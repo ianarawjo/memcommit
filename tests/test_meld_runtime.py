@@ -78,8 +78,33 @@ def test_meld_command_contains_no_initial_cache_or_provisional_session_logic():
             "ensure_comparison_analysis",
             "install_prepared_comparison_analysis",
             "MeldSession.create_directional",
+            "prepare_meld_assessment",
+            "execute_meld_assessment",
         )
     )
+
+
+def test_python_client_uses_the_combined_meld_turn_runtime():
+    client_path = Path(meld_runtime.__file__).with_name("api") / "client.py"
+    operation_path = client_path.with_name("_operations") / "meld.py"
+    source = client_path.read_text(encoding="utf-8")
+    if operation_path.exists():
+        source += operation_path.read_text(encoding="utf-8")
+
+    assert "execute_meld_turn(" in source
+    assert "prepare_meld_assessment" not in source
+
+
+def test_meld_provider_timeout_policy_is_runtime_owned(monkeypatch):
+    class Provider:
+        def __init__(self):
+            self.timeout = 30
+
+    monkeypatch.setattr(meld_runtime, "CodexChatGPTProvider", Provider)
+
+    provider = meld_runtime.connect_meld_provider(Provider)
+
+    assert provider.timeout == meld_runtime.MELD_AGGREGATE_TIMEOUT_SECONDS
 
 
 def test_symmetric_saved_compare_reuse_does_not_connect_provider(monkeypatch):

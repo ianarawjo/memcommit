@@ -77,6 +77,12 @@ validation.
   a semantic turn.
 - Cache replay crosses the same strict decoder as a provider completion and
   cannot publish a partial assessment.
+- Follow-up callers compose one `MeldTurnRequest`, then share
+  `PreparedMeldTurnExecution`. Its cache decision, provider-required flag,
+  repair path, and session CAS token are executed once by the runtime; CLI
+  progress and public result projection do not assemble the lifecycle again.
+- Meld's complete-ledger provider timeout is runtime-owned. CLI, Python, and
+  agent calls therefore receive the same bound, including follow-up turns.
 - Ordered Compare lookup and installation execute in `meld_runtime`: exact,
   equivalent-scope, and safe projected hits are resolved before a provider is
   constructed. Symmetric misses alone invoke live Compare and save the durable

@@ -89,6 +89,9 @@ from memcommit.meld_session_application import (
     MeldPreservationPort,
     MeldSessionRepository,
     MeldSessionSnapshot,
+    MeldTurnRequest,
+    PendingMeldTurn,
+    prepare_meld_turn,
     run_meld_destination_change,
     run_meld_preservation,
     run_meld_session_defer,
@@ -103,6 +106,7 @@ from memcommit.meld_start_application import (
     run_meld_start,
 )
 from memcommit.provider_types import ProviderIdentity
+from memcommit.query_provider import CodexChatGPTProvider
 from memcommit.store import (
     ConcurrentContextUpdateError,
     MemoryStore,
@@ -126,6 +130,18 @@ from memcommit.study_prewarm.compare import (
     record_exact_compare_prewarm,
     record_projected_compare_prewarm,
 )
+
+
+MELD_AGGREGATE_TIMEOUT_SECONDS = 900
+
+
+def connect_meld_provider(provider_factory):
+    """Connect one provider under Meld's complete-ledger timeout boundary."""
+
+    provider = provider_factory()
+    if isinstance(provider, CodexChatGPTProvider):
+        provider.timeout = max(provider.timeout, MELD_AGGREGATE_TIMEOUT_SECONDS)
+    return provider
 
 
 def load_meld_source(
@@ -1702,6 +1718,49 @@ def prepare_meld_assessment(
     )
 
 
+@dataclass(frozen=True)
+class PreparedMeldTurnExecution:
+    """One pending dialogue turn bound to its cache and publication token."""
+
+    pending: PendingMeldTurn
+    frozen: FrozenMeldAssessment
+    port: MemoryStoreMeldAssessmentPort
+
+    @property
+    def provider_required(self) -> bool:
+        return self.frozen.cached_completion is None
+
+
+def prepare_pending_meld_turn(
+    pending: PendingMeldTurn,
+    *,
+    store: MemoryStore,
+) -> PreparedMeldTurnExecution:
+    """Freeze a locally composed turn through the production cache boundary."""
+
+    if not isinstance(pending, PendingMeldTurn):
+        raise TypeError("Meld turn execution requires a PendingMeldTurn.")
+    frozen, port = prepare_meld_assessment(
+        pending.session,
+        store=store,
+        expected_session_digest=pending.expected_version,
+    )
+    return PreparedMeldTurnExecution(pending=pending, frozen=frozen, port=port)
+
+
+def prepare_meld_turn_execution(
+    request: MeldTurnRequest,
+    *,
+    store: MemoryStore,
+) -> PreparedMeldTurnExecution:
+    """Compose and freeze one follow-up under the exact saved-session token."""
+
+    return prepare_pending_meld_turn(
+        prepare_meld_turn(request),
+        store=store,
+    )
+
+
 def execute_meld_assessment(
     frozen: FrozenMeldAssessment,
     *,
@@ -1714,6 +1773,40 @@ def execute_meld_assessment(
     return run_meld_assessment(
         frozen,
         port=port,
+        provider_factory=lambda: connect_meld_provider(provider_factory),
+        observer=observer,
+    )
+
+
+def execute_prepared_meld_turn(
+    prepared: PreparedMeldTurnExecution,
+    *,
+    provider_factory: MeldProviderFactory,
+    observer=None,
+) -> MeldAssessmentResult:
+    """Execute the exact frozen cache/provider decision without recomputing it."""
+
+    if not isinstance(prepared, PreparedMeldTurnExecution):
+        raise TypeError("Meld turn execution requires prepared input.")
+    return execute_meld_assessment(
+        prepared.frozen,
+        port=prepared.port,
+        provider_factory=provider_factory,
+        observer=observer,
+    )
+
+
+def execute_meld_turn(
+    request: MeldTurnRequest,
+    *,
+    store: MemoryStore,
+    provider_factory: MeldProviderFactory,
+    observer=None,
+) -> MeldAssessmentResult:
+    """Compose, cache-resolve, execute, and CAS-publish one follow-up turn."""
+
+    return execute_prepared_meld_turn(
+        prepare_meld_turn_execution(request, store=store),
         provider_factory=provider_factory,
         observer=observer,
     )
@@ -2479,12 +2572,15 @@ def execute_meld_apply(
 
 
 __all__ = [
+    "MELD_AGGREGATE_TIMEOUT_SECONDS",
     "MemoryStoreMeldApplyPort",
     "MemoryStoreMeldAssessmentPort",
     "MemoryStoreMeldDestinationPort",
     "MemoryStoreMeldPreservationPort",
     "MemoryStoreMeldSessionRepository",
     "MemoryStoreMeldStartPort",
+    "PreparedMeldExecution",
+    "PreparedMeldTurnExecution",
     "assert_meld_non_target_source_bindings",
     "assert_meld_source_bindings",
     "assert_unapplied_meld_target",
@@ -2495,9 +2591,17 @@ __all__ = [
     "execute_meld_session_defer",
     "execute_meld_session_open",
     "execute_meld_start",
+    "execute_meld_restart",
+    "execute_meld_turn",
+    "execute_prepared_meld_turn",
     "load_bound_meld_contexts",
     "load_local_meld_source",
     "load_meld_source",
     "meld_bound_frame_digest",
     "prepare_meld_assessment",
+    "prepare_meld_restart",
+    "prepare_meld_start",
+    "prepare_meld_turn_execution",
+    "prepare_pending_meld_turn",
+    "connect_meld_provider",
 ]

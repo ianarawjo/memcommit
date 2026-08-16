@@ -34,19 +34,19 @@ from memcommit.meld_provider import MeldProviderError
 from memcommit.meld_restart_application import MeldRestartError, MeldRestartRequest
 from memcommit.meld_runtime import (
     execute_meld_apply,
-    execute_meld_assessment,
     execute_meld_preservation,
+    execute_meld_turn,
+    execute_prepared_meld_turn,
     execute_meld_restart,
     execute_meld_session_defer,
     execute_meld_session_open,
     execute_meld_start,
     load_meld_source,
-    prepare_meld_assessment,
+    prepare_pending_meld_turn,
 )
 from memcommit.meld_session_application import (
     MeldTurnRequest,
     prepare_meld_preservation_turn,
-    prepare_meld_turn,
 )
 from memcommit.meld_start_application import MeldStartError, MeldStartRequest
 from memcommit.profiles import ProfileError
@@ -329,7 +329,7 @@ def comment_meld(
         if not isinstance(comment, str) or not comment.strip():
             raise ValueError("comment must be nonblank text.")
         snapshot = _meld_snapshot(runtime, target_context)
-        pending = prepare_meld_turn(
+        result = execute_meld_turn(
             MeldTurnRequest(
                 snapshot=snapshot,
                 comment=comment,
@@ -337,16 +337,8 @@ def comment_meld(
                 issue_uids=(issue_uid,) if issue_uid is not None else (),
                 revision=revision.upper(),  # type: ignore[arg-type]
                 revises_turn_uids=tuple(revises_turn_uids),
-            )
-        )
-        frozen, port = prepare_meld_assessment(
-            pending.session,
+            ),
             store=runtime.store,
-            expected_session_digest=pending.expected_version,
-        )
-        result = execute_meld_assessment(
-            frozen,
-            port=port,
             provider_factory=lambda: _safe_semantic_provider(runtime),
         )
     except MeldProviderFailure:
@@ -381,14 +373,12 @@ def preserve_meld(runtime: ClientRuntime, target_context: str) -> MeldSessionRes
         if session.mode == "SYMMETRIC" and session.schema_version >= MELD_SCHEMA_VERSION:
             saved = execute_meld_preservation(pending, store=runtime.store)
             return _project_meld(saved.session, origin="LOCAL")
-        frozen, port = prepare_meld_assessment(
-            session,
+        prepared = prepare_pending_meld_turn(
+            pending,
             store=runtime.store,
-            expected_session_digest=pending.expected_version,
         )
-        result = execute_meld_assessment(
-            frozen,
-            port=port,
+        result = execute_prepared_meld_turn(
+            prepared,
             provider_factory=lambda: _safe_semantic_provider(runtime),
         )
     except MeldProviderFailure:

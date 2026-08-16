@@ -90,7 +90,6 @@ from memcommit.commands.session_picker import (
     choose_session,
 )
 from memcommit.query_provider import (
-    CodexChatGPTProvider,
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
@@ -106,13 +105,6 @@ from memcommit.store import (
     validate_context_name,
 )
 from memcommit.study_prewarm.registry import StudyPrewarmRegistryError
-
-
-# A full 150 + 150 Task 2 Meld must return a complete relation ledger and
-# proposal set in one call. Live runs can exceed the five-minute Compare-sized
-# window, so keep the longer allowance local to Meld rather than weakening
-# timeouts for every semantic command.
-MELD_AGGREGATE_TIMEOUT_SECONDS = 900
 
 
 class MeldCommandError(RuntimeError):
@@ -201,16 +193,6 @@ def _preserve_all_guidance(session: MeldSession) -> str:
         "scope and provenance. Do not present unresolved alternatives as one "
         "consistent rule."
     )
-
-
-def _connect_meld_provider(provider_factory):
-    provider = provider_factory()
-    if isinstance(provider, CodexChatGPTProvider):
-        provider.timeout = max(
-            provider.timeout,
-            MELD_AGGREGATE_TIMEOUT_SECONDS,
-        )
-    return provider
 
 
 def _single_line(value: str, *, limit: int = 90) -> str:
@@ -802,23 +784,25 @@ def _assess_and_save(
     expected_session_digest: str | None,
 ) -> MeldSession:
     from memcommit.meld_runtime import (
-        execute_meld_assessment,
-        prepare_meld_assessment,
+        execute_prepared_meld_turn,
+        prepare_pending_meld_turn,
     )
+    from memcommit.meld_session_application import PendingMeldTurn
 
-    frozen, assessment_port = prepare_meld_assessment(
-        session,
+    prepared = prepare_pending_meld_turn(
+        PendingMeldTurn(
+            session=session,
+            expected_version=expected_session_digest,
+        ),
         store=store,
-        expected_session_digest=expected_session_digest,
     )
 
     def connected_provider():
-        return _connect_meld_provider(provider_factory)
+        return provider_factory()
 
-    if frozen.cached_completion is not None:
-        return execute_meld_assessment(
-            frozen,
-            port=assessment_port,
+    if not prepared.provider_required:
+        return execute_prepared_meld_turn(
+            prepared,
             provider_factory=lambda: (_ for _ in ()).throw(
                 AssertionError("A cached Meld assessment connected a provider.")
             ),
@@ -831,9 +815,8 @@ def _assess_and_save(
             elif stage == "REPAIRING":
                 progress.update("repairing invalid meld turn", step=2)
 
-        return execute_meld_assessment(
-            frozen,
-            port=assessment_port,
+        return execute_prepared_meld_turn(
+            prepared,
             provider_factory=connected_provider,
             observer=observe,
         ).session
@@ -1797,9 +1780,7 @@ def cmd(
 
                 def start_meld(progress):
                     def connected_provider():
-                        provider = _connect_meld_provider(
-                            connect_codex_chatgpt_provider
-                        )
+                        provider = connect_codex_chatgpt_provider()
                         progress.update("analyzing meld turn", step=2)
                         return provider
 
@@ -1899,9 +1880,7 @@ def cmd(
 
                 def restart_meld(progress):
                     def connected_provider():
-                        provider = _connect_meld_provider(
-                            connect_codex_chatgpt_provider
-                        )
+                        provider = connect_codex_chatgpt_provider()
                         progress.update("analyzing meld turn", step=2)
                         return provider
 

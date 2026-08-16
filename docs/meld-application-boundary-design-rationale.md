@@ -111,3 +111,11 @@ the ordinary exact Compare installation boundary; that final installation may
 observe a concurrently published exact result, but it does not repeat
 equivalent or projection search. This preserves CAS safety without restoring
 adapter-owned cache prediction.
+
+Follow-up turns use the same pattern. `PreparedMeldTurnExecution` binds the
+locally composed `PendingMeldTurn` to its exact hidden resolution-cache result,
+provider request, and publication port. The CLI reads `provider_required` only
+to decide whether to show progress and then executes that same value; the
+Python facade calls the combined `execute_meld_turn` service. Provider
+connection timeout policy also moved into `meld_runtime`, so an interface can
+observe progress but cannot silently choose a weaker semantic-call bound.
