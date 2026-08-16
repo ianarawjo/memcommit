@@ -3,20 +3,17 @@
 from __future__ import annotations
 
 from collections.abc import Callable, Sequence
-import json
+from functools import partial
 from pathlib import Path
 
-from memcommit.api.add import (
-    AddMemoriesResult,
-    AddedMemoryResult,
+from memcommit.api._runtime import ClientRuntime
+from memcommit.api._support.providers import (
+    connect_ordinary_provider,
+    connect_route_provider,
 )
+
+from memcommit.api.add import AddMemoriesResult
 from memcommit.api.errors import (
-    AddAuthorityError,
-    AddConflictError,
-    AddContextError,
-    AddExecutionError,
-    AddInputError,
-    AddStorageError,
     MeldAuthorityError,
     MeldConflictError,
     MeldContextError,
@@ -24,13 +21,7 @@ from memcommit.api.errors import (
     MeldInputError,
     MeldProviderFailure,
     MeldStorageError,
-    QueryAuthorityError,
     QueryConfigurationError,
-    QueryContextError,
-    QueryExecutionError,
-    QueryInputError,
-    QueryProviderFailure,
-    QueryPublicationError,
     QueryStorageError,
 )
 from memcommit.api.meld import (
@@ -43,10 +34,7 @@ from memcommit.api.meld import (
 from memcommit.api.query import (
     GrantedQueryResult,
     OrdinaryQueryResult,
-    QueryCatalogEntry,
-    QueryCitation,
     QueryProviderConfig,
-    QuerySessionReceipt,
     ReferenceQueryResult,
 )
 from memcommit.context import QueryContextRef
@@ -70,8 +58,6 @@ _UNLOADED_INTEGRATION = object()
 
 # These names remain patchable without eagerly importing their implementations.
 # The loaders replace only this sentinel, so an injected test or host adapter wins.
-run_add = _UNLOADED_INTEGRATION
-execute_granted_query_session_publication = _UNLOADED_INTEGRATION
 execute_meld_start = _UNLOADED_INTEGRATION
 execute_meld_restart = _UNLOADED_INTEGRATION
 
@@ -82,23 +68,6 @@ def _publish_integration(namespace: dict[str, object]) -> None:
             continue
         if globals().get(name, _UNLOADED_INTEGRATION) is _UNLOADED_INTEGRATION:
             globals()[name] = value
-
-
-def _load_add_integration() -> None:
-    """Load Add's application/runtime assembly only when Add is selected."""
-
-    from memcommit.add_application import (
-        AddError as ApplicationAddError,
-        AddRequest,
-        AddSource,
-        run_add,
-        validate_add_request,
-    )
-    from memcommit.add_runtime import MemoryStoreAddTargetPort
-    from memcommit.context_locator import resolve_context_locator
-    from memcommit.store import ConcurrentContextUpdateError
-
-    _publish_integration(locals())
 
 
 def _load_meld_integration() -> None:
@@ -132,36 +101,6 @@ def _load_meld_integration() -> None:
     )
     from memcommit.meld_start_application import MeldStartError, MeldStartRequest
     from memcommit.store import ConcurrentContextUpdateError
-
-    _publish_integration(locals())
-
-
-def _load_query_integration() -> None:
-    """Load Query authority/runtime assembly only when Query is selected."""
-
-    from memcommit.authority.access import resolve_context_access
-    from memcommit.context_locator import resolve_context_locator
-    from memcommit.context_targeting.readable_catalog import (
-        freeze_profile_readable_context_catalog,
-    )
-    from memcommit.find_answer_dialogue import FindAnswerCorpusTooLarge
-    from memcommit.operations.query.granted_application import (
-        GrantedQueryRequest,
-        GrantedQueryTarget,
-    )
-    from memcommit.operations.query.granted_runtime import (
-        execute_granted_query_read,
-        execute_granted_query_session_publication,
-        freeze_granted_query_targets,
-    )
-    from memcommit.operations.query.ordinary_application import OrdinaryQueryRequest
-    from memcommit.operations.query.ordinary_runtime import execute_ordinary_query
-    from memcommit.operations.query.reference_application import QueryReferenceRequest
-    from memcommit.operations.query.reference_runtime import execute_query_reference
-    from memcommit.ordinary_query_answer import OrdinaryQueryCorpusTooLarge
-    from memcommit.query_provider import QueryProviderError
-    from memcommit.query_sessions import QuerySessionError
-    from memcommit.search import FindError
 
     _publish_integration(locals())
 
@@ -229,14 +168,26 @@ class MemCommitClient:
         self._registry = registry
         self._profile = selected_profile
         self._query_config = config
-        self._ordinary_provider_factory = (
-            ordinary_provider_factory or self._connect_ordinary_provider
+        self._ordinary_provider_factory = ordinary_provider_factory or partial(
+            connect_ordinary_provider,
+            config,
         )
-        self._query_route_provider_factory = (
-            query_route_provider_factory or self._connect_route_provider
+        self._query_route_provider_factory = query_route_provider_factory or partial(
+            connect_route_provider,
+            config,
         )
         self._semantic_provider_factory = (
-            semantic_provider_factory or self._connect_ordinary_provider
+            semantic_provider_factory or self._ordinary_provider_factory
+        )
+        self._runtime = ClientRuntime(
+            store=self._store,
+            store_root=self._store_root,
+            registry=self._registry,
+            profile=self._profile,
+            query_config=self._query_config,
+            ordinary_provider_factory=self._ordinary_provider_factory,
+            query_route_provider_factory=self._query_route_provider_factory,
+            semantic_provider_factory=self._semantic_provider_factory,
         )
 
     @property
@@ -250,47 +201,6 @@ class MemCommitClient:
     @property
     def query_config(self) -> QueryProviderConfig:
         return self._query_config
-
-    def _connect_ordinary_provider(self) -> object:
-        from memcommit.infrastructure.providers.find_query import (
-            connect_ordinary_query_provider,
-        )
-
-        config = self._query_config
-        return connect_ordinary_query_provider(
-            model=config.model,
-            reasoning_effort=config.reasoning_effort,
-            timeout_seconds=config.timeout_seconds,
-        )
-
-    def _connect_route_provider(self, provider_name: str) -> object:
-        from memcommit.infrastructure.providers.find_query import (
-            connect_query_route_provider,
-        )
-
-        config = self._query_config
-        return connect_query_route_provider(
-            provider_name,
-            model=config.model,
-            reasoning_effort=config.reasoning_effort,
-            timeout_seconds=config.timeout_seconds,
-        )
-
-    def _safe_ordinary_provider(self) -> object:
-        try:
-            return self._ordinary_provider_factory()
-        except QueryProviderFailure:
-            raise
-        except Exception as error:
-            _raise(QueryProviderFailure, error)
-
-    def _safe_route_provider(self, provider_name: str) -> object:
-        try:
-            return self._query_route_provider_factory(provider_name)
-        except QueryProviderFailure:
-            raise
-        except Exception as error:
-            _raise(QueryProviderFailure, error)
 
     def _safe_semantic_provider(self) -> object:
         try:
@@ -699,87 +609,12 @@ class MemCommitClient:
     ) -> AddMemoriesResult:
         """Append one exact ordered batch and publish one Add checkpoint."""
 
-        _load_add_integration()
-        try:
-            if isinstance(contents, (str, bytes)):
-                raise TypeError("contents must be a sequence of Memory texts.")
-            values = tuple(contents)
-            if context_name is not None and (
-                not isinstance(context_name, str) or not context_name
-            ):
-                raise ValueError("context_name must be nonblank text.")
-            request = validate_add_request(
-                AddRequest(
-                    contents=values,
-                    context_locator=context_name,
-                    source=AddSource(
-                        mode="EXPLICIT_BATCH",
-                        kind="python-api",
-                        parser="exact-memory-sequence-v1",
-                        raw_text=json.dumps(
-                            values,
-                            ensure_ascii=False,
-                            separators=(",", ":"),
-                        ),
-                    ),
-                )
-            )
-        except (ApplicationAddError, TypeError, ValueError) as error:
-            _raise(AddInputError, error)
+        from memcommit.api._operations.add import add_memories
 
-        try:
-            current_name = (
-                self._store.current_context_name()
-                if self._store.state_file.exists()
-                else None
-            )
-            operand = context_name or current_name
-            if operand is None:
-                raise FileNotFoundError(
-                    "No current Context; pass context_name or initialize one."
-                )
-            canonical = resolve_context_locator(operand, current=current_name)
-            target_is_local = self._store.context_exists(canonical)
-            if not target_is_local:
-                if self._registry is None:
-                    raise FileNotFoundError(f"Context {canonical!r} not found.")
-                registry = load_profile_registry()
-                if (
-                    self._profile is None
-                    or self._profile.uid != registry.active.uid
-                    or self._store_root != profile_store_dir(registry.active).resolve()
-                ):
-                    raise AddAuthorityError(
-                        "CREATE-granted Add requires a client bound to the "
-                        "active Profile."
-                    )
-            port = MemoryStoreAddTargetPort(
-                self._store,
-                current_name=current_name,
-                local_only=target_is_local,
-            )
-            result = run_add(request, target_port=port)
-        except AddAuthorityError:
-            raise
-        except FileNotFoundError as error:
-            _raise(AddContextError, error)
-        except (ProfileConfigError, ProfileError) as error:
-            _raise(AddAuthorityError, error)
-        except ConcurrentContextUpdateError as error:
-            _raise(AddConflictError, error)
-        except OSError as error:
-            _raise(AddStorageError, error)
-        except (ApplicationAddError, RuntimeError, TypeError, ValueError) as error:
-            _raise(AddExecutionError, error)
-
-        return AddMemoriesResult(
-            context_name=result.context_name,
-            context_uid=result.context_uid,
-            memories=tuple(
-                AddedMemoryResult(uid=memory.uid, content=memory.content)
-                for memory in result.memories
-            ),
-            checkpoint_uid=result.checkpoint_uid,
+        return add_memories(
+            self._runtime,
+            contents,
+            context_name=context_name,
         )
 
     def query_ordinary(
@@ -793,111 +628,15 @@ class MemCommitClient:
     ) -> OrdinaryQueryResult:
         """Answer from one exact readable Context set without publishing state."""
 
-        _load_query_integration()
-        current_name = self._current_context_name()
-        operands: tuple[str, ...]
-        if context_names is None:
-            if current_name is None:
-                raise QueryContextError(
-                    "No current Context; pass context_names or initialize one."
-                )
-            operands = (current_name,)
-        elif isinstance(context_names, (str, bytes)):
-            raise QueryInputError("context_names must be a sequence of names.")
-        else:
-            try:
-                operands = tuple(context_names)
-            except TypeError as error:
-                _raise(QueryInputError, error)
-            if not operands:
-                raise QueryInputError("Select at least one readable Context.")
+        from memcommit.api._operations.query import query_ordinary
 
-        accesses = []
-        try:
-            for operand in operands:
-                if not isinstance(operand, str) or not operand:
-                    raise ValueError("Context names must be nonblank text.")
-                canonical = resolve_context_locator(operand, current=current_name)
-                # An explicit Store root is intentionally local-only. It must
-                # not inherit host grants merely because an attachment matches.
-                if self._registry is None and not self._store.context_exists(canonical):
-                    raise FileNotFoundError(f"Context {canonical!r} not found.")
-                accesses.append(
-                    resolve_context_access(
-                        self._store,
-                        operand,
-                        current_name=current_name,
-                        required_permission="READ",
-                        registry=self._registry,
-                    )
-                )
-            catalog = freeze_profile_readable_context_catalog(
-                self._store,
-                accesses[0],
-            )
-            target_names = tuple(access.display_name for access in accesses)
-            if any(not catalog.context_exists(name) for name in target_names):
-                raise ProfileError(
-                    "A selected Context left the frozen readable Profile view."
-                )
-            request = OrdinaryQueryRequest(
-                question=question,
-                target_names=target_names,
-                include_descendants=include_descendants,
-                follow_embeds=follow_embeds,
-            )
-        except FileNotFoundError as error:
-            _raise(QueryContextError, error)
-        except (ProfileConfigError, ProfileError) as error:
-            _raise(QueryAuthorityError, error)
-        except (TypeError, ValueError) as error:
-            _raise(QueryInputError, error)
-
-        try:
-            response = execute_ordinary_query(
-                request,
-                store=self._store,
-                catalog=catalog,
-                provider_factory=self._safe_ordinary_provider,
-                observer=on_stage,  # type: ignore[arg-type]
-            )
-        except QueryProviderFailure:
-            raise
-        except QueryProviderError as error:
-            _raise(QueryProviderFailure, error)
-        except FileNotFoundError as error:
-            _raise(QueryContextError, error)
-        except (ProfileConfigError, ProfileError) as error:
-            _raise(QueryAuthorityError, error)
-        except OSError as error:
-            _raise(QueryStorageError, error)
-        except (
-            FindAnswerCorpusTooLarge,
-            OrdinaryQueryCorpusTooLarge,
-            FindError,
-            RuntimeError,
-            TypeError,
-            ValueError,
-        ) as error:
-            _raise(QueryExecutionError, error)
-
-        citations = ()
-        if response.reference_document is not None:
-            citations = tuple(
-                QueryCitation(
-                    number=item.number,
-                    alias=item.evidence.alias,
-                    context_name=item.evidence.context_name,
-                    kind=item.evidence.kind,
-                    uid=item.evidence.uid,
-                    content=item.evidence.content,
-                )
-                for item in response.reference_document.references
-            )
-        return OrdinaryQueryResult(
-            answer=response.answer,
-            grounded=response.grounded,
-            citations=citations,
+        return query_ordinary(
+            self._runtime,
+            question,
+            context_names=context_names,
+            include_descendants=include_descendants,
+            follow_embeds=follow_embeds,
+            on_stage=on_stage,
         )
 
     def query_granted(
@@ -917,115 +656,17 @@ class MemCommitClient:
         visible turn was also reauthorized and CAS-published.
         """
 
-        _load_query_integration()
-        try:
-            if not isinstance(public_name, str) or not public_name:
-                raise ValueError("Granted Query public name must be nonblank.")
-            registry = load_profile_registry()
-            if (
-                self._profile is None
-                or self._profile.uid != registry.active.uid
-                or self._store_root != profile_store_dir(registry.active).resolve()
-            ):
-                raise QueryAuthorityError(
-                    "Granted Query requires a client bound to the active Profile."
-                )
-            targets = freeze_granted_query_targets(self._store)
-            matches = tuple(
-                target
-                for target in targets
-                if public_name == target.public_name
-                or public_name.startswith(target.public_name + "/")
-            )
-            if not matches:
-                raise QueryContextError(
-                    f"Query-only view {public_name!r} is not available."
-                )
-            base_target = max(
-                matches,
-                key=lambda target: len(target.public_name.split("/")),
-            )
-            if session_name is not None and not base_target.session_log_allowed:
-                raise QueryAuthorityError(
-                    f"Query-only view {public_name!r} does not allow SESSION_LOG."
-                )
-            request = GrantedQueryRequest(
-                target=GrantedQueryTarget(
-                    grant_uid=base_target.grant_uid,
-                    public_name=public_name,
-                    attachment_name=base_target.attachment_name,
-                    session_log_allowed=base_target.session_log_allowed,
-                ),
-                question=question,
-                language=language,
-                session_name=session_name,
-                memory_handle=memory_handle,
-                federate_descendants=federate_descendants,
-            )
-        except (QueryAuthorityError, QueryContextError):
-            raise
-        except (ProfileConfigError, ProfileError) as error:
-            _raise(QueryAuthorityError, error)
-        except (QuerySessionError, TypeError, ValueError) as error:
-            _raise(QueryInputError, error)
-        except OSError as error:
-            _raise(QueryStorageError, error)
+        from memcommit.api._operations.query import query_granted
 
-        try:
-            outcome = execute_granted_query_read(
-                request,
-                store=self._store,
-                provider_factory=self._safe_ordinary_provider,
-                observer=on_stage,  # type: ignore[arg-type]
-            )
-        except QueryProviderFailure:
-            raise
-        except QueryProviderError as error:
-            _raise(QueryProviderFailure, error)
-        except FileNotFoundError as error:
-            _raise(QueryContextError, error)
-        except (ProfileConfigError, ProfileError) as error:
-            _raise(QueryAuthorityError, error)
-        except QuerySessionError as error:
-            _raise(QueryExecutionError, error)
-        except OSError as error:
-            _raise(QueryStorageError, error)
-        except (RuntimeError, TypeError, ValueError) as error:
-            _raise(QueryExecutionError, error)
-
-        receipt = None
-        if outcome.publication is not None:
-            try:
-                published = execute_granted_query_session_publication(
-                    outcome.publication,
-                    store=self._store,
-                    observer=on_stage,  # type: ignore[arg-type]
-                )
-            except (ProfileConfigError, ProfileError, QuerySessionError) as error:
-                _raise(QueryPublicationError, error)
-            except (OSError, RuntimeError, TypeError, ValueError) as error:
-                _raise(QueryPublicationError, error)
-            receipt = QuerySessionReceipt(
-                session_name=published.session_name,
-                revision=published.revision,
-                turn_count=published.turn_count,
-            )
-
-        response = outcome.response
-        if response.answer is None:
-            return GrantedQueryResult(
-                mode="CATALOG",
-                public_name=public_name,
-                catalog=tuple(
-                    QueryCatalogEntry(entry.handle, entry.placeholder_lines)
-                    for entry in response.catalog
-                ),
-            )
-        return GrantedQueryResult(
-            mode="ANSWER",
-            public_name=public_name,
-            answer=response.answer,
-            session_receipt=receipt,
+        return query_granted(
+            self._runtime,
+            public_name,
+            question,
+            language=language,
+            session_name=session_name,
+            memory_handle=memory_handle,
+            federate_descendants=federate_descendants,
+            on_stage=on_stage,
         )
 
     def query_reference(
@@ -1038,39 +679,14 @@ class MemCommitClient:
     ) -> ReferenceQueryResult:
         """Answer through one exact legacy QueryContextRef without persistence."""
 
-        _load_query_integration()
-        try:
-            if not isinstance(reference, QueryContextRef):
-                raise TypeError("reference must be a QueryContextRef.")
-            request = QueryReferenceRequest(
-                source_uid=reference.target_source_uid,
-                source_name=reference.name,
-                provider_name=reference.provider,
-                question=question,
-                language=language,
-            )
-        except (TypeError, ValueError) as error:
-            _raise(QueryInputError, error)
-        try:
-            response = execute_query_reference(
-                request,
-                store=self._store,
-                provider_factory=self._safe_route_provider,
-                observer=on_stage,  # type: ignore[arg-type]
-            )
-        except QueryProviderFailure:
-            raise
-        except QueryProviderError as error:
-            _raise(QueryProviderFailure, error)
-        except FileNotFoundError as error:
-            _raise(QueryContextError, error)
-        except OSError as error:
-            _raise(QueryStorageError, error)
-        except (RuntimeError, TypeError, ValueError) as error:
-            _raise(QueryExecutionError, error)
-        return ReferenceQueryResult(
-            source_name=response.request.source_name,
-            answer=response.answer,
+        from memcommit.api._operations.query import query_reference
+
+        return query_reference(
+            self._runtime,
+            reference,
+            question,
+            language=language,
+            on_stage=on_stage,
         )
 
 

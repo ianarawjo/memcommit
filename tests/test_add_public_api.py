@@ -8,7 +8,7 @@ import uuid
 import pytest
 
 import memcommit
-import memcommit.api.client as client_module
+import memcommit.api._operations.add as add_operation
 import memcommit.ops as ops
 from memcommit.api import (
     AddAuthorityError,
@@ -255,7 +255,7 @@ def test_public_add_projects_conflict_and_storage_failures(
     def fail(*_args, **_kwargs):
         raise failure
 
-    monkeypatch.setattr(client_module, "run_add", fail)
+    monkeypatch.setattr(add_operation, "run_add", fail)
 
     with pytest.raises(public_error):
         client.add_memories(("No receipt.",))

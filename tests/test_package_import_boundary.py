@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -10,10 +11,11 @@ import sys
 REPOSITORY = Path(__file__).parents[1]
 
 
-def _run_fresh(source: str):
+def _run_fresh(source: str, *, environment: dict[str, str] | None = None):
     return subprocess.run(
         [sys.executable, "-c", source],
         cwd=REPOSITORY,
+        env=environment,
         capture_output=True,
         text=True,
         check=False,
@@ -42,6 +44,8 @@ def test_public_client_import_does_not_assemble_operation_implementations():
 import sys
 from memcommit.api import MemCommitClient
 blocked = (
+    'memcommit.api._operations.add',
+    'memcommit.api._operations.query',
     'memcommit.add_application',
     'memcommit.meld_application',
     'memcommit.operations.query.ordinary_application',
@@ -83,23 +87,65 @@ assert MemCommitClient.__name__ == 'MemCommitClient'
     assert completed.returncode == 0, completed.stderr
 
 
-def test_selecting_add_loads_add_without_query_or_meld(tmp_path):
+def test_selected_add_loads_only_its_operation_assembly(tmp_path):
+    environment = os.environ.copy()
+    environment["MEMCOMMIT_IMPORT_TEST_ROOT"] = str(tmp_path / "store")
     completed = _run_fresh(
-        f"""
+        """
+import os
+from pathlib import Path
 import sys
 from memcommit.api import AddInputError, MemCommitClient
-client = MemCommitClient(root={str(tmp_path / 'store')!r}, create=True)
+client = MemCommitClient(
+    root=Path(os.environ['MEMCOMMIT_IMPORT_TEST_ROOT']),
+    create=True,
+)
 try:
     client.add_memories('not-a-sequence')
 except AddInputError:
     pass
 else:
     raise AssertionError('invalid Add input unexpectedly succeeded')
+assert 'memcommit.api._operations.add' in sys.modules
 assert 'memcommit.add_application' in sys.modules
+assert 'memcommit.api._operations.query' not in sys.modules
 assert 'memcommit.meld_application' not in sys.modules
 assert 'memcommit.operations.query.ordinary_application' not in sys.modules
 assert 'memcommit.ground_distill' not in sys.modules
-"""
+""",
+        environment=environment,
+    )
+
+    assert completed.returncode == 0, completed.stderr
+
+
+def test_selected_query_loads_only_its_operation_assembly(tmp_path):
+    environment = os.environ.copy()
+    environment["MEMCOMMIT_IMPORT_TEST_ROOT"] = str(tmp_path / "store")
+    completed = _run_fresh(
+        """
+import os
+from pathlib import Path
+import sys
+from memcommit.api import MemCommitClient, QueryInputError
+
+client = MemCommitClient(
+    root=Path(os.environ['MEMCOMMIT_IMPORT_TEST_ROOT']),
+    create=True,
+)
+try:
+    client.query_ordinary('Question?', context_names=())
+except QueryInputError:
+    pass
+else:
+    raise AssertionError('invalid Query target set unexpectedly succeeded')
+assert 'memcommit.api._operations.query' in sys.modules
+assert 'memcommit.operations.query.ordinary_application' in sys.modules
+assert 'memcommit.api._operations.add' not in sys.modules
+assert 'memcommit.add_application' not in sys.modules
+assert 'memcommit.meld_application' not in sys.modules
+""",
+        environment=environment,
     )
 
     assert completed.returncode == 0, completed.stderr

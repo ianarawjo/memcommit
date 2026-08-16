@@ -11,7 +11,7 @@ import pytest
 
 import memcommit
 import memcommit.ops as ops
-import memcommit.api.client as client_module
+import memcommit.api._operations.query as query_operation
 from memcommit.api import (
     MemCommitClient,
     OrdinaryQueryResult,
@@ -330,7 +330,7 @@ def test_granted_session_publication_failure_returns_no_partial_success(
         raise ValueError("source changed before publication")
 
     monkeypatch.setattr(
-        client_module,
+        query_operation,
         "execute_granted_query_session_publication",
         fail_publication,
     )
