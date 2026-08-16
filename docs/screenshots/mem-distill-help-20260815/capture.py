@@ -42,14 +42,14 @@ def main() -> None:
     by_kind.send("\x1b[C")
     BASE._pump(by_kind, seconds=0.35)
     screen = BASE._snapshot(by_kind_recorder, "02-by-kind-distill-expanded")
-    assert "▾ mem distill" in screen and "Goal? + Source Context" in screen
+    assert "▾ mem distill" in screen and "Case/Example Context + Goal?" in screen
     BASE._assert_color(by_kind_recorder.getvalue())
     _close(by_kind)
 
     az, az_recorder = BASE._spawn(executable, interactive=True)
     BASE._pump(az, seconds=0.8)
     # First row → VIEW → A-Z → command list → Home, then add → distill.
-    az.send("\x1b[Z\x1b[C\t\x1b[H" + "\x1b[B" * 13)
+    az.send("\x1b[Z\x1b[C\t\x1b[H" + "\x1b[B" * 14)
     BASE._pump(az, seconds=0.45)
     screen = BASE._snapshot(az_recorder, "03-a-z-distill-focused")
     assert "A–Z" in screen and "▸ mem distill" in screen
@@ -59,6 +59,66 @@ def main() -> None:
     assert "▾ mem distill" in screen and "FORM 1 · mem distill" in screen
     BASE._assert_color(az_recorder.getvalue())
     _close(az)
+
+    by_kind_elaborate, recorder = BASE._spawn(executable, interactive=True)
+    BASE._pump(by_kind_elaborate, seconds=0.8)
+    by_kind_elaborate.send("\t\t\t" + "\x1b[B" * 3)
+    BASE._pump(by_kind_elaborate, seconds=0.4)
+    screen = BASE._snapshot(recorder, "05-by-kind-elaborate-focused")
+    assert "ANALYZE & TRANSFORM" in screen and "▸ mem elaborate" in screen
+    by_kind_elaborate.send("\x1b[C")
+    BASE._pump(by_kind_elaborate, seconds=0.35)
+    screen = BASE._snapshot(recorder, "06-by-kind-elaborate-expanded")
+    assert "▾ mem elaborate" in screen and "suggested Case propositions" in screen
+    BASE._assert_color(recorder.getvalue())
+    _close(by_kind_elaborate)
+
+    az_elaborate, recorder = BASE._spawn(executable, interactive=True)
+    BASE._pump(az_elaborate, seconds=0.8)
+    az_elaborate.send("\x1b[Z\x1b[C\t\x1b[H" + "\x1b[B" * 16)
+    BASE._pump(az_elaborate, seconds=0.45)
+    screen = BASE._snapshot(recorder, "07-a-z-elaborate-focused")
+    assert "A–Z" in screen and "▸ mem elaborate" in screen
+    az_elaborate.send("\x1b[C")
+    BASE._pump(az_elaborate, seconds=0.35)
+    screen = BASE._snapshot(recorder, "08-a-z-elaborate-expanded")
+    assert "▾ mem elaborate" in screen and "FORM 1 · mem elaborate" in screen
+    BASE._assert_color(recorder.getvalue())
+    _close(az_elaborate)
+
+    BASE.COLUMNS = 100
+    BASE.ROWS = 30
+    compact, recorder = BASE._spawn(executable, interactive=True)
+    BASE._pump(compact, seconds=0.8)
+    compact.send("\t\t\t" + "\x1b[B" * 2)
+    BASE._pump(compact, seconds=0.4)
+    screen = BASE._snapshot(recorder, "09-compact-distill-focused")
+    assert "▸ mem distill" in screen and "USE WHEN:" in screen
+    compact.send("\x1b[C")
+    BASE._pump(compact, seconds=0.35)
+    screen = BASE._snapshot(recorder, "10-compact-distill-expanded")
+    assert "▾ mem distill" in screen and "Case/Example Context + Goal?" in screen
+    compact_raw = recorder.getvalue()
+    assert "30 100" in compact_raw
+    assert BASE.re.search(r"\x1b\[[0-9;]*38;(?:2|5);", compact_raw) is not None
+    assert BASE.re.search(r"\x1b\[[0-9;]*48;(?:2|5);", compact_raw) is not None
+    _close(compact)
+
+    compact_elaborate, recorder = BASE._spawn(executable, interactive=True)
+    BASE._pump(compact_elaborate, seconds=0.8)
+    compact_elaborate.send("\t\t\t" + "\x1b[B" * 3)
+    BASE._pump(compact_elaborate, seconds=0.4)
+    screen = BASE._snapshot(recorder, "11-compact-elaborate-focused")
+    assert "▸ mem elaborate" in screen and "USE WHEN:" in screen
+    compact_elaborate.send("\x1b[C")
+    BASE._pump(compact_elaborate, seconds=0.35)
+    screen = BASE._snapshot(recorder, "12-compact-elaborate-expanded")
+    assert "▾ mem elaborate" in screen and "suggested Case propositions" in screen
+    compact_raw = recorder.getvalue()
+    assert "30 100" in compact_raw
+    assert BASE.re.search(r"\x1b\[[0-9;]*38;(?:2|5);", compact_raw) is not None
+    assert BASE.re.search(r"\x1b\[[0-9;]*48;(?:2|5);", compact_raw) is not None
+    _close(compact_elaborate)
 
 
 if __name__ == "__main__":

@@ -32,21 +32,21 @@
 ┃                          relevance.                                                    │                                                                                        ┃ 
 ┃ ▸ mem edit               Replace direct Memory content by UID or prefix in the current │ USE WHEN: Correcting or revising a known Memory in place.                              ┃ 
 ┃                          or explicit Context.                                          │                                                                                        ┃ 
-┃ ▸ mem elaborate          Propose candidate Rules from a Goal, or concrete Case         │ USE WHEN: An abstract Goal needs starter Rule candidates, or existing Rules need       ┃ 
+┃ ▾ mem elaborate          Propose candidate Rules from a Goal, or concrete Case         │ USE WHEN: An abstract Goal needs starter Rule candidates, or existing Rules need       ┃ 
 ┃                          propositions from existing Rules.                             │           additional concrete Case propositions for review.                            ┃ 
+┃   FLOW      · Goal -> suggested Rules; Rules -> suggested Case propositions                                                                                                     ┃ 
+┃   EXECUTION · SEMANTIC                                                                                                                                                          ┃ 
+┃   EFFECT    · Read-only; every proposal remains suggested and unverified                                                                                                        ┃ 
+┃   RANGE     · One Goal or Rule set, inline or from one exact Ground revision                                                                                                    ┃ 
+┃   FORM 1 · mem elaborate --goal "[goal]" (propose candidate Rules)                                                                                                              ┃ 
+┃   FORM 2 · mem elaborate --rule "[rule]" (propose concrete Cases)                                                                                                               ┃ 
+┃   FORM 3 · mem elaborate --rule "[rule1]" --rule "[rule2]" (propose concrete Cases across explicit Rules)                                                                       ┃ 
+┃   FORM 4 · mem elaborate --ground [name] --from-goal (use the exact Ground Goal through the same application)                                                                   ┃ 
+┃   FORM 5 · mem elaborate --ground [name] --from-rules (use the exact active Ground Rules through the same application)                                                          ┃ 
 ┃ ▸ mem embed              Place a Child Context inside a target while retaining its     │ USE WHEN: Reusing a Context inside another Context without copying it.                 ┃ 
 ┃                          identity and ownership.                                       │                                                                                        ┃ 
 ┃ ▸ mem eval               Run and inspect staged semantic evaluation campaigns.         │ USE WHEN: Measuring operation behavior against repeatable fixtures.                    ┃ 
 ┃ ▸ mem find               Search selected Contexts with explicit lexical-descendant and │ USE WHEN: Finding relevant Memories across a selected Context scope.                   ┃ 
-┃                          embedded-Context reach.                                       │                                                                                        ┃ 
-┃ ▸ mem find-ambiguities   Report ambiguous direct Memories in the current or explicit   │ USE WHEN: Finding Memories that permit unclear or multiple interpretations.            ┃ 
-┃                          Context; no Context changes.                                  │                                                                                        ┃ 
-┃ ▸ mem find-conflicts     Report conflicting direct Memory pairs in the current or      │ USE WHEN: Finding mutually incompatible claims or instructions.                        ┃ 
-┃                          explicit Context; no Context changes.                         │                                                                                        ┃ 
-┃ ▸ mem find-duplicates    Report duplicate direct Memories in the current or explicit   │ USE WHEN: Locating semantically redundant Memories before cleanup.                     ┃ 
-┃                          Context; no Context changes.                                  │                                                                                        ┃ 
-┃ ▸ mem fit                Judge whether two or more propositions can jointly hold under │ USE WHEN: Checking whether Memories, Rules, Goals, or other propositions can coexist   ┃ 
-┃                          ordinary readings.                                            │           without contradiction.                                                       ┃ 
-┃ ▸ mem forget             Review keep/edit/delete decisions for one instruction, then   │ USE WHEN: Removing or transforming material according to a semantic criterion.         ┃v
+┃                          embedded-Context reach.                                       │                                                                                        ┃v
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
- ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab surface  H full help
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab surface  H full help

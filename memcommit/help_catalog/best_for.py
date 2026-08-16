@@ -24,6 +24,10 @@ BEST_FOR_BY_OPERATION = {
     "delete": "Removing a specific Context or item that is no longer needed.",
     "diff": "Verifying exactly what a recorded operation changed.",
     "distill": "Extracting reusable rules from evidence-rich source material.",
+    "elaborate": (
+        "An abstract Goal needs starter Rule candidates, or existing Rules need "
+        "additional concrete Case propositions for review."
+    ),
     "edit": "Correcting or revising a known Memory in place.",
     "embed": "Reusing a Context inside another Context without copying it.",
     "eval": "Measuring operation behavior against repeatable fixtures.",

@@ -1,0 +1,30 @@
+ mem help · command inventory                                                                       
+┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+│ ▸ mem find-duplicates   Report duplicate direct Memories in the current or explicit Context; no │^
+│                         Context changes.                                                        │ 
+│                         USE WHEN: Locating semantically redundant Memories before cleanup.      │ 
+│ ▸ mem find-ambiguities  Report ambiguous direct Memories in the current or explicit Context; no │ 
+│                         Context changes.                                                        │ 
+│                         USE WHEN: Finding Memories that permit unclear or multiple              │ 
+│                                   interpretations.                                              │ 
+│ ▸ mem find-conflicts    Report conflicting direct Memory pairs in the current or explicit       │ 
+│                         Context; no Context changes.                                            │ 
+│                         USE WHEN: Finding mutually incompatible claims or instructions.         │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                    
+┏ ANALYZE & TRANSFORM ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃ ▸ mem audit      Run Duplicate, Ambiguity, and Conflict checks plus optional Rule Conformance,  ┃ 
+┃                  then review one saved report.                                                  ┃ 
+┃                  USE WHEN: Performing a combined quality review before revising a Context.      ┃ 
+┃ ▸ mem atomize    Split composite Memories for review; --evaluate performs an issue-scoped       ┃ 
+┃                  directional meld.                                                              ┃ 
+┃                  USE WHEN: Separating a composite Memory into independently reviewable          ┃ 
+┃                            requirements.                                                        ┃ 
+┃ ▸ mem distill    Derive reusable Rules from Case or Example propositions in a selected Context  ┃ 
+┃                  scope, using an optional Goal to focus relevance.                              ┃ 
+┃                  USE WHEN: Extracting reusable rules from evidence-rich source material.        ┃ 
+┃ ▸ mem elaborate  Propose candidate Rules from a Goal, or concrete Case propositions from        ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help

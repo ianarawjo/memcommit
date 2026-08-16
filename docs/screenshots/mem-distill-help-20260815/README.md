@@ -1,7 +1,8 @@
-# `mem distill` Help discovery
+# `mem distill` and `mem elaborate` Help discovery
 
-These four read-only captures verify that the new Distill operation is
-discoverable through both projections of the canonical `mem help` catalog.
+These read-only captures verify that Distill and Elaborate are discoverable
+through both projections of the canonical `mem help` catalog and remain
+readable in a compact viewport.
 They use the installed `mem help` entry point in a color-capable `180x52` PTY
 with `TERM=xterm-256color`, `COLORTERM=truecolor`, and `NO_COLOR` removed.
 Help opens no Context content and performs no durable mutation.
@@ -14,6 +15,14 @@ Help opens no Context content and performs no durable mutation.
    and `Home` select A–Z, then thirteen `Down` keys focus Distill.
 4. `04-a-z-distill-expanded` — `Right` exposes the same contract and Forms in
    the A–Z projection.
+5. `05`–`08` repeat BY KIND and A–Z discovery/expansion for Elaborate.
+6. `09`–`12` capture collapsed and expanded Distill/Elaborate at `100×30`;
+   summaries and `USE WHEN:` stack while the expanded contract remains
+   scrollable.
+
+The Elaborate captures use the final reviewed wording: candidate Rules come
+from a Goal, concrete Case propositions come from existing Rules, and the use
+case does not imply that Elaborate itself refines or verifies a Rule.
 
 Each step has a native-size PNG, extracted terminal text, and the original
 color-preserving PTY byte stream. The two projections consume one Help record;

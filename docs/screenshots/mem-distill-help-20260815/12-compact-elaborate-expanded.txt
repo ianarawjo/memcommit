@@ -1,0 +1,30 @@
+ mem help · command inventory                                                                       
+┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+│                         Context; no Context changes.                                            │^
+│                         USE WHEN: Finding mutually incompatible claims or instructions.         │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                    
+┏ ANALYZE & TRANSFORM ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃ ▸ mem audit      Run Duplicate, Ambiguity, and Conflict checks plus optional Rule Conformance,  ┃ 
+┃                  then review one saved report.                                                  ┃ 
+┃                  USE WHEN: Performing a combined quality review before revising a Context.      ┃ 
+┃ ▸ mem atomize    Split composite Memories for review; --evaluate performs an issue-scoped       ┃ 
+┃                  directional meld.                                                              ┃ 
+┃                  USE WHEN: Separating a composite Memory into independently reviewable          ┃ 
+┃                            requirements.                                                        ┃ 
+┃ ▸ mem distill    Derive reusable Rules from Case or Example propositions in a selected Context  ┃ 
+┃                  scope, using an optional Goal to focus relevance.                              ┃ 
+┃                  USE WHEN: Extracting reusable rules from evidence-rich source material.        ┃ 
+┃ ▾ mem elaborate  Propose candidate Rules from a Goal, or concrete Case propositions from        ┃ 
+┃                  existing Rules.                                                                ┃ 
+┃                  USE WHEN: An abstract Goal needs starter Rule candidates, or existing Rules    ┃ 
+┃                            need additional concrete Case propositions for review.               ┃ 
+┃   FLOW      · Goal -> suggested Rules; Rules -> suggested Case propositions                     ┃ 
+┃   EXECUTION · SEMANTIC                                                                          ┃ 
+┃   EFFECT    · Read-only; every proposal remains suggested and unverified                        ┃ 
+┃   RANGE     · One Goal or Rule set, inline or from one exact Ground revision                    ┃ 
+┃   FORM 1 · mem elaborate --goal "[goal]" (propose candidate Rules)                              ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab next kind  H f

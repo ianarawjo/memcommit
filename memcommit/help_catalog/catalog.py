@@ -145,11 +145,21 @@ _OPERATIONS = (
     ),
     _operation(
         "distill",
-        "Derive evidence-bound reusable Rules from a Context, optionally guided by a Goal.",
-        "Goal? + Source Context -> reviewed Rule Context",
+        "Derive reusable Rules from Case or Example propositions in a selected "
+        "Context scope, using an optional Goal to focus relevance.",
+        "Case/Example Context + Goal? -> reviewed Rules",
         ExecutionKind.SEMANTIC,
-        "Source stays unchanged; only explicit Apply creates a new Result",
-        "One exact local Source or its readable descendants",
+        "Source and Ground stay unchanged; standalone Apply may create a new Result",
+        "One exact local Source, its readable descendants, or one bound Ground candidate frame",
+    ),
+    _operation(
+        "elaborate",
+        "Propose candidate Rules from a Goal, or concrete Case propositions from "
+        "existing Rules.",
+        "Goal -> suggested Rules; Rules -> suggested Case propositions",
+        ExecutionKind.SEMANTIC,
+        "Read-only; every proposal remains suggested and unverified",
+        "One Goal or Rule set, inline or from one exact Ground revision",
     ),
     _operation(
         "edit",

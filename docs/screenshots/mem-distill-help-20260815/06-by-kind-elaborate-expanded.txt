@@ -2,15 +2,7 @@
 ┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
 │  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-│ ▸ mem import     Import a clean-baseline Profile, Context tree, or Memory by value     │ USE WHEN: Bringing externally supplied material into a locally managed store.          │^
-│                  while preserving resource identity.                                   │                                                                                        │ 
-│ ▸ mem embed      Place a Child Context inside a target while retaining its identity    │ USE WHEN: Reusing a Context inside another Context without copying it.                 │ 
-│                  and ownership.                                                        │                                                                                        │ 
-└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
-                                                                                                                                                                                    
-┌ MEMORIES ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
-│ ▸ mem add              Add one or more Memories to the current or explicit Context.    │ USE WHEN: Saving new facts, instructions, or source material.                          │ 
-│ ▸ mem reference        Add a read-only Memory pointer; the Target stores identity      │ USE WHEN: Reusing a Memory while keeping one authoritative copy.                       │ 
+│ ▸ mem reference        Add a read-only Memory pointer; the Target stores identity      │ USE WHEN: Reusing a Memory while keeping one authoritative copy.                       │^
 │                        metadata rather than copying content.                           │                                                                                        │ 
 │ ▸ mem edit             Replace direct Memory content by UID or prefix in the current   │ USE WHEN: Correcting or revising a known Memory in place.                              │ 
 │                        or explicit Context.                                            │                                                                                        │ 
@@ -47,6 +39,14 @@
 ┃                  Conformance, then review one saved report.                            │                                                                                        ┃ 
 ┃ ▸ mem atomize    Split composite Memories for review; --evaluate performs an           │ USE WHEN: Separating a composite Memory into independently reviewable requirements.    ┃ 
 ┃                  issue-scoped directional meld.                                        │                                                                                        ┃ 
-┃ ▸ mem distill    Derive reusable Rules from Case or Example propositions in a selected │ USE WHEN: Extracting reusable rules from evidence-rich source material.                ┃v
+┃ ▸ mem distill    Derive reusable Rules from Case or Example propositions in a selected │ USE WHEN: Extracting reusable rules from evidence-rich source material.                ┃ 
+┃                  Context scope, using an optional Goal to focus relevance.             │                                                                                        ┃ 
+┃ ▾ mem elaborate  Propose candidate Rules from a Goal, or concrete Case propositions    │ USE WHEN: An abstract Goal needs starter Rule candidates, or existing Rules need       ┃ 
+┃                  from existing Rules.                                                  │           additional concrete Case propositions for review.                            ┃ 
+┃   FLOW      · Goal -> suggested Rules; Rules -> suggested Case propositions                                                                                                     ┃ 
+┃   EXECUTION · SEMANTIC                                                                                                                                                          ┃ 
+┃   EFFECT    · Read-only; every proposal remains suggested and unverified                                                                                                        ┃ 
+┃   RANGE     · One Goal or Rule set, inline or from one exact Ground revision                                                                                                    ┃ 
+┃   FORM 1 · mem elaborate --goal "[goal]" (propose candidate Rules)                                                                                                              ┃v
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
- ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab next kind  H full help

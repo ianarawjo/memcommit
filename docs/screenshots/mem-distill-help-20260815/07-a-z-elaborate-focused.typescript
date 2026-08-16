@@ -77,13 +77,13 @@
 [19C[0;1m        [0mlocator, name,[Cor[CUID.[0m
 [8C[0;1md[Cff[C    [2C        [0mInspect r[Ccorded Cont[Cx[2Cor Update[Cchang[Cs without applying [14CVerifying exactly what a[Crecorded opera[Cion changed.      [0m
 [19C[0;1m        [0mthem.[0m
-[C[0;38;5;234;48;5;117;1m ▸ mem distill            Derive reusable Rules from Case or Example propositions in a  │ USE WHEN: Extracting reusable rules from evidence-rich source material.                [0m
-[C[0;38;5;234;48;5;117;1m                          selected Context scope, using an optional Goal to focus       │                                                                                        [0m
-[C[0;38;5;234;48;5;117;1m                          relevance.                                                    │                                                                                        [0m
+[8C[0;1mdistill[4C        [0mDerive[3Cusable Rules from[2Case or Exampl[2Cpropositions in[Ca [13CExtracting reusable rules from evidence-rich[Csource ma[Cerial.[0m
+[19C[0;1m        [0mselected Context scope,[Cusing[Can[Coptional[CGoal[Cto[Cfocus[0m
+[2C[0;1m [C   [C      [5C        [0mrelevance.   [C       [C       [C  [C      [C  [C  [C        [10C         [C      [C   [C       [C        [C  [C       [C        [C        [0m
 [2C[0;1m▸[Cmem[Cedit[7C        [0mReplace[Cdirect[CMemory[Ccontent[Cby[CUID[Cor[Cprefix[Cin[Cthe[Ccurrent[3C[0;1mUSE WHEN:[C[0mCorrecting[Cor[Crevising[Ca[Cknown[CMemory[Cin[Cplace.[0m
 [2C[0;1m [C   [C        [3C        [C[0mr [2Cplicit Context.   [C       [C    [C   [C      [C   [C      [C  [3C         [C     [C [C        [C        [C  [C      [C  [C      [C [C       [0m
-[2C[0;1m▸[Cmem[Celaborate[2C        [0mPropose candidate[CRules[Cfrom[Ca[CGoal,[Cor[Cconcrete[CCase[11C[0;1mUSE WHEN:[C[0mAn[Cabstract[CGoal[Cneeds[Cstarter[CRule[Ccandidates,[Cor[Cexisting[CRules[Cneed[0m
-[2C[0;1m [C   [C    [7C        [0mpropositions from existing[CRules.[C   [C        [C   [C      [C  [4C         [Caddi[2Conal[Cconcrete Case propositions for[Creview.[0m
+[C[0;38;5;234;48;5;117;1m ▸ mem elaborate          Propose candidate Rules from a Goal, or concrete Case         │ USE WHEN: An abstract Goal needs starter Rule candidates, or existing Rules need       [0m
+[C[0;38;5;234;48;5;117;1m                          propositions from existing Rules.                             │           additional concrete Case propositions for review.                            [0m
 [2C[0;1m▸[Cmem[Cembed[6C        [0mPlace[Ca[CChild[CContext[Cinside[Ca[Ctarget[Cwhile[Cretaining[Cits[7C[0;1mUSE WHEN:[C[0mReusing[Ca[CContext[Cinside[Canother[CContext[Cwithout[Ccopying[Cit.[0m
 [2C[0;1m [C   [C      [5C        [0midentity and own[Crship. [C   [C      [C   [C      [C  [C   [11C         [C             [C       [C         [C   [C        [C       [C     [0m
 [8C[0;1meval  [5C        [0mRun [2Cd inspect[Cstaged sema[2Cic evaluation campaigns.    [17CMeasuring op[2Cation[Cbehav[Cor[Cagainst repeat[Cb[Ce fixtures.   [C      [0m
@@ -99,34 +99,4 @@
 [0;38;5;117;1m┃[C[0;1m [C   [C    [13C  [0mordinary readings. [C       [C  [C   [C  [C      [C  [C   [C       [5C         [Cwithou[C cont[Cadictio[C.[C [C     [C      [C  [C      [30C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[C[0;1m▸[Cmem[Cforget[11C  [0mR[Cview keep/edit/delete[Cdecisions[Cfor[Cone[Cinstruction,[Cthen[5C[0;1mUSE WHEN:[C[0mRemoving[Cor[Ctransforming[Cmaterial[Caccording[Cto[Ca[Csemantic[Ccriterion.[9C[0;38;5;117;1m┃[0m
 
-[76C[0msurface  H[Cfull help[0m[K[22A[96D[0m[8A[179C[0;48;5;238m [0m
-[179C[0;48;5;248m [0m
-
-
-
-
-
-
-[C[0;1m ▾ mem distill            [0mDerive reusable Rules from Case or Example propositions in a  │ [0;1mUSE WHEN:[0m Extracting reusable rules from evidence-rich source material.                [0m
-[C[0;1m                          [0mselected Context scope, using an optional Goal to focus       │                                                                                        [0m
-[C[0;1m                          [0mrelevance.                                                    │                                                                                        [0m
-[C[0m   FLOW      · Case/Example Cont[Cxt + Goal? -> reviewed[CRules [C  [C      [C  [C   [C       [C [C         [C          [C  [C        [C [C     [C      [C  [C      [0m
-[C[0m   EXECUTION · SEMANTIC     [C        [C        [42C [0m
-[C[0m   EFFECT    · Source and G[2Cund st[Cy unchanged; standalone Apply[Cmay create a new[CResult[C         [C  [C        [C    [C     [C       [C    [C           [C  [C        [C     [C    [0m
-[C[0m   RANGE     · One exact local Source,[Cits r[Cadable desc[Cndants,[Cor[Cone[Cbound[CGround[Ccandidate[Cframe          [C        [C    [C            [C   [C       [0m
-[C[0;38;5;234;48;5;117;1;7m   FORM 1 · mem distill (review Rules distilled from the current Context)                                                                                                        [0m
-[C[0;38;5;189m   FORM 2 · mem distill [context] (review Rules from one explicit Context)                                                                                                       [0m
-[C[0;38;5;189m   FORM 3 · mem distill [context] --goal "[goal]" (guide Rule relevance with a Goal)                                                                                             [0m
-[C[0;38;5;189m   FORM 4 · mem distill [context] -r (include descendants and embedded Contexts)                                                                                                 [0m
-[C[0;38;5;189m   FORM 5 · mem distill [context] --save-as [result_context] (review without creating the Result)                                                                                [0m
-[C[0;38;5;189m   FORM 6 · mem distill [context] --save-as [result_context] --apply (create the exact reviewed Rule Context)                                                                    [0m
-[C[0;38;5;189m   FORM 7 · mem distill --ground [name] (review Rules from its exact Goal and working-candidate frame)                                                                           [0m
-[8C[0;1medit          [8C[0mlace direct Memory content b[2CUID or prefix in the[Ccurrent[13CCorrecting or rev[Csing [C known Memory in place.      [0m
-[27C[0mor explicit Con[Cext.[C       [C        [0m
-[8C[0;1melaborate      [4C[0mPropose candidate Rules[Cfrom a Goal, or[2Concre[Ce Case      [15CAn [Cbstract Goal needs starter Rule candidates,[Cor existing[CRules[Cneed[0m
-[27C[0mpropositions from existing Rules.[41Cadditional[Cconcrete[CCase[Cpropositions[Cfor[Creview.[0m
-[8C[0;1membed[14C[0mPlac[2Ca Child[CContext inside a target while retaining its    [13CReusing a Cont[Cxt insid[C anoth[Cr Context[Cwithout copying it.  [C   [C       [0m
-[27C[0midentit[2Cand ownership.[51C       [C              [0m
-[8C[0;1meval  [14C[0mun and insp[Cct stag[Cd semant[Cc evaluation campaigns. [C    [15CM[Casuring ope[2Ction behavior ag[Cinst repeatable fixtures.[C          [0m
-
-[60C[0mpr[Cfill command[Cline  Tab surface  H[Cfull help[15A[106D[0m
+[76C[0msurface  H[Cfull help[0m[K[17A[96D[0m

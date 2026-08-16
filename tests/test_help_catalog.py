@@ -111,6 +111,27 @@ def test_meld_help_distinguishes_symmetric_and_directional_modes():
     ) in overview
 
 
+def test_distill_help_separates_case_propositions_from_goal_focus():
+    assert operation_help("distill").summary == (
+        "Derive reusable Rules from Case or Example propositions in a selected "
+        "Context scope, using an optional Goal to focus relevance."
+    )
+
+
+def test_elaborate_help_separates_candidate_rules_from_concrete_cases():
+    assert operation_help("elaborate").summary == (
+        "Propose candidate Rules from a Goal, or concrete Case propositions from "
+        "existing Rules."
+    )
+    assert BEST_FOR_BY_OPERATION["elaborate"] == (
+        "An abstract Goal needs starter Rule candidates, or existing Rules need "
+        "additional concrete Case propositions for review."
+    )
+    assert operation_help("elaborate").flow == (
+        "Goal -> suggested Rules; Rules -> suggested Case propositions"
+    )
+
+
 def test_collapsed_by_kind_row_shows_summary_and_best_for_side_by_side():
     root, context = _root_context()
     try:
@@ -135,12 +156,13 @@ def test_collapsed_by_kind_row_shows_summary_and_best_for_side_by_side():
 
     assert all(len(line) == 180 for line in lines)
     assert "Compare Memories in two Contexts" in command_line
-    assert "│ Comparing two Contexts" in command_line
+    assert "│ USE WHEN: Comparing two Contexts" in command_line
     row_content = command_line[2:-2]
     summary_column, use_case_column = row_content.split(" │ ", 1)
     assert abs(len(summary_column) - len(use_case_column)) <= 1
+    assert use_case_column.startswith("USE WHEN: Comparing two Contexts")
     assert any(
-        style == "class:selected" and "Comparing two Contexts" in text
+        style == "class:help-command.selected bold" and text == "USE WHEN:"
         for style, text in fragments
     )
     assert "BEST FOR" not in rendered
@@ -172,7 +194,7 @@ def test_collapsed_a_z_rows_use_the_same_best_for_column():
         line for line in rendered.splitlines() if "▸ mem compare" in line
     )
 
-    assert "│ Comparing two Contexts" in command_line
+    assert "│ USE WHEN: Comparing two Contexts" in command_line
     assert "BEST FOR" not in rendered
 
 
@@ -209,6 +231,13 @@ def test_collapsed_narrow_row_stacks_best_for_below_the_summary():
 
     assert all(len(line) == 90 for line in lines)
     assert best_for_index > command_index
+    summary_start = lines[command_index].index("Compare Memories")
+    label_start = lines[best_for_index].index("USE WHEN:")
+    use_case_start = lines[best_for_index].index("Comparing two Contexts")
+    continuation = next(line for line in lines if "align and differ." in line)
+    assert label_start == summary_start
+    assert use_case_start == label_start + len("USE WHEN: ")
+    assert continuation.index("align and differ.") == use_case_start
     assert "BEST FOR" not in rendered
 
 

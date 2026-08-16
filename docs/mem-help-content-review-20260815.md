@@ -3,7 +3,7 @@
 Status: working draft, 2026-08-15
 
 This document freezes the current review copy before it is promoted into the
-runtime Help catalog. It contains the same 57 operations in two separate
+runtime Help catalog. It contains the same 58 operations in two separate
 tables: English first and Korean second.
 
 Field provenance:
@@ -53,7 +53,8 @@ catalog rather than parsed from this document.
 | Search & Explain | find-conflicts | YES · CACHE OR PROVIDER | Context Memories → conflict report | Report conflicting direct Memory pairs in the current or explicit Context; no Context changes. | Analyzes one exact direct Context and does not modify it. | Finding mutually incompatible claims or instructions. |
 | Analyze & Transform | audit | YES · CACHE OR PROVIDER | Context → saved quality report | Run Duplicate, Ambiguity, and Conflict checks and review one saved report. | Read-only analysis of one exact direct Context. | Performing a combined quality review before revising a Context. |
 | Analyze & Transform | atomize | YES · CACHE OR PROVIDER | Context Memories → reviewed atomic Memories | Split composite Memories for review; --evaluate performs an issue-scoped directional meld. | Material changes occur only after explicit acceptance. | Separating a composite Memory into independently reviewable requirements. |
-| Analyze & Transform | distill | YES · CACHE OR PROVIDER | Goal? + Source Context → reviewed Rule Context | Derive evidence-bound reusable Rules from a Context, optionally guided by a Goal. | Source stays unchanged; Apply creates a new Result. | Extracting reusable rules from evidence-rich source material. |
+| Analyze & Transform | distill | YES · EXACT PREPARED OR PROVIDER | Case/Example Context + Goal? → reviewed Rules | Derive reusable Rules from Case or Example propositions in a selected Context scope, using an optional Goal to focus relevance. | Source and Ground stay unchanged; standalone Apply may create a new Result. | Extracting reusable rules from evidence-rich source material. |
+| Analyze & Transform | elaborate | YES · EXACT PREPARED OR PROVIDER | Goal → suggested Rules; Rules → suggested Case propositions | Propose candidate Rules from a Goal, or concrete Case propositions from existing Rules. | Read-only; every proposal remains suggested and unverified. | An abstract Goal needs starter Rule candidates, or existing Rules need additional concrete Case propositions for review. |
 | Analyze & Transform | compare | YES · CACHE OR PROVIDER | Context ↔ Context → comparison report | Compare Memories in two Contexts and report what they share, what differs, and what appears only on one side. | Neither Context changes or serves as the authority; each may be exact or include readable descendants. | Comparing two Contexts as a whole to understand where they align and differ. |
 | Analyze & Transform | impact | DEPENDS ON FORM | Operation inputs or session → impact report | Preview or inspect operation Impact; no Context changes occur before its reviewed Apply handoff. | Impact is read-only; applying remains a separate reviewed action. | Checking expected consequences before accepting a transformation. |
 | Analyze & Transform | review | DEPENDS ON FORM | Saved analysis → review responses | Enter an interactive Review session or stage semantic review responses; never apply Memories. | Records review responses but never materializes Memory changes. | Resolving issues in a saved analysis before a later Apply. |
@@ -115,7 +116,8 @@ catalog rather than parsed from this document.
 | 검색 및 설명 | find-conflicts | 있음 · 캐시 또는 Provider | Context Memory → 충돌 보고서 | 현재 또는 명시한 Context에서 서로 충돌하는 직접 Memory 쌍을 보고합니다. | 정확한 직접 Context 하나를 분석하며 내용을 변경하지 않습니다. | 양립할 수 없는 주장이나 지침을 찾을 때. |
 | 분석 및 변환 | audit | 있음 · 캐시 또는 Provider | Context → 저장된 품질 보고서 | 중복, 모호성 및 충돌 검사를 실행하고 하나의 저장된 보고서로 검토합니다. | 정확한 직접 Context 하나를 읽기 전용으로 분석합니다. | Context를 수정하기 전에 종합적인 품질 검사를 수행할 때. |
 | 분석 및 변환 | atomize | 있음 · 캐시 또는 Provider | Context Memory → 검토 가능한 원자적 Memory | 복합 Memory를 검토 가능한 단위로 나눕니다. --evaluate는 issue 범위의 directional meld를 수행합니다. | 명시적으로 승인한 후에만 자료가 변경됩니다. | 복합 Memory의 요구사항을 독립적으로 검토할 수 있게 나눌 때. |
-| 분석 및 변환 | distill | 있음 · 캐시 또는 Provider | Goal 선택 사항 + Source Context → 검토 가능한 Rule Context | 선택적인 Goal을 기준으로 Context에서 근거에 연결된 재사용 가능 Rule을 도출합니다. | Source는 유지되며 Apply만 새 Result를 생성합니다. | 근거가 풍부한 자료에서 재사용 가능한 규칙을 추출할 때. |
+| 분석 및 변환 | distill | 있음 · 정확한 준비 결과 또는 Provider | Case/Example Context + 선택적 Goal → 검토 가능한 Rule | 선택한 Context 범위의 Case 또는 Example 명제에서 재사용 가능한 Rule을 도출하며, 선택적인 Goal로 관련성의 초점을 맞춥니다. | Source와 Ground는 유지되며 독립 실행의 Apply만 새 Result를 만들 수 있습니다. | 근거가 풍부한 자료에서 재사용 가능한 규칙을 추출할 때. |
+| 분석 및 변환 | elaborate | 있음 · 정확한 준비 결과 또는 Provider | Goal → 제안된 Rule; Rule → 제안된 Case 명제 | Goal에서 후보 Rule을, 기존 Rule에서 구체적인 Case 명제를 제안합니다. | 읽기 전용이며 모든 제안은 제안 상태이자 미검증 상태로 남습니다. | 추상적인 Goal에 출발점이 될 Rule 후보가 필요하거나, 기존 Rule을 검토할 구체적인 Case 명제가 더 필요할 때. |
 | 분석 및 변환 | compare | 있음 · 캐시 또는 Provider | Context ↔ Context → 비교 보고서 | 두 Context의 Memory를 비교해 공통점, 차이점, 한쪽에만 있는 내용을 보고합니다. | 두 Context 모두 변경하지 않으며 어느 쪽도 기준으로 삼지 않습니다. 각 범위는 정확한 Context 또는 읽을 수 있는 하위 Context를 포함할 수 있습니다. | 두 Context를 전체적으로 비교해 어디가 같고 다른지 이해할 때. |
 | 분석 및 변환 | impact | 형식에 따라 다름 | Operation 입력 또는 session → 영향 보고서 | Operation의 영향을 미리 보거나 검사하며 검토된 Apply로 넘기기 전에는 Context를 변경하지 않습니다. | Impact 자체는 읽기 전용이며 Apply는 별도의 검토 작업입니다. | 변환을 승인하기 전에 예상되는 영향을 확인할 때. |
 | 분석 및 변환 | review | 형식에 따라 다름 | 저장된 분석 → 검토 응답 | 대화형 Review session에 들어가거나 의미 검토 응답을 기록하며 Memory를 적용하지 않습니다. | 응답만 기록하며 Memory 변경을 materialize하지 않습니다. | 이후 Apply 전에 저장된 분석의 문제를 해결할 때. |
