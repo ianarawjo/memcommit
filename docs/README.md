@@ -195,6 +195,10 @@ considered sufficient design history.
   comment–implication–confirmation loops modeled on grounding in ordinary
   human communication. Shared turn-lineage may be reused, but named Ground's
   Goal–Rules–Memories frame remains separate from Resolution Workbench.
+- [`atomize-grounding-agent-tool-design-rationale.md`](atomize-grounding-agent-tool-design-rationale.md)
+  defines the strict five-action agent contract over the public Grounding
+  facade, its provider and mutation boundaries, JSON projection, registry/MCP
+  path, and remaining concurrency limitation.
 - [`mem-atomize-grounding-screen-captures.md`](mem-atomize-grounding-screen-captures.md)
   indexes exact tested CLI captures for the workbench, awaiting, resumed,
   corrected ready, and applied states.
