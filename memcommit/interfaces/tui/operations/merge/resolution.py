@@ -37,6 +37,7 @@ from memcommit.merge_application import (
     MergeReach,
     MergeResolution,
     MergeResult,
+    merge_resolution_case,
 )
 from memcommit.merge_runtime import merge_summary
 
@@ -133,9 +134,7 @@ def _argv_for(plan: FrozenMergePlan, outcome: ResolutionOutcome) -> tuple[str, .
         "mem",
         "merge",
         plan.source_name,
-        "--recursive"
-        if plan.request.reach is MergeReach.DESCENDANTS
-        else "--direct",
+        "--recursive" if plan.request.reach is MergeReach.DESCENDANTS else "--direct",
     ]
     if outcome.bulk_uid == MergeDecision.KEEP_TARGET.value:
         argv.append("--keep-target-all")
@@ -180,6 +179,7 @@ def merge_resolution_spec(plan: FrozenMergePlan) -> ResolutionWorkbenchSpec:
 
     if not plan.conflicts:
         raise ValueError("Merge Resolution requires at least one conflict.")
+    case = merge_resolution_case(plan)
     all_choices = (
         ResolutionChoice(
             MergeDecision.KEEP_TARGET.value,
@@ -201,7 +201,7 @@ def merge_resolution_spec(plan: FrozenMergePlan) -> ResolutionWorkbenchSpec:
             choices=tuple(
                 choice
                 for choice in all_choices
-                if MergeDecision(choice.uid) in conflict.allowed_decisions
+                if choice.uid in case.requirement(conflict.uid).choice_uids
             ),
         )
         for conflict in plan.conflicts
@@ -243,8 +243,8 @@ def merge_resolution_spec(plan: FrozenMergePlan) -> ResolutionWorkbenchSpec:
                     ),
                 )
                 if all(
-                    MergeDecision.TAKE_SOURCE in conflict.allowed_decisions
-                    for conflict in plan.conflicts
+                    MergeDecision.TAKE_SOURCE.value in requirement.choice_uids
+                    for requirement in case.requirements
                 )
                 else ()
             ),

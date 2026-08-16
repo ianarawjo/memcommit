@@ -201,6 +201,14 @@ _OPERATIONS = (
         "One complete frozen proposition set; Ground is an explicit adapter",
     ),
     _operation(
+        "resolve",
+        "Propose grounded minimum changes that turn one direct-Memory frame from Fit MAY or NO to YES.",
+        "Context Memories + optional guidance -> verified repair candidates -> exact Apply",
+        ExecutionKind.SEMANTIC,
+        "Read-only until one exact candidate is explicitly applied; Apply creates one checkpoint",
+        "One exact direct Context; explicit Memory UID prefixes may narrow mutation targets",
+    ),
+    _operation(
         "find-ambiguities",
         "Report ambiguous direct Memories in the current or explicit Context; no Context changes.",
         "Context Memories -> ambiguity report",

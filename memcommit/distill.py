@@ -25,7 +25,7 @@ from memcommit.summarize import SummaryFrame
 
 
 DISTILL_OPERATION = "distill_context"
-DISTILL_PROVIDER_CONTRACT_VERSION = 3
+DISTILL_PROVIDER_CONTRACT_VERSION = 2
 DISTILL_PAYLOAD_MARKER = "DISTILL CONTEXT PAYLOAD:\n"
 
 
@@ -398,9 +398,7 @@ def analyze_distill(
         "decision principle, or durable constraint rather than a narrative "
         "summary. Cite supporting Memories that justify it and boundary or "
         "contrast Memories that limit it. Every Rule must cite at least one "
-        "supporting Memory. Within one Rule, the support and boundary lists "
-        "must be disjoint: one Memory cannot appear in both lists. Do not "
-        "hide Source Memories: "
+        "supporting Memory. Do not hide Source Memories: "
         "every Memory not cited by any Rule must appear in outside_memory_ids, "
         "and an outside Memory must not also be cited. One Memory may support "
         "more than one Rule. Preserve uncertainty, exceptions, and time bounds. "

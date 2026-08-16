@@ -1,0 +1,121 @@
+PTY 180 52
+MEM RESOLVE · 1/1 · JUDGING, GENERATING, AND INDEPENDENTLY VERIFYING THE COMPLETE FRAME . · 0sMEM RESOLVE · 1/1 · VERIFIED PROPOSAL READY . · 0s                                                                                              [?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM RESOLVE · RESOLUTION SESSION[0m
+[0m SEMANTIC CANDIDATES · INDEPENDENTLY VERIFIED · EXACT APPLY[0m
+[0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER · COMPLETE REPORT ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;5;117;1m┃RESOLVE · FIT REPAIR[0m                                                                                                                                                             [0;1m^[179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃CONTEXT · resolve/capture[0m                                                                                                                                                        [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃REVISION · 4eae2a713f001951aafc8c814d2f8ac9bebbd906fcb25dab81b5353753dcedba[0m                                                                                                      [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃STATUS · CHOICE[0m                                                                                                                                                                  [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃REQUESTED · UPDATE, CREATE[0m                                                                                                                                                       [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃ALLOWED · UPDATE, CREATE[0m                                                                                                                                                         [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;117mINITIAL FIT · NO[0m                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;117mThe same office cannot ordinarily open at both times.[0m                                                                                                                            [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;117mQUESTION · Choose the smallest grounded schedule repair.[0m                                                                                                                         [0;48;5;248m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;248m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃CANDIDATE 1 · resolve-6755c6534462f94a77bd714861be1e8569b826ebe6093d3eb107ee9ef38f3476[0m                                                                                           [0;48;5;248m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;117mQualify the second time as the weekend schedule.[0m                                                                                                                                 [0;48;5;248m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;117mCOST · DELETE 0 · CREATE 0 · UPDATE 1 · CHANGED UNITS 6[0m                                                                                                                          [0;48;5;248m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;248m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;150;1mUPDATE · [20000000][0m                                                                                                                                                              [0;48;5;248m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃BEFORE · The office opens at 9.[0m                                                                                                                                                  [0;48;5;248m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃AFTER · The office opens at 9 on weekends.[0m                                                                                                                                       [0;1mv[179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+[0m┌────────────────────────────────────────────────────────────────────────| ITEMS · REQUIRED RESOLVE PLAN |─────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[0;38;5;231;1mREQUIRED 1 · ANSWERED 0 · REMAINING 1[0m                                                                                                                                             [179C│[0m
+[0m│· 1. FIT REPAIR · Choose one verified minimum-change post-image.                                                                                                                  [179C│[0m
+[0m│                                                                                                                                                                                  [179C│[0m
+[0m│                                                                                                                                                                                  [179C│[0m
+[0m│                                                                                                                                                                                  [179C│[0m
+[0m│                                                                                                                                                                                  [179C│[0m
+[0m│                                                                                                                                                                                  [179C│[0m
+[0m│                                                                                                                                                                                  [179C│[0m
+[0m│                                                                                                                                                                                  [179C│[0m
+[0m│                                                                                                                                                                                  [179C│[0m
+[0m│                                                                                                                                                                                  [179C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m┌───────────────────────────────────────────────────────────────────────────| TO DO · ONE NEXT ACTION |────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[0;38;5;231mOPEN FIRST UNRESOLVED · Choose one verified minimum-change post-image.[0m                                                                                                            [179C│[0m
+[0m│[0;38;5;231mEnter opens this required item. Apply stays unavailable.[0m                                                                                                                          [179C│[0m
+[0m│[ PRESS ENTER ]                                                                                                                                                                   [179C│[0m
+[0m│                                                                                                                                                                                  [179C│[0m
+[0m│                                                                                                                                                                                  [179C│[0m
+[0m│                                                                                                                                                                                  [179C│[0m
+[0m│                                                                                                                                                                                  [179C│[0m
+[0m│                                                                                                                                                                                  [179C│[0m
+[0m│                                                                                                                                                                                  [179C│[0m
+[0m│                                                                                                                                                                                  [179C│[0m
+[0m│                                                                                                                                                                                  [179C│[0m
+[0m│                                                                                                                                                                                  [179C│[0m
+[0m│                                                                                                                                                                                  [179C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m ↑/↓ move · Enter open/select · Tab frames · Esc/Backspace back · y focused · Y complete · Q close[98D[48A[C[0m[?25l[A[69C[0;38;5;117;1m┃ VIEWER · V[2CIFIED CANDIDATE DETAILS ┃[0m
+[C[0;38;5;117;1mV[CRIFI[CD RESOLV[C CANDIDATE[0m
+[C[0;38;5;117;1mresolve-6755c6534462f94a77bd714861be1e8569b826ebe6093d3eb107ee9ef38f3476[0m
+[C[0;38;5;117mQualify the second time as the weekend schedule.[0m                           [0m
+[C[0m               [0m
+[C[0;38;5;150;1mUPDATE · [20000000][0m       [0m
+[C[0;38;5;117;1mBEFORE · The office opens at 9.[0m
+[C[0;38;5;117;1mAFTER · The office opens at 9 on weekends.[0m
+[C[0;38;5;117mWHY · The added scope preserves both times.[0m
+[C[0;38;5;117mSOURCES · 20000000, 20000000[0m                         [0m
+
+[C[0;38;5;150;1mGROUNDING VERIFIED · Only the complete supplied frame is used.[0m
+[C[0;38;5;150;1mFIT YES · The complete revised schedule is compatible.[0m
+[C[0mVERIFIED RESOLVE CANDIDATE                                                            [0m
+[C[0;38;5;231;1mresolve-8a6915c9bf2142edf9d300400954d7eaea73321f168da4b5db706688ed9ba398[0m
+[0;38;5;117;1m┃[0;38;5;231mAdd an explicit day-dependent schedule statement.[0m                                                                                                                                [0;1mv[179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+[0m┌──────────────────────────────────────────────────────────────────| RESPONSES · REQUIRED · VERIFIED CANDIDATES |──────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[0;38;5;231;1mQUESTION · Choose one verified minimum-change post-image.[0m                                                                                                                         [179C│[0m
+[0m│                                                                                                                                                                                  [179C│[0m
+[0m│  1. CANDIDATE 1                                                                                                                                                                  [179C│[0m
+[0m│  Qualify the second time as the weekend schedule.                                                                                                                                [179C│[0m
+[C[0m                                     [0m
+[C[0m [C2[2CCANDIDATE 2                                                [0m
+[C[0m  Add an explicit day-dependent schedule statement.[0m
+
+[0m│                                                                                                                                                                                  [179C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m┌────────────────────────────────────────────────────────────────────────| ITEMS · REQUIRED RESOLVE PLAN |─────────────────────────────────────────────────────────────────────────[179C┐[0m
+[C[0;38;5;231;1mREQUIRED 1 · ANSWERED 0 · REMAINING 1[0m
+[C[0m· 1. FIT REPAIR · Choose one verified minimum-change post-image.[0m
+
+[0m│                                                                                                                                                                                  [179C│[0m
+[0m│                                                                                                                                                                                  [179C│[0m
+[0m│                                                                                                                                                                                  [179C│[0m
+[C[0m                                                                      [0m
+[0m│                                                                                                                                                                                  [179C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m┌───────────────────────────────────────────────────────────────────────────| TO DO · ONE NEXT ACTION |────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[C[0;38;5;231mOPEN FIRST UNRESOLVED · Choose one verified minimum-change post-image.[0m
+[C[0;38;5;231mEnter opens this required item. Apply stays unavailable.[0m
+[C[0m[ PRESS ENTER ][40A[15D[0m[?25l[A[0m┌─────────────────────────────────────────────────────────────────────| VIEWER · VERIFIED CANDIDATE DETAILS |──────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│VERIFIED RESOLVE CANDIDATE                                                                                                                                                       [0;1m^[179C[0m│[0m
+[0m│[0;38;5;231;1mresolve-6755c6534462f94a77bd714861be1e8569b826ebe6093d3eb107ee9ef38f3476[0m                                                                                                         [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;231mQualify the second time as the weekend schedule.[0m                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;150;1mUPDATE · [20000000][0m                                                                                                                                                              [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189mBEFORE · The office opens at 9.[0m                                                                                                                                                  [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189mAFTER · The office opens at 9 on weekends.[0m                                                                                                                                       [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;231mWHY · The added scope preserves both times.[0m                                                                                                                                      [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;231mSOURCES · 20000000, 20000000[0m                                                                                                                                                     [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;150;1mGROUNDING VERIFIED · Only the complete supplied frame is used.[0m                                                                                                                   [0;48;5;248m [179C[0m│[0m
+[0m│[0;38;5;150;1mFIT YES · The complete revised schedule is compatible.[0m                                                                                                                           [0;48;5;248m [179C[0m│[0m
+[0m│VERIFIED RESOLVE CANDIDATE                                                                                                                                                       [0;48;5;248m [179C[0m│[0m
+[0m│[0;38;5;231;1mresolve-8a6915c9bf2142edf9d300400954d7eaea73321f168da4b5db706688ed9ba398[0m                                                                                                         [0;48;5;248m [179C[0m│[0m
+[0m│[0;38;5;231mAdd an explicit day-dependent schedule statement.[0m                                                                                                                                [0;1mv[179C[0m│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ RESPONSES · REQUIRED · VERIFIED CANDIDATES ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;5;117;1m┃[0;38;5;231;1mQUESTION · Choose one verified minimum-change post-image.[0m                                                                                                                         [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                  [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m  1. CANDIDATE 1[0m                                                                                                                                                                  [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117m  Qualify the second time as the weekend schedule.[0m                                                                                                                                [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                  [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  2. CANDIDATE 2                                                                                                                                                                  [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  Add an explicit day-dependent schedule statement.                                                                                                                               [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                  [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                  [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[29A[0m

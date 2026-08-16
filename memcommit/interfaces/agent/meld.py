@@ -119,31 +119,63 @@ def _parse_request(payload: object) -> tuple[MeldAgentKind, dict[str, object]]:
     if kind == "comment":
         exact_fields(
             value,
-            required={"version", "kind", "target_context", "comment"},
-            optional=frozenset({"issue_uid", "revision", "revises_turn_uids"}),
+            required={"version", "kind", "target_context"},
+            optional=frozenset(
+                {
+                    "comment",
+                    "issue_uid",
+                    "option_uid",
+                    "expected_version",
+                    "revision",
+                    "revises_turn_uids",
+                }
+            ),
             label="Meld comment request",
         )
         raw_revises = value.get("revises_turn_uids", [])
         if not isinstance(raw_revises, list):
             raise AgentRequestError("revises_turn_uids must be a list.")
+        comment = (
+            text_value(value["comment"], field="comment") if "comment" in value else ""
+        )
+        issue_uid = text_value(
+            value.get("issue_uid"),
+            field="issue_uid",
+            optional=True,
+        )
+        option_uid = text_value(
+            value.get("option_uid"),
+            field="option_uid",
+            optional=True,
+        )
+        expected_version = text_value(
+            value.get("expected_version"),
+            field="expected_version",
+            optional=True,
+        )
+        if not comment and option_uid is None:
+            raise AgentRequestError("Meld comment requires comment or option_uid.")
+        if option_uid is not None and issue_uid is None:
+            raise AgentRequestError("option_uid requires issue_uid.")
+        if option_uid is not None and expected_version is None:
+            raise AgentRequestError(
+                "option_uid requires the expected_version returned by open."
+            )
         return kind, {
             "target_context": text_value(
                 value["target_context"],
                 field="target_context",
             ),
-            "comment": text_value(value["comment"], field="comment"),
-            "issue_uid": text_value(
-                value.get("issue_uid"),
-                field="issue_uid",
-                optional=True,
-            ),
+            "comment": comment,
+            "issue_uid": issue_uid,
+            "option_uid": option_uid,
+            "expected_version": expected_version,
             "revision": text_value(
                 value.get("revision", "EXTEND"),
                 field="revision",
             ),
             "revises_turn_uids": tuple(
-                text_value(item, field="revises_turn_uids item")
-                for item in raw_revises
+                text_value(item, field="revises_turn_uids item") for item in raw_revises
             ),
         }
     if kind == "restart":
@@ -157,9 +189,7 @@ def _parse_request(payload: object) -> tuple[MeldAgentKind, dict[str, object]]:
                 "target_context",
                 "expected_version",
             },
-            optional=frozenset(
-                {"mode", "left_descendants", "right_descendants"}
-            ),
+            optional=frozenset({"mode", "left_descendants", "right_descendants"}),
             label="Meld restart request",
         )
         return kind, {
@@ -365,6 +395,14 @@ def meld_agent_tool_schema() -> JsonObject:
                 "right_descendants": {"type": "boolean"},
                 "comment": text,
                 "issue_uid": {"type": ["string", "null"], "minLength": 1},
+                "option_uid": {
+                    "type": ["string", "null"],
+                    "minLength": 1,
+                    "description": (
+                        "Exact option UID returned by open; requires issue_uid "
+                        "and expected_version."
+                    ),
+                },
                 "revision": {
                     "type": "string",
                     "enum": ["CONFIRM", "EXTEND", "CORRECT", "RETRACT"],

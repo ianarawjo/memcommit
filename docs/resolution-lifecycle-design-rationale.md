@@ -1,0 +1,183 @@
+# Operation-neutral Resolution lifecycle
+
+## Status
+
+The first application-level Resolution contract is implemented.  The shared
+contract binds a complete set of required or optional items to one frozen
+operation artifact revision, validates exact item and choice identities,
+rejects duplicate or capability-crossing submissions, preserves frozen item
+order, and reports whether required work remains. Structural Merge, saved Meld
+issue turns, and public Fit-repair Resolve are production consumers.
+
+This is distinct from the shared Resolution Workbench.  The workbench owns
+presentation and UID-addressed interaction.  The lifecycle contract owns only
+operation-neutral decision validity and readiness.  Neither owns semantic
+provider behavior, persistence, or Apply.
+
+## Motivating problem
+
+Merge, Meld, future Fit repair, Dedup, and clarification can all contain an
+unresolved stage, but the condition and legal repair differ:
+
+| Operation | Unsatisfied condition | Operation-owned resolution |
+| --- | --- | --- |
+| Merge | one or more structural collisions have no legal disposition | exact `KEEP_TARGET` or `TAKE_SOURCE` choices |
+| Meld | Source disposition is incomplete or a required issue remains | preservation, coalescing, synthesis, or grounded semantic revision |
+| Fit repair | the complete proposition frame is `MAY` or `NO` | a grounded minimum-change candidate independently verified as `YES` |
+| Dedup | a confirmed duplicate group has no survivor/reference plan | stable survivor plus complete absorbed-UID and reference migration plan |
+| Clarification | one materially ambiguous reading remains ungrounded | an explicit interpretation or scope supplied by evidence or the person |
+
+Calling every operation Fit would erase these distinctions.  Conversely,
+letting every operation reimplement item identity, allowed-choice validation,
+required coverage, and stable decision order causes the same safety mechanics
+to drift.
+
+## Boundary
+
+The common lifecycle is:
+
+```text
+frozen operation artifact
+  -> operation-owned ResolutionCase projection
+  -> exact submissions or an explicit bulk choice
+  -> operation-neutral validation and readiness
+  -> operation-owned typed plan
+  -> separate review and Apply boundary
+```
+
+`memcommit.resolution` imports no operation, Store, provider, CLI, or TUI
+module.  It owns:
+
+- `ResolutionBinding(operation, artifact_uid, revision)`;
+- ordered `ResolutionRequirement` values with required/optional obligation,
+  real choice UIDs, and explicit free-response capability;
+- UID-bound `ResolutionSubmission` values collected in one
+  revision-bound `ResolutionAttempt`;
+- unknown-item, duplicate-item, unavailable-choice, comment-capability, and
+  unresolved-required validation; and
+- canonical frozen-order `ResolutionProgress`.
+
+The contract intentionally does not own a generic solver callback.  Merge and
+Meld now demonstrate real overlap in revision binding, exact item/choice
+identity, obligation, and response capability; they also demonstrate that the
+solver does *not* overlap.  A wrapper that merely calls an operation function
+would add a second apparent lifecycle without enforcing a safety boundary.
+Candidate generation, semantic verification, and minimum-change ranking stay
+operation-owned until a later pair of implementations demonstrates those
+stronger invariants.
+
+## Merge vertical slice
+
+`merge_planning` continues to classify structural collisions and materialize
+the selected post-image.  `merge_application` continues to own
+`FrozenMergePlan`, `MergeResolution`, completeness, receipt matching, and the
+terminal-independent `run_merge` use case.  `merge_runtime` continues to own
+authority, freshness, locks, CAS, checkpoints, rollback, and Undo/Redo.
+
+`merge_resolution_case()` projects the public frozen plan into the shared
+contract. Its revision digest binds process-local review actions to the frozen
+endpoints and complete conflict-decision projection. The opaque runtime token
+remains the stronger Apply authority and freshness boundary and is
+deliberately excluded from presentation.
+
+`resolve_merge_conflicts()` now delegates exact item/choice/coverage mechanics
+to the shared validator and maps structured failures back to the established
+Merge error vocabulary.  It still returns only operation-owned
+`MergeResolution` values.  It performs no provider call and no mutation.
+
+The plain CLI parser and Merge TUI both consume the same projected requirement
+identities, then call the same typed Merge application use case.  The TUI may
+invoke that use case through an injected application callback after exact
+approval; this is interface composition, not a second mutation implementation.
+No Merge Python or agent surface is added merely by extracting the common
+contract.  If Merge later becomes a public slice, those adapters must call the
+same application entry rather than importing CLI or TUI code.
+
+## Meld vertical slice
+
+`meld_resolution_case()` projects the current saved assessment into exact
+issue and option UIDs bound to the session's opaque canonical-digest version.
+Required issues remain `REQUIRED`; helpful issues are `OPTIONAL`; both accept
+an operation-supplied comment. Because Meld dialogue is incremental,
+`prepare_meld_resolution_turn()` validates one issue response with
+`evaluate_resolution()` but does not require every current required issue to
+be answered in the same turn. The provider's next complete assessment remains
+the authority for whether required work is actually closed.
+
+The shared validator never sees or creates provider prose. After exact UID
+validation, the Meld application layer alone translates a selected option to
+`Choose this reading: ...` using the option text from that same frozen
+assessment. The TUI and CLI therefore carry exact UIDs across their boundary
+instead of converting `UID -> visible index -> text`. Python exposes the same
+optional `option_uid` and `expected_version`; the agent requires the version
+returned by `open` whenever it submits an option UID. A stale version fails
+before provider construction.
+
+Provider/cache execution, complete-assessment replacement, saved-session CAS,
+and Apply remain in the existing Meld runtime. This adoption adds no common
+provider callback, persistence schema, or Apply route, and changes no visible
+terminal flow.
+
+## Public Resolve naming and implementation
+
+The internal noun **Resolution** names the general lifecycle. Public
+`mem resolve` is the narrower Fit-repair operation:
+
+```text
+fit_K(P) in {MAY, NO}
+  -> grounded candidates
+  -> independent complete-frame Fit verification
+  -> operation-owned minimum-change comparison
+  -> zero candidates: NEEDS_INPUT
+  -> one minimum: automatic proposal
+  -> several incomparable minima: explicit choice
+```
+
+An automatic proposal is not automatic Apply.  Fit establishes compatibility,
+not truth, support, authority, or permission to mutate.
+
+The former working name `reconcile` bundled ambiguity clarification and
+conflict repair too broadly.  Quality surfaces instead route by finding type:
+
+```text
+duplicate -> dedup
+ambiguity -> clarify, and Resolve only if joint Fit remains MAY/NO
+conflict  -> Resolve
+```
+
+Find and Audit remain read-only.  Their future handoff creates a separately
+authorized, frozen operation request; it does not mutate from the finder.
+
+Resolve V1 projects its verified candidate UIDs as the legal choices of one
+required `resolve-plan` item. Candidate generation, independent grounding and
+information-preservation verification, complete post-image Fit, and Pareto
+minimum-change comparison remain operation-owned. The shared validator checks
+only the exact selected UID before the Resolve runtime repeats authority,
+freshness, pre-image, reference, and checkpoint checks. The full contract is
+recorded in
+[`resolve-fit-repair-design-rationale.md`](resolve-fit-repair-design-rationale.md).
+
+## Interface and persistence boundary
+
+- CLI, TUI, public Python, and agent adapters may expose different syntax but
+  must call one typed application use case whenever that public surface exists.
+- A TUI projection may collect decisions and show exact review; it may not
+  decide semantic validity, construct a provider, or implement Store writes.
+- An agent adapter must include the operation's opaque revision whenever it
+  submits an exact reviewed choice. It does not gain authority from seeing an
+  issue; legacy free-form Meld comments may still target the latest loaded
+  revision for compatibility.
+- Meld retains its saved-session CAS, complete-assessment replacement,
+  provider/cache runtime, and four Apply routes. It adopts only the shared
+  UID/revision/capability validation and retains incremental readiness meaning.
+- Apply consumes an exact operation-owned plan and repeats ordinary authority,
+  freshness, and receipt validation.  Resolution never weakens that boundary.
+
+## Intentional limitations
+
+- The two existing Resolution TUI models are not consolidated here; that is
+  the separately tracked `TUI-03` feature-parity migration.
+- Merge remains provider-free and has no semantic rewrite candidate.
+- Dedup reference migration, clarification persistence, and typed finder
+  handoff remain future operation-owned work. Resolve V1 deliberately does not
+  make those semantics generic.

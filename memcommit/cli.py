@@ -43,6 +43,7 @@ from memcommit.commands import (
     reference,
     rename,
     remove,
+    resolve,
     review,
     revert,
     share,
@@ -219,6 +220,10 @@ app.command(
     "fit",
     help=operation_summary("fit"),
 )(fit.cmd)
+app.command(
+    "resolve",
+    help=operation_summary("resolve"),
+)(resolve.cmd)
 app.command(
     "checkpoint",
     help=operation_summary("checkpoint"),

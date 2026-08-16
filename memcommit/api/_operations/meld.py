@@ -31,11 +31,15 @@ from memcommit.meld import (
 )
 from memcommit.meld_application import MeldApplyRequest
 from memcommit.meld_provider import MeldProviderError
+from memcommit.meld_resolution_application import (
+    MeldResolutionError,
+    MeldResolutionTurnRequest,
+    prepare_meld_resolution_turn,
+)
 from memcommit.meld_restart_application import MeldRestartError, MeldRestartRequest
 from memcommit.meld_runtime import (
     execute_meld_apply,
     execute_meld_preservation,
-    execute_meld_turn,
     execute_prepared_meld_turn,
     execute_meld_restart,
     execute_meld_session_defer,
@@ -44,10 +48,7 @@ from memcommit.meld_runtime import (
     load_meld_source,
     prepare_pending_meld_turn,
 )
-from memcommit.meld_session_application import (
-    MeldTurnRequest,
-    prepare_meld_preservation_turn,
-)
+from memcommit.meld_session_application import prepare_meld_preservation_turn
 from memcommit.meld_start_application import MeldStartError, MeldStartRequest
 from memcommit.profiles import ProfileError
 from memcommit.store import ConcurrentContextUpdateError
@@ -74,6 +75,7 @@ def _safe_semantic_provider(runtime: ClientRuntime) -> object:
     except Exception as error:
         _raise(MeldProviderFailure, error)
 
+
 def _project_meld(session, *, origin: str | None = None) -> MeldSessionResult:
     assessment = session.current_assessment
     application = session.application
@@ -87,9 +89,7 @@ def _project_meld(session, *, origin: str | None = None) -> MeldSessionResult:
         target_context=session.target.context_name,
         turn_count=len(session.turns),
         overview=assessment.overview if assessment is not None else None,
-        ready_to_apply=(
-            assessment.ready_to_apply if assessment is not None else False
-        ),
+        ready_to_apply=(assessment.ready_to_apply if assessment is not None else False),
         issues=(
             tuple(
                 MeldIssueResult(
@@ -132,6 +132,7 @@ def _project_meld(session, *, origin: str | None = None) -> MeldSessionResult:
         ),
     )
 
+
 def _meld_snapshot(runtime: ClientRuntime, target_name: str):
     current_name = _current_context_name(runtime)
     canonical = resolve_context_locator(target_name, current=current_name)
@@ -143,6 +144,7 @@ def _meld_snapshot(runtime: ClientRuntime, target_name: str):
     )
     target = load_meld_source(access, project=False)
     return execute_meld_session_open(target.uid, store=runtime.store)
+
 
 def start_meld(
     runtime: ClientRuntime,
@@ -165,10 +167,14 @@ def start_meld(
             for value in (left_context, right_context)
         ):
             raise ValueError("Meld source names must be nonblank text.")
-        if not isinstance(create_target, bool) or not isinstance(
-            left_descendants,
-            bool,
-        ) or not isinstance(right_descendants, bool):
+        if (
+            not isinstance(create_target, bool)
+            or not isinstance(
+                left_descendants,
+                bool,
+            )
+            or not isinstance(right_descendants, bool)
+        ):
             raise TypeError("Meld scope and creation controls must be booleans.")
         current_name = _current_context_name(runtime)
         left = resolve_context_locator(left_context, current=current_name)
@@ -217,9 +223,16 @@ def start_meld(
         _raise(MeldConflictError, error)
     except OSError as error:
         _raise(MeldStorageError, error)
-    except (CoreMeldError, MeldStartError, RuntimeError, TypeError, ValueError) as error:
+    except (
+        CoreMeldError,
+        MeldStartError,
+        RuntimeError,
+        TypeError,
+        ValueError,
+    ) as error:
         _raise(MeldExecutionError, error)
     return _project_meld(result.session, origin=result.origin)
+
 
 def restart_meld(
     runtime: ClientRuntime,
@@ -299,6 +312,7 @@ def restart_meld(
         _raise(MeldExecutionError, error)
     return _project_meld(result.session, origin=result.origin)
 
+
 def open_meld(runtime: ClientRuntime, target_context: str) -> MeldSessionResult:
     """Open one exact saved review without provider or mutation."""
 
@@ -314,34 +328,51 @@ def open_meld(runtime: ClientRuntime, target_context: str) -> MeldSessionResult:
         _raise(MeldExecutionError, error)
     return _project_meld(snapshot.session)
 
+
 def comment_meld(
     runtime: ClientRuntime,
     target_context: str,
-    comment: str,
+    comment: str = "",
     *,
     issue_uid: str | None = None,
+    option_uid: str | None = None,
+    expected_version: str | None = None,
     revision: str = "EXTEND",
     revises_turn_uids: Sequence[str] = (),
 ) -> MeldSessionResult:
     """Submit one complete semantic follow-up against a saved version."""
 
     try:
-        if not isinstance(comment, str) or not comment.strip():
-            raise ValueError("comment must be nonblank text.")
+        if not isinstance(comment, str):
+            raise MeldResolutionError("comment must be text.")
+        if expected_version is not None and (
+            not isinstance(expected_version, str) or not expected_version
+        ):
+            raise MeldResolutionError("expected_version must be nonblank text.")
+        if not isinstance(revision, str):
+            raise MeldResolutionError("revision must be text.")
         snapshot = _meld_snapshot(runtime, target_context)
-        result = execute_meld_turn(
-            MeldTurnRequest(
+        if expected_version is not None and expected_version != snapshot.version_token:
+            raise MeldConflictError(
+                "The saved Meld changed after the submitted response was reviewed."
+            )
+        pending = prepare_meld_resolution_turn(
+            MeldResolutionTurnRequest(
                 snapshot=snapshot,
                 comment=comment,
-                scope="ISSUE" if issue_uid is not None else "ALL",
-                issue_uids=(issue_uid,) if issue_uid is not None else (),
+                issue_uid=issue_uid,
+                option_uid=option_uid,
                 revision=revision.upper(),  # type: ignore[arg-type]
                 revises_turn_uids=tuple(revises_turn_uids),
-            ),
-            store=runtime.store,
+            )
+        )
+        result = execute_prepared_meld_turn(
+            prepare_pending_meld_turn(pending, store=runtime.store),
             provider_factory=lambda: _safe_semantic_provider(runtime),
         )
     except MeldProviderFailure:
+        raise
+    except MeldConflictError:
         raise
     except MeldProviderError as error:
         _raise(MeldProviderFailure, error)
@@ -353,9 +384,12 @@ def comment_meld(
         _raise(MeldConflictError, error)
     except OSError as error:
         _raise(MeldStorageError, error)
+    except MeldResolutionError as error:
+        _raise(MeldInputError, error)
     except (CoreMeldError, RuntimeError, TypeError, ValueError) as error:
         _raise(MeldExecutionError, error)
     return _project_meld(result.session, origin=result.origin)
+
 
 def preserve_meld(runtime: ClientRuntime, target_context: str) -> MeldSessionResult:
     """Preserve every remaining distinction under the saved-session CAS."""
@@ -370,7 +404,10 @@ def preserve_meld(runtime: ClientRuntime, target_context: str) -> MeldSessionRes
             ),
         )
         session = pending.session
-        if session.mode == "SYMMETRIC" and session.schema_version >= MELD_SCHEMA_VERSION:
+        if (
+            session.mode == "SYMMETRIC"
+            and session.schema_version >= MELD_SCHEMA_VERSION
+        ):
             saved = execute_meld_preservation(pending, store=runtime.store)
             return _project_meld(saved.session, origin="LOCAL")
         prepared = prepare_pending_meld_turn(
@@ -397,6 +434,7 @@ def preserve_meld(runtime: ClientRuntime, target_context: str) -> MeldSessionRes
         _raise(MeldExecutionError, error)
     return _project_meld(result.session, origin=result.origin)
 
+
 def defer_meld(runtime: ClientRuntime, target_context: str) -> MeldSessionResult:
     """Close one saved review without changing its target."""
 
@@ -412,6 +450,7 @@ def defer_meld(runtime: ClientRuntime, target_context: str) -> MeldSessionResult
     except (CoreMeldError, RuntimeError, TypeError, ValueError) as error:
         _raise(MeldExecutionError, error)
     return _project_meld(saved.session, origin="LOCAL")
+
 
 def apply_meld(runtime: ClientRuntime, target_context: str) -> PublicMeldApplyResult:
     """Apply exactly one ready saved proposal without another provider turn."""
@@ -441,6 +480,7 @@ def apply_meld(runtime: ClientRuntime, target_context: str) -> PublicMeldApplyRe
         checkpoint_uid=applied.receipt.checkpoint_uid,
         result_count=applied.receipt.result_count,
     )
+
 
 __all__ = [
     "apply_meld",

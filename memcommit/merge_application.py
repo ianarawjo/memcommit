@@ -2,9 +2,21 @@
 
 from __future__ import annotations
 
+import hashlib
+import json
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Protocol
+
+from memcommit.resolution import (
+    ResolutionAttempt,
+    ResolutionBinding,
+    ResolutionCase,
+    ResolutionRequirement,
+    ResolutionSubmission,
+    ResolutionValidationError,
+    require_resolution_ready,
+)
 
 
 class MergeError(RuntimeError):
@@ -171,9 +183,7 @@ class MergeContextResult:
             raise TypeError("Merge target-created state must be a boolean.")
         if any(not isinstance(value, MergeAddition) for value in self.additions):
             raise TypeError("Merge Context additions must be MergeAddition values.")
-        if any(
-            not isinstance(value, MergeItemSnapshot) for value in self.unchanged
-        ):
+        if any(not isinstance(value, MergeItemSnapshot) for value in self.unchanged):
             raise TypeError("Merge Context unchanged items are invalid.")
         if any(not isinstance(value, MergeConflict) for value in self.conflicts):
             raise TypeError("Merge Context conflicts are invalid.")
@@ -237,6 +247,74 @@ class MergePort(Protocol):
         """Commit the frozen plan or publish none of it."""
 
 
+def merge_resolution_case(plan: FrozenMergePlan) -> ResolutionCase:
+    """Project one frozen Merge plan into the operation-neutral contract."""
+
+    if not isinstance(plan, FrozenMergePlan):
+        raise TypeError("Merge conflict resolution requires a frozen plan.")
+    # This digest binds process-local review actions to the frozen endpoints
+    # and conflict-decision projection. The opaque runtime token remains the
+    # stronger Apply authority and freshness boundary and stays unexposed.
+    revision_payload = {
+        "request": {
+            "source_locator": plan.request.source_locator,
+            "target_locator": plan.request.target_locator,
+            "reach": plan.request.reach.value,
+        },
+        "source": [plan.source_name, plan.source_uid, plan.source_digest],
+        "target": [plan.target_name, plan.target_uid, plan.target_digest],
+        "contexts": [
+            {
+                "source_name": context.source_name,
+                "source_uid": context.source_uid,
+                "target_name": context.target_name,
+                "target_uid": context.target_uid,
+                "target_created": context.target_created,
+                "additions": [
+                    [addition.uid, addition.kind.value]
+                    for addition in context.additions
+                ],
+                "unchanged": [item.uid for item in context.unchanged],
+                "conflicts": [conflict.uid for conflict in context.conflicts],
+            }
+            for context in plan.contexts
+        ],
+        "conflicts": [
+            {
+                "uid": conflict.uid,
+                "choices": [decision.value for decision in conflict.allowed_decisions],
+            }
+            for conflict in plan.conflicts
+        ],
+        "cross_profile_memory_only": plan.cross_profile_memory_only,
+        "mutates_granted_authority": plan.mutates_granted_authority,
+    }
+    revision = hashlib.sha256(
+        json.dumps(
+            revision_payload,
+            ensure_ascii=False,
+            separators=(",", ":"),
+            sort_keys=True,
+        ).encode("utf-8")
+    ).hexdigest()
+    return ResolutionCase(
+        binding=ResolutionBinding(
+            operation="merge",
+            artifact_uid=f"merge:{plan.source_uid}:{plan.target_uid}",
+            revision=revision,
+        ),
+        requirements=tuple(
+            ResolutionRequirement(
+                item_uid=conflict.uid,
+                choice_uids=tuple(
+                    decision.value for decision in conflict.allowed_decisions
+                ),
+            )
+            for conflict in plan.conflicts
+        ),
+    )
+
+
 def resolve_merge_conflicts(
     plan: FrozenMergePlan,
     *,
@@ -245,63 +323,66 @@ def resolve_merge_conflicts(
 ) -> tuple[MergeResolution, ...]:
     """Return one exact, complete, conflict-ordered decision set."""
 
-    if not isinstance(plan, FrozenMergePlan):
-        raise TypeError("Merge conflict resolution requires a frozen plan.")
+    case = merge_resolution_case(plan)
     if bulk is not None and not isinstance(bulk, MergeDecision):
         raise TypeError("Merge bulk decision is invalid.")
-    if bulk is not None and resolutions:
-        raise MergeError("Use either one Merge bulk decision or per-item resolutions.")
     if any(not isinstance(value, MergeResolution) for value in resolutions):
         raise TypeError("Merge resolutions must be MergeResolution values.")
-    conflicts = {conflict.uid: conflict for conflict in plan.conflicts}
-    if bulk is not None:
-        unavailable = [
-            conflict.uid
-            for conflict in plan.conflicts
-            if bulk not in conflict.allowed_decisions
-        ]
-        if unavailable:
+    submissions = tuple(
+        ResolutionSubmission(
+            item_uid=resolution.conflict_uid,
+            choice_uid=resolution.decision.value,
+        )
+        for resolution in resolutions
+    )
+    try:
+        progress = require_resolution_ready(
+            case,
+            ResolutionAttempt(
+                binding=case.binding,
+                submissions=submissions,
+                bulk_choice_uid=bulk.value if bulk is not None else None,
+            ),
+        )
+    except ResolutionValidationError as error:
+        if error.code == "BULK_WITH_SUBMISSIONS":
+            raise MergeError(
+                "Use either one Merge bulk decision or per-item resolutions."
+            ) from error
+        if error.code == "UNKNOWN_ITEM":
+            conflict_uid = error.item_uids[0]
+            raise MergeError(
+                f"Merge resolution names an unknown conflict: '{conflict_uid}'."
+            ) from error
+        if error.code == "DUPLICATE_ITEM":
+            conflict_uid = error.item_uids[0]
+            raise MergeError(
+                f"Merge resolution repeats conflict '{conflict_uid}'."
+            ) from error
+        if error.code == "UNAVAILABLE_CHOICE" and bulk is not None:
             raise MergeError(
                 f"Merge bulk decision {bulk.value} is not authorized for: "
-                + ", ".join(unavailable)
-            )
-        return tuple(
-            MergeResolution(conflict_uid=conflict.uid, decision=bulk)
-            for conflict in plan.conflicts
-        )
-    supplied: dict[str, MergeDecision] = {}
-    for resolution in resolutions:
-        if resolution.conflict_uid not in conflicts:
+                + ", ".join(error.item_uids)
+            ) from error
+        if error.code == "UNAVAILABLE_CHOICE":
+            conflict_uid = error.item_uids[0]
             raise MergeError(
-                f"Merge resolution names an unknown conflict: "
-                f"'{resolution.conflict_uid}'."
-            )
-        previous = supplied.get(resolution.conflict_uid)
-        if previous is not None:
+                f"Merge decision {error.choice_uid} is not authorized "
+                f"for conflict '{conflict_uid}'."
+            ) from error
+        if error.code == "UNRESOLVED_REQUIRED":
             raise MergeError(
-                f"Merge resolution repeats conflict '{resolution.conflict_uid}'."
-            )
-        supplied[resolution.conflict_uid] = resolution.decision
-        if resolution.decision not in conflicts[
-            resolution.conflict_uid
-        ].allowed_decisions:
-            raise MergeError(
-                f"Merge decision {resolution.decision.value} is not authorized "
-                f"for conflict '{resolution.conflict_uid}'."
-            )
-    missing = [
-        conflict.uid for conflict in plan.conflicts if conflict.uid not in supplied
-    ]
-    if missing:
-        raise MergeError(
-            "Merge has unresolved required conflicts: " + ", ".join(missing)
-        )
+                "Merge has unresolved required conflicts: " + ", ".join(error.item_uids)
+            ) from error
+        if error.code == "STALE_BINDING":  # pragma: no cover - locally composed.
+            raise MergeError("The frozen Merge resolution binding is stale.") from error
+        raise MergeError(str(error)) from error
     return tuple(
         MergeResolution(
-            conflict_uid=conflict.uid,
-            decision=supplied[conflict.uid],
+            conflict_uid=submission.item_uid,
+            decision=MergeDecision(submission.choice_uid),
         )
-        for conflict in plan.conflicts
+        for submission in progress.submissions
     )
 
 

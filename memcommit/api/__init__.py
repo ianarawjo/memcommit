@@ -77,6 +77,10 @@ __all__ = [
     "QuerySessionReceipt",
     "QueryStorageError",
     "ReferenceQueryResult",
+    "ResolveAnalysisResult",
+    "ResolveApplyResult",
+    "ResolveCandidateResult",
+    "ResolveEffectResult",
     "DistillApplyResult",
     "DistillProposal",
     "DistillRuleProposal",
@@ -85,11 +89,6 @@ __all__ = [
     "ElaborateRuleProposal",
     "FitJudgmentResult",
     "FitPropositionInput",
-    "GroundFitJudgmentResult",
-    "GroundFitReceiptResult",
-    "GroundResolutionActionResult",
-    "GroundResolutionApplyResult",
-    "GroundResolutionPlanResult",
     "SemanticAuthorityError",
     "SemanticConflictError",
     "SemanticContextError",
@@ -150,6 +149,10 @@ _LAZY_EXPORTS = {
     "QueryProviderConfig": ("memcommit.api.query", "QueryProviderConfig"),
     "QuerySessionReceipt": ("memcommit.api.query", "QuerySessionReceipt"),
     "ReferenceQueryResult": ("memcommit.api.query", "ReferenceQueryResult"),
+    "ResolveAnalysisResult": ("memcommit.api.resolve", "ResolveAnalysisResult"),
+    "ResolveApplyResult": ("memcommit.api.resolve", "ResolveApplyResult"),
+    "ResolveCandidateResult": ("memcommit.api.resolve", "ResolveCandidateResult"),
+    "ResolveEffectResult": ("memcommit.api.resolve", "ResolveEffectResult"),
     "DistillApplyResult": ("memcommit.api.semantic", "DistillApplyResult"),
     "DistillProposal": ("memcommit.api.semantic", "DistillProposal"),
     "DistillRuleProposal": ("memcommit.api.semantic", "DistillRuleProposal"),
@@ -158,26 +161,6 @@ _LAZY_EXPORTS = {
     "ElaborateRuleProposal": ("memcommit.api.semantic", "ElaborateRuleProposal"),
     "FitJudgmentResult": ("memcommit.api.semantic", "FitJudgmentResult"),
     "FitPropositionInput": ("memcommit.api.semantic", "FitPropositionInput"),
-    "GroundFitJudgmentResult": (
-        "memcommit.api.semantic",
-        "GroundFitJudgmentResult",
-    ),
-    "GroundFitReceiptResult": (
-        "memcommit.api.semantic",
-        "GroundFitReceiptResult",
-    ),
-    "GroundResolutionActionResult": (
-        "memcommit.api.semantic",
-        "GroundResolutionActionResult",
-    ),
-    "GroundResolutionApplyResult": (
-        "memcommit.api.semantic",
-        "GroundResolutionApplyResult",
-    ),
-    "GroundResolutionPlanResult": (
-        "memcommit.api.semantic",
-        "GroundResolutionPlanResult",
-    ),
     **{
         name: ("memcommit.api.errors", name)
         for name in __all__

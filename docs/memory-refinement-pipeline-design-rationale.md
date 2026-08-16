@@ -37,11 +37,14 @@ Here, open-world does not mean inventing unlimited possible worlds. It means a
 and an ordinary reading genuinely support, but do not invent arbitrary hidden
 premises merely to create or dissolve a conflict.
 
-The later design retains this combination **only at the resolution stage**.
-Ambiguity judges one Memory, whereas conflict judges a pair of Memories, so
-their detection units and results differ. `find-ambiguities` and
-`find-conflicts` are therefore separate read-only detectors; a later
-`reconcile` operation can explain or resolve their findings together.
+The later design retains a combined review surface but not one combined
+mutation operation. Ambiguity judges one Memory, whereas conflict judges a
+pair of Memories, so their detection units and results differ.
+`find-ambiguities` and `find-conflicts` are therefore separate read-only
+detectors. An ambiguity routes to clarification; a conflict routes to Resolve,
+which may consume that clarification when the complete frame remains Fit
+`MAY` or `NO`. The former working name `reconcile` did not preserve this
+boundary.
 
 The design also rejects a simple public/private binary for disclosure. It uses
 **audience classification** to decide the necessary explanation and level of
@@ -75,7 +78,7 @@ atomic claims before comparing them.
 
 ### Revised quality analysis: detect before resolving
 
-If names such as `dedup` and `reconcile` combine detection with mutation, they
+If names such as `dedup` and `resolve` combine detection with mutation, they
 can imply that merely inspecting a problem may delete or edit content.
 Ambiguity is unary, conflict is pairwise, and duplicate discovery returns
 binary relation evidence from a whole-Context pass. Combining them in one
@@ -91,7 +94,8 @@ raw intake
 → confirmed dedup
 → find-ambiguities
 → find-conflicts
-→ reconcile
+→ clarify where needed
+→ resolve Fit MAY/NO
 → audience
 → normalize
 → duplicate verification
@@ -103,8 +107,11 @@ All three `find-*` commands are read-only and create no checkpoint.
 target, but it does not pre-enumerate every pair as model input.
 `find-ambiguities` judges one Memory at a time, while `find-conflicts` judges
 Memory pairs. A future mutating `dedup` stage will turn confirmed duplicate
-results into a survivor plan, and a future `reconcile` stage will interpret
-ambiguity and conflict findings together.
+results into a survivor plan. Future clarification grounds unresolved
+readings. Implemented Resolve V1 attempts only the remaining joint Fit `MAY`
+or `NO` frame; the typed finder-to-Resolve handoff remains future work, so it
+is invoked directly over an exact Context and optional direct-Memory selectors
+today.
 
 ## Intent
 
@@ -124,8 +131,8 @@ The current primary order is intentional:
 4. **Find ambiguities** one Memory at a time under ordinary local reading.
 5. **Find conflicts** pairwise, preserving `YES`, `MAY`, and `NO` as semantic
    outcomes rather than confidence scores.
-6. **Reconcile the separate findings together** to identify what the current
-   knowledge cannot yet explain and which clarification would help.
+6. **Clarify unresolved readings and Resolve incompatible frames** without
+   treating Fit as truth or silently choosing a winner.
 7. **Classify audiences** so differences caused by applicability, recipient,
    or disclosure purpose become explicit.
 8. **Normalize** only after meaning and scope are sufficiently clear.
@@ -154,7 +161,8 @@ source intake
 → confirmed dedup
 → find-ambiguities
 → find-conflicts
-→ reconcile
+→ clarify where needed
+→ resolve Fit MAY/NO
 → audience
 → normalize
 → duplicate verification
@@ -202,9 +210,10 @@ when terminals or agents work in parallel.
 
 Each semantic stage retains its own preview and confirmation boundary. A
 confirmed stage creates its own checkpoint; the entire import does not become
-one opaque checkpoint. If `reconcile` cannot resolve a scope or a later stage
-cannot safely mutate several Contexts, the import pauses and can be resumed
-from the manifest. It does not guess or mark the run complete.
+one opaque checkpoint. If clarification lacks grounding, Resolve has no valid
+Fit-`YES` candidate, or a later stage cannot safely mutate several Contexts,
+the import pauses and can be resumed from the manifest. It does not guess or
+mark the run complete.
 
 A convenience form such as `mem ingest --input notes.txt --through atomize`
 means: commit deterministic raw intake, then generate previews through the
@@ -384,13 +393,14 @@ The public detectors are `mem find-ambiguities` and `mem find-conflicts`.
 They remain separate because their arity, labels, and regression cases differ.
 Both are read-only and create no checkpoint.
 
-The later working operation `reconcile` consumes their separate findings and
-asks what missing distinction, condition, or evidence would make the relevant
-Memories usable or jointly explainable. It must not silently choose a winner.
-A later confirmed edit can add missing scope, preserve both scoped facts, or
-mark one statement as superseded when evidence actually supports that
-decision. `reconcile` combines follow-up reasoning; it does not replace either
-finder.
+The later quality workflow reviews their separate findings together but routes
+them through distinct operations. Clarification asks what missing distinction,
+condition, or evidence would ground an ambiguous reading. Resolve consumes a
+joint Fit `MAY` or `NO` frame and attempts to produce an independently verified
+Fit `YES` proposal. Neither may silently choose a winner. A later confirmed
+edit can add missing scope, preserve both scoped facts, or mark one statement
+as superseded only when evidence supports that decision. Neither operation
+replaces either finder.
 
 ## Audience classification is not merely privacy separation
 
@@ -499,7 +509,8 @@ important than final CLI spelling.
 | 2a | future `mem dedup` | confirmed survivor and absorbed-UID plan | stale-safe confirmed groups apply as one checkpoint |
 | 3 | `mem find-ambiguities` | unary interpretation and clarification findings | read-only; no checkpoint |
 | 4 | `mem find-conflicts` | pairwise `YES`/`MAY` conflict findings and questions | read-only; no checkpoint |
-| 5 | future `mem reconcile` | combined missing dimensions and clarification proposals | read-only first; edits require a separate confirmed plan |
+| 5a | future clarification | grounded reading or missing-evidence record for ambiguity findings | read-only response first; any edit requires a separate confirmed plan |
+| 5b | future `mem resolve` | minimum-change candidate that independently changes joint Fit `MAY`/`NO` to `YES`, or `NEEDS_INPUT` | proposal first; explicit Apply consumes one exact authorized plan |
 | 6 | `mem audience` | applicability, recipient, purpose, and disclosure assignments | preview first; storage representation must be explicit |
 | 7 | `mem normalize` | named rule violations and full replacement proposals | confirmed batch applies as one checkpoint |
 | 8 | `mem find-duplicates` verification | post-normalization mechanical and semantic reclassification | read-only; any removal requires a new `dedup` plan |
@@ -575,23 +586,24 @@ important than final CLI spelling.
   UID action, and navigation layer. Meld uses its dynamic interactive adapter;
   Update exposes exact planned changes read-only. This is not a shared
   provider, persistence, or mutation engine, and Update semantic issue turns
-  remain future work. `reconcile` and `distill` remain future or
+  remain future work. Clarification, Fit Resolve, and `distill` remain future or
   design-only contracts. Symmetric and public Context-directional `mem meld`
   are implemented through the bounded Context workbench.
 
 The focused rationale is
 [`memory-review-shell-design-rationale.md`](memory-review-shell-design-rationale.md).
 
-### Future `reconcile`
+### Future clarification and Resolve
 
-- Consumes the separate ambiguity and conflict findings instead of replacing
+- They consume separate ambiguity and conflict findings instead of replacing
   either detector.
-- Treats missing scope as the default hypothesis, not proof that one statement
-  is false.
-- Records the dimension that could explain the difference and the evidence
-  still required.
-- Can conclude that two statements are already jointly explainable and need no
-  edit.
+- Clarification treats missing scope as the default hypothesis, not proof that
+  one statement is false, and records the evidence still required.
+- Resolve accepts only a complete joint frame whose Fit result is `MAY` or
+  `NO`, and any proposed replacement must be independently verified as `YES`.
+- Resolve can conclude that the complete statements are already Fit `YES` and
+  need no edit; a standalone ambiguity can remain a clarification task without
+  becoming a Fit repair.
 
 ### `audience`
 
@@ -665,8 +677,8 @@ their target instead of counting them as copied contents.
 ## Iteration without changing the primary order
 
 Early atomization exposes the claims that the primary dedup pass should
-compare. Later reconciliation and audience classification can supply a missing
-qualifier that proves a deferred candidate equivalent or distinct.
+compare. Later clarification, Resolve, and audience classification can supply
+a missing qualifier that proves a deferred candidate equivalent or distinct.
 Normalization can also make two previously different surface forms
 mechanically identical. The pipeline therefore includes a deliberate
 read-only verification pass:
@@ -677,7 +689,8 @@ atomize
 → confirmed dedup
 → find-ambiguities
 → find-conflicts
-→ reconcile
+→ clarify where needed
+→ resolve Fit MAY/NO
 → audience
 → normalize
 → duplicate verification
@@ -703,7 +716,7 @@ Immediate examples are:
   dedup candidates, but their instruction-versus-fact and scope differences
   still require review;
 - physical-card versus app access may produce ambiguity or conflict findings
-  that a later `reconcile` can combine; it is not safe dedup;
+  whose shared review routes to clarification or Resolve; it is not safe dedup;
 - restroom directions differ by visitor and accessibility audience;
 - public closure guidance and internal construction reasons need different
   audiences and detail levels;
@@ -716,7 +729,9 @@ golden regression harness now implement the preferred source boundary.
 `find-duplicates`, `find-ambiguities`, and `find-conflicts` remain separate
 read-only commands so that their whole-Context relation discovery, pair-target,
 and unary contracts stay observable. Stronger independent atomize validation,
-a future `dedup` apply path and `reconcile`, followed by `audience`, `normalize`,
-duplicate verification, and `place`, can then be added one at a time. A later
+a future `dedup` apply path and clarification, plus the implemented direct
+Fit Resolve path, followed by
+`audience`, `normalize`, duplicate verification, and `place`, can then be added
+one at a time. A later
 `mem ingest` may orchestrate those same tested operations without replacing
 their visible findings, plans, reasons, or checkpoints.

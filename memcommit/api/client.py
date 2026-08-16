@@ -37,15 +37,13 @@ from memcommit.api.query import (
     QueryProviderConfig,
     ReferenceQueryResult,
 )
+from memcommit.api.resolve import ResolveAnalysisResult, ResolveApplyResult
 from memcommit.api.semantic import (
     DistillApplyResult,
     DistillProposal,
     ElaborateProposal,
     FitJudgmentResult,
     FitPropositionInput,
-    GroundFitReceiptResult,
-    GroundResolutionApplyResult,
-    GroundResolutionPlanResult,
 )
 from memcommit.context import QueryContextRef
 from memcommit.profile_config import (
@@ -168,20 +166,44 @@ class MemCommitClient:
 
         return fit(self._runtime, propositions, background=background)
 
-    def fit_ground(
+    def resolve_context(
         self,
-        ground_name: str,
+        context_name: str | None = None,
         *,
-        receipt_uid: str | None = None,
-    ) -> GroundFitReceiptResult:
-        """Run or reopen one immutable revision-bound Ground Fit receipt."""
+        memory_selectors: Sequence[str] = (),
+        allow_create: bool = False,
+        allow_delete: bool = False,
+        guidance: str = "",
+        expected_revision: str | None = None,
+    ) -> ResolveAnalysisResult:
+        """Propose grounded, independently Fit-verified Context repairs."""
 
-        from memcommit.api._operations.ground_resolution import fit_ground
+        from memcommit.api._operations.resolve import resolve_context
 
-        return fit_ground(
+        return resolve_context(
             self._runtime,
-            ground_name,
-            receipt_uid=receipt_uid,
+            context_name,
+            memory_selectors=memory_selectors,
+            allow_create=allow_create,
+            allow_delete=allow_delete,
+            guidance=guidance,
+            expected_revision=expected_revision,
+        )
+
+    def apply_resolve(
+        self,
+        analysis: ResolveAnalysisResult,
+        *,
+        candidate_uid: str,
+    ) -> ResolveApplyResult:
+        """Apply one exact candidate from a reviewed Resolve analysis."""
+
+        from memcommit.api._operations.resolve import apply_resolve
+
+        return apply_resolve(
+            self._runtime,
+            analysis,
+            candidate_uid=candidate_uid,
         )
 
     def distill_context(
@@ -251,48 +273,6 @@ class MemCommitClient:
             direction=direction,
         )
 
-    def plan_ground_resolution(
-        self,
-        source: DistillProposal | ElaborateProposal | GroundFitReceiptResult,
-        *,
-        candidate_uid: str | None = None,
-        example_uid: str | None = None,
-        action: str | None = None,
-        content: str = "",
-        rationale: str = "",
-        rule_uid: str = "",
-        use: str = "",
-    ) -> GroundResolutionPlanResult:
-        """Project one semantic artifact into one still-unapproved action."""
-
-        from memcommit.api._operations.ground_resolution import (
-            plan_ground_resolution,
-        )
-
-        return plan_ground_resolution(
-            self._runtime,
-            source,
-            candidate_uid=candidate_uid,
-            example_uid=example_uid,
-            action=action,
-            content=content,
-            rationale=rationale,
-            rule_uid=rule_uid,
-            use=use,
-        )
-
-    def apply_ground_resolution(
-        self,
-        plan: GroundResolutionPlanResult,
-    ) -> GroundResolutionApplyResult:
-        """Apply one separately reviewed Resolve plan through Ground CAS."""
-
-        from memcommit.api._operations.ground_resolution import (
-            apply_ground_resolution,
-        )
-
-        return apply_ground_resolution(self._runtime, plan)
-
     def start_meld(
         self,
         left_context: str,
@@ -355,9 +335,11 @@ class MemCommitClient:
     def comment_meld(
         self,
         target_context: str,
-        comment: str,
+        comment: str = "",
         *,
         issue_uid: str | None = None,
+        option_uid: str | None = None,
+        expected_version: str | None = None,
         revision: str = "EXTEND",
         revises_turn_uids: Sequence[str] = (),
     ) -> MeldSessionResult:
@@ -370,6 +352,8 @@ class MemCommitClient:
             target_context,
             comment,
             issue_uid=issue_uid,
+            option_uid=option_uid,
+            expected_version=expected_version,
             revision=revision,
             revises_turn_uids=revises_turn_uids,
         )

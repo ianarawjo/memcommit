@@ -1,0 +1,2 @@
+COMMAND EXIT · 0                                                                                                                                                                    
+APPLY VERIFICATION · MEMORIES ['The office opens at 8.', 'The office opens at 9 on weekends.'] · CHECKPOINTS 1 · COMMANDS ['resolve']

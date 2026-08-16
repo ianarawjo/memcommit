@@ -41,13 +41,16 @@ def test_meld_execution_modules_have_no_terminal_or_command_dependencies(module)
         elif isinstance(node, ast.ImportFrom) and node.module is not None:
             imported.append(node.module)
 
-    assert tuple(
-        name
-        for name in imported
-        if name == "typer"
-        or name.startswith("prompt_toolkit")
-        or name.startswith("memcommit.commands")
-    ) == ()
+    assert (
+        tuple(
+            name
+            for name in imported
+            if name == "typer"
+            or name.startswith("prompt_toolkit")
+            or name.startswith("memcommit.commands")
+        )
+        == ()
+    )
 
 
 def test_meld_command_contains_no_target_or_session_publication_primitive():
@@ -93,14 +96,16 @@ def test_meld_command_calls_the_operation_owned_apply_service_directly():
     assert "MeldApplicationFlowPort" not in source
 
 
-def test_python_client_uses_the_combined_meld_turn_runtime():
+def test_python_client_uses_the_operation_owned_meld_resolution_boundary():
     client_path = Path(meld_runtime.__file__).with_name("api") / "client.py"
     operation_path = client_path.with_name("_operations") / "meld.py"
     source = client_path.read_text(encoding="utf-8")
     if operation_path.exists():
         source += operation_path.read_text(encoding="utf-8")
 
-    assert "execute_meld_turn(" in source
+    assert "prepare_meld_resolution_turn(" in source
+    assert "execute_prepared_meld_turn(" in source
+    assert "execute_meld_turn(" not in source
     assert "prepare_meld_assessment" not in source
 
 
@@ -201,9 +206,12 @@ def test_symmetric_subset_projection_is_resolved_and_recorded_in_runtime(
     )
 
     def ensure(**kwargs):
-        assert kwargs["equivalent"](
-            meld_runtime.ComparisonInput.from_contexts(left, right)
-        ) is projected
+        assert (
+            kwargs["equivalent"](
+                meld_runtime.ComparisonInput.from_contexts(left, right)
+            )
+            is projected
+        )
         return SimpleNamespace(
             analysis=projected,
             origin="EQUIVALENT_SCOPE_PREWARM",
@@ -242,9 +250,7 @@ def test_assessment_freeze_falls_back_to_exact_installed_branch(monkeypatch):
     completion = "saved complete Meld response"
     branch = SimpleNamespace(completion=completion)
     store = SimpleNamespace(load_meld_resolution_branch=lambda key: None)
-    session = SimpleNamespace(
-        current_turn=SimpleNamespace(sequence=1, scope="ALL")
-    )
+    session = SimpleNamespace(current_turn=SimpleNamespace(sequence=1, scope="ALL"))
     monkeypatch.setattr(
         meld_runtime,
         "meld_turn_request_digest",

@@ -81,6 +81,9 @@ class ResolutionWorkbenchSpec:
     items: tuple[ResolutionItem, ...]
     exact_review: ExactCommandReview
     bulk_strategies: tuple[ResolutionBulkStrategy, ...] = ()
+    detail_title: str = "VIEWER · REQUIRED CONFLICT DETAIL"
+    responses_title: str = "RESPONSES · REQUIRED · DETERMINISTIC ONLY"
+    items_title: str = "ITEMS · REQUIRED CONFLICTS ONLY"
 
     def __post_init__(self) -> None:
         if not self.title or not self.subtitle:
@@ -91,6 +94,15 @@ class ResolutionWorkbenchSpec:
             raise ValueError("Resolution workbench requires distinct required items.")
         if not isinstance(self.exact_review, ExactCommandReview):
             raise TypeError("Resolution workbench exact review is invalid.")
+        if any(
+            not isinstance(value, str) or not value
+            for value in (
+                self.detail_title,
+                self.responses_title,
+                self.items_title,
+            )
+        ):
+            raise ValueError("Resolution workbench frame titles must be nonempty.")
         bulk_uids = tuple(strategy.choice_uid for strategy in self.bulk_strategies)
         bulk_keys = tuple(strategy.key.casefold() for strategy in self.bulk_strategies)
         if len(set(bulk_uids)) != len(bulk_uids):

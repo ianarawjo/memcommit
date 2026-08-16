@@ -47,7 +47,7 @@ from memcommit.selection.tui import choice_marker
 class MeldShellAction:
     kind: str
     issue_uid: str | None = None
-    choice_index: int | None = None
+    option_uid: str | None = None
     comment: str = ""
     destination: str | None = None
 
@@ -357,7 +357,11 @@ def run_meld_shell(
             result=MeldShellAction(
                 kind="COMMENT_ISSUE",
                 issue_uid=assessment.issues[selected["index"]].uid,
-                choice_index=choice["index"],
+                option_uid=(
+                    assessment.issues[selected["index"]].options[choice["index"]].uid
+                    if choice["index"] is not None
+                    else None
+                ),
                 comment=text,
             )
         )
@@ -444,9 +448,7 @@ def run_meld_shell(
     def _back_or_close(event) -> None:
         dispatch_tui_back(event, _collapse_detail, close=_close)
 
-    @bind_case_insensitive_key(
-        bindings, "q", filter=~has_focus(input_area), eager=True
-    )
+    @bind_case_insensitive_key(bindings, "q", filter=~has_focus(input_area), eager=True)
     @bindings.add("c-c", eager=True)
     def _quit(event) -> None:
         _close(event)
@@ -786,19 +788,9 @@ def run_meld_shell(
         )
     if action.kind != "SUBMIT_ITEM" or action.item_uid is None:
         raise ValueError(f"Unsupported resolution action '{action.kind}' for Meld.")
-    issue = adapter.view().item(action.item_uid)
-    choice_index = (
-        next(
-            index
-            for index, option in enumerate(issue.options)
-            if option.uid == action.option_uid
-        )
-        if action.option_uid is not None
-        else None
-    )
     return MeldShellAction(
         kind="COMMENT_ISSUE",
         issue_uid=action.item_uid,
-        choice_index=choice_index,
+        option_uid=action.option_uid,
         comment=action.comment,
     )

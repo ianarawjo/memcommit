@@ -43,7 +43,7 @@ construction, provider decoder, session publication, or Apply transaction.
 | New symmetric review | `MeldStartRequest` | source/transfer checks, exact ordered Compare, empty Result, atomic new target plus session when requested | `start_meld(mode="symmetric")` | `start` | current Result or `--to`; Compare handoff uses the same runtime |
 | Replace saved review | `MeldRestartRequest` with opaque expected version | fail stale before provider, then share start authorization/Compare/cache construction and CAS-replace the session | `restart_meld` | `restart` | `--restart` |
 | Open saved review | `MeldSessionRepository.load` | target UID lookup and canonical-digest version | `open_meld` | `open` | direct resume or saved-session picker |
-| Semantic follow-up | `MeldTurnRequest` plus `FrozenMeldAssessment` | exact turn preparation, cache replay or provider/repair, source/target revalidation, session CAS | `comment_meld` | `comment` | issue choice/comment and TUI response actions |
+| Semantic follow-up | `MeldResolutionTurnRequest`, common `ResolutionCase`, then `FrozenMeldAssessment` | exact issue/option UID validation, operation-owned guidance composition, cache replay or provider/repair, source/target revalidation, session CAS | `comment_meld` with optional option UID and expected version | `comment`; exact option requires version returned by `open` | visible issue ordinal is translated once to exact UID; TUI response actions already emit UID |
 | Preserve remaining distinctions | `MeldPreservationRequest` | provider-free current symmetric schema; legacy/directional sessions use the ordinary assessment boundary | `preserve_meld` | `preserve` | `--preserve-all` or TUI action |
 | Defer review | `MeldSessionSnapshot` | provider-free session transition and CAS | `defer_meld` | `defer` | `--defer-all` or TUI action |
 | Change symmetric destination | `MeldDestinationRequest` | empty-target validation and atomic Context/session relocation | not yet public | not yet exposed | TUI destination action |
@@ -77,7 +77,9 @@ validation.
   a semantic turn.
 - Cache replay crosses the same strict decoder as a provider completion and
   cannot publish a partial assessment.
-- Follow-up callers compose one `MeldTurnRequest`, then share
+- Follow-up callers compose one `MeldResolutionTurnRequest`; its exact saved
+  issue/option binding is validated by the common Resolution contract and
+  translated to one operation-owned `MeldTurnRequest`, then all callers share
   `PreparedMeldTurnExecution`. Its cache decision, provider-required flag,
   repair path, and session CAS token are executed once by the runtime; CLI
   progress and public result projection do not assemble the lifecycle again.
@@ -104,7 +106,7 @@ validation.
 
 - Application contracts: `test_meld_start_application.py`,
   `test_meld_restart_application.py`, `test_meld_lifecycle_application.py`,
-  and `test_meld_application.py`.
+  `test_meld_resolution_application.py`, and `test_meld_application.py`.
 - Runtime, CAS, cache, and boundary ownership: `test_meld_runtime.py`,
   `test_meld_provenance.py`, and `test_meld_application_flow.py`.
 - Public and agent adapters: `test_meld_public_api.py`,
@@ -121,7 +123,9 @@ validation.
 
 The interactive Meld screen and Endpoint Setup are now owned by
 `interfaces.tui`; compatibility command paths are import-only. Session and
-Apply execution are terminal-independent. Follow-up turns use one prepared
-cache/provider/CAS lifecycle, and CLI Apply enters the typed operation service
-directly. The final complete regression and import-boundary pass closes this
-audit without introducing another session schema or moving presentation.
+Apply execution are terminal-independent. Follow-up turns carry exact UIDs
+through CLI, TUI, Python, and agent adapters into one operation-owned Resolution
+preparer and then use one prepared cache/provider/CAS lifecycle. CLI Apply
+enters the typed operation service directly. The final complete regression and
+import-boundary pass closes this audit without introducing another session
+schema or moving presentation.

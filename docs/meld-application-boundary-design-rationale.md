@@ -16,6 +16,9 @@ Meld now separates three terminal-independent contracts:
   provider execution, one repair attempt, and all-or-nothing publication.
 - `meld_session_application` owns saved-session snapshots, pending dialogue
   turns, defer, provider-free preservation, and destination-change requests.
+- `meld_resolution_application` projects a saved assessment into the common
+  Resolution contract, validates exact issue/option UIDs against its opaque
+  version, and translates a valid choice to operation-owned provider guidance.
 - `meld_application` owns reviewed Apply routing. `meld_runtime` supplies the
   MemoryStore, Grant, checkpoint, recovery, cache, and provider adapters.
 - `meld_start_application` owns the canonical source/target request and
@@ -116,9 +119,20 @@ Follow-up turns use the same pattern. `PreparedMeldTurnExecution` binds the
 locally composed `PendingMeldTurn` to its exact hidden resolution-cache result,
 provider request, and publication port. The CLI reads `provider_required` only
 to decide whether to show progress and then executes that same value; the
-Python facade calls the combined `execute_meld_turn` service. Provider
-connection timeout policy also moved into `meld_runtime`, so an interface can
-observe progress but cannot silently choose a weaker semantic-call bound.
+Python facade and agent first call the same operation-owned Meld Resolution
+preparer, then enter the same prepared execution. Provider connection timeout
+policy also moved into `meld_runtime`, so an interface can observe progress
+but cannot silently choose a weaker semantic-call bound.
+
+The follow-up boundary previously converted a TUI option UID to an ordinal in
+the interface, then converted that ordinal back to provider text in the CLI.
+The CLI's scripted `--choice` path did the same independently, while Python and
+agent callers could submit only free-form text. The corrected boundary carries
+the exact option UID into `meld_resolution_application`; only that operation
+layer reads its frozen option text. Python exposes option UID and optional
+expected version, while the agent requires `expected_version` for an exact
+option submission. This prevents a reordered presentation or stale reviewed
+assessment from silently changing a machine-submitted answer.
 
 The final CLI Apply wrapper now calls `execute_meld_apply` directly. The
 discarded outer application flow contributed only an identity review step and

@@ -1,0 +1,52 @@
+ MEM RESOLVE · RESOLUTION SESSION                                                                                                                                                   
+ SEMANTIC CANDIDATES · INDEPENDENTLY VERIFIED · EXACT APPLY                                                                                                                         
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER · VERIFIED CANDIDATE DETAILS ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃VERIFIED RESOLVE CANDIDATE                                                                                                                                                       ^┃
+┃resolve-6755c6534462f94a77bd714861be1e8569b826ebe6093d3eb107ee9ef38f3476                                                                                                          ┃
+┃Qualify the second time as the weekend schedule.                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃UPDATE · [20000000]                                                                                                                                                               ┃
+┃BEFORE · The office opens at 9.                                                                                                                                                   ┃
+┃AFTER · The office opens at 9 on weekends.                                                                                                                                        ┃
+┃WHY · The added scope preserves both times.                                                                                                                                       ┃
+┃SOURCES · 20000000, 20000000                                                                                                                                                      ┃
+┃                                                                                                                                                                                  ┃
+┃GROUNDING VERIFIED · Only the complete supplied frame is used.                                                                                                                    ┃
+┃FIT YES · The complete revised schedule is compatible.                                                                                                                            ┃
+┃VERIFIED RESOLVE CANDIDATE                                                                                                                                                        ┃
+┃resolve-8a6915c9bf2142edf9d300400954d7eaea73321f168da4b5db706688ed9ba398                                                                                                          ┃
+┃Add an explicit day-dependent schedule statement.                                                                                                                                v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌──────────────────────────────────────────────────────────────────| RESPONSES · REQUIRED · VERIFIED CANDIDATES |──────────────────────────────────────────────────────────────────┐
+│QUESTION · Choose one verified minimum-change post-image.                                                                                                                         │
+│                                                                                                                                                                                  │
+│  1. CANDIDATE 1                                                                                                                                                                  │
+│  Qualify the second time as the weekend schedule.                                                                                                                                │
+│                                                                                                                                                                                  │
+│  2. CANDIDATE 2                                                                                                                                                                  │
+│  Add an explicit day-dependent schedule statement.                                                                                                                               │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────| ITEMS · REQUIRED RESOLVE PLAN |─────────────────────────────────────────────────────────────────────────┐
+│REQUIRED 1 · ANSWERED 0 · REMAINING 1                                                                                                                                             │
+│· 1. FIT REPAIR · Choose one verified minimum-change post-image.                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────────────────| TO DO · ONE NEXT ACTION |────────────────────────────────────────────────────────────────────────────┐
+│OPEN FIRST UNRESOLVED · Choose one verified minimum-change post-image.                                                                                                            │
+│Enter opens this required item. Apply stays unavailable.                                                                                                                          │
+│[ PRESS ENTER ]                                                                                                                                                                   │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ move · Enter open/select · Tab frames · Esc/Backspace back · y focused · Y complete · Q close

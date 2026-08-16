@@ -197,6 +197,17 @@ batching would require operation-owned reconciliation for cross-case Rule
 interpretation and Context-wide mixed evidence; neither operation currently
 claims such a reconciler.
 
+## Whole-frame Resolve
+
+Resolve declares `WHOLE_FRAME_ONLY`. The initial Fit judgment, candidate
+generation, independent grounding/information-preservation verification, and
+final Fit judgments each operate on a complete frozen direct-Memory frame or
+complete candidate post-image. A complete block matrix would not establish
+that a repair preserves facts across shards, and independent local repairs
+could introduce new cross-batch incompatibilities. Resolve therefore rejects
+an oversized frame before provider construction or before publishing an
+incomplete analysis; it does not enable hidden batching.
+
 ## Migration scope
 
 This layer covers aggregate Context operations whose candidate, relation,

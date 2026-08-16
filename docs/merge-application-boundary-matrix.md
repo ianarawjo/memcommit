@@ -47,7 +47,7 @@ application boundary.
 | Callable | Layer | Responsibility |
 | --- | --- | --- |
 | `MergeRequest`, `FrozenMergePlan`, `MergeConflict`, `MergeResolution`, `MergeResult` | Application contract | Typed locator/reach input, mapping-qualified conflict identity, deterministic decision, reviewed binding, and durable result without Store or terminal objects. |
-| `prepare_merge`, `resolve_merge_conflicts`, `run_merge` | Application | Validate before Store access, require complete exact decisions, and require the final receipt to match the frozen plan. |
+| `merge_resolution_case`, `prepare_merge`, `resolve_merge_conflicts`, `run_merge` | Application | Project the frozen structural requirements through the operation-neutral Resolution contract, validate before Store access, require complete exact decisions, and require the final receipt to match the frozen plan. |
 | `MemoryStoreMergePort` | Infrastructure/runtime | Capture current once; resolve authority; project cross-Profile input; freeze Source/Target digests; revalidate and checkpoint atomically. |
 | `execute_merge` | Internal Python runtime | Invoke the same use case with no stdout, stderr, prompt-toolkit, or provider dependency. |
 | `render_merge_plain` | Plain CLI adapter | Preserve the historical direct success sentence and explicitly report recursive Context/checkpoint totals. |
@@ -186,6 +186,9 @@ permanently conceal an earlier mutation.
 - No automatic propagation of edits or deletions; an edit occurs only through
   an explicit `TAKE SOURCE` conflict decision.
 - No semantic duplicate or conflict reconciliation; Meld owns that behavior.
+- No provider or Fit call in structural conflict resolution; the shared
+  Resolution contract supplies identity, legal-choice, and required-coverage
+  mechanics rather than a universal solver.
 - No traversal of embedded Context graphs as if they were lexical descendants.
 - No partial publication when one descendant fails validation.
 - No recursive Merge between overlapping local Source and Target namespaces.

@@ -396,8 +396,7 @@ def render_meld_session(
             and proposal.owner_context_name is not None
         ):
             lines.append(
-                "       OWNER · "
-                + safe_terminal_text(proposal.owner_context_name)
+                "       OWNER · " + safe_terminal_text(proposal.owner_context_name)
             )
         lines.append(f"       WHY · {safe_terminal_text(proposal.reason)}")
     if session.state == "AWAITING_REPLY":
@@ -430,8 +429,7 @@ def _load_bound_contexts(
     registry=None,
 ) -> tuple[Context, Context, Context]:
     if session.mode == "DIRECTIONAL" and (
-        session.granted_incoming is not None
-        or session.granted_target is not None
+        session.granted_incoming is not None or session.granted_target is not None
     ):
         bindings = (session.granted_incoming, session.granted_target)
         loaded = []
@@ -453,9 +451,7 @@ def _load_bound_contexts(
                 _load_meld_source(
                     access,
                     include_descendants=bool(frame.include_descendants),
-                    project=(
-                        session.schema_version < MELD_OWNER_AWARE_SCHEMA_VERSION
-                    ),
+                    project=(session.schema_version < MELD_OWNER_AWARE_SCHEMA_VERSION),
                 )
             )
         left, right = loaded
@@ -645,7 +641,6 @@ def _assert_unapplied_target(
         )
 
 
-
 def _meld_wait_view(session: MeldSession) -> CommandWaitView:
     """Restore the last complete Meld report beneath one pending turn.
 
@@ -678,9 +673,7 @@ def _meld_wait_view(session: MeldSession) -> CommandWaitView:
     prior_payload = session.to_dict()
     prior_payload["turns"] = [turn.to_dict() for turn in session.turns[:-1]]
     prior_payload["state"] = (
-        "READY_TO_APPLY"
-        if prior_turn.assessment.ready_to_apply
-        else "AWAITING_REPLY"
+        "READY_TO_APPLY" if prior_turn.assessment.ready_to_apply else "AWAITING_REPLY"
     )
     prior_session = MeldSession.from_dict(prior_payload)
     pending_lines = [
@@ -713,9 +706,7 @@ def _meld_wait_context_view(session: MeldSession) -> CommandWaitView:
     ]
     for frame in session.frames:
         scope = (
-            "INCLUDE DESCENDANTS"
-            if frame.include_descendants
-            else "THIS CONTEXT ONLY"
+            "INCLUDE DESCENDANTS" if frame.include_descendants else "THIS CONTEXT ONLY"
         )
         lines.extend(
             [
@@ -872,9 +863,11 @@ def _run_interactive(
     from memcommit.meld_session_application import (
         MeldDestinationRequest,
         MeldSessionSnapshot,
-        MeldTurnRequest,
         prepare_meld_preservation_turn,
-        prepare_meld_turn,
+    )
+    from memcommit.meld_resolution_application import (
+        MeldResolutionTurnRequest,
+        prepare_meld_resolution_turn,
     )
 
     if analysis_origin is None and session.comparison_seed is not None:
@@ -888,6 +881,7 @@ def _run_interactive(
         )
     navigation = ResolutionNavigation()
     while session.state not in {"APPLIED", "KEPT_REVIEW_ONLY"}:
+
         def validate_destination(name: str) -> None:
             validate_context_name(name)
             if name == session.target.context_name:
@@ -959,9 +953,7 @@ def _run_interactive(
         snapshot = MeldSessionSnapshot(session=session, version_token=expected)
         if action.kind == "CHANGE_DESTINATION":
             if destination is None or action.destination is None:
-                raise MeldCommandError(
-                    "This Meld cannot change its save location."
-                )
+                raise MeldCommandError("This Meld cannot change its save location.")
             validate_destination(action.destination)
             if action.destination != session.target.context_name:
                 session = execute_meld_destination_change(
@@ -997,31 +989,20 @@ def _run_interactive(
                 session = execute_meld_preservation(pending, store=store).session
                 continue
         elif action.kind == "COMMENT_ALL":
-            session = prepare_meld_turn(
-                MeldTurnRequest(
+            session = prepare_meld_resolution_turn(
+                MeldResolutionTurnRequest(
                     snapshot=snapshot,
                     comment=action.comment,
-                    scope="ALL",
                 )
             ).session
         elif action.kind == "COMMENT_ISSUE":
-            assessment = session.current_assessment
-            assert assessment is not None and action.issue_uid is not None
-            issue = next(
-                item for item in assessment.issues if item.uid == action.issue_uid
-            )
-            parts: list[str] = []
-            if action.choice_index is not None:
-                option = issue.options[action.choice_index]
-                parts.append(f"Choose this reading: {option.text}")
-            if action.comment:
-                parts.append(action.comment)
-            session = prepare_meld_turn(
-                MeldTurnRequest(
+            assert action.issue_uid is not None
+            session = prepare_meld_resolution_turn(
+                MeldResolutionTurnRequest(
                     snapshot=snapshot,
-                    comment="\n\n".join(parts),
-                    scope="ISSUE",
-                    issue_uids=(issue.uid,),
+                    issue_uid=action.issue_uid,
+                    option_uid=action.option_uid,
+                    comment=action.comment,
                 )
             ).session
         else:
@@ -1632,13 +1613,11 @@ def cmd(
         if requested_mode == "DIRECTIONAL":
             if incoming_memory is not None and left_descendants:
                 raise MeldCommandError(
-                    "--incoming-memory cannot be combined with "
-                    "--left-descendants."
+                    "--incoming-memory cannot be combined with --left-descendants."
                 )
             if baseline_memory is not None and right_descendants:
                 raise MeldCommandError(
-                    "--baseline-memory cannot be combined with "
-                    "--right-descendants."
+                    "--baseline-memory cannot be combined with --right-descendants."
                 )
             start_parts = ["mem", "meld", left_name]
             if left_descendants:
@@ -1813,9 +1792,7 @@ def cmd(
                 if requested_mode == "DIRECTIONAL":
                     assert prepared.provisional_session is not None
                     return_view = _meld_wait_view(prepared.provisional_session)
-                    context_view = _meld_wait_context_view(
-                        prepared.provisional_session
-                    )
+                    context_view = _meld_wait_context_view(prepared.provisional_session)
                     stage = "connecting provider"
                 else:
                     comparison_input = ComparisonInput.from_contexts(
@@ -1826,7 +1803,12 @@ def cmd(
                     )
                     return_view = build_report_loading_view(
                         "MELD",
-                        sections=("What mem understood", "Both", "Differences", "Items"),
+                        sections=(
+                            "What mem understood",
+                            "Both",
+                            "Differences",
+                            "Items",
+                        ),
                     )
                     context_view = _symmetric_comparison_wait_context_view(
                         comparison_input,
@@ -1913,9 +1895,7 @@ def cmd(
                 if requested_mode == "DIRECTIONAL":
                     assert prepared.provisional_session is not None
                     return_view = _meld_wait_view(prepared.provisional_session)
-                    context_view = _meld_wait_context_view(
-                        prepared.provisional_session
-                    )
+                    context_view = _meld_wait_context_view(prepared.provisional_session)
                     stage = "connecting provider"
                 else:
                     comparison_input = ComparisonInput.from_contexts(
@@ -1926,7 +1906,12 @@ def cmd(
                     )
                     return_view = build_report_loading_view(
                         "MELD",
-                        sections=("What mem understood", "Both", "Differences", "Items"),
+                        sections=(
+                            "What mem understood",
+                            "Both",
+                            "Differences",
+                            "Items",
+                        ),
                     )
                     context_view = _symmetric_comparison_wait_context_view(
                         comparison_input,
@@ -2007,9 +1992,11 @@ def cmd(
         )
         from memcommit.meld_session_application import (
             MeldSessionSnapshot,
-            MeldTurnRequest,
             prepare_meld_preservation_turn,
-            prepare_meld_turn,
+        )
+        from memcommit.meld_resolution_application import (
+            MeldResolutionTurnRequest,
+            prepare_meld_resolution_turn,
         )
 
         session_snapshot = MeldSessionSnapshot(
@@ -2084,18 +2071,14 @@ def cmd(
             selected_issue = (
                 _issue_selector(session, issue) if issue is not None else None
             )
-            text_parts: list[str] = []
+            option_uid = None
             if choice is not None:
                 assert selected_issue is not None
                 if choice > len(selected_issue.options):
                     raise MeldCommandError(
                         f"Issue has only {len(selected_issue.options)} choices."
                     )
-                option = selected_issue.options[choice - 1]
-                text_parts.append(f"Choose this reading: {option.text}")
-            if comment is not None and comment.strip():
-                text_parts.append(comment)
-            turn_comment = "\n\n".join(text_parts)
+                option_uid = selected_issue.options[choice - 1].uid
             revision_value = (revision or "extend").strip().upper()
             if revision_value not in {
                 "CONFIRM",
@@ -2111,14 +2094,14 @@ def cmd(
                 raise MeldCommandError(
                     "--revises-turn is valid only with --revision correct or retract."
                 )
-            session = prepare_meld_turn(
-                MeldTurnRequest(
+            session = prepare_meld_resolution_turn(
+                MeldResolutionTurnRequest(
                     snapshot=session_snapshot,
-                    comment=turn_comment,
-                    scope=("ISSUE" if selected_issue is not None else "ALL"),
-                    issue_uids=(
-                        (selected_issue.uid,) if selected_issue is not None else ()
+                    comment=comment or "",
+                    issue_uid=(
+                        selected_issue.uid if selected_issue is not None else None
                     ),
+                    option_uid=option_uid,
                     revision=revision_value,  # type: ignore[arg-type]
                     revises_turn_uids=revises,
                 )

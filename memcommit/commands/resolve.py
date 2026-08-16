@@ -1,0 +1,210 @@
+"""Generate and explicitly apply grounded Fit-repair candidates."""
+
+from __future__ import annotations
+
+from typing import Annotated, Optional
+
+import typer
+
+from memcommit.clipboard import write_system_clipboard
+from memcommit.commands.command_progress import CommandProgress
+from memcommit.commands.context_operand import ContextOperandSnapshot
+from memcommit.fit_judgment import FitJudgmentError
+from memcommit.interfaces.cli.resolve import (
+    render_resolve_plain,
+    render_resolve_receipt,
+)
+from memcommit.interfaces.console import (
+    ConsoleMode,
+    ConsoleModeError,
+    SystemTerminalCapabilities,
+    resolve_console_mode,
+)
+from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.tui.operations.resolve import run_resolve_tui
+from memcommit.profile_config import ProfileConfigError
+from memcommit.profiles import ProfileError
+from memcommit.query_provider import QueryProviderError, connect_semantic_provider
+from memcommit.resolve_application import (
+    ResolveError,
+    ResolveRequest,
+    apply_resolve,
+    run_resolve,
+)
+from memcommit.resolve_runtime import MemoryStoreResolvePort
+from memcommit.resolve_semantic import ProviderResolveSemanticPort
+from memcommit.store import MemoryStore
+
+
+def cmd(
+    memory_selectors: Annotated[
+        Optional[list[str]],
+        typer.Argument(
+            help=(
+                "Direct Memory UID prefixes allowed to change; omit to use "
+                "the initial Fit judgment's material Memories"
+            )
+        ),
+    ] = None,
+    context_name: Annotated[
+        Optional[str],
+        typer.Option(
+            "--context",
+            "-c",
+            help="Exact local Context or readable granted Context to repair",
+        ),
+    ] = None,
+    allow_create: Annotated[
+        bool,
+        typer.Option(
+            "--allow-create",
+            help="Permit a verified candidate to add direct Memories",
+        ),
+    ] = False,
+    allow_delete: Annotated[
+        bool,
+        typer.Option(
+            "--allow-delete",
+            help="Permit guidance-grounded deletion candidates",
+        ),
+    ] = False,
+    guidance: Annotated[
+        Optional[str],
+        typer.Option(
+            "--guidance",
+            help="Grounding instruction or fact available to candidate generation",
+        ),
+    ] = None,
+    candidate_uid: Annotated[
+        Optional[str],
+        typer.Option(
+            "--candidate",
+            help="Exact full candidate id from a reviewed Resolve analysis",
+        ),
+    ] = None,
+    expected_revision: Annotated[
+        Optional[str],
+        typer.Option(
+            "--expected-revision",
+            help="Exact frozen revision printed by the reviewed analysis",
+        ),
+    ] = None,
+    apply_now: Annotated[
+        bool,
+        typer.Option(
+            "--apply",
+            help="Apply the exact regenerated candidate after Fit verification",
+        ),
+    ] = False,
+    plain: Annotated[
+        bool,
+        typer.Option(
+            "--plain",
+            help="Print the proposal or receipt instead of opening the TUI",
+        ),
+    ] = False,
+    tui: Annotated[
+        bool,
+        typer.Option(
+            "--tui",
+            help="Require the interactive Resolve review and exact Apply flow",
+        ),
+    ] = False,
+) -> None:
+    """Make one complete Memory frame Fit through grounded minimum changes."""
+
+    try:
+        mode = resolve_console_mode(plain=plain, tui=tui)
+        if apply_now:
+            if candidate_uid is None or expected_revision is None:
+                raise ResolveError(
+                    "Resolve --apply requires --candidate and --expected-revision."
+                )
+            if mode is ConsoleMode.TUI:
+                raise ResolveError(
+                    "Resolve --apply is already exact; do not combine it with --tui."
+                )
+        elif candidate_uid is not None or expected_revision is not None:
+            raise ResolveError(
+                "Resolve --candidate and --expected-revision require --apply."
+            )
+
+        store = MemoryStore(create=False)
+        snapshot = ContextOperandSnapshot.capture(store)
+        request = ResolveRequest(
+            context_name=snapshot.resolve_or_current(context_name),
+            memory_selectors=tuple(memory_selectors or ()),
+            allow_create=allow_create,
+            allow_delete=allow_delete,
+            guidance=guidance or "",
+        )
+        port = MemoryStoreResolvePort(
+            store,
+            current_name=snapshot.current_name,
+        )
+        with CommandProgress(
+            "RESOLVE",
+            "judging, generating, and independently verifying the complete frame",
+            total=1,
+        ) as progress:
+            analysis = run_resolve(
+                request,
+                frame_port=port,
+                semantic_port=ProviderResolveSemanticPort(),
+                provider_factory=connect_semantic_provider,
+                expected_revision=expected_revision,
+            )
+            progress.update("verified proposal ready", step=1)
+
+        if apply_now:
+            assert candidate_uid is not None
+            receipt = apply_resolve(
+                analysis,
+                candidate_uid,
+                frame_port=port,
+            )
+            render_resolve_receipt(receipt)
+            return
+
+        interactive = SystemTerminalCapabilities().is_interactive()
+        selected_mode = (
+            ConsoleMode.TUI
+            if mode is ConsoleMode.AUTO and interactive
+            else ConsoleMode.PLAIN
+            if mode is ConsoleMode.AUTO
+            else mode
+        )
+        if selected_mode is ConsoleMode.TUI:
+            run_resolve_tui(
+                analysis,
+                apply_candidate=lambda selected: apply_resolve(
+                    analysis,
+                    selected,
+                    frame_port=port,
+                ),
+                clipboard_writer=write_system_clipboard,
+            )
+        else:
+            render_resolve_plain(analysis)
+    except (
+        ConsoleModeError,
+        FileNotFoundError,
+        FitJudgmentError,
+        OSError,
+        ProfileConfigError,
+        ProfileError,
+        QueryProviderError,
+        ResolveError,
+        RuntimeError,
+        TypeError,
+        ValueError,
+    ) as error:
+        typer.secho(
+            "Resolve error: " + display_escape_text(str(error)),
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
+
+
+__all__ = ["cmd"]

@@ -2,9 +2,9 @@
 
 ## Status and scope
 
-Meld, Atomize, Update, and Sever now project their operation-owned artifacts
-into one interactive Resolution Workbench presentation contract.  A future
-Reconcile implementation is expected to use the same contract.  Ground
+Meld, Atomize, Update, Sever, and Fit-repair Resolve now project their
+operation-owned artifacts into one interactive Resolution Workbench
+presentation contract. Ground
 deliberately does not: its Goal–Contexts–Rules–Memories–Chat frame, draft
 lifecycle, and exact command approval are a different interaction.
 
@@ -487,12 +487,21 @@ renderer while retaining their prompt-oriented approval grammar.
 In-place Atomize/Translate, Forget, Update, and directional Meld remain
 target-bound and therefore do not expose a misleading save-as control.
 
-### Reconcile
+### Resolve
 
-Reconcile has no public semantic backend yet.  The common projection and
-action contract are reserved for it, but this is not evidence that a
-`mem reconcile` command, provider schema, durable session, or application path
-exists.
+Resolve projects its complete analysis into Viewer, one required candidate
+choice into Responses, the real plan into Items, and exact Apply into To Do.
+The operation adapter supplies Resolve-specific titles without changing the
+shared Meld defaults. One candidate is preselected as a proposal; several
+Pareto-incomparable candidates remain real choices. The exact review binds the
+canonical Context, actionable Memory UIDs, requested effect flags, guidance,
+full candidate hash, and frozen revision.
+
+The workbench neither regenerates candidates nor writes storage. It returns
+the selected candidate UID to the Resolve application callback, which applies
+the already verified process-local analysis after authority and freshness
+revalidation. Terminal outcomes such as `ALREADY_FIT`, `NEEDS_INPUT`, and
+`NEEDS_AUTHORITY` use the shared read-only semantic Viewer and expose no Apply.
 
 ## Invariants
 

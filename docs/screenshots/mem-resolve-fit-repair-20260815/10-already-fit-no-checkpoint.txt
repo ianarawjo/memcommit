@@ -1,0 +1,2 @@
+COMMAND EXIT · 0                                                                                                                                                                    
+ALREADY-FIT VERIFICATION · MEMORIES ['The office opens at 8.', 'The office opens at 9.'] · CHECKPOINTS 0 · COMMANDS []

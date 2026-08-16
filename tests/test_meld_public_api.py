@@ -8,6 +8,7 @@ import pytest
 
 import memcommit.api._operations.meld as meld_operation
 from memcommit.api import (
+    MeldConflictError,
     MeldContextError,
     MeldSessionResult,
     MeldStorageError,
@@ -135,13 +136,18 @@ def test_remaining_meld_lifecycle_methods_delegate_to_the_operation_owner(
     for name in ("comment_meld", "preserve_meld", "defer_meld", "apply_meld"):
         monkeypatch.setattr(meld_operation, name, capture(name))
 
-    assert client.comment_meld(
-        "result",
-        "Keep both.",
-        issue_uid="issue-1",
-        revision="replace",
-        revises_turn_uids=("turn-1",),
-    ) == "comment_meld"
+    assert (
+        client.comment_meld(
+            "result",
+            "Keep both.",
+            issue_uid="issue-1",
+            option_uid="option-1",
+            expected_version="saved-version",
+            revision="replace",
+            revises_turn_uids=("turn-1",),
+        )
+        == "comment_meld"
+    )
     assert client.preserve_meld("result") == "preserve_meld"
     assert client.defer_meld("result") == "defer_meld"
     assert client.apply_meld("result") == "apply_meld"
@@ -150,6 +156,8 @@ def test_remaining_meld_lifecycle_methods_delegate_to_the_operation_owner(
     assert calls[0][1][1:] == ("result", "Keep both.")
     assert calls[0][2] == {
         "issue_uid": "issue-1",
+        "option_uid": "option-1",
+        "expected_version": "saved-version",
         "revision": "replace",
         "revises_turn_uids": ("turn-1",),
     }
@@ -159,6 +167,36 @@ def test_remaining_meld_lifecycle_methods_delegate_to_the_operation_owner(
         "defer_meld",
         "apply_meld",
     ]
+
+
+def test_comment_meld_rejects_a_stale_review_before_provider_connection(
+    tmp_path,
+    monkeypatch,
+):
+    session = _review_session()
+    monkeypatch.setattr(
+        meld_operation,
+        "_meld_snapshot",
+        lambda runtime, target: SimpleNamespace(
+            session=session,
+            version_token="current-version",
+        ),
+    )
+    client = MemCommitClient(
+        root=tmp_path / "store",
+        create=True,
+        semantic_provider_factory=lambda: (_ for _ in ()).throw(
+            AssertionError("stale Meld response connected a provider")
+        ),
+    )
+
+    with pytest.raises(MeldConflictError, match="changed"):
+        client.comment_meld(
+            "result",
+            issue_uid="issue-1",
+            option_uid="option-1",
+            expected_version="reviewed-version",
+        )
 
 
 def test_meld_current_context_failure_uses_the_meld_error_taxonomy():

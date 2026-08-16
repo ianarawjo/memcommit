@@ -18,8 +18,8 @@ from memcommit.interfaces.agent import (
     DISTILL_AGENT_TOOL_NAME,
     ELABORATE_AGENT_TOOL_NAME,
     FIT_AGENT_TOOL_NAME,
-    GROUND_RESOLUTION_AGENT_TOOL_NAME,
     QUERY_AGENT_TOOL_NAME,
+    RESOLVE_AGENT_TOOL_NAME,
     AgentToolBinding,
     AgentToolRegistrationError,
     AgentToolRegistry,
@@ -81,7 +81,7 @@ def test_default_registry_discovers_fresh_frozen_shipped_schemas(tmp_path):
         DISTILL_AGENT_TOOL_NAME,
         ELABORATE_AGENT_TOOL_NAME,
         FIT_AGENT_TOOL_NAME,
-        GROUND_RESOLUTION_AGENT_TOOL_NAME,
+        RESOLVE_AGENT_TOOL_NAME,
     )
     first = registry.tool_schemas()
     second = registry.tool_schemas()
@@ -322,3 +322,4 @@ def test_registry_depends_only_on_public_client_and_agent_adapters():
     assert "memcommit.interfaces.agent.atomize" in imported
     assert "memcommit.interfaces.agent.atomize_grounding" in imported
     assert "memcommit.interfaces.agent.query" in imported
+    assert "memcommit.interfaces.agent.resolve" in imported

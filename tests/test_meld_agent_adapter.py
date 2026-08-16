@@ -118,8 +118,61 @@ def test_provider_failure_is_bounded_and_retryable(client, monkeypatch):
     }
 
 
+def test_exact_issue_option_forwards_the_reviewed_version(client, monkeypatch):
+    calls = []
+    monkeypatch.setattr(
+        client,
+        "comment_meld",
+        lambda *args, **kwargs: (calls.append((args, kwargs)) or _session()),
+    )
+
+    result = MeldAgentAdapter(client).invoke(
+        {
+            "version": 1,
+            "kind": "comment",
+            "target_context": "baseline",
+            "issue_uid": "issue-1",
+            "option_uid": "option-1",
+            "expected_version": "saved-version",
+        }
+    )
+
+    assert result["ok"] is True
+    assert calls == [
+        (
+            (),
+            {
+                "target_context": "baseline",
+                "comment": "",
+                "issue_uid": "issue-1",
+                "option_uid": "option-1",
+                "expected_version": "saved-version",
+                "revision": "EXTEND",
+                "revises_turn_uids": (),
+            },
+        )
+    ]
+
+
+def test_exact_issue_option_requires_the_reviewed_version(client):
+    result = MeldAgentAdapter(client).invoke(
+        {
+            "version": 1,
+            "kind": "comment",
+            "target_context": "baseline",
+            "issue_uid": "issue-1",
+            "option_uid": "option-1",
+        }
+    )
+
+    assert result["ok"] is False
+    assert result["error"]["code"] == "invalid_request"
+    assert "expected_version" in result["error"]["message"]
+
+
 def test_schema_is_fresh_and_uses_stable_tool_name():
     first = meld_agent_tool_schema()
     first["name"] = "changed"
 
     assert meld_agent_tool_schema()["name"] == MELD_AGENT_TOOL_NAME
+    assert "option_uid" in meld_agent_tool_schema()["parameters"]["properties"]

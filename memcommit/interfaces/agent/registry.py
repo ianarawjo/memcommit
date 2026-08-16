@@ -39,16 +39,15 @@ from memcommit.interfaces.agent.fit import (
     FitAgentAdapter,
     fit_agent_tool_schema,
 )
-from memcommit.interfaces.agent.ground_artifacts import GroundArtifactRegistry
-from memcommit.interfaces.agent.ground_resolution import (
-    GROUND_RESOLUTION_AGENT_TOOL_NAME,
-    GroundResolutionAgentAdapter,
-    ground_resolution_agent_tool_schema,
-)
 from memcommit.interfaces.agent.query import (
     QUERY_AGENT_TOOL_NAME,
     QueryAgentAdapter,
     query_agent_tool_schema,
+)
+from memcommit.interfaces.agent.resolve import (
+    RESOLVE_AGENT_TOOL_NAME,
+    ResolveAgentAdapter,
+    resolve_agent_tool_schema,
 )
 from memcommit.interfaces.agent.meld import (
     MELD_AGENT_TOOL_NAME,
@@ -225,11 +224,10 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
     meld = MeldAgentAdapter(client)
     atomize = AtomizeAgentAdapter(client)
     atomize_grounding = AtomizeGroundingAgentAdapter(client)
-    artifacts = GroundArtifactRegistry()
-    distill = DistillAgentAdapter(client, artifacts=artifacts)
-    elaborate = ElaborateAgentAdapter(client, artifacts=artifacts)
+    distill = DistillAgentAdapter(client)
+    elaborate = ElaborateAgentAdapter(client)
     fit = FitAgentAdapter(client)
-    ground_resolution = GroundResolutionAgentAdapter(client, artifacts)
+    resolve = ResolveAgentAdapter(client)
     return AgentToolRegistry(
         (
             AgentToolBinding(
@@ -273,9 +271,9 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
                 handler=fit.invoke,
             ),
             AgentToolBinding(
-                name=GROUND_RESOLUTION_AGENT_TOOL_NAME,
-                schema_factory=ground_resolution_agent_tool_schema,
-                handler=ground_resolution.invoke,
+                name=RESOLVE_AGENT_TOOL_NAME,
+                schema_factory=resolve_agent_tool_schema,
+                handler=resolve.invoke,
             ),
         )
     )

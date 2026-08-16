@@ -160,7 +160,7 @@ def run_resolution_workbench(
         title=lambda: (
             "VIEWER · COMPLETE REPORT"
             if opened_item() is None
-            else "VIEWER · REQUIRED CONFLICT DETAIL"
+            else spec.detail_title
         ),
         is_focused=lambda: get_app().layout.has_focus(viewer_control),
         height=Dimension(min=14, weight=1),
@@ -189,7 +189,7 @@ def run_resolution_workbench(
     responses_frame = ConditionalContainer(
         build_focused_frame(
             Window(responses_control, wrap_lines=True),
-            title="RESPONSES · REQUIRED · DETERMINISTIC ONLY",
+            title=spec.responses_title,
             is_focused=lambda: get_app().layout.has_focus(responses_control),
             height=Dimension(min=8, max=13),
         ),
@@ -232,7 +232,7 @@ def run_resolution_workbench(
     )
     items_frame = build_focused_frame(
         Window(items_control, wrap_lines=True),
-        title="ITEMS · REQUIRED CONFLICTS ONLY",
+        title=spec.items_title,
         is_focused=lambda: get_app().layout.has_focus(items_control),
         height=Dimension(min=7, max=14),
     )

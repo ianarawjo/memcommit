@@ -1,0 +1,52 @@
+ MEM RESOLVE · RESOLUTION SESSION                                                                                                                                                   
+ SEMANTIC CANDIDATES · INDEPENDENTLY VERIFIED · EXACT APPLY                                                                                                                         
+┌───────────────────────────────────────────────────────────────────────────| VIEWER · COMPLETE REPORT |───────────────────────────────────────────────────────────────────────────┐
+│RESOLVE · FIT REPAIR                                                                                                                                                             ^│
+│CONTEXT · resolve/capture                                                                                                                                                         │
+│REVISION · 4eae2a713f001951aafc8c814d2f8ac9bebbd906fcb25dab81b5353753dcedba                                                                                                       │
+│STATUS · CHOICE                                                                                                                                                                   │
+│REQUESTED · UPDATE, CREATE                                                                                                                                                        │
+│ALLOWED · UPDATE, CREATE                                                                                                                                                          │
+│                                                                                                                                                                                  │
+│INITIAL FIT · NO                                                                                                                                                                  │
+│The same office cannot ordinarily open at both times.                                                                                                                             │
+│                                                                                                                                                                                  │
+│QUESTION · Choose the smallest grounded schedule repair.                                                                                                                          │
+│                                                                                                                                                                                  │
+│CANDIDATE 1 · resolve-6755c6534462f94a77bd714861be1e8569b826ebe6093d3eb107ee9ef38f3476                                                                                            │
+│Qualify the second time as the weekend schedule.                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────| ITEMS · REQUIRED RESOLVE PLAN |─────────────────────────────────────────────────────────────────────────┐
+│REQUIRED 1 · ANSWERED 1 · REMAINING 0                                                                                                                                             │
+│✓ 1. FIT REPAIR · Choose one verified minimum-change post-image.                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ TO DO · ONE NEXT ACTION ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃FINAL REVIEW · ITEM-BY-ITEM DECISIONS                                                                                                                                             ┃
+┃PROPOSED COMMAND · NOT RUN                                                                                                                                                        ┃
+┃  mem resolve --context resolve/capture --allow-create --candidate resolve-6755c6534462f94a77bd714861be1e8569b826ebe6093d3eb107ee9ef38f3476 --expected-revision 4eae2a713f001951aa┃
+┃fc8c814d2f8ac9bebbd906fcb25dab81b5353753dcedba --apply                                                                                                                            ┃
+┃                                                                                                                                                                                  ┃
+┃EFFECTS · ONE COMMAND                                                                                                                                                             ┃
+┃  Frozen Context revision · 4eae2a713f001951aafc8c814d2f8ac9bebbd906fcb25dab81b5353753dcedba.                                                                                     ┃
+┃  Verified candidate · resolve-6755c6534462f94a77bd714861be1e8569b826ebe6093d3eb107ee9ef38f3476.                                                                                  ┃
+┃  UPDATE [20000000-0000-4000-8000-000000000002] · 'The office opens at 9.' -> 'The office opens at 9 on weekends.'                                                                ┃
+┃  The complete post-image independently Fits as YES.                                                                                                                              ┃
+┃  Apply creates one checkpoint; recovery is mem undo.                                                                                                                             ┃
+┃                                                                                                                                                                                  ┃
+┃Approval applies only to the exact command shown above.                                                                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃[ PRESS ENTER TO APPLY THIS EXACT WHOLE SET ]                                                                                                                                     ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ Apply failed · The Resolve Context changed before Apply; nothing was written.

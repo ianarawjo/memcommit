@@ -158,7 +158,7 @@ class AtomizeExecutionError(AtomizeError):
 
 
 class SemanticError(MemCommitError):
-    """Base class for public Distill and Elaborate failures."""
+    """Base class for public provider-backed semantic operation failures."""
 
 
 class SemanticInputError(SemanticError):

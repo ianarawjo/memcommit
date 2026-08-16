@@ -25,7 +25,6 @@ from memcommit.interfaces.agent.contract import (
     object_value,
     text_value,
 )
-from memcommit.interfaces.agent.ground_artifacts import GroundArtifactRegistry
 
 
 DISTILL_AGENT_CONTRACT_VERSION = 1
@@ -118,16 +117,10 @@ _ERRORS: tuple[tuple[type[SemanticError], str, str, bool], ...] = (
 
 
 class DistillAgentAdapter:
-    def __init__(
-        self,
-        client: MemCommitClient,
-        *,
-        artifacts: GroundArtifactRegistry | None = None,
-    ) -> None:
+    def __init__(self, client: MemCommitClient) -> None:
         if not isinstance(client, MemCommitClient):
             raise TypeError("DistillAgentAdapter requires a MemCommitClient.")
         self._client = client
-        self._artifacts = artifacts
 
     def invoke(self, payload: object) -> JsonObject:
         kind: DistillAgentKind | None = None
@@ -174,8 +167,6 @@ class DistillAgentAdapter:
                 message="The Distill tool failed internally.",
                 retryable=False,
             )
-        if kind == "ground" and self._artifacts is not None:
-            self._artifacts.retain_artifact(result)
         return {
             "version": DISTILL_AGENT_CONTRACT_VERSION,
             "ok": True,

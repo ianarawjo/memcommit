@@ -148,7 +148,7 @@ def test_elaborate_help_separates_candidate_rules_from_concrete_cases():
     )
 
 
-def test_collapsed_wide_by_kind_row_stacks_use_when_after_summary():
+def test_collapsed_by_kind_row_shows_summary_and_best_for_side_by_side():
     root, context = _root_context()
     try:
         entry = next(
@@ -168,27 +168,24 @@ def test_collapsed_wide_by_kind_row_stacks_use_when_after_summary():
     )
     rendered = "".join(text for _style, text in fragments)
     lines = rendered.splitlines()
-    command_index = next(
-        index for index, line in enumerate(lines) if "▸ mem compare" in line
-    )
-    use_case_index = next(
-        index for index, line in enumerate(lines) if "USE WHEN" in line
-    )
+    command_line = next(line for line in lines if "▸ mem compare" in line)
 
     assert all(len(line) == 180 for line in lines)
-    assert "Compare Memories in two Contexts" in lines[command_index]
-    assert "USE WHEN" not in lines[command_index]
-    assert use_case_index > command_index
-    assert "USE WHEN: Comparing two Contexts" in lines[use_case_index]
-    assert "DESCRIPTION" not in rendered
-    assert not any(
-        "USE WHEN:" in text and "bold" in style for style, text in fragments
+    assert "Compare Memories in two Contexts" in command_line
+    assert "│ USE WHEN: Comparing two Contexts" in command_line
+    row_content = command_line[2:-2]
+    summary_column, use_case_column = row_content.split(" │ ", 1)
+    assert abs(len(summary_column) - len(use_case_column)) <= 1
+    assert use_case_column.startswith("USE WHEN: Comparing two Contexts")
+    assert any(
+        style == "class:help-command.selected bold" and text == "USE WHEN:"
+        for style, text in fragments
     )
     assert "BEST FOR" not in rendered
     assert "FORM 1" not in rendered
 
 
-def test_collapsed_a_z_rows_use_the_same_stacked_help_flow():
+def test_collapsed_a_z_rows_use_the_same_best_for_column():
     root, context = _root_context()
     try:
         entries = command_entries(context)
@@ -209,24 +206,15 @@ def test_collapsed_a_z_rows_use_the_same_stacked_help_flow():
             selected_form=None,
         )
     )
-    lines = rendered.splitlines()
-    command_index = next(
-        index for index, line in enumerate(lines) if "▸ mem compare" in line
-    )
-    use_case_index = next(
-        index
-        for index, line in enumerate(lines[command_index + 1 :], command_index + 1)
-        if "USE WHEN: Comparing two Contexts" in line
+    command_line = next(
+        line for line in rendered.splitlines() if "▸ mem compare" in line
     )
 
-    assert "Compare Memories" in lines[command_index]
-    assert "USE WHEN" not in lines[command_index]
-    assert use_case_index > command_index
-    assert "DESCRIPTION" not in rendered
+    assert "│ USE WHEN: Comparing two Contexts" in command_line
     assert "BEST FOR" not in rendered
 
 
-def test_collapsed_narrow_row_uses_the_same_stacked_help_flow():
+def test_collapsed_narrow_row_stacks_best_for_below_the_summary():
     root, context = _root_context()
     try:
         entry = next(
@@ -235,32 +223,37 @@ def test_collapsed_narrow_row_uses_the_same_stacked_help_flow():
     finally:
         context.close()
 
-    fragments = _help_group_fragments(
-        [(0, entry)],
-        title="ANALYZE & TRANSFORM",
-        width=90,
-        focused=False,
-        selected_index=0,
-        expanded_index=None,
-        selected_form=None,
+    rendered = "".join(
+        text
+        for _style, text in _help_group_fragments(
+            [(0, entry)],
+            title="ANALYZE & TRANSFORM",
+            width=90,
+            focused=False,
+            selected_index=0,
+            expanded_index=None,
+            selected_form=None,
+        )
     )
-    rendered = "".join(text for _style, text in fragments)
     lines = rendered.splitlines()
     command_index = next(
         index for index, line in enumerate(lines) if "▸ mem compare" in line
     )
-    use_case_index = next(
-        index for index, line in enumerate(lines) if "USE WHEN" in line
+    best_for_index = next(
+        index
+        for index, line in enumerate(lines)
+        if "Comparing two Contexts as a whole" in line
     )
 
     assert all(len(line) == 90 for line in lines)
-    assert "Compare Memories" in lines[command_index]
-    assert "USE WHEN" not in lines[command_index]
-    assert use_case_index > command_index
-    assert "USE WHEN: Comparing two" in lines[use_case_index]
-    assert "DESCRIPTION" not in rendered
-    assert any("Contexts as a whole" in line for line in lines)
-    assert not any("USE WHEN:" in text and "bold" in style for style, text in fragments)
+    assert best_for_index > command_index
+    summary_start = lines[command_index].index("Compare Memories")
+    label_start = lines[best_for_index].index("USE WHEN:")
+    use_case_start = lines[best_for_index].index("Comparing two Contexts")
+    continuation = next(line for line in lines if "align and differ." in line)
+    assert label_start == summary_start
+    assert use_case_start == label_start + len("USE WHEN: ")
+    assert continuation.index("align and differ.") == use_case_start
     assert "BEST FOR" not in rendered
 
 

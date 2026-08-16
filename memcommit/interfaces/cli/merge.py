@@ -12,6 +12,7 @@ from memcommit.merge_application import (
     MergeReach,
     MergeResolution,
     MergeResult,
+    merge_resolution_case,
 )
 from memcommit.merge_runtime import merge_summary
 
@@ -27,10 +28,14 @@ def render_merge_plain(result: MergeResult) -> None:
     unchanged_phrase = (
         f"; {len(result.unchanged)} unchanged" if result.unchanged else ""
     )
-    no_change = not result.additions and not any(
-        resolution.decision is MergeDecision.TAKE_SOURCE
-        for resolution in result.resolutions
-    ) and not any(context.target_created for context in result.contexts)
+    no_change = (
+        not result.additions
+        and not any(
+            resolution.decision is MergeDecision.TAKE_SOURCE
+            for resolution in result.resolutions
+        )
+        and not any(context.target_created for context in result.contexts)
+    )
     status = "NO TARGET CHANGE · " if no_change else ""
     if result.reach is MergeReach.DESCENDANTS:
         created = sum(context.target_created for context in result.contexts)
@@ -75,9 +80,7 @@ def render_merge_conflicts_plain(plan: FrozenMergePlan) -> None:
             f"{display_escape_text(conflict.source_name)} → "
             f"{display_escape_text(conflict.target_name)}"
         )
-        typer.echo(
-            f"  SOURCE · {display_escape_text(conflict.source.description)}"
-        )
+        typer.echo(f"  SOURCE · {display_escape_text(conflict.source.description)}")
         for target in conflict.targets:
             typer.echo(f"  TARGET · {display_escape_text(target.description)}")
         typer.echo(f"  WHY · {display_escape_text(conflict.reason)}")
@@ -94,10 +97,7 @@ def render_merge_conflicts_plain(plan: FrozenMergePlan) -> None:
         if all_take_source
         else "--keep-target-all"
     )
-    typer.echo(
-        "RESOLVE · repeat --resolve ID=<listed-allowed-value>, or use "
-        f"{bulk}."
-    )
+    typer.echo(f"RESOLVE · repeat --resolve ID=<listed-allowed-value>, or use {bulk}.")
 
 
 def parse_merge_resolutions(
@@ -106,7 +106,9 @@ def parse_merge_resolutions(
 ) -> tuple[MergeResolution, ...]:
     """Parse repeatable CLI decisions against the exact frozen plan."""
 
-    known = {conflict.uid for conflict in plan.conflicts}
+    known = {
+        requirement.item_uid for requirement in merge_resolution_case(plan).requirements
+    }
     result: list[MergeResolution] = []
     for value in values:
         if not isinstance(value, str) or "=" not in value:
@@ -126,7 +128,5 @@ def parse_merge_resolutions(
             raise MergeError(
                 "Merge decisions are keep-target or take-source."
             ) from error
-        result.append(
-            MergeResolution(conflict_uid=conflict_uid, decision=decision)
-        )
+        result.append(MergeResolution(conflict_uid=conflict_uid, decision=decision))
     return tuple(result)

@@ -16,6 +16,7 @@ from memcommit.merge_application import (
     MergeError,
     MergeReach,
     MergeRequest,
+    merge_resolution_case,
     prepare_merge,
     resolve_merge_conflicts,
 )
@@ -97,9 +98,7 @@ def test_direct_conflict_requires_a_choice_and_applies_each_bulk_strategy(
         store=store,
         bulk=MergeDecision.KEEP_TARGET,
     )
-    assert store.load_direct("target").memories["shared"].content == (
-        "target revision"
-    )
+    assert store.load_direct("target").memories["shared"].content == ("target revision")
     assert kept.resolutions[0].decision is MergeDecision.KEEP_TARGET
 
     taken = execute_merge(
@@ -107,9 +106,7 @@ def test_direct_conflict_requires_a_choice_and_applies_each_bulk_strategy(
         store=store,
         bulk=MergeDecision.TAKE_SOURCE,
     )
-    assert store.load_direct("target").memories["shared"].content == (
-        "source revision"
-    )
+    assert store.load_direct("target").memories["shared"].content == ("source revision")
     assert taken.resolutions[0].decision is MergeDecision.TAKE_SOURCE
 
 
@@ -129,16 +126,12 @@ def test_noninteractive_cli_lists_ids_then_accepts_a_bulk_resolution(
     assert unresolved.exit_code == 1
     assert "CONTENT_DIVERGENCE" in unresolved.output
     assert "--keep-target-all / --take-source-all" in unresolved.output
-    assert store.load_direct("target").memories["shared"].content == (
-        "target revision"
-    )
+    assert store.load_direct("target").memories["shared"].content == ("target revision")
 
     resolved = runner.invoke(app, ["merge", "source", "--take-source-all"])
     assert resolved.exit_code == 0, resolved.output + resolved.stderr
     assert "resolved 1 conflict" in resolved.output
-    assert store.load_direct("target").memories["shared"].content == (
-        "source revision"
-    )
+    assert store.load_direct("target").memories["shared"].content == ("source revision")
 
 
 def test_recursive_merge_is_one_undo_redo_unit_including_created_contexts(
@@ -221,6 +214,10 @@ def test_conflict_identity_changes_when_frozen_content_changes(isolated_store):
     )
 
     assert first.conflicts[0].uid != second.conflicts[0].uid
+    assert (
+        merge_resolution_case(first).binding.revision
+        != merge_resolution_case(second).binding.revision
+    )
 
 
 def test_restricted_conflict_never_promises_take_source(isolated_store):
@@ -253,9 +250,7 @@ def test_restricted_conflict_never_promises_take_source(isolated_store):
     spec = merge_resolution_spec(restricted_plan)
 
     assert [choice.uid for choice in spec.items[0].choices] == ["KEEP_TARGET"]
-    assert [strategy.choice_uid for strategy in spec.bulk_strategies] == [
-        "KEEP_TARGET"
-    ]
+    assert [strategy.choice_uid for strategy in spec.bulk_strategies] == ["KEEP_TARGET"]
 
     with pytest.raises(MergeError, match="not authorized"):
         resolve_merge_conflicts(
@@ -289,9 +284,7 @@ def test_protected_target_memory_never_promises_take_source(isolated_store):
 
     assert plan.conflicts[0].allowed_decisions == (MergeDecision.KEEP_TARGET,)
     assert [choice.uid for choice in spec.items[0].choices] == ["KEEP_TARGET"]
-    assert [strategy.choice_uid for strategy in spec.bulk_strategies] == [
-        "KEEP_TARGET"
-    ]
+    assert [strategy.choice_uid for strategy in spec.bulk_strategies] == ["KEEP_TARGET"]
 
     unresolved = runner.invoke(app, ["merge", "source"])
     assert unresolved.exit_code == 1
@@ -301,15 +294,11 @@ def test_protected_target_memory_never_promises_take_source(isolated_store):
     rejected = runner.invoke(app, ["merge", "source", "--take-source-all"])
     assert rejected.exit_code == 1
     assert "not authorized" in rejected.stderr
-    assert store.load_direct("target").memories["shared"].content == (
-        "target revision"
-    )
+    assert store.load_direct("target").memories["shared"].content == ("target revision")
 
     kept = runner.invoke(app, ["merge", "source", "--keep-target-all"])
     assert kept.exit_code == 0, kept.output + kept.stderr
-    assert store.load_direct("target").memories["shared"].content == (
-        "target revision"
-    )
+    assert store.load_direct("target").memories["shared"].content == ("target revision")
 
 
 def test_protected_target_context_rejects_unconditional_addition_before_review(

@@ -1,0 +1,347 @@
+"""Versioned JSON-safe agent adapter for exact Resolve analysis and Apply."""
+
+from __future__ import annotations
+
+from collections.abc import Mapping
+from typing import Literal
+
+from memcommit.api import (
+    MemCommitClient,
+    ResolveAnalysisResult,
+    ResolveApplyResult,
+    SemanticAuthorityError,
+    SemanticConflictError,
+    SemanticContextError,
+    SemanticError,
+    SemanticExecutionError,
+    SemanticInputError,
+    SemanticProviderFailure,
+    SemanticStorageError,
+)
+from memcommit.interfaces.agent.contract import (
+    AgentRequestError,
+    JsonObject,
+    error_response,
+    exact_fields,
+    object_value,
+    text_value,
+)
+
+
+RESOLVE_AGENT_CONTRACT_VERSION = 1
+RESOLVE_AGENT_TOOL_NAME = "memcommit_resolve"
+ResolveAgentKind = Literal["analyze", "apply"]
+
+
+def _boolean(value: object, *, field: str) -> bool:
+    if not isinstance(value, bool):
+        raise AgentRequestError(f"{field} must be a boolean.")
+    return value
+
+
+def _selectors(value: object) -> tuple[str, ...]:
+    if not isinstance(value, list):
+        raise AgentRequestError("memory_selectors must be an array.")
+    selectors = tuple(
+        text_value(item, field=f"memory_selectors[{index}]")
+        for index, item in enumerate(value)
+    )
+    if len(set(selectors)) != len(selectors):
+        raise AgentRequestError("memory_selectors must not repeat.")
+    return selectors
+
+
+def _parse_request(payload: object) -> tuple[ResolveAgentKind, dict[str, object]]:
+    value = object_value(payload, label="Resolve request")
+    version = value.get("version")
+    if (
+        isinstance(version, bool)
+        or not isinstance(version, int)
+        or version != RESOLVE_AGENT_CONTRACT_VERSION
+    ):
+        raise AgentRequestError(
+            f"version must be exactly {RESOLVE_AGENT_CONTRACT_VERSION}."
+        )
+    kind = value.get("kind")
+    if kind not in {"analyze", "apply"}:
+        raise AgentRequestError("kind must be analyze or apply.")
+    common = {
+        "context_name",
+        "memory_selectors",
+        "allow_create",
+        "allow_delete",
+        "guidance",
+    }
+    required = {"version", "kind"}
+    optional = common
+    if kind == "apply":
+        required |= {"candidate_uid", "expected_revision"}
+    exact_fields(
+        value,
+        required=required,
+        optional=frozenset(optional),
+        label=f"Resolve {kind} request",
+    )
+    arguments: dict[str, object] = {
+        "context_name": text_value(
+            value.get("context_name"),
+            field="context_name",
+            optional=True,
+        ),
+        "memory_selectors": _selectors(value.get("memory_selectors", [])),
+        "allow_create": _boolean(
+            value.get("allow_create", False),
+            field="allow_create",
+        ),
+        "allow_delete": _boolean(
+            value.get("allow_delete", False),
+            field="allow_delete",
+        ),
+        "guidance": (
+            text_value(value["guidance"], field="guidance")
+            if "guidance" in value
+            else ""
+        ),
+    }
+    if kind == "apply":
+        arguments.update(
+            candidate_uid=text_value(value["candidate_uid"], field="candidate_uid"),
+            expected_revision=text_value(
+                value["expected_revision"],
+                field="expected_revision",
+            ),
+        )
+    return kind, arguments
+
+
+def _analysis_result(result: ResolveAnalysisResult) -> JsonObject:
+    return {
+        "context_name": result.context_name,
+        "context_uid": result.context_uid,
+        "revision": result.revision,
+        "status": result.status,
+        "initial_fit": result.initial_fit,
+        "initial_fit_reason": result.initial_fit_reason,
+        "question": result.question,
+        "requested_effects": list(result.requested_effects),
+        "allowed_effects": list(result.allowed_effects),
+        "denied_effects": list(result.denied_effects),
+        "candidates": [
+            {
+                "uid": candidate.uid,
+                "summary": candidate.summary,
+                "cost": {
+                    "deletes": candidate.deletes,
+                    "creates": candidate.creates,
+                    "updates": candidate.updates,
+                    "changed_units": candidate.changed_units,
+                },
+                "verification_reason": candidate.verification_reason,
+                "fit_reason": candidate.fit_reason,
+                "effects": [
+                    {
+                        "kind": effect.kind,
+                        "memory_uid": effect.memory_uid,
+                        "before": effect.before,
+                        "after": effect.after,
+                        "source_memory_uids": list(effect.source_memory_uids),
+                        "reason": effect.reason,
+                    }
+                    for effect in candidate.effects
+                ],
+            }
+            for candidate in result.candidates
+        ],
+        "effect": "NONE",
+    }
+
+
+def _apply_result(result: ResolveApplyResult) -> JsonObject:
+    return {
+        "context_name": result.context_name,
+        "context_uid": result.context_uid,
+        "revision": result.revision,
+        "candidate_uid": result.candidate_uid,
+        "checkpoint_uid": result.checkpoint_uid,
+        "created_uids": list(result.created_uids),
+        "updated_uids": list(result.updated_uids),
+        "deleted_uids": list(result.deleted_uids),
+        "effect": "CHECKPOINT",
+    }
+
+
+_PUBLIC_ERRORS: tuple[tuple[type[SemanticError], str, str, bool], ...] = (
+    (SemanticInputError, "invalid_request", "The Resolve request is invalid.", False),
+    (
+        SemanticContextError,
+        "context_unavailable",
+        "The Resolve Context is unavailable.",
+        False,
+    ),
+    (
+        SemanticAuthorityError,
+        "authority_denied",
+        "Resolve authority was denied.",
+        False,
+    ),
+    (
+        SemanticProviderFailure,
+        "provider_failure",
+        "The Resolve provider failed.",
+        True,
+    ),
+    (
+        SemanticConflictError,
+        "concurrent_update",
+        "The Resolve frame or exact candidate changed.",
+        False,
+    ),
+    (
+        SemanticStorageError,
+        "storage_failure",
+        "Resolve storage failed safely.",
+        False,
+    ),
+    (
+        SemanticExecutionError,
+        "execution_failed",
+        "Resolve failed before publishing a complete outcome.",
+        False,
+    ),
+)
+
+
+class ResolveAgentAdapter:
+    """Expose analysis and stateless exact replay through one agent tool."""
+
+    def __init__(self, client: MemCommitClient) -> None:
+        if not isinstance(client, MemCommitClient):
+            raise TypeError("ResolveAgentAdapter requires a MemCommitClient.")
+        self._client = client
+
+    def invoke(self, payload: object) -> JsonObject:
+        kind: ResolveAgentKind | None = None
+        if isinstance(payload, Mapping) and payload.get("kind") in {
+            "analyze",
+            "apply",
+        }:
+            kind = payload["kind"]  # type: ignore[assignment]
+        try:
+            kind, arguments = _parse_request(payload)
+        except AgentRequestError as error:
+            return error_response(
+                version=RESOLVE_AGENT_CONTRACT_VERSION,
+                kind=kind,
+                code="invalid_request",
+                message=str(error),
+                retryable=False,
+            )
+        try:
+            candidate_uid = arguments.pop("candidate_uid", None)
+            expected_revision = arguments.pop("expected_revision", None)
+            analysis = self._client.resolve_context(
+                **arguments,
+                expected_revision=expected_revision,
+            )
+            if kind == "analyze":
+                result = _analysis_result(analysis)
+            else:
+                assert isinstance(candidate_uid, str)
+                if not any(
+                    candidate.uid == candidate_uid
+                    for candidate in analysis.candidates
+                ):
+                    raise SemanticConflictError(
+                        "The reviewed Resolve candidate was not regenerated."
+                    )
+                result = _apply_result(
+                    self._client.apply_resolve(
+                        analysis,
+                        candidate_uid=candidate_uid,
+                    )
+                )
+        except SemanticError as error:
+            for error_type, code, message, retryable in _PUBLIC_ERRORS:
+                if isinstance(error, error_type):
+                    return error_response(
+                        version=RESOLVE_AGENT_CONTRACT_VERSION,
+                        kind=kind,
+                        code=code,
+                        message=(
+                            str(error)
+                            if isinstance(
+                                error,
+                                (
+                                    SemanticInputError,
+                                    SemanticContextError,
+                                    SemanticAuthorityError,
+                                ),
+                            )
+                            else message
+                        ),
+                        retryable=retryable,
+                    )
+            return error_response(
+                version=RESOLVE_AGENT_CONTRACT_VERSION,
+                kind=kind,
+                code="resolve_failed",
+                message="Resolve failed without a more specific public category.",
+                retryable=False,
+            )
+        except Exception:
+            return error_response(
+                version=RESOLVE_AGENT_CONTRACT_VERSION,
+                kind=kind,
+                code="internal_error",
+                message="The Resolve tool failed internally.",
+                retryable=False,
+            )
+        return {
+            "version": RESOLVE_AGENT_CONTRACT_VERSION,
+            "ok": True,
+            "kind": kind,
+            "result": result,
+        }
+
+
+def resolve_agent_tool_schema() -> JsonObject:
+    """Return the strict Resolve analyze/exact-replay union schema."""
+
+    text = {"type": "string", "minLength": 1, "pattern": r".*\S.*"}
+    return {
+        "name": RESOLVE_AGENT_TOOL_NAME,
+        "description": (
+            "Analyze one exact Context for grounded minimum-change Fit repairs, "
+            "or regenerate and apply one reviewed candidate using its exact "
+            "revision and candidate UID. UPDATE is enabled by default; CREATE "
+            "and DELETE require explicit opt-in, and DELETE also requires guidance."
+        ),
+        "parameters": {
+            "type": "object",
+            "additionalProperties": False,
+            "required": ["version", "kind"],
+            "properties": {
+                "version": {
+                    "type": "integer",
+                    "const": RESOLVE_AGENT_CONTRACT_VERSION,
+                },
+                "kind": {"type": "string", "enum": ["analyze", "apply"]},
+                "context_name": {"type": ["string", "null"], "minLength": 1},
+                "memory_selectors": {"type": "array", "items": text},
+                "allow_create": {"type": "boolean", "default": False},
+                "allow_delete": {"type": "boolean", "default": False},
+                "guidance": text,
+                "candidate_uid": text,
+                "expected_revision": text,
+            },
+        },
+    }
+
+
+__all__ = [
+    "RESOLVE_AGENT_CONTRACT_VERSION",
+    "RESOLVE_AGENT_TOOL_NAME",
+    "ResolveAgentAdapter",
+    "ResolveAgentKind",
+    "resolve_agent_tool_schema",
+]
