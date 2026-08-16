@@ -25,6 +25,10 @@ from memcommit.comparison import (
     comparison_canonical_digest,
 )
 from memcommit.context import Context, Memory, QueryContextRef
+from memcommit.context_targeting.memory_focus import (
+    MemoryFocusError,
+    resolve_memory_focus,
+)
 from memcommit.store import context_record_digest
 from memcommit.update import ContextFingerprint, GrantedUpdateTarget
 
@@ -34,6 +38,7 @@ MELD_GRANTED_SCHEMA_VERSION = 4
 MELD_OWNER_AWARE_SCHEMA_VERSION = 5
 MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION = 6
 MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION = 7
+MELD_MEMORY_FOCUS_SCHEMA_VERSION = 8
 MELD_COMPARISON_SCHEMA_VERSION = 2
 MELD_LEGACY_SCHEMA_VERSION = 1
 MELD_TEXT_LIMIT = 20_000
@@ -323,6 +328,8 @@ class MeldFrame:
     memories: tuple[MeldMemory, ...]
     include_descendants: bool | None = None
     contexts: tuple[ContextFingerprint, ...] | None = None
+    context_evidence: tuple[MeldMemory, ...] = ()
+    selected_memory_uid: str | None = None
 
     @classmethod
     def from_context(
@@ -332,6 +339,7 @@ class MeldFrame:
         role: MeldRole,
         include_descendants: bool | None = None,
         owner_aware: bool = False,
+        memory_selector: str | None = None,
     ) -> "MeldFrame":
         if not isinstance(ctx, Context):
             raise MeldError("Meld source must be a Context.")
@@ -382,7 +390,7 @@ class MeldFrame:
             for item in context.iter_items()
             if isinstance(item, Memory)
         ]
-        memories = tuple(
+        complete_memories = tuple(
             MeldMemory.create(
                 item,
                 position,
@@ -390,8 +398,20 @@ class MeldFrame:
             )
             for position, (context, item) in enumerate(owned_memories)
         )
-        if not memories:
+        if not complete_memories:
             raise MeldError(f"Source Context '{ctx.name}' has no direct Memories.")
+        try:
+            focus = resolve_memory_focus(
+                complete_memories,
+                memory_selector,
+                label=f"{role} Memory",
+            )
+        except MemoryFocusError as error:
+            raise MeldError(str(error)) from error
+        memories = tuple(
+            replace(memory, position=position)
+            for position, memory in enumerate(focus.actionable)
+        )
         fingerprints = (
             tuple(
                 ContextFingerprint(
@@ -422,6 +442,14 @@ class MeldFrame:
             value["include_descendants"] = include_descendants
         if fingerprints is not None:
             value["contexts"] = [item.to_dict() for item in fingerprints]
+        if focus.context_only:
+            value["context_evidence"] = [
+                item.to_dict() for item in focus.context_only
+            ]
+        if focus.selected_uid is not None:
+            # Persist selection identity independently of neighbor count: a
+            # one-Memory Context is still narrower than an unrestricted target.
+            value["selected_memory_uid"] = focus.selected_uid
         return cls.from_dict(value)
 
     def to_dict(self) -> dict[str, object]:
@@ -437,6 +465,12 @@ class MeldFrame:
             result["include_descendants"] = self.include_descendants
         if self.contexts is not None:
             result["contexts"] = [context.to_dict() for context in self.contexts]
+        if self.context_evidence:
+            result["context_evidence"] = [
+                memory.to_dict() for memory in self.context_evidence
+            ]
+        if self.selected_memory_uid is not None:
+            result["selected_memory_uid"] = self.selected_memory_uid
         return result
 
     @classmethod
@@ -453,6 +487,10 @@ class MeldFrame:
             keys.add("include_descendants")
         if isinstance(value, dict) and "contexts" in value:
             keys.add("contexts")
+        if isinstance(value, dict) and "context_evidence" in value:
+            keys.add("context_evidence")
+        if isinstance(value, dict) and "selected_memory_uid" in value:
+            keys.add("selected_memory_uid")
         data = _exact_dict(value, keys, "meld frame")
         memories = tuple(
             MeldMemory.from_dict(item)
@@ -499,6 +537,58 @@ class MeldFrame:
                 )
             ):
                 raise MeldError("Invalid owner-aware meld frame.")
+        context_evidence = tuple(
+            MeldMemory.from_dict(item)
+            for item in _array(
+                data.get("context_evidence", []),
+                "meld Context evidence",
+            )
+        )
+        selected_memory_uid = (
+            _canonical_uuid(
+                data["selected_memory_uid"],
+                "selected meld Memory uid",
+            )
+            if "selected_memory_uid" in data
+            else None
+        )
+        if (
+            len({memory.uid for memory in context_evidence})
+            != len(context_evidence)
+            or {memory.uid for memory in memories}
+            & {memory.uid for memory in context_evidence}
+            or (
+                context_evidence
+                and any(
+                    memory.owner_context_uid is None
+                    or memory.owner_context_name is None
+                    or (
+                        contexts is not None
+                        and (
+                            memory.owner_context_uid,
+                            memory.owner_context_name,
+                        )
+                        not in {
+                            (context.uid, context.name)
+                            for context in contexts
+                        }
+                    )
+                    for memory in context_evidence
+                )
+            )
+            or (
+                selected_memory_uid is None
+                and bool(context_evidence)
+            )
+            or (
+                selected_memory_uid is not None
+                and (
+                    len(memories) != 1
+                    or memories[0].uid != selected_memory_uid
+                )
+            )
+        ):
+            raise MeldError("Invalid meld Context evidence.")
         return cls(
             uid=_canonical_uuid(data["uid"], "meld frame uid"),
             context_uid=_canonical_uuid(
@@ -518,6 +608,8 @@ class MeldFrame:
             memories=memories,
             include_descendants=include_descendants,  # type: ignore[arg-type]
             contexts=contexts,
+            context_evidence=context_evidence,
+            selected_memory_uid=selected_memory_uid,
         )
 
 
@@ -1673,6 +1765,8 @@ class MeldSession:
         baseline_descendants: bool | None = None,
         granted_incoming: GrantedUpdateTarget | None = None,
         granted_target: GrantedUpdateTarget | None = None,
+        incoming_memory_selector: str | None = None,
+        baseline_memory_selector: str | None = None,
     ) -> "MeldSession":
         """Bind one incoming Context to an authoritative mutable baseline."""
         if incoming.uid == baseline.uid or incoming.name == baseline.name:
@@ -1684,12 +1778,14 @@ class MeldSession:
             role="INCOMING",
             include_descendants=incoming_descendants,
             owner_aware=True,
+            memory_selector=incoming_memory_selector,
         )
         baseline_frame = MeldFrame.from_context(
             baseline,
             role="BASELINE",
             include_descendants=baseline_descendants,
             owner_aware=True,
+            memory_selector=baseline_memory_selector,
         )
         session = cls(
             uid=str(uuid.uuid4()),
@@ -1701,7 +1797,14 @@ class MeldSession:
             ),
             # Owner-aware directional sessions freeze every Context in each
             # selected scope; public names alone are not stable authority.
-            schema_version=MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION,
+            schema_version=(
+                MELD_MEMORY_FOCUS_SCHEMA_VERSION
+                if (
+                    incoming_memory_selector is not None
+                    or baseline_memory_selector is not None
+                )
+                else MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION
+            ),
             granted_incoming=granted_incoming,
             granted_target=granted_target,
         )
@@ -1796,6 +1899,7 @@ class MeldSession:
             MELD_OWNER_AWARE_SCHEMA_VERSION,
             MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION,
             MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION,
+            MELD_MEMORY_FOCUS_SCHEMA_VERSION,
         }:
             raise MeldError("Unsupported meld session schema version.")
         keys = {
@@ -2056,6 +2160,7 @@ class MeldSession:
             MELD_OWNER_AWARE_SCHEMA_VERSION,
             MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION,
             MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION,
+            MELD_MEMORY_FOCUS_SCHEMA_VERSION,
         }:
             raise MeldError("Unsupported meld session schema version.")
         if self.schema_version == MELD_LEGACY_SCHEMA_VERSION:
@@ -2074,6 +2179,27 @@ class MeldSession:
             raise MeldError("A legacy meld session cannot contain Grant bindings.")
         if len(self.frames) != 2:
             raise MeldError("Context meld requires exactly two source frames.")
+        if any(frame.selected_memory_uid is not None for frame in self.frames) and (
+            self.mode != "DIRECTIONAL"
+            or self.schema_version != MELD_MEMORY_FOCUS_SCHEMA_VERSION
+        ):
+            raise MeldError(
+                "Context-only Meld evidence requires a focused directional session."
+            )
+        if (
+            self.schema_version == MELD_MEMORY_FOCUS_SCHEMA_VERSION
+            and (
+                self.mode != "DIRECTIONAL"
+                or self.comparison_seed is not None
+                or not any(
+                    frame.selected_memory_uid is not None
+                    for frame in self.frames
+                )
+            )
+        ):
+            raise MeldError(
+                "A focused Meld session must be directional and directly analyzed."
+            )
         if len({frame.uid for frame in self.frames}) != len(self.frames):
             raise MeldError("Duplicate meld frame identity.")
         if len({frame.context_uid for frame in self.frames}) != len(self.frames) or len(
@@ -2091,7 +2217,7 @@ class MeldSession:
                 raise MeldError("Symmetric meld requires two PEER frames.")
         else:
             if (
-                self.schema_version >= MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION
+                self.schema_version == MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION
                 and self.comparison_seed is None
             ):
                 raise MeldError(
@@ -2451,6 +2577,13 @@ class MeldSession:
             incoming_evidence = any(
                 frame_uid == incoming_frame.uid for frame_uid, _ in source_keys
             )
+            if (
+                baseline_frame.selected_memory_uid is not None
+                and proposal.operation != "EDIT"
+            ):
+                raise MeldError(
+                    "A Memory-focused BASELINE may edit only its selected Memory."
+                )
             if proposal.disposition == "USER_ADD":
                 if proposal.operation != "ADD":
                     raise MeldError(

@@ -114,12 +114,14 @@ from memcommit.study_prewarm.meld_resolution import (
     find_installed_meld_resolution_branch,
 )
 from memcommit.study_prewarm.meld_directional import (
+    DirectionalMeldPrewarmMatch,
     find_installed_equivalent_directional_comparison,
     find_installed_directional_meld_prewarm,
 )
 from memcommit.study_prewarm.compare import (
     EquivalentComparePrewarmMatch,
     find_declared_equivalent_compare_analysis,
+    find_declared_projected_compare_analysis,
     record_equivalent_compare_prewarm,
     record_exact_compare_prewarm,
     record_projected_compare_prewarm,
@@ -782,6 +784,10 @@ def granted_owner_name(binding, public_name: str) -> str:
     return binding.authority_context_name + public_name[len(binding.public_name) :]
 
 
+class _LiveComparisonRequired(RuntimeError):
+    """Internal signal that a prepared symmetric Start needs its provider."""
+
+
 def _start_comparison(
     request: MeldStartRequest | MeldRestartRequest,
     *,
@@ -792,6 +798,7 @@ def _start_comparison(
     right: Context,
     current_name: str | None,
     provider_factory,
+    allow_provider: bool = True,
     error_type: type[RuntimeError] = MeldStartError,
 ) -> ComparisonAnalysis | None:
     """Resolve the ordered Compare basis at the application boundary.
@@ -882,23 +889,38 @@ def _start_comparison(
             current_name=current_name,
             registry_snapshot=load_profile_registry(),
         )
+        if equivalent_match is None:
+            equivalent_match = find_declared_projected_compare_analysis(
+                store=store,
+                comparison_input=comparison_input,
+                current_name=current_name,
+                registry_snapshot=load_profile_registry(),
+            )
         return equivalent_match.analysis if equivalent_match is not None else None
 
-    execution = ensure_comparison_analysis(
-        store=store,
-        reference_access=left_access,
-        compared_access=right_access,
-        reference=left,
-        compared=right,
-        current_name=current_name,
-        include_descendants=include_descendants,
-        require_durable=True,
-        analyze=lambda comparison_input: analyze_comparison(
+    def analyze_live(comparison_input: ComparisonInput) -> ComparisonAnalysis:
+        if not allow_provider:
+            raise _LiveComparisonRequired
+        return analyze_comparison(
             comparison_input,
             connect_comparison_provider(provider_factory),
-        ),
-        equivalent=equivalent,
-    )
+        )
+
+    try:
+        execution = ensure_comparison_analysis(
+            store=store,
+            reference_access=left_access,
+            compared_access=right_access,
+            reference=left,
+            compared=right,
+            current_name=current_name,
+            include_descendants=include_descendants,
+            require_durable=True,
+            analyze=analyze_live,
+            equivalent=equivalent,
+        )
+    except _LiveComparisonRequired:
+        return None
     if execution.origin == "EQUIVALENT_SCOPE_PREWARM" and equivalent_match:
         if equivalent_match.origin == "EXACT_PREWARM":
             record_exact_compare_prewarm(
@@ -907,7 +929,12 @@ def _start_comparison(
                 analysis=execution.analysis,
             )
         else:
-            record_equivalent_compare_prewarm(
+            recorder = (
+                record_projected_compare_prewarm
+                if equivalent_match.origin == "PROJECTED_PREWARM"
+                else record_equivalent_compare_prewarm
+            )
+            recorder(
                 store,
                 entry_key=equivalent_match.entry_key,
                 analysis=execution.analysis,
@@ -916,16 +943,35 @@ def _start_comparison(
     return execution.analysis
 
 
-def _execute_initial_meld(
+@dataclass(frozen=True)
+class PreparedMeldExecution:
+    """Frozen Start/Restart inputs plus the exact remaining semantic work."""
+
+    request: MeldStartRequest | MeldRestartRequest
+    store: MemoryStore
+    current_name: str | None
+    left_access: ContextAccess
+    right_access: ContextAccess
+    left: Context
+    right: Context
+    target: Context
+    expected_session_digest: str | None
+    create_target: bool
+    comparison: ComparisonAnalysis | None
+    provisional_session: MeldSession | None
+    directional_prewarm: DirectionalMeldPrewarmMatch | None
+    provider_required: bool
+
+
+def _prepare_initial_meld(
     request: MeldStartRequest | MeldRestartRequest,
     *,
     store: MemoryStore,
-    provider_factory,
     expected_session_digest: str | None,
     create_target: bool,
     error_type: type[RuntimeError],
-) -> tuple[MeldSession, MeldStartOrigin]:
-    """Build and publish one initial review under a create-or-replace token."""
+) -> PreparedMeldExecution:
+    """Freeze one Start/Restart and resolve every provider-free cache route."""
 
     current_name = store.current_context_name()
     left_access = resolve_context_access(
@@ -1019,9 +1065,14 @@ def _execute_initial_meld(
         left=recursive_comparison_projection(left),
         right=recursive_comparison_projection(right),
         current_name=current_name,
-        provider_factory=provider_factory,
+        provider_factory=lambda: (_ for _ in ()).throw(
+            AssertionError("Meld preparation connected a provider.")
+        ),
+        allow_provider=False,
         error_type=error_type,
     )
+    provisional_session: MeldSession | None = None
+    directional_prewarm: DirectionalMeldPrewarmMatch | None = None
     if request.mode == "DIRECTIONAL":
         granted_incoming = (
             freeze_granted_context_binding(left_access)
@@ -1033,7 +1084,7 @@ def _execute_initial_meld(
             if right_access.is_granted
             else None
         )
-        session = (
+        provisional_session = (
             MeldSession.create_directional(
                 left,
                 right,
@@ -1053,16 +1104,76 @@ def _execute_initial_meld(
                 granted_target=granted_target,
             )
         )
-        session.start_initial_analysis()
-        prepared = find_installed_directional_meld_prewarm(
+        provisional_session.start_initial_analysis()
+        directional_prewarm = find_installed_directional_meld_prewarm(
             store=store,
-            current=session,
+            current=provisional_session,
         )
-        if prepared is None:
+    return PreparedMeldExecution(
+        request=request,
+        store=store,
+        current_name=current_name,
+        left_access=left_access,
+        right_access=right_access,
+        left=left,
+        right=right,
+        target=target,
+        expected_session_digest=expected_session_digest,
+        create_target=create_target,
+        comparison=comparison,
+        provisional_session=provisional_session,
+        directional_prewarm=directional_prewarm,
+        provider_required=(
+            comparison is None
+            if request.mode == "SYMMETRIC"
+            else directional_prewarm is None
+        ),
+    )
+
+
+def _execute_prepared_initial_meld(
+    prepared: PreparedMeldExecution,
+    *,
+    provider_factory,
+    error_type: type[RuntimeError],
+) -> tuple[MeldSession, MeldStartOrigin]:
+    """Execute one frozen plan without repeating its provider-free cache search."""
+
+    request = prepared.request
+    store = prepared.store
+    comparison = prepared.comparison
+    if request.mode == "SYMMETRIC" and comparison is None:
+        comparison_input = ComparisonInput.from_contexts(
+            recursive_comparison_projection(prepared.left),
+            recursive_comparison_projection(prepared.right),
+            reference_descendants=request.left_descendants,
+            compared_descendants=request.right_descendants,
+        )
+        live_analysis = analyze_comparison(
+            comparison_input,
+            connect_comparison_provider(provider_factory),
+        )
+        comparison = install_prepared_comparison_analysis(
+            store=store,
+            reference_access=prepared.left_access,
+            compared_access=prepared.right_access,
+            reference=recursive_comparison_projection(prepared.left),
+            compared=recursive_comparison_projection(prepared.right),
+            current_name=prepared.current_name,
+            include_descendants=(
+                request.left_descendants,
+                request.right_descendants,
+            ),
+            analysis=live_analysis,
+        ).analysis
+
+    if request.mode == "DIRECTIONAL":
+        assert prepared.provisional_session is not None
+        if prepared.directional_prewarm is None:
             frozen, assessment_port = prepare_meld_assessment(
-                session,
+                prepared.provisional_session,
                 store=store,
-                expected_session_digest=expected_session_digest,
+                expected_session_digest=prepared.expected_session_digest,
             )
             session = execute_meld_assessment(
                 frozen,
@@ -1071,7 +1182,7 @@ def _execute_initial_meld(
             ).session
             origin = "PROVIDER"
         else:
-            session = prepared.session
+            session = prepared.directional_prewarm.session
             left_live, right_live, target_live = load_bound_meld_contexts(
                 store,
                 session,
@@ -1093,17 +1204,20 @@ def _execute_initial_meld(
                     )
             store.save_meld_session(
                 session,
-                expected_session_digest=expected_session_digest,
+                expected_session_digest=prepared.expected_session_digest,
             )
-            origin = prepared.origin
+            origin = prepared.directional_prewarm.origin
     else:
         assert comparison is not None
-        session = MeldSession.create_symmetric_from_comparison(comparison, target)
-        assert_meld_source_bindings(session, left, right)
-        assert_unapplied_meld_target(session, target)
-        if create_target:
+        session = MeldSession.create_symmetric_from_comparison(
+            comparison,
+            prepared.target,
+        )
+        assert_meld_source_bindings(session, prepared.left, prepared.right)
+        assert_unapplied_meld_target(session, prepared.target)
+        if prepared.create_target:
             store.create_meld_target_with_session(
-                target,
+                prepared.target,
                 session,
                 AutoCheckpoint(
                     command="meld",
@@ -1122,10 +1236,35 @@ def _execute_initial_meld(
         else:
             store.save_meld_session(
                 session,
-                expected_session_digest=expected_session_digest,
+                expected_session_digest=prepared.expected_session_digest,
             )
         origin = "SAVED_COMPARISON"
     return session, origin
+
+
+def _execute_initial_meld(
+    request: MeldStartRequest | MeldRestartRequest,
+    *,
+    store: MemoryStore,
+    provider_factory,
+    expected_session_digest: str | None,
+    create_target: bool,
+    error_type: type[RuntimeError],
+) -> tuple[MeldSession, MeldStartOrigin]:
+    """Prepare and publish one initial review under a create-or-replace token."""
+
+    prepared = _prepare_initial_meld(
+        request,
+        store=store,
+        expected_session_digest=expected_session_digest,
+        create_target=create_target,
+        error_type=error_type,
+    )
+    return _execute_prepared_initial_meld(
+        prepared,
+        provider_factory=provider_factory,
+        error_type=error_type,
+    )
 
 
 @dataclass
@@ -1133,6 +1272,7 @@ class MemoryStoreMeldStartPort(MeldStartPort):
     """Authorize and publish a new target-scoped Meld without interface code."""
 
     store: MemoryStore
+    prepared: PreparedMeldExecution | None = None
 
     def start(
         self,
@@ -1140,14 +1280,23 @@ class MemoryStoreMeldStartPort(MeldStartPort):
         *,
         provider_factory,
     ) -> MeldStartResult:
-        session, origin = _execute_initial_meld(
-            request,
-            store=self.store,
-            provider_factory=provider_factory,
-            expected_session_digest=None,
-            create_target=request.create_target,
-            error_type=MeldStartError,
-        )
+        if self.prepared is not None:
+            if self.prepared.request != request or self.prepared.store is not self.store:
+                raise MeldStartError("Prepared Meld Start does not match its request.")
+            session, origin = _execute_prepared_initial_meld(
+                self.prepared,
+                provider_factory=provider_factory,
+                error_type=MeldStartError,
+            )
+        else:
+            session, origin = _execute_initial_meld(
+                request,
+                store=self.store,
+                provider_factory=provider_factory,
+                expected_session_digest=None,
+                create_target=request.create_target,
+                error_type=MeldStartError,
+            )
         return MeldStartResult(
             session=session,
             origin=origin,
@@ -1160,13 +1309,30 @@ def execute_meld_start(
     *,
     store: MemoryStore,
     provider_factory,
+    prepared: PreparedMeldExecution | None = None,
 ) -> MeldStartResult:
     """Start one complete Meld through the production Store/Grant adapter."""
 
     return run_meld_start(
         request,
-        port=MemoryStoreMeldStartPort(store),
+        port=MemoryStoreMeldStartPort(store, prepared=prepared),
         provider_factory=provider_factory,
+    )
+
+
+def prepare_meld_start(
+    request: MeldStartRequest,
+    *,
+    store: MemoryStore,
+) -> PreparedMeldExecution:
+    """Freeze a new Meld and report whether its exact plan needs a provider."""
+
+    return _prepare_initial_meld(
+        request,
+        store=store,
+        expected_session_digest=None,
+        create_target=request.create_target,
+        error_type=MeldStartError,
     )
 
 
@@ -1175,6 +1341,7 @@ class MemoryStoreMeldRestartPort(MeldRestartPort):
     """CAS-replace an existing target-scoped Meld without interface code."""
 
     store: MemoryStore
+    prepared: PreparedMeldExecution | None = None
 
     def restart(
         self,
@@ -1182,14 +1349,25 @@ class MemoryStoreMeldRestartPort(MeldRestartPort):
         *,
         provider_factory,
     ) -> MeldRestartResult:
-        session, origin = _execute_initial_meld(
-            request,
-            store=self.store,
-            provider_factory=provider_factory,
-            expected_session_digest=request.expected_version,
-            create_target=False,
-            error_type=MeldRestartError,
-        )
+        if self.prepared is not None:
+            if self.prepared.request != request or self.prepared.store is not self.store:
+                raise MeldRestartError(
+                    "Prepared Meld Restart does not match its request."
+                )
+            session, origin = _execute_prepared_initial_meld(
+                self.prepared,
+                provider_factory=provider_factory,
+                error_type=MeldRestartError,
+            )
+        else:
+            session, origin = _execute_initial_meld(
+                request,
+                store=self.store,
+                provider_factory=provider_factory,
+                expected_session_digest=request.expected_version,
+                create_target=False,
+                error_type=MeldRestartError,
+            )
         return MeldRestartResult(session=session, origin=origin)
 
 
@@ -1198,13 +1376,30 @@ def execute_meld_restart(
     *,
     store: MemoryStore,
     provider_factory,
+    prepared: PreparedMeldExecution | None = None,
 ) -> MeldRestartResult:
     """Restart one Meld through the production Store/Grant adapter."""
 
     return run_meld_restart(
         request,
-        port=MemoryStoreMeldRestartPort(store),
+        port=MemoryStoreMeldRestartPort(store, prepared=prepared),
         provider_factory=provider_factory,
+    )
+
+
+def prepare_meld_restart(
+    request: MeldRestartRequest,
+    *,
+    store: MemoryStore,
+) -> PreparedMeldExecution:
+    """Freeze a replacement Meld under its exact saved-session version."""
+
+    return _prepare_initial_meld(
+        request,
+        store=store,
+        expected_session_digest=request.expected_version,
+        create_target=False,
+        error_type=MeldRestartError,
     )
 
 

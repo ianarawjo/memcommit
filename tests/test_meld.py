@@ -57,6 +57,7 @@ from memcommit.commands.resolution_workbench_shell import (
 from memcommit.meld import (
     MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION,
     MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION,
+    MELD_MEMORY_FOCUS_SCHEMA_VERSION,
     MeldCheckpointReceipt,
     MeldError,
     MeldSession,
@@ -70,6 +71,8 @@ from memcommit.meld_provider import (
     assess_meld_turn,
     meld_output_schema,
 )
+from memcommit.meld_runtime import prepare_meld_start
+from memcommit.meld_start_application import MeldStartRequest
 from memcommit.responses.model import ResponseDraft
 from memcommit.meld_resolution_adapter import MeldResolutionWorkbenchAdapter
 from memcommit.provenance import build_trace
@@ -137,6 +140,39 @@ def test_new_meld_setup_routes_directional_a_into_b(isolated_store, monkeypatch)
             "into": "baseline",
             "left_descendants": False,
             "right_descendants": False,
+        }
+    ]
+
+
+def test_new_meld_setup_routes_exact_memories_into_directional_command(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    monkeypatch.setattr(
+        meld_command,
+        "choose_meld_setup",
+        lambda _store: MeldSetupReceipt(
+            "directional",
+            "incoming",
+            "baseline",
+            left_memory_uid="incoming-memory",
+            right_memory_uid="baseline-memory",
+        ),
+    )
+    calls = []
+    monkeypatch.setattr(meld_command, "cmd", lambda **kwargs: calls.append(kwargs))
+
+    meld_command._start_new_meld_from_picker(store)
+
+    assert calls == [
+        {
+            "left": "incoming",
+            "into": "baseline",
+            "left_descendants": False,
+            "right_descendants": False,
+            "incoming_memory": "incoming-memory",
+            "baseline_memory": "baseline-memory",
         }
     ]
 
@@ -482,13 +518,20 @@ def test_symmetric_meld_reuses_scoped_compare_descendants(isolated_store):
     )
     target = ops.init("scope/result")
 
-    reviewed = meld_command._load_symmetric_comparison(
-        left=left_scope,
-        right=right_scope,
-        target=target,
-        create_target=True,
-        include_descendants=(True, True),
+    prepared = prepare_meld_start(
+        MeldStartRequest(
+            mode="SYMMETRIC",
+            left_name=left.name,
+            right_name=right.name,
+            target_name=target.name,
+            create_target=True,
+            left_descendants=True,
+            right_descendants=True,
+        ),
+        store=store,
     )
+    reviewed = prepared.comparison
+    assert reviewed is not None
     session = MeldSession.create_symmetric_from_comparison(reviewed, target)
     restored = MeldSession.from_dict(session.to_dict())
 
@@ -508,8 +551,7 @@ def test_symmetric_meld_reuses_scoped_compare_descendants(isolated_store):
             "meld",
             left.name,
             right.name,
-            "--left-descendants",
-            "--right-descendants",
+            "-r",
             "--to",
             target.name,
         ],
@@ -522,8 +564,7 @@ def test_symmetric_meld_reuses_scoped_compare_descendants(isolated_store):
             "meld",
             left.name,
             right.name,
-            "--left-descendants",
-            "--right-descendants",
+            "-r",
             "--preserve-all",
         ],
     )
@@ -534,8 +575,7 @@ def test_symmetric_meld_reuses_scoped_compare_descendants(isolated_store):
             "meld",
             left.name,
             right.name,
-            "--left-descendants",
-            "--right-descendants",
+            "-r",
             "--accept",
         ],
     )
@@ -848,6 +888,152 @@ class DirectionalProvider:
                 "ready_to_apply": True,
             }
         )
+
+
+def test_focused_directional_meld_keeps_neighbors_context_only_and_edits_selected_baseline():
+    incoming = ops.init("focused/meld/incoming")
+    incoming_focus = ops.add(incoming, "Only the vehicle entrance is closed.")
+    incoming_neighbor = ops.add(incoming, "An ATM is available in the annex.")
+    baseline = ops.init("focused/meld/baseline")
+    baseline_focus = ops.add(baseline, "The parking stairwell is closed.")
+    baseline_neighbor = ops.add(baseline, "The library remains open.")
+    session = MeldSession.create_directional(
+        incoming,
+        baseline,
+        incoming_memory_selector=incoming_focus.uid[:8],
+        baseline_memory_selector=baseline_focus.uid[:8],
+    )
+    session.start_initial_analysis()
+    captured = {}
+
+    class FocusedProvider:
+        def complete(self, prompt, *, operation, output_schema=None):
+            assert operation == "meld_contexts"
+            payload = json.loads(prompt.split(MELD_PAYLOAD_MARKER, 1)[1])
+            captured["payload"] = payload
+            captured["schema"] = output_schema
+            incoming_id = payload["frames"][0]["memories"][0]["memory_id"]
+            baseline_id = payload["frames"][1]["memories"][0]["memory_id"]
+            return json.dumps(
+                {
+                    "overview": (
+                        "The selected incoming correction narrows the selected "
+                        "baseline closure while preserving nearby policies."
+                    ),
+                    "relations": [
+                        {
+                            "relation_key": "parking",
+                            "left_memory_ids": [incoming_id],
+                            "right_memory_ids": [baseline_id],
+                            "kind": "CONFLICT",
+                            "status": "RESOLVED",
+                            "summary": "The selected parking claims conflict.",
+                            "reason": "The incoming claim narrows the closure.",
+                        }
+                    ],
+                    "issues": [],
+                    "results": [
+                        {
+                            "result_key": "parking_edit",
+                            "operation": "EDIT",
+                            "target_memory_ids": [baseline_id],
+                            "disposition": "SYNTHESIZE",
+                            "content": (
+                                "The parking stairwell remains open; only the "
+                                "vehicle entrance is closed."
+                            ),
+                            "reason": "The incoming correction narrows the closure.",
+                            "relation_keys": ["parking"],
+                            "source_memory_ids": [incoming_id, baseline_id],
+                            "grounded_turn_ids": [],
+                        }
+                    ],
+                    "ready_to_apply": True,
+                }
+            )
+
+    assessment = assess_meld_turn(session, FocusedProvider())
+    session.record_assessment(session.current_turn.uid, assessment)
+    payload = captured["payload"]
+    schema = captured["schema"]
+
+    assert session.schema_version == MELD_MEMORY_FOCUS_SCHEMA_VERSION
+    assert session.frames[0].selected_memory_uid == incoming_focus.uid
+    assert session.frames[1].selected_memory_uid == baseline_focus.uid
+    assert payload["frames"][0]["memory_focus"] is True
+    assert payload["frames"][1]["memory_focus"] is True
+    assert payload["frames"][0]["context_evidence"][0]["content"] == (
+        incoming_neighbor.content
+    )
+    assert payload["frames"][1]["context_evidence"][0]["content"] == (
+        baseline_neighbor.content
+    )
+    assert schema["properties"]["results"]["items"]["properties"][
+        "operation"
+    ]["enum"] == ["EDIT"]
+    assert "context_id" not in json.dumps(schema)
+    assert assessment.proposals[0].memory_uid == baseline_focus.uid
+    assert MeldSession.from_dict(session.to_dict()).to_dict() == session.to_dict()
+
+
+def test_focused_directional_meld_keeps_focus_without_neighbor_evidence():
+    incoming = ops.init("focused/meld/single-incoming")
+    incoming_memory = ops.add(incoming, "The visitor entrance remains open.")
+    baseline = ops.init("focused/meld/single-baseline")
+    baseline_memory = ops.add(baseline, "The visitor entrance remains open.")
+    session = MeldSession.create_directional(
+        incoming,
+        baseline,
+        incoming_memory_selector=incoming_memory.uid[:8],
+        baseline_memory_selector=baseline_memory.uid[:8],
+    )
+    session.start_initial_analysis()
+    captured = {}
+
+    class SingletonFocusedProvider:
+        def complete(self, prompt, *, operation, output_schema=None):
+            assert operation == "meld_contexts"
+            payload = json.loads(prompt.split(MELD_PAYLOAD_MARKER, 1)[1])
+            captured["payload"] = payload
+            captured["schema"] = output_schema
+            incoming_id = payload["frames"][0]["memories"][0]["memory_id"]
+            baseline_id = payload["frames"][1]["memories"][0]["memory_id"]
+            return json.dumps(
+                {
+                    "overview": "The selected claims are already equivalent.",
+                    "relations": [
+                        {
+                            "relation_key": "visitor_access",
+                            "left_memory_ids": [incoming_id],
+                            "right_memory_ids": [baseline_id],
+                            "kind": "EQUIVALENT",
+                            "status": "RESOLVED",
+                            "summary": "Both selected claims preserve access.",
+                            "reason": "Their visitor entrance policy is identical.",
+                        }
+                    ],
+                    "issues": [],
+                    "results": [],
+                    "ready_to_apply": True,
+                }
+            )
+
+    assessment = assess_meld_turn(session, SingletonFocusedProvider())
+    session.record_assessment(session.current_turn.uid, assessment)
+
+    assert all(frame.context_evidence == () for frame in session.frames)
+    assert session.frames[0].selected_memory_uid == incoming_memory.uid
+    assert session.frames[1].selected_memory_uid == baseline_memory.uid
+    assert all(
+        frame["memory_focus"] is True
+        and "context_evidence" not in frame
+        for frame in captured["payload"]["frames"]
+    )
+    assert captured["schema"]["properties"]["results"]["items"]["properties"][
+        "operation"
+    ]["enum"] == ["EDIT"]
+    assert assessment.proposals == ()
+    assert MeldSession.from_dict(session.to_dict()).to_dict() == session.to_dict()
 
 
 class DirectionalSubtreeProvider:
@@ -3800,44 +3986,21 @@ def test_symmetric_basis_wait_view_shows_sources_and_unchanged_result():
     assert "INCLUDE DESCENDANTS" in view.text
 
 
-def test_symmetric_basis_wait_keeps_report_and_inputs_on_explicit_destinations(
-    monkeypatch,
-):
+def test_symmetric_basis_wait_keeps_inputs_on_explicit_destination():
     left = ops.init("wait/advisor1")
     right = ops.init("wait/advisor2")
     ops.add(left, "Pay CAD 20–30 per hour, including travel time.")
     ops.add(right, "Allow cash, e-transfer, or a gift card.")
     comparison_input = ComparisonInput.from_contexts(left, right)
-    calls = []
-
-    class Progress:
-        def update(self, stage, *, step):
-            calls.append(("UPDATE", stage, step))
-
-    def run_wait(operation, stage, *, total, work, return_view, context_view):
-        assert return_view.title == "MELD REPORT · BUILDING"
-        assert context_view.title == "MELD CONFIRMED INPUTS · READ-ONLY"
-        assert "RESULT C · wait/proposal-workspace" in context_view.text
-        calls.append(("WAIT", operation, stage, total))
-        return work(Progress())
-
-    monkeypatch.setattr(meld_command, "run_command_wait", run_wait)
-    monkeypatch.setattr(
-        meld_command,
-        "connect_codex_chatgpt_provider",
-        Task2CompareProvider,
-    )
-
-    analysis = meld_command._analyze_symmetric_comparison_basis(
+    view = meld_command._symmetric_comparison_wait_context_view(
         comparison_input,
         target_name="wait/proposal-workspace",
     )
 
-    assert analysis.matches(left, right)
-    assert calls == [
-        ("WAIT", "MELD", "preparing ordered Compare basis", 2),
-        ("UPDATE", "analyzing ordered source relations", 2),
-    ]
+    assert view.title == "MELD CONFIRMED INPUTS · READ-ONLY"
+    assert "REFERENCE A · wait/advisor1" in view.text
+    assert "PEER B · wait/advisor2" in view.text
+    assert "RESULT C · wait/proposal-workspace" in view.text
 
 
 def test_meld_wait_view_styles_memory_objects_without_tinting_report_prose():

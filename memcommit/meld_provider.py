@@ -396,14 +396,35 @@ def _provider_view(session: MeldSession) -> _ProviderView:
                         target_context_id_by_identity[owner]
                     )
             memories.append(memory_payload)
-        frame_payloads.append(
-            {
-                "frame_id": frame_id,
-                "role": frame.role,
-                "context_name": frame.context_name,
-                "memories": memories,
-            }
-        )
+        frame_payload: dict[str, object] = {
+            "frame_id": frame_id,
+            "role": frame.role,
+            "context_name": frame.context_name,
+            "memories": memories,
+        }
+        if frame.selected_memory_uid is not None:
+            # The provider needs the role-level boundary even when the frozen
+            # Context contains no neighboring evidence entries.
+            frame_payload["memory_focus"] = True
+        if frame.context_evidence:
+            frame_payload["context_evidence"] = [
+                {
+                    "context_id": f"c{frame_index}_{index:06d}",
+                    "position": memory.position,
+                    "content": memory.content,
+                    "content_sha256": memory.content_digest,
+                    **(
+                        {"owner_context_name": memory.owner_context_name}
+                        if memory.owner_context_name is not None
+                        else {}
+                    ),
+                }
+                for index, memory in enumerate(
+                    frame.context_evidence,
+                    start=1,
+                )
+            ]
+        frame_payloads.append(frame_payload)
 
     turn_by_id: dict[str, str] = {}
     turn_id_by_uid: dict[str, str] = {}
@@ -650,6 +671,7 @@ def meld_output_schema(
     *,
     mode: str = "SYMMETRIC",
     target_context_count: int = 1,
+    allow_directional_add: bool = True,
 ) -> dict[str, object]:
     source_count = len(source_memory_ids)
     key = {"type": "string", "minLength": 1, "maxLength": MELD_KEY_LIMIT}
@@ -783,7 +805,9 @@ def meld_output_schema(
     if mode == "DIRECTIONAL":
         result["properties"]["operation"] = {
             "type": "string",
-            "enum": ["ADD", "EDIT"],
+            "enum": (
+                ["ADD", "EDIT"] if allow_directional_add else ["EDIT"]
+            ),
         }
         result["properties"]["target_memory_ids"] = {
             "type": "array",
@@ -902,6 +926,36 @@ def _prompt(
         )
     directional = payload.get("mode") == "DIRECTIONAL"
     directional_comparison = directional and "comparison_basis" in payload
+    frames = payload.get("frames")
+    focused = (
+        isinstance(frames, list)
+        and any(
+            isinstance(frame, dict) and frame.get("memory_focus") is True
+            for frame in frames
+        )
+    )
+    baseline_focused = (
+        isinstance(frames, list)
+        and len(frames) == 2
+        and isinstance(frames[1], dict)
+        and frames[1].get("memory_focus") is True
+    )
+    focus_contract = (
+        "Each frame's memories array is the complete actionable scope. Any "
+        "context_evidence entries are neighboring Memories supplied only to "
+        "interpret local meaning, preserve unrelated BASELINE facts, and "
+        "detect duplication or conflict. They have no memory_id by design: "
+        "never assign them to a relation, cite them as proposal sources, edit "
+        "them, materialize them, or expose them as issues or results. "
+        + (
+            "Because the BASELINE is Memory-focused, return EDIT operations "
+            "only; ADD would create an out-of-scope sibling. "
+            if baseline_focused
+            else ""
+        )
+        if focused
+        else ""
+    )
     authority_contract = (
         (
             "Perform one bounded DIRECTIONAL semantic meld analysis. The "
@@ -909,7 +963,8 @@ def _prompt(
             "authoritative BASELINE and mutation target. Preserve every "
             "BASELINE Memory unless supported INCOMING or user-turn evidence "
             "justifies an exact EDIT; supported novel evidence may produce "
-            "an ADD. Return only the exact material BASELINE changes. A fully "
+            + ("no ADD. " if baseline_focused else "an ADD. ")
+            + "Return only the exact material BASELINE changes. A fully "
             "equivalent meld may "
             "be ready with zero results; never manufacture a no-op EDIT. "
         )
@@ -1013,6 +1068,7 @@ def _prompt(
     return (
         repair_contract
         + authority_contract
+        + focus_contract
         + directional_comparison_contract
         + "\n"
         + relation_response_contract
@@ -1788,7 +1844,7 @@ def _expand_directional_comparison_response(
 
 
 def _meld_turn_request(session: MeldSession) -> _MeldTurnRequest:
-    """Freeze the complete provider request without opening a connection."""
+    """Freeze the exact provider-facing request for one pending Meld turn."""
     if not isinstance(session, MeldSession):
         raise MeldProviderError("Expected a MeldSession.")
     view = _provider_view(session)
@@ -1796,6 +1852,13 @@ def _meld_turn_request(session: MeldSession) -> _MeldTurnRequest:
     source_memory_ids = tuple(view.memory_by_id)
     left_count = len(session.frames[0].memories)
     right_count = len(session.frames[1].memories)
+    context_count = sum(
+        len(frame.context_evidence) for frame in session.frames
+    )
+    allow_directional_add = not (
+        session.mode == "DIRECTIONAL"
+        and session.frames[1].selected_memory_uid is not None
+    )
     directional_comparison = (
         session.mode == "DIRECTIONAL"
         and session.comparison_seed is not None
@@ -1812,13 +1875,14 @@ def _meld_turn_request(session: MeldSession) -> _MeldTurnRequest:
             source_memory_ids,
             mode=session.mode,
             target_context_count=len(view.target_context_by_id) or 1,
+            allow_directional_add=allow_directional_add,
         )
     )
     plan = plan_semantic_execution(
         MELD_EXECUTION_POLICY,
         json_budget(
             view.payload,
-            item_count=source_count,
+            item_count=source_count + context_count,
             output_schema=output_schema,
             expected_output_items=source_count,
             relation_edges=left_count * right_count,

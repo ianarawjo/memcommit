@@ -30,11 +30,11 @@ Meld now separates three terminal-independent contracts:
 The command remains responsible for argument and TUI presentation, progress
 text, exact approval, and rendering. Both direct CLI setup and the
 Compare-to-Meld handoff now construct `MeldStartRequest` and enter the same
-runtime used by Python and agent adapters. The CLI may construct a provisional
-directional frame solely to decide whether a provider progress surface is
-needed, but that frame is never persisted; the runtime repeats the cache and
-authority decision before publication. It must not become the semantic or
-persistence authority.
+runtime used by Python and agent adapters. The runtime returns one frozen
+`PreparedMeldExecution`; the CLI uses only its provider requirement and
+read-only provisional view to choose a progress surface, then executes that
+same value. It neither constructs a competing session nor repeats cache
+lookup.
 
 The former command-local Apply transaction, recovery, checkpoint-record, and
 session-publication implementations were removed after their runtime adapters
@@ -102,3 +102,12 @@ and re-exports for compatibility. This direction was chosen so Python, agent,
 and terminal calls cannot disagree about which Compare cache shapes are safe.
 It intentionally does not make a directional Compare mandatory: an actual
 miss still enters the established directional Meld assessment path.
+
+Start and Restart preparation freezes authority, source frames, target state,
+the saved-session CAS token, ordered Compare reuse, and directional assessment
+prewarm before any provider construction. A cache hit is executed from that
+same value. A symmetric live miss performs one provider analysis, then enters
+the ordinary exact Compare installation boundary; that final installation may
+observe a concurrently published exact result, but it does not repeat
+equivalent or projection search. This preserves CAS safety without restoring
+adapter-owned cache prediction.

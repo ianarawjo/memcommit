@@ -23,11 +23,12 @@ matrix as fully closed would therefore hide adapter drift.
 | Provider prediction | the CLI constructs a provisional session and repeats prewarm lookup to decide whether to open a progress surface | a typed prepared Start/Restart value reports whether semantic provider work remains without publishing state |
 | Adapter parity | Python and agent Start enter the runtime without the CLI's Compare-preparation path | CLI, Python, and agent requests enter the same Prepare/Execute path and expose the same scope controls |
 
-Progress: direct-Memory scope is now part of Start and Restart, and ordered
-Compare resolution is now runtime-owned. `comparison_execution` is a neutral
-application/infrastructure module; its old command path is only a wait-view
-compatibility facade. The command-side provider prediction and duplicate
-preparation path remain the next boundary to remove.
+Progress: all four audited Start boundaries are now closed. Direct-Memory
+scope is typed; ordered Compare resolution is runtime-owned; and Start/Restart
+first return a `PreparedMeldExecution` whose `provider_required` flag and
+provisional read-only view come from the same frozen cache decision that is
+later executed. `comparison_execution` is terminal-neutral; its old command
+path is only a wait-view compatibility facade.
 
 The remaining work must not replace the already extracted session or Apply
 services. It removes only these start-time parallel decisions and then proves
@@ -85,7 +86,9 @@ validation.
 - Apply never calls the provider and consumes only the exact reviewed session
   version. Recovery must match its checkpoint and complete post-image.
 - `commands.meld` contains no target/session publication primitive. The CLI
-  retains locator grammar, progress, rendering, and TUI orchestration.
+  retains locator grammar, progress, rendering, and TUI orchestration. It also
+  contains no ordered-Compare cache lookup, directional prewarm lookup, or
+  provisional `MeldSession` construction.
 
 ## Verification map
 
@@ -104,10 +107,11 @@ validation.
 - Grant-owner authority cases are additionally selected from
   `test_granted_impact.py` and `test_authority_grants.py`.
 
-## Remaining boundary
+## Remaining verification boundary
 
 The interactive Meld screen and Endpoint Setup are now owned by
 `interfaces.tui`; compatibility command paths are import-only. Session and
-Apply execution are terminal-independent. Completion therefore means removing
-the audited start-time parallel decisions above, not moving presentation again
-or inventing another session schema.
+Apply execution are terminal-independent. The remaining pass is an audit of
+the command wrappers around follow-up turns and Apply, followed by the complete
+regression and import-boundary suite; it must not invent another session schema
+or move presentation again.

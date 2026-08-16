@@ -9,28 +9,30 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.comparison import (
-    COMPARISON_RULESET_VERSION,
     ComparisonAnalysis,
     ComparisonInput,
 )
 from memcommit.comparison_provider import (
     ComparisonProviderError,
-    analyze_comparison,
 )
-from memcommit.comparison_store import load_comparison_analysis
 from memcommit.commands.comparison_execution import (
     comparison_wait_view,
-    connect_comparison_provider,
-    ensure_comparison_analysis,
-    install_prepared_comparison_analysis,
 )
 from memcommit.context import Context
 from memcommit.context_targeting.loading import load_context_scope
+from memcommit.context_targeting.presets import (
+    ContextScopePreset,
+    resolve_descendant_scopes,
+    resolve_scope_preset,
+)
+from memcommit.context_targeting.memory_focus import (
+    MemoryFocusError,
+    resolve_memory_focus,
+)
 from memcommit.context_locator import resolve_context_locator
 from memcommit.authority.access import (
     ContextAccess,
     GrantedReadStore,
-    freeze_granted_context_binding,
     revalidate_granted_context_binding,
     resolve_context_access,
 )
@@ -64,9 +66,12 @@ from memcommit.meld import (
 from memcommit.meld_provider import (
     MeldProviderError,
 )
+from memcommit.interfaces.console.text import (
+    display_escape_text,
+    safe_terminal_text,
+)
 from memcommit.meld_start_application import MeldStartRequest
 from memcommit.meld_restart_application import MeldRestartRequest
-from memcommit.interfaces.console.text import safe_terminal_text
 from memcommit.interfaces.tui.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
@@ -89,7 +94,7 @@ from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
-from memcommit.profile_config import ProfileConfigError, load_profile_registry
+from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import (
     ProfileError,
 )
@@ -112,153 +117,6 @@ MELD_AGGREGATE_TIMEOUT_SECONDS = 900
 
 class MeldCommandError(RuntimeError):
     """Safe user-facing orchestration failure."""
-
-
-def _comparison_prerequisite_error(
-    *,
-    left: Context,
-    right: Context,
-    target: Context,
-    refresh: bool,
-    reason: str,
-    create_target: bool = False,
-    include_descendants: tuple[bool, bool] = (False, False),
-    directional: bool = False,
-) -> MeldCommandError:
-    compare_argv = [
-        "mem",
-        "compare",
-        "--from",
-        left.name,
-        "--to",
-        right.name,
-    ]
-    if include_descendants[0]:
-        compare_argv.append("--reference-descendants")
-    if include_descendants[1]:
-        compare_argv.append("--compared-descendants")
-    if refresh:
-        compare_argv.append("--refresh")
-    rerun_argv = (
-        ["mem", "meld", left.name, "--into", right.name]
-        if directional
-        else ["mem", "meld", left.name, right.name]
-    )
-    if include_descendants[0]:
-        rerun_argv.append("--left-descendants")
-    if include_descendants[1]:
-        rerun_argv.append("--right-descendants")
-    if create_target and not directional:
-        rerun_argv.extend(("--to", target.name))
-    lines = [
-        reason,
-        "Create the exact ordered Compare basis first:",
-        f"  {shlex.join(compare_argv)}",
-    ]
-    if not create_target and not directional:
-        lines.append(f"  {shlex.join(['mem', 'switch', target.name])}")
-    lines.extend(("Then rerun:", f"  {shlex.join(rerun_argv)}"))
-    return MeldCommandError("\n".join(lines))
-
-
-def _load_symmetric_comparison(
-    *,
-    left: Context,
-    right: Context,
-    target: Context,
-    create_target: bool = False,
-    include_descendants: tuple[bool, bool] = (False, False),
-) -> ComparisonAnalysis:
-    """Load the exact reviewed LEFT→RIGHT basis; never use a reverse slot."""
-    try:
-        analysis = load_comparison_analysis(left.uid, right.uid)
-        if analysis is None:
-            artifact = load_granted_comparison_artifact(
-                MemoryStore(create=False),
-                left.uid,
-                right.uid,
-            )
-            analysis = artifact.analysis if artifact is not None else None
-    except ValueError as error:
-        raise _comparison_prerequisite_error(
-            left=left,
-            right=right,
-            target=target,
-            refresh=True,
-            reason="The saved ordered Compare analysis is invalid.",
-            create_target=create_target,
-            include_descendants=include_descendants,
-        ) from error
-    if analysis is None:
-        raise _comparison_prerequisite_error(
-            left=left,
-            right=right,
-            target=target,
-            refresh=False,
-            reason=(
-                f"Meld requires a saved Compare analysis for "
-                f"'{left.name}' → '{right.name}'."
-            ),
-            create_target=create_target,
-            include_descendants=include_descendants,
-        )
-    if (
-        not analysis.matches(left, right)
-        or analysis.include_descendants != include_descendants
-        or analysis.ruleset_version != COMPARISON_RULESET_VERSION
-    ):
-        raise _comparison_prerequisite_error(
-            left=left,
-            right=right,
-            target=target,
-            refresh=True,
-            reason=(
-                f"The saved Compare analysis for '{left.name}' → "
-                f"'{right.name}' is stale."
-            ),
-            create_target=create_target,
-            include_descendants=include_descendants,
-        )
-    return analysis
-
-
-def _analyze_symmetric_comparison_basis(
-    comparison_input: ComparisonInput,
-    *,
-    target_name: str,
-) -> ComparisonAnalysis:
-    """Create a missing or stale symmetric basis without changing current."""
-
-    def compare_frames(progress):
-        provider = connect_comparison_provider(
-            connect_codex_chatgpt_provider
-        )
-        progress.update("analyzing ordered source relations", step=2)
-        return analyze_comparison(comparison_input, provider)
-
-    confirmed_inputs = _symmetric_comparison_wait_context_view(
-        comparison_input,
-        target_name=target_name,
-    )
-    return run_command_wait(
-        "MELD",
-        "preparing ordered Compare basis",
-        total=2,
-        work=compare_frames,
-        # The destination keys retain one meaning across every wait: Report is
-        # the default R/r surface, while I/i exposes all three frozen operands
-        # so a cross-task current Context cannot look implicit.
-        return_view=build_report_loading_view(
-            "MELD",
-            sections=(
-                "What mem understood",
-                "Both",
-                "Differences",
-                "Items",
-            ),
-        ),
-        context_view=confirmed_inputs,
-    )
 
 
 def _symmetric_comparison_wait_context_view(
@@ -284,187 +142,6 @@ def _symmetric_comparison_wait_context_view(
             + "target and session are published."
         ),
     )
-
-
-def _ensure_symmetric_comparison(
-    *,
-    store: MemoryStore,
-    left_access: ContextAccess,
-    right_access: ContextAccess,
-    left: Context,
-    right: Context,
-    target_name: str,
-    current_name: str | None,
-    include_descendants: tuple[bool, bool] = (False, False),
-) -> ComparisonAnalysis:
-    """Return the exact durable LEFT→RIGHT basis, creating it when needed."""
-
-    from memcommit.study_prewarm.compare import (
-        EquivalentComparePrewarmMatch,
-        find_declared_equivalent_compare_analysis,
-        find_declared_projected_compare_analysis,
-        record_equivalent_compare_prewarm,
-        record_exact_compare_prewarm,
-        record_projected_compare_prewarm,
-    )
-
-    equivalent_match: EquivalentComparePrewarmMatch | None = None
-
-    def equivalent(comparison_input):
-        nonlocal equivalent_match
-        equivalent_match = find_declared_equivalent_compare_analysis(
-            store=store,
-            comparison_input=comparison_input,
-            current_name=current_name,
-            registry_snapshot=load_profile_registry(),
-        )
-        if equivalent_match is None:
-            equivalent_match = find_declared_projected_compare_analysis(
-                store=store,
-                comparison_input=comparison_input,
-                current_name=current_name,
-                registry_snapshot=load_profile_registry(),
-            )
-        return equivalent_match.analysis if equivalent_match is not None else None
-
-    execution = ensure_comparison_analysis(
-        store=store,
-        reference_access=left_access,
-        compared_access=right_access,
-        reference=left,
-        compared=right,
-        current_name=current_name,
-        include_descendants=include_descendants,
-        require_durable=True,
-        analyze=lambda comparison_input: _analyze_symmetric_comparison_basis(
-            comparison_input,
-            target_name=target_name,
-        ),
-        equivalent=equivalent,
-    )
-    if (
-        execution.origin == "EQUIVALENT_SCOPE_PREWARM"
-        and equivalent_match is not None
-    ):
-        if equivalent_match.origin == "EXACT_PREWARM":
-            record_exact_compare_prewarm(
-                store,
-                entry_key=equivalent_match.entry_key,
-                analysis=execution.analysis,
-            )
-        else:
-            recorder = (
-                record_projected_compare_prewarm
-                if equivalent_match.origin == "PROJECTED_PREWARM"
-                else record_equivalent_compare_prewarm
-            )
-            recorder(
-                store,
-                entry_key=equivalent_match.entry_key,
-                analysis=execution.analysis,
-                prepared_context_names=equivalent_match.prepared_context_names,
-            )
-    return execution.analysis
-
-
-def _load_directional_comparison(
-    *,
-    store: MemoryStore,
-    incoming_access: ContextAccess,
-    baseline_access: ContextAccess,
-    incoming: Context,
-    baseline: Context,
-    current_name: str | None,
-    include_descendants: tuple[bool, bool] = (False, False),
-) -> ComparisonAnalysis | None:
-    """Load an exact ordered basis when present, retaining legacy fallback.
-
-    Existing Directional sessions predate the Compare contract. Absence keeps
-    that compatible one-shot path, while any present artifact must be current:
-    silently ignoring a stale reviewed basis would make two identical commands
-    appear Compare-backed while using different semantics.
-    """
-    try:
-        analysis = load_comparison_analysis(incoming.uid, baseline.uid)
-        if analysis is None:
-            artifact = load_granted_comparison_artifact(
-                store,
-                incoming.uid,
-                baseline.uid,
-            )
-            analysis = artifact.analysis if artifact is not None else None
-    except ValueError as error:
-        raise _comparison_prerequisite_error(
-            left=incoming,
-            right=baseline,
-            target=baseline,
-            refresh=True,
-            reason="The saved ordered Directional Compare analysis is invalid.",
-            include_descendants=include_descendants,
-            directional=True,
-        ) from error
-    if analysis is None:
-        comparison_input = ComparisonInput.from_contexts(
-            incoming,
-            baseline,
-            reference_descendants=include_descendants[0],
-            compared_descendants=include_descendants[1],
-        )
-        from memcommit.study_prewarm.compare import (
-            record_equivalent_compare_prewarm,
-            record_projected_compare_prewarm,
-        )
-        from memcommit.study_prewarm.meld_directional import (
-            find_installed_equivalent_directional_comparison,
-        )
-
-        equivalent = find_installed_equivalent_directional_comparison(
-            store=store,
-            comparison_input=comparison_input,
-            registry_snapshot=load_profile_registry(),
-        )
-        if equivalent is None:
-            return None
-        installed = install_prepared_comparison_analysis(
-            store=store,
-            reference_access=incoming_access,
-            compared_access=baseline_access,
-            reference=incoming,
-            compared=baseline,
-            current_name=current_name,
-            include_descendants=include_descendants,
-            analysis=equivalent.analysis,
-        )
-        recorder = (
-            record_projected_compare_prewarm
-            if equivalent.origin == "PROJECTED_PREWARM"
-            else record_equivalent_compare_prewarm
-        )
-        recorder(
-            store,
-            entry_key=equivalent.entry_key,
-            analysis=installed.analysis,
-            prepared_context_names=equivalent.prepared_context_names,
-        )
-        return installed.analysis
-    if (
-        not analysis.matches(incoming, baseline)
-        or analysis.include_descendants != include_descendants
-        or analysis.ruleset_version != COMPARISON_RULESET_VERSION
-    ):
-        raise _comparison_prerequisite_error(
-            left=incoming,
-            right=baseline,
-            target=baseline,
-            refresh=True,
-            reason=(
-                f"The saved Directional Compare analysis for '{incoming.name}' → "
-                f"'{baseline.name}' is stale."
-            ),
-            include_descendants=include_descendants,
-            directional=True,
-        )
-    return analysis
 
 
 def _session_command(session: MeldSession) -> str:
@@ -1536,55 +1213,28 @@ def _start_new_meld_from_picker(store: MemoryStore) -> None:
     left = receipt.left_name
     right = receipt.right_name
     if receipt.mode == "directional":
-        cmd(
-            left=left,
-            into=right,
-            left_descendants=receipt.left_descendants,
-            right_descendants=receipt.right_descendants,
-        )
+        start_kwargs = {
+            "left": left,
+            "into": right,
+            "left_descendants": receipt.left_descendants,
+            "right_descendants": receipt.right_descendants,
+        }
+        if receipt.left_memory_uid is not None:
+            start_kwargs["incoming_memory"] = receipt.left_memory_uid
+        if receipt.right_memory_uid is not None:
+            start_kwargs["baseline_memory"] = receipt.right_memory_uid
+        cmd(**start_kwargs)
         return
 
     if receipt.target_name is None:
         raise MeldCommandError("Symmetric Meld setup omitted result C.")
-    current_name = store.current_context_name()
-    left_access = _resolve_meld_source(
-        store,
-        left,
-        current_name=current_name,
+    cmd(
+        left=left,
+        right=right,
+        to=receipt.target_name if receipt.create_target else None,
+        left_descendants=receipt.left_descendants,
+        right_descendants=receipt.right_descendants,
     )
-    right_access = _resolve_meld_source(
-        store,
-        right,
-        current_name=current_name,
-    )
-    left_ctx = _load_meld_source(
-        left_access,
-        include_descendants=receipt.left_descendants,
-    )
-    right_ctx = _load_meld_source(
-        right_access,
-        include_descendants=receipt.right_descendants,
-    )
-    analysis = _ensure_symmetric_comparison(
-        store=store,
-        left_access=left_access,
-        right_access=right_access,
-        left=left_ctx,
-        right=right_ctx,
-        target_name=receipt.target_name,
-        current_name=current_name,
-        include_descendants=(
-            receipt.left_descendants,
-            receipt.right_descendants,
-        ),
-    )
-    session = start_reviewed_symmetric_meld(
-        store=store,
-        analysis=analysis,
-        target_name=receipt.target_name,
-        create_target=receipt.create_target,
-    )
-    typer.echo(render_meld_session(session))
 
 
 def cmd(
@@ -1718,15 +1368,31 @@ def cmd(
             help="Enter the interactive Meld session launcher",
         ),
     ] = False,
-    left_descendants: Annotated[
+    direct: Annotated[
         bool,
+        typer.Option(
+            "-d",
+            "--direct",
+            help="Use only the selected LEFT/INCOMING and RIGHT/BASELINE roots",
+        ),
+    ] = False,
+    recursive: Annotated[
+        bool,
+        typer.Option(
+            "-r",
+            "--recursive",
+            help="Include descendants under both Meld roots",
+        ),
+    ] = False,
+    left_descendants: Annotated[
+        Optional[bool],
         typer.Option(
             "--left-descendants/--left-only",
             help="Include all readable descendants under PEER or INCOMING A",
         ),
-    ] = False,
+    ] = None,
     right_descendants: Annotated[
-        bool,
+        Optional[bool],
         typer.Option(
             "--right-descendants/--right-only",
             help=(
@@ -1734,9 +1400,54 @@ def cmd(
                 "owner Contexts under directional BASELINE B"
             ),
         ),
-    ] = False,
+    ] = None,
+    incoming_memory: Annotated[
+        Optional[str],
+        typer.Option(
+            "--incoming-memory",
+            metavar="UID_OR_PREFIX",
+            help=(
+                "In directional Meld, select one INCOMING Memory while its "
+                "neighbors remain non-actionable context"
+            ),
+        ),
+    ] = None,
+    baseline_memory: Annotated[
+        Optional[str],
+        typer.Option(
+            "--baseline-memory",
+            metavar="UID_OR_PREFIX",
+            help=(
+                "In directional Meld, restrict mutation to one BASELINE Memory "
+                "while its neighbors remain non-actionable context"
+            ),
+        ),
+    ] = None,
 ) -> None:
     """Meld peers, or directionally update an authoritative BASELINE."""
+    scope_flags_supplied = (
+        direct
+        or recursive
+        or left_descendants is not None
+        or right_descendants is not None
+    )
+    try:
+        preset = resolve_scope_preset(
+            direct=direct,
+            recursive=recursive,
+            default=ContextScopePreset.DIRECT,
+        )
+        left_descendants, right_descendants = resolve_descendant_scopes(
+            preset=preset,
+            explicit=(left_descendants, right_descendants),
+        )
+    except (TypeError, ValueError) as error:
+        typer.secho(
+            f"Meld error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
     action_count = sum(
         (
             comment is not None or choice is not None,
@@ -1822,9 +1533,12 @@ def cmd(
         and not restart
         and not left_descendants
         and not right_descendants
+        and incoming_memory is None
+        and baseline_memory is None
         and revision is None
         and not revises_turn
         and expand is None
+        and not scope_flags_supplied
     )
     if sessions and not browse_by_default:
         typer.secho(
@@ -1914,13 +1628,31 @@ def cmd(
             start_command = shlex.join(["mem", "meld", left_name, "--into", right_name])
 
         if requested_mode == "DIRECTIONAL":
+            if incoming_memory is not None and left_descendants:
+                raise MeldCommandError(
+                    "--incoming-memory cannot be combined with "
+                    "--left-descendants."
+                )
+            if baseline_memory is not None and right_descendants:
+                raise MeldCommandError(
+                    "--baseline-memory cannot be combined with "
+                    "--right-descendants."
+                )
             start_parts = ["mem", "meld", left_name]
             if left_descendants:
                 start_parts.append("--left-descendants")
             start_parts.extend(("--into", right_name))
             if right_descendants:
                 start_parts.append("--right-descendants")
+            if incoming_memory is not None:
+                start_parts.extend(("--incoming-memory", incoming_memory))
+            if baseline_memory is not None:
+                start_parts.extend(("--baseline-memory", baseline_memory))
         else:
+            if incoming_memory is not None or baseline_memory is not None:
+                raise MeldCommandError(
+                    "Memory scope flags are supported only by directional Meld."
+                )
             start_parts = ["mem", "meld", left_name]
             if left_descendants:
                 start_parts.append("--left-descendants")
@@ -2038,135 +1770,6 @@ def cmd(
                 raise MeldCommandError(
                     f"Start the meld with a plain '{start_command}' first."
                 )
-            left_ctx = (
-                _load_meld_source(
-                    left_access,
-                    include_descendants=left_descendants,
-                    project=requested_mode != "DIRECTIONAL",
-                )
-                if left_access is not None
-                else _load_local_meld_source(
-                    store,
-                    left_name,
-                    include_descendants=left_descendants,
-                    project=requested_mode != "DIRECTIONAL",
-                )
-            )
-            right_ctx = (
-                _load_meld_source(
-                    right_access,
-                    include_descendants=right_descendants,
-                    project=requested_mode != "DIRECTIONAL",
-                )
-                if right_access is not None
-                else _load_local_meld_source(
-                    store,
-                    right_name,
-                    include_descendants=right_descendants,
-                    project=requested_mode != "DIRECTIONAL",
-                )
-            )
-            meld_analysis_origin: str | None = None
-            comparison: ComparisonAnalysis | None = None
-            if requested_mode == "DIRECTIONAL":
-                granted_incoming = (
-                    freeze_granted_context_binding(left_access)
-                    if left_access is not None and left_access.is_granted
-                    else None
-                )
-                granted_target = (
-                    freeze_granted_context_binding(right_access)
-                    if right_access is not None and right_access.is_granted
-                    else None
-                )
-                comparison = _load_directional_comparison(
-                    store=store,
-                    incoming_access=(
-                        left_access
-                        if left_access is not None
-                        else resolve_context_access(
-                            store,
-                            left_name,
-                            current_name=current_name,
-                            required_permission="READ",
-                        )
-                    ),
-                    baseline_access=(
-                        right_access
-                        if right_access is not None
-                        else resolve_context_access(
-                            store,
-                            right_name,
-                            current_name=current_name,
-                            required_permission="READ",
-                        )
-                    ),
-                    incoming=recursive_comparison_projection(left_ctx),
-                    baseline=recursive_comparison_projection(right_ctx),
-                    current_name=current_name,
-                    include_descendants=(
-                        left_descendants,
-                        right_descendants,
-                    ),
-                )
-                session = (
-                    MeldSession.create_directional(
-                        left_ctx,
-                        right_ctx,
-                        incoming_descendants=left_descendants,
-                        baseline_descendants=right_descendants,
-                        granted_incoming=granted_incoming,
-                        granted_target=granted_target,
-                    )
-                    if comparison is None
-                    else MeldSession.create_directional_from_comparison(
-                        comparison,
-                        left_ctx,
-                        right_ctx,
-                        granted_incoming=granted_incoming,
-                        granted_target=granted_target,
-                    )
-                )
-                session.start_initial_analysis()
-                from memcommit.study_prewarm.meld_directional import (
-                    find_installed_directional_meld_prewarm,
-                )
-
-                prewarm = find_installed_directional_meld_prewarm(
-                    store=store,
-                    current=session,
-                    registry_snapshot=load_profile_registry(),
-                )
-                directional_prewarm_origin = (
-                    prewarm.origin if prewarm is not None else None
-                )
-                meld_analysis_origin = directional_prewarm_origin
-            else:
-                assert left_access is not None
-                assert right_access is not None
-                comparison = _ensure_symmetric_comparison(
-                    store=store,
-                    left_access=left_access,
-                    right_access=right_access,
-                    left=left_ctx,
-                    right=right_ctx,
-                    target_name=target.name,
-                    current_name=current_name,
-                    include_descendants=(
-                        left_descendants,
-                        right_descendants,
-                    ),
-                )
-                from memcommit.study_prewarm.compare import (
-                    installed_compare_prewarm_origin,
-                )
-
-                meld_analysis_origin = installed_compare_prewarm_origin(
-                    store,
-                    comparison,
-                )
-            from memcommit.meld_runtime import execute_meld_start
-
             request = MeldStartRequest(
                 mode=requested_mode,
                 left_name=left_name,
@@ -2175,10 +1778,22 @@ def cmd(
                 left_descendants=left_descendants,
                 right_descendants=right_descendants,
                 create_target=create_target,
-                comparison=comparison,
+                incoming_memory=incoming_memory,
+                baseline_memory=baseline_memory,
             )
-            if requested_mode == "DIRECTIONAL" and prewarm is None:
-                provisional = session
+            from memcommit.meld_runtime import (
+                execute_meld_start,
+                prepare_meld_start,
+            )
+
+            prepared = prepare_meld_start(request, store=store)
+            meld_analysis_origin: str | None = None
+            directional_prewarm_origin = (
+                prepared.directional_prewarm.origin
+                if prepared.directional_prewarm is not None
+                else None
+            )
+            if prepared.provider_required:
 
                 def start_meld(progress):
                     def connected_provider():
@@ -2192,15 +1807,39 @@ def cmd(
                         request,
                         store=store,
                         provider_factory=connected_provider,
+                        prepared=prepared,
                     )
 
+                if requested_mode == "DIRECTIONAL":
+                    assert prepared.provisional_session is not None
+                    return_view = _meld_wait_view(prepared.provisional_session)
+                    context_view = _meld_wait_context_view(
+                        prepared.provisional_session
+                    )
+                    stage = "connecting provider"
+                else:
+                    comparison_input = ComparisonInput.from_contexts(
+                        prepared.left,
+                        prepared.right,
+                        reference_descendants=left_descendants,
+                        compared_descendants=right_descendants,
+                    )
+                    return_view = build_report_loading_view(
+                        "MELD",
+                        sections=("What mem understood", "Both", "Differences", "Items"),
+                    )
+                    context_view = _symmetric_comparison_wait_context_view(
+                        comparison_input,
+                        target_name=target_name,
+                    )
+                    stage = "preparing ordered Compare basis"
                 started = run_command_wait(
                     "MELD",
-                    "connecting provider",
+                    stage,
                     total=2,
                     work=start_meld,
-                    return_view=_meld_wait_view(provisional),
-                    context_view=_meld_wait_context_view(provisional),
+                    return_view=return_view,
+                    context_view=context_view,
                 )
             else:
                 started = execute_meld_start(
@@ -2209,6 +1848,7 @@ def cmd(
                     provider_factory=lambda: (_ for _ in ()).throw(
                         AssertionError("A prepared Meld start connected a provider.")
                     ),
+                    prepared=prepared,
                 )
             session = started.session
             if requested_mode == "DIRECTIONAL":
@@ -2238,99 +1878,6 @@ def cmd(
 
         if restart:
             prior_digest = meld_canonical_digest(session.to_dict())
-            # Restart is defined by the newly supplied ordered pair, not by
-            # the old session's frames. The CLI loads a provisional frame only
-            # for prerequisite and wait-surface decisions; runtime owns the
-            # authoritative revalidation and exact-version replacement.
-            restart_left_access = _resolve_meld_source(
-                store,
-                left_name,
-                current_name=current_name,
-            )
-            restart_right_access = _resolve_meld_source(
-                store,
-                right_name,
-                current_name=current_name,
-            )
-            left_ctx = _load_meld_source(
-                restart_left_access,
-                include_descendants=left_descendants,
-                project=requested_mode == "SYMMETRIC",
-            )
-            right_ctx = _load_meld_source(
-                restart_right_access,
-                include_descendants=right_descendants,
-                project=requested_mode == "SYMMETRIC",
-            )
-            comparison = None
-            prewarm = None
-            if requested_mode == "DIRECTIONAL":
-                granted_incoming = (
-                    freeze_granted_context_binding(restart_left_access)
-                    if restart_left_access.is_granted
-                    else None
-                )
-                granted_target = (
-                    freeze_granted_context_binding(restart_right_access)
-                    if restart_right_access.is_granted
-                    else None
-                )
-                comparison = _load_directional_comparison(
-                    store=store,
-                    incoming_access=restart_left_access,
-                    baseline_access=restart_right_access,
-                    incoming=recursive_comparison_projection(left_ctx),
-                    baseline=recursive_comparison_projection(right_ctx),
-                    current_name=current_name,
-                    include_descendants=(
-                        left_descendants,
-                        right_descendants,
-                    ),
-                )
-                replacement = (
-                    MeldSession.create_directional(
-                        left_ctx,
-                        right_ctx,
-                        incoming_descendants=left_descendants,
-                        baseline_descendants=right_descendants,
-                        granted_incoming=granted_incoming,
-                        granted_target=granted_target,
-                    )
-                    if comparison is None
-                    else MeldSession.create_directional_from_comparison(
-                        comparison,
-                        left_ctx,
-                        right_ctx,
-                        granted_incoming=granted_incoming,
-                        granted_target=granted_target,
-                    )
-                )
-                replacement.start_initial_analysis()
-                from memcommit.study_prewarm.meld_directional import (
-                    find_installed_directional_meld_prewarm,
-                )
-
-                prewarm = find_installed_directional_meld_prewarm(
-                    store=store,
-                    current=replacement,
-                    registry_snapshot=load_profile_registry(),
-                )
-            else:
-                comparison = _ensure_symmetric_comparison(
-                    store=store,
-                    left_access=restart_left_access,
-                    right_access=restart_right_access,
-                    left=left_ctx,
-                    right=right_ctx,
-                    target_name=target.name,
-                    current_name=current_name,
-                    include_descendants=(
-                        left_descendants,
-                        right_descendants,
-                    ),
-                )
-            from memcommit.meld_runtime import execute_meld_restart
-
             restart_request = MeldRestartRequest(
                 mode=requested_mode,
                 left_name=left_name,
@@ -2339,9 +1886,16 @@ def cmd(
                 expected_version=prior_digest,
                 left_descendants=left_descendants,
                 right_descendants=right_descendants,
-                comparison=comparison,
+                incoming_memory=incoming_memory,
+                baseline_memory=baseline_memory,
             )
-            if requested_mode == "DIRECTIONAL" and prewarm is None:
+            from memcommit.meld_runtime import (
+                execute_meld_restart,
+                prepare_meld_restart,
+            )
+
+            prepared = prepare_meld_restart(restart_request, store=store)
+            if prepared.provider_required:
 
                 def restart_meld(progress):
                     def connected_provider():
@@ -2355,15 +1909,39 @@ def cmd(
                         restart_request,
                         store=store,
                         provider_factory=connected_provider,
+                        prepared=prepared,
                     )
 
+                if requested_mode == "DIRECTIONAL":
+                    assert prepared.provisional_session is not None
+                    return_view = _meld_wait_view(prepared.provisional_session)
+                    context_view = _meld_wait_context_view(
+                        prepared.provisional_session
+                    )
+                    stage = "connecting provider"
+                else:
+                    comparison_input = ComparisonInput.from_contexts(
+                        prepared.left,
+                        prepared.right,
+                        reference_descendants=left_descendants,
+                        compared_descendants=right_descendants,
+                    )
+                    return_view = build_report_loading_view(
+                        "MELD",
+                        sections=("What mem understood", "Both", "Differences", "Items"),
+                    )
+                    context_view = _symmetric_comparison_wait_context_view(
+                        comparison_input,
+                        target_name=target_name,
+                    )
+                    stage = "preparing ordered Compare basis"
                 restarted = run_command_wait(
                     "MELD",
-                    "connecting provider",
+                    stage,
                     total=2,
                     work=restart_meld,
-                    return_view=_meld_wait_view(replacement),
-                    context_view=_meld_wait_context_view(replacement),
+                    return_view=return_view,
+                    context_view=context_view,
                 )
             else:
                 restarted = execute_meld_restart(
@@ -2372,6 +1950,7 @@ def cmd(
                     provider_factory=lambda: (_ for _ in ()).throw(
                         AssertionError("A prepared Meld restart connected a provider.")
                     ),
+                    prepared=prepared,
                 )
             session = restarted.session
             if sys.stdin.isatty() and sys.stdout.isatty():
@@ -2400,6 +1979,24 @@ def cmd(
         sources_match = sources_match and tuple(
             bool(frame.include_descendants) for frame in session.frames
         ) == (left_descendants, right_descendants)
+        for selector, frame, label in (
+            (incoming_memory, session.frames[0], "INCOMING Memory"),
+            (baseline_memory, session.frames[1], "BASELINE Memory"),
+        ):
+            requested_uid = None
+            if selector is not None:
+                try:
+                    focus = resolve_memory_focus(
+                        (*frame.memories, *frame.context_evidence),
+                        selector,
+                        label=label,
+                    )
+                except MemoryFocusError as error:
+                    raise MeldCommandError(str(error)) from error
+                requested_uid = focus.selected_uid
+            sources_match = sources_match and (
+                frame.selected_memory_uid == requested_uid
+            )
         if not sources_match:
             raise MeldCommandError(
                 "The target already has a meld from different sources. Use "
