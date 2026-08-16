@@ -31,9 +31,10 @@ artifacts. The selected first row is only the keyboard target; it does not mean
 that operation was invoked.
 
 The collapsed command rows use the same one-column reading order at wide and
-compact widths: a bold `DESCRIPTION` label and summary are followed by a bold
-`USE WHEN` label and its use case. This avoids changing the semantic reading
-order merely because the terminal becomes wider.
+compact widths: the operation summary is followed by an explicit `USE WHEN:`
+row and its use case. This avoids changing the semantic reading order merely
+because the terminal becomes wider and avoids repeating a `DESCRIPTION` label
+on every operation.
 
 ## Expanded operation sequence
 

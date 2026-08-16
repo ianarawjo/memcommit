@@ -2,51 +2,51 @@
 ┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
 │  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-│                  USE WHEN  Bringing work from a copied or branched Context back into the current Context.                                                                       │^
+│                  USE WHEN: Bringing work from a copied or branched Context back into the current Context.                                                                       │^
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
                                                                                                                                                                                     
 ┌ HISTORY & RECOVERY ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
-│ ▸ mem log         DESCRIPTION  Browse Context checkpoints, inspect one Memory lineage with --memory, search history, or list Profile command attempts.                          │ 
-│                   USE WHEN  Investigating previous operations, checkpoints, or Memory history.                                                                                  │ 
-│ ▸ mem diff        DESCRIPTION  Inspect recorded Context or Update changes without applying them.                                                                                │ 
-│                   USE WHEN  Verifying exactly what a recorded operation changed.                                                                                                │ 
-│ ▸ mem checkpoint  DESCRIPTION  Save the current Context as a manual recovery point for Diff or Revert.                                                                          │ 
-│                   USE WHEN  Creating a recovery point before risky work.                                                                                                        │ 
-│ ▸ mem undo        DESCRIPTION  Undo the most recent recorded Context command across its affected Contexts.                                                                      │ 
-│                   USE WHEN  Reversing the latest recorded mutation as one operation.                                                                                            │ 
-│ ▸ mem redo        DESCRIPTION  Redo the most recently undone recorded Context command.                                                                                          │ 
-│                   USE WHEN  Reapplying a command that was undone accidentally.                                                                                                  │ 
-│ ▸ mem revert      DESCRIPTION  Select a checkpoint and review restoration of one local Context.                                                                                 │ 
-│                   USE WHEN  Restoring a Context to a deliberately saved recovery point.                                                                                         │ 
+│ ▸ mem log         Browse Context checkpoints, inspect one Memory lineage with --memory, search history, or list Profile command attempts.                                       │ 
+│                   USE WHEN: Investigating previous operations, checkpoints, or Memory history.                                                                                  │ 
+│ ▸ mem diff        Inspect recorded Context or Update changes without applying them.                                                                                             │ 
+│                   USE WHEN: Verifying exactly what a recorded operation changed.                                                                                                │ 
+│ ▸ mem checkpoint  Save the current Context as a manual recovery point for Diff or Revert.                                                                                       │ 
+│                   USE WHEN: Creating a recovery point before risky work.                                                                                                        │ 
+│ ▸ mem undo        Undo the most recent recorded Context command across its affected Contexts.                                                                                   │ 
+│                   USE WHEN: Reversing the latest recorded mutation as one operation.                                                                                            │ 
+│ ▸ mem redo        Redo the most recently undone recorded Context command.                                                                                                       │ 
+│                   USE WHEN: Reapplying a command that was undone accidentally.                                                                                                  │ 
+│ ▸ mem revert      Select a checkpoint and review restoration of one local Context.                                                                                              │ 
+│                   USE WHEN: Restoring a Context to a deliberately saved recovery point.                                                                                         │ 
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
                                                                                                                                                                                     
 ┌ GROUND & EVALUATION ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
-│ ▸ mem ground             DESCRIPTION  Create or continue a reviewed Goal-Rules-Memories Ground workbench.                                                                       │ 
-│                          USE WHEN  Building a reviewed evaluation or behavior contract from evidence.                                                                           │ 
-│ ▸ mem fit                DESCRIPTION  Judge whether two or more propositions can jointly hold under ordinary readings.                                                          │ 
-│                          USE WHEN  Checking whether Memories, Rules, Goals, or other propositions can coexist without contradiction.                                            │ 
-│ ▸ mem check-conformance  DESCRIPTION  Check Ground examples or one Context against explicit Rules.                                                                              │ 
-│                          USE WHEN  Checking a Context or saved Ground against explicit Rules.                                                                                   │ 
-│ ▸ mem init-study         DESCRIPTION  Copy one Study baseline into an isolated participant/authority Profile pair.                                                              │ 
-│                          USE WHEN  Preparing a reproducible, isolated user-study environment.                                                                                   │ 
-│ ▸ mem eval               DESCRIPTION  Run and inspect staged semantic evaluation campaigns.                                                                                     │ 
-│                          USE WHEN  Measuring operation behavior against repeatable fixtures.                                                                                    │ 
+│ ▸ mem ground             Create or continue a reviewed Goal-Rules-Memories Ground workbench.                                                                                    │ 
+│                          USE WHEN: Building a reviewed evaluation or behavior contract from evidence.                                                                           │ 
+│ ▸ mem fit                Judge whether two or more propositions can jointly hold under ordinary readings.                                                                       │ 
+│                          USE WHEN: Checking whether Memories, Rules, Goals, or other propositions can coexist without contradiction.                                            │ 
+│ ▸ mem check-conformance  Check Ground examples or one Context against explicit Rules.                                                                                           │ 
+│                          USE WHEN: Checking a Context or saved Ground against explicit Rules.                                                                                   │ 
+│ ▸ mem init-study         Copy one Study baseline into an isolated participant/authority Profile pair.                                                                           │ 
+│                          USE WHEN: Preparing a reproducible, isolated user-study environment.                                                                                   │ 
+│ ▸ mem eval               Run and inspect staged semantic evaluation campaigns.                                                                                                  │ 
+│                          USE WHEN: Measuring operation behavior against repeatable fixtures.                                                                                    │ 
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
                                                                                                                                                                                     
 ┌ PROFILE & SHARING ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
-│ ▸ mem profile  DESCRIPTION  Enter the interactive Profile selector, or manage complete local MemoryStore Profiles.                                                              │ 
-│                USE WHEN  Managing separate users, environments, or Memory stores.                                                                                               │ 
-│ ▸ mem rename   DESCRIPTION  Rename the current or an explicit managed Profile without moving or rewriting its store; mem profile rename is the explicit equivalent.             │ 
-│                USE WHEN  Giving an existing managed Profile a clearer name.                                                                                                     │ 
-│ ▸ mem share    DESCRIPTION  Send one ordinary Context through a grant-backed receiver endpoint.                                                                                 │ 
-│                USE WHEN  Delivering an owned Context to an authorized receiver.                                                                                                 │ 
-│ ▸ mem lock     DESCRIPTION  Lock the current Context, a recursive Context set, Memory, or Profile.                                                                              │ 
-│                USE WHEN  Preventing accidental modification of stable material.                                                                                                 │ 
-│ ▸ mem unlock   DESCRIPTION  Unlock the current Context, a recursive set, Memory, or Profile.                                                                                    │ 
-│                USE WHEN  Reopening protected material for intentional revision.                                                                                                 │ 
+│ ▸ mem profile  Enter the interactive Profile selector, or manage complete local MemoryStore Profiles.                                                                           │ 
+│                USE WHEN: Managing separate users, environments, or Memory stores.                                                                                               │ 
+│ ▸ mem rename   Rename the current or an explicit managed Profile without moving or rewriting its store; mem profile rename is the explicit equivalent.                          │ 
+│                USE WHEN: Giving an existing managed Profile a clearer name.                                                                                                     │ 
+│ ▸ mem share    Send one ordinary Context through a grant-backed receiver endpoint.                                                                                              │ 
+│                USE WHEN: Delivering an owned Context to an authorized receiver.                                                                                                 │ 
+│ ▸ mem lock     Lock the current Context, a recursive Context set, Memory, or Profile.                                                                                           │ 
+│                USE WHEN: Preventing accidental modification of stable material.                                                                                                 │ 
+│ ▸ mem unlock   Unlock the current Context, a recursive set, Memory, or Profile.                                                                                                 │ 
+│                USE WHEN: Reopening protected material for intentional revision.                                                                                                 │ 
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
                                                                                                                                                                                     
 ┏ SYSTEM ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
-┃ ▸ mem help             DESCRIPTION  Enter the interactive command browser and open syntax help.                                                                                 ┃v
+┃ ▸ mem help             Enter the interactive command browser and open syntax help.                                                                                              ┃v
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
  ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help

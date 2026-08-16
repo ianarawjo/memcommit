@@ -3,50 +3,50 @@
 │  VIEW · [   BY KIND ]  [ ✓ A–Z ] · ←/→ TO SELECT                                                                                                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┏ A–Z ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓^
-┃ ▸ mem add                DESCRIPTION  Add one or more Memories to the current or explicit Context.                                                                              ┃ 
-┃                          USE WHEN  Saving new facts, instructions, or source material.                                                                                          ┃ 
-┃ ▸ mem atomize            DESCRIPTION  Split composite Memories for review; --evaluate performs an issue-scoped directional meld.                                                ┃ 
-┃                          USE WHEN  Separating a composite Memory into independently reviewable requirements.                                                                    ┃ 
-┃ ▸ mem audit              DESCRIPTION  Run Duplicate, Ambiguity, and Conflict checks plus optional Rule Conformance, then review one saved report.                               ┃ 
-┃                          USE WHEN  Performing a combined quality review before revising a Context.                                                                              ┃ 
-┃ ▸ mem branch             DESCRIPTION  Copy a Context or subtree into a new branch and switch to it.                                                                             ┃ 
-┃                          USE WHEN  Experimenting without modifying the original Context tree.                                                                                   ┃ 
-┃ ▸ mem check-conformance  DESCRIPTION  Check Ground examples or one Context against explicit Rules.                                                                              ┃ 
-┃                          USE WHEN  Checking a Context or saved Ground against explicit Rules.                                                                                   ┃ 
-┃ ▸ mem checkout           DESCRIPTION  Switch Contexts using Git-style syntax; with -b, create and switch to a new Context branch.                                               ┃ 
-┃                          USE WHEN  Using a Git-like workflow to switch or create a branch.                                                                                      ┃ 
-┃ ▾ mem checkpoint         DESCRIPTION  Save the current Context as a manual recovery point for Diff or Revert.                                                                   ┃ 
-┃                          USE WHEN  Creating a recovery point before risky work.                                                                                                 ┃ 
+┃ ▸ mem add                Add one or more Memories to the current or explicit Context.                                                                                           ┃ 
+┃                          USE WHEN: Saving new facts, instructions, or source material.                                                                                          ┃ 
+┃ ▸ mem atomize            Split composite Memories for review; --evaluate performs an issue-scoped directional meld.                                                             ┃ 
+┃                          USE WHEN: Separating a composite Memory into independently reviewable requirements.                                                                    ┃ 
+┃ ▸ mem audit              Run Duplicate, Ambiguity, and Conflict checks plus optional Rule Conformance, then review one saved report.                                            ┃ 
+┃                          USE WHEN: Performing a combined quality review before revising a Context.                                                                              ┃ 
+┃ ▸ mem branch             Copy a Context or subtree into a new branch and switch to it.                                                                                          ┃ 
+┃                          USE WHEN: Experimenting without modifying the original Context tree.                                                                                   ┃ 
+┃ ▸ mem check-conformance  Check Ground examples or one Context against explicit Rules.                                                                                           ┃ 
+┃                          USE WHEN: Checking a Context or saved Ground against explicit Rules.                                                                                   ┃ 
+┃ ▸ mem checkout           Switch Contexts using Git-style syntax; with -b, create and switch to a new Context branch.                                                            ┃ 
+┃                          USE WHEN: Using a Git-like workflow to switch or create a branch.                                                                                      ┃ 
+┃ ▾ mem checkpoint         Save the current Context as a manual recovery point for Diff or Revert.                                                                                ┃ 
+┃                          USE WHEN: Creating a recovery point before risky work.                                                                                                 ┃ 
 ┃   FLOW      · Context state -> checkpoint                                                                                                                                       ┃ 
 ┃   EXECUTION · DETERMINISTIC                                                                                                                                                     ┃ 
 ┃   EFFECT    · Adds recoverable history; content is unchanged                                                                                                                    ┃ 
 ┃   FORM 1 · mem checkpoint (save without a message)                                                                                                                              ┃ 
 ┃   FORM 2 · mem checkpoint "[message]" (describe the saved checkpoint)                                                                                                           ┃ 
-┃ ▸ mem chunk              DESCRIPTION  Preview and split one direct Memory by headers, paragraphs, or sentences.                                                                 ┃ 
-┃                          USE WHEN  Mechanically splitting a long Memory at structural boundaries.                                                                               ┃ 
-┃ ▸ mem clear              DESCRIPTION  Remove all direct items from the current or explicit Context after confirmation.                                                          ┃ 
-┃                          USE WHEN  Emptying a Context while retaining the Context itself.                                                                                       ┃ 
-┃ ▸ mem compare            DESCRIPTION  Compare Memories in two Contexts and report what they share, what differs, and what appears only on one side.                             ┃ 
-┃                          USE WHEN  Comparing two Contexts as a whole to understand where they align and differ.                                                                 ┃ 
-┃ ▸ mem config (legacy)    DESCRIPTION  Read and write global configuration.                                                                                                      ┃ 
-┃                          USE WHEN  Inspecting or changing persistent MemCommit settings.                                                                                        ┃ 
-┃ ▸ mem contexts           DESCRIPTION  Browse local Contexts and readable cross-Profile Context views without switching.                                                         ┃ 
-┃                          USE WHEN  Exploring every Context currently available to the Profile.                                                                                  ┃ 
-┃ ▸ mem delete (remove)    DESCRIPTION  Select a Context or direct item to delete, or name it by locator, name, or UID.                                                           ┃ 
-┃                          USE WHEN  Removing a specific Context or item that is no longer needed.                                                                                ┃ 
-┃ ▸ mem diff               DESCRIPTION  Inspect recorded Context or Update changes without applying them.                                                                         ┃ 
-┃                          USE WHEN  Verifying exactly what a recorded operation changed.                                                                                         ┃ 
-┃ ▸ mem distill            DESCRIPTION  Derive reusable Rules from Case or Example propositions in a selected Context scope, using an optional Goal to focus relevance.           ┃ 
-┃                          USE WHEN  Extracting reusable rules from evidence-rich source material.                                                                                ┃ 
-┃ ▸ mem edit               DESCRIPTION  Replace direct Memory content by UID or prefix in the current or explicit Context.                                                        ┃ 
-┃                          USE WHEN  Correcting or revising a known Memory in place.                                                                                              ┃ 
-┃ ▸ mem elaborate          DESCRIPTION  Propose candidate Rules from a Goal, or concrete Case propositions from existing Rules.                                                   ┃ 
-┃                          USE WHEN  An abstract Goal needs starter Rule candidates, or existing Rules need additional concrete Case propositions for review.                     ┃ 
-┃ ▸ mem embed              DESCRIPTION  Place a Child Context inside a target while retaining its identity and ownership.                                                         ┃ 
-┃                          USE WHEN  Reusing a Context inside another Context without copying it.                                                                                 ┃ 
-┃ ▸ mem eval               DESCRIPTION  Run and inspect staged semantic evaluation campaigns.                                                                                     ┃ 
-┃                          USE WHEN  Measuring operation behavior against repeatable fixtures.                                                                                    ┃ 
-┃ ▸ mem find               DESCRIPTION  Search selected Contexts with explicit lexical-descendant and embedded-Context reach.                                                     ┃ 
-┃                          USE WHEN  Finding relevant Memories across a selected Context scope.                                                                                   ┃v
+┃ ▸ mem chunk              Preview and split one direct Memory by headers, paragraphs, or sentences.                                                                              ┃ 
+┃                          USE WHEN: Mechanically splitting a long Memory at structural boundaries.                                                                               ┃ 
+┃ ▸ mem clear              Remove all direct items from the current or explicit Context after confirmation.                                                                       ┃ 
+┃                          USE WHEN: Emptying a Context while retaining the Context itself.                                                                                       ┃ 
+┃ ▸ mem compare            Compare Memories in two Contexts and report what they share, what differs, and what appears only on one side.                                          ┃ 
+┃                          USE WHEN: Comparing two Contexts as a whole to understand where they align and differ.                                                                 ┃ 
+┃ ▸ mem config (legacy)    Read and write global configuration.                                                                                                                   ┃ 
+┃                          USE WHEN: Inspecting or changing persistent MemCommit settings.                                                                                        ┃ 
+┃ ▸ mem contexts           Browse local Contexts and readable cross-Profile Context views without switching.                                                                      ┃ 
+┃                          USE WHEN: Exploring every Context currently available to the Profile.                                                                                  ┃ 
+┃ ▸ mem delete (remove)    Select a Context or direct item to delete, or name it by locator, name, or UID.                                                                        ┃ 
+┃                          USE WHEN: Removing a specific Context or item that is no longer needed.                                                                                ┃ 
+┃ ▸ mem diff               Inspect recorded Context or Update changes without applying them.                                                                                      ┃ 
+┃                          USE WHEN: Verifying exactly what a recorded operation changed.                                                                                         ┃ 
+┃ ▸ mem distill            Derive reusable Rules from Case or Example propositions in a selected Context scope, using an optional Goal to focus relevance.                        ┃ 
+┃                          USE WHEN: Extracting reusable rules from evidence-rich source material.                                                                                ┃ 
+┃ ▸ mem edit               Replace direct Memory content by UID or prefix in the current or explicit Context.                                                                     ┃ 
+┃                          USE WHEN: Correcting or revising a known Memory in place.                                                                                              ┃ 
+┃ ▸ mem elaborate          Propose candidate Rules from a Goal, or concrete Case propositions from existing Rules.                                                                ┃ 
+┃                          USE WHEN: An abstract Goal needs starter Rule candidates, or existing Rules need additional concrete Case propositions for review.                     ┃ 
+┃ ▸ mem embed              Place a Child Context inside a target while retaining its identity and ownership.                                                                      ┃ 
+┃                          USE WHEN: Reusing a Context inside another Context without copying it.                                                                                 ┃ 
+┃ ▸ mem eval               Run and inspect staged semantic evaluation campaigns.                                                                                                  ┃ 
+┃                          USE WHEN: Measuring operation behavior against repeatable fixtures.                                                                                    ┃ 
+┃ ▸ mem find               Search selected Contexts with explicit lexical-descendant and embedded-Context reach.                                                                  ┃ 
+┃                          USE WHEN: Finding relevant Memories across a selected Context scope.                                                                                   ┃v
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
  ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab surface  H full help

@@ -20,33 +20,33 @@
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
                                                                                                                                                                                     
 ┏ CONTEXTS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
-┃ ▸ mem status     DESCRIPTION  Show current Context counts, recent Memories, and checkpoints.                                                                                    ┃ 
-┃                  USE WHEN  Quickly checking the state and recent activity of the current Context.                                                                               ┃ 
-┃ ▸ mem pwd        DESCRIPTION  Print the current canonical Context name without loading its contents.                                                                            ┃ 
-┃                  USE WHEN  Confirming the active Context in a script or terminal.                                                                                               ┃ 
-┃ ▸ mem contexts   DESCRIPTION  Browse local Contexts and readable cross-Profile Context views without switching.                                                                 ┃ 
-┃                  USE WHEN  Exploring every Context currently available to the Profile.                                                                                          ┃ 
-┃ ▸ mem list (ls)  DESCRIPTION  Browse child Contexts and direct items; ls is the equivalent compact spelling.                                                                    ┃ 
-┃                  USE WHEN  Inspecting the structure and direct contents of a Context.                                                                                           ┃ 
-┃ ▸ mem show       DESCRIPTION  Show a Memory, reference, embedded Context, or the direct contents of a current/explicit Context.                                                 ┃ 
-┃                  USE WHEN  Reading the complete content of a known item or Context.                                                                                             ┃ 
-┃ ▸ mem switch     DESCRIPTION  Enter the interactive Context picker, or switch to an explicit Context.                                                                           ┃ 
-┃                  USE WHEN  Moving the working position to another existing Context.                                                                                             ┃ 
-┃ ▸ mem checkout   DESCRIPTION  Switch Contexts using Git-style syntax; with -b, create and switch to a new Context branch.                                                       ┃ 
-┃                  USE WHEN  Using a Git-like workflow to switch or create a branch.                                                                                              ┃ 
-┃ ▸ mem init       DESCRIPTION  Create a named Context, optionally ensure its parents, and switch to it.                                                                          ┃ 
-┃                  USE WHEN  Starting a new empty Context hierarchy.                                                                                                              ┃ 
-┃ ▸ mem branch     DESCRIPTION  Copy a Context or subtree into a new branch and switch to it.                                                                                     ┃ 
-┃                  USE WHEN  Experimenting without modifying the original Context tree.                                                                                           ┃ 
-┃ ▸ mem import     DESCRIPTION  Import a clean-baseline Profile, Context tree, or Memory by value while preserving resource identity.                                             ┃ 
-┃                  USE WHEN  Bringing externally supplied material into a locally managed store.                                                                                  ┃ 
-┃ ▸ mem embed      DESCRIPTION  Place a Child Context inside a target while retaining its identity and ownership.                                                                 ┃ 
-┃                  USE WHEN  Reusing a Context inside another Context without copying it.                                                                                         ┃ 
+┃ ▸ mem status     Show current Context counts, recent Memories, and checkpoints.                                                                                                 ┃ 
+┃                  USE WHEN: Quickly checking the state and recent activity of the current Context.                                                                               ┃ 
+┃ ▸ mem pwd        Print the current canonical Context name without loading its contents.                                                                                         ┃ 
+┃                  USE WHEN: Confirming the active Context in a script or terminal.                                                                                               ┃ 
+┃ ▸ mem contexts   Browse local Contexts and readable cross-Profile Context views without switching.                                                                              ┃ 
+┃                  USE WHEN: Exploring every Context currently available to the Profile.                                                                                          ┃ 
+┃ ▸ mem list (ls)  Browse child Contexts and direct items; ls is the equivalent compact spelling.                                                                                 ┃ 
+┃                  USE WHEN: Inspecting the structure and direct contents of a Context.                                                                                           ┃ 
+┃ ▸ mem show       Show a Memory, reference, embedded Context, or the direct contents of a current/explicit Context.                                                              ┃ 
+┃                  USE WHEN: Reading the complete content of a known item or Context.                                                                                             ┃ 
+┃ ▸ mem switch     Enter the interactive Context picker, or switch to an explicit Context.                                                                                        ┃ 
+┃                  USE WHEN: Moving the working position to another existing Context.                                                                                             ┃ 
+┃ ▸ mem checkout   Switch Contexts using Git-style syntax; with -b, create and switch to a new Context branch.                                                                    ┃ 
+┃                  USE WHEN: Using a Git-like workflow to switch or create a branch.                                                                                              ┃ 
+┃ ▸ mem init       Create a named Context, optionally ensure its parents, and switch to it.                                                                                       ┃ 
+┃                  USE WHEN: Starting a new empty Context hierarchy.                                                                                                              ┃ 
+┃ ▸ mem branch     Copy a Context or subtree into a new branch and switch to it.                                                                                                  ┃ 
+┃                  USE WHEN: Experimenting without modifying the original Context tree.                                                                                           ┃ 
+┃ ▸ mem import     Import a clean-baseline Profile, Context tree, or Memory by value while preserving resource identity.                                                          ┃ 
+┃                  USE WHEN: Bringing externally supplied material into a locally managed store.                                                                                  ┃ 
+┃ ▸ mem embed      Place a Child Context inside a target while retaining its identity and ownership.                                                                              ┃ 
+┃                  USE WHEN: Reusing a Context inside another Context without copying it.                                                                                         ┃ 
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ 
                                                                                                                                                                                     
 ┌ MEMORIES ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
-│ ▸ mem add              DESCRIPTION  Add one or more Memories to the current or explicit Context.                                                                                │ 
-│                        USE WHEN  Saving new facts, instructions, or source material.                                                                                            │ 
-│ ▸ mem reference        DESCRIPTION  Add a read-only Memory pointer; the Target stores identity metadata rather than copying content.                                            │v
+│ ▸ mem add              Add one or more Memories to the current or explicit Context.                                                                                             │ 
+│                        USE WHEN: Saving new facts, instructions, or source material.                                                                                            │ 
+│ ▸ mem reference        Add a read-only Memory pointer; the Target stores identity metadata rather than copying content.                                                         │v
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
  ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help
