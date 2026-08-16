@@ -8,6 +8,12 @@ from memcommit.interfaces.tui.components.exact_command_review import (
     ExactCommandReview,
 )
 from memcommit.interfaces.tui.viewers.semantic import SemanticViewerDocument
+from memcommit.resolution import (
+    ResolutionAttempt,
+    ResolutionCase,
+    ResolutionSubmission,
+    require_resolution_ready,
+)
 
 
 @dataclass(frozen=True)
@@ -75,6 +81,7 @@ class ResolutionBulkStrategy:
 class ResolutionWorkbenchSpec:
     """Complete operation projection consumed by the shared Resolution shell."""
 
+    case: ResolutionCase
     title: str
     subtitle: str
     report: SemanticViewerDocument
@@ -86,6 +93,8 @@ class ResolutionWorkbenchSpec:
     items_title: str = "ITEMS · REQUIRED CONFLICTS ONLY"
 
     def __post_init__(self) -> None:
+        if not isinstance(self.case, ResolutionCase):
+            raise TypeError("Resolution workbench requires a frozen case.")
         if not self.title or not self.subtitle:
             raise ValueError("Resolution workbench requires visible headings.")
         if not isinstance(self.report, SemanticViewerDocument):
@@ -118,6 +127,57 @@ class ResolutionWorkbenchSpec:
         ):
             raise ValueError("Resolution bulk strategy is unavailable for one item.")
 
+        requirements = self.case.requirements
+        if tuple(item.uid for item in self.items) != tuple(
+            requirement.item_uid for requirement in requirements
+        ):
+            raise ValueError(
+                "Resolution workbench items must exactly project the frozen case."
+            )
+        for item, requirement in zip(self.items, requirements, strict=True):
+            if requirement.obligation != "REQUIRED" or requirement.comment_allowed:
+                raise ValueError(
+                    "The deterministic workbench supports choice-only required items."
+                )
+            if tuple(choice.uid for choice in item.choices) != requirement.choice_uids:
+                raise ValueError(
+                    "Resolution workbench choices must exactly project the frozen case."
+                )
+
+    def validate_outcome(self, outcome: "ResolutionOutcome") -> "ResolutionOutcome":
+        """Bind one UI outcome to this exact case and canonical frozen order."""
+
+        if not isinstance(outcome, ResolutionOutcome):
+            raise TypeError("Resolution workbench outcome is invalid.")
+        if outcome.bulk_uid is None:
+            attempt = ResolutionAttempt(
+                binding=self.case.binding,
+                submissions=tuple(
+                    ResolutionSubmission(item_uid, choice_uid=choice_uid)
+                    for item_uid, choice_uid in outcome.decisions
+                ),
+            )
+        else:
+            attempt = ResolutionAttempt(
+                binding=self.case.binding,
+                bulk_choice_uid=outcome.bulk_uid,
+            )
+        progress = require_resolution_ready(self.case, attempt)
+        canonical = tuple(
+            (submission.item_uid, submission.choice_uid)
+            for submission in progress.submissions
+            if submission.choice_uid is not None
+        )
+        if len(canonical) != len(progress.submissions):
+            raise ValueError(
+                "The deterministic workbench cannot return free responses."
+            )
+        if outcome.bulk_uid is not None and outcome.decisions != canonical:
+            raise ValueError(
+                "Resolution bulk outcome does not match its frozen expansion."
+            )
+        return ResolutionOutcome(canonical, bulk_uid=outcome.bulk_uid)
+
 
 @dataclass(frozen=True)
 class ResolutionOutcome:
@@ -127,7 +187,22 @@ class ResolutionOutcome:
     bulk_uid: str | None = None
 
     def __post_init__(self) -> None:
-        if not self.decisions or len({uid for uid, _choice in self.decisions}) != len(
-            self.decisions
+        if (
+            not isinstance(self.decisions, tuple)
+            or not self.decisions
+            or any(
+                not isinstance(decision, tuple)
+                or len(decision) != 2
+                or not isinstance(decision[0], str)
+                or not decision[0]
+                or not isinstance(decision[1], str)
+                or not decision[1]
+                for decision in self.decisions
+            )
+            or len({uid for uid, _choice in self.decisions}) != len(self.decisions)
         ):
             raise ValueError("Resolution outcome requires distinct item decisions.")
+        if self.bulk_uid is not None and (
+            not isinstance(self.bulk_uid, str) or not self.bulk_uid
+        ):
+            raise ValueError("Resolution outcome bulk choice is invalid.")

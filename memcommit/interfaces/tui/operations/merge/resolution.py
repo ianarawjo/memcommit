@@ -221,6 +221,7 @@ def merge_resolution_spec(plan: FrozenMergePlan) -> ResolutionWorkbenchSpec:
         bulk_uid=MergeDecision.TAKE_SOURCE.value,
     )
     return ResolutionWorkbenchSpec(
+        case=case,
         title="MEM MERGE · RESOLUTION SESSION",
         subtitle="DETERMINISTIC · NO PROVIDER · ALL REQUIRED BEFORE APPLY",
         report=project_merge_plan(plan),

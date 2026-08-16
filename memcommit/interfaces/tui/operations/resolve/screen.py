@@ -29,6 +29,7 @@ from memcommit.resolve_application import (
     ResolveAnalysis,
     ResolveCandidate,
     ResolveReceipt,
+    resolve_case,
 )
 
 
@@ -239,6 +240,7 @@ def _spec(analysis: ResolveAnalysis) -> ResolutionWorkbenchSpec:
         raise ValueError("Resolve workbench requires verified candidates.")
     first = analysis.candidates[0]
     return ResolutionWorkbenchSpec(
+        case=resolve_case(analysis),
         title="MEM RESOLVE · RESOLUTION SESSION",
         subtitle="SEMANTIC CANDIDATES · INDEPENDENTLY VERIFIED · EXACT APPLY",
         report=project_resolve_analysis(analysis),

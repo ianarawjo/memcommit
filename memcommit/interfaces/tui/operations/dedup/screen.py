@@ -12,6 +12,7 @@ from memcommit.dedup_application import (
     DedupReceipt,
     DedupSelection,
     FrozenDedupPlan,
+    dedup_resolution_case,
 )
 from memcommit.interfaces.console.text import safe_terminal_text
 from memcommit.interfaces.tui.components.exact_command_review import (
@@ -183,6 +184,7 @@ def dedup_exact_review(
 
 
 def dedup_resolution_spec(plan: FrozenDedupPlan) -> ResolutionWorkbenchSpec:
+    case = dedup_resolution_case(plan)
     placeholder = ResolutionOutcome(
         tuple(
             (component.uid, component.recommended_survivor_uid)
@@ -190,6 +192,7 @@ def dedup_resolution_spec(plan: FrozenDedupPlan) -> ResolutionWorkbenchSpec:
         )
     )
     return ResolutionWorkbenchSpec(
+        case=case,
         title="MEM DEDUP · RESOLUTION SESSION",
         subtitle="DETERMINISTIC · EXISTING UID SURVIVOR · EXACT WHOLE-SET APPLY",
         report=project_dedup_plan(plan),

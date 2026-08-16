@@ -4,6 +4,14 @@ from __future__ import annotations
 
 import pytest
 
+from memcommit.exact_command_review import ExactCommandReview
+from memcommit.interfaces.tui.viewers.semantic import SemanticViewerDocument
+from memcommit.interfaces.tui.workbenches.resolution import (
+    ResolutionChoice,
+    ResolutionItem,
+    ResolutionOutcome,
+    ResolutionWorkbenchSpec,
+)
 from memcommit.resolution import (
     ResolutionAttempt,
     ResolutionBinding,
@@ -189,3 +197,87 @@ def test_attempt_must_match_the_complete_frozen_binding():
         evaluate_resolution(case, stale)
 
     assert raised.value.code == "STALE_BINDING"
+
+
+def _workbench_spec(case: ResolutionCase) -> ResolutionWorkbenchSpec:
+    return ResolutionWorkbenchSpec(
+        case=case,
+        title="EXAMPLE RESOLUTION",
+        subtitle="DETERMINISTIC",
+        report=SemanticViewerDocument(()),
+        items=tuple(
+            ResolutionItem(
+                uid=requirement.item_uid,
+                label=requirement.item_uid,
+                classification="EXAMPLE",
+                detail=SemanticViewerDocument(()),
+                choices=tuple(
+                    ResolutionChoice(choice_uid, choice_uid, "Choose it.")
+                    for choice_uid in requirement.choice_uids
+                ),
+            )
+            for requirement in case.requirements
+        ),
+        exact_review=ExactCommandReview(("mem", "example"), ("Apply once.",)),
+    )
+
+
+def test_deterministic_workbench_must_exactly_project_the_frozen_case():
+    case = ResolutionCase(
+        binding=ResolutionBinding("merge", "artifact", "revision"),
+        requirements=(ResolutionRequirement("one", ("KEEP", "TAKE")),),
+    )
+    spec = _workbench_spec(case)
+
+    assert spec.case is case
+
+    with pytest.raises(ValueError, match="choices must exactly project"):
+        ResolutionWorkbenchSpec(
+            case=case,
+            title=spec.title,
+            subtitle=spec.subtitle,
+            report=spec.report,
+            items=(
+                ResolutionItem(
+                    uid="one",
+                    label="one",
+                    classification="EXAMPLE",
+                    detail=SemanticViewerDocument(()),
+                    choices=(ResolutionChoice("KEEP", "KEEP", "Choose it."),),
+                ),
+            ),
+            exact_review=spec.exact_review,
+        )
+
+
+def test_deterministic_workbench_revalidates_item_and_bulk_outcomes():
+    case = ResolutionCase(
+        binding=ResolutionBinding("merge", "artifact", "revision"),
+        requirements=(
+            ResolutionRequirement("one", ("KEEP", "TAKE")),
+            ResolutionRequirement("two", ("KEEP",)),
+        ),
+    )
+    spec = _workbench_spec(case)
+
+    canonical = spec.validate_outcome(
+        ResolutionOutcome((("two", "KEEP"), ("one", "TAKE")))
+    )
+    assert canonical.decisions == (("one", "TAKE"), ("two", "KEEP"))
+
+    with pytest.raises(ResolutionValidationError) as unavailable:
+        spec.validate_outcome(
+            ResolutionOutcome(
+                (("one", "TAKE"), ("two", "TAKE")),
+                bulk_uid="TAKE",
+            )
+        )
+    assert unavailable.value.code == "UNAVAILABLE_CHOICE"
+
+    with pytest.raises(ValueError, match="does not match its frozen expansion"):
+        spec.validate_outcome(
+            ResolutionOutcome(
+                (("one", "TAKE"), ("two", "KEEP")),
+                bulk_uid="KEEP",
+            )
+        )

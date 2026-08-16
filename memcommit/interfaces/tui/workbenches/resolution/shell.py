@@ -415,7 +415,10 @@ def run_resolution_workbench(
             if bulk_uid is not None
             else tuple((item.uid, selected[item.uid]) for item in spec.items)
         )
-        return ResolutionOutcome(values, bulk_uid=bulk_uid)
+        # Presentation never becomes mutation authority. Re-enter the same
+        # revision-bound case validator used by CLI/Python before review or
+        # Apply so a UI projection cannot widen item or choice capabilities.
+        return spec.validate_outcome(ResolutionOutcome(values, bulk_uid=bulk_uid))
 
     def apply_review(event) -> SurfaceActionResult:
         mode = review_mode["value"]

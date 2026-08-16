@@ -15,6 +15,16 @@ presentation and UID-addressed interaction.  The lifecycle contract owns only
 operation-neutral decision validity and readiness.  Neither owns semantic
 provider behavior, persistence, or Apply.
 
+The smaller deterministic Resolution Workbench now retains the exact
+`ResolutionCase` it projects. Its item and choice rows must match the case in
+the same frozen order, and every individual or bulk outcome re-enters the
+common validator before exact review and Apply. This closes the former gap in
+which application adapters validated the same identities later, but the TUI
+spec itself carried only a parallel visual vocabulary. The larger saved
+Resolution Session remains a distinct presentation model because it also
+supports optional items, comments, provider-backed turns, and process- or
+session-local drafts.
+
 ## Motivating problem
 
 Merge, Meld, future Fit repair, Dedup, and clarification can all contain an
@@ -90,6 +100,10 @@ The plain CLI parser and Merge TUI both consume the same projected requirement
 identities, then call the same typed Merge application use case.  The TUI may
 invoke that use case through an injected application callback after exact
 approval; this is interface composition, not a second mutation implementation.
+The deterministic workbench spec retains `merge_resolution_case(plan)` and
+rejects any item/choice projection that widens or reorders that case. Its final
+UI outcome is canonically revalidated against the same binding before the
+callback is invoked.
 No Merge Python or agent surface is added merely by extracting the common
 contract.  If Merge later becomes a public slice, those adapters must call the
 same application entry rather than importing CLI or TUI code.
@@ -159,6 +173,9 @@ only the exact selected UID before the Resolve runtime repeats authority,
 freshness, pre-image, reference, and checkpoint checks. The full contract is
 recorded in
 [`resolve-fit-repair-design-rationale.md`](resolve-fit-repair-design-rationale.md).
+The TUI now carries that same Resolve case rather than constructing an
+unbound candidate menu; this does not make candidate generation deterministic,
+only the already-verified candidate selection and exact Apply handoff.
 
 ## Deterministic Dedup vertical slice
 
@@ -176,6 +193,9 @@ calculation, command locking, inbound-reference blocking, Context CAS, and the
 single checkpoint. No provider or generic solver callback is involved. The
 full contract is recorded in
 [`dedup-design-rationale.md`](dedup-design-rationale.md).
+The deterministic workbench projects component and member UIDs directly from
+`dedup_resolution_case(plan)` and revalidates the complete outcome before the
+Dedup adapter translates it to survivor selections.
 
 ## Interface and persistence boundary
 
@@ -195,8 +215,10 @@ full contract is recorded in
 
 ## Intentional limitations
 
-- The two existing Resolution TUI models are not consolidated here; that is
-  the separately tracked `TUI-03` feature-parity migration.
+- The deterministic and saved-session Resolution TUI models are not collapsed
+  into one semantic model. They now share the frozen case boundary where it is
+  applicable, while optional/comment/provider-turn parity remains the
+  separately tracked `TUI-03` migration.
 - Merge remains provider-free and has no semantic rewrite candidate.
 - Dedup reference migration and clarification persistence remain future
   operation-owned work. Typed conflict and duplicate handoffs are implemented,
