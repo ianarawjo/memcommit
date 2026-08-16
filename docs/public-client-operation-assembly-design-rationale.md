@@ -63,10 +63,16 @@ is a private test/injection path, not a public API spelling. The operation
 module remains patchable without reintroducing client-owned implementation
 symbols.
 
-During migration, unmoved operations may retain the lazy-loader mechanism.
-That coexistence is explicit and temporary. The migration is complete only
-when the loader namespace and its sentinel can be removed from `client.py`.
+Meld is the final operation in the committed public facade to move. Its whole
+durable lifecycle moves together so start, restart, follow-up, preserve,
+defer, and apply cannot acquire different dependency snapshots. With that
+move, the loader namespace and its sentinels are removed from `client.py`.
 Typer command registration remains a separate console composition boundary.
+
+The move also closes one accidental taxonomy leak: reading the current
+Context for a Meld formerly reused a client helper that raised
+`QueryStorageError`. The Meld adapter now projects that failure as
+`MeldStorageError`, matching every other Meld storage failure.
 
 ## Invariants
 
@@ -86,9 +92,8 @@ Typer command registration remains a separate console composition boundary.
 
 ## Remaining rollout
 
-Add and Query are now extracted. Meld remains the only operation in the
-currently committed public facade whose durable multi-turn lifecycle is still
-assembled by `client.py`; extract that lifecycle next, then remove the loader
-namespace and sentinels. Fit, Elaborate, standalone Distill, and their Ground
-adapters must enter through the same boundary when those public methods are
-published. Audit the CLI registry independently afterward.
+Add, Query, and the complete Meld lifecycle are now extracted; the committed
+public facade contains delegation and shared runtime construction only. Fit,
+Elaborate, standalone Distill, and their Ground adapters must enter through
+the same boundary when those public methods are published. Audit the CLI
+registry independently afterward.

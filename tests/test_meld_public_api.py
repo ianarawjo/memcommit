@@ -6,10 +6,11 @@ from types import SimpleNamespace
 
 import pytest
 
-import memcommit.api.client as client_module
+import memcommit.api._operations.meld as meld_operation
 from memcommit.api import (
     MeldContextError,
     MeldSessionResult,
+    MeldStorageError,
     MemCommitClient,
 )
 
@@ -65,7 +66,7 @@ def test_start_meld_projects_runtime_session_without_terminal_state(
         calls.append((request, kwargs))
         return SimpleNamespace(session=session, origin="PROVIDER")
 
-    monkeypatch.setattr(client_module, "execute_meld_start", execute)
+    monkeypatch.setattr(meld_operation, "execute_meld_start", execute)
     client = MemCommitClient(
         root=tmp_path / "store",
         create=True,
@@ -91,7 +92,7 @@ def test_restart_meld_forwards_the_reviewed_version(monkeypatch, tmp_path):
         calls.append((request, kwargs))
         return SimpleNamespace(session=session, origin="EXACT_PREWARM")
 
-    monkeypatch.setattr(client_module, "execute_meld_restart", execute)
+    monkeypatch.setattr(meld_operation, "execute_meld_restart", execute)
     client = MemCommitClient(
         root=tmp_path / "store",
         create=True,
@@ -115,3 +116,58 @@ def test_open_meld_maps_missing_target_to_public_context_error(tmp_path):
 
     with pytest.raises(MeldContextError):
         client.open_meld("missing")
+
+
+def test_remaining_meld_lifecycle_methods_delegate_to_the_operation_owner(
+    tmp_path,
+    monkeypatch,
+):
+    client = MemCommitClient(root=tmp_path / "store", create=True)
+    calls = []
+
+    def capture(name):
+        def invoke(*args, **kwargs):
+            calls.append((name, args, kwargs))
+            return name
+
+        return invoke
+
+    for name in ("comment_meld", "preserve_meld", "defer_meld", "apply_meld"):
+        monkeypatch.setattr(meld_operation, name, capture(name))
+
+    assert client.comment_meld(
+        "result",
+        "Keep both.",
+        issue_uid="issue-1",
+        revision="replace",
+        revises_turn_uids=("turn-1",),
+    ) == "comment_meld"
+    assert client.preserve_meld("result") == "preserve_meld"
+    assert client.defer_meld("result") == "defer_meld"
+    assert client.apply_meld("result") == "apply_meld"
+
+    assert calls[0][1][0] is client._runtime
+    assert calls[0][1][1:] == ("result", "Keep both.")
+    assert calls[0][2] == {
+        "issue_uid": "issue-1",
+        "revision": "replace",
+        "revises_turn_uids": ("turn-1",),
+    }
+    assert [call[0] for call in calls] == [
+        "comment_meld",
+        "preserve_meld",
+        "defer_meld",
+        "apply_meld",
+    ]
+
+
+def test_meld_current_context_failure_uses_the_meld_error_taxonomy():
+    class BrokenStore:
+        state_file = SimpleNamespace(exists=lambda: True)
+
+        @staticmethod
+        def current_context_name():
+            raise ValueError("broken state pointer")
+
+    with pytest.raises(MeldStorageError):
+        meld_operation._current_context_name(SimpleNamespace(store=BrokenStore()))

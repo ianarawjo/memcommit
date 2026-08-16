@@ -45,6 +45,7 @@ import sys
 from memcommit.api import MemCommitClient
 blocked = (
     'memcommit.api._operations.add',
+    'memcommit.api._operations.meld',
     'memcommit.api._operations.query',
     'memcommit.add_application',
     'memcommit.meld_application',
@@ -52,6 +53,24 @@ blocked = (
 )
 assert MemCommitClient.__name__ == 'MemCommitClient'
 assert not [name for name in blocked if name in sys.modules]
+"""
+    )
+
+    assert completed.returncode == 0, completed.stderr
+
+
+def test_private_operation_adapters_do_not_import_the_client_facade():
+    completed = _run_fresh(
+        """
+import importlib
+import sys
+for name in (
+    'memcommit.api._operations.add',
+    'memcommit.api._operations.meld',
+    'memcommit.api._operations.query',
+):
+    importlib.import_module(name)
+assert 'memcommit.api.client' not in sys.modules
 """
     )
 
@@ -109,6 +128,7 @@ else:
 assert 'memcommit.api._operations.add' in sys.modules
 assert 'memcommit.add_application' in sys.modules
 assert 'memcommit.api._operations.query' not in sys.modules
+assert 'memcommit.api._operations.meld' not in sys.modules
 assert 'memcommit.meld_application' not in sys.modules
 assert 'memcommit.operations.query.ordinary_application' not in sys.modules
 assert 'memcommit.ground_distill' not in sys.modules
@@ -143,7 +163,41 @@ assert 'memcommit.api._operations.query' in sys.modules
 assert 'memcommit.operations.query.ordinary_application' in sys.modules
 assert 'memcommit.api._operations.add' not in sys.modules
 assert 'memcommit.add_application' not in sys.modules
+assert 'memcommit.api._operations.meld' not in sys.modules
 assert 'memcommit.meld_application' not in sys.modules
+""",
+        environment=environment,
+    )
+
+    assert completed.returncode == 0, completed.stderr
+
+
+def test_selected_meld_loads_only_its_operation_assembly(tmp_path):
+    environment = os.environ.copy()
+    environment["MEMCOMMIT_IMPORT_TEST_ROOT"] = str(tmp_path / "store")
+    completed = _run_fresh(
+        """
+import os
+from pathlib import Path
+import sys
+from memcommit.api import MeldContextError, MemCommitClient
+
+client = MemCommitClient(
+    root=Path(os.environ['MEMCOMMIT_IMPORT_TEST_ROOT']),
+    create=True,
+)
+try:
+    client.open_meld('missing')
+except MeldContextError:
+    pass
+else:
+    raise AssertionError('missing Meld target unexpectedly opened')
+assert 'memcommit.api._operations.meld' in sys.modules
+assert 'memcommit.meld_application' in sys.modules
+assert 'memcommit.api._operations.add' not in sys.modules
+assert 'memcommit.add_application' not in sys.modules
+assert 'memcommit.api._operations.query' not in sys.modules
+assert 'memcommit.operations.query.ordinary_application' not in sys.modules
 """,
         environment=environment,
     )

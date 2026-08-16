@@ -7,28 +7,17 @@ from functools import partial
 from pathlib import Path
 
 from memcommit.api._runtime import ClientRuntime
+from memcommit.api._support.errors import raise_public
 from memcommit.api._support.providers import (
     connect_ordinary_provider,
     connect_route_provider,
 )
-
 from memcommit.api.add import AddMemoriesResult
 from memcommit.api.errors import (
-    MeldAuthorityError,
-    MeldConflictError,
-    MeldContextError,
-    MeldExecutionError,
-    MeldInputError,
-    MeldProviderFailure,
-    MeldStorageError,
     QueryConfigurationError,
-    QueryStorageError,
 )
 from memcommit.api.meld import (
     MeldApplyResult as PublicMeldApplyResult,
-    MeldIssueResult,
-    MeldOptionResult,
-    MeldProposalResult,
     MeldSessionResult,
 )
 from memcommit.api.query import (
@@ -45,68 +34,12 @@ from memcommit.profile_config import (
     load_profile_registry,
     profile_store_dir,
 )
-from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore
 
 
 ProviderFactory = Callable[[], object]
 RouteProviderFactory = Callable[[str], object]
 StageObserver = Callable[[str], None]
-
-
-_UNLOADED_INTEGRATION = object()
-
-# These names remain patchable without eagerly importing their implementations.
-# The loaders replace only this sentinel, so an injected test or host adapter wins.
-execute_meld_start = _UNLOADED_INTEGRATION
-execute_meld_restart = _UNLOADED_INTEGRATION
-
-
-def _publish_integration(namespace: dict[str, object]) -> None:
-    for name, value in namespace.items():
-        if name.startswith("_"):
-            continue
-        if globals().get(name, _UNLOADED_INTEGRATION) is _UNLOADED_INTEGRATION:
-            globals()[name] = value
-
-
-def _load_meld_integration() -> None:
-    """Load Meld's durable review assembly only when a Meld method is used."""
-
-    from memcommit.authority.access import resolve_context_access
-    from memcommit.context_locator import resolve_context_locator
-    from memcommit.meld import (
-        MELD_SCHEMA_VERSION,
-        MeldError as CoreMeldError,
-        meld_canonical_digest,
-    )
-    from memcommit.meld_application import MeldApplyRequest
-    from memcommit.meld_provider import MeldProviderError
-    from memcommit.meld_restart_application import MeldRestartError, MeldRestartRequest
-    from memcommit.meld_runtime import (
-        execute_meld_apply,
-        execute_meld_assessment,
-        execute_meld_preservation,
-        execute_meld_restart,
-        execute_meld_session_defer,
-        execute_meld_session_open,
-        execute_meld_start,
-        load_meld_source,
-        prepare_meld_assessment,
-    )
-    from memcommit.meld_session_application import (
-        MeldTurnRequest,
-        prepare_meld_preservation_turn,
-        prepare_meld_turn,
-    )
-    from memcommit.meld_start_application import MeldStartError, MeldStartRequest
-    from memcommit.store import ConcurrentContextUpdateError
-
-    _publish_integration(locals())
-
-
-def _raise(error_type: type[Exception], error: BaseException) -> None:
-    raise error_type(str(error)) from error
 
 
 class MemCommitClient:
@@ -136,7 +69,7 @@ class MemCommitClient:
         try:
             config = query_config or QueryProviderConfig()
         except (TypeError, ValueError) as error:
-            _raise(QueryConfigurationError, error)
+            raise_public(QueryConfigurationError, error)
         if not isinstance(config, QueryProviderConfig):
             raise QueryConfigurationError("query_config must be a QueryProviderConfig.")
 
@@ -161,7 +94,7 @@ class MemCommitClient:
         except QueryConfigurationError:
             raise
         except (OSError, ProfileConfigError, TypeError, ValueError) as error:
-            _raise(QueryConfigurationError, error)
+            raise_public(QueryConfigurationError, error)
 
         self._store = MemoryStore(root=store_root, create=create)
         self._store_root = self._store.store_dir.resolve()
@@ -202,87 +135,6 @@ class MemCommitClient:
     def query_config(self) -> QueryProviderConfig:
         return self._query_config
 
-    def _safe_semantic_provider(self) -> object:
-        try:
-            return self._semantic_provider_factory()
-        except MeldProviderFailure:
-            raise
-        except Exception as error:
-            _raise(MeldProviderFailure, error)
-
-    @staticmethod
-    def _project_meld(session, *, origin: str | None = None) -> MeldSessionResult:
-        _load_meld_integration()
-        assessment = session.current_assessment
-        application = session.application
-        return MeldSessionResult(
-            session_uid=session.uid,
-            version=meld_canonical_digest(session.to_dict()),
-            mode=session.mode,
-            state=session.state,
-            left_context=session.frames[0].context_name,
-            right_context=session.frames[1].context_name,
-            target_context=session.target.context_name,
-            turn_count=len(session.turns),
-            overview=assessment.overview if assessment is not None else None,
-            ready_to_apply=(
-                assessment.ready_to_apply if assessment is not None else False
-            ),
-            issues=(
-                tuple(
-                    MeldIssueResult(
-                        uid=issue.uid,
-                        priority=issue.priority,
-                        title=issue.title,
-                        question=issue.question,
-                        why_it_matters=issue.why_it_matters,
-                        options=tuple(
-                            MeldOptionResult(
-                                uid=option.uid,
-                                label=option.label,
-                                text=option.text,
-                            )
-                            for option in issue.options
-                        ),
-                    )
-                    for issue in assessment.issues
-                )
-                if assessment is not None
-                else ()
-            ),
-            proposals=(
-                tuple(
-                    MeldProposalResult(
-                        uid=proposal.uid,
-                        operation=proposal.operation,
-                        disposition=proposal.disposition,
-                        content=proposal.content,
-                        reason=proposal.reason,
-                    )
-                    for proposal in assessment.proposals
-                )
-                if assessment is not None
-                else ()
-            ),
-            origin=origin,
-            checkpoint_uid=(
-                application.checkpoint_uid if application is not None else None
-            ),
-        )
-
-    def _meld_snapshot(self, target_name: str):
-        _load_meld_integration()
-        current_name = self._current_context_name()
-        canonical = resolve_context_locator(target_name, current=current_name)
-        access = resolve_context_access(
-            self._store,
-            canonical,
-            current_name=current_name,
-            required_permission="READ",
-        )
-        target = load_meld_source(access, project=False)
-        return execute_meld_session_open(target.uid, store=self._store)
-
     def start_meld(
         self,
         left_context: str,
@@ -296,70 +148,18 @@ class MemCommitClient:
     ) -> MeldSessionResult:
         """Create one durable reviewed Meld without opening a terminal UI."""
 
-        _load_meld_integration()
-        try:
-            if mode not in {"directional", "symmetric"}:
-                raise ValueError("mode must be directional or symmetric.")
-            if any(
-                not isinstance(value, str) or not value.strip()
-                for value in (left_context, right_context)
-            ):
-                raise ValueError("Meld source names must be nonblank text.")
-            if not isinstance(create_target, bool) or not isinstance(
-                left_descendants,
-                bool,
-            ) or not isinstance(right_descendants, bool):
-                raise TypeError("Meld scope and creation controls must be booleans.")
-            current_name = self._current_context_name()
-            left = resolve_context_locator(left_context, current=current_name)
-            right = resolve_context_locator(right_context, current=current_name)
-            if mode == "directional":
-                if target_context is not None and target_context != right:
-                    raise ValueError("Directional target must be the BASELINE.")
-                target = right
-            else:
-                if target_context is None:
-                    raise ValueError("Symmetric Meld requires target_context.")
-                target = (
-                    target_context
-                    if create_target
-                    else resolve_context_locator(
-                        target_context,
-                        current=current_name,
-                    )
-                )
-            request = MeldStartRequest(
-                mode=mode.upper(),  # type: ignore[arg-type]
-                left_name=left,
-                right_name=right,
-                target_name=target,
-                left_descendants=left_descendants,
-                right_descendants=right_descendants,
-                create_target=create_target,
-            )
-        except (TypeError, ValueError, CoreMeldError, MeldStartError) as error:
-            _raise(MeldInputError, error)
-        try:
-            result = execute_meld_start(
-                request,
-                store=self._store,
-                provider_factory=self._safe_semantic_provider,
-            )
-        except MeldProviderFailure:
-            raise
-        except MeldProviderError as error:
-            _raise(MeldProviderFailure, error)
-        except FileNotFoundError as error:
-            _raise(MeldContextError, error)
-        except ProfileError as error:
-            _raise(MeldAuthorityError, error)
-        except ConcurrentContextUpdateError as error:
-            _raise(MeldConflictError, error)
-        except OSError as error:
-            _raise(MeldStorageError, error)
-        except (CoreMeldError, MeldStartError, RuntimeError, TypeError, ValueError) as error:
-            _raise(MeldExecutionError, error)
-        return self._project_meld(result.session, origin=result.origin)
+        from memcommit.api._operations.meld import start_meld
+
+        return start_meld(
+            self._runtime,
+            left_context,
+            right_context,
+            mode=mode,
+            target_context=target_context,
+            create_target=create_target,
+            left_descendants=left_descendants,
+            right_descendants=right_descendants,
+        )
 
     def restart_meld(
         self,
@@ -374,86 +174,25 @@ class MemCommitClient:
     ) -> MeldSessionResult:
         """Replace one exact saved Meld review without deleting its target."""
 
-        _load_meld_integration()
-        try:
-            if mode not in {"directional", "symmetric"}:
-                raise ValueError("mode must be directional or symmetric.")
-            if any(
-                not isinstance(value, str) or not value.strip()
-                for value in (
-                    left_context,
-                    right_context,
-                    target_context,
-                    expected_version,
-                )
-            ):
-                raise ValueError(
-                    "Meld restart names and expected_version must be nonblank text."
-                )
-            if not isinstance(left_descendants, bool) or not isinstance(
-                right_descendants,
-                bool,
-            ):
-                raise TypeError("Meld scope controls must be booleans.")
-            current_name = self._current_context_name()
-            left = resolve_context_locator(left_context, current=current_name)
-            right = resolve_context_locator(right_context, current=current_name)
-            target = resolve_context_locator(target_context, current=current_name)
-            if mode == "directional" and target != right:
-                raise ValueError("Directional target must be the BASELINE.")
-            request = MeldRestartRequest(
-                mode=mode.upper(),  # type: ignore[arg-type]
-                left_name=left,
-                right_name=right,
-                target_name=target,
-                expected_version=expected_version,
-                left_descendants=left_descendants,
-                right_descendants=right_descendants,
-            )
-        except (TypeError, ValueError, CoreMeldError, MeldRestartError) as error:
-            _raise(MeldInputError, error)
-        try:
-            result = execute_meld_restart(
-                request,
-                store=self._store,
-                provider_factory=self._safe_semantic_provider,
-            )
-        except MeldProviderFailure:
-            raise
-        except MeldProviderError as error:
-            _raise(MeldProviderFailure, error)
-        except FileNotFoundError as error:
-            _raise(MeldContextError, error)
-        except ProfileError as error:
-            _raise(MeldAuthorityError, error)
-        except ConcurrentContextUpdateError as error:
-            _raise(MeldConflictError, error)
-        except OSError as error:
-            _raise(MeldStorageError, error)
-        except (
-            CoreMeldError,
-            MeldRestartError,
-            RuntimeError,
-            TypeError,
-            ValueError,
-        ) as error:
-            _raise(MeldExecutionError, error)
-        return self._project_meld(result.session, origin=result.origin)
+        from memcommit.api._operations.meld import restart_meld
+
+        return restart_meld(
+            self._runtime,
+            left_context,
+            right_context,
+            target_context,
+            expected_version=expected_version,
+            mode=mode,
+            left_descendants=left_descendants,
+            right_descendants=right_descendants,
+        )
 
     def open_meld(self, target_context: str) -> MeldSessionResult:
         """Open one exact saved review without provider or mutation."""
 
-        try:
-            snapshot = self._meld_snapshot(target_context)
-        except FileNotFoundError as error:
-            _raise(MeldContextError, error)
-        except ProfileError as error:
-            _raise(MeldAuthorityError, error)
-        except OSError as error:
-            _raise(MeldStorageError, error)
-        except (CoreMeldError, RuntimeError, TypeError, ValueError) as error:
-            _raise(MeldExecutionError, error)
-        return self._project_meld(snapshot.session)
+        from memcommit.api._operations.meld import open_meld
+
+        return open_meld(self._runtime, target_context)
 
     def comment_meld(
         self,
@@ -466,140 +205,37 @@ class MemCommitClient:
     ) -> MeldSessionResult:
         """Submit one complete semantic follow-up against a saved version."""
 
-        try:
-            if not isinstance(comment, str) or not comment.strip():
-                raise ValueError("comment must be nonblank text.")
-            snapshot = self._meld_snapshot(target_context)
-            pending = prepare_meld_turn(
-                MeldTurnRequest(
-                    snapshot=snapshot,
-                    comment=comment,
-                    scope="ISSUE" if issue_uid is not None else "ALL",
-                    issue_uids=(issue_uid,) if issue_uid is not None else (),
-                    revision=revision.upper(),  # type: ignore[arg-type]
-                    revises_turn_uids=tuple(revises_turn_uids),
-                )
-            )
-            frozen, port = prepare_meld_assessment(
-                pending.session,
-                store=self._store,
-                expected_session_digest=pending.expected_version,
-            )
-            result = execute_meld_assessment(
-                frozen,
-                port=port,
-                provider_factory=self._safe_semantic_provider,
-            )
-        except MeldProviderFailure:
-            raise
-        except MeldProviderError as error:
-            _raise(MeldProviderFailure, error)
-        except FileNotFoundError as error:
-            _raise(MeldContextError, error)
-        except ProfileError as error:
-            _raise(MeldAuthorityError, error)
-        except ConcurrentContextUpdateError as error:
-            _raise(MeldConflictError, error)
-        except OSError as error:
-            _raise(MeldStorageError, error)
-        except (CoreMeldError, RuntimeError, TypeError, ValueError) as error:
-            _raise(MeldExecutionError, error)
-        return self._project_meld(result.session, origin=result.origin)
+        from memcommit.api._operations.meld import comment_meld
+
+        return comment_meld(
+            self._runtime,
+            target_context,
+            comment,
+            issue_uid=issue_uid,
+            revision=revision,
+            revises_turn_uids=revises_turn_uids,
+        )
 
     def preserve_meld(self, target_context: str) -> MeldSessionResult:
         """Preserve every remaining distinction under the saved-session CAS."""
 
-        try:
-            snapshot = self._meld_snapshot(target_context)
-            pending = prepare_meld_preservation_turn(
-                snapshot,
-                guidance=(
-                    "Preserve every remaining supported source distinction "
-                    "without inventing unsupported content."
-                ),
-            )
-            session = pending.session
-            if session.mode == "SYMMETRIC" and session.schema_version >= MELD_SCHEMA_VERSION:
-                saved = execute_meld_preservation(pending, store=self._store)
-                return self._project_meld(saved.session, origin="LOCAL")
-            frozen, port = prepare_meld_assessment(
-                session,
-                store=self._store,
-                expected_session_digest=pending.expected_version,
-            )
-            result = execute_meld_assessment(
-                frozen,
-                port=port,
-                provider_factory=self._safe_semantic_provider,
-            )
-        except MeldProviderFailure:
-            raise
-        except MeldProviderError as error:
-            _raise(MeldProviderFailure, error)
-        except FileNotFoundError as error:
-            _raise(MeldContextError, error)
-        except ProfileError as error:
-            _raise(MeldAuthorityError, error)
-        except ConcurrentContextUpdateError as error:
-            _raise(MeldConflictError, error)
-        except OSError as error:
-            _raise(MeldStorageError, error)
-        except (CoreMeldError, RuntimeError, TypeError, ValueError) as error:
-            _raise(MeldExecutionError, error)
-        return self._project_meld(result.session, origin=result.origin)
+        from memcommit.api._operations.meld import preserve_meld
+
+        return preserve_meld(self._runtime, target_context)
 
     def defer_meld(self, target_context: str) -> MeldSessionResult:
         """Close one saved review without changing its target."""
 
-        try:
-            snapshot = self._meld_snapshot(target_context)
-            saved = execute_meld_session_defer(snapshot, store=self._store)
-        except FileNotFoundError as error:
-            _raise(MeldContextError, error)
-        except ConcurrentContextUpdateError as error:
-            _raise(MeldConflictError, error)
-        except OSError as error:
-            _raise(MeldStorageError, error)
-        except (CoreMeldError, RuntimeError, TypeError, ValueError) as error:
-            _raise(MeldExecutionError, error)
-        return self._project_meld(saved.session, origin="LOCAL")
+        from memcommit.api._operations.meld import defer_meld
+
+        return defer_meld(self._runtime, target_context)
 
     def apply_meld(self, target_context: str) -> PublicMeldApplyResult:
         """Apply exactly one ready saved proposal without another provider turn."""
 
-        try:
-            snapshot = self._meld_snapshot(target_context)
-            applied = execute_meld_apply(
-                MeldApplyRequest(
-                    session=snapshot.session,
-                    expected_session_digest=snapshot.version_token,
-                ),
-                store=self._store,
-            )
-        except FileNotFoundError as error:
-            _raise(MeldContextError, error)
-        except ProfileError as error:
-            _raise(MeldAuthorityError, error)
-        except ConcurrentContextUpdateError as error:
-            _raise(MeldConflictError, error)
-        except OSError as error:
-            _raise(MeldStorageError, error)
-        except (CoreMeldError, RuntimeError, TypeError, ValueError) as error:
-            _raise(MeldExecutionError, error)
-        return PublicMeldApplyResult(
-            session=self._project_meld(applied.session, origin="LOCAL"),
-            recovered=applied.receipt.recovered,
-            checkpoint_uid=applied.receipt.checkpoint_uid,
-            result_count=applied.receipt.result_count,
-        )
+        from memcommit.api._operations.meld import apply_meld
 
-    def _current_context_name(self) -> str | None:
-        if not self._store.state_file.exists():
-            return None
-        try:
-            return self._store.current_context_name()
-        except (OSError, ValueError) as error:
-            _raise(QueryStorageError, error)
+        return apply_meld(self._runtime, target_context)
 
     def add_memories(
         self,
