@@ -6,7 +6,7 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.commands.ground as ground_command
-import memcommit.commands.ground_session_picker as ground_picker_module
+import memcommit.commands.operation_launcher_location as launcher_location_module
 import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.commands.ground_session_picker import (
@@ -14,6 +14,10 @@ from memcommit.commands.ground_session_picker import (
     list_ground_session_catalog,
     list_ground_session_entries,
     reload_selected_ground_session,
+)
+from memcommit.commands.ground_workspace_picker import (
+    list_ground_workspace_catalog,
+    reload_selected_ground_workspace,
 )
 from memcommit.interfaces.tui.components.operation_launcher.session import SessionOpenReceipt
 from memcommit.ground import (
@@ -103,76 +107,44 @@ def test_bound_ground_groups_by_raw_context_and_retains_all_contexts_in_detail(
     )
 
 
-def test_ticker_ground_is_created_bound_and_reopened_from_its_context_group(
+def test_physical_ticker_ground_is_listed_and_reopened_without_switching(
     isolated_store,
     monkeypatch,
 ):
-    raw_name = "test/ground/ticker-rule-examples"
-    derived_name = "test/ground/ticker-rule-candidates"
-    target_name = "test/ground/ticker-rule-output"
     goal = (
         "Find reusable rules for generating consistent company tickers "
         "from company names and share-class details."
     )
-
-    created_raw = runner.invoke(app, ["init", raw_name, "--parents"])
-    first_example = runner.invoke(app, ["add", "Apple Inc. → AAPL"])
-    second_example = runner.invoke(
-        app,
-        ["add", "Berkshire Hathaway Class B → BRK.B"],
-    )
-    created_derived = runner.invoke(
-        app,
-        ["init", derived_name, "--parents"],
-    )
-    candidate = runner.invoke(app, ["add", "North Star Energy Inc. → NSE"])
-    created_target = runner.invoke(
-        app,
-        ["init", target_name, "--parents"],
-    )
-    for result in (
-        created_raw,
-        first_example,
-        second_example,
-        created_derived,
-        candidate,
-        created_target,
-    ):
-        assert result.exit_code == 0, result.output
-
     created_ground = runner.invoke(
         app,
-        ["ground", "ticker-rules", "--goal", goal],
+        ["ground", "ticker-rules", "--goal", goal, "--snapshot"],
     )
     assert created_ground.exit_code == 0, created_ground.output
-
-    bound_ground = runner.invoke(
+    rule = runner.invoke(
         app,
         [
             "ground",
             "ticker-rules",
-            "--description",
-            (
-                "Infer and test reusable ticker-generation rules from "
-                "explicit examples."
-            ),
-            "--raw-context",
-            raw_name,
-            "--derived-context",
-            derived_name,
-            "--publication-target",
-            target_name,
+            "--add-rule",
+            "Use actual US-listed companies and their real ticker symbols.",
         ],
     )
-    assert bound_ground.exit_code == 0, bound_ground.output
+    example = runner.invoke(
+        app,
+        ["ground", "ticker-rules", "--add-example", "Apple Inc. → AAPL"],
+    )
+    assert rule.exit_code == 0, rule.output
+    assert example.exit_code == 0, example.output
 
     store = MemoryStore(create=False)
-    saved = store.load_ground_session("ticker-rules")
-    assert saved is not None
-    entry = list_ground_session_entries(store)[0]
+    catalog = list_ground_workspace_catalog(store)
+    [selected] = catalog
+    saved = reload_selected_ground_workspace(store, selected)
+    entry = selected.picker_entry
+    assert entry.kind == "ground-workspace"
     assert entry.title == "ticker-rules"
-    assert entry.group == raw_name
-    assert f"Contexts: {raw_name}, {derived_name}, {target_name}" in entry.detail
+    assert entry.group == "Ground workspaces"
+    assert "Physical Contexts: 6" in entry.detail
 
     before = {
         path.relative_to(isolated_store).as_posix(): path.read_bytes()
@@ -185,21 +157,23 @@ def test_ticker_ground_is_created_bound_and_reopened_from_its_context_group(
         ground_command,
         "choose_session",
         lambda *_args, **_kwargs: SessionOpenReceipt(
-            kind="ground",
+            kind="ground-workspace",
             key="ticker-rules",
             argv=("mem", "ground", "ticker-rules"),
         ),
     )
     monkeypatch.setattr(
         ground_command,
-        "_run_existing_ground_shell",
-        lambda session: opened.append(session),
+        "run_ground_workspace_tui",
+        lambda workspace, **_kwargs: opened.append(workspace),
     )
 
     reopened = runner.invoke(app, ["ground"])
 
     assert reopened.exit_code == 0, reopened.output
-    assert opened == [saved]
+    assert [(workspace.uid, workspace.name) for workspace in opened] == [
+        (saved.uid, saved.name)
+    ]
     assert {
         path.relative_to(isolated_store).as_posix(): path.read_bytes()
         for path in isolated_store.rglob("*")
@@ -237,10 +211,10 @@ def test_ground_picker_location_matches_frozen_store_not_live_active_profile(
             ),
         ),
     )
-    monkeypatch.setattr(ground_picker_module.store_module, "STORE_DIR", authoring_root)
-    monkeypatch.setattr(ground_picker_module, "load_profile_registry", lambda: registry)
+    monkeypatch.setattr(launcher_location_module.store_module, "STORE_DIR", authoring_root)
+    monkeypatch.setattr(launcher_location_module, "load_profile_registry", lambda: registry)
     monkeypatch.setattr(
-        ground_picker_module,
+        launcher_location_module,
         "profile_store_dir",
         lambda profile: authoring_root if profile.name == "authoring" else task_root,
     )
@@ -266,9 +240,9 @@ def test_ground_picker_location_marks_an_isolated_store_unregistered(
             ),
         ),
     )
-    monkeypatch.setattr(ground_picker_module, "load_profile_registry", lambda: registry)
+    monkeypatch.setattr(launcher_location_module, "load_profile_registry", lambda: registry)
     monkeypatch.setattr(
-        ground_picker_module,
+        launcher_location_module,
         "profile_store_dir",
         lambda _profile: isolated_store.parent / "other",
     )

@@ -1,0 +1,33 @@
+GROUND TUI CLOSED · GLOBAL CURRENT STILL capture/orientation                                                                                                                        
+CAPTURE 07 · READ-ONLY CLOSE RECEIPT · PRESS X                                                                                                                                      
+x                                                                                                                                                                                   
+$ mem ground capture/ticker --add-relation 'The Goal is evaluated against every active Rule and Example.'                                                                           
+Added relation Memory [ce4080e1] · revision 3.                                                                                                                                      
+CAPTURE 08 · LOCAL COMMAND RECEIPT · PRESS X                                                                                                                                        
+x                                                                                                                                                                                   
+$ mem ground capture/ticker --undo                                                                                                                                                  
+Undid Ground action 'add-memory' [30c880ed] · revision 4.                                                                                                                           
+$ mem ground capture/ticker --snapshot                                                                                                                                              
+GROUND WORKSPACE · capture/ticker                                                                                                                                                   
+STATUS · OPEN · REVISION 4                                                                                                                                                          
+                                                                                                                                                                                    
+CONTEXTS                                                                                                                                                                            
+  capture/ticker · 1 direct item · ROOT                                                                                                                                             
+  capture/ticker/goals · 1 direct item                                                                                                                                              
+  capture/ticker/rules · 1 direct item                                                                                                                                              
+  capture/ticker/examples · 1 direct item                                                                                                                                           
+  capture/ticker/contexts · 0 direct items                                                                                                                                          
+  capture/ticker/relations · 0 direct items                                                                                                                                         
+                                                                                                                                                                                    
+CONTENTS                                                                                                                                                                            
+  /goals                                                                                                                                                                            
+    [f34dc0f9] MEMORY · Learn how real US ticker symbols are assigned.                                                                                                              
+  /rules                                                                                                                                                                            
+    [171a5d8a] MEMORY · Use observed exchange symbols rather than inventing abbreviations.                                                                                          
+  /examples                                                                                                                                                                         
+    [1a3ab89a] MEMORY · Apple Inc. is listed under AAPL.                                                                                                                            
+                                                                                                                                                                                    
+Ground workspace Contexts and Memories are physical Store records.                                                                                                                  
+Global current Context: unchanged.                                                                                                                                                  
+UNDO VERIFIED · RELATIONS DIRECT ITEMS 0 · GLOBAL CURRENT capture/orientation · LEGACY JSON False                                                                                   
+CAPTURE 09 · LOCAL UNDO AND SNAPSHOT · PRESS X

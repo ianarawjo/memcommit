@@ -635,7 +635,7 @@ def test_cli_creates_resumes_and_snapshots_without_touching_context(
     assert store.list_checkpoints(ctx.name) == checkpoints_before
 
 
-def test_cli_ground_does_not_create_context_state_in_a_fresh_store(
+def test_cli_ground_creates_a_physical_workspace_without_global_current_state(
     isolated_store,
 ):
     assert not isolated_store.exists()
@@ -646,13 +646,17 @@ def test_cli_ground_does_not_create_context_state_in_a_fresh_store(
     )
 
     assert result.exit_code == 0, result.output
-    assert (
-        isolated_store
-        / "ground-sessions"
-        / "standalone-contract.json"
-    ).is_file()
-    assert not (isolated_store / "state.json").exists()
-    assert not (isolated_store / "contexts").exists()
+    assert not (isolated_store / "ground-sessions").exists()
+    assert MemoryStore(create=False).current_context_name() is None
+    assert (isolated_store / "contexts").is_dir()
+    assert set(MemoryStore(create=False).list_context_names()) == {
+        "standalone-contract",
+        "standalone-contract/goals",
+        "standalone-contract/rules",
+        "standalone-contract/examples",
+        "standalone-contract/contexts",
+        "standalone-contract/relations",
+    }
 
 
 def test_cli_ground_without_name_opens_unsaved_blank_frame(
@@ -961,7 +965,11 @@ def test_cli_ground_without_name_uses_tui_and_applies_one_frozen_command(
         fake_shell,
     )
     def run_in_process(argv):
-        invoked = runner.invoke(app, list(argv[1:]))
+        # The real subprocess has captured (non-TTY) stdout, so it prints a
+        # snapshot instead of opening a nested workspace TUI. Typer's in-
+        # process runner inherits the mocked interactive predicate; emulate
+        # the real presentation boundary without changing the approved argv.
+        invoked = runner.invoke(app, [*argv[1:], "--snapshot"])
         return subprocess.CompletedProcess(
             argv,
             invoked.exit_code,
@@ -976,11 +984,8 @@ def test_cli_ground_without_name_uses_tui_and_applies_one_frozen_command(
     )
     monkeypatch.setattr(
         ground_command,
-        "_run_existing_ground_shell",
-        lambda session, *, initial_receipt="", context_hints=(),
-        new_context_hint=None: continued.append(
-            (session, initial_receipt, context_hints, new_context_hint)
-        ),
+        "run_ground_workspace_tui",
+        lambda workspace, **_kwargs: continued.append(workspace),
     )
 
     result = runner.invoke(app, ["ground"])
@@ -988,21 +993,18 @@ def test_cli_ground_without_name_uses_tui_and_applies_one_frozen_command(
     assert result.exit_code == 0, result.output
     assert len(shell_calls) == 1
     assert len(continued) == 1
-    assert continued[0][0].contract_name == "task-1-report-coverage"
-    assert "created" in continued[0][1]
-    assert continued[0][2] == ("temp/task-1", "campus-wiki")
-    assert continued[0][3] == "test/ground/ticker-rule-examples"
-    session = MemoryStore(create=False).load_ground_session(
+    assert continued[0].name == "task-1-report-coverage"
+    [goal] = tuple(continued[0].goals.iter_items())
+    assert goal.content == "Determine which Task 1 claims were represented."
+    assert MemoryStore(create=False).load_ground_session(
         "task-1-report-coverage"
-    )
-    assert session is not None
-    assert session.goal == "Determine which Task 1 claims were represented."
+    ) is None
     persisted = b"\n".join(_store_bytes(isolated_store).values())
     assert b"temp/task-1" not in persisted
     assert b"campus-wiki" not in persisted
     assert b"test/ground/ticker-rule-examples" not in persisted
-    assert not (isolated_store / "contexts").exists()
-    assert not (isolated_store / "state.json").exists()
+    assert (isolated_store / "contexts").exists()
+    assert MemoryStore(create=False).current_context_name() is None
 
 
 def test_approved_ground_command_uses_argv_without_a_shell(monkeypatch):
@@ -1977,7 +1979,7 @@ def test_cli_ground_help_marks_name_as_optional():
     assert "unsaved frame" in result.output
 
 
-def test_cli_keeps_named_sessions_independent_and_refuses_silent_redefinition(
+def test_cli_keeps_physical_grounds_independent_and_refuses_silent_redefinition(
     isolated_store,
 ):
     first = runner.invoke(app, ["ground", "task-1-fixture"])
@@ -1985,12 +1987,10 @@ def test_cli_keeps_named_sessions_independent_and_refuses_silent_redefinition(
 
     assert first.exit_code == 0, first.output
     assert second.exit_code == 0, second.output
-    assert (
-        isolated_store / "ground-sessions" / "task-1-fixture.json"
-    ).exists()
-    assert (
-        isolated_store / "ground-sessions" / "task-2-fixture.json"
-    ).exists()
+    names = set(MemoryStore(create=False).list_context_names())
+    assert "task-1-fixture" in names
+    assert "task-2-fixture" in names
+    assert not (isolated_store / "ground-sessions").exists()
 
     refused = runner.invoke(
         app,
@@ -2002,7 +2002,8 @@ def test_cli_keeps_named_sessions_independent_and_refuses_silent_redefinition(
         ],
     )
     assert refused.exit_code == 1
-    assert "--replace-ground" in refused.output
+    assert "already exists" in refused.output
+    assert "/goals" in refused.output
 
 
 def test_explicit_replace_recovers_a_malformed_named_session(

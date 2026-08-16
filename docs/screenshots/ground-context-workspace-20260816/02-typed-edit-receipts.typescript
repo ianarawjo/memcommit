@@ -1,0 +1,27 @@
+LIVE PTY · 52 180
+$ mem ground capture/ticker --goal 'Learn how real US ticker symbols are assigned.' --snapshot
+[32m[1mCreated Ground workspace 'capture/ticker' as 6 physical Contexts.[0m
+GROUND WORKSPACE · capture/ticker
+STATUS · OPEN · REVISION 0
+
+CONTEXTS
+  capture/ticker · 1 direct item · ROOT
+  capture/ticker/goals · 1 direct item
+  capture/ticker/rules · 0 direct items
+  capture/ticker/examples · 0 direct items
+  capture/ticker/contexts · 0 direct items
+  capture/ticker/relations · 0 direct items
+
+CONTENTS
+  /goals
+    [f34dc0f9] MEMORY · Learn how real US ticker symbols are assigned.
+
+Ground workspace Contexts and Memories are physical Store records.
+Global current Context: unchanged.
+CAPTURE 01 · CREATION RECEIPT · PRESS X
+x
+$ mem ground capture/ticker --add-rule 'Use observed exchange symbols rather than inventing abbreviations.'
+[32m[1mAdded Rule Memory [171a5d8a] · revision 1.[0m
+$ mem ground capture/ticker --add-example 'Apple Inc. is listed under AAPL.'
+[32m[1mAdded Example Memory [1a3ab89a] · revision 2.[0m
+CAPTURE 02 · PHYSICAL EDIT RECEIPTS · PRESS X

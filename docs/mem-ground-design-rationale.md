@@ -2,6 +2,19 @@
 
 ## Status
 
+> **Storage migration in progress (2026-08-16).** The versioned JSON session
+> and raw/working/publication/placement frame model documented below records
+> the measured prototype that still has production consumers. It is no longer
+> the target durable architecture. The replacement is the real Context-rooted
+> workspace in
+> [`ground-workspace-context-model-design-rationale.md`](ground-workspace-context-model-design-rationale.md):
+> one named root, physical `goals`, `rules`, `examples`, `contexts`, and
+> `relations` children, ordinary Memories and typed Context relationships,
+> operation-local semantic input freezing, and a Ground-local command history.
+> Existing prototype JSON has no migration promise. Keep this historical flow
+> only until its remaining CLI/TUI and semantic consumers move; do not extend
+> the old frame schema.
+
 The implementation has two explicit stages. It first creates or resumes a
 named empty version-1 scaffold, then an explicit binding action upgrades that
 scaffold to a version-2 workbench:

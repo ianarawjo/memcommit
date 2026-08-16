@@ -13,6 +13,7 @@ from memcommit.ground_dialogue import (
     GroundDialogueNewContextSuggestion,
     GroundDialogueProposal,
 )
+from memcommit.ground_workspace_runtime import load_ground_workspace
 from memcommit.store import MemoryStore
 
 
@@ -62,9 +63,10 @@ def test_valid_portable_positional_keeps_named_ground_behavior(
     result = runner.invoke(app, ["ground", "task-1"])
 
     assert result.exit_code == 0, result.output
-    saved = MemoryStore(create=False).load_ground_session("task-1")
-    assert saved is not None
-    assert saved.contract_name == "task-1"
+    saved = load_ground_workspace(MemoryStore(create=False), "task-1")
+    assert saved.name == "task-1"
+    assert saved.manifest.revision == 0
+    assert not (isolated_store / "ground-sessions").exists()
 
 
 def test_sentence_entry_rejects_named_ground_options_without_writing(

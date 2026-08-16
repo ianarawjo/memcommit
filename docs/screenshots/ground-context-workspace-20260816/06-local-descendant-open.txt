@@ -1,0 +1,52 @@
+ MEM GROUND · capture/ticker                                                                                                                                                        
+ CONTEXT-ROOTED WORKSPACE · OPEN · REVISION 2                                                                                                                                       
+┌─────────────────────────────────────────────────────────────────────| GROUND WORKSPACE · PHYSICAL CONTEXTS |─────────────────────────────────────────────────────────────────────┐
+│  ·   ▾ capture/ticker                                                                                                                                                           ^│
+│  ·     · capture/ticker/goals                                                                                                                                                    │
+│  ·     · capture/ticker/rules                                                                                                                                                    │
+│  ·     · capture/ticker/examples                                                                                                                                                 │
+│  ·     ▾ capture/ticker/contexts                                                                                                                                                 │
+│› ✓       · capture/ticker/contexts/us-market                                                                                                                                     │
+│  ·     · capture/ticker/relations                                                                                                                                               v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────────────────────────| MEMORIES |───────────────────────────────────────────────────────────────────────────────────┐
+│capture/ticker/contexts/us-market                                                                                                                                                ^│
+│UID · 4ad1698d-b319-4cc2-a0ac-945d472689cc                                                                                                                                        │
+│DIRECT ITEMS · 1                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│[7a5d8848] MEMORY                                                                                                                                                                 │
+│Use actual companies listed on United States exchanges.                                                                                                                           │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ read/cross · PgUp/PgDn page · Home/End · Tab Contexts · Esc/Backspace/Q close · read-only

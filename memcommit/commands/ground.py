@@ -26,6 +26,10 @@ from memcommit.commands.ground_session_picker import (
     list_ground_session_catalog,
     reload_selected_ground_session,
 )
+from memcommit.commands.ground_workspace_picker import (
+    list_ground_workspace_catalog,
+    reload_selected_ground_workspace,
+)
 from memcommit.interfaces.tui.components.operation_launcher.session import (
     SessionNewReceipt,
     SessionOpenReceipt,
@@ -33,6 +37,10 @@ from memcommit.interfaces.tui.components.operation_launcher.session import (
 )
 from memcommit.interfaces.console.text import (
     safe_terminal_text,
+)
+from memcommit.interfaces.cli.ground_workspace import render_ground_workspace
+from memcommit.interfaces.tui.operations.ground_workspace import (
+    run_ground_workspace_tui,
 )
 from memcommit.context import Context, Memory
 from memcommit.ground import (
@@ -73,6 +81,24 @@ from memcommit.ground_context_catalog import (
     discover_ground_context_locators,
     select_ground_context_locators,
 )
+from memcommit.ground_workspace import GroundWorkspaceError
+from memcommit.ground_workspace_application import (
+    AddGroundWorkspaceMemoryRequest,
+    CreateGroundWorkspaceRequest,
+    ReplaceGroundWorkspaceMemoryRequest,
+)
+from memcommit.ground_workspace_history import (
+    GroundWorkspaceHistoryError,
+    undo_ground_workspace_command,
+)
+from memcommit.ground_workspace_runtime import (
+    execute_ground_workspace_creation,
+    execute_ground_workspace_memory_add,
+    execute_ground_workspace_memory_replace,
+    ground_workspace_exists,
+    load_ground_workspace_navigation_contexts,
+    load_ground_workspace,
+)
 from memcommit.ground_turn_dialogue import (
     GroundBlockedTarget,
     GroundTurnAction,
@@ -88,6 +114,7 @@ from memcommit.store import (
     ConcurrentGroundUpdateError,
     MemoryStore,
     ground_session_record_digest,
+    validate_context_name,
 )
 
 
@@ -211,7 +238,7 @@ def _interpret_new_ground_turn(
         connect_codex_chatgpt_provider,
         context_names=context_names,
     )
-    store = MemoryStore(create=False)
+    store = MemoryStore()
     for suggestion in turn.new_context_suggestions:
         try:
             # This is a read-only early check. A future approved `mem init`
@@ -327,29 +354,182 @@ def _run_new_ground_shell(initial_request: str = "") -> GroundViewExit:
             raise GroundError(
                 "The approved Ground was not available for continuation."
             )
-        session = MemoryStore(create=False).load_ground_session(
-            proposal.ground_name
-        )
-        if session is None:
+        workspace_store = MemoryStore(create=False)
+        try:
+            workspace = load_ground_workspace(
+                workspace_store,
+                proposal.ground_name,
+            )
+        except (FileNotFoundError, GroundWorkspaceError, OSError, ValueError):
             raise GroundError(
                 "The approved Ground could not be reloaded."
             )
-        continuation_kwargs = {
-            "initial_receipt": result.actual_output or "Ground created.",
-            "context_hints": result.selected_context_names,
-        }
-        if result.new_context_name_hint:
-            continuation_kwargs["new_context_hint"] = (
-                result.new_context_name_hint
-            )
-        return _run_existing_ground_shell(
-            session,
-            **continuation_kwargs,
+        run_ground_workspace_tui(
+            workspace,
+            navigation_contexts=load_ground_workspace_navigation_contexts(
+                workspace_store,
+                workspace,
+            ),
         )
+        return "CLOSED"
     if result.status == "BACK_TO_PICKER":
         return "BACK_TO_PICKER"
     typer.echo("Ground chat cancelled. Nothing was created.")
     return "CLOSED"
+
+
+def _run_named_ground_workspace(
+    name: str,
+    *,
+    goal: str | None,
+    snapshot: bool,
+    set_goal: str | None = None,
+    add_rule: str | None = None,
+    add_example: str | None = None,
+    add_relation: str | None = None,
+    undo_local: bool = False,
+    expected_revision: int | None = None,
+) -> None:
+    """Create or open one Context-rooted workspace through the new boundary."""
+
+    creation_request = CreateGroundWorkspaceRequest(name=name, goal=goal or "")
+    # Creation is an authorized effect of this exact named command. Unlike
+    # blank discovery, it must establish missing Store infrastructure before
+    # taking the multi-Context command lock.
+    store = MemoryStore()
+    edit_values = (set_goal, add_rule, add_example, add_relation)
+    edit_count = sum(value is not None for value in edit_values) + int(undo_local)
+    if edit_count > 1:
+        raise GroundWorkspaceError(
+            "Set Goal, add Rule, add Example, add relation, and Undo are "
+            "separate Ground actions."
+        )
+    exists = ground_workspace_exists(store, name)
+    if exists:
+        if goal is not None:
+            raise GroundWorkspaceError(
+                "The Ground workspace already exists; edit its /goals "
+                "Context through a separately reviewed Ground action."
+            )
+        created = False
+    else:
+        if edit_count:
+            raise GroundWorkspaceError(
+                "Create the Ground workspace before applying a local edit."
+            )
+        try:
+            validate_ground_contract_name(name)
+            legacy = store.load_ground_session(name)
+        except GroundError:
+            legacy = None
+        if legacy is not None:
+            raise GroundWorkspaceError(
+                "A legacy Ground session uses this name. Legacy Ground JSON "
+                "is not imported into a physical workspace."
+            )
+        execute_ground_workspace_creation(
+            creation_request,
+            store=store,
+        )
+        created = True
+    workspace = load_ground_workspace(store, name)
+    if (
+        expected_revision is not None
+        and workspace.manifest.revision != expected_revision
+    ):
+        raise GroundWorkspaceError(
+            "The Ground workspace changed after this command was reviewed."
+        )
+    action_receipt = ""
+    if undo_local:
+        undone = undo_ground_workspace_command(store, name)
+        action_receipt = (
+            f"Undid Ground action '{undone.source_unit.action}' "
+            f"[{undone.source_unit.uid[:8]}] · revision {undone.revision}."
+        )
+    elif set_goal is not None:
+        goals = tuple(
+            item for item in workspace.goals.iter_items() if isinstance(item, Memory)
+        )
+        if len(goals) > 1:
+            raise GroundWorkspaceError(
+                "Set Goal requires zero or one directly owned Goal Memory."
+            )
+        if goals:
+            edited = execute_ground_workspace_memory_replace(
+                ReplaceGroundWorkspaceMemoryRequest(
+                    workspace_name=name,
+                    lane="goals",
+                    memory_uid=goals[0].uid,
+                    content=set_goal,
+                    expected_revision=workspace.manifest.revision,
+                ),
+                store=store,
+            )
+        else:
+            edited = execute_ground_workspace_memory_add(
+                AddGroundWorkspaceMemoryRequest(
+                    workspace_name=name,
+                    lane="goals",
+                    content=set_goal,
+                    expected_revision=workspace.manifest.revision,
+                ),
+                store=store,
+            )
+        action_receipt = (
+            f"Set Goal Memory [{edited.memory_uid[:8]}] · "
+            f"revision {edited.revision}."
+        )
+    else:
+        additions = (
+            ("rules", add_rule, "Rule"),
+            ("examples", add_example, "Example"),
+            ("relations", add_relation, "relation"),
+        )
+        selected = next(
+            (
+                (lane, content, label)
+                for lane, content, label in additions
+                if content is not None
+            ),
+            None,
+        )
+        if selected is not None:
+            lane, content, label = selected
+            edited = execute_ground_workspace_memory_add(
+                AddGroundWorkspaceMemoryRequest(
+                    workspace_name=name,
+                    lane=lane,
+                    content=content,
+                    expected_revision=workspace.manifest.revision,
+                ),
+                store=store,
+            )
+            action_receipt = (
+                f"Added {label} Memory [{edited.memory_uid[:8]}] · "
+                f"revision {edited.revision}."
+            )
+    workspace = load_ground_workspace(store, name)
+    if created:
+        typer.secho(
+            f"Created Ground workspace '{safe_terminal_text(name)}' as "
+            f"{len(workspace.all_contexts)} physical Contexts.",
+            fg=typer.colors.GREEN,
+            bold=True,
+        )
+    if action_receipt:
+        typer.secho(action_receipt, fg=typer.colors.GREEN, bold=True)
+    if _interactive_terminal() and not snapshot and not action_receipt:
+        run_ground_workspace_tui(
+            workspace,
+            navigation_contexts=load_ground_workspace_navigation_contexts(
+                store,
+                workspace,
+            ),
+        )
+        return
+    if snapshot or not action_receipt:
+        typer.echo(render_ground_workspace(workspace))
 
 
 def _ground_digest(session: GroundSession) -> str:
@@ -1386,13 +1566,22 @@ def _run_ground_session_picker(
             if next_catalog is None
             else next_catalog
         )
+        workspace_catalog = list_ground_workspace_catalog(store)
         # A view can mutate the saved Ground before B returns here. Reuse the
         # optional caller snapshot only for the first picker render; every
         # later pass rediscovers identities, revisions, digests, and ordering.
         next_catalog = None
-        by_key = {entry.picker_entry.key: entry for entry in frozen_catalog}
+        legacy_by_key = {
+            entry.picker_entry.key: entry for entry in frozen_catalog
+        }
+        workspace_by_key = {
+            entry.picker_entry.key: entry for entry in workspace_catalog
+        }
         receipt = choose_session(
-            tuple(entry.picker_entry for entry in frozen_catalog),
+            (
+                *(entry.picker_entry for entry in workspace_catalog),
+                *(entry.picker_entry for entry in frozen_catalog),
+            ),
             title="MEM GROUND · SAVED WORK",
             new_receipt=SessionNewReceipt(
                 kind="ground",
@@ -1414,19 +1603,41 @@ def _run_ground_session_picker(
         else:
             if (
                 not isinstance(receipt, SessionOpenReceipt)
-                or receipt.kind != "ground"
+                or receipt.kind not in {"ground", "ground-workspace"}
             ):
                 raise GroundError("Ground picker returned an invalid selection.")
-            entry = by_key.get(receipt.key)
-            if entry is None or receipt.argv != entry.picker_entry.reopen_argv:
-                raise GroundError(
-                    "Ground picker changed the selected reopen command."
+            if receipt.kind == "ground-workspace":
+                workspace_entry = workspace_by_key.get(receipt.key)
+                if (
+                    workspace_entry is None
+                    or receipt.argv != workspace_entry.picker_entry.reopen_argv
+                ):
+                    raise GroundError(
+                        "Ground picker changed the selected workspace command."
+                    )
+                workspace = reload_selected_ground_workspace(
+                    store,
+                    workspace_entry,
                 )
-            # The picker is only a read-only projection. Re-load by the
-            # catalog key and compare UID, revision, and digest so neither
-            # deletion nor replacement can fall through to create-or-resume.
-            session = reload_selected_ground_session(store, entry)
-            outcome = _run_existing_ground_shell(session)
+                run_ground_workspace_tui(
+                    workspace,
+                    navigation_contexts=load_ground_workspace_navigation_contexts(
+                        store,
+                        workspace,
+                    ),
+                )
+                outcome = "CLOSED"
+            else:
+                entry = legacy_by_key.get(receipt.key)
+                if entry is None or receipt.argv != entry.picker_entry.reopen_argv:
+                    raise GroundError(
+                        "Ground picker changed the selected reopen command."
+                    )
+                # The picker is only a read-only projection. Re-load by the
+                # catalog key and compare UID, revision, and digest so neither
+                # deletion nor replacement can fall through to create-or-resume.
+                session = reload_selected_ground_session(store, entry)
+                outcome = _run_existing_ground_shell(session)
         if outcome != "BACK_TO_PICKER":
             return
 
@@ -2059,6 +2270,49 @@ def cmd(
         Optional[str],
         typer.Option("--goal", help="Goal for a new named Ground"),
     ] = None,
+    set_goal: Annotated[
+        Optional[str],
+        typer.Option(
+            "--set-goal",
+            help="Add or replace the one Goal Memory in a physical Ground",
+        ),
+    ] = None,
+    add_rule: Annotated[
+        Optional[str],
+        typer.Option(
+            "--add-rule",
+            help="Add one reviewed Rule Memory to a physical Ground",
+        ),
+    ] = None,
+    add_example: Annotated[
+        Optional[str],
+        typer.Option(
+            "--add-example",
+            help="Add one reviewed Example proposition Memory",
+        ),
+    ] = None,
+    add_relation: Annotated[
+        Optional[str],
+        typer.Option(
+            "--add-relation",
+            help="Add one reviewed relationship as an ordinary Memory",
+        ),
+    ] = None,
+    undo_local: Annotated[
+        bool,
+        typer.Option(
+            "--undo",
+            help="Undo the latest command owned by this Ground workspace",
+        ),
+    ] = False,
+    if_ground_revision: Annotated[
+        Optional[int],
+        typer.Option(
+            "--if-revision",
+            min=0,
+            help="Require this exact physical Ground revision",
+        ),
+    ] = None,
     scope: Annotated[
         Optional[list[str]],
         typer.Option(
@@ -2375,7 +2629,11 @@ def cmd(
         ),
     ] = None,
 ) -> None:
-    """Open or persist Ground judgments without directly editing Contexts."""
+    """Create, inspect, or revise one Ground workspace or legacy session."""
+    physical_edit_requested = any(
+        value is not None
+        for value in (set_goal, add_rule, add_example, add_relation)
+    ) or undo_local
     bind_requested = any(
         value is not None
         for value in (
@@ -2448,10 +2706,12 @@ def cmd(
             )
         )
         or action_count > 0
+        or physical_edit_requested
         or snapshot
         or replace_ground
         or if_ground_version is not None
         or bool(if_context_version)
+        or if_ground_revision is not None
     )
     initial_request: str | None = request
     if sessions and (ground_name is not None or request is not None):
@@ -2490,20 +2750,38 @@ def cmd(
         try:
             validate_ground_contract_name(ground_name)
         except GroundError:
-            if seed_conflict_requested:
+            try:
+                # Physical workspaces use the ordinary Context namespace. A
+                # slash disambiguates that exact name from the established
+                # natural-language positional shorthand. Flat workspace names
+                # continue to use the portable Ground-name grammar.
+                if "/" not in ground_name:
+                    raise ValueError("not an explicit Context-rooted name")
+                validate_context_name(ground_name)
+            except ValueError:
+                if seed_conflict_requested:
+                    typer.secho(
+                        "Ground error: a natural-language starting request "
+                        "cannot be combined with Ground options. Use a valid "
+                        "Context-rooted GROUND_NAME for named actions.",
+                        fg=typer.colors.RED,
+                        err=True,
+                    )
+                    raise typer.Exit(1)
+                # A value that cannot identify an explicit workspace remains
+                # the person's first unsaved turn.
+                initial_request = ground_name
+                ground_name = None
+        if ground_name is not None:
+            try:
+                validate_context_name(ground_name)
+            except ValueError as error:
                 typer.secho(
-                    "Ground error: a natural-language starting request "
-                    "cannot be combined with Ground options. Use a portable "
-                    "GROUND_NAME for named actions.",
+                    f"Ground error: {safe_terminal_text(str(error))}",
                     fg=typer.colors.RED,
                     err=True,
                 )
                 raise typer.Exit(1)
-            # A value that cannot ever identify a saved Ground is safe to
-            # reinterpret as the user's first unsaved turn. Valid names keep
-            # their historical create/resume behavior.
-            initial_request = ground_name
-            ground_name = None
     if initial_request is not None:
         try:
             initial_request = _validated_start_request(initial_request)
@@ -2521,6 +2799,75 @@ def cmd(
         else:
             typer.echo(render_ground_start(initial_request))
         return
+
+    legacy_named_exists = False
+    if ground_name is not None and not physical_edit_requested:
+        try:
+            legacy_named_exists = (
+                MemoryStore(create=False).load_ground_session(ground_name) is not None
+            )
+        except (FileNotFoundError, OSError, RuntimeError, ValueError):
+            legacy_named_exists = False
+
+    physical_workspace_route = (
+        ground_name is not None
+        and not legacy_named_exists
+        and scope is None
+        and action_count == 0
+        and focus_target is None
+        and not replace_ground
+        and if_ground_version is None
+        and not if_context_version
+    )
+    if physical_workspace_route:
+        try:
+            _run_named_ground_workspace(
+                ground_name,
+                goal=goal,
+                snapshot=snapshot,
+                set_goal=set_goal,
+                add_rule=add_rule,
+                add_example=add_example,
+                add_relation=add_relation,
+                undo_local=undo_local,
+                expected_revision=if_ground_revision,
+            )
+        except (
+            FileExistsError,
+            FileNotFoundError,
+            GroundWorkspaceError,
+            GroundWorkspaceHistoryError,
+            OSError,
+            RuntimeError,
+            TypeError,
+            ValueError,
+        ) as error:
+            typer.secho(
+                f"Ground error: {safe_terminal_text(str(error))}",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        return
+
+
+    if ground_name is not None:
+        try:
+            is_physical_workspace = ground_workspace_exists(
+                MemoryStore(create=False),
+                ground_name,
+            )
+        except (FileNotFoundError, OSError, RuntimeError, ValueError):
+            is_physical_workspace = False
+        if is_physical_workspace:
+            typer.secho(
+                "Ground error: this is a physical Ground workspace; the "
+                "requested legacy session option cannot write a parallel "
+                "Ground JSON record.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
 
     plain_named_tui_requested = (
         ground_name is not None
@@ -2546,10 +2893,12 @@ def cmd(
                 )
             )
             or action_count > 0
+            or physical_edit_requested
             or snapshot
             or replace_ground
             or if_ground_version is not None
             or bool(if_context_version)
+            or if_ground_revision is not None
         )
         if option_requested:
             typer.secho(
@@ -2571,7 +2920,7 @@ def cmd(
             try:
                 store = MemoryStore(create=False)
                 catalog = list_ground_session_catalog(store)
-                if catalog or sessions:
+                if catalog or list_ground_workspace_catalog(store) or sessions:
                     _run_ground_session_picker(store, catalog=catalog)
                 else:
                     outcome = _run_new_ground_shell()

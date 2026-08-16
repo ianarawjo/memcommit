@@ -1,0 +1,84 @@
+LIVE PTY · 52 180
+$ mem ground capture/ticker --goal 'Learn how real US ticker symbols are assigned.' --snapshot
+[32m[1mCreated Ground workspace 'capture/ticker' as 6 physical Contexts.[0m
+GROUND WORKSPACE · capture/ticker
+STATUS · OPEN · REVISION 0
+
+CONTEXTS
+  capture/ticker · 1 direct item · ROOT
+  capture/ticker/goals · 1 direct item
+  capture/ticker/rules · 0 direct items
+  capture/ticker/examples · 0 direct items
+  capture/ticker/contexts · 0 direct items
+  capture/ticker/relations · 0 direct items
+
+CONTENTS
+  /goals
+    [f34dc0f9] MEMORY · Learn how real US ticker symbols are assigned.
+
+Ground workspace Contexts and Memories are physical Store records.
+Global current Context: unchanged.
+CAPTURE 01 · CREATION RECEIPT · PRESS X
+x
+$ mem ground capture/ticker --add-rule 'Use observed exchange symbols rather than inventing abbreviations.'
+[32m[1mAdded Rule Memory [171a5d8a] · revision 1.[0m
+$ mem ground capture/ticker --add-example 'Apple Inc. is listed under AAPL.'
+[32m[1mAdded Example Memory [1a3ab89a] · revision 2.[0m
+CAPTURE 02 · PHYSICAL EDIT RECEIPTS · PRESS X
+x
+$ mem ground capture/ticker
+[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM GROUND · capture/ticker[0m
+[0m CONTEXT-ROOTED WORKSPACE · OPEN · REVISION 2[0m
+[0;38;2;139;213;255;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ GROUND WORKSPACE · PHYSICAL CONTEXTS ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;2;139;213;255;1m┃[0m  ·   ▾ capture/ticker                                                                                                                                                           [0;1m^[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;1;7m› ✓     · [0;38;2;16;36;47;48;2;139;213;255;1mcapture/ticker/goals[0m                                                                                                                                                   [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m  ·     · capture/ticker/rules                                                                                                                                                   [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m  ·     · capture/ticker/examples                                                                                                                                                [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m  ·     ▸ capture/ticker/contexts                                                                                                                                                [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m  ·     · capture/ticker/relations                                                                                                                                               [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+[0m┌───────────────────────────────────────────────────────────────────────────────────| MEMORIES |───────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│capture/ticker/goals                                                                                                                                                             [0;1m^[179C[0m│[0m
+[0m│UID · 26290ee4-2b1a-4a83-9e9b-ac2bae6d620b                                                                                                                                       [0;48;2;68;68;68m [179C[0m│[0m
+[0m│DIRECT ITEMS · 1                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[f34dc0f9] MEMORY                                                                                                                                                                [0;48;2;68;68;68m [179C[0m│[0m
+[0m│Learn how real US ticker symbols are assigned.                                                                                                                                   [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m ↑/↓ move/cross · ←/→ collapse/expand · Enter open · Tab Memories · Esc/Backspace/Q close · global current unchanged[116D[47A[C[0m[?25l[0m  ✓     · [0;38;2;16;36;47;48;2;139;213;255mcapture/ticker/goals[0m
+
+
+[C[0;1;7m› ·     ▸ capture/ticker/contexts[33D[0m

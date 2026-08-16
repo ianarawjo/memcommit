@@ -1,0 +1,6 @@
+GROUND TUI CLOSED · GLOBAL CURRENT STILL capture/orientation                                                                                                                        
+CAPTURE 07 · READ-ONLY CLOSE RECEIPT · PRESS X                                                                                                                                      
+x                                                                                                                                                                                   
+$ mem ground capture/ticker --add-relation 'The Goal is evaluated against every active Rule and Example.'                                                                           
+Added relation Memory [ce4080e1] · revision 3.                                                                                                                                      
+CAPTURE 08 · LOCAL COMMAND RECEIPT · PRESS X

@@ -414,14 +414,68 @@ def _prepare_context_catalog(
 def _build_prompt(
     user_text: str,
     context_catalog: Sequence[dict[str, str]] = (),
+    *,
+    ground_name: str | None = None,
 ) -> str:
     payload = json.dumps(
         {
             "user_text": user_text,
             "context_catalog": list(context_catalog),
+            "ground_name": ground_name,
         },
         ensure_ascii=False,
     )
+    if ground_name is None:
+        context_contract = (
+            "The Context catalog contains locator-only local names disclosed for "
+            "this turn. Inspect those names before answering, but never claim to "
+            "know a Context's contents, validity, ownership, or write authority. "
+            "When the catalog is non-empty, return exactly one best name-only "
+            "candidate with role MAIN and at most three distinct runners-up with "
+            "role ALTERNATIVE. Give each a short name-based reason. When the "
+            "catalog is empty, return an empty list. MAIN is a recommendation for "
+            "the one Context from which this Ground should begin; it is not a "
+            "selection, validation, or binding. Do not classify candidates as "
+            "source, derived, or target. Do not ask the user to approve or confirm "
+            "MAIN in this version; the question may concern only the proposed Goal "
+            "and portable Ground name.\n"
+            "Separately, new_context_suggestions may contain at most one canonical "
+            "Context name when a dedicated new Context could be useful. "
+            "Slash-delimited namespaces such as "
+            "test/ground/ticker-rule-examples are allowed. For Ground test "
+            "examples, prefer the test/ground/<portable-topic> convention unless "
+            "the user supplied another namespace. It is a display suggestion "
+            "below existing alternatives and may be opened for exact local "
+            "editing, but it is not a checkbox, not in the catalog, not created, "
+            "not validated as current, and not bound. When the catalog is empty "
+            "and the intended work needs a place for examples or evidence, return "
+            "one; otherwise return [] when no new Context is useful.\n"
+        )
+        name_contract = (
+            "Use ASK only when missing information would consequentially change "
+            "the Goal or portable Ground name. Ask one focused question, not a "
+            "checklist and not a request for details that can safely be refined "
+            "later. For ASK, set ground_name and goal to exactly empty strings.\n"
+            "Otherwise use PROPOSE. Supply a concise portable lowercase "
+            "ground_name. "
+        )
+    else:
+        context_contract = (
+            "The person has already chosen the exact physical Ground Save "
+            "Location in ground_name. The Context catalog is intentionally empty: "
+            "do not recommend, rank, select, or invent another Context. Return "
+            "context_suggestions and new_context_suggestions as empty arrays. "
+            "This Ground will build its own goals, rules, examples, contexts, and "
+            "relations lanes beneath the chosen root.\n"
+        )
+        name_contract = (
+            "Use ASK only when missing information would consequentially change "
+            "the Goal. Ask one focused question, not a checklist and not a request "
+            "for details that can safely be refined later. For ASK, set ground_name "
+            "and goal to exactly empty strings.\n"
+            "Otherwise use PROPOSE. Copy the exact ground_name from the payload "
+            "without changing, shortening, or renaming it. "
+        )
     return (
         "Interpret the first user turn of an unsaved "
         "Goal–Rules–Memories Ground "
@@ -444,31 +498,8 @@ def _build_prompt(
         "response-scope restriction. Never use the FOCUS line or comment label "
         "as USER_EXACT evidence; source spans may come only from the person's "
         "comment body or other raw user wording.\n"
-        "The Context catalog contains locator-only local names disclosed for "
-        "this turn. Inspect those names before answering, but never claim to "
-        "know a Context's contents, validity, ownership, or write authority. "
-        "When the catalog is non-empty, return exactly one best name-only "
-        "candidate with role MAIN and at most three distinct runners-up with "
-        "role ALTERNATIVE. Give each a short name-based reason. When the "
-        "catalog is empty, return an empty list. MAIN is a recommendation for "
-        "the one Context from which this Ground should begin; it is not a "
-        "selection, validation, or binding. Do not classify candidates as "
-        "source, derived, or target. Do not ask the user to approve or confirm "
-        "MAIN in this version; the question may concern only the proposed Goal "
-        "and portable Ground name.\n"
-        "Separately, new_context_suggestions may contain at most one canonical "
-        "Context name when a dedicated new Context could be useful. "
-        "Slash-delimited namespaces such as "
-        "test/ground/ticker-rule-examples are allowed. For Ground test "
-        "examples, prefer the test/ground/<portable-topic> convention unless "
-        "the user supplied another namespace. It is a display suggestion "
-        "below existing alternatives and may be opened for exact local "
-        "editing, but it is not a checkbox, not in the catalog, not created, "
-        "not validated as current, and not bound. When the catalog is empty "
-        "and the intended work needs a "
-        "place for examples or evidence, return one; otherwise return [] when "
-        "no new Context is useful.\n"
-        "Return a small bounded set of process-local Rule and Memory drafts "
+        + context_contract
+        + "Return a small bounded set of process-local Rule and Memory drafts "
         "when the first turn contains examples or supports a useful initial "
         "hypothesis. These drafts are read-only previews, NOT SAVED, and never "
         "part of the Ground creation command. A Memory draft is one Case with "
@@ -489,13 +520,8 @@ def _build_prompt(
         "merely to reach three. Every AGENT_SUGGESTED Memory must remain "
         "UNRESOLVED. Return empty draft arrays only when no responsible "
         "preview is possible.\n"
-        "Use ASK only when missing information would consequentially change "
-        "the Goal or portable Ground name. Ask one "
-        "focused question, not a checklist and not a request for details that "
-        "can safely be refined later. For ASK, set ground_name and goal to "
-        "exactly empty strings.\n"
-        "Otherwise use PROPOSE. Supply a concise portable lowercase "
-        "ground_name. When the user's starting request already states a clear "
+        + name_contract
+        + "When the user's starting request already states a clear "
         "outcome within the authoring limit, preserve it as the Goal; distill "
         "only when needed for clarity or length. The Goal describes what will "
         "be understood, decided, or made together in no more than "
@@ -837,6 +863,7 @@ def _parse_turn(
     *,
     user_text: str,
     context_by_id: dict[str, str] | None = None,
+    expected_ground_name: str | None = None,
 ) -> GroundDialogueTurn:
     if (
         not isinstance(raw, str)
@@ -876,6 +903,13 @@ def _parse_turn(
     new_context_suggestions = _parse_new_context_suggestions(
         value["new_context_suggestions"]
     )
+    if expected_ground_name is not None and (
+        context_suggestions or new_context_suggestions
+    ):
+        raise GroundDialogueError(
+            "Codex ground chat returned Context suggestions after the exact "
+            "Ground Save Location was fixed."
+        )
     rule_drafts = _parse_rule_drafts(
         value["rule_drafts"],
         user_text=user_text,
@@ -904,12 +938,19 @@ def _parse_turn(
         raise GroundDialogueError(
             "Codex ground chat returned an unknown turn kind."
         )
-    try:
-        validated_name = validate_ground_contract_name(ground_name)
-    except GroundError as error:
-        raise GroundDialogueError(
-            "Codex ground chat returned an invalid Ground name."
-        ) from error
+    if expected_ground_name is None:
+        try:
+            validated_name = validate_ground_contract_name(ground_name)
+        except GroundError as error:
+            raise GroundDialogueError(
+                "Codex ground chat returned an invalid Ground name."
+            ) from error
+    else:
+        if ground_name != expected_ground_name:
+            raise GroundDialogueError(
+                "Codex ground chat changed the exact Ground Save Location."
+            )
+        validated_name = expected_ground_name
     try:
         validated_goal = validate_ground_goal(goal, label="Goal")
     except GroundError as error:
@@ -933,6 +974,7 @@ def interpret_ground_dialogue(
     provider_or_factory: GroundDialogueProviderInput,
     *,
     context_names: Sequence[str] = (),
+    ground_name: str | None = None,
 ) -> GroundDialogueTurn:
     """Interpret one blank-Ground turn with exactly one provider completion."""
     if (
@@ -945,11 +987,31 @@ def interpret_ground_dialogue(
             f"{GROUND_DIALOGUE_USER_TEXT_LIMIT} characters."
         )
 
+    if ground_name is not None:
+        try:
+            ground_name = validate_context_name(ground_name)
+        except ValueError as error:
+            raise GroundDialogueError(
+                "Ground Save Location is not a valid Context name."
+            ) from error
+        if len(ground_name) > GROUND_DIALOGUE_NAME_LIMIT:
+            raise GroundDialogueError(
+                "Ground Save Location is too long for one dialogue turn."
+            )
+        if tuple(context_names):
+            raise GroundDialogueError(
+                "A fixed Ground Save Location cannot use Context "
+                "recommendations."
+            )
     context_catalog, context_by_id = _prepare_context_catalog(context_names)
     provider = _provider_from(provider_or_factory)
     try:
         raw = provider.complete(
-            _build_prompt(user_text, context_catalog),
+            _build_prompt(
+                user_text,
+                context_catalog,
+                ground_name=ground_name,
+            ),
             operation=GROUND_DIALOGUE_OPERATION,
             output_schema=ground_dialogue_output_schema(),
         )
@@ -965,4 +1027,5 @@ def interpret_ground_dialogue(
         raw,
         user_text=user_text,
         context_by_id=context_by_id,
+        expected_ground_name=ground_name,
     )

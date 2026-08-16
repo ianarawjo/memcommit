@@ -2,11 +2,12 @@
 
 ## Status
 
-Physical creation, loading, typed Memory editing, Ground-local Undo, and the
-Distill, Elaborate, and Fit semantic projections are implemented. The Ground
-workspace terminal adapter remains an integration gate. The legacy session
-Store remains available during that migration; existing prototype Ground
-session JSON is not a migration input for a new workspace.
+Physical creation, loading, typed Memory editing, the read-only workspace TUI,
+Ground-local Undo, and the Distill, Elaborate, and Fit semantic projections are
+implemented. The CLI retains a transitional legacy-session route only for an
+already existing legacy name; a physical workspace never reads or writes that
+parallel JSON. Existing prototype Ground session JSON is not a migration input
+for a new workspace.
 
 Last reviewed: 2026-08-16.
 
