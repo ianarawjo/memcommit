@@ -92,6 +92,22 @@ assert 'memcommit.api.client' not in sys.modules
     assert completed.returncode == 0, completed.stderr
 
 
+def test_ground_resolution_values_do_not_eagerly_assemble_source_adapters():
+    completed = _run_fresh(
+        """
+import sys
+from memcommit.ground_resolution import GroundResolutionIdentity
+assert GroundResolutionIdentity.__module__ == 'memcommit.ground_resolution'
+assert 'memcommit.fit_store' not in sys.modules
+assert 'memcommit.ground_distill' not in sys.modules
+assert 'memcommit.ground_elaborate' not in sys.modules
+assert 'memcommit.ground_resolution_application' not in sys.modules
+"""
+    )
+
+    assert completed.returncode == 0, completed.stderr
+
+
 def test_internal_standalone_modules_remain_importable_without_ground():
     completed = _run_fresh(
         """
