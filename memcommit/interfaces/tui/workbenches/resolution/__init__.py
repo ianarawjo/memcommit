@@ -10,6 +10,12 @@ from memcommit.interfaces.tui.workbenches.resolution.model import (
 from memcommit.interfaces.tui.workbenches.resolution.shell import (
     run_resolution_workbench,
 )
+from memcommit.interfaces.tui.workbenches.resolution.session_shell import (
+    ResolutionDestination,
+    ResolutionGlobalStrategy,
+    SessionTodoView,
+    run_resolution_workbench_shell,
+)
 
 __all__ = [
     "ResolutionChoice",
@@ -17,5 +23,9 @@ __all__ = [
     "ResolutionItem",
     "ResolutionOutcome",
     "ResolutionWorkbenchSpec",
+    "ResolutionDestination",
+    "ResolutionGlobalStrategy",
+    "SessionTodoView",
     "run_resolution_workbench",
+    "run_resolution_workbench_shell",
 ]

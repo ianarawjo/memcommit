@@ -573,7 +573,7 @@ def run_meld_shell(
     destination=None,
 ) -> MeldShellAction | None:
     """Collect one action through the shared dynamic resolution workbench."""
-    from memcommit.commands.resolution_workbench_shell import (
+    from memcommit.interfaces.tui.workbenches.resolution.session_shell import (
         ResolutionGlobalStrategy,
         run_resolution_workbench_shell,
     )

@@ -8,8 +8,10 @@ from pathlib import Path
 import memcommit.commands.meld as meld_command
 import memcommit.commands.meld_shell as legacy_shell
 import memcommit.commands.compare as compare_command
+import memcommit.commands.resolution_workbench_shell as legacy_resolution_shell
 from memcommit.comparison_present import render_comparison
 import memcommit.interfaces.tui.operations.meld.screen as meld_screen
+import memcommit.interfaces.tui.workbenches.resolution.session_shell as resolution_shell
 
 
 def test_meld_command_enters_the_operation_tui_directly() -> None:
@@ -41,3 +43,18 @@ def test_meld_uses_the_interface_neutral_compare_presenter() -> None:
     }
     assert "memcommit.comparison_present" in imported_modules
     assert "memcommit.commands.compare" not in imported_modules
+
+
+def test_legacy_resolution_shell_is_an_import_only_facade() -> None:
+    assert (
+        legacy_resolution_shell.run_resolution_workbench_shell
+        is resolution_shell.run_resolution_workbench_shell
+    )
+
+    module = ast.parse(
+        Path(legacy_resolution_shell.__file__).read_text(encoding="utf-8")
+    )
+    assert not any(
+        isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
+        for node in module.body
+    )

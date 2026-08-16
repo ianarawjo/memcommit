@@ -7,7 +7,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.layout import to_container
 from prompt_toolkit.output import DummyOutput
 
-import memcommit.commands.resolution_workbench_shell as resolution_shell_module
+import memcommit.interfaces.tui.workbenches.resolution.session_shell as resolution_shell_module
 from memcommit.commands.semantic_detail_renderer import (
     semantic_detail_block_fragments,
 )
