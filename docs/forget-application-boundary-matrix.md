@@ -128,8 +128,9 @@ identity-preserving facades over `interfaces.tui.operations.forget`.
 
 ## Remaining work and non-goals
 
-1. Add stable public Python values and a versioned process-local agent/MCP
-   projection over the same Analyze/Select/Revise/Apply use cases.
+1. Add a versioned process-local agent/MCP projection over the same
+   Analyze/Select/Revise/Apply use cases. The stable Python facade is recorded
+   in `forget-public-python-api-design-rationale.md`.
 2. Run installed-wheel discovery and effect smoke before classifying the route
    `CLOSED`.
 3. Cross-process durable resume is intentionally not part of Forget. Adding it

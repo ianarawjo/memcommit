@@ -117,6 +117,17 @@ __all__ = [
     "ElaborateRuleProposal",
     "FitJudgmentResult",
     "FitPropositionInput",
+    "ForgetApplyResult",
+    "ForgetAuthorityError",
+    "ForgetCandidateResult",
+    "ForgetConflictError",
+    "ForgetContextError",
+    "ForgetError",
+    "ForgetExecutionError",
+    "ForgetInputError",
+    "ForgetProviderFailure",
+    "ForgetReviewResult",
+    "ForgetStorageError",
     "SemanticAuthorityError",
     "SemanticConflictError",
     "SemanticContextError",
@@ -249,6 +260,9 @@ _LAZY_EXPORTS = {
     "ElaborateRuleProposal": ("memcommit.api.semantic", "ElaborateRuleProposal"),
     "FitJudgmentResult": ("memcommit.api.semantic", "FitJudgmentResult"),
     "FitPropositionInput": ("memcommit.api.semantic", "FitPropositionInput"),
+    "ForgetApplyResult": ("memcommit.api.forget", "ForgetApplyResult"),
+    "ForgetCandidateResult": ("memcommit.api.forget", "ForgetCandidateResult"),
+    "ForgetReviewResult": ("memcommit.api.forget", "ForgetReviewResult"),
     **{
         name: ("memcommit.api.errors", name)
         for name in __all__

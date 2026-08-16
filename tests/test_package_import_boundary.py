@@ -50,6 +50,7 @@ blocked = (
     'memcommit.api._operations.elaborate',
     'memcommit.api._operations.fit',
     'memcommit.api._operations.help',
+    'memcommit.api._operations.forget',
     'memcommit.api._operations.ground_distill',
     'memcommit.api._operations.ground_elaborate',
     'memcommit.api._operations.meld',
@@ -61,6 +62,7 @@ blocked = (
     'memcommit.elaborate_application',
     'memcommit.fit_application',
     'memcommit.help_application',
+    'memcommit.forget_application',
     'memcommit.ground_distill',
     'memcommit.ground_elaborate',
     'memcommit.meld_application',
@@ -87,6 +89,7 @@ for name in (
     'memcommit.api._operations.elaborate',
     'memcommit.api._operations.fit',
     'memcommit.api._operations.help',
+    'memcommit.api._operations.forget',
     'memcommit.api._operations.ground_distill',
     'memcommit.api._operations.ground_elaborate',
     'memcommit.api._operations.meld',
@@ -332,6 +335,43 @@ assert 'memcommit.api._operations.query' not in sys.modules
 assert 'memcommit.operations.query.ordinary_application' not in sys.modules
 assert 'memcommit.api._operations.meld' not in sys.modules
 assert 'memcommit.meld_application' not in sys.modules
+""",
+        environment=environment,
+    )
+
+    assert completed.returncode == 0, completed.stderr
+
+
+def test_selected_forget_loads_only_its_operation_assembly(tmp_path):
+    environment = os.environ.copy()
+    environment["MEMCOMMIT_IMPORT_TEST_ROOT"] = str(tmp_path / "store")
+    completed = _run_fresh(
+        """
+import os
+from pathlib import Path
+import sys
+from memcommit.api import ForgetContextError, MemCommitClient
+
+client = MemCommitClient(
+    root=Path(os.environ['MEMCOMMIT_IMPORT_TEST_ROOT']),
+    create=True,
+)
+try:
+    client.analyze_forget('Forget the obsolete detail.', context_name='missing')
+except ForgetContextError:
+    pass
+else:
+    raise AssertionError('missing Forget Source unexpectedly analyzed')
+assert 'memcommit.api._operations.forget' in sys.modules
+assert 'memcommit.forget_application' in sys.modules
+assert 'memcommit.api._operations.add' not in sys.modules
+assert 'memcommit.add_application' not in sys.modules
+assert 'memcommit.api._operations.query' not in sys.modules
+assert 'memcommit.operations.query.ordinary_application' not in sys.modules
+assert 'memcommit.api._operations.meld' not in sys.modules
+assert 'memcommit.meld_application' not in sys.modules
+assert 'memcommit.api._operations.update' not in sys.modules
+assert 'memcommit.update_planning_application' not in sys.modules
 """,
         environment=environment,
     )

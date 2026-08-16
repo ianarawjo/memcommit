@@ -26,6 +26,10 @@ from memcommit.api.atomize import (
 )
 from memcommit.api.compare import ComparisonResult
 from memcommit.api.dedup import DedupApplyResult, DedupPlanResult
+from memcommit.api.forget import (
+    ForgetApplyResult,
+    ForgetReviewResult,
+)
 from memcommit.api.help import HelpCatalogResult, OperationHelpResult
 from memcommit.api.errors import (
     QueryConfigurationError,
@@ -221,6 +225,63 @@ class MemCommitClient:
             reference_memory=reference_memory,
             compared_memory=compared_memory,
         )
+
+    def analyze_forget(
+        self,
+        instruction: str,
+        *,
+        context_name: str | None = None,
+    ) -> ForgetReviewResult:
+        """Analyze one complete direct Source into a process-local review."""
+
+        from memcommit.api._operations.forget import analyze_forget_context
+
+        return analyze_forget_context(
+            self._runtime,
+            instruction,
+            context_name=context_name,
+        )
+
+    def select_forget(
+        self,
+        review: ForgetReviewResult,
+        candidate_uid: str,
+        selection: str,
+        *,
+        custom_content: str = "",
+    ) -> ForgetReviewResult:
+        """Change one exact process-local Forget decision without effects."""
+
+        from memcommit.api._operations.forget import select_forget_review
+
+        return select_forget_review(
+            self._runtime,
+            review,
+            candidate_uid,
+            selection,
+            custom_content=custom_content,
+        )
+
+    def revise_forget(
+        self,
+        review: ForgetReviewResult,
+        guidance: str,
+    ) -> ForgetReviewResult:
+        """Run one provider revision over a process-local Forget review."""
+
+        from memcommit.api._operations.forget import revise_forget_review
+
+        return revise_forget_review(self._runtime, review, guidance)
+
+    def apply_forget(
+        self,
+        review: ForgetReviewResult,
+    ) -> ForgetApplyResult:
+        """Apply one exact reviewed Forget effect or explicit no-op."""
+
+        from memcommit.api._operations.forget import apply_forget_review
+
+        return apply_forget_review(self._runtime, review)
 
     def open_comparison(self, analysis_uid: str) -> ComparisonResult:
         """Open one exact current durable analysis without provider or mutation."""

@@ -165,6 +165,38 @@ class CompareExecutionError(CompareError):
     """An authorized Compare failed before a complete result was published."""
 
 
+class ForgetError(MemCommitError):
+    """Base class for public selective Forget failures."""
+
+
+class ForgetInputError(ForgetError):
+    """The caller supplied an invalid Forget request or review action."""
+
+
+class ForgetContextError(ForgetError):
+    """The requested Forget Source Context is unavailable."""
+
+
+class ForgetAuthorityError(ForgetError):
+    """The active Profile or Grant does not authorize this Forget."""
+
+
+class ForgetProviderFailure(ForgetError):
+    """The semantic provider could not complete a required Forget turn."""
+
+
+class ForgetConflictError(ForgetError):
+    """The frozen Forget Source changed before Apply."""
+
+
+class ForgetStorageError(ForgetError):
+    """Forget could not safely read or publish local durable state."""
+
+
+class ForgetExecutionError(ForgetError):
+    """Forget failed before returning one complete requested outcome."""
+
+
 class AtomizeGroundingError(MemCommitError):
     """Base class for public conversational Atomize Grounding failures."""
 
@@ -285,6 +317,14 @@ __all__ = [
     "CompareStorageError",
     "HelpError",
     "HelpInputError",
+    "ForgetAuthorityError",
+    "ForgetConflictError",
+    "ForgetContextError",
+    "ForgetError",
+    "ForgetExecutionError",
+    "ForgetInputError",
+    "ForgetProviderFailure",
+    "ForgetStorageError",
     "MemCommitError",
     "MeldAuthorityError",
     "MeldConflictError",
