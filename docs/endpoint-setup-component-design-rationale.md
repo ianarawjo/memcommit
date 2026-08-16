@@ -71,10 +71,15 @@ directly.
 
 - Compare and Update now use the rebuilt component. Their provider, cache,
   session, result/review, and Apply behavior intentionally remains outside it.
-- The existing shell still serves Atomize and Meld until their new-Context and
-  mode-dependent-role contracts are available in the rebuilt component.
-- The rebuilt component does not yet create new Context endpoints or support
-  mode-dependent active roles. Those capabilities should be added only when a
-  migrated operation requires them.
+- Meld now uses the rebuilt component for symmetric `A + B -> C` and
+  directional `A -> B` modes. It can return one confirmed new Result name, but
+  that value remains process-local and `NOT CREATED`; application validation
+  and materialization remain outside the component.
+- Atomize remains on its characterized Study flow until its current behavior is
+  frozen independently. Meld's requirements do not justify migrating it by
+  visual similarity alone.
+- The shared screen still imports a small command-owned terminal-primitives
+  set. That dependency is recorded as migration work, not accepted as the
+  final component boundary.
 - A fixed Merge Target avoids inventing a TUI-only command. Selectable targets
   require a separately supported public `--into TARGET` contract.
