@@ -17,12 +17,14 @@ from typer.testing import CliRunner
 import memcommit.ops as ops
 from memcommit.atomize_application import atomize_application_audit
 from memcommit.atomize_runtime import (
+    MemoryStoreAtomizeSessionRepository,
     MemoryStoreAtomizeOutputPort,
     capture_atomize_session_snapshot,
 )
 from memcommit.atomize_workflow import open_or_create_atomize_workbench
 from memcommit.commands.atomize import cmd as atomize_command
 from memcommit.context import AutoCheckpoint, Memory
+from memcommit.provenance import build_trace
 from memcommit.store import MemoryStore
 
 
@@ -71,6 +73,50 @@ class _AllAtomicProvider:
                         ),
                     }
                     for candidate_id in candidate_ids
+                ],
+                "quality_issues": [],
+            }
+        )
+
+
+class _OneCompositeProvider:
+    """Split one exact two-clause Memory with grounded child evidence."""
+
+    def complete(self, prompt, *, operation, output_schema=None):
+        assert operation == "impact_atomize"
+        assert output_schema is not None
+        payload = json.loads(prompt.split(_PAYLOAD_MARKER, 1)[1])
+        candidate_id = payload["memories"][0]["candidate_id"]
+        return json.dumps(
+            {
+                "overview": {
+                    "understood": {
+                        "text": "The Memory contains two independent facts.",
+                        "source_ids": [candidate_id],
+                    },
+                    "changed": {
+                        "text": "The two facts become separate Memories.",
+                        "source_ids": [candidate_id],
+                    },
+                    "unresolved": {"text": "", "source_ids": []},
+                },
+                "items": [
+                    {
+                        "candidate_id": candidate_id,
+                        "classification": "COMPOSITE",
+                        "reason_codes": ["A01_ONE_FOCUS"],
+                        "children": [
+                            {
+                                "content": "The library closes at five.",
+                                "source_spans": ["The library closes at five"],
+                            },
+                            {
+                                "content": "Security remains on site.",
+                                "source_spans": ["Security remains on site"],
+                            },
+                        ],
+                        "reason": "Each clause can be revised independently.",
+                    }
                 ],
                 "quality_issues": [],
             }
@@ -228,6 +274,176 @@ def test_retry_recovers_terminal_receipt_from_exact_atomize_checkpoint(
     assert terminal is not None and terminal.application is not None
     assert terminal.application.checkpoint_uid == history[0]["uid"]
     assert store.list_checkpoints(context.name) == history
+
+
+def test_save_as_publishes_one_final_checkpoint_and_restores_one_lifecycle(
+    isolated_store,
+):
+    store = MemoryStore()
+    source, memory, opened = _open_all_atomic_session(store)
+    source_record = store.load_direct(source.name).to_dict()
+
+    applied = runner.invoke(
+        app,
+        ["atomize", "--context", source.name, "--save-as", "atomize/output"],
+    )
+
+    assert applied.exit_code == 0, applied.output
+    assert "One Atomize checkpoint created" in applied.output
+    output = store.load_direct("atomize/output")
+    output_record = output.to_dict()
+    assert output.uid != source.uid
+    assert [item.uid for item in output.iter_items() if isinstance(item, Memory)] == [
+        memory.uid
+    ]
+    checkpoints = store.list_checkpoints(output.name)
+    assert [checkpoint["command"] for checkpoint in checkpoints] == ["atomize"]
+    checkpoint_uid = checkpoints[0]["uid"]
+    assert store.load_direct(source.name).to_dict() == source_record
+    assert store.current_context_name() == output.name
+    trace = build_trace(store, output, memory.uid)
+    assert [event.kind for event in trace.events] == [
+        "CREATED",
+        "ATOMIZE_KEEP",
+    ]
+    assert all(event.evidence == "RECORDED" for event in trace.events)
+    assert not trace.warnings
+
+    undone = store.restore_recent_context_command("undo")
+
+    assert undone.unit.command == "atomize"
+    assert not store.context_exists(output.name)
+    assert store.current_context_name() == source.name
+    reviewing = store.load_atomize_workbench(opened.analysis)
+    assert reviewing is not None and reviewing.application is None
+
+    redone = store.restore_recent_context_command("redo")
+
+    assert redone.unit.uid == undone.unit.uid
+    assert store.load_direct(output.name).to_dict() == output_record
+    assert store.current_context_name() == output.name
+    terminal = store.load_atomize_workbench(opened.analysis)
+    assert terminal is not None and terminal.application is not None
+    assert terminal.application.checkpoint_uid == checkpoint_uid
+    assert [
+        checkpoint["command"]
+        for checkpoint in store.list_checkpoints(output.name)[:3]
+    ] == ["redo", "undo", "atomize"]
+
+
+def test_save_as_prepublication_failure_leaves_no_context_or_hidden_analysis(
+    isolated_store,
+    monkeypatch,
+):
+    from memcommit.atomize import AtomizeImpactError
+
+    store = MemoryStore()
+    source, _memory, _opened = _open_all_atomic_session(store)
+    analysis_paths = set(store.atomize_analyses_dir.glob("*.json"))
+
+    def reject_apply(*_args, **_kwargs):
+        raise AtomizeImpactError("injected prepublication failure")
+
+    monkeypatch.setattr(
+        "memcommit.atomize_runtime.apply_atomize_analysis",
+        reject_apply,
+    )
+
+    failed = runner.invoke(
+        app,
+        ["atomize", "--context", source.name, "--save-as", "atomize/failed"],
+    )
+
+    assert failed.exit_code == 1
+    assert "injected prepublication failure" in failed.stderr
+    assert not store.context_exists("atomize/failed")
+    assert set(store.atomize_analyses_dir.glob("*.json")) == analysis_paths
+    assert store.current_context_name() == source.name
+
+
+def test_save_as_trace_uses_recorded_nonpublished_source_frame_for_split(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = ops.init("atomize/split-source")
+    original = ops.add(
+        source,
+        "The library closes at five. Security remains on site.",
+    )
+    store.save(source)
+    store.set_current(source.name)
+    open_or_create_atomize_workbench(
+        store=store,
+        ctx=source,
+        provider_factory=_OneCompositeProvider,
+    )
+
+    applied = runner.invoke(
+        app,
+        ["atomize", "--context", source.name, "--save-as", "atomize/split-output"],
+    )
+
+    assert applied.exit_code == 0, applied.output
+    output = store.load_direct("atomize/split-output")
+    children = [item for item in output.iter_items() if isinstance(item, Memory)]
+    assert [item.content for item in children] == [
+        "The library closes at five.",
+        "Security remains on site.",
+    ]
+    trace = build_trace(store, output, children[0].uid)
+    assert trace.component_uids == tuple(
+        sorted((original.uid, children[0].uid, children[1].uid))
+    )
+    assert [event.kind for event in trace.events] == ["CREATED", "SPLIT"]
+    assert all(event.evidence == "RECORDED" for event in trace.events)
+    assert not trace.warnings
+
+
+def test_save_as_retry_finishes_source_receipt_without_second_checkpoint(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source, _memory, opened = _open_all_atomic_session(store)
+    original = MemoryStoreAtomizeSessionRepository.replace_application
+    failed_once = False
+
+    def reject_once(repository, *args, **kwargs):
+        nonlocal failed_once
+        if not failed_once:
+            failed_once = True
+            raise OSError("injected Save As receipt failure")
+        return original(repository, *args, **kwargs)
+
+    monkeypatch.setattr(
+        MemoryStoreAtomizeSessionRepository,
+        "replace_application",
+        reject_once,
+    )
+
+    failed = runner.invoke(
+        app,
+        ["atomize", "--context", source.name, "--save-as", "atomize/retry"],
+    )
+
+    assert failed.exit_code == 1
+    assert "retained" in failed.stderr
+    checkpoints = store.list_checkpoints("atomize/retry")
+    assert [checkpoint["command"] for checkpoint in checkpoints] == ["atomize"]
+    reviewing = store.load_atomize_workbench(opened.analysis)
+    assert reviewing is not None and reviewing.application is None
+
+    retried = runner.invoke(
+        app,
+        ["atomize", "--context", source.name, "--save-as", "atomize/retry"],
+    )
+
+    assert retried.exit_code == 0, retried.output
+    assert "Recovered the exact prior checkpoint" in retried.output
+    assert store.list_checkpoints("atomize/retry") == checkpoints
+    terminal = store.load_atomize_workbench(opened.analysis)
+    assert terminal is not None and terminal.application is not None
+    assert terminal.application.checkpoint_uid == checkpoints[0]["uid"]
 
 
 def test_receipt_recovery_does_not_overwrite_later_context_edits(

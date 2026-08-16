@@ -1019,20 +1019,18 @@ def test_atomize_save_as_rejects_conflicts_and_preserves_published_failure(
         raise AtomizeImpactError("injected apply failure")
 
     monkeypatch.setattr(
-        "memcommit.commands.atomize.apply_atomize_analysis",
+        "memcommit.atomize_runtime.apply_atomize_analysis",
         fail_apply,
     )
     failed = runner.invoke(app, ["atomize", "--save-as", "rolled-back"])
 
     assert failed.exit_code == 1
     assert "injected apply failure" in failed.stderr
-    assert "preserved for manual inspection" in failed.stderr
-    assert store.context_exists("rolled-back")
-    assert store.list_context_names() == ["existing", "rolled-back", "source"]
-    preserved = store.load_direct("rolled-back")
-    assert preserved.uid != source.uid
-    assert memory.uid in preserved.memories
-    assert len(store.list_checkpoints(preserved.name)) == 1
+    assert not store.context_exists("rolled-back")
+    assert store.list_context_names() == ["existing", "source"]
+    assert not any(store.atomize_analyses_dir.glob("*.json")) or list(
+        store.atomize_analyses_dir.glob("*.json")
+    ) == [store._atomize_analysis_path(source.uid)]
     assert store.current_context_name() == source.name
     assert store._context_file(source.name).read_bytes() == source_bytes
     assert memory.uid in store.load_direct(source.name).memories
@@ -1095,11 +1093,96 @@ def test_atomize_save_as_preserves_destination_when_final_switch_fails(
     assert "injected state switch failure" in result.stderr
     assert "preserved for manual inspection" in result.stderr
     assert store.context_exists("derived")
-    assert len(store.list_checkpoints("derived")) == 2
+    assert len(store.list_checkpoints("derived")) == 1
     assert store.current_context_name() == source.name
     assert store_module.STATE_FILE.read_bytes() == state_bytes
     assert store._context_file(source.name).read_bytes() == source_bytes
     assert memory.uid in store.load_direct(source.name).memories
+
+
+def test_atomize_save_as_retry_completes_receipt_without_duplicate_checkpoint(
+    isolated_store,
+    monkeypatch,
+):
+    from memcommit.atomize_runtime import MemoryStoreAtomizeSessionRepository
+
+    store = MemoryStore()
+    source = ops.init("retry-source")
+    ops.add(source, "First fact. Second fact.")
+    store.save(source)
+    store.set_current(source.name)
+
+    def respond(payload):
+        return {
+            "items": [
+                _item(
+                    payload["memories"][0]["candidate_id"],
+                    "COMPOSITE",
+                    children=[
+                        {
+                            "content": "First fact.",
+                            "source_spans": ["First fact"],
+                        },
+                        {
+                            "content": "Second fact.",
+                            "source_spans": ["Second fact"],
+                        },
+                    ],
+                )
+            ]
+        }
+
+    monkeypatch.setattr(
+        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        lambda: AtomizeProvider(respond),
+    )
+    assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
+    analysis = store.load_atomize_analysis(source.uid)
+    assert analysis is not None
+    original = MemoryStoreAtomizeSessionRepository.replace_application
+    failed_once = False
+
+    def fail_once(repository, *args, **kwargs):
+        nonlocal failed_once
+        if not failed_once:
+            failed_once = True
+            raise OSError("injected receipt failure")
+        return original(repository, *args, **kwargs)
+
+    monkeypatch.setattr(
+        MemoryStoreAtomizeSessionRepository,
+        "replace_application",
+        fail_once,
+    )
+
+    failed = runner.invoke(app, ["atomize", "--save-as", "retry-output"])
+
+    assert failed.exit_code == 1
+    assert "injected receipt failure" in failed.stderr
+    assert "retained" in failed.stderr
+    assert store.context_exists("retry-output")
+    first_checkpoints = store.list_checkpoints("retry-output")
+    assert [checkpoint["command"] for checkpoint in first_checkpoints] == [
+        "atomize"
+    ]
+    workbench = store.load_atomize_workbench(analysis)
+    assert workbench is not None
+    assert workbench.application is None
+    assert store.current_context_name() == source.name
+
+    retried = runner.invoke(
+        app,
+        ["atomize", "--context", source.name, "--save-as", "retry-output"],
+    )
+
+    assert retried.exit_code == 0, retried.output
+    assert "Recovered the exact prior checkpoint" in retried.output
+    assert store.list_checkpoints("retry-output") == first_checkpoints
+    workbench = store.load_atomize_workbench(analysis)
+    assert workbench is not None
+    assert workbench.application is not None
+    assert workbench.application.checkpoint_uid == first_checkpoints[0]["uid"]
+    assert store.current_context_name() == "retry-output"
 
 
 def test_atomize_save_as_preserves_concurrent_current_selection(
@@ -1146,7 +1229,7 @@ def test_atomize_save_as_preserves_concurrent_current_selection(
         return apply_analysis(context, analysis)
 
     monkeypatch.setattr(
-        "memcommit.commands.atomize.apply_atomize_analysis",
+        "memcommit.atomize_runtime.apply_atomize_analysis",
         switch_then_apply,
     )
 
@@ -1185,7 +1268,7 @@ def test_atomize_save_as_does_not_overwrite_concurrent_destination(
         return result
 
     monkeypatch.setattr(
-        "memcommit.commands.atomize.ops.branch",
+        "memcommit.atomize_runtime.ops.branch",
         create_competitor,
     )
 
@@ -1572,7 +1655,7 @@ def test_atomize_save_blocks_stale_analysis_and_inbound_split_reference(
     assert "stale" in stale.stderr
 
 
-def test_atomize_save_as_preserves_source_and_records_base_then_apply(
+def test_atomize_save_as_is_one_creation_command_with_lifecycle_undo_redo(
     isolated_store,
     monkeypatch,
 ):
@@ -1651,7 +1734,7 @@ def test_atomize_save_as_preserves_source_and_records_base_then_apply(
 
     assert saved.exit_code == 0, saved.output
     assert "Created and atomized 'derived/atomized'" in saved.output
-    assert "Two checkpoints created" in saved.output
+    assert "One Atomize checkpoint created" in saved.output
     assert store.current_context_name() == "derived/atomized"
     assert store._context_file(source.name).read_bytes() == source_bytes
     assert store.list_checkpoints(source.name) == source_checkpoints
@@ -1685,9 +1768,10 @@ def test_atomize_save_as_preserves_source_and_records_base_then_apply(
     )
     assert [
         checkpoint["command"] for checkpoint in store.list_checkpoints(destination.name)
-    ] == ["atomize", "init"]
+    ] == ["atomize"]
     destination_after_apply = destination.to_dict()
-    destination_before_apply = store.list_checkpoints(destination.name)[1]["snapshot"]
+    destination_uid = destination.uid
+    checkpoint_uid = store.list_checkpoints(destination.name)[0]["uid"]
 
     destination_analysis = store.load_atomize_analysis(destination.uid)
     assert source_analysis is not None
@@ -1719,12 +1803,24 @@ def test_atomize_save_as_preserves_source_and_records_base_then_apply(
 
     undone = runner.invoke(app, ["undo"])
     assert undone.exit_code == 0, undone.output
-    assert store.load_direct(destination.name).to_dict() == destination_before_apply
+    assert not store.context_exists(destination.name)
+    assert store.current_context_name() == source.name
+    source_workbench = store.load_atomize_workbench(source_analysis)
+    assert source_workbench is not None
+    assert source_workbench.application is None
 
     redone = runner.invoke(app, ["redo"])
     assert redone.exit_code == 0, redone.output
     assert store.load_direct(destination.name).to_dict() == destination_after_apply
+    assert store.load_direct(destination.name).uid == destination_uid
+    restored_analysis = store.load_atomize_analysis(destination_uid)
+    assert restored_analysis is not None
+    assert restored_analysis.uid == source_analysis.uid
+    source_workbench = store.load_atomize_workbench(source_analysis)
+    assert source_workbench is not None
+    assert source_workbench.application is not None
+    assert source_workbench.application.checkpoint_uid == checkpoint_uid
     assert [
         checkpoint["command"]
-        for checkpoint in store.list_checkpoints(destination.name)[:4]
-    ] == ["redo", "undo", "atomize", "init"]
+        for checkpoint in store.list_checkpoints(destination.name)[:3]
+    ] == ["redo", "undo", "atomize"]

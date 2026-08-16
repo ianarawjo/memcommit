@@ -8,21 +8,20 @@ from typing import Annotated, Optional
 
 import typer
 
-import memcommit.ops as ops
 from memcommit.atomize import (
     AtomizeAnalysisSession,
     AtomizeImpactError,
-    apply_atomize_analysis,
     atomize_analysis_matches_context,
 )
 from memcommit.atomize_analysis_application import AtomizeAnalysisOpenRequest
 from memcommit.atomize_analysis_runtime import execute_atomize_analysis_open
 from memcommit.atomize_application import (
     AtomizePersistedApplyRequest,
-    atomize_application_audit,
+    AtomizeSaveAsRequest,
 )
 from memcommit.atomize_runtime import (
     capture_atomize_session_snapshot,
+    execute_atomize_save_as,
     execute_atomize_session_apply,
 )
 from memcommit.atomize_workbench import (
@@ -58,14 +57,12 @@ from memcommit.commands.endpoint_setup_flows import choose_atomize_setup
 from memcommit.commands.session_picker import SessionNewReceipt
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.review_shell import ReviewCancelled
-from memcommit.context import AutoCheckpoint, Memory
 from memcommit.review import (
     atomize_review_declared_frames,
     atomize_review_matches_analysis,
-    direct_context_digest,
     review_response_digest,
 )
-from memcommit.store import MemoryStore, context_record_digest
+from memcommit.store import MemoryStore
 from memcommit.study_prewarm.atomize import is_installed_atomize_prewarm
 from memcommit.query_provider import (
     QueryProviderError,
@@ -93,56 +90,6 @@ def _incorporable_workbench_response_count(
         response.answered and len(findings[issue_uid].source_uids) == 1
         for issue_uid, response in workbench.responses.items()
     )
-
-
-def _atomize_application_audit(
-    analysis: AtomizeAnalysisSession,
-    workbench,
-) -> dict[str, object]:
-    """Compatibility projection for save-as while in-place uses typed state."""
-
-    return atomize_application_audit(analysis, workbench).checkpoint_fields()
-
-
-def _record_atomize_workbench_application(
-    *,
-    store: MemoryStore,
-    analysis: AtomizeAnalysisSession,
-    workbench,
-    output_context_name: str,
-) -> None:
-    """Persist Source-owned terminal state after the Context checkpoint exists."""
-
-    if workbench is None:
-        return
-    checkpoint_uid = next(
-        (
-            checkpoint.get("uid")
-            for checkpoint in store.list_checkpoints(output_context_name)
-            if checkpoint.get("command") == "atomize"
-            and isinstance(checkpoint.get("args"), dict)
-            and checkpoint["args"].get("analysis_uid") == analysis.uid
-        ),
-        None,
-    )
-    if not isinstance(checkpoint_uid, str):
-        raise AtomizeImpactError(
-            "Atomize applied but its application checkpoint could not be found."
-        )
-    latest = store.load_atomize_workbench(analysis)
-    if latest is None or latest.uid != workbench.uid:
-        raise AtomizeImpactError(
-            "Atomize applied but its reviewed workbench changed before the "
-            "terminal receipt could be saved."
-        )
-    # An explicit one-shot --save-as chooses its Output after the workbench;
-    # retain that actual destination before freezing the terminal receipt.
-    latest.output_context_name = output_context_name
-    latest.record_application(
-        output_context_name=output_context_name,
-        checkpoint_uid=checkpoint_uid,
-    )
-    store.save_atomize_workbench(latest)
 
 
 def _render_apply_result(
@@ -187,8 +134,8 @@ def _render_apply_result(
         )
     if created:
         typer.echo(
-            "Two checkpoints created: the source-based initial state and "
-            "the atomized state."
+            "One Atomize checkpoint created; no intermediate Context was "
+            "published."
         )
         typer.echo(f"Switched to '{context_name}'.")
     else:
@@ -413,109 +360,6 @@ def _resume_selected_atomize(
         )
 
 
-def _apply_to_new_context(
-    *,
-    store: MemoryStore,
-    source_name: str,
-    destination_name: str,
-    session: AtomizeAnalysisSession,
-    expected_current: str | None,
-    application_audit: dict[str, object],
-):
-    """Create an init-like copy, then apply one saved preview to that copy."""
-    if store.context_exists(destination_name):
-        raise AtomizeImpactError(f"Context '{destination_name}' already exists.")
-
-    # Resolve normal refs only after the direct-only preview has been verified.
-    # Query-only refs remain opaque. ops.branch gives the destination a fresh
-    # Context identity while preserving the source frame's direct Memory UIDs.
-    source = store.load_for_update(source_name)
-    source_digest = context_record_digest(source)
-    destination = ops.branch(source, destination_name)
-    created = False
-    try:
-        # Persist the unmodified source frame first. This makes save-as
-        # inspectable as original state -> atomized state without copying the
-        # source Context's unrelated checkpoint history.
-        store.create_context_with_sources(
-            destination,
-            AutoCheckpoint(
-                command="init",
-                args={
-                    "name": destination_name,
-                    "source_context": {
-                        "uid": source.uid,
-                        "name": source.name,
-                    },
-                    "source_analysis_uid": session.uid,
-                    "memory_uids": [
-                        item.uid
-                        for item in destination.iter_items()
-                        if isinstance(item, Memory)
-                    ],
-                },
-                description=(
-                    f"Initialized '{destination_name}' from '{source_name}' "
-                    f"before applying atomize [{session.uid[:8]}]"
-                ),
-            ),
-            source_bindings=((source_name, source.uid, source_digest),),
-        )
-        created = True
-
-        destination_session = replace(
-            session,
-            context_uid=destination.uid,
-            context_name=destination.name,
-            context_digest=direct_context_digest(destination),
-        )
-        store.save_atomize_analysis(destination_session)
-        result = apply_atomize_analysis(destination, destination_session)
-        store.save(
-            destination,
-            AutoCheckpoint(
-                command="atomize",
-                args={
-                    "analysis_uid": destination_session.uid,
-                    "ruleset_version": destination_session.ruleset_version,
-                    "source_review_uid": (destination_session.source_review_uid),
-                    "source_review_digest": (destination_session.source_review_digest),
-                    "declared_frame_count": len(destination_session.declared_frames),
-                    "split_count": result.split_count,
-                    "child_count": result.child_count,
-                    "preserved_count": result.preserved_count,
-                    **application_audit,
-                    "trace": result.trace_metadata(),
-                },
-                description=(
-                    f"Applied atomize [{destination_session.uid[:8]}]: "
-                    f"{result.split_count} splits -> {result.child_count} "
-                    f"children; {result.preserved_count} preserved; "
-                    f"{application_audit['unresolved_at_apply_count']} "
-                    "unresolved at apply"
-                ),
-            ),
-        )
-        store.set_current_context_if(
-            expected_current,
-            destination.name,
-            expected_context_uid=destination.uid,
-            expected_context_digest=destination._store_digest or "",
-        )
-        return destination_session, result
-    except Exception as error:
-        if created:
-            # Publication is observable even when the destination itself has
-            # not changed. Deleting it by name could strand a concurrent
-            # reference, so preserve the exact partial result for inspection.
-            raise AtomizeImpactError(
-                f"Atomize save-as failed ({error}); destination "
-                f"'{destination.name}' was preserved for manual inspection "
-                "and the source was not changed."
-            ) from error
-        raise
-
-
 def cmd(
     save: Annotated[
         bool,
@@ -530,8 +374,8 @@ def cmd(
             "--save-as",
             metavar="CONTEXT",
             help=(
-                "Create an init-like Context from the source frame, apply the "
-                "preview there, and switch to it"
+                "Create one final atomized Context from the source frame and "
+                "switch to it"
             ),
         ),
     ] = None,
@@ -1042,10 +886,16 @@ def cmd(
             raise AtomizeImpactError(
                 "The saved atomize analysis does not match this Context's identity."
             )
+        workbench = store.load_atomize_workbench(session)
+        planned_output = (
+            workbench.output_context_name if workbench is not None else name
+        )
+        applying_planned_output = save and save_as is None and planned_output != name
+        if applying_planned_output:
+            save_as = planned_output
         already_applied = atomize_workbench_was_applied(
             store, session
         ) or atomize_analysis_was_applied(store, direct_ctx, session.uid)
-        workbench = store.load_atomize_workbench(session)
         recovering_missing_receipt = (
             save
             and save_as is None
@@ -1053,7 +903,12 @@ def cmd(
             and workbench is not None
             and workbench.application is None
         )
-        if save and already_applied and not recovering_missing_receipt:
+        if (
+            save
+            and save_as is None
+            and already_applied
+            and not recovering_missing_receipt
+        ):
             typer.secho(
                 f"Atomize analysis [{session.uid[:8]}] is already applied; "
                 "no new checkpoint was created.",
@@ -1068,12 +923,6 @@ def cmd(
                 "Saved atomize analysis is stale. "
                 "Run 'mem impact atomize --refresh' before saving."
             )
-        planned_output = (
-            workbench.output_context_name if workbench is not None else name
-        )
-        applying_planned_output = save and save_as is None and planned_output != name
-        if applying_planned_output:
-            save_as = planned_output
         if save_as is not None and store.context_exists(save_as):
             output_context = store.load_direct(save_as)
             output_analysis = store.load_atomize_analysis(output_context.uid)
@@ -1082,17 +931,15 @@ def cmd(
                 and output_analysis.uid == session.uid
                 and atomize_planned_output_was_applied(store, session, save_as)
             ):
-                typer.secho(
-                    f"Atomize analysis [{session.uid[:8]}] is already "
-                    f"applied to planned Output '{save_as}'; no new "
-                    "checkpoint was created.",
-                    fg=typer.colors.YELLOW,
+                # Continue through the typed Save As boundary. It validates
+                # the exact checkpoint and completes any missing Source
+                # receipt/current selection without publishing another one.
+                pass
+            else:
+                raise AtomizeImpactError(
+                    f"Planned atomize Output '{save_as}' already exists and is "
+                    "not the exact applied result of this session."
                 )
-                return
-            raise AtomizeImpactError(
-                f"Planned atomize Output '{save_as}' already exists and is "
-                "not the exact applied result of this session."
-            )
         incorporable_response_count = _incorporable_workbench_response_count(
             session,
             workbench,
@@ -1148,6 +995,7 @@ def cmd(
             save_as is not None
             and _interactive_terminal()
             and not applying_planned_output
+            and not store.context_exists(save_as)
         ):
             from memcommit.commands.save_location_review import (
                 review_save_location,
@@ -1166,31 +1014,28 @@ def cmd(
                 return
             save_as = reviewed_destination
 
-        application_audit = _atomize_application_audit(session, workbench)
         recovered_application = False
+        snapshot = capture_atomize_session_snapshot(
+            store=store,
+            analysis=session,
+            expected_workbench=workbench,
+        )
         if save_as is not None:
-            applied_session, result = _apply_to_new_context(
+            applied = execute_atomize_save_as(
+                AtomizeSaveAsRequest(
+                    snapshot=snapshot,
+                    destination_name=save_as,
+                    expected_current=context_snapshot.current_name,
+                ),
                 store=store,
-                source_name=name,
-                destination_name=save_as,
-                session=session,
-                expected_current=context_snapshot.current_name,
-                application_audit=application_audit,
             )
-            applied_name = save_as
+            applied_session = applied.output_analysis
+            result = applied.materialization.result
+            applied_name = applied.materialization.context_name
             created = True
-            _record_atomize_workbench_application(
-                store=store,
-                analysis=session,
-                workbench=workbench,
-                output_context_name=applied_name,
-            )
+            recovered_application = applied.recovered
+            application_audit = applied.audit.checkpoint_fields()
         else:
-            snapshot = capture_atomize_session_snapshot(
-                store=store,
-                analysis=session,
-                expected_workbench=workbench,
-            )
             applied = execute_atomize_session_apply(
                 AtomizePersistedApplyRequest(snapshot=snapshot),
                 store=store,

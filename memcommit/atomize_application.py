@@ -82,6 +82,26 @@ class AtomizePersistedApplyResult:
     recovered: bool
 
 
+@dataclass(frozen=True)
+class AtomizeSaveAsRequest:
+    """Create one reviewed Atomize output without exposing an intermediate copy."""
+
+    snapshot: AtomizeSessionSnapshot
+    destination_name: str
+    expected_current: str | None
+
+
+@dataclass(frozen=True)
+class AtomizeSaveAsResult:
+    """One final new Context, its Source-owned receipt, and selection outcome."""
+
+    snapshot: AtomizeSessionSnapshot
+    output_analysis: AtomizeAnalysisSession
+    materialization: AtomizeMaterialization
+    audit: AtomizeApplicationAudit
+    recovered: bool
+
+
 class AtomizeSessionRepository(Protocol):
     """Persist an analysis/workbench pair without exposing record digests."""
 
@@ -123,6 +143,35 @@ class AtomizeOutputPort(Protocol):
         materialization: AtomizeMaterialization,
     ) -> None:
         """Compensate only the untouched checkpoint created by this attempt."""
+
+
+class AtomizeSaveAsOutputPort(Protocol):
+    """Publish or recover one final new Context for a reviewed Source session."""
+
+    def recover_materialization(
+        self,
+        snapshot: AtomizeSessionSnapshot,
+        audit: AtomizeApplicationAudit,
+        destination_name: str,
+    ) -> tuple[AtomizeAnalysisSession, AtomizeMaterialization] | None:
+        """Recover only the exact output of this Source review."""
+
+    def materialize(
+        self,
+        snapshot: AtomizeSessionSnapshot,
+        audit: AtomizeApplicationAudit,
+        destination_name: str,
+        expected_current: str | None,
+    ) -> tuple[AtomizeAnalysisSession, AtomizeMaterialization]:
+        """Publish the final atomized Context in one checkpoint."""
+
+    def select_output(
+        self,
+        materialization: AtomizeMaterialization,
+        *,
+        expected_current: str | None,
+    ) -> None:
+        """Select the exact published output under current-state CAS."""
 
 
 def atomize_application_audit(
@@ -170,16 +219,119 @@ def atomize_application_audit(
 def _terminal_workbench(
     snapshot: AtomizeSessionSnapshot,
     materialization: AtomizeMaterialization,
+    *,
+    output_context_name: str | None = None,
 ) -> AtomizeWorkbenchSession | None:
     workbench = snapshot.workbench
     if workbench is None:
         return None
     terminal = copy.deepcopy(workbench)
+    if output_context_name is not None:
+        terminal.output_context_name = output_context_name
     terminal.record_application(
         output_context_name=materialization.context_name,
         checkpoint_uid=materialization.checkpoint_uid,
     )
     return terminal
+
+
+def run_atomize_save_as(
+    request: AtomizeSaveAsRequest,
+    *,
+    repository: AtomizeSessionRepository,
+    output_port: AtomizeSaveAsOutputPort,
+) -> AtomizeSaveAsResult:
+    """Publish one final output and finish its Source-owned receipt on retry.
+
+    The Context becomes visible only after the structural transform succeeds.
+    Once visible, it is deliberately retained if receipt persistence or current
+    selection fails: deleting a published Context by name could invalidate an
+    observer, while the exact checkpoint makes a later retry deterministic.
+    """
+
+    reviewed = request.snapshot
+    current = repository.load(reviewed.analysis)
+    if current != reviewed:
+        raise AtomizeApplicationError(
+            "The Atomize session changed before Save As. Reopen the review."
+        )
+    audit = atomize_application_audit(current.analysis, current.workbench)
+    recovered_pair = output_port.recover_materialization(
+        current,
+        audit,
+        request.destination_name,
+    )
+    recovered = recovered_pair is not None
+    if recovered_pair is None:
+        output_analysis, materialization = output_port.materialize(
+            current,
+            audit,
+            request.destination_name,
+            request.expected_current,
+        )
+    else:
+        output_analysis, materialization = recovered_pair
+
+    terminal = _terminal_workbench(
+        current,
+        materialization,
+        output_context_name=request.destination_name,
+    )
+    committed = current
+    if terminal is not None:
+        if current.workbench is not None and current.workbench.application is not None:
+            if current.workbench != terminal:
+                raise AtomizeApplicationError(
+                    "The Atomize session records a different application receipt."
+                )
+            recovered = True
+        else:
+            try:
+                committed = repository.replace_application(
+                    terminal,
+                    analysis=current.analysis,
+                    expected_version=current.version_token,
+                )
+            except Exception as error:
+                try:
+                    observed = repository.load(current.analysis)
+                except Exception as observation_error:
+                    raise AtomizeApplicationError(
+                        "The final Atomize output is retained, but its Source "
+                        "receipt could not be verified. Retry the same Save As: "
+                        f"{observation_error}"
+                    ) from observation_error
+                if observed.workbench == terminal:
+                    committed = observed
+                else:
+                    raise AtomizeApplicationError(
+                        "The final Atomize output is retained, but its Source "
+                        "receipt was not saved. Retry the same Save As: "
+                        f"{error}"
+                    ) from error
+            if committed.workbench != terminal:
+                raise AtomizeApplicationError(
+                    "Atomize receipt persistence returned a different session."
+                )
+
+    try:
+        output_port.select_output(
+            materialization,
+            expected_current=request.expected_current,
+        )
+    except Exception as error:
+        raise AtomizeApplicationError(
+            "The final Atomize output and receipt are retained, but current "
+            "Context selection failed. Retry the same Save As or select it "
+            f"explicitly: {error}"
+        ) from error
+    return AtomizeSaveAsResult(
+        snapshot=committed,
+        output_analysis=output_analysis,
+        materialization=materialization,
+        audit=audit,
+        recovered=recovered,
+    )
 
 
 def run_atomize_session_apply(

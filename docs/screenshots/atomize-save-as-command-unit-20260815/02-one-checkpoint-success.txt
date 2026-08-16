@@ -1,0 +1,14 @@
+52 180                                                                                                                                                                              
+                                                                                                                                                                                    
+ ╭─ SAVE LOCATION ──────────────────────────────────────────────────────╮                                                                                                           
+ │ atomize/output · NOT CREATED                                         │                                                                                                           
+ │ E edits this exact new Context name before Apply.                    │                                                                                                           
+ ╰──────────────────────────────────────────────────────────────────────╯                                                                                                           
+  y = create atomized Context    e = edit save location    n = abort                                                                                                                
+>: y                                                                                                                                                                                
+Created and atomized 'atomize/output' from analysis [5937a593].                                                                                                                     
+  0 splits -> 0 children                                                                                                                                                            
+  1 Memories preserved in place                                                                                                                                                     
+One Atomize checkpoint created; no intermediate Context was published.                                                                                                              
+Switched to 'atomize/output'.                                                                                                                                                       
+SAVE AS VERIFIED · OUTPUT True · CHECKPOINTS 1 · RECEIPT True · CURRENT atomize/output

@@ -1,0 +1,10 @@
+52 180
+
+ ╭─ SAVE LOCATION ──────────────────────────────────────────────────────╮
+ │ atomize/output · NOT CREATED                                         │
+ │ E edits this exact new Context name before Apply.                    │
+ ╰──────────────────────────────────────────────────────────────────────╯
+[2m  y = create atomized Context    e = edit save location    n = abort[0m
+>: y
+[31mAtomize error: injected prepublication failure[0m
+PREPUBLICATION FAILURE VERIFIED · OUTPUT False · CHECKPOINTS 0 · RECEIPT False · CURRENT atomize/source

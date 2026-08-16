@@ -117,10 +117,11 @@ pair publication, and the existing synchronous restoration path. The legacy
 | Embedded Context unavailable | fail before saving parent | embedded-Context safety test | mutating load must stay complete |
 | Inbound reference to split source | fail before mutation | inbound-reference test | strict graph scan remains a preflight |
 | Repeated exact Apply | no second checkpoint or effect | lineage/idempotence tests | terminal receipt or exact checkpoint recovery must make retry idempotent |
-| Undo then retry | Context can return to its old bytes, but the analysis remains terminal | Undo/retry test | do not equate byte equality with application eligibility |
+| Undo then retry | In-place Apply can return to old bytes while remaining terminal; Save As lifecycle Undo removes its created Context and reverses its Source receipt | Undo/retry and Save As lifecycle tests | do not equate byte equality with application eligibility; creation Undo is an explicit whole-command reversal |
 | Destination occupied or raced | unrelated Context is never overwritten | save-as collision/race tests | require-new publication remains authoritative |
-| Save-as succeeds | Source unchanged; destination gets init baseline, atomize checkpoint, analysis copy, then conditional current switch | save-as lineage test | return one typed complete-effect receipt |
-| Save-as fails after publication | published destination is retained for manual inspection | published-failure and switch-failure tests | result must explicitly distinguish retained partial publication from success |
+| Save-as succeeds | Source unchanged; transform finishes before publication; destination gets one final Atomize creation checkpoint, analysis copy, Source receipt, then conditional current switch | save-as lineage and lifecycle tests | return one typed complete-effect receipt |
+| Save-as fails before publication | no destination or destination analysis remains | injected transform/publication tests | hidden preparation is not a visible command state |
+| Save-as fails after publication | exact final destination is retained and retry finishes the missing receipt/selection without another checkpoint | receipt- and switch-failure retry tests | distinguish retained recoverable publication from success |
 | Terminal receipt write fails before commit | exact new checkpoint is removed and the exact pre-Apply Context record is restored | compensation boundary test | verified for synchronous local failure |
 | Terminal receipt commits then reports failure | exact terminal workbench is re-read and reported as success | late-success boundary test | verified under the session lock and application re-read |
 | Retry after checkpoint but before terminal receipt | exact trace/audit/checkpoint is adopted, receipt is repaired, and no duplicate checkpoint is created | interrupted recovery test | verified even after later Context edits because recovery never overwrites current content |
@@ -207,27 +208,22 @@ session lock; the repository rechecks the token before terminal publication.
    workbench-race cases.
 4. **Done:** move open/create/reuse behind an analysis application use case
    while retaining exact hidden-prewarm and provider-free resume behavior.
-5. Give save-as an explicit typed partial-publication result and choose its
-   Undo model without deleting a possibly observed Context by name.
+5. **Done:** route save-as through a typed request/result, publish one final
+   creation checkpoint, retain exact post-publication failures for idempotent
+   retry, and restore Context/analysis/receipt as one Undo/Redo lifecycle.
 6. Move the remaining shared Resolution/save-as actions to typed use cases,
    then remove duplicated command-owned policy.
-7. Decide whether the save-as init + atomize sequence becomes one compound
-   Undo unit or remains an explicitly documented two-checkpoint exception.
+7. **Done:** make new save-as histories one Atomize creation unit; leave
+   pre-release legacy `init + atomize` histories uninterpreted.
 
 ## Current verification evidence
 
-The current Atomize-focused run passes 186 tests with one pre-existing
-grounding screen-capture comparison deselected because its expected wording no
-longer matches the shared renderer. The new six-case analysis-boundary file
-directly covers provider creation, provider-free saved resume, exact
-hidden-prewarm materialization, prepared-reuse policy, stale rejection,
-refresh, and module dependency direction; the existing refresh rollback test
-continues to prove analysis/workbench pair restoration. The structural boundary
-file passes seven cases: recorded all-preserved completion, receipt compensation,
-late-success detection, interrupted recovery, later-edit preservation,
-workbench-race compensation, and dependency direction. A second integrated run
-passes 202 command, Context safety, history/restoration, write-protection, and
-Study-installation tests.
+The structural boundary file passes eleven cases. In addition to recorded
+all-preserved completion, in-place receipt compensation, late-success
+detection, interrupted recovery, later-edit preservation, workbench-race
+compensation, and dependency direction, it now covers final-only Save As,
+creation-lifecycle Undo/Redo, prepublication failure cleanup, exact receipt
+retry, and recorded Source-frame lineage for both KEEP and SPLIT.
 
 The existing screenshot sets cover Study hidden-session initialization, exact
 prewarm entry, split review, final approval/application, output verification,
@@ -239,6 +235,12 @@ read-only verification, receipt compensation, late success, interrupted
 checkpoint recovery, recovery verification, and workbench-CAS compensation;
 an ordinary success screenshot alone is not treated as proof of those
 boundaries.
+
+The focused
+[180×52 Save As command-unit replay](screenshots/atomize-save-as-command-unit-20260815/README.md)
+adds eight ordered color-PTY captures for exact location review, final-only
+publication, read-only lineage, one-command Undo/Redo, prepublication failure,
+retained output, and exact retry recovery.
 
 The focused
 [180×52 analysis-open replay](screenshots/atomize-analysis-open-boundary-20260815/README.md)

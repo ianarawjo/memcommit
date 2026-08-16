@@ -1,0 +1,19 @@
+52 180                                                                                                                                                                              
+                                                                                                                                                                                    
+ ╭─ SAVE LOCATION ──────────────────────────────────────────────────────╮                                                                                                           
+ │ atomize/output · NOT CREATED                                         │                                                                                                           
+ │ E edits this exact new Context name before Apply.                    │                                                                                                           
+ ╰──────────────────────────────────────────────────────────────────────╯                                                                                                           
+  y = create atomized Context    e = edit save location    n = abort                                                                                                                
+>: y                                                                                                                                                                                
+Atomize error: The final Atomize output is retained, but its Source receipt was not saved. Retry the same Save As: injected Source receipt failure                                  
+RETAINED OUTPUT · OUTPUT True · CHECKPOINTS 1 · RECEIPT False · CURRENT atomize/source                                                                                              
+RETRY READY                                                                                                                                                                         
+> press Enter to retry the exact retained output:                                                                                                                                   
+Created and atomized 'atomize/output' from analysis [f5be3bc0].                                                                                                                     
+  0 splits -> 0 children                                                                                                                                                            
+  1 Memories preserved in place                                                                                                                                                     
+  Recovered the exact prior checkpoint; no duplicate was created                                                                                                                    
+One Atomize checkpoint created; no intermediate Context was published.                                                                                                              
+Switched to 'atomize/output'.                                                                                                                                                       
+RETRY VERIFIED · OUTPUT True · CHECKPOINTS 1 · RECEIPT True · CURRENT atomize/output

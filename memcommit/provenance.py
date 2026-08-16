@@ -11,6 +11,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, replace
 import hashlib
+import json
 from typing import Any, Iterable, Literal, Sequence
 import uuid
 
@@ -400,6 +401,63 @@ def _frame_from_context(ctx: Context) -> _Frame:
         order=tuple(order),
         record=record,
         record_digest=context_record_digest(record),
+    )
+
+
+def _atomize_save_as_source_frame(
+    args: dict[str, Any],
+    after: _Frame,
+) -> _Frame | None:
+    """Recover the non-published branch baseline retained for Trace only."""
+
+    receipt = args.get("atomize_save_as")
+    if not isinstance(receipt, dict) or receipt.get("version") != 1:
+        return None
+    raw_frame = receipt.get("source_frame")
+    declared_digest = receipt.get("source_frame_digest")
+    if not isinstance(raw_frame, list) or not isinstance(declared_digest, str):
+        return None
+    ordered: list[dict[str, object]] = []
+    seen: set[str] = set()
+    for position, item in enumerate(raw_frame):
+        if (
+            not isinstance(item, dict)
+            or set(item) != {"uid", "content", "position"}
+            or not isinstance(item.get("uid"), str)
+            or not isinstance(item.get("content"), str)
+            or item.get("position") != position
+            or item["uid"] in seen
+        ):
+            return None
+        seen.add(item["uid"])
+        ordered.append(item)
+    actual_digest = hashlib.sha256(
+        json.dumps(
+            [
+                {"uid": item["uid"], "content": item["content"]}
+                for item in ordered
+            ],
+            ensure_ascii=False,
+            separators=(",", ":"),
+        ).encode("utf-8")
+    ).hexdigest()
+    if actual_digest != declared_digest:
+        return None
+    return _frame_from_snapshot(
+        {
+            "uid": after.context_uid,
+            "name": after.context_name,
+            "memories": {
+                item["uid"]: {
+                    "type": "memory",
+                    "uid": item["uid"],
+                    "content": item["content"],
+                }
+                for item in ordered
+            },
+            "order": [item["uid"] for item in ordered],
+        },
+        label="Atomize Save As Source frame",
     )
 
 
@@ -2365,11 +2423,47 @@ def _transition_events(
             )
         return events, []
 
+    trace_before = (
+        _atomize_save_as_source_frame(args, after)
+        if command == "atomize"
+        else None
+    )
     events, consumed_before, consumed_after, warnings = _explicit_trace_events(
-        before=before,
+        before=trace_before or before,
         after=after,
         entry=entry,
     )
+    if trace_before is not None:
+        receipt = args["atomize_save_as"]
+        source_context = receipt.get("source_context")
+        source_name = (
+            source_context.get("name")
+            if isinstance(source_context, dict)
+            else None
+        )
+        events = [
+            TraceEvent(
+                kind="CREATED",
+                evidence="RECORDED",
+                timestamp=timestamp,
+                checkpoint_uid=checkpoint_uid,
+                command=command,
+                description=description,
+                after=(trace_before.memories[uid],),
+                reason=(
+                    f"Copied into this Context from '{source_name}' before "
+                    "the reviewed Atomize transform."
+                    if isinstance(source_name, str)
+                    else "Copied into this Context before Atomize."
+                ),
+                operation_id=(
+                    args.get("analysis_uid")
+                    if isinstance(args.get("analysis_uid"), str)
+                    else None
+                ),
+            )
+            for uid in trace_before.order
+        ] + events
     command_operation = _update_command_operation(
         command=command,
         args=args,

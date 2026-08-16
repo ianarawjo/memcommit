@@ -101,6 +101,16 @@ to Output for provenance, the saved-work catalog collapses that copy into the
 single Input-owned workbench session instead of presenting two sessions or
 rejecting UID-based resume as ambiguous.
 
+Save As is one user operation and one Context-creation command unit. Atomize
+builds the derived Context and applies the complete reviewed transform in
+memory; the unmodified branch baseline is provenance, not a visible Context or
+checkpoint. Only the final atomized Context is published, with one `atomize`
+checkpoint carrying an exact `context_creation` and Source-baseline receipt.
+Legacy histories that already contain separate `init` and `atomize`
+checkpoints are not regrouped or reinterpreted. A person who deliberately
+wants two operations can still run `mem branch A B` and then apply Atomize to
+`B`.
+
 ## Decision
 
 An atomic Memory is one **focal-commitment occurrence** together with every
@@ -548,11 +558,14 @@ the final screen discloses that the revised proposal will apply without being
 rendered again. Escape/Backspace returns without either step, and `mem undo`
 remains the recovery boundary.
 
-That Apply boundary is terminal for the saved analysis identity. After the
-durable Atomize checkpoint exists, the Source-owned workbench records its
+That Apply boundary is terminal for the saved analysis identity while its
+effect remains in command history. After the durable Atomize checkpoint
+exists, the Source-owned workbench records its
 Output and checkpoint UID so target divergence or deletion cannot rearm the
-session. Later Output edits, conflicts, or Undo do not make the same proposal
-applicable again.
+session. Later Output edits or conflicts do not make the same proposal
+applicable again. Whole-command Undo of a Save As creation reverses both the
+created Context lifecycle and this receipt; Redo restores the same Context UID,
+checkpoint lineage, copied analysis, and terminal receipt.
 Reopening an applied workbench may retain and edit item comments as review
 evidence, but it exposes neither whole-set incorporation nor `APPLY`, `APPLY AS
 IS`, or `INCORPORATE AND APPLY`. Another structural attempt begins from a new
@@ -666,24 +679,28 @@ In-place save creates one checkpoint and blocks only an inbound `memory_ref`
 whose target Context UID is the selected Context and whose target Memory UID is
 one of the sources that would be split. References to unchanged Memories do not
 block it. Save-as does not remove those source Memories: it creates a fresh
-Context UID, first records an init-like source baseline, then records the
-atomized state, so references to the unchanged source Context remain valid.
+Context UID and publishes only the final atomized state, so references to the
+unchanged source Context remain valid. The source baseline remains explicit in
+checkpoint provenance without becoming an independently undoable state.
 The inbound scan uses the strict direct ordinary-Context graph rather than the
 human navigation catalog. A malformed, unsafe, unreadable, or duplicate
 ordinary record therefore blocks an in-place split instead of becoming an
 invisible omission.
-The new Context is selected only after both states and the copied analysis have
-been persisted. Publication uses a require-new write and rechecks the exact
+The new Context is selected only after the final state, copied analysis, and
+Source-owned terminal receipt have been persisted. Publication uses a
+require-new write and rechecks the exact
 source name, UID, and direct-record digest under the source/target lock set.
 The final selection compare-and-sets the current Context captured at command
 entry together with the destination UID/digest, so a concurrent switch is not
 overwritten.
 
 If a later phase fails after publication, the destination and its saved
-analysis are preserved for manual inspection. Another process may already have
-observed or referenced the new identity without changing its digest, so
-deleting it by name would risk creating a dangling pointer. Failure before the
-require-new publication leaves no destination.
+analysis are preserved. Another process may already have observed or referenced
+the new identity without changing its digest, so deleting it by name would risk
+creating a dangling pointer. Retrying the exact Save As validates and adopts
+that checkpoint, finishes a missing Source receipt or current selection, and
+does not create a second checkpoint. Failure before the require-new publication
+leaves neither a destination nor a destination-bound hidden analysis.
 
 Atomize also depends on two store-wide mutation invariants. A mutating load
 must resolve every directly embedded Context pointer; otherwise saving the
@@ -855,8 +872,11 @@ Implemented operation tests cover the current preview-and-apply boundary:
 - preview creates zero Context checkpoints but updates one per-Context analysis
   artifact and one per-Context workbench artifact;
 - in-place apply creates exactly one checkpoint;
-- save-as leaves the source unchanged and creates exactly two destination
-  checkpoints: source-based `init`, then `atomize`;
+- save-as leaves the source unchanged and creates exactly one destination
+  checkpoint containing the final atomized state;
+- one Undo removes that created Context into the validated command archive and
+  clears its Source receipt; Redo restores the same identity, history, copied
+  analysis, and receipt;
 - stale Context identity/digest, source UID/content/position, or saved ruleset
   data causes zero mutation;
 - an in-place apply is blocked when an inbound `memory_ref` targets a split
@@ -1080,8 +1100,10 @@ mem atomize --save-as temp/task-1-atomized
 ```
 
 The original remained a 51-Memory Context with its two original checkpoints.
-The new Context has 54 Memories and exactly two checkpoints: its source-based
-baseline and the atomize application. The three applied splits were vehicle
+The historical run predates the single-publication contract: its new Context
+has 54 Memories and two checkpoints, a source-based baseline and the atomize
+application. Current Save As creates one final Atomize checkpoint instead. The
+three applied splits were vehicle
 versus pedestrian parking access, restroom closure versus nearest alternative,
 and left-side accessible guidance versus the right-stair accessibility
 constraint. Twenty incomplete or deictic items were preserved as `UNCERTAIN`

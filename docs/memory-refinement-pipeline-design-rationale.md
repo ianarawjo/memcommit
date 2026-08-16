@@ -494,7 +494,7 @@ important than final CLI spelling.
 | Stage | Working operation | Primary output | Mutation boundary |
 |---|---|---|---|
 | Envelope | future `mem ingest` | source manifest, stage progress, linked provenance | preserves raw intake first; delegates every mutation to the confirmed stage contract |
-| 1 | `mem impact atomize`; `mem atomize --save`; `mem atomize --save-as NAME` | exhaustive classifications, ordered split proposals, and recorded source-to-child lineage | preview saves a Context-scoped analysis but no Context checkpoint; in-place apply creates one checkpoint; save-as creates an init-like baseline and atomize checkpoint in a fresh Context |
+| 1 | `mem impact atomize`; `mem atomize --save`; `mem atomize --save-as NAME` | exhaustive classifications, ordered split proposals, and recorded source-to-child lineage | preview saves a Context-scoped analysis but no Context checkpoint; in-place apply creates one checkpoint; save-as retains its baseline as provenance and publishes one final Atomize creation checkpoint in a fresh Context |
 | 2 | `mem find-duplicates` | positive pair evidence discovered from the whole direct Context | read-only; no checkpoint |
 | 2a | future `mem dedup` | confirmed survivor and absorbed-UID plan | stale-safe confirmed groups apply as one checkpoint |
 | 3 | `mem find-ambiguities` | unary interpretation and clarification findings | read-only; no checkpoint |

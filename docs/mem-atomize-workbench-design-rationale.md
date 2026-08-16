@@ -884,12 +884,14 @@ The following decisions are stable enough to guide implementation and tests:
 - One analysis identity crosses Apply at most once. After its Context
   checkpoint exists, the Source-owned workbench stores the applied Output and
   checkpoint UID as a terminal receipt. This is not merely evidence that the
-  Context still equals the immediate post-Apply bytes. Undo, later edits, a
-  conflict in a created Output, or loss of that Output therefore do not
-  re-enable `APPLY AS IS`, `INCORPORATE AND APPLY`, or any other second
-  application of that session. Reopening it keeps item comments editable for
-  review evidence but removes whole-set and Apply capabilities; a new
-  structural application requires a new analysis session.
+  Context still equals the immediate post-Apply bytes. Later edits, a conflict
+  in a created Output, or loss of that Output therefore do not re-enable
+  `APPLY AS IS`, `INCORPORATE AND APPLY`, or any other second application of
+  that session. Whole-command Undo of a Save As creation is the explicit
+  exception: it removes the created Context and reverses the Source receipt;
+  Redo restores both sides under exact-state checks. Reopening a still-applied
+  session keeps item comments editable for review evidence but removes
+  whole-set and Apply capabilities.
 - Unanswered Ambiguity, Atomize Uncertainty, and Conflict findings do not
   require per-item responses; they select one explicit `APPLY AS IS` boundary.
 - Answered unary responses still require one batch incorporation turn. The
@@ -1044,6 +1046,10 @@ These boxes describe the current implementation and its regression boundary.
 - [x] Keep analysis, review, snapshot, and reanalysis non-mutating.
 - [x] Bind `--save` and `--save-as` to the exact reviewed analysis and record
       trace/rationale provenance.
+- [x] Publish Save As only after the transform succeeds, as one final
+      `atomize` creation checkpoint; recover a published-but-unreceipted exact
+      output without duplicating it, and restore its Context/analysis/receipt
+      lifecycle through one Undo/Redo command unit.
 - [x] Persist one Context-bound, multi-turn atomize grounding session with
       unary/pair anchor arity, reviewer turns, provisional understanding,
       downstream effects, and required/helpful follow-ups.

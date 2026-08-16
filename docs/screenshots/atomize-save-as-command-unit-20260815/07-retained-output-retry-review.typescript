@@ -1,0 +1,12 @@
+52 180
+
+ ╭─ SAVE LOCATION ──────────────────────────────────────────────────────╮
+ │ atomize/output · NOT CREATED                                         │
+ │ E edits this exact new Context name before Apply.                    │
+ ╰──────────────────────────────────────────────────────────────────────╯
+[2m  y = create atomized Context    e = edit save location    n = abort[0m
+>: y
+[31mAtomize error: The final Atomize output is retained, but its Source receipt was not saved. Retry the same Save As: injected Source receipt failure[0m
+RETAINED OUTPUT · OUTPUT True · CHECKPOINTS 1 · RECEIPT False · CURRENT atomize/source
+RETRY READY
+> press Enter to retry the exact retained output: 

@@ -432,13 +432,24 @@ def _context_parts(
             and creation.get("context_uid") == context.uid
             and creation.get("context_name") == context.name
         )
-        # A Sever-created result has no pre-image only when neither the
+        save_as = args.get("atomize_save_as")
+        is_exact_atomize_creation = (
+            command == "atomize"
+            and isinstance(creation, dict)
+            and set(creation) == {"version", "context_uid", "context_name"}
+            and creation.get("version") == 1
+            and creation.get("context_uid") == context.uid
+            and creation.get("context_name") == context.name
+            and isinstance(save_as, dict)
+            and save_as.get("version") == 1
+        )
+        # A created result has no pre-image only when neither the
         # checkpoint nor the retained history supplies one.  Test those
         # sources directly: ``before`` is assigned below for ordinary edits.
         if (
             normalized_before is None
             and effective is None
-            and is_exact_sever_creation
+            and (is_exact_sever_creation or is_exact_atomize_creation)
             and owned
             and auto
         ):

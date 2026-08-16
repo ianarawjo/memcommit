@@ -311,6 +311,21 @@ def atomize_workbench_response_digest(
     ).hexdigest()
 
 
+def atomize_workbench_record_digest(
+    session: "AtomizeWorkbenchSession",
+) -> str:
+    """Fingerprint the complete mutable record for lifecycle CAS."""
+
+    return hashlib.sha256(
+        json.dumps(
+            session.to_dict(),
+            ensure_ascii=False,
+            separators=(",", ":"),
+            sort_keys=True,
+        ).encode("utf-8")
+    ).hexdigest()
+
+
 def atomize_workbench_declared_frames(
     session: "AtomizeWorkbenchSession",
     analysis: "AtomizeAnalysisSession",
@@ -782,6 +797,30 @@ class AtomizeWorkbenchSession:
                 "Atomize workbench already records a different application."
             )
         self.application = receipt
+
+    def clear_application(
+        self,
+        *,
+        output_context_name: str,
+        checkpoint_uid: str,
+        restore_output_context_name: str,
+    ) -> None:
+        """Return one exact terminal Save As receipt to its reviewing route."""
+
+        if (
+            self.application is None
+            or self.application.output_context_name != output_context_name
+            or self.application.checkpoint_uid != checkpoint_uid
+        ):
+            raise AtomizeWorkbenchError(
+                "Atomize workbench does not record this application."
+            )
+        self.output_context_name = _string(
+            restore_output_context_name,
+            "atomize workbench output Context name",
+            limit=ATOMIZE_WORKBENCH_CONTEXT_NAME_CHAR_LIMIT,
+        )
+        self.application = None
 
     def matches_analysis(
         self,
