@@ -27,12 +27,12 @@ from prompt_toolkit.widgets import Frame
 from prompt_toolkit.utils import get_cwidth
 
 from memcommit.application_review_policy import DecisionFreeBehavior
-from memcommit.commands.tui_primitives import (
+from memcommit.interfaces.tui.components.exact_name import (
     ExactNameFieldView,
     ExactNameInputControl,
-    boxed_lines,
-    navigable_tree_row_prefix,
 )
+from memcommit.interfaces.tui.components.report_card import boxed_lines
+from memcommit.interfaces.tui.components.tree_row import navigable_tree_row_prefix
 from memcommit.interfaces.tui.components.multiline_input import (
     build_framed_multiline_input,
 )

@@ -23,11 +23,11 @@ from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.widgets import Frame, TextArea
 
-from memcommit.commands.tui_primitives import (
+from memcommit.interfaces.tui.components.exact_name import (
     ExactNameFieldControl,
     ExactNameFieldView,
-    boxed_lines,
 )
+from memcommit.interfaces.tui.components.report_card import boxed_lines
 from memcommit.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,

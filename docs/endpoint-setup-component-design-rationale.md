@@ -78,8 +78,9 @@ directly.
 - Atomize remains on its characterized Study flow until its current behavior is
   frozen independently. Meld's requirements do not justify migrating it by
   visual similarity alone.
-- The shared screen still imports a small command-owned terminal-primitives
-  set. That dependency is recorded as migration work, not accepted as the
-  final component boundary.
+- Exact-name input, report-card lines, viewport anchors, and navigable tree-row
+  markers now have separate interface component modules. Endpoint Setup and
+  the interface-owned Resolution Session import those owners directly;
+  `commands.tui_primitives` is an import-only compatibility facade.
 - A fixed Merge Target avoids inventing a TUI-only command. Selectable targets
   require a separately supported public `--into TARGET` contract.

@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import asyncio
+import ast
+from pathlib import Path
 import shlex
 from types import SimpleNamespace
 
@@ -11,6 +13,8 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout import FormattedTextControl, Layout, Window
 from prompt_toolkit.output import DummyOutput
+
+import memcommit.commands.tui_primitives as legacy_tui_primitives
 
 from memcommit.commands.exact_command_review import (
     ExactCommandReview,
@@ -30,6 +34,12 @@ from memcommit.interfaces.tui.components.in_frame_input import (
     INLINE_DIRECT_EDIT_TITLE,
     build_inline_direct_edit_input,
     classify_inline_edit_submission,
+)
+from memcommit.interfaces.tui.components.exact_name import (
+    ExactNameFieldControl as OwnedExactNameFieldControl,
+)
+from memcommit.interfaces.tui.components.viewport_anchor import (
+    anchored_fragments as owned_anchored_fragments,
 )
 from memcommit.interfaces.tui.components.multiline_input import (
     build_framed_multiline_input,
@@ -60,6 +70,19 @@ from memcommit.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,
 )
+
+
+def test_command_tui_primitives_is_an_import_only_compatibility_facade() -> None:
+    assert legacy_tui_primitives.ExactNameFieldControl is OwnedExactNameFieldControl
+    assert legacy_tui_primitives.anchored_fragments is owned_anchored_fragments
+
+    module = ast.parse(
+        Path(legacy_tui_primitives.__file__).read_text(encoding="utf-8")
+    )
+    assert not any(
+        isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
+        for node in module.body
+    )
 
 
 def test_exact_name_input_can_embed_without_owning_a_frame() -> None:
