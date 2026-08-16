@@ -7,9 +7,9 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.config as config_module
+import memcommit.meld_runtime as meld_runtime
 import memcommit.ops as ops
 import memcommit.store as store_module
-from memcommit.commands import meld as meld_command
 from memcommit.cli import app
 from memcommit.commands.compare import render_comparison
 from memcommit.commands.comparison_execution import ensure_comparison_analysis
@@ -26,6 +26,7 @@ from memcommit.config import Config
 from memcommit.context import Context, Memory
 from memcommit.context_targeting.loading import load_context_scope
 from memcommit.granted_comparison_store import recursive_comparison_projection
+from memcommit.meld_start_application import MeldStartRequest
 from memcommit.profile_config import (
     ProfileEntry,
     ProfileRegistry,
@@ -743,7 +744,7 @@ def test_equivalent_compare_rejects_nontransparent_task1_scopes(
     assert match is None
 
 
-def test_unprepared_task3_child_scope_runs_live_symmetric_compare(
+def test_task3_child_subset_uses_projected_symmetric_compare_without_provider(
     tmp_path,
     monkeypatch,
 ):
@@ -806,35 +807,31 @@ def test_unprepared_task3_child_scope_runs_live_symmetric_compare(
         registry_snapshot=registry,
     )
     monkeypatch.setattr(
-        meld_command,
+        meld_runtime,
         "load_profile_registry",
         lambda: registry,
     )
-    analyzer_calls = 0
-
-    def analyze(comparison_input, **_kwargs):
-        nonlocal analyzer_calls
-        analyzer_calls += 1
-        return _live_distinct_analysis(comparison_input)
-
-    monkeypatch.setattr(
-        meld_command,
-        "_analyze_symmetric_comparison_basis",
-        analyze,
-    )
-
-    analysis = meld_command._ensure_symmetric_comparison(
+    analysis = meld_runtime._start_comparison(
+        MeldStartRequest(
+            mode="SYMMETRIC",
+            left_name=child.name,
+            right_name=peer.name,
+            target_name="task-3/result",
+            left_descendants=True,
+            right_descendants=True,
+        ),
         store=store,
         left_access=_access(store, child),
         right_access=_access(store, peer),
         left=child,
         right=peer,
-        target_name="task-3/result",
         current_name=child.name,
-        include_descendants=(True, True),
+        provider_factory=lambda: pytest.fail(
+            "safe child-subset projection connected a provider"
+        ),
     )
 
-    assert analyzer_calls == 1
+    assert analysis is not None
     assert [frame.context_name for frame in analysis.frames] == [child.name, peer.name]
     assert load_comparison_analysis(child.uid, peer.uid) is not None
-    assert installed_compare_prewarm_origin(store, analysis) is None
+    assert installed_compare_prewarm_origin(store, analysis) == "PROJECTED_PREWARM"
