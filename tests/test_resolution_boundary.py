@@ -5,6 +5,8 @@ from __future__ import annotations
 import ast
 from pathlib import Path
 
+import pytest
+
 
 ROOT = Path(__file__).parents[1]
 PACKAGE = ROOT / "memcommit"
@@ -97,3 +99,83 @@ def test_merge_cli_and_tui_depend_on_the_typed_application_contract():
     assert "memcommit.merge_application" in cli_imports
     assert "memcommit.merge_application" in tui_imports
     assert not any(module.startswith("memcommit.commands") for module in tui_imports)
+
+
+@pytest.mark.parametrize(
+    ("application_name", "tui_path", "cli_path", "public_path", "agent_path"),
+    (
+        (
+            "memcommit.dedup_application",
+            PACKAGE / "interfaces" / "tui" / "operations" / "dedup" / "screen.py",
+            PACKAGE / "interfaces" / "cli" / "dedup.py",
+            PACKAGE / "api" / "_operations" / "dedup.py",
+            PACKAGE / "interfaces" / "agent" / "dedup.py",
+        ),
+        (
+            "memcommit.resolve_application",
+            PACKAGE / "interfaces" / "tui" / "operations" / "resolve" / "screen.py",
+            PACKAGE / "interfaces" / "cli" / "resolve.py",
+            PACKAGE / "api" / "_operations" / "resolve.py",
+            PACKAGE / "interfaces" / "agent" / "resolve.py",
+        ),
+    ),
+)
+def test_deterministic_resolution_adapters_keep_one_application_owner(
+    application_name: str,
+    tui_path: Path,
+    cli_path: Path,
+    public_path: Path,
+    agent_path: Path,
+):
+    application_path = PACKAGE / f"{application_name.rsplit('.', 1)[1]}.py"
+    forbidden_application_imports = (
+        "memcommit.commands",
+        "memcommit.interfaces",
+        "prompt_toolkit",
+        "typer",
+    )
+    application_imports = _imports(application_path)
+    assert not any(
+        module == prefix or module.startswith(f"{prefix}.")
+        for module in application_imports
+        for prefix in forbidden_application_imports
+    )
+
+    tui_imports = _imports(tui_path)
+    cli_imports = _imports(cli_path)
+    public_imports = _imports(public_path)
+    agent_imports = _imports(agent_path)
+    assert application_name in tui_imports
+    assert application_name in cli_imports
+    assert application_name in public_imports
+    assert not any(module.startswith("memcommit.commands") for module in tui_imports)
+    assert not any(module.startswith("memcommit.commands") for module in public_imports)
+    assert "memcommit.api" in agent_imports
+    assert application_name not in agent_imports
+    assert not any(
+        module.startswith("memcommit.commands")
+        or module.startswith("memcommit.interfaces.tui")
+        for module in agent_imports
+    )
+
+
+def test_read_report_identity_and_launcher_keep_runtime_and_ui_ownership_separate():
+    identity_imports = _imports(PACKAGE / "read_report.py")
+    launcher_imports = _imports(
+        PACKAGE
+        / "interfaces"
+        / "tui"
+        / "workbenches"
+        / "read_report"
+        / "launcher.py"
+    )
+
+    assert not any(
+        module.startswith("memcommit.commands")
+        or module.startswith("memcommit.interfaces")
+        or module == "prompt_toolkit"
+        or module.startswith("prompt_toolkit.")
+        for module in identity_imports
+    )
+    assert "memcommit.read_report" in launcher_imports
+    assert not any(module.startswith("memcommit.commands") for module in launcher_imports)
