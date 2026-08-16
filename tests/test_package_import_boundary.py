@@ -45,9 +45,17 @@ import sys
 from memcommit.api import MemCommitClient
 blocked = (
     'memcommit.api._operations.add',
+    'memcommit.api._operations.fit',
+    'memcommit.api._operations.distill',
+    'memcommit.api._operations.elaborate',
     'memcommit.api._operations.meld',
     'memcommit.api._operations.query',
     'memcommit.add_application',
+    'memcommit.fit_application',
+    'memcommit.distill_application',
+    'memcommit.elaborate_application',
+    'memcommit.ground_distill',
+    'memcommit.ground_elaborate',
     'memcommit.meld_application',
     'memcommit.operations.query.ordinary_application',
 )
@@ -66,8 +74,11 @@ import importlib
 import sys
 for name in (
     'memcommit.api._operations.add',
-    'memcommit.api._operations.meld',
     'memcommit.api._operations.query',
+    'memcommit.api._operations.meld',
+    'memcommit.api._operations.fit',
+    'memcommit.api._operations.distill',
+    'memcommit.api._operations.elaborate',
 ):
     importlib.import_module(name)
 assert 'memcommit.api.client' not in sys.modules
@@ -77,7 +88,7 @@ assert 'memcommit.api.client' not in sys.modules
     assert completed.returncode == 0, completed.stderr
 
 
-def test_internal_standalone_modules_remain_importable_without_ground():
+def test_standalone_modules_and_client_remain_importable_without_ground():
     completed = _run_fresh(
         """
 import importlib
@@ -96,10 +107,14 @@ for name in (
     'memcommit.update',
     'memcommit.distill',
     'memcommit.distill_application',
+    'memcommit.elaborate',
+    'memcommit.elaborate_application',
 ):
     importlib.import_module(name)
-from memcommit.api import MemCommitClient
+from memcommit.api import MemCommitClient, DistillProposal, ElaborateProposal
 assert MemCommitClient.__name__ == 'MemCommitClient'
+assert DistillProposal.__name__ == 'DistillProposal'
+assert ElaborateProposal.__name__ == 'ElaborateProposal'
 """
     )
 
@@ -115,6 +130,7 @@ import os
 from pathlib import Path
 import sys
 from memcommit.api import AddInputError, MemCommitClient
+
 client = MemCommitClient(
     root=Path(os.environ['MEMCOMMIT_IMPORT_TEST_ROOT']),
     create=True,
@@ -127,11 +143,13 @@ else:
     raise AssertionError('invalid Add input unexpectedly succeeded')
 assert 'memcommit.api._operations.add' in sys.modules
 assert 'memcommit.add_application' in sys.modules
-assert 'memcommit.api._operations.query' not in sys.modules
-assert 'memcommit.api._operations.meld' not in sys.modules
+assert 'memcommit.fit_application' not in sys.modules
+assert 'memcommit.distill_application' not in sys.modules
+assert 'memcommit.elaborate_application' not in sys.modules
+assert 'memcommit.ground_distill' not in sys.modules
+assert 'memcommit.ground_elaborate' not in sys.modules
 assert 'memcommit.meld_application' not in sys.modules
 assert 'memcommit.operations.query.ordinary_application' not in sys.modules
-assert 'memcommit.ground_distill' not in sys.modules
 """,
         environment=environment,
     )
@@ -163,7 +181,52 @@ assert 'memcommit.api._operations.query' in sys.modules
 assert 'memcommit.operations.query.ordinary_application' in sys.modules
 assert 'memcommit.api._operations.add' not in sys.modules
 assert 'memcommit.add_application' not in sys.modules
-assert 'memcommit.api._operations.meld' not in sys.modules
+assert 'memcommit.fit_application' not in sys.modules
+assert 'memcommit.distill_application' not in sys.modules
+assert 'memcommit.elaborate_application' not in sys.modules
+assert 'memcommit.ground_distill' not in sys.modules
+assert 'memcommit.ground_elaborate' not in sys.modules
+assert 'memcommit.meld_application' not in sys.modules
+""",
+        environment=environment,
+    )
+
+    assert completed.returncode == 0, completed.stderr
+
+
+def test_selected_standalone_operation_does_not_load_ground(tmp_path):
+    environment = os.environ.copy()
+    environment["MEMCOMMIT_IMPORT_TEST_ROOT"] = str(tmp_path / "store")
+    completed = _run_fresh(
+        """
+import json
+import os
+from pathlib import Path
+import sys
+from memcommit.api import MemCommitClient
+
+class Provider:
+    def complete(self, prompt, *, operation, output_schema=None):
+        assert operation == 'elaborate'
+        return json.dumps({
+            'overview': 'One Rule makes the Goal reviewable.',
+            'rules': [{
+                'content': 'Confirm the option before acting.',
+                'rationale': 'This operationalizes the Goal.',
+            }],
+        })
+
+client = MemCommitClient(
+    root=Path(os.environ['MEMCOMMIT_IMPORT_TEST_ROOT']),
+    create=True,
+    semantic_provider_factory=Provider,
+)
+result = client.elaborate(goal='Confirm before acting.')
+assert result.rules[0].content == 'Confirm the option before acting.'
+assert 'memcommit.elaborate_application' in sys.modules
+assert 'memcommit.ground_elaborate' not in sys.modules
+assert 'memcommit.ground_distill' not in sys.modules
+assert 'memcommit.distill_application' not in sys.modules
 assert 'memcommit.meld_application' not in sys.modules
 """,
         environment=environment,
@@ -198,6 +261,9 @@ assert 'memcommit.api._operations.add' not in sys.modules
 assert 'memcommit.add_application' not in sys.modules
 assert 'memcommit.api._operations.query' not in sys.modules
 assert 'memcommit.operations.query.ordinary_application' not in sys.modules
+assert 'memcommit.fit_application' not in sys.modules
+assert 'memcommit.distill_application' not in sys.modules
+assert 'memcommit.elaborate_application' not in sys.modules
 """,
         environment=environment,
     )

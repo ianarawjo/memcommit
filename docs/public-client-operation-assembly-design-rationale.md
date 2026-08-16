@@ -63,22 +63,31 @@ is a private test/injection path, not a public API spelling. The operation
 module remains patchable without reintroducing client-owned implementation
 symbols.
 
-Meld is the final operation in the committed public facade to move. Its whole
+Meld is the final operation in the original public facade to move. Its whole
 durable lifecycle moves together so start, restart, follow-up, preserve,
 defer, and apply cannot acquire different dependency snapshots. With that
 move, the loader namespace and its sentinels are removed from `client.py`.
 Typer command registration remains a separate console composition boundary.
 
-Atomize Grounding is the next adapter built directly in the extracted shape.
-Its five public lifecycle methods delegate to one operation-owned assembly and
-reuse the same application/runtime port as the CLI. The adapter deliberately
-requires an existing saved Atomize analysis/workbench rather than hiding a
-second semantic operation inside Grounding Start.
+Atomize Grounding is built directly in the extracted shape. Its five public
+lifecycle methods delegate to one operation-owned assembly and reuse the same
+application/runtime port as the CLI. The adapter deliberately requires an
+existing saved Atomize analysis/workbench rather than hiding a second semantic
+operation inside Grounding Start.
 
-The move also closes one accidental taxonomy leak: reading the current
-Context for a Meld formerly reused a client helper that raised
-`QueryStorageError`. The Meld adapter now projects that failure as
-`MeldStorageError`, matching every other Meld storage failure.
+Fit, Distill, and Elaborate follow the same boundary. The client exposes only
+typed inputs, proposals, results, and stable public errors; private operation
+adapters own request construction, provider projection, and application/runtime
+calls. Standalone Distill and Elaborate keep their Ground imports inside the
+Ground-selected method, so importing or calling the standalone route does not
+assemble the Ground subsystem. Distill Apply accepts the exact opaque proposal
+returned by the same client surface and revalidates its frozen Source before
+publishing one new Context.
+
+The Meld move also closes one accidental taxonomy leak: reading the current
+Context formerly reused a client helper that raised `QueryStorageError`. The
+Meld adapter projects that failure as `MeldStorageError`, matching every other
+Meld storage failure.
 
 ## Invariants
 
@@ -98,32 +107,17 @@ Context for a Meld formerly reused a client helper that raised
 
 ## Verification
 
-The extracted surface passed 113 focused tests on the latest Meld runtime,
-covering Add, all Query routes, the public Meld lifecycle, agent adapters,
-fresh-process import isolation, Store-root handling, and the agent registry.
-The agent/MCP projection suite passed 76 tests after its stale two-tool
-expectation was updated to include the already registered Meld tool.
-
-An isolated `uv build` wheel was installed with the `mcp` extra under Python
-3.13. From that `site-packages` origin, constructing the client loaded no
-operation adapter; selecting Add, Query, and Meld loaded only the requested
-adapter in sequence. The installed `mem-mcp` stdio entry point initialized,
-listed Query, Add, and Meld, applied one two-Memory Add with exactly one
-checkpoint, and returned the typed unknown-tool error.
-
-The same installed wheel's general `mem --help` entry point remains blocked by
-an independent repository-state mismatch: `quality_audit` imports
-`QualityFindSourceFrame`, while that definition is not yet present in the
-committed `quality_find_workbench`. The working tree contains the pending
-quality-find implementation, but it was intentionally not absorbed into this
-assembly-boundary change. Therefore this verification proves the Python and
-MCP distribution boundaries, not full CLI readiness.
+Fresh-process tests construct the client with no operation assembly loaded,
+then select Add, Query, Meld, and standalone semantic routes independently.
+They also import every private adapter while blocking any dependency back on
+the client facade. Behavioral tests cover typed Fit judgments, standalone and
+Ground Distill/Elaborate proposals, exact Distill Apply, stable error mapping,
+and agent/MCP projections.
 
 ## Remaining rollout
 
-Add, Query, the complete Meld lifecycle, and Atomize Grounding are now
-operation-owned assemblies; their public facade methods contain delegation and
-shared runtime construction only. Fit,
-Elaborate, standalone Distill, and their Ground adapters must enter through
-the same boundary when those public methods are published. Audit the CLI
-registry independently afterward.
+Add, Query, the complete Meld lifecycle, Atomize Grounding, Fit, Distill, and
+Elaborate now have operation-owned assemblies. The public client contains only
+stable construction, typed signatures, and local delegation imports. Future
+public operations must enter through the same boundary; CLI registration and
+installed-wheel verification remain independent rollout concerns.

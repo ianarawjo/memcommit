@@ -58,6 +58,22 @@ __all__ = [
     "QuerySessionReceipt",
     "QueryStorageError",
     "ReferenceQueryResult",
+    "DistillApplyResult",
+    "DistillProposal",
+    "DistillRuleProposal",
+    "ElaborateCaseProposal",
+    "ElaborateProposal",
+    "ElaborateRuleProposal",
+    "FitJudgmentResult",
+    "FitPropositionInput",
+    "SemanticAuthorityError",
+    "SemanticConflictError",
+    "SemanticContextError",
+    "SemanticError",
+    "SemanticExecutionError",
+    "SemanticInputError",
+    "SemanticProviderFailure",
+    "SemanticStorageError",
 ]
 
 
@@ -93,6 +109,14 @@ _LAZY_EXPORTS = {
     "QueryProviderConfig": ("memcommit.api.query", "QueryProviderConfig"),
     "QuerySessionReceipt": ("memcommit.api.query", "QuerySessionReceipt"),
     "ReferenceQueryResult": ("memcommit.api.query", "ReferenceQueryResult"),
+    "DistillApplyResult": ("memcommit.api.semantic", "DistillApplyResult"),
+    "DistillProposal": ("memcommit.api.semantic", "DistillProposal"),
+    "DistillRuleProposal": ("memcommit.api.semantic", "DistillRuleProposal"),
+    "ElaborateCaseProposal": ("memcommit.api.semantic", "ElaborateCaseProposal"),
+    "ElaborateProposal": ("memcommit.api.semantic", "ElaborateProposal"),
+    "ElaborateRuleProposal": ("memcommit.api.semantic", "ElaborateRuleProposal"),
+    "FitJudgmentResult": ("memcommit.api.semantic", "FitJudgmentResult"),
+    "FitPropositionInput": ("memcommit.api.semantic", "FitPropositionInput"),
     **{
         name: ("memcommit.api.errors", name)
         for name in __all__

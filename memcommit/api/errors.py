@@ -129,6 +129,38 @@ class AtomizeGroundingExecutionError(AtomizeGroundingError):
     """Grounding failed before publishing one complete requested outcome."""
 
 
+class SemanticError(MemCommitError):
+    """Base class for public Distill and Elaborate failures."""
+
+
+class SemanticInputError(SemanticError):
+    """The caller supplied an invalid semantic-operation request."""
+
+
+class SemanticContextError(SemanticError):
+    """A selected Context or Ground is unavailable or stale."""
+
+
+class SemanticAuthorityError(SemanticError):
+    """The selected frame is not authorized for semantic derivation."""
+
+
+class SemanticProviderFailure(SemanticError):
+    """The configured semantic provider could not complete the request."""
+
+
+class SemanticConflictError(SemanticError):
+    """A frozen proposal or its Source changed before publication."""
+
+
+class SemanticStorageError(SemanticError):
+    """The operation could not safely access local durable state."""
+
+
+class SemanticExecutionError(SemanticError):
+    """An authorized semantic operation failed before complete publication."""
+
+
 __all__ = [
     "AddAuthorityError",
     "AddConflictError",
@@ -162,4 +194,12 @@ __all__ = [
     "QueryProviderFailure",
     "QueryPublicationError",
     "QueryStorageError",
+    "SemanticAuthorityError",
+    "SemanticConflictError",
+    "SemanticContextError",
+    "SemanticError",
+    "SemanticExecutionError",
+    "SemanticInputError",
+    "SemanticProviderFailure",
+    "SemanticStorageError",
 ]

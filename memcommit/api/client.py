@@ -30,6 +30,13 @@ from memcommit.api.query import (
     QueryProviderConfig,
     ReferenceQueryResult,
 )
+from memcommit.api.semantic import (
+    DistillApplyResult,
+    DistillProposal,
+    ElaborateProposal,
+    FitJudgmentResult,
+    FitPropositionInput,
+)
 from memcommit.context import QueryContextRef
 from memcommit.profile_config import (
     ProfileConfigError,
@@ -138,6 +145,85 @@ class MemCommitClient:
     @property
     def query_config(self) -> QueryProviderConfig:
         return self._query_config
+
+    def fit(
+        self,
+        propositions: Sequence[str | FitPropositionInput],
+        *,
+        background: Sequence[str | FitPropositionInput] = (),
+    ) -> FitJudgmentResult:
+        """Judge one complete proposition set without reading or changing Store state."""
+
+        from memcommit.api._operations.fit import fit
+
+        return fit(self._runtime, propositions, background=background)
+
+    def distill_context(
+        self,
+        context_name: str | None = None,
+        *,
+        goal: str | None = None,
+        include_descendants: bool = False,
+        follow_embeds: bool = False,
+    ) -> DistillProposal:
+        """Propose evidence-bound Rules from one exact local Context frame."""
+
+        from memcommit.api._operations.distill import distill_context
+
+        return distill_context(
+            self._runtime,
+            context_name,
+            goal=goal,
+            include_descendants=include_descendants,
+            follow_embeds=follow_embeds,
+        )
+
+    def distill_ground(self, ground_name: str) -> DistillProposal:
+        """Distill one exact bound Ground frame without mutating the Ground."""
+
+        from memcommit.api._operations.distill import distill_ground
+
+        return distill_ground(self._runtime, ground_name)
+
+    def apply_distill(
+        self,
+        proposal: DistillProposal,
+        *,
+        output_name: str,
+    ) -> DistillApplyResult:
+        """Materialize one exact reviewed standalone proposal into a new Context."""
+
+        from memcommit.api._operations.distill import apply_distill
+
+        return apply_distill(self._runtime, proposal, output_name=output_name)
+
+    def elaborate(
+        self,
+        *,
+        goal: str | None = None,
+        rules: Sequence[str] | None = None,
+    ) -> ElaborateProposal:
+        """Propose unverified Rules from a Goal or Cases from Rules."""
+
+        from memcommit.api._operations.elaborate import elaborate
+
+        return elaborate(self._runtime, goal=goal, rules=rules)
+
+    def elaborate_ground(
+        self,
+        ground_name: str,
+        *,
+        direction: str,
+    ) -> ElaborateProposal:
+        """Project one exact Ground Goal or Rule set through Elaborate."""
+
+        from memcommit.api._operations.elaborate import elaborate_ground
+
+        return elaborate_ground(
+            self._runtime,
+            ground_name,
+            direction=direction,
+        )
 
     def start_meld(
         self,
