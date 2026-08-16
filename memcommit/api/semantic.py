@@ -7,6 +7,10 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from memcommit.distill_application import DistillResult as ApplicationDistillResult
+    from memcommit.fit_store import GroundFitReceipt
+    from memcommit.ground_distill import GroundDistillResult
+    from memcommit.ground_elaborate import GroundElaborateResult
+    from memcommit.ground_resolution import GroundResolutionPlan
 
 
 @dataclass(frozen=True)
@@ -57,6 +61,11 @@ class DistillProposal:
         repr=False,
         compare=False,
     )
+    _ground_result: GroundDistillResult | None = field(
+        default=None,
+        repr=False,
+        compare=False,
+    )
 
 
 @dataclass(frozen=True)
@@ -94,6 +103,76 @@ class ElaborateProposal:
     cases: tuple[ElaborateCaseProposal, ...]
     origin: str
     verification: str = "UNVERIFIED"
+    _ground_result: GroundElaborateResult | None = field(
+        default=None,
+        repr=False,
+        compare=False,
+    )
+
+
+@dataclass(frozen=True)
+class GroundFitJudgmentResult:
+    example_uid: str
+    example_alias: str
+    proposition: str
+    status: str
+    reason: str
+    rule_uids: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class GroundFitReceiptResult:
+    receipt_uid: str
+    receipt_digest: str
+    ground_uid: str
+    ground_name: str
+    ground_revision: int
+    ground_digest: str
+    overview: str
+    current: bool
+    judgments: tuple[GroundFitJudgmentResult, ...]
+    _receipt: GroundFitReceipt = field(repr=False, compare=False)
+
+
+@dataclass(frozen=True)
+class GroundResolutionActionResult:
+    kind: str
+    content: str
+    rationale: str
+    selector: str
+    source_item_uid: str
+    case_role: str
+    use: str
+    rule_provenance: str
+
+
+@dataclass(frozen=True)
+class GroundResolutionPlanResult:
+    plan_digest: str
+    artifact_kind: str
+    artifact_uid: str
+    artifact_digest: str
+    source_verification: str
+    candidate_verification: str
+    ground_uid: str
+    ground_name: str
+    ground_revision: int
+    ground_digest: str
+    explanation: str
+    action: GroundResolutionActionResult
+    _plan: GroundResolutionPlan = field(repr=False, compare=False)
+    _artifact: object = field(repr=False, compare=False)
+
+
+@dataclass(frozen=True)
+class GroundResolutionApplyResult:
+    plan_digest: str
+    artifact_uid: str
+    action_kind: str
+    previous_revision: int
+    resulting_revision: int
+    resulting_ground_digest: str
+    mutated: bool
 
 
 __all__ = [
@@ -105,4 +184,9 @@ __all__ = [
     "ElaborateRuleProposal",
     "FitJudgmentResult",
     "FitPropositionInput",
+    "GroundFitJudgmentResult",
+    "GroundFitReceiptResult",
+    "GroundResolutionActionResult",
+    "GroundResolutionApplyResult",
+    "GroundResolutionPlanResult",
 ]

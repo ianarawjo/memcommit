@@ -102,11 +102,34 @@ Resolve action fails without being partially added. A changed bound Context
 also fails before Ground publication. `DEFER` returns a typed non-mutating
 receipt and writes no Ground revision.
 
-Resolve does not yet persist plans, expose a CLI/TUI screen, or call a provider
-to suggest a Fit response. The next slice should expose the application service
-through the stable Python and agent boundaries, then compose the same service
-into the Ground workbench. Those adapters must not recreate the planning or
-mutation logic.
+The stable Python facade exposes the separation directly:
+
+```python
+fit = client.fit_ground("ticker-ground")
+plan = client.plan_ground_resolution(
+    fit,
+    example_uid=fit.judgments[0].example_uid,
+    action="REFINE_RULE",
+    rule_uid=fit.judgments[0].rule_uids[0],
+    content="...replacement Rule...",
+    rationale="...review reason...",
+)
+# Reviewing a plan has changed nothing.
+receipt = client.apply_ground_resolution(plan)
+```
+
+Ground Distill and Elaborate proposals use the same plan/apply pair. Their
+public values retain a private process-local exact artifact only when produced
+by `distill_ground` or `elaborate_ground`; a standalone proposal has no Ground
+identity and is rejected as a Resolve source. Ground Fit additionally supports
+reopening an exact receipt UID so an older receipt remains auditable and is
+projected as stale after a successful Resolve revision.
+
+Resolve does not yet persist plans, expose a CLI/TUI screen, call a provider to
+suggest a Fit response, or provide a cross-call agent artifact registry. The
+next slice should expose the same public service through an agent boundary,
+then compose it into the Ground workbench. Those adapters must not recreate the
+planning or mutation logic.
 
 The staged ticker benchmark in
 [`ground-ticker-iterative-flow-todo.md`](ground-ticker-iterative-flow-todo.md)

@@ -43,6 +43,9 @@ from memcommit.api.semantic import (
     ElaborateProposal,
     FitJudgmentResult,
     FitPropositionInput,
+    GroundFitReceiptResult,
+    GroundResolutionApplyResult,
+    GroundResolutionPlanResult,
 )
 from memcommit.context import QueryContextRef
 from memcommit.profile_config import (
@@ -165,6 +168,22 @@ class MemCommitClient:
 
         return fit(self._runtime, propositions, background=background)
 
+    def fit_ground(
+        self,
+        ground_name: str,
+        *,
+        receipt_uid: str | None = None,
+    ) -> GroundFitReceiptResult:
+        """Run or reopen one immutable revision-bound Ground Fit receipt."""
+
+        from memcommit.api._operations.ground_resolution import fit_ground
+
+        return fit_ground(
+            self._runtime,
+            ground_name,
+            receipt_uid=receipt_uid,
+        )
+
     def distill_context(
         self,
         context_name: str | None = None,
@@ -231,6 +250,48 @@ class MemCommitClient:
             ground_name,
             direction=direction,
         )
+
+    def plan_ground_resolution(
+        self,
+        source: DistillProposal | ElaborateProposal | GroundFitReceiptResult,
+        *,
+        candidate_uid: str | None = None,
+        example_uid: str | None = None,
+        action: str | None = None,
+        content: str = "",
+        rationale: str = "",
+        rule_uid: str = "",
+        use: str = "",
+    ) -> GroundResolutionPlanResult:
+        """Project one semantic artifact into one still-unapproved action."""
+
+        from memcommit.api._operations.ground_resolution import (
+            plan_ground_resolution,
+        )
+
+        return plan_ground_resolution(
+            self._runtime,
+            source,
+            candidate_uid=candidate_uid,
+            example_uid=example_uid,
+            action=action,
+            content=content,
+            rationale=rationale,
+            rule_uid=rule_uid,
+            use=use,
+        )
+
+    def apply_ground_resolution(
+        self,
+        plan: GroundResolutionPlanResult,
+    ) -> GroundResolutionApplyResult:
+        """Apply one separately reviewed Resolve plan through Ground CAS."""
+
+        from memcommit.api._operations.ground_resolution import (
+            apply_ground_resolution,
+        )
+
+        return apply_ground_resolution(self._runtime, plan)
 
     def start_meld(
         self,

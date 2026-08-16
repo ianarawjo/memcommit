@@ -62,7 +62,12 @@ def raise_semantic_execution_error(error: BaseException) -> None:
     raise_public(SemanticExecutionError, error)
 
 
-def project_distill(result, *, apply_allowed: bool) -> DistillProposal:
+def project_distill(
+    result,
+    *,
+    apply_allowed: bool,
+    ground_result=None,
+) -> DistillProposal:
     analysis = result.analysis
     return DistillProposal(
         analysis_uid=analysis.uid,
@@ -84,10 +89,11 @@ def project_distill(result, *, apply_allowed: bool) -> DistillProposal:
         origin=result.origin,
         apply_allowed=apply_allowed,
         _application_result=result,
+        _ground_result=ground_result,
     )
 
 
-def project_elaborate(result) -> ElaborateProposal:
+def project_elaborate(result, *, ground_result=None) -> ElaborateProposal:
     analysis = result.analysis
     return ElaborateProposal(
         analysis_uid=analysis.uid,
@@ -114,6 +120,7 @@ def project_elaborate(result) -> ElaborateProposal:
             for case in analysis.cases
         ),
         origin=result.origin,
+        _ground_result=ground_result,
     )
 
 

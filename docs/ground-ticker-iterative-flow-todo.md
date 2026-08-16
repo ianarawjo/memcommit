@@ -159,7 +159,10 @@ be proved as a separate Distill compatibility rule.
 - [x] define one-source/one-action Resolve plans and verification labels;
 - [x] revalidate exact artifacts and apply one existing Ground primitive with
   bound-frame checks and Ground CAS;
-- [ ] expose Resolve through the stable Python and agent boundaries;
+- [x] expose Ground Fit and Resolve planning/application through the stable
+  Python boundary;
+- [ ] expose process-local Ground artifacts and Resolve through the agent
+  boundary;
 - [ ] compose the same action into the Ground workbench and exact approval UI;
 - [ ] run and capture the complete provider-backed ticker progression; and
 - [ ] evaluate convergence, regressions, and explicit unresolved coverage.

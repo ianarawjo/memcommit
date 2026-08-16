@@ -44,11 +44,12 @@ def elaborate_ground(
             ground_name=ground_name,
             direction=direction,  # type: ignore[arg-type]
         )
-        result = execute_ground_elaborate(
+        ground_result = execute_ground_elaborate(
             frozen,
             store=runtime.store,
             provider_factory=lambda: safe_semantic_provider(runtime),
-        ).elaborate
+        )
+        result = ground_result.elaborate
     except SemanticProviderFailure:
         raise
     except QueryProviderError as error:
@@ -59,7 +60,7 @@ def elaborate_ground(
         raise_public(SemanticStorageError, error)
     except ElaborateError as error:
         raise_semantic_execution_error(error)
-    return project_elaborate(result)
+    return project_elaborate(result, ground_result=ground_result)
 
 
 __all__ = ["elaborate_ground"]

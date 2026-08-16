@@ -31,11 +31,12 @@ def distill_ground(
         raise SemanticInputError("ground_name must be nonblank text.")
     try:
         frozen = freeze_ground_distill(runtime.store, ground_name=ground_name)
-        result = execute_ground_distill(
+        ground_result = execute_ground_distill(
             frozen,
             store=runtime.store,
             provider_factory=lambda: safe_semantic_provider(runtime),
-        ).distill
+        )
+        result = ground_result.distill
     except SemanticProviderFailure:
         raise
     except QueryProviderError as error:
@@ -46,7 +47,11 @@ def distill_ground(
         raise_public(SemanticStorageError, error)
     except DistillError as error:
         raise_semantic_execution_error(error)
-    return project_distill(result, apply_allowed=False)
+    return project_distill(
+        result,
+        apply_allowed=False,
+        ground_result=ground_result,
+    )
 
 
 __all__ = ["distill_ground"]
