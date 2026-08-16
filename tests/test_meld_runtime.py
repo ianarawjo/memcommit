@@ -8,6 +8,7 @@ from types import SimpleNamespace
 
 import pytest
 
+import memcommit.comparison_execution as comparison_execution
 import memcommit.meld_assessment_application as meld_assessment_application
 import memcommit.meld_restart_application as meld_restart_application
 import memcommit.meld_runtime as meld_runtime
@@ -27,6 +28,7 @@ from memcommit.meld_restart_application import MeldRestartRequest
         meld_start_application,
         meld_restart_application,
         meld_runtime,
+        comparison_execution,
     ),
 )
 def test_meld_execution_modules_have_no_terminal_or_command_dependencies(module):
@@ -62,6 +64,50 @@ def test_meld_command_contains_no_target_or_session_publication_primitive():
             "_write_json_atomic(",
         )
     )
+
+
+def test_symmetric_saved_compare_reuse_does_not_connect_provider(monkeypatch):
+    left = Context(uid="11111111-1111-4111-8111-111111111111", name="left")
+    right = Context(uid="22222222-2222-4222-8222-222222222222", name="right")
+    store = SimpleNamespace()
+    accesses = tuple(
+        ContextAccess(
+            store=store,
+            context_name=context.name,
+            display_name=context.name,
+            attachment_name=None,
+            permission="READ",
+        )
+        for context in (left, right)
+    )
+    saved = SimpleNamespace(name="saved-analysis")
+
+    def ensure(**kwargs):
+        # A saved/equivalent hit returns before invoking the lazy live callback.
+        assert callable(kwargs["analyze"])
+        return SimpleNamespace(analysis=saved, origin="SAVED_REUSE")
+
+    monkeypatch.setattr(meld_runtime, "ensure_comparison_analysis", ensure)
+
+    result = meld_runtime._start_comparison(
+        meld_start_application.MeldStartRequest(
+            mode="SYMMETRIC",
+            left_name=left.name,
+            right_name=right.name,
+            target_name="result",
+        ),
+        store=store,
+        left_access=accesses[0],
+        right_access=accesses[1],
+        left=left,
+        right=right,
+        current_name=None,
+        provider_factory=lambda: pytest.fail(
+            "saved symmetric Compare reuse connected a provider"
+        ),
+    )
+
+    assert result is saved
 
 
 def test_assessment_freeze_falls_back_to_exact_installed_branch(monkeypatch):

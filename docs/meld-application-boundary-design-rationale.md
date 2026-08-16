@@ -91,3 +91,14 @@ The completion pass therefore preserves the existing application services and
 adds one frozen Prepare/Execute boundary for Start and Restart. Provider
 progress remains interface-owned, but whether provider work is required must
 come from the prepared value rather than a second interface-side cache query.
+
+The first completion step moved Compare execution out of `commands`. Meld's
+runtime now owns symmetric exact/equivalent/live acquisition and directional
+exact/equivalent/projected acquisition. The neutral
+`memcommit.comparison_execution` module contains authorization, CAS, Grant
+revalidation, installation, and lazy provider construction; the legacy
+`commands.comparison_execution` module retains only terminal wait rendering
+and re-exports for compatibility. This direction was chosen so Python, agent,
+and terminal calls cannot disagree about which Compare cache shapes are safe.
+It intentionally does not make a directional Compare mandatory: an actual
+miss still enters the established directional Meld assessment path.

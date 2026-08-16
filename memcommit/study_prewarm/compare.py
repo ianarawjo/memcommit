@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 import uuid
 
-from memcommit.commands.comparison_execution import load_comparison_context
+from memcommit.comparison_execution import load_comparison_context
 from memcommit.authority.access import GrantedReadStore, resolve_context_access
 from memcommit.comparison import (
     COMPARISON_RULESET_VERSION,

@@ -15,7 +15,17 @@ from memcommit.authority.access import (
     revalidate_granted_context_binding,
     resolve_context_access,
 )
-from memcommit.comparison import COMPARISON_RULESET_VERSION, ComparisonAnalysis
+from memcommit.comparison import (
+    COMPARISON_RULESET_VERSION,
+    ComparisonAnalysis,
+    ComparisonInput,
+)
+from memcommit.comparison_execution import (
+    connect_comparison_provider,
+    ensure_comparison_analysis,
+    install_prepared_comparison_analysis,
+)
+from memcommit.comparison_provider import analyze_comparison
 from memcommit.comparison_store import load_comparison_analysis
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.context_targeting.loading import load_context_scope
@@ -59,6 +69,7 @@ from memcommit.profiles import (
     authority_grant_snapshot_lock,
     resolve_granted_context_view,
 )
+from memcommit.profile_config import load_profile_registry
 from memcommit.meld_provider import meld_turn_request_digest
 from memcommit.meld_resolution_cache import (
     MeldResolutionBranch,
@@ -103,7 +114,15 @@ from memcommit.study_prewarm.meld_resolution import (
     find_installed_meld_resolution_branch,
 )
 from memcommit.study_prewarm.meld_directional import (
+    find_installed_equivalent_directional_comparison,
     find_installed_directional_meld_prewarm,
+)
+from memcommit.study_prewarm.compare import (
+    EquivalentComparePrewarmMatch,
+    find_declared_equivalent_compare_analysis,
+    record_equivalent_compare_prewarm,
+    record_exact_compare_prewarm,
+    record_projected_compare_prewarm,
 )
 
 
@@ -767,14 +786,39 @@ def _start_comparison(
     request: MeldStartRequest | MeldRestartRequest,
     *,
     store: MemoryStore,
+    left_access: ContextAccess,
+    right_access: ContextAccess,
     left: Context,
     right: Context,
+    current_name: str | None,
+    provider_factory,
     error_type: type[RuntimeError] = MeldStartError,
 ) -> ComparisonAnalysis | None:
+    """Resolve the ordered Compare basis at the application boundary.
+
+    Directional Meld may proceed without a Compare basis, but it still reuses
+    an exact, equivalent, or safely projected installed basis when one exists.
+    Symmetric Meld always materializes a durable exact basis, connecting the
+    provider only after every reusable route misses.
+    """
+
     if request.incoming_memory is not None or request.baseline_memory is not None:
         return None
     analysis = request.comparison
-    if analysis is None:
+    include_descendants = (
+        request.left_descendants,
+        request.right_descendants,
+    )
+    if analysis is not None:
+        if (
+            not analysis.matches(left, right)
+            or analysis.include_descendants != include_descendants
+            or analysis.ruleset_version != COMPARISON_RULESET_VERSION
+        ):
+            raise error_type("The supplied ordered Compare analysis is stale.")
+        return analysis
+
+    if request.mode == "DIRECTIONAL":
         analysis = load_comparison_analysis(
             left.uid,
             right.uid,
@@ -783,20 +827,93 @@ def _start_comparison(
         if analysis is None:
             artifact = load_granted_comparison_artifact(store, left.uid, right.uid)
             analysis = artifact.analysis if artifact is not None else None
-    if analysis is None:
-        if request.mode == "DIRECTIONAL":
-            return None
-        raise error_type(
-            "Symmetric Meld requires an exact saved ordered Compare analysis."
+        if analysis is not None:
+            if (
+                not analysis.matches(left, right)
+                or analysis.include_descendants != include_descendants
+                or analysis.ruleset_version != COMPARISON_RULESET_VERSION
+            ):
+                raise error_type("The saved ordered Compare analysis is stale.")
+            return analysis
+
+        comparison_input = ComparisonInput.from_contexts(
+            left,
+            right,
+            reference_descendants=request.left_descendants,
+            compared_descendants=request.right_descendants,
         )
-    if (
-        not analysis.matches(left, right)
-        or analysis.include_descendants
-        != (request.left_descendants, request.right_descendants)
-        or analysis.ruleset_version != COMPARISON_RULESET_VERSION
-    ):
-        raise error_type("The saved ordered Compare analysis is stale.")
-    return analysis
+        equivalent = find_installed_equivalent_directional_comparison(
+            store=store,
+            comparison_input=comparison_input,
+            registry_snapshot=load_profile_registry(),
+        )
+        if equivalent is None:
+            return None
+        installed = install_prepared_comparison_analysis(
+            store=store,
+            reference_access=left_access,
+            compared_access=right_access,
+            reference=left,
+            compared=right,
+            current_name=current_name,
+            include_descendants=include_descendants,
+            analysis=equivalent.analysis,
+        )
+        recorder = (
+            record_projected_compare_prewarm
+            if equivalent.origin == "PROJECTED_PREWARM"
+            else record_equivalent_compare_prewarm
+        )
+        recorder(
+            store,
+            entry_key=equivalent.entry_key,
+            analysis=installed.analysis,
+            prepared_context_names=equivalent.prepared_context_names,
+        )
+        return installed.analysis
+
+    equivalent_match: EquivalentComparePrewarmMatch | None = None
+
+    def equivalent(comparison_input: ComparisonInput) -> ComparisonAnalysis | None:
+        nonlocal equivalent_match
+        equivalent_match = find_declared_equivalent_compare_analysis(
+            store=store,
+            comparison_input=comparison_input,
+            current_name=current_name,
+            registry_snapshot=load_profile_registry(),
+        )
+        return equivalent_match.analysis if equivalent_match is not None else None
+
+    execution = ensure_comparison_analysis(
+        store=store,
+        reference_access=left_access,
+        compared_access=right_access,
+        reference=left,
+        compared=right,
+        current_name=current_name,
+        include_descendants=include_descendants,
+        require_durable=True,
+        analyze=lambda comparison_input: analyze_comparison(
+            comparison_input,
+            connect_comparison_provider(provider_factory),
+        ),
+        equivalent=equivalent,
+    )
+    if execution.origin == "EQUIVALENT_SCOPE_PREWARM" and equivalent_match:
+        if equivalent_match.origin == "EXACT_PREWARM":
+            record_exact_compare_prewarm(
+                store,
+                entry_key=equivalent_match.entry_key,
+                analysis=execution.analysis,
+            )
+        else:
+            record_equivalent_compare_prewarm(
+                store,
+                entry_key=equivalent_match.entry_key,
+                analysis=execution.analysis,
+                prepared_context_names=equivalent_match.prepared_context_names,
+            )
+    return execution.analysis
 
 
 def _execute_initial_meld(
@@ -897,8 +1014,12 @@ def _execute_initial_meld(
     comparison = _start_comparison(
         request,
         store=store,
+        left_access=left_access,
+        right_access=right_access,
         left=recursive_comparison_projection(left),
         right=recursive_comparison_projection(right),
+        current_name=current_name,
+        provider_factory=provider_factory,
         error_type=error_type,
     )
     if request.mode == "DIRECTIONAL":

@@ -23,6 +23,12 @@ matrix as fully closed would therefore hide adapter drift.
 | Provider prediction | the CLI constructs a provisional session and repeats prewarm lookup to decide whether to open a progress surface | a typed prepared Start/Restart value reports whether semantic provider work remains without publishing state |
 | Adapter parity | Python and agent Start enter the runtime without the CLI's Compare-preparation path | CLI, Python, and agent requests enter the same Prepare/Execute path and expose the same scope controls |
 
+Progress: direct-Memory scope is now part of Start and Restart, and ordered
+Compare resolution is now runtime-owned. `comparison_execution` is a neutral
+application/infrastructure module; its old command path is only a wait-view
+compatibility facade. The command-side provider prediction and duplicate
+preparation path remain the next boundary to remove.
+
 The remaining work must not replace the already extracted session or Apply
 services. It removes only these start-time parallel decisions and then proves
 that command code contains no semantic cache lookup, provisional `MeldSession`
@@ -70,6 +76,10 @@ validation.
   a semantic turn.
 - Cache replay crosses the same strict decoder as a provider completion and
   cannot publish a partial assessment.
+- Ordered Compare lookup and installation execute in `meld_runtime`: exact,
+  equivalent-scope, and safe projected hits are resolved before a provider is
+  constructed. Symmetric misses alone invoke live Compare and save the durable
+  ordered basis; directional misses retain their compatible Meld-only path.
 - Restart observes one opaque saved version before expensive work and replaces
   that exact version; it never deletes the prior review or creates a target.
 - Apply never calls the provider and consumes only the exact reviewed session
