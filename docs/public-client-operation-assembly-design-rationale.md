@@ -140,9 +140,9 @@ standalone Distill or Ground Elaborate adapter. The installed
 `mem` entry point listed Fit, Distill, and Elaborate. The installed `mem-mcp`
 stdio entry point initialized and listed Query, Add, Meld, structural Atomize,
 Atomize Grounding, Distill, Elaborate, and Fit. It opened one saved Grounding
-session, applied one two-Memory Add with exactly one checkpoint, ran a saved
-structural Atomize open/Apply/retry with one checkpoint, and returned the typed
-unknown-tool error.
+session, applied one two-Memory Add with exactly one checkpoint, ran saved
+structural Atomize in-place Apply/retry plus response edit, Output planning,
+Save As/retry, and returned the typed unknown-tool error.
 
 The earlier general `mem --help` blocker was a partial-commit mismatch between
 `quality_audit` and `QualityFindSourceFrame`. The committed aggregate
@@ -151,8 +151,8 @@ focused tests and the installed CLI gate.
 
 ## Remaining rollout
 
-Add, Query, the complete Meld lifecycle, structural Atomize analysis/in-place
-Apply, Atomize Grounding, Fit, standalone Distill, Ground Distill, standalone
+Add, Query, the complete Meld lifecycle, the complete structural Atomize
+lifecycle, Atomize Grounding, Fit, standalone Distill, Ground Distill, standalone
 Elaborate, and Ground Elaborate are now operation-owned assemblies. Their
 public facade methods contain delegation and shared runtime construction only.
 New public operations must add a sibling adapter and fresh-process import

@@ -2,103 +2,102 @@
 
 Last reviewed: 2026-08-15.
 
-## Motivation
+## Motivation and selected contract
 
-The structural Atomize public API exposes a complete analysis and exact in-place
-Apply, but an MCP process cannot retain the private Python proposal object from
-one request to the next. Reconstructing that object in the transport adapter or
-accepting only public IDs would create a second application policy and weaken
-the stale-review boundary.
+An MCP request cannot retain the private Python proposal object used by the
+CLI/TUI. Reconstructing acceptance from public IDs, or implementing review
+logic in the transport, would create a second cache, stale-state, and
+application policy. `memcommit_atomize` therefore projects the complete
+structural lifecycle through seven strict version-1 actions, each delegating to
+one stable `MemCommitClient` method:
 
-`memcommit_atomize` therefore projects two deliberately small version-1
-actions over `MemCommitClient`:
+| Action | Provider | Durable Context effect | Purpose |
+| --- | --- | --- | --- |
+| `open` | saved/prepared hit: no; miss/refresh: yes | none | open whole-Context or focused exact-Memory review |
+| `respond` | no | none | replace or clear one exact issue response |
+| `plan_output` | no | none | select in-place Source or require-new Save As destination |
+| `reanalyze` | yes | none | incorporate answered unary guidance |
+| `apply_as_is` | no | one Source checkpoint | apply the exact current in-place proposal |
+| `save_as` | no | one new-Context checkpoint | publish the exact reviewed require-new plan |
+| `incorporate_and_apply` | yes | one Source or new-Context checkpoint | perform one explicitly approved compound action |
 
-- `open` calls `open_atomize_analysis` and returns the complete visible
-  proposal, cache/provider origin, effect classification, and opaque version;
-- `apply_as_is` calls `apply_saved_atomize_as_is` with that exact 64-character
-  version and returns the checkpoint and source-to-result lineage receipt.
+The adapter does not import commands, TUI code, Store internals, or Atomize
+runtimes. The frozen registry and MCP transport expose the same schema and
+JSON-safe result.
 
-Save As, workbench response editing, and provider-backed reanalysis of an
-edited review remain outside this tool. They need separate reviewed contracts
-rather than transport-owned shortcuts.
+## Cache, provider, and effect reporting
 
-## Cache, provider, and effect contract
+`open` preserves the operation's existing policy. `SAVED` and
+`EXACT_PREWARM` set `cache_used: true`; only `PROVIDER` sets
+`provider_used: true`. Saved open reports `effect: NONE`; prepared
+materialization and provider analysis report `DERIVED_SESSION`. A focused
+`memory_selector` cannot silently reuse a whole-Context prepared artifact.
 
-`open` retains the existing operation policy. `SAVED` and `EXACT_PREWARM` set
-`cache_used: true`; only `PROVIDER` sets `provider_used: true`. A saved open has
-`effect: NONE`, while provider and exact-prewarm materialization report
-`effect: DERIVED_SESSION`. None of these paths edits the selected Context.
+`refresh: true` explicitly requests a provider analysis and dominates
+`use_prepared`. Provider-free response and Output edits return the complete new
+proposal and opaque version. Reanalysis and compound incorporation state their
+provider use directly. Final Apply and Save As report
+`effect: CONTEXT_CHECKPOINT`; planning Save As alone creates nothing.
 
-`refresh: true` explicitly requests a new provider analysis and dominates the
-prepared-cache preference. `use_prepared: false` disables only hidden prepared
-reuse, not an exact saved-session hit. These controls are strict booleans and
-the response exposes the actual origin so an agent need not infer what ran.
+## Exact-version review boundary
 
-`apply_as_is` never constructs a provider and reports
-`effect: CONTEXT_CHECKPOINT`. Its action name, exact reviewed version, and
-explicit Context form the final machine request; there is no separate boolean
-that could be accidentally detached from the action being approved.
+Every saved action consumes the exact 64-character version returned by the
+previous proposal. The token binds the immutable analysis and the complete
+workbench record, including responses, Output plan, layout, and terminal
+receipt. Action `allowed` values are projected from the same workbench
+validation, including pair/multi-response restrictions and terminal state,
+rather than reconstructed in the adapter. A stale action cannot overwrite a
+concurrent review edit.
 
-## Stateless exact-version boundary
+`respond` is replacement, not patch, semantics. `option_uid: null` plus an
+empty comment clears a response. `plan_output` validates a distinct name as
+require-new before changing the workbench. `reanalyze` admits only answered
+unary frames; pair-shaped conflict responses remain visible review evidence
+and are not flattened into unary semantic input. Provider results replace the
+analysis/workbench pair under one Context-scoped compare-and-swap, so a
+response changed during inference wins and no partial new pair is published.
 
-The public `apply_saved_atomize_as_is` entry loads the saved analysis/workbench
-under the ordinary session lock. It accepts only:
+## Application and retry boundary
 
-1. the current exact version; or
-2. after a successful Apply whose response may have been lost, the exact
-   preterminal version obtained by removing only that terminal application
-   receipt and verifying its digest.
+`apply_as_is` is allowed only for an in-place plan. `save_as` is allowed only
+for a distinct reviewed Output name. Save As leaves Source unchanged, creates
+the new Context as one Atomize creation/checkpoint unit, records Source
+lineage, and conditionally selects the output. It does not accept an existing
+destination.
 
-The second case recovers the already committed checkpoint. Any different
-response, Output plan, layout, analysis, or workbench edit is a stale conflict.
-This makes retry safe across MCP process restarts without a process-local
-proposal cache and without broadening acceptance to a merely similar review.
-The existing application runtime still rechecks Source digest and performs the
-single checkpoint/receipt mutation.
+A lost final response may repeat the exact same `apply_as_is` or `save_as`
+payload. The public boundary accepts only the original preterminal revision
+plus the exact terminal receipt produced by that action, then returns the same
+checkpoint with `recovered: true`. Any response, Output, layout, analysis, or
+other workbench change is `stale_state`. The compound action deliberately does
+not promise byte-for-byte transport retry after its provider turn; callers
+that need an inspectable intermediate proposal use `reanalyze` followed by a
+separately approved final action.
 
-## Adapter and transport boundary
+## Error and Skill boundary
 
-The adapter imports only the stable public API and the shared agent-envelope
-contract. Each valid action calls exactly one public client method. Invalid
-versions, fields, or booleans stop before Store access. Provider and internal
-errors are bounded and redacted; public input and missing-Context errors retain
-their actionable messages, while stale state is a non-retryable `stale_state`
-requiring a new `open`.
+Strict parsing rejects unknown fields, invalid action shapes, and malformed
+versions before public execution. Provider and internal details are redacted;
+actionable input/Context messages remain visible. `stale_state` is
+non-retryable and requires `open`, review, and fresh approval.
 
-The frozen agent registry places structural Atomize immediately before the
-separate conversational `memcommit_atomize_grounding` tool. MCP projects the
-same schema and result without importing commands, TUI code, Store internals,
-or Atomize runtimes into the transport adapter.
-
-## Companion Skill boundary
-
-`skills/memcommit-atomize/` is checked-in host guidance rather than another
-operation implementation. It directs an agent to the registered tool, keeps
-saved/prepared/provider origin distinct, requires the complete returned
-proposal to be shown before mutation, and copies the exact reviewed version
-into `apply_as_is`. It permits one byte-for-byte Apply retry only when the
-transport response was lost, because that exact revision has a recovery
-contract; a typed stale or operation failure is not an invitation to retry.
-
-The Skill does not run the CLI, read the Store, emulate Save As, edit review
-responses, or redirect conversational issue resolution away from the separate
-Grounding tool. It is a distributable source artifact, not evidence that a
-particular agent host has installed the Skill or registered the MCP tool.
+`skills/memcommit-atomize/` is host guidance, not another implementation. It
+requires direct tool use, newest-version chaining, complete proposal review,
+explicit approval, bounded exact final-action retry, and the separate
+`memcommit_atomize_grounding` tool for conversational issue resolution. The
+Skill passes the canonical Skill Creator validator.
 
 ## Verification and limits
 
-Focused tests cover strict parsing, complete JSON projection, cache/provider
-and effect fields, error redaction, one-public-call ownership, adapter import
-isolation, registry/MCP discovery, provider-backed first open, saved second
-open, exact Apply, transport retry recovery, stale-version rejection, one
-provider call, one checkpoint, and the companion Skill's review, cache,
-version, retry, and no-fallback instructions. The Skill also passes the
-canonical Skill Creator structural validator.
+Focused public/agent tests cover all seven actions, strict schema projection,
+focused Memory open, saved/prepared/provider origins, provider-free review
+edits, response clearing, require-new validation, atomic reanalysis under a
+concurrent response edit, in-place and Save As materialization, checkpoint
+lineage, exact retry recovery, stale rejection, and one-public-call adapter
+ownership. The installed-wheel MCP smoke covers saved open, response edit,
+Output planning, in-place Apply, reviewed Save As, both exact recovery paths,
+and independent Store verification without an external provider.
 
-A fresh installed wheel is also exercised from outside the checkout through
-the official MCP stdio client. The smoke opens a pre-created saved structural
-review without a provider, applies its exact version, retries it, and verifies
-the resulting two Memories and single checkpoint through an independent Store
-read. This is package and local-transport evidence, not a claim about remote
-authentication, native Windows behavior, or the excluded Save As/editing
-lifecycle.
+This is local ordinary-Context and local stdio evidence. It does not claim
+remote authentication, Grant-authorized mutation, provider-backed installed
+execution, native Windows behavior, or automatic Skill installation.

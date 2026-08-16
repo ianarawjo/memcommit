@@ -1,4 +1,4 @@
 interface:
   display_name: "MemCommit Atomize"
-  short_description: "Review and apply exact structural Atomize proposals"
-  default_prompt: "Use $memcommit-atomize to review this Context structurally and apply only the exact proposal I approve."
+  short_description: "Complete exact structural Atomize reviews"
+  default_prompt: "Use $memcommit-atomize to review this Context structurally, incorporate my guidance, and publish only the exact proposal I approve."

@@ -20,9 +20,14 @@ from memcommit.atomize_application import (
     AtomizeMaterialization,
     AtomizePersistedApplyRequest,
     AtomizePersistedApplyResult,
+    AtomizeOutputPlanRequest,
+    AtomizeResponseUpdateRequest,
     AtomizeSaveAsRequest,
     AtomizeSaveAsResult,
     AtomizeSessionSnapshot,
+    AtomizeWorkbenchUpdateResult,
+    run_atomize_output_plan_update,
+    run_atomize_response_update,
     run_atomize_session_apply,
     run_atomize_save_as,
 )
@@ -125,6 +130,29 @@ class MemoryStoreAtomizeSessionRepository:
             if committed.workbench != workbench:
                 raise AtomizeApplicationError(
                     "Atomize terminal persistence returned a different workbench."
+                )
+            return committed
+
+    def replace_workbench(
+        self,
+        workbench: AtomizeWorkbenchSession,
+        *,
+        analysis: AtomizeAnalysisSession,
+        expected_version: str,
+    ) -> AtomizeSessionSnapshot:
+        """Replace one complete workbench only under its opaque revision."""
+
+        with self.store._atomize_session_write_lock(analysis.context_uid):  # noqa: SLF001
+            current = self._load_unlocked(analysis)
+            if current.version_token != expected_version:
+                raise AtomizeApplicationError(
+                    "The Atomize session changed before the review update."
+                )
+            self.store._save_atomize_workbench_locked(workbench)  # noqa: SLF001
+            committed = self._load_unlocked(analysis)
+            if committed.workbench != workbench:
+                raise AtomizeApplicationError(
+                    "Atomize review persistence returned a different workbench."
                 )
             return committed
 
@@ -944,8 +972,50 @@ def capture_atomize_session_snapshot_at_version(
                     version_token=accepted_version,
                 )
         raise AtomizeApplicationError(
-            "The accepted Atomize version changed before Apply. Reopen the review."
+            "The accepted Atomize version changed before application. Reopen the review."
         )
+
+
+def capture_current_atomize_session_snapshot_at_version(
+    *,
+    store: MemoryStore,
+    analysis: AtomizeAnalysisSession,
+    expected_version: str,
+) -> AtomizeSessionSnapshot:
+    """Capture only the current exact revision, never a terminal retry form."""
+
+    snapshot = MemoryStoreAtomizeSessionRepository(store).load(analysis)
+    if snapshot.version_token != expected_version:
+        raise AtomizeApplicationError(
+            "The accepted Atomize version changed. Reopen the review."
+        )
+    return snapshot
+
+
+def execute_atomize_response_update(
+    request: AtomizeResponseUpdateRequest,
+    *,
+    store: MemoryStore,
+) -> AtomizeWorkbenchUpdateResult:
+    """Persist one exact response update through the production repository."""
+
+    return run_atomize_response_update(
+        request,
+        repository=MemoryStoreAtomizeSessionRepository(store),
+    )
+
+
+def execute_atomize_output_plan_update(
+    request: AtomizeOutputPlanRequest,
+    *,
+    store: MemoryStore,
+) -> AtomizeWorkbenchUpdateResult:
+    """Persist one exact Output-plan update through the production repository."""
+
+    return run_atomize_output_plan_update(
+        request,
+        repository=MemoryStoreAtomizeSessionRepository(store),
+    )
 
 
 def execute_atomize_session_apply(

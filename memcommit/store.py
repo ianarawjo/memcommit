@@ -2568,29 +2568,41 @@ class MemoryStore:
     @_profile_write_guarded
     def save_atomize_analysis(self, session) -> None:
         """Atomically persist a validated, non-applying atomize preview."""
+
+        from memcommit.atomize import AtomizeAnalysisSession
+
+        if not isinstance(session, AtomizeAnalysisSession):
+            raise TypeError("Expected an AtomizeAnalysisSession.")
+
+        with self._atomize_session_write_lock(session.context_uid):
+            self._save_atomize_analysis_locked(session)
+
+    def _save_atomize_analysis_locked(self, session) -> None:
+        """Persist one analysis while its Context-scoped CAS lock is held."""
+
         from memcommit.atomize import (
             AtomizeAnalysisSession,
             AtomizeImpactError,
         )
 
+        self._assert_profile_write_allowed()
         if not isinstance(session, AtomizeAnalysisSession):
             raise TypeError("Expected an AtomizeAnalysisSession.")
-        with self._atomize_session_write_lock(session.context_uid):
-            path = self._atomize_analysis_path(session.context_uid)
-            if self.atomize_analyses_dir.exists() and (
-                not self.atomize_analyses_dir.is_dir()
-                or self.atomize_analyses_dir.is_symlink()
-            ):
-                raise ValueError("Atomize analysis storage is invalid.")
-            self.atomize_analyses_dir.mkdir(parents=True, exist_ok=True)
-            if path.exists() and (not path.is_file() or path.is_symlink()):
-                raise ValueError("Atomize analysis storage is invalid.")
-            data = session.to_dict()
-            try:
-                AtomizeAnalysisSession.from_dict(data)
-            except AtomizeImpactError as error:
-                raise ValueError("Atomize analysis is invalid.") from error
-            _write_json_atomic(path, data)
+        path = self._atomize_analysis_path(session.context_uid)
+        if self.atomize_analyses_dir.exists() and (
+            not self.atomize_analyses_dir.is_dir()
+            or self.atomize_analyses_dir.is_symlink()
+        ):
+            raise ValueError("Atomize analysis storage is invalid.")
+        self.atomize_analyses_dir.mkdir(parents=True, exist_ok=True)
+        if path.exists() and (not path.is_file() or path.is_symlink()):
+            raise ValueError("Atomize analysis storage is invalid.")
+        data = session.to_dict()
+        try:
+            AtomizeAnalysisSession.from_dict(data)
+        except AtomizeImpactError as error:
+            raise ValueError("Atomize analysis is invalid.") from error
+        _write_json_atomic(path, data)
 
     @_profile_write_guarded
     def delete_atomize_analysis(self, context_uid: str) -> None:

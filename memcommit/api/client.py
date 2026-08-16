@@ -19,6 +19,9 @@ from memcommit.api.atomize_grounding import (
 )
 from memcommit.api.atomize import (
     AtomizeAnalysisResult,
+    AtomizeReviewUpdateResult,
+    AtomizeReviewedApplyResult,
+    AtomizeSaveAsApplyResult,
     AtomizeStructuralApplyResult,
 )
 from memcommit.api.errors import (
@@ -349,6 +352,7 @@ class MemCommitClient:
         *,
         refresh: bool = False,
         use_prepared: bool = True,
+        memory_selector: str | None = None,
     ) -> AtomizeAnalysisResult:
         """Open one exact durable structural Atomize proposal."""
 
@@ -359,6 +363,97 @@ class MemCommitClient:
             context_name,
             refresh=refresh,
             use_prepared=use_prepared,
+            memory_selector=memory_selector,
+        )
+
+    def update_atomize_response(
+        self,
+        context_name: str | None = None,
+        *,
+        expected_version: str,
+        issue_uid: str,
+        option_uid: str | None,
+        comment: str,
+    ) -> AtomizeReviewUpdateResult:
+        """Replace or clear one response in an exact saved review."""
+
+        from memcommit.api._operations.atomize import update_atomize_response
+
+        return update_atomize_response(
+            self._runtime,
+            context_name,
+            expected_version=expected_version,
+            issue_uid=issue_uid,
+            option_uid=option_uid,
+            comment=comment,
+        )
+
+    def plan_atomize_output(
+        self,
+        context_name: str | None = None,
+        *,
+        expected_version: str,
+        output_context_name: str,
+    ) -> AtomizeReviewUpdateResult:
+        """Set one exact in-place or require-new structural Output plan."""
+
+        from memcommit.api._operations.atomize import plan_atomize_output
+
+        return plan_atomize_output(
+            self._runtime,
+            context_name,
+            expected_version=expected_version,
+            output_context_name=output_context_name,
+        )
+
+    def reanalyze_atomize_responses(
+        self,
+        context_name: str | None = None,
+        *,
+        expected_version: str,
+    ) -> AtomizeAnalysisResult:
+        """Incorporate exact saved unary responses through the provider."""
+
+        from memcommit.api._operations.atomize import reanalyze_atomize_responses
+
+        return reanalyze_atomize_responses(
+            self._runtime,
+            context_name,
+            expected_version=expected_version,
+        )
+
+    def save_saved_atomize_as(
+        self,
+        context_name: str | None = None,
+        *,
+        expected_version: str,
+    ) -> AtomizeSaveAsApplyResult:
+        """Publish or recover one exact reviewed require-new Output."""
+
+        from memcommit.api._operations.atomize import save_saved_atomize_as
+
+        return save_saved_atomize_as(
+            self._runtime,
+            context_name,
+            expected_version=expected_version,
+        )
+
+    def incorporate_and_apply_atomize(
+        self,
+        context_name: str | None = None,
+        *,
+        expected_version: str,
+    ) -> AtomizeReviewedApplyResult:
+        """Incorporate exact responses and immediately apply their Output plan."""
+
+        from memcommit.api._operations.atomize import (
+            incorporate_and_apply_atomize,
+        )
+
+        return incorporate_and_apply_atomize(
+            self._runtime,
+            context_name,
+            expected_version=expected_version,
         )
 
     def apply_atomize_as_is(

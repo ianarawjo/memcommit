@@ -18,13 +18,13 @@ environment's `site-packages`, and discovered this exact registry order:
 7. `memcommit_elaborate`
 8. `memcommit_fit`
 
-The client then invoked Add, observed its structured success receipt, and
-verified the same checkpoint through an independent Store read. It opened a
-durable review-only Grounding dialogue without a provider, then opened a saved
-structural Atomize review without a provider, applied its exact version,
-recovered the same receipt on retry, and verified the split result and single
-checkpoint. Finally, it confirmed that an unknown tool returns the typed
-`unknown_tool` error. This proves that the eight
+The client then invoked Add and verified its checkpoint independently. It
+opened a durable review-only Grounding dialogue without a provider. For
+structural Atomize it exercised two saved sessions without provider access:
+one exact in-place Apply/retry, plus response replacement, require-new Output
+planning, Save As/retry, Source preservation, destination selection, and both
+single-checkpoint outcomes. Finally, it confirmed that an unknown tool returns
+the typed `unknown_tool` error. This proves that the eight
 registered adapters and their transitive modules ship in the wheel and cross
 the installed MCP discovery boundary. Provider-backed semantic execution remains
 covered by the in-process public-client, agent-registry, and MCP-projection
@@ -76,9 +76,12 @@ invalid-HOME regression record.
 It invoked Add with two exact Memory texts and an explicit `smoke/target`
 Context. The MCP result contained matching success and receipt data; an
 independent Store read found the two texts in order and exactly one checkpoint
-whose UID matched the returned receipt. A call to an unregistered tool returned
-`isError: true`, `code: unknown_tool`, and `retryable: false`. Closing the client
-closed the stdio server process normally.
+whose UID matched the returned receipt. The Atomize reads separately verified
+that in-place Apply changed only its Source, Save As preserved its Source and
+created/selected the planned output, and exact retries reused their respective
+checkpoint UIDs. A call to an unregistered tool returned `isError: true`,
+`code: unknown_tool`, and `retryable: false`. Closing the client closed the
+stdio server process normally.
 
 The loaded module origin was inside the new environment's `site-packages`, not
 the source checkout. Query was verified through discovery in this run; invoking

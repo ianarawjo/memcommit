@@ -2,24 +2,22 @@
 
 ## Status
 
-`VERIFIED` for analysis open/create/reuse, local in-place structural Apply, and
-their bounded public Python projection; reviewed 2026-08-15.
+`VERIFIED` for analysis open/create/reuse, exact review edits, unary
+reanalysis, local in-place Apply, require-new Save As, and their complete public
+Python/agent projection; reviewed 2026-08-15.
 
-This note records the first two Atomize application slices. Analysis
-open/create/reuse and local in-place Apply now cross typed,
-interface-independent boundaries. They preserve Atomize semantics, provider
-prompts, Study fixtures, saved schemas, and ordinary TUI navigation while
-making saved reuse, hidden-prewarm materialization, provider creation, and
-structural application independently callable. The public projection exposes
-analysis plus in-place `Apply as is`; the require-new save-as route remains an
-internal reviewed lifecycle and is not part of that stable public contract.
+Analysis, review edits, reanalysis, and both materialization directions now
+cross typed, interface-independent boundaries. They preserve Atomize prompts,
+classifications, Study fixtures, saved schemas, and ordinary TUI navigation.
+The stable public projection exposes the same exact-version lifecycle rather
+than asking Python or agent adapters to reconstruct command-owned policy.
 
 ## Current execution junction
 
-Atomize already separated its semantic records, strict provider decoder,
-mutable workbench model, and presentation. Analysis open, in-place Apply, and
-Save As now have distinct application/runtime junctions; the stable Python
-surface deliberately exports only the first two:
+Atomize separates semantic records, strict provider decoding, mutable
+workbench state, application/runtime use cases, and presentation. The stable
+Python surface exports the full structural lifecycle through those same use
+cases:
 
 ```text
 CLI flags or TUI action
@@ -38,16 +36,17 @@ AtomizeAnalysisOpenRequest
 durable analysis/workbench pair + typed origin
         |
         v
-command-owned semantic/review gates
+exact opaque session revision
         |
-        +-- in place --> AtomizeSessionSnapshot
-        |                + exact analysis/workbench revision
-        |                + recover or create one atomize checkpoint
+        +-- response or Output edit --> provider-free CAS replacement
+        +-- unary reanalysis --> provider turn + atomic pair replacement
+        |
+        +-- in place --> recover/create one Source checkpoint
         |                + CAS-save terminal receipt
         |                + compensate an uncommitted exact checkpoint
         |
-        `-- save-as  --> create source copy + init checkpoint
-                        + atomize checkpoint + current switch
+        `-- save-as  --> publish one require-new Atomize creation checkpoint
+                        + Source-owned receipt + current switch
         |
         v
 typed Apply result or retained save-as state
@@ -56,10 +55,11 @@ typed Apply result or retained save-as state
 render command receipt
 ```
 
-`memcommit.atomize_application` owns the in-place lifecycle and imports no
-terminal adapter or Store. `memcommit.atomize_runtime` owns the Store session
-repository, strict graph preflight, checkpoint reconstruction, materialization,
-and compensation. The Context/checkpoint and workbench receipt remain separate
+`memcommit.atomize_application` owns provider-free response/Output edits and
+both application lifecycles, and imports no terminal adapter or Store.
+`memcommit.atomize_runtime` owns the Store session repository, strict graph
+preflight, checkpoint reconstruction, materialization, and compensation. The
+Context/checkpoint and workbench receipt remain separate
 atomic files, but the application result treats them as one synchronous
 outcome: it re-reads late success, compensates an uncommitted new checkpoint,
 and recovers an exact previously interrupted checkpoint without replaying the
@@ -69,7 +69,7 @@ transformation.
 contract, and result validation without importing Store, commands, Typer, or
 prompt-toolkit. `memcommit.atomize_analysis_runtime` owns saved-pair lookup,
 hidden-prewarm lookup, lazy provider connection, Context freshness recheck,
-pair publication, and the existing synchronous restoration path. The legacy
+pair publication, exact reanalysis pair-CAS, and synchronous restoration path. The legacy
 `atomize_workflow` module is now a compatibility facade over that boundary.
 
 ## Operation-owned decisions to preserve
@@ -135,8 +135,8 @@ pair publication, and the existing synchronous restoration path. The legacy
 | Analysis-only | latest analysis and optional workbench | not a Context history effect | application session lifecycle only |
 | In-place structural Apply | one Context replacement, one Atomize checkpoint, optional terminal workbench receipt | one `mem undo` / `mem redo` restores the whole Context snapshot; session remains terminal | verified, including receipt compensation and interrupted recovery |
 | All-preserved in-place Apply | same checkpoint/receipt with unchanged Memory ledger | Undo/Redo records history although Memory content is unchanged | preserve as explicit completion, not collapse to Update semantics |
-| Save-as structural Apply | new Context, init checkpoint, copied analysis, Atomize checkpoint, current-pointer CAS, Source terminal receipt | one Undo reverses only the Atomize checkpoint to the created baseline; it does not remove the new Context | either define a compound operation unit or document this as an intentional two-checkpoint exception before verification |
-| Save-as failure after publication | inspectable new Context in its last durable phase; Source unchanged | manual inspection/recovery; no complete success receipt | add a typed partial-publication result and exact retry/adoption rules |
+| Save-as structural Apply | new Context, one Atomize creation checkpoint, copied analysis, current-pointer CAS, Source terminal receipt | one Undo/Redo removes/restores the complete created Context and Source receipt | verified as one command unit for new histories |
+| Save-as failure after publication | exact inspectable new Context in its last durable phase; Source unchanged | exact retry completes missing receipt/selection without a second checkpoint | verified retained-publication recovery |
 | Structural Apply receipt failure | synchronous pre-commit failure exposes no Context effect; a prior exact checkpoint is recoverable without replay | checkpoint/receipt pair remains one application outcome | verified for local in-place Apply |
 | Grounding proposal Apply | separate edit/add transaction and grounding receipt/history | already has exact checkpoint recovery and mixed-write rollback tests | do not merge its schema with structural Atomize; reuse only the application/recovery mechanics |
 
@@ -213,28 +213,21 @@ session lock; the repository rechecks the token before terminal publication.
 5. **Done:** route save-as through a typed request/result, publish one final
    creation checkpoint, retain exact post-publication failures for idempotent
    retry, and restore Context/analysis/receipt as one Undo/Redo lifecycle.
-6. **Partial:** the stable Python projection now opens the exact durable pair
-   and applies in place; move the remaining shared Resolution/save-as actions
-   to independently reviewed typed public use cases before exporting them.
+6. **Done:** expose exact response/Output edits, unary reanalysis, in-place
+   Apply, require-new Save As, and the explicit compound action through stable
+   Python and agent contracts without moving policy into adapters.
 7. **Done:** make new save-as histories one Atomize creation unit; leave
    pre-release legacy `init + atomize` histories uninterpreted.
 
 ## Current verification evidence
 
-The current Atomize-focused run passes 186 tests with one pre-existing
-grounding screen-capture comparison deselected because its expected wording no
-longer matches the shared renderer. The new six-case analysis-boundary file
-directly covers provider creation, provider-free saved resume, exact
-hidden-prewarm materialization, prepared-reuse policy, stale rejection,
-refresh, and module dependency direction; the existing refresh rollback test
-continues to prove analysis/workbench pair restoration. The structural boundary
-file passes eleven cases: recorded all-preserved completion, in-place receipt
-compensation, late-success detection, interrupted recovery, later-edit
-preservation, workbench-race compensation, dependency direction, final-only
-Save As, creation-lifecycle Undo/Redo, prepublication failure cleanup, exact
-receipt retry, and recorded Source-frame lineage for both KEEP and SPLIT. A
-second integrated run passes 202 command, Context safety, history/restoration,
-write-protection, and Study-installation tests.
+Focused public/application/agent tests cover provider creation, provider-free
+saved resume, exact hidden-prewarm materialization, focused Memory open,
+response replacement and clearing, Output plan validation, atomic unary
+reanalysis, concurrent-response preservation, in-place and Save As receipts,
+exact recovery, lineage, stale rejection, and adapter dependency direction.
+The complete regression and installed-wheel gates are rerun with every change;
+the current recorded commands live in the public and agent rationale notes.
 
 The existing screenshot sets cover Study hidden-session initialization, exact
 prewarm entry, split review, final approval/application, output verification,
@@ -262,12 +255,8 @@ explicit refresh, stale rejection, and analysis/workbench pair restoration.
 ## Non-goals of this slice
 
 - no provider-prompt or Atomize classification change;
-- no migration of the in-progress exact-Memory selection work;
 - no change to `APPLY`, `APPLY AS IS`, or ownership-aware presentation policy;
 - no deletion or cleanup of a published save-as destination;
-- no change yet to save-as partial-publication or Undo semantics;
 - no unification of structural Atomize and grounding-proposal schemas;
-- no claim that workbench response editing, compound reanalysis, or structural
-  Save As is a stable public Python API; the bounded analysis-open and in-place
-  `Apply as is` contract is recorded separately in
-  `atomize-public-python-api-design-rationale.md`.
+- no conversion of pair-shaped conflicts into unary provider guidance; and
+- no expansion from local ordinary Contexts to Grant-authorized mutation.

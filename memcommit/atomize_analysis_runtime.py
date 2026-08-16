@@ -20,6 +20,7 @@ from memcommit.atomize_analysis_application import (
     AtomizeProviderFactory,
     run_atomize_analysis_open,
 )
+from memcommit.atomize_application import AtomizeSessionSnapshot
 from memcommit.atomize_workbench import create_atomize_workbench
 from memcommit.context import Context
 from memcommit.query_provider import CodexChatGPTProvider
@@ -138,6 +139,54 @@ class MemoryStoreAtomizeAnalysisOpenPort:
     validate_before_save: Callable[[], None] | None = None
     prepared_analysis_override: AtomizeAnalysisSession | None = None
     prepared_output_name: str | None = None
+    expected_session: AtomizeSessionSnapshot | None = None
+
+    def _replace_expected_session(
+        self,
+        analysis: AtomizeAnalysisSession,
+        workbench,
+    ) -> None:
+        """Publish one provider result only over the exact reviewed pair."""
+
+        expected = self.expected_session
+        assert expected is not None
+        with self.store._atomize_session_write_lock(  # noqa: SLF001
+            expected.analysis.context_uid
+        ):
+            current_analysis = self.store.load_atomize_analysis(
+                expected.analysis.context_uid
+            )
+            current_workbench = (
+                self.store.load_atomize_workbench(current_analysis)
+                if current_analysis is not None
+                else None
+            )
+            if (
+                current_analysis != expected.analysis
+                or current_workbench != expected.workbench
+            ):
+                raise AtomizeImpactError(
+                    "The atomize workbench changed while reviewed "
+                    "materialization was running; no proposal was saved."
+                )
+            self.store._save_atomize_analysis_locked(analysis)  # noqa: SLF001
+            try:
+                self.store._save_atomize_workbench_locked(workbench)  # noqa: SLF001
+            except Exception:
+                self.store._save_atomize_analysis_locked(  # noqa: SLF001
+                    expected.analysis
+                )
+                if expected.workbench is None:
+                    path = self.store._atomize_workbench_path(  # noqa: SLF001
+                        expected.analysis.context_uid
+                    )
+                    if path.exists():
+                        path.unlink()
+                else:
+                    self.store._save_atomize_workbench_locked(  # noqa: SLF001
+                        expected.workbench
+                    )
+                raise
 
     def _prepared(
         self,
@@ -284,6 +333,14 @@ class MemoryStoreAtomizeAnalysisOpenPort:
             analysis,
             output_context_name=effective_output_name,
         )
+        if self.expected_session is not None:
+            self._replace_expected_session(analysis, workbench)
+            return AtomizeAnalysisOpenResult(
+                analysis=analysis,
+                workbench=workbench,
+                origin="PROVIDER",
+            )
+
         analysis_saved = False
         try:
             self.store.save_atomize_analysis(analysis)
@@ -323,6 +380,7 @@ def execute_atomize_analysis_open(
     validate_before_save: Callable[[], None] | None = None,
     prepared_analysis_override: AtomizeAnalysisSession | None = None,
     prepared_output_name: str | None = None,
+    expected_session: AtomizeSessionSnapshot | None = None,
 ) -> AtomizeAnalysisOpenResult:
     """Execute one Atomize open through production non-terminal adapters."""
 
@@ -333,6 +391,7 @@ def execute_atomize_analysis_open(
             validate_before_save=validate_before_save,
             prepared_analysis_override=prepared_analysis_override,
             prepared_output_name=prepared_output_name,
+            expected_session=expected_session,
         ),
         provider_factory=provider_factory,
     )

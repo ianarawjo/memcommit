@@ -111,19 +111,21 @@ def _prepare_store(root: Path) -> MemoryStore:
     )
     grounding.keep_review_only()
     store.save_atomize_grounding_session(grounding)
-    atomize_context = ops.init("smoke/atomize")
-    ops.add(
-        atomize_context,
-        "The installed library closes at five and the installed cafe closes at six.",
-    )
-    store.save(atomize_context)
-    prepared = MemCommitClient(
+    atomize_client = MemCommitClient(
         root=root,
         semantic_provider_factory=_AtomizeProvider,
-    ).open_atomize_analysis(atomize_context.name)
-    assert prepared.origin == "PROVIDER"
+    )
+    for name in ("smoke/atomize", "smoke/atomize-save-as"):
+        atomize_context = ops.init(name)
+        ops.add(
+            atomize_context,
+            "The installed library closes at five and the installed cafe closes at six.",
+        )
+        store.save(atomize_context)
+        prepared = atomize_client.open_atomize_analysis(atomize_context.name)
+        assert prepared.origin == "PROVIDER"
+        assert store.list_checkpoints(atomize_context.name) == []
     assert store.list_checkpoints(context.name) == []
-    assert store.list_checkpoints(atomize_context.name) == []
     return store
 
 
@@ -181,6 +183,61 @@ async def _exercise_stdio(command: str, root: Path, workdir: Path) -> dict[str, 
                     "expected_version": atomize_version,
                 },
             )
+            atomize_save_source = await session.call_tool(
+                "memcommit_atomize",
+                {
+                    "version": 1,
+                    "kind": "open",
+                    "context_name": "smoke/atomize-save-as",
+                },
+            )
+            save_source_result = atomize_save_source.structured_content["result"]
+            atomize_response = await session.call_tool(
+                "memcommit_atomize",
+                {
+                    "version": 1,
+                    "kind": "respond",
+                    "context_name": "smoke/atomize-save-as",
+                    "expected_version": save_source_result["version"],
+                    "issue_uid": save_source_result["issues"][0]["uid"],
+                    "option_uid": None,
+                    "comment": "Keep the two installed facts independent.",
+                },
+            )
+            response_proposal = atomize_response.structured_content["result"][
+                "proposal"
+            ]
+            atomize_output_plan = await session.call_tool(
+                "memcommit_atomize",
+                {
+                    "version": 1,
+                    "kind": "plan_output",
+                    "context_name": "smoke/atomize-save-as",
+                    "expected_version": response_proposal["version"],
+                    "output_context_name": "smoke/atomize-output",
+                },
+            )
+            output_proposal = atomize_output_plan.structured_content["result"][
+                "proposal"
+            ]
+            atomize_save = await session.call_tool(
+                "memcommit_atomize",
+                {
+                    "version": 1,
+                    "kind": "save_as",
+                    "context_name": "smoke/atomize-save-as",
+                    "expected_version": output_proposal["version"],
+                },
+            )
+            atomize_save_retry = await session.call_tool(
+                "memcommit_atomize",
+                {
+                    "version": 1,
+                    "kind": "save_as",
+                    "context_name": "smoke/atomize-save-as",
+                    "expected_version": output_proposal["version"],
+                },
+            )
             unknown = await session.call_tool("not_registered", {})
 
     assert initialized.server_info.name == "memcommit"
@@ -212,6 +269,21 @@ async def _exercise_stdio(command: str, root: Path, workdir: Path) -> dict[str, 
     assert atomize_retry.structured_content["result"]["checkpoint_uid"] == (
         atomize_apply.structured_content["result"]["checkpoint_uid"]
     )
+    assert atomize_save_source.is_error is False
+    assert save_source_result["cache_used"] is True
+    assert atomize_response.is_error is False
+    assert response_proposal["issues"][0]["answered"] is True
+    assert atomize_output_plan.is_error is False
+    assert output_proposal["output_context_name"] == "smoke/atomize-output"
+    assert output_proposal["in_place_apply_allowed"] is False
+    assert atomize_save.is_error is False
+    assert atomize_save.structured_content["result"]["created_context"] is True
+    assert atomize_save.structured_content["result"]["recovered"] is False
+    assert atomize_save_retry.is_error is False
+    assert atomize_save_retry.structured_content["result"]["recovered"] is True
+    assert atomize_save_retry.structured_content["result"]["checkpoint_uid"] == (
+        atomize_save.structured_content["result"]["checkpoint_uid"]
+    )
     assert unknown.is_error is True
     assert unknown.structured_content["error"]["code"] == "unknown_tool"
     return {
@@ -223,6 +295,11 @@ async def _exercise_stdio(command: str, root: Path, workdir: Path) -> dict[str, 
         "atomize": atomize.structured_content,
         "atomize_apply": atomize_apply.structured_content,
         "atomize_retry": atomize_retry.structured_content,
+        "atomize_save_source": atomize_save_source.structured_content,
+        "atomize_response": atomize_response.structured_content,
+        "atomize_output_plan": atomize_output_plan.structured_content,
+        "atomize_save": atomize_save.structured_content,
+        "atomize_save_retry": atomize_save_retry.structured_content,
         "unknown_error": unknown.structured_content["error"],
     }
 
@@ -259,6 +336,22 @@ def main() -> int:
     assert atomize_checkpoints[0]["uid"] == (
         protocol["atomize_apply"]["result"]["checkpoint_uid"]
     )
+    save_source = store.load_direct("smoke/atomize-save-as")
+    assert [memory.content for memory in save_source.memories.values()] == [
+        "The installed library closes at five and the installed cafe closes at six."
+    ]
+    assert store.list_checkpoints(save_source.name) == []
+    saved_output = store.load_direct("smoke/atomize-output")
+    save_checkpoints = store.list_checkpoints(saved_output.name)
+    assert [memory.content for memory in saved_output.memories.values()] == [
+        "The installed library closes at five",
+        "the installed cafe closes at six.",
+    ]
+    assert len(save_checkpoints) == 1
+    assert save_checkpoints[0]["uid"] == (
+        protocol["atomize_save"]["result"]["checkpoint_uid"]
+    )
+    assert store.current_context_name() == "smoke/atomize-output"
 
     print(
         json.dumps(
@@ -269,6 +362,7 @@ def main() -> int:
                 "entrypoint": command,
                 "checkpoint_count": len(checkpoints),
                 "atomize_checkpoint_count": len(atomize_checkpoints),
+                "atomize_save_checkpoint_count": len(save_checkpoints),
                 **protocol,
             },
             ensure_ascii=False,

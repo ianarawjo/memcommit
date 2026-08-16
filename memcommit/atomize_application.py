@@ -11,6 +11,8 @@ from memcommit.atomize import (
     AtomizeApplyResult,
 )
 from memcommit.atomize_workbench import (
+    ATOMIZE_WORKBENCH_RESPONSE_CHAR_LIMIT,
+    AtomizeWorkbenchResponse,
     AtomizeWorkbenchSession,
     atomize_workbench_response_digest,
     project_atomize_workbench_findings,
@@ -102,6 +104,32 @@ class AtomizeSaveAsResult:
     recovered: bool
 
 
+@dataclass(frozen=True)
+class AtomizeResponseUpdateRequest:
+    """Replace one exact issue response in an accepted workbench revision."""
+
+    snapshot: AtomizeSessionSnapshot
+    issue_uid: str
+    option_uid: str | None
+    comment: str
+
+
+@dataclass(frozen=True)
+class AtomizeOutputPlanRequest:
+    """Replace the Output plan of one exact nonterminal workbench revision."""
+
+    snapshot: AtomizeSessionSnapshot
+    output_context_name: str
+
+
+@dataclass(frozen=True)
+class AtomizeWorkbenchUpdateResult:
+    """One exact provider-free derived-session revision."""
+
+    snapshot: AtomizeSessionSnapshot
+    changed: bool
+
+
 class AtomizeSessionRepository(Protocol):
     """Persist an analysis/workbench pair without exposing record digests."""
 
@@ -119,6 +147,15 @@ class AtomizeSessionRepository(Protocol):
         expected_version: str,
     ) -> AtomizeSessionSnapshot:
         """Commit one terminal receipt only under the exact opaque version."""
+
+    def replace_workbench(
+        self,
+        workbench: AtomizeWorkbenchSession,
+        *,
+        analysis: AtomizeAnalysisSession,
+        expected_version: str,
+    ) -> AtomizeSessionSnapshot:
+        """Commit one complete nonterminal or review-only workbench revision."""
 
 
 class AtomizeOutputPort(Protocol):
@@ -172,6 +209,112 @@ class AtomizeSaveAsOutputPort(Protocol):
         expected_current: str | None,
     ) -> None:
         """Select the exact published output under current-state CAS."""
+
+
+def _accepted_workbench(
+    snapshot: AtomizeSessionSnapshot,
+    repository: AtomizeSessionRepository,
+) -> tuple[AtomizeSessionSnapshot, AtomizeWorkbenchSession]:
+    current = repository.load(snapshot.analysis)
+    if current != snapshot:
+        raise AtomizeApplicationError(
+            "The Atomize session changed before the review update. Reopen it."
+        )
+    if current.workbench is None:
+        raise AtomizeApplicationError(
+            "The accepted Atomize analysis has no editable workbench."
+        )
+    return current, current.workbench
+
+
+def run_atomize_response_update(
+    request: AtomizeResponseUpdateRequest,
+    *,
+    repository: AtomizeSessionRepository,
+) -> AtomizeWorkbenchUpdateResult:
+    """Replace or clear one response under the complete session revision."""
+
+    if not isinstance(request, AtomizeResponseUpdateRequest):
+        raise TypeError("Atomize response update requires a typed request.")
+    if not isinstance(request.issue_uid, str) or not request.issue_uid:
+        raise AtomizeApplicationError("Atomize response issue uid must be nonempty.")
+    if request.option_uid is not None and (
+        not isinstance(request.option_uid, str) or not request.option_uid
+    ):
+        raise AtomizeApplicationError("Atomize response option uid must be nonempty.")
+    if not isinstance(request.comment, str):
+        raise AtomizeApplicationError("Atomize response comment must be text.")
+    if len(request.comment) > ATOMIZE_WORKBENCH_RESPONSE_CHAR_LIMIT:
+        raise AtomizeApplicationError(
+            "Atomize response comment exceeds the workbench character limit."
+        )
+
+    current, workbench = _accepted_workbench(request.snapshot, repository)
+    if workbench.application is not None:
+        raise AtomizeApplicationError(
+            "An applied Atomize workbench cannot change its responses."
+        )
+    issue = next(
+        (candidate for candidate in workbench.issues if candidate.uid == request.issue_uid),
+        None,
+    )
+    if issue is None:
+        raise AtomizeApplicationError("The Atomize response issue is unavailable.")
+    if request.option_uid is not None and request.option_uid not in issue.choice_uids:
+        raise AtomizeApplicationError(
+            "The Atomize response option does not belong to this issue."
+        )
+    updated = copy.deepcopy(workbench)
+    response = AtomizeWorkbenchResponse(
+        selected_choice_uid=request.option_uid,
+        text=request.comment,
+    )
+    if response.answered:
+        updated.responses[request.issue_uid] = response
+    else:
+        updated.responses.pop(request.issue_uid, None)
+    updated.cursor_uid = request.issue_uid
+    if updated == workbench:
+        return AtomizeWorkbenchUpdateResult(snapshot=current, changed=False)
+    committed = repository.replace_workbench(
+        updated,
+        analysis=current.analysis,
+        expected_version=current.version_token,
+    )
+    return AtomizeWorkbenchUpdateResult(snapshot=committed, changed=True)
+
+
+def run_atomize_output_plan_update(
+    request: AtomizeOutputPlanRequest,
+    *,
+    repository: AtomizeSessionRepository,
+) -> AtomizeWorkbenchUpdateResult:
+    """Replace one reviewed Output plan without provider or Context mutation."""
+
+    if not isinstance(request, AtomizeOutputPlanRequest):
+        raise TypeError("Atomize Output update requires a typed request.")
+    if (
+        not isinstance(request.output_context_name, str)
+        or not request.output_context_name
+    ):
+        raise AtomizeApplicationError("Atomize Output Context must be nonempty.")
+    current, workbench = _accepted_workbench(request.snapshot, repository)
+    if workbench.application is not None:
+        if workbench.output_context_name == request.output_context_name:
+            return AtomizeWorkbenchUpdateResult(snapshot=current, changed=False)
+        raise AtomizeApplicationError(
+            "An applied Atomize workbench cannot change its Output plan."
+        )
+    updated = copy.deepcopy(workbench)
+    updated.output_context_name = request.output_context_name
+    if updated == workbench:
+        return AtomizeWorkbenchUpdateResult(snapshot=current, changed=False)
+    committed = repository.replace_workbench(
+        updated,
+        analysis=current.analysis,
+        expected_version=current.version_token,
+    )
+    return AtomizeWorkbenchUpdateResult(snapshot=committed, changed=True)
 
 
 def atomize_application_audit(

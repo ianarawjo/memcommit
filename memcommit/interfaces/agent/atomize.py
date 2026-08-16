@@ -1,4 +1,4 @@
-"""Versioned JSON-safe agent adapter for structural Atomize."""
+"""Versioned JSON-safe agent adapter for the complete structural Atomize flow."""
 
 from __future__ import annotations
 
@@ -13,6 +13,8 @@ from memcommit.api import (
     AtomizeExecutionError,
     AtomizeInputError,
     AtomizeProviderFailure,
+    AtomizeReviewedApplyResult,
+    AtomizeSaveAsApplyResult,
     AtomizeStorageError,
     AtomizeStructuralApplyResult,
     MemCommitClient,
@@ -29,7 +31,24 @@ from memcommit.interfaces.agent.contract import (
 
 ATOMIZE_AGENT_CONTRACT_VERSION = 1
 ATOMIZE_AGENT_TOOL_NAME = "memcommit_atomize"
-AtomizeAgentKind = Literal["open", "apply_as_is"]
+AtomizeAgentKind = Literal[
+    "open",
+    "respond",
+    "plan_output",
+    "reanalyze",
+    "apply_as_is",
+    "save_as",
+    "incorporate_and_apply",
+]
+_KINDS = {
+    "open",
+    "respond",
+    "plan_output",
+    "reanalyze",
+    "apply_as_is",
+    "save_as",
+    "incorporate_and_apply",
+}
 
 
 def _boolean(value: object, *, field: str) -> bool:
@@ -49,8 +68,11 @@ def _kind(value: Mapping[str, object]) -> AtomizeAgentKind:
             f"version must be exactly {ATOMIZE_AGENT_CONTRACT_VERSION}."
         )
     kind = value.get("kind")
-    if kind not in {"open", "apply_as_is"}:
-        raise AgentRequestError("kind must be one of: open, apply_as_is.")
+    if kind not in _KINDS:
+        raise AgentRequestError(
+            "kind must be one of: open, respond, plan_output, reanalyze, "
+            "apply_as_is, save_as, incorporate_and_apply."
+        )
     return kind  # type: ignore[return-value]
 
 
@@ -73,6 +95,21 @@ def _expected_version(value: object) -> str:
     return version
 
 
+def _comment(value: object) -> str:
+    if not isinstance(value, str):
+        raise AgentRequestError("comment must be text, including empty text to clear.")
+    if len(value) > 20_000:
+        raise AgentRequestError("comment exceeds the 20000-character limit.")
+    return value
+
+
+def _versioned_arguments(value: Mapping[str, object]) -> dict[str, object]:
+    return {
+        "context_name": _context_name(value),
+        "expected_version": _expected_version(value["expected_version"]),
+    }
+
+
 def _parse_request(payload: object) -> tuple[AtomizeAgentKind, dict[str, object]]:
     value = object_value(payload, label="Atomize request")
     kind = _kind(value)
@@ -80,7 +117,9 @@ def _parse_request(payload: object) -> tuple[AtomizeAgentKind, dict[str, object]
         exact_fields(
             value,
             required={"version", "kind"},
-            optional=frozenset({"context_name", "refresh", "use_prepared"}),
+            optional=frozenset(
+                {"context_name", "refresh", "use_prepared", "memory_selector"}
+            ),
             label="Atomize open request",
         )
         return kind, {
@@ -90,29 +129,75 @@ def _parse_request(payload: object) -> tuple[AtomizeAgentKind, dict[str, object]
                 value.get("use_prepared", True),
                 field="use_prepared",
             ),
+            "memory_selector": text_value(
+                value.get("memory_selector"),
+                field="memory_selector",
+                optional=True,
+            ),
+        }
+    if kind == "respond":
+        exact_fields(
+            value,
+            required={
+                "version",
+                "kind",
+                "expected_version",
+                "issue_uid",
+                "option_uid",
+                "comment",
+            },
+            optional=frozenset({"context_name"}),
+            label="Atomize respond request",
+        )
+        return kind, {
+            **_versioned_arguments(value),
+            "issue_uid": text_value(value["issue_uid"], field="issue_uid"),
+            "option_uid": text_value(
+                value["option_uid"],
+                field="option_uid",
+                optional=True,
+            ),
+            "comment": _comment(value["comment"]),
+        }
+    if kind == "plan_output":
+        exact_fields(
+            value,
+            required={"version", "kind", "expected_version", "output_context_name"},
+            optional=frozenset({"context_name"}),
+            label="Atomize plan_output request",
+        )
+        return kind, {
+            **_versioned_arguments(value),
+            "output_context_name": text_value(
+                value["output_context_name"],
+                field="output_context_name",
+            ),
         }
     exact_fields(
         value,
         required={"version", "kind", "expected_version"},
         optional=frozenset({"context_name"}),
-        label="Atomize apply_as_is request",
+        label=f"Atomize {kind} request",
     )
-    return kind, {
-        "context_name": _context_name(value),
-        "expected_version": _expected_version(value["expected_version"]),
-    }
+    return kind, _versioned_arguments(value)
 
 
-def _analysis_result(result: AtomizeAnalysisResult) -> JsonObject:
+def _analysis_result(
+    result: AtomizeAnalysisResult,
+    *,
+    effect: str | None = None,
+) -> JsonObject:
     provider_used = result.origin == "PROVIDER"
     cache_used = result.origin in {"SAVED", "EXACT_PREWARM"}
-    return {
+    projected: JsonObject = {
         "analysis_uid": result.analysis_uid,
         "version": result.version,
         "origin": result.origin,
         "provider_used": provider_used,
         "cache_used": cache_used,
-        "effect": "NONE" if result.origin == "SAVED" else "DERIVED_SESSION",
+        "effect": effect or (
+            "NONE" if result.origin == "SAVED" else "DERIVED_SESSION"
+        ),
         "context_uid": result.context_uid,
         "context_name": result.context_name,
         "context_digest": result.context_digest,
@@ -179,23 +264,84 @@ def _analysis_result(result: AtomizeAnalysisResult) -> JsonObject:
                     for reading in issue.readings
                 ],
                 "answered": issue.answered,
+                "selected_reading_uid": issue.selected_reading_uid,
+                "response_text": issue.response_text,
             }
             for issue in result.issues
         ],
         "workbench_uid": result.workbench_uid,
         "output_context_name": result.output_context_name,
+        "review_edit_allowed": result.review_edit_allowed,
+        "response_reanalysis_allowed": result.response_reanalysis_allowed,
+        "application_completed": result.application_completed,
         "in_place_apply_allowed": result.in_place_apply_allowed,
+    }
+    projected["actions"] = {
+        "respond": {
+            "allowed": result.review_edit_allowed,
+            "expected_version": result.version,
+            "provider_used": False,
+            "effect": "DERIVED_SESSION",
+        },
+        "plan_output": {
+            "allowed": result.review_edit_allowed,
+            "expected_version": result.version,
+            "provider_used": False,
+            "effect": "DERIVED_SESSION",
+        },
+        "reanalyze": {
+            "allowed": result.response_reanalysis_allowed,
+            "expected_version": result.version,
+            "provider_used": True,
+            "effect": "DERIVED_SESSION",
+        },
         "apply_as_is": {
-            "allowed": result.in_place_apply_allowed,
+            "allowed": (
+                result.in_place_apply_allowed and not result.application_completed
+            ),
             "expected_version": result.version,
             "provider_used": False,
             "effect": "CONTEXT_CHECKPOINT",
         },
+        "save_as": {
+            "allowed": (
+                not result.in_place_apply_allowed and not result.application_completed
+            ),
+            "expected_version": result.version,
+            "provider_used": False,
+            "effect": "CONTEXT_CHECKPOINT",
+        },
+        "incorporate_and_apply": {
+            "allowed": result.response_reanalysis_allowed,
+            "expected_version": result.version,
+            "provider_used": True,
+            "effect": "CONTEXT_CHECKPOINT",
+        },
     }
+    # Preserve the original small key for version-1 consumers while extending
+    # the same contract with the complete action map above.
+    projected["apply_as_is"] = projected["actions"]["apply_as_is"]
+    return projected
 
 
-def _apply_result(result: AtomizeStructuralApplyResult) -> JsonObject:
-    return {
+def _lineage_items(result) -> list[JsonObject]:
+    return [
+        {
+            "source_memory_uid": item.source_memory_uid,
+            "classification": item.classification,
+            "result_memory_uids": list(item.result_memory_uids),
+            "result_contents": list(item.result_contents),
+            "reason": item.reason,
+            "reason_codes": list(item.reason_codes),
+        }
+        for item in result.items
+    ]
+
+
+def _apply_result(
+    result: AtomizeStructuralApplyResult | AtomizeSaveAsApplyResult,
+) -> JsonObject:
+    value: JsonObject = {
         "analysis_uid": result.analysis_uid,
         "context_uid": result.context_uid,
         "context_name": result.context_name,
@@ -205,21 +351,21 @@ def _apply_result(result: AtomizeStructuralApplyResult) -> JsonObject:
         "preserved_count": result.preserved_count,
         "application_mode": result.application_mode,
         "unresolved_at_apply_count": result.unresolved_at_apply_count,
-        "items": [
-            {
-                "source_memory_uid": item.source_memory_uid,
-                "classification": item.classification,
-                "result_memory_uids": list(item.result_memory_uids),
-                "result_contents": list(item.result_contents),
-                "reason": item.reason,
-                "reason_codes": list(item.reason_codes),
-            }
-            for item in result.items
-        ],
+        "items": _lineage_items(result),
         "recovered": result.recovered,
         "provider_used": False,
         "effect": "CONTEXT_CHECKPOINT",
+        "created_context": isinstance(result, AtomizeSaveAsApplyResult),
     }
+    if isinstance(result, AtomizeSaveAsApplyResult):
+        value.update(
+            {
+                "source_context_uid": result.source_context_uid,
+                "source_context_name": result.source_context_name,
+                "current_context_name": result.current_context_name,
+            }
+        )
+    return value
 
 
 _PUBLIC_ERRORS: tuple[tuple[type[AtomizeError], str, str, bool], ...] = (
@@ -230,24 +376,14 @@ _PUBLIC_ERRORS: tuple[tuple[type[AtomizeError], str, str, bool], ...] = (
         "The Atomize Context or saved analysis is unavailable.",
         False,
     ),
-    (
-        AtomizeProviderFailure,
-        "provider_failure",
-        "The Atomize provider failed.",
-        True,
-    ),
+    (AtomizeProviderFailure, "provider_failure", "The Atomize provider failed.", True),
     (
         AtomizeConflictError,
         "stale_state",
         "The accepted Atomize revision changed.",
         False,
     ),
-    (
-        AtomizeStorageError,
-        "storage_failure",
-        "Atomize storage failed safely.",
-        False,
-    ),
+    (AtomizeStorageError, "storage_failure", "Atomize storage failed safely.", False),
     (
         AtomizeExecutionError,
         "execution_failed",
@@ -267,10 +403,7 @@ class AtomizeAgentAdapter:
 
     def invoke(self, payload: object) -> JsonObject:
         kind: AtomizeAgentKind | None = None
-        if isinstance(payload, Mapping) and payload.get("kind") in {
-            "open",
-            "apply_as_is",
-        }:
+        if isinstance(payload, Mapping) and payload.get("kind") in _KINDS:
             kind = payload["kind"]  # type: ignore[assignment]
         try:
             kind, arguments = _parse_request(payload)
@@ -285,11 +418,51 @@ class AtomizeAgentAdapter:
 
         try:
             if kind == "open":
-                result = self._client.open_atomize_analysis(**arguments)
-                projected = _analysis_result(result)
+                projected = _analysis_result(
+                    self._client.open_atomize_analysis(**arguments)
+                )
+            elif kind == "respond":
+                update = self._client.update_atomize_response(**arguments)
+                projected = {
+                    "update_kind": update.kind,
+                    "changed": update.changed,
+                    "proposal": _analysis_result(
+                        update.proposal,
+                        effect="DERIVED_SESSION" if update.changed else "NONE",
+                    ),
+                }
+            elif kind == "plan_output":
+                update = self._client.plan_atomize_output(**arguments)
+                projected = {
+                    "update_kind": update.kind,
+                    "changed": update.changed,
+                    "proposal": _analysis_result(
+                        update.proposal,
+                        effect="DERIVED_SESSION" if update.changed else "NONE",
+                    ),
+                }
+            elif kind == "reanalyze":
+                projected = _analysis_result(
+                    self._client.reanalyze_atomize_responses(**arguments)
+                )
+            elif kind == "apply_as_is":
+                projected = _apply_result(
+                    self._client.apply_saved_atomize_as_is(**arguments)
+                )
+            elif kind == "save_as":
+                projected = _apply_result(
+                    self._client.save_saved_atomize_as(**arguments)
+                )
             else:
-                result = self._client.apply_saved_atomize_as_is(**arguments)
-                projected = _apply_result(result)
+                reviewed: AtomizeReviewedApplyResult = (
+                    self._client.incorporate_and_apply_atomize(**arguments)
+                )
+                projected = {
+                    "proposal": _analysis_result(reviewed.proposal),
+                    "application": _apply_result(reviewed.application),
+                    "provider_used": True,
+                    "effect": "CONTEXT_CHECKPOINT",
+                }
         except AtomizeError as error:
             for error_type, code, message, retryable in _PUBLIC_ERRORS:
                 if isinstance(error, error_type):
@@ -319,7 +492,6 @@ class AtomizeAgentAdapter:
                 message="The Atomize tool failed internally.",
                 retryable=False,
             )
-
         return {
             "version": ATOMIZE_AGENT_CONTRACT_VERSION,
             "ok": True,
@@ -329,11 +501,30 @@ class AtomizeAgentAdapter:
 
 
 def atomize_agent_tool_schema() -> JsonObject:
-    """Return the strict structural review and exact-Apply schema."""
+    """Return the strict complete structural Atomize lifecycle schema."""
 
     text = {"type": "string", "minLength": 1, "pattern": r".*\S.*"}
     nullable_text = {**text, "type": ["string", "null"]}
     version = {"type": "integer", "const": ATOMIZE_AGENT_CONTRACT_VERSION}
+    expected = {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$",
+        "description": "Opaque version returned by the exact reviewed action.",
+    }
+
+    def base(kind: AtomizeAgentKind) -> JsonObject:
+        return {
+            "type": "object",
+            "additionalProperties": False,
+            "required": ["version", "kind", "expected_version"],
+            "properties": {
+                "version": version,
+                "kind": {"type": "string", "const": kind},
+                "context_name": nullable_text,
+                "expected_version": expected,
+            },
+        }
+
     open_request: JsonObject = {
         "type": "object",
         "additionalProperties": False,
@@ -342,45 +533,57 @@ def atomize_agent_tool_schema() -> JsonObject:
             "version": version,
             "kind": {"type": "string", "const": "open"},
             "context_name": nullable_text,
-            "refresh": {
-                "type": "boolean",
-                "default": False,
-                "description": "Force a new provider analysis instead of saved reuse.",
-            },
-            "use_prepared": {
-                "type": "boolean",
-                "default": True,
-                "description": "Allow an exact hidden prepared analysis when available.",
-            },
+            "memory_selector": nullable_text,
+            "refresh": {"type": "boolean", "default": False},
+            "use_prepared": {"type": "boolean", "default": True},
         },
     }
-    apply_request: JsonObject = {
-        "type": "object",
-        "additionalProperties": False,
-        "required": ["version", "kind", "expected_version"],
-        "properties": {
-            "version": version,
-            "kind": {"type": "string", "const": "apply_as_is"},
-            "context_name": nullable_text,
-            "expected_version": {
-                "type": "string",
-                "pattern": "^[0-9a-f]{64}$",
-                "description": "Opaque version returned by the reviewed open action.",
-            },
-        },
+    respond = base("respond")
+    respond["required"] = [
+        "version",
+        "kind",
+        "expected_version",
+        "issue_uid",
+        "option_uid",
+        "comment",
+    ]
+    respond["properties"] = {
+        **respond["properties"],
+        "issue_uid": text,
+        "option_uid": nullable_text,
+        "comment": {"type": "string", "maxLength": 20_000},
+    }
+    plan_output = base("plan_output")
+    plan_output["required"] = [
+        "version",
+        "kind",
+        "expected_version",
+        "output_context_name",
+    ]
+    plan_output["properties"] = {
+        **plan_output["properties"],
+        "output_context_name": text,
     }
     return {
         "name": ATOMIZE_AGENT_TOOL_NAME,
         "description": (
-            "Open one complete structural Atomize review, then optionally apply "
-            "that exact revision in place. Open reports provider/cache use and may "
-            "create or reuse a derived review session; apply_as_is never calls the "
-            "provider and mutates the local Context through one checkpoint. Save As "
-            "and response editing are not exposed by this tool."
+            "Open a whole-Context or focused structural Atomize review; edit "
+            "exact responses and Output plans; incorporate unary responses; "
+            "then apply in place or publish the reviewed require-new Save As. "
+            "Every saved action is version-bound. Reanalysis uses the provider; "
+            "review edits and final application do not."
         ),
         "parameters": {
             "type": "object",
-            "oneOf": [open_request, apply_request],
+            "oneOf": [
+                open_request,
+                respond,
+                plan_output,
+                base("reanalyze"),
+                base("apply_as_is"),
+                base("save_as"),
+                base("incorporate_and_apply"),
+            ],
         },
     }
 

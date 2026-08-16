@@ -4,131 +4,130 @@ Last reviewed: 2026-08-15.
 
 ## Problem
 
-Structural Atomize already had interface-independent analysis-open and in-place
-Apply use cases, but a Python caller still had to import internal session,
-workbench, Store, prewarm, and checkpoint types. Reconstructing those steps in
-another adapter would risk a different cache policy, a forged Apply revision,
-or a mutation against a workbench that changed after review.
+Structural Atomize had a complete CLI/TUI lifecycle, but callers otherwise had
+to import mutable workbench, session, Store, prewarm, and checkpoint internals.
+That would make each adapter reconstruct cache policy, response semantics,
+stale-state checks, Save As recovery, and application authority differently.
 
-The public boundary therefore needs to expose useful analysis and lineage while
-retaining the exact saved analysis/workbench pair as an opaque application
+The public boundary therefore exposes immutable projections and typed use
+cases while retaining the exact analysis/workbench pair behind an opaque
 revision.
 
-## Selected contract
+## Complete public lifecycle
 
-`MemCommitClient` exposes proposal-bound and stateless structural methods:
+`MemCommitClient` exposes:
 
 ```python
 proposal = client.open_atomize_analysis(
     context_name=None,
     refresh=False,
     use_prepared=True,
+    memory_selector=None,
 )
-receipt = client.apply_atomize_as_is(proposal)
-transport_receipt = client.apply_saved_atomize_as_is(
-    context_name,
+response = client.update_atomize_response(
+    proposal.context_name,
     expected_version=proposal.version,
+    issue_uid=proposal.issues[0].uid,
+    option_uid=None,
+    comment="Treat the facts independently.",
+)
+reanalyzed = client.reanalyze_atomize_responses(
+    proposal.context_name,
+    expected_version=response.proposal.version,
+)
+plan = client.plan_atomize_output(
+    proposal.context_name,
+    expected_version=reanalyzed.version,
+    output_context_name="reviewed/output",
+)
+receipt = client.save_saved_atomize_as(
+    proposal.context_name,
+    expected_version=plan.proposal.version,
 )
 ```
 
-`open_atomize_analysis` resolves an explicit or current local Context once and
-delegates to the existing analysis runtime. Its `origin` is exactly one of:
+The alternate final paths are `apply_atomize_as_is(proposal)`, stateless
+`apply_saved_atomize_as_is(context_name, expected_version=...)`, and the
+explicit compound `incorporate_and_apply_atomize(...)`.
 
-- `SAVED`: the current durable analysis/workbench pair was reused without a
-  provider connection;
-- `EXACT_PREWARM`: a declared hidden Study artifact matched and was first
-  materialized as the ordinary durable pair, also without a provider; or
-- `PROVIDER`: one new complete analysis was produced and saved.
+## Open and cache contract
 
-`refresh=True` is an explicit provider request and therefore dominates the
-general `use_prepared` preference. `use_prepared=False` disables only hidden
-prewarm lookup; it does not disable exact saved-session reuse. That distinction
-matches the existing operation rather than turning one cache preference into a
-new refresh spelling.
+Open resolves the existing local Context once and returns one exact origin:
 
-The immutable public proposal includes the overview, every direct-Memory
-classification, proposed split children and evidence spans, review findings,
-the durable Output plan, and an opaque version. Proposal-bound Apply privately
-retains the typed `AtomizeSessionSnapshot`; stateless Apply uses the opaque
-version only to recover an exact locked saved snapshot, never acceptance
-reconstructed from public IDs or caller-supplied digests.
+- `SAVED`: current durable pair reused without a provider;
+- `EXACT_PREWARM`: exact hidden Study artifact materialized as the ordinary
+  durable pair without a provider; or
+- `PROVIDER`: one complete analysis produced and saved.
 
-`apply_atomize_as_is` means exactly the existing local in-place final action:
+`refresh=True` requests provider analysis and dominates prepared reuse.
+`use_prepared=False` disables hidden lookup, not exact saved-session reuse.
+`memory_selector` focuses one exact Memory and disables whole-Context prepared
+reuse. Open never edits the Source Context.
 
-- `COMPOSITE` sources split; `ATOMIC`, `UNCERTAIN`, and
-  `NON_PROPOSITIONAL` sources preserve their identity and content;
-- open optional findings remain open and are audited as `AS_IS`, never
-  fabricated into answers;
-- an all-preserved result still records one deliberate Atomize checkpoint and
-  terminal receipt;
-- the Source, analysis, and complete workbench revision are rechecked before
-  mutation; and
-- an exact retry adopts only the terminal application receipt added to the
-  accepted workbench, recovers the same checkpoint, and creates no second
-  effect. Any other workbench edit remains a conflict.
+The proposal includes the overview, ordered classifications, children and
+evidence, issues, selected readings and response text, Output plan, available
+application direction, exact `review_edit_allowed` and
+`response_reanalysis_allowed` readiness, terminal completion state, and opaque
+version. These are projections of operation validation rather than adapter
+heuristics.
 
-`apply_saved_atomize_as_is` is the provider-free boundary for transports that
-cannot retain the private Python proposal object. It accepts the current exact
-opaque revision, or the exact preterminal revision after a successful Apply so
-a lost response can recover the same receipt. It does not accept another
-workbench change, reconstruct acceptance from public fields, or relax the
-Source recheck.
+## Review-update and reanalysis contract
 
-## Save As boundary
+Response and Output changes are provider-free exact-version use cases. A
+response update replaces the whole selected choice/comment pair; both empty
+clears it. A distinct Output name must be creatable and remains only a plan.
+Every changed edit returns a new version; an unchanged edit returns the same
+one.
 
-This slice does not publish the internal structural Save As lifecycle. A saved
-workbench can already contain a different Output plan, so the proposal exposes
-`output_context_name` and `in_place_apply_allowed`. The public in-place method
-rejects such a proposal before mutation instead of silently changing the plan
-or applying to the Source.
+Reanalysis requires at least one answered unary response. It sends the complete
+declared unary frames in one provider turn, preserves the Output plan, and
+publishes no partial result. Pair-shaped conflicts remain review evidence. The
+runtime compares the original analysis/workbench pair under its session lock
+before replacing both records; a concurrent edit causes
+`AtomizeConflictError` and remains intact.
 
-Save As requires a separately reviewed public contract for require-new
-authority, destination collision and partial-publication recovery. Workbench
-response editing and compound incorporate-and-apply are also outside this
-slice. They remain available through the reviewed CLI/TUI lifecycle.
+## Application and recovery contract
+
+In-place Apply and Save As consume the exact reviewed proposal:
+
+- `COMPOSITE` splits in place; other classifications preserve source identity;
+- silence remains open and is audited as `AS_IS`, never inferred as an answer;
+- all-preserved output still records deliberate completion;
+- Source, graph safety, analysis, and workbench revision are rechecked;
+- Save As is require-new, leaves Source unchanged, creates one final Atomize
+  Context/checkpoint unit, records lineage, and selects the output; and
+- repeating the exact final action after a lost response recovers the same
+  checkpoint without a second effect.
+
+The preterminal recovery exception admits only the terminal receipt appended
+to the accepted workbench. Any other analysis, response, Output, layout, or
+Source change is a conflict. `incorporate_and_apply_atomize` is one explicitly
+chosen provider reanalysis followed by the resulting in-place or Save As path;
+separate reanalysis remains available when a person must inspect the new
+proposal before materialization.
 
 ## Error and dependency boundary
 
-Structural Atomize has its own public taxonomy rather than reusing
-conversational `AtomizeGrounding*` failures:
+The public taxonomy is `AtomizeInputError`, `AtomizeContextError`,
+`AtomizeProviderFailure`, `AtomizeConflictError`, `AtomizeStorageError`, and
+`AtomizeExecutionError`. Invalid versions fail before Store access. Endpoint
+construction/transport failures stay distinct from invalid semantic output.
 
-- `AtomizeInputError` for invalid public arguments or an ineligible Output
-  plan;
-- `AtomizeContextError` for a missing local Context;
-- `AtomizeProviderFailure` for endpoint construction or transport failure;
-- `AtomizeConflictError` for stale Source or changed accepted session state;
-- `AtomizeStorageError` for local I/O failure; and
-- `AtomizeExecutionError` for invalid semantic output or another complete
-  operation failure.
+The facade imports the operation adapter lazily. DTO imports and client
+construction do not load commands, Typer, prompt-toolkit, or the structural
+runtime. The operation adapter receives `ClientRuntime` and never reaches back
+through `MemCommitClient`.
 
-The client facade lazily imports `api._operations.atomize`. Constructing a
-client or importing its DTOs does not load structural analysis/application
-runtimes. The operation adapter receives `ClientRuntime` and never imports the
-client facade, command modules, Typer, or prompt-toolkit.
+## Verification and intentional limits
 
-## Verification
+Focused tests cover exports, lazy imports, whole/focused open, saved and exact
+prewarm reuse, refresh, complete projection, response replace/clear, Output
+planning, provider reanalysis, concurrent-edit CAS, in-place and Save As
+effects, lineage, all-preserved completion, exact retry recovery, stale/source
+conflicts, provider failures, and agent-registry composition. The installed
+wheel smoke independently verifies provider-free saved review, review edits,
+both final directions, and checkpoint recovery through MCP stdio.
 
-Focused tests cover public/root exports, provider creation, provider-free saved
-resume, exact hidden prewarm, refresh dominance, complete DTO projection,
-split Apply, all-preserved completion, proposal-bound and stateless exact retry
-recovery, invalid and stale transport versions, Source and
-workbench conflicts, Save As-plan rejection, provider/error projection, and
-fresh-process import isolation.
-
-The integrated structural Atomize suite passed 178 tests. One additional existing
-Study test currently fails because the registered `mem atomize` command in the
-tested baseline has no `--memory` option; this public API change does not touch
-command registration or that test's focused-prewarm behavior.
-
-A wheel built from the change was installed into a new Python 3.13 environment
-and exercised outside the checkout. The smoke used the installed
-`site-packages` origin, produced `PROVIDER` then provider-free `SAVED`, called
-the provider once, split one Memory, recorded one checkpoint, and recovered the
-same checkpoint when the exact proposal was applied again.
-
-## Intentional non-goals
-
-- no provider prompt, decoder, classification, or saved-schema change;
-- no public workbench response-editing or reanalysis API;
-- no public Save As method; and
-- no expansion from local ordinary Contexts to Grant-authorized mutation.
+This slice deliberately does not change prompts, decoders, classifications, or
+saved schemas; expand to Grant-authorized mutation; treat pair conflicts as
+unary guidance; or merge structural Atomize with conversational Grounding.

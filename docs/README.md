@@ -185,13 +185,13 @@ considered sufficient design history.
 ## Atomize contract notes
 
 - [`atomize-public-python-api-design-rationale.md`](atomize-public-python-api-design-rationale.md)
-  defines the stable saved/prepared/provider analysis projection and exact
-  in-place `Apply as is` receipt, including cache origin, opaque revision,
-  retry recovery, stale conflict, and the intentional Save As exclusion.
+  defines the stable saved/prepared/provider and exact-Memory analysis
+  projection, versioned review edits, unary reanalysis, in-place Apply,
+  require-new Save As, compound action, retry recovery, and stale conflict.
 - [`atomize-agent-tool-design-rationale.md`](atomize-agent-tool-design-rationale.md)
-  defines the strict structural `open` and version-bound `apply_as_is` agent
-  actions, explicit cache/provider/effect reporting, stateless retry recovery,
-  registry/MCP projection, and the Save As/editing exclusions.
+  defines the seven strict structural lifecycle actions, explicit
+  cache/provider/effect reporting, newest-version chaining, stateless final
+  recovery, registry/MCP projection, and companion Skill boundary.
 - [`semantic-result-workbench-design-rationale.md`](semantic-result-workbench-design-rationale.md)
   generalizes the result-explanation hierarchy shared by bounded semantic
   operations: compact counts, what was understood, what happened, what remains

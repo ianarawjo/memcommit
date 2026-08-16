@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 
 if TYPE_CHECKING:
     from memcommit.atomize_application import AtomizeSessionSnapshot
@@ -73,6 +73,8 @@ class AtomizeIssueResult:
     question: str
     readings: tuple[AtomizeReadingResult, ...]
     answered: bool
+    selected_reading_uid: str | None = None
+    response_text: str = ""
 
 
 @dataclass(frozen=True)
@@ -99,6 +101,9 @@ class AtomizeAnalysisResult:
     issues: tuple[AtomizeIssueResult, ...]
     workbench_uid: str
     output_context_name: str
+    review_edit_allowed: bool
+    response_reanalysis_allowed: bool
+    application_completed: bool
     in_place_apply_allowed: bool
     _snapshot: AtomizeSessionSnapshot = field(repr=False, compare=False)
 
@@ -132,6 +137,43 @@ class AtomizeStructuralApplyResult:
     recovered: bool
 
 
+@dataclass(frozen=True)
+class AtomizeReviewUpdateResult:
+    """One provider-free exact workbench edit and its new proposal token."""
+
+    kind: Literal["RESPONSE", "OUTPUT"]
+    changed: bool
+    proposal: AtomizeAnalysisResult
+
+
+@dataclass(frozen=True)
+class AtomizeSaveAsApplyResult:
+    """Receipt for one created or exactly recovered structural Output."""
+
+    analysis_uid: str
+    source_context_uid: str
+    source_context_name: str
+    context_uid: str
+    context_name: str
+    checkpoint_uid: str
+    split_count: int
+    child_count: int
+    preserved_count: int
+    application_mode: str
+    unresolved_at_apply_count: int
+    items: tuple[AtomizeAppliedItemResult, ...]
+    recovered: bool
+    current_context_name: str
+
+
+@dataclass(frozen=True)
+class AtomizeReviewedApplyResult:
+    """One response-incorporating reanalysis followed by its exact effect."""
+
+    proposal: AtomizeAnalysisResult
+    application: AtomizeStructuralApplyResult | AtomizeSaveAsApplyResult
+
+
 __all__ = [
     "AtomizeAnalysisResult",
     "AtomizeAppliedItemResult",
@@ -141,5 +183,8 @@ __all__ = [
     "AtomizeOverviewResult",
     "AtomizeOverviewSectionResult",
     "AtomizeReadingResult",
+    "AtomizeReviewUpdateResult",
+    "AtomizeReviewedApplyResult",
+    "AtomizeSaveAsApplyResult",
     "AtomizeStructuralApplyResult",
 ]

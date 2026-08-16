@@ -18,6 +18,9 @@ from memcommit.api import (
     AtomizeOverviewResult,
     AtomizeOverviewSectionResult,
     AtomizeProviderFailure,
+    AtomizeReviewUpdateResult,
+    AtomizeReviewedApplyResult,
+    AtomizeSaveAsApplyResult,
     AtomizeStructuralApplyResult,
     MemCommitClient,
 )
@@ -129,6 +132,9 @@ def _proposal() -> AtomizeAnalysisResult:
         issues=(),
         workbench_uid="workbench-1",
         output_context_name="task/source",
+        review_edit_allowed=True,
+        response_reanalysis_allowed=False,
+        application_completed=False,
         in_place_apply_allowed=True,
         _snapshot=object(),  # type: ignore[arg-type]
     )
@@ -156,6 +162,26 @@ def _receipt(*, recovered: bool = False) -> AtomizeStructuralApplyResult:
             ),
         ),
         recovered=recovered,
+    )
+
+
+def _save_as_receipt(*, recovered: bool = False) -> AtomizeSaveAsApplyResult:
+    receipt = _receipt(recovered=recovered)
+    return AtomizeSaveAsApplyResult(
+        analysis_uid=receipt.analysis_uid,
+        source_context_uid=receipt.context_uid,
+        source_context_name=receipt.context_name,
+        context_uid="context-output",
+        context_name="task/output",
+        checkpoint_uid=receipt.checkpoint_uid,
+        split_count=receipt.split_count,
+        child_count=receipt.child_count,
+        preserved_count=receipt.preserved_count,
+        application_mode=receipt.application_mode,
+        unresolved_at_apply_count=receipt.unresolved_at_apply_count,
+        items=receipt.items,
+        recovered=recovered,
+        current_context_name="task/output",
     )
 
 
@@ -188,6 +214,7 @@ def test_open_calls_one_public_method_and_projects_cache_and_effect(
                 "context_name": "task/source",
                 "refresh": True,
                 "use_prepared": False,
+                "memory_selector": None,
             },
         )
     ]
@@ -240,6 +267,87 @@ def test_apply_calls_only_version_bound_public_method_and_projects_receipt(
     assert response["result"]["recovered"] is True
     assert response["result"]["provider_used"] is False
     assert response["result"]["effect"] == "CONTEXT_CHECKPOINT"
+
+
+@pytest.mark.parametrize(
+    ("kind", "method_name", "extra", "public_result"),
+    [
+        (
+            "respond",
+            "update_atomize_response",
+            {
+                "issue_uid": "issue-1",
+                "option_uid": None,
+                "comment": "Keep both facts independent.",
+            },
+            AtomizeReviewUpdateResult(
+                kind="RESPONSE",
+                changed=True,
+                proposal=_proposal(),
+            ),
+        ),
+        (
+            "plan_output",
+            "plan_atomize_output",
+            {"output_context_name": "task/output"},
+            AtomizeReviewUpdateResult(
+                kind="OUTPUT",
+                changed=True,
+                proposal=_proposal(),
+            ),
+        ),
+        ("reanalyze", "reanalyze_atomize_responses", {}, _proposal()),
+        ("save_as", "save_saved_atomize_as", {}, _save_as_receipt()),
+        (
+            "incorporate_and_apply",
+            "incorporate_and_apply_atomize",
+            {},
+            AtomizeReviewedApplyResult(
+                proposal=_proposal(),
+                application=_receipt(),
+            ),
+        ),
+    ],
+)
+def test_each_review_action_calls_one_public_method(
+    tmp_path,
+    monkeypatch,
+    kind,
+    method_name,
+    extra,
+    public_result,
+):
+    client = MemCommitClient(root=tmp_path / "store")
+    calls = []
+    monkeypatch.setattr(
+        client,
+        method_name,
+        lambda *args, **kwargs: (
+            calls.append((args, kwargs)) or public_result
+        ),
+    )
+    payload = {
+        "version": 1,
+        "kind": kind,
+        "context_name": "task/source",
+        "expected_version": _VERSION,
+        **extra,
+    }
+
+    response = AtomizeAgentAdapter(client).invoke(payload)
+
+    assert response["ok"] is True
+    assert calls == [
+        (
+            (),
+            {
+                "context_name": "task/source",
+                "expected_version": _VERSION,
+                **extra,
+            },
+        )
+    ]
+    json.dumps(response)
 
 
 @pytest.mark.parametrize(
@@ -330,14 +438,19 @@ def test_schema_is_fresh_strict_and_names_both_effect_boundaries():
     assert schema["name"] == ATOMIZE_AGENT_TOOL_NAME
     assert [branch["properties"]["kind"]["const"] for branch in branches] == [
         "open",
+        "respond",
+        "plan_output",
+        "reanalyze",
         "apply_as_is",
+        "save_as",
+        "incorporate_and_apply",
     ]
     assert all(branch["additionalProperties"] is False for branch in branches)
     assert branches[1]["properties"]["expected_version"]["pattern"] == (
         "^[0-9a-f]{64}$"
     )
-    assert "never calls the provider" in schema["description"]
-    assert "checkpoint" in schema["description"]
+    assert "Reanalysis uses the provider" in schema["description"]
+    assert "final application do not" in schema["description"]
 
 
 def test_real_registry_open_saved_apply_and_retry_use_one_provider_and_checkpoint(
@@ -396,6 +509,91 @@ def test_real_registry_open_saved_apply_and_retry_use_one_provider_and_checkpoin
         "The library closes at five",
         "the cafe closes at six.",
     ]
+
+
+def test_real_registry_review_reanalysis_save_as_and_retry_are_exact(
+    isolated_store,
+):
+    store = MemoryStore(root=isolated_store)
+    context = ops.init("atomize/agent-review")
+    ops.add(context, "The library closes at five and the cafe closes at six.")
+    store.save(context)
+    store.set_current(context.name)
+    provider = _Provider()
+    registry = build_default_agent_tool_registry(
+        MemCommitClient(
+            root=isolated_store,
+            semantic_provider_factory=lambda: provider,
+        )
+    )
+
+    opened = registry.invoke(
+        ATOMIZE_AGENT_TOOL_NAME,
+        {"version": 1, "kind": "open", "context_name": context.name},
+    )
+    issue_uid = opened["result"]["issues"][0]["uid"]
+    responded = registry.invoke(
+        ATOMIZE_AGENT_TOOL_NAME,
+        {
+            "version": 1,
+            "kind": "respond",
+            "context_name": context.name,
+            "expected_version": opened["result"]["version"],
+            "issue_uid": issue_uid,
+            "option_uid": None,
+            "comment": "Treat the closing times as independent facts.",
+        },
+    )
+    reanalyzed = registry.invoke(
+        ATOMIZE_AGENT_TOOL_NAME,
+        {
+            "version": 1,
+            "kind": "reanalyze",
+            "context_name": context.name,
+            "expected_version": responded["result"]["proposal"]["version"],
+        },
+    )
+    planned = registry.invoke(
+        ATOMIZE_AGENT_TOOL_NAME,
+        {
+            "version": 1,
+            "kind": "plan_output",
+            "context_name": context.name,
+            "expected_version": reanalyzed["result"]["version"],
+            "output_context_name": "atomize/agent-output",
+        },
+    )
+    saved = registry.invoke(
+        ATOMIZE_AGENT_TOOL_NAME,
+        {
+            "version": 1,
+            "kind": "save_as",
+            "context_name": context.name,
+            "expected_version": planned["result"]["proposal"]["version"],
+        },
+    )
+    retried = registry.invoke(
+        ATOMIZE_AGENT_TOOL_NAME,
+        {
+            "version": 1,
+            "kind": "save_as",
+            "context_name": context.name,
+            "expected_version": planned["result"]["proposal"]["version"],
+        },
+    )
+
+    assert responded["result"]["proposal"]["issues"][0]["answered"] is True
+    assert reanalyzed["result"]["provider_used"] is True
+    assert planned["result"]["proposal"]["output_context_name"] == (
+        "atomize/agent-output"
+    )
+    assert saved["result"]["created_context"] is True
+    assert saved["result"]["context_name"] == "atomize/agent-output"
+    assert saved["result"]["recovered"] is False
+    assert retried["result"]["recovered"] is True
+    assert retried["result"]["checkpoint_uid"] == saved["result"]["checkpoint_uid"]
+    assert provider.calls == 2
+    assert len(store.list_checkpoints("atomize/agent-output")) == 1
 
 
 def test_real_registry_rejects_unknown_revision_without_provider_or_checkpoint(
@@ -494,12 +692,14 @@ def test_companion_skill_preserves_review_cache_and_exact_apply_boundaries():
 
     assert "name: memcommit-atomize" in normalized
     assert "Invoke `memcommit_atomize` directly." in normalized
-    assert "Always send `version: 1` and `kind: open`" in normalized
+    assert "Send `version: 1` and `kind: open`" in normalized
     assert "`EXACT_PREWARM` is cached" in normalized
-    assert "Do not call `apply_as_is` merely because `open` succeeded." in normalized
-    assert "Copy its `apply_as_is.expected_version` exactly" in normalized
+    assert "Use the newest proposal version" in normalized
+    assert "This replaces the prior response" in normalized
+    assert "it must not already exist" in normalized
+    assert "pairwise conflict responses" in normalized
+    assert "only after explicit approval" in normalized
     assert "repeat the exact same" in normalized
-    assert "For `stale_state`, do not retry Apply." in normalized
-    assert "Save As and response editing" in normalized
+    assert "On `stale_state`, reopen" in normalized
     assert "Do not fall back to shell access" in normalized
     assert "$memcommit-atomize" in metadata
