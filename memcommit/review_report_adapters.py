@@ -6,6 +6,7 @@ from memcommit.atomize import AtomizeAnalysisSession
 from memcommit.atomize_resolution_adapter import AtomizeResolutionWorkbenchAdapter
 from memcommit.atomize_workbench import AtomizeWorkbenchSession
 from memcommit.comparison import ComparisonAnalysis, comparison_canonical_digest
+from memcommit.comparison_present import render_comparison
 from memcommit.meld import MeldSession
 from memcommit.meld_resolution_adapter import MeldResolutionWorkbenchAdapter
 from memcommit.review_report import ReviewReportController
@@ -17,8 +18,6 @@ from memcommit.update_resolution_adapter import UpdateResolutionWorkbenchAdapter
 
 def compare_review_report(analysis: ComparisonAnalysis) -> ReviewReportController:
     """Expose the exact saved Compare prose as a read-only Review report."""
-    from memcommit.commands.compare import render_comparison
-
     return ReviewReportController.from_text(
         operation="COMPARE",
         artifact_uid=analysis.uid,
@@ -34,8 +33,6 @@ def meld_review_report(session: MeldSession) -> ReviewReportController:
     """Expose Meld analysis, issues, and proposals without its Apply capability."""
     compare_text = ""
     if session.mode == "SYMMETRIC" and session.comparison_seed is not None:
-        from memcommit.commands.compare import render_comparison
-
         compare_text = (
             render_comparison(
                 session.comparison_seed.analysis,

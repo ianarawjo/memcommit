@@ -69,7 +69,7 @@ def update_impact_presentation(
 def _saved_compare_report(session: MeldSession) -> str:
     if session.mode != "SYMMETRIC" or session.comparison_seed is None:
         return ""
-    from memcommit.commands.compare import render_comparison
+    from memcommit.comparison_present import render_comparison
 
     return (
         render_comparison(

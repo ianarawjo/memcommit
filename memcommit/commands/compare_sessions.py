@@ -179,7 +179,7 @@ def comparison_session_entries(
     # Import lazily because compare.py owns command orchestration and imports
     # this picker adapter. The picker preview must nevertheless reuse the exact
     # compact renderer instead of maintaining a second summary shape.
-    from memcommit.commands.compare import render_comparison
+    from memcommit.comparison_present import render_comparison
 
     entries: list[SessionPickerEntry] = []
     for analysis, path in iter_saved_comparisons(store):
