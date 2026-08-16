@@ -1091,7 +1091,7 @@ def test_atomize_save_as_preserves_destination_when_final_switch_fails(
 
     assert result.exit_code == 1
     assert "injected state switch failure" in result.stderr
-    assert "preserved for manual inspection" in result.stderr
+    assert "final Atomize output and receipt are retained" in result.stderr
     assert store.context_exists("derived")
     assert len(store.list_checkpoints("derived")) == 1
     assert store.current_context_name() == source.name
@@ -1237,7 +1237,7 @@ def test_atomize_save_as_preserves_concurrent_current_selection(
 
     assert result.exit_code == 1
     assert "current Context changed" in result.stderr
-    assert "preserved for manual inspection" in result.stderr
+    assert "final Atomize output and receipt are retained" in result.stderr
     assert store.current_context_name() == "other"
     assert store.context_exists("derived")
 

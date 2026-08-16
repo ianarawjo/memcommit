@@ -904,6 +904,20 @@ def cmd(
             and workbench.application is None
         )
         if (
+            save_as is not None
+            and already_applied
+            and workbench is not None
+            and workbench.application is not None
+            and workbench.application.output_context_name == save_as
+            and context_snapshot.current_name == save_as
+        ):
+            typer.secho(
+                f"Atomize analysis [{session.uid[:8]}] is already applied; "
+                "no new checkpoint was created.",
+                fg=typer.colors.YELLOW,
+            )
+            return
+        if (
             save
             and save_as is None
             and already_applied

@@ -696,7 +696,7 @@ class MemoryStoreAtomizeSaveAsOutputPort:
                 "The planned Atomize output belongs to a different Source."
             )
         source_frame = save_as.get("source_frame")
-        expected_frame = [
+        expected_selected = [
             {
                 "uid": item.memory_uid,
                 "content": item.content,
@@ -704,20 +704,46 @@ class MemoryStoreAtomizeSaveAsOutputPort:
             }
             for item in sorted(snapshot.analysis.items, key=lambda item: item.position)
         ]
+        if not isinstance(source_frame, list) or any(
+            not isinstance(item, dict)
+            or set(item) != {"uid", "content", "position"}
+            or item.get("position") != position
+            or not isinstance(item.get("uid"), str)
+            or not isinstance(item.get("content"), str)
+            for position, item in enumerate(source_frame)
+        ):
+            raise AtomizeApplicationError(
+                "The planned Atomize output has incompatible Source lineage."
+            )
+        selected_by_position = {
+            item["position"]: item
+            for item in expected_selected
+        }
+        if any(
+            position >= len(source_frame)
+            or source_frame[position] != item
+            for position, item in selected_by_position.items()
+        ):
+            raise AtomizeApplicationError(
+                "The planned Atomize output has incompatible Source lineage."
+            )
         expected_frame_digest = hashlib.sha256(
             json.dumps(
                 [
                     {"uid": item["uid"], "content": item["content"]}
-                    for item in expected_frame
+                    for item in source_frame
                 ],
                 ensure_ascii=False,
                 separators=(",", ":"),
             ).encode("utf-8")
         ).hexdigest()
         if (
-            source_frame != expected_frame
-            or save_as.get("source_frame_digest") != expected_frame_digest
-            or expected_frame_digest != snapshot.analysis.context_digest
+            save_as.get("source_frame_digest") != expected_frame_digest
+            or expected_frame_digest
+            != (
+                snapshot.analysis.evidence_digest
+                or snapshot.analysis.context_digest
+            )
         ):
             raise AtomizeApplicationError(
                 "The planned Atomize output has incompatible Source lineage."
@@ -770,7 +796,11 @@ class MemoryStoreAtomizeSaveAsOutputPort:
         source_digest = context_record_digest(source)
         if (
             source.uid != snapshot.analysis.context_uid
-            or not direct_context_digest(source) == snapshot.analysis.context_digest
+            or direct_context_digest(source)
+            != (
+                snapshot.analysis.evidence_digest
+                or snapshot.analysis.context_digest
+            )
         ):
             raise AtomizeApplicationError(
                 "The Atomize Source changed before Save As. Reopen the review."
@@ -780,7 +810,16 @@ class MemoryStoreAtomizeSaveAsOutputPort:
             snapshot.analysis,
             context_uid=output.uid,
             context_name=output.name,
-            context_digest=direct_context_digest(output),
+            context_digest=(
+                snapshot.analysis.context_digest
+                if snapshot.analysis.evidence_digest is not None
+                else direct_context_digest(output)
+            ),
+            evidence_digest=(
+                direct_context_digest(output)
+                if snapshot.analysis.evidence_digest is not None
+                else None
+            ),
         )
         # Structural application completes in memory. Until the final Context
         # write below, only a hidden derived analysis may exist.
