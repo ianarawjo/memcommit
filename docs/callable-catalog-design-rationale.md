@@ -47,13 +47,17 @@ aliases only to find mechanically related modules.
 application module, public method, or boundary note does not prove authority,
 cache, provider, Apply, receipt, or failure-path parity. The separate
 [`operation-route-classification.json`](operation-route-classification.json)
-is the reviewed input for `curated_state`; the generator validates that it
-classifies exactly the canonical Help operation set with no duplicate or stale
-names.
+is the sole reviewed input for `curated_state`. The separate
+[`operation-evidence-index.json`](operation-evidence-index.json) owns focused
+document membership, and
+[`generated/operation-evidence-index.md`](generated/operation-evidence-index.md)
+combines those authored roles for review. Verification requires both
+registries to cover exactly the canonical Help operation set with no duplicate
+or stale names.
 
 The initial curation is deliberately conservative. It marks `CLOSED` only when
-a focused matrix or progress-ledger gate says all currently implemented routes
-in the stated scope share one terminal-independent application boundary. It
+registered focused evidence shows all currently implemented routes in the
+stated scope share one terminal-independent application boundary. It
 marks `MIXED` when only a lifecycle slice is verified or when recorded evidence
 conflicts. Everything else remains `UNREVIEWED`, which is not a euphemism for
 `LEGACY`. `LEGACY` requires a trace proving that a command or presentation
@@ -71,8 +75,13 @@ make an otherwise closed current route mixed.
 - [`generated/operation-route-catalog.md`](generated/operation-route-catalog.md)
   provides the operation-level entry and layer index.
 - [`operation-route-classification.json`](operation-route-classification.json)
-  stores the human-reviewed route conclusion and its evidence separately from
-  generated source observations.
+  stores the human-reviewed route conclusion separately from generated source
+  observations.
+- [`operation-evidence-index.json`](operation-evidence-index.json) stores the
+  operation-to-document membership, including incomplete evidence for an
+  unreviewed route.
+- [`generated/operation-evidence-index.md`](generated/operation-evidence-index.md)
+  is their generated readable projection.
 
 Run `python scripts/generate_callable_catalog.py` after source changes. Run the
 same command with `--check` in verification; the focused test also rejects any

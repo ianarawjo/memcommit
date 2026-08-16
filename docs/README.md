@@ -24,6 +24,29 @@ limitation, the relevant focused `*-design-rationale.md` document must state
 the reason and the remaining boundary. A conversation-only explanation is not
 considered sufficient design history.
 
+## Operation evidence and route state
+
+- [`operation-route-classification.json`](operation-route-classification.json)
+  is the only authored source of operation-level route state.
+- [`operation-evidence-index.json`](operation-evidence-index.json) is the only
+  authored index from each Help operation to its focused boundary and rationale
+  documents, including incomplete evidence for an operation that remains
+  unreviewed.
+- [`generated/operation-evidence-index.md`](generated/operation-evidence-index.md)
+  combines those sources into the complete readable ledger; it is generated
+  and must not be edited directly.
+- [`operation-consistency-matrix.md`](operation-consistency-matrix.md) tracks
+  shared contracts rather than duplicating operation route state.
+- [`operation-evidence-ledger-design-rationale.md`](operation-evidence-ledger-design-rationale.md)
+  defines naming, per-operation updates, validation, and the deliberately
+  deferred document consolidation.
+
+Run `python scripts/verify_operation_evidence.py` after registering evidence,
+then `python scripts/verify_operation_evidence.py --check` before committing.
+The check also rejects missing evidence files, unregistered final boundary
+matrices, broken governed local links, Help coverage drift, duplicate
+classification, and stale generated output.
+
 ## Multilingual Memory and explanation-language research TODO
 
 - [`multilingual-memory-and-explanation-language-design-rationale.md`](multilingual-memory-and-explanation-language-design-rationale.md)

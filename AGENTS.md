@@ -43,6 +43,40 @@ conversation.
   this solve? What behavior was intended? Why was this design selected? What
   boundary or limitation remains?
 
+## Operation evidence ledger
+
+- Treat `docs/operation-route-classification.json` as the sole authored source
+  of operation-level `CLOSED`, `MIXED`, `LEGACY`, `N/A`, and `UNREVIEWED`
+  route state. Do not copy those judgments or their aggregate counts into the
+  distribution plan, shared consistency matrix, README, or a second status
+  table.
+- Register every operation-focused boundary matrix and route-relevant
+  rationale under its canonical Help operation in
+  `docs/operation-evidence-index.json`. This document-membership index may
+  contain partial evidence while the operation remains `UNREVIEWED`. When a
+  reviewed state changes, keep the version-1 classification evidence field
+  identical to the evidence index until its callable-catalog compatibility
+  schema is migrated.
+- Never edit `docs/generated/operation-evidence-index.md` directly. Run
+  `python scripts/verify_operation_evidence.py` after changing either registry,
+  then run `python scripts/verify_operation_evidence.py --check` before a
+  commit. The check must remain part of CI.
+- For a new focused record, use
+  `<operation>-application-boundary-matrix.md` for an internal application
+  slice and `<operation>-callable-boundary-matrix.md` only for a reviewed
+  vertical package spanning its exposed adapters. Register deliberate joint
+  evidence under every operation it covers.
+- Work and record each operation separately while its authority, cache,
+  provider, receipt, review, Apply, and adapter boundaries are still being
+  established. Update `docs/operation-consistency-matrix.md` only for shared
+  contract evidence; its row state is not an operation route state.
+- Do not move the existing flat operation documents merely to normalize their
+  layout. They may be consolidated into operation directories later, after
+  document roles and boundaries stabilize, by atomically migrating registry
+  paths and all links. Keep
+  `docs/operation-evidence-ledger-design-rationale.md` consistent with that
+  eventual migration.
+
 ## Existing Context locators
 
 - When adding or updating a CLI operand whose semantic role is to locate an

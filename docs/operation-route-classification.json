@@ -52,12 +52,20 @@
         ],
         "reason": "General and Ground Fit routes share typed application/runtime execution and independent plain and TUI projections."
       },
+      "forget": {
+        "evidence": [
+          "docs/forget-application-boundary-matrix.md",
+          "docs/forget-public-python-api-design-rationale.md",
+          "docs/forget-agent-adapter-design-rationale.md"
+        ],
+        "reason": "CLI, TUI, Python, agent, and MCP routes share one complete-frame process-local Analyze, Select, Revise, authority/CAS Apply, and exact in-process replay lifecycle."
+      },
       "help": {
         "evidence": [
           "docs/help-application-boundary-matrix.md",
           "docs/help-application-design-rationale.md"
         ],
-        "reason": "Plain and interactive CLI, Python, agent, and MCP discovery routes share one Store-free, provider-free list/describe application boundary over the canonical 59-operation catalog."
+        "reason": "Plain and interactive CLI, Python, agent, and MCP discovery routes share one Store-free, provider-free list/describe application boundary over the canonical Help operation catalog."
       },
       "init": {
         "evidence": [
@@ -80,14 +88,15 @@
       },
       "pwd": {
         "evidence": [
-          "docs/mem-pwd-design-rationale.md",
-          "docs/distribution-boundary-and-architecture-understanding-plan.md"
+          "docs/mem-pwd-design-rationale.md"
         ],
         "reason": "The only current route is a typed terminal-independent current-Context read with a one-line CLI presenter."
       },
       "query": {
         "evidence": [
-          "docs/query-callable-boundary-matrix.md"
+          "docs/query-callable-boundary-matrix.md",
+          "docs/query-answer-application-boundary-matrix.md",
+          "docs/query-reference-application-boundary-matrix.md"
         ],
         "reason": "Ordinary, granted, and query-only families plus CLI, TUI, public, and agent projections have a verified operation package."
       },
@@ -120,7 +129,8 @@
       },
       "summarize": {
         "evidence": [
-          "docs/summarize-application-boundary-matrix.md"
+          "docs/summarize-application-boundary-matrix.md",
+          "docs/read-report-lifecycle-design-rationale.md"
         ],
         "reason": "Direct and recursive reads share one terminal-independent application result with independent plain and TUI presenters."
       },
@@ -134,17 +144,15 @@
     "MIXED": {
       "find": {
         "evidence": [
-          "docs/find-search-application-boundary-matrix.md",
-          "docs/distribution-boundary-and-architecture-understanding-plan.md"
+          "docs/find-search-application-boundary-matrix.md"
         ],
-        "reason": "Search and materialization are verified, but the progress ledger still names Find dialogue as an unclosed route."
+        "reason": "Search and materialization are verified, but the current Find dialogue route remains outside the reviewed application boundary."
       },
       "update": {
         "evidence": [
-          "docs/update-application-boundary-matrix.md",
-          "docs/distribution-boundary-and-architecture-understanding-plan.md"
+          "docs/update-application-boundary-matrix.md"
         ],
-        "reason": "Apply policy and recovery are verified, but the complete Update application slice is still recorded as not started."
+        "reason": "Apply policy and recovery are verified, but the remaining Update routes have not been traced into one complete reviewed application boundary."
       }
     },
     "LEGACY": {},
@@ -166,7 +174,6 @@
       "find-ambiguities",
       "find-conflicts",
       "find-duplicates",
-      "forget",
       "ground",
       "impact",
       "import",

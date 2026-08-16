@@ -99,9 +99,10 @@ def test_curated_classification_covers_all_operations_conservatively() -> None:
         for state in {record.curated_state for record in snapshot.operations}
     }
 
-    assert len(states["CLOSED"]) == 19
+    assert len(states["CLOSED"]) == 20
+    assert "forget" in states["CLOSED"]
     assert states["MIXED"] == {"find", "update"}
-    assert len(states["UNREVIEWED"]) == 39
+    assert len(states["UNREVIEWED"]) == 38
     assert not states.keys() & {"LEGACY", "N/A"}
 
 
@@ -113,7 +114,9 @@ def test_checked_in_catalog_is_current() -> None:
         "operation-route-catalog.md": render_operation_markdown(snapshot),
     }
 
+    # This generator owns a fixed output set.  Other generated documentation
+    # may share the directory and must be verified by its own source registry.
     assert {
-        path.name: path.read_text(encoding="utf-8")
-        for path in sorted(GENERATED.iterdir())
+        name: (GENERATED / name).read_text(encoding="utf-8")
+        for name in sorted(expected)
     } == expected

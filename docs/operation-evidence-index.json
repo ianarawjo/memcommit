@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "classification_source": "docs/operation-route-classification.json",
+  "operations": {
+    "add": [
+      "docs/add-callable-boundary-matrix.md"
+    ],
+    "atomize": [
+      "docs/atomize-application-boundary-matrix.md"
+    ],
+    "audit": [],
+    "branch": [],
+    "check-conformance": [],
+    "checkout": [
+      "docs/switch-application-boundary-matrix.md"
+    ],
+    "checkpoint": [],
+    "chunk": [],
+    "clear": [],
+    "compare": [
+      "docs/compare-application-boundary-matrix.md",
+      "docs/compare-session-lifecycle-design-rationale.md"
+    ],
+    "config": [],
+    "contexts": [],
+    "dedup": [
+      "docs/dedup-design-rationale.md",
+      "docs/resolution-lifecycle-design-rationale.md"
+    ],
+    "delete": [],
+    "diff": [],
+    "distill": [
+      "docs/distill-elaborate-application-boundary-matrix.md"
+    ],
+    "edit": [],
+    "elaborate": [
+      "docs/distill-elaborate-application-boundary-matrix.md"
+    ],
+    "embed": [
+      "docs/embed-application-boundary-matrix.md"
+    ],
+    "eval": [],
+    "find": [
+      "docs/find-search-application-boundary-matrix.md"
+    ],
+    "find-ambiguities": [
+      "docs/read-report-lifecycle-design-rationale.md"
+    ],
+    "find-conflicts": [
+      "docs/read-report-lifecycle-design-rationale.md"
+    ],
+    "find-duplicates": [
+      "docs/read-report-lifecycle-design-rationale.md"
+    ],
+    "fit": [
+      "docs/fit-application-boundary-matrix.md"
+    ],
+    "forget": [
+      "docs/forget-application-boundary-matrix.md",
+      "docs/forget-public-python-api-design-rationale.md",
+      "docs/forget-agent-adapter-design-rationale.md"
+    ],
+    "ground": [
+      "docs/ground-workspace-application-boundary-matrix.md",
+      "docs/ground-workspace-context-model-design-rationale.md"
+    ],
+    "help": [
+      "docs/help-application-boundary-matrix.md",
+      "docs/help-application-design-rationale.md"
+    ],
+    "impact": [],
+    "import": [],
+    "init": [
+      "docs/context-init-application-boundary-matrix.md"
+    ],
+    "init-study": [],
+    "list": [],
+    "lock": [],
+    "log": [],
+    "meld": [
+      "docs/meld-application-boundary-matrix.md",
+      "docs/meld-session-lifecycle-design-rationale.md"
+    ],
+    "merge": [
+      "docs/merge-application-boundary-matrix.md"
+    ],
+    "profile": [],
+    "provider": [],
+    "pwd": [
+      "docs/mem-pwd-design-rationale.md"
+    ],
+    "query": [
+      "docs/query-callable-boundary-matrix.md",
+      "docs/query-answer-application-boundary-matrix.md",
+      "docs/query-reference-application-boundary-matrix.md"
+    ],
+    "rationale": [
+      "docs/read-report-lifecycle-design-rationale.md"
+    ],
+    "redo": [],
+    "reference": [],
+    "rename": [],
+    "resolve": [
+      "docs/resolve-fit-repair-design-rationale.md",
+      "docs/resolution-lifecycle-design-rationale.md"
+    ],
+    "revert": [],
+    "review": [],
+    "sever": [
+      "docs/sever-application-boundary-matrix.md"
+    ],
+    "share": [],
+    "shell-init": [],
+    "show": [
+      "docs/show-application-boundary-matrix.md",
+      "docs/show-application-design-rationale.md"
+    ],
+    "status": [],
+    "summarize": [
+      "docs/summarize-application-boundary-matrix.md",
+      "docs/read-report-lifecycle-design-rationale.md"
+    ],
+    "switch": [
+      "docs/switch-application-boundary-matrix.md"
+    ],
+    "trace": [
+      "docs/read-report-lifecycle-design-rationale.md"
+    ],
+    "translate": [],
+    "undo": [],
+    "unlock": [],
+    "update": [
+      "docs/update-application-boundary-matrix.md"
+    ]
+  }
+}
