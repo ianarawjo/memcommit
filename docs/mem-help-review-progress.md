@@ -18,7 +18,7 @@ closed.
 | Contexts | — | — | status, pwd, contexts, list, show, switch, checkout, init, branch, import, embed |
 | Memories | — | — | add, reference, edit, chunk, forget, delete, clear |
 | Search & Explain | — | — | find, query, summarize, trace, rationale, find-duplicates, find-ambiguities, find-conflicts |
-| Analyze & Transform | compare, meld, update, distill, elaborate | **merge (current)** | audit, atomize, impact, review, sever, translate |
+| Analyze & Transform | compare, meld, update, distill, elaborate, merge | — | audit, atomize, impact, review, sever, translate |
 | History & Recovery | — | — | log, diff, checkpoint, undo, redo, revert |
 | Ground & Evaluation | — | — | ground, fit, check-conformance, init-study, eval |
 | Profile & Sharing | — | — | profile, rename, share, lock, unlock |
@@ -32,13 +32,13 @@ closed.
 | Wide view uses equal summary/use-case columns | Reviewed |
 | Compact view stacks the use case below the summary | Reviewed |
 | `USE WHEN:` aligns with the summary body; only the label is bold; wrapped use-case text aligns after the label | Reviewed |
-| Representative actual-color PTY evidence at `180×52` and `100×30` | Reviewed for Meld, Distill, and Elaborate |
+| Representative actual-color PTY evidence at `180×52` and `100×30` | Reviewed for Meld, Merge, Distill, and Elaborate |
 
 ## Next review
 
-Finish the human wording review for `merge`. If the review stops
-mid-operation, keep it In progress and name the missing surface in a short note
-here.
+Select the next operation from the remaining Analyze & Transform set. If a
+review stops mid-operation, keep it In progress and name the missing surface in
+a short note here.
 
 - `distill` semantic direction is now enforced in code: it derives Rules
   upward from Case/example propositions stored as Context Memories, while an
@@ -54,3 +54,7 @@ here.
   Case propositions, avoids implying that the operation itself refines Rules,
   and presents the two use cases as starter Rule candidates or additional Cases
   for review. Suggested and unverified status remains in the Effect contract.
+- `merge` is reviewed as the deterministic counterpart to semantic `meld`.
+  Its Summary states the Source-only addition and Source/Target choice behavior,
+  while its `USE WHEN` stays scenario-based rather than asking the user to
+  understand stored-identity mechanics before choosing the operation.

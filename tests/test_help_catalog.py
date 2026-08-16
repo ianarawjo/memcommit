@@ -95,8 +95,8 @@ def test_meld_help_distinguishes_symmetric_and_directional_modes():
     overview = [(row.label, row.value) for row in composed.overview]
 
     assert composed.operation.summary == (
-        "Combine two Contexts and resolve their differences, either into a "
-        "separate Result or into one authoritative Baseline."
+        "Semantically reconcile two Contexts into either a separate Result or "
+        "an authoritative Baseline."
     )
     assert ("FLOW", "PEER A + PEER B -> RESULT; INCOMING -> BASELINE") in overview
     assert (
@@ -106,8 +106,24 @@ def test_meld_help_distinguishes_symmetric_and_directional_modes():
     ) in overview
     assert (
         "BEST FOR",
-        "Combining independently edited Contexts into one shared version, or "
-        "incorporating proposed changes into the current baseline.",
+        "Combining separately developed Contexts into a shared Result, or "
+        "incorporating proposed changes into an existing Baseline.",
+    ) in overview
+
+
+def test_merge_help_distinguishes_structural_selection_from_meld_synthesis():
+    composed = compose_operation_help(operation_help("merge"))
+    overview = [(row.label, row.value) for row in composed.overview]
+
+    assert composed.operation.summary == (
+        "Add Source-only items to the current Target, choosing Source or Target "
+        "wherever stored items conflict."
+    )
+    assert ("EXECUTION", "DETERMINISTIC") in overview
+    assert (
+        "BEST FOR",
+        "Bringing work from a copied or branched Context back into the current "
+        "Context.",
     ) in overview
 
 

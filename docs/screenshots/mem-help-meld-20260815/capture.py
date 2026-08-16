@@ -36,17 +36,22 @@ def main() -> None:
     _BASE._pump(child, seconds=0.8)
 
     # Contexts -> Memories -> Search & Explain -> Analyze & Transform, then
-    # Audit -> Atomize -> Distill -> Compare -> Impact -> Review -> Meld.
-    child.send("\t\t\t" + "\x1b[B" * 6)
+    # Audit -> Atomize -> Distill -> Elaborate -> Compare -> Impact -> Review
+    # -> Meld -> Update. Focus Update so the complete preceding Meld row stays
+    # visible even after Elaborate made this category taller.
+    child.send("\t\t\t" + "\x1b[B" * 8)
     _BASE._pump(child, seconds=0.8)
     collapsed = _BASE._snapshot(recorder, "01-collapsed-meld")
     assert "▸ mem meld" in collapsed
-    assert "Combine two Contexts and resolve their differences" in collapsed
-    assert "Combining independently edited Contexts" in collapsed
+    assert "Semantically reconcile two Contexts" in collapsed
+    assert "USE WHEN: Combining separately developed Contexts" in collapsed
+    assert (
+        "incorporating proposed changes into an existing Baseline." in collapsed
+    )
     assert "FORM 1" not in collapsed
     _BASE._assert_color(recorder.getvalue())
 
-    child.send("\x1b[C")
+    child.send("\x1b[A\x1b[C")
     _BASE._pump(child, seconds=0.8)
     expanded = _BASE._snapshot(recorder, "02-expanded-contract")
     assert "▾ mem meld" in expanded
@@ -80,13 +85,14 @@ def main() -> None:
     _BASE._pump(compact_child, seconds=0.8)
     # Focus Update so the complete preceding Meld row, including its stacked
     # use case, remains visible in the short viewport.
-    compact_child.send("\t\t\t" + "\x1b[B" * 7)
+    compact_child.send("\t\t\t" + "\x1b[B" * 8)
     _BASE._pump(compact_child, seconds=0.8)
     compact = _BASE._snapshot(compact_recorder, "05-compact-collapsed-meld")
     assert "30 100" in compact_recorder.getvalue()
     assert "▸ mem meld" in compact
-    assert "Combine two Contexts and resolve their differences" in compact
-    assert "Combining independently edited Contexts" in compact
+    assert "Semantically reconcile two Contexts" in compact
+    assert "USE WHEN: Combining separately developed Contexts" in compact
+    assert "incorporating proposed changes" in compact
     assert "FORM 1" not in compact
 
     compact_child.send("\x1b[A\x1b[C")

@@ -49,12 +49,12 @@ BEST_FOR_BY_OPERATION = {
     "lock": "Preventing accidental modification of stable material.",
     "log": "Investigating previous operations, checkpoints, or Memory history.",
     "meld": (
-        "Combining independently edited Contexts into one shared version, or "
-        "incorporating proposed changes into the current baseline."
+        "Combining separately developed Contexts into a shared Result, or "
+        "incorporating proposed changes into an existing Baseline."
     ),
     "merge": (
-        "Returning branch additions while explicitly resolving stored-identity "
-        "collisions before changing the current Context."
+        "Bringing work from a copied or branched Context back into the current "
+        "Context."
     ),
     "profile": "Managing separate users, environments, or Memory stores.",
     "provider": "Selecting and validating the semantic execution backend.",

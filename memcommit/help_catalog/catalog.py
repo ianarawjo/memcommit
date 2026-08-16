@@ -303,8 +303,8 @@ _OPERATIONS = (
     ),
     _operation(
         "meld",
-        "Combine two Contexts and resolve their differences, either into a "
-        "separate Result or into one authoritative Baseline.",
+        "Semantically reconcile two Contexts into either a separate Result or "
+        "an authoritative Baseline.",
         "PEER A + PEER B -> RESULT; INCOMING -> BASELINE",
         ExecutionKind.SEMANTIC,
         "Symmetric mode requires a distinct empty Result; directional mode "
@@ -313,7 +313,8 @@ _OPERATIONS = (
     ),
     _operation(
         "merge",
-        "Classify structural Source/Target differences, then add or deterministically resolve them without semantic reconciliation.",
+        "Add Source-only items to the current Target, choosing Source or Target "
+        "wherever stored items conflict.",
         "Source Context -> current Target Context",
         ExecutionKind.DETERMINISTIC,
         "Changes Target only after every required conflict has KEEP TARGET or TAKE SOURCE; Source stays unchanged",

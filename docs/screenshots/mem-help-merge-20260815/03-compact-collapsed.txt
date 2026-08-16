@@ -1,0 +1,30 @@
+ mem help · command inventory                                                                       
+┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
+│  VIEW · [   BY KIND ]  [ ✓ A–Z ] · ←/→ TO SELECT                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+┃                          it.                                                                    ┃^
+┃                          USE WHEN: Starting a new empty Context hierarchy.                      ┃ 
+┃ ▸ mem init-study         Copy one Study baseline into an isolated participant/authority Profile ┃ 
+┃                          pair.                                                                  ┃ 
+┃                          USE WHEN: Preparing a reproducible, isolated user-study environment.   ┃ 
+┃ ▸ mem list (ls)          Browse child Contexts and direct items; ls is the equivalent compact   ┃ 
+┃                          spelling.                                                              ┃ 
+┃                          USE WHEN: Inspecting the structure and direct contents of a Context.   ┃ 
+┃ ▸ mem lock               Lock the current Context, a recursive Context set, Memory, or Profile. ┃ 
+┃                          USE WHEN: Preventing accidental modification of stable material.       ┃ 
+┃ ▸ mem log                Browse Context checkpoints, inspect one Memory lineage with --memory,  ┃ 
+┃                          search history, or list Profile command attempts.                      ┃ 
+┃                          USE WHEN: Investigating previous operations, checkpoints, or Memory    ┃ 
+┃                                    history.                                                     ┃ 
+┃ ▸ mem meld               Semantically reconcile two Contexts into either a separate Result or   ┃ 
+┃                          an authoritative Baseline.                                             ┃ 
+┃                          USE WHEN: Combining separately developed Contexts into a shared        ┃ 
+┃                                    Result, or incorporating proposed changes into an existing   ┃ 
+┃                                    Baseline.                                                    ┃ 
+┃ ▸ mem merge              Add Source-only items to the current Target, choosing Source or Target ┃ 
+┃                          wherever stored items conflict.                                        ┃ 
+┃                          USE WHEN: Bringing work from a copied or branched Context back into    ┃ 
+┃                                    the current Context.                                         ┃ 
+┃ ▸ mem profile            Enter the interactive Profile selector, or manage complete local       ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab surface  H full help

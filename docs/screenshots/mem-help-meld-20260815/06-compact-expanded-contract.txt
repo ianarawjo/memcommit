@@ -2,24 +2,24 @@
 ┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
 │  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
-┃                  directional meld.                                                              ┃^
-┃   Separating a composite Memory into independently reviewable requirements.                     ┃ 
-┃ ▸ mem distill    Derive evidence-bound reusable Rules from a Context, optionally guided by a    ┃ 
-┃                  Goal.                                                                          ┃ 
-┃   Extracting reusable rules from evidence-rich source material.                                 ┃ 
+┃ ▸ mem elaborate  Propose candidate Rules from a Goal, or concrete Case propositions from        ┃^
+┃                  existing Rules.                                                                ┃ 
+┃                  USE WHEN: An abstract Goal needs starter Rule candidates, or existing Rules    ┃ 
+┃                            need additional concrete Case propositions for review.               ┃ 
 ┃ ▸ mem compare    Compare Memories in two Contexts and report what they share, what differs, and ┃ 
 ┃                  what appears only on one side.                                                 ┃ 
-┃   Comparing two Contexts as a whole to understand where they align and differ.                  ┃ 
+┃                  USE WHEN: Comparing two Contexts as a whole to understand where they align and ┃ 
+┃                            differ.                                                              ┃ 
 ┃ ▸ mem impact     Preview or inspect operation Impact; no Context changes occur before its       ┃ 
 ┃                  reviewed Apply handoff.                                                        ┃ 
-┃   Checking expected consequences before accepting a transformation.                             ┃ 
+┃                  USE WHEN: Checking expected consequences before accepting a transformation.    ┃ 
 ┃ ▸ mem review     Enter an interactive Review session or stage semantic review responses; never  ┃ 
 ┃                  apply Memories.                                                                ┃ 
-┃   Resolving issues in a saved analysis before a later Apply.                                    ┃ 
-┃ ▾ mem meld       Combine two Contexts and resolve their differences, either into a separate     ┃ 
-┃                  Result or into one authoritative Baseline.                                     ┃ 
-┃   Combining independently edited Contexts into one shared version, or incorporating proposed    ┃ 
-┃   changes into the current baseline.                                                            ┃ 
+┃                  USE WHEN: Resolving issues in a saved analysis before a later Apply.           ┃ 
+┃ ▾ mem meld       Semantically reconcile two Contexts into either a separate Result or an        ┃ 
+┃                  authoritative Baseline.                                                        ┃ 
+┃                  USE WHEN: Combining separately developed Contexts into a shared Result, or     ┃ 
+┃                            incorporating proposed changes into an existing Baseline.            ┃ 
 ┃   FLOW      · PEER A + PEER B -> RESULT; INCOMING -> BASELINE                                   ┃ 
 ┃   EXECUTION · SEMANTIC                                                                          ┃ 
 ┃   EFFECT    · Symmetric mode requires a distinct empty Result; directional mode changes only    ┃ 

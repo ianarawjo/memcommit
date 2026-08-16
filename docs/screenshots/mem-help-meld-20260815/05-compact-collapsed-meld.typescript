@@ -24,31 +24,31 @@
 [0m└─────────────────────────────────────────────────────────────────────────────────────────────────┘[99C[0;48;5;248m [0m
 [99C[0;48;5;248m [0m
 [0;38;5;117;1m┏ CONTEXTS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[99C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0;38;5;234;48;5;117;1;7m ▸ mem status     Show current Context counts, recent Memories, and checkpoints.                 [0;38;5;117;1m┃[99C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0;38;5;234;48;5;117;1;7m   Quickly checking the state and recent activity of the current Context.                        [0;38;5;117;1m┃[99C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0;1m ▸ mem pwd        [0mPrint the current canonical Context name without loading its contents.         [0;38;5;117;1m┃[99C[0;1mv[0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m ▸ mem status     Show current Context counts, recent Memories, and checkpoints.                 [0;38;5;117;1m┃[99C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m                  USE WHEN: Quickly checking the state and recent activity of the current        [0;38;5;117;1m┃[99C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m                            Context.                                                             [0;38;5;117;1m┃[99C[0;1mv[0m
 [0m───────────────────────────────────────────────────────────────────────────────────────────────────[0m
-[0m ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help[98D[4A[0m[21A[0;38;5;117;1m┏ ANALYZE & TRANSFORM ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
-[0;38;5;117;1m┃[0;1m ▸ mem audit      [0mRun D[Cplicate, Ambigu[Cty, and Conflict ch[Ccks[Cplus[Coptional[CRule[CConformance,[2C[0;38;5;117;1m┃[99C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0;1m                  [0mthen [Ceview one saved report.       [C   [C     [C         [23C[0;38;5;117;1m┃[99C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0;1m [0m  Performing a[Ccombined quality [Ceview befo[Ce[Crevisi[Cg a Context.[31C[0;38;5;117;1m┃[99C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0;1m ▸ mem atomize    [0mSplit composite Memories for review; --evaluate performs an issue-scoped[7C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m                  [0mdirec[Ci[Cnal meld.[C         [C  [C    [C  [C     [C [C       [C   [C   [C         [C  [4C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m [2C[0mSeparating a composi[2C Memo[Cy [Cnto[Ci[Cdep[Cndently reviewable[3Cqu[Crements. [20C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m ▸ mem distill    [0mDerive evidence-bound reusabl[C Rules from a[CCon[Cext,[Coptionally gui[Ced[Cby[Ca[4C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m                  [0mGoal.[C  [C    [C   [C      [C    [C       [C       [C    [C        [20C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m [0m  Extracting reusable rules fr[Cm evidence-rich source materi[Cl.    [C         [C   [C        [C   [2C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m ▸ mem compare    [0mCompare Memories[Cin[Ctwo[CContexts[Cand[Creport[Cwhat[Cthey[Cshare,[Cwhat[Cdiffers,[Cand[C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m                  [0mwhat appears only on one side.                                                 [0;38;5;117;1m┃[99C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0;1m [0m  Comparing two Cont[Cxts[Cas a whole to[Cunderstand whe[Ce they[Calign[Cand[Cdiffer.[18C[0;38;5;117;1m┃[99C[0;48;5;238m [0m
+[0m ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help[98D[4A[0m[21A[0;38;5;117;1m┃[0;1m [0m                 [0;1mUSE WHEN:[0m Separating a composite Memory into independently reviewable          [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m [0m              [C      [C    [Crequiremen[Cs. [C      [C  [C [C        [34C[0;38;5;117;1m┃[99C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem distill    [0mDerive reusable Rules from Case or Ex[Cmple proposi[Cion[C in[Ca[Cselected[CContext[2C[0;38;5;117;1m┃[99C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m                  [0mscope, using an optional Goal to[Cf[Ccus relevance.[30C[0;38;5;117;1m┃[99C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m [0m             [C   [0;1mUSE WHEN:[0m Ex[Cracting[Creusable[Crules from evid[Cnc[C-rich sourc[C material. [7C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m ▸ mem elaborate  [0mPropose can[2Cdate[CRul[Cs from a[CGo[Cl, or concrete Case propositions from [C  [4C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m                  [C[0mxis[Cing[CRules.    [C  [C     [C     [C   [C     [C       [C      [20C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m [0m             [C   [0;1mUSE WHEN:[C[0mAn[2Cbstr[Cct Goal ne[Cds starter Rule candidat[Cs, [Cr existing[CRules[4C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m [12C[0m          [C  [C n[Ced add[2Cional co[Ccrete Case propositions for review.[15C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m ▸ mem compare    [0mComp[Cre Memories[Cin two Cont[Cx[Cs and r[Cport what they share,[Cwhat differs, and[C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m                  [0mwhat app[Cars[Conly[Con[Cone[Cside.[49C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m [0m                 [0;1mUSE WHEN:[0m Comparing two Contexts as a whole to understand where they align and [0;38;5;117;1m┃[99C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m [0m                     [C  [C  differ.    [C   [C       [C        [37C[0;38;5;117;1m┃[99C[0;48;5;238m [0m
 [0;38;5;117;1m┃[0;1m ▸ mem impact     [0mPrevi[Cw or inspect operation Impact; no Context [Changes occur before[Cits[7C[0;38;5;117;1m┃[99C[0;48;5;238m [0m
 [0;38;5;117;1m┃[0;1m                  [0mre[Ciewed Apply ha[Cdoff.   [C         [43C[0;38;5;117;1m┃[99C[0;48;5;238m [0m
-[0;38;5;117;1m┃[0;1m [0m  Checking expected con[2Cquences before acc[Cpting a transformation.[29C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m [0m                 [0;1mUSE WHEN:[0m Checking expec[Ced[Cc[Cnsequen[Ces before[Caccepting[Ca[Ctransformation.[4C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0;1m ▸ mem review     [0mEnter an [Cnteractive Review [Cession or stage[Csemantic review r[Csponses;[Cnever[2C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0;1m                  [0mapply Memories.   [C         [C     [C    [C  [C        [C       [20C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m [0m  Resolving issues in a saved analysis before a later Apply.                                    [0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m ▸ mem meld       [0mCombine two Contexts and resolve their differences, either into a separate     [0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m                  [0mResult or into one authoritative Baseline.                                     [0;38;5;117;1m┃[0m
-[C[0;1m [0m  Combining independently edited Contexts into one shared version, or incorporating proposed    [0m
-[C[0;1m [0m  changes into the current baseline.                                                            [0m
-[C[0;38;5;234;48;5;117;1;7m ▸ mem update     Update Memories in the Target Context from Memories in the Source Context,     [98D[0m
+[0;38;5;117;1m┃[0;1m [0m                 [0;1mUSE WHEN:[0m Resolving issues in a saved analysis before a later Apply.           [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m ▸ mem meld       [0mSemantically reconcile two Contexts into either a separate Result or an        [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m                  [0mauthoritative Baseline.                                                        [0;38;5;117;1m┃[0m
+[C[0;1m [0m                 [0;1mUSE WHEN:[0m Combining separately developed Contexts into a shared Result, or     [0m
+[C[0;1m [0m                           incorporating proposed changes into an existing Baseline.            [0m
+[2C[0;38;5;234;48;5;117;1m▸ mem update     Update[CMemories in[Cthe[CTarget[CContext[Cfrom[CMemories[Cin[Cthe[CSource[CContext,[93D[0m
