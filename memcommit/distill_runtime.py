@@ -15,8 +15,13 @@ from memcommit.distill_application import (
     DistillApplyRequest,
     DistillRequest,
     DistillResult,
+    DistillPreparedLookup,
     apply_distill,
     run_distill,
+)
+from memcommit.distill_config import (
+    DEFAULT_DISTILL_SEMANTIC_CONFIG,
+    DistillSemanticConfig,
 )
 from memcommit.store import MemoryStore, context_record_digest, validate_context_name
 from memcommit.summarize_application import (
@@ -68,6 +73,8 @@ def execute_distill(
     *,
     store: MemoryStore,
     provider_factory: DistillProviderFactory,
+    config: DistillSemanticConfig = DEFAULT_DISTILL_SEMANTIC_CONFIG,
+    prepared_lookup: DistillPreparedLookup | None = None,
 ) -> DistillResult:
     """Run Distill without importing CLI or terminal presentation."""
 
@@ -81,6 +88,8 @@ def execute_distill(
         request,
         source_port=source_port,
         provider_session_factory=provider_session,
+        config=config,
+        prepared_lookup=prepared_lookup,
     )
 
 
@@ -146,7 +155,6 @@ class MemoryStoreDistillOutputPort:
                 {
                     "result_memory_uid": result_uid,
                     "rule_uid": rule.uid,
-                    "goal_support": rule.goal_support,
                     "support_memory_uids": list(rule.support_memory_uids),
                     "boundary_memory_uids": list(rule.boundary_memory_uids),
                     "rationale": rule.rationale,
@@ -172,6 +180,13 @@ class MemoryStoreDistillOutputPort:
                         "analysis_uid": analysis.uid,
                         "analysis_digest": analysis.digest,
                         "provider_contract_version": analysis.provider_contract_version,
+                        "semantic_config": {
+                            "max_rules": analysis.semantic_config.max_rules,
+                            "rule_text_limit": analysis.semantic_config.rule_text_limit,
+                            "rationale_limit": analysis.semantic_config.rationale_limit,
+                            "overview_limit": analysis.semantic_config.overview_limit,
+                            "response_char_limit": analysis.semantic_config.response_char_limit,
+                        },
                         "source_context": analysis.source.context_name,
                         "source_digest": analysis.source.digest,
                         "source_scope": (

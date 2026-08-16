@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ ELABORATE · RULES → CASES                                                                                                                                                       ^┃
+┃ STATUS · REVIEW ONLY · SUGGESTED · UNVERIFIED · LIVE                                                                                                                             ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT MEM UNDERSTOOD                                                                                                                                                              ┃
+┃ A fit and a boundary make the Rule easier to test.                                                                                                                               ┃
+┃                                                                                                                                                                                  ┃
+┃ CASE 1 · FIT · [Suggested] [Unverified]                                                                                                                                          ┃
+┃ The person explicitly confirms option A.                                                                                                                                         ┃
+┃ SOURCE RULE · 1                                                                                                                                                                  ┃
+┃ EXPECTED · Proceed with option A.                                                                                                                                                ┃
+┃ WHY · This is an ordinary fitting Case.                                                                                                                                          ┃
+┃                                                                                                                                                                                  ┃
+┃ CASE 2 · BOUNDARY · [Suggested] [Unverified]                                                                                                                                     ┃
+┃ The person mentions option A without confirming it.                                                                                                                              ┃
+┃ SOURCE RULE · 1                                                                                                                                                                  ┃
+┃ EXPECTED · Do not proceed yet.                                                                                                                                                   ┃
+┃ WHY · This distinguishes mention from confirmation.                                                                                                                              ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ ELABORATE · ↑/↓ section · PgUp/PgDn page · Home/End · y focused · Y all · Esc/Backspace/Q close · read-only

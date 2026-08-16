@@ -1,0 +1,3 @@
+Create 'capture/rules' from these exact 1 Rules? [y/N]: n                                                                                                                           
+RESULT · capture/rules · NOT CREATED · rerun with --apply only after reviewing this proposal                                                                                        
+REVIEW VERIFIED · FOCUSED + WHOLE COPY · RESULT NOT CREATED · SOURCE UNCHANGED

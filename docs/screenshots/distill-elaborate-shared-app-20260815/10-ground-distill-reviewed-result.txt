@@ -1,0 +1,52 @@
+ MEM DISTILL                                                                                                                                                                        
+ READ-ONLY · SOURCE FROZEN BY CALLER                                                                                                                                                
+┌────────────────────────────────────────────────────────────────────────────────| REACH · FROZEN |────────────────────────────────────────────────────────────────────────────────┐
+│ RANGE · [ THIS CONTEXT ONLY ] · FROZEN                                                                                                                                           │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────────────────| SOURCE CONTEXT · FROZEN |────────────────────────────────────────────────────────────────────────────┐
+│  ✓   · capture/candidates                                                                                                                                                       ^│
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ RULE PROPOSAL ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ DISTILL · capture/candidates                                                                                                                                                    ^┃
+┃ STATUS · REVIEW ONLY · SOURCE UNCHANGED · DIRECT · LIVE                                                                                                                          ┃
+┃                                                                                                                                                                                  ┃
+┃ GOAL · RELEVANCE FOCUS ONLY                                                                                                                                                      ┃
+┃ Confirm a chosen option before acting.                                                                                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT MEM UNDERSTOOD                                                                                                                                                              ┃
+┃ The examples support a confirmation Rule while the contrast limits when action is allowed.                                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃ RULE 1                                                                                                                                                                           ┃
+┃ Act only after the person explicitly confirms the selected option.                                                                                                               ┃
+┃ SUPPORT · 00000000                                                                                                                                                               ┃
+┃ BOUNDARY · 00000000                                                                                                                                                              ┃
+┃ WHY · The confirmed Case supports action and the mention-only Case bounds it.                                                                                                    ┃
+┃                                                                                                                                                                                  ┃
+┃ OUTSIDE PROPOSED RULES · 0 Memories                                                                                                                                              ┃
+┃ No Result Context or checkpoint has been created.                                                                                                                                ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ y current · Y all · ↑/↓ section/cross · PgUp/PgDn page · Home/End · S rerun · Esc/Backspace/Q close · read-only

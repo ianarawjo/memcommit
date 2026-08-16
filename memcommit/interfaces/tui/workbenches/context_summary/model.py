@@ -22,6 +22,8 @@ class ContextSummaryWorkbenchView:
     current_context: str | None = None
     annotations: tuple[tuple[str, SourceDisplayValue], ...] = ()
     document: SemanticViewerDocument | None = None
+    allow_both: bool = True
+    targeting_editable: bool = True
 
     def __post_init__(self) -> None:
         if (
@@ -36,6 +38,16 @@ class ContextSummaryWorkbenchView:
             raise ValueError("The current Context is outside the workbench catalog.")
         if self.range_mode not in {"BOTH", "EXACT", "SUBTREE"}:
             raise ValueError("Context workbench range mode is invalid.")
+        if type(self.allow_both) is not bool:
+            raise ValueError("Context workbench allow_both must be boolean.")
+        if type(self.targeting_editable) is not bool:
+            raise ValueError("Context workbench targeting_editable must be boolean.")
+        if not self.allow_both and self.range_mode == "BOTH":
+            raise ValueError("This Context workbench requires one reach mode.")
+        if not self.targeting_editable and self.names != (self.selected_context,):
+            raise ValueError(
+                "A locked Context workbench requires only its selected Context."
+            )
         if not self.operation_label.strip() or not self.result_title.strip():
             raise ValueError("Context workbench labels must be nonblank.")
         if not self.empty_message.strip():

@@ -3,12 +3,15 @@
 from __future__ import annotations
 
 import json
+import ast
+from pathlib import Path
 
 import pytest
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
 import memcommit.commands.distill as distill_command
+import memcommit.distill_application as distill_application
 from memcommit.cli import app
 from memcommit.commands.help_inventory import COMMAND_FORMS
 from memcommit.context import Context, Memory
@@ -19,7 +22,14 @@ from memcommit.distill import (
     analyze_distill,
 )
 from memcommit.distill_application import DistillApplyRequest, DistillRequest
+from memcommit.distill_config import DistillSemanticConfig
 from memcommit.distill_runtime import execute_distill, execute_distill_apply
+from memcommit.ground import (
+    GroundTargetSpec,
+    bind_ground_workbench,
+    create_ground_session,
+)
+from memcommit.ground_distill import execute_ground_distill, freeze_ground_distill
 from memcommit.store import MemoryStore
 from memcommit.summarize import collect_summary_frame
 
@@ -50,7 +60,6 @@ class DistillProvider:
                         "The Goal requires a recommendation and the examples "
                         "distinguish quiet from noisy settings."
                     ),
-                    "goal_support": True,
                     "support_memory_ids": aliases[:1],
                     "boundary_memory_ids": aliases[1:2],
                 }
@@ -89,7 +98,6 @@ def test_distill_accepts_goal_and_context_evidence_as_one_rule_frame():
 
     assert len(analysis.rules) == 1
     rule = analysis.rules[0]
-    assert rule.goal_support is True
     assert rule.support_memory_uids == (
         "00000000-0000-4000-8000-000000000011",
     )
@@ -110,7 +118,6 @@ def test_distill_rejects_silent_source_omission():
                 {
                     "content": "Prefer quiet settings.",
                     "rationale": "One case supports it.",
-                    "goal_support": False,
                     "support_memory_ids": ["m000001"],
                     "boundary_memory_ids": [],
                 }
@@ -147,7 +154,6 @@ def test_distill_local_decoder_rejects_duplicate_source_aliases():
                 {
                     "content": "Prefer quiet settings.",
                     "rationale": "One case supports it.",
-                    "goal_support": False,
                     "support_memory_ids": ["m000001", "m000001"],
                     "boundary_memory_ids": ["m000002"],
                 }
@@ -160,33 +166,75 @@ def test_distill_local_decoder_rejects_duplicate_source_aliases():
         analyze_distill(frame, goal=None, provider=provider)
 
 
-def test_distill_goal_only_can_support_a_rule_in_an_empty_context():
+def test_distill_rejects_goal_only_empty_context_before_provider_connection():
     empty = Context(uid="00000000-0000-4000-8000-000000000021", name="empty")
     frame = collect_summary_frame(empty)
-    provider = DistillProvider(
-        {
-            "overview": "The Goal itself supplies one durable constraint.",
-            "rules": [
-                {
-                    "content": "Confirm the final choice with the user.",
-                    "rationale": "The supplied Goal explicitly requires confirmation.",
-                    "goal_support": True,
-                    "support_memory_ids": [],
-                    "boundary_memory_ids": [],
-                }
-            ],
-            "outside_memory_ids": [],
-        }
-    )
+    provider = DistillProvider()
 
-    analysis = analyze_distill(
-        frame,
-        goal="Recommend an option, then confirm the final choice with the user.",
-        provider=provider,
-    )
+    with pytest.raises(DistillError, match="Case or Example proposition"):
+        analyze_distill(
+            frame,
+            goal="Recommend an option, then confirm the final choice with the user.",
+            provider=provider,
+        )
 
-    assert analysis.rules[0].goal_support is True
-    assert analysis.rules[0].support_memory_uids == ()
+    assert provider.calls == []
+
+
+def test_distill_empty_source_fails_before_prepared_lookup_or_provider(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = ops.init("distill/empty-application")
+    store.save(source)
+    lookup_calls = 0
+    provider_constructions = 0
+
+    def lookup(_frame, _goal, _config):
+        nonlocal lookup_calls
+        lookup_calls += 1
+        return None
+
+    def provider_factory():
+        nonlocal provider_constructions
+        provider_constructions += 1
+        return DistillProvider()
+
+    with pytest.raises(DistillError, match="Case or Example proposition"):
+        execute_distill(
+            DistillRequest(context_locator=source.name, goal="A Goal"),
+            store=store,
+            provider_factory=provider_factory,
+            prepared_lookup=lookup,
+        )
+
+    assert lookup_calls == 0
+    assert provider_constructions == 0
+
+
+def test_distill_live_plan_rejects_oversized_frame_before_provider_construction(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = ops.init("distill/oversized")
+    ops.add(source, "A" * 600_000)
+    ops.add(source, "B" * 600_000)
+    store.save(source)
+    provider_constructions = 0
+
+    def provider_factory():
+        nonlocal provider_constructions
+        provider_constructions += 1
+        return DistillProvider()
+
+    with pytest.raises(DistillError, match="bounded one-turn plan"):
+        execute_distill(
+            DistillRequest(context_locator=source.name),
+            store=store,
+            provider_factory=provider_factory,
+        )
+
+    assert provider_constructions == 0
 
 
 def test_execute_and_apply_distill_create_new_result_and_preserve_source(
@@ -230,6 +278,145 @@ def test_execute_and_apply_distill_create_new_result_and_preserve_source(
     assert metadata["rules"][0]["boundary_memory_uids"] == [second.uid]
 
 
+def test_distill_exact_prepared_analysis_avoids_provider_construction(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = ops.init("distill/prepared")
+    ops.add(source, "A quiet setting supported a long conversation.")
+    store.save(source)
+    store.set_current(source.name)
+    first_provider = DistillProvider()
+    live = execute_distill(
+        DistillRequest(context_locator=source.name, goal="Focus on conversation."),
+        store=store,
+        provider_factory=lambda: first_provider,
+    )
+
+    def forbidden_provider():
+        raise AssertionError("an exact prepared Distill hit must avoid the provider")
+
+    prepared = execute_distill(
+        DistillRequest(context_locator=source.name, goal=" Focus on conversation. "),
+        store=store,
+        provider_factory=forbidden_provider,
+        prepared_lookup=lambda frame, goal, config: live.analysis,
+    )
+
+    assert prepared.analysis is live.analysis
+    assert prepared.origin == "PREPARED_EXACT"
+    assert len(first_provider.calls) == 1
+
+
+def test_distill_rejects_nonexact_prepared_projection(isolated_store):
+    store = MemoryStore()
+    source = ops.init("distill/prepared-mismatch")
+    ops.add(source, "A first Case proposition.")
+    store.save(source)
+    store.set_current(source.name)
+    live = execute_distill(
+        DistillRequest(context_locator=source.name),
+        store=store,
+        provider_factory=DistillProvider,
+    )
+
+    changed = store.load_direct(source.name)
+    ops.add(changed, "A second Case proposition changes the global Rule frame.")
+    store.save(changed)
+
+    with pytest.raises(DistillError, match="does not exactly match"):
+        execute_distill(
+            DistillRequest(context_locator=source.name),
+            store=store,
+            provider_factory=lambda: (_ for _ in ()).throw(
+                AssertionError("an invalid prepared candidate must fail closed")
+            ),
+            prepared_lookup=lambda frame, goal, config: live.analysis,
+        )
+
+
+def test_distill_uses_one_typed_limit_snapshot():
+    _context, frame = _frame()
+    provider = DistillProvider()
+    config = DistillSemanticConfig(max_rules=1)
+
+    analyze_distill(frame, goal=None, provider=provider, config=config)
+
+    assert provider.calls[0][1]["properties"]["rules"]["maxItems"] == 1
+
+
+def test_distill_result_limits_follow_the_injected_config():
+    _context, frame = _frame()
+    long_rule = "R" * 4_100
+    provider = DistillProvider(
+        {
+            "overview": "One long Rule is allowed by this explicit contract.",
+            "rules": [
+                {
+                    "content": long_rule,
+                    "rationale": "The first proposition supplies the evidence.",
+                    "support_memory_ids": ["m000001"],
+                    "boundary_memory_ids": ["m000002"],
+                }
+            ],
+            "outside_memory_ids": [],
+        }
+    )
+
+    analysis = analyze_distill(
+        frame,
+        goal=None,
+        provider=provider,
+        config=DistillSemanticConfig(rule_text_limit=4_200),
+    )
+
+    assert analysis.rules[0].content == long_rule
+
+
+def test_distill_prepared_result_is_revalidated_against_current_config(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = ops.init("distill/prepared-limit")
+    ops.add(source, "One source proposition supports a reusable Rule.")
+    store.save(source)
+    live = execute_distill(
+        DistillRequest(context_locator=source.name),
+        store=store,
+        provider_factory=DistillProvider,
+    )
+
+    with pytest.raises(DistillError, match="semantic config does not match"):
+        execute_distill(
+            DistillRequest(context_locator=source.name),
+            store=store,
+            provider_factory=lambda: (_ for _ in ()).throw(
+                AssertionError("prepared validation must happen before provider")
+            ),
+            prepared_lookup=lambda frame, goal, config: live.analysis,
+            config=DistillSemanticConfig(rule_text_limit=10),
+        )
+
+
+def test_distill_application_imports_no_terminal_or_command_adapter():
+    source = Path(distill_application.__file__).read_text(encoding="utf-8")
+    tree = ast.parse(source)
+    imports: list[str] = []
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            imports.extend(alias.name for alias in node.names)
+        elif isinstance(node, ast.ImportFrom) and node.module is not None:
+            imports.append(node.module)
+
+    assert tuple(
+        name
+        for name in imports
+        if name == "typer"
+        or name.startswith("prompt_toolkit")
+        or name.startswith("memcommit.commands")
+    ) == ()
+
+
 def test_distill_apply_fails_closed_when_source_changed(isolated_store):
     store = MemoryStore()
     source = ops.init("distill/stale")
@@ -242,7 +429,6 @@ def test_distill_apply_fails_closed_when_source_changed(isolated_store):
                 {
                     "content": "Retain the supported source condition.",
                     "rationale": "The single Source Memory supports it.",
-                    "goal_support": False,
                     "support_memory_ids": ["m000001"],
                     "boundary_memory_ids": [],
                 }
@@ -265,6 +451,148 @@ def test_distill_apply_fails_closed_when_source_changed(isolated_store):
             store=store,
         )
     assert not store.context_exists("distill/stale-rules")
+
+
+def _ground_with_distill_source(store: MemoryStore):
+    raw = Context(uid="00000000-0000-4000-8000-000000000201", name="distill/raw")
+    candidates = Context(
+        uid="00000000-0000-4000-8000-000000000202",
+        name="distill/candidates",
+    )
+    candidates.add(
+        Memory(
+            uid="00000000-0000-4000-8000-000000000211",
+            content="A quiet setting supported a long conversation.",
+        )
+    )
+    target = Context(
+        uid="00000000-0000-4000-8000-000000000203",
+        name="distill/target",
+    )
+    for context in (raw, candidates, target):
+        store.create_context(context)
+    session = bind_ground_workbench(
+        create_ground_session(
+            "distill-ground",
+            goal="Choose a setting that supports conversation.",
+        ),
+        description="Derive a reviewable setting Rule.",
+        raw_context=raw,
+        derived_context=candidates,
+        target_contexts=(target,),
+        target_requirements=(
+            GroundTargetSpec(
+                context_name=target.name,
+                description="Publish a reviewed Rule.",
+                role="PUBLICATION_TARGET",
+            ),
+        ),
+    )
+    store.save_ground_session(session)
+    return session, (raw, candidates, target)
+
+
+def test_ground_distill_uses_same_application_and_preserves_ground(isolated_store):
+    store = MemoryStore()
+    session, contexts = _ground_with_distill_source(store)
+    frozen = freeze_ground_distill(store, ground_name=session.contract_name)
+
+    result = execute_ground_distill(
+        frozen,
+        store=store,
+        provider_factory=DistillProvider,
+    )
+
+    assert frozen.request == DistillRequest(
+        context_locator="distill/candidates",
+        goal=session.goal,
+    )
+    assert result.distill.analysis.source.context_name == "distill/candidates"
+    assert store.load_ground_session(session.contract_name) == session
+    assert all(store.list_checkpoints(context.name) == [] for context in contexts)
+
+
+def test_ground_distill_rejects_stale_bound_candidate_before_provider(
+    isolated_store,
+):
+    store = MemoryStore()
+    session, (_raw, candidates, _target) = _ground_with_distill_source(store)
+    frozen = freeze_ground_distill(store, ground_name=session.contract_name)
+    changed = store.load_direct(candidates.name)
+    changed.add(
+        Memory(
+            uid="00000000-0000-4000-8000-000000000212",
+            content="A concurrent candidate proposition.",
+        )
+    )
+    store.save(changed)
+    provider = DistillProvider()
+
+    with pytest.raises(DistillError, match="changed after Ground binding"):
+        execute_ground_distill(
+            frozen,
+            store=store,
+            provider_factory=lambda: provider,
+        )
+
+    assert provider.calls == []
+
+
+def test_ground_distill_rejects_candidate_change_during_provider(
+    isolated_store,
+):
+    store = MemoryStore()
+    session, (_raw, candidates, _target) = _ground_with_distill_source(store)
+    frozen = freeze_ground_distill(store, ground_name=session.contract_name)
+
+    class ConcurrentProvider(DistillProvider):
+        def complete(self, prompt, *, operation, output_schema=None):
+            changed = store.load_direct(candidates.name)
+            changed.add(
+                Memory(
+                    uid="00000000-0000-4000-8000-000000000213",
+                    content="A concurrent candidate proposition.",
+                )
+            )
+            store.save(changed)
+            return super().complete(
+                prompt,
+                operation=operation,
+                output_schema=output_schema,
+            )
+
+    provider = ConcurrentProvider()
+    with pytest.raises(DistillError, match="changed while Distill was running"):
+        execute_ground_distill(
+            frozen,
+            store=store,
+            provider_factory=lambda: provider,
+        )
+
+    assert len(provider.calls) == 1
+    assert all(
+        store.list_checkpoints(name) == []
+        for name in ("distill/raw", "distill/candidates", "distill/target")
+    )
+
+
+def test_mem_distill_ground_plain_uses_frozen_ground(monkeypatch, isolated_store):
+    store = MemoryStore()
+    session, _contexts = _ground_with_distill_source(store)
+    monkeypatch.setattr(
+        distill_command,
+        "connect_semantic_provider",
+        DistillProvider,
+    )
+
+    result = runner.invoke(
+        app,
+        ["distill", "--ground", session.contract_name, "--plain"],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert "DISTILL · distill/candidates" in result.output
+    assert "GOAL · RELEVANCE FOCUS ONLY" in result.output
 
 
 def test_mem_distill_applies_the_exact_rendered_proposal(
@@ -318,7 +646,6 @@ def test_mem_distill_save_as_without_apply_remains_read_only(
                 {
                     "content": "Retain the supported source condition.",
                     "rationale": "The Source Memory supports it.",
-                    "goal_support": False,
                     "support_memory_ids": ["m000001"],
                     "boundary_memory_ids": [],
                 }
@@ -352,4 +679,6 @@ def test_mem_distill_help_inventory_exposes_goal_review_and_apply_forms():
         "(review without creating the Result)",
         "mem distill [context] --save-as [result_context] --apply "
         "(create the exact reviewed Rule Context)",
+        "mem distill --ground [name] "
+        "(review Rules from its exact Goal and working-candidate frame)",
     )

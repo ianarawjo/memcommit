@@ -16,11 +16,13 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
 from memcommit.context_targeting.tui.reach import (
+    ContextReachState,
     ContextReachViewState,
     render_context_reach,
 )
 from memcommit.context_targeting.tui.selector import (
     ContextSelectorControl,
+    ContextSelectorRowProjection,
     ContextSelectorView,
 )
 from memcommit.interfaces.console.terminal import require_interactive_terminal
@@ -74,13 +76,30 @@ def run_context_summary_workbench(
             names=view.names,
             selected=(view.selected_context,),
             mode="SINGLE",
-            label="CONTEXT · ALL READABLE CONTEXTS · * CURRENT",
+            label=(
+                "CONTEXT · ALL READABLE CONTEXTS · * CURRENT"
+                if view.targeting_editable
+                else "SOURCE CONTEXT · FROZEN"
+            ),
             current_context=view.current_context,
             annotations=view.annotations,
         ),
         height=min(9, max(3, len(view.names))),
+        row_projector=(
+            None
+            if view.targeting_editable
+            else lambda _row, _focused: ContextSelectorRowProjection(
+                show_context_cursor=False
+            )
+        ),
     )
-    reach = ContextReachViewState.create(mode=view.range_mode)
+    reach = (
+        ContextReachViewState.create(mode=view.range_mode)
+        if view.allow_both
+        else ContextReachState.create(
+            include_descendants=view.range_mode == "SUBTREE"
+        )
+    )
     document = view.document
     navigation = SessionWorkbenchNavigation(pane="viewer")
     viewer = SemanticViewerController(navigation)
@@ -89,17 +108,25 @@ def run_context_summary_workbench(
 
     range_control: FormattedTextControl
     range_control = FormattedTextControl(
-        lambda: render_context_reach(
-            reach,
-            focused=get_app().layout.has_focus(range_control),
-            title="RANGE",
+        lambda: (
+            render_context_reach(
+                reach,
+                focused=get_app().layout.has_focus(range_control),
+                title="RANGE",
+            )
+            if view.targeting_editable
+            else [
+                ("", " RANGE · "),
+                ("class:memcommit.choice.selected", "[ THIS CONTEXT ONLY ]"),
+                ("", " · FROZEN"),
+            ]
         ),
-        focusable=True,
+        focusable=view.targeting_editable,
         show_cursor=False,
     )
     range_frame = build_focused_frame(
         Window(range_control, wrap_lines=False),
-        title="DESCENDANTS",
+        title=("DESCENDANTS" if view.targeting_editable else "REACH · FROZEN"),
         is_focused=lambda: get_app().layout.has_focus(range_control),
         height=Dimension.exact(3),
     )
@@ -139,7 +166,11 @@ def run_context_summary_workbench(
     header = Window(
         FormattedTextControl(
             f" MEM {safe_terminal_text(view.operation_label.upper())}\n"
-            " READ-ONLY · PICK CONTEXT AND DESCENDANTS SEPARATELY"
+            + (
+                " READ-ONLY · PICK CONTEXT AND DESCENDANTS SEPARATELY"
+                if view.targeting_editable
+                else " READ-ONLY · SOURCE FROZEN BY CALLER"
+            )
         ),
         height=Dimension.exact(2),
         dont_extend_height=True,
@@ -162,8 +193,13 @@ def run_context_summary_workbench(
             )
         if app.layout.has_focus(summary_control):
             if document is None:
+                navigation_hint = (
+                    "↑ Context · Shift-Tab Context · "
+                    if view.targeting_editable
+                    else ""
+                )
                 return (
-                    " Enter run · ↑ Context · Shift-Tab Context · "
+                    f" Enter run · {navigation_hint}"
                     "Esc/Backspace/Q close · read-only"
                 )
             receipt = ""
@@ -190,7 +226,11 @@ def run_context_summary_workbench(
         TuiRegion(summary_frame),
         TuiRegion(footer),
     )
-    initial_focus = summary_control if document is not None else selector.control
+    initial_focus = (
+        summary_control
+        if document is not None or not view.targeting_editable
+        else selector.control
+    )
     app: Application[ContextSummaryWorkbenchReceipt | None] = Application(
         layout=Layout(root, focused_element=initial_focus),
         key_bindings=bindings,
@@ -206,7 +246,13 @@ def run_context_summary_workbench(
         event.app.exit(
             result=ContextSummaryWorkbenchReceipt(
                 context_name=selector.selection.selected_name,
-                range_mode=reach.mode,
+                range_mode=(
+                    reach.mode
+                    if isinstance(reach, ContextReachViewState)
+                    else "SUBTREE"
+                    if reach.include_descendants
+                    else "EXACT"
+                ),
             )
         )
         return "HANDLED"
@@ -254,28 +300,34 @@ def run_context_summary_workbench(
         else:
             viewer.end(document)
 
-    surface_values = [
-        FocusSurface(
-            "DESCENDANTS",
-            range_control,
-            move_vertical=move_range,
-            activate=advance_range,
-        ),
-        FocusSurface(
-            "CONTEXT",
-            selector.control,
-            move_vertical=move_context,
-            activate=choose_context,
-            on_vertical_enter=enter_context,
-        ),
+    surface_values = []
+    if view.targeting_editable:
+        surface_values.extend(
+            [
+                FocusSurface(
+                    "DESCENDANTS",
+                    range_control,
+                    move_vertical=move_range,
+                    activate=advance_range,
+                ),
+                FocusSurface(
+                    "CONTEXT",
+                    selector.control,
+                    move_vertical=move_context,
+                    activate=choose_context,
+                    on_vertical_enter=enter_context,
+                ),
+            ]
+        )
+    surface_values.append(
         FocusSurface(
             "SUMMARY",
             summary_control,
             move_vertical=move_summary,
             activate=submit if document is None else advance_summary,
             on_vertical_enter=None if document is None else enter_summary,
-        ),
-    ]
+        )
+    )
     surfaces = SurfaceFocusController(tuple(surface_values))
     bind_surface_navigation(bindings, surfaces)
 

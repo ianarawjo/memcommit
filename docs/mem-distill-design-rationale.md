@@ -2,74 +2,121 @@
 
 ## Status
 
-Implemented as a first local Context-to-Context vertical slice. The command
-can analyze an exact Context or its readable descendants, optionally under a
-Goal, and can create one fresh local Result Context after review. A dedicated
-saved-session TUI and durable grant-derived results remain future work.
+Distill now has one typed application/runtime path shared by plain CLI, the
+interactive Context/range setup and semantic Viewer, the public Python client,
+the versioned agent tool, MCP projection, and the bound-Ground adapter. Apply
+is available only for an exact reviewed standalone proposal and creates one
+fresh local Result Context. A persisted hidden-prewarm artifact and a durable
+review session are not implemented.
 
-## Meaning
+## Meaning and direction
 
-Distill reduces a Goal and/or concrete Context evidence into fewer reusable,
-independently meaningful Rules. It is not defined by a top-down or bottom-up
-direction: examples can support a Rule, a Goal can support a Rule, and a Goal
-can constrain which Rules are relevant when Context evidence is also present.
+Distill is the evidence-bound upward operation:
 
-This differs from neighboring operations:
+```text
+Case or Example propositions in a Context --Distill--> reusable Rules
+                                     Goal? --focuses relevance only--^
+```
 
-- Summarize produces process-local comprehension and creates no Memory.
-- Atomize restructures existing meaning into independently reviewable
-  Memories and may change its Source after Apply.
-- Distill proposes abstractions across a complete evidence frame, leaves the
-  Source unchanged, and materializes only reviewed Rules into a fresh Result.
-- Induct is an inner Ground primitive that proposes one scoped Rule delta after
-  a reviewed case exposes a gap; its distinction is delta scope, not the use of
-  examples.
+The optional Goal cannot support a Rule. Every proposed Rule must cite at
+least one Source Memory, and an empty Source fails before provider connection
+even when a Goal exists. Top-down proposal generation is owned by Elaborate:
+a Goal may suggest Rules, and Rules may suggest Case propositions, but those
+outputs remain explicitly unverified.
 
-## Contract
+This separates neighboring operations:
 
-One request freezes a Source Context frame plus an optional Goal. Every
-proposed Rule contains standalone content, rationale, whether the Goal
-materially supports it, exact supporting Source Memory UIDs, and exact
-boundary or contrast Memory UIDs. Every Source Memory must either be cited by
-at least one Rule or be named in the analysis-wide outside set. A Memory cannot
-be silently omitted, and it cannot be both outside and cited.
+- Summarize produces process-local comprehension.
+- Distill proposes evidence-linked abstractions and may materialize reviewed
+  Rules into a fresh Result.
+- Elaborate proposes top-down hypotheses without claiming evidence or saving
+  them.
+- Atomize restructures existing meaning and may change its Source after Apply.
 
-The Goal is data and may support a normative Rule, but it cannot make an
-unsupported factual claim true. A Goal-only Rule is allowed when an empty
-Context is selected, while Context-only distillation remains valid when no
-Goal is supplied. With neither Goal nor ordinary Source Memory, analysis fails
-before provider connection.
+## Evidence and provider contract
 
-Distill declares `WHOLE_FRAME_ONLY` semantic execution. Cross-Memory evidence,
-exceptions, and boundaries can affect every Rule, so the first version rejects
-an oversized frame rather than partitioning it without an operation-owned
-global reconciliation pass. The provider sees aliases rather than durable
-Memory UIDs; returned aliases are resolved and validated locally.
+One request freezes one exact local Context or its lexical/embedded traversal
+plus an optional Goal. Every Rule contains standalone content, rationale,
+supporting Memory UIDs, and optional boundary/contrast Memory UIDs. Every
+Source Memory must be cited by at least one Rule or appear in the analysis-wide
+outside set. Cited and outside sets are disjoint, aliases are resolved locally,
+and every provider response crosses a strict schema and local decoder.
 
-## Apply and provenance
+Distill is `WHOLE_FRAME_ONLY`. Relations among any Source propositions can
+change the complete Rule set, so an oversized frame is rejected instead of
+being silently batched. On an exact prepared miss, this complete-frame plan is
+validated before the provider object is constructed. The same reason makes
+cache projection unsafe: only an
+exact Source frame, Goal, provider contract, and limit snapshot may reuse a
+prepared analysis. A subset, ancestor, or descendant projection is a miss or a
+fail-closed adapter error, even when a different operation can safely project
+its cached result.
 
-Analysis is read-only. Apply requires a fresh Result Context and never changes
-the Source. Before publishing, the complete frozen frame is rebuilt and every
-local Source Context identity and digest is rechecked under the require-new
-Store transaction. Each Result Memory has a deterministic identity derived
-from the exact analysis and Rule proposal.
+The application owns an injectable exact prepared-analysis lookup and reports
+`LIVE` or `PREPARED_EXACT`. No persisted Distill prewarm registry is installed
+yet, so this is a tested reuse port rather than a claim that ordinary runs
+already have a hidden cache artifact.
 
-The Result checkpoint records the analysis digest, Source scope and digest,
-Goal and Goal digest, provider-contract version, and per-Rule support and
-boundary UIDs. This preserves why each abstraction was materialized without
-pretending the output is a lossless copy of every Source Memory.
+## Configuration
 
-The first slice rejects any frame containing a granted Context before provider
-connection. A future grant-aware analysis and output must require the
-appropriate `DERIVE`, `EXPORT`, retained-analysis, and target acceptance
-permissions rather than silently deriving or copying authority-owned content
-into a local store. A dedicated saved Resolution Workbench is also not
-presented as implemented in this first slice.
+Behavioral limits live in `DistillSemanticConfig`. Request normalization,
+schema limits, response decoding, and prepared-result validation use the same
+frozen snapshot. Domain values enforce structural validity; they do not
+silently reapply module defaults after a caller injects a different validated
+configuration. Provider credentials, endpoint, model, reasoning, and timeout
+remain provider-infrastructure concerns.
 
-## Ground compatibility
+## Interfaces and interaction
 
-New Ground Rules use direction-neutral `DISTILLED` provenance whether their
-support comes from a Goal, Memories, or both. `DISTILLED_FROM_GOAL` and
-`INDUCED_FROM_CASES` remain accepted legacy persisted tokens and render as
-`DISTILLED`; they are no longer emitted for new Rules. `JOINTLY_REVISED`
-continues to identify a reviewed revision rather than a source direction.
+The TUI composes the shared Context-summary workbench with Distill's typed
+projection. It supports one Context plus exact/subtree reach, explicitly omits
+Summarize's ambiguous `BOTH` mode, performs no provider call until the run
+action, and uses the shared semantic Viewer and focused/whole-document `y`/`Y`
+clipboard contract. The optional Goal is currently supplied by CLI input; a
+dedicated TUI Goal editor is a named remaining boundary.
+
+Ground composition uses the same workbench in caller-frozen mode. It shows the
+single bound candidate Context and exact reach for traceability, but removes
+them from focus and selection. The adapter also rechecks the submitted request
+against the frozen Ground request immediately before execution. This avoids a
+misleading screen where a person could appear to retarget Ground Distill while
+the application correctly continued to use the bound frame.
+
+The public Python client returns a stable `DistillProposal`; the private frozen
+application token remains attached for exact in-process Apply. The agent and
+MCP tools expose proposal generation only and report `effect: NONE`; they do
+not combine inference and materialization into an unreviewed mutation.
+
+## Ground composition
+
+`mem distill --ground NAME` projects the exact bound Ground Goal and
+`WORKING_CANDIDATES` frame into the same `DistillRequest`. Ground UID, revision,
+record digest, candidate Context UID, frame digest, item counts, and request are
+checked before inference and again before the proposal is returned. Neither
+the Ground nor any bound Context is changed.
+
+Ground Distill intentionally rejects Context/range/Goal overrides and
+`--save-as`/`--apply`. Promotion into Ground Rules is a separate reviewed
+Ground action; a read-only semantic proposal is not acceptance.
+
+## Apply, provenance, and authority
+
+Standalone Apply consumes the exact reviewed proposal, rebuilds the complete
+Source, and creates one require-new local Result. Its checkpoint records Source
+scope/digest, Goal digest, provider contract, Rule evidence, outside evidence,
+and the analysis digest. Source remains unchanged and the Result is one Undo
+unit.
+
+The current runtime rejects any granted Source before provider connection.
+Visibility or `READ` alone does not authorize derivation or retention. A later
+grant adapter must explicitly satisfy `DERIVE`, `EXPORT`, retained-analysis,
+target acceptance, and freshness requirements.
+
+## Remaining limits
+
+- no persisted Distill hidden receipt/prewarm installer;
+- no safe subset or ancestor cache projection;
+- no durable Distill review session or resume path;
+- no granted-frame derivation;
+- no TUI Goal editor; and
+- no agent/MCP Apply tool.

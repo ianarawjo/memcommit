@@ -17,6 +17,7 @@ from memcommit.commands import (
     delete,
     diff,
     distill,
+    elaborate,
     edit,
     find,
     find_ambiguities,
@@ -208,6 +209,10 @@ app.command(
     "distill",
     help=operation_summary("distill"),
 )(distill.cmd)
+app.command(
+    "elaborate",
+    help=operation_summary("elaborate"),
+)(elaborate.cmd)
 app.command(
     "check-conformance",
     help=operation_summary("check-conformance"),
