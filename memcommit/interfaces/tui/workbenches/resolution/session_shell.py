@@ -38,6 +38,7 @@ from memcommit.interfaces.tui.components.multiline_input import (
 )
 from memcommit.interfaces.tui.components.plain_text_clipboard import (
     copy_plain_text,
+    plain_text_from_fragments,
 )
 from memcommit.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
@@ -2940,26 +2941,10 @@ def run_resolution_workbench_shell(
                 other_direction_focused=other_direction["focused"],
             )
         )
-        text_parts: list[str] = []
-        anchors: list[int] = []
-        offset = 0
-        for style, text in fragments:
-            if style == "[SetCursorPosition]":
-                anchors.append(offset)
-                continue
-            text_parts.append(text)
-            offset += len(text)
-        complete = "".join(text_parts)
-        if whole_document or not anchors:
-            return complete.strip()
-        if len(anchors) >= 2 and anchors[-1] > anchors[0]:
-            focused = complete[anchors[0] : anchors[-1]].strip()
-            if focused:
-                return focused
-        anchor = min(anchors[0], len(complete))
-        line_start = complete.rfind("\n", 0, anchor) + 1
-        line_end = complete.find("\n", anchor)
-        return complete[line_start : line_end if line_end >= 0 else None].strip()
+        return plain_text_from_fragments(
+            fragments,
+            whole_document=whole_document,
+        )
 
     def responses_fragments() -> list[tuple[str, str]]:
         target = sync_response_state()

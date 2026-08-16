@@ -2,10 +2,11 @@
 
 ## Status
 
-Implemented and verified for the shared frame, focus, scrollable-pane, semantic
-Viewer, read-only Viewer, and Summarize operation adapter.
+Implemented and verified for the shared frame, focus, scrollable-pane,
+plain-text projection, semantic Viewer, read-only Viewer, Context Summary, and
+both Resolution workbench shells.
 
-Last reviewed: 2026-08-13.
+Last reviewed: 2026-08-16.
 
 ## Motivating problem
 
@@ -29,11 +30,13 @@ memcommit/interfaces/tui/
     frame/                      frame model and focused chrome
     focus/                      cross-surface focus controller
     scrollable_pane/            model, navigation, scrollbar, component
+    plain_text_clipboard/       projection, writer boundary, result receipt
   viewers/
-    semantic/                   typed document, controller, renderer, shell
+    semantic/                   typed document, controller, renderer, text, shell
     read_only/                  generic read-only shell
   workbenches/
     context_summary/            Context + reach + semantic result composition
+    resolution/                 deterministic and saved-session compositions
   operations/
     summarize/                  picker/reach composition and result projection
 ```
@@ -78,6 +81,33 @@ provider connection, and freshness checks remain inside the runtime path.
 Direct versus recursive reach is copied into a new application request rather
 than becoming hidden presentation state.
 
+## Resolution lower-component boundary
+
+The deterministic Merge/Dedup/Resolve workbench and the richer saved-session
+Resolution shell intentionally retain different semantic models. They already
+share frame chrome, surface focus, flat choice state, response-row rendering,
+exact command review, and scrollbar mechanics. The remaining duplicated
+plain-text projection is now owned by
+`components.plain_text_clipboard.projection`:
+
+- style fragments and cursor anchors are stripped by one pure function;
+- two anchors delimit the focused semantic unit;
+- a legacy single anchor falls back to its visual line; and
+- whole-document projection ignores cursor anchors and preserves all text.
+
+The typed Semantic Viewer adds only an exact-section adapter over that
+primitive. The deterministic Resolution shell therefore keeps its historical
+`y` behavior of copying the complete focused section even when the section's
+viewport block has a start-only anchor, while the saved-session shell keeps
+its rendered-fragment focus semantics. Both `Y` paths use the same complete
+projection primitive. Neither projection writes the clipboard itself or owns
+the operation's decision about which semantic document is copyable.
+
+The deterministic Viewer also adopts the shared wrapped-row scrollbar used by
+the saved-session Viewer. Long Memory and evidence lines now use the same
+visual-row thumb calculation without changing item identity, focus order, or
+application behavior.
+
 ## Invariants
 
 1. Application and runtime modules remain independent of Typer,
@@ -92,6 +122,9 @@ than becoming hidden presentation state.
    checkpoint, copy, or otherwise mutate a Context.
 6. Package discovery must include every normal `memcommit` subpackage so source
    and installed-wheel behavior cannot diverge by silently omitting components.
+7. Focused/complete text projection is pure and separate from the operating-
+   system clipboard writer; cursor anchors are presentation mechanics, not
+   copied content.
 
 ## Alternatives considered
 
@@ -131,6 +164,11 @@ than becoming hidden presentation state.
 - The exact commit tree's repository-wide run reached 2,931 passes; its 38
   failures and 39 errors are the separately recorded Task 2 lock, Atomize
   capture, and obsolete Find-test baseline, with no failure in this slice.
+- The Resolution lower-component migration passes 287 focused tests across
+  fragment/section projection, both workbench shells, Merge, Dedup, Resolve,
+  Meld, Forget, and Sever. Existing operation captures remain semantically
+  unchanged because valid focus, choice, review, and Apply topology did not
+  change.
 
 ## Remaining boundary
 
@@ -139,4 +177,7 @@ range choice, complete dual-result publication, cancellation before execution,
 explicit reruns, scoped/complete plain-text copy, and a read-only result Viewer.
 It does not prove editable text input, review/Apply,
 cache/receipt, or CAS behavior through the new operation-adapter hierarchy. The
-public Python API and machine-readable adapter also remain separate gates.
+two Resolution workbench semantic models also remain separate until optional
+items, comments, drafts, and provider-turn behavior demonstrate a safe common
+contract. The public Python API and machine-readable adapter remain separate
+gates.

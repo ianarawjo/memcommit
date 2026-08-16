@@ -17,7 +17,6 @@ from prompt_toolkit.layout import (
     Layout,
     Window,
 )
-from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
@@ -44,6 +43,9 @@ from memcommit.interfaces.tui.components.plain_text_clipboard import (
     PlainTextClipboardReceipt,
     copy_plain_text,
 )
+from memcommit.interfaces.tui.components.scrollable_pane import (
+    WrappedScrollbarMargin,
+)
 from memcommit.interfaces.tui.core.keybindings import bind_case_insensitive_key
 from memcommit.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
@@ -53,6 +55,7 @@ from memcommit.interfaces.tui.core.theme import (
 from memcommit.interfaces.tui.viewers.semantic import (
     SemanticViewerController,
     SemanticViewerDocument,
+    semantic_document_plain_text,
 )
 from memcommit.interfaces.tui.workbenches.resolution.model import (
     ResolutionOutcome,
@@ -65,30 +68,6 @@ from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
 
 
 T = TypeVar("T")
-
-
-def _document_text(document: SemanticViewerDocument) -> str:
-    return "".join(
-        text
-        for section in document.sections
-        for style, text in section.block.fragments
-        if style != "[SetCursorPosition]"
-    ).strip()
-
-
-def _focused_text(
-    document: SemanticViewerDocument,
-    controller: SemanticViewerController,
-) -> str:
-    current = controller.current(document)
-    if current is None:
-        return ""
-    section = next(section for section in document.sections if section.uid == current.uid)
-    return "".join(
-        text
-        for style, text in section.block.fragments
-        if style != "[SetCursorPosition]"
-    ).strip()
 
 
 def run_resolution_workbench(
@@ -155,7 +134,7 @@ def run_resolution_workbench(
         Window(
             viewer_control,
             wrap_lines=True,
-            right_margins=[ScrollbarMargin(display_arrows=True)],
+            right_margins=[WrappedScrollbarMargin(display_arrows=True)],
         ),
         title=lambda: (
             "VIEWER · COMPLETE REPORT"
@@ -501,7 +480,12 @@ def run_resolution_workbench(
     def copy_viewer(event, *, whole: bool) -> None:
         if not event.app.layout.has_focus(viewer_control):
             return
-        text = _document_text(document()) if whole else _focused_text(document(), controller)
+        current = controller.current(document())
+        text = semantic_document_plain_text(
+            document(),
+            focused_uid=None if current is None else current.uid,
+            whole_document=whole,
+        )
         copied: PlainTextClipboardReceipt = copy_plain_text(
             text,
             success_message="complete current document" if whole else "focused section",

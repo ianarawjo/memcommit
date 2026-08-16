@@ -14,6 +14,9 @@ from memcommit.interfaces.tui.viewers.semantic.rendering import (
     deactivate_semantic_viewer_fragments,
     semantic_viewer_block_fragments,
 )
+from memcommit.interfaces.tui.viewers.semantic.plain_text import (
+    semantic_document_plain_text,
+)
 from memcommit.interfaces.tui.viewers.semantic.shell import run_semantic_viewer
 
 __all__ = [
@@ -26,4 +29,5 @@ __all__ = [
     "deactivate_semantic_viewer_fragments",
     "semantic_viewer_block_fragments",
     "run_semantic_viewer",
+    "semantic_document_plain_text",
 ]
