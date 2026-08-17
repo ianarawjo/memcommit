@@ -1,0 +1,30 @@
+ mem help · command inventory                                                                       
+┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+│                   impact when selection is interactive.                                         │^
+│                   USE WHEN: Restoring a Context to a deliberately saved recovery point.         │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                    
+┏ PROFILES ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃ NO LLM · Select and administer complete local Profile stores and their managed names.           ┃ 
+┃ ▾ mem profile  Select and manage complete local MemoryStore Profiles. Profiles can also be      ┃ 
+┃                renamed or permanently removed through the picker or with mem profile rename and ┃ 
+┃                mem profile remove.                                                              ┃ 
+┃                USE WHEN: Managing separate users, environments, or Memory stores.               ┃ 
+┃   FLOW      · Profile registry <-> Profile administration                                       ┃ 
+┃   EXECUTION · DETERMINISTIC                                                                     ┃ 
+┃   EFFECT    · May switch, import, rename, or permanently remove Profiles; Grant subcommands     ┃ 
+┃               manage cross-Profile views                                                        ┃ 
+┃   PROFILE MANAGEMENT                                                                            ┃ 
+┃   The interactive picker and explicit Profile subcommands share the same managed Profile        ┃ 
+┃   registry. Removal is permanent and is named remove, not delete, in the CLI.                   ┃ 
+┃   - SELECT · Press Enter in the picker, or use mem profile use.                                 ┃ 
+┃   - RENAME · Press R in the picker, or use mem profile rename; mem rename is the top-level      ┃ 
+┃     shortcut.                                                                                   ┃ 
+┃   - REMOVE · Press D in the picker, or use mem profile remove. Switch away before removing the  ┃ 
+┃     current Profile.                                                                            ┃ 
+┃   - REMOVE STUDY · Press D on a Study heading, or use mem profile remove-study.                 ┃ 
+┃   FORM 1 · mem profile (enter the interactive Profile selector in a TTY; list otherwise)        ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab next kind  H f

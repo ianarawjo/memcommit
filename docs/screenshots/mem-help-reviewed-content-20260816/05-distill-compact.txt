@@ -1,0 +1,30 @@
+ mem help · command inventory                                                                       
+┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+┃ ▾ mem distill    Derive higher-level Rules or condition propositions from Case or Example       ┃^
+┃                  propositions in a bounded Context, optionally guided by a Goal.                ┃ 
+┃                  USE WHEN: Inferring more general Rules or condition propositions from several  ┃ 
+┃                            concrete cases or examples.                                          ┃ 
+┃   FLOW      · Case/Example Context + Goal? -> reviewed Rules                                    ┃ 
+┃   EXECUTION · SEMANTIC                                                                          ┃ 
+┃   EFFECT    · Source and Ground stay unchanged; standalone Apply may create a new Result        ┃ 
+┃   RANGE     · One exact local Source, its readable descendants, or one bound Ground candidate   ┃ 
+┃               frame                                                                             ┃ 
+┃   DISTILL OR ATOMIZE                                                                            ┃ 
+┃   The bounded Source Context supplies supporting propositions. An optional Goal focuses the     ┃ 
+┃   direction of Distill's derivation.                                                            ┃ 
+┃   - DISTILL · Derive a higher-level Rule or condition proposition across Case or Example        ┃ 
+┃     propositions.                                                                               ┃ 
+┃   - ATOMIZE · Separate distinct propositions already present in composite Memories without      ┃ 
+┃     deriving a higher-level Rule.                                                               ┃ 
+┃   FORM 1 · mem distill (review Rules distilled from the current Context)                        ┃ 
+┃   FORM 2 · mem distill [context] (review Rules from one explicit Context)                       ┃ 
+┃   FORM 3 · mem distill [context] --goal "[goal]" (guide Rule relevance with a Goal)             ┃ 
+┃   FORM 4 · mem distill [context] -r (include descendants and embedded Contexts)                 ┃ 
+┃   FORM 5 · mem distill [context] --save-as [result_context] (review without creating the        ┃ 
+┃            Result)                                                                              ┃ 
+┃   FORM 6 · mem distill [context] --save-as [result_context] --apply (create the exact reviewed  ┃ 
+┃            Rule Context)                                                                        ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab next kind  H f

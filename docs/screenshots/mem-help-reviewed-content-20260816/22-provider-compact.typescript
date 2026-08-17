@@ -1,0 +1,113 @@
+30 100
+[?12l[?25h[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;1m mem help · command inventory[0m
+[0m┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────[99C┐[0m
+[0m│  VIEW · [[0;38;5;234;48;5;117m ✓ BY KIND [0m]  [   A–Z ] · ←/→ TO SELECT                                                 [99C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────[99C┘[0m
+[0m┌ CORE CONCEPTS ──────────────────────────────────────────────────────────────────────────────────┐[99C[0;1m^[0m
+[0m│ [0;38;5;189mMEMORY      [0mAn atomic unit of information stored in a Context.                                  [0m│[99C[0;48;5;238m [0m
+[0m│ [0;1mCONTEXT     [0mA named workspace that organizes Memories and other Contexts.                       [0m│[99C[0;48;5;238m [0m
+[0m│ [0;1mPROFILE     [0mAn ownership and storage boundary for Contexts.                                     [0m│[99C[0;48;5;248m [0m
+[0m│ [0;1mGRANT       [0mA permission relationship that can be given or received, selectively allowing       [0m│[99C[0;48;5;248m [0m
+[0m│             someone without direct ownership to read or query a Context and its Memories, or    [0m│[99C[0;48;5;248m [0m
+[0m│             run permitted operations on them, while the Grant remains valid.                    [0m│[99C[0;48;5;248m [0m
+[0m│ [0;1mSESSION     [0mA saved record of an analysis or review workflow that can be reopened and           [0m│[99C[0;48;5;248m [0m
+[0m│             continued; it does not itself mean Context changes were applied.                    [0m│[99C[0;48;5;248m [0m
+[0m│ [0;1mCHECKPOINT  [0mA recoverable history boundary created for each applied operation and recorded per  [0m│[99C[0;48;5;248m [0m
+[0m│             affected Context.                                                                   [0m│[99C[0;48;5;248m [0m
+[0m├ COMMON KEYS ────────────────────────────────────────────────────────────────────────────────────┤[99C[0;48;5;248m [0m
+[0m│ [0;1m↑/↓              [0mMove or scroll within the focused surface.                                     [0m│[99C[0;48;5;248m [0m
+[0m│ [0;1m←/→              [0mChange a horizontal choice, expand, or go back according to focus.             [0m│[99C[0;48;5;248m [0m
+[0m│ [0;1mTab / Shift-Tab  [0mMove focus between visible surfaces.                                           [0m│[99C[0;48;5;248m [0m
+[0m│ [0;1mEnter            [0mOpen, select, or submit the focused action.                                    [0m│[99C[0;48;5;248m [0m
+[0m│ [0;1mH                [0mOpen or hide Help from a session's read-only navigation surface.               [0m│[99C[0;48;5;248m [0m
+[0m│ [0;1mEsc / Backspace  [0mGo back one layer; Backspace edits text in writable fields.                    [0m│[99C[0;48;5;248m [0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────┘[99C[0;48;5;248m [0m
+[99C[0;48;5;248m [0m
+[0;38;5;117;1m┏ BROWSE & NAVIGATE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[99C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0m [0;1mNO LLM[0m · Inspect the current location and available Contexts, then move through the Context     [0;38;5;117;1m┃[99C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0m [0m         namespace.                                                                             [0;38;5;117;1m┃[99C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m ▸ mem status     Show the current Context's inventory, first five direct Memories,              [0;38;5;117;1m┃[99C[0;1mv[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[0m ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help[98D[2A[0m[23A[0m┌ PROFILES ───────────────────────────────────────────────────────────────────────────────────────┐[0m
+[0m│[C[0;1mNO LLM[0m · Select and administer complete local Profile stores and their managed names.[11C│[99C[0;48;5;248m [0m
+[0m│[0;1m ▸ mem profile  [0mSelect and manage complete local MemoryStore Profiles. Profiles[Ccan[Calso[Cbe[6C[0m│[99C[0;48;5;248m [0m
+[0m│[0;1m                [0mre[Camed or permanently removed[Cth[Cough the picker[Cor[Cwith[Cmem[Cprofile[Crename[Cand[C[0m│[0m
+[0m│[0;1m                [0mme[C profile remove.   [C    [C   [C  [C     [C  [C         [C           [C        [7C[0m│[0m
+[0m│[0;1m [12C[0m   [0;1mUSE WHEN:[0m Managing separate users, envi[Conm[Cnts,[Cor M[Cmory stores.        [C  [4C[0m│[0m
+[0m│[0;1m ▸ mem rename   [0mRena[Ce [Che[Ccur[Cent or[Ca[2Cexplicit manag[Cd Profil[C w[Cthout moving[Cor[Crewriting[4C[0m│[0m
+[0m│[0;1m                [0mits store; mem[Cprofile rename[Cis the[Cexplicit[Cequivalent.[C        [C   [11C[0m│[0m
+[0m│[0;1m [12C[0m   [0;1mUSE WHEN:[0m Giving an[Cexisting managed Profile a cl[Carer nam[C. [20C[0m│[0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
+[0m                                                                                                   [0m
+[0m┌ SHARING & PROTECTION ───────────────────────────────────────────────────────────────────────────┐[0m
+[0m│[C[0;1mNO LLM[0m · Deliver owned Contexts and protect Memory, Context, or Profile writes.[17C│[0m
+[0m│[0;1m ▸ mem share   [0mSend o[Ce ordinary Context through [C grant-backed re[Ceiver endpoint.  [13C[0m│[0m
+[0m│[0;1m [0m              [0;1mUSE WHEN:[0m Deliv[Cring an owned[CContext to[Can[Cauthorized[Creceiver.[18C[0m│[0m
+[0m│[0;1m ▸ mem lock    [0mLock the[Ccurrent[CContext, a r[Ccursiv[C Con[Cext set,[CMemory,[Cor[CProfile.[12C[0m│[0m
+[0m│[0;1m [0m              [0;1mUSE WHEN:[0m Prev[Cnting[Caccidental m[Cdification of[Cstable material.   [15C[0m│[0m
+[0m│[0;1m ▸ mem unlock  [0mUnlock the[Ccurrent Context, [C recursive set, Memory, or Profile.[18C[0m│[0m
+[0m│[0;1m [0m              [0;1mUSE WHEN:[0m Reopening protected material for intentional revision.                  [0m│[99C[0;48;5;248m [0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────┘[99C[0;48;5;238m [0m
+[0m                                                                                                   [99C[0;48;5;238m [0m
+[0;38;5;117;1m┏ SYSTEM & STUDY TOOLS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
+[2C[0mConfigure MemCommit and prepare or run study and evaluation utilities.[0m
+[8C[0;38;5;234;48;5;117;1mhelp  [5C      Enter the interac[Cive command browser[Cand open syntax help.[84D[0m[23A[0m│[0;1m ▸ mem share   [0mSend one ordinary Context through a grant-backed receiver endpoint.               [0m│[0m
+[C[0;1m [0m              [0;1mUSE WHEN:[0m Delivering an owned Context to an authorized receiver.       [0m
+[8C[0;1mlock   [C[0mLock the curre[Ct Context, a[Cre[Cursive Con[Cext[Cset, M[Cmory, or Profile.   [C  [0m
+[2C[0m              [0;1mUSE WHEN:[0m Preventing accidental[Cmodifica[Cion of stable material.      [C      [C   [0m
+[2C[0;1m▸[Cmem[Cunlock[2C[0mUnlock the cu[Crent Context,[Ca[Crecursive[Cset,[CMemory,[Cor[CProfile.[0m
+[16C[0;1mUSE WHEN:[0m Reopen[4Cprotec[2Cd material for intenti[Cnal revision.   [0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
+[0m                                                                                                   [0m
+[0;38;5;117;1m┏ SYSTEM & STUDY TOOLS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
+[0;38;5;117;1m┃[0m [0mConfigure MemCommit and prepare or run study and evaluation utilities.                          [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m ▸ mem help             [0mEnter the interactive command browser and open syntax help.              [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m [0m                       [0;1mUSE WHEN:[0m Discovering available operations and their invocation forms.   [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m ▸ mem provider         [0mSelect and verify Codex, Ollama, or OpenRouter semantic execution.[7C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0m                  [C   [C[0;1mUSE WHEN:[0m Choosing whic[2Cbacke[Cd semantic operatio[Cs should[Cuse,[Cor[6C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[15C[0m         [C         checking that it is re[Cdy bef[2Ce durabl[C wo[Ck.[17C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[7C[0;1mshell-init       [0mPrint opt-in shell[Cintegration for int[Cractive command prefill.[10C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[15C[0m         [0;1mUSE WHEN:[0m En[Cbl[Cng optional shell-specific conveniences.[17C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[7C[0;1mconfig[C(legacy)  [0mRead or write stored[Cglobal configurati[Cn values.      [18C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[15C[0m         [0;1mUSE WHEN:[0m Inspecting[Cor changing stor[Cd global sett[Cngs[Cthrough[Cthe[6C[0;38;5;117;1m┃[99C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m [0m                                 legacy low-level interface.                                    [0;38;5;117;1m┃[99C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem init-study       [0mCopy one Study baseline into an isolated participant/authority Profile   [0;38;5;117;1m┃[99C[0;48;5;238m [0m
+[0;38;5;117;1m┃[0;1m                        [0mpair.                                                                    [0;38;5;117;1m┃[99C[0;48;5;238m [0m
+[C[0;1m [0m                       [0;1mUSE WHEN:[0m Preparing a reproducible, isolated user-study[Cenvironment.[0m
+[8C[0;38;5;234;48;5;117;1meval[C(legacy)[4CRun and inspect the [Cxisting semantic[Cevaluation campaigns[83D[0m[11A[C[0;38;5;234;48;5;117;1m ▸ mem provider         Select and verify Codex, Ollama, or OpenRouter semantic execution.       [0m
+[C[0;38;5;234;48;5;117;1m                        USE WHEN: Choosing which backend semantic operations should use, or      [0m
+[C[0;38;5;234;48;5;117;1m                                  checking that it is ready before durable work.                 [0m
+
+
+
+
+
+
+
+
+[C[0;1m ▸ mem eval (legacy)    [0mRun and inspect the existing semantic evaluation campaigns.              [11A[98D[0m[12A[2C[0m              [0;1mUSE WHEN:[0m Preventing accidental modifica[Cion of stable mat[Crial.   [0m
+[2C[0;1m▸ mem unlock  [0mUnlock the curr[Cnt Context, a[Crecursive set, Mem[2Cy, or Profile[0m
+[2C[0m              [0;1mUSE WHEN:[0m Reopening pro[Cected material for inten[Cional [Cevision.      [0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
+[0m                                                                                                   [0m
+[0;38;5;117;1m┏ SYSTEM & STUDY TOOLS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
+[0;38;5;117;1m┃[0m [0mConfigure MemCommit and prepare or run study and evaluation utilities.                          [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m ▸ mem help             [0mEnter the interactive command browser and open syntax help.              [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m [0m                       [0;1mUSE WHEN:[0m Discovering available operations and their invocation forms.   [0;38;5;117;1m┃[0m
+[C[0;1m ▾ mem provider         [0mSelect and verify Codex, Ollama, or OpenRouter semantic[Cexecution.[0m
+[2C[0m                       [0;1mUSE WHEN:[C[0mChoosing whi[Ch b[Cckend semantic[4Crations s[Could[Cuse,[Cor[0m
+[25C[0m         [Cche[Cking that it is ready bef[Cre[Cdurabl[C work.       [C      [0m
+[C[0m   FLOW      · Provider configuration <-> status or probe                                        [0m
+[C[0m   EXECUTION · DETERMINISTIC                                                                     [0m
+[C[0m   EFFECT    · May change provider configuration or make a probe request                         [0m
+[C[0;1m   PROVIDER ACTIONS                                                                              [0m
+[C[0m [2CProvider[Cconfiguration and readi[Cess checking [Cre s[Cparat[C actions. Ne[Cther action[Cchanges[0m
+[C[0m   Context content.         [C  [C     [C      [C      [C             [C       [0m
+[C[0m [2C-[CSTATUS[C·[CShow[Cthe[Cselected provid[Cr a[Cd[Cbounded settings with[Cut connecting o[C exposing[6C[0;48;5;248m [0m
+[C[0m [4Ccredentials.[17C      [C         [C          [37C[0;48;5;238m [0m
+[C[0m   - USE · Store the provider and mo[Cel selection f[Cr later commands.                 [C       [4C[0;48;5;238m [0m
+[C[0m   - PROBE · Contact the selected[Cprovider[Cwith[Cone[Csynthetic[Cstrict-schema[Ccompletion[Cbefore[5C[0;48;5;248m [0m
+[C[0m [4Cdurable[Cwork.[6C         [C         [C [C             [C        [C          [C            [0m
+[C[0;38;5;234;48;5;117;1;7m   FORM 1 · mem provider status (inspect the selection without connecting)                       [0m
+
+[60C[0mpr[Cfill command[Cline[C Tab[Cnext kind  H[Cf[2A[0m

@@ -1,0 +1,30 @@
+ mem help · command inventory                                                                       
+┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+┃ ▾ mem fit                Judge whether a defined set of Memories or other propositions is       ┃^
+┃                          jointly compatible under ordinary interpretation, returning YES, MAY,  ┃ 
+┃                          or NO.                                                                 ┃ 
+┃                          USE WHEN: Checking whether a defined set of Memories, Rules, Goals,    ┃ 
+┃                                    Examples, or other propositions can jointly hold.            ┃ 
+┃   FLOW      · Propositions + optional background -> YES / MAY / NO; Ground + bound Contexts ->  ┃ 
+┃               complete Fit receipt                                                              ┃ 
+┃   EXECUTION · SEMANTIC                                                                          ┃ 
+┃   EFFECT    · Read-only; changes no Context, Ground, Rule, Goal, or Memory                      ┃ 
+┃   RANGE     · One complete frozen frame; Ground checks Context, vertical, peer, and             ┃ 
+┃               Rule–Example relations                                                            ┃ 
+┃   YES, MAY, OR NO                                                                               ┃ 
+┃   Fit judges ordinary-language compatibility, not whether the propositions are true or          ┃ 
+┃   sufficiently supported.                                                                       ┃ 
+┃   - YES · Compatible across materially ordinary readings. Context: the building has a main and  ┃ 
+┃     side entrance. 'The main entrance closes at 5.' and 'The side entrance stays open until 8.' ┃ 
+┃   - MAY · One ordinary reading is compatible and another is not. Context: the building has      ┃ 
+┃     multiple entrances, including a main and side entrance. 'The main entrance closes at 5.'    ┃ 
+┃     and 'The entrance stays open until 8.' depend on which entrance the second proposition      ┃ 
+┃     denotes.                                                                                    ┃ 
+┃   - NO · Incompatible across materially ordinary readings. Context: the building has only one   ┃ 
+┃     entrance. 'The entrance closes at 5.' and 'The entrance stays open until 8.' denote that    ┃ 
+┃     same entrance.                                                                              ┃ 
+┃   FORM 1 · mem fit (show the required two-proposition input error)                              ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab next kind  H f

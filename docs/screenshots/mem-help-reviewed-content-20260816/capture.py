@@ -1,0 +1,280 @@
+"""Capture reviewed Help wording and typed details in a real color PTY."""
+
+from __future__ import annotations
+
+import argparse
+from dataclasses import dataclass
+import importlib.util
+from pathlib import Path
+import shutil
+
+
+ROOT = Path(__file__).resolve().parents[3]
+OUT = ROOT / "docs/screenshots/mem-help-reviewed-content-20260816"
+
+_BASE_PATH = ROOT / "docs/screenshots/mem-help-command-naming-20260813/capture.py"
+_SPEC = importlib.util.spec_from_file_location("mem_help_capture_base", _BASE_PATH)
+assert _SPEC is not None and _SPEC.loader is not None
+_BASE = importlib.util.module_from_spec(_SPEC)
+_SPEC.loader.exec_module(_BASE)
+_BASE.ROOT = ROOT
+_BASE.OUT = OUT
+
+
+@dataclass(frozen=True)
+class CaptureTarget:
+    stem: str
+    category_tabs: int
+    row_downs: int
+    expanded: bool
+    expected: tuple[str, ...]
+
+
+TARGETS = (
+    CaptureTarget(
+        "01-search",
+        2,
+        1,
+        True,
+        ("mem search", "without obvious keyword overlap"),
+    ),
+    CaptureTarget(
+        "02-merge",
+        3,
+        5,
+        True,
+        ("mem merge", "MERGE BOUNDARY", "EXACT MATCH"),
+    ),
+    CaptureTarget(
+        "03-dedup",
+        3,
+        6,
+        True,
+        ("mem dedup", "delete the rest on Apply"),
+    ),
+    CaptureTarget(
+        "04-atomize",
+        4,
+        0,
+        True,
+        ("mem atomize", "ATOMIZE ROUTES", "--EVALUATE"),
+    ),
+    CaptureTarget(
+        "05-distill",
+        4,
+        1,
+        True,
+        ("mem distill", "DISTILL OR ATOMIZE", "condition propositions"),
+    ),
+    CaptureTarget(
+        "06-elaborate",
+        4,
+        2,
+        True,
+        ("mem elaborate", "abstract Goal, Rule, or condition"),
+    ),
+    CaptureTarget(
+        "07-translate",
+        4,
+        3,
+        True,
+        ("mem translate", "MATERIALIZATION ROUTES", "--SAVE-AS"),
+    ),
+    CaptureTarget(
+        "08-resolve",
+        4,
+        5,
+        True,
+        ("mem resolve", "direct-Memory Context frame"),
+    ),
+    CaptureTarget(
+        "09-meld",
+        4,
+        7,
+        True,
+        ("mem meld", "INCOMING -> EXISTING TARGET"),
+    ),
+    CaptureTarget(
+        "10-sever",
+        4,
+        8,
+        True,
+        ("mem sever", "selecting, transforming, or excluding"),
+    ),
+    CaptureTarget(
+        "11-audit",
+        5,
+        4,
+        True,
+        ("mem audit", "combined saved result"),
+    ),
+    CaptureTarget(
+        "12-impact",
+        5,
+        5,
+        True,
+        ("mem impact", "INVOCATION", "DIRECTIONAL UPDATE"),
+    ),
+    CaptureTarget(
+        "13-review",
+        5,
+        6,
+        True,
+        ("mem review", "saved semantic artifact"),
+    ),
+    CaptureTarget(
+        "14-fit",
+        5,
+        7,
+        True,
+        ("mem fit", "YES, MAY, OR NO", "multiple entrances"),
+    ),
+    CaptureTarget(
+        "15-check-conformance",
+        5,
+        8,
+        True,
+        ("mem check-conformance", "FIT OR CONFORMANCE", "condition propositions"),
+    ),
+    CaptureTarget(
+        "16-ground",
+        6,
+        0,
+        True,
+        ("mem ground", "Develop an abstract idea", "Ground workspace Contexts"),
+    ),
+    CaptureTarget(
+        "17-log",
+        7,
+        0,
+        True,
+        ("mem log", "LOG ROUTES", "MEMORY LINEAGE"),
+    ),
+    CaptureTarget(
+        "18-diff",
+        7,
+        1,
+        True,
+        ("mem diff", "Context checkpoint or active Update -> diff report"),
+    ),
+    CaptureTarget(
+        "19-undo",
+        7,
+        5,
+        True,
+        ("mem undo", "most recent recorded command as one unit"),
+    ),
+    CaptureTarget(
+        "20-revert",
+        7,
+        7,
+        True,
+        ("mem revert", "REVERT ROUTES", "EXACT CHECKPOINT"),
+    ),
+    CaptureTarget(
+        "21-profile",
+        8,
+        0,
+        True,
+        ("mem profile", "PROFILE MANAGEMENT", "mem profile remove"),
+    ),
+    CaptureTarget(
+        "22-provider",
+        10,
+        1,
+        True,
+        ("mem provider", "PROVIDER ACTIONS", "strict-schema"),
+    ),
+    CaptureTarget(
+        "23-config",
+        10,
+        3,
+        True,
+        ("mem config (legacy)", "stored global configuration"),
+    ),
+    CaptureTarget(
+        "24-eval",
+        10,
+        5,
+        True,
+        ("mem eval (legacy)", "EVALUATION SCOPE", "remains future work."),
+    ),
+)
+
+_CATEGORY_ROW_COUNTS = {2: 4, 3: 7, 4: 9, 5: 9, 6: 1, 7: 8, 8: 2, 10: 6}
+
+
+def _close(child: object) -> None:
+    child.send("q")
+    child.expect(_BASE.pexpect.EOF, timeout=5)
+    child.close()
+    assert child.exitstatus == 0, (child.exitstatus, child.signalstatus)
+
+
+def _capture_target(executable: str, target: CaptureTarget, *, compact: bool) -> None:
+    if compact:
+        _BASE.COLUMNS = 100
+        _BASE.ROWS = 30
+        viewport = "compact"
+    else:
+        _BASE.COLUMNS = 180
+        _BASE.ROWS = 52
+        viewport = "wide"
+
+    child, recorder = _BASE._spawn(executable, interactive=True)
+    _BASE._pump(child, seconds=0.55)
+    child.send("\t" * target.category_tabs)
+    _BASE._pump(child, seconds=0.15)
+    # First visit the category's final row, then return to the requested row.
+    # This settles the vertical viewport around the selected category even when
+    # Tab initially brings its first row in at the bottom edge of the terminal.
+    final_row = _CATEGORY_ROW_COUNTS[target.category_tabs] - 1
+    child.send("\x1b[B" * final_row)
+    _BASE._pump(child, seconds=0.15)
+    child.send("\x1b[A" * (final_row - target.row_downs))
+    _BASE._pump(child, seconds=0.15)
+    if target.expanded:
+        # Right opens the operation and focuses its first Form. Retaining that
+        # focus keeps the newly revealed detail within the viewport.
+        child.send("\x1b[C")
+    _BASE._pump(child, seconds=0.5)
+
+    plain = _BASE._snapshot(recorder, f"{target.stem}-{viewport}")
+    normalized = " ".join(plain.split())
+    for expected in target.expected:
+        assert expected in normalized, (target.stem, viewport, expected, plain)
+
+    raw = recorder.getvalue()
+    expected_size = "30 100" if compact else "52 180"
+    assert expected_size in raw
+    assert _BASE.re.search(r"\x1b\[[0-9;]*38;(?:2|5);", raw) is not None
+    assert _BASE.re.search(r"\x1b\[[0-9;]*48;(?:2|5);", raw) is not None
+    _close(child)
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--viewport", choices=("wide", "compact", "both"), default="both")
+    parser.add_argument(
+        "--start",
+        default=TARGETS[0].stem,
+        choices=tuple(target.stem for target in TARGETS),
+    )
+    args = parser.parse_args()
+    executable = shutil.which("mem")
+    if executable is None:
+        raise RuntimeError("mem executable is unavailable")
+    OUT.mkdir(parents=True, exist_ok=True)
+    targets = TARGETS[next(i for i, target in enumerate(TARGETS) if target.stem == args.start) :]
+    viewports = {
+        "wide": (False,),
+        "compact": (True,),
+        "both": (False, True),
+    }[args.viewport]
+    for compact in viewports:
+        for target in targets:
+            _capture_target(executable, target, compact=compact)
+
+
+if __name__ == "__main__":
+    main()

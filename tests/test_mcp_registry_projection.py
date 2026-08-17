@@ -184,6 +184,25 @@ def test_mcp_add_discovery_surfaces_copy_or_link_before_tool_selection(tmp_path)
     assert detail["discoverySummary"].startswith("Add stores input literally")
 
 
+def test_mcp_distill_discovery_surfaces_the_atomize_selection_boundary(tmp_path):
+    projection = McpRegistryProjection(
+        build_default_agent_tool_registry(MemCommitClient(root=tmp_path / "store"))
+    )
+
+    distill_tool = next(
+        tool for tool in projection.list_tools() if tool.name == DISTILL_AGENT_TOOL_NAME
+    )
+    wire = distill_tool.to_dict()
+
+    assert "Selection boundary (DISTILL OR ATOMIZE)" in distill_tool.description
+    [detail] = wire["_meta"]["memcommit/helpDetails"]
+    assert detail["id"] == "distill-or-atomize"
+    assert detail["discovery"] == "TOOL_SELECTION"
+    assert "higher-level Rules or condition propositions" in (
+        detail["discoverySummary"]
+    )
+
+
 def test_successful_call_preserves_structured_and_text_envelopes():
     calls: list[object] = []
 

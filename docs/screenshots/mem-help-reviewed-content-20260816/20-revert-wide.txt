@@ -1,0 +1,52 @@
+ mem help · command inventory                                                                                                                                                       
+┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+│ ▸ mem audit              Run Duplicate, Ambiguity, and Conflict checks plus optional   │ USE WHEN: Performing a combined quality review before revising a Context.              │^
+│                          Rule Conformance, then review the combined saved result.      │                                                                                        │ 
+│ ▸ mem impact             Preview or inspect an operation's expected Context effects    │ USE WHEN: Verifying an operation's proposed effects before its separate Apply action.  │ 
+│                          without applying them.                                        │                                                                                        │ 
+│ ▸ mem review             Open a saved semantic artifact to inspect its analysis,       │ USE WHEN: Revisiting a saved analysis, proposal, or result state.                      │ 
+│                          proposal, or result state and, when supported, record review  │                                                                                        │ 
+│                          responses. Review never applies Memories.                     │                                                                                        │ 
+│ ▸ mem fit                Judge whether a defined set of Memories or other propositions │ USE WHEN: Checking whether a defined set of Memories, Rules, Goals, Examples, or other │ 
+│                          is jointly compatible under ordinary interpretation,          │           propositions can jointly hold.                                               │ 
+│                          returning YES, MAY, or NO.                                    │                                                                                        │ 
+│ ▸ mem check-conformance  Check one Context or saved Ground Examples against explicit   │ USE WHEN: Verifying whether existing Memories or Examples satisfy stated Rules or      │ 
+│                          Rules or condition propositions and report conformance        │           condition propositions.                                                      │ 
+│                          issues.                                                       │                                                                                        │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┌ GROUND WORKBENCH ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ LLM-BASED · Turn abstract ideas into reviewable common ground by developing a Goal, Rules, and example Memories together.                                                       │ 
+│ ▸ mem ground  Develop an abstract idea into a reviewable Ground by shaping its Goal,   │ USE WHEN: Working out how an abstract goal should operate in practice through jointly  │ 
+│               Rules, and example Memories together.                                    │           revised Rules and concrete Examples.                                         │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┏ HISTORY & RECOVERY ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃ MIXED · Inspect provenance and recorded changes. Restore an earlier state through explicit history operations.                                                                  ┃ 
+┃ ▸ mem log         Browse or search recorded Context, Memory, and Profile history.      │ USE WHEN: Investigating previous operations, checkpoints, or Memory history.           ┃ 
+┃ ▸ mem diff        Show the differences recorded by a Context checkpoint or the active  │ USE WHEN: Verifying exactly what a recorded operation changed.                         ┃ 
+┃                   Update.                                                              │                                                                                        ┃ 
+┃ ▸ mem trace       Trace one retained Memory through its recorded lineage.              │ USE WHEN: Determining where a Memory came from and how it changed.                     ┃ 
+┃ ▸ mem rationale   Explain one Memory from recorded provenance and, when needed,        │ USE WHEN: Understanding why a Memory exists or reached its current form.               ┃ 
+┃                   inference.                                                           │                                                                                        ┃ 
+┃ ▸ mem checkpoint  Save the current Context as a manual recovery point for Diff or      │ USE WHEN: Creating a recovery point before risky work.                                 ┃ 
+┃                   Revert.                                                              │                                                                                        ┃ 
+┃ ▸ mem undo        Undo the most recent recorded command as one unit.                   │ USE WHEN: Reversing the latest recorded mutation as one operation.                     ┃ 
+┃ ▸ mem redo        Redo the most recently undone recorded Context command.              │ USE WHEN: Reapplying a command that was undone accidentally.                           ┃ 
+┃ ▾ mem revert      Restore one local Context to a selected checkpoint, reviewing the    │ USE WHEN: Restoring a Context to a deliberately saved recovery point.                  ┃ 
+┃                   exact impact when selection is interactive.                          │                                                                                        ┃ 
+┃   FLOW      · Checkpoint -> restored Context state                                                                                                                              ┃ 
+┃   EXECUTION · MIXED                                                                                                                                                             ┃ 
+┃   EFFECT    · Restores one Context; interactive or semantic selection requires reviewed confirmation                                                                            ┃ 
+┃   RANGE     · One exact local Context                                                                                                                                           ┃ 
+┃   REVERT ROUTES                                                                                                                                                                 ┃ 
+┃   Every route restores one local Context. Exact checkpoint selection is deterministic; natural-language selection uses semantic lookup.                                         ┃ 
+┃   - EXACT CHECKPOINT · Restore an exact checkpoint UID or unique prefix directly.                                                                                               ┃ 
+┃   - INTERACTIVE · Choose a Context and checkpoint, inspect the exact restore impact, and approve it.                                                                            ┃ 
+┃   - NATURAL-LANGUAGE · Use semantic history lookup, then review the selected checkpoint before restoration.                                                                     ┃ 
+┃   - --KEEP · Preserve checkpoints newer than the restored checkpoint.                                                                                                           ┃ 
+┃   FORM 1 · mem revert (choose a local Context, checkpoint, and history policy interactively)                                                                                    ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab next kind  H full help

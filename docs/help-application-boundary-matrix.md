@@ -10,7 +10,7 @@ session, Apply, checkpoint, or Undo lifecycle.
 | Route | Entry | Application path | Projection | Effect | Evidence |
 | --- | --- | --- | --- | --- | --- |
 | Plain `mem help` | `interfaces.tui.operations.help.inventory.cmd` in a non-TTY | `command_entries` takes `list_operation_help()` once | Plain alphabetized inventory plus CLI-owned forms, maturity tags, and canonical expanded details | None | `test_help_catalog.py`, `test_help_application.py` |
-| Interactive `mem help` | Same command in a TTY | Same frozen application snapshot | Grouped/A–Z browser; collapsed maturity tags; expanded typed details | None | Help renderer tests and `docs/screenshots/mem-help-import-query-details-20260816/` |
+| Interactive `mem help` | Same command in a TTY | Same frozen application snapshot | Grouped/A–Z browser; collapsed maturity tags; expanded typed details | None | Help renderer tests, `docs/screenshots/mem-help-import-query-details-20260816/`, and the full reviewed sequence in `docs/screenshots/mem-help-reviewed-content-20260816/` |
 | Shell selection | Hidden `--emit-selection` route | Same frozen application snapshot | One interface-owned command template on stdout | None | Existing Help selection tests |
 | Selected CLI detail | One `CommandEntry` from the snapshot | Catalog meaning already bound to the entry | Common meaning composed with registered CLI syntax | None | `test_help_catalog.py` |
 | Python list | `MemCommitClient.list_operations()` | `_operations.help.list_operations` → `list_operation_help` | `HelpCatalogResult` of immutable DTOs, including compact typed-detail references | None | `test_help_public_api.py`, import-boundary tests |

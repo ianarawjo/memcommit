@@ -1,0 +1,30 @@
+ mem help · command inventory                                                                       
+┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+┃ ▸ mem checkpoint  Save the current Context as a manual recovery point for Diff or Revert.       ┃^
+┃                   USE WHEN: Creating a recovery point before risky work.                        ┃ 
+┃ ▸ mem undo        Undo the most recent recorded command as one unit.                            ┃ 
+┃                   USE WHEN: Reversing the latest recorded mutation as one operation.            ┃ 
+┃ ▸ mem redo        Redo the most recently undone recorded Context command.                       ┃ 
+┃                   USE WHEN: Reapplying a command that was undone accidentally.                  ┃ 
+┃ ▾ mem revert      Restore one local Context to a selected checkpoint, reviewing the exact       ┃ 
+┃                   impact when selection is interactive.                                         ┃ 
+┃                   USE WHEN: Restoring a Context to a deliberately saved recovery point.         ┃ 
+┃   FLOW      · Checkpoint -> restored Context state                                              ┃ 
+┃   EXECUTION · MIXED                                                                             ┃ 
+┃   EFFECT    · Restores one Context; interactive or semantic selection requires reviewed         ┃ 
+┃               confirmation                                                                      ┃ 
+┃   RANGE     · One exact local Context                                                           ┃ 
+┃   REVERT ROUTES                                                                                 ┃ 
+┃   Every route restores one local Context. Exact checkpoint selection is deterministic;          ┃ 
+┃   natural-language selection uses semantic lookup.                                              ┃ 
+┃   - EXACT CHECKPOINT · Restore an exact checkpoint UID or unique prefix directly.               ┃ 
+┃   - INTERACTIVE · Choose a Context and checkpoint, inspect the exact restore impact, and        ┃ 
+┃     approve it.                                                                                 ┃ 
+┃   - NATURAL-LANGUAGE · Use semantic history lookup, then review the selected checkpoint before  ┃ 
+┃     restoration.                                                                                ┃ 
+┃   - --KEEP · Preserve checkpoints newer than the restored checkpoint.                           ┃ 
+┃   FORM 1 · mem revert (choose a local Context, checkpoint, and history policy interactively)    ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab next kind  H f

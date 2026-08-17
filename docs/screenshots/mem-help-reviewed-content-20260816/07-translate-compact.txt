@@ -1,0 +1,30 @@
+ mem help · command inventory                                                                       
+┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+┃ ▸ mem elaborate  Expand an abstract Goal, Rule, or condition into multiple more specific        ┃^
+┃                  candidate propositions.                                                        ┃ 
+┃                  USE WHEN: Generating several more concrete candidate Rules or Cases from an    ┃ 
+┃                            abstract concept or condition.                                       ┃ 
+┃ ▾ mem translate  Generate and save a reusable translated view of one Context or Memory while    ┃ 
+┃                  preserving the original content.                                               ┃ 
+┃                  USE WHEN: Reading or reusing Memory content in another language without        ┃ 
+┃                            replacing the original.                                              ┃ 
+┃   FLOW      · Context or Memory -> translated view or materialization                           ┃ 
+┃   EXECUTION · SEMANTIC                                                                          ┃ 
+┃   EFFECT    · Source unchanged; explicit routes may create or add material                      ┃ 
+┃   RANGE     · One exact Context or one direct Memory                                            ┃ 
+┃   MATERIALIZATION ROUTES                                                                        ┃ 
+┃   Every route preserves the original Memory content; only explicit materialization creates or   ┃ 
+┃   adds ordinary Memories.                                                                       ┃ 
+┃   - VIEW · Generate and save a reusable translated view without materializing ordinary          ┃ 
+┃     Memories.                                                                                   ┃ 
+┃   - --SAVE-AS · Create a separate translated Context.                                           ┃ 
+┃   - --IN-PLACE · Add translated sibling Memories without rewriting the original Memories.       ┃ 
+┃   FORM 1 · mem translate (show/save a default-English view of the current Context)              ┃ 
+┃   FORM 2 · mem translate [memory] (show/save one default-English Memory view)                   ┃ 
+┃   FORM 3 · mem translate --to [language] (show/save a current-Context view)                     ┃ 
+┃   FORM 4 · mem translate [memory] --to [language] (show/save one Memory view)                   ┃ 
+┃   FORM 5 · mem translate --save-as [result_context] (default-English new Context and switch)    ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab next kind  H f

@@ -147,19 +147,22 @@ def test_meld_help_distinguishes_symmetric_and_directional_modes():
     overview = [(row.label, row.value) for row in composed.overview]
 
     assert composed.operation.summary == (
-        "Semantically reconcile two Contexts into either a separate Result or "
-        "an authoritative Baseline."
+        "Semantically reconcile two Contexts, either into a separate Result or "
+        "by incorporating proposed changes into an existing Target Context."
     )
-    assert ("FLOW", "PEER A + PEER B -> RESULT; INCOMING -> BASELINE") in overview
+    assert (
+        "FLOW",
+        "PEER A + PEER B -> RESULT; INCOMING -> EXISTING TARGET",
+    ) in overview
     assert (
         "EFFECT",
         "Symmetric mode requires a distinct empty Result; directional mode "
-        "changes only the Baseline after reviewed Apply",
+        "changes only the existing Target after reviewed Apply",
     ) in overview
     assert (
         "BEST FOR",
-        "Combining separately developed Contexts into a shared Result, or "
-        "incorporating proposed changes into an existing Baseline.",
+        "Combining two bodies of work when overlap, conflicts, and newly "
+        "synthesized content must be reviewed semantically.",
     ) in overview
 
 
@@ -168,32 +171,46 @@ def test_merge_help_distinguishes_structural_selection_from_meld_synthesis():
     overview = [(row.label, row.value) for row in composed.overview]
 
     assert composed.operation.summary == (
-        "Add Source-only items to the current Target, choosing Source or Target "
-        "wherever stored items conflict."
+        "Add Source-only items to the current Target, leave exact matches "
+        "unchanged, and choose Source or Target for stored-item conflicts."
     )
     assert ("EXECUTION", "DETERMINISTIC") in overview
     assert (
         "BEST FOR",
-        "Bringing work from a copied or branched Context back into the current "
-        "Context.",
+        "Appending Source-only items or bringing a copied or branched Context "
+        "back into the current Context without semantic synthesis.",
     ) in overview
+
+    [boundary] = composed.operation.details
+    assert boundary.title == "MERGE BOUNDARY"
+    assert [option.label for option in boundary.options] == [
+        "SOURCE ONLY",
+        "EXACT MATCH",
+        "CONFLICT",
+        "TARGET ONLY",
+        "RECURSIVE",
+    ]
 
 
 def test_distill_help_separates_case_propositions_from_goal_focus():
     assert operation_help("distill").summary == (
-        "Derive reusable Rules from Case or Example propositions in a selected "
-        "Context scope, using an optional Goal to focus relevance."
+        "Derive higher-level Rules or condition propositions from Case or Example "
+        "propositions in a bounded Context, optionally guided by a Goal."
     )
+    [comparison] = operation_help("distill").details
+    assert comparison.title == "DISTILL OR ATOMIZE"
+    assert comparison.discovery.value == "TOOL_SELECTION"
+    assert "optional Goal focuses" in comparison.explanation
 
 
 def test_elaborate_help_separates_candidate_rules_from_concrete_cases():
     assert operation_help("elaborate").summary == (
-        "Propose candidate Rules from a Goal, or concrete Case propositions from "
-        "existing Rules."
+        "Expand an abstract Goal, Rule, or condition into multiple more specific "
+        "candidate propositions."
     )
     assert BEST_FOR_BY_OPERATION["elaborate"] == (
-        "An abstract Goal needs starter Rule candidates, or existing Rules need "
-        "additional concrete Case propositions for review."
+        "Generating several more concrete candidate Rules or Cases from an "
+        "abstract concept or condition."
     )
     assert operation_help("elaborate").flow == (
         "Goal -> suggested Rules; Rules -> suggested Case propositions"
@@ -316,7 +333,7 @@ def test_every_help_category_explains_its_intent_and_execution_basis():
     assert "NO LLM · Apply explicit inputs" in deterministic
     assert "deterministic program logic" in deterministic
     assert "LLM-BASED · Uses LLM semantic analysis" in semantic
-    assert "reviewable common ground for agent memory" in ground
+    assert "abstract ideas into reviewable common ground" in ground
     assert "Configure MemCommit and prepare or run study" in system
     assert "MIXED · Configure" not in system
     assert "NO LLM" not in a_z
@@ -585,7 +602,7 @@ def test_search_and_explain_copy_distinguishes_exact_and_llm_based_routes():
     )
     assert operation_help("search").best_for == (
         "Finding relevant Memories through meaning and context, including "
-        "related content expressed in different words."
+        "related content without obvious keyword overlap."
     )
     assert operation_help("query").summary.startswith("Generate an LLM-based answer")
     assert operation_help("summarize").summary.startswith(
@@ -597,3 +614,96 @@ def test_search_and_explain_copy_distinguishes_exact_and_llm_based_routes():
     assert query_detail.title == "QUERY-ONLY ACCESS"
     assert "QUERY without READ" in query_detail.body
     assert "full underlying policy concealed" in query_detail.body
+
+
+def test_semantic_transform_and_review_details_preserve_reviewed_boundaries():
+    [atomize_routes] = operation_help("atomize").details
+    [translation_routes] = operation_help("translate").details
+    [impact_invocation] = operation_help("impact").details
+    [fit_verdicts] = operation_help("fit").details
+    [conformance_comparison] = operation_help("check-conformance").details
+
+    assert atomize_routes.title == "ATOMIZE ROUTES"
+    assert "directional Meld" in atomize_routes.options[1].guidance
+    assert translation_routes.title == "MATERIALIZATION ROUTES"
+    assert [option.label for option in translation_routes.options] == [
+        "VIEW",
+        "--SAVE-AS",
+        "--IN-PLACE",
+    ]
+    assert impact_invocation.title == "INVOCATION"
+    assert "--from or --to" in impact_invocation.options[1].guidance
+    assert fit_verdicts.title == "YES, MAY, OR NO"
+    assert "multiple entrances" in fit_verdicts.options[1].guidance
+    assert "only one entrance" in fit_verdicts.options[2].guidance
+    assert conformance_comparison.title == "FIT OR CONFORMANCE"
+    assert conformance_comparison.discovery.value == "TOOL_SELECTION"
+
+
+def test_final_help_categories_match_their_reviewed_runtime_boundaries():
+    ground = operation_help("ground")
+    log = operation_help("log")
+    diff = operation_help("diff")
+    undo = operation_help("undo")
+    revert = operation_help("revert")
+    profile = operation_help("profile")
+    provider = operation_help("provider")
+    config = operation_help("config")
+    eval_operation = operation_help("eval")
+
+    assert ground.summary.startswith("Develop an abstract idea")
+    assert "Ground workspace Contexts" in ground.effect
+    assert log.summary == (
+        "Browse or search recorded Context, Memory, and Profile history."
+    )
+    assert diff.flow == "Context checkpoint or active Update -> diff report"
+    assert undo.summary == "Undo the most recent recorded command as one unit."
+    assert "every Context and Memory change" in undo.effect
+    assert revert.summary.startswith("Restore one local Context")
+    assert "mem profile rename and mem profile remove" in profile.summary
+    assert "backend semantic operations should use" in provider.best_for
+    assert "legacy low-level interface" in config.best_for
+    assert "existing semantic evaluation campaigns" in eval_operation.summary
+
+
+def test_final_help_categories_expose_exact_on_demand_details():
+    [log_routes] = operation_help("log").details
+    [revert_routes] = operation_help("revert").details
+    [profile_management] = operation_help("profile").details
+    [provider_actions] = operation_help("provider").details
+    [evaluation_scope] = operation_help("eval").details
+
+    assert log_routes.title == "LOG ROUTES"
+    assert [option.label for option in log_routes.options] == [
+        "CONTEXT CHECKPOINTS",
+        "MEMORY LINEAGE",
+        "SEMANTIC SEARCH",
+        "PROFILE ATTEMPTS",
+        "STUDY ACTIONS",
+    ]
+    assert revert_routes.title == "REVERT ROUTES"
+    assert [option.label for option in revert_routes.options] == [
+        "EXACT CHECKPOINT",
+        "INTERACTIVE",
+        "NATURAL-LANGUAGE",
+        "--KEEP",
+    ]
+    assert profile_management.title == "PROFILE MANAGEMENT"
+    assert "remove, not delete" in profile_management.explanation
+    assert provider_actions.title == "PROVIDER ACTIONS"
+    assert "synthetic strict-schema" in provider_actions.options[2].guidance
+    assert evaluation_scope.title == "EVALUATION SCOPE"
+    assert "general evaluation interface remains future work" in (
+        evaluation_scope.explanation
+    )
+
+
+def test_eval_and_config_are_compactly_marked_legacy():
+    root, context = _root_context()
+    try:
+        entries = {entry.name: entry for entry in command_entries(context)}
+    finally:
+        context.close()
+
+    assert entries["config"].annotation == "legacy"
+    assert entries["eval"].annotation == "legacy"

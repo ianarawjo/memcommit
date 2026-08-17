@@ -80,3 +80,48 @@ def test_client_projects_query_only_access_as_typed_detail(tmp_path):
     assert operation.details[0].discovery_summary is not None
     assert detail.kind == "ACCESS_BOUNDARY"
     assert "QUERY without READ" in detail.body
+
+
+def test_client_projects_reviewed_operation_boundaries_as_typed_comparisons(
+    tmp_path,
+):
+    client = MemCommitClient(root=tmp_path / "missing-store")
+
+    distill = client.describe_operation_detail("distill", "distill-or-atomize")
+    impact = client.describe_operation_detail("impact", "invocation")
+    fit = client.describe_operation_detail("fit", "verdicts")
+    conformance = client.describe_operation_detail(
+        "check-conformance",
+        "fit-or-conformance",
+    )
+
+    assert distill.discovery == "TOOL_SELECTION"
+    assert [option.label for option in distill.options] == ["DISTILL", "ATOMIZE"]
+    assert "--from or --to" in impact.options[1].guidance
+    assert [option.label for option in fit.options] == ["YES", "MAY", "NO"]
+    assert conformance.discovery_summary is not None
+    assert "propositions can coexist" in conformance.discovery_summary
+
+
+def test_client_projects_final_category_routes_as_typed_details(tmp_path):
+    client = MemCommitClient(root=tmp_path / "missing-store")
+
+    log = client.describe_operation_detail("log", "history-routes")
+    profile = client.describe_operation_detail("profile", "management-actions")
+    eval_scope = client.describe_operation_detail("eval", "evaluation-scope")
+
+    assert [option.label for option in log.options] == [
+        "CONTEXT CHECKPOINTS",
+        "MEMORY LINEAGE",
+        "SEMANTIC SEARCH",
+        "PROFILE ATTEMPTS",
+        "STUDY ACTIONS",
+    ]
+    assert [option.label for option in profile.options] == [
+        "SELECT",
+        "RENAME",
+        "REMOVE",
+        "REMOVE STUDY",
+    ]
+    assert eval_scope.discovery == "ON_DEMAND"
+    assert "Profile-independent evaluation ledger" in eval_scope.explanation

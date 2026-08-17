@@ -1,0 +1,52 @@
+ mem help · command inventory                                                                                                                                                       
+┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                                                                                                                                                                   ^
+┌ BROWSE & NAVIGATE ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ NO LLM · Inspect the current location and available Contexts, then move through the Context namespace.                                                                          │ 
+│ ▸ mem status     Show the current Context's inventory, first five direct Memories,     │ USE WHEN: Getting oriented to what the current Context contains, how it is connected,  │ 
+│                  relationships, and latest checkpoints.                                │           and which operations were recently applied.                                  │ 
+│ ▸ mem pwd        Print the current canonical Context name without loading its          │ USE WHEN: Confirming the active Context in a script or terminal.                       │ 
+│                  contents.                                                             │                                                                                        │ 
+│ ▸ mem contexts   Browse local Contexts and readable cross-Profile Context views        │ USE WHEN: Exploring every Context currently available to the Profile.                  │ 
+│                  without switching.                                                    │                                                                                        │ 
+│ ▸ mem list (ls)  List a Context's direct items—Memories, Memory references, query      │ USE WHEN: Inspecting the structure and direct contents of a Context.                   │ 
+│                  views, and embedded Contexts—and its readable child Contexts. Use -r  │                                                                                        │ 
+│                  to recursively include items from descendant and embedded Contexts;   │                                                                                        │ 
+│                  ls is the compact alias.                                              │                                                                                        │ 
+│ ▸ mem show       Show a Memory, reference, embedded Context, or the direct contents of │ USE WHEN: Reading the complete content of a known item or Context.                     │ 
+│                  a current/explicit Context.                                           │                                                                                        │ 
+│ ▸ mem switch     Enter the interactive Context picker, or switch to an explicit        │ USE WHEN: Moving the working position to another existing Context.                     │ 
+│                  Context.                                                              │                                                                                        │ 
+│ ▸ mem checkout   Switch Contexts using Git-style syntax; with -b, create and switch to │ USE WHEN: Using a Git-like workflow to switch or create a branch.                      │ 
+│                  a new Context branch.                                                 │                                                                                        │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┌ CREATE, COPY & CONNECT ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ NO LLM · Create Contexts or Memories, copy or import resources, or connect existing material.                                                                                   │ 
+│ ▸ mem init              Create a new empty Context and make it the current working     │ USE WHEN: Starting a separate workspace for a new topic, task, or group of Memories.   │ 
+│                         Context.                                                       │                                                                                        │ 
+│ ▸ mem add               Add one or more Memories to the current or explicit Context.   │ USE WHEN: Adding one or more facts, instructions, or notes directly to a Context.      │ 
+│ ▸ mem branch            Copy a Context or subtree into a new branch and switch to it.  │ USE WHEN: Editing a Context or subtree independently while preserving the original.    │ 
+│ ▸ mem import [PARTIAL]  Import a clean-baseline Profile, Context tree, or Memory by    │ USE WHEN: Bringing externally supplied material into a locally managed store.          │ 
+│                         value while preserving resource identity.                      │                                                                                        │ 
+│ ▸ mem reference         Copy one direct Source Memory version into a Target as an      │ USE WHEN: Retaining one exact Memory version even if its Source later changes or       │ 
+│                         immutable read-only snapshot.                                  │           disappears.                                                                  │ 
+│ ▸ mem embed             Place a live link to one Memory or Context inside a local      │ USE WHEN: Reusing a Memory or Context in another Context while following later Source  │ 
+│                         Target while retaining Source ownership.                       │           changes.                                                                     │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┏ SEARCH & EXPLAIN ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃ MIXED · Find exact text directly, or use LLM-based semantic retrieval, answering, and summarization within the selected authorized scope.                                       ┃ 
+┃ ▸ mem find       Find exact text or explicit regular-expression (regex) matches in     │ USE WHEN: Locating exact words, identifiers, or text patterns within a selected        ┃ 
+┃                  readable Memories.                                                    │           Context scope.                                                               ┃ 
+┃ ▾ mem search     Semantically rank Memories relevant to a natural-language request     │ USE WHEN: Finding relevant Memories through meaning and context, including related     ┃ 
+┃                  across selected Contexts.                                             │           content without obvious keyword overlap.                                     ┃ 
+┃   FLOW      · Context set + query -> ranked Memories                                                                                                                            ┃ 
+┃   EXECUTION · SEMANTIC                                                                                                                                                          ┃ 
+┃   EFFECT    · Search results are read-only; optional reviewed Save As creates a new local Context                                                                               ┃ 
+┃   RANGE     · One or more readable roots; lexical descendants and embedded Context reach are independently selectable                                                           ┃ 
+┃   FORM 1 · mem search (interactive semantic search, checked COPY/REFERENCE, and Save Location)                                                                                  ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab next kind  H full help

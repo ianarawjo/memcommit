@@ -1,0 +1,30 @@
+ mem help · command inventory                                                                       
+┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+│               example Memories together.                                                        │^
+│               USE WHEN: Working out how an abstract goal should operate in practice through     │ 
+│                         jointly revised Rules and concrete Examples.                            │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                    
+┏ HISTORY & RECOVERY ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃ MIXED · Inspect provenance and recorded changes. Restore an earlier state through explicit      ┃ 
+┃         history operations.                                                                     ┃ 
+┃ ▾ mem log         Browse or search recorded Context, Memory, and Profile history.               ┃ 
+┃                   USE WHEN: Investigating previous operations, checkpoints, or Memory history.  ┃ 
+┃   FLOW      · Recorded history or query -> history report                                       ┃ 
+┃   EXECUTION · MIXED                                                                             ┃ 
+┃   EFFECT    · Read-only                                                                         ┃ 
+┃   RANGE     · One Context, one Memory lineage, or Profile attempts                              ┃ 
+┃   LOG ROUTES                                                                                    ┃ 
+┃   Log groups several retained-history views under one entry point. Only a natural-language      ┃ 
+┃   history search requires semantic interpretation.                                              ┃ 
+┃   - CONTEXT CHECKPOINTS · Browse the recorded checkpoints for one Context.                      ┃ 
+┃   - MEMORY LINEAGE · Inspect one retained Memory lineage; mem trace is the shorter equivalent   ┃ 
+┃     entry point.                                                                                ┃ 
+┃   - SEMANTIC SEARCH · Search retained history with a natural-language query.                    ┃ 
+┃   - PROFILE ATTEMPTS · Inspect Profile-scoped mem command attempts.                             ┃ 
+┃   - STUDY ACTIONS · Inspect content-free actions for the active Study Profile.                  ┃ 
+┃   FORM 1 · mem log (select a Context, then browse its checkpoints in a TTY; print otherwise)    ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab next kind  H f

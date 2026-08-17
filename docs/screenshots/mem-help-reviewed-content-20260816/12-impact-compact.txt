@@ -1,0 +1,30 @@
+ mem help · command inventory                                                                       
+┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+┃                          USE WHEN: Finding Memories that permit unclear or multiple             ┃^
+┃                                    interpretations.                                             ┃ 
+┃ ▸ mem find-conflicts     Report conflicting direct Memory pairs in the current or explicit      ┃ 
+┃                          Context; no Context changes.                                           ┃ 
+┃                          USE WHEN: Finding mutually incompatible claims or instructions.        ┃ 
+┃ ▸ mem audit              Run Duplicate, Ambiguity, and Conflict checks plus optional Rule       ┃ 
+┃                          Conformance, then review the combined saved result.                    ┃ 
+┃                          USE WHEN: Performing a combined quality review before revising a       ┃ 
+┃                                    Context.                                                     ┃ 
+┃ ▾ mem impact             Preview or inspect an operation's expected Context effects without     ┃ 
+┃                          applying them.                                                         ┃ 
+┃                          USE WHEN: Verifying an operation's proposed effects before its         ┃ 
+┃                                    separate Apply action.                                       ┃ 
+┃   FLOW      · Operation inputs or session -> impact report                                      ┃ 
+┃   EXECUTION · MIXED                                                                             ┃ 
+┃   EFFECT    · Impact is read-only; Apply is a separate reviewed handoff                         ┃ 
+┃   RANGE     · Operation-owned Source and Target ranges                                          ┃ 
+┃   INVOCATION                                                                                    ┃ 
+┃   Impact remains read-only in either form; Apply is a separate reviewed action.                 ┃ 
+┃   - OPERATION-SPECIFIC · Use mem impact OPERATION to preview Atomize or inspect a saved Meld,   ┃ 
+┃     Sever, or Update Impact.                                                                    ┃ 
+┃   - DIRECTIONAL UPDATE · Omit OPERATION and provide --from or --to; the omitted endpoint is the ┃ 
+┃     current Context.                                                                            ┃ 
+┃   FORM 1 · mem impact atomize (preview atomization of the current Context)                      ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab next kind  H f

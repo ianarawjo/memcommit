@@ -3,17 +3,41 @@
 from types import MappingProxyType
 
 from memcommit.help_catalog.details.add import ADD_DETAILS
+from memcommit.help_catalog.details.atomize import ATOMIZE_DETAILS
+from memcommit.help_catalog.details.check_conformance import CHECK_CONFORMANCE_DETAILS
+from memcommit.help_catalog.details.distill import DISTILL_DETAILS
+from memcommit.help_catalog.details.eval import EVAL_DETAILS
+from memcommit.help_catalog.details.fit import FIT_DETAILS
+from memcommit.help_catalog.details.impact import IMPACT_DETAILS
 from memcommit.help_catalog.details.import_operation import IMPORT_DETAILS
 from memcommit.help_catalog.details.init import INIT_DETAILS
+from memcommit.help_catalog.details.log import LOG_DETAILS
+from memcommit.help_catalog.details.merge import MERGE_DETAILS
+from memcommit.help_catalog.details.profile import PROFILE_DETAILS
+from memcommit.help_catalog.details.provider import PROVIDER_DETAILS
 from memcommit.help_catalog.details.query import QUERY_DETAILS
+from memcommit.help_catalog.details.revert import REVERT_DETAILS
+from memcommit.help_catalog.details.translate import TRANSLATE_DETAILS
 from memcommit.help_catalog.model import OperationHelpDetail
 
 
 _DETAIL_GROUPS = (
     ADD_DETAILS,
+    ATOMIZE_DETAILS,
+    CHECK_CONFORMANCE_DETAILS,
+    DISTILL_DETAILS,
+    EVAL_DETAILS,
+    FIT_DETAILS,
+    IMPACT_DETAILS,
     IMPORT_DETAILS,
     INIT_DETAILS,
+    LOG_DETAILS,
+    MERGE_DETAILS,
+    PROFILE_DETAILS,
+    PROVIDER_DETAILS,
     QUERY_DETAILS,
+    REVERT_DETAILS,
+    TRANSLATE_DETAILS,
 )
 
 _by_operation: dict[str, list[OperationHelpDetail]] = {}

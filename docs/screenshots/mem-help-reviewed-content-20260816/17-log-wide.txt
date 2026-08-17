@@ -1,0 +1,52 @@
+ mem help · command inventory                                                                                                                                                       
+┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌ CHECK, COMPARE & REVIEW ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐^
+│ MIXED · Check compatibility, differences, quality, or expected impact. Review saved analysis and decide what should happen next.                                                │ 
+│ ▸ mem compare            Compare Memories in two Contexts and report what they share,  │ USE WHEN: Comparing two Contexts as a whole to understand where they align and differ. │ 
+│                          what differs, and what appears only on one side.              │                                                                                        │ 
+│ ▸ mem find-duplicates    Report duplicate direct Memories in the current or explicit   │ USE WHEN: Locating semantically redundant Memories before cleanup.                     │ 
+│                          Context; no Context changes.                                  │                                                                                        │ 
+│ ▸ mem find-ambiguities   Report ambiguous direct Memories in the current or explicit   │ USE WHEN: Finding Memories that permit unclear or multiple interpretations.            │ 
+│                          Context; no Context changes.                                  │                                                                                        │ 
+│ ▸ mem find-conflicts     Report conflicting direct Memory pairs in the current or      │ USE WHEN: Finding mutually incompatible claims or instructions.                        │ 
+│                          explicit Context; no Context changes.                         │                                                                                        │ 
+│ ▸ mem audit              Run Duplicate, Ambiguity, and Conflict checks plus optional   │ USE WHEN: Performing a combined quality review before revising a Context.              │ 
+│                          Rule Conformance, then review the combined saved result.      │                                                                                        │ 
+│ ▸ mem impact             Preview or inspect an operation's expected Context effects    │ USE WHEN: Verifying an operation's proposed effects before its separate Apply action.  │ 
+│                          without applying them.                                        │                                                                                        │ 
+│ ▸ mem review             Open a saved semantic artifact to inspect its analysis,       │ USE WHEN: Revisiting a saved analysis, proposal, or result state.                      │ 
+│                          proposal, or result state and, when supported, record review  │                                                                                        │ 
+│                          responses. Review never applies Memories.                     │                                                                                        │ 
+│ ▸ mem fit                Judge whether a defined set of Memories or other propositions │ USE WHEN: Checking whether a defined set of Memories, Rules, Goals, Examples, or other │ 
+│                          is jointly compatible under ordinary interpretation,          │           propositions can jointly hold.                                               │ 
+│                          returning YES, MAY, or NO.                                    │                                                                                        │ 
+│ ▸ mem check-conformance  Check one Context or saved Ground Examples against explicit   │ USE WHEN: Verifying whether existing Memories or Examples satisfy stated Rules or      │ 
+│                          Rules or condition propositions and report conformance        │           condition propositions.                                                      │ 
+│                          issues.                                                       │                                                                                        │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┌ GROUND WORKBENCH ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ LLM-BASED · Turn abstract ideas into reviewable common ground by developing a Goal, Rules, and example Memories together.                                                       │ 
+│ ▸ mem ground  Develop an abstract idea into a reviewable Ground by shaping its Goal,   │ USE WHEN: Working out how an abstract goal should operate in practice through jointly  │ 
+│               Rules, and example Memories together.                                    │           revised Rules and concrete Examples.                                         │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┏ HISTORY & RECOVERY ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃ MIXED · Inspect provenance and recorded changes. Restore an earlier state through explicit history operations.                                                                  ┃ 
+┃ ▾ mem log         Browse or search recorded Context, Memory, and Profile history.      │ USE WHEN: Investigating previous operations, checkpoints, or Memory history.           ┃ 
+┃   FLOW      · Recorded history or query -> history report                                                                                                                       ┃ 
+┃   EXECUTION · MIXED                                                                                                                                                             ┃ 
+┃   EFFECT    · Read-only                                                                                                                                                         ┃ 
+┃   RANGE     · One Context, one Memory lineage, or Profile attempts                                                                                                              ┃ 
+┃   LOG ROUTES                                                                                                                                                                    ┃ 
+┃   Log groups several retained-history views under one entry point. Only a natural-language history search requires semantic interpretation.                                     ┃ 
+┃   - CONTEXT CHECKPOINTS · Browse the recorded checkpoints for one Context.                                                                                                      ┃ 
+┃   - MEMORY LINEAGE · Inspect one retained Memory lineage; mem trace is the shorter equivalent entry point.                                                                      ┃ 
+┃   - SEMANTIC SEARCH · Search retained history with a natural-language query.                                                                                                    ┃ 
+┃   - PROFILE ATTEMPTS · Inspect Profile-scoped mem command attempts.                                                                                                             ┃ 
+┃   - STUDY ACTIONS · Inspect content-free actions for the active Study Profile.                                                                                                  ┃ 
+┃   FORM 1 · mem log (select a Context, then browse its checkpoints in a TTY; print otherwise)                                                                                    ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab next kind  H full help

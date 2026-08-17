@@ -1,0 +1,30 @@
+ mem help · command inventory                                                                       
+┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+┃                          no Context changes.                                                    ┃^
+┃                          USE WHEN: Finding Memories that permit unclear or multiple             ┃ 
+┃                                    interpretations.                                             ┃ 
+┃ ▸ mem find-conflicts     Report conflicting direct Memory pairs in the current or explicit      ┃ 
+┃                          Context; no Context changes.                                           ┃ 
+┃                          USE WHEN: Finding mutually incompatible claims or instructions.        ┃ 
+┃ ▾ mem audit              Run Duplicate, Ambiguity, and Conflict checks plus optional Rule       ┃ 
+┃                          Conformance, then review the combined saved result.                    ┃ 
+┃                          USE WHEN: Performing a combined quality review before revising a       ┃ 
+┃                                    Context.                                                     ┃ 
+┃   FLOW      · Context + Rules? -> saved Audit report                                            ┃ 
+┃   EXECUTION · SEMANTIC                                                                          ┃ 
+┃   EFFECT    · No Context content changes                                                        ┃ 
+┃   RANGE     · One exact direct Context                                                          ┃ 
+┃   FORM 1 · mem audit (choose one Context, run Duplicate + Ambiguity + Conflict, save, and       ┃ 
+┃            review)                                                                              ┃ 
+┃   FORM 2 · mem audit --context [context] (run and save all three finders for one exact Context) ┃ 
+┃   FORM 3 · mem audit --context [context] --against [rules_context] (add the shared Conformance  ┃ 
+┃            check)                                                                               ┃ 
+┃   FORM 4 · mem audit --context [context] --snapshot (save and print the combined report)        ┃ 
+┃ ▸ mem impact             Preview or inspect an operation's expected Context effects without     ┃ 
+┃                          applying them.                                                         ┃ 
+┃                          USE WHEN: Verifying an operation's proposed effects before its         ┃ 
+┃                                    separate Apply action.                                       ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab next kind  H f

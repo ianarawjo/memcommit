@@ -1,0 +1,30 @@
+ mem help · command inventory                                                                       
+┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+┃ ▾ mem elaborate  Expand an abstract Goal, Rule, or condition into multiple more specific        ┃^
+┃                  candidate propositions.                                                        ┃ 
+┃                  USE WHEN: Generating several more concrete candidate Rules or Cases from an    ┃ 
+┃                            abstract concept or condition.                                       ┃ 
+┃   FLOW      · Goal -> suggested Rules; Rules -> suggested Case propositions                     ┃ 
+┃   EXECUTION · SEMANTIC                                                                          ┃ 
+┃   EFFECT    · Read-only; every proposal remains suggested and unverified                        ┃ 
+┃   RANGE     · One Goal or Rule set, inline or from one exact Ground revision                    ┃ 
+┃   FORM 1 · mem elaborate --goal "[goal]" (propose candidate Rules)                              ┃ 
+┃   FORM 2 · mem elaborate --rule "[rule]" (propose concrete Cases)                               ┃ 
+┃   FORM 3 · mem elaborate --rule "[rule1]" --rule "[rule2]" (propose concrete Cases across       ┃ 
+┃            explicit Rules)                                                                      ┃ 
+┃   FORM 4 · mem elaborate --ground [name] --from-goal (use the exact Ground Goal through the     ┃ 
+┃            same application)                                                                    ┃ 
+┃   FORM 5 · mem elaborate --ground [name] --from-rules (use the exact active Ground Rules        ┃ 
+┃            through the same application)                                                        ┃ 
+┃ ▸ mem translate  Generate and save a reusable translated view of one Context or Memory while    ┃ 
+┃                  preserving the original content.                                               ┃ 
+┃                  USE WHEN: Reading or reusing Memory content in another language without        ┃ 
+┃                            replacing the original.                                              ┃ 
+┃ ▸ mem forget     Review keep/edit/delete decisions for one instruction, then apply the accepted ┃ 
+┃                  batch.                                                                         ┃ 
+┃                  USE WHEN: Removing or rewriting Memories according to a natural-language       ┃ 
+┃                            instruction whose meaning must be interpreted.                       ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab next kind  H f

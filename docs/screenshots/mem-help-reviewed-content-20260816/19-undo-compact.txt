@@ -1,0 +1,30 @@
+ mem help · command inventory                                                                       
+┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+│               USE WHEN: Working out how an abstract goal should operate in practice through     │^
+│                         jointly revised Rules and concrete Examples.                            │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                    
+┏ HISTORY & RECOVERY ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃ MIXED · Inspect provenance and recorded changes. Restore an earlier state through explicit      ┃ 
+┃         history operations.                                                                     ┃ 
+┃ ▸ mem log         Browse or search recorded Context, Memory, and Profile history.               ┃ 
+┃                   USE WHEN: Investigating previous operations, checkpoints, or Memory history.  ┃ 
+┃ ▸ mem diff        Show the differences recorded by a Context checkpoint or the active Update.   ┃ 
+┃                   USE WHEN: Verifying exactly what a recorded operation changed.                ┃ 
+┃ ▸ mem trace       Trace one retained Memory through its recorded lineage.                       ┃ 
+┃                   USE WHEN: Determining where a Memory came from and how it changed.            ┃ 
+┃ ▸ mem rationale   Explain one Memory from recorded provenance and, when needed, inference.      ┃ 
+┃                   USE WHEN: Understanding why a Memory exists or reached its current form.      ┃ 
+┃ ▸ mem checkpoint  Save the current Context as a manual recovery point for Diff or Revert.       ┃ 
+┃                   USE WHEN: Creating a recovery point before risky work.                        ┃ 
+┃ ▾ mem undo        Undo the most recent recorded command as one unit.                            ┃ 
+┃                   USE WHEN: Reversing the latest recorded mutation as one operation.            ┃ 
+┃   FLOW      · Command history -> reversed Context effects                                       ┃ 
+┃   EXECUTION · DETERMINISTIC                                                                     ┃ 
+┃   EFFECT    · Restores every Context and Memory change recorded by that command                 ┃ 
+┃   RANGE     · One most-recent recoverable command unit across all affected Contexts             ┃ 
+┃   FORM 1 · mem undo (undo the latest recorded Context command)                                  ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab next kind  H f

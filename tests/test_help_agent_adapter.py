@@ -38,8 +38,8 @@ def test_describe_returns_one_complete_stable_contract(tmp_path):
     assert operation == {
         "name": "merge",
         "summary": (
-            "Add Source-only items to the current Target, choosing Source or "
-            "Target wherever stored items conflict."
+            "Add Source-only items to the current Target, leave exact matches "
+            "unchanged, and choose Source or Target for stored-item conflicts."
         ),
         "flow": "Source Context -> current Target Context",
         "execution": "DETERMINISTIC",
@@ -49,15 +49,27 @@ def test_describe_returns_one_complete_stable_contract(tmp_path):
         ),
         "range": "Exact roots or matching lexical descendants by complete relative path",
         "best_for": (
-            "Bringing work from a copied or branched Context back into the "
-            "current Context."
+            "Appending Source-only items or bringing a copied or branched "
+            "Context back into the current Context without semantic synthesis."
         ),
         "use_when": (
-            "Bringing work from a copied or branched Context back into the "
-            "current Context."
+            "Appending Source-only items or bringing a copied or branched "
+            "Context back into the current Context without semantic synthesis."
         ),
         "maturity": None,
-        "details": [],
+        "details": [
+            {
+                "id": "structural-boundary",
+                "operation": "merge",
+                "kind": "COMPARISON",
+                "title": "MERGE BOUNDARY",
+                "use_when": (
+                    "Checking how each structural Source/Target case is handled."
+                ),
+                "discovery": "ON_DEMAND",
+                "discovery_summary": None,
+            }
+        ],
     }
     assert response["result"]["effect"] == "NONE"
 
@@ -178,10 +190,22 @@ def test_schema_is_json_safe_and_bounds_describe_names_to_the_catalog():
     assert schema["parameters"]["allOf"][0]["else"] == {"required": ["operation"]}
     assert len(schema["parameters"]["properties"]["operation"]["enum"]) == 62
     assert schema["parameters"]["properties"]["detail"]["enum"] == [
+        "actions",
         "copy-or-link",
         "current-limitation",
+        "distill-or-atomize",
+        "evaluation-scope",
+        "fit-or-conformance",
+        "history-routes",
+        "invocation",
+        "management-actions",
+        "materialization-routes",
+        "operation-routes",
         "parent-contexts",
         "query-only-access",
+        "selection-routes",
+        "structural-boundary",
+        "verdicts",
     ]
     assert schema["parameters"]["allOf"][1]["then"] == {"required": ["detail"]}
     assert "use-when guidance" in schema["description"]

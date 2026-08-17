@@ -1,0 +1,52 @@
+ mem help · command inventory                                                                                                                                                       
+┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+│                          responses. Review never applies Memories.                     │                                                                                        │^
+│ ▸ mem fit                Judge whether a defined set of Memories or other propositions │ USE WHEN: Checking whether a defined set of Memories, Rules, Goals, Examples, or other │ 
+│                          is jointly compatible under ordinary interpretation,          │           propositions can jointly hold.                                               │ 
+│                          returning YES, MAY, or NO.                                    │                                                                                        │ 
+│ ▸ mem check-conformance  Check one Context or saved Ground Examples against explicit   │ USE WHEN: Verifying whether existing Memories or Examples satisfy stated Rules or      │ 
+│                          Rules or condition propositions and report conformance        │           condition propositions.                                                      │ 
+│                          issues.                                                       │                                                                                        │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┌ GROUND WORKBENCH ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ LLM-BASED · Turn abstract ideas into reviewable common ground by developing a Goal, Rules, and example Memories together.                                                       │ 
+│ ▸ mem ground  Develop an abstract idea into a reviewable Ground by shaping its Goal,   │ USE WHEN: Working out how an abstract goal should operate in practice through jointly  │ 
+│               Rules, and example Memories together.                                    │           revised Rules and concrete Examples.                                         │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┌ HISTORY & RECOVERY ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ MIXED · Inspect provenance and recorded changes. Restore an earlier state through explicit history operations.                                                                  │ 
+│ ▸ mem log         Browse or search recorded Context, Memory, and Profile history.      │ USE WHEN: Investigating previous operations, checkpoints, or Memory history.           │ 
+│ ▸ mem diff        Show the differences recorded by a Context checkpoint or the active  │ USE WHEN: Verifying exactly what a recorded operation changed.                         │ 
+│                   Update.                                                              │                                                                                        │ 
+│ ▸ mem trace       Trace one retained Memory through its recorded lineage.              │ USE WHEN: Determining where a Memory came from and how it changed.                     │ 
+│ ▸ mem rationale   Explain one Memory from recorded provenance and, when needed,        │ USE WHEN: Understanding why a Memory exists or reached its current form.               │ 
+│                   inference.                                                           │                                                                                        │ 
+│ ▸ mem checkpoint  Save the current Context as a manual recovery point for Diff or      │ USE WHEN: Creating a recovery point before risky work.                                 │ 
+│                   Revert.                                                              │                                                                                        │ 
+│ ▸ mem undo        Undo the most recent recorded command as one unit.                   │ USE WHEN: Reversing the latest recorded mutation as one operation.                     │ 
+│ ▸ mem redo        Redo the most recently undone recorded Context command.              │ USE WHEN: Reapplying a command that was undone accidentally.                           │ 
+│ ▸ mem revert      Restore one local Context to a selected checkpoint, reviewing the    │ USE WHEN: Restoring a Context to a deliberately saved recovery point.                  │ 
+│                   exact impact when selection is interactive.                          │                                                                                        │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┏ PROFILES ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃ NO LLM · Select and administer complete local Profile stores and their managed names.                                                                                           ┃ 
+┃ ▾ mem profile  Select and manage complete local MemoryStore Profiles. Profiles can     │ USE WHEN: Managing separate users, environments, or Memory stores.                     ┃ 
+┃                also be renamed or permanently removed through the picker or with mem   │                                                                                        ┃ 
+┃                profile rename and mem profile remove.                                  │                                                                                        ┃ 
+┃   FLOW      · Profile registry <-> Profile administration                                                                                                                       ┃ 
+┃   EXECUTION · DETERMINISTIC                                                                                                                                                     ┃ 
+┃   EFFECT    · May switch, import, rename, or permanently remove Profiles; Grant subcommands manage cross-Profile views                                                          ┃ 
+┃   PROFILE MANAGEMENT                                                                                                                                                            ┃ 
+┃   The interactive picker and explicit Profile subcommands share the same managed Profile registry. Removal is permanent and is named remove, not delete, in the CLI.            ┃ 
+┃   - SELECT · Press Enter in the picker, or use mem profile use.                                                                                                                 ┃ 
+┃   - RENAME · Press R in the picker, or use mem profile rename; mem rename is the top-level shortcut.                                                                            ┃ 
+┃   - REMOVE · Press D in the picker, or use mem profile remove. Switch away before removing the current Profile.                                                                 ┃ 
+┃   - REMOVE STUDY · Press D on a Study heading, or use mem profile remove-study.                                                                                                 ┃ 
+┃   FORM 1 · mem profile (enter the interactive Profile selector in a TTY; list otherwise)                                                                                        ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab next kind  H full help

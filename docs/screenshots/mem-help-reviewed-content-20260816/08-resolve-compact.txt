@@ -1,0 +1,30 @@
+ mem help · command inventory                                                                       
+┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+┃ ▸ mem elaborate  Expand an abstract Goal, Rule, or condition into multiple more specific        ┃^
+┃                  candidate propositions.                                                        ┃ 
+┃                  USE WHEN: Generating several more concrete candidate Rules or Cases from an    ┃ 
+┃                            abstract concept or condition.                                       ┃ 
+┃ ▸ mem translate  Generate and save a reusable translated view of one Context or Memory while    ┃ 
+┃                  preserving the original content.                                               ┃ 
+┃                  USE WHEN: Reading or reusing Memory content in another language without        ┃ 
+┃                            replacing the original.                                              ┃ 
+┃ ▸ mem forget     Review keep/edit/delete decisions for one instruction, then apply the accepted ┃ 
+┃                  batch.                                                                         ┃ 
+┃                  USE WHEN: Removing or rewriting Memories according to a natural-language       ┃ 
+┃                            instruction whose meaning must be interpreted.                       ┃ 
+┃ ▾ mem resolve    Propose and verify minimum changes that make one bounded direct-Memory Context ┃ 
+┃                  frame Fit YES.                                                                 ┃ 
+┃                  USE WHEN: Deciding how to repair semantic conflicts or ambiguities within a    ┃ 
+┃                            bounded Context frame.                                               ┃ 
+┃   FLOW      · Bounded Context frame + optional guidance -> verified repair candidates -> exact  ┃ 
+┃               Apply                                                                             ┃ 
+┃   EXECUTION · SEMANTIC                                                                          ┃ 
+┃   EFFECT    · Read-only until one exact candidate is explicitly applied; Apply creates one      ┃ 
+┃               checkpoint                                                                        ┃ 
+┃   RANGE     · One bounded direct Context frame; explicit Memory UID prefixes limit mutation     ┃ 
+┃               targets                                                                           ┃ 
+┃   FORM 1 · mem resolve (analyze the current direct-Memory frame and open review)                ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab next kind  H f

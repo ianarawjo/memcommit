@@ -30,7 +30,9 @@ Each record retains name, summary, flow, execution kind, effect, range, and the
 reviewed use situation. `use_when` is the public discovery name for the
 existing `best_for` value, which remains as a compatibility field. An operation
 may also carry structured detailed comparisons: one title and explanation plus
-named alternatives with guidance. Typed prose details cover limitations and
+named alternatives with guidance. These comparisons cover adjacent operation
+selection, invocation routes, deterministic behavior cases, materialization
+routes, and closed verdict examples. Typed prose details cover limitations and
 access boundaries without turning every caveat into an unclassified note.
 Each detail has a stable operation-local ID, discovery role, and use situation;
 an optional one-line discovery summary is required when an agent needs the
@@ -105,3 +107,9 @@ discovery contracts need; neither is a second semantic source.
 The first maturity and typed-prose presentation is recorded at both `180×52`
 and `100×30` under
 `docs/screenshots/mem-help-import-query-details-20260816/`.
+The later operation-wording review and its structured Merge, Atomize, Distill,
+Translate, Impact, Fit, and Conformance details are recorded under
+`docs/screenshots/mem-help-reviewed-content-20260816/`.
+The final category review adds typed Log, Revert, Profile, Provider, and legacy
+Eval route details. Eval's tag and detail describe the current fixed research
+harness without changing its separate operation-route classification.

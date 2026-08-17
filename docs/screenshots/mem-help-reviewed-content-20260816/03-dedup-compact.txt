@@ -1,0 +1,30 @@
+ mem help · command inventory                                                                       
+┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+┃ ▸ mem chunk            Mechanically split one direct Memory at header, paragraph, or            ┃^
+┃                        approximate sentence boundaries.                                         ┃ 
+┃                        USE WHEN: A Memory already has clear text boundaries that should become  ┃ 
+┃                                  separate Memories.                                             ┃ 
+┃ ▸ mem delete (remove)  Select a Context or direct item to delete, or name it by locator, name,  ┃ 
+┃                        or UID.                                                                  ┃ 
+┃                        USE WHEN: Removing a specific Context or item that is no longer needed.  ┃ 
+┃ ▸ mem clear            Remove all direct items from the current or explicit Context after       ┃ 
+┃                        confirmation.                                                            ┃ 
+┃                        USE WHEN: Emptying a Context while retaining the Context itself.         ┃ 
+┃ ▸ mem merge            Add Source-only items to the current Target, leave exact matches         ┃ 
+┃                        unchanged, and choose Source or Target for stored-item conflicts.        ┃ 
+┃                        USE WHEN: Appending Source-only items or bringing a copied or branched   ┃ 
+┃                                  Context back into the current Context without semantic         ┃ 
+┃                                  synthesis.                                                     ┃ 
+┃ ▾ mem dedup            Review confirmed duplicate groups, retain one existing Memory in each    ┃ 
+┃                        group, and delete the rest on Apply.                                     ┃ 
+┃                        USE WHEN: Removing confirmed semantic duplicates while preserving one    ┃ 
+┃                                  exact existing Memory and its UID.                             ┃ 
+┃   FLOW      · Confirmed duplicate handoffs -> reviewed survivors -> exact Apply                 ┃ 
+┃   EXECUTION · DETERMINISTIC                                                                     ┃ 
+┃   EFFECT    · Read-only until exact Apply; Apply deletes absorbed UIDs in one checkpoint        ┃ 
+┃   RANGE     · One exact direct Context; inbound references block version 1 Apply                ┃ 
+┃   FORM 1 · mem dedup (show the required find-duplicates handoff error)                          ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab next kind  H f

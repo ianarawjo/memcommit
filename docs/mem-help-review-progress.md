@@ -18,14 +18,14 @@ closed.
 | Browse & Navigate | status | — | pwd, contexts, list, show, switch, checkout |
 | Create, Copy & Connect | — | init, branch, import | add, reference, embed |
 | Search & Explain | — | find, search, query, summarize | — |
-| Deterministic Content Changes | merge | — | edit, chunk, delete, clear, dedup |
-| Semantic Transformations | meld, update, distill, elaborate | — | atomize, translate, forget, resolve, sever |
-| Check, Compare & Review | compare | — | find-duplicates, find-ambiguities, find-conflicts, audit, impact, review, fit, check-conformance |
-| Ground Workbench | — | — | ground |
-| History & Recovery | — | — | log, diff, trace, rationale, checkpoint, undo, redo, revert |
-| Profiles | — | — | profile, rename |
+| Deterministic Content Changes | merge | edit, replace, chunk, delete, clear, dedup | — |
+| Semantic Transformations | meld, update, distill, elaborate | atomize, translate, resolve, sever | forget |
+| Check, Compare & Review | compare | audit, impact, review, fit, check-conformance | find-duplicates, find-ambiguities, find-conflicts |
+| Ground Workbench | — | ground | — |
+| History & Recovery | — | log, diff, undo, revert | trace, rationale, checkpoint, redo |
+| Profiles | — | profile | rename |
 | Sharing & Protection | — | — | share, lock, unlock |
-| System & Study Tools | — | — | help, provider, shell-init, config, init-study, eval |
+| System & Study Tools | — | provider, config, eval | help, shell-init, init-study |
 
 ## Global Help UI
 
@@ -36,7 +36,7 @@ closed.
 | Wide view uses equal summary/use-case columns | Reviewed |
 | Compact view stacks the use case below the summary | Reviewed |
 | `USE WHEN:` aligns with the summary body; only the label is bold; wrapped use-case text aligns after the label | Reviewed |
-| Representative actual-color PTY evidence at `180×52` and `100×30` | Reviewed for Meld, Merge, Distill, Elaborate, and the Import/Query typed-detail presentation |
+| Representative actual-color PTY evidence at `180×52` and `100×30` | Reviewed for Search wording; Merge and Dedup; Atomize, Distill, Elaborate, Translate, Resolve, Meld, and Sever; Audit, Impact, Review, Fit, and Check Conformance; Ground; Log, Diff, Undo, and Revert; Profile; Provider, Config, and Eval; and the Import/Query typed-detail presentation |
 
 `replace` is now a public operation under Deterministic Content Changes; its
 operation review is tracked with that category even though the implementation
@@ -52,10 +52,11 @@ here.
   upward from Case/example propositions stored as Context Memories, while an
   optional Goal only focuses relevance. Every Rule requires Source support and
   an empty Source fails before provider connection.
-- `distill` Summary is reviewed as: “Derive reusable Rules from Case or
-  Example propositions in a selected Context scope, using an optional Goal to
-  focus relevance.” Flow, `USE WHEN`, Forms, behavior, and wide/compact
-  real-terminal rendering have now passed together.
+- `distill` Summary is reviewed as: “Derive higher-level Rules or condition
+  propositions from Case or Example propositions in a bounded Context,
+  optionally guided by a Goal.” Its typed Distill/Atomize comparison keeps
+  upward derivation distinct from separating propositions that are already
+  present in composite Memories.
 - The top-down Goal-to-Rule / Rule-to-Case proposal operation is implemented as
   `elaborate`. Its typed behavior, Forms, and wide/compact rendering are
   verified. Its reviewed wording distinguishes candidate Rules from concrete
@@ -83,3 +84,14 @@ here.
   collapsed layout and Query's expanded boundary now have wide/compact visual
   evidence; operation-specific forms and end-to-end behavior review remain
   before all four rows can be marked Reviewed.
+- The accepted content pass for categories 4–6 adds typed details rather than
+  burying route boundaries in prose: Merge explains Source-only, exact-match,
+  conflict, Target-only, and recursive behavior; Atomize explains ordinary and
+  `--evaluate` routes; Translate explains view, Save As, and in-place routes;
+  Impact explains ordinary and directional invocation; Fit defines YES, MAY,
+  and NO with entrance examples; and Check Conformance states its boundary
+  from Fit. The wording and typed projections are tested, and the expanded
+  states are captured in
+  `screenshots/mem-help-reviewed-content-20260816/`. Rows still marked In
+  progress require their operation-specific forms and behavior gate before
+  they become Reviewed.

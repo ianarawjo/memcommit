@@ -47,7 +47,8 @@ _OPERATIONS = (
     ),
     _operation(
         "atomize",
-        "Split composite Memories for review; --evaluate performs an issue-scoped directional meld.",
+        "Analyze composite Memories and separate their distinct propositions "
+        "into independently reviewable Memories.",
         "Context Memories -> reviewed atomic Memories",
         ExecutionKind.SEMANTIC,
         "Changes material only after explicit acceptance",
@@ -55,7 +56,8 @@ _OPERATIONS = (
     ),
     _operation(
         "audit",
-        "Run Duplicate, Ambiguity, and Conflict checks plus optional Rule Conformance, then review one saved report.",
+        "Run Duplicate, Ambiguity, and Conflict checks plus optional Rule "
+        "Conformance, then review the combined saved result.",
         "Context + Rules? -> saved Audit report",
         ExecutionKind.SEMANTIC,
         "No Context content changes",
@@ -86,8 +88,9 @@ _OPERATIONS = (
     ),
     _operation(
         "check-conformance",
-        "Check Ground examples or one Context against explicit Rules.",
-        "Rules + Ground Memories or Context -> Conformance report",
+        "Check one Context or saved Ground Examples against explicit Rules or "
+        "condition propositions and report conformance issues.",
+        "Rules or condition propositions + Ground Examples or Context -> Conformance report",
         ExecutionKind.SEMANTIC,
         "Read-only; no Rule, Ground, Context, or Memory changes",
         "One saved Ground, or one exact local Target and Rules Context",
@@ -119,7 +122,7 @@ _OPERATIONS = (
     ),
     _operation(
         "config",
-        "Read and write global configuration.",
+        "Read or write stored global configuration values.",
         "Configuration key <-> value",
         ExecutionKind.DETERMINISTIC,
         "May change global configuration",
@@ -142,16 +145,16 @@ _OPERATIONS = (
     ),
     _operation(
         "diff",
-        "Inspect recorded Context or Update changes without applying them.",
-        "Recorded change -> diff report",
+        "Show the differences recorded by a Context checkpoint or the active Update.",
+        "Context checkpoint or active Update -> diff report",
         ExecutionKind.DETERMINISTIC,
         "Read-only",
         "One exact Context or active Update",
     ),
     _operation(
         "distill",
-        "Derive reusable Rules from Case or Example propositions in a selected "
-        "Context scope, using an optional Goal to focus relevance.",
+        "Derive higher-level Rules or condition propositions from Case or Example "
+        "propositions in a bounded Context, optionally guided by a Goal.",
         "Case/Example Context + Goal? -> reviewed Rules",
         ExecutionKind.SEMANTIC,
         "Source and Ground stay unchanged; standalone Apply may create a new Result",
@@ -159,8 +162,8 @@ _OPERATIONS = (
     ),
     _operation(
         "elaborate",
-        "Propose candidate Rules from a Goal, or concrete Case propositions from "
-        "existing Rules.",
+        "Expand an abstract Goal, Rule, or condition into multiple more specific "
+        "candidate propositions.",
         "Goal -> suggested Rules; Rules -> suggested Case propositions",
         ExecutionKind.SEMANTIC,
         "Read-only; every proposal remains suggested and unverified",
@@ -192,8 +195,8 @@ _OPERATIONS = (
     ),
     _operation(
         "eval",
-        "Run and inspect staged semantic evaluation campaigns.",
-        "Evaluation fixtures -> campaign results",
+        "Run and inspect the existing semantic evaluation campaigns.",
+        "Fixed evaluation fixtures -> retained campaign results",
         ExecutionKind.MIXED,
         "Changes evaluation ledgers, not Context content",
     ),
@@ -221,7 +224,8 @@ _OPERATIONS = (
     ),
     _operation(
         "fit",
-        "Judge proposition compatibility, or detect coherence issues across one saved Ground graph.",
+        "Judge whether a defined set of Memories or other propositions is jointly "
+        "compatible under ordinary interpretation, returning YES, MAY, or NO.",
         "Propositions + optional background -> YES / MAY / NO; Ground + bound Contexts -> complete Fit receipt",
         ExecutionKind.SEMANTIC,
         "Read-only; changes no Context, Ground, Rule, Goal, or Memory",
@@ -229,15 +233,17 @@ _OPERATIONS = (
     ),
     _operation(
         "resolve",
-        "Propose grounded minimum changes that turn one direct-Memory frame from Fit MAY or NO to YES.",
-        "Context Memories + optional guidance -> verified repair candidates -> exact Apply",
+        "Propose and verify minimum changes that make one bounded direct-Memory "
+        "Context frame Fit YES.",
+        "Bounded Context frame + optional guidance -> verified repair candidates -> exact Apply",
         ExecutionKind.SEMANTIC,
         "Read-only until one exact candidate is explicitly applied; Apply creates one checkpoint",
-        "One exact direct Context; explicit Memory UID prefixes may narrow mutation targets",
+        "One bounded direct Context frame; explicit Memory UID prefixes limit mutation targets",
     ),
     _operation(
         "dedup",
-        "Keep one unchanged existing Memory per confirmed duplicate component.",
+        "Review confirmed duplicate groups, retain one existing Memory in each "
+        "group, and delete the rest on Apply.",
         "Confirmed duplicate handoffs -> reviewed survivors -> exact Apply",
         ExecutionKind.DETERMINISTIC,
         "Read-only until exact Apply; Apply deletes absorbed UIDs in one checkpoint",
@@ -277,10 +283,13 @@ _OPERATIONS = (
     ),
     _operation(
         "ground",
-        "Create or continue a reviewed Goal-Rules-Memories Ground workbench.",
+        "Develop an abstract idea into a reviewable Ground by shaping its Goal, "
+        "Rules, and example Memories together.",
         "Dialogue + evidence -> reviewed Ground",
         ExecutionKind.SEMANTIC,
-        "Changes Ground records; Context changes require separate commands",
+        "Creates or changes only Ground workspace Contexts; external Context "
+        "changes require separate operations",
+        "One named Ground workspace and its owned lanes",
     ),
     _operation(
         "help",
@@ -291,7 +300,8 @@ _OPERATIONS = (
     ),
     _operation(
         "impact",
-        "Preview or inspect operation Impact; no Context changes occur before its reviewed Apply handoff.",
+        "Preview or inspect an operation's expected Context effects without "
+        "applying them.",
         "Operation inputs or session -> impact report",
         ExecutionKind.MIXED,
         "Impact is read-only; Apply is a separate reviewed handoff",
@@ -347,7 +357,7 @@ _OPERATIONS = (
     ),
     _operation(
         "log",
-        "Browse Context checkpoints, inspect one Memory lineage with --memory, search history, or list Profile command attempts.",
+        "Browse or search recorded Context, Memory, and Profile history.",
         "Recorded history or query -> history report",
         ExecutionKind.MIXED,
         "Read-only",
@@ -355,18 +365,18 @@ _OPERATIONS = (
     ),
     _operation(
         "meld",
-        "Semantically reconcile two Contexts into either a separate Result or "
-        "an authoritative Baseline.",
-        "PEER A + PEER B -> RESULT; INCOMING -> BASELINE",
+        "Semantically reconcile two Contexts, either into a separate Result or "
+        "by incorporating proposed changes into an existing Target Context.",
+        "PEER A + PEER B -> RESULT; INCOMING -> EXISTING TARGET",
         ExecutionKind.SEMANTIC,
         "Symmetric mode requires a distinct empty Result; directional mode "
-        "changes only the Baseline after reviewed Apply",
+        "changes only the existing Target after reviewed Apply",
         "Each side exact or readable descendants",
     ),
     _operation(
         "merge",
-        "Add Source-only items to the current Target, choosing Source or Target "
-        "wherever stored items conflict.",
+        "Add Source-only items to the current Target, leave exact matches "
+        "unchanged, and choose Source or Target for stored-item conflicts.",
         "Source Context -> current Target Context",
         ExecutionKind.DETERMINISTIC,
         "Changes Target only after every required conflict has KEEP TARGET or TAKE SOURCE; Source stays unchanged",
@@ -374,10 +384,13 @@ _OPERATIONS = (
     ),
     _operation(
         "profile",
-        "Enter the interactive Profile selector, or manage complete local MemoryStore Profiles.",
+        "Select and manage complete local MemoryStore Profiles. Profiles can "
+        "also be renamed or permanently removed through the picker or with "
+        "mem profile rename and mem profile remove.",
         "Profile registry <-> Profile administration",
         ExecutionKind.DETERMINISTIC,
-        "May switch, create, import, rename, or remove Profiles",
+        "May switch, import, rename, or permanently remove Profiles; Grant "
+        "subcommands manage cross-Profile views",
     ),
     _operation(
         "provider",
@@ -439,23 +452,28 @@ _OPERATIONS = (
     ),
     _operation(
         "revert",
-        "Select a checkpoint and review restoration of one local Context.",
+        "Restore one local Context to a selected checkpoint, reviewing the "
+        "exact impact when selection is interactive.",
         "Checkpoint -> restored Context state",
         ExecutionKind.MIXED,
-        "Changes one Context after restoration review",
+        "Restores one Context; interactive or semantic selection requires "
+        "reviewed confirmation",
         "One exact local Context",
     ),
     _operation(
         "review",
-        "Enter an interactive Review session or stage semantic review responses; never apply Memories.",
-        "Saved analysis -> review responses",
+        "Open a saved semantic artifact to inspect its analysis, proposal, or "
+        "result state and, when supported, record review responses. Review never "
+        "applies Memories.",
+        "Saved semantic artifact -> report and optional review responses",
         ExecutionKind.MIXED,
         "No Context content changes",
         "One saved operation artifact",
     ),
     _operation(
         "sever",
-        "Review Source against Criteria and create a derived Result while leaving Source unchanged.",
+        "Create a Result by selecting, transforming, or excluding Source Memories "
+        "according to a Criteria Context.",
         "Source Context + Criteria Context -> new Result Context",
         ExecutionKind.SEMANTIC,
         "Creates reviewed Result; Source remains unchanged",
@@ -530,7 +548,8 @@ _OPERATIONS = (
     ),
     _operation(
         "translate",
-        "Show and save a reusable translation view; materialize it only through an explicit route.",
+        "Generate and save a reusable translated view of one Context or Memory "
+        "while preserving the original content.",
         "Context or Memory -> translated view or materialization",
         ExecutionKind.SEMANTIC,
         "Source unchanged; explicit routes may create or add material",
@@ -538,10 +557,11 @@ _OPERATIONS = (
     ),
     _operation(
         "undo",
-        "Undo the most recent recorded Context command across its affected Contexts.",
+        "Undo the most recent recorded command as one unit.",
         "Command history -> reversed Context effects",
         ExecutionKind.DETERMINISTIC,
-        "Changes every Context affected by that command",
+        "Restores every Context and Memory change recorded by that command",
+        "One most-recent recoverable command unit across all affected Contexts",
     ),
     _operation(
         "unlock",

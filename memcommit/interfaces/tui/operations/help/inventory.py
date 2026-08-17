@@ -56,6 +56,7 @@ from memcommit.help_application import list_operation_help
 
 COMMAND_ANNOTATIONS = {
     "config": "legacy",
+    "eval": "legacy",
 }
 
 # Exact alternate spellings stay executable but share their canonical
@@ -272,7 +273,7 @@ HELP_CATEGORY_DESCRIPTIONS = {
     ),
     "GROUND WORKBENCH": (
         "LLM-BASED",
-        "Build a reviewable common ground for agent memory by developing its Goal, "
+        "Turn abstract ideas into reviewable common ground by developing a Goal, "
         "Rules, and example Memories together.",
     ),
     "HISTORY & RECOVERY": (

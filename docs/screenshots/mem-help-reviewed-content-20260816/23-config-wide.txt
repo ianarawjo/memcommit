@@ -1,0 +1,52 @@
+ mem help · command inventory                                                                                                                                                       
+┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘^
+                                                                                                                                                                                    
+┌ HISTORY & RECOVERY ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ MIXED · Inspect provenance and recorded changes. Restore an earlier state through explicit history operations.                                                                  │ 
+│ ▸ mem log         Browse or search recorded Context, Memory, and Profile history.      │ USE WHEN: Investigating previous operations, checkpoints, or Memory history.           │ 
+│ ▸ mem diff        Show the differences recorded by a Context checkpoint or the active  │ USE WHEN: Verifying exactly what a recorded operation changed.                         │ 
+│                   Update.                                                              │                                                                                        │ 
+│ ▸ mem trace       Trace one retained Memory through its recorded lineage.              │ USE WHEN: Determining where a Memory came from and how it changed.                     │ 
+│ ▸ mem rationale   Explain one Memory from recorded provenance and, when needed,        │ USE WHEN: Understanding why a Memory exists or reached its current form.               │ 
+│                   inference.                                                           │                                                                                        │ 
+│ ▸ mem checkpoint  Save the current Context as a manual recovery point for Diff or      │ USE WHEN: Creating a recovery point before risky work.                                 │ 
+│                   Revert.                                                              │                                                                                        │ 
+│ ▸ mem undo        Undo the most recent recorded command as one unit.                   │ USE WHEN: Reversing the latest recorded mutation as one operation.                     │ 
+│ ▸ mem redo        Redo the most recently undone recorded Context command.              │ USE WHEN: Reapplying a command that was undone accidentally.                           │ 
+│ ▸ mem revert      Restore one local Context to a selected checkpoint, reviewing the    │ USE WHEN: Restoring a Context to a deliberately saved recovery point.                  │ 
+│                   exact impact when selection is interactive.                          │                                                                                        │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┌ PROFILES ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ NO LLM · Select and administer complete local Profile stores and their managed names.                                                                                           │ 
+│ ▸ mem profile  Select and manage complete local MemoryStore Profiles. Profiles can     │ USE WHEN: Managing separate users, environments, or Memory stores.                     │ 
+│                also be renamed or permanently removed through the picker or with mem   │                                                                                        │ 
+│                profile rename and mem profile remove.                                  │                                                                                        │ 
+│ ▸ mem rename   Rename the current or an explicit managed Profile without moving or     │ USE WHEN: Giving an existing managed Profile a clearer name.                           │ 
+│                rewriting its store; mem profile rename is the explicit equivalent.     │                                                                                        │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┌ SHARING & PROTECTION ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ NO LLM · Deliver owned Contexts and protect Memory, Context, or Profile writes.                                                                                                 │ 
+│ ▸ mem share   Send one ordinary Context through a grant-backed receiver endpoint.      │ USE WHEN: Delivering an owned Context to an authorized receiver.                       │ 
+│ ▸ mem lock    Lock the current Context, a recursive Context set, Memory, or Profile.   │ USE WHEN: Preventing accidental modification of stable material.                       │ 
+│ ▸ mem unlock  Unlock the current Context, a recursive set, Memory, or Profile.         │ USE WHEN: Reopening protected material for intentional revision.                       │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┏ SYSTEM & STUDY TOOLS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃ Configure MemCommit and prepare or run study and evaluation utilities.                                                                                                          ┃ 
+┃ ▸ mem help             Enter the interactive command browser and open syntax help.     │ USE WHEN: Discovering available operations and their invocation forms.                 ┃ 
+┃ ▸ mem provider         Select and verify Codex, Ollama, or OpenRouter semantic         │ USE WHEN: Choosing which backend semantic operations should use, or checking that it   ┃ 
+┃                        execution.                                                      │           is ready before durable work.                                                ┃ 
+┃ ▸ mem shell-init       Print opt-in shell integration for interactive command prefill. │ USE WHEN: Enabling optional shell-specific conveniences.                               ┃ 
+┃ ▾ mem config (legacy)  Read or write stored global configuration values.               │ USE WHEN: Inspecting or changing stored global settings through the legacy low-level   ┃ 
+┃                                                                                        │           interface.                                                                   ┃ 
+┃   FLOW      · Configuration key <-> value                                                                                                                                       ┃ 
+┃   EXECUTION · DETERMINISTIC                                                                                                                                                     ┃ 
+┃   EFFECT    · May change global configuration                                                                                                                                   ┃ 
+┃   FORM 1 · mem config show (show global configuration)                                                                                                                          ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab next kind  H full help

@@ -1,0 +1,30 @@
+ mem help · command inventory                                                                       
+┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+┃ ▸ mem delete (remove)  Select a Context or direct item to delete, or name it by locator, name,  ┃^
+┃                        or UID.                                                                  ┃ 
+┃                        USE WHEN: Removing a specific Context or item that is no longer needed.  ┃ 
+┃ ▸ mem clear            Remove all direct items from the current or explicit Context after       ┃ 
+┃                        confirmation.                                                            ┃ 
+┃                        USE WHEN: Emptying a Context while retaining the Context itself.         ┃ 
+┃ ▾ mem merge            Add Source-only items to the current Target, leave exact matches         ┃ 
+┃                        unchanged, and choose Source or Target for stored-item conflicts.        ┃ 
+┃                        USE WHEN: Appending Source-only items or bringing a copied or branched   ┃ 
+┃                                  Context back into the current Context without semantic         ┃ 
+┃                                  synthesis.                                                     ┃ 
+┃   FLOW      · Source Context -> current Target Context                                          ┃ 
+┃   EXECUTION · DETERMINISTIC                                                                     ┃ 
+┃   EFFECT    · Changes Target only after every required conflict has KEEP TARGET or TAKE SOURCE; ┃ 
+┃               Source stays unchanged                                                            ┃ 
+┃   RANGE     · Exact roots or matching lexical descendants by complete relative path             ┃ 
+┃   MERGE BOUNDARY                                                                                ┃ 
+┃   Merge is a deterministic structural union, not a three-way or semantic reconciliation.        ┃ 
+┃   - SOURCE ONLY · Add the Source item to the current Target.                                    ┃ 
+┃   - EXACT MATCH · Leave the stored item unchanged.                                              ┃ 
+┃   - CONFLICT · Choose KEEP TARGET or TAKE SOURCE; Merge never synthesizes custom content.       ┃ 
+┃   - TARGET ONLY · Keep the Target item; absence from Source never deletes it.                   ┃ 
+┃   - RECURSIVE · Align descendants by complete relative path.                                    ┃ 
+┃   FORM 1 · mem merge (choose a readable Source and direct or descendant reach in a TTY)         ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab next kind  H f

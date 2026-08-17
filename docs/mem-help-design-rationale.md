@@ -111,7 +111,9 @@ prompt-toolkit selector:
   depend on Markdown bullet projection.
   Expanded prose follows the same catalog-owned rule, but remains typed rather
   than entering a generic note bag. Every detail has an operation-local ID and
-  a discovery role. `LIMITATION` records explain an incomplete
+  a discovery role. Structured `COMPARISON` details also carry bounded route,
+  behavior, or verdict options when a flat paragraph would hide a meaningful
+  choice. `LIMITATION` records explain an incomplete
   implementation boundary and `ACCESS_BOUNDARY` records explain an authority
   distinction. The terminal shows their title and body only after expansion;
   Python and agent-facing discovery can address the same detail by its stable
@@ -119,6 +121,11 @@ prompt-toolkit selector:
   during MCP discovery; an `ON_DEMAND` detail remains indexed without copying
   its body into every execution tool. Import's current MemCommit-to-MemCommit
   scope and Query's QUERY-without-READ behavior are the first two prose details.
+  The same typed-detail path now records Merge's structural cases, ordinary
+  Atomize versus `--evaluate`, Distill versus Atomize, Translate materialization
+  routes, Impact invocation, Fit verdict examples, and Fit versus Conformance.
+  Distill and Conformance expose their adjacent-operation distinction during
+  tool selection; syntax and worked verdict examples remain on demand.
   An exact alternate spelling that adds no operation may instead be folded into
   its canonical label, as in `list (ls)` and `delete (remove)`, while remaining
   directly executable. `remove` is therefore not a second deletion operation:
@@ -228,8 +235,9 @@ deterministic instead of emitting a terminal-control interface.
 Ordinary commands carry no implementation label. Repeating `implemented` on
 nearly every row adds noise without helping a person choose a command. A
 parenthesized status annotation is reserved for exceptional compatibility
-state: `config (legacy)` remains callable but sits outside the current
-workflow. A separate exact-spelling annotation groups an executable hidden
+state. `config (legacy)` remains a low-level stored-setting interface, while
+`eval (legacy)` remains the fixed research campaign harness pending a general
+evaluation interface. Both remain callable. A separate exact-spelling annotation groups an executable hidden
 spelling with its canonical operation, as in `list (ls)` and
 `delete (remove)`; it does not classify a conditional dispatcher such as
 `checkout` as an alias. Retired commands such as `integrate` are omitted
