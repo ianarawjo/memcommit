@@ -17,11 +17,14 @@
 >
 > **Interactive-entry correction (2026-08-16).** The Context-recommendation
 > flow documented below is also historical. New production Ground entry now
-> opens the shared saved-work launcher, then a shared exact Save Location
-> control for the new physical Context root. The accepted root is fixed before
-> provider dialogue; the provider receives no Context catalog and cannot rank
-> existing Contexts, suggest another location, or rename it. External Context
-> membership is built later under the physical `/contexts` lane.
+> opens the shared session launcher and enters a blank workbench immediately.
+> A persistent `LOCATION` pane above `GOAL` opens the shared exact Save
+> Location tree with Enter or `L`; the location remains `NOT CREATED` and changeable
+> until exact approval. Goal-bearing interrupted work is retained as a private
+> typed draft row in the same launcher, not as a Context or a second draft
+> screen. The provider receives no Context catalog and cannot rank existing
+> Contexts. External Context membership is built later under the physical
+> `/contexts` lane.
 
 The implementation has two explicit stages. It first creates or resumes a
 named empty version-1 scaffold, then an explicit binding action upgrades that
@@ -81,8 +84,8 @@ mem ground "I want to separate Task 1 into wiki and user-facing material."
 
 In a TTY, the request is immediately visible as the Working Goal and is
 already `USER TURN 1`. It is not copied into the Message composer and does not
-wait for a redundant `Enter`: the host performs content-free Context locator
-discovery and starts one provider interpretation. The composer is empty when
+wait for a redundant `Enter`: the host starts one provider interpretation
+without disclosing an existing-Context catalog. The composer is empty when
 the agent's proposal or question makes it the person's turn again. Outside a
 TTY, the request is only rendered in the deterministic unsaved snapshot; no
 provider is called and nothing is written. A valid portable positional value
@@ -116,14 +119,19 @@ A future durable agreement command must bind approval to the reviewed Ground
 revision and digest. It must not infer agreement from coverage or reuse the
 legacy completion field.
 
-The blank TUI is already the appropriate temporary session: its Working Goal,
-dialogue blocks, and pending proposal live only in process memory. Before the
-exact creation command is approved, no Ground JSON, temporary name, Context
-state, or checkpoint exists. Persisting an unnamed draft was rejected because
-it would introduce resume identity, name collision, expiry, cleanup, and
-privacy decisions without helping the immediate dialogue. A distinct
-named-draft feature can be designed later if interrupted-session recovery
-becomes necessary.
+The blank TUI is the temporary workbench, while a Goal-bearing interrupted
+proposal may now be retained as a typed private draft receipt. The receipt is
+shown in the same Ground launcher as `DRAFT · NOT CREATED`; it is not a Ground
+Context, manifest, checkpoint, binding, or current pointer. It uses a stable
+UUID, exact planned Location, revision, digest-based compare-and-swap, private
+profile storage, and exact reopen argv. Reopening restores the pending proposal
+without replaying provider inference. A completely untouched blank workbench
+is still discarded because it has neither a useful Goal nor save identity.
+
+Final exact approval materializes the physical Context-rooted workspace and
+removes the receipt. This deliberately keeps interruption recovery separate
+from the durable Ground model: the five lane Contexts remain the only source of
+truth after creation.
 
 Lifecycle and persistence state belong to the overall artifact header. An
 unsaved Ground says `MEM GROUND · WORKING · NOT SAVED`; a named one says
@@ -140,8 +148,9 @@ layers looked like passive status labels, while the transcript looked like the
 primary artifact. It also made a long Goal, Rule, or Ground Memory inaccessible
 rather than merely compact.
 
-The revised layout presents Goal, Contexts, Rules, Memories, and Chat as
-five peer workbench components, but peers do not need identical height. Goal is an
+The revised layout presents a compact Location control above Goal, Contexts,
+Rules, Memories, and Chat. The five semantic panes remain peer workbench
+components, but peers do not need identical height. Goal is an
 orientation statement: every newly created or revised durable Goal is limited
 to 40 whitespace-delimited words, and its frame is capped at three visible
 body rows. Contexts prefers five body rows, and may use up to eight, because its
@@ -151,6 +160,9 @@ share the remaining flexible height. Every component keeps its own focusable,
 independently scrollable viewport:
 
 ```text
+┌─ LOCATION ────────────────────────────────────────────┐
+│ NOT SET · Enter/L opens Context tree                  │
+└───────────────────────────────────────────────────────┘
 ┌─ GOAL ────────────────────────────────────────────────┐
 │ (not yet stated)                                  ▐   │
 └───────────────────────────────────────────────────────┘
@@ -286,7 +298,8 @@ and placement targets. It does not load live Context content, expose UIDs or
 digests, or claim current freshness; the normal mutation boundary rechecks
 freshness later.
 
-Within an input field, `Enter` sends and `Ctrl-J` inserts a newline. On a
+Within an input field, `Enter` sends and `Ctrl-J` inserts a newline. On the
+read-only Location viewport, `Enter` expands the shared tree editor. On a
 read-only Goal, Contexts, Rules, or Memories viewport, `Enter` first opens that
 pane's conversation; on Chat it focuses the already-present general Message.
 `Escape` first collapses an expanded pane conversation and restores any
@@ -298,12 +311,23 @@ fail to provide the predictable exit requested by the user.
 
 When an exact command is awaiting approval, the command/effect receipt and its
 operation-specific approval keys take precedence over message entry. The
-five workbench components remain visible, but the approval focus is attached
-to Chat. `Tab` and `Shift-Tab` may still browse the five read-only panes
+five semantic workbench components remain visible, while Location stays
+visible above them and the approval focus is attached to Chat. `Tab` and
+`Shift-Tab` may still browse the six read-only surfaces
 after a pane has been scrolled, but every writable in-frame composer is
 detached and the Action panel is shown below the workbench. Browsing cannot
 edit, replace, or implicitly approve the
 frozen command; approval remains bound to the exact displayed argv.
+
+The initial keyboard focus is Goal, not the general Chat composer. This keeps
+the first interaction aligned with the artifact being established. Location
+participates in the same focus sequence despite its compact height:
+`Shift-Tab` from the initial Goal reaches Location immediately, Enter expands
+the shared Context-tree Save Location editor, and ordinary Tab reaches
+Location when the top-to-bottom sequence wraps. `L` remains available from
+every read-only Ground surface as a direct shortcut. Returning from the nested
+editor restores the originating surface; it never approves the pending Ground
+command.
 
 This is the normal entry point when the person has only a rough concern, such
 as wanting to work out which parts of some notes were reported. Early
@@ -314,18 +338,20 @@ then returns either one consequential `ASK` turn or a structured
 The host validates and freezes those two fields, constructs the exact
 creation argv locally, and presents it for explicit approval.
 
-The blank frame is not an unnamed persistent Ground. It does not construct a
-store, reserve a name, inspect the current Context, or write dialogue text.
-Its optional Working Goal is an unsaved copy of the person's starting request,
-not an inferred durable field. Persisting an unnamed session would weaken
-identity and resume semantics, while silently generating a slug could collide
-with an existing Ground or make an unreviewed interpretation durable. Named
-action options therefore still require `GROUND_NAME`; `mem ground --goal ...`,
-`--snapshot`, or another action option without a name fails without creating
-state. A provider-suggested name is checked for a collision before approval
-and checked again immediately before execution.
+The blank frame is not an unnamed persistent Ground Context. It does not
+reserve a namespace, create a manifest, inspect Context content, or change
+Current. Its optional Working Goal remains unapproved. Only after a concrete
+proposal exists may the shell retain the private draft receipt described
+above. Named action options still require `GROUND_NAME`; `mem ground --goal
+...`, `--snapshot`, or another action option without a name fails without
+creating state. A proposed Location is checked locally when selected and
+checked again immediately before exact execution.
 
-### Content-free Context discovery before naming
+### Historical: content-free Context discovery before naming
+
+The following subsection records the previous prototype and is not the current
+entry contract. Current Ground startup sends no existing-Context catalog; the
+person opens the shared Save Location tree explicitly with `L`.
 
 A sentence-form invocation is already a submitted request, so the next
 conversational turn belongs to the agent. The blank TUI now performs one
@@ -1537,16 +1563,15 @@ restriction to read panes is deliberate: ordinary lowercase `b` and `q` must
 remain writable message, comment, direct-edit, and exact-name text. `C` stays
 the pane-comment alias, while `Ctrl-C` stays the immediate exit path.
 
-Returning with `B` performs no Ground mutation and does not approve a pending
-command. The launcher rediscovers the catalog instead of reusing the previous
-screen's snapshot, then rechecks the chosen Ground's UID, revision, and digest
-through the existing-only reopen path. This makes newly created sessions and
-the latest saved revisions visible without introducing an active-Ground
-pointer. It also means an unapproved proposal is abandoned when navigating
-away; only explicit Enter approval (or its `A` compatibility alias) can cross
-the exact-command boundary. The same navigation is
-available from the unsaved blank Ground so entering New never traps the user
-in a screen that must be killed and restarted.
+Returning with `B` performs no Ground or Context mutation and does not approve
+a pending command. The launcher rediscovers the catalog instead of reusing the
+previous screen's snapshot, then rechecks the chosen entry's UID, revision,
+and digest through its existing-only reopen path. A Goal-bearing pending
+proposal is retained as a `DRAFT · NOT CREATED` row; reopening that row does
+not repeat provider inference. Only explicit Enter approval (or its `A`
+compatibility alias) can cross the exact-command boundary. The same navigation
+is available from a completely blank Ground so entering New never traps the
+user in a screen that must be killed and restarted.
 
 The initial Ground view is `BY CONTEXT · RECENT FIRST`: Context groups use
 case-insensitive name order with an exact-name tie breaker, and sessions within

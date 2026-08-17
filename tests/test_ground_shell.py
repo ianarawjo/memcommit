@@ -185,6 +185,184 @@ def proposal_with_new_context(
     )
 
 
+def test_resumed_proposal_opens_without_repeating_provider_inference():
+    frozen = GroundShellProposal(
+        ground_name="projects/ticker-ground",
+        goal="Find how real US ticker symbols are assigned.",
+        understanding="The Goal is about actual US-listed companies.",
+        question="Approve this Goal?",
+        rule_drafts=(
+            GroundShellRuleDraft(
+                content="Use actual US-listed companies.",
+                rationale="The examples must be factual.",
+                origin="AGENT_SUGGESTED",
+                source_spans=(),
+            ),
+        ),
+    )
+    provider_calls = []
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("q")
+        result = run_ground_shell(
+            interpret=lambda text: provider_calls.append(text),
+            apply=lambda _value: pytest.fail("resuming must not apply"),
+            ground_name=frozen.ground_name,
+            initial_proposal=frozen,
+            initial_submitted_turns=(
+                "I want to understand how real US tickers are assigned.",
+            ),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result.status == "CANCELLED"
+    assert result.proposal == frozen
+    assert result.submitted_turns == (
+        "I want to understand how real US tickers are assigned.",
+    )
+    assert provider_calls == []
+
+
+def test_back_to_picker_carries_the_pending_proposal_for_draft_retention():
+    frozen = GroundShellProposal(
+        ground_name="projects/ticker-ground",
+        goal="Find how real US ticker symbols are assigned.",
+        understanding="The Goal is ready for review.",
+        question="Approve this Goal?",
+    )
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("b")
+        result = run_ground_shell(
+            interpret=lambda _text: pytest.fail("resuming must not infer"),
+            apply=lambda _value: pytest.fail("returning must not apply"),
+            ground_name=frozen.ground_name,
+            initial_proposal=frozen,
+            initial_submitted_turns=("Understand real ticker assignment.",),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result.status == "BACK_TO_PICKER"
+    assert result.proposal == frozen
+
+
+def test_location_above_goal_can_retarget_the_exact_save_command():
+    frozen = GroundShellProposal(
+        ground_name="projects/ticker-ground",
+        goal="Find how real US ticker symbols are assigned.",
+        understanding="The Goal is ready for review.",
+        question="Approve this Goal?",
+    )
+    applied = []
+    location_inputs = []
+
+    with create_pipe_input() as pipe_input:
+        def feed() -> None:
+            pipe_input.send_text("l")
+            time.sleep(0.1)
+            # Location returns to the originating Goal surface. Exact apply
+            # remains owned by Chat, four visible panes later.
+            pipe_input.send_text("\t\t\t\t\r")
+
+        feeder = threading.Thread(target=feed)
+        feeder.start()
+        result = run_ground_shell(
+            interpret=lambda _text: pytest.fail("retargeting must not infer"),
+            apply=lambda value: applied.append(value) or "created",
+            ground_name=frozen.ground_name,
+            initial_proposal=frozen,
+            initial_submitted_turns=("Understand real ticker assignment.",),
+            choose_save_location=lambda current: (
+                location_inputs.append(current) or "research/ticker-ground"
+            ),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+        feeder.join(timeout=2)
+
+    assert result.status == "APPLIED"
+    assert location_inputs == ["projects/ticker-ground"]
+    assert result.proposal is not None
+    assert result.proposal.ground_name == "research/ticker-ground"
+    assert applied == [result.proposal]
+
+
+def test_selected_namespaced_location_is_the_frozen_first_proposal_name():
+    applied = []
+
+    def namespaced_proposal(_text: str) -> Propose:
+        return Propose(
+            kind="PROPOSE",
+            understanding="Use the selected Context-rooted Location.",
+            question="Approve this Goal?",
+            ground_name="research/ticker-ground",
+            goal="Find how real US ticker symbols are assigned.",
+        )
+
+    with create_pipe_input() as pipe_input:
+        def feed() -> None:
+            pipe_input.send_text("l")
+            time.sleep(0.1)
+            pipe_input.send_text("\rFind real ticker rules.\rq")
+
+        feeder = threading.Thread(target=feed)
+        feeder.start()
+        result = run_ground_shell(
+            interpret=namespaced_proposal,
+            apply=lambda value: applied.append(value),
+            choose_save_location=lambda _current: "research/ticker-ground",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+        feeder.join(timeout=2)
+
+    assert result.status == "CANCELLED"
+    assert result.proposal is not None
+    assert result.proposal.ground_name == "research/ticker-ground"
+    assert applied == []
+
+
+@pytest.mark.parametrize(
+    "navigation",
+    [
+        pytest.param("\x1b[Z", id="shift-tab-from-goal"),
+        pytest.param("\t\t\t\t\t\t", id="tab-wrap-from-goal"),
+    ],
+)
+def test_location_is_a_real_tab_surface_and_enter_expands_it(navigation):
+    location_inputs = []
+
+    with create_pipe_input() as pipe_input:
+        def feed() -> None:
+            pipe_input.send_text(f"{navigation}\r")
+            time.sleep(0.1)
+            pipe_input.send_text("q")
+
+        feeder = threading.Thread(target=feed)
+        feeder.start()
+        result = run_ground_shell(
+            interpret=lambda _text: pytest.fail("must not interpret"),
+            apply=lambda _value: pytest.fail("must not apply"),
+            choose_save_location=lambda current: (
+                location_inputs.append(current) or "research/ticker-ground"
+            ),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+        feeder.join(timeout=2)
+
+    assert not feeder.is_alive()
+    assert result.status == "CANCELLED"
+    assert location_inputs == [None]
+
+
 def test_blank_goal_inline_direct_edit_is_preserved_in_creation_proposal():
     seen = []
     applied = []
@@ -203,7 +381,7 @@ def test_blank_goal_inline_direct_edit_is_preserved_in_creation_proposal():
     with create_pipe_input() as pipe_input:
         # MESSAGE -> GOAL -> expanded EDIT. The creation command still waits
         # for Enter after the provider supplies only a portable Ground name.
-        pipe_input.send_text(f"\te{exact_goal}\ra")
+        pipe_input.send_text(f"e{exact_goal}\ra")
         result = run_ground_shell(
             interpret=interpret,
             apply=lambda value: applied.append(value) or "created",
@@ -225,7 +403,7 @@ def test_blank_goal_direct_edit_fails_closed_if_provider_rewrites_it():
     applied = []
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text(f"\te{exact_goal}\r\x1b")
+        pipe_input.send_text(f"e{exact_goal}\r\x1b")
         result = run_ground_shell(
             interpret=lambda _text: Propose(
                 kind="PROPOSE",
@@ -263,11 +441,11 @@ def test_blank_goal_refine_reopens_exact_edit_and_agent_comment_fields():
         )
 
     with create_pipe_input() as pipe_input:
-        # MESSAGE -> GOAL -> EDIT -> COMMENT -> review -> refine.  Pressing
-        # Typing immediately after E must change the reopened direct field,
+        # GOAL -> EDIT -> COMMENT -> review -> refine. Typing immediately
+        # after E must change the reopened direct field,
         # not append prose to a host-framed payload in ordinary Message.
         pipe_input.send_text(
-            f"\te{exact_goal}\t{comment}\re Revised.\r\x1b"
+            f"e{exact_goal}\t{comment}\re Revised.\r\x1b"
         )
         result = run_ground_shell(
             interpret=interpret,
@@ -291,7 +469,7 @@ def test_blank_goal_escape_collapses_editor_before_cancelling_shell():
     interpreted = []
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\teunsubmitted edit\x1b\x1b")
+        pipe_input.send_text("eunsubmitted edit\x1b\x1b")
         result = run_ground_shell(
             interpret=lambda text: interpreted.append(text),
             apply=lambda _value: pytest.fail("must not apply"),
@@ -318,7 +496,7 @@ def test_blank_goal_inline_tab_submits_comment_only_to_agent():
 
     with create_pipe_input() as pipe_input:
         pipe_input.send_text(
-            "\te\tExplain the intended audience.\r\x1b"
+            "e\tExplain the intended audience.\r\x1b"
         )
         result = run_ground_shell(
             interpret=interpret,
@@ -469,8 +647,8 @@ def test_goal_revision_result_stays_in_goal_without_chat_duplication(
     )
 
     with create_pipe_input() as pipe_input:
-        # MESSAGE -> GOAL -> target-owned revision request -> proposed Goal.
-        pipe_input.send_text(f"\t\r{request}\rq")
+        # Goal owns the initial focus and the target-owned revision request.
+        pipe_input.send_text(f"\r{request}\rq")
         result = run_ground_shell(
             interpret=lambda _text: Propose(
                 kind="PROPOSE",
@@ -542,7 +720,7 @@ def test_blank_inline_goal_keeps_five_panes_and_both_fields_at_24_rows(
     with create_pipe_input() as pipe_input:
         def inspect() -> None:
             try:
-                pipe_input.send_text("\te")
+                pipe_input.send_text("e")
                 deadline = time.monotonic() + 2
                 while time.monotonic() < deadline:
                     if panes and messages and editors:
@@ -997,6 +1175,7 @@ def test_initial_results_mark_unseen_panes_until_the_person_visits_one(
 
     assert result.status == "CANCELLED"
     assert set(notifications) == {
+        "LOCATION",
         "GOAL",
         "CONTEXTS",
         "RULES",
@@ -1004,6 +1183,7 @@ def test_initial_results_mark_unseen_panes_until_the_person_visits_one(
         "CHAT",
     }
     assert notifications["GOAL"]()
+    assert notifications["LOCATION"]()
     assert notifications["CONTEXTS"]()
     assert not notifications["RULES"]()
     assert notifications["MEMORIES"]()
@@ -1052,6 +1232,7 @@ def test_blank_ground_keeps_every_pane_and_message_body_visible_at_24_rows(
 
     assert result.status == "CANCELLED"
     assert set(panes) == {
+        "LOCATION",
         "GOAL",
         "CONTEXTS",
         "RULES",
@@ -1099,7 +1280,7 @@ def test_blank_ground_prefers_five_context_body_rows_at_30_rows(monkeypatch):
 
     context_info = panes["CONTEXTS"].text_area.window.render_info
     assert context_info is not None
-    assert context_info.window_height == 5
+    assert context_info.window_height == 3
     assert all(
         pane.text_area.window.render_info is not None
         and pane.text_area.window.render_info.window_height >= 1
@@ -1161,9 +1342,9 @@ def test_blank_ground_flexible_panes_fill_a_tall_terminal(monkeypatch):
     assert heights["CONTEXTS"] <= 8
     assert min(flexible) > 4
     assert max(flexible) - min(flexible) <= 1
-    # Five read frames plus ACTION contribute twelve border rows; the
+    # Six read frames plus ACTION contribute fourteen border rows; the
     # header/footer contribute two. No unallocated band remains below ACTION.
-    assert sum(heights.values()) + action_height + 14 == 60
+    assert sum(heights.values()) + action_height + 16 == 60
 
 
 def test_blank_action_panels_are_content_sized_and_fit_narrow_terminals(
@@ -1239,7 +1420,7 @@ def test_blank_approval_action_renders_two_body_rows_at_24_by_30(
     with create_pipe_input() as pipe_input:
         def approve_after_render() -> None:
             try:
-                pipe_input.send_text("Review Task 1.\r")
+                pipe_input.send_text("\t\t\t\t\tReview Task 1.\r")
                 deadline = time.monotonic() + 2
                 while time.monotonic() < deadline:
                     if action_frames:
@@ -1625,7 +1806,7 @@ def test_memory_view_key_remains_literal_text_in_message():
     seen = []
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("v\r\x1b")
+        pipe_input.send_text("\t\t\t\t\tv\r\x1b")
         result = run_ground_shell(
             interpret=lambda text: seen.append(text)
             or Ask(
@@ -1647,7 +1828,7 @@ def test_focused_comment_key_remains_literal_text_in_message():
     seen = []
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("c\r\x1b")
+        pipe_input.send_text("\t\t\t\t\tc\r\x1b")
         result = run_ground_shell(
             interpret=lambda text: seen.append(text)
             or Ask(
@@ -1680,7 +1861,9 @@ def test_ask_loops_to_another_input_without_applying():
         return proposal(text)
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("See what was reported.\rTask 1 notes.\rq")
+        pipe_input.send_text(
+            "\t\t\t\t\tSee what was reported.\rTask 1 notes.\rq"
+        )
         result = run_ground_shell(
             interpret=interpret,
             apply=lambda value: applied.append(value),
@@ -1712,7 +1895,9 @@ def test_approval_applies_the_frozen_proposal_exactly_once():
         return "Grounding session created."
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("Review the Task 1 report.\r\r")
+        pipe_input.send_text(
+            "\t\t\t\t\tReview the Task 1 report.\r\r"
+        )
         result = run_ground_shell(
             interpret=proposal,
             apply=apply,
@@ -1768,7 +1953,9 @@ def test_approval_is_modal_and_tab_cannot_detach_exact_apply():
     applied: list[GroundShellProposal] = []
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("Review the Task 1 report.\r\ta")
+        pipe_input.send_text(
+            "\t\t\t\t\tReview the Task 1 report.\r\ta"
+        )
         result = run_ground_shell(
             interpret=proposal,
             apply=lambda value: applied.append(value) or "created",
@@ -1783,9 +1970,11 @@ def test_approval_is_modal_and_tab_cannot_detach_exact_apply():
 
 def test_enter_does_not_approve_from_another_ground_pane():
     with create_pipe_input() as pipe_input:
-        # Approval starts on Chat. Tab moves to Goal, where Enter is read-only;
-        # Q then cancels the still-pending review.
-        pipe_input.send_text("Review the Task 1 report.\r\t\rq")
+        # Approval starts on Chat. Tab moves to Location, where Enter expands
+        # the unavailable editor instead of approving; Q cancels the review.
+        pipe_input.send_text(
+            "\t\t\t\t\tReview the Task 1 report.\r\t\rq"
+        )
         result = run_ground_shell(
             interpret=proposal,
             apply=lambda _value: pytest.fail("must not apply away from Chat"),
@@ -1797,12 +1986,13 @@ def test_enter_does_not_approve_from_another_ground_pane():
     assert result.status == "CANCELLED"
 
 
-def test_tab_cycles_five_read_only_components_without_submitting():
+def test_tab_cycles_from_goal_through_semantic_panes_without_submitting():
     interpreted: list[str] = []
     applied: list[GroundShellProposal] = []
 
     with create_pipe_input() as pipe_input:
-        # MESSAGE → GOAL → CONTEXTS → RULES → MEMORIES → CHAT.
+        # GOAL → CONTEXTS → RULES → MEMORIES → CHAT → MESSAGE. Enter on the
+        # empty Message does not submit semantic work.
         pipe_input.send_text("\t\t\t\t\t\r\x03")
         result = run_ground_shell(
             interpret=lambda text: interpreted.append(text),
@@ -1840,7 +2030,7 @@ def test_context_selection_supports_multiple_names_before_separate_approval(
         # the alternative first (local Main) and the recommendation second.
         # F finishes the set; A separately approves the unchanged command.
         pipe_input.send_text(
-            "Review Task 1.\r"
+            "\t\t\t\t\tReview Task 1.\r"
             "\t"
             "\x1b[Z"
             "\x1b[B"
@@ -2145,7 +2335,7 @@ def test_ask_context_selection_can_be_reopened_from_input_mode():
     with create_pipe_input() as pipe_input:
         pipe_input.send_text(
             " f"
-            "\t\t"
+            "\t\t\t"
             "f"
             "\x1b[B"
             " "
@@ -2562,7 +2752,9 @@ def test_refine_requires_a_new_proposal_and_approval():
 
     with create_pipe_input() as pipe_input:
         # E restores the previous response. Ctrl-U clears it for a replacement.
-        pipe_input.send_text("First wording.\re\x15Better wording.\ra")
+        pipe_input.send_text(
+            "\t\t\t\t\tFirst wording.\re\x15Better wording.\ra"
+        )
         result = run_ground_shell(
             interpret=interpret,
             apply=lambda value: applied.append(value) or "created",
@@ -2588,7 +2780,9 @@ def test_cancel_and_ctrl_c_never_apply(cancel_key: str):
     applied: list[GroundShellProposal] = []
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text(f"Draft a Goal.\r{cancel_key}")
+        pipe_input.send_text(
+            f"\t\t\t\t\tDraft a Goal.\r{cancel_key}"
+        )
         result = run_ground_shell(
             interpret=proposal,
             apply=lambda value: applied.append(value),
@@ -2606,7 +2800,9 @@ def test_escape_cancels_with_unsent_text_in_the_message_box():
     applied: list[GroundShellProposal] = []
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("an unfinished Ground description\x1b")
+        pipe_input.send_text(
+            "\t\t\t\t\tan unfinished Ground description\x1b"
+        )
         result = run_ground_shell(
             interpret=lambda text: interpreted.append(text),
             apply=lambda value: applied.append(value),
@@ -2632,7 +2828,7 @@ def test_interpreter_error_is_fail_closed_and_can_retry():
         return proposal(text)
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("Draft a Goal.\rrq")
+        pipe_input.send_text("\t\t\t\t\tDraft a Goal.\rrq")
         result = run_ground_shell(
             interpret=interpret,
             apply=lambda value: applied.append(value),
@@ -2655,7 +2851,7 @@ def test_failed_apply_is_not_retried_by_repeated_approval():
 
     with create_pipe_input() as pipe_input:
         # The second approval alias is inert after an execution attempt; Q then closes.
-        pipe_input.send_text("Draft a Goal.\raaq")
+        pipe_input.send_text("\t\t\t\t\tDraft a Goal.\raaq")
         result = run_ground_shell(
             interpret=proposal,
             apply=fail,
@@ -2691,7 +2887,7 @@ def test_failed_direct_goal_apply_discards_inline_draft_before_refine():
         # After approval reaches the apply boundary, E must not reconstruct the same
         # direct proposal. Escape closes from ordinary input without another
         # provider or apply call.
-        pipe_input.send_text(f"\te{exact_goal}\rae\x1b")
+        pipe_input.send_text(f"e{exact_goal}\rae\x1b")
         result = run_ground_shell(
             interpret=interpret,
             apply=fail,
@@ -2714,7 +2910,9 @@ def test_ctrl_j_inserts_a_newline_instead_of_submitting():
         return proposal(text)
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("first line\nsecond line\rq")
+        pipe_input.send_text(
+            "\t\t\t\t\tfirst line\nsecond line\rq"
+        )
         run_ground_shell(
             interpret=interpret,
             apply=lambda value: pytest.fail("must not apply"),
@@ -2752,11 +2950,11 @@ def test_blank_read_pane_backs_to_picker_or_quits_without_a_turn(
     assert applied == []
 
 
-def test_blank_back_discards_pending_creation_without_applying_it():
+def test_blank_back_retains_pending_creation_without_applying_it():
     applied = []
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("Create a Ground.\rb")
+        pipe_input.send_text("\t\t\t\t\tCreate a Ground.\rb")
         result = run_ground_shell(
             interpret=proposal,
             apply=lambda *args: applied.append(args),
@@ -2766,7 +2964,8 @@ def test_blank_back_discards_pending_creation_without_applying_it():
         )
 
     assert result.status == "BACK_TO_PICKER"
-    assert result.proposal is None
+    assert result.proposal is not None
+    assert result.proposal.ground_name == "task-1-report-coverage"
     assert applied == []
 
 
@@ -2782,7 +2981,9 @@ def test_blank_message_keeps_lowercase_b_and_q_as_user_text():
         )
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("bring back q safely\r\x03")
+        pipe_input.send_text(
+            "\t\t\t\t\tbring back q safely\r\x03"
+        )
         result = run_ground_shell(
             interpret=interpret,
             apply=lambda *_args: pytest.fail("must not apply"),
@@ -2827,7 +3028,7 @@ def test_malformed_proposal_never_reaches_apply():
         }
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("Create it.\rq")
+        pipe_input.send_text("\t\t\t\t\tCreate it.\rq")
         result = run_ground_shell(
             interpret=raw_only,
             apply=lambda value: applied.append(value),
@@ -2844,7 +3045,7 @@ def test_nonempty_catalog_requires_one_main_at_shell_boundary():
     applied: list[GroundShellProposal] = []
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("Choose a Context.\rq")
+        pipe_input.send_text("\t\t\t\t\tChoose a Context.\rq")
         result = run_ground_shell(
             interpret=proposal,
             apply=lambda value: applied.append(value),
@@ -2869,7 +3070,7 @@ def test_overlong_goal_from_custom_interpreter_never_reaches_apply():
     )
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("Create it.\rq")
+        pipe_input.send_text("\t\t\t\t\tCreate it.\rq")
         result = run_ground_shell(
             interpret=lambda _text: overlong,
             apply=lambda value: applied.append(value),

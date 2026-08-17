@@ -2,9 +2,10 @@
 
 ## Status
 
-Physical creation, loading, typed Memory editing, the saved-work launcher,
-exact Save Location setup, the read-only workspace TUI, Ground-local Undo, and
-the Distill, Elaborate, and Fit semantic projections are implemented. The CLI
+Physical creation, loading, typed Memory editing, the unified saved/draft
+session launcher, in-session exact Save Location control, the read-only
+workspace TUI, Ground-local Undo, and the Distill, Elaborate, and Fit semantic
+projections are implemented. The CLI
 retains a transitional legacy-session route only for an already existing
 legacy name; a physical workspace never reads or writes that parallel JSON.
 Existing prototype Ground session JSON is not a migration input for a new
@@ -92,35 +93,54 @@ structural command.
 ### Interactive entry and Save Location
 
 Bare interactive `mem ground` always opens the common Operation Launcher, even
-when no saved Ground exists. The pinned action is `CREATE NEW GROUND CONTEXT`,
-not a synthetic unsaved session row. Existing physical workspaces and
-transitional legacy Grounds remain independently typed saved entries.
+when no saved Ground exists. The pinned action is `START NEW GROUND SESSION`.
+Physical workspaces, resumable not-yet-created drafts, and transitional legacy
+Grounds appear in that same session list as independently typed rows; there is
+no second draft launcher.
 
-Choosing New next opens the common exact Context-name control as
-`NEW GROUND · SAVE LOCATION`. The field starts focused and a frozen local
-Context tree is available only as a lexical parent browser. Selecting a parent
-rewrites the unedited leaf; it does not select that existing Context as Ground
-input. Validation covers the root and all five fixed child names before the
-provider is connected, but the setup writes nothing and does not switch global
-Current.
+Choosing New opens the blank Ground workbench immediately. `LOCATION` is a
+persistent compact pane above `GOAL`. It begins `NOT SET`, may display a
+provider-proposed name as `SUGGESTED · NOT CREATED`, and remains changeable with
+`L`. `L` opens the shared exact Context-name and frozen parent-tree control.
+Selecting a parent rewrites the unedited leaf; it does not select that existing
+Context as Ground input. Location editing validates the root and all five fixed
+child names but writes nothing, binds nothing, and does not switch global
+Current. The workbench starts on `GOAL`. `LOCATION` is also a real focus
+surface: `Shift-Tab` reaches it immediately from Goal, ordinary Tab reaches it
+when the top-to-bottom sequence wraps, and Enter expands the shared tree.
+`L` remains the direct shortcut from every read surface.
 
-The accepted Save Location is then frozen as the only possible Ground root for
-the new dialogue. The provider receives that exact name and an intentionally
-empty Context catalog. It may clarify or propose the Goal and provisional Rule
-or Example material, but it cannot rank existing Contexts, suggest another
-Context, or rename the root. Any such output fails closed. The creation review
-therefore has one locally owned command identity:
+The provider receives an intentionally empty Context catalog. It may clarify
+or propose the Goal, a candidate Save Location, and provisional Rule or Example
+material, but it cannot rank existing Contexts or treat a Context name as
+evidence. A person-selected Location overrides later provider naming and may be
+changed again until final approval. The creation review therefore has one
+locally owned command identity:
 
 ```text
 mem ground <exact-save-location> --goal <reviewed-goal>
 ```
 
+Leaving a workbench after it has a Goal proposal retains one typed, private
+resume receipt under the active profile. The receipt preserves the proposed
+Goal, provisional Rule and Example previews, submitted turns, exact planned
+Location, revision, and CAS identity. It creates no ordinary Context,
+checkpoint, manifest, binding, or current-Context change. Its launcher row is
+explicitly `DRAFT · NOT CREATED`, and reopening it restores the proposal
+without replaying provider inference. A completely untouched blank workbench
+has no useful identity and is not retained.
+
+The exact command approval atomically materializes the root and fixed children,
+then removes the draft receipt. If receipt cleanup fails after successful
+creation, the physical workspace is authoritative and catalog discovery hides
+the stale duplicate. The draft is an interruption-recovery mechanism, not a
+second Ground source of truth.
+
 The earlier blank-TUI flow that asked a model to rank locator-only Context
 names conflated two decisions: where this new physical object lives and what
-external material it may later reference. It is retained only in historical
-tests and documentation while old code is removed; it is not a production
-entry route. External material enters `/contexts` later through an explicit
-typed relationship or structural operation.
+external material it may later reference. It is not a production entry route.
+External material enters `/contexts` later through an explicit typed
+relationship or structural operation.
 
 ## External material
 

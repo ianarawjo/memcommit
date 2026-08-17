@@ -12,7 +12,7 @@ import asyncio
 import threading
 import unicodedata
 from collections.abc import Callable, Mapping, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from functools import partial
 from typing import Literal, Protocol
 
@@ -104,11 +104,19 @@ GROUND_GOAL_FRAME_HEIGHT = Dimension(min=3, preferred=5, max=5)
 # outer height leaves five body rows, while the shared three-row minimum lets
 # prompt-toolkit compress it to one body row on a conventional 24-row terminal.
 GROUND_CONTEXTS_FRAME_HEIGHT = Dimension(min=3, preferred=7, max=10)
+GROUND_LOCATION_FRAME_HEIGHT = Dimension.exact(3)
 # Compatibility aliases remain patchable by focused shell tests while Ground
 # shares the same liveness vocabulary and cadence as blocking commands.
 _THINKING_SUFFIXES = BUSY_FRAMES
 _THINKING_INTERVAL_SECONDS = BUSY_INTERVAL_SECONDS
-_GroundPane = Literal["GOAL", "CONTEXTS", "RULES", "MEMORIES", "CHAT"]
+_GroundPane = Literal[
+    "LOCATION",
+    "GOAL",
+    "CONTEXTS",
+    "RULES",
+    "MEMORIES",
+    "CHAT",
+]
 _GroundPaneActivityPhase = Literal[
     "IDLE",
     "THINKING",
@@ -604,9 +612,39 @@ def render_ground_contexts_pane(
     return "\n".join(lines)
 
 
-def render_ground_workspace_pane(ground_name: str) -> str:
+def render_ground_location_pane(
+    ground_name: str | None,
+    *,
+    source: Literal["UNSET", "SUGGESTED", "SELECTED", "RESUMED"] = "UNSET",
+) -> str:
+    """Render the session-owned Context Save Location above Goal."""
+
+    if ground_name is None:
+        return "NOT SET · Enter/L to choose with the Context tree"
+    name = validate_context_name(ground_name)
+    label = {
+        "UNSET": "NOT SET",
+        "SUGGESTED": "SUGGESTED · REVIEW REQUIRED",
+        "SELECTED": "SELECTED",
+        "RESUMED": "RESUMED",
+    }[source]
+    return (
+        f"{safe_terminal_text(name)} · {label} · NOT CREATED\n"
+        "Enter/L to change; final exact approval saves this Ground here."
+    )
+
+
+def render_ground_workspace_pane(ground_name: str | None) -> str:
     """Render one already chosen, still-uncreated physical workspace root."""
 
+    if ground_name is None:
+        return "\n".join(
+            (
+                "SAVE LOCATION · NOT SET",
+                "Choose Location above Goal before exact save approval.",
+                "No physical Context, manifest, or checkpoint exists.",
+            )
+        )
     name = validate_context_name(ground_name)
     return "\n".join(
         (
@@ -1148,10 +1186,13 @@ def run_ground_shell(
     apply: GroundApplier,
     ground_name: str | None = None,
     initial_request: str = "",
+    initial_proposal: GroundShellProposal | None = None,
+    initial_submitted_turns: Sequence[str] = (),
     current_context_name: str | None = None,
     context_catalog_count: int = 0,
     context_catalog_names: Sequence[str] = (),
     validate_new_context: Callable[[str], str] = validate_context_name,
+    choose_save_location: Callable[[str | None], str | None] | None = None,
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
@@ -1171,6 +1212,43 @@ def run_ground_shell(
         if ground_name is not None
         else None
     )
+    planned_ground_name: dict[str, str | None] = {
+        "value": fixed_ground_name
+    }
+    location_source: dict[
+        str,
+        Literal["UNSET", "SUGGESTED", "SELECTED", "RESUMED"],
+    ] = {
+        "value": (
+            "RESUMED"
+            if initial_proposal is not None
+            else "SELECTED"
+            if fixed_ground_name is not None
+            else "UNSET"
+        )
+    }
+    if initial_proposal is not None and initial_request.strip():
+        raise ValueError(
+            "A resumed Ground proposal cannot start another initial request."
+        )
+    if initial_proposal is not None and fixed_ground_name is None:
+        raise ValueError("A resumed Ground proposal requires its Save Location.")
+    frozen_initial_proposal = (
+        _freeze_proposal(
+            initial_proposal,
+            expected_ground_name=fixed_ground_name,
+        )
+        if initial_proposal is not None
+        else None
+    )
+    frozen_initial_turns = tuple(initial_submitted_turns)
+    if any(
+        not isinstance(turn, str) or not turn.strip()
+        for turn in frozen_initial_turns
+    ):
+        raise ValueError("Resumed Ground turns must be nonblank text.")
+    if frozen_initial_proposal is None and frozen_initial_turns:
+        raise ValueError("Resumed Ground turns require a saved proposal.")
     if fixed_ground_name is not None and (
         context_catalog_count or tuple(context_catalog_names)
     ):
@@ -1178,7 +1256,11 @@ def run_ground_shell(
             "A fixed Ground Save Location cannot use Context recommendations."
         )
 
-    working_goal = initial_request.strip()
+    working_goal = (
+        frozen_initial_proposal.goal
+        if frozen_initial_proposal is not None
+        else initial_request.strip()
+    )
     editable_goal = {"value": working_goal}
     required_direct_goal: dict[str, str | None] = {"value": None}
     inline_goal_open = {"value": False}
@@ -1195,10 +1277,18 @@ def run_ground_shell(
     ] = {"value": None}
     suspended_message = {"value": ""}
     mode = {
-        "value": "INTERPRETING" if working_goal else "INPUT"
+        "value": (
+            "APPROVAL"
+            if frozen_initial_proposal is not None
+            else "INTERPRETING"
+            if working_goal
+            else "INPUT"
+        )
     }
     review_view = {"value": "COMMAND"}
-    pending: dict[str, GroundShellProposal | None] = {"value": None}
+    pending: dict[str, GroundShellProposal | None] = {
+        "value": frozen_initial_proposal
+    }
     suspended_context_proposal: dict[
         str, GroundShellProposal | None
     ] = {"value": None}
@@ -1209,10 +1299,18 @@ def run_ground_shell(
         str, tuple[GroundShellNewContextSuggestion, ...]
     ] = {"value": ()}
     rule_drafts: dict[str, tuple[GroundShellRuleDraft, ...]] = {
-        "value": ()
+        "value": (
+            frozen_initial_proposal.rule_drafts
+            if frozen_initial_proposal is not None
+            else ()
+        )
     }
     memory_drafts: dict[str, tuple[GroundShellMemoryDraft, ...]] = {
-        "value": ()
+        "value": (
+            frozen_initial_proposal.memory_drafts
+            if frozen_initial_proposal is not None
+            else ()
+        )
     }
     memory_view: dict[str, Literal["LIST", "TABLE"]] = {"value": "LIST"}
     selected_memory_index = {"value": 0}
@@ -1224,22 +1322,50 @@ def run_ground_shell(
     selected_context_names: dict[str, tuple[str, ...]] = {"value": ()}
     local_new_context_name = {"value": ""}
     context_selection_finished = {"value": False}
-    context_discovery_complete = {"value": False}
+    context_discovery_complete = {
+        "value": frozen_initial_proposal is not None
+    }
     # Liveness begins only when ``begin_interpretation`` records the owning
     # pane. Rendering it earlier would briefly revive the legacy assumption
     # that every initial Goal turn belongs to Context discovery.
     context_discovery_in_progress = {"value": False}
     thinking_phase = {"value": 0}
     interpretation_generation = {"value": 0}
-    active_turn_target: dict[str, _GroundPane] = {"value": "CHAT"}
+    active_turn_target: dict[str, _GroundPane] = {
+        "value": "GOAL" if frozen_initial_proposal is not None else "CHAT"
+    }
     pane_activities: dict[_GroundPane, _GroundPaneActivity] = {
         pane: _GroundPaneActivity()
-        for pane in ("GOAL", "CONTEXTS", "RULES", "MEMORIES", "CHAT")
+        for pane in (
+            "LOCATION",
+            "GOAL",
+            "CONTEXTS",
+            "RULES",
+            "MEMORIES",
+            "CHAT",
+        )
     }
+    if frozen_initial_proposal is not None:
+        pane_activities["GOAL"] = _GroundPaneActivity(
+            phase="PROPOSED",
+            request=(frozen_initial_turns[-1] if frozen_initial_turns else ""),
+        )
     shell_closed = {"value": False}
     error_message = {"value": ""}
-    status_message = {"value": ""}
-    last_submission = {"value": working_goal}
+    status_message = {
+        "value": (
+            "Draft resumed · NOT CREATED · exact approval is still required."
+            if frozen_initial_proposal is not None
+            else ""
+        )
+    }
+    last_submission = {
+        "value": (
+            frozen_initial_turns[-1]
+            if frozen_initial_turns
+            else working_goal
+        )
+    }
     last_submission_target: dict[str, _GroundPane] = {
         "value": "GOAL" if working_goal else "CHAT"
     }
@@ -1249,6 +1375,7 @@ def run_ground_shell(
     # Ground layer is complete or agreed: Ground has no implicit completion
     # criterion, and focus chosen by the program must not dismiss a result.
     pane_notifications = {
+        "LOCATION": False,
         "GOAL": False,
         "CONTEXTS": False,
         "RULES": False,
@@ -1263,8 +1390,19 @@ def run_ground_shell(
     def acknowledge_pane(layer: str) -> None:
         pane_notifications[layer] = False
 
-    submitted_turns: list[str] = []
+    submitted_turns: list[str] = list(frozen_initial_turns)
     conversation: list[str] = (
+        [
+            "\n".join(
+                [
+                    "RESUMED DRAFT · NOT CREATED",
+                    "  The saved proposal is ready for exact command review.",
+                    "  No Context, manifest, or checkpoint exists yet.",
+                ]
+            )
+        ]
+        if frozen_initial_proposal is not None
+        else
         [
             "\n".join(
                 [
@@ -1320,6 +1458,7 @@ def run_ground_shell(
 
     def pane_turn_label(target: _GroundPane) -> str:
         return {
+            "LOCATION": "SAVE LOCATION",
             "GOAL": "GOAL REVISION REQUEST",
             "CONTEXTS": "WORKSPACE REVISION REQUEST",
             "RULES": "RULE REVISION REQUEST",
@@ -1329,6 +1468,7 @@ def run_ground_shell(
 
     def pane_thinking_verb(target: _GroundPane) -> str:
         return {
+            "LOCATION": "CHOOSING",
             "GOAL": "REVISING",
             "CONTEXTS": "RECONSIDERING",
             "RULES": "REVISING",
@@ -1461,24 +1601,40 @@ def run_ground_shell(
         row = context_cursor_row()
         return row.context_name if row is not None else None
 
+    location_pane = build_scrollable_text_pane(
+        "LOCATION",
+        render_ground_location_pane(
+            planned_ground_name["value"],
+            source=location_source["value"],
+        ),
+        buffer_name="ground-new-location",
+        height=GROUND_LOCATION_FRAME_HEIGHT,
+        notification=lambda: pane_notifications["LOCATION"],
+    )
     goal_pane = build_scrollable_text_pane(
         "GOAL",
-        render_ground_goal_pane(working_goal=editable_goal["value"]),
+        pane_activity_text(
+            "GOAL",
+            render_ground_goal_pane(
+                frozen_initial_proposal,
+                working_goal=editable_goal["value"],
+            ),
+        ),
         buffer_name="ground-new-goal",
         height=GROUND_GOAL_FRAME_HEIGHT,
         notification=lambda: pane_notifications["GOAL"],
     )
     contexts_pane = build_scrollable_text_pane(
-        "WORKSPACE" if fixed_ground_name is not None else "CONTEXTS",
+        "CONTEXTS",
         (
-            render_ground_workspace_pane(fixed_ground_name)
-            if fixed_ground_name is not None
-            else render_ground_contexts_pane(
+            render_ground_contexts_pane(
                 current_context_name=current_context_name,
                 catalog_count=context_catalog_count,
                 discovery_in_progress=context_discovery_in_progress["value"],
                 thinking_suffix=current_thinking_suffix(),
             )
+            if context_catalog_count
+            else render_ground_workspace_pane(planned_ground_name["value"])
         ),
         buffer_name="ground-new-contexts",
         height=GROUND_CONTEXTS_FRAME_HEIGHT,
@@ -1486,14 +1642,14 @@ def run_ground_shell(
     )
     rules_pane = build_scrollable_text_pane(
         "RULES",
-        render_ground_rules_pane(),
+        render_ground_rules_pane(rule_drafts["value"]),
         buffer_name="ground-new-rules",
         height=pane_height,
         notification=lambda: pane_notifications["RULES"],
     )
     cases_pane = build_scrollable_text_pane(
         "MEMORIES",
-        render_ground_memories_pane(),
+        render_ground_memories_pane(memory_drafts["value"]),
         buffer_name="ground-new-cases",
         height=pane_height,
         notification=lambda: pane_notifications["MEMORIES"],
@@ -1639,7 +1795,18 @@ def run_ground_shell(
         memories_focused = application.layout.has_focus(
             cases_pane.text_area
         )
+        location_focused = application.layout.has_focus(
+            location_pane.text_area
+        )
         input_focused = application.layout.has_focus(input_area)
+        if (
+            location_focused
+            and active_mode in {"INPUT", "APPROVAL"}
+        ):
+            return (
+                " LOCATION: Enter/L · choose or change    "
+                "Tab/Shift-Tab · move    B · Grounds    Q · quit"
+            )
         if (
             context_selection_finished["value"]
             and contexts_focused
@@ -1692,11 +1859,11 @@ def run_ground_shell(
                 and application.layout.has_focus(goal_pane.text_area)
             ):
                 return (
-                    " Enter · talk here    E · edit Goal    "
+                    " Enter · talk here    E · edit Goal    L · location    "
                     "B · Grounds    Q · quit"
                 )
             return (
-                " Enter · talk in this pane    C · same action    "
+                " Enter · talk here    C · same action    L · location    "
                 "B · Grounds    Q · quit"
             )
         if active_mode == "APPROVAL":
@@ -1713,7 +1880,7 @@ def run_ground_shell(
                 )
             return (
                 " No command runs without Enter · exact approval    "
-                "B · Grounds    Q · quit"
+                "L · location    B · Grounds    Q · quit"
             )
         if active_mode == "APPLY_ERROR":
             return " The exact command will not be applied again"
@@ -1727,6 +1894,7 @@ def run_ground_shell(
 
     normal_root = build_tui_frame(
         TuiRegion(header),
+        TuiRegion(location_pane.container),
         TuiRegion(goal_pane.container),
         TuiRegion(contexts_pane.container),
         TuiRegion(rules_pane.container),
@@ -1748,6 +1916,7 @@ def run_ground_shell(
 
     def pane_for_layer(layer: _GroundPane):
         return {
+            "LOCATION": location_pane,
             "GOAL": goal_pane,
             "CONTEXTS": contexts_pane,
             "RULES": rules_pane,
@@ -1757,10 +1926,9 @@ def run_ground_shell(
 
     def sync_pane_titles() -> None:
         base_titles: dict[_GroundPane, str] = {
+            "LOCATION": "LOCATION",
             "GOAL": "GOAL",
-            "CONTEXTS": (
-                "WORKSPACE" if fixed_ground_name is not None else "CONTEXTS"
-            ),
+            "CONTEXTS": "CONTEXTS",
             "RULES": "RULES",
             "MEMORIES": "MEMORIES",
             "CHAT": "CHAT",
@@ -1835,11 +2003,10 @@ def run_ground_shell(
     application: Application[GroundShellResult] = Application(
         layout=Layout(
             normal_root,
-            focused_element=(
-                input_area
-                if input_manager.active_pane is not None
-                else dialogue_pane.text_area
-            ),
+            # Ground is Goal-first. The general Message composer remains one
+            # explicit Tab stop, but opening the workbench must not visually
+            # or semantically make Chat the primary entry surface.
+            focused_element=goal_pane.text_area,
         ),
         key_bindings=bindings,
         full_screen=True,
@@ -1857,6 +2024,7 @@ def run_ground_shell(
     application.ttimeoutlen = 0.05
 
     for pane in (
+        location_pane,
         goal_pane,
         contexts_pane,
         rules_pane,
@@ -1871,11 +2039,17 @@ def run_ground_shell(
         )
 
     def sync_contexts_pane(*, align_candidate: bool = False) -> None:
-        if fixed_ground_name is not None:
+        if (
+            not context_catalog_count
+            and not context_suggestions["value"]
+            and not new_context_suggestions["value"]
+        ):
             contexts_pane.set_text(
                 pane_activity_text(
                     "CONTEXTS",
-                    render_ground_workspace_pane(fixed_ground_name),
+                    render_ground_workspace_pane(
+                        planned_ground_name["value"]
+                    ),
                 ),
                 anchor="preserve",
             )
@@ -1953,6 +2127,13 @@ def run_ground_shell(
 
     def sync_panes(*, dialogue_anchor: str = "end") -> None:
         sync_pane_titles()
+        location_pane.set_text(
+            render_ground_location_pane(
+                planned_ground_name["value"],
+                source=location_source["value"],
+            ),
+            anchor="preserve",
+        )
         goal_pane.set_text(
             pane_activity_text(
                 "GOAL",
@@ -2037,7 +2218,7 @@ def run_ground_shell(
         )
         frozen_contexts = _freeze_context_suggestions(response)
         frozen_new_contexts = _freeze_new_context_suggestions(response)
-        if fixed_ground_name is not None and (
+        if planned_ground_name["value"] is not None and (
             frozen_contexts or frozen_new_contexts
         ):
             raise ValueError(
@@ -2119,8 +2300,22 @@ def run_ground_shell(
             return
         frozen = _freeze_proposal(
             response,
-            expected_ground_name=fixed_ground_name,
+            expected_ground_name=planned_ground_name["value"],
         )
+        if planned_ground_name["value"] is None:
+            # The provider may suggest a portable initial location, but the
+            # persistent LOCATION pane keeps it visibly unapproved and lets
+            # the person replace it through the shared Context tree.
+            planned_ground_name["value"] = frozen.ground_name
+            location_source["value"] = "SUGGESTED"
+            mark_pane_updates("LOCATION", "CONTEXTS")
+        else:
+            # A person-owned local location plan outranks later provider
+            # naming. The exact command is always rebuilt from this value.
+            frozen = replace(
+                frozen,
+                ground_name=planned_ground_name["value"],
+            )
         exact_goal = required_direct_goal["value"]
         if exact_goal is not None and frozen.goal != exact_goal:
             raise ValueError(
@@ -2719,6 +2914,7 @@ def run_ground_shell(
         lambda: mode["value"] in {"APPROVAL", "ERROR", "APPLY_ERROR"}
     )
     read_panes = (
+        location_pane.text_area,
         goal_pane.text_area,
         contexts_pane.text_area,
         rules_pane.text_area,
@@ -2726,7 +2922,8 @@ def run_ground_shell(
         dialogue_pane.text_area,
     )
     read_pane_focus = (
-        has_focus(goal_pane.text_area)
+        has_focus(location_pane.text_area)
+        | has_focus(goal_pane.text_area)
         | has_focus(contexts_pane.text_area)
         | has_focus(rules_pane.text_area)
         | has_focus(cases_pane.text_area)
@@ -2743,9 +2940,13 @@ def run_ground_shell(
     inline_field_focus = inline_edit_mode & (
         has_focus(direct_edit_area) | has_focus(input_area)
     )
-    focus_order = (input_area, *read_panes)
+    # Preserve visual top-to-bottom order. Starting at Goal makes Shift-Tab
+    # reach Location immediately, while ordinary Tab proceeds through the
+    # semantic workbench and eventually wraps through Message and Location.
+    focus_order = (*read_panes, input_area)
     focus_layers = {
         id(input_area): "CHAT",
+        id(location_pane.text_area): "LOCATION",
         id(goal_pane.text_area): "GOAL",
         id(contexts_pane.text_area): "CONTEXTS",
         id(rules_pane.text_area): "RULES",
@@ -2784,6 +2985,69 @@ def run_ground_shell(
             )
         )
     )
+    location_focus = has_focus(location_pane.text_area)
+    location_edit_available = (
+        (input_mode | approval_mode)
+        & read_pane_focus
+        & ~inline_edit_mode
+        & ~panel_comment_mode
+    )
+
+    def choose_or_change_save_location(event) -> None:
+        """Expand the focused compact Location into the shared tree editor."""
+
+        acknowledge_pane("LOCATION")
+        if choose_save_location is None:
+            status_message["value"] = (
+                "Save Location editing is unavailable in this adapter."
+            )
+            event.app.invalidate()
+            return
+
+        async def choose() -> None:
+            result = await run_in_terminal(
+                lambda: choose_save_location(planned_ground_name["value"]),
+                in_executor=True,
+            )
+            if result is None:
+                status_message["value"] = "Save Location change cancelled."
+                application.invalidate()
+                return
+            exact_name = validate_context_name(result)
+            planned_ground_name["value"] = exact_name
+            location_source["value"] = "SELECTED"
+            if pending["value"] is not None:
+                pending["value"] = replace(
+                    pending["value"],
+                    ground_name=exact_name,
+                )
+            if suspended_context_proposal["value"] is not None:
+                suspended_context_proposal["value"] = replace(
+                    suspended_context_proposal["value"],
+                    ground_name=exact_name,
+                )
+            mark_pane_updates("LOCATION", "CONTEXTS", "CHAT")
+            status_message["value"] = (
+                f"Save Location selected · {safe_terminal_text(exact_name)} "
+                "· NOT CREATED."
+            )
+            sync_panes(dialogue_anchor="end")
+            application.invalidate()
+
+        event.app.create_background_task(choose())
+
+    @bindings.add("l", filter=location_edit_available, eager=True)
+    @bindings.add("L", filter=location_edit_available, eager=True)
+    def _choose_or_change_save_location(event) -> None:
+        choose_or_change_save_location(event)
+
+    @bindings.add(
+        "enter",
+        filter=location_edit_available & location_focus,
+        eager=True,
+    )
+    def _expand_focused_save_location(event) -> None:
+        choose_or_change_save_location(event)
 
     def cycle_focus(step: int) -> None:
         current_index = next(
@@ -3105,7 +3369,11 @@ def run_ground_shell(
 
     @bindings.add(
         "enter",
-        filter=navigation_mode & read_pane_focus,
+        filter=(
+            navigation_mode
+            & read_pane_focus
+            & ~has_focus(location_pane.text_area)
+        ),
         eager=True,
     )
     def _talk_in_focused_pane(_event) -> None:
@@ -3344,13 +3612,22 @@ def run_ground_shell(
 
     @bindings.add("b", filter=read_pane_focus, eager=True)
     def _back_to_picker(event) -> None:
-        # This navigation result never carries or applies the pending Ground
-        # creation receipt. The caller must rediscover the saved catalog.
+        # Returning to the launcher never applies the pending creation
+        # receipt. It does carry the exact validated proposal so the caller
+        # can publish a separately typed NOT CREATED resume receipt first.
         shell_closed["value"] = True
         event.app.exit(
             result=GroundShellResult(
                 status="BACK_TO_PICKER",
+                proposal=(
+                    pending["value"]
+                    or suspended_context_proposal["value"]
+                ),
                 submitted_turns=tuple(submitted_turns),
+                selected_context_names=selected_context_names["value"],
+                new_context_name_hint=(
+                    local_new_context_name["value"] or None
+                ),
             )
         )
 
@@ -3395,7 +3672,7 @@ def run_ground_shell(
         )
 
     try:
-        if working_goal:
+        if initial_request.strip():
             submitted_turns.append(working_goal)
             if background_interpretation:
                 return application.run(pre_run=start_initial_turn)

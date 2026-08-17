@@ -114,11 +114,6 @@ def test_tty_sentence_passes_exact_working_goal_to_blank_shell(
     )
     monkeypatch.setattr(
         ground_command,
-        "_choose_ground_workspace_save_location",
-        lambda _store: "work/ground",
-    )
-    monkeypatch.setattr(
-        ground_command,
         "_run_new_ground_shell",
         lambda initial_request="", *, ground_name=None: seen.append(
             (initial_request, ground_name)
@@ -128,11 +123,11 @@ def test_tty_sentence_passes_exact_working_goal_to_blank_shell(
     result = runner.invoke(app, ["ground", request])
 
     assert result.exit_code == 0, result.output
-    assert seen == [(request, "work/ground")]
+    assert seen == [(request, None)]
     assert not isolated_store.exists()
 
 
-def test_new_ground_shell_discovers_context_names_before_agent_turn(
+def test_new_ground_shell_keeps_existing_contexts_out_of_the_agent_turn(
     isolated_store,
     monkeypatch,
 ):
@@ -151,7 +146,7 @@ def test_new_ground_shell_discovers_context_names_before_agent_turn(
     )
 
     def fake_shell(**kwargs):
-        assert kwargs["context_catalog_count"] == 2
+        assert "context_catalog_count" not in kwargs
         assert kwargs["current_context_name"] == "temp/task-1"
         kwargs["interpret"]("Split Task 1 into wiki material.")
         return GroundShellResult(status="CANCELLED")
@@ -169,7 +164,7 @@ def test_new_ground_shell_discovers_context_names_before_agent_turn(
     assert seen == [
         (
             "Split Task 1 into wiki material.",
-            ("campus-wiki", "temp/task-1"),
+            (),
         )
     ]
 
@@ -233,6 +228,48 @@ def test_fixed_ground_shell_uses_save_location_without_context_recommendations(
             "Find real ticker rules.",
             (),
             "projects/ticker-ground",
+        )
+    ]
+
+
+def test_location_selected_inside_blank_shell_freezes_later_semantic_turns(
+    isolated_store,
+    monkeypatch,
+):
+    seen = []
+
+    monkeypatch.setattr(
+        ground_command,
+        "_choose_ground_workspace_save_location",
+        lambda _store, **_kwargs: "research/ticker-ground",
+    )
+
+    def interpret(text, *, context_names=(), ground_name=None):
+        seen.append((text, tuple(context_names), ground_name))
+        return GroundDialogueProposal(
+            understanding="Use the selected Context-rooted Location.",
+            question="Approve this Goal?",
+            ground_name=ground_name,
+            goal="Find how real US ticker symbols are assigned.",
+        )
+
+    def shell(**kwargs):
+        selected = kwargs["choose_save_location"](None)
+        assert selected == "research/ticker-ground"
+        proposal = kwargs["interpret"]("Find real ticker rules.")
+        assert proposal.ground_name == selected
+        return GroundShellResult(status="CANCELLED")
+
+    monkeypatch.setattr(ground_command, "_interpret_new_ground_turn", interpret)
+    monkeypatch.setattr(ground_command, "run_ground_shell", shell)
+
+    ground_command._run_new_ground_shell()
+
+    assert seen == [
+        (
+            "Find real ticker rules.",
+            (),
+            "research/ticker-ground",
         )
     ]
 

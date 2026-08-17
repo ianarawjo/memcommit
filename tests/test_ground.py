@@ -868,11 +868,6 @@ def test_cli_ground_tty_picker_new_receipt_keeps_new_flow_explicit(
     )
     monkeypatch.setattr(
         ground_command,
-        "_choose_ground_workspace_save_location",
-        lambda _store: "projects/new-ground",
-    )
-    monkeypatch.setattr(
-        ground_command,
         "_run_new_ground_shell",
         lambda *_args, **kwargs: started.append(kwargs.get("ground_name")),
     )
@@ -880,7 +875,9 @@ def test_cli_ground_tty_picker_new_receipt_keeps_new_flow_explicit(
     result = runner.invoke(app, ["ground"])
 
     assert result.exit_code == 0, result.output
-    assert started == ["projects/new-ground"]
+    # New enters a blank Ground session. Its Save Location is chosen from the
+    # persistent LOCATION control inside that session, not before it opens.
+    assert started == [None]
 
 
 def test_cli_ground_picker_does_not_recreate_a_disappeared_selection(
@@ -935,15 +932,18 @@ def test_cli_ground_without_name_uses_tui_and_applies_one_frozen_command(
         interpret,
         apply,
         validate_new_context,
+        choose_save_location,
         ground_name=None,
         current_context_name=None,
     ):
         assert current_context_name is None
-        assert ground_name == "task-1-report-coverage"
+        assert ground_name is None
         assert callable(validate_new_context)
+        assert callable(choose_save_location)
         new_name = "test/ground/ticker-rule-examples"
         assert validate_new_context(new_name) == new_name
         assert not MemoryStore(create=False).context_exists(new_name)
+        assert choose_save_location(None) == "task-1-report-coverage"
         shell_calls.append((interpret, apply))
         proposal = ground_command.GroundShellProposal(
             ground_name="task-1-report-coverage",
@@ -977,7 +977,7 @@ def test_cli_ground_without_name_uses_tui_and_applies_one_frozen_command(
     monkeypatch.setattr(
         ground_command,
         "_choose_ground_workspace_save_location",
-        lambda _store: "task-1-report-coverage",
+        lambda _store, **_kwargs: "task-1-report-coverage",
     )
     monkeypatch.setattr(
         ground_command,

@@ -11,7 +11,9 @@ from typing import Annotated, Iterable, Literal, Optional
 import typer
 
 from memcommit.commands.ground_shell import (
+    GroundShellMemoryDraft,
     GroundShellProposal,
+    GroundShellRuleDraft,
     proposal_argv,
     run_ground_shell,
 )
@@ -27,7 +29,9 @@ from memcommit.commands.ground_session_picker import (
     reload_selected_ground_session,
 )
 from memcommit.commands.ground_workspace_picker import (
+    list_ground_workspace_draft_catalog,
     list_ground_workspace_catalog,
+    reload_selected_ground_workspace_draft,
     reload_selected_ground_workspace,
 )
 from memcommit.interfaces.tui.components.operation_launcher.session import (
@@ -88,6 +92,14 @@ from memcommit.ground_workspace import (
     GroundWorkspaceError,
     ground_workspace_context_names,
 )
+from memcommit.ground_workspace_draft import (
+    GroundWorkspaceDraft,
+    GroundWorkspaceDraftError,
+    GroundWorkspaceMemoryDraft,
+    GroundWorkspaceRuleDraft,
+    ground_workspace_draft_digest,
+)
+from memcommit.ground_workspace_draft_store import GroundWorkspaceDraftStore
 from memcommit.ground_workspace_application import (
     AddGroundWorkspaceMemoryRequest,
     CreateGroundWorkspaceRequest,
@@ -229,6 +241,8 @@ def _current_context_name_for_ground(store: MemoryStore) -> str | None:
 def _validate_ground_workspace_save_location(
     store: MemoryStore,
     name: str,
+    *,
+    exclude_draft_uid: str | None = None,
 ) -> str:
     """Validate one exact require-new root without creating Store records."""
 
@@ -246,6 +260,14 @@ def _validate_ground_workspace_save_location(
     if legacy is not None:
         raise FileExistsError(
             f"A legacy Ground session already uses '{canonical}'."
+        )
+    existing_draft = GroundWorkspaceDraftStore(store).find_by_workspace_name(
+        canonical
+    )
+    if existing_draft is not None and existing_draft.uid != exclude_draft_uid:
+        raise FileExistsError(
+            f"A resumable Ground draft already uses '{canonical}'. Open it "
+            "from the Ground launcher."
         )
     return canonical
 
@@ -274,23 +296,33 @@ def _suggest_ground_workspace_save_location(
 
 def _choose_ground_workspace_save_location(
     store: MemoryStore,
+    *,
+    initial_name: str | None = None,
+    exclude_draft_uid: str | None = None,
 ) -> str | None:
     """Collect one exact new root through the shared Context-name control."""
 
     context_names = tuple(store.list_context_names())
     current_context_name = _current_context_name_for_ground(store)
-    initial_name = _suggest_ground_workspace_save_location(
-        store,
-        current_context_name=current_context_name,
+    suggested_name = (
+        _suggest_ground_workspace_save_location(
+            store,
+            current_context_name=current_context_name,
+        )
+        if initial_name is None
+        else initial_name
     )
     return run_ground_workspace_location_tui(
         GroundWorkspaceLocationSetup(
-            initial_name=initial_name,
+            initial_name=suggested_name,
             current_context=current_context_name,
             context_names=context_names,
-            validate_name=lambda name: _validate_ground_workspace_save_location(
-                store,
-                name,
+            validate_name=lambda name: (
+                _validate_ground_workspace_save_location(
+                    store,
+                    name,
+                    exclude_draft_uid=exclude_draft_uid,
+                )
             ),
         )
     )
@@ -400,17 +432,146 @@ def _run_approved_ground_command(
 GroundViewExit = Literal["CLOSED", "BACK_TO_PICKER"]
 
 
+def _proposal_from_workspace_draft(
+    draft: GroundWorkspaceDraft,
+) -> GroundShellProposal:
+    return GroundShellProposal(
+        ground_name=draft.workspace_name,
+        goal=draft.goal,
+        understanding=draft.understanding,
+        question=draft.question,
+        rule_drafts=tuple(
+            GroundShellRuleDraft(
+                content=item.content,
+                rationale=item.rationale,
+                origin=item.origin,
+                source_spans=item.source_spans,
+            )
+            for item in draft.rule_drafts
+        ),
+        memory_drafts=tuple(
+            GroundShellMemoryDraft(
+                content=item.content,
+                expected=item.expected,
+                rationale=item.rationale,
+                case_role=item.case_role,
+                disposition=item.disposition,
+                rule_draft_index=item.rule_draft_index,
+                origin=item.origin,
+                source_spans=item.source_spans,
+            )
+            for item in draft.memory_drafts
+        ),
+    )
+
+
+def _workspace_draft_from_proposal(
+    proposal: GroundShellProposal,
+    *,
+    submitted_turns: tuple[str, ...],
+    current: GroundWorkspaceDraft | None,
+) -> GroundWorkspaceDraft:
+    if proposal.context_suggestions or proposal.new_context_suggestions:
+        raise GroundWorkspaceDraftError(
+            "A fixed-location Ground draft cannot retain Context suggestions."
+        )
+    rules = tuple(
+        GroundWorkspaceRuleDraft(
+            content=item.content,
+            rationale=item.rationale,
+            origin=item.origin,
+            source_spans=item.source_spans,
+        )
+        for item in proposal.rule_drafts
+    )
+    memories = tuple(
+        GroundWorkspaceMemoryDraft(
+            content=item.content,
+            expected=item.expected,
+            rationale=item.rationale,
+            case_role=item.case_role,
+            disposition=item.disposition,
+            rule_draft_index=item.rule_draft_index,
+            origin=item.origin,
+            source_spans=item.source_spans,
+        )
+        for item in proposal.memory_drafts
+    )
+    if current is None:
+        return GroundWorkspaceDraft.create(
+            workspace_name=proposal.ground_name,
+            goal=proposal.goal,
+            understanding=proposal.understanding,
+            question=proposal.question,
+            submitted_turns=submitted_turns,
+            rule_drafts=rules,
+            memory_drafts=memories,
+        )
+    unchanged = (
+        current.workspace_name == proposal.ground_name
+        and current.goal == proposal.goal
+        and current.understanding == proposal.understanding
+        and current.question == proposal.question
+        and current.submitted_turns == submitted_turns
+        and current.rule_drafts == rules
+        and current.memory_drafts == memories
+    )
+    if unchanged:
+        return current
+    return current.revise(
+        workspace_name=proposal.ground_name,
+        goal=proposal.goal,
+        understanding=proposal.understanding,
+        question=proposal.question,
+        submitted_turns=submitted_turns,
+        rule_drafts=rules,
+        memory_drafts=memories,
+    )
+
+
+def _retain_ground_workspace_draft(
+    store: MemoryStore,
+    *,
+    proposal: GroundShellProposal,
+    submitted_turns: tuple[str, ...],
+    current: GroundWorkspaceDraft | None,
+) -> GroundWorkspaceDraft:
+    draft = _workspace_draft_from_proposal(
+        proposal,
+        submitted_turns=submitted_turns,
+        current=current,
+    )
+    if current is not None and draft == current:
+        return current
+    GroundWorkspaceDraftStore(store).save(
+        draft,
+        expected_digest=(
+            ground_workspace_draft_digest(current)
+            if current is not None
+            else None
+        ),
+    )
+    return draft
+
+
 def _run_new_ground_shell(
     initial_request: str = "",
     *,
     ground_name: str | None = None,
+    draft: GroundWorkspaceDraft | None = None,
 ) -> GroundViewExit:
     store = MemoryStore(create=False)
-    locators = (
-        ()
-        if ground_name is not None
-        else discover_ground_context_locators(store)
-    )
+    if draft is not None:
+        if ground_name is not None and ground_name != draft.workspace_name:
+            raise GroundWorkspaceDraftError(
+                "The Ground draft does not match its Save Location."
+            )
+        ground_name = draft.workspace_name
+    # New physical Grounds no longer begin by ranking existing Contexts. The
+    # session starts blank and owns a separate Save Location control above its
+    # Goal; external material enters /contexts through later explicit actions.
+    locators = ()
+    semantic_ground_name = {"value": ground_name}
     # Current is only an at-launch orientation snapshot. It remains local to
     # the shell: the provider sees the same bounded name catalog as before,
     # without a mutable "this one is current" marker or any Context content.
@@ -422,9 +583,18 @@ def _run_new_ground_shell(
             for locator in select_ground_context_locators(text, locators)
         )
         kwargs = {"context_names": context_names}
-        if ground_name is not None:
-            kwargs["ground_name"] = ground_name
-        return _interpret_new_ground_turn(text, **kwargs)
+        if semantic_ground_name["value"] is not None:
+            kwargs["ground_name"] = semantic_ground_name["value"]
+        turn = _interpret_new_ground_turn(text, **kwargs)
+        if (
+            semantic_ground_name["value"] is None
+            and isinstance(turn, GroundDialogueProposal)
+        ):
+            # A provider-proposed initial name becomes the visible local plan
+            # for later turns, but creates nothing and remains replaceable by
+            # the person through LOCATION.
+            semantic_ground_name["value"] = turn.ground_name
+        return turn
 
     def validate_new_context(name: str) -> str:
         # This is only a read-only early check for the local editor. The
@@ -432,19 +602,33 @@ def _run_new_ground_shell(
         store.assert_context_creatable(name)
         return name
 
+    def choose_save_location(current: str | None) -> str | None:
+        selected = _choose_ground_workspace_save_location(
+            store,
+            initial_name=current,
+            exclude_draft_uid=(draft.uid if draft is not None else None),
+        )
+        if selected is not None:
+            # The shell and semantic adapter share one process-local Location
+            # plan so a slash-delimited Context root is validated as the exact
+            # user-owned target, never as a legacy portable Ground name.
+            semantic_ground_name["value"] = selected
+        return selected
+
     shell_kwargs = {
         "interpret": interpret,
         "apply": _apply_new_ground_proposal,
         "current_context_name": current_context_name,
         "validate_new_context": validate_new_context,
+        "choose_save_location": choose_save_location,
     }
     if ground_name is not None:
         shell_kwargs["ground_name"] = ground_name
-    if locators:
-        shell_kwargs["context_catalog_count"] = len(locators)
-        shell_kwargs["context_catalog_names"] = tuple(
-            locator.name for locator in locators
+    if draft is not None:
+        shell_kwargs["initial_proposal"] = _proposal_from_workspace_draft(
+            draft
         )
+        shell_kwargs["initial_submitted_turns"] = draft.submitted_turns
     if initial_request:
         shell_kwargs["initial_request"] = initial_request
     result = run_ground_shell(**shell_kwargs)
@@ -464,6 +648,22 @@ def _run_new_ground_shell(
             raise GroundError(
                 "The approved Ground could not be reloaded."
             )
+        if draft is not None:
+            try:
+                GroundWorkspaceDraftStore(store).delete(
+                    draft.uid,
+                    expected_digest=ground_workspace_draft_digest(draft),
+                )
+            except (OSError, RuntimeError, ValueError):
+                # The physical workspace is authoritative after creation.
+                # Catalog discovery suppresses a stale draft with the same
+                # root, so cleanup failure cannot fabricate a second Ground.
+                typer.secho(
+                    "Ground created; its stale draft receipt could not be "
+                    "removed and will remain hidden.",
+                    fg=typer.colors.YELLOW,
+                    err=True,
+                )
         run_ground_workspace_tui(
             workspace,
             navigation_contexts=load_ground_workspace_navigation_contexts(
@@ -472,9 +672,19 @@ def _run_new_ground_shell(
             ),
         )
         return "CLOSED"
+    if result.proposal is not None:
+        _retain_ground_workspace_draft(
+            store,
+            proposal=result.proposal,
+            submitted_turns=result.submitted_turns,
+            current=draft,
+        )
     if result.status == "BACK_TO_PICKER":
         return "BACK_TO_PICKER"
-    typer.echo("Ground chat cancelled. Nothing was created.")
+    if result.proposal is not None:
+        typer.echo("Ground chat closed. Draft saved; nothing was created.")
+    else:
+        typer.echo("Ground chat cancelled. Nothing was created.")
     return "CLOSED"
 
 
@@ -1667,6 +1877,7 @@ def _run_ground_session_picker(
             else next_catalog
         )
         workspace_catalog = list_ground_workspace_catalog(store)
+        draft_catalog = list_ground_workspace_draft_catalog(store)
         # A view can mutate the saved Ground before B returns here. Reuse the
         # optional caller snapshot only for the first picker render; every
         # later pass rediscovers identities, revisions, digests, and ordering.
@@ -1677,24 +1888,30 @@ def _run_ground_session_picker(
         workspace_by_key = {
             entry.picker_entry.key: entry for entry in workspace_catalog
         }
+        draft_by_key = {
+            entry.picker_entry.key: entry for entry in draft_catalog
+        }
         receipt = choose_session(
             (
                 *(entry.picker_entry for entry in workspace_catalog),
+                *(entry.picker_entry for entry in draft_catalog),
                 *(entry.picker_entry for entry in frozen_catalog),
             ),
-            title="MEM GROUND · SAVED GROUNDS OR NEW CONTEXT",
+            # Physical and not-yet-created work share this one session list.
+            # Their row status, not a second launcher, distinguishes them.
+            title="MEM GROUND · SESSIONS",
             new_receipt=SessionNewReceipt(
                 kind="ground",
                 argv=("mem", "ground"),
-                action_label="CREATE NEW GROUND CONTEXT",
+                action_label="START NEW GROUND SESSION",
                 action_description=(
-                    "Choose an exact Save Location for a new physical Ground "
-                    "workspace, then state its Goal before creation approval."
+                    "Start blank, then choose or change its Context Save "
+                    "Location above the Goal before exact save approval."
                 ),
             ),
             initial_sort_mode="recent",
             initial_group_mode="context",
-            catalog_label="saved Grounds",
+            catalog_label="Ground sessions",
             enter_action="open Ground",
             location=ground_session_picker_location(),
         )
@@ -1706,16 +1923,16 @@ def _run_ground_session_picker(
                 raise GroundError(
                     "Ground picker returned an invalid new receipt."
                 )
-            ground_name = _choose_ground_workspace_save_location(store)
-            if ground_name is None:
-                # Save Location cancellation returns to a freshly discovered
-                # launcher; it never falls through to provider naming.
-                continue
-            outcome = _run_new_ground_shell(ground_name=ground_name)
+            outcome = _run_new_ground_shell()
         else:
             if (
                 not isinstance(receipt, SessionOpenReceipt)
-                or receipt.kind not in {"ground", "ground-workspace"}
+                or receipt.kind
+                not in {
+                    "ground",
+                    "ground-workspace",
+                    "ground-workspace-draft",
+                }
             ):
                 raise GroundError("Ground picker returned an invalid selection.")
             if receipt.kind == "ground-workspace":
@@ -1739,6 +1956,21 @@ def _run_ground_session_picker(
                     ),
                 )
                 outcome = "CLOSED"
+            elif receipt.kind == "ground-workspace-draft":
+                draft_entry = draft_by_key.get(receipt.key)
+                if (
+                    draft_entry is None
+                    or receipt.argv
+                    != draft_entry.picker_entry.reopen_argv
+                ):
+                    raise GroundError(
+                        "Ground picker changed the selected draft command."
+                    )
+                draft = reload_selected_ground_workspace_draft(
+                    store,
+                    draft_entry,
+                )
+                outcome = _run_new_ground_shell(draft=draft)
             else:
                 entry = legacy_by_key.get(receipt.key)
                 if entry is None or receipt.argv != entry.picker_entry.reopen_argv:
@@ -2740,6 +2972,13 @@ def cmd(
             hidden=True,
         ),
     ] = None,
+    resume_draft: Annotated[
+        Optional[str],
+        typer.Option(
+            "--resume-draft",
+            hidden=True,
+        ),
+    ] = None,
 ) -> None:
     """Create, inspect, or revise one Ground workspace or legacy session."""
     physical_edit_requested = any(
@@ -2826,6 +3065,49 @@ def cmd(
         or if_ground_revision is not None
     )
     initial_request: str | None = request
+    if resume_draft is not None:
+        if (
+            sessions
+            or ground_name is not None
+            or request is not None
+            or seed_conflict_requested
+        ):
+            typer.secho(
+                "Ground error: --resume-draft cannot be combined with "
+                "another Ground target, request, or action.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        if not _interactive_terminal():
+            typer.secho(
+                "Ground error: --resume-draft requires an interactive "
+                "terminal.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        try:
+            draft_store = GroundWorkspaceDraftStore(
+                MemoryStore(create=False)
+            )
+            draft = draft_store.load(resume_draft)
+            if ground_workspace_exists(draft_store.store, draft.workspace_name):
+                raise GroundWorkspaceDraftError(
+                    f"Ground workspace '{draft.workspace_name}' already "
+                    "exists; open the physical workspace instead."
+                )
+            outcome = _run_new_ground_shell(draft=draft)
+            if outcome == "BACK_TO_PICKER":
+                _run_ground_session_picker(draft_store.store)
+        except (OSError, RuntimeError, TypeError, ValueError) as error:
+            typer.secho(
+                f"Ground error: {safe_terminal_text(str(error))}",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        return
     if sessions and (ground_name is not None or request is not None):
         typer.secho(
             "Ground error: --sessions cannot be combined with a Ground "
@@ -2906,14 +3188,7 @@ def cmd(
             raise typer.Exit(1)
         if _interactive_terminal():
             store = MemoryStore(create=False)
-            chosen_ground_name = _choose_ground_workspace_save_location(store)
-            if chosen_ground_name is None:
-                typer.echo("Ground Save Location cancelled. Nothing was created.")
-                return
-            outcome = _run_new_ground_shell(
-                initial_request,
-                ground_name=chosen_ground_name,
-            )
+            outcome = _run_new_ground_shell(initial_request)
             if outcome == "BACK_TO_PICKER":
                 _run_ground_session_picker(store)
         else:

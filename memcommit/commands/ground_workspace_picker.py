@@ -7,7 +7,13 @@ from datetime import datetime
 
 from memcommit.context import Memory
 from memcommit.ground_workspace import GroundWorkspace
+from memcommit.ground_workspace_draft import (
+    GroundWorkspaceDraft,
+    ground_workspace_draft_digest,
+)
+from memcommit.ground_workspace_draft_store import GroundWorkspaceDraftStore
 from memcommit.ground_workspace_runtime import (
+    ground_workspace_exists,
     list_ground_workspace_names,
     load_ground_workspace,
 )
@@ -24,6 +30,14 @@ class GroundWorkspaceCatalogEntry:
     workspace_uid: str
     revision: int
     context_evidence: tuple[tuple[str, str, str], ...]
+
+
+@dataclass(frozen=True)
+class GroundWorkspaceDraftCatalogEntry:
+    picker_entry: SessionPickerEntry
+    draft_uid: str
+    draft_revision: int
+    draft_digest: str
 
 
 def _latest_timestamp(store: MemoryStore, workspace: GroundWorkspace) -> float:
@@ -105,6 +119,57 @@ def list_ground_workspace_catalog(
     return tuple(entries)
 
 
+def list_ground_workspace_draft_catalog(
+    store: MemoryStore,
+) -> tuple[GroundWorkspaceDraftCatalogEntry, ...]:
+    """Project hidden resume receipts without treating them as workspaces."""
+
+    entries: list[GroundWorkspaceDraftCatalogEntry] = []
+    draft_store = GroundWorkspaceDraftStore(store)
+    for draft in draft_store.list():
+        # A successful create followed by an interrupted receipt cleanup must
+        # never produce two visible objects for one physical workspace.
+        if ground_workspace_exists(store, draft.workspace_name):
+            continue
+        modified = datetime.fromisoformat(draft.updated_at)
+        detail = "\n".join(
+            (
+                f"Goal: {display_escape_text(draft.goal)}",
+                f"Save Location: {display_escape_text(draft.workspace_name)}",
+                "Physical Contexts: 0 · manifest 0 · checkpoints 0",
+                "Resume receipt only; exact creation approval is still required.",
+            )
+        )
+        picker = SessionPickerEntry(
+            kind="ground-workspace-draft",
+            key=draft.uid,
+            title=draft.workspace_name,
+            status=f"DRAFT · rev {draft.revision} · NOT CREATED",
+            subtitle=draft.goal,
+            group=(
+                draft.workspace_name.rpartition("/")[0]
+                or "Ground drafts"
+            ),
+            sort_timestamp=modified.timestamp(),
+            detail=detail,
+            reopen_argv=(
+                "mem",
+                "ground",
+                "--resume-draft",
+                draft.uid,
+            ),
+        )
+        entries.append(
+            GroundWorkspaceDraftCatalogEntry(
+                picker_entry=picker,
+                draft_uid=draft.uid,
+                draft_revision=draft.revision,
+                draft_digest=ground_workspace_draft_digest(draft),
+            )
+        )
+    return tuple(entries)
+
+
 def reload_selected_ground_workspace(
     store: MemoryStore,
     entry: GroundWorkspaceCatalogEntry,
@@ -122,8 +187,32 @@ def reload_selected_ground_workspace(
     return workspace
 
 
+def reload_selected_ground_workspace_draft(
+    store: MemoryStore,
+    entry: GroundWorkspaceDraftCatalogEntry,
+) -> GroundWorkspaceDraft:
+    draft = GroundWorkspaceDraftStore(store).load(entry.draft_uid)
+    if (
+        draft.revision != entry.draft_revision
+        or ground_workspace_draft_digest(draft) != entry.draft_digest
+    ):
+        raise ValueError(
+            f"Selected Ground draft '{draft.workspace_name}' changed while "
+            "the list was open; reopen the list."
+        )
+    if ground_workspace_exists(store, draft.workspace_name):
+        raise ValueError(
+            f"Ground workspace '{draft.workspace_name}' already exists; "
+            "open the physical workspace instead."
+        )
+    return draft
+
+
 __all__ = [
+    "GroundWorkspaceDraftCatalogEntry",
     "GroundWorkspaceCatalogEntry",
+    "list_ground_workspace_draft_catalog",
     "list_ground_workspace_catalog",
+    "reload_selected_ground_workspace_draft",
     "reload_selected_ground_workspace",
 ]

@@ -1,0 +1,52 @@
+ MEM GROUND · SESSIONS · RECENT FIRST · BY CONTEXT                                                                                                                                  
+ PROFILE · (unregistered)                                                                                                                                                           
+ STORE   · /var/folders/gb/k74fw7ks06x4c041g8gqgj600000gq/T/memcommit-ground-draft-capture-flxkvf80/.mem                                                                            
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  + START NEW GROUND SESSION                                                                                                                                                       ^
+                                                                                                                                                                                    
+  CONTEXT · projects                                                                                                                                                                
+› 2026-08-17 00:21Z  projects/ticker-ground  [DRAFT · rev 0 · NOT CREATED]  Find how real US ticker symbols are assigned.                                                           
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ Kind         ground-workspace-draft                                                                                                                                               ^
+ Key          b2dd1dff-3503-477b-9d60-c97a1726a5f0                                                                                                                                  
+ Title        projects/ticker-ground                                                                                                                                                
+ Status       DRAFT · rev 0 · NOT CREATED                                                                                                                                           
+ Context      projects                                                                                                                                                              
+ Modified     2026-08-17 00:21Z                                                                                                                                                     
+ Summary      Find how real US ticker symbols are assigned.                                                                                                                         
+ Detail       Goal: Find how real US ticker symbols are assigned.                                                                                                                   
+              Save Location: projects/ticker-ground                                                                                                                                 
+              Physical Contexts: 0 · manifest 0 · checkpoints 0                                                                                                                     
+              Resume receipt only; exact creation approval is still required.                                                                                                       
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ ↑/↓ move  PgUp/PgDn detail  Enter open Ground  S sort  G group  / filter  N START NEW GROUND SESSION  Esc/q cancel  ·  2/2

@@ -1,0 +1,52 @@
+ MEM GROUND · projects/ticker-ground                                                                                                                                                
+ CONTEXT-ROOTED WORKSPACE · OPEN · REVISION 0                                                                                                                                       
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ GROUND WORKSPACE · PHYSICAL CONTEXTS ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃  ·   ▾ projects/ticker-ground                                                                                                                                                   ^┃
+┃› ✓     · projects/ticker-ground/goals                                                                                                                                            ┃
+┃  ·     · projects/ticker-ground/rules                                                                                                                                            ┃
+┃  ·     · projects/ticker-ground/examples                                                                                                                                         ┃
+┃  ·     · projects/ticker-ground/contexts                                                                                                                                         ┃
+┃  ·     · projects/ticker-ground/relations                                                                                                                                       v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌───────────────────────────────────────────────────────────────────────────────────| MEMORIES |───────────────────────────────────────────────────────────────────────────────────┐
+│projects/ticker-ground/goals                                                                                                                                                     ^│
+│UID · babe47d4-60dd-4a18-bece-66d978baf1e7                                                                                                                                        │
+│DIRECT ITEMS · 1                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│[bcc253e7] MEMORY                                                                                                                                                                 │
+│Find how real US ticker symbols are assigned.                                                                                                                                     │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ move/cross · ←/→ collapse/expand · Enter open · Tab Memories · Esc/Backspace/Q close · global current unchanged

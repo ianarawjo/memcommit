@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dataclasses import replace
 import os
 
 import pytest
@@ -16,14 +17,27 @@ from memcommit.commands.ground_session_picker import (
     reload_selected_ground_session,
 )
 from memcommit.commands.ground_workspace_picker import (
+    list_ground_workspace_draft_catalog,
     list_ground_workspace_catalog,
+    reload_selected_ground_workspace_draft,
     reload_selected_ground_workspace,
+)
+from memcommit.commands.ground_shell import (
+    GroundShellProposal,
+    GroundShellResult,
 )
 from memcommit.interfaces.tui.components.operation_launcher.session import SessionOpenReceipt
 from memcommit.ground import (
     GroundTargetSpec,
     bind_ground_workbench,
     create_ground_session,
+)
+from memcommit.ground_workspace_draft import GroundWorkspaceDraft
+from memcommit.ground_workspace_draft_store import GroundWorkspaceDraftStore
+from memcommit.ground_workspace_application import CreateGroundWorkspaceRequest
+from memcommit.ground_workspace_runtime import (
+    execute_ground_workspace_creation,
+    ground_workspace_exists,
 )
 from memcommit.profile_config import (
     AUTHORING_PROFILE_UID,
@@ -34,6 +48,16 @@ from memcommit.store import MemoryStore
 
 
 runner = CliRunner()
+
+
+def _workspace_draft() -> GroundWorkspaceDraft:
+    return GroundWorkspaceDraft.create(
+        workspace_name="projects/ticker-ground",
+        goal="Find how real US ticker symbols are assigned.",
+        understanding="Use actual US-listed companies.",
+        question="Approve this Goal?",
+        submitted_turns=("I want to understand real ticker assignment.",),
+    )
 
 
 def test_ground_session_entries_are_read_only_and_carry_exact_reopen_argv(
@@ -181,6 +205,143 @@ def test_physical_ticker_ground_is_listed_and_reopened_without_switching(
     } == before
 
 
+def test_goal_draft_appears_in_the_same_ground_session_list(isolated_store):
+    store = MemoryStore()
+    draft = _workspace_draft()
+    GroundWorkspaceDraftStore(store).save(draft, expected_digest=None)
+
+    [entry] = list_ground_workspace_draft_catalog(store)
+    picker = entry.picker_entry
+
+    assert picker.kind == "ground-workspace-draft"
+    assert picker.title == "projects/ticker-ground"
+    assert picker.status == "DRAFT · rev 0 · NOT CREATED"
+    assert picker.subtitle == draft.goal
+    assert picker.reopen_argv == (
+        "mem",
+        "ground",
+        "--resume-draft",
+        draft.uid,
+    )
+    assert reload_selected_ground_workspace_draft(store, entry) == draft
+    assert store.list_context_names() == []
+
+
+def test_ground_picker_opens_a_draft_row_without_provider_replay(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    draft = _workspace_draft()
+    GroundWorkspaceDraftStore(store).save(draft, expected_digest=None)
+    opened = []
+
+    monkeypatch.setattr(
+        ground_command,
+        "choose_session",
+        lambda entries, **_kwargs: SessionOpenReceipt(
+            kind="ground-workspace-draft",
+            key=draft.uid,
+            argv=("mem", "ground", "--resume-draft", draft.uid),
+        ),
+    )
+    monkeypatch.setattr(
+        ground_command,
+        "_run_new_ground_shell",
+        lambda *args, **kwargs: opened.append((args, kwargs)) or "CLOSED",
+    )
+
+    ground_command._run_ground_session_picker(store)
+
+    assert opened == [((), {"draft": draft})]
+
+
+def test_closing_a_goal_proposal_publishes_only_a_session_list_draft(
+    isolated_store,
+    monkeypatch,
+):
+    proposal = GroundShellProposal(
+        ground_name="projects/ticker-ground",
+        goal="Find how real US ticker symbols are assigned.",
+        understanding="Use actual US-listed companies.",
+        question="Approve this Goal?",
+    )
+    monkeypatch.setattr(
+        ground_command,
+        "run_ground_shell",
+        lambda **_kwargs: GroundShellResult(
+            status="CANCELLED",
+            proposal=proposal,
+            submitted_turns=(
+                "I want to understand real ticker assignment.",
+            ),
+        ),
+    )
+
+    outcome = ground_command._run_new_ground_shell()
+
+    assert outcome == "CLOSED"
+    [draft] = GroundWorkspaceDraftStore(MemoryStore(create=False)).list()
+    assert draft.workspace_name == proposal.ground_name
+    assert draft.goal == proposal.goal
+    assert MemoryStore(create=False).list_context_names() == []
+
+
+def test_relocated_draft_materializes_only_at_exact_apply_and_then_disappears(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    draft = _workspace_draft()
+    GroundWorkspaceDraftStore(store).save(draft, expected_digest=None)
+    opened = []
+
+    monkeypatch.setattr(
+        ground_command,
+        "_choose_ground_workspace_save_location",
+        lambda _store, **_kwargs: "research/ticker-ground",
+    )
+
+    def apply(proposal):
+        execute_ground_workspace_creation(
+            CreateGroundWorkspaceRequest(
+                name=proposal.ground_name,
+                goal=proposal.goal,
+            ),
+            store=MemoryStore(),
+        )
+        return "created"
+
+    def shell(**kwargs):
+        resumed = kwargs["initial_proposal"]
+        selected = kwargs["choose_save_location"](resumed.ground_name)
+        assert selected == "research/ticker-ground"
+        relocated = replace(resumed, ground_name=selected)
+        kwargs["apply"](relocated)
+        return GroundShellResult(
+            status="APPLIED",
+            proposal=relocated,
+            actual_output="created",
+            submitted_turns=kwargs["initial_submitted_turns"],
+        )
+
+    monkeypatch.setattr(ground_command, "_apply_new_ground_proposal", apply)
+    monkeypatch.setattr(ground_command, "run_ground_shell", shell)
+    monkeypatch.setattr(
+        ground_command,
+        "run_ground_workspace_tui",
+        lambda workspace, **_kwargs: opened.append(workspace.name),
+    )
+
+    outcome = ground_command._run_new_ground_shell(draft=draft)
+
+    assert outcome == "CLOSED"
+    assert opened == ["research/ticker-ground"]
+    assert ground_workspace_exists(store, "research/ticker-ground")
+    assert not ground_workspace_exists(store, draft.workspace_name)
+    assert GroundWorkspaceDraftStore(store).list() == ()
+
+
 def test_ground_session_entries_do_not_create_missing_storage(isolated_store):
     store = MemoryStore(create=False)
 
@@ -188,7 +349,7 @@ def test_ground_session_entries_do_not_create_missing_storage(isolated_store):
     assert not isolated_store.exists()
 
 
-def test_empty_ground_catalog_still_opens_launcher_with_new_context_action(
+def test_empty_ground_catalog_still_opens_launcher_with_new_session_action(
     isolated_store,
     monkeypatch,
 ):
@@ -205,8 +366,10 @@ def test_empty_ground_catalog_still_opens_launcher_with_new_context_action(
     assert len(seen) == 1
     entries, kwargs = seen[0]
     assert entries == ()
-    assert kwargs["new_receipt"].action_label == "CREATE NEW GROUND CONTEXT"
-    assert "exact Save Location" in kwargs["new_receipt"].action_description
+    assert kwargs["title"] == "MEM GROUND · SESSIONS"
+    assert kwargs["new_receipt"].action_label == "START NEW GROUND SESSION"
+    assert "Start blank" in kwargs["new_receipt"].action_description
+    assert "above the Goal" in kwargs["new_receipt"].action_description
     assert not isolated_store.exists()
 
 
