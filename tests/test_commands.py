@@ -63,7 +63,7 @@ class TestHelp:
         assert "start a new" not in result.output
         lines = result.output.splitlines()
         assert any(
-            line.startswith("impact ") and "no Context changes" in line
+            line.startswith("impact ") and "without applying them" in line
             for line in lines
         )
         assert any(
@@ -99,7 +99,8 @@ class TestHelp:
         assert any(line.startswith("help ") for line in lines)
         assert "bare → TUI" not in result.output
         assert any(
-            line.startswith("atomize ") and "issue-scoped directional meld" in line
+            line.startswith("atomize ")
+            and "independently reviewable Memories" in line
             for line in lines
         )
         assert any(
@@ -408,7 +409,7 @@ class TestHelp:
         meld_help = " ".join(meld.output.split())
         assert "Combine two Contexts and resolve their differences" in meld_help
         assert "separate Result" in meld_help
-        assert "authoritative Baseline" in meld_help
+        assert "authoritative BASELINE" in meld_help
         assert "--atomic" not in meld_help
         assert "--into" in meld_help
 
@@ -939,7 +940,7 @@ class TestHelp:
         assert result.exit_code == 0
         assert "Command: mem impact" in result.output
         assert "Usage: mem impact" in result.output
-        assert "no Context changes" in result.output
+        assert "Apply is a separate reviewed handoff" in result.output
 
 
 # ---------------------------------------------------------------------------

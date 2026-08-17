@@ -175,7 +175,7 @@ class _GrantedFindProvider:
 
     def complete(self, prompt, *, operation, output_schema=None):
         self.prompts.append(prompt)
-        if operation != "find":
+        if operation != "search":
             return json.dumps({"findings": []})
         payload = json.loads(prompt.split("FIND PAYLOAD:\n", 1)[1])
         matches = [
@@ -689,7 +689,7 @@ def test_local_namespace_root_reads_granted_and_owned_descendants_together(
         lambda: provider,
     )
 
-    found = runner.invoke(app, ["find", "service desk", "--limit", "10", "-r"])
+    found = runner.invoke(app, ["search", "service desk", "--limit", "10", "-r"])
     listed = runner.invoke(app, ["ls", "-R", "task-root"])
     mixed_copy = runner.invoke(app, ["ls", "-R", "task-root", "--copy"])
 
@@ -950,7 +950,7 @@ def test_temporal_find_rejects_granted_view_without_history_access(
         "campus-wiki",
     )
 
-    result = runner.invoke(app, ["find", "the last updated Memory"])
+    result = runner.invoke(app, ["search", "the last updated Memory"])
 
     assert result.exit_code == 1
     assert "does not expose authority checkpoint history" in result.stderr

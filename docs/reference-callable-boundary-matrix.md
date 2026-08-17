@@ -34,6 +34,9 @@ snapshot. The source lock and Target compare-and-set are held through one
 checkpoint publication, so drift produces no partial snapshot.
 That checkpoint is the operation-unit Undo/Redo boundary: Undo removes only
 the Target snapshot, and Redo restores the same retained bytes and identity.
+Restoration presentation classifies both snapshot and live records as Memory
+references and renders only their pointer identity; it must not fall back to
+printing the snapshot record because that record contains the retained bytes.
 
 The operation is deterministic. It constructs no provider, reads or writes no
 semantic cache or analysis session, and changes only the Target. The snapshot

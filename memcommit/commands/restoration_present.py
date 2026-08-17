@@ -115,6 +115,10 @@ def _item_kind(item: Mapping[str, Any] | None) -> str:
     return {
         "memory": "Memory",
         "memory_ref": _MEMORY_REF_KIND,
+        # Snapshot References carry retained bytes in the checkpoint record.
+        # Classify them as pointers so restoration receipts never fall back to
+        # rendering the raw record and disclosing that content.
+        "memory_snapshot_ref": _MEMORY_REF_KIND,
         "query_context_ref": _QUERY_VIEW_KIND,
         "context_ref": _EMBEDDED_CONTEXT_KIND,
     }.get(raw, "direct item")
@@ -124,7 +128,7 @@ def _item_description(item: Mapping[str, Any]) -> str:
     kind = item.get("type")
     if kind == "memory":
         return _quoted_content(item.get("content", ""))
-    if kind == "memory_ref":
+    if kind in {"memory_ref", "memory_snapshot_ref"}:
         target_context = item.get("target_context")
         target_name = (
             target_context.get("name")

@@ -23,7 +23,7 @@ class FirstFindCandidateProvider:
         self.payloads: list[dict[str, object]] = []
 
     def complete(self, prompt, *, operation, output_schema=None):
-        assert operation == "find"
+        assert operation == "search"
         payload = json.loads(prompt.split("FIND PAYLOAD:\n", 1)[1])
         self.payloads.append(payload)
         candidate = payload["candidates"][0]

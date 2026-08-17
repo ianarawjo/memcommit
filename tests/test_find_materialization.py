@@ -78,7 +78,7 @@ def test_copy_creates_fresh_memory_values_and_leaves_source_unchanged(
     assert result.item_uids == (copied[0].uid,)
     assert context_record_digest(store.load_direct(source.name)) == source_before
     checkpoint = store.list_checkpoints(result.context_name)[0]
-    assert checkpoint["command"] == "find"
+    assert checkpoint["command"] == "search"
     assert checkpoint["args"]["find_materialization"]["mode"] == "COPY"
     assert checkpoint["description"].startswith(
         "Saved 1 checked Find result(s) as COPY"
