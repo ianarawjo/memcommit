@@ -97,6 +97,9 @@ class MemoryRef:
         if self.is_snapshot:
             if self.target is None or self.snapshot_content_sha256 is None:
                 raise ValueError("Memory snapshot reference has no retained content.")
+            expected = hashlib.sha256(self.target.content.encode("utf-8")).hexdigest()
+            if expected != self.snapshot_content_sha256:
+                raise ValueError("Memory snapshot content digest does not match.")
             record["content"] = self.target.content
             record["content_sha256"] = self.snapshot_content_sha256
         return record

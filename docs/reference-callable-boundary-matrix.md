@@ -32,6 +32,8 @@ direct Source Memory UID and exact content, and a SHA-256 digest of that
 content. Apply reopens and revalidates every binding before creating the
 snapshot. The source lock and Target compare-and-set are held through one
 checkpoint publication, so drift produces no partial snapshot.
+That checkpoint is the operation-unit Undo/Redo boundary: Undo removes only
+the Target snapshot, and Redo restores the same retained bytes and identity.
 
 The operation is deterministic. It constructs no provider, reads or writes no
 semantic cache or analysis session, and changes only the Target. The snapshot
@@ -54,7 +56,8 @@ continues to own its disclosure and inclusion policy.
 ## Executable evidence
 
 - `tests/test_reference_application.py` verifies frozen Source/Target drift,
-  CLI publication, checkpoint shape, and fixed content after Source change.
+  CLI publication, checkpoint and Undo/Redo behavior, and fixed content after
+  Source change.
 - `tests/test_reference_embed_public_api.py` verifies the public snapshot/live
   distinction and operation-specific error projection.
 - `tests/test_reference_embed_agent_adapter.py` verifies strict versioned

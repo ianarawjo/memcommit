@@ -96,6 +96,25 @@ def test_runtime_rejects_source_drift_without_partial_memory_embed(isolated_stor
     assert list(store.load("target").iter_items()) == []
 
 
+def test_runtime_rejects_target_drift_without_partial_memory_embed(isolated_store):
+    store = MemoryStore()
+    source = ops.init("source")
+    memory = ops.add(source, "version one")
+    store.save(source)
+    target = ops.init("target")
+    store.save(target)
+    port = MemoryStoreEmbedPort.capture(store)
+    plan = port.freeze_memory(MemoryEmbedRequest(memory.uid[:8], "source", "target"))
+
+    marker = ops.add(target, "concurrent target value")
+    store.save(target)
+
+    with pytest.raises(RuntimeError, match="Into Context changed"):
+        port.apply_memory(plan)
+    reloaded = store.load("target")
+    assert reloaded.ordered_uids() == [marker.uid]
+
+
 def test_cli_memory_embed_uses_from_and_preserves_reviewed_gap(isolated_store):
     assert runner.invoke(app, ["init", "source"]).exit_code == 0
     assert runner.invoke(app, ["add", "version one"]).exit_code == 0
@@ -157,6 +176,30 @@ def test_cli_memory_embed_reads_latest_source_after_target_reload(isolated_store
     assert reloaded.is_live
     assert reloaded.target is not None
     assert reloaded.target.content == "version two"
+
+
+def test_cli_memory_embed_undo_and_redo_restore_the_live_link(isolated_store):
+    assert runner.invoke(app, ["init", "source"]).exit_code == 0
+    assert runner.invoke(app, ["add", "version one"]).exit_code == 0
+    store = MemoryStore()
+    memory = next(iter(store.load("source").iter_items()))
+    assert isinstance(memory, Memory)
+    assert runner.invoke(app, ["init", "target"]).exit_code == 0
+    assert runner.invoke(
+        app,
+        ["embed", memory.uid[:8], "--from", "source", "--into", "target"],
+    ).exit_code == 0
+    embed_uid = store.load("target").ordered_uids()[0]
+
+    assert runner.invoke(app, ["undo"]).exit_code == 0
+    assert store.load("target").ordered_uids() == []
+    assert runner.invoke(app, ["redo"]).exit_code == 0
+
+    restored = store.load("target").memories[embed_uid]
+    assert isinstance(restored, MemoryRef)
+    assert restored.is_live
+    assert restored.target is not None
+    assert restored.target.content == "version one"
 
 
 def test_memory_embed_rejects_a_self_link_before_publication(isolated_store):

@@ -64,6 +64,30 @@ def test_snapshot_reference_survives_source_deletion(isolated_store):
     assert loaded.target.content == "retained evidence"
 
 
+def test_snapshot_reference_rejects_in_memory_content_tampering(isolated_store):
+    store = MemoryStore()
+    source = ops.init("source")
+    memory = ops.add(source, "reviewed evidence")
+    store.save(source)
+    parent = ops.init("parent")
+    reference = ops.reference_memory(memory, source, parent)
+    store.save(parent)
+
+    loaded = store.load("parent")
+    loaded_reference = loaded.memories[reference.uid]
+    assert isinstance(loaded_reference, MemoryRef)
+    assert loaded_reference.target is not None
+    loaded_reference.target.content = "unreviewed replacement"
+
+    with pytest.raises(ValueError, match="snapshot content digest"):
+        store.save(loaded)
+
+    reloaded = store.load("parent").memories[reference.uid]
+    assert isinstance(reloaded, MemoryRef)
+    assert reloaded.target is not None
+    assert reloaded.target.content == "reviewed evidence"
+
+
 def test_memory_ref_round_trip_stores_pointer_only(isolated_store):
     store = MemoryStore()
     source = ops.init("source")

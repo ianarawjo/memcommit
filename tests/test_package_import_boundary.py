@@ -48,6 +48,7 @@ blocked = (
     'memcommit.api._operations.compare',
     'memcommit.api._operations.distill',
     'memcommit.api._operations.elaborate',
+    'memcommit.api._operations.embed',
     'memcommit.api._operations.fit',
     'memcommit.api._operations.help',
     'memcommit.api._operations.forget',
@@ -55,11 +56,13 @@ blocked = (
     'memcommit.api._operations.ground_elaborate',
     'memcommit.api._operations.meld',
     'memcommit.api._operations.query',
+    'memcommit.api._operations.reference',
     'memcommit.api._operations.show',
     'memcommit.add_application',
     'memcommit.comparison_execution',
     'memcommit.distill_application',
     'memcommit.elaborate_application',
+    'memcommit.embed_application',
     'memcommit.fit_application',
     'memcommit.help_application',
     'memcommit.forget_application',
@@ -67,6 +70,7 @@ blocked = (
     'memcommit.ground_elaborate',
     'memcommit.meld_application',
     'memcommit.operations.query.ordinary_application',
+    'memcommit.reference_application',
     'memcommit.show_application',
 )
 assert MemCommitClient.__name__ == 'MemCommitClient'
@@ -87,6 +91,7 @@ for name in (
     'memcommit.api._operations.compare',
     'memcommit.api._operations.distill',
     'memcommit.api._operations.elaborate',
+    'memcommit.api._operations.embed',
     'memcommit.api._operations.fit',
     'memcommit.api._operations.help',
     'memcommit.api._operations.forget',
@@ -94,6 +99,7 @@ for name in (
     'memcommit.api._operations.ground_elaborate',
     'memcommit.api._operations.meld',
     'memcommit.api._operations.query',
+    'memcommit.api._operations.reference',
     'memcommit.api._operations.show',
 ):
     importlib.import_module(name)

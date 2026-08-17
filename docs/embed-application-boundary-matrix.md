@@ -39,6 +39,8 @@ Memory Embed also revalidates the frozen direct Memory content. The Store's
 target compare-and-set and source binding remain the final locked boundary. A
 successful result includes the exact relationship, placement, and checkpoint
 UID so Python and agent adapters never parse CLI text.
+The checkpoint is also the operation-unit Undo/Redo boundary; restoring a
+Memory Embed restores the live identity link, not a copied Source value.
 
 ## Compatibility and remaining boundary
 

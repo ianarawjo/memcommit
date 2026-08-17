@@ -1,4 +1,4 @@
-"""Terminal-independent application contract for embedding one Context."""
+"""Terminal-independent application contracts for live Context and Memory Embed."""
 
 from __future__ import annotations
 
@@ -57,7 +57,7 @@ class FrozenEmbedPlan:
 
 @dataclass(frozen=True)
 class EmbedResult:
-    """Typed durable receipt shared by CLI, TUI, and future Python adapters."""
+    """Typed durable Context receipt shared by every exposed adapter."""
 
     child_name: str
     child_uid: str

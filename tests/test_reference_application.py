@@ -91,6 +91,25 @@ def test_runtime_freezes_source_and_target_before_snapshot_apply(isolated_store)
     assert list(store.load("target").iter_items()) == []
 
 
+def test_runtime_rejects_target_drift_without_overwriting_it(isolated_store):
+    store = MemoryStore()
+    source = ops.init("source")
+    memory = ops.add(source, "version one")
+    store.save(source)
+    target = ops.init("target")
+    store.save(target)
+    port = MemoryStoreReferencePort.capture(store)
+    plan = port.freeze(ReferenceRequest(memory.uid[:8], "source", "target"))
+
+    marker = ops.add(target, "concurrent target value")
+    store.save(target)
+
+    with pytest.raises(RuntimeError, match="Target Context changed"):
+        port.apply(plan)
+    reloaded = store.load("target")
+    assert reloaded.ordered_uids() == [marker.uid]
+
+
 def test_cli_reference_persists_snapshot_and_one_checkpoint(isolated_store):
     assert runner.invoke(app, ["init", "source"]).exit_code == 0
     assert runner.invoke(app, ["add", "version one"]).exit_code == 0
@@ -145,3 +164,27 @@ def test_cli_reference_stays_fixed_after_source_change(isolated_store):
     assert shown.exit_code == 0
     assert "version one" in shown.output
     assert "version two" not in shown.output
+
+
+def test_cli_reference_undo_and_redo_restore_the_snapshot(isolated_store):
+    assert runner.invoke(app, ["init", "source"]).exit_code == 0
+    assert runner.invoke(app, ["add", "version one"]).exit_code == 0
+    store = MemoryStore()
+    memory = next(iter(store.load("source").iter_items()))
+    assert isinstance(memory, Memory)
+    assert runner.invoke(app, ["init", "target"]).exit_code == 0
+    assert runner.invoke(
+        app,
+        ["reference", memory.uid[:8], "--from", "source"],
+    ).exit_code == 0
+    snapshot_uid = store.load("target").ordered_uids()[0]
+
+    assert runner.invoke(app, ["undo"]).exit_code == 0
+    assert store.load("target").ordered_uids() == []
+    assert runner.invoke(app, ["redo"]).exit_code == 0
+
+    restored = store.load("target").memories[snapshot_uid]
+    assert isinstance(restored, MemoryRef)
+    assert restored.is_snapshot
+    assert restored.target is not None
+    assert restored.target.content == "version one"

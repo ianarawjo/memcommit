@@ -42,7 +42,6 @@ from memcommit.commands import (
     query,
     rationale,
     redo,
-    reference,
     replace,
     rename,
     remove,
@@ -61,7 +60,7 @@ from memcommit.commands import (
     update,
     write_protection,
 )
-from memcommit.interfaces.cli import embed
+from memcommit.interfaces.cli import embed, reference
 from memcommit.commands.clear import cmd as clear_cmd
 from memcommit.commands.config import app as config_app
 from memcommit.commands.dev import app as dev_app
