@@ -108,7 +108,6 @@ def test_read_and_analysis_commands_share_relative_context_operand_boundary(
         [
             "rationale",
             memory.uid,
-            "--recorded-only",
             "--context",
             "../to",
         ],

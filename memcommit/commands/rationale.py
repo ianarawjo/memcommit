@@ -1,4 +1,4 @@
-"""Explain one Memory using provenance, saved analysis, and local context."""
+"""Show one Memory with its recorded provenance."""
 
 from __future__ import annotations
 
@@ -11,7 +11,6 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.command_attempts import annotate_memory_report_attempt
-from memcommit.commands.command_progress import progressing_provider_factory
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.memory_picker import (
     ScopedMemoryPickerItem,
@@ -31,14 +30,12 @@ from memcommit.interfaces.console.text import (
     safe_terminal_text,
 )
 from memcommit.provenance import ProvenanceError
-from memcommit.query_provider import connect_codex_chatgpt_provider
 from memcommit.rationale import (
     RationaleError,
     RationaleReport,
     build_rationale,
 )
 from memcommit.rationale_scope import (
-    authorize_rationale_inference,
     freeze_rationale_profile_catalog,
     load_rationale_scope,
     rationale_candidates,
@@ -114,31 +111,6 @@ def render_rationale(
             )
         )
 
-    inference = report.inference
-    if inference is not None:
-        cache_label = " · cached" if report.inference_cached else ""
-        typer.secho(
-            "\nAPPARENT PURPOSE — inferred from Context, not recorded"
-            + cache_label,
-            bold=True,
-        )
-        typer.echo(
-            "  "
-            + _bounded_summary(
-                safe_terminal_text(inference.explanation),
-                report.inference_character_limit,
-            )
-        )
-    elif report.inference_status == "NOT_REQUESTED":
-        typer.secho("\nAPPARENT PURPOSE — not requested", bold=True)
-    elif report.inference_status == "INSUFFICIENT_EVIDENCE":
-        typer.secho("\nAPPARENT PURPOSE — insufficient Context", bold=True)
-    else:
-        typer.secho(
-            "\nAPPARENT PURPOSE — unavailable",
-            bold=True,
-        )
-
 
 def rationale_report_text(
     report: RationaleReport,
@@ -192,20 +164,6 @@ def cmd(
             ),
         ),
     ] = None,
-    recorded_only: Annotated[
-        bool,
-        typer.Option(
-            "--recorded-only",
-            help="Skip contextual inference and its cache",
-        ),
-    ] = False,
-    refresh: Annotated[
-        bool,
-        typer.Option(
-            "--refresh",
-            help="Ignore and replace a cached contextual inference",
-        ),
-    ] = False,
     verbose: Annotated[
         bool,
         typer.Option(
@@ -219,12 +177,10 @@ def cmd(
         typer.Option("--json", help="Emit structured rationale evidence as JSON"),
     ] = False,
 ) -> None:
-    """Separate recorded origin from inference within the current Context."""
+    """Show the recorded reason for one current or historical Memory."""
     store = MemoryStore(create=False)
     try:
         include_descendants = True
-        if recorded_only and refresh:
-            raise RationaleError("--refresh cannot be combined with --recorded-only.")
         context_snapshot = ContextOperandSnapshot.capture(store)
         if selector is None and as_json:
             raise RationaleError("JSON output requires an explicit Memory UID.")
@@ -300,8 +256,8 @@ def cmd(
             selector = selected.memory_uid
             include_descendants = selected.include_descendants
             selected_from_profile = profile_catalog is not None
-            # Do not connect the inference provider until an exact Memory has
-            # been chosen. Re-read live state after the full-screen picker.
+            # Re-read live state after the full-screen picker so the report is
+            # tied to the exact Memory the person selected.
         if selected_from_profile:
             # Revalidate through the same Profile-wide namespace used by the
             # picker.  Re-anchoring a granted target to its grant-only catalog
@@ -325,45 +281,14 @@ def cmd(
                 include_descendants=include_descendants,
             )
         target = resolve_rationale_target(scope, selector)
-        if target.access.is_granted and recorded_only:
-            raise RationaleError(
-                "--recorded-only is unavailable for a granted READ view because "
-                "authority history is not granted."
-            )
-        if not recorded_only:
-            authorize_rationale_inference(scope)
         trace = rationale_trace(scope, target)
-        if recorded_only:
-            report = build_rationale(
-                target.access.store,
-                target.owner,
-                trace,
-                None,
-                cache_inference=False,
-                refresh_inference=refresh,
-                inference_contexts=scope.contexts,
-                inference_scope_name=scope.root_name,
-                inference_scope_include_descendants=include_descendants,
-                recorded_evidence_available=not target.access.is_granted,
-            )
-        else:
-            with progressing_provider_factory(
-                "RATIONALE",
-                "inferring rationale",
-                connect_codex_chatgpt_provider,
-            ) as provider_factory:
-                report = build_rationale(
-                    target.access.store,
-                    target.owner,
-                    trace,
-                    provider_factory,
-                    cache_inference=not target.access.is_granted,
-                    refresh_inference=refresh,
-                    inference_contexts=scope.contexts,
-                    inference_scope_name=scope.root_name,
-                    inference_scope_include_descendants=include_descendants,
-                    recorded_evidence_available=not target.access.is_granted,
-                )
+        report = build_rationale(
+            target.access.store,
+            target.owner,
+            trace,
+            None,
+            recorded_evidence_available=not target.access.is_granted,
+        )
         annotate_memory_report_attempt(
             operation="rationale",
             context_name=scope.root_name,

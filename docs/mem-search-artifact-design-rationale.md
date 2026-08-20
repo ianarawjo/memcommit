@@ -22,7 +22,8 @@ visible ordinary Memory graph plus bounded, active-Profile projections of:
 - saved visible query-session questions and answers;
 - saved Compare and Meld work relevant to a Context in the searched frame;
 - Context checkpoints as recorded trace events; and
-- validated cached rationale inferences for Memories in the frame.
+- validated legacy rationale-inference caches already present for Memories in
+  the frame.
 
 The semantic ranker decides whether an artifact materially satisfies the
 question. No command injects a Meld, trace, rationale, or prior session merely
@@ -65,8 +66,8 @@ Contexts before ranking; query-only Views remain a separate typed Source mode.
   include saved overview, issues, reviewed comments, target identity, and
   application receipt because those are the operation artifact the user saw or
   approved.
-- Rationale search reuses only a validated current cache record. It does not
-  trigger a fresh rationale inference.
+- Search may reuse a validated legacy cache record for compatibility. Current
+  `mem rationale` never creates or refreshes one.
 
 ## Presentation boundary
 

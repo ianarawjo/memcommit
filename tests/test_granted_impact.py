@@ -788,7 +788,7 @@ def test_recursive_summarize_uses_one_local_and_granted_public_namespace(
         )
 
 
-def test_rationale_local_root_combines_authorized_granted_public_subtree(
+def test_rationale_local_root_does_not_analyze_granted_neighbor_subtree(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -804,28 +804,6 @@ def test_rationale_local_root_combines_authorized_granted_public_subtree(
     target = next(
         item for item in attachment.iter_items() if isinstance(item, Memory)
     )
-    payloads: list[dict[str, object]] = []
-
-    class Provider:
-        def complete(self, prompt, *, operation, output_schema=None):
-            assert operation == "rationale inference"
-            payload = json.loads(prompt.split("RATIONALE PAYLOAD:\n", 1)[1])
-            payloads.append(payload)
-            candidates = payload["candidates"]
-            return json.dumps(
-                {
-                    "explanation": (
-                        "Public and local context align; details remain open."
-                    ),
-                    "support_ids": [candidate["candidate_id"] for candidate in candidates],
-                }
-            )
-
-    monkeypatch.setattr(
-        "memcommit.commands.rationale.connect_codex_chatgpt_provider",
-        Provider,
-    )
-
     result = runner.invoke(
         app,
         ["rationale", target.uid[:8], "--context", "task-root"],
@@ -843,22 +821,16 @@ def test_rationale_local_root_combines_authorized_granted_public_subtree(
 
     assert result.exit_code == 0, result.output + result.stderr
     assert structured.exit_code == 0, structured.output + structured.stderr
-    assert payloads
-    candidate_contexts = {
-        candidate["context_name"] for candidate in payloads[0]["candidates"]
-    }
-    assert "task-root/campus-wiki" in candidate_contexts
-    assert "task-root/campus-wiki/services" in candidate_contexts
+    assert target.content in result.output
+    assert "APPARENT PURPOSE" not in result.output
     assert "Context(s)" not in result.output
-    assert json.loads(structured.output)["inference_scope"] == {
-        "context_name": "task-root",
-        "context_count": 4,
-        "include_descendants": True,
-    }
-    assert DETAIL_SECRET not in json.dumps(payloads)
+    payload = json.loads(structured.output)
+    assert payload["inference"] is None
+    assert payload["fallback_evidence"] == []
+    assert DETAIL_SECRET not in structured.output
 
 
-def test_rationale_mixed_subtree_requires_grant_combination_permissions(
+def test_rationale_mixed_subtree_needs_no_combination_permission_for_provenance(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -875,33 +847,14 @@ def test_rationale_mixed_subtree_requires_grant_combination_permissions(
     target = next(
         item for item in attachment.iter_items() if isinstance(item, Memory)
     )
-    calls = []
-    monkeypatch.setattr(
-        "memcommit.commands.rationale.connect_codex_chatgpt_provider",
-        lambda: calls.append("connected"),
-    )
-
     result = runner.invoke(
         app,
         ["rationale", target.uid[:8], "--context", "task-root"],
     )
 
-    assert result.exit_code == 1
-    assert "does not authorize COMBINE + DERIVE" in result.stderr
-    assert calls == []
-
-    recorded = runner.invoke(
-        app,
-        [
-            "rationale",
-            target.uid[:8],
-            "--context",
-            "task-root",
-            "--recorded-only",
-        ],
-    )
-    assert recorded.exit_code == 0, recorded.output + recorded.stderr
-    assert calls == []
+    assert result.exit_code == 0, result.output + result.stderr
+    assert "PROVENANCE" in result.output
+    assert "APPARENT PURPOSE" not in result.output
 
 
 def _empty_plan() -> str:

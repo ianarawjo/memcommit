@@ -119,7 +119,7 @@ BEST_FOR_BY_OPERATION = {
         "Getting a grounded natural-language answer instead of a list of matching "
         "Memories."
     ),
-    "rationale": "Understanding why a Memory exists or reached its current form.",
+    "rationale": "Checking a recorded reason for a Memory's current form.",
     "redo": "Reapplying a command that was undone accidentally.",
     "reference": (
         "Retaining one exact Memory version even if its Source later changes "

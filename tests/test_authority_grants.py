@@ -15,7 +15,6 @@ from memcommit.api import MemCommitClient, ShowContextResult
 from memcommit.cli import app
 from memcommit.authority.access import resolve_context_access
 from memcommit.commands.memory_picker import MemoryReportTargetSelection
-from memcommit.commands.memory_report_recents import MemoryReportSelectAction
 from memcommit.commands.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
@@ -377,7 +376,7 @@ def test_profile_target_workbenches_keep_all_readable_names_from_a_grant(
     }
 
 
-def test_bare_rationale_location_picker_keeps_empty_local_and_read_grants(
+def test_explicit_granted_rationale_picker_keeps_readable_descendants(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -388,23 +387,6 @@ def test_bare_rationale_location_picker_keeps_empty_local_and_read_grants(
         monkeypatch,
     )
     observed: dict[str, object] = {}
-
-    class Provider:
-        def complete(self, prompt, *, operation, output_schema=None):
-            payload = json.loads(prompt.split("RATIONALE PAYLOAD:\n", 1)[1])
-            candidate = payload["candidates"][0]
-            return json.dumps(
-                {
-                    "explanation": "Readable context supports this; details remain open.",
-                    "support_ids": [candidate["candidate_id"]],
-                }
-            )
-
-    def select_context(names, *, current, virtual_names, **kwargs):
-        observed["local"] = tuple(names)
-        observed["virtual"] = tuple(virtual_names)
-        observed["current"] = current
-        return "campus-wiki"
 
     def select_memory(items, *, context_name, catalog_context_names, **kwargs):
         observed["scope"] = tuple(catalog_context_names)
@@ -419,23 +401,8 @@ def test_bare_rationale_location_picker_keeps_empty_local_and_read_grants(
     monkeypatch.setattr(rationale_command, "interactive_report_terminal", lambda: True)
     monkeypatch.setattr(
         rationale_command,
-        "choose_memory_report_recent",
-        lambda *args, **kwargs: MemoryReportSelectAction(),
-    )
-    monkeypatch.setattr(
-        rationale_command,
-        "choose_memory_report_context",
-        select_context,
-    )
-    monkeypatch.setattr(
-        rationale_command,
         "choose_memory_report_target",
         select_memory,
-    )
-    monkeypatch.setattr(
-        rationale_command,
-        "connect_codex_chatgpt_provider",
-        Provider,
     )
     monkeypatch.setattr(
         rationale_command,
@@ -443,14 +410,13 @@ def test_bare_rationale_location_picker_keeps_empty_local_and_read_grants(
         lambda body, *, title: observed.update(viewer=(title, body)),
     )
 
-    result = runner.invoke(app, ["rationale"])
+    result = runner.invoke(app, ["rationale", "--context", "campus-wiki"])
 
     assert result.exit_code == 0, result.output + result.stderr
-    assert observed["local"] == ("task-root",)
-    assert observed["virtual"] == ("campus-wiki", "campus-wiki/public")
-    assert observed["current"] == "task-root"
     assert observed["scope"] == ("campus-wiki", "campus-wiki/public")
     assert observed["viewer"][0] == "RATIONALE REPORT"
+    assert "PROVENANCE — hidden by Grant" in observed["viewer"][1]
+    assert "APPARENT PURPOSE" not in observed["viewer"][1]
     assert MemoryStore().current_context_name() == "task-root"
 
 
@@ -469,24 +435,6 @@ def test_granted_read_allows_subtree_rationale_but_never_trace_history(
         for item in authority_store.load_direct("campus-wiki/public").iter_items()
         if isinstance(item, Memory)
     )
-    calls: list[dict[str, object]] = []
-
-    class Provider:
-        def complete(self, prompt, *, operation, output_schema=None):
-            payload = json.loads(prompt.split("RATIONALE PAYLOAD:\n", 1)[1])
-            calls.append(payload)
-            return json.dumps(
-                {
-                    "explanation": "Readable context supports this; details remain open.",
-                    "support_ids": [payload["candidates"][0]["candidate_id"]],
-                }
-            )
-
-    monkeypatch.setattr(
-        "memcommit.commands.rationale.connect_codex_chatgpt_provider",
-        Provider,
-    )
-
     def forbidden_history(*args, **kwargs):
         raise AssertionError("granted READ opened authority checkpoint history")
 
@@ -510,30 +458,14 @@ def test_granted_read_allows_subtree_rationale_but_never_trace_history(
             "campus-wiki/public",
         ],
     )
-    recorded = runner.invoke(
-        app,
-        [
-            "rationale",
-            target.uid[:8],
-            "--context",
-            "campus-wiki",
-            "--recorded-only",
-        ],
-    )
-
     assert rationale.exit_code == 0, rationale.output
     assert "PROVENANCE — hidden by Grant" in rationale.output
-    assert calls
-    assert {candidate["context_name"] for candidate in calls[0]["candidates"]} == {
-        "campus-wiki"
-    }
-    assert SECRET not in json.dumps(calls)
+    assert "APPARENT PURPOSE" not in rationale.output
+    assert SECRET not in rationale.output
     assert trace.exit_code == 1
     assert "READ does not expose authority checkpoint" in trace.stderr
     assert log_memory.exit_code == 1
     assert "READ does not expose authority checkpoint" in log_memory.stderr
-    assert recorded.exit_code == 1
-    assert "--recorded-only is unavailable" in recorded.stderr
 
 
 def test_read_view_does_not_open_nested_query_authority_record(

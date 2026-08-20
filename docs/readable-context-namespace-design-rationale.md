@@ -43,7 +43,7 @@ The catalog observes these invariants:
 
 `mem ls`, current-state `mem find`, `mem rationale`, and the A/B source picker
 for new symmetric `mem meld` sessions consume this shared catalog. Recursive
-listing, search, Rationale inference, and Meld source selection from `task-1`
+listing, search, Rationale target selection, and Meld source selection from `task-1`
 can therefore see both
 `task-1/participant/...` and `task-1/campus-wiki/...`, even when the latter is
 stored by another Profile. Find also performs one bounded relevance check over

@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import importlib.util
 import io
-import json
 import os
 from pathlib import Path
 import re
@@ -59,70 +58,59 @@ def _isolate_store(root: Path) -> None:
 
 
 def _prepare_fixture() -> str:
-    from memcommit.commands import add, edit, init
-    from memcommit.context import Memory
+    import memcommit.ops as ops
+    from memcommit.context import AutoCheckpoint, Memory
     from memcommit.store import MemoryStore
 
-    init.cmd("rationale/korean", parents=True)
-    add.cmd(
+    store = MemoryStore()
+    context = ops.init("rationale/korean")
+    source = ops.add(
+        context,
         "나중에 문장을 다듬어 달라고 하면 구조와 인용 필요 표시는 유지하고, "
         "문제가 되는 표현만 바꾼다.",
-        input_source=None,
-        paste=False,
-        context_name=None,
     )
-    store = MemoryStore()
-    target = next(
-        item
-        for item in store.load_current_direct().iter_items()
-        if isinstance(item, Memory)
+    store.save(
+        context,
+        AutoCheckpoint(command="add", args={}, description="초안 규칙 추가"),
     )
-    edit.cmd(
-        target.uid,
-        "나중에 문장을 다듬어 달라고 하면 전체 구조와 인용 필요 표시는 "
-        "유지하고, 문제가 되는 표현만 바꾼다.",
-        input_source=None,
-        context_name=None,
+    source_position = context.ordered_uids().index(source.uid)
+    context.remove(source.uid)
+    target = Memory(
+        uid="20000000-0000-4000-8000-000000000001",
+        content=(
+            "나중에 문장을 다듬어 달라고 하면 전체 구조와 인용 필요 표시는 "
+            "유지하고, 문제가 되는 표현만 바꾼다."
+        ),
     )
-    add.cmd(
-        "초안이 어떻게 읽히는지 물으면 수정하기 전에 먼저 구성과 흐름을 평가한다.",
-        input_source=None,
-        paste=False,
-        context_name=None,
+    context.add(target, position=source_position)
+    reason = (
+        "문장 다듬기 요청이 전체 재작성으로 번지지 않도록 구조와 인용 표시를 "
+        "보존하는 검토 원칙을 기록하기 위해 유지했다."
     )
-    add.cmd(
-        "한 표현만 바꾸라고 하면 프로젝트 고유 용어와 이미 합의한 표현은 그대로 둔다.",
-        input_source=None,
-        paste=False,
-        context_name=None,
+    store.save(
+        context,
+        AutoCheckpoint(
+            command="atomize",
+            args={
+                "trace": {
+                    "schema_version": 1,
+                    "operation_id": "compact-korean-provenance",
+                    "changes": [
+                        {
+                            "kind": "SPLIT",
+                            "source_uids": [source.uid],
+                            "result_uids": [target.uid],
+                            "reason": reason,
+                            "reason_codes": ["A01_ONE_FOCUS"],
+                        }
+                    ],
+                }
+            },
+            description="기록 이유가 있는 검토 원칙 적용",
+        ),
     )
+    store.set_current(context.name)
     return target.uid
-
-
-class _Provider:
-    def complete(self, prompt, *, operation, output_schema=None):
-        assert operation == "rationale inference"
-        assert output_schema is not None
-        assert set(output_schema["required"]) == {"explanation", "support_ids"}
-        payload = json.loads(prompt.split("RATIONALE PAYLOAD:\n", 1)[1])
-        support_ids = [
-            candidate["candidate_id"] for candidate in payload["candidates"]
-        ]
-        explanation = (
-            "이 Memory는 이후 문장 다듬기의 변경 범위를 고정한다. 주변 규칙이 "
-            "검토 순서와 용어 보존을 보완하므로 중복이 아니라 전체 편집 원칙으로 "
-            "기능한다."
-        )
-        explanation_limit = output_schema["properties"]["explanation"][
-            "maxLength"
-        ]
-        assert len(explanation) <= explanation_limit
-        return json.dumps(
-            {
-                "explanation": explanation,
-                "support_ids": support_ids,
-            }
-        )
 
 
 def _run_child() -> None:
@@ -133,14 +121,15 @@ def _run_child() -> None:
         _isolate_store(Path(temp))
         target_uid = _prepare_fixture()
         before = MemoryStore().load_current_direct().to_dict()
-        rationale.connect_codex_chatgpt_provider = lambda: _Provider()
+        assert not hasattr(rationale, "connect_codex_chatgpt_provider")
         print("PTY", os.get_terminal_size().columns, os.get_terminal_size().lines)
         rationale.cmd()
         after = MemoryStore().load_current_direct().to_dict()
         assert before == after
         print(
             f"RATIONALE CLOSED · TARGET [{target_uid[:8]}] · "
-            "CURRENT rationale/korean · READ ONLY · STORE CONTENT UNCHANGED"
+            "CURRENT rationale/korean · PROVIDER CALLS 0 · "
+            "CACHE UNTOUCHED · STORE CONTENT UNCHANGED"
         )
 
 
@@ -210,14 +199,15 @@ def main() -> None:
     plain = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.txt"))
     assert "PTY 180 52" in raw
     assert "MEMORY" in plain
-    assert "PROVENANCE" in plain
-    assert "APPARENT PURPOSE — inferred from Context, not recorded" in plain
-    assert "전체 편집 원칙으로 기능한다" in plain
+    assert "PROVENANCE — recorded reason" in plain
+    assert "검토 원칙을 기록하기 위해 유지했다" in plain
+    assert "APPARENT PURPOSE" not in plain
     assert "LIMITS" not in plain
     assert "Context(s)" not in plain
     assert "SAVED ANALYSIS" not in plain
     assert "EVIDENCE USED FOR INFERENCE" not in plain
     assert "STORE CONTENT UNCHANGED" in plain
+    assert "PROVIDER CALLS 0" in plain
     assert "┏" in raw and "┗" in raw
     assert "38;" in raw
     assert any(

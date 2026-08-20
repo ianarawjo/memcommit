@@ -1,13 +1,13 @@
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃Rationale [976c0624] · bounds/minimum                                                                                                                                            ^┃
+┃Rationale [b669f5f1] · provenance/no-reason                                                                                                                                      ^┃
 ┃                                                                                                                                                                                  ┃
 ┃MEMORY                                                                                                                                                                            ┃
-┃  일단 적어 둔다                                                                                                                                                                  ┃
+┃  아직 기록 이유가 없는 한국어 Memory다.                                                                                                                                          ┃
 ┃                                                                                                                                                                                  ┃
 ┃PROVENANCE — no reason recorded                                                                                                                                                   ┃
 ┃                                                                                                                                                                                  ┃
-┃APPARENT PURPOSE — inferred from Context, not recorded                                                                                                                            ┃
-┃  유지할 이유는 보이지 않는다.                                                                                                                                                    ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃

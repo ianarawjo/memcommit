@@ -423,9 +423,9 @@ _OPERATIONS = (
     ),
     _operation(
         "rationale",
-        "Explain one Memory from recorded provenance and, when needed, inference.",
+        "Show one Memory with its recorded provenance.",
         "Memory provenance -> rationale",
-        ExecutionKind.MIXED,
+        ExecutionKind.DETERMINISTIC,
         "Read-only",
         "One current or historical Memory",
     ),

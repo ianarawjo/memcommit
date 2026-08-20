@@ -329,13 +329,11 @@ def test_atomize_review_comment_is_persisted_reanalyzed_and_applied(
 
     rationale = runner.invoke(
         app,
-        ["rationale", memory.uid[:8], "--recorded-only"],
+        ["rationale", memory.uid[:8]],
     )
     assert rationale.exit_code == 0, rationale.output
-    assert "Reviewed declared context/comment" in rationale.output
-    assert comment in rationale.output
-    assert "Requested because:" in rationale.output
-    assert "Applied citations for" in rationale.output
+    assert "PROVENANCE" in rationale.output
+    assert "Reviewed declared context/comment" not in rationale.output
     assert "Reviewer response:" not in rationale.output
 
 

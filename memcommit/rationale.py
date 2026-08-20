@@ -862,8 +862,16 @@ def build_rationale(
         review_warnings = []
         proposal_warnings = []
     inference_contexts = inference_contexts or (ctx,)
-    candidates, limited = _context_candidates(inference_contexts, target)
-    fallback = _fallback_evidence(candidates)
+    # A provenance-only caller must not inspect neighboring Memories merely to
+    # populate dormant inference diagnostics. Candidate work begins only when
+    # an explicit provider factory establishes a semantic inference boundary.
+    if provider_factory is None:
+        candidates: tuple[ContextEvidence, ...] = ()
+        limited = False
+        fallback: tuple[ContextEvidence, ...] = ()
+    else:
+        candidates, limited = _context_candidates(inference_contexts, target)
+        fallback = _fallback_evidence(candidates)
     if recorded_evidence_available:
         provenance_source_character_count, provenance_character_limit = (
             _provenance_character_budget(trace)
@@ -871,9 +879,13 @@ def build_rationale(
     else:
         provenance_source_character_count = 0
         provenance_character_limit = 0
-    inference_source_character_count, inference_character_limit = (
-        _inference_character_budget(target, candidates, saved_analysis)
-    )
+    if provider_factory is None:
+        inference_source_character_count = 0
+        inference_character_limit = 0
+    else:
+        inference_source_character_count, inference_character_limit = (
+            _inference_character_budget(target, candidates, saved_analysis)
+        )
     warnings = [*review_warnings, *proposal_warnings]
     if limited:
         warnings.append(

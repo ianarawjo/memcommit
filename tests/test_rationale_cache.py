@@ -1,21 +1,18 @@
-"""Durable, exact-input cache contracts for ``mem rationale`` inference."""
+"""Provenance-only ``mem rationale`` and legacy-cache compatibility tests."""
+
 from __future__ import annotations
 
 import hashlib
 import json
-from pathlib import Path
-import unicodedata
 import uuid
 
-import pytest
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
 import memcommit.rationale as rationale_module
 import memcommit.store as store_module
 from memcommit.cli import app
-from memcommit.context import Memory
-from memcommit.query_provider import QueryProviderError
+from memcommit.context import AutoCheckpoint, Memory
 from memcommit.rationale_cache import (
     CachedRationaleInference,
     load_rationale_inference,
@@ -27,698 +24,105 @@ from memcommit.store import MemoryStore
 
 
 runner = CliRunner()
-RATIONALE_MARKER = "RATIONALE PAYLOAD:\n"
 
 
 def invoke(*args: str):
     return runner.invoke(app, list(args))
 
 
-class RationaleProvider:
-    def __init__(self, label: str):
-        self.label = label
-        self.calls: list[dict[str, object]] = []
-
-    def complete(self, prompt, *, operation, output_schema=None):
-        assert operation == "rationale inference"
-        assert output_schema is not None
-        assert "contributes a distinct useful function" in prompt
-        assert "no meaningful current purpose" in prompt
-        assert "ordinary local reading" not in prompt
-        payload = json.loads(prompt.split(RATIONALE_MARKER, 1)[1])
-        self.calls.append(payload)
-        candidates = payload["candidates"]
-        assert isinstance(candidates, list) and candidates
-        semantic_values = [
-            payload["target"]["content"],
-            *(candidate["content"] for candidate in candidates),
-        ]
-        saved_analysis = payload["saved_analysis"]
-        if saved_analysis is not None:
-            semantic_values.extend(
-                (
-                    saved_analysis["interpretation"],
-                    saved_analysis["clarification"],
-                    saved_analysis["reason"],
-                    saved_analysis["question"],
-                    *(item["text"] for item in saved_analysis["readings"]),
-                )
-            )
-        normalized = {
-            unicodedata.normalize("NFC", value).strip()
-            for value in semantic_values
-            if value.strip()
-        }
-        expected_limit = min(480, sum(map(len, normalized)) - 1)
-        assert (
-            output_schema["properties"]["explanation"]["maxLength"]
-            == expected_limit
-        )
-        explanation = f"{self.label}: useful here."
-        assert len(explanation) <= expected_limit
-        return json.dumps(
-            {
-                "explanation": explanation,
-                "support_ids": [candidates[0]["candidate_id"]],
-            }
-        )
-
-
-class BadRationaleProvider:
-    def __init__(self, mode: str):
-        self.mode = mode
-        self.calls = 0
-
-    def complete(self, prompt, *, operation, output_schema=None):
-        self.calls += 1
-        if self.mode == "provider-failure":
-            raise QueryProviderError("rationale provider unavailable")
-        if self.mode == "over-character-limit":
-            assert output_schema is not None
-            explanation_limit = output_schema["properties"]["explanation"][
-                "maxLength"
-            ]
-            assert isinstance(explanation_limit, int)
-            return json.dumps(
-                {
-                    "explanation": "P" * (explanation_limit + 1),
-                    "support_ids": [],
-                }
-            )
-        if self.mode == "multiple-paragraphs":
-            return json.dumps(
-                {
-                    "explanation": "POISON first.\nPOISON second.",
-                    "support_ids": [],
-                }
-            )
-        if self.mode == "control-character":
-            return json.dumps(
-                {
-                    "explanation": "POISON\u0000control",
-                    "support_ids": [],
-                }
-            )
-        assert self.mode == "invalid-output"
-        return json.dumps(
-            {
-                "explanation": "POISON reading follows a POISON flow.",
-                "support_ids": ["unknown-candidate"],
-            }
-        )
-
-
-def _patch_provider(monkeypatch, provider) -> None:
-    monkeypatch.setattr(
-        "memcommit.commands.rationale.connect_codex_chatgpt_provider",
-        lambda: provider,
-    )
-
-
-def _forbid_provider(monkeypatch) -> None:
-    def forbidden():
-        raise AssertionError("the rationale provider must not be connected")
-
-    monkeypatch.setattr(
-        "memcommit.commands.rationale.connect_codex_chatgpt_provider",
-        forbidden,
-    )
-
-
-def _setup_context(name: str = "rationale-cache"):
+def _setup_context(name: str = "rationale-provenance"):
     store = MemoryStore()
-    ctx = ops.init(name)
-    target, first, second = ops.add_many(
-        ctx,
-        ["Target fragment.", "First direct neighbor.", "Second neighbor."],
-    )
-    store.save(ctx)
-    store.set_current(ctx.name)
-    return store, ctx, target, first, second
+    context = ops.init(name)
+    target = ops.add(context, "기록된 이유를 확인할 대상 Memory다.")
+    ops.add(context, "Rationale이 열지 않아야 할 주변 Memory다.")
+    store.save(context)
+    store.set_current(context.name)
+    return store, context, target
 
 
-def test_identical_cli_input_reuses_cache_and_reports_it_in_text_and_json(
-    isolated_store,
-    monkeypatch,
-):
-    _, ctx, target, _, _ = _setup_context()
-    provider = RationaleProvider("ORIGINAL")
-    _patch_provider(monkeypatch, provider)
-
-    first = invoke("rationale", target.uid)
-
-    assert first.exit_code == 0, first.output
-    assert "ORIGINAL: useful" in first.output
-    assert len(provider.calls) == 1
-    assert rationale_inference_path(ctx.uid, target.uid).is_file()
-
-    _forbid_provider(monkeypatch)
-    reused = invoke("rationale", target.uid)
-    structured = invoke("rationale", target.uid, "--json")
-
-    assert reused.exit_code == 0, reused.output
-    assert "ORIGINAL: useful" in reused.output
-    assert "· cached" in reused.output
-    assert structured.exit_code == 0, structured.output
-    payload = json.loads(structured.output)
-    assert payload["inference_cached"] is True
-    assert payload["inference"]["explanation"] == (
-        "ORIGINAL: useful here."
-    )
-    budgets = payload["character_budgets"]
-    explanation = payload["inference"]["explanation"]
-    assert len(explanation) <= budgets["inference_limit"]
-    assert budgets["inference_limit"] < budgets["inference_source"]
-
-
-def test_refresh_replaces_cache_and_conflicts_with_recorded_only(
-    isolated_store,
-    monkeypatch,
-):
-    _, _, target, _, _ = _setup_context()
-    original = RationaleProvider("ORIGINAL")
-    _patch_provider(monkeypatch, original)
-    assert invoke("rationale", target.uid).exit_code == 0
-
-    replacement = RationaleProvider("REFRESHED")
-    _patch_provider(monkeypatch, replacement)
-    refreshed = invoke("rationale", target.uid, "--refresh")
-
-    assert refreshed.exit_code == 0, refreshed.output
-    assert "REFRESHED: useful" in refreshed.output
-    assert "· cached" not in refreshed.output
-    assert len(replacement.calls) == 1
-
-    _forbid_provider(monkeypatch)
-    reused = invoke("rationale", target.uid, "--json")
-    incompatible = invoke(
-        "rationale",
-        target.uid,
-        "--refresh",
-        "--recorded-only",
-    )
-
-    assert reused.exit_code == 0, reused.output
-    payload = json.loads(reused.output)
-    assert payload["inference_cached"] is True
-    assert payload["inference"]["explanation"] == (
-        "REFRESHED: useful here."
-    )
-    assert incompatible.exit_code == 1
-    assert "cannot be combined with --recorded-only" in incompatible.output
-
-
-@pytest.mark.parametrize(
-    "change",
-    ["target-content", "candidate-content", "add", "order"],
-)
-def test_direct_memory_input_changes_invalidate_the_latest_slot(
-    isolated_store,
-    monkeypatch,
-    change,
-):
-    store, ctx, target, first, second = _setup_context(
-        f"rationale-cache-{change}"
-    )
-    initial = RationaleProvider("BEFORE")
-    _patch_provider(monkeypatch, initial)
-    assert invoke("rationale", target.uid).exit_code == 0
-
-    current = store.load_direct(ctx.name)
-    if change == "target-content":
-        ops.edit(current, target.uid, "Changed target fragment.")
-    elif change == "candidate-content":
-        ops.edit(current, first.uid, "Changed direct neighbor.")
-    elif change == "add":
-        ops.add(current, "New direct neighbor.")
-    else:
-        current.order = [second.uid, target.uid, first.uid]
-    store.save(current)
-
-    current_provider = RationaleProvider("AFTER")
-    _patch_provider(monkeypatch, current_provider)
-    result = invoke("rationale", target.uid)
-
-    assert result.exit_code == 0, result.output
-    assert "AFTER: useful" in result.output
-    assert "· cached" not in result.output
-    assert len(current_provider.calls) == 1
-
-
-def _replace_nested_key(value: object, key: str, replacement: object) -> int:
-    count = 0
-    if isinstance(value, dict):
-        if key in value:
-            value[key] = replacement
-            count += 1
-        for child in value.values():
-            count += _replace_nested_key(child, key, replacement)
-    elif isinstance(value, list):
-        for child in value:
-            count += _replace_nested_key(child, key, replacement)
-    return count
-
-
-def _corrupt_cache(path: Path, mode: str) -> None:
-    if mode == "malformed":
-        path.write_text("{not valid JSON: POISON", encoding="utf-8")
-        return
-
-    data = json.loads(path.read_text(encoding="utf-8"))
-    if mode == "duplicate-key":
-        encoded = json.dumps(data, ensure_ascii=False)
-        first_key = next(iter(data))
-        path.write_text(
-            "{"
-            + json.dumps(first_key)
-            + ":"
-            + json.dumps("POISON")
-            + ","
-            + encoded[1:],
-            encoding="utf-8",
-        )
-        return
-
-    assert mode == "unknown-support"
-    assert _replace_nested_key(
-        data,
-        "support_memory_uids",
-        ["missing-memory-POISON"],
-    ) == 1
-    assert _replace_nested_key(
-        data,
-        "explanation",
-        "POISON reading",
-    ) == 1
-    path.write_text(json.dumps(data), encoding="utf-8")
-
-
-@pytest.mark.parametrize(
-    "corruption",
-    ["malformed", "duplicate-key", "unknown-support"],
-)
-def test_invalid_cache_is_never_rendered_and_a_fresh_result_repairs_it(
-    isolated_store,
-    monkeypatch,
-    corruption,
-):
-    _, ctx, target, _, _ = _setup_context(
-        f"rationale-corrupt-{corruption}"
-    )
-    original = RationaleProvider("ORIGINAL")
-    _patch_provider(monkeypatch, original)
-    assert invoke("rationale", target.uid).exit_code == 0
-    path = rationale_inference_path(ctx.uid, target.uid)
-    _corrupt_cache(path, corruption)
-
-    repair = RationaleProvider("REPAIRED")
-    _patch_provider(monkeypatch, repair)
-    result = invoke("rationale", target.uid)
-
-    assert result.exit_code == 0, result.output
-    assert "REPAIRED: useful" in result.output
-    assert "POISON" not in result.output
-    assert len(repair.calls) == 1
-
-    _forbid_provider(monkeypatch)
-    reused = invoke("rationale", target.uid)
-    assert reused.exit_code == 0, reused.output
-    assert "REPAIRED: useful" in reused.output
-    assert "· cached" in reused.output
-
-
-@pytest.mark.parametrize(
-    "failure_mode",
-    [
-        "provider-failure",
-        "invalid-output",
-        "over-character-limit",
-        "multiple-paragraphs",
-        "control-character",
-    ],
-)
-def test_failed_or_invalid_provider_result_is_not_cached(
-    isolated_store,
-    monkeypatch,
-    failure_mode,
-):
-    _, ctx, target, _, _ = _setup_context(
-        f"rationale-bad-{failure_mode}"
-    )
-    provider = BadRationaleProvider(failure_mode)
-    _patch_provider(monkeypatch, provider)
-
-    result = invoke("rationale", target.uid, "--json")
-
-    assert result.exit_code == 0, result.output
-    payload = json.loads(result.output)
-    assert payload["inference"] is None
-    assert payload["inference_cached"] is False
-    assert "POISON" not in result.output
-    assert provider.calls == 1
-    assert not rationale_inference_path(ctx.uid, target.uid).exists()
-
-
-@pytest.mark.parametrize(
-    "failure_mode",
-    ["provider-failure", "invalid-output"],
-)
-def test_failed_refresh_preserves_the_previous_cache(
-    isolated_store,
-    monkeypatch,
-    failure_mode,
-):
-    _, ctx, target, _, _ = _setup_context(
-        f"rationale-refresh-{failure_mode}"
-    )
-    original = RationaleProvider("PRESERVED")
-    _patch_provider(monkeypatch, original)
-    assert invoke("rationale", target.uid).exit_code == 0
-    path = rationale_inference_path(ctx.uid, target.uid)
-    before = path.read_bytes()
-
-    failing = BadRationaleProvider(failure_mode)
-    _patch_provider(monkeypatch, failing)
-    refreshed = invoke("rationale", target.uid, "--refresh", "--json")
-
-    assert refreshed.exit_code == 0, refreshed.output
-    payload = json.loads(refreshed.output)
-    assert payload["inference"] is None
-    assert payload["inference_cached"] is False
-    assert "POISON" not in refreshed.output
-    assert path.read_bytes() == before
-
-    _forbid_provider(monkeypatch)
-    reused = invoke("rationale", target.uid, "--json")
-    assert reused.exit_code == 0, reused.output
-    payload = json.loads(reused.output)
-    assert payload["inference_cached"] is True
-    assert payload["inference"]["explanation"] == (
-        "PRESERVED: useful here."
-    )
-
-
-def test_recorded_only_does_not_read_write_or_render_an_existing_cache(
-    isolated_store,
-    monkeypatch,
-):
-    _, ctx, target, _, _ = _setup_context()
-    provider = RationaleProvider("CACHED")
-    _patch_provider(monkeypatch, provider)
-    assert invoke("rationale", target.uid).exit_code == 0
-    path = rationale_inference_path(ctx.uid, target.uid)
-    before = path.read_bytes()
-
+def _forbid_legacy_cache(monkeypatch) -> None:
     def forbidden(*args, **kwargs):
-        raise AssertionError("recorded-only must not access inference cache")
+        raise AssertionError("provenance-only rationale touched inference cache")
 
-    monkeypatch.setattr(
-        rationale_module,
-        "load_rationale_inference",
-        forbidden,
-    )
-    monkeypatch.setattr(
-        rationale_module,
-        "save_rationale_inference",
-        forbidden,
-    )
-    _forbid_provider(monkeypatch)
-
-    result = invoke("rationale", target.uid, "--recorded-only", "--json")
-
-    assert result.exit_code == 0, result.output
-    payload = json.loads(result.output)
-    assert payload["inference"] is None
-    assert payload["inference_cached"] is False
-    assert path.read_bytes() == before
+    monkeypatch.setattr(rationale_module, "load_rationale_inference", forbidden)
+    monkeypatch.setattr(rationale_module, "save_rationale_inference", forbidden)
 
 
-def test_tiny_semantic_frame_skips_provider_and_emits_only_status(
+def test_cli_is_provenance_only_and_never_reads_or_writes_inference_cache(
     isolated_store,
     monkeypatch,
 ):
-    store = MemoryStore()
-    ctx = ops.init("rationale-tiny-evidence")
-    target, _neighbor = ops.add_many(ctx, ["A", "B"])
-    store.save(ctx)
-    store.set_current(ctx.name)
-    _forbid_provider(monkeypatch)
+    _, context, target = _setup_context()
+    digest = rationale_inference_input_digest(
+        context_uid=context.uid,
+        selected_memory_uid=target.uid,
+        prompt="legacy prompt that must stay unread",
+        output_schema={"type": "object"},
+    )
+    save_rationale_inference(
+        context.uid,
+        target.uid,
+        digest,
+        CachedRationaleInference(
+            explanation="LEGACY APPARENT PURPOSE MUST NOT RENDER",
+            support_memory_uids=(),
+        ),
+    )
+    _forbid_legacy_cache(monkeypatch)
 
     result = invoke("rationale", target.uid)
     structured = invoke("rationale", target.uid, "--json")
 
     assert result.exit_code == 0, result.output
-    assert "APPARENT PURPOSE — insufficient Context" in result.output
-    assert "available semantic evidence" not in result.output
     assert structured.exit_code == 0, structured.output
+    assert "PROVENANCE — no reason recorded" in result.output
+    assert "APPARENT PURPOSE" not in result.output
+    assert "LEGACY APPARENT" not in result.output
     payload = json.loads(structured.output)
-    assert payload["inference_status"] == "INSUFFICIENT_EVIDENCE"
-    budgets = payload["character_budgets"]
-    assert budgets["inference_source"] == 2
-    assert budgets["inference_limit"] == 1
-    assert budgets["provenance_limit"] < budgets["provenance_source"]
-    assert not rationale_inference_path(ctx.uid, target.uid).exists()
-
-
-def test_nfc_equivalent_evidence_counts_once_before_provider_planning(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    ctx = ops.init("rationale-nfc-budget")
-    target, _neighbor = ops.add_many(ctx, ["e\u0301", "é"])
-    store.save(ctx)
-    store.set_current(ctx.name)
-    _forbid_provider(monkeypatch)
-
-    result = invoke("rationale", target.uid, "--json")
-
-    assert result.exit_code == 0, result.output
-    payload = json.loads(result.output)
-    assert payload["inference_status"] == "INSUFFICIENT_EVIDENCE"
-    assert payload["character_budgets"]["inference_source"] == 1
+    assert payload["inference"] is None
+    assert payload["inference_cached"] is False
+    assert payload["inference_status"] == "NOT_REQUESTED"
+    assert payload["fallback_evidence"] == []
+    assert payload["character_budgets"]["inference_source"] == 0
     assert payload["character_budgets"]["inference_limit"] == 0
 
 
-def test_inference_minimum_boundary_skips_15_but_accepts_16_characters(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    below = ops.init("rationale-below-minimum")
-    below_target, _ = ops.add_many(
-        below,
-        ["일단 적어 둔다", "관련 규칙 없음"],
-    )
-    store.save(below)
-    store.set_current(below.name)
-    _forbid_provider(monkeypatch)
+def test_inference_options_are_removed_from_rationale_help(isolated_store):
+    help_result = invoke("rationale", "--help")
+    recorded_only = invoke("rationale", "--recorded-only")
+    refresh = invoke("rationale", "--refresh")
 
-    rejected = invoke("rationale", below_target.uid, "--json")
-
-    assert rejected.exit_code == 0, rejected.output
-    rejected_payload = json.loads(rejected.output)
-    assert rejected_payload["inference_status"] == "INSUFFICIENT_EVIDENCE"
-    assert rejected_payload["character_budgets"]["inference_source"] == 16
-    assert rejected_payload["character_budgets"]["inference_limit"] == 15
-
-    accepted = ops.init("rationale-at-minimum")
-    accepted_target, _ = ops.add_many(
-        accepted,
-        ["일단 적어 둔다", "관련 규칙은 없다"],
-    )
-    store.save(accepted)
-    store.set_current(accepted.name)
-    calls: list[int] = []
-
-    class Provider:
-        def complete(self, prompt, *, operation, output_schema=None):
-            assert operation == "rationale inference"
-            assert output_schema is not None
-            limit = output_schema["properties"]["explanation"]["maxLength"]
-            calls.append(limit)
-            candidate = json.loads(prompt.split(RATIONALE_MARKER, 1)[1])[
-                "candidates"
-            ][0]
-            return json.dumps(
-                {
-                    "explanation": "유지할 이유는 보이지 않는다.",
-                    "support_ids": [candidate["candidate_id"]],
-                }
-            )
-
-    _patch_provider(monkeypatch, Provider())
-    accepted_result = invoke("rationale", accepted_target.uid, "--json")
-
-    assert accepted_result.exit_code == 0, accepted_result.output
-    accepted_payload = json.loads(accepted_result.output)
-    assert calls == [16]
-    assert accepted_payload["inference_status"] == "AVAILABLE"
-    assert accepted_payload["character_budgets"]["inference_source"] == 17
-    assert accepted_payload["character_budgets"]["inference_limit"] == 16
-    assert accepted_payload["inference"]["explanation"] == (
-        "유지할 이유는 보이지 않는다."
-    )
-
-
-def test_terminal_escaping_cannot_expand_visible_inference_past_its_limit(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    ctx = ops.init("rationale-terminal-escape")
-    target, _ = ops.add_many(ctx, ["12345678", "abcdefghi"])
-    store.save(ctx)
-    store.set_current(ctx.name)
-
-    class Provider:
-        def complete(self, prompt, *, operation, output_schema=None):
-            candidate = json.loads(prompt.split(RATIONALE_MARKER, 1)[1])[
-                "candidates"
-            ][0]
-            return json.dumps(
-                {
-                    "explanation": "123456789012345\u202e",
-                    "support_ids": [candidate["candidate_id"]],
-                }
-            )
-
-    _patch_provider(monkeypatch, Provider())
-
-    result = invoke("rationale", target.uid)
-
-    assert result.exit_code == 0, result.output
-    assert "\u202e" not in result.output
-    lines = result.output.splitlines()
-    inference_index = lines.index(
-        "APPARENT PURPOSE — inferred from Context, not recorded"
-    )
-    visible_explanation = lines[inference_index + 1].strip()
-    assert len(visible_explanation) <= 16
-
-
-def test_absolute_480_character_boundary_accepts_exact_and_rejects_one_more(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    ctx = ops.init("rationale-absolute-boundary")
-    target, _ = ops.add_many(ctx, ["T" * 300, "N" * 300])
-    store.save(ctx)
-    store.set_current(ctx.name)
-    limits: list[int] = []
-
-    class ExactProvider:
-        def complete(self, prompt, *, operation, output_schema=None):
-            assert output_schema is not None
-            limit = output_schema["properties"]["explanation"]["maxLength"]
-            limits.append(limit)
-            candidate = json.loads(prompt.split(RATIONALE_MARKER, 1)[1])[
-                "candidates"
-            ][0]
-            return json.dumps(
-                {
-                    "explanation": "X" * limit,
-                    "support_ids": [candidate["candidate_id"]],
-                }
-            )
-
-    _patch_provider(monkeypatch, ExactProvider())
-    exact = invoke("rationale", target.uid, "--json")
-
-    assert exact.exit_code == 0, exact.output
-    exact_payload = json.loads(exact.output)
-    assert limits == [480]
-    assert len(exact_payload["inference"]["explanation"]) == 480
-    cache_path = rationale_inference_path(ctx.uid, target.uid)
-    cached_before = cache_path.read_bytes()
-
-    too_long = BadRationaleProvider("over-character-limit")
-    _patch_provider(monkeypatch, too_long)
-    rejected = invoke("rationale", target.uid, "--refresh", "--json")
-
-    assert rejected.exit_code == 0, rejected.output
-    rejected_payload = json.loads(rejected.output)
-    assert rejected_payload["inference"] is None
-    assert rejected_payload["inference_status"] == "UNAVAILABLE"
-    assert cache_path.read_bytes() == cached_before
-
-    _forbid_provider(monkeypatch)
-    reused = invoke("rationale", target.uid, "--json")
-    assert reused.exit_code == 0, reused.output
-    assert len(json.loads(reused.output)["inference"]["explanation"]) == 480
-
-
-def test_oversized_context_reduces_candidates_and_keeps_output_at_480(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    ctx = ops.init("rationale-oversized-context")
-    contents = ["Large target."] + [
-        f"{index:03d}" + (chr(65 + index % 26) * 9_997)
-        for index in range(105)
-    ]
-    target, *_ = ops.add_many(ctx, contents)
-    store.save(ctx)
-    store.set_current(ctx.name)
-    observed: dict[str, object] = {}
-
-    class Provider:
-        def complete(self, prompt, *, operation, output_schema=None):
-            assert output_schema is not None
-            payload = json.loads(prompt.split(RATIONALE_MARKER, 1)[1])
-            observed["candidate_count"] = len(payload["candidates"])
-            observed["context_scope"] = payload["context_scope"]
-            observed["limit"] = output_schema["properties"]["explanation"][
-                "maxLength"
-            ]
-            return json.dumps(
-                {
-                    "explanation": "L" * 480,
-                    "support_ids": [payload["candidates"][0]["candidate_id"]],
-                }
-            )
-
-    _patch_provider(monkeypatch, Provider())
-    structured = invoke("rationale", target.uid, "--json")
-
-    assert structured.exit_code == 0, structured.output
-    payload = json.loads(structured.output)
-    assert 0 < observed["candidate_count"] < 105
-    assert observed["context_scope"].startswith("nearest readable subtree")
-    assert observed["limit"] == 480
-    assert len(payload["inference"]["explanation"]) == 480
-    assert any("nearest-Memory subset" in item for item in payload["warnings"])
+    assert help_result.exit_code == 0, help_result.output
+    assert "--recorded-only" not in help_result.output
+    assert "--refresh" not in help_result.output
+    assert recorded_only.exit_code == 2
+    assert refresh.exit_code == 2
 
 
 def test_long_provenance_projection_is_capped_at_320_characters(
     isolated_store,
     monkeypatch,
 ):
-    from memcommit.context import AutoCheckpoint
-
     store = MemoryStore()
-    ctx = ops.init("rationale-long-provenance")
-    source = ops.add(ctx, "Initial " + ("A" * 240))
+    context = ops.init("rationale-long-provenance")
+    source = ops.add(context, "초안 " + ("가" * 240))
     store.save(
-        ctx,
-        AutoCheckpoint(command="add", args={}, description="Added long Memory"),
+        context,
+        AutoCheckpoint(command="add", args={}, description="긴 Memory 추가"),
     )
-    source_position = ctx.ordered_uids().index(source.uid)
-    ctx.remove(source.uid)
+    source_position = context.ordered_uids().index(source.uid)
+    context.remove(source.uid)
     target = Memory(
         uid="10000000-0000-4000-8000-000000000001",
-        content="Current " + ("B" * 240),
+        content="현재 " + ("나" * 240),
     )
-    ctx.add(target, position=source_position)
+    context.add(target, position=source_position)
     reason = (
-        "This Memory was retained because the reviewed local rule needs one "
-        "stable statement of purpose without repeating the surrounding "
-        "inventory. "
-    ) * 4
+        "검토된 로컬 규칙의 목적을 주변 항목과 중복 없이 한 문장으로 남기기 "
+        "위해 이 Memory를 유지했다. "
+    ) * 7
     store.save(
-        ctx,
+        context,
         AutoCheckpoint(
             command="atomize",
             args={
@@ -736,19 +140,14 @@ def test_long_provenance_projection_is_capped_at_320_characters(
                     ],
                 }
             },
-            description="Applied a long recorded rationale",
+            description="긴 기록 이유 적용",
         ),
     )
-    store.set_current(ctx.name)
-    _forbid_provider(monkeypatch)
+    store.set_current(context.name)
+    _forbid_legacy_cache(monkeypatch)
 
-    result = invoke("rationale", target.uid, "--recorded-only")
-    structured = invoke(
-        "rationale",
-        target.uid,
-        "--recorded-only",
-        "--json",
-    )
+    result = invoke("rationale", target.uid)
+    structured = invoke("rationale", target.uid, "--json")
 
     assert result.exit_code == 0, result.output
     assert structured.exit_code == 0, structured.output
@@ -759,59 +158,34 @@ def test_long_provenance_projection_is_capped_at_320_characters(
     lines = result.output.splitlines()
     provenance = lines[lines.index("PROVENANCE — recorded reason") + 1].strip()
     assert len(provenance) <= 320
-    assert provenance.startswith("This Memory was retained")
-    assert "APPARENT PURPOSE — not requested" in result.output
-    assert "LIMITS" not in result.output
+    assert provenance.startswith("검토된 로컬 규칙의 목적")
+    assert "APPARENT PURPOSE" not in result.output
 
 
-def test_cache_publication_failure_keeps_the_valid_inference_available(
+def test_query_only_source_is_not_opened_by_provenance_only_rationale(
     isolated_store,
     monkeypatch,
 ):
-    _, _, target, _, _ = _setup_context("rationale-cache-write-failure")
-    provider = RationaleProvider("UNCACHED")
-    _patch_provider(monkeypatch, provider)
-
-    def unavailable(*args, **kwargs):
-        raise OSError("simulated cache storage failure")
-
-    monkeypatch.setattr(
-        rationale_module,
-        "save_rationale_inference",
-        unavailable,
-    )
-
-    result = invoke("rationale", target.uid)
-
-    assert result.exit_code == 0, result.output
-    assert "UNCACHED: useful" in result.output
-    assert "not cached because cache storage was unavailable" not in result.output
-    structured = invoke("rationale", target.uid, "--json")
-    assert "not cached because cache storage was unavailable" in structured.output
-    assert len(provider.calls) == 2
-
-
-def test_legacy_context_identity_disables_cache_without_blocking_inference(
-    isolated_store,
-    monkeypatch,
-):
+    secret = "QUERY-ONLY SECRET MUST NOT ENTER RATIONALE"
     store = MemoryStore()
-    ctx = ops.init("rationale-cache-legacy")
-    ctx.uid = "legacy-context-identity"
-    target, _ = ops.add_many(ctx, ["Legacy target.", "Visible support."])
-    store.save(ctx)
-    store.set_current(ctx.name)
-    provider = RationaleProvider("LEGACY")
-    _patch_provider(monkeypatch, provider)
+    context = ops.init("rationale-query-boundary")
+    target = ops.add(context, "이 직접 Memory의 기록 이유를 보여준다.")
+    source = store.create_query_source("restricted", secret)
+    ops.reference_query_context("restricted", source.uid, context)
+    ops.add(context, "보이는 직접 Memory")
+    store.save(context)
+    store.set_current(context.name)
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("rationale opened a query-only source")
+
+    monkeypatch.setattr(MemoryStore, "load_query_source", forbidden)
 
     result = invoke("rationale", target.uid)
 
     assert result.exit_code == 0, result.output
-    assert "LEGACY: useful" in result.output
-    assert "caching is unavailable for this Context" not in result.output
-    structured = invoke("rationale", target.uid, "--json")
-    assert "caching is unavailable for this Context" in structured.output
-    assert len(provider.calls) == 2
+    assert secret not in result.output
+    assert not rationale_inference_path(context.uid, target.uid).exists()
 
 
 def test_cache_path_hashes_arbitrary_memory_uid_and_uses_runtime_store_root(
@@ -829,10 +203,7 @@ def test_cache_path_hashes_arbitrary_memory_uid_and_uses_runtime_store_root(
         output_schema={"type": "object"},
     )
     inference = CachedRationaleInference(
-        explanation=(
-            "A bounded reading follows the available contextual flow, while "
-            "the author's intent remains unknown."
-        ),
+        explanation="A legacy validated inference retained for compatibility.",
         support_memory_uids=(support_uid,),
     )
 
@@ -865,49 +236,28 @@ def test_cache_path_hashes_arbitrary_memory_uid_and_uses_runtime_store_root(
     ) is None
 
 
-def test_query_only_source_is_neither_opened_nor_copied_into_cache(
+def test_context_delete_removes_a_legacy_rationale_inference_cache(
     isolated_store,
-    monkeypatch,
 ):
-    secret = "QUERY-ONLY SECRET MUST NOT ENTER RATIONALE CACHE"
-    store = MemoryStore()
-    ctx = ops.init("rationale-query-boundary")
-    target = ops.add(ctx, "Explain this direct fragment.")
-    source = store.create_query_source("restricted", secret)
-    ops.reference_query_context("restricted", source.uid, ctx)
-    ops.add(ctx, "Visible direct support only.")
-    store.save(ctx)
-    store.set_current(ctx.name)
-
-    def forbidden(*args, **kwargs):
-        raise AssertionError("rationale opened a query-only source")
-
-    monkeypatch.setattr(MemoryStore, "load_query_source", forbidden)
-    provider = RationaleProvider("VISIBLE")
-    _patch_provider(monkeypatch, provider)
-
-    result = invoke("rationale", target.uid)
-
-    assert result.exit_code == 0, result.output
-    assert secret not in result.output
-    assert secret not in json.dumps(provider.calls)
-    cached = rationale_inference_path(ctx.uid, target.uid).read_text(
-        encoding="utf-8"
+    store, context, target = _setup_context("rationale-cache-delete")
+    digest = rationale_inference_input_digest(
+        context_uid=context.uid,
+        selected_memory_uid=target.uid,
+        prompt="legacy deletion prompt",
+        output_schema={"type": "object"},
     )
-    assert secret not in cached
+    save_rationale_inference(
+        context.uid,
+        target.uid,
+        digest,
+        CachedRationaleInference(
+            explanation="Delete this compatibility record with its Context.",
+            support_memory_uids=(),
+        ),
+    )
+    cache_path = rationale_inference_path(context.uid, target.uid)
+    assert cache_path.is_file()
 
+    store.delete(context.name)
 
-def test_context_delete_removes_its_rationale_inference_cache(
-    isolated_store,
-    monkeypatch,
-):
-    store, ctx, target, _, _ = _setup_context()
-    provider = RationaleProvider("DELETE-ME")
-    _patch_provider(monkeypatch, provider)
-    assert invoke("rationale", target.uid).exit_code == 0
-    path = rationale_inference_path(ctx.uid, target.uid)
-    assert path.is_file()
-
-    store.delete(ctx.name)
-
-    assert not path.exists()
+    assert not cache_path.exists()

@@ -1,9 +1,13 @@
-# `mem rationale` character-bound edge-case captures
+# `mem rationale` provenance-only boundary captures
 
-This evidence set runs five actual Rationale paths with Korean Memory content
-and Korean accepted output in isolated stores. Each
-report is captured from a `180×52` color PTY and followed by a close receipt
-that verifies the Context was unchanged.
+This evidence set runs four actual provenance-only Rationale paths with Korean
+Memory content in isolated stores. Each report is captured from a `180×52`
+color PTY and followed by a close receipt verifying zero provider calls, no
+legacy inference-cache access, and unchanged Context content.
+
+The directory name is retained from the earlier character-bound experiment so
+existing study links remain valid; its contents now record the provenance-only
+replacement contract.
 
 ## Reproduction frame
 
@@ -14,27 +18,22 @@ that verifies the Context was unchanged.
 - Renderer: real cumulative PTY ANSI streams replayed through `pyte` at the
   full `1832×1124` Menlo canvas with Apple SD Gothic Neo supplying only Hangul
   glyphs
-- Durable boundary: every scenario uses a temporary isolated store; accepted
-  inference may create its replaceable cache, but Context content must remain
-  byte-equivalent
+- Durable boundary: every scenario uses a temporary isolated store; Rationale
+  performs no provider or cache operation and leaves Context content unchanged
 
 ## Scenarios and expected boundaries
 
 | Report | Evidence condition | Expected result |
 | --- | --- | --- |
-| `01-insufficient-report.png` | 2 source characters | limit 1; provider connection count 0; status only |
-| `03-minimum-report.png` | 17 Korean source characters | dynamic limit 16; the exact 16-character judgment `유지할 이유는 보이지 않는다.` is accepted |
-| `05-over-limit-report.png` | 33 source characters | dynamic limit 32; a 33-character result is rejected and not cached |
-| `07-oversized-context-report.png` | 105 Korean candidates exceed the real 1,000,000-character input bound | nearest 49 candidates retained; absolute limit 480; exact 480-character Korean result accepted |
-| `09-long-provenance-report.png` | one retained Korean atomize reason longer than 320 characters | provenance source exceeds 320; only the recorded reason is projected and capped at 320; provider not requested |
+| `01-no-reason-report.png` | selected Memory has no retained operation reason | `PROVENANCE — no reason recorded`; no filler explanation |
+| `03-recorded-reason-report.png` | one compact Korean reason is retained in explicit trace metadata | only that recorded Korean reason is projected |
+| `05-oversized-context-report.png` | 106 Korean Memories exceed 1,000,000 semantic characters | target provenance still opens without contextual analysis, provider, or cache |
+| `07-long-reason-report.png` | one retained Korean reason exceeds 320 characters | recorded reason is projected at the 320-character provenance cap |
 
 Each odd-numbered image is the report state. Its following even-numbered image
-is the terminal receipt after `q`, including the observed source/limit or
-candidate counts and `STORE UNCHANGED` verification.
+is the terminal receipt after `q`, including `PROVIDER CALLS 0`,
+`CACHE UNTOUCHED`, and `STORE UNCHANGED`.
 
-The over-limit provider deliberately returns repeated `P` characters. The
-capture asserts that this unvalidated text never appears in any rendered report.
-Every report also asserts that no human `LIMITS` section or Context-count row is
-rendered; those diagnostics remain available from `--json`.
-The application chrome remains English; Korean here exercises the contract that
-semantic output follows the target Memory's language.
+Every report asserts that APPARENT PURPOSE, a human `LIMITS` section, and a
+Context-count row are absent. The application chrome remains English; Korean
+here verifies the language of actual Memory and provenance data.

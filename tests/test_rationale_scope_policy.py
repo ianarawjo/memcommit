@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 import uuid
 
 from typer.testing import CliRunner
@@ -16,29 +15,6 @@ from memcommit.study_operation_policy import operation_policy
 
 
 runner = CliRunner()
-RATIONALE_MARKER = "RATIONALE PAYLOAD:\n"
-
-
-class _Provider:
-    def __init__(self):
-        self.payload: dict[str, object] | None = None
-
-    def complete(self, prompt, *, operation, output_schema=None):
-        assert operation == "rationale inference"
-        assert output_schema is not None
-        self.payload = json.loads(prompt.split(RATIONALE_MARKER, 1)[1])
-        candidates = self.payload["candidates"]
-        assert isinstance(candidates, list)
-        return json.dumps(
-            {
-                "explanation": (
-                    "Earlier notes support using diagrams; details remain open."
-                ),
-                "support_ids": [candidate["candidate_id"] for candidate in candidates],
-            }
-        )
-
-
 def _memory(store: MemoryStore, context_name: str, content: str) -> Memory:
     return next(
         item
@@ -47,9 +23,8 @@ def _memory(store: MemoryStore, context_name: str, content: str) -> Memory:
     )
 
 
-def test_rationale_from_parent_uses_owned_descendant_memories(
+def test_rationale_from_parent_selects_descendant_but_does_not_analyze_neighbors(
     isolated_store,
-    monkeypatch,
 ):
     assert runner.invoke(app, ["init", "advisor"]).exit_code == 0
     assert runner.invoke(app, ["add", "Reviewers scan diagrams first."]).exit_code == 0
@@ -58,12 +33,6 @@ def test_rationale_from_parent_uses_owned_descendant_memories(
     assert runner.invoke(app, ["add", "Use a diagram when branches matter."]).exit_code == 0
     store = MemoryStore()
     target = _memory(store, "advisor/style", "Use a diagram when branches matter.")
-    provider = _Provider()
-    monkeypatch.setattr(
-        "memcommit.commands.rationale.connect_codex_chatgpt_provider",
-        lambda: provider,
-    )
-
     result = runner.invoke(
         app,
         ["rationale", target.uid[:8], "--context", "advisor"],
@@ -75,21 +44,11 @@ def test_rationale_from_parent_uses_owned_descendant_memories(
 
     assert result.exit_code == 0, result.output
     assert structured.exit_code == 0, structured.output
-    assert provider.payload is not None
-    candidates = provider.payload["candidates"]
-    assert {
-        (candidate["context_name"], candidate["content"])
-        for candidate in candidates
-    } == {
-        ("advisor", "Reviewers scan diagrams first."),
-        ("advisor/style", "Drawing a diagram takes longer."),
-    }
+    assert "Use a diagram when branches matter." in result.output
+    assert "Reviewers scan diagrams first." not in result.output
+    assert "Drawing a diagram takes longer." not in result.output
+    assert "APPARENT PURPOSE" not in result.output
     assert "Context(s)" not in result.output
-    assert json.loads(structured.output)["inference_scope"] == {
-        "context_name": "advisor",
-        "context_count": 2,
-        "include_descendants": True,
-    }
 
 
 def test_locally_owned_trace_is_available_independent_of_study_task(

@@ -109,7 +109,7 @@ def test_bare_trace_runs_existing_report_for_picker_uid(
     assert "temporary" in result.output
 
 
-def test_bare_recorded_rationale_selects_before_any_provider_call(
+def test_bare_rationale_selects_provenance_target(
     isolated_store,
     monkeypatch,
 ):
@@ -122,19 +122,13 @@ def test_bare_recorded_rationale_selects_before_any_provider_call(
             _target_selection(context_name, context_name, target.uid)
         ),
     )
-    monkeypatch.setattr(
-        "memcommit.commands.rationale.connect_codex_chatgpt_provider",
-        lambda: (_ for _ in ()).throw(
-            AssertionError("--recorded-only must not connect a provider")
-        ),
-    )
-
-    result = invoke("rationale", "--recorded-only")
+    result = invoke("rationale")
 
     assert result.exit_code == 0, result.output
     assert "Rationale [" in result.output
     assert "portable note" in result.output
-    assert "APPARENT PURPOSE — not requested" in result.output
+    assert "PROVENANCE — no reason recorded" in result.output
+    assert "APPARENT PURPOSE" not in result.output
 
 
 def test_trace_descendant_range_opens_the_selected_owner_history(
@@ -214,7 +208,7 @@ def test_rationale_picker_groups_memories_under_their_public_context(
         select,
     )
 
-    result = invoke("rationale", "--recorded-only")
+    result = invoke("rationale")
 
     assert result.exit_code == 0, result.output
     assert observed == {
@@ -225,7 +219,8 @@ def test_rationale_picker_groups_memories_under_their_public_context(
             ("notes/child", "child note"),
         ],
     }
-    assert "APPARENT PURPOSE — not requested" in result.output
+    assert "PROVENANCE — no reason recorded" in result.output
+    assert "APPARENT PURPOSE" not in result.output
 
 
 def test_interactive_rationale_report_uses_common_viewer(
@@ -245,7 +240,7 @@ def test_interactive_rationale_report_uses_common_viewer(
         lambda text, *, title: observed.update(text=text, title=title),
     )
 
-    result = invoke("rationale", target.uid, "--recorded-only")
+    result = invoke("rationale", target.uid)
 
     assert result.exit_code == 0, result.output
     assert observed["title"] == "RATIONALE REPORT"
@@ -358,14 +353,14 @@ def test_bare_rationale_recent_reopens_its_recorded_scope(
         lambda text, *, title: viewed.append(text),
     )
 
-    result = invoke("rationale", "--recorded-only")
+    result = invoke("rationale")
 
     assert result.exit_code == 0, result.output
     assert len(viewed) == 1
     assert "portable note" in viewed[0]
 
 
-def test_bare_rationale_cancel_never_connects_provider(
+def test_bare_rationale_cancel_returns_without_report(
     isolated_store,
     monkeypatch,
 ):
@@ -375,13 +370,6 @@ def test_bare_rationale_cancel_never_connects_provider(
         "memcommit.commands.rationale.choose_memory_report_target",
         lambda items, *, context_name, operation, initial_include_descendants, **kwargs: None,
     )
-    monkeypatch.setattr(
-        "memcommit.commands.rationale.connect_codex_chatgpt_provider",
-        lambda: (_ for _ in ()).throw(
-            AssertionError("cancelled rationale must not connect a provider")
-        ),
-    )
-
     result = invoke("rationale")
 
     assert result.exit_code == 0, result.output
@@ -394,13 +382,6 @@ def test_bare_commands_require_tty_instead_of_auto_selecting(
 ):
     assert invoke("init", "notes").exit_code == 0
     assert invoke("add", "portable note").exit_code == 0
-    monkeypatch.setattr(
-        "memcommit.commands.rationale.connect_codex_chatgpt_provider",
-        lambda: (_ for _ in ()).throw(
-            AssertionError("non-TTY rationale must not connect a provider")
-        ),
-    )
-
     trace = invoke("trace")
     rationale = invoke("rationale")
 
@@ -415,13 +396,6 @@ def test_bare_commands_open_empty_current_memory_tree_before_cancelling(
     monkeypatch,
 ):
     assert invoke("init", "empty").exit_code == 0
-    monkeypatch.setattr(
-        "memcommit.commands.rationale.connect_codex_chatgpt_provider",
-        lambda: (_ for _ in ()).throw(
-            AssertionError("empty rationale must not connect a provider")
-        ),
-    )
-
     observed: list[tuple[str, str, tuple[str, ...], tuple[object, ...]]] = []
 
     def cancel_target(
@@ -515,14 +489,7 @@ def test_bare_rationale_does_not_browse_away_from_empty_current_context(
         "memcommit.commands.rationale.choose_memory_report_target",
         cancel_target,
     )
-    monkeypatch.setattr(
-        "memcommit.commands.rationale.connect_codex_chatgpt_provider",
-        lambda: (_ for _ in ()).throw(
-            AssertionError("recorded-only rationale must not connect a provider")
-        ),
-    )
-
-    result = invoke("rationale", "--recorded-only")
+    result = invoke("rationale")
 
     assert result.exit_code == 0, result.output
     assert observed == {"root": "empty", "catalog": ("empty",), "items": ()}
@@ -548,7 +515,7 @@ def test_explicit_selectors_bypass_picker(isolated_store, monkeypatch):
     )
 
     trace = invoke("trace", target.uid[:8])
-    rationale = invoke("rationale", target.uid[:8], "--recorded-only")
+    rationale = invoke("rationale", target.uid[:8])
 
     assert trace.exit_code == 0, trace.output
     assert rationale.exit_code == 0, rationale.output
@@ -597,7 +564,6 @@ def test_explicit_context_bypasses_recents_and_uses_exact_picker_root(
         "rationale",
         "--context",
         ".",
-        "--recorded-only",
     )
 
     assert trace.exit_code == 0, trace.output

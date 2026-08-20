@@ -18,24 +18,10 @@ from memcommit.update import plan_update
 
 
 runner = CliRunner()
-RATIONALE_MARKER = "RATIONALE PAYLOAD:\n"
 
 
 def invoke(*args: str, stdin: str | None = None):
     return runner.invoke(app, list(args), input=stdin)
-
-
-class RationaleProvider:
-    def __init__(self, responder):
-        self.responder = responder
-        self.calls: list[dict[str, object]] = []
-
-    def complete(self, prompt, *, operation, output_schema=None):
-        assert operation == "rationale inference"
-        assert output_schema is not None
-        payload = json.loads(prompt.split(RATIONALE_MARKER, 1)[1])
-        self.calls.append(payload)
-        return json.dumps(self.responder(payload))
 
 
 class UpdatePlanProvider:
@@ -532,7 +518,7 @@ def test_rationale_proposal_source_matches_context_and_memory_identity(
     assert unrelated_report.proposals == ()
 
 
-def test_task1_rationale_separates_origin_review_and_context_inference(
+def test_task1_rationale_keeps_structured_evidence_but_renders_only_provenance(
     isolated_store,
     monkeypatch,
 ):
@@ -575,44 +561,13 @@ def test_task1_rationale_separates_origin_review_and_context_inference(
     )
     store.save_review_session(create_ambiguity_review(ctx, report))
 
-    provider = RationaleProvider(
-        lambda data: {
-            "explanation": (
-                "This Memory appears intended to preserve a student-access "
-                "instruction, but its rationale is weak: nearby rules limit "
-                "entry to staff and do not establish whether the app is for "
-                "access or notification."
-            ),
-            "support_ids": [
-                candidate["candidate_id"]
-                for candidate in data["candidates"]
-                if candidate["content"]
-                in {
-                    "nfc로 되어서 실물 카드만 필요하다.",
-                    (
-                        "같은 nfc 쓰는데 교직원들만 출입가능하다, "
-                        "학생들은 여전히 못 들어온다."
-                    ),
-                }
-            ],
-        }
-    )
-    monkeypatch.setattr(
-        "memcommit.commands.rationale.connect_codex_chatgpt_provider",
-        lambda: provider,
-    )
-
     result = invoke("rationale", target.uid[:8])
     structured = invoke("rationale", target.uid[:8], "--json")
 
     assert result.exit_code == 0
     assert "PROVENANCE — no reason recorded" in result.output
     assert "CREATED" not in result.output
-    assert (
-        "APPARENT PURPOSE — inferred from Context, not recorded"
-        in result.output
-    )
-    assert "limit entry to staff" in result.output
+    assert "APPARENT PURPOSE" not in result.output
     assert "SAVED ANALYSIS" not in result.output
     assert "EVIDENCE USED FOR INFERENCE" not in result.output
     assert "Context(s)" not in result.output
@@ -622,12 +577,10 @@ def test_task1_rationale_separates_origin_review_and_context_inference(
     assert payload["origin_events"][0]["source_occurrence"]["ordinal"] == 7
     assert payload["saved_analysis"]["interpretation"] == "COMPETING"
     budgets = payload["character_budgets"]
-    explanation = payload["inference"]["explanation"]
-    assert len(explanation) <= budgets["inference_limit"]
-    assert budgets["inference_limit"] < budgets["inference_source"]
+    assert payload["inference"] is None
+    assert budgets["inference_limit"] == 0
+    assert budgets["inference_source"] == 0
     assert budgets["provenance_limit"] < budgets["provenance_source"]
-    assert len(provider.calls) == 1
-    assert len(provider.calls[0]["candidates"]) == 50
 
 
 def test_trace_degrades_corrupt_add_source_or_uid_order_to_reconstructed(
@@ -685,7 +638,7 @@ def test_trace_degrades_corrupt_add_source_or_uid_order_to_reconstructed(
     )
 
 
-def test_rationale_excludes_stale_review_and_uses_no_provider_when_requested(
+def test_rationale_excludes_stale_review_from_provenance_projection(
     isolated_store,
 ):
     store = MemoryStore()
@@ -721,17 +674,12 @@ def test_rationale_excludes_stale_review_and_uses_no_provider_when_requested(
     )
     store.set_current("stale")
 
-    result = invoke("rationale", target.uid[:8], "--recorded-only")
-    structured = invoke(
-        "rationale",
-        target.uid[:8],
-        "--recorded-only",
-        "--json",
-    )
+    result = invoke("rationale", target.uid[:8])
+    structured = invoke("rationale", target.uid[:8], "--json")
 
     assert result.exit_code == 0
     assert "The responsible person is unnamed." not in result.output
-    assert "APPARENT PURPOSE — not requested" in result.output
+    assert "APPARENT PURPOSE" not in result.output
     assert "Provenance alone does not establish" not in result.output
     assert structured.exit_code == 0
     assert json.loads(structured.output)["stale_analysis"] is True
@@ -746,7 +694,7 @@ def test_rationale_never_opens_query_only_source_or_mutates_authoritative_state(
     target = ops.add(ctx, "Explain this fragment.")
     source = store.create_query_source("restricted", "DO NOT DISCLOSE")
     ops.reference_query_context("restricted", source.uid, ctx)
-    neighbor = ops.add(ctx, "Visible direct evidence.")
+    ops.add(ctx, "Visible direct evidence.")
     store.save(
         ctx,
         AutoCheckpoint(command="setup", args={}, description="Setup"),
@@ -764,21 +712,6 @@ def test_rationale_never_opens_query_only_source_or_mutates_authoritative_state(
         raise AssertionError("rationale opened a query-only source")
 
     monkeypatch.setattr(MemoryStore, "load_query_source", forbidden)
-    provider = RationaleProvider(
-        lambda data: {
-            "explanation": "This Memory clarifies the visible local rule.",
-            "support_ids": [
-                candidate["candidate_id"]
-                for candidate in data["candidates"]
-                if candidate["content"] == neighbor.content
-            ],
-        }
-    )
-    monkeypatch.setattr(
-        "memcommit.commands.rationale.connect_codex_chatgpt_provider",
-        lambda: provider,
-    )
-
     result = invoke("rationale", target.uid[:8])
     after = {
         path.relative_to(isolated_store): path.read_bytes()
@@ -793,46 +726,5 @@ def test_rationale_never_opens_query_only_source_or_mutates_authoritative_state(
 
     assert result.exit_code == 0
     assert "DO NOT DISCLOSE" not in result.output
-    assert "DO NOT DISCLOSE" not in json.dumps(provider.calls)
-    assert cache_files
-    assert all(
-        b"DO NOT DISCLOSE" not in path.read_bytes()
-        for path in cache_files
-    )
+    assert cache_files == []
     assert before == after
-
-
-def test_invalid_context_inference_falls_back_without_rendering_model_text(
-    isolated_store,
-    monkeypatch,
-):
-    assert invoke("init", "fallback").exit_code == 0
-    assert invoke("add", "Target fragment.").exit_code == 0
-    assert invoke("add", "Visible neighbor.").exit_code == 0
-    store = MemoryStore()
-    target = next(
-        item
-        for item in store.load_current_direct().iter_items()
-        if isinstance(item, Memory) and item.content == "Target fragment."
-    )
-    provider = RationaleProvider(
-        lambda data: {
-            "explanation": "MALICIOUS",
-            "support_ids": ["unknown"],
-        }
-    )
-    monkeypatch.setattr(
-        "memcommit.commands.rationale.connect_codex_chatgpt_provider",
-        lambda: provider,
-    )
-
-    result = invoke("rationale", target.uid[:8])
-    structured = invoke("rationale", target.uid[:8], "--json")
-
-    assert result.exit_code == 0
-    assert "MALICIOUS INVENTION" not in result.output
-    assert "APPARENT PURPOSE — unavailable" in result.output
-    assert "cited an unknown Memory" not in result.output
-    assert structured.exit_code == 0, structured.output
-    payload = json.loads(structured.output)
-    assert "cited an unknown Memory" in payload["inference_error"]

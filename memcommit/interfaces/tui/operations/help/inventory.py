@@ -655,7 +655,6 @@ COMMAND_FORMS = {
         "mem rationale [memory] (explain one current or historical Memory)",
         "mem rationale --context [context] (start Memory selection in one readable Context)",
         "mem rationale [memory] --context [context] (explicit Context and Memory)",
-        "mem rationale [memory] --recorded-only (skip inference and its cache)",
     ),
     "reference": (
         "mem reference [memory] --from [source_context] (snapshot into current Context)",

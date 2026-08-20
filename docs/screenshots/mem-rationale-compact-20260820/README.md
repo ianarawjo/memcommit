@@ -1,26 +1,20 @@
 # Compact `mem rationale` capture log
 
 This ordered evidence set records the shortened Rationale path. The human
-report keeps only the selected Memory, a Trace-derived provenance summary, and
-one contextual APPARENT PURPOSE paragraph. The human projection omits Context
-counts and the `LIMITS` section; detailed scope, warnings, saved analysis, and
-cited Memory bodies remain available to JSON consumers but are intentionally
-absent from the Viewer.
+report keeps only the selected Memory and a Trace-derived provenance summary.
+It neither requests nor renders a contextual purpose.
 
 ## Reproduction frame
 
 - Command: `python docs/screenshots/mem-rationale-compact-20260820/capture.py`
 - Working directory: `/Users/KimMunyeong/Github/memcommit`
 - Profile/current Context: capture-local `rationale/korean`
-- Fixture: one Korean target created and edited, followed by two Korean
-  supporting Memories
+- Fixture: one Korean source replaced by one Korean target through explicit
+  trace metadata containing a Korean recorded reason
 - PTY: `180` columns × `52` rows, verified inside the child
 - Environment: `TERM=xterm-256color`, `COLORTERM=truecolor`, `NO_COLOR` unset
-- Provider boundary: deterministic local provider double using the production
-  `explanation + support_ids` schema; its paragraph stays below the dynamic
-  NFC-character cap (85 output characters versus a 141-character limit from
-  142 unique Korean semantic source characters) and directly states the
-  Memory's apparent current function without inventorying the Context
+- Provider/cache boundary: the command module exposes no provider connector;
+  the capture verifies zero provider calls and no legacy inference-cache access
 - Renderer: cumulative real PTY ANSI streams replayed through `pyte` and drawn
   at the full `1832×1124` Menlo canvas with Apple SD Gothic Neo supplying only
   Hangul glyphs; raw `.typescript` and plain `.txt` evidence are retained beside
@@ -32,13 +26,12 @@ absent from the Viewer.
 | --- | --- | --- | --- |
 | `01-target-entry.png` | Launch bare Rationale | Exact-range target selector for `rationale/korean` with Korean Memories | None |
 | `02-target-focused.png` | `Tab`, `Down` | Edited target Memory is focused | None |
-| `03-compact-report.png` | `Enter` | Viewer shows Korean Memory content, `no reason recorded`, and one Korean APPARENT PURPOSE paragraph | Replaceable inference cache; no Context mutation |
+| `03-compact-report.png` | `Enter` | Viewer shows Korean Memory content and its Korean recorded reason | None |
 | `04-read-only-verification.png` | `q` | Child verifies current Context content is unchanged | None |
 
-The capture asserts that Saved Analysis, inference-evidence, Context-count, and
-Limits sections are absent. Closing the Viewer does not mutate Context content; the
-replaceable inference cache remains the operation's documented derived-data
-exception.
+The capture asserts that APPARENT PURPOSE, Saved Analysis, Context-count, and
+Limits sections are absent. Closing the Viewer does not mutate Context content
+or touch a legacy inference cache.
 
-The application chrome remains English; this set verifies that the semantic
-Memory and inferred paragraph preserve the target Memory's Korean language.
+The application chrome remains English; the Memory and retained reason remain
+Korean.

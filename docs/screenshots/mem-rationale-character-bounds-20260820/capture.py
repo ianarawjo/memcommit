@@ -1,14 +1,14 @@
-"""Capture actual Rationale character-budget edge cases in a color PTY."""
+"""Capture provenance-only Rationale boundaries in a real color PTY."""
 
 from __future__ import annotations
 
 import importlib.util
 import io
-import json
 import os
 from pathlib import Path
 import sys
 import tempfile
+import uuid
 
 import pexpect
 
@@ -22,7 +22,7 @@ _COMPACT_PATH = (
     ROOT / "docs/screenshots/mem-rationale-compact-20260820/capture.py"
 )
 _SPEC = importlib.util.spec_from_file_location(
-    "rationale_character_bounds_compact",
+    "rationale_provenance_bounds_compact",
     _COMPACT_PATH,
 )
 assert _SPEC is not None and _SPEC.loader is not None
@@ -46,174 +46,22 @@ def _stored_context(name: str, contents: list[str]):
     return store, context, memories
 
 
-def _run_insufficient() -> None:
-    from memcommit.commands import rationale
-
-    store, context, memories = _stored_context(
-        "bounds/insufficient",
-        ["가", "나"],
-    )
-    before = context.to_dict()
-    connections = 0
-
-    def forbidden():
-        nonlocal connections
-        connections += 1
-        raise AssertionError("insufficient evidence connected the provider")
-
-    rationale.connect_codex_chatgpt_provider = forbidden
-    rationale.cmd(memories[0].uid)
-    assert connections == 0
-    assert store.load_direct(context.name).to_dict() == before
-    print(
-        "SCENARIO insufficient VERIFIED · SOURCE 2 · LIMIT 1 · "
-        "PROVIDER CALLS 0 · STORE UNCHANGED"
-    )
-
-
-def _run_minimum() -> None:
-    from memcommit.commands import rationale
-
-    store, context, memories = _stored_context(
-        "bounds/minimum",
-        ["일단 적어 둔다", "관련 규칙은 없다"],
-    )
-    before = context.to_dict()
-    observed: dict[str, int] = {}
-
-    class Provider:
-        def complete(self, prompt, *, operation, output_schema=None):
-            assert operation == "rationale inference"
-            assert output_schema is not None
-            limit = output_schema["properties"]["explanation"]["maxLength"]
-            observed["limit"] = limit
-            payload = json.loads(prompt.split("RATIONALE PAYLOAD:\n", 1)[1])
-            return json.dumps(
-                {
-                    "explanation": "유지할 이유는 보이지 않는다.",
-                    "support_ids": [payload["candidates"][0]["candidate_id"]],
-                }
-            )
-
-    rationale.connect_codex_chatgpt_provider = Provider
-    rationale.cmd(memories[0].uid)
-    assert observed == {"limit": 16}
-    assert store.load_direct(context.name).to_dict() == before
-    print(
-        "SCENARIO minimum VERIFIED · SOURCE 17 · LIMIT 16 · "
-        "OUTPUT 16 · STORE UNCHANGED"
-    )
-
-
-def _run_over_limit() -> None:
-    from memcommit.commands import rationale
-    from memcommit.rationale_cache import rationale_inference_path
-
-    store, context, memories = _stored_context(
-        "bounds/over-limit",
-        ["목적이 불분명한 임시 항목이다.", "주변 규칙과 연결되지 않는다."],
-    )
-    before = context.to_dict()
-    observed: dict[str, int] = {}
-
-    class Provider:
-        def complete(self, prompt, *, operation, output_schema=None):
-            assert output_schema is not None
-            limit = output_schema["properties"]["explanation"]["maxLength"]
-            observed["limit"] = limit
-            return json.dumps(
-                {
-                    "explanation": "P" * (limit + 1),
-                    "support_ids": [],
-                }
-            )
-
-    rationale.connect_codex_chatgpt_provider = Provider
-    rationale.cmd(memories[0].uid)
-    assert observed == {"limit": 32}
-    assert not rationale_inference_path(context.uid, memories[0].uid).exists()
-    assert store.load_direct(context.name).to_dict() == before
-    print(
-        "SCENARIO over-limit VERIFIED · SOURCE 33 · LIMIT 32 · "
-        "OUTPUT 33 REJECTED · CACHE ABSENT · STORE UNCHANGED"
-    )
-
-
-def _run_oversized_context() -> None:
-    from memcommit.commands import rationale
-
-    korean_fill = "가나다라마바사아자차카타파하"
-    contents = ["큰 Context의 대상 항목이다."] + [
-        f"{index:03d}" + (korean_fill[index % len(korean_fill)] * 9_997)
-        for index in range(105)
-    ]
-    store, context, memories = _stored_context(
-        "bounds/oversized-context",
-        contents,
-    )
-    before = context.to_dict()
-    observed: dict[str, object] = {}
-    sentence = (
-        "이 Memory는 흩어진 편집 제약을 반복하지 않고 하나의 적용 원칙으로 "
-        "묶어 두는 역할을 한다. "
-    )
-    explanation = (sentence * 10)[:480]
-    assert len(explanation) == 480
-
-    class Provider:
-        def complete(self, prompt, *, operation, output_schema=None):
-            assert output_schema is not None
-            payload = json.loads(prompt.split("RATIONALE PAYLOAD:\n", 1)[1])
-            observed["candidate_count"] = len(payload["candidates"])
-            observed["scope"] = payload["context_scope"]
-            observed["limit"] = output_schema["properties"]["explanation"][
-                "maxLength"
-            ]
-            return json.dumps(
-                {
-                    "explanation": explanation,
-                    "support_ids": [payload["candidates"][0]["candidate_id"]],
-                }
-            )
-
-    rationale.connect_codex_chatgpt_provider = Provider
-    rationale.cmd(memories[0].uid)
-    assert observed["candidate_count"] == 49
-    assert str(observed["scope"]).startswith("nearest readable subtree")
-    assert observed["limit"] == 480
-    assert store.load_direct(context.name).to_dict() == before
-    print(
-        "SCENARIO oversized-context VERIFIED · CANDIDATES 49/105 · "
-        "LIMIT 480 · OUTPUT 480 · STORE UNCHANGED"
-    )
-
-
-def _run_long_provenance() -> None:
+def _recorded_context(name: str, *, content: str, reason: str, target_uid: str):
     import memcommit.ops as ops
-    from memcommit.commands import rationale
     from memcommit.context import AutoCheckpoint, Memory
-    from memcommit.provenance import build_trace
-    from memcommit.rationale import build_rationale
     from memcommit.store import MemoryStore
 
     store = MemoryStore()
-    context = ops.init("bounds/long-provenance")
-    source = ops.add(context, "초안 " + ("가" * 240))
+    context = ops.init(name)
+    source = ops.add(context, "초안 " + content)
     store.save(
         context,
-        AutoCheckpoint(command="add", args={}, description="Added long Memory"),
+        AutoCheckpoint(command="add", args={}, description="초안 추가"),
     )
     source_position = context.ordered_uids().index(source.uid)
     context.remove(source.uid)
-    target = Memory(
-        uid="10000000-0000-4000-8000-000000000001",
-        content="현재 " + ("나" * 240),
-    )
+    target = Memory(uid=target_uid, content=content)
     context.add(target, position=source_position)
-    reason = (
-        "검토된 로컬 규칙의 목적을 주변 항목과 중복 없이 한 문장으로 남기기 위해 "
-        "이 Memory를 유지했다. "
-    ) * 7
     store.save(
         context,
         AutoCheckpoint(
@@ -221,7 +69,7 @@ def _run_long_provenance() -> None:
             args={
                 "trace": {
                     "schema_version": 1,
-                    "operation_id": "long-rationale-operation",
+                    "operation_id": str(uuid.uuid4()),
                     "changes": [
                         {
                             "kind": "SPLIT",
@@ -233,43 +81,133 @@ def _run_long_provenance() -> None:
                     ],
                 }
             },
-            description="Applied a long recorded rationale",
+            description="기록 이유 적용",
         ),
     )
     store.set_current(context.name)
-    before = context.to_dict()
-    report = build_rationale(
-        store,
-        context,
-        build_trace(store, context, target.uid),
-        None,
+    return store, context, target
+
+
+def _guard_provenance_only() -> None:
+    import memcommit.rationale as rationale_engine
+    from memcommit.commands import rationale
+
+    assert not hasattr(rationale, "connect_codex_chatgpt_provider")
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("provenance-only capture touched inference cache")
+
+    rationale_engine.load_rationale_inference = forbidden
+    rationale_engine.save_rationale_inference = forbidden
+
+
+def _run_no_reason() -> None:
+    from memcommit.commands import rationale
+    from memcommit.rationale_cache import rationale_inference_path
+
+    store, context, memories = _stored_context(
+        "provenance/no-reason",
+        ["아직 기록 이유가 없는 한국어 Memory다."],
     )
-    assert report.provenance_source_character_count > 320
-    assert report.provenance_character_limit == 320
-    assert report.recorded_reason_events
-    rationale.cmd(target.uid, recorded_only=True)
+    before = context.to_dict()
+    _guard_provenance_only()
+    rationale.cmd(memories[0].uid)
     assert store.load_direct(context.name).to_dict() == before
+    assert not rationale_inference_path(context.uid, memories[0].uid).exists()
     print(
-        "SCENARIO long-provenance VERIFIED · SOURCE "
-        f"{report.provenance_source_character_count} · LIMIT 320 · "
+        "SCENARIO no-reason VERIFIED · PROVIDER CALLS 0 · CACHE UNTOUCHED · "
         "STORE UNCHANGED"
     )
 
 
-SCENARIOS = {
-    "insufficient": _run_insufficient,
-    "minimum": _run_minimum,
-    "over-limit": _run_over_limit,
+def _run_recorded_reason() -> None:
+    from memcommit.commands import rationale
+    from memcommit.rationale_cache import rationale_inference_path
+
+    reason = "중복된 초안 규칙을 하나의 검토 기준으로 합치기 위해 유지했다."
+    store, context, target = _recorded_context(
+        "provenance/recorded-reason",
+        content="문장 검토에서는 구조와 인용 표시를 보존한다.",
+        reason=reason,
+        target_uid="30000000-0000-4000-8000-000000000001",
+    )
+    before = context.to_dict()
+    _guard_provenance_only()
+    rationale.cmd(target.uid)
+    assert store.load_direct(context.name).to_dict() == before
+    assert not rationale_inference_path(context.uid, target.uid).exists()
+    print(
+        f"SCENARIO recorded-reason VERIFIED · REASON {len(reason)} CHARS · "
+        "PROVIDER CALLS 0 · CACHE UNTOUCHED · STORE UNCHANGED"
+    )
+
+
+def _run_oversized_context() -> None:
+    from memcommit.commands import rationale
+    from memcommit.rationale_cache import rationale_inference_path
+
+    korean_fill = "가나다라마바사아자차카타파하"
+    contents = ["큰 Context에서도 이 대상의 기록 이유만 확인한다."] + [
+        f"{index:03d}" + (korean_fill[index % len(korean_fill)] * 9_997)
+        for index in range(105)
+    ]
+    store, context, memories = _stored_context(
+        "provenance/oversized-context",
+        contents,
+    )
+    before = context.to_dict()
+    _guard_provenance_only()
+    rationale.cmd(memories[0].uid)
+    assert store.load_direct(context.name).to_dict() == before
+    assert not rationale_inference_path(context.uid, memories[0].uid).exists()
+    print(
+        "SCENARIO oversized-context VERIFIED · MEMORIES 106 · "
+        "SEMANTIC SOURCE OVER 1000000 · PROVIDER CALLS 0 · CACHE UNTOUCHED · "
+        "STORE UNCHANGED"
+    )
+
+
+def _run_long_provenance() -> None:
+    from memcommit.commands import rationale
+    from memcommit.rationale_cache import rationale_inference_path
+
+    reason = (
+        "검토된 로컬 규칙의 목적을 주변 항목과 중복 없이 한 문장으로 남기기 위해 "
+        "이 Memory를 유지했다. "
+    ) * 7
+    store, context, target = _recorded_context(
+        "provenance/long-reason",
+        content="현재 " + ("나" * 240),
+        reason=reason,
+        target_uid="40000000-0000-4000-8000-000000000001",
+    )
+    before = context.to_dict()
+    _guard_provenance_only()
+    rationale.cmd(target.uid)
+    assert store.load_direct(context.name).to_dict() == before
+    assert not rationale_inference_path(context.uid, target.uid).exists()
+    print(
+        f"SCENARIO long-reason VERIFIED · REASON {len(reason)} CHARS · "
+        "PROJECTION LIMIT 320 · PROVIDER CALLS 0 · CACHE UNTOUCHED · "
+        "STORE UNCHANGED"
+    )
+
+
+_RUNNERS = {
+    "no-reason": _run_no_reason,
+    "recorded-reason": _run_recorded_reason,
     "oversized-context": _run_oversized_context,
-    "long-provenance": _run_long_provenance,
+    "long-reason": _run_long_provenance,
 }
 
 
 def _run_child(scenario: str) -> None:
-    with tempfile.TemporaryDirectory(prefix=f"memcommit-rationale-{scenario}-") as temp:
+    with tempfile.TemporaryDirectory(
+        prefix=f"memcommit-rationale-{scenario}-"
+    ) as temp:
         _COMPACT._isolate_store(Path(temp))
         print("PTY", os.get_terminal_size().columns, os.get_terminal_size().lines)
-        SCENARIOS[scenario]()
+        _RUNNERS[scenario]()
 
 
 def _environment() -> dict[str, str]:
@@ -308,57 +246,52 @@ def _snapshot(recorder: io.StringIO, stem: str) -> None:
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     for pattern in ("*.png", "*.txt", "*.typescript"):
-        for path in OUT.glob(pattern):
-            path.unlink()
+        for output_path in OUT.glob(pattern):
+            output_path.unlink()
 
     cases = (
-        ("insufficient", "APPARENT PURPOSE — insufficient Context"),
-        (
-            "minimum",
-            "APPARENT PURPOSE — inferred from Context, not recorded",
-        ),
-        ("over-limit", "APPARENT PURPOSE — unavailable"),
-        (
-            "oversized-context",
-            "APPARENT PURPOSE — inferred from Context, not recorded",
-        ),
-        ("long-provenance", "APPARENT PURPOSE — not requested"),
+        ("no-reason", "PROVENANCE — no reason recorded"),
+        ("recorded-reason", "PROVENANCE — recorded reason"),
+        ("oversized-context", "PROVENANCE — no reason recorded"),
+        ("long-reason", "PROVENANCE — recorded reason"),
     )
     for index, (scenario, expected) in enumerate(cases, start=1):
         child, recorder = _spawn(scenario)
+        report_stem = f"{index * 2 - 1:02d}-{scenario}-report"
+        receipt_stem = f"{index * 2:02d}-{scenario}-verification"
         try:
             child.expect("RATIONALE REPORT")
             _BASE._settle(child)
-            _snapshot(recorder, f"{index * 2 - 1:02d}-{scenario}-report")
+            plain = _BASE.pyte.Screen(COLUMNS, ROWS)
+            _BASE.pyte.Stream(plain).feed(recorder.getvalue())
+            assert expected in "\n".join(plain.display)
+            _snapshot(recorder, report_stem)
 
             child.send("q")
             child.expect(f"SCENARIO {scenario} VERIFIED")
             child.expect(pexpect.EOF)
-            _snapshot(recorder, f"{index * 2:02d}-{scenario}-verification")
+            _snapshot(recorder, receipt_stem)
         finally:
             if child.isalive():
                 child.close(force=True)
 
-        report_text = (OUT / f"{index * 2 - 1:02d}-{scenario}-report.txt").read_text(
-            encoding="utf-8"
-        )
-        raw_text = (
-            OUT / f"{index * 2 - 1:02d}-{scenario}-report.typescript"
-        ).read_text(encoding="utf-8")
-        assert expected in report_text
-        assert "PTY 180 52" in raw_text
-        assert "┏" in raw_text and "┗" in raw_text
-        assert "38;" in raw_text
-
-    combined = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.txt"))
-    assert "PPPPPP" not in combined
+    raw = "".join(
+        output_path.read_text(encoding="utf-8")
+        for output_path in OUT.glob("*.typescript")
+    )
+    combined = "".join(
+        output_path.read_text(encoding="utf-8")
+        for output_path in OUT.glob("*.txt")
+    )
+    assert raw.count("PTY 180 52") >= len(cases)
+    assert "APPARENT PURPOSE" not in combined
     assert "PROVIDER CALLS 0" in combined
-    assert "OUTPUT 33 REJECTED" in combined
-    assert "CANDIDATES 49/105" in combined
-    assert "LIMIT 320" in combined
+    assert "CACHE UNTOUCHED" in combined
+    assert "중복된 초안 규칙을 하나의 검토 기준으로 합치기 위해 유지했다." in combined
+    assert "SEMANTIC SOURCE OVER 1000000" in combined
+    assert "PROJECTION LIMIT 320" in combined
     assert "LIMITS" not in combined
     assert "Context(s)" not in combined
-    assert "유지할 이유는 보이지 않는다." in combined
 
 
 if __name__ == "__main__":
