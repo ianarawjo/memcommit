@@ -1,0 +1,52 @@
+ DIFF · task-1/participant                                                                                                                                                          
+┌────────────────────────────────────────────────────────────────────────────────────| VIEWER |────────────────────────────────────────────────────────────────────────────────────┐
+│ CHECKPOINT  (not created)                                                                                                                                                       ^│
+│ SESSION     fdbd22ef-19d0-56f2-a8b8-d75eb5bfd890                                                                                                                                 │
+│ TIME        2026-08-20T09:30:00-04:00                                                                                                                                            │
+│ ACTION      update                                                                                                                                                               │
+│ LOCATION    task-1/participant                                                                                                                                                   │
+│                                                                                                                                                                                  │
+│ 1. UPDATE · EDIT Memory [9a29f4b9]                                                                                                                                               │
+│ - Rule 001: previous participant guidance.                                                                                                                                       │
+│ + Rule 001: revised participant guidance.                                                                                                                                        │
+│   REASON  Align this Task 1 rule with the reviewed source.                                                                                                                       │
+│                                                                                                                                                                                  │
+│ 2. UPDATE · EDIT Memory [fbe4538c]                                                                                                                                               │
+│ - Rule 002: previous participant guidance.                                                                                                                                       │
+│ + Rule 002: revised participant guidance.                                                                                                                                        │
+│   REASON  Align this Task 1 rule with the reviewed source.                                                                                                                       │
+│                                                                                                                                                                                  │
+│ 3. UPDATE · EDIT Memory [adb14602]                                                                                                                                               │
+│ - Rule 003: previous participant guidance.                                                                                                                                       │
+│ + Rule 003: revised participant guidance.                                                                                                                                        │
+│   REASON  Align this Task 1 rule with the reviewed source.                                                                                                                       │
+│                                                                                                                                                                                  │
+│ 4. UPDATE · EDIT Memory [dccbc829]                                                                                                                                               │
+│ - Rule 004: previous participant guidance.                                                                                                                                       │
+│ + Rule 004: revised participant guidance.                                                                                                                                        │
+│   REASON  Align this Task 1 rule with the reviewed source.                                                                                                                       │
+│                                                                                                                                                                                  │
+│ 5. UPDATE · EDIT Memory [45adeda0]                                                                                                                                               │
+│ - Rule 005: previous participant guidance.                                                                                                                                       │
+│ + Rule 005: revised participant guidance.                                                                                                                                        │
+│   REASON  Align this Task 1 rule with the reviewed source.                                                                                                                       │
+│                                                                                                                                                                                  │
+│ 6. UPDATE · EDIT Memory [2735484d]                                                                                                                                               │
+│ - Rule 006: previous participant guidance.                                                                                                                                       │
+│ + Rule 006: revised participant guidance.                                                                                                                                        │
+│   REASON  Align this Task 1 rule with the reviewed source.                                                                                                                       │
+│                                                                                                                                                                                  │
+│ 7. UPDATE · EDIT Memory [40e6e738]                                                                                                                                               │
+│ - Rule 007: previous participant guidance.                                                                                                                                       │
+│ + Rule 007: revised participant guidance.                                                                                                                                        │
+│   REASON  Align this Task 1 rule with the reviewed source.                                                                                                                      v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ ITEMS ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃›  2026-08-20 09:30  update  fdbd22ef  STAGED semantic update · 150 target Memory changes                                                                                        ^┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ FOCUS ITEMS · ↑/↓ move  Enter viewer  Tab switch  Esc/Backspace/q close  ·  1/1

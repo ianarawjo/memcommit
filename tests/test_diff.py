@@ -247,7 +247,7 @@ def test_diff_is_read_only_and_does_not_depend_on_current_context(
     assert after == before
 
 
-def test_diff_opens_common_context_tree_before_checkpoint_history_in_a_tty(
+def test_diff_opens_current_scoped_browser_in_a_tty(
     isolated_store,
     monkeypatch,
 ):
@@ -266,6 +266,8 @@ def test_diff_opens_common_context_tree_before_checkpoint_history_in_a_tty(
     result = runner.invoke(app, ["diff"])
 
     assert result.exit_code == 0, result.output
+    # The Diff browser owns the one-time current-Context snapshot; the CLI
+    # passes no Profile-wide selection request of its own.
     assert opened == [(store.store_dir, session, None)]
     assert "Update preview" not in result.output
 

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from memcommit.commands.checkpoint_diff import checkpoint_diff_detail_renderer
+from memcommit.commands.history_picker import HistoryDetailView
 from memcommit.commands.history_present import checkpoint_picker_entries
 
 
@@ -44,7 +45,9 @@ def test_selected_checkpoint_shows_action_and_red_then_green_memory_change():
     )
     checkpoints = [second, first]
     entry = checkpoint_picker_entries(checkpoints)[0]
-    fragments = checkpoint_diff_detail_renderer(checkpoints)(entry)
+    detail = checkpoint_diff_detail_renderer(checkpoints)(entry)
+    assert isinstance(detail, HistoryDetailView)
+    fragments = detail.content
     rendered = "".join(text for _style, text in fragments)
 
     assert "ACTION      update" in rendered
@@ -60,6 +63,7 @@ def test_selected_checkpoint_shows_action_and_red_then_green_memory_change():
         style.startswith("class:memory-diff.add") and "green" in text
         for style, text in fragments
     )
+    assert detail.unit_start_lines == (4,)
 
 
 def test_first_checkpoint_is_an_addition_from_the_empty_baseline():
@@ -70,9 +74,47 @@ def test_first_checkpoint_is_an_addition_from_the_empty_baseline():
         "First Memory.",
     )
     entry = checkpoint_picker_entries([first])[0]
-    fragments = checkpoint_diff_detail_renderer([first])(entry)
+    detail = checkpoint_diff_detail_renderer([first])(entry)
+    assert isinstance(detail, HistoryDetailView)
+    fragments = detail.content
     rendered = "".join(text for _style, text in fragments)
 
     assert "ADD · ADD [memory]" in rendered
     assert " + First Memory." in rendered
     assert " - " not in rendered
+    assert detail.unit_start_lines == (4,)
+
+
+def test_reorder_only_checkpoint_is_one_navigable_change():
+    first = _checkpoint(
+        "11111111-1111-4111-8111-111111111111",
+        "2026-08-06T10:00:00-04:00",
+        "add",
+        "First Memory.",
+    )
+    first["snapshot"] = {
+        "uid": "context",
+        "name": "wiki/access",
+        "memories": {
+            "one": {"type": "memory", "uid": "one", "content": "One"},
+            "two": {"type": "memory", "uid": "two", "content": "Two"},
+        },
+        "order": ["one", "two"],
+    }
+    second = _checkpoint(
+        "22222222-2222-4222-8222-222222222222",
+        "2026-08-06T11:00:00-04:00",
+        "edit",
+        "unused",
+    )
+    second["snapshot"] = {**first["snapshot"], "order": ["two", "one"]}
+    checkpoints = [second, first]
+    entry = checkpoint_picker_entries(checkpoints)[0]
+
+    detail = checkpoint_diff_detail_renderer(checkpoints)(entry)
+
+    assert isinstance(detail, HistoryDetailView)
+    assert detail.unit_start_lines == (4,)
+    assert "Direct-item order changed" in "".join(
+        text for _style, text in detail.content
+    )

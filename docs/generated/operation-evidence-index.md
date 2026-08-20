@@ -22,7 +22,7 @@ only from `docs/operation-evidence-index.json`.
 | `dedun` | `CLOSED` | [`dedun-callable-boundary-matrix.md`](../dedun-callable-boundary-matrix.md)<br>[`dedun-design-rationale.md`](../dedun-design-rationale.md)<br>[`resolution-lifecycle-design-rationale.md`](../resolution-lifecycle-design-rationale.md) | Semantic redundancy discovery, evidence confirmation, survivor review, and exact Apply form one Dedun operation whose CLI, Python, agent, and MCP projections share Grant revalidation, reference blocking, and one checkpointed application boundary. |
 | `dedup` | `CLOSED` | [`dedup-callable-boundary-matrix.md`](../dedup-callable-boundary-matrix.md)<br>[`dedup-design-rationale.md`](../dedup-design-rationale.md) | The direct CLI and public Python routes enter one provider-free exact-content application boundary that retains first-in-Context UIDs and removes later byte-identical copies in one checkpoint. |
 | `delete` | `UNREVIEWED` | [`unified-delete-selector-design-rationale.md`](../unified-delete-selector-design-rationale.md) | — |
-| `diff` | `UNREVIEWED` | — | — |
+| `diff` | `UNREVIEWED` | [`mem-history-search-design-rationale.md`](../mem-history-search-design-rationale.md) | — |
 | `distill` | `CLOSED` | [`distill-elaborate-application-boundary-matrix.md`](../distill-elaborate-application-boundary-matrix.md) | CLI, TUI, public, agent, MCP, Ground, provider, and prepared-result routes share the reviewed Distill application contract. |
 | `edit` | `UNREVIEWED` | — | — |
 | `elaborate` | `CLOSED` | [`distill-elaborate-application-boundary-matrix.md`](../distill-elaborate-application-boundary-matrix.md) | CLI, TUI, public, agent, MCP, Ground, provider, and prepared-result routes share the reviewed Elaborate application contract. |

@@ -1,0 +1,52 @@
+ DIFF · task-1/participant                                                                                                                                                          
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ - Rule 141: obsolete participant guidance.                                                                                                                                      ^┃
+┃   REASON  Remove superseded Task 1 guidance.                                                                                                                                     ┃
+┃                                                                                                                                                                                  ┃
+┃ 142. UPDATE · REMOVE Memory [a9e172d3]                                                                                                                                           ┃
+┃ - Rule 142: obsolete participant guidance.                                                                                                                                       ┃
+┃   REASON  Remove superseded Task 1 guidance.                                                                                                                                     ┃
+┃                                                                                                                                                                                  ┃
+┃ 143. UPDATE · REMOVE Memory [cdd676ab]                                                                                                                                           ┃
+┃ - Rule 143: obsolete participant guidance.                                                                                                                                       ┃
+┃   REASON  Remove superseded Task 1 guidance.                                                                                                                                     ┃
+┃                                                                                                                                                                                  ┃
+┃ 144. UPDATE · REMOVE Memory [9fb9ba87]                                                                                                                                           ┃
+┃ - Rule 144: obsolete participant guidance.                                                                                                                                       ┃
+┃   REASON  Remove superseded Task 1 guidance.                                                                                                                                     ┃
+┃                                                                                                                                                                                  ┃
+┃ 145. UPDATE · REMOVE Memory [3dd19266]                                                                                                                                           ┃
+┃ - Rule 145: obsolete participant guidance.                                                                                                                                       ┃
+┃   REASON  Remove superseded Task 1 guidance.                                                                                                                                     ┃
+┃                                                                                                                                                                                  ┃
+┃ 146. UPDATE · REMOVE Memory [39feebb9]                                                                                                                                           ┃
+┃ - Rule 146: obsolete participant guidance.                                                                                                                                       ┃
+┃   REASON  Remove superseded Task 1 guidance.                                                                                                                                     ┃
+┃                                                                                                                                                                                  ┃
+┃ 147. UPDATE · REMOVE Memory [d15680b2]                                                                                                                                           ┃
+┃ - Rule 147: obsolete participant guidance.                                                                                                                                       ┃
+┃   REASON  Remove superseded Task 1 guidance.                                                                                                                                     ┃
+┃                                                                                                                                                                                  ┃
+┃ 148. UPDATE · REMOVE Memory [9d833622]                                                                                                                                           ┃
+┃ - Rule 148: obsolete participant guidance.                                                                                                                                       ┃
+┃   REASON  Remove superseded Task 1 guidance.                                                                                                                                     ┃
+┃                                                                                                                                                                                  ┃
+┃ 149. UPDATE · REMOVE Memory [d877acaf]                                                                                                                                           ┃
+┃ - Rule 149: obsolete participant guidance.                                                                                                                                       ┃
+┃   REASON  Remove superseded Task 1 guidance.                                                                                                                                     ┃
+┃                                                                                                                                                                                  ┃
+┃ 150. UPDATE · REMOVE Memory [b6a1b2af]                                                                                                                                           ┃
+┃ - Rule 150: obsolete participant guidance.                                                                                                                                       ┃
+┃   REASON  Remove superseded Task 1 guidance.                                                                                                                                     ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│›  2026-08-20 09:30  update  fdbd22ef  STAGED semantic update · 150 target Memory changes                                                                                        ^│
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ FOCUS VIEWER · CHANGE 150/150 · ↑/↓ scroll  Enter/Esc/Backspace items  Tab switch  q close  ·  1/1

@@ -399,8 +399,8 @@ def cmd(
         str | None,
         typer.Argument(
             help=(
-                "Existing Context to inspect; omit in a TTY to select from "
-                "the shared Context tree"
+                "Existing Context to inspect; omit in a TTY to inspect the "
+                "current Context"
             )
         ),
     ] = None,

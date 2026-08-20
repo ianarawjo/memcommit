@@ -206,6 +206,52 @@ than recursively invoking one CLI command from the other.
 Outside a TTY, `mem log` retains plain checkpoint rows. This preserves shell
 redirection and automation and avoids requiring terminal key input.
 
+### `mem diff`
+
+```text
+mem diff
+mem diff CONTEXT
+```
+
+In a TTY, bare Diff snapshots the current Context and opens that Context's
+checkpoint transitions directly. It does not display the Profile-wide Context
+tree or allow a second Context choice inside the session. An explicit existing
+Context operand resolves once against the same command-start current snapshot
+and opens that exact Context without changing the global current pointer.
+
+This follows List's requested-scope rule. Showing siblings and unrelated roots
+in gray would still expose Switch navigation inside a command whose subject is
+already known. Removing those rows makes the heading, visible history, and
+keyboard scope agree. Revert deliberately retains its Context tree because
+choosing a restoration target is part of that operation's safety review; Diff
+does not inherit that mutation-oriented selection step.
+
+The exact route reads the ordinary name catalog only to validate the resolved
+target. It opens checkpoint and Context records for that target alone; it does
+not scan unrelated Context histories merely to build annotations for a tree
+that will not be shown.
+
+Diff reuses the shared full-screen Viewer/Items history session. Current-only
+scope does not imply a compact viewport: omitting the Profile-wide Context
+tree removes an unrelated navigation choice, while the selected Context's
+directional detail still benefits from the same large inspection surface as
+other history workbenches. The standard alternate-screen buffer also restores
+the preceding terminal after Diff closes.
+
+The focused Viewer footer reports the logical change under its cursor as
+`CHANGE n/total`. Renderers provide change-start line anchors, so wrapped
+Memory prose and multi-line reasons do not turn the indicator into a misleading
+raw line count; `Home` resolves to the first change and `End` to the final
+change. Details and histories remain scrollable and are never truncated. Full
+checkpoint UIDs, directional details, escaping, read-only behavior, and exact
+explicit-Context resolution are unchanged.
+
+The ordered `180×52` PTY evidence under
+`docs/screenshots/mem-diff-current-fullscreen-20260820/` records current entry,
+checkpoint navigation, Viewer focus, exact-operand entry, close receipts,
+final read-only verification, and the entry/Viewer/End states of one
+150-change Update fixture.
+
 ### `mem revert`
 
 ```text

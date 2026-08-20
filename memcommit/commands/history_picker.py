@@ -7,6 +7,7 @@ the eventual revert remain responsibilities of their command adapters.
 
 from __future__ import annotations
 
+from bisect import bisect_right
 import sys
 from collections.abc import Sequence
 from dataclasses import dataclass
@@ -112,6 +113,28 @@ class HistoryPickerEntry:
 
 
 @dataclass(frozen=True)
+class HistoryDetailView:
+    """Rendered detail plus logical line anchors for navigable change units."""
+
+    content: str | StyleAndTextTuples
+    unit_start_lines: tuple[int, ...]
+    unit_label: str = "CHANGE"
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.content, (str, list, tuple)):
+            raise ValueError("History detail content must be renderable text.")
+        if not self.unit_label or "\n" in self.unit_label:
+            raise ValueError("History detail unit label must be one non-empty line.")
+        if any(
+            not isinstance(line, int) or isinstance(line, bool) or line < 0
+            for line in self.unit_start_lines
+        ):
+            raise ValueError("History detail unit anchors must be line indexes.")
+        if tuple(sorted(set(self.unit_start_lines))) != self.unit_start_lines:
+            raise ValueError("History detail unit anchors must be strictly increasing.")
+
+
+@dataclass(frozen=True)
 class HistorySelectionReceipt:
     """Exact local selection returned by the mutation-oriented picker mode."""
 
@@ -133,6 +156,14 @@ def _visible_bounds(selected: int, count: int) -> tuple[int, int]:
     start = max(0, selected - visible // 2)
     start = min(start, count - visible)
     return start, start + visible
+
+
+def _detail_unit_position(unit_start_lines: tuple[int, ...], row: int) -> int:
+    """Map a logical Viewer row to its one-based semantic change position."""
+
+    if not unit_start_lines:
+        raise ValueError("Detail position requires at least one unit anchor.")
+    return max(1, bisect_right(unit_start_lines, max(0, row)))
 
 
 def _compact_timestamp(value: str) -> str:
@@ -303,7 +334,11 @@ def choose_history(
     require_tty: bool = True,
     initial_details_open: bool | None = None,
     detail_renderer: (
-        Callable[[HistoryPickerItem], str | StyleAndTextTuples] | None
+        Callable[
+            [HistoryPickerItem],
+            str | StyleAndTextTuples | HistoryDetailView,
+        ]
+        | None
     ) = None,
     empty_message: str | None = None,
     empty_detail: str | None = None,
@@ -416,6 +451,7 @@ def choose_history(
     app_ref: dict[
         str, Application[HistorySelectionReceipt | HistoryBackNavigation | None]
     ] = {}
+    detail_view: dict[str, HistoryDetailView | None] = {"value": None}
 
     def render_entries() -> list[tuple[str, str]]:
         if not options:
@@ -454,15 +490,33 @@ def choose_history(
 
     def render_detail() -> str | StyleAndTextTuples:
         if not options:
-            return empty_detail or " No history item is available."
-        if not details_open["value"]:
-            return " Select an item and press Enter to open its detail."
-        entry = options[navigation.viewer_row_index]
-        return (
-            detail_renderer(entry)
-            if detail_renderer is not None
-            else _render_detail(entry)
-        )
+            rendered: str | StyleAndTextTuples | HistoryDetailView = (
+                empty_detail or " No history item is available."
+            )
+        elif not details_open["value"]:
+            rendered = " Select an item and press Enter to open its detail."
+        else:
+            entry = options[navigation.viewer_row_index]
+            rendered = (
+                detail_renderer(entry)
+                if detail_renderer is not None
+                else _render_detail(entry)
+            )
+        if isinstance(rendered, HistoryDetailView):
+            detail_view["value"] = rendered
+            content = rendered.content
+        else:
+            detail_view["value"] = None
+            content = rendered
+        return content
+
+    def render_detail_progress() -> str | None:
+        view = detail_view["value"]
+        if view is None or not view.unit_start_lines:
+            return None
+        row = detail_pane.text_area.buffer.document.cursor_position_row
+        position = _detail_unit_position(view.unit_start_lines, row)
+        return f"{view.unit_label} {position}/{len(view.unit_start_lines)}"
 
     def render_footer() -> str:
         close = (
@@ -475,8 +529,11 @@ def choose_history(
         position = f"{navigation.row_index + 1}/{len(options)}"
         app = app_ref.get("app")
         if app is not None and app.layout.has_focus(detail_pane.text_area):
+            progress = render_detail_progress()
             return (
-                " FOCUS VIEWER · ↑/↓ scroll  Enter/Esc/Backspace items  "
+                " FOCUS VIEWER"
+                + (f" · {progress}" if progress is not None else "")
+                + " · ↑/↓ scroll  Enter/Esc/Backspace items  "
                 f"Tab switch  q close  ·  {position}"
             )
         if (

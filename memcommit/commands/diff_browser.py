@@ -326,6 +326,7 @@ def _browse_local_checkpoints(
     mode: HistoryPickerMode = "log",
     keep_history: bool = False,
     staged_checkpoint_uid: str | None = None,
+    title: str | None = None,
 ) -> ReviewedCheckpointSelection | HistoryBackNavigation | None:
     context = store.load_direct(context_name)
     all_checkpoints = store.list_checkpoints(context_name)
@@ -361,6 +362,7 @@ def _browse_local_checkpoints(
         back_navigation=back_navigation,
         keep_history=keep_history,
         staged_checkpoint_uid=staged_checkpoint_uid,
+        title=title,
     )
     if isinstance(result, HistorySelectionReceipt):
         return ReviewedCheckpointSelection(
@@ -399,6 +401,45 @@ def browse_checkpoint_locations(
     catalog = tuple(dict.fromkeys((*local_names, *target_catalog, *update_locations)))
     if not selectable:
         raise ValueError(f"No Context locations are available for {title}.")
+
+    def open_context_history(
+        context_name: str,
+        *,
+        back_navigation: bool,
+        staged_checkpoint_uid: str | None = None,
+    ) -> ReviewedCheckpointSelection | HistoryBackNavigation | None:
+        if context_name in update_locations and session is not None:
+            if mode != "log":
+                raise ValueError(
+                    "Only ordinary local Context checkpoints can be reverted."
+                )
+            return choose_update_checkpoint_at_location(
+                session,
+                context_name,
+                back_navigation=back_navigation,
+                title=title,
+            )
+        return _browse_local_checkpoints(
+            store,
+            context_name,
+            back_navigation=back_navigation,
+            manual=manual,
+            show_diffs=show_diffs,
+            mode=mode,
+            keep_history=keep_history,
+            staged_checkpoint_uid=staged_checkpoint_uid,
+            title=title,
+        )
+
+    if context_locator is not None:
+        context_name = resolve_context_locator(
+            context_locator,
+            current=store.current_context_name(),
+        )
+        if context_name not in selectable:
+            raise ValueError(f"Context '{context_name}' is not available for {title}.")
+        result = open_context_history(context_name, back_navigation=False)
+        return result if isinstance(result, ReviewedCheckpointSelection) else None
 
     operations_by_name: dict[str, set[str]] = defaultdict(set)
     inherited_by_name: dict[str, set[str]] = defaultdict(set)
@@ -455,69 +496,43 @@ def browse_checkpoint_locations(
 
     while True:
         staged_checkpoint_uid: str | None = None
-        if context_locator is None:
-            location_selection = choose_history_location(
-                selectable,
-                current=selector_current,
-                annotations=annotations,
-                title=f"{title} · SELECT A CONTEXT",
-                catalog_names=catalog,
-                descendant_scope_names=changed_descendant_roots,
-                operation_loader=load_operations,
-                select_nested_checkpoints=mode == "revert",
-            )
-            if location_selection is None:
-                return
-            if isinstance(location_selection, ContextSubtreeSelection):
-                if session is None:
-                    raise ValueError("A saved Update is required for descendant Diff.")
-                selector_current = location_selection.name
-                result = choose_update_checkpoint_subtree(
-                    session,
-                    location_selection.name,
-                    back_navigation=True,
-                )
-                if result is HISTORY_BACK:
-                    continue
-                return
-            if isinstance(location_selection, CheckpointLocationSelection):
-                context_name = location_selection.context_name
-                staged_checkpoint_uid = location_selection.checkpoint_uid
-            else:
-                context_name = location_selection
-            selector_current = context_name
-        else:
-            context_name = resolve_context_locator(
-                context_locator,
-                current=store.current_context_name(),
-            )
-            if context_name not in selectable:
-                raise ValueError(
-                    f"Context '{context_name}' is not available for {title}."
-                )
-
-        if context_name in update_locations and session is not None:
-            if mode != "log":
-                raise ValueError(
-                    "Only ordinary local Context checkpoints can be reverted."
-                )
-            result = choose_update_checkpoint_at_location(
+        location_selection = choose_history_location(
+            selectable,
+            current=selector_current,
+            annotations=annotations,
+            title=f"{title} · SELECT A CONTEXT",
+            catalog_names=catalog,
+            descendant_scope_names=changed_descendant_roots,
+            operation_loader=load_operations,
+            select_nested_checkpoints=mode == "revert",
+        )
+        if location_selection is None:
+            return
+        if isinstance(location_selection, ContextSubtreeSelection):
+            if session is None:
+                raise ValueError("A saved Update is required for descendant Diff.")
+            selector_current = location_selection.name
+            result = choose_update_checkpoint_subtree(
                 session,
-                context_name,
-                back_navigation=context_locator is None,
+                location_selection.name,
+                back_navigation=True,
             )
+            if result is HISTORY_BACK:
+                continue
+            return
+        if isinstance(location_selection, CheckpointLocationSelection):
+            context_name = location_selection.context_name
+            staged_checkpoint_uid = location_selection.checkpoint_uid
         else:
-            result = _browse_local_checkpoints(
-                store,
-                context_name,
-                back_navigation=context_locator is None,
-                manual=manual,
-                show_diffs=show_diffs,
-                mode=mode,
-                keep_history=keep_history,
-                staged_checkpoint_uid=staged_checkpoint_uid,
-            )
-        if result is HISTORY_BACK and context_locator is None:
+            context_name = location_selection
+        selector_current = context_name
+
+        result = open_context_history(
+            context_name,
+            back_navigation=True,
+            staged_checkpoint_uid=staged_checkpoint_uid,
+        )
+        if result is HISTORY_BACK:
             continue
         return result if isinstance(result, ReviewedCheckpointSelection) else None
 
@@ -528,11 +543,30 @@ def browse_diff(
     session: UpdateSession | None,
     context_locator: str | None,
 ) -> None:
-    """Open the common location browser with directional Diff details."""
+    """Open one exact Context's directional Diff details.
+
+    A bare Diff snapshots the current Context instead of presenting the
+    Profile-wide Switch tree. An explicit locator keeps the same direct
+    inspection route without changing the global current pointer.
+    """
+
+    current_name = store.current_context_name()
+    if context_locator is None:
+        selected_locator = current_name
+        if selected_locator is None:
+            raise ValueError(
+                "No current Context is available for Diff; pass CONTEXT or "
+                "switch to one first."
+            )
+    else:
+        selected_locator = resolve_context_locator(
+            context_locator,
+            current=current_name,
+        )
 
     browse_checkpoint_locations(
         store,
         session=session,
-        context_locator=context_locator,
+        context_locator=selected_locator,
         title="DIFF",
     )

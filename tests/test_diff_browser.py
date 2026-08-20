@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
+import pytest
+
 import memcommit.commands.diff_browser as diff_browser
 from memcommit.commands.context_picker import ContextSubtreeSelection
 from memcommit.commands.history_picker import HISTORY_BACK
@@ -23,7 +25,7 @@ class Store:
         return SimpleNamespace(name=name, uid=f"uid:{name}")
 
 
-def test_namespace_enter_dispatches_one_changed_subtree_history(monkeypatch):
+def test_shared_location_browser_dispatches_one_changed_subtree_history(monkeypatch):
     parent = "task-1/campus-wiki"
     child = f"{parent}/building-access"
     session = SimpleNamespace(
@@ -47,10 +49,11 @@ def test_namespace_enter_dispatches_one_changed_subtree_history(monkeypatch):
         ),
     )
 
-    diff_browser.browse_diff(
+    diff_browser.browse_checkpoint_locations(
         Store(),
         session=session,
         context_locator=None,
+        title="REVERT",
     )
 
     assert parent in observed["descendant_scope_names"]
@@ -58,7 +61,7 @@ def test_namespace_enter_dispatches_one_changed_subtree_history(monkeypatch):
     assert opened == [(session, parent)]
 
 
-def test_checkpoint_backspace_reopens_context_selector(monkeypatch):
+def test_shared_location_browser_backspace_reopens_context_selector(monkeypatch):
     child = "task-1/campus-wiki/building-access"
     session = SimpleNamespace(
         target_contexts=(SimpleNamespace(name=child),),
@@ -83,15 +86,125 @@ def test_checkpoint_backspace_reopens_context_selector(monkeypatch):
         )[1],
     )
 
-    diff_browser.browse_diff(
+    diff_browser.browse_checkpoint_locations(
         Store(),
         session=session,
         context_locator=None,
+        title="REVERT",
     )
 
     assert len(selector_currents) == 2
     assert selector_currents[1] == child
-    assert opened == [(session, child, {"back_navigation": True})]
+    assert opened == [
+        (
+            session,
+            child,
+            {
+                "back_navigation": True,
+                "title": "REVERT",
+            },
+        )
+    ]
+
+
+def test_diff_bypasses_profile_location_selection_and_opens_current_fullscreen(
+    monkeypatch,
+):
+    observed = {}
+
+    def browse(*_args, **kwargs):
+        observed.update(kwargs)
+
+    monkeypatch.setattr(diff_browser, "browse_checkpoint_locations", browse)
+
+    diff_browser.browse_diff(Store(), session=None, context_locator=None)
+
+    assert observed == {
+        "session": None,
+        "context_locator": "task-1",
+        "title": "DIFF",
+    }
+
+
+def test_diff_explicit_context_bypasses_current_without_switching(monkeypatch):
+    observed = {}
+
+    def browse(*_args, **kwargs):
+        observed.update(kwargs)
+
+    monkeypatch.setattr(diff_browser, "browse_checkpoint_locations", browse)
+
+    diff_browser.browse_diff(Store(), session=None, context_locator="archive")
+
+    assert observed["context_locator"] == "archive"
+
+
+def test_diff_resolves_relative_context_from_one_current_snapshot(monkeypatch):
+    observed = {}
+    store = Store()
+    store.current_context_name = lambda: "task-1/current"
+
+    def browse(*_args, **kwargs):
+        observed.update(kwargs)
+
+    monkeypatch.setattr(diff_browser, "browse_checkpoint_locations", browse)
+
+    diff_browser.browse_diff(store, session=None, context_locator="../archive")
+
+    assert observed["context_locator"] == "task-1/archive"
+
+
+def test_diff_without_current_or_explicit_context_fails_before_browser(monkeypatch):
+    store = Store()
+    store.current_context_name = lambda: None
+    monkeypatch.setattr(
+        diff_browser,
+        "browse_checkpoint_locations",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            AssertionError("profile location browser must not open")
+        ),
+    )
+
+    with pytest.raises(ValueError, match="No current Context"):
+        diff_browser.browse_diff(store, session=None, context_locator=None)
+
+
+def test_exact_history_scope_does_not_scan_unrelated_context_history(monkeypatch):
+    opened = []
+    monkeypatch.setattr(
+        diff_browser,
+        "_local_operation_ids",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            AssertionError("exact history must not scan the Profile catalog")
+        ),
+    )
+    monkeypatch.setattr(
+        diff_browser,
+        "_browse_local_checkpoints",
+        lambda _store, name, **kwargs: opened.append((name, kwargs)),
+    )
+
+    diff_browser.browse_checkpoint_locations(
+        Store(),
+        session=None,
+        context_locator="task-1",
+        title="DIFF",
+    )
+
+    assert opened == [
+        (
+            "task-1",
+            {
+                "back_navigation": False,
+                "manual": False,
+                "show_diffs": True,
+                "mode": "log",
+                "keep_history": False,
+                "staged_checkpoint_uid": None,
+                "title": "DIFF",
+            },
+        )
+    ]
 
 
 def test_subtree_counts_multi_context_update_and_undo_as_two_operations():

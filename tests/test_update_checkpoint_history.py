@@ -12,6 +12,7 @@ from memcommit.commands.update_checkpoint_history import (
     update_subtree_checkpoint_entries,
     update_subtree_locations,
 )
+from memcommit.commands.history_picker import HistoryDetailView
 from memcommit.update import (
     UpdateApplicationReceipt,
     UpdateCheckpointReceipt,
@@ -101,10 +102,12 @@ def test_applied_location_uses_the_recorded_checkpoint_identity():
 def test_checkpoint_detail_keeps_update_action_and_red_then_green_transition():
     session = _session()
     entry = update_checkpoint_entry(session, "target/building-access")
-    fragments = update_checkpoint_detail_renderer(
+    detail = update_checkpoint_detail_renderer(
         session,
         "target/building-access",
     )(entry)
+    assert isinstance(detail, HistoryDetailView)
+    fragments = detail.content
     rendered = "".join(text for _style, text in fragments)
 
     assert "ACTION      update" in rendered
@@ -118,11 +121,15 @@ def test_checkpoint_detail_keeps_update_action_and_red_then_green_transition():
     assert next(style for style, text in fragments if text == "green") == (
         "class:memory-diff.add.changed"
     )
-    assert sum(
-        style in {"class:memory-diff.remove", "class:memory-diff.add"}
-        and text == "Use the "
-        for style, text in fragments
-    ) == 2
+    assert (
+        sum(
+            style in {"class:memory-diff.remove", "class:memory-diff.add"}
+            and text == "Use the "
+            for style, text in fragments
+        )
+        == 2
+    )
+    assert detail.unit_start_lines == (6,)
 
 
 def test_subtree_history_collects_only_changed_owners_below_exact_root():

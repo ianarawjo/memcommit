@@ -9,7 +9,7 @@ from typing import Any
 
 from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 
-from memcommit.commands.history_picker import HistoryPickerItem
+from memcommit.commands.history_picker import HistoryDetailView, HistoryPickerItem
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
@@ -111,7 +111,7 @@ def checkpoint_diff_detail_renderer(
     }
     before_by_uid = _before_snapshots(checkpoints)
 
-    def render(entry: HistoryPickerItem) -> StyleAndTextTuples:
+    def render(entry: HistoryPickerItem) -> StyleAndTextTuples | HistoryDetailView:
         checkpoint = records[entry.uid]
         changes, reordered = _checkpoint_changes(
             before_by_uid[entry.uid],
@@ -133,7 +133,9 @@ def checkpoint_diff_detail_renderer(
         if not changes and not reordered:
             fragments.append(("class:report-neutral", " (no direct Context changes)\n"))
             return fragments
+        unit_start_lines: list[int] = []
         for index, change in enumerate(changes, start=1):
+            unit_start_lines.append(sum(text.count("\n") for _style, text in fragments))
             before = _item_text(change.before)
             after = _item_text(change.after)
             treatment = (
@@ -173,10 +175,14 @@ def checkpoint_diff_detail_renderer(
                 fragments.append(("", "\n"))
             fragments.append(("", "\n"))
         if reordered:
+            unit_start_lines.append(sum(text.count("\n") for _style, text in fragments))
             fragments.append(
                 ("class:report-neutral", " = Direct-item order changed.\n")
             )
-        return fragments
+        return HistoryDetailView(
+            content=fragments,
+            unit_start_lines=tuple(unit_start_lines),
+        )
 
     return render
 

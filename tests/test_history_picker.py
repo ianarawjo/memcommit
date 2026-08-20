@@ -9,10 +9,13 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from prompt_toolkit.utils import get_cwidth
 
+import memcommit.commands.history_picker as history_picker
 from memcommit.commands.history_picker import (
     HISTORY_BACK,
+    HistoryDetailView,
     HistoryPickerEntry,
     HistorySelectionReceipt,
+    _detail_unit_position,
     _render_detail,
     _render_entry_fragments,
     _render_entry_line,
@@ -375,6 +378,44 @@ def test_visible_window_tracks_selection_and_never_exceeds_twelve_rows():
     assert _visible_bounds(0, 20) == (0, 12)
     assert _visible_bounds(10, 20) == (4, 16)
     assert _visible_bounds(19, 20) == (8, 20)
+
+
+def test_history_uses_the_shared_full_screen_session(monkeypatch):
+    captured = {}
+
+    class FakeApplication:
+        def __init__(self, **kwargs):
+            captured.update(kwargs)
+
+        def run(self):
+            return None
+
+    monkeypatch.setattr(history_picker, "Application", FakeApplication)
+
+    selected = choose_history(
+        (entry(1),),
+        context_name="journal",
+        mode="log",
+        require_tty=False,
+    )
+
+    assert selected is None
+    assert captured["full_screen"] is True
+
+
+def test_detail_position_tracks_semantic_change_anchors():
+    anchors = (6, 10, 15)
+
+    assert _detail_unit_position(anchors, 0) == 1
+    assert _detail_unit_position(anchors, 6) == 1
+    assert _detail_unit_position(anchors, 14) == 2
+    assert _detail_unit_position(anchors, 15) == 3
+    assert _detail_unit_position(anchors, 99) == 3
+
+
+def test_history_detail_requires_strictly_increasing_unit_anchors():
+    with pytest.raises(ValueError, match="strictly increasing"):
+        HistoryDetailView("content", (4, 4))
 
 
 def test_detail_contains_full_checkpoint_and_direct_change_summaries():

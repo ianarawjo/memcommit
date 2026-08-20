@@ -8,6 +8,7 @@ from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 
 from memcommit.commands.history_picker import (
     HistoryBackNavigation,
+    HistoryDetailView,
     HistoryPickerEntry,
     HistoryPickerItem,
     choose_history,
@@ -159,7 +160,7 @@ def update_checkpoint_detail_renderer(
         if operation.owner_context_name == location
     )
 
-    def render(entry: HistoryPickerItem) -> StyleAndTextTuples:
+    def render(entry: HistoryPickerItem) -> HistoryDetailView:
         checkpoint = _checkpoint_by_location(session).get(location)
         fragments: StyleAndTextTuples = [
             ("class:report-label", " CHECKPOINT  "),
@@ -188,7 +189,9 @@ def update_checkpoint_detail_renderer(
             ("class:report-neutral", display_escape_text(location) + "\n"),
             ("", "\n"),
         ]
+        unit_start_lines: list[int] = []
         for index, operation in enumerate(operations, start=1):
+            unit_start_lines.append(sum(text.count("\n") for _style, text in fragments))
             fragments.extend(
                 [
                     (
@@ -228,7 +231,10 @@ def update_checkpoint_detail_renderer(
                     ("", "\n"),
                 ]
             )
-        return fragments
+        return HistoryDetailView(
+            content=fragments,
+            unit_start_lines=tuple(unit_start_lines),
+        )
 
     return render
 
@@ -261,6 +267,7 @@ def choose_update_checkpoint_at_location(
     location: str,
     *,
     back_navigation: bool = False,
+    title: str | None = None,
 ) -> HistoryBackNavigation | None:
     """Inspect the recorded Update checkpoint for one already-selected location."""
     entry = update_checkpoint_entry(session, location)
@@ -271,6 +278,7 @@ def choose_update_checkpoint_at_location(
         initial_details_open=True,
         detail_renderer=update_checkpoint_detail_renderer(session, location),
         back_navigation=back_navigation,
+        title=title,
     )
     return result if isinstance(result, HistoryBackNavigation) else None
 

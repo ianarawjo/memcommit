@@ -37,7 +37,9 @@
     "delete": [
       "docs/unified-delete-selector-design-rationale.md"
     ],
-    "diff": [],
+    "diff": [
+      "docs/mem-history-search-design-rationale.md"
+    ],
     "distill": [
       "docs/distill-elaborate-application-boundary-matrix.md"
     ],
