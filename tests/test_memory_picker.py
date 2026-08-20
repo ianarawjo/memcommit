@@ -19,11 +19,7 @@ import memcommit.context_targeting.tui.picker as context_picker
 import memcommit.ops as ops
 from memcommit.provenance import TraceCandidate, collect_trace_candidates
 from memcommit.store import MemoryStore
-from memcommit.interfaces.console.theme import ERROR_HEX
-from memcommit.interfaces.tui.core.theme import (
-    MEMCOMMIT_TUI_STYLE,
-    SEMANTIC_VIEWER_STYLE,
-)
+from memcommit.interfaces.tui.core.theme import SEMANTIC_VIEWER_STYLE
 
 
 def candidate(
@@ -205,41 +201,6 @@ def test_report_picker_projects_current_and_historical_as_separate_badges(
             (("00000000", None), ("r3", None)),
         ),
     ]
-
-
-def test_report_picker_rejects_context_rows_with_a_red_exact_memory_hint(
-    monkeypatch,
-):
-    observed_receipt = None
-
-    def observe_context_rejection(names, **kwargs):
-        nonlocal observed_receipt
-        observed_receipt = kwargs["context_accept_handler"](names[0])
-        return None
-
-    monkeypatch.setattr(
-        "memcommit.commands.memory_picker.choose_context",
-        observe_context_rejection,
-    )
-
-    selected = choose_memory_report_target(
-        (candidate(1, change_count=2),),
-        context_name="notes",
-        operation="trace",
-        require_tty=False,
-    )
-
-    assert selected is None
-    assert observed_receipt is not None
-    assert observed_receipt.label == "CONTEXT NOT SELECTABLE"
-    assert "exact Memory" in observed_receipt.detail
-    assert observed_receipt.label_style == "class:memcommit.error"
-    assert (
-        MEMCOMMIT_TUI_STYLE.get_attrs_for_style_str(
-            observed_receipt.label_style
-        ).color
-        == ERROR_HEX[1:]
-    )
 
 
 def test_report_picker_uses_shared_enter_and_vertical_surface_routing():

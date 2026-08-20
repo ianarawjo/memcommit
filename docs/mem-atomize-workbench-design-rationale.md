@@ -67,33 +67,49 @@ mem impact atomize
     -> inspect and answer actionable issues
 
 mem atomize
-    -> create the first analysis if none exists, otherwise resume the saved one
-    -> do not silently generate a different proposal
+    -> target the complete current Context without opening a session
+    -> create or reuse the compatible saved analysis
+    -> apply it in place as one checkpoint
+    -> print representative source/child UIDs, full content, and review counts
 
 mem review atomize
-    -> resume the same saved review position and responses
+    -> resume the same saved analysis and responses
+    -> remain read-only after that analysis has been applied
 
 mem review
     -> in a TTY, browse all saved Review-capable sessions
     -> choosing Atomize resumes this exact analysis and workbench
     -> non-TTY and explicit snapshot/response forms retain compatibility resume
 
+mem atomize --context INPUT
 mem atomize --save
 mem atomize --save-as NEW_CONTEXT
-    -> apply the reviewed analysis explicitly
+mem atomize --sessions
+    -> retain advanced explicit workbench, destination, and saved-work routes
 ```
 
-`mem impact atomize` is the primary discovery entry point because the risky
+`mem impact atomize` is the primary preview entry point because the risky
 questions occur before application: Did the operation understand the source?
 What will it split? What remains unclear? `mem atomize` is also allowed as a
-convenient entry point, but it must join the same compatible saved analysis
-rather than creating a second proposal merely because a different command was
-used. `mem review atomize` is a compatibility resume surface, not the
-conceptual owner of atomization. In a TTY, bare `mem review` reaches Atomize
+direct current-Context action: it joins the same compatible saved analysis and
+applies it without opening the workbench. `mem review atomize` is the durable
+inspection surface for the complete result and unresolved findings. In a TTY,
+bare `mem review` reaches Atomize
 through the aggregate saved-session launcher and revalidates the selected
 analysis UID. Non-interactive or explicit snapshot/response compatibility
 forms may still reach the current Context's workbench only when no older global
-review is active.
+review is active. Once applied, the terminal workbench and exact checkpoint
+authorize read-only reopening even though a split necessarily changed the
+current direct-Memory digest; response and replacement actions are rejected.
+Memory has no separate name field, so the Review list identifies each finding
+as `[uid-prefix] content preview`; its detail retains the exact UID and full
+content. SOURCE ordinals describe evidence arity only and are never presented
+as Memory names.
+The common seeded-report shell treats a trusted report with no child focus
+markers as one whole-report Viewer section instead of indexing an empty focus
+topology. In read-only item detail it hides an unanswered blank Responses
+frame and removes edit/send hints; an answered saved response may still appear
+as inspection evidence, but its target remains non-editable.
 
 Opening, closing, taking a snapshot of, or re-entering the workbench does not
 rerun the semantic provider. A new model completion is permitted only through

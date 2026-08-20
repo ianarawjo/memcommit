@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import copy
 import sys
 from typing import Annotated, Optional
 
@@ -10,7 +11,6 @@ import typer
 import memcommit.ops as ops
 from memcommit.atomize import (
     AtomizeImpactError,
-    atomize_analysis_matches_context,
 )
 from memcommit.atomize_workbench import (
     AtomizeWorkbenchError,
@@ -298,6 +298,11 @@ def _run_atomize_workbench(
     expected_analysis_uid: str | None = None,
 ) -> None:
     """Resume the Context-bound atomize workbench compatibility adapter."""
+    from memcommit.commands.atomize_sessions import (
+        atomize_application_checkpoint_uid,
+        revalidate_saved_atomize_analysis,
+    )
+
     if expected_analysis_uid is not None:
         from memcommit.commands.atomize_sessions import (
             load_saved_atomize_analysis,
@@ -324,15 +329,39 @@ def _run_atomize_workbench(
             "The selected atomize analysis changed while the Review launcher "
             "was open. Reopen the launcher."
         )
-    if not atomize_analysis_matches_context(analysis, ctx):
+    try:
+        ctx, applied = revalidate_saved_atomize_analysis(store, analysis)
+    except ValueError as error:
+        raise ReviewError(str(error)) from error
+    if replace and applied:
         raise ReviewError(
-            "The saved atomize analysis is stale for this Context. Request "
-            "an explicit reanalysis before reviewing it."
+            "An applied Atomize analysis is read-only and cannot replace its "
+            "saved review state."
         )
     workbench = None if replace else store.load_atomize_workbench(analysis)
     if workbench is None:
         workbench = create_atomize_workbench(analysis)
-        store.save_atomize_workbench(workbench)
+        if not applied:
+            store.save_atomize_workbench(workbench)
+    if applied and workbench.application is None:
+        checkpoint_uid = atomize_application_checkpoint_uid(
+            store,
+            ctx,
+            analysis.uid,
+        )
+        if checkpoint_uid is None:
+            raise ReviewError(
+                "The applied Atomize analysis has no recognized checkpoint."
+            )
+        # Analysis-only and applied-Output copies deliberately have no durable
+        # workbench owner. Project the exact terminal checkpoint into a local
+        # read-only receipt so Review says APPLIED without creating a second
+        # session owner or repairing persistence as a side effect of reading.
+        workbench = copy.deepcopy(workbench)
+        workbench.record_application(
+            output_context_name=analysis.context_name,
+            checkpoint_uid=checkpoint_uid,
+        )
     if not workbench.matches_analysis(
         analysis_uid=analysis.uid,
         context_uid=analysis.context_uid,
@@ -343,6 +372,19 @@ def _run_atomize_workbench(
         raise ReviewError("The saved atomize workbench does not match its analysis.")
     if (respond_to is None) != (response is None):
         raise ReviewError("--respond-to and --response must be used together.")
+    if applied:
+        if respond_to is not None:
+            raise ReviewError(
+                "An applied Atomize analysis is read-only; its saved findings "
+                "and responses cannot be changed."
+            )
+        from memcommit.review_report_adapters import atomize_review_report
+
+        _show_operation_review(
+            atomize_review_report(analysis, workbench),
+            snapshot=snapshot,
+        )
+        return
     if respond_to is not None:
         selector = respond_to.strip()
         findings = project_atomize_workbench_findings(analysis)

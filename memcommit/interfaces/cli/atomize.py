@@ -1,4 +1,5 @@
 """Trusted terminal rendering for provisional atomize impact reports."""
+
 from __future__ import annotations
 
 import typer
@@ -19,6 +20,22 @@ _CLASSIFICATION_COLORS = {
     "UNCERTAIN": typer.colors.RED,
     "NON_PROPOSITIONAL": typer.colors.CYAN,
 }
+
+_APPLY_RESULT_SAMPLE_LIMIT = 3
+
+
+def _plural(count: int, singular: str, plural: str | None = None) -> str:
+    return singular if count == 1 else (plural or f"{singular}s")
+
+
+def _render_apply_content(prefix: str, content: str) -> None:
+    """Render one selected full Memory without allowing terminal injection."""
+
+    lines = safe_terminal_text(content).splitlines() or [""]
+    typer.echo(prefix + lines[0])
+    continuation = " " * len(prefix)
+    for line in lines[1:]:
+        typer.echo(continuation + line)
 
 
 def render_atomize_apply_result(
@@ -51,13 +68,39 @@ def render_atomize_apply_result(
             "recorded",
             fg=typer.colors.YELLOW,
         )
-    for item in result.items:
-        if item.classification != "COMPOSITE":
+    split_items = [item for item in result.items if item.classification == "COMPOSITE"]
+    for item in split_items[:_APPLY_RESULT_SAMPLE_LIMIT]:
+        source = session.item_for(item.source_uid)
+        if source is None:
             continue
-        typer.echo(
-            f"  [{item.source_uid[:8]}] -> "
-            + ", ".join(f"[{uid[:8]}]" for uid in item.result_uids)
+        _render_apply_content(f"  [{item.source_uid[:8]}] ", source.content)
+        for uid, content in zip(
+            item.result_uids,
+            item.result_contents,
+            strict=True,
+        ):
+            _render_apply_content(f"    -> [{uid[:8]}] ", content)
+    hidden_split_count = max(0, len(split_items) - _APPLY_RESULT_SAMPLE_LIMIT)
+    if hidden_split_count:
+        typer.secho(
+            f"  … {hidden_split_count} more "
+            f"{_plural(hidden_split_count, 'split')} in mem review atomize",
+            dim=True,
         )
+
+    ambiguity_count = sum(issue.kind == "AMBIGUITY" for issue in session.quality_issues)
+    conflict_count = sum(issue.kind == "CONFLICT" for issue in session.quality_issues)
+    uncertainty_count = sum(
+        item.classification == "UNCERTAIN" for item in session.items
+    )
+    typer.echo(
+        "  Review · "
+        f"{ambiguity_count} {_plural(ambiguity_count, 'ambiguity', 'ambiguities')}"
+        f" · {conflict_count} {_plural(conflict_count, 'conflict')}"
+        f" · {uncertainty_count} atomize "
+        f"{_plural(uncertainty_count, 'uncertainty', 'uncertainties')}"
+    )
+    typer.echo("  Full analysis · mem review atomize")
     typer.echo("  Recovery · mem undo")
     if recovered_application:
         typer.secho(
@@ -66,12 +109,14 @@ def render_atomize_apply_result(
         )
     if created:
         typer.echo(
-            "One Atomize checkpoint created; no intermediate Context was "
-            "published."
+            "One Atomize checkpoint created; no intermediate Context was published."
         )
         typer.echo(f"Switched to '{context_name}'.")
     else:
-        typer.echo("One Context checkpoint created. The saved analysis remains linked.")
+        typer.echo(
+            "One Context checkpoint created. The saved analysis remains linked "
+            "for Review."
+        )
 
 
 def _render_source(item: AtomizeItem) -> None:
@@ -93,19 +138,13 @@ def _render_children(item: AtomizeItem) -> None:
             typer.secho(f"            {line}", fg=typer.colors.GREEN)
         typer.secho(
             "         Cited source spans: "
-            + " | ".join(
-                safe_terminal_text(span)
-                for span in child.source_spans
-            ),
+            + " | ".join(safe_terminal_text(span) for span in child.source_spans),
             dim=True,
         )
         if child.frame_spans:
             typer.secho(
                 "         Cited declared-frame spans: "
-                + " | ".join(
-                    safe_terminal_text(span)
-                    for span in child.frame_spans
-                ),
+                + " | ".join(safe_terminal_text(span) for span in child.frame_spans),
                 dim=True,
             )
 
@@ -114,8 +153,7 @@ def _render_item(item: AtomizeItem) -> None:
     color = _CLASSIFICATION_COLORS[item.classification]
     typer.echo()
     typer.secho(
-        f"  {item.action:<15} {item.classification:<18} "
-        f"[{item.memory.uid[:8]}]",
+        f"  {item.action:<15} {item.classification:<18} [{item.memory.uid[:8]}]",
         fg=color,
         bold=True,
     )
@@ -187,9 +225,7 @@ def render_atomize_impact(
     )
 
     visible = [
-        item
-        for item in report.items
-        if show_all or item.classification != "ATOMIC"
+        item for item in report.items if show_all or item.classification != "ATOMIC"
     ]
     if not visible:
         typer.echo("\n  (no atomization changes or review findings)")

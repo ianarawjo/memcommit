@@ -1,0 +1,103 @@
+52 180
+[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;2;139;213;255;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;2;139;213;255;1m┃[0m RESULT · atomize · atomize/direct-current                                                                                                                                       [0;1m^[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mCONTEXT LOCATIONS                                                                                                                                                                [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m  SOURCE · atomize/direct-current                                                                                                                                                [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m  OUTPUT · atomize/direct-current · IN PLACE                                                                                                                                     [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m STATUS · APPLIED ANALYSIS · READ ONLY · sources=4 · projected=8 · splits=4 · children=8 · review issues=4                                                                       [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m WHAT MEM UNDERSTOOD                                                                                                                                                             [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m Each source records two independent claims.                                                                                                                                     [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m WHAT HAPPENED                                                                                                                                                                   [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m Each source is split into its two recorded claims.                                                                                                                              [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m WHAT REMAINS UNRESOLVED                                                                                                                                                         [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m (none reported under this operation's bounded contract)                                                                                                                         [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0mThe atomize analysis reported no unresolved finding in this bounded Context frame.                                                                                               [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m REPRESENTATIVE / BOUNDARY CASES                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m ›  1. [REPRESENTATIVE] COMPOSITE · SPLIT                                                                                                                                        [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m       SPLIT: The Main Building entrance accepts a physical NFC card. | Mobile-app authentication is not accepted at that entrance.                                              [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[0;1m› REPORT         Complete Atomize report[0m                                                                                                                                         [0;1m^[179C[0m│[0m
+[0m│  SUGGESTED SPLIT [7b9881b8] The Main Building entrance accepts a physical NFC card. | Mobile-app authentication is not accepted at that entrance.                               [0;48;2;68;68;68m [179C[0m│[0m
+[0m│  SUGGESTED SPLIT [d355e1e6] The staff entrance uses the same physical NFC card. | Staff should not rely on mobile-app authentication.                                           [0;48;2;68;68;68m [179C[0m│[0m
+[0m│  SUGGESTED SPLIT [1ed62304] The library opens at 10:00 on weekends. | The research desk closes at 16:00.                                                                        [0;48;2;68;68;68m [179C[0m│[0m
+[0m│  SUGGESTED SPLIT [0fed81b1] The north elevator serves floors one through four. | The fifth floor requires the south elevator.                                                   [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[ READ ONLY ]  No action available · This saved session can only be inspected.                                                                                                    [179C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m READ ONLY · APPLIED · REVIEW · ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter inspect  Esc/Backspace close H Help  y/Y copy  Q close[160D[50A[C[0m[?25l[0m                                          [0m
+[C[0m SUGGESTED SPLIT 1/4[0m
+[C[0;38;2;255;255;255;1m [7b9881b8] The Main Building entrance accepts a physical NFC card. | Mobile-app authentication is not accepted at that entrance.[0m
+[2C[0m[REVIEW] OPEN                   [0m
+[2C[0mREVIEW SET · REQUIRED 0 · OPTIONAL[C4       [0m
+[C[0;38;2;139;213;255;1m CLASSIFICATION[0m                                                                                           [0m
+[C[0;38;2;139;213;255m COMPOSITE · 2 CHILDREN[0m
+[C[0m                    [0m
+[C[0;38;2;255;255;255;1m SOURCE MEMORY[0m                              [0m
+
+[C[0;38;2;255;255;255;1m SOURCE 1 · FROM atomize/direct-current[0m
+[2C[0m  [7b9881b8] [0;38;2;202;211;245mThe Main Building entrance accepts a physical NFC card. | Mobile-app authentication is not accepted at that entrance.[0m
+
+[C[0;38;2;255;255;255;1m WHY THIS MEMORY SPLIT[0m  [0m
+[C[0;38;2;244;245;247m The source contains two independently revisable claims.[0m
+[C[0;38;2;255;255;255;1m PROPOSED CHILDREN[0m                                                                [0m
+[C[0;38;2;202;211;245m [1] The Main Building entrance accepts a physical NFC card.[0m
+[C[0;38;2;202;211;245m [2] Mobile-app authentication is not accepted at that entrance.[0m
+[C[0m                                         [0m
+[C[0m                                                                                                                                   [0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[C[0m  REPORT         Complete Atomize report[0m
+[C[0;1m› SUGGESTED SPLIT [7b9881b8] The Main Building entrance accepts a physical NFC card. | Mobile-app authentication is not accepted at that entrance.[0m
+
+
+
+
+
+
+
+
+
+
+[36C[0msection/item  Tab switch[2CEnter inspect [CEsc/Backspace report H[CHelp [Cy/Y copy[C Q close[0m[K[45A[122D[0m

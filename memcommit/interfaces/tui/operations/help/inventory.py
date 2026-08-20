@@ -354,7 +354,7 @@ COMMAND_FORMS = {
         "mem dedup --finding-handoff '[json]' --survivor [component]=[memory] --expected-revision [revision] --apply (apply one exact complete survivor set)",
     ),
     "atomize": (
-        "mem atomize (enter the current Context's interactive Atomize session)",
+        "mem atomize (atomize the current Context now; inspect the saved analysis with mem review)",
         "mem atomize --context [context] (enter that Context's interactive Atomize session)",
         "mem atomize --sessions (enter the interactive Atomize session launcher)",
         'mem atomize --evaluate "[issue]" (directional atomic review)',
@@ -641,7 +641,7 @@ COMMAND_FORMS = {
         "mem query --show-session [session_name] (show one saved transcript)",
     ),
     "rationale": (
-        "mem rationale (open Recents or select a Memory from the current readable Context)",
+        "mem rationale (open Recents or browse readable Contexts, then select a Memory)",
         "mem rationale [memory] (explain one current or historical Memory)",
         "mem rationale --context [context] (start Memory selection in one readable Context)",
         "mem rationale [memory] --context [context] (explicit Context and Memory)",
@@ -734,7 +734,7 @@ COMMAND_FORMS = {
         "mem translate [memory] --to [language] --in-place (add one translated sibling Memory)",
     ),
     "trace": (
-        "mem trace (open Recents or select a Memory from the current Context)",
+        "mem trace (open Recents or browse local Contexts, then select a Memory)",
         "mem trace [memory] (shorthand for mem log --memory [memory])",
         "mem trace --context [context] (start Memory selection in one local Context)",
         "mem trace [memory] --context [context] (explicit Context and Memory)",

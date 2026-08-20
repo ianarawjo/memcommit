@@ -410,7 +410,7 @@ def test_atomize_adapter_joins_findings_sources_children_and_saved_response() ->
     assert "TRACE" not in rendered
 
     split = view.item(f"atomize:{composite_uid}")
-    assert split.title == analysis.items[1].content
+    assert split.title == f"[{composite_uid[:8]}] {analysis.items[1].content}"
     assert split.title != "ATOMIZE SPLIT"
     assert split.kind == "ATOMIZE_SPLIT"
     assert split.kind_label == "SUGGESTED SPLIT"
@@ -462,6 +462,23 @@ def test_atomize_adapter_exposes_apply_only_for_an_unedited_reviewed_proposal() 
         session_review_action_view(edited, {}, whole_set_available=True).kind
         == "INCORPORATE AND APPLY"
     )
+
+
+def test_applied_atomize_adapter_is_read_only_review_evidence() -> None:
+    analysis, _conflict_uid, _composite_uid = _atomize_fixture()
+    workbench = create_atomize_workbench(analysis)
+    workbench.record_application(
+        output_context_name=analysis.context_name,
+        checkpoint_uid=_uid(),
+    )
+
+    view = AtomizeResolutionWorkbenchAdapter(analysis, workbench).view()
+
+    assert view.status == "APPLIED"
+    assert view.capabilities == frozenset()
+    assert view.accept_enabled is False
+    assert view.unresolved_at_apply_count == 0
+    assert view.input_locked is True
 
 
 def test_unanswered_atomize_quality_finding_advances_to_apply_as_is() -> None:

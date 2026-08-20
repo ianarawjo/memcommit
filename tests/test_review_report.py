@@ -157,6 +157,46 @@ def test_review_host_cannot_turn_accept_key_into_apply():
     assert action.kind == "CLOSE"
 
 
+def test_read_only_seeded_report_without_common_markers_is_one_viewer_surface():
+    view = ResolutionWorkbenchView(
+        operation="ATOMIZE",
+        artifact_uid="applied-analysis",
+        revision="terminal-revision",
+        title="Atomize",
+        route="CONTEXT example",
+        status="APPLIED",
+        metrics=(),
+        overview="Applied analysis remains inspectable.",
+        list_label="FINDINGS",
+        items=(),
+        empty_message="No findings.",
+        results_label="RESULTS",
+        results=(),
+        capabilities=frozenset(),
+        accept_enabled=False,
+        input_locked=True,
+    )
+    controller = ReviewReportController.from_resolution(
+        view,
+        kind="CLARIFICATION",
+        title="MEM REVIEW · ATOMIZE",
+        summary="Read-only applied analysis.",
+        report_text="A complete trusted report without common section markers.",
+    )
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("q")
+        action = run_review_report_shell(
+            controller,
+            interactive_actions=False,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "CLOSE"
+
+
 def test_adaptive_review_starts_in_viewer_and_opens_the_selected_item():
     view = ResolutionWorkbenchView(
         operation="ATOMIZE",

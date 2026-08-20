@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from prompt_toolkit.styles import Style
 
-from memcommit.interfaces.console.theme import ERROR_HEX, SOURCE_CAPABILITY_HEX
+from memcommit.interfaces.console.theme import SOURCE_CAPABILITY_HEX
 
 
 # Focus belongs to terminal chrome, while blue fill records retained selection.
@@ -13,7 +13,6 @@ MEMCOMMIT_TUI_STYLE = Style.from_dict(
         "memcommit.focused frame.border": "fg:#8bd5ff bold",
         "memcommit.focused frame.label": "fg:#8bd5ff bold",
         "memcommit.notification": "fg:#f5a97f bold",
-        "memcommit.error": f"fg:{ERROR_HEX} bold",
         "memcommit.table.selected": "reverse bold",
         "memcommit.control.focused": "bold",
         "memcommit.choice.active": "fg:#10242f bg:#8bd5ff",

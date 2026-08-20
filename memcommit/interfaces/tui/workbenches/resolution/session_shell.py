@@ -2457,6 +2457,13 @@ def run_resolution_workbench_shell(
                 )
                 for line_index, key in _seeded_report_sections(lines)
             )
+            if not entries:
+                # A read-only operation may seed a complete trusted report
+                # without the common ITEM:/IMPACT markers. The report is still
+                # one navigable Viewer surface; keeping an explicit fallback
+                # section prevents focus/help projection from indexing an
+                # empty semantic topology merely because no child stop exists.
+                entries = (("REPORT", "SEEDED:REPORT", 0),)
             return _stable_sections(entries)
         entries: list[tuple[str, str, int | None]] = [
             (
@@ -2873,7 +2880,14 @@ def run_resolution_workbench_shell(
         return target
 
     def response_visible() -> bool:
-        return split_viewer_items and current_response_target() is not None
+        target = current_response_target()
+        if not split_viewer_items or target is None:
+            return False
+        # Read-only review retains an answered choice/comment as evidence, but
+        # an empty response target is not a semantic surface. Hiding that blank
+        # frame also prevents inactive controls from suggesting that an
+        # applied session can still be edited.
+        return not read_only or current_response_draft(target).answered
 
     def set_viewer_content(kind: str) -> None:
         """Keep the outer frame label aligned with its semantic surface."""
@@ -2977,11 +2991,7 @@ def run_resolution_workbench_shell(
             selected_index=session_navigation.row_index,
             focused=session_navigation.pane == "items",
             content_width=pane_content_width(),
-            report_label=(
-                "Complete Compare report"
-                if split_report_text is not None
-                else f"Complete {active_view.operation.title()} report"
-            ),
+            report_label=f"Complete {active_view.operation.title()} report",
         )
 
     items_control = FormattedTextControl(
@@ -4476,7 +4486,11 @@ def run_resolution_workbench_shell(
         elif split_viewer_items and split_kind() == "SAVE_LOCATION":
             navigation_help = " Enter change location  Tab switch  Q close "
         elif split_viewer_items and split_kind() == "RESPONSES":
-            if response_state.option_navigation_active:
+            if read_only:
+                navigation_help = (
+                    " ↑/↓ saved response  Tab switch  Esc/Backspace report "
+                )
+            elif response_state.option_navigation_active:
                 navigation_help = (
                     " ↑/↓ choice/Response  Enter select  "
                     "Esc/Backspace report  Tab switch "
@@ -4555,6 +4569,11 @@ def run_resolution_workbench_shell(
         ):
             navigation_help = (
                 " Enter show/hide evidence  ↑/↓ Memory  Esc/Backspace back  Tab switch "
+            )
+        elif split_viewer_items and read_only:
+            navigation_help = (
+                " ↑/↓ section/item  Tab switch  Enter inspect  "
+                "Esc/Backspace report "
             )
         elif split_viewer_items:
             navigation_help = (

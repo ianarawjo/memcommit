@@ -238,6 +238,16 @@ def atomize_analysis_was_applied(
     analysis eligible for a second structural application.
     """
 
+    return atomize_application_checkpoint_uid(store, context, analysis_uid) is not None
+
+
+def atomize_application_checkpoint_uid(
+    store: MemoryStore,
+    context: Context,
+    analysis_uid: str,
+) -> str | None:
+    """Return the exact recognized application checkpoint for presentation."""
+
     for checkpoint in store.list_checkpoints(context.name):
         args = checkpoint.get("args")
         trace = args.get("trace") if isinstance(args, dict) else None
@@ -258,9 +268,10 @@ def atomize_analysis_was_applied(
         if (
             checkpoint_context.uid == context.uid
             and checkpoint_context.name == context.name
+            and isinstance(checkpoint.get("uid"), str)
         ):
-            return True
-    return False
+            return checkpoint["uid"]
+    return None
 
 
 def atomize_workbench_was_applied(

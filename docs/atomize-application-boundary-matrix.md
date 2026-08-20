@@ -52,7 +52,8 @@ exact opaque session revision
 typed Apply result or retained save-as state
         |
         v
-render command receipt
+render command receipt (at most three complete split examples + typed
+review-finding counts + `mem review atomize` handoff)
 ```
 
 `memcommit.atomize_application` owns provider-free response/Output edits and
@@ -101,12 +102,23 @@ pair publication, exact reanalysis pair-CAS, and synchronous restoration path. T
 - Atomize currently accepts local ordinary Contexts. Grant-aware readable
   Source and authority-owned mutation are not silently inferred from picker
   visibility and are not part of this application slice.
+- Bare `mem atomize` freezes the current ordinary Context, opens the complete
+  whole-Context analysis scope, and immediately requests in-place Apply. It
+  does not grant a launcher, workbench, or saved Output plan authority to
+  redirect that ordinary route. Explicit flags retain the advanced workflow.
+- An applied terminal workbench plus its recognized checkpoint is sufficient
+  to reopen the complete analysis in read-only Review after the live Context
+  digest changed. It is not sufficient to edit a response or reapply the
+  semantic result.
 
 ## APPLY-01 case matrix
 
 | Case | Current effect | Evidence state | Extraction requirement |
 | --- | --- | --- | --- |
 | Preview or workbench open | Analysis/workbench artifacts only; no Context checkpoint | existing preview, workbench, and Study-prewarm tests | typed analysis result must remain non-applying |
+| Bare current-Context command | compatible complete analysis is created/reused and immediately applied in place; no launcher or workbench is opened | `test_bare_interactive_atomize_applies_the_current_context_without_a_session` | freeze current name, complete scope, and in-place Output before ordinary Apply |
+| Compact direct receipt | first three split sources and every child are shown with UID plus full safe text; remaining split count and typed review counts hand off to Review | `test_bare_atomize_receipt_samples_content_and_applied_review_remains_complete` | Memory has no separate name; presentation must not fabricate one, truncate the durable analysis, or imply findings were resolved |
+| Applied Review reopen | complete analysis remains read-only and provider-free despite the post-split Context digest; each item title pairs source UID with its content preview | direct receipt/review and adapter tests | accept only exact terminal receipt/checkpoint evidence; reject response edits |
 | Close/cancel before final action | Saved review may remain; no Context effect | shared Resolution CLOSE and workbench persistence tests | application port must never be called |
 | Local current analysis, one or more splits | one in-place Context checkpoint, complete SPLIT/KEEP/PRESERVE trace | `test_saved_atomize_analysis_applies_once_with_recorded_lineage` | consume exact analysis and workbench revision |
 | Every item preserved | one no-change Atomize checkpoint and terminal receipt | `test_all_atomic_apply_records_a_deliberate_no_change_checkpoint` | preserve this explicit Atomize no-op variant |

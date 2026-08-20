@@ -1,0 +1,96 @@
+52 180
+ RESULT · atomize · atomize/direct-current
+ STATUS · APPLIED ANALYSIS · READ ONLY · sources=4 · projected=8 · splits=4 · children=8 · review issues=4
+
+ WHAT MEM UNDERSTOOD
+ Each source records two independent claims.
+
+ WHAT HAPPENED
+ Each source is split into its two recorded claims.
+
+ WHAT REMAINS UNRESOLVED
+ (none reported under this operation's bounded contract)
+The atomize analysis reported no unresolved finding in this bounded Context frame.
+
+ REPRESENTATIVE / BOUNDARY CASES
+ ›  1. [REPRESENTATIVE] COMPOSITE · SPLIT
+       SPLIT: The Main Building entrance accepts a physical NFC card. | Mobile-app authentication is not accepted at that entrance.
+
+ MEM REVIEW · ATOMIZE
+ CONTEXT LOCATIONS
+   SOURCE · atomize/direct-current
+   OUTPUT · atomize/direct-current · IN PLACE
+ APPLIED · REVIEW · 4 SOURCE MEMORIES · 8 PROJECTED MEMORIES · 4 FINDINGS · 0 ANSWERED
+
+ WHAT MEM UNDERSTOOD
+ UNDERSTOOD
+ Each source records two independent claims.
+
+ CHANGED
+ Each source is split into its two recorded claims.
+
+ UNRESOLVED
+ (none)
+
+ REVIEW ITEMS · 4
+ SUGGESTED SPLIT 1 · [7b9881b8] The Main Building entrance accepts a physical NFC card. | Mobile-app authentication is not accepted at that entrance.
+ [REVIEW] The source contains two independently revisable claims.
+
+ SUGGESTED SPLIT 2 · [d355e1e6] The staff entrance uses the same physical NFC card. | Staff should not rely on mobile-app authentication.
+ [REVIEW] The source contains two independently revisable claims.
+
+ SUGGESTED SPLIT 3 · [1ed62304] The library opens at 10:00 on weekends. | The research desk closes at 16:00.
+ [REVIEW] The source contains two independently revisable claims.
+
+ SUGGESTED SPLIT 4 · [0fed81b1] The north elevator serves floors one through four. | The fifth floor requires the south elevator.
+ [REVIEW] The source contains two independently revisable claims.
+
+[7b9881b8] The Main Building entrance accepts a physical NFC card. | Mobile-app authentication is not accepted at that entrance.
+  CLASSIFICATION
+    COMPOSITE · 2 CHILDREN
+  SOURCE MEMORY
+    SOURCE 1 · FROM atomize/direct-current
+      [7b9881b8] The Main Building entrance accepts a physical NFC card. | Mobile-app authentication is not accepted at that entrance.
+  WHY THIS MEMORY SPLIT
+    The source contains two independently revisable claims.
+  RESPONSES
+    RESPONSE
+      (none)
+  PROPOSED CHILDREN
+[d355e1e6] The staff entrance uses the same physical NFC card. | Staff should not rely on mobile-app authentication.
+  CLASSIFICATION
+    COMPOSITE · 2 CHILDREN
+  SOURCE MEMORY
+    SOURCE 1 · FROM atomize/direct-current
+      [d355e1e6] The staff entrance uses the same physical NFC card. | Staff should not rely on mobile-app authentication.
+  WHY THIS MEMORY SPLIT
+    The source contains two independently revisable claims.
+  RESPONSES
+    RESPONSE
+      (none)
+  PROPOSED CHILDREN
+[1ed62304] The library opens at 10:00 on weekends. | The research desk closes at 16:00.
+  CLASSIFICATION
+    COMPOSITE · 2 CHILDREN
+  SOURCE MEMORY
+    SOURCE 1 · FROM atomize/direct-current
+      [1ed62304] The library opens at 10:00 on weekends. | The research desk closes at 16:00.
+  WHY THIS MEMORY SPLIT
+    The source contains two independently revisable claims.
+  RESPONSES
+    RESPONSE
+      (none)
+  PROPOSED CHILDREN
+[0fed81b1] The north elevator serves floors one through four. | The fifth floor requires the south elevator.
+  CLASSIFICATION
+    COMPOSITE · 2 CHILDREN
+  SOURCE MEMORY
+    SOURCE 1 · FROM atomize/direct-current
+      [0fed81b1] The north elevator serves floors one through four. | The fifth floor requires the south elevator.
+  WHY THIS MEMORY SPLIT
+    The source contains two independently revisable claims.
+  RESPONSES
+    RESPONSE
+      (none)
+  PROPOSED CHILDREN
+READ-ONLY VERIFICATION · MEMORIES 8 · CHECKPOINTS 1 · RECEIPT True

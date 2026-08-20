@@ -48,7 +48,7 @@ only from `docs/operation-evidence-index.json`.
 | `provider` | `UNREVIEWED` | — | — |
 | `pwd` | `CLOSED` | [`mem-pwd-design-rationale.md`](../mem-pwd-design-rationale.md) | The only current route is a typed terminal-independent current-Context read with a one-line CLI presenter. |
 | `query` | `CLOSED` | [`query-callable-boundary-matrix.md`](../query-callable-boundary-matrix.md)<br>[`query-answer-application-boundary-matrix.md`](../query-answer-application-boundary-matrix.md)<br>[`query-reference-application-boundary-matrix.md`](../query-reference-application-boundary-matrix.md) | Ordinary, granted, and query-only families plus CLI, TUI, public, and agent projections have a verified operation package. |
-| `rationale` | `UNREVIEWED` | [`read-report-lifecycle-design-rationale.md`](../read-report-lifecycle-design-rationale.md)<br>[`mem-trace-rationale-design-rationale.md`](../mem-trace-rationale-design-rationale.md) | — |
+| `rationale` | `UNREVIEWED` | [`read-report-lifecycle-design-rationale.md`](../read-report-lifecycle-design-rationale.md) | — |
 | `redo` | `UNREVIEWED` | — | — |
 | `reference` | `CLOSED` | [`memory-reference-embed-semantics-design-rationale.md`](../memory-reference-embed-semantics-design-rationale.md)<br>[`reference-callable-boundary-matrix.md`](../reference-callable-boundary-matrix.md) | CLI, Python, agent, and MCP routes share one provider-free frozen Source/Target snapshot, content-digest revalidation, atomic checkpoint, and immutable stored-value contract. |
 | `rename` | `UNREVIEWED` | — | — |
@@ -64,7 +64,7 @@ only from `docs/operation-evidence-index.json`.
 | `status` | `CLOSED` | [`status-application-boundary-matrix.md`](../status-application-boundary-matrix.md)<br>[`mem-status-short-design-rationale.md`](../mem-status-short-design-rationale.md) | Detailed, compact, recursive, lineage, local, and granted CLI routes share one typed read-only inventory, bounded preview, relationship, and recent-checkpoint application/runtime boundary. |
 | `summarize` | `CLOSED` | [`summarize-application-boundary-matrix.md`](../summarize-application-boundary-matrix.md)<br>[`read-report-lifecycle-design-rationale.md`](../read-report-lifecycle-design-rationale.md) | Direct and recursive reads share one terminal-independent application result with independent plain and TUI presenters. |
 | `switch` | `CLOSED` | [`switch-application-boundary-matrix.md`](../switch-application-boundary-matrix.md) | Explicit CLI, interactive picker, and checkout-compatible selection share one typed global/relative locator, READ authorization, target validation, and current-pointer CAS boundary. |
-| `trace` | `UNREVIEWED` | [`read-report-lifecycle-design-rationale.md`](../read-report-lifecycle-design-rationale.md)<br>[`mem-trace-rationale-design-rationale.md`](../mem-trace-rationale-design-rationale.md) | — |
+| `trace` | `UNREVIEWED` | [`read-report-lifecycle-design-rationale.md`](../read-report-lifecycle-design-rationale.md) | — |
 | `translate` | `UNREVIEWED` | — | — |
 | `undo` | `UNREVIEWED` | — | — |
 | `unlock` | `UNREVIEWED` | — | — |

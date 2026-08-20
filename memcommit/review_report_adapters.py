@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from dataclasses import replace
+
 from memcommit.atomize import AtomizeAnalysisSession
 from memcommit.atomize_resolution_adapter import AtomizeResolutionWorkbenchAdapter
 from memcommit.atomize_workbench import AtomizeWorkbenchSession
@@ -83,6 +85,10 @@ def atomize_review_report(
         render_result_workbench_snapshot,
     )
 
+    result_view = AtomizeResultWorkbenchAdapter(analysis).view()
+    if workbench.application is not None:
+        result_view = replace(result_view, status="APPLIED ANALYSIS · READ ONLY")
+
     return ReviewReportController.from_resolution(
         AtomizeResolutionWorkbenchAdapter(analysis, workbench).view,
         kind="CLARIFICATION",
@@ -95,9 +101,7 @@ def atomize_review_report(
         # queue are different layers.  Preserve the former verbatim while the
         # common Review host supplies navigation and response controls for the
         # latter.
-        report_text=render_result_workbench_snapshot(
-            AtomizeResultWorkbenchAdapter(analysis).view()
-        ),
+        report_text=render_result_workbench_snapshot(result_view),
     )
 
 

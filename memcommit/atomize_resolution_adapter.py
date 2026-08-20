@@ -215,8 +215,12 @@ class AtomizeResolutionWorkbenchAdapter:
                         else "OPEN"
                     ),
                     priority=_priority_label(finding),
+                    # Memory has no separate display name. Pair the stable
+                    # identity with the content preview so Review never makes
+                    # synthetic SOURCE ordinals look like Memory names.
                     title=" ↔ ".join(
-                        _memory_preview(source_by_uid[source_uid])
+                        f"[{source_uid[:8]}] "
+                        f"{_memory_preview(source_by_uid[source_uid])}"
                         for source_uid in finding.source_uids
                     ),
                     summary=finding.reason,
@@ -276,6 +280,7 @@ class AtomizeResolutionWorkbenchAdapter:
             for issue_uid, response in workbench.responses.items()
         )
         ready_to_apply = not incorporable_response_open
+        application_complete = workbench.application is not None
         unresolved_at_apply_count = sum(
             finding.kind
             in {
@@ -290,10 +295,12 @@ class AtomizeResolutionWorkbenchAdapter:
             for item in projected
         )
         unresolved_at_apply = unresolved_at_apply_count > 0 or open_optional_review
-        capabilities = {"SUBMIT_ITEM", "SUBMIT_ALL"}
-        if ready_to_apply:
+        capabilities: set[str] = set()
+        if not application_complete:
+            capabilities.update({"SUBMIT_ITEM", "SUBMIT_ALL"})
+        if ready_to_apply and not application_complete:
             capabilities.add("ACCEPT")
-        else:
+        elif not application_complete:
             # Atomize can honor one reviewed compound boundary: incorporate
             # the saved unary response frame, revalidate the new proposal,
             # and apply it without forcing a second approval screen.
@@ -312,7 +319,9 @@ class AtomizeResolutionWorkbenchAdapter:
                 f"{workbench.output_context_name or analysis.context_name}"
             ),
             status=(
-                "READY_TO_APPLY_AS_IS"
+                "APPLIED"
+                if application_complete
+                else "READY_TO_APPLY_AS_IS"
                 if ready_to_apply and unresolved_at_apply
                 else "READY_TO_APPLY"
                 if ready_to_apply
@@ -355,14 +364,18 @@ class AtomizeResolutionWorkbenchAdapter:
             # saved analysis projects zero Memories.
             show_results=False,
             capabilities=frozenset(capabilities),
-            accept_enabled=ready_to_apply,
+            accept_enabled=ready_to_apply and not application_complete,
             accept_mode=(
-                "AS_IS" if ready_to_apply and unresolved_at_apply else "CHANGES"
+                "AS_IS"
+                if ready_to_apply and unresolved_at_apply and not application_complete
+                else "CHANGES"
             ),
             unresolved_at_apply_count=(
-                unresolved_at_apply_count if ready_to_apply else 0
+                unresolved_at_apply_count
+                if ready_to_apply and not application_complete
+                else 0
             ),
-            input_locked=False,
+            input_locked=application_complete,
         )
 
 

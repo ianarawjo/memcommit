@@ -1606,7 +1606,7 @@ def test_atomize_revert_keep_does_not_rearm_an_applied_analysis(
 
     inspected = runner.invoke(app, ["atomize"])
     assert inspected.exit_code == 0, inspected.output
-    assert "APPLIED" in inspected.output
+    assert "already applied" in inspected.output
 
     checkpoints_after_revert = len(store.list_checkpoints(ctx.name))
     rejected_reapply = runner.invoke(app, ["atomize", "--save"])

@@ -13,13 +13,22 @@ deduplication. The intended model combines:
 - the source-first question/answer regression style used by the local
   `clozemaking` project.
 
-This note fixes the semantic contract. `mem impact atomize` creates or resumes
-a Context-scoped analysis and workbench; explicit
-`mem atomize --context INPUT` and `mem review atomize` resume that same
-compatible result without another provider call. Interactive bare
-`mem atomize` opens the shared session launcher. `mem atomize --save` and
-`--save-as` explicitly apply the
-locally validated proposal. A second, independent semantic validator remains
+This note fixes the semantic contract. Bare `mem atomize` analyzes or reuses
+the complete current Context and immediately applies that exact proposal in
+place as one checkpoint; it does not open a launcher or workbench. Its compact
+receipt shows complete source/child text for at most three representative
+splits, counts Ambiguity, Conflict, and Atomize Uncertainty separately, and
+routes the complete saved analysis to `mem review atomize`. `mem impact
+atomize` remains the explicit non-applying analysis route. `mem review` and
+`mem review atomize` open the same compatible artifact, including an applied
+artifact, without another provider call; applied review is read-only.
+Because the base `Memory` contract contains only `uid` and `content`, neither
+the receipt nor Review fabricates a Memory name: compact receipt rows show the
+UID with full content, while Review item titles show the UID with a bounded
+content preview before the exact source detail.
+`mem atomize --context INPUT`, `--save`, `--save-as`, and `--sessions` remain
+advanced compatibility routes for explicit workbench, destination, and saved-
+artifact workflows. A second, independent semantic validator remains
 future work, so application is a deliberate research-prototype action rather
 than a claim of semantic proof. The later quality-finding stages intentionally
 use a different evidence boundary: atomization protects one source occurrence
@@ -36,11 +45,10 @@ The saved-work selector adds a separate discovery route:
 mem atomize --sessions
 ```
 
-In a terminal, bare `mem atomize` and `--sessions` use the shared saved-work
-launcher. The old direct path remains available explicitly through
-`--context INPUT`; non-TTY bare use also retains its stable current-Context
-behavior for automation. Opening a saved row is provider-free and never
-refreshes or mutates it. Its New row opens the shared
+Only `mem atomize --sessions` uses the shared saved-work launcher. Bare
+`mem atomize` always targets the current Context directly, in TTY and non-TTY
+execution alike. Opening a saved row is provider-free and never refreshes or
+mutates it. Its New row opens the shared
 `INPUT A → OUTPUT B` setup and may create a fresh analysis through the normal
 Atomize controller. Setup itself remains process-local: it does not create
 Output, switch the current Context, change a Memory, or create a checkpoint.
@@ -624,9 +632,23 @@ incorporated into the selected analysis. Pairwise conflict responses remain
 staged and block reviewed reanalysis rather than being treated as unary
 application frames or silently dropped.
 
-### Saved analysis and explicit prototype application
+### Direct current-Context application and advanced saved routes
 
-The current commands keep destination choice outside semantic analysis while
+The ordinary command has no setup or approval session:
+
+```text
+mem atomize  # analyze/reuse and apply the complete current Context in place
+```
+
+It captures the current Context name once, forces any nonterminal legacy
+Output plan back to that exact in-place destination, and then crosses the same
+typed Apply boundary as the advanced routes. A stale same-scope analysis still
+fails closed instead of being silently regenerated, and an already applied
+analysis remains idempotent. A previously focused analysis does not narrow a
+later bare command: the complete current direct-Memory scope is opened before
+Apply.
+
+The advanced commands keep destination choice outside semantic analysis while
 allowing the shared workbench to remember it:
 
 ```text
@@ -894,8 +916,15 @@ Implemented operation tests cover the current preview-and-apply boundary:
   reference view;
 - provider responses with unknown IDs, missing fields, extra fields, duplicate
   keys, or ungrounded spans are rejected as a whole.
-- `mem impact atomize`, bare `mem atomize`, and `mem review atomize` resume the
-  same exact analysis/workbench without duplicate provider calls;
+- `mem impact atomize`, bare `mem atomize`, and `mem review atomize` reuse the
+  same compatible analysis/workbench without duplicate provider calls; bare
+  Atomize applies it, while Impact and Review remain non-applying;
+- an applied analysis remains reconstructible in read-only `mem review` even
+  though in-place splits changed the live direct-Memory digest;
+- the direct receipt renders full safe terminal text for at most three split
+  sources and their children, reports the hidden split count, and records
+  separate Ambiguity, Conflict, and Atomize Uncertainty counts without
+  pretending that those findings were resolved;
 - the aggregate completion supplies source-linked overview sections and typed
   one-source ambiguity and two-source conflict issues alongside atomization;
 - `SOURCE`/`PRIORITY`, cursor, choices, and responses survive resume without

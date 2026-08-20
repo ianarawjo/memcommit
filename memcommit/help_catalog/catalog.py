@@ -47,12 +47,12 @@ _OPERATIONS = (
     ),
     _operation(
         "atomize",
-        "Analyze composite Memories and separate their distinct propositions "
-        "into independently reviewable Memories.",
-        "Context Memories -> reviewed atomic Memories",
+        "Immediately atomize the current Context into independently reviewable "
+        "Memories and save the full analysis for Review.",
+        "Current Context Memories -> one atomized checkpoint + saved Review",
         ExecutionKind.SEMANTIC,
-        "Changes material only after explicit acceptance",
-        "One selected Context frame",
+        "Changes the current Context in one checkpoint; Undo can restore it",
+        "The complete current direct-Context frame",
     ),
     _operation(
         "audit",

@@ -1,0 +1,52 @@
+ TRACE · MEMORY [e3bbf029] · notes/child                                                                                                                                            
+┌────────────────────────────────────────────────────────────────────────────────────| VIEWER |────────────────────────────────────────────────────────────────────────────────────┐
+│ UID          76a6a0f4-3af1-4af2-a270-03614ca38d7c                                                                                                                               ^│
+│ Time         2026-08-13T16:11:43.332322                                                                                                                                          │
+│ Command      mem remove                                                                                                                                                          │
+│ Description  REMOVED · RECORDED · [e3bbf029]@2 “Retained historical wording” → ∅                                                                                                 │
+│ Detail       Selected Memory: e3bbf029-378e-4d6a-a48d-e1228cddde95                                                                                                               │
+│              Lineage UIDs: e3bbf029-378e-4d6a-a48d-e1228cddde95                                                                                                                  │
+│              NOW: ∅                                                                                                                                                              │
+│              EARLIEST RETAINED:                                                                                                                                                  │
+│                [e3bbf029-378e-4d6a-a48d-e1228cddde95]@2 Retained historical wording                                                                                              │
+│                                                                                                                                                                                  │
+│              Operation: mem remove                                                                                                                                               │
+│              Effect: REMOVED                                                                                                                                                     │
+│              Evidence: RECORDED                                                                                                                                                  │
+│              BEFORE:                                                                                                                                                             │
+│                [e3bbf029-378e-4d6a-a48d-e1228cddde95]@2 Retained historical wording                                                                                              │
+│              AFTER: ∅                                                                                                                                                            │
+│              Description: Removed memory [e3bbf029]: "Retained historical wording"                                                                                               │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ ITEMS ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃›  2026-08-13 16:11  mem remove  76a6a0f4  REMOVED · RECORDED · [e3bbf029]@2 “Retained historical wording” → ∅                                                                   ^┃
+┃   2026-08-13 16:11  mem add     8e51eeff  CREATED · RECORDED · ∅ → [e3bbf029]@2 “Retained historical wording”                                                                    ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ FOCUS ITEMS · ↑/↓ move  Enter viewer  Tab switch  Esc/Backspace/q close  ·  1/2

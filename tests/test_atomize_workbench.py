@@ -167,6 +167,53 @@ class AggregateProvider:
         )
 
 
+class SplitProvider:
+    """Return deterministic two-child splits for compact receipt tests."""
+
+    def __init__(self):
+        self.payloads: list[dict] = []
+
+    def complete(self, prompt, *, operation, output_schema=None):
+        assert operation == "impact_atomize"
+        payload = json.loads(prompt.split(PAYLOAD_MARKER, 1)[1])
+        self.payloads.append(payload)
+        memories = payload["memories"]
+        items = []
+        source_ids = []
+        for memory in memories:
+            source_ids.append(memory["candidate_id"])
+            first, second = memory["content"].split(" | ", 1)
+            items.append(
+                {
+                    "candidate_id": memory["candidate_id"],
+                    "classification": "COMPOSITE",
+                    "reason_codes": ["A01_ONE_FOCUS", "A04_SOURCE_GROUNDED"],
+                    "children": [
+                        {"content": first, "source_spans": [first]},
+                        {"content": second, "source_spans": [second]},
+                    ],
+                    "reason": "The source contains two independently revisable claims.",
+                }
+            )
+        return json.dumps(
+            {
+                "overview": {
+                    "understood": {
+                        "text": "Each source records two independent claims.",
+                        "source_ids": source_ids,
+                    },
+                    "changed": {
+                        "text": "Each source is split into its two recorded claims.",
+                        "source_ids": source_ids,
+                    },
+                    "unresolved": {"text": "", "source_ids": []},
+                },
+                "items": items,
+                "quality_issues": [],
+            }
+        )
+
+
 def _init_context(store: MemoryStore):
     ctx = ops.init("temp/task-1")
     memory = ops.add(ctx, "Use the same NFC for access.")
@@ -378,7 +425,7 @@ def test_context_clean_quality_scan_does_not_duplicate_source_uncertainty():
     assert workbench.issues[0].uid.startswith("atomize:")
 
 
-def test_cli_reuses_one_analysis_across_impact_atomize_and_review(
+def test_cli_reuses_one_analysis_then_bare_atomize_applies_and_review_reopens(
     isolated_store,
     monkeypatch,
 ):
@@ -404,7 +451,7 @@ def test_cli_reuses_one_analysis_across_impact_atomize_and_review(
     assert len(provider.payloads) == 1
     assert f"Analysis [{analysis.uid[:8]}]" in first.output
     assert "the provider was not called" in second.output
-    assert "the provider was not called" in direct.output
+    assert "Applied atomize analysis" in direct.output
     for output in [first.output, review.output]:
         assert "WHAT MEM UNDERSTOOD" in output
         assert "WHAT HAPPENED" in output
@@ -420,8 +467,9 @@ def test_cli_reuses_one_analysis_across_impact_atomize_and_review(
     resumed = store.load_atomize_workbench(analysis)
     assert resumed is not None
     assert resumed.uid == workbench.uid
+    assert resumed.application is not None
     assert store._context_file(ctx.name).read_bytes() == context_before
-    assert store.list_checkpoints(ctx.name) == checkpoints_before
+    assert len(store.list_checkpoints(ctx.name)) == len(checkpoints_before) + 1
 
 
 def test_atomize_sessions_catalog_reopens_exact_analysis_provider_free(
@@ -482,36 +530,131 @@ def test_atomize_sessions_catalog_reopens_exact_analysis_provider_free(
     assert len(provider.payloads) == 1
 
 
-def test_bare_interactive_atomize_enters_shared_session_launcher(
+def test_bare_interactive_atomize_applies_the_current_context_without_a_session(
     isolated_store,
     monkeypatch,
 ):
     store = MemoryStore()
     ctx, _ = _init_context(store)
-    calls = []
+    provider = AggregateProvider()
+    _patch_provider(monkeypatch, provider)
     monkeypatch.setattr(
         "memcommit.commands.atomize._interactive_terminal",
         lambda: True,
     )
     monkeypatch.setattr(
         "memcommit.commands.atomize.choose_atomize_session",
-        lambda selected_store, *, show_all: calls.append((selected_store, show_all)),
-    )
-    monkeypatch.setattr(
-        "memcommit.commands.atomize.connect_codex_chatgpt_provider",
-        lambda: (_ for _ in ()).throw(
-            AssertionError("launcher cancellation must not connect a provider")
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            AssertionError("bare Atomize must not open the session launcher")
         ),
     )
+    monkeypatch.setattr(
+        "memcommit.commands.atomize.present_atomize_workbench",
+        lambda **_kwargs: (_ for _ in ()).throw(
+            AssertionError("bare Atomize must not open the workbench")
+        ),
+    )
+    checkpoints_before = store.list_checkpoints(ctx.name)
 
     result = runner.invoke(app, ["atomize"])
 
     assert result.exit_code == 0, result.output
-    assert "selection ended" in result.output
-    assert len(calls) == 1
-    assert calls[0][1] is False
-    assert isinstance(calls[0][0], MemoryStore)
-    assert store.load_atomize_analysis(ctx.uid) is None
+    assert "Applied atomize analysis" in result.output
+    assert "Review · 1 ambiguity · 0 conflicts · 1 atomize uncertainty" in result.output
+    assert "Full analysis · mem review atomize" in result.output
+    assert len(provider.payloads) == 1
+    assert len(store.list_checkpoints(ctx.name)) == len(checkpoints_before) + 1
+    analysis = store.load_atomize_analysis(ctx.uid)
+    assert analysis is not None
+    workbench = store.load_atomize_workbench(analysis)
+    assert workbench is not None
+    assert workbench.application is not None
+
+
+def test_bare_atomize_receipt_samples_content_and_applied_review_remains_complete(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    ctx = ops.init("atomize/direct-current")
+    source_contents = [
+        (
+            "The Main Building entrance accepts a physical NFC card. | "
+            "Mobile-app authentication is not accepted at that entrance."
+        ),
+        (
+            "The staff entrance uses the same physical NFC card. | "
+            "Staff should not rely on mobile-app authentication."
+        ),
+        (
+            "The library opens at 10:00 on weekends. | "
+            "The research desk closes at 16:00."
+        ),
+        (
+            "The north elevator serves floors one through four. | "
+            "The fifth floor requires the south elevator."
+        ),
+    ]
+    sources = [ops.add(ctx, content) for content in source_contents]
+    store.save(ctx)
+    store.set_current(ctx.name)
+    provider = SplitProvider()
+    _patch_provider(monkeypatch, provider)
+    monkeypatch.setattr(
+        "memcommit.commands.atomize.choose_atomize_session",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            AssertionError("bare Atomize must not open the session launcher")
+        ),
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.atomize.present_atomize_workbench",
+        lambda **_kwargs: (_ for _ in ()).throw(
+            AssertionError("bare Atomize must not open the workbench")
+        ),
+    )
+
+    applied = runner.invoke(app, ["atomize"])
+
+    assert applied.exit_code == 0, applied.output
+    for source in sources[:3]:
+        assert f"[{source.uid[:8]}] {source.content}" in applied.output
+    assert source_contents[3] not in applied.output
+    assert "… 1 more split in mem review atomize" in applied.output
+    assert "Review · 0 ambiguities · 0 conflicts · 0 atomize uncertainties" in (
+        applied.output
+    )
+    assert len(provider.payloads) == 1
+
+    checkpoints_after_apply = store.list_checkpoints(ctx.name)
+    repeated = runner.invoke(app, ["atomize"])
+    assert repeated.exit_code == 0, repeated.output
+    assert "already applied; no new checkpoint" in repeated.output
+    assert store.list_checkpoints(ctx.name) == checkpoints_after_apply
+    assert len(provider.payloads) == 1
+
+    # Applying changes the direct-Memory digest, but the exact checkpoint and
+    # terminal workbench keep the saved analysis reviewable without mutation.
+    reviewed = runner.invoke(app, ["review", "--snapshot"])
+
+    assert reviewed.exit_code == 0, reviewed.output
+    assert "APPLIED" in reviewed.output
+    assert source_contents[3] in reviewed.output
+    assert len(provider.payloads) == 1
+    output_before = store._context_file(ctx.name).read_bytes()
+    rejected_edit = runner.invoke(
+        app,
+        [
+            "review",
+            "atomize",
+            "--respond-to",
+            sources[0].uid[:8],
+            "--response",
+            "Change the applied reading.",
+        ],
+    )
+    assert rejected_edit.exit_code == 1
+    assert "read-only" in rejected_edit.output
+    assert store._context_file(ctx.name).read_bytes() == output_before
 
 
 def test_atomize_launcher_shows_frozen_profile_and_store_location(
@@ -1688,6 +1831,20 @@ def test_applied_output_preview_does_not_become_a_second_session_owner(
     )
     assert preview.exit_code == 0, preview.output
     assert "APPLIED" in preview.output
+    assert store.load_atomize_workbench(output_analysis) is None
+
+    reviewed_output = runner.invoke(
+        app,
+        [
+            "review",
+            "atomize",
+            "--context",
+            "workbench/applied-output",
+            "--snapshot",
+        ],
+    )
+    assert reviewed_output.exit_code == 0, reviewed_output.output
+    assert "APPLIED ANALYSIS · READ ONLY" in reviewed_output.output
     assert store.load_atomize_workbench(output_analysis) is None
 
     # Recover catalogs produced by the historical bug without deleting the

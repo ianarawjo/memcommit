@@ -16,11 +16,13 @@ from memcommit.atomize import (
 from memcommit.atomize_analysis_application import AtomizeAnalysisOpenRequest
 from memcommit.atomize_analysis_runtime import execute_atomize_analysis_open
 from memcommit.atomize_application import (
+    AtomizeOutputPlanRequest,
     AtomizePersistedApplyRequest,
     AtomizeSaveAsRequest,
 )
 from memcommit.atomize_runtime import (
     capture_atomize_session_snapshot,
+    execute_atomize_output_plan_update,
     execute_atomize_save_as,
     execute_atomize_session_apply,
 )
@@ -61,7 +63,9 @@ from memcommit.commands.atomize_sessions import (
     revalidate_saved_atomize_analysis,
 )
 from memcommit.commands.endpoint_setup_flows import choose_atomize_setup
-from memcommit.interfaces.tui.components.operation_launcher.session import SessionNewReceipt
+from memcommit.interfaces.tui.components.operation_launcher.session import (
+    SessionNewReceipt,
+)
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.review import (
     atomize_review_declared_frames,
@@ -255,11 +259,7 @@ def _resume_selected_atomize(
         exact_prewarm = is_installed_atomize_prewarm(store, analysis)
         typer.secho(
             f"Saved analysis [{analysis.uid[:8]}]: "
-            + (
-                "EXACT PREWARM · CURRENT. "
-                if exact_prewarm
-                else "CURRENT. "
-            )
+            + ("EXACT PREWARM · CURRENT. " if exact_prewarm else "CURRENT. ")
             + "Resumed; the provider was not called.",
             fg=typer.colors.CYAN,
         )
@@ -379,7 +379,22 @@ def cmd(
         ),
     ] = False,
 ) -> None:
-    """Inspect a preview, mutate in place, or save an atomized new Context."""
+    """Atomize the current Context or use an explicit advanced route."""
+    auto_apply_current = (
+        not save
+        and save_as is None
+        and context_name is None
+        and memory_selector is None
+        and output_name is None
+        and not show_all
+        and not sessions
+        and evaluate is None
+        and comment is None
+        and reply is None
+        and revision is None
+        and not accept_grounding_flag
+        and not keep_review_only
+    )
     grounding_action_count = sum(
         (
             evaluate is not None,
@@ -473,19 +488,7 @@ def cmd(
 
     store = MemoryStore(create=False)
     try:
-        browse_by_default = (
-            _interactive_terminal()
-            and not sessions
-            and not save
-            and save_as is None
-            and context_name is None
-            and memory_selector is None
-            and output_name is None
-            and grounding_action_count == 0
-            and comment is None
-            and revision is None
-        )
-        if sessions or browse_by_default:
+        if sessions:
             receipt = choose_atomize_session(store, show_all=show_all)
             if receipt is None:
                 typer.echo("Atomize selection ended; no analysis was opened.")
@@ -671,11 +674,43 @@ def cmd(
                 typer.echo(render_grounding_session(grounding, session))
                 return
 
-        applying = save or save_as is not None
-        if not applying:
-            if memory_selector is None and session is not None and (
+        applying = save or save_as is not None or auto_apply_current
+        if auto_apply_current:
+            existing_applied = session is not None and (
                 atomize_analysis_was_applied(store, direct_ctx, session.uid)
                 or atomize_workbench_was_applied(store, session)
+            )
+            if not existing_applied:
+                # Bare Atomize means the complete current Context. Opening
+                # through the shared boundary reuses an exact whole-Context
+                # analysis, but replaces an older focused analysis with the
+                # requested complete scope before any mutation can begin.
+                with progressing_provider_factory(
+                    "ATOMIZE",
+                    "analyzing memory structure",
+                    connect_codex_chatgpt_provider,
+                ) as provider_factory:
+                    opened = execute_atomize_analysis_open(
+                        AtomizeAnalysisOpenRequest(
+                            context=direct_ctx,
+                            allow_prepared=session is None,
+                        ),
+                        store=store,
+                        provider_factory=provider_factory,
+                    )
+                session = opened.analysis
+            # This is intentionally set only after the durable analysis pair
+            # exists. The ordinary Apply path below still owns freshness,
+            # reference, audit, checkpoint, compensation, and retry checks.
+            save = True
+        if not applying:
+            if (
+                memory_selector is None
+                and session is not None
+                and (
+                    atomize_analysis_was_applied(store, direct_ctx, session.uid)
+                    or atomize_workbench_was_applied(store, session)
+                )
             ):
                 workbench = store.load_atomize_workbench(session)
                 if workbench is None:
@@ -829,15 +864,37 @@ def cmd(
                 "The saved atomize analysis does not match this Context's identity."
             )
         workbench = store.load_atomize_workbench(session)
+        already_applied = atomize_workbench_was_applied(
+            store, session
+        ) or atomize_analysis_was_applied(store, direct_ctx, session.uid)
+        if (
+            auto_apply_current
+            and not already_applied
+            and workbench is not None
+            and workbench.output_context_name != name
+        ):
+            # Bare Atomize has one unambiguous destination: the Context that
+            # was current at command start. An older setup-screen Output plan
+            # must not silently turn this direct command into Save As.
+            accepted = capture_atomize_session_snapshot(
+                store=store,
+                analysis=session,
+                expected_workbench=workbench,
+            )
+            updated = execute_atomize_output_plan_update(
+                AtomizeOutputPlanRequest(
+                    snapshot=accepted,
+                    output_context_name=name,
+                ),
+                store=store,
+            )
+            workbench = updated.snapshot.workbench
         planned_output = (
             workbench.output_context_name if workbench is not None else name
         )
         applying_planned_output = save and save_as is None and planned_output != name
         if applying_planned_output:
             save_as = planned_output
-        already_applied = atomize_workbench_was_applied(
-            store, session
-        ) or atomize_analysis_was_applied(store, direct_ctx, session.uid)
         recovering_missing_receipt = (
             save
             and save_as is None
@@ -871,9 +928,8 @@ def cmd(
                 fg=typer.colors.YELLOW,
             )
             return
-        if (
-            not recovering_missing_receipt
-            and not atomize_analysis_matches_context(session, direct_ctx)
+        if not recovering_missing_receipt and not atomize_analysis_matches_context(
+            session, direct_ctx
         ):
             raise AtomizeImpactError(
                 "Saved atomize analysis is stale. "
