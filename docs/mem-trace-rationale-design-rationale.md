@@ -304,6 +304,26 @@ their meaning.
 The same family appears in the compact and character-bound PTY evidence, while
 the million-character Context case varies only the unrelated surrounding frame.
 
+#### `EXAMPLE-01` coverage
+
+These rows apply the shared
+[example contract](operation-example-contract-design-rationale.md) without
+turning the prose family above into an uncheckable claim. `HOST_ONLY` means the
+fixture exercises the real application projection but is never placed in a
+provider prompt.
+
+| Example ID | Boundary | Input form | Output variant | Exposure | Artifact and oracle |
+| --- | --- | --- | --- | --- | --- |
+| `rationale.provenance.no-reason` | frozen Trace → human Rationale document | current Memory with retained events but no reason | `no reason recorded` | `HOST_ONLY` | capture scenario `no-reason`; `test_cli_is_provenance_only_and_never_reads_or_writes_inference_cache` |
+| `rationale.provenance.recorded` | frozen Trace → human Rationale document | current Memory with one retained reason | normalized latest reason | `HOST_ONLY` | capture scenario `recorded-reason`; ordered PTY evidence |
+| `rationale.provenance.latest` | frozen Trace → human Rationale document | two retained, contradictory reasons | only the later reason | `HOST_ONLY` | `test_provenance_projection_uses_only_the_latest_recorded_reason` |
+| `rationale.provenance.long` | frozen Trace → human Rationale document | coherent retained reason over 160 characters | sentence-aware bounded paragraph with ellipsis | `HOST_ONLY` | capture scenario `long-reason`; `test_long_provenance_projection_is_capped_at_160_characters` |
+| `rationale.provenance.oversized-context` | frozen Trace → human Rationale document | no retained reason inside a million-character Context | `no reason recorded`, without contextual inference | `HOST_ONLY` | capture scenario `oversized-context`; ordered PTY evidence |
+
+Rationale has no provider contract, so `PROVIDER_VISIBLE`, decoder-rejection,
+calibration, and holdout rows are intentionally inapplicable. This is an
+operation boundary decision, not an omission inferred from a missing example.
+
 The [180×52 compact Rationale capture](screenshots/mem-rationale-compact-20260820/README.md)
 records target selection, the shortened Viewer, and read-only close
 verification.
