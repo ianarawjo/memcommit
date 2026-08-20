@@ -1,0 +1,8 @@
+MERGE RECORDED · 'source' → 'target' · DIRECT · NEW 0 · ALREADY PRESENT 0 · KEPT TARGET 0 · TOOK SOURCE 150 · CREATED CONTEXTS 0 · TARGET CHANGED YES · CHECKPOINTS 1               
+COMMAND EXIT · 0                                                                                                                                                                    
+POST-MERGE VERIFICATION                                                                                                                                                             
+TARGET MEMORIES · 150                                                                                                                                                               
+ALL 150 SOURCE VALUES · True                                                                                                                                                        
+FIRST · 'SOURCE conflict 001 · exact Source value'                                                                                                                                  
+LAST · 'SOURCE conflict 150 · exact Source value'                                                                                                                                   
+CHECKPOINTS · 1

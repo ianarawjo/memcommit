@@ -1,0 +1,3 @@
+Error: Resolution application failed: The merge source changed before the target could be saved.                                                                                    
+COMMAND EXIT · 1                                                                                                                                                                    
+STALE VERIFICATION · TARGET ['target revision: library closes at 5 p.m.'] · CHILD False · NEW PATH False · CHECKPOINTS 0

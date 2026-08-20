@@ -1,4 +1,4 @@
-"""Shared Viewer/Responses/Items/To-Do shell for deterministic resolutions."""
+"""Shared compact-or-Viewer shell for deterministic required resolutions."""
 
 from __future__ import annotations
 
@@ -61,6 +61,9 @@ from memcommit.interfaces.tui.workbenches.resolution.model import (
     ResolutionOutcome,
     ResolutionWorkbenchSpec,
 )
+from memcommit.interfaces.tui.workbenches.resolution.inline_shell import (
+    run_inline_resolution_workbench,
+)
 from memcommit.selection.model import SelectionOption
 from memcommit.selection.state import FlatSelectionState
 from memcommit.selection.tui import render_vertical_choice_rows
@@ -85,6 +88,17 @@ def run_resolution_workbench(
 
     if not isinstance(spec, ResolutionWorkbenchSpec):
         raise TypeError("Resolution workbench requires a typed specification.")
+    if spec.inline_choice_layout:
+        return run_inline_resolution_workbench(
+            spec,
+            apply_outcome=apply_outcome,
+            receipt_text=receipt_text,
+            review_outcome=review_outcome,
+            app_input=app_input,
+            app_output=app_output,
+            clipboard_writer=clipboard_writer,
+            require_tty=require_tty,
+        )
     if require_tty:
         require_interactive_terminal(
             spec.title,
@@ -95,15 +109,22 @@ def run_resolution_workbench(
     controller = SemanticViewerController(SessionWorkbenchNavigation())
     opened_uid: dict[str, str | None] = {"value": None}
     item_cursor = {"value": 0}
-    selected: dict[str, str] = {}
+    # An operation may already have made its semantic choice and use this shell
+    # only for exact mutation approval. Seed that operation-owned decision so
+    # the person does not have to re-select an automatic plan in presentation.
+    selected: dict[str, str] = {
+        item.uid: item.default_choice_uid
+        for item in spec.items
+        if item.default_choice_uid is not None
+    }
     choice_states = {
         item.uid: FlatSelectionState(
             tuple(
                 SelectionOption(choice.uid, choice.label, choice.description)
                 for choice in item.choices
             ),
-            cursor_uid=item.choices[0].uid,
-            selected_uid=None,
+            cursor_uid=item.default_choice_uid or item.choices[0].uid,
+            selected_uid=item.default_choice_uid,
             allow_empty=True,
         )
         for item in spec.items
@@ -145,13 +166,44 @@ def run_resolution_workbench(
         height=Dimension(min=14, weight=1),
     )
 
+    compact_summary = ConditionalContainer(
+        Window(
+            FormattedTextControl(
+                lambda: [
+                    (
+                        "class:report-neutral",
+                        safe_terminal_text(spec.compact_summary),
+                    )
+                ]
+            ),
+            wrap_lines=True,
+            height=Dimension(min=2, max=4),
+            dont_extend_height=True,
+        ),
+        filter=Condition(lambda: bool(spec.compact_summary)),
+    )
+    conditional_viewer = ConditionalContainer(
+        viewer_frame,
+        filter=Condition(lambda: spec.show_viewer),
+    )
+
     def render_responses():
         item = opened_item()
         if item is None:
             return []
         state = choice_states[item.uid]
+        context = (
+            [("class:report-neutral", safe_terminal_text(item.compact_context) + "\n\n")]
+            if item.compact_context
+            else []
+        )
         return [
-            ("class:report-label", f"QUESTION · {safe_terminal_text(item.label)}\n\n"),
+            *context,
+            (
+                "class:report-label",
+                f"{'QUESTION' if spec.show_viewer else 'DECISION'} · "
+                f"{safe_terminal_text(item.label)}\n\n",
+            ),
             *render_vertical_choice_rows(
                 state,
                 focused=get_app().layout.has_focus(responses_control),
@@ -170,7 +222,18 @@ def run_resolution_workbench(
             Window(responses_control, wrap_lines=True),
             title=spec.responses_title,
             is_focused=lambda: get_app().layout.has_focus(responses_control),
-            height=Dimension(min=8, max=13),
+            height=lambda: (
+                Dimension.exact(
+                    min(
+                        20,
+                        len(opened_item().compact_context.splitlines())
+                        + 5
+                        + 3 * len(opened_item().choices),
+                    )
+                )
+                if opened_item() is not None and opened_item().compact_context
+                else Dimension(min=8, max=13)
+            ),
         ),
         filter=Condition(lambda: opened_item() is not None),
     )
@@ -213,7 +276,11 @@ def run_resolution_workbench(
         Window(items_control, wrap_lines=True),
         title=spec.items_title,
         is_focused=lambda: get_app().layout.has_focus(items_control),
-        height=Dimension(min=7, max=14),
+        height=(
+            Dimension(min=7, max=14)
+            if spec.show_viewer
+            else Dimension.exact(min(10, len(spec.items) + 4))
+        ),
     )
 
     def current_review():
@@ -245,9 +312,9 @@ def run_resolution_workbench(
         if review_mode["value"] is not None:
             mode = review_mode["value"]
             heading = (
-                "FINAL REVIEW · ITEM-BY-ITEM DECISIONS"
+                "APPLY CONFIRMATION · ITEM-BY-ITEM DECISIONS"
                 if mode == "INDIVIDUAL"
-                else "BULK WHOLE-SET REVIEW · FUSED APPROVAL"
+                else "APPLY CONFIRMATION · BULK WHOLE-SET DECISION"
             )
             return [
                 ("class:report-label", heading + "\n"),
@@ -267,8 +334,8 @@ def run_resolution_workbench(
             )
         else:
             text = (
-                "REVIEW AND APPLY\n"
-                "Enter opens the exact whole-set final review."
+                "APPLY CONFIRMATION\n"
+                "Enter confirms the exact decided whole set before publication."
             )
         bulk = "".join(
             f" · {strategy.key.upper()} {safe_terminal_text(strategy.label)}"
@@ -294,8 +361,12 @@ def run_resolution_workbench(
         # boundary. Temporarily reclaim the Responses space instead of letting
         # the bottom cursor scroll the command out of the review viewport.
         height=lambda: (
-            Dimension(min=20, max=24, weight=3)
+            Dimension.exact(13)
+            if not spec.show_viewer and result["value"] is not None
+            else Dimension(min=20, max=24, weight=3)
             if review_mode["value"] is not None
+            else Dimension.exact(5)
+            if not spec.show_viewer
             else Dimension(min=9, max=18)
         ),
     )
@@ -315,9 +386,14 @@ def run_resolution_workbench(
             return " Enter/Esc/Q close · durable receipt shown"
         if review_mode["value"] is not None:
             return " Enter applies the displayed exact command · Esc/Backspace returns"
+        if spec.show_viewer:
+            return (
+                " ↑/↓ move · Enter open/select · Tab frames · Esc/Backspace back "
+                "· y focused · Y complete · Q close"
+            )
         return (
             " ↑/↓ move · Enter open/select · Tab frames · Esc/Backspace back "
-            "· y focused · Y complete · Q close"
+            "· Q close"
         )
 
     footer = Window(
@@ -327,14 +403,18 @@ def run_resolution_workbench(
     )
     root = build_tui_frame(
         TuiRegion(header),
-        TuiRegion(viewer_frame),
+        TuiRegion(compact_summary),
+        TuiRegion(conditional_viewer),
         TuiRegion(responses_frame),
         TuiRegion(items_frame),
         TuiRegion(todo_frame),
         TuiRegion(footer),
     )
     app: Application[T | None] = Application(
-        layout=Layout(root, focused_element=viewer_control),
+        layout=Layout(
+            root,
+            focused_element=viewer_control if spec.show_viewer else items_control,
+        ),
         key_bindings=bindings,
         full_screen=True,
         erase_when_done=True,
@@ -382,7 +462,7 @@ def run_resolution_workbench(
         state.set_selected(selected.get(item_uid))
         state.reset_cursor_to_selection()
         controller.navigation.section_uid = None
-        event.app.layout.focus(viewer_control)
+        event.app.layout.focus(viewer_control if spec.show_viewer else responses_control)
 
     def activate_item(event) -> SurfaceActionResult:
         open_item(spec.items[item_cursor["value"]].uid, event)
@@ -431,9 +511,11 @@ def run_resolution_workbench(
         return "HANDLED"
 
     def surfaces():
-        values = [
-            FocusSurface("VIEWER", viewer_control, move_vertical=move_viewer),
-        ]
+        values = []
+        if spec.show_viewer:
+            values.append(
+                FocusSurface("VIEWER", viewer_control, move_vertical=move_viewer)
+            )
         if opened_item() is not None:
             values.append(
                 FocusSurface(
@@ -478,7 +560,7 @@ def run_resolution_workbench(
             event.app.invalidate()
 
     def copy_viewer(event, *, whole: bool) -> None:
-        if not event.app.layout.has_focus(viewer_control):
+        if not spec.show_viewer or not event.app.layout.has_focus(viewer_control):
             return
         current = controller.current(document())
         text = semantic_document_plain_text(
@@ -530,7 +612,7 @@ def run_resolution_workbench(
         elif opened_item() is not None:
             opened_uid["value"] = None
             controller.navigation.section_uid = None
-            event.app.layout.focus(viewer_control)
+            event.app.layout.focus(viewer_control if spec.show_viewer else items_control)
         else:
             close(event)
         event.app.invalidate()

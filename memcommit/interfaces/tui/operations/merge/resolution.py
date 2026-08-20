@@ -24,6 +24,7 @@ from memcommit.interfaces.tui.viewers.semantic import (
 from memcommit.interfaces.tui.workbenches.resolution import (
     ResolutionBulkStrategy,
     ResolutionChoice,
+    ResolutionInlineChoice,
     ResolutionItem,
     ResolutionOutcome,
     ResolutionWorkbenchSpec,
@@ -34,12 +35,12 @@ from memcommit.merge_application import (
     FrozenMergePlan,
     MergeConflict,
     MergeDecision,
+    MergeItemKind,
     MergeReach,
     MergeResolution,
     MergeResult,
     merge_resolution_case,
 )
-from memcommit.merge_runtime import merge_summary
 
 
 def _conflict_detail(conflict: MergeConflict) -> SemanticViewerDocument:
@@ -194,20 +195,57 @@ def merge_resolution_spec(plan: FrozenMergePlan) -> ResolutionWorkbenchSpec:
             "Replace the conflicting Target member(s) with the exact Source item.",
         ),
     )
-    items = tuple(
-        ResolutionItem(
-            uid=conflict.uid,
-            label=conflict.source.description,
-            classification=conflict.kind.value,
-            detail=_conflict_detail(conflict),
-            choices=tuple(
-                choice
-                for choice in all_choices
-                if choice.uid in case.requirement(conflict.uid).choice_uids
+    def visible_value(conflict: MergeConflict, *, source: bool) -> tuple[str, bool]:
+        snapshots = (conflict.source,) if source else conflict.targets
+        if len(snapshots) == 1:
+            snapshot = snapshots[0]
+            return (
+                snapshot.content
+                if snapshot.content is not None
+                else snapshot.description,
+                snapshot.kind is MergeItemKind.MEMORY,
+            )
+        return (
+            "\n\n".join(
+                snapshot.description
+                + (f"\n{snapshot.content}" if snapshot.content is not None else "")
+                for snapshot in snapshots
             ),
+            False,
         )
-        for conflict in plan.conflicts
-    )
+
+    items = []
+    for conflict in plan.conflicts:
+        legal = case.requirement(conflict.uid).choice_uids
+        source_content, source_is_memory = visible_value(conflict, source=True)
+        target_content, target_is_memory = visible_value(conflict, source=False)
+        items.append(
+            ResolutionItem(
+                uid=conflict.uid,
+                label=f"[{conflict.source.uid[:8]}]",
+                classification=conflict.kind.value,
+                detail=_conflict_detail(conflict),
+                choices=tuple(choice for choice in all_choices if choice.uid in legal),
+                inline_choices=(
+                    ResolutionInlineChoice(
+                        MergeDecision.TAKE_SOURCE.value,
+                        "SOURCE",
+                        source_content,
+                        selectable=MergeDecision.TAKE_SOURCE.value in legal,
+                        memory_content=source_is_memory,
+                    ),
+                    ResolutionInlineChoice(
+                        MergeDecision.KEEP_TARGET.value,
+                        "TARGET",
+                        target_content,
+                        selectable=True,
+                        memory_content=target_is_memory,
+                    ),
+                ),
+                default_choice_uid=MergeDecision.KEEP_TARGET.value,
+            )
+        )
+    items = tuple(items)
     keep_outcome = ResolutionOutcome(
         tuple(
             (conflict.uid, MergeDecision.KEEP_TARGET.value)
@@ -224,8 +262,11 @@ def merge_resolution_spec(plan: FrozenMergePlan) -> ResolutionWorkbenchSpec:
     )
     return ResolutionWorkbenchSpec(
         case=case,
-        title="MEM MERGE · RESOLUTION SESSION",
-        subtitle="DETERMINISTIC · NO PROVIDER · ALL REQUIRED BEFORE APPLY",
+        title=(
+            f"MERGE REVIEW · {len(plan.conflicts)} "
+            f"{'conflict' if len(plan.conflicts) == 1 else 'conflicts'}"
+        ),
+        subtitle="CHOOSE EACH",
         report=project_merge_plan(plan),
         items=items,
         exact_review=merge_resolution_exact_review(plan, keep_outcome),
@@ -252,6 +293,10 @@ def merge_resolution_spec(plan: FrozenMergePlan) -> ResolutionWorkbenchSpec:
                 else ()
             ),
         ),
+        show_viewer=False,
+        inline_choice_layout=True,
+        responses_title="DECISION · REQUIRED · DETERMINISTIC ONLY",
+        items_title="CONFLICTS · REQUIRED DECISIONS",
     )
 
 
@@ -271,14 +316,18 @@ def _receipt(result: MergeResult) -> str:
         resolution.decision is MergeDecision.TAKE_SOURCE
         for resolution in result.resolutions
     )
+    keep_count = len(result.resolutions) - take_count
+    target_changed = bool(result.additions or take_count or created)
     return (
         f"SOURCE · {result.source_name}\n"
         f"TARGET · {result.target_name}\n"
         f"RANGE · {result.reach.value}\n"
         f"CONTEXTS · {len(result.contexts)} · CREATED {created}\n"
-        f"NEW · {merge_summary(result.additions)}\n"
-        f"UNCHANGED · {len(result.unchanged)}\n"
-        f"RESOLVED · {len(result.resolutions)} · TAKE SOURCE {take_count}\n"
+        f"NEW · {len(result.additions)}\n"
+        f"ALREADY PRESENT · {len(result.unchanged)}\n"
+        f"KEPT TARGET · {keep_count}\n"
+        f"TOOK SOURCE · {take_count}\n"
+        f"TARGET CHANGED · {'YES' if target_changed else 'NO'}\n"
         f"CHECKPOINTS · {len(result.checkpoint_uids)} · RECOVERY · mem undo"
     )
 

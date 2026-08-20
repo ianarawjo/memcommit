@@ -10,7 +10,9 @@ deterministic decisions. Bare `mem merge` opens the Source/Target setup. A decis
 plan applies immediately through the normal checkpointed application boundary;
 a decision-free granted-authority plan retains final review, and a
 conflict-bearing plan opens the shared Resolution workbench. Every path applies
-the same frozen typed plan.
+the same frozen typed plan. Conflict review now presents every complete Source
+and Target value inline, stages `KEEP TARGET` for every row at entry, and keeps
+Apply visibly ready while allowing row-level or whole-set arrow selection.
 
 ## Motivating distinction
 
@@ -40,7 +42,7 @@ application boundary.
 | Pointer collisions | `merge_planning` | Duplicate/incompatible logical references become `REFERENCE_COLLISION`; incompatible Context-like names become `PLACEMENT_COLLISION`. |
 | Freshness | Store runtime and Store transaction | Source name, UID, and direct-record digest are revalidated; Target save uses UID/digest compare-and-set. |
 | Persistence | `save_context_with_sources` | One Target Context and one automatic checkpoint are published under the Source/Target lock set. |
-| Result | typed application receipt and adapters | Reports NEW, UNCHANGED, CONFLICT/resolution, Context creation, and checkpoint boundaries; verified no-ops still record a receipt. |
+| Result | typed application receipt and adapters | Separately reports `NEW`, `ALREADY PRESENT`, `KEPT TARGET`, `TOOK SOURCE`, created Contexts, whether the Target changed, and checkpoint boundaries; verified no-ops still record a receipt. |
 
 ## Extracted ownership
 
@@ -50,15 +52,52 @@ application boundary.
 | `merge_resolution_case`, `prepare_merge`, `resolve_merge_conflicts`, `run_merge` | Application | Project the frozen structural requirements through the operation-neutral Resolution contract, validate before Store access, require complete exact decisions, and require the final receipt to match the frozen plan. |
 | `MemoryStoreMergePort` | Infrastructure/runtime | Capture current once; resolve authority; project cross-Profile input; freeze Source/Target digests; revalidate and checkpoint atomically. |
 | `execute_merge` | Internal Python runtime | Invoke the same use case with no stdout, stderr, prompt-toolkit, or provider dependency. |
-| `render_merge_plain` | Plain CLI adapter | Preserve the historical direct success sentence and explicitly report recursive Context/checkpoint totals. |
+| `render_merge_plain` | Plain CLI adapter | Use the same disposition counts as the TUI receipt, so a retained equal/conflicting identity is not misreported as merely “added nothing new.” |
 | Merge endpoint setup | Interactive adapter | Select a readable Source, a local or CREATE-authorized Target, and one coupled direct/recursive shape from separate frozen catalogs. The command-start current Context is only the initial Target. Either endpoint may temporarily select the same row; Continue rejects that completed draft. Returns only a typed request. |
 | Merge frozen-plan review | Interactive adapter | Project a decision-free granted-authority plan and apply only that exact plan after explicit approval. Local decision-free plans skip this duplicate approval because the complete command checkpoint supports Undo/Redo. |
-| Shared deterministic Resolution workbench | Interactive adapter | For conflict-bearing plans only, compose Viewer, conditional Responses, Items, To Do, exact individual/bulk review, y/Y clipboard, and a visible receipt without importing `commands.*`. |
+| Shared inline deterministic Resolution workbench | Interactive adapter | For conflict-bearing plans only, render complete Source/Target values in frozen order, stage Target defaults, compose row and bulk arrows with one always-visible Apply action, retain exact final review, and show a typed receipt without a Viewer or `commands.*` import. |
 | `commands.merge.cmd` | Typer composition boundary | Parse argv or route a bare TTY invocation, compose Store runtime, translate expected failures to CLI exits, and invoke the presenter. |
 
 `MergeReach.DESCENDANTS` uses the same typed request and result. Its result
 contains one ordered `MergeContextResult` and one checkpoint UID for every
 Source-relative Target path, while direct contains exactly one of each.
+
+## Inline conflict review and decision provenance
+
+The visible conflict list is the complete decision surface. Each row contains
+the stable abbreviated item UID, the full Source value, the full Target value,
+and exactly one checked disposition. Memory content is never shortened with an
+ellipsis. Values taller than the viewport use the shared cursor-backed wrapped
+read pane, so `PageUp` and `PageDown` traverse from the first Source byte
+through the last Target byte. A forbidden `TAKE SOURCE` remains visible as
+unavailable evidence rather than disappearing; authority still determines the
+selectable vocabulary.
+
+Every row begins at `KEEP TARGET`. This is a real staged outcome, not only
+initial keyboard focus, so Apply is ready from the first frame. The independently
+scrollable `CONFLICTS` frame and fixed `CONTROLS` frame are separate shared focus
+Surfaces: one `Tab` reaches Apply regardless of conflict count, `Shift-Tab`
+returns to the retained conflict cursor, and vertical boundary traversal still
+crosses naturally between the last conflict and the first control. The Controls
+cursor starts on Apply; `Up` reaches the adjacent `BULK DECISION` row containing
+`KEEP ALL TARGET / TAKE ALL SOURCE`. `Left`/`Right` immediately stages the
+visible side for one conflict or selects the focused bulk strategy, and Enter
+on Bulk applies that strategy to the frozen rows before returning to Apply.
+The bulk check is derived from all visible row decisions: uniform Target or
+Source choices automatically light the matching side and select the compact
+whole-set command, while a mixed set lights neither. It therefore summarizes
+the same staged state instead of introducing a second hidden selection.
+Enter on Apply opens one exact whole-set command review; a second Enter crosses
+the existing mutation approval boundary. Closing or stale-plan failure
+publishes no Target change.
+
+The process-local checked state is disposable, but the reviewed outcome is
+not. Every Merge checkpoint stores a version-1 `merge_decisions` record with
+the conflict UID, conflict kind, decision, Source/Target names, Source UID, and
+Target UIDs. Memory bodies are not duplicated in checkpoint arguments because
+the checkpoint already binds the operation images. This makes a no-delta
+`KEEP TARGET` merge explainable later while keeping the normal Merge
+checkpoint and Undo/Redo contract intact.
 
 ## Conflict-aware verification gate
 
@@ -73,7 +112,8 @@ The implementation preserves and verifies all of the following:
   by hiding the Target in the Source picker; relative-locator behavior, Source
   freshness, and Target compare-and-set;
 - Grant permissions and cross-Profile Memory-only projection; and
-- existing exit status and plain terminal wording.
+- existing exit status and stable line-oriented terminal structure, including
+  complete conflict bodies outside a TTY.
 
 Focused characterization lives in `tests/test_merge_characterization.py` and
 is supplemented by the existing operation, CLI, integration, Grant, reference,
@@ -139,11 +179,39 @@ verified no-op receipt/checkpoint. It also records a protected Memory exposing
 only `KEEP TARGET` and a protected Context rejecting an unconditional addition
 before review.
 
+The focused picker-boundary evidence under
+`docs/screenshots/revert-inline-version-selection-20260820/` shows the current
+Target selected as Source A, the completed same-Context draft rejected at
+Continue, and read-only verification that neither Context nor checkpoint
+history changed.
+
 The selectable-Target evidence under
 `docs/screenshots/mem-merge-target-selection-20260820/` records the initial
-current Target, alternate B selection, decision-free application to that
-selected Target without switching global current, and same-endpoint rejection
-with no partial state.
+current Target, alternate B selection, selected-target conflict review,
+reproducible `--into target-selected` approval, successful application without
+switching global current, and same-endpoint rejection with no partial state.
+The refreshed inline conflict evidence under
+`docs/screenshots/mem-merge-compact-conflict-resolution-20260820/` records the
+default-ready Target state, individual and bulk arrow choices across multiple
+conflicts, exact approval, disposition-aware receipts, read-only verification,
+stale-plan atomic failure, protected-Memory choice narrowing, cancellation,
+and complete traversal of two 60-line Memory values in a real 180×52 color
+PTY.
+
+The focused Source-only replay under
+`docs/screenshots/mem-merge-source-only-actual-20260820/` starts with an empty
+Target, runs the explicit real Merge command, and then uses `mem show` to
+verify that the Target contains the exact Source UID and all Source lines with
+one checkpoint. This distinguishes content copied by Merge from synthetic
+scroll-boundary fixture text.
+
+The scale replay under
+`docs/screenshots/mem-merge-150-conflicts-actual-20260820/` lets the real Merge
+planner produce 150 content-divergence conflicts from 150 shared identities.
+It records one-key Tab traversal from both the first and final conflict
+viewports into the separate Controls frame, a 150-row bulk Source decision,
+exact review, one atomic checkpoint, and read-only verification of every
+resulting Target body.
 
 An isolated Study Task 1 application-policy replay additionally exercised 11
 direct additions, a verified no-op, one content conflict, exact `TAKE SOURCE`,
@@ -179,7 +247,8 @@ frozen and applied.
 Every affected Context retains a normal Merge checkpoint for Diff, History,
 and provenance. Version-2 Merge checkpoint metadata binds every direct or
 recursive member to one operation UID and records which Target Contexts were
-created. Undo validates the complete post-image, restores every updated
+created. Its sibling version-1 `merge_decisions` record retains every reviewed
+conflict disposition without duplicating Memory content. Undo validates the complete post-image, restores every updated
 Context, and moves every created Context plus its history into private
 validated lifecycle archives under one command/graph/lock boundary. Redo
 validates the complete pre-image, restores the archived identities and

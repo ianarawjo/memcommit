@@ -1,0 +1,6 @@
+PTY 180 52                                                                                                                                                                          
+PRE-MERGE · SOURCE MEMORIES 1 · TARGET MEMORIES 0                                                                                                                                   
+RUN · mem merge source --into target --direct                                                                                                                                       
+MERGE RECORDED · 'source' → 'target' · DIRECT · NEW 1 (1 memory) · ALREADY PRESENT 0 · KEPT TARGET 0 · TOOK SOURCE 0 · CREATED CONTEXTS 0 · TARGET CHANGED YES · CHECKPOINTS 1      
+COMMAND EXIT · 0                                                                                                                                                                    
+MERGE RECEIPT COMPLETE

@@ -24,6 +24,7 @@ from memcommit.derived_policy import authorize_derived_transfer
 from memcommit.merge_application import (
     FrozenMergePlan,
     MergeAddition,
+    MergeConflict,
     MergeContextResult,
     MergeDecision,
     MergeItemKind,
@@ -58,6 +59,63 @@ def _memory_only_source(source: Context) -> Context:
         if isinstance(item, Memory):
             result.add(Memory(uid=item.uid, content=item.content))
     return result
+
+
+def _merge_decision_checkpoint_record(
+    conflicts: tuple[MergeConflict, ...],
+    resolutions: tuple[MergeResolution, ...],
+) -> dict[str, object]:
+    """Retain exact reviewed choices without duplicating Memory bodies."""
+
+    resolution_by_uid = {
+        resolution.conflict_uid: resolution.decision.value
+        for resolution in resolutions
+    }
+    return {
+        "version": 1,
+        "decisions": [
+            {
+                "conflict_uid": conflict.uid,
+                "kind": conflict.kind.value,
+                "decision": resolution_by_uid[conflict.uid],
+                "source_name": conflict.source_name,
+                "target_name": conflict.target_name,
+                "source_uid": conflict.source.uid,
+                "target_uids": [target.uid for target in conflict.targets],
+            }
+            for conflict in conflicts
+            if conflict.uid in resolution_by_uid
+        ],
+    }
+
+
+def _merge_checkpoint_description(
+    *,
+    source_name: str,
+    target_name: str,
+    additions: tuple[MergeAddition, ...],
+    unchanged_count: int,
+    conflicts: tuple[MergeConflict, ...],
+    resolutions: tuple[MergeResolution, ...],
+    recursive: bool = False,
+) -> str:
+    relevant = {conflict.uid for conflict in conflicts}
+    take_count = sum(
+        resolution.conflict_uid in relevant
+        and resolution.decision is MergeDecision.TAKE_SOURCE
+        for resolution in resolutions
+    )
+    keep_count = sum(
+        resolution.conflict_uid in relevant
+        and resolution.decision is MergeDecision.KEEP_TARGET
+        for resolution in resolutions
+    )
+    prefix = "Recursively merged" if recursive else "Merged"
+    return (
+        f"{prefix} '{source_name}' into '{target_name}': "
+        f"new {len(additions)}; already present {unchanged_count}; "
+        f"kept Target {keep_count}; took Source {take_count}"
+    )
 
 
 def _take_source_allowed(access: ContextAccess) -> bool:
@@ -535,7 +593,6 @@ class MemoryStoreMergePort(MergePort):
             token.context_plan,
             resolutions=decisions,
         )
-        summary = merge_summary(plan.additions)
         contexts = [{"uid": candidate.uid, "name": candidate.name}]
         checkpoint = AutoCheckpoint(
             command="merge",
@@ -550,11 +607,19 @@ class MemoryStoreMergePort(MergePort):
                     "target_root": plan.target_name,
                     "target_created": False,
                 },
+                "merge_decisions": _merge_decision_checkpoint_record(
+                    plan.conflicts,
+                    resolutions,
+                ),
                 **grant_checkpoint_args(target_access),
             },
-            description=(
-                f"Merged '{source_access.display_name}' into "
-                f"'{target_access.display_name}': added {summary}"
+            description=_merge_checkpoint_description(
+                source_name=source_access.display_name,
+                target_name=target_access.display_name,
+                additions=plan.additions,
+                unchanged_count=len(plan.unchanged),
+                conflicts=plan.conflicts,
+                resolutions=resolutions,
             ),
         )
         target_permissions = (
@@ -683,7 +748,6 @@ class MemoryStoreMergePort(MergePort):
             strict=True,
         ):
             access = frame.access or token.target_root_access
-            summary = merge_summary(result.additions)
             writes.append(
                 MergeTreeWrite(
                     context=candidate,
@@ -704,11 +768,20 @@ class MemoryStoreMergePort(MergePort):
                                 "target_root": plan.target_name,
                                 "target_created": result.target_created,
                             },
+                            "merge_decisions": _merge_decision_checkpoint_record(
+                                result.conflicts,
+                                resolutions,
+                            ),
                             **grant_checkpoint_args(access),
                         },
-                        description=(
-                            f"Recursively merged '{result.source_name}' into "
-                            f"'{result.target_name}': added {summary}"
+                        description=_merge_checkpoint_description(
+                            source_name=result.source_name,
+                            target_name=result.target_name,
+                            additions=result.additions,
+                            unchanged_count=len(result.unchanged),
+                            conflicts=result.conflicts,
+                            resolutions=resolutions,
+                            recursive=True,
                         ),
                     ),
                 )
@@ -788,7 +861,7 @@ def merge_summary(additions: tuple[MergeAddition, ...]) -> str:
         count = sum(addition.kind is kind for addition in additions)
         if count:
             parts.append(f"{count} {singular if count == 1 else plural}")
-    return ", ".join(parts) if parts else "nothing new"
+    return ", ".join(parts) if parts else "0 items"
 
 
 def execute_merge(

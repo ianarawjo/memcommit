@@ -1,0 +1,18 @@
+PTY 180 52
+PRE-MERGE · SOURCE MEMORIES 1 · TARGET MEMORIES 0
+RUN · mem merge source --into target --direct
+[32mMERGE RECORDED · 'source' → 'target' · DIRECT · NEW 1 (1 memory) · ALREADY PRESENT 0 · KEPT TARGET 0 · TOOK SOURCE 0 · CREATED CONTEXTS 0 · TARGET CHANGED YES · CHECKPOINTS 1[0m
+COMMAND EXIT · 0
+MERGE RECEIPT COMPLETE
+
+RUN · mem show --context target
+[1mContext: target[0m
+  Memories 1  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+[1m
+Items (in context order):[0m
+  [memory 4f8f9b10] [2mThis Memory existed only in Source before Merge.
+Merge copies this exact body into Target.
+Final line: copied byte-for-byte.[0m
+SHOW EXIT · 0
+POST-MERGE · TARGET UID 4f8f9b10 · CHECKPOINTS 1
+SHOW VERIFICATION COMPLETE

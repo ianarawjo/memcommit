@@ -1,0 +1,3 @@
+MERGE RECORDED · 'source' → 'target' · DIRECT · NEW 1 (1 memory) · ALREADY PRESENT 0 · KEPT TARGET 1 · TOOK SOURCE 0 · CREATED CONTEXTS 0 · TARGET CHANGED YES · CHECKPOINTS 1      
+COMMAND EXIT · 0                                                                                                                                                                    
+DIRECT VERIFICATION · TARGET ['target revision: library closes at 5 p.m.', 'source-only structural addition'] · CHILD False · NEW PATH False · CHECKPOINTS 1

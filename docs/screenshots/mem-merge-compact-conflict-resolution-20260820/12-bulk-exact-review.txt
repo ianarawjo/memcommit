@@ -1,0 +1,52 @@
+ MERGE REVIEW · 2 conflicts                                                                                                                                                         
+ CHOOSE EACH                                                                                                                                                                        
+┌────────────────────────────────────────────────────────────────────────────────────| REVIEW |────────────────────────────────────────────────────────────────────────────────────┐
+│APPLY CONFIRMATION · EXACT WHOLE SET                                                                                                                                             ^│
+│PROPOSED COMMAND · NOT RUN                                                                                                                                                        │
+│  mem merge source --into target --recursive --take-source-all                                                                                                                    │
+│                                                                                                                                                                                  │
+│EFFECTS · ONE COMMAND                                                                                                                                                             │
+│  Apply the frozen DESCENDANTS plan to 3 Context mapping(s).                                                                                                                      │
+│  Create 1 Source-only Target path(s).                                                                                                                                            │
+│  Add 2 memories, 1 embedded context; retain 1 unchanged item(s); resolve 2 conflict(s); record 3 checkpoint(s).                                                                  │
+│  Revalidate every frozen identity, digest, and subtree membership before writing.                                                                                                │
+│  Publish the complete plan atomically or publish none of it.                                                                                                                     │
+│  Required decisions · KEEP TARGET 0 · TAKE SOURCE 2.                                                                                                                             │
+│  Existing Target-only items remain; no custom or semantic rewrite is allowed.                                                                                                    │
+│  Recovery is one operation-level mem undo, including created descendants.                                                                                                        │
+│                                                                                                                                                                                  │
+│Approval applies only to the exact command shown above.                                                                                                                           │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ CONTROLS ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃› APPLY EXACT WHOLE SET                                                                                                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ Enter apply exact command · Esc/Backspace return

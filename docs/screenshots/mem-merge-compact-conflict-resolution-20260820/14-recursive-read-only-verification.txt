@@ -1,0 +1,4 @@
+MERGE RECORDED · 'source' → 'target' · DESCENDANTS · NEW 3 (2 memories, 1 embedded context) · ALREADY PRESENT 1 · KEPT TARGET 0 · TOOK SOURCE 2 · CREATED CONTEXTS 1 · TARGET CHANGE
+D YES · CHECKPOINTS 3                                                                                                                                                               
+COMMAND EXIT · 0                                                                                                                                                                    
+RECURSIVE VERIFICATION · TARGET ['source revision: library closes at 6 p.m.', 'source-only structural addition'] · CHILD True · NEW PATH True · CHECKPOINTS 1

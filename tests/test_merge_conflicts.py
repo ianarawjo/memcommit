@@ -125,13 +125,60 @@ def test_noninteractive_cli_lists_ids_then_accepts_a_bulk_resolution(
     unresolved = runner.invoke(app, ["merge", "source"])
     assert unresolved.exit_code == 1
     assert "CONTENT_DIVERGENCE" in unresolved.output
+    assert "SOURCE CONTENT · source revision" in unresolved.output
+    assert "TARGET CONTENT · target revision" in unresolved.output
     assert "--keep-target-all / --take-source-all" in unresolved.output
     assert store.load_direct("target").memories["shared"].content == ("target revision")
+    planned = prepare_merge(
+        MergeRequest(source_locator="source"),
+        port=MemoryStoreMergePort.capture(store),
+    )
 
     resolved = runner.invoke(app, ["merge", "source", "--take-source-all"])
     assert resolved.exit_code == 0, resolved.output + resolved.stderr
-    assert "resolved 1 conflict" in resolved.output
+    assert "TOOK SOURCE 1" in resolved.output
+    assert "TARGET CHANGED YES" in resolved.output
     assert store.load_direct("target").memories["shared"].content == ("source revision")
+    (checkpoint,) = store.list_checkpoints("target")
+    assert checkpoint["args"]["merge_decisions"] == {
+        "version": 1,
+        "decisions": [
+            {
+                "conflict_uid": planned.conflicts[0].uid,
+                "kind": "CONTENT_DIVERGENCE",
+                "decision": "TAKE_SOURCE",
+                "source_name": "source",
+                "target_name": "target",
+                "source_uid": "shared",
+                "target_uids": ["shared"],
+            }
+        ],
+    }
+    assert "kept Target 0; took Source 1" in checkpoint["description"]
+
+
+def test_keep_target_only_receipt_explains_the_zero_delta(isolated_store):
+    store = MemoryStore()
+    source = ops.init("source")
+    source.add(Memory(uid="shared", content="source revision"))
+    _create(store, source)
+    target = ops.init("target")
+    target.add(Memory(uid="shared", content="target revision"))
+    _create(store, target)
+    store.set_current("target")
+
+    kept = runner.invoke(app, ["merge", "source", "--keep-target-all"])
+
+    assert kept.exit_code == 0, kept.output + kept.stderr
+    assert "NEW 0" in kept.output
+    assert "ALREADY PRESENT 0" in kept.output
+    assert "KEPT TARGET 1" in kept.output
+    assert "TOOK SOURCE 0" in kept.output
+    assert "TARGET CHANGED NO" in kept.output
+    (checkpoint,) = store.list_checkpoints("target")
+    assert "new 0; already present 0; kept Target 1; took Source 0" in (
+        checkpoint["description"]
+    )
 
 
 def test_recursive_merge_is_one_undo_redo_unit_including_created_contexts(
@@ -285,6 +332,15 @@ def test_protected_target_memory_never_promises_take_source(isolated_store):
     assert plan.conflicts[0].allowed_decisions == (MergeDecision.KEEP_TARGET,)
     assert [choice.uid for choice in spec.items[0].choices] == ["KEEP_TARGET"]
     assert [strategy.choice_uid for strategy in spec.bulk_strategies] == ["KEEP_TARGET"]
+    assert [choice.content for choice in spec.items[0].inline_choices] == [
+        "source revision",
+        "target revision",
+    ]
+    assert [choice.selectable for choice in spec.items[0].inline_choices] == [
+        False,
+        True,
+    ]
+    assert spec.items[0].default_choice_uid == "KEEP_TARGET"
 
     unresolved = runner.invoke(app, ["merge", "source"])
     assert unresolved.exit_code == 1

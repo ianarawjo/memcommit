@@ -3,6 +3,7 @@
 from memcommit.interfaces.tui.workbenches.resolution.model import (
     ResolutionBulkStrategy,
     ResolutionChoice,
+    ResolutionInlineChoice,
     ResolutionItem,
     ResolutionOutcome,
     ResolutionWorkbenchSpec,
@@ -19,6 +20,7 @@ from memcommit.interfaces.tui.workbenches.resolution.session_shell import (
 
 __all__ = [
     "ResolutionChoice",
+    "ResolutionInlineChoice",
     "ResolutionBulkStrategy",
     "ResolutionItem",
     "ResolutionOutcome",

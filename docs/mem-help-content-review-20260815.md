@@ -253,42 +253,35 @@ Required shared behavior:
   remains one coupled setup choice.
 - Build the complete deterministic plan before rendering decisions. `NEW` and
   `UNCHANGED` counts belong in the report; only actionable deterministic
-  `CONFLICT` items belong in the Items list.
+  `CONFLICT` items become inline decision rows.
 - When no required divergence exists, do not construct empty `ITEMS` or
   `RESPONSES` frames. Continue to the existing exact frozen-plan review.
-- When divergence exists, start on the complete Viewer report. Before opening
-  an item the visible Tab order is `VIEWER → ITEMS → TO DO → VIEWER`. After an
-  item is opened it is `VIEWER → RESPONSES → ITEMS → TO DO → VIEWER`.
-- Show `RESPONSES` only for the currently opened conflict. All conflicts are
-  `REQUIRED`; To Do opens the first unanswered item and must not expose Apply
-  while any required choice is open.
-- Render `KEEP TARGET` and `TAKE SOURCE` through the common flat selection
-  state: a check mark is the staged choice, blue is keyboard focus, and moving
-  between frames restores the cursor to the staged choice. Selecting the
-  staged choice again may clear it and must make the item unresolved again.
-- Do not fabricate an `Other` choice. If the shared Response box remains
-  visible, its text is an optional retained comment and never satisfies the
-  required exact choice or invents replacement Memory content.
-- Present classification before evidence. One detail shows the exact Context
-  mapping, shared Memory UID, Target content, Source content, and a
-  deterministic line/word diff. Reuse the presentation-neutral Memory diff
-  records rather than reconstructing differences from rendered terminal text.
+- When divergence exists, render one inline `MERGE REVIEW` list in frozen
+  conflict order. Every row shows the short item UID and complete Source and
+  Target values; no Viewer, hidden item-opening step, or separate Responses
+  frame is required.
+- Stage `KEEP TARGET` for every row at entry. The check mark is the real staged
+  choice, not only keyboard focus, so `APPLY · READY` remains visible and valid
+  from the first frame. `Left`/`Right` changes the focused row immediately;
+  `Up`/`Down` traverses within and across the separate Conflicts and Controls
+  surfaces, while one `Tab` moves directly from any conflict row to Apply.
 - Keep report labels and chrome neutral. Individual Memory contents use the
-  shared light-lavender Memory style; only the active control uses the shared
-  blue focus treatment. Sanitize terminal control text and retain full content
-  in the scrollable detail even when list labels are shortened.
-- Stage every choice without mutation. On the per-item path, after all required
-  choices are staged, To Do opens a separate final review summarizing `NEW`,
-  `UNCHANGED`, every conflict class, `KEEP TARGET`, `TAKE SOURCE`, Contexts to
-  create, and checkpoints. A whole-set bulk card may fuse this review with its
-  Apply action, but both paths confirm the exact frozen plan and complete
-  decision set once.
-- Escape and Backspace unwind one read-only layer at a time: final review to
-  report, opened detail to report, then root close. Backspace remains ordinary
-  deletion in a writable optional comment. Cancel at every layer publishes no
-  partial additions or decisions.
+  shared light-lavender Memory style; the checked or active control uses the
+  shared blue treatment. Sanitize terminal controls and retain the complete
+  content in a cursor-backed wrapped pane; `PageUp`/`PageDown` must reach the
+  final Target byte when one comparison is taller than the viewport.
+- Do not fabricate `Other`, clear a staged row, or accept custom replacement
+  text. A protected Target still shows complete Source evidence with an
+  unavailable marker while removing `TAKE SOURCE` from the selectable and
+  bulk vocabularies.
+- Enter on Apply opens one separate exact whole-set review. Its argv represents
+  the frozen per-item decisions or selected bulk strategy; a second Enter is
+  the mutation approval. Escape or Backspace returns from review to the same
+  staged list, and cancel at either layer publishes no partial addition or
+  decision.
 - After Apply, keep a visible durable receipt with Source, Target, reach,
-  per-disposition counts, changed Context count, and checkpoint identities.
+  `NEW`, `ALREADY PRESENT`, `KEPT TARGET`, `TOOK SOURCE`, whether Target
+  changed, and checkpoint count.
   A stale Source, Target, subtree, or decision binding fails without partial
   publication and requires a freshly frozen plan.
 - A bare TTY invocation may enter this conditional workbench. An explicit CLI
@@ -302,10 +295,11 @@ Required shared behavior:
 Merge-specific decisions and boundaries:
 
 - **No-op persistence.** A Merge with no effective Target content change still
-  freezes and revalidates the complete boundary and records an explicit
-  `NO TARGET CHANGE` session/receipt. It must distinguish the verified no-op
-  from an operation that never ran. Its zero-delta command-unit behavior must
-  not conceal or partially consume an earlier undoable mutation.
+  freezes and revalidates the complete boundary. Its receipt explains the
+  zero delta through typed counts such as `KEPT TARGET 1` and
+  `TARGET CHANGED NO`, and its checkpoint retains the reviewed decisions. It
+  must distinguish the verified no-op from an operation that never ran and
+  must not conceal or partially consume an earlier undoable mutation.
 - **Operation-level recovery.** Direct and recursive Merge, including Contexts
   created by recursive reach and edits selected through divergence resolution,
   require one complete command unit. Undo atomically restores every updated
@@ -325,28 +319,35 @@ Merge-specific decisions and boundaries:
   classes rather than silent skips. Each exposes only resolutions that can be
   validated and applied without breaking pointer, authority, or placement
   invariants.
-- **Decision retention (intentional limitation).** Current Merge review is process-local. Decide whether
-  many staged divergence choices should survive closing and reopening. Any
-  retained decision receipt must be bound to the exact Source/Target digests
-  and become unusable when either side changes.
+- **Decision retention (intentional limitation).** Staged review choices remain
+  process-local. An applied checkpoint durably records the exact conflict IDs
+  and decisions for explanation and recovery, but it is not a resumable draft.
+  Any future resumable choice set must bind the exact Source/Target digests and
+  become unusable when either side changes.
 - **Bulk choices (implemented).** Explicit `KEEP ALL TARGET` and `TAKE ALL SOURCE`
-  strategies over the complete unresolved set. A bulk action retains per-item
-  accounting and shows the exact count, mappings, permissions, creations, and
-  replacements it will commit. Confirming that complete bulk card is the final
-  approval boundary, so it may Apply directly without a second duplicate Final
-  Review screen. It must never mutate from an unreviewed shortcut key.
-- **No custom content (implemented).** Merge offers only typed deterministic Source/Target
-choices. It never synthesizes or accepts a combined replacement; semantic or
-custom reconciliation remains Meld's responsibility. The current Merge shell
-does not expose a free-form comment; if one is added later, it may retain
-rationale only and must never become replacement content.
-- **Shared clipboard (implemented).** The migrated shared Resolution workbench has the
-  `y` focused / `Y` complete plain-text clipboard contract used by Summarize and
-  Query. The binding is inactive in writable input, returns a visible copy or
+  strategies share one `BULK DECISION` row in a fixed Controls frame below the
+  independently scrollable conflict list; Apply remains a distinct control.
+  `Left`/`Right` chooses a strategy and Enter visibly stages it across every
+  row before moving to Apply. Its checked side is also derived automatically
+  when every individual row agrees, and both sides remain unchecked for a
+  mixed set. The same separate exact whole-set review used by individual
+  choices remains the final approval boundary; no shortcut key mutates an
+  unreviewed set.
+- **No custom content (implemented).** Merge offers only typed deterministic
+  Source/Target choices. It never synthesizes or accepts a combined
+  replacement; semantic or custom reconciliation remains Meld's
+  responsibility. The current Merge shell does not expose a free-form comment;
+  if one is added later, it may retain rationale only and must never become
+  replacement content.
+- **Shared clipboard (implemented).** The inline shared Resolution workbench has the
+  `y` focused conflict row / `Y` complete conflict-set plain-text clipboard
+  contract used by other read-only surfaces. It returns a visible copy or
   failure receipt, and is not implemented as a Merge-only variant.
-- **Verification evidence (implemented).** Ordered 180×52 color PTY evidence under
-  `docs/screenshots/mem-merge-conflict-resolution-20260815/` covers divergent
-  direct and recursive paths, choice selection and clearing, individual and
-  bulk final approval, durable receipts, operation-unit Undo/Redo,
-  cancellation, stale-plan failure without partial Target publication, and an
-  explicit no-op checkpoint/receipt with read-only verification.
+- **Verification evidence (implemented).** Ordered 180×52 color PTY evidence
+  under `docs/screenshots/mem-merge-compact-conflict-resolution-20260820/`
+  covers default Target staging, individual and multiple-conflict arrow
+  choices, bulk staging, exact approval, durable receipts, cancellation,
+  stale-plan failure without partial Target publication, protected evidence,
+  complete 60-line-per-side scrolling, and an explanatory zero-delta
+  checkpoint/receipt. The 2026-08-15 set retains the former topology for
+  historical comparison.

@@ -1,0 +1,6 @@
+PTY 180 52                                                                                                                                                                          
+MERGE RECORDED · 'source' → 'target' · DIRECT · NEW 0 · ALREADY PRESENT 0 · KEPT TARGET 1 · TOOK SOURCE 0 · CREATED CONTEXTS 0 · TARGET CHANGED NO · CHECKPOINTS 1                  
+COMMAND EXIT · 0                                                                                                                                                                    
+ZERO DELTA RECEIPT COMPLETE                                                                                                                                                         
+                                                                                                                                                                                    
+ZERO DELTA VERIFICATION · TARGET 'target revision' · CHECKPOINTS 1 · DESCRIPTION Merged 'source' into 'target': new 0; already present 0; kept Target 1; took Source 0

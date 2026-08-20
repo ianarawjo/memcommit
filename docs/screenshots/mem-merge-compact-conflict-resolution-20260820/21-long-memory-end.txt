@@ -1,0 +1,52 @@
+ MERGE REVIEW · 1 conflict                                                                                                                                                          
+ CHOOSE EACH                                                                                                                                                                        
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ CONFLICTS ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃target complete line 20                                                                                                                                                          ^┃
+┃target complete line 21                                                                                                                                                           ┃
+┃target complete line 22                                                                                                                                                           ┃
+┃target complete line 23                                                                                                                                                           ┃
+┃target complete line 24                                                                                                                                                           ┃
+┃target complete line 25                                                                                                                                                           ┃
+┃target complete line 26                                                                                                                                                           ┃
+┃target complete line 27                                                                                                                                                           ┃
+┃target complete line 28                                                                                                                                                           ┃
+┃target complete line 29                                                                                                                                                           ┃
+┃target complete line 30                                                                                                                                                           ┃
+┃target complete line 31                                                                                                                                                           ┃
+┃target complete line 32                                                                                                                                                           ┃
+┃target complete line 33                                                                                                                                                           ┃
+┃target complete line 34                                                                                                                                                           ┃
+┃target complete line 35                                                                                                                                                           ┃
+┃target complete line 36                                                                                                                                                           ┃
+┃target complete line 37                                                                                                                                                           ┃
+┃target complete line 38                                                                                                                                                           ┃
+┃target complete line 39                                                                                                                                                           ┃
+┃target complete line 40                                                                                                                                                           ┃
+┃target complete line 41                                                                                                                                                           ┃
+┃target complete line 42                                                                                                                                                           ┃
+┃target complete line 43                                                                                                                                                           ┃
+┃target complete line 44                                                                                                                                                           ┃
+┃target complete line 45                                                                                                                                                           ┃
+┃target complete line 46                                                                                                                                                           ┃
+┃target complete line 47                                                                                                                                                           ┃
+┃target complete line 48                                                                                                                                                           ┃
+┃target complete line 49                                                                                                                                                           ┃
+┃target complete line 50                                                                                                                                                           ┃
+┃target complete line 51                                                                                                                                                           ┃
+┃target complete line 52                                                                                                                                                           ┃
+┃target complete line 53                                                                                                                                                           ┃
+┃target complete line 54                                                                                                                                                           ┃
+┃target complete line 55                                                                                                                                                           ┃
+┃target complete line 56                                                                                                                                                           ┃
+┃target complete line 57                                                                                                                                                           ┃
+┃target complete line 58                                                                                                                                                           ┃
+┃target complete line 59                                                                                                                                                           ┃
+┃target complete line 60                                                                                                                                                           ┃
+┃TARGET END"                                                                                                                                                                       ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌───────────────────────────────────────────────────────────────────────────────────| CONTROLS |───────────────────────────────────────────────────────────────────────────────────┐
+│  BULK DECISION · ✓ KEEP ALL TARGET /   TAKE ALL SOURCE                                                                                                                           │
+│  APPLY · READY                                                                                                                                                                   │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ Tab conflicts/controls · ↑/↓ row/control · ←/→ Source/Target · Enter choose/review · PgUp/PgDn scroll · y row · Y all · Esc cancel

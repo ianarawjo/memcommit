@@ -27,6 +27,10 @@ from memcommit.interfaces.tui.operations.merge import (
     run_merge_plan_review,
 )
 from memcommit.interfaces.tui.workbenches.resolution import ResolutionOutcome
+from memcommit.interfaces.tui.workbenches.resolution.inline_shell import (
+    render_inline_resolution_item,
+    run_inline_resolution_workbench,
+)
 from memcommit.merge_application import (
     FrozenMergePlan,
     MergeAddition,
@@ -45,6 +49,8 @@ from memcommit.merge_application import (
     run_merge,
 )
 from memcommit.merge_runtime import MemoryStoreMergePort
+from memcommit.selection.model import SelectionOption
+from memcommit.selection.state import FlatSelectionState
 from memcommit.store import MemoryStore
 
 
@@ -142,6 +148,33 @@ def _conflict_plan() -> FrozenMergePlan:
     )
 
 
+def _multi_conflict_plan(count: int = 3) -> FrozenMergePlan:
+    plan = _conflict_plan()
+    conflicts = tuple(
+        replace(
+            plan.conflicts[0],
+            uid=f"merge-conflict:test-{index}",
+            source=replace(
+                plan.conflicts[0].source,
+                uid=f"memory-{index}",
+                description=f"Memory [memory-{index}]",
+                content=f"complete source value {index}",
+            ),
+            targets=(
+                replace(
+                    plan.conflicts[0].targets[0],
+                    uid=f"memory-{index}",
+                    description=f"Memory [memory-{index}]",
+                    content=f"complete target value {index}",
+                ),
+            ),
+        )
+        for index in range(1, count + 1)
+    )
+    context = replace(plan.contexts[0], conflicts=conflicts)
+    return replace(plan, contexts=(context,), conflicts=conflicts)
+
+
 def _resolved_result(
     plan: FrozenMergePlan,
     resolutions: tuple[MergeResolution, ...],
@@ -216,17 +249,17 @@ def test_plan_review_cancel_does_not_apply() -> None:
 
 
 def test_conflict_workbench_bulk_review_applies_one_exact_whole_set() -> None:
-    plan = _conflict_plan()
+    plan = _multi_conflict_plan()
     applied: list[tuple[MergeResolution, ...]] = []
     with create_pipe_input() as pipe_input:
-        # Viewer → Items → To Do, K opens the fused bulk exact review, then
-        # Enter applies and the next Enter closes the visible receipt.
-        pipe_input.send_text("\t\tk\r\r")
+        # Tab reaches the separate Controls frame without traversing conflicts.
+        # Up focuses Bulk, Right chooses TAKE ALL SOURCE, and Enter stages it
+        # before the exact review/apply/close sequence.
+        pipe_input.send_text("\t\x1b[A\x1b[C\r\r\r\r")
         returned = run_merge_conflict_review(
             plan,
             apply_plan=lambda frozen, resolutions: (
-                applied.append(resolutions)
-                or _resolved_result(frozen, resolutions)
+                applied.append(resolutions) or _resolved_result(frozen, resolutions)
             ),
             app_input=pipe_input,
             app_output=DummyOutput(),
@@ -235,28 +268,46 @@ def test_conflict_workbench_bulk_review_applies_one_exact_whole_set() -> None:
 
     assert returned is not None
     assert applied == [
-        (
+        tuple(
             MergeResolution(
-                "merge-conflict:test",
-                MergeDecision.KEEP_TARGET,
-            ),
+                f"merge-conflict:test-{index}",
+                MergeDecision.TAKE_SOURCE,
+            )
+            for index in range(1, 4)
         )
     ]
 
 
-def test_conflict_workbench_item_choice_and_clipboard_contract() -> None:
+def test_conflict_workbench_arrows_change_one_inline_choice_before_apply() -> None:
     plan = _conflict_plan()
-    copied: list[str] = []
     applied: list[tuple[MergeResolution, ...]] = []
     with create_pipe_input() as pipe_input:
-        # y/Y copy the focused and complete report. Open the item, choose the
-        # first real response, then separately enter final review and Apply.
-        pipe_input.send_text("yY\t\r\t\r\t\t\r\r\r")
+        # Target is staged initially. Left chooses Source; Tab jumps directly
+        # to Apply in the separate Controls frame, then review/apply/close.
+        pipe_input.send_text("\x1b[D\t\r\r\r")
         returned = run_merge_conflict_review(
             plan,
             apply_plan=lambda frozen, resolutions: (
-                applied.append(resolutions)
-                or _resolved_result(frozen, resolutions)
+                applied.append(resolutions) or _resolved_result(frozen, resolutions)
+            ),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert returned is not None
+    assert applied[0][0].decision is MergeDecision.TAKE_SOURCE
+
+
+def test_inline_conflict_workbench_copies_one_row_or_the_complete_set() -> None:
+    plan = _multi_conflict_plan()
+    copied: list[str] = []
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("yYq")
+        returned = run_merge_conflict_review(
+            plan,
+            apply_plan=lambda _frozen, _resolutions: pytest.fail(
+                "Copying and closing must not apply Merge."
             ),
             clipboard_writer=copied.append,
             app_input=pipe_input,
@@ -264,11 +315,129 @@ def test_conflict_workbench_item_choice_and_clipboard_contract() -> None:
             require_tty=False,
         )
 
-    assert returned is not None
+    assert returned is None
     assert len(copied) == 2
-    assert "MERGE PLAN" in copied[0]
-    assert "MAPPING 1/1" in copied[1]
-    assert applied[0][0].decision is MergeDecision.KEEP_TARGET
+    assert "complete source value 1" in copied[0]
+    assert "complete target value 1" in copied[0]
+    assert "complete source value 3" not in copied[0]
+    assert "complete source value 3" in copied[1]
+    assert "complete target value 3" in copied[1]
+
+
+def test_conflict_workbench_stages_keep_target_and_apply_is_ready_at_entry() -> None:
+    plan = _conflict_plan()
+    applied: list[tuple[MergeResolution, ...]] = []
+    with create_pipe_input() as pipe_input:
+        # One Tab reaches Apply regardless of item count. No item decision is
+        # required because KEEP TARGET is visibly staged for every conflict.
+        pipe_input.send_text("\t\r\r\r")
+        returned = run_merge_conflict_review(
+            plan,
+            apply_plan=lambda frozen, resolutions: (
+                applied.append(resolutions) or _resolved_result(frozen, resolutions)
+            ),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert returned is not None
+    assert applied == [
+        (MergeResolution("merge-conflict:test", MergeDecision.KEEP_TARGET),)
+    ]
+
+
+def test_conflict_workbench_retains_distinct_choices_for_three_conflicts() -> None:
+    plan = _multi_conflict_plan()
+    applied: list[tuple[MergeResolution, ...]] = []
+    with create_pipe_input() as pipe_input:
+        # Choose Source for rows 1 and 3, retain Target for row 2, then Tab
+        # directly to the independently focused Apply action.
+        pipe_input.send_text("\x1b[D\x1b[B\x1b[B\x1b[D\t\r\r\r")
+        returned = run_merge_conflict_review(
+            plan,
+            apply_plan=lambda frozen, resolutions: (
+                applied.append(resolutions) or _resolved_result(frozen, resolutions)
+            ),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert returned is not None
+    assert [resolution.decision for resolution in applied[0]] == [
+        MergeDecision.TAKE_SOURCE,
+        MergeDecision.KEEP_TARGET,
+        MergeDecision.TAKE_SOURCE,
+    ]
+
+
+def test_conflict_workbench_tab_skips_150_rows_and_preserves_staged_defaults() -> None:
+    plan = _multi_conflict_plan(150)
+    applied: list[tuple[MergeResolution, ...]] = []
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\t\r\r\r")
+        returned = run_merge_conflict_review(
+            plan,
+            apply_plan=lambda frozen, resolutions: (
+                applied.append(resolutions) or _resolved_result(frozen, resolutions)
+            ),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert returned is not None
+    assert len(applied[0]) == 150
+    assert {resolution.decision for resolution in applied[0]} == {
+        MergeDecision.KEEP_TARGET
+    }
+
+
+def test_conflict_workbench_shift_tab_restores_the_retained_conflict_cursor() -> None:
+    plan = _multi_conflict_plan()
+    applied: list[tuple[MergeResolution, ...]] = []
+    with create_pipe_input() as pipe_input:
+        # Retain row 2 while visiting Controls, return to that row, choose its
+        # Source value, then jump back to Apply.
+        pipe_input.send_text("\x1b[B\t\x1b[Z\x1b[D\t\r\r\r")
+        returned = run_merge_conflict_review(
+            plan,
+            apply_plan=lambda frozen, resolutions: (
+                applied.append(resolutions) or _resolved_result(frozen, resolutions)
+            ),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert returned is not None
+    assert [resolution.decision for resolution in applied[0]] == [
+        MergeDecision.KEEP_TARGET,
+        MergeDecision.TAKE_SOURCE,
+        MergeDecision.KEEP_TARGET,
+    ]
+
+
+def test_inline_workbench_derives_bulk_state_when_individual_rows_all_agree() -> None:
+    spec = merge_resolution_spec(_multi_conflict_plan())
+    applied: list[ResolutionOutcome] = []
+    with create_pipe_input() as pipe_input:
+        # Select Source independently on all three rows. The Controls summary
+        # must normalize that uniform set to TAKE_SOURCE without requiring the
+        # explicit Bulk control.
+        pipe_input.send_text("\x1b[D\x1b[B\x1b[D\x1b[B\x1b[D\t\r\r\r")
+        returned = run_inline_resolution_workbench(
+            spec,
+            apply_outcome=lambda outcome: applied.append(outcome) or outcome,
+            receipt_text=lambda _outcome: "recorded",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert returned is not None
+    assert applied[0].bulk_uid == MergeDecision.TAKE_SOURCE.value
 
 
 def test_merge_resolution_spec_has_no_custom_choice() -> None:
@@ -295,6 +464,66 @@ def test_conflict_review_exact_command_names_the_selected_target() -> None:
         "--direct",
         "--resolve",
     )
+    assert any("Add 0 items" in effect for effect in review.effects)
+
+
+def test_merge_resolution_uses_inline_full_value_choices_without_viewer() -> None:
+    spec = merge_resolution_spec(_conflict_plan())
+
+    assert spec.show_viewer is False
+    assert spec.inline_choice_layout is True
+    assert spec.title == "MERGE REVIEW · 1 conflict"
+    assert spec.subtitle == "CHOOSE EACH"
+    assert spec.items[0].default_choice_uid == "KEEP_TARGET"
+    assert [choice.label for choice in spec.items[0].inline_choices] == [
+        "SOURCE",
+        "TARGET",
+    ]
+    assert [choice.content for choice in spec.items[0].inline_choices] == [
+        "source revision",
+        "target revision",
+    ]
+
+
+def test_inline_conflict_renderer_never_elides_long_or_multiline_memory() -> None:
+    source = "source first line\n" + ("source-complete-value " * 20) + "SOURCE-END"
+    target = "target first line\n" + ("target-complete-value " * 20) + "TARGET-END"
+    plan = _conflict_plan()
+    conflict = replace(
+        plan.conflicts[0],
+        source=replace(plan.conflicts[0].source, content=source),
+        targets=(replace(plan.conflicts[0].targets[0], content=target),),
+    )
+    context = replace(plan.contexts[0], conflicts=(conflict,))
+    spec = merge_resolution_spec(
+        replace(plan, contexts=(context,), conflicts=(conflict,))
+    )
+    item = spec.items[0]
+    state = FlatSelectionState(
+        tuple(
+            SelectionOption(choice.choice_uid, choice.label)
+            for choice in item.inline_choices
+            if choice.selectable
+        ),
+        cursor_uid="KEEP_TARGET",
+        selected_uid="KEEP_TARGET",
+        allow_empty=False,
+    )
+
+    rendered = "".join(
+        text
+        for _style, text in render_inline_resolution_item(
+            item,
+            state,
+            ordinal=1,
+            focused=True,
+        )
+    )
+
+    assert source in rendered
+    assert target in rendered
+    assert "SOURCE-END" in rendered
+    assert "TARGET-END" in rendered
 
 
 def test_store_backed_frozen_plan_is_read_only_until_review_apply(
@@ -400,9 +629,7 @@ def test_meld_style_setup_projects_coupled_reach_and_selectable_target() -> None
     assert spec.roles[1].uid == "B"
     assert spec.roles[1].selected_name == "target"
     assert spec.roles[1].fixed is False
-    assert spec.roles[1].selectable_names == frozenset(
-        {"source", "target", "target-b"}
-    )
+    assert spec.roles[1].selectable_names == frozenset({"source", "target", "target-b"})
     assert spec.roles[0].selectable_names == frozenset({"source", "target"})
 
 
@@ -639,8 +866,9 @@ def test_cli_recursive_merge_creates_path_aligned_target_descendant(
     result = runner.invoke(app, ["merge", "source", "--recursive"])
 
     assert result.exit_code == 0, result.output
-    assert "Recursively merged 'source' into 'target'" in result.output
-    assert "2 Contexts, 1 created" in result.output
+    assert "MERGE RECORDED · 'source' → 'target' · DESCENDANTS" in result.output
+    assert "CREATED CONTEXTS 1" in result.output
+    assert "CHECKPOINTS 2" in result.output
     assert child_memory.uid in store.load_direct("target/child").memories
 
 
@@ -656,8 +884,8 @@ def test_cli_recursive_root_only_receipt_uses_singular_counts(isolated_store) ->
     result = runner.invoke(app, ["merge", "source", "--recursive"])
 
     assert result.exit_code == 0, result.output
-    assert "1 Context, 0 created" in result.output
-    assert "1 checkpoint." in result.output
+    assert "CREATED CONTEXTS 0" in result.output
+    assert "CHECKPOINTS 1" in result.output
 
 
 def test_cli_merge_into_explicit_target_without_a_current_context(

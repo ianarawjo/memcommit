@@ -1,0 +1,52 @@
+ MERGE REVIEW · 150 conflicts                                                                                                                                                       
+ CHOOSE EACH                                                                                                                                                                        
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ CONFLICTS ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃  43 · [00000043]   SOURCE "SOURCE conflict 043 · exact Source value" ≠ ✓ TARGET "TARGET conflict 043 · exact Target value"                                                      ^┃
+┃  44 · [00000044]   SOURCE "SOURCE conflict 044 · exact Source value" ≠ ✓ TARGET "TARGET conflict 044 · exact Target value"                                                       ┃
+┃  45 · [00000045]   SOURCE "SOURCE conflict 045 · exact Source value" ≠ ✓ TARGET "TARGET conflict 045 · exact Target value"                                                       ┃
+┃  46 · [00000046]   SOURCE "SOURCE conflict 046 · exact Source value" ≠ ✓ TARGET "TARGET conflict 046 · exact Target value"                                                       ┃
+┃  47 · [00000047]   SOURCE "SOURCE conflict 047 · exact Source value" ≠ ✓ TARGET "TARGET conflict 047 · exact Target value"                                                       ┃
+┃  48 · [00000048]   SOURCE "SOURCE conflict 048 · exact Source value" ≠ ✓ TARGET "TARGET conflict 048 · exact Target value"                                                       ┃
+┃  49 · [00000049]   SOURCE "SOURCE conflict 049 · exact Source value" ≠ ✓ TARGET "TARGET conflict 049 · exact Target value"                                                       ┃
+┃  50 · [00000050]   SOURCE "SOURCE conflict 050 · exact Source value" ≠ ✓ TARGET "TARGET conflict 050 · exact Target value"                                                       ┃
+┃  51 · [00000051]   SOURCE "SOURCE conflict 051 · exact Source value" ≠ ✓ TARGET "TARGET conflict 051 · exact Target value"                                                       ┃
+┃  52 · [00000052]   SOURCE "SOURCE conflict 052 · exact Source value" ≠ ✓ TARGET "TARGET conflict 052 · exact Target value"                                                       ┃
+┃  53 · [00000053]   SOURCE "SOURCE conflict 053 · exact Source value" ≠ ✓ TARGET "TARGET conflict 053 · exact Target value"                                                       ┃
+┃  54 · [00000054]   SOURCE "SOURCE conflict 054 · exact Source value" ≠ ✓ TARGET "TARGET conflict 054 · exact Target value"                                                       ┃
+┃  55 · [00000055]   SOURCE "SOURCE conflict 055 · exact Source value" ≠ ✓ TARGET "TARGET conflict 055 · exact Target value"                                                       ┃
+┃  56 · [00000056]   SOURCE "SOURCE conflict 056 · exact Source value" ≠ ✓ TARGET "TARGET conflict 056 · exact Target value"                                                       ┃
+┃  57 · [00000057]   SOURCE "SOURCE conflict 057 · exact Source value" ≠ ✓ TARGET "TARGET conflict 057 · exact Target value"                                                       ┃
+┃  58 · [00000058]   SOURCE "SOURCE conflict 058 · exact Source value" ≠ ✓ TARGET "TARGET conflict 058 · exact Target value"                                                       ┃
+┃  59 · [00000059]   SOURCE "SOURCE conflict 059 · exact Source value" ≠ ✓ TARGET "TARGET conflict 059 · exact Target value"                                                       ┃
+┃  60 · [00000060]   SOURCE "SOURCE conflict 060 · exact Source value" ≠ ✓ TARGET "TARGET conflict 060 · exact Target value"                                                       ┃
+┃  61 · [00000061]   SOURCE "SOURCE conflict 061 · exact Source value" ≠ ✓ TARGET "TARGET conflict 061 · exact Target value"                                                       ┃
+┃  62 · [00000062]   SOURCE "SOURCE conflict 062 · exact Source value" ≠ ✓ TARGET "TARGET conflict 062 · exact Target value"                                                       ┃
+┃  63 · [00000063]   SOURCE "SOURCE conflict 063 · exact Source value" ≠ ✓ TARGET "TARGET conflict 063 · exact Target value"                                                       ┃
+┃  64 · [00000064]   SOURCE "SOURCE conflict 064 · exact Source value" ≠ ✓ TARGET "TARGET conflict 064 · exact Target value"                                                       ┃
+┃  65 · [00000065]   SOURCE "SOURCE conflict 065 · exact Source value" ≠ ✓ TARGET "TARGET conflict 065 · exact Target value"                                                       ┃
+┃  66 · [00000066]   SOURCE "SOURCE conflict 066 · exact Source value" ≠ ✓ TARGET "TARGET conflict 066 · exact Target value"                                                       ┃
+┃  67 · [00000067]   SOURCE "SOURCE conflict 067 · exact Source value" ≠ ✓ TARGET "TARGET conflict 067 · exact Target value"                                                       ┃
+┃  68 · [00000068]   SOURCE "SOURCE conflict 068 · exact Source value" ≠ ✓ TARGET "TARGET conflict 068 · exact Target value"                                                       ┃
+┃  69 · [00000069]   SOURCE "SOURCE conflict 069 · exact Source value" ≠ ✓ TARGET "TARGET conflict 069 · exact Target value"                                                       ┃
+┃  70 · [00000070]   SOURCE "SOURCE conflict 070 · exact Source value" ≠ ✓ TARGET "TARGET conflict 070 · exact Target value"                                                       ┃
+┃  71 · [00000071]   SOURCE "SOURCE conflict 071 · exact Source value" ≠ ✓ TARGET "TARGET conflict 071 · exact Target value"                                                       ┃
+┃  72 · [00000072]   SOURCE "SOURCE conflict 072 · exact Source value" ≠ ✓ TARGET "TARGET conflict 072 · exact Target value"                                                       ┃
+┃  73 · [00000073]   SOURCE "SOURCE conflict 073 · exact Source value" ≠ ✓ TARGET "TARGET conflict 073 · exact Target value"                                                       ┃
+┃  74 · [00000074]   SOURCE "SOURCE conflict 074 · exact Source value" ≠ ✓ TARGET "TARGET conflict 074 · exact Target value"                                                       ┃
+┃  75 · [00000075]   SOURCE "SOURCE conflict 075 · exact Source value" ≠ ✓ TARGET "TARGET conflict 075 · exact Target value"                                                       ┃
+┃  76 · [00000076]   SOURCE "SOURCE conflict 076 · exact Source value" ≠ ✓ TARGET "TARGET conflict 076 · exact Target value"                                                       ┃
+┃  77 · [00000077]   SOURCE "SOURCE conflict 077 · exact Source value" ≠ ✓ TARGET "TARGET conflict 077 · exact Target value"                                                       ┃
+┃  78 · [00000078]   SOURCE "SOURCE conflict 078 · exact Source value" ≠ ✓ TARGET "TARGET conflict 078 · exact Target value"                                                       ┃
+┃  79 · [00000079]   SOURCE "SOURCE conflict 079 · exact Source value" ≠ ✓ TARGET "TARGET conflict 079 · exact Target value"                                                       ┃
+┃  80 · [00000080]   SOURCE "SOURCE conflict 080 · exact Source value" ≠ ✓ TARGET "TARGET conflict 080 · exact Target value"                                                       ┃
+┃  81 · [00000081]   SOURCE "SOURCE conflict 081 · exact Source value" ≠ ✓ TARGET "TARGET conflict 081 · exact Target value"                                                       ┃
+┃  82 · [00000082]   SOURCE "SOURCE conflict 082 · exact Source value" ≠ ✓ TARGET "TARGET conflict 082 · exact Target value"                                                       ┃
+┃  83 · [00000083]   SOURCE "SOURCE conflict 083 · exact Source value" ≠ ✓ TARGET "TARGET conflict 083 · exact Target value"                                                       ┃
+┃  84 · [00000084]   SOURCE "SOURCE conflict 084 · exact Source value" ≠ ✓ TARGET "TARGET conflict 084 · exact Target value"                                                       ┃
+┃  85 · [00000085]   SOURCE "SOURCE conflict 085 · exact Source value" ≠ ✓ TARGET "TARGET conflict 085 · exact Target value"                                                      v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌───────────────────────────────────────────────────────────────────────────────────| CONTROLS |───────────────────────────────────────────────────────────────────────────────────┐
+│  BULK DECISION · ✓ KEEP ALL TARGET /   TAKE ALL SOURCE                                                                                                                           │
+│  APPLY · READY                                                                                                                                                                   │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ Tab conflicts/controls · ↑/↓ row/control · ←/→ Source/Target · Enter choose/review · PgUp/PgDn scroll · y row · Y all · Esc cancel

@@ -1,0 +1,52 @@
+ MERGE REVIEW · 1 conflict                                                                                                                                                          
+ CHOOSE EACH                                                                                                                                                                        
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ CONFLICTS ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃› 1 · [00000000]   SOURCE "SOURCE START                                                                                                                                          ^┃
+┃source complete line 01                                                                                                                                                           ┃
+┃source complete line 02                                                                                                                                                           ┃
+┃source complete line 03                                                                                                                                                           ┃
+┃source complete line 04                                                                                                                                                           ┃
+┃source complete line 05                                                                                                                                                           ┃
+┃source complete line 06                                                                                                                                                           ┃
+┃source complete line 07                                                                                                                                                           ┃
+┃source complete line 08                                                                                                                                                           ┃
+┃source complete line 09                                                                                                                                                           ┃
+┃source complete line 10                                                                                                                                                           ┃
+┃source complete line 11                                                                                                                                                           ┃
+┃source complete line 12                                                                                                                                                           ┃
+┃source complete line 13                                                                                                                                                           ┃
+┃source complete line 14                                                                                                                                                           ┃
+┃source complete line 15                                                                                                                                                           ┃
+┃source complete line 16                                                                                                                                                           ┃
+┃source complete line 17                                                                                                                                                           ┃
+┃source complete line 18                                                                                                                                                           ┃
+┃source complete line 19                                                                                                                                                           ┃
+┃source complete line 20                                                                                                                                                           ┃
+┃source complete line 21                                                                                                                                                           ┃
+┃source complete line 22                                                                                                                                                           ┃
+┃source complete line 23                                                                                                                                                           ┃
+┃source complete line 24                                                                                                                                                           ┃
+┃source complete line 25                                                                                                                                                           ┃
+┃source complete line 26                                                                                                                                                           ┃
+┃source complete line 27                                                                                                                                                           ┃
+┃source complete line 28                                                                                                                                                           ┃
+┃source complete line 29                                                                                                                                                           ┃
+┃source complete line 30                                                                                                                                                           ┃
+┃source complete line 31                                                                                                                                                           ┃
+┃source complete line 32                                                                                                                                                           ┃
+┃source complete line 33                                                                                                                                                           ┃
+┃source complete line 34                                                                                                                                                           ┃
+┃source complete line 35                                                                                                                                                           ┃
+┃source complete line 36                                                                                                                                                           ┃
+┃source complete line 37                                                                                                                                                           ┃
+┃source complete line 38                                                                                                                                                           ┃
+┃source complete line 39                                                                                                                                                           ┃
+┃source complete line 40                                                                                                                                                           ┃
+┃source complete line 41                                                                                                                                                           ┃
+┃source complete line 42                                                                                                                                                          v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌───────────────────────────────────────────────────────────────────────────────────| CONTROLS |───────────────────────────────────────────────────────────────────────────────────┐
+│  BULK DECISION · ✓ KEEP ALL TARGET /   TAKE ALL SOURCE                                                                                                                           │
+│  APPLY · READY                                                                                                                                                                   │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ Tab conflicts/controls · ↑/↓ row/control · ←/→ Source/Target · Enter choose/review · PgUp/PgDn scroll · y row · Y all · Esc cancel
