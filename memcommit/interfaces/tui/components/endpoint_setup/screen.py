@@ -30,6 +30,9 @@ from memcommit.context_targeting.tui.selector import (
 )
 from memcommit.interfaces.console.terminal import require_interactive_terminal
 from memcommit.interfaces.console.text import safe_terminal_text
+from memcommit.interfaces.tui.components.endpoint_setup.compact_screen import (
+    run_compact_endpoint_setup,
+)
 from memcommit.interfaces.tui.components.endpoint_setup.memory_focus import (
     EndpointMemoryFocusController,
     MemoryProjectionLoader,
@@ -85,6 +88,15 @@ def run_endpoint_setup(
 
     if not isinstance(spec, EndpointSetupSpec):
         raise TypeError("Endpoint setup requires an EndpointSetupSpec.")
+    if spec.screen_layout == "COMPACT_FORM":
+        return run_compact_endpoint_setup(
+            spec,
+            memory_loader=memory_loader,
+            validate_draft=validate_draft,
+            app_input=app_input,
+            app_output=app_output,
+            require_tty=require_tty,
+        )
     if require_tty:
         require_interactive_terminal(
             spec.title,
@@ -100,6 +112,7 @@ def run_endpoint_setup(
         selected_uid=spec.initial_mode_uid,
         allow_empty=False,
     )
+
     def selected_mode_uid() -> str:
         selected = mode_state.selected_uid
         if selected is None:
@@ -136,9 +149,7 @@ def run_endpoint_setup(
         )
         selectors[role.uid] = selector
     reach_states = {
-        role.uid: ContextReachState.create(
-            include_descendants=role.include_descendants
-        )
+        role.uid: ContextReachState.create(include_descendants=role.include_descendants)
         for role in spec.roles
         if role.allow_descendants
     }
@@ -163,9 +174,7 @@ def run_endpoint_setup(
     role_by_uid = {role.uid: role for role in spec.roles}
     create_new = {role.uid: role.prefer_new for role in spec.roles if role.allow_new}
     confirmed_new_names = {
-        role.uid: role.initial_new_name.strip()
-        for role in spec.roles
-        if role.allow_new
+        role.uid: role.initial_new_name.strip() for role in spec.roles if role.allow_new
     }
     new_name_fields: dict[str, ExactNameFieldControl] = {}
     for role in spec.roles:
@@ -314,14 +323,12 @@ def run_endpoint_setup(
                 selectors[role_uid].selection.selected_name,
                 include_descendants=(
                     reach_states[role_uid].include_descendants
-                    if role_uid in reach_states
-                    and role_allows_descendants(role_uid)
+                    if role_uid in reach_states and role_allows_descendants(role_uid)
                     else False
                 ),
                 memory_uid=(
                     memory_focuses[role_uid].selected_memory_uid
-                    if role_uid in memory_focuses
-                    and role_allows_memory_focus(role_uid)
+                    if role_uid in memory_focuses and role_allows_memory_focus(role_uid)
                     else None
                 ),
             )
@@ -425,13 +432,11 @@ def run_endpoint_setup(
         if get_app().layout.has_focus(action_control):
             return " Enter run selected setup · ↑ endpoint · Esc cancel"
         if any(
-            get_app().layout.has_focus(control)
-            for control in reach_controls.values()
+            get_app().layout.has_focus(control) for control in reach_controls.values()
         ):
             return " ←/→ choose this Context only or include descendants · Tab next · Esc cancel"
         if any(
-            get_app().layout.has_focus(control)
-            for control in memory_controls.values()
+            get_app().layout.has_focus(control) for control in memory_controls.values()
         ):
             return " ↑/↓ choose whole Context or one direct Memory · Enter select · Tab next · Esc cancel"
         if any(
@@ -453,9 +458,7 @@ def run_endpoint_setup(
                 TuiRegion(
                     ConditionalContainer(
                         selectors[role.uid].frame,
-                        filter=Condition(
-                            lambda uid=role.uid: role_is_active(uid)
-                        ),
+                        filter=Condition(lambda uid=role.uid: role_is_active(uid)),
                     )
                 )
             )
@@ -488,9 +491,7 @@ def run_endpoint_setup(
                 TuiRegion(
                     ConditionalContainer(
                         new_name_fields[role.uid].frame,
-                        filter=Condition(
-                            lambda uid=role.uid: role_is_active(uid)
-                        ),
+                        filter=Condition(lambda uid=role.uid: role_is_active(uid)),
                     )
                 )
             )
@@ -505,9 +506,7 @@ def run_endpoint_setup(
         (
             new_name_fields[role.uid].input
             for role in spec.roles
-            if role.allow_new
-            and role.prefer_new
-            and role_is_active(role.uid)
+            if role.allow_new and role.prefer_new and role_is_active(role.uid)
         ),
         None,
     )
@@ -584,18 +583,13 @@ def run_endpoint_setup(
         if role_uid in memory_focuses:
             memory_focuses[role_uid].clear()
         if role_uid in reach_states:
-            reach_states[role_uid] = ContextReachState.create(
-                include_descendants=False
-            )
+            reach_states[role_uid] = ContextReachState.create(include_descendants=False)
         status["value"] = f"{candidate} confirmed as NEW · NOT CREATED."
         surfaces.focus_relative(event.app, 1, wrap=False)
         return "HANDLED"
 
     def move_memory(role_uid: str, delta: int) -> SurfaceMoveResult:
-        if (
-            role_uid in reach_states
-            and reach_states[role_uid].include_descendants
-        ):
+        if role_uid in reach_states and reach_states[role_uid].include_descendants:
             return "BOUNDARY"
         changed = memory_focuses[role_uid].move(delta)
         status["value"] = ""
@@ -605,14 +599,9 @@ def run_endpoint_setup(
         memory_focuses[role_uid].enter(delta)
 
     def choose_memory(role_uid: str) -> SurfaceActionResult:
-        if (
-            role_uid in reach_states
-            and reach_states[role_uid].include_descendants
-        ):
+        if role_uid in reach_states and reach_states[role_uid].include_descendants:
             memory_focuses[role_uid].clear()
-            status["value"] = (
-                "Focused Memory requires THIS CONTEXT ONLY."
-            )
+            status["value"] = "Focused Memory requires THIS CONTEXT ONLY."
             return "HANDLED"
         memory_focuses[role_uid].choose()
         status["value"] = ""
@@ -713,8 +702,7 @@ def run_endpoint_setup(
 
     reach_focus = Condition(
         lambda: any(
-            get_app().layout.has_focus(control)
-            for control in reach_controls.values()
+            get_app().layout.has_focus(control) for control in reach_controls.values()
         )
     )
 
@@ -764,8 +752,7 @@ def run_endpoint_setup(
     )
     memory_focus = Condition(
         lambda: any(
-            get_app().layout.has_focus(control)
-            for control in memory_controls.values()
+            get_app().layout.has_focus(control) for control in memory_controls.values()
         )
     )
     new_input_focus = Condition(

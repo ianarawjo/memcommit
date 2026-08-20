@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass
+from typing import Literal
 
 from memcommit.source_projection.presentation import SourceDisplayValue
 
@@ -30,27 +31,21 @@ class EndpointSetupMode:
             or not isinstance(self.description, str)
         ):
             raise ValueError("Endpoint setup modes require stable text identity.")
-        if (
-            len(set(self.active_role_uids)) != len(self.active_role_uids)
-            or any(
-                not isinstance(role_uid, str)
-                or not role_uid
-                or any(character in role_uid for character in "\r\n")
-                for role_uid in self.active_role_uids
-            )
+        if len(set(self.active_role_uids)) != len(self.active_role_uids) or any(
+            not isinstance(role_uid, str)
+            or not role_uid
+            or any(character in role_uid for character in "\r\n")
+            for role_uid in self.active_role_uids
         ):
             raise ValueError("Endpoint setup mode roles require stable identity.")
         labels = dict(self.role_labels)
-        if (
-            len(labels) != len(self.role_labels)
-            or any(
-                not isinstance(role_uid, str)
-                or not role_uid
-                or not isinstance(label, str)
-                or not label
-                or any(character in role_uid + label for character in "\r\n")
-                for role_uid, label in self.role_labels
-            )
+        if len(labels) != len(self.role_labels) or any(
+            not isinstance(role_uid, str)
+            or not role_uid
+            or not isinstance(label, str)
+            or not label
+            or any(character in role_uid + label for character in "\r\n")
+            for role_uid, label in self.role_labels
         ):
             raise ValueError("Endpoint setup mode role labels are invalid.")
         for role_uids, label in (
@@ -66,9 +61,7 @@ class EndpointSetupMode:
                     for role_uid in role_uids
                 )
             ):
-                raise ValueError(
-                    f"Endpoint setup mode {label} roles are invalid."
-                )
+                raise ValueError(f"Endpoint setup mode {label} roles are invalid.")
 
 
 @dataclass(frozen=True)
@@ -134,9 +127,8 @@ class EndpointSetupRole:
         ):
             raise ValueError("Endpoint setup roles require a distinct Context catalog.")
         if (
-            (not self.selectable_names and not self.allow_new)
-            or not self.selectable_names <= set(self.names)
-        ):
+            not self.selectable_names and not self.allow_new
+        ) or not self.selectable_names <= set(self.names):
             raise ValueError("Endpoint role availability is outside its catalog.")
         if self.selected_name not in self.names or (
             self.selectable_names and self.selected_name not in self.selectable_names
@@ -182,10 +174,7 @@ class EndpointSetupRole:
             if (
                 not isinstance(self.selected_memory_uid, str)
                 or not self.selected_memory_uid
-                or any(
-                    character in self.selected_memory_uid
-                    for character in "\r\n"
-                )
+                or any(character in self.selected_memory_uid for character in "\r\n")
             ):
                 raise ValueError("Endpoint role initial Memory UID is invalid.")
             if not self.allow_memory_focus:
@@ -222,6 +211,7 @@ class EndpointSetupSpec:
     initial_mode_uid: str
     roles: tuple[EndpointSetupRole, ...]
     action_label: str = "CONTINUE TO PLAN REVIEW"
+    screen_layout: Literal["WORKBENCH", "COMPACT_FORM"] = "WORKBENCH"
 
     def __post_init__(self) -> None:
         if (
@@ -231,6 +221,7 @@ class EndpointSetupSpec:
             or not self.subtitle
             or not isinstance(self.action_label, str)
             or not self.action_label
+            or self.screen_layout not in {"WORKBENCH", "COMPACT_FORM"}
             or any(
                 character in self.title + self.subtitle + self.action_label
                 for character in "\r\n"
@@ -273,18 +264,14 @@ class EndpointSetupSpec:
                     uid for uid in active if role_by_uid[uid].allow_memory_focus
                 )
             )
-            if (
-                not descendants <= active
-                or any(not role_by_uid[uid].allow_descendants for uid in descendants)
+            if not descendants <= active or any(
+                not role_by_uid[uid].allow_descendants for uid in descendants
             ):
                 raise ValueError(
                     "Endpoint setup mode enables unavailable descendant reach."
                 )
-            if (
-                not memory_focus <= active
-                or any(
-                    not role_by_uid[uid].allow_memory_focus for uid in memory_focus
-                )
+            if not memory_focus <= active or any(
+                not role_by_uid[uid].allow_memory_focus for uid in memory_focus
             ):
                 raise ValueError(
                     "Endpoint setup mode enables unavailable Memory focus."

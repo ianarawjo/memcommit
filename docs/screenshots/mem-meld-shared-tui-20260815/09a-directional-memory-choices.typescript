@@ -22,37 +22,4 @@ PTY 180 52
 [0;38;2;16;36;47;48;2;139;213;255;1m  MEMORY · fc6a81a8[160C[0;48;2;68;68;68m [0m
 [0;38;2;16;36;47;48;2;139;213;255m  Only the south vehicle entrance closes during construction.[118C[0;48;2;170;170;170m [0m
 [0m                                                                                                                                                                                   [179C[0;1mv[0m
-[0m ↑/↓ Memory · Enter choose · Esc close details[46D[10A[121C[?7h[0m[?25l[?7l[0;38;2;16;36;47;48;2;139;213;255;1m[ MEMORY · fc6a81a8 ][0m[K[0m
-
-
-[0m FROM uses Memory fc6a81a8.[0m[K[0m
-[0m [0m[K[0m
-[0m [0m[K[0m
-[C[0m[K[0m
-[0m [0m[K[0m
-[0m [0m[K[0m
-[0m [0m[K[0m
-[0m [0m[K[10A[120C[?7h[0m[?25l[?7l[121D[0m  FROM[115C[0;38;2;16;36;47;48;2;139;213;255m[ MEMORY · fc6a81a8 ][0m
-[0;1m› TO[21C[?7h[0m[?12l[?25h[?25l[?7l[69C[0;38;2;139;213;255;1m[[0;38;2;16;36;47;48;2;139;213;255;1m ✓ INCLUDE DESCENDANTS [0;38;2;139;213;255;1m][19C[0mSUB[CREE[0m
-
-[C[0m←/→,[CSpace, or Enter toggle descendants · Tab next · Esc cancel[2A[30C[?7h[0m[?25l[?7l[0m[[0;38;2;16;36;47;48;2;139;213;255m ✓ INCLUDE DESCENDANTS [0m][2C[0;1m[ MEMORY · WHOLE SUBTREE ][0m
-
-[C[0mEnter open Memory choices ·[CTab next · Esc canc[Cl[0m[K[2A[71C[?7h[0m[?25l[?7l[121D[0m  TO[117C[ MEMORY · WHOLE SUBTREE ][0m
-[0;38;2;16;36;47;48;2;139;213;255;1m› [ START MELD ][0m
-[7C[0mstart Meld · ↑ pr[Cvious ·[CEsc cancel[0m[K[A[43D[?7h[0m[4A[J[0m[?7h[?2004l
-MELD SETUP RECEIPT · PROCESS-LOCAL · NOT RUN
-  MODE · directional
-  A · capture/incoming · DESCENDANTS=False · MEMORY=fc6a81a8-c8c5-43db-8122-938a222f7c98
-  B · capture/baseline · DESCENDANTS=True · MEMORY=None
-  C · None · CREATE=False · NOT CREATED
-  EXPECTED A MEMORY · fc6a81a8-c8c5-43db-8122-938a222f7c98 · MATCH=True
-CAPTURE GATE · PRESS V FOR READ-ONLY VERIFICATION
-v
-
-READ-ONLY SETUP VERIFICATION
-  CURRENT CONTEXT · capture/incoming
-  EXISTING CONTEXT BYTES UNCHANGED · True
-  RESULT EXISTS · False
-  CONTEXT CHECKPOINTS · 0
-  MELD SESSIONS · 0
-  PROVIDER CALLS · 0
+[0m ↑/↓ Memory · Enter choose · Esc close details[46D[10A[121C[?7h[0m

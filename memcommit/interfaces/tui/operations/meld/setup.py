@@ -35,9 +35,7 @@ def meld_endpoint_setup_spec(
     annotations = tuple(setup.annotations)
     height = min(9, max(4, len(setup.names)))
     initial_target = (
-        next(
-            name for name in setup.names if name in setup.eligible_target_names
-        )
+        next(name for name in setup.names if name in setup.eligible_target_names)
         if setup.eligible_target_names
         else setup.left_name
     )
@@ -47,34 +45,35 @@ def meld_endpoint_setup_spec(
         modes=(
             EndpointSetupMode(
                 "SYMMETRIC",
-                "SYMMETRIC · A + B → C",
+                "SYMMETRIC · CREATE SEPARATE RESULT",
                 (
                     "A and B are equal peers. C is an eligible empty local "
                     "Context or one confirmed new exact name."
                 ),
                 active_role_uids=("A", "B", "C"),
                 role_labels=(
-                    ("A", "A · PEER · ALL READABLE CONTEXTS"),
-                    ("B", "B · PEER · ALL READABLE CONTEXTS"),
-                    ("C", "C · RESULT · EMPTY LOCAL CONTEXTS"),
+                    ("A", "FROM"),
+                    ("B", "WITH"),
+                    ("C", "TO"),
                 ),
                 descendant_role_uids=frozenset({"A", "B"}),
                 memory_focus_role_uids=frozenset(),
             ),
             EndpointSetupMode(
                 "DIRECTIONAL",
-                "DIRECTIONAL · A → B",
+                "DIRECTIONAL · UPDATE EXISTING",
                 "A is incoming evidence. B remains authoritative and is the result.",
                 active_role_uids=("A", "B"),
                 role_labels=(
-                    ("A", "A · INCOMING · ALL READABLE CONTEXTS"),
-                    ("B", "B · BASELINE + RESULT · ALL READABLE CONTEXTS"),
+                    ("A", "FROM"),
+                    ("B", "TO"),
                 ),
                 descendant_role_uids=frozenset({"A", "B"}),
                 memory_focus_role_uids=frozenset({"A", "B"}),
             ),
         ),
         initial_mode_uid="SYMMETRIC",
+        screen_layout="COMPACT_FORM",
         roles=(
             EndpointSetupRole(
                 "A",
@@ -117,7 +116,7 @@ def meld_endpoint_setup_spec(
                 new_name_validator=new_name_validator,
             ),
         ),
-        action_label="CONTINUE TO MELD PLANNING",
+        action_label="START MELD",
     )
 
 

@@ -61,8 +61,7 @@ def test_horizontal_choice_clamps_and_renders_active_value():
     assert "←/→ SELECT" in rendered
     assert "MEANING · Right-side meaning." in rendered
     assert any(
-        style == "class:memcommit.choice.active.focused"
-        and text == "[ RIGHT MODE ]"
+        style == "class:memcommit.choice.active.focused" and text == "[ RIGHT MODE ]"
         for style, text in focused_fragments
     )
 
@@ -72,8 +71,7 @@ def test_horizontal_choice_clamps_and_renders_active_value():
         focused=False,
     )
     assert any(
-        style == "class:memcommit.choice.active"
-        and text == "[ RIGHT MODE ]"
+        style == "class:memcommit.choice.active" and text == "[ RIGHT MODE ]"
         for style, text in inactive_fragments
     )
 
@@ -155,8 +153,7 @@ def test_horizontal_choice_can_render_checked_boxes_on_one_line():
     assert rendered == "› VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT"
     assert "\n" not in rendered
     assert any(
-        style == "class:memcommit.choice.active.focused"
-        and text == " ✓ BY KIND "
+        style == "class:memcommit.choice.active.focused" and text == " ✓ BY KIND "
         for style, text in fragments
     )
 
@@ -443,9 +440,7 @@ def test_common_endpoint_mode_change_clears_unsupported_memory_focus():
     with create_pipe_input() as pipe_input:
         # MODE → A, select Memory, return to MODE, choose whole-frame mode,
         # then move through A to Apply.
-        pipe_input.send_text(
-            "\x1b[Bm\x1b[B\r\x1b[Z\x1b[C\x1b[B\t\r"
-        )
+        pipe_input.send_text("\x1b[Bm\x1b[B\r\x1b[Z\x1b[C\x1b[B\t\r")
         draft = choose_session_endpoints(
             ("alpha",),
             title="MODE MEMORY TEST",
@@ -498,9 +493,7 @@ def test_common_endpoint_uppercase_m_loads_all_visible_context_memories():
         draft = choose_session_endpoints(
             ("alpha", "beta"),
             title="MEMORY PREVIEW TEST",
-            modes=(
-                EndpointModeSpec("TEST", "A", ("A",), {"A": "A"}),
-            ),
+            modes=(EndpointModeSpec("TEST", "A", ("A",), {"A": "A"}),),
             roles=(
                 EndpointRoleSpec(
                     "A",
@@ -525,7 +518,7 @@ def test_common_endpoint_uppercase_m_loads_all_visible_context_memories():
         ("update", "mq", ("preview/a",)),
         (
             "meld",
-            "\x1b[C\t\t\t\x1b[B\t\t\t\x1b[Bq",
+            "\x1b[C" + "\t" * 4 + "\x1b[B" + "\t" * 4 + "\x1b[Bq",
             ("preview/a", "preview/b"),
         ),
         ("atomize", "mq", ("preview/a",)),
@@ -664,8 +657,7 @@ def test_confirmed_new_context_is_projected_back_into_endpoint_selector():
         "    + atomize/output  NEW · NOT CREATED"
     )
     assert all(
-        style == "class:memcommit.choice.active"
-        for style, _text in fragments[1:]
+        style == "class:memcommit.choice.active" for style, _text in fragments[1:]
     )
 
 
@@ -720,9 +712,7 @@ def test_atomize_setup_down_enters_the_common_new_output_control(isolated_store)
 
     with create_pipe_input() as pipe_input:
         # Output's last row ↓ NEW; ↑ returns, ↓ re-enters the editor.
-        pipe_input.send_text(
-            "\t\x1b[B\x1b[A\x1b[Batomize/down-output\r\r"
-        )
+        pipe_input.send_text("\t\x1b[B\x1b[A\x1b[Batomize/down-output\r\r")
         receipt = choose_atomize_setup(
             store,
             app_input=pipe_input,
@@ -783,9 +773,7 @@ def test_atomize_setup_selects_one_exact_input_memory(isolated_store):
     store.create_context(context)
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text(
-            "m\x1b[B\r\t\x1b[Batomize/focused-output\r\r"
-        )
+        pipe_input.send_text("m\x1b[B\r\t\x1b[Batomize/focused-output\r\r")
         receipt = choose_atomize_setup(
             store,
             app_input=pipe_input,
@@ -850,14 +838,7 @@ def test_endpoint_setup_arrows_cross_tree_and_scope_boundaries(isolated_store):
         # A's last row ↓ A scope ↓ B's first row, then reverse the same path.
         down = "\x1b[B"
         up = "\x1b[A"
-        pipe_input.send_text(
-            down * 4
-            + up * 2
-            + "\r"
-            + down * 2
-            + "\r"
-            + "\t\t\r"
-        )
+        pipe_input.send_text(down * 4 + up * 2 + "\r" + down * 2 + "\r" + "\t\t\r")
         receipt = choose_update_setup(
             store,
             app_input=pipe_input,
@@ -878,7 +859,7 @@ def test_meld_directional_option_has_no_third_target(isolated_store):
     with create_pipe_input() as pipe_input:
         # Directional mode exposes independent A and B reach/Memory controls
         # but no C surface. Broaden only B, then continue to the action.
-        pipe_input.send_text("\x1b[C" + "\t" * 5 + "\x1b[C\t\t\r")
+        pipe_input.send_text("\x1b[C" + "\t" * 7 + "\x1b[C\t\t\r")
         receipt = choose_meld_setup(
             store,
             app_input=pipe_input,
@@ -905,10 +886,8 @@ def test_meld_symmetric_mode_collects_new_result_c(isolated_store):
     store.create_context(right)
 
     with create_pipe_input() as pipe_input:
-        # Five Tabs reach C; two Downs cross its two leaves into NEW.
-        pipe_input.send_text(
-            "\t\t\t\t\t\x1b[B\x1b[Bfaq/result\n\r"
-        )
+        # A/B each expose an explicit Browse stop before compact C.
+        pipe_input.send_text("\t" * 7 + "faq/result\n\r")
         receipt = choose_meld_setup(
             store,
             app_input=pipe_input,

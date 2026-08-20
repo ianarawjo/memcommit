@@ -1,52 +1,8 @@
- NEW MELD                                                                                                                                                                           
- SETUP ONLY · NO PROVIDER, SESSION, RESULT, OR APPLY                                                                                                                                
-┌───────────────────────────────────────────────────────────────────────────────| OPERATION SHAPE |────────────────────────────────────────────────────────────────────────────────┐
-│  SYMMETRIC · A + B → C                                                                                                                                                           │
-│  A and B are equal peers. C is an eligible empty local Context or one confirmed new                                                                                              │
-│  exact name.                                                                                                                                                                     │
-│                                                                                                                                                                                  │
-│✓ DIRECTIONAL · A → B                                                                                                                                                             │
-│  A is incoming evidence. B remains authoritative and is the result.                                                                                                              │
-└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-┌─────────────────────────────────────────────────────────────────────| A · INCOMING · ALL READABLE CONTEXTS |─────────────────────────────────────────────────────────────────────┐
-│  ·   · capture/baseline                                                                                                                                                         ^│
-│› ✓ * · capture/incoming                                                                                                                                                          │
-│                                                                                                                                                                                  │
-│                                                                                                                                                                                 v│
-└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-┌─────────────────────────────────────────────────────────────────| A · INCOMING · ALL READABLE CONTEXTS · RANGE |─────────────────────────────────────────────────────────────────┐
-│  [ THIS CONTEXT ONLY ]  [ INCLUDE DESCENDANTS ] · ←/→ SELECT                                                                                                                     │
-└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ A · INCOMING · ALL READABLE CONTEXTS · MEMORY FOCUS ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃  Use every direct Memory in this exact Context.                                                                                                                                 ^┃
-┃                                                                                                                                                                                  ┃
-┃✓ MEMORY · dde63546                                                                                                                                                               ┃
-┃  Only the south vehicle entrance closes during construction.                                                                                                                     ┃
-┃                                                                                                                                                                                 v┃
-┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-┌────────────────────────────────────────────────────────────────| B · BASELINE + RESULT · ALL READABLE CONTEXTS |─────────────────────────────────────────────────────────────────┐
-│› ✓   · capture/baseline                                                                                                                                                         ^│
-│  · * · capture/incoming                                                                                                                                                          │
-│                                                                                                                                                                                  │
-│                                                                                                                                                                                 v│
-└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-┌────────────────────────────────────────────────────────────| B · BASELINE + RESULT · ALL READABLE CONTEXTS · RANGE |─────────────────────────────────────────────────────────────┐
-│  [ THIS CONTEXT ONLY ]  [ INCLUDE DESCENDANTS ] · ←/→ SELECT                                                                                                                     │
-└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-┌─────────────────────────────────────────────────────────| B · BASELINE + RESULT · ALL READABLE CONTEXTS · MEMORY FOCUS |─────────────────────────────────────────────────────────┐
-│✓ WHOLE CONTEXT                                                                                                                                                                  ^│
-│  Use every direct Memory in this exact Context.                                                                                                                                  │
-│                                                                                                                                                                                  │
-│  MEMORY · 463a1653                                                                                                                                                               │
-│  The south entrance is closed during construction.                                                                                                                              v│
-└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-┌──────────────────────────────────────────────────────────────────────────────| TO DO · SETUP ONLY |──────────────────────────────────────────────────────────────────────────────┐
-│SETUP · NOT RUN                                                                                                                                                                   │
-│MODE · DIRECTIONAL                                                                                                                                                                │
-│A · capture/incoming · THIS CONTEXT ONLY · MEMORY dde63546                                                                                                                        │
-│B · capture/baseline · THIS CONTEXT ONLY · WHOLE CONTEXT                                                                                                                          │
-│                                                                                                                                                                                  │
-│[ CONTINUE TO MELD PLANNING ]                                                                                                                                                     │
-│                                                                                                                                                                                  │
-└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
- ↑/↓ choose whole Context or one direct Memory · Enter select · Tab next · Esc cancel
+$ mem meld --sessions -> New Meld · DIRECTIONAL                                                                                                                                     
+PTY 180 52                                                                                                                                                                          
+ NEW MELD · SETUP ONLY · NO PROVIDER, SESSION, RESULT, OR APPLY                                                                                                                     
+  MODE · [   SYMMETRIC · CREATE SEPARATE RESULT ]  [ ✓ DIRECTIONAL · UPDATE EXISTING ] · ←/→ TO SELECT                                                                              
+› FROM › capture/incoming                        [ BROWSE ] CURRENT                           [   INCLUDE DESCENDANTS ]  [ MEMORY · fc6a81a8 ]                                      
+  TO   › capture/baseline                        [ BROWSE ]                                   [   INCLUDE DESCENDANTS ]  [ MEMORY · WHOLE CONTEXT ]                                 
+  [ START MELD ]                                                                                                                                                                    
+ FROM uses Memory fc6a81a8.

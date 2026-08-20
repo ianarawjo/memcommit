@@ -7,6 +7,7 @@ from itertools import count
 from typing import Callable
 
 from prompt_toolkit.application.current import get_app
+from prompt_toolkit.completion import Completer
 from prompt_toolkit.layout import AnyDimension
 from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.widgets import Frame, TextArea
@@ -87,16 +88,24 @@ class ExactNameInputControl:
         input_name: str | None = None,
         prompt: str = "› ",
         input_style: str = "",
+        completer: Completer | None = None,
+        complete_while_typing: bool = True,
+        width: AnyDimension = None,
+        dont_extend_width: bool = False,
     ) -> "ExactNameInputControl":
         """Build the writable field without imposing box or host semantics."""
         input_area = TextArea(
             text=view.value,
             multiline=False,
+            completer=completer,
+            complete_while_typing=complete_while_typing,
             prompt=prompt,
             focusable=True,
             focus_on_click=True,
             wrap_lines=False,
+            width=width,
             height=Dimension.exact(1),
+            dont_extend_width=dont_extend_width,
             style=input_style,
             name=input_name or _next_buffer_name("exact-name"),
         )

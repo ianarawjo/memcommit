@@ -81,6 +81,7 @@ def _meld_shaped_spec() -> EndpointSetupSpec:
 def test_endpoint_setup_mode_contract_projects_roles_labels_and_capabilities():
     spec = _meld_shaped_spec()
 
+    assert spec.screen_layout == "WORKBENCH"
     assert spec.active_role_uids("SYMMETRIC") == ("A", "B", "C")
     assert spec.active_role_uids("DIRECTIONAL") == ("A", "B")
     assert spec.role_label("SYMMETRIC", "C") == "C · RESULT"

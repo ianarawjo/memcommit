@@ -8,7 +8,9 @@ from types import SimpleNamespace
 
 import pytest
 from prompt_toolkit.application import Application
+from prompt_toolkit.completion import CompleteEvent, WordCompleter
 from prompt_toolkit.data_structures import Size
+from prompt_toolkit.document import Document
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout import FormattedTextControl, Layout, Window
@@ -76,9 +78,7 @@ def test_command_tui_primitives_is_an_import_only_compatibility_facade() -> None
     assert legacy_tui_primitives.ExactNameFieldControl is OwnedExactNameFieldControl
     assert legacy_tui_primitives.anchored_fragments is owned_anchored_fragments
 
-    module = ast.parse(
-        Path(legacy_tui_primitives.__file__).read_text(encoding="utf-8")
-    )
+    module = ast.parse(Path(legacy_tui_primitives.__file__).read_text(encoding="utf-8"))
     assert not any(
         isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
         for node in module.body
@@ -100,6 +100,25 @@ def test_exact_name_input_can_embed_without_owning_a_frame() -> None:
     assert control.validate_candidate() == "final"
     assert observed == ["final"]
     assert not hasattr(control, "frame")
+
+
+def test_exact_name_input_can_compose_a_caller_owned_completion_catalog() -> None:
+    completer = WordCompleter(("context/a", "context/b"), sentence=True)
+    control = ExactNameInputControl.create(
+        ExactNameFieldView(value="context/a"),
+        completer=completer,
+        complete_while_typing=True,
+    )
+
+    completions = control.input.buffer.completer.get_completions(
+        Document("context/"),
+        CompleteEvent(completion_requested=True),
+    )
+    assert [completion.text for completion in completions] == [
+        "context/a",
+        "context/b",
+    ]
+    assert control.input.buffer.cursor_position == len("context/a")
 
 
 def test_exact_name_framed_control_composes_the_same_input_contract() -> None:

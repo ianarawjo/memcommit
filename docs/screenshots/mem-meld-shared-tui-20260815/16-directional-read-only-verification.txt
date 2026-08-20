@@ -1,16 +1,18 @@
+$ mem meld --sessions -> New Meld · DIRECTIONAL                                                                                                                                     
+PTY 180 52                                                                                                                                                                          
                                                                                                                                                                                     
 MELD SETUP RECEIPT · PROCESS-LOCAL · NOT RUN                                                                                                                                        
   MODE · directional                                                                                                                                                                
-  A · capture/incoming · DESCENDANTS=False · MEMORY=dde63546-a368-4774-911b-cde7a3722340                                                                                            
+  A · capture/incoming · DESCENDANTS=False · MEMORY=fc6a81a8-c8c5-43db-8122-938a222f7c98                                                                                            
   B · capture/baseline · DESCENDANTS=True · MEMORY=None                                                                                                                             
   C · None · CREATE=False · NOT CREATED                                                                                                                                             
-  EXPECTED A MEMORY · dde63546-a368-4774-911b-cde7a3722340 · MATCH=True                                                                                                             
+  EXPECTED A MEMORY · fc6a81a8-c8c5-43db-8122-938a222f7c98 · MATCH=True                                                                                                             
 CAPTURE GATE · PRESS V FOR READ-ONLY VERIFICATION                                                                                                                                   
 v                                                                                                                                                                                   
                                                                                                                                                                                     
 READ-ONLY SETUP VERIFICATION                                                                                                                                                        
   CURRENT CONTEXT · capture/incoming                                                                                                                                                
-  SOURCE BYTES UNCHANGED · True                                                                                                                                                     
+  EXISTING CONTEXT BYTES UNCHANGED · True                                                                                                                                           
   RESULT EXISTS · False                                                                                                                                                             
   CONTEXT CHECKPOINTS · 0                                                                                                                                                           
   MELD SESSIONS · 0                                                                                                                                                                 

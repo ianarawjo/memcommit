@@ -36,6 +36,83 @@ Memory focus. This prevents an invisible narrower scope from surviving in the
 executable draft. Backspace remains ordinary text deletion while the exact-name
 field owns focus.
 
+## Compact Meld form
+
+Meld setup is a short form, not an analysis workbench. Permanently framing a
+Context tree, descendant range, and Memory list for every endpoint expanded a
+five-row decision into a full terminal canvas and gave supporting navigation
+more visual weight than the request being constructed. Shorter labels inside
+the same boxes did not solve that hierarchy problem.
+
+Meld therefore opts into the shared Endpoint Setup's `COMPACT_FORM` layout.
+Its stable draft contract is projected through five persistent rows:
+
+1. `MODE` chooses `SYMMETRIC · CREATE SEPARATE RESULT` or
+   `DIRECTIONAL · UPDATE EXISTING` with Left/Right;
+2. `FROM` accepts the exact A Context name;
+3. `WITH` accepts symmetric peer B, while directional mode relabels the same B
+   operand as `TO · BASELINE + RESULT`;
+4. symmetric `TO` accepts either an eligible existing empty Context or a new
+   exact name; and
+5. `START MELD` constructs the existing typed draft and returns it to the CLI
+   caller, which starts Meld analysis/session execution.
+
+The visible operand labels are only `FROM`, `WITH`, and `TO`. Peer, incoming,
+baseline, and Result meaning remains in the selected mode's typed A/B/C role
+contract instead of being repeated beside every input. The label column sizes
+to those short tokens so the fields begin near the left edge, and every exact
+name field renders a fixed `› ` prompt. This keeps the fields visually writable
+without restoring boxes or changing their direct-input semantics.
+
+Every A/B/C operand remains a writable one-line field backed by the already
+frozen, role-authorized catalog, so each position can be replaced by typing an
+exact name directly. Matching names appear only while the person types.
+When an existing candidate is available, an explicit `[ BROWSE ]` focus stop
+appears beside that field. Tab moves to it and Enter transiently opens the
+shared Switch-style Context tree with the role's complete allowed existing
+catalog; Enter copies one exact name back and Escape returns to the visible
+trigger without changing the operand. For A/B that catalog is the frozen
+readable namespace; for C it contains only eligible empty Result Contexts. A C
+with no existing eligible target has no inert Browse control, and new C names
+remain direct input rather than appearing as if they already exist. The
+transient browser and completion are presentation, not new authority, and
+final validation still requires the role's exact existing set or its
+operation-owned new-name validator. C derives `create=False` for an eligible
+existing empty name and `create=True · NOT CREATED` for a validated new name,
+so it needs no separate target-kind selector.
+
+An unfilled C says `CHOOSE EMPTY OR ENTER NEW NAME` when at least one eligible
+existing empty Context is exposed by Browse; without one it narrows to `ENTER
+NEW NAME` and omits the inert trigger. `ENTER NEW NAME` maps to a process-local
+exact-name draft. The copy deliberately avoids `CREATE NEW`: setup records
+creation intent but does not create the Context at this screen.
+
+Each A/B descendant flag remains an independent checked control on the same
+row. Directional Memory focus is summarized on that row and expands its frozen
+direct-Memory choices only on demand; closing the detail returns to the same
+five-row form. Descendant reach still clears direct-Memory focus, symmetric
+mode still disables it, and changing modes still clears a Memory identity the
+new mode cannot represent. The executable draft and CLI mapping therefore
+receive the same mode, reach flags, direct-Memory selector, and result intent.
+
+The compact form renders in the terminal's main buffer and requests only its
+visible rows. It does not enter an alternate full-screen buffer or keep a
+flexible blank spacer merely to fill the viewport; terminal history above the
+launcher remains intact. On completion it erases only its own live form before
+the caller begins Meld. This boundary is specific to `COMPACT_FORM`; saved
+Meld analysis and Resolution workbenches still own full-screen presentation.
+
+`START MELD` is intentionally concrete. There is no intermediate “Meld
+planning” screen: the setup component returns a process-local receipt, then
+`commands.meld` prepares the start, connects a provider when required, creates
+or resumes the session/Result under its existing boundaries, and opens review.
+The component itself still performs none of that work.
+
+`COMPACT_FORM` is an explicit shared-component opt-in rather than a Meld-owned
+parallel request model. Other endpoint consumers retain `WORKBENCH`, including
+their established framed trees and keyboard paths, until their own interaction
+evidence is reviewed.
+
 ## Operation adapter boundary
 
 The intended dependency direction is:
@@ -101,10 +178,16 @@ Viewer owns focus; they do not submit a response or change session state.
 - `935ec9b5` moved the remaining Resolution dependencies—Help, Save Location,
   and semantic detail—under `interfaces.tui`. An AST-based regression test now
   rejects every `memcommit.interfaces` import of `memcommit.commands`.
-- `docs/screenshots/mem-meld-shared-tui-20260815` records 20 ordered 180x52
+- `docs/screenshots/mem-meld-shared-tui-20260815` records 24 ordered 180x52
   true-color PTY states for both setup shapes and the relocated session screen.
   The captured setup receipts are process-local, sources and Result remain
   byte-identical, no checkpoint or Meld session is created, and provider calls
   remain zero. The final migration regression sets pass with 340
   Meld/component/Resolution boundary tests, 10 Grant-focused tests, and 35
   Study-prewarm tests.
+- The setup entry now uses the shared five-row compact form. Contract tests
+  cover independently typed A/B/C names, the minimal visible role labels, the
+  role-scoped full-catalog browser, existing and new C names, symmetric A/B
+  descendant reach, all four directional A/B descendant combinations, and
+  directional direct-Memory focus so the reduced presentation cannot drift
+  from the existing request fields.

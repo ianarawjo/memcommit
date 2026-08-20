@@ -18,7 +18,9 @@ COLUMNS = 180
 ROWS = 52
 
 _BASE_PATH = ROOT / "docs/screenshots/atomize-memory-selection-20260814/capture.py"
-_SPEC = importlib.util.spec_from_file_location("meld_shared_tui_capture_base", _BASE_PATH)
+_SPEC = importlib.util.spec_from_file_location(
+    "meld_shared_tui_capture_base", _BASE_PATH
+)
 assert _SPEC is not None and _SPEC.loader is not None
 _BASE = importlib.util.module_from_spec(_SPEC)
 _SPEC.loader.exec_module(_BASE)
@@ -41,19 +43,20 @@ def _prepare_store(root: Path):
     baseline = ops.init("capture/baseline")
     ops.add(baseline, "The south entrance is closed during construction.")
     ops.add(baseline, "The north entrance remains open.")
-    for context in (incoming, baseline):
+    empty_result = ops.init("capture/empty-result")
+    for context in (incoming, baseline, empty_result):
         store.create_context(context)
     store.set_current(incoming.name)
-    return store, incoming, baseline, incoming_focus
+    return store, incoming, baseline, empty_result, incoming_focus
 
 
 def _run_setup_child(store_root: Path, *, directional: bool) -> None:
     from memcommit.commands.meld_setup import choose_meld_setup
 
-    store, incoming, baseline, incoming_focus = _prepare_store(store_root)
+    store, incoming, baseline, empty_result, incoming_focus = _prepare_store(store_root)
     before = {
         context.name: store._context_file(context.name).read_bytes()
-        for context in (incoming, baseline)
+        for context in (incoming, baseline, empty_result)
     }
     label = "DIRECTIONAL" if directional else "SYMMETRIC NEW RESULT"
     print(f"$ mem meld --sessions -> New Meld · {label}", flush=True)
@@ -76,10 +79,7 @@ def _run_setup_child(store_root: Path, *, directional: bool) -> None:
         f"{receipt.right_name} · DESCENDANTS={receipt.right_descendants} · "
         f"MEMORY={receipt.right_memory_uid}"
     )
-    print(
-        "  C · "
-        f"{receipt.target_name} · CREATE={receipt.create_target} · NOT CREATED"
-    )
+    print(f"  C · {receipt.target_name} · CREATE={receipt.create_target} · NOT CREATED")
     print(
         "  EXPECTED A MEMORY · "
         f"{incoming_focus.uid} · MATCH={receipt.left_memory_uid == incoming_focus.uid}"
@@ -90,7 +90,7 @@ def _run_setup_child(store_root: Path, *, directional: bool) -> None:
     print("\nREAD-ONLY SETUP VERIFICATION")
     print(f"  CURRENT CONTEXT · {store.current_context_name()}")
     print(
-        "  SOURCE BYTES UNCHANGED · "
+        "  EXISTING CONTEXT BYTES UNCHANGED · "
         f"{all(store._context_file(name).read_bytes() == value for name, value in before.items())}"
     )
     print(
@@ -136,12 +136,12 @@ def _run_session_child(store_root: Path) -> None:
     )
     action = run_meld_shell(session)
     print("\nMELD SESSION VIEW CLOSED · READ-ONLY")
-    print(
-        "  ADAPTER · memcommit.interfaces.tui.operations.meld.screen.run_meld_shell"
-    )
+    print("  ADAPTER · memcommit.interfaces.tui.operations.meld.screen.run_meld_shell")
     print(f"  RETURNED ACTION · {action!r}")
     print(f"  SESSION STATE · {session.state}")
-    print(f"  TARGET BYTES UNCHANGED · {store._context_file(target.name).read_bytes() == before}")
+    print(
+        f"  TARGET BYTES UNCHANGED · {store._context_file(target.name).read_bytes() == before}"
+    )
     print(f"  TARGET MEMORIES · {len(store.load_direct(target.name).memories)}")
     print("  PROVIDER CALLS · 0", flush=True)
 
@@ -154,6 +154,10 @@ def _environment() -> dict[str, str]:
             "TERM": "xterm-256color",
             "COLORTERM": "truecolor",
             "PROMPT_TOOLKIT_COLOR_DEPTH": "DEPTH_24_BIT",
+            # pexpect's PTY records bytes but does not answer terminal CPR.
+            # Disable that probe so its timeout warning is not misattributed
+            # to the inline application layout under test.
+            "PROMPT_TOOLKIT_NO_CPR": "1",
             "MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG": "1",
             "PYTHONPATH": str(ROOT),
         }
@@ -192,7 +196,23 @@ def _capture_symmetric(store_root: Path) -> None:
         _BASE._settle(child)
         _snapshot(recorder, "02-symmetric-peer-a")
 
-        child.send("\t\t")
+        child.send("\x15capture/")
+        _BASE._settle(child)
+        _snapshot(recorder, "02a-symmetric-context-matches")
+
+        child.send("\x15capture/incoming")
+        _BASE._settle(child)
+        child.send("\t")
+        _BASE._settle(child)
+        _snapshot(recorder, "02b-symmetric-browse-trigger")
+
+        child.send("\r")
+        _BASE._settle(child)
+        _snapshot(recorder, "02c-symmetric-all-allowed-contexts")
+
+        child.send("\x1b")
+        _BASE._settle(child)
+        child.send("\t\t\t")
         _BASE._settle(child)
         _snapshot(recorder, "03-symmetric-peer-b")
 
@@ -233,7 +253,11 @@ def _capture_directional(store_root: Path) -> None:
         _BASE._settle(child)
         _snapshot(recorder, "09-directional-mode-selected")
 
-        child.send("\t\t\t\x1b[B\r")
+        child.send("\t\t\t\t\x1b[B")
+        _BASE._settle(child)
+        _snapshot(recorder, "09a-directional-memory-choices")
+
+        child.send("\r")
         _BASE._settle(child)
         _snapshot(recorder, "10-directional-incoming-memory")
 
@@ -241,7 +265,7 @@ def _capture_directional(store_root: Path) -> None:
         _BASE._settle(child)
         _snapshot(recorder, "11-directional-baseline")
 
-        child.send("\t\x1b[C")
+        child.send("\t\t\x1b[C")
         _BASE._settle(child)
         _snapshot(recorder, "12-directional-baseline-descendants")
 
@@ -301,11 +325,18 @@ def main() -> None:
         _capture_symmetric(root / "symmetric-store")
         _capture_directional(root / "directional-store")
         _capture_session(root / "session-store")
-    raw = "".join(
-        path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript")
-    )
+    raw = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript"))
     if "38;2;" not in raw and "48;2;" not in raw:
         raise RuntimeError("PTY stream did not contain expected true-color ANSI.")
+    setup_raw = "".join(
+        (OUT / name).read_text(encoding="utf-8")
+        for name in (
+            "08-symmetric-read-only-verification.typescript",
+            "16-directional-read-only-verification.typescript",
+        )
+    )
+    if "\x1b[?1049h" in setup_raw:
+        raise RuntimeError("Compact Meld setup entered an alternate screen buffer.")
 
 
 if __name__ == "__main__":
