@@ -8,21 +8,26 @@ the limits of the ordinary-reading judge, see
 
 ## Decision
 
-The quality-analysis surface consists of one semantic-redundancy operation and
-two explicit read-only finders:
+The quality-analysis surface consists of three explicit read-only finders and
+one applying semantic-redundancy operation:
 
 ```text
-mem dedun
+mem find-redundancies
 mem find-ambiguities
 mem find-conflicts
+mem dedun
 ```
 
 `dedun` is a deliberate product term: `dup` denotes exact stored duplicates,
-while `dun` denotes semantic redundancy. Dedun's discovery and evidence review
-are read-only; only its separately reviewed exact Apply removes redundant UIDs.
-The `find-` prefix remains on Ambiguities and Conflicts because those operations
-only report. The existing `mem find <query>` is separate literal text lookup,
-not a quality or relationship judge.
+while `dun` denotes semantic redundancy. `find-redundancies` owns the frozen
+readable-frame analysis and process-local evidence review and never exposes an
+Apply action. Dedun deliberately reuses that same analysis, then alone exposes
+confirmed evidence to its survivor review and exact Apply boundary. The hidden
+`find-duplicates` spelling is an exact callback alias of
+`find-redundancies`, folded into the canonical Help row for older scripts.
+There is no singular `find-redundancy` command. The existing
+`mem find <query>` is separate literal text lookup, not a quality or
+relationship judge.
 
 The implemented [`mem review ambiguities`](memory-review-shell-design-rationale.md)
 is a separate consumer of an ambiguity report. It persists selected readings
@@ -34,6 +39,7 @@ read-only/mutation contract or apply those annotations to Memories.
 The explicit Context forms retain the stable one-shot report contract:
 
 ```text
+mem find-redundancies --context NAME
 mem dedun --context NAME
 mem find-ambiguities --context NAME
 mem find-conflicts --context NAME
@@ -46,7 +52,8 @@ screen contains three top-to-bottom controls:
 1. `TARGETS`, the common `PROFILE` plus readable Context namespace tree;
 2. `SCOPE`, with `SINGLE TARGET` versus `MULTIPLE TARGETS` and `THIS CONTEXT
    ONLY` versus `INCLUDE DESCENDANTS`; and
-3. `TO DO`, the exact `RUN FIND ...` action for the visible checked set.
+3. `TO DO`, the exact operation-labelled Run action for the visible checked
+   set.
 
 Setup starts in `MULTIPLE TARGETS` and `THIS CONTEXT ONLY`, with the current
 Context checked and marked for orientation. This keeps one-Context execution a
@@ -90,7 +97,10 @@ reading choices, Conflict keeps its exact pair and question, and Duplicate
 adds an operation-owned review disposition for one emitted evidence link.
 Responses in this first rollout are process-local review state: they do not
 alter the report, persist a new artifact, imply resolution, or mutate Memory.
-The individual finder workbenches retain that compatibility boundary. Durable
+For `find-redundancies`, confirmation remains only a note on the read-only
+report. The Dedun adapter is the sole caller that converts confirmed eligible
+links into a survivor-review handoff; sharing the report does not share Apply
+authority. The individual finder workbenches retain that compatibility boundary. Durable
 multi-session retention is instead explicit through `mem audit`, which records
 all three reports, each finder ruleset, and provider/model provenance without
 silently changing a one-shot `find-* --context` invocation into a stored
@@ -213,7 +223,7 @@ The judgments and their public evidence deliberately have different arities:
 
 | Command | Discovery input and result unit | Primary labels |
 |---|---|---|
-| `dedun` discovery | whole selected direct-Memory frame; positive evidence links identify unordered Memory pairs | emitted: `SURFACE_EQUIVALENT`, `SEMANTIC_EQUIVALENT`; byte-identical content belongs to `dedup`; rejection boundaries: `OVERLAP`, `UNKNOWN`, `DISTINCT` |
+| `find-redundancies` / Dedun analysis | whole selected direct-Memory frame; positive evidence links identify unordered Memory pairs | emitted: `SURFACE_EQUIVALENT`, `SEMANTIC_EQUIVALENT`; byte-identical content belongs to `dedup`; rejection boundaries: `OVERLAP`, `UNKNOWN`, `DISTINCT` |
 | `find-ambiguities` | one Memory interpreted inside the complete selected frame | `SINGLE`, `DOMINANT`, `COMPETING` crossed with `NONE`, `HELPFUL`, `REQUIRED` |
 | `find-conflicts` | one unordered pair of Memories | `YES`, `MAY`, `NO` |
 
@@ -221,7 +231,7 @@ Consequently, a selected frame with `n` direct Memories has `n` unary ambiguity
 targets and admits up to `n(n-1)/2` possible binary relations. That
 cardinality does not prescribe the execution strategy. `find-conflicts`
 currently names every unordered pair as an explicit target.
-Dedun discovery instead discovers equivalence components from a
+The shared redundancy analysis instead discovers equivalence components from a
 whole-Context input and emits only a linear set of positive pair-shaped
 evidence links. It never materializes the candidate-pair space.
 

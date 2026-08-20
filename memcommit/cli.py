@@ -246,8 +246,8 @@ app.command(
     "dedun",
     help=operation_summary("dedun"),
 )(dedun.cmd)
-# Pre-Dedun spellings remain executable for exact-command receipts and scripts,
-# but command discovery teaches one semantic-redundancy operation.
+# The exact-review spelling remains executable for old receipts; ordinary
+# discovery and applying intent stay under the canonical Dedun operation.
 app.command("consolidate", hidden=True)(consolidate.cmd)
 app.command(
     "checkpoint",
@@ -295,7 +295,12 @@ app.command(
     "find",
     help=operation_summary("find"),
 )(literal_find.cmd)
-app.command("find-redundancies", hidden=True)(find_duplicates.cmd)
+app.command(
+    "find-redundancies",
+    help=operation_summary("find-redundancies"),
+)(find_duplicates.cmd)
+# Preserve the former semantic-finder spelling without presenting it as a
+# second operation. Exact byte-identical removal belongs to `mem dedup`.
 app.command("find-duplicates", hidden=True)(find_duplicates.cmd)
 app.command(
     "find-ambiguities",

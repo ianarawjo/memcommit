@@ -45,16 +45,17 @@ A no-op prints that no exact duplicates exist and creates no checkpoint.
 - A successful mutation records contract `exact-dedup-v1`, exact survivor and
   absorbed UIDs, and remains recoverable with `mem undo`.
 
-## Semantic redundancy is Dedun
+## Semantic redundancy finder and Dedun
 
 Different wording that appears interchangeable is not an exact duplicate.
-`mem dedun` owns provider-backed discovery, semantic evidence confirmation,
-survivor review, and exact Apply. It excludes `EXACT` rows and accepts only
-`SURFACE_EQUIVALENT` or `SEMANTIC_EQUIVALENT` evidence. Its review screen and
-survivor decision remain distinct from exact Dedup. The old
-`find-redundancies`, `find-duplicates`, and `consolidate` spellings are hidden
-compatibility aliases; finder and handoff terminology is not part of ordinary
-command Help.
+`mem find-redundancies` owns provider-backed, read-only analysis and evidence
+review. `mem dedun` reuses exactly that analysis, then alone exposes semantic
+evidence confirmation, survivor review, and exact Apply. Both exclude `EXACT`
+rows; Dedun accepts only `SURFACE_EQUIVALENT` or `SEMANTIC_EQUIVALENT`
+evidence. The hidden `find-duplicates` spelling is an exact callback alias of
+the canonical read-only finder and is folded into its Help row. There is no
+singular `find-redundancy` command. Hidden `consolidate` remains only the exact
+Dedun review replay route.
 
 ## Alternatives and limits
 

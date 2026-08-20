@@ -2,8 +2,9 @@
 
 ## Motivation
 
-Summarize, Trace, Rationale, Dedun's discovery phase, and the two quality Find
-operations all produce read-only reports before any later action, but their interactive entry paths had diverged. Trace and
+Summarize, Trace, Rationale, the three quality Find operations, and Dedun's
+shared discovery phase all produce read-only reports before any later action,
+but their interactive entry paths had diverged. Trace and
 Rationale reused the saved-session picker for content-free navigation history,
 Summarize opened its Context workbench directly, and the finders always opened
 fresh target setup. That made visually similar operations imply different
@@ -63,6 +64,12 @@ Select-Target action. It does not own target trees or result documents:
 - The quality-analysis family retains its multi-target/Profile setup and
   process-local Resolution report, including typed Resolve and semantic Dedun
   evidence routes.
+
+Find Redundancies and Dedun intentionally have distinct report identities even
+though they share one analyzer and presentation model. The finder closes with
+process-local evidence only. Dedun alone installs the confirmed-evidence
+handoff that begins survivor review and exact Apply, so replay identity cannot
+accidentally broaden a read-only invocation into mutation authority.
 
 This is composition rather than one universal report model. The operations
 share launch and lifecycle identity while preserving different evidence,

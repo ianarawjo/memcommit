@@ -8,8 +8,10 @@ distinction matters while building the study prototype and when preparing its
 printed cheat sheet.
 
 `mem help` therefore renders one concise inventory line per visible registered
-command. The interactive browser offers two projections of the same audited
-metadata: `BY KIND` for intent-first discovery and `A–Z` for exact-name lookup.
+command. An exact hidden spelling may be folded into its canonical row when
+both execute the same callback and contract. The interactive browser offers two
+projections of the same audited metadata: `BY KIND` for intent-first discovery
+and `A–Z` for exact-name lookup.
 The stable non-TTY inventory remains case-insensitive A–Z for scripts and
 captured study output:
 
@@ -252,6 +254,12 @@ prompt-toolkit selector:
   its canonical label, as in `list (ls)` and `delete (remove)`, while remaining
   directly executable. `remove` is therefore not a second deletion operation:
   both spellings reach the same callback and the canonical Delete contract.
+  The same rule makes `find-redundancies (find-duplicates)` one read-only
+  semantic-quality operation: the plural redundancy spelling is canonical and
+  visible, while the older duplicate spelling remains executable but hidden.
+  The alias does not become a second Help operation or evidence-ledger row.
+  There is no singular `find-redundancy` route. Syntax-first root Help displays
+  only the canonical command.
   `A–Z` has no semantic categories, so its complete visible-operation
   projection occupies one `A–Z` box.
   Because that projection owns only one box, the box fills any spare list
@@ -310,6 +318,14 @@ prompt-toolkit selector:
   such as `[context]`. `H` separately opens the registered command's complete
   syntax help.
 - `q`, Escape, and Ctrl-C cancel without selecting or invoking anything.
+
+The hidden prompt-toolkit cursor anchor follows the complete focused command
+record (and the complete focused wrapped Form), rather than preceding its first
+line. Cursor visibility is the scroll boundary: placing the anchor before a
+two-line record allowed the final `mem eval` summary to remain visible while
+its `WHEN` row and category border were clipped below the viewport. Anchoring
+after the record keeps the whole semantic unit visible at the bottom without
+adding a synthetic blank row or changing the fixed footer height.
 
 The scrollable inventory and its fixed footer are separated by the shared
 horizontal-rule primitive configured with a one-column right gutter. Its

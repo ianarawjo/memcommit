@@ -1,10 +1,11 @@
 # Quality Find aggregate-range setup capture log
 
 This ordered set records the shared flagless setup used by `mem
-find-duplicates`, `mem find-ambiguities`, and `mem find-conflicts`. Duplicate
-is the representative command because all three use the same target, scope,
-approval, cancellation, and read-only boundaries; only the operation label and
-the already-existing result adapter differ.
+find-redundancies`, `mem find-ambiguities`, and `mem find-conflicts`. Find
+Redundancies is the representative command because all three use the same
+target, scope, approval, cancellation, and read-only boundaries; only the
+operation label and result adapter differ. Dedun reuses the same source setup
+but owns a later applying handoff.
 
 ## Reproduction frame
 
@@ -27,7 +28,7 @@ the already-existing result adapter differ.
 
 | Image | Input since preceding image | Visible state | Durable mutation |
 | --- | --- | --- | --- |
-| `01-entry-current-target.png` | Launch `FIND DUPLICATES` setup | `MULTIPLE TARGETS` and `THIS CONTEXT ONLY` are visible; current `study/policy` is checked | None |
+| `01-entry-current-target.png` | Launch `FIND REDUNDANCIES` setup | `MULTIPLE TARGETS` and `THIS CONTEXT ONLY` are visible; current `study/policy` is checked | None |
 | `02-multiple-independent-targets.png` | `Down`, `Enter` | `study/operations` joins the checked set without clearing `study/policy` | None |
 | `03-multiple-target-setting.png` | `Tab` | Scope owns focus and visibly confirms `MULTIPLE TARGETS` | None |
 | `04-include-descendants-setting.png` | `Down`, `Right` | `INCLUDE DESCENDANTS` is selected and the effective count becomes three | None |

@@ -474,7 +474,41 @@ def test_duplicate_projection_reviews_emitted_links_without_choosing_survivor():
         "REJECT LINK",
         "DEFER",
     ]
+    assert item.kind == "REDUNDANCY"
+    assert "redundancy evidence" in item.question
     assert all("survivor" not in option.text.casefold() for option in item.options)
+
+
+def test_shared_redundancy_report_projects_caller_owned_operation_identity():
+    ctx, first, second = _context()
+    session = create_quality_find_workbench(
+        "duplicates",
+        ctx,
+        DuplicateReport(
+            memory_count=2,
+            findings=(
+                DuplicateFinding(
+                    left=first,
+                    right=second,
+                    relation="SEMANTIC_EQUIVALENT",
+                    reason="Equivalent.",
+                ),
+            ),
+        ),
+    )
+
+    dedun = quality_find_resolution_view(session, ctx)
+    finder = quality_find_resolution_view(
+        session,
+        ctx,
+        operation_label="FIND REDUNDANCIES",
+    )
+
+    assert (dedun.operation, dedun.title) == ("DEDUN", "MEM DEDUN")
+    assert (finder.operation, finder.title) == (
+        "FIND REDUNDANCIES",
+        "MEM FIND REDUNDANCIES",
+    )
 
 
 def test_process_local_workbench_fails_closed_when_context_changes():
@@ -561,11 +595,18 @@ def test_conflict_workbench_hands_off_the_selected_typed_finding():
 
 
 @pytest.mark.parametrize(
-    ("module_name", "command_name", "kind"),
+    ("module_name", "command_name", "kind", "operation_name", "has_handoff"),
     [
-        ("find_ambiguities", "find-ambiguities", "ambiguities"),
-        ("find_conflicts", "find-conflicts", "conflicts"),
-        ("find_duplicates", "dedun", "duplicates"),
+        ("find_ambiguities", "find-ambiguities", "ambiguities", None, False),
+        ("find_conflicts", "find-conflicts", "conflicts", None, False),
+        (
+            "find_duplicates",
+            "find-redundancies",
+            "duplicates",
+            "find-redundancies",
+            False,
+        ),
+        ("find_duplicates", "dedun", "duplicates", "dedun", True),
     ],
 )
 def test_flagless_tty_commands_route_to_the_shared_quality_workbench(
@@ -574,12 +615,14 @@ def test_flagless_tty_commands_route_to_the_shared_quality_workbench(
     module_name,
     command_name,
     kind,
+    operation_name,
+    has_handoff,
 ):
     store = MemoryStore()
     ctx, _first, _second = _context()
     store.create_context(ctx)
     store.set_current(ctx.name)
-    observed: list[tuple[str | None, str]] = []
+    observed: list[tuple[str | None, str, str | None, bool]] = []
     module_path = f"memcommit.commands.{module_name}"
 
     monkeypatch.setattr(
@@ -588,12 +631,20 @@ def test_flagless_tty_commands_route_to_the_shared_quality_workbench(
     )
     monkeypatch.setattr(
         f"{module_path}.run_interactive_quality_find",
-        lambda _store, *, current_name, kind, analyze, **_kwargs: (
-            observed.append((current_name, kind)) or True
+        lambda _store, *, current_name, kind, analyze, **kwargs: (
+            observed.append(
+                (
+                    current_name,
+                    kind,
+                    kwargs.get("operation_name"),
+                    kwargs.get("duplicate_handoff_handler") is not None,
+                )
+            )
+            or True
         ),
     )
 
     result = runner.invoke(app, [command_name])
 
     assert result.exit_code == 0, result.output
-    assert observed == [(ctx.name, kind)]
+    assert observed == [(ctx.name, kind, operation_name, has_handoff)]

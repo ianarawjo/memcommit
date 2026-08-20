@@ -46,12 +46,13 @@ def _run_child() -> None:
         ),
         current="study/policy",
         kind="duplicates",
+        operation_name="find-redundancies",
     )
     if receipt is None:
         print("QUALITY FIND SETUP CANCELLED · NO PROVIDER · NO SOURCE MUTATION")
         return
     print(
-        "APPROVED QUALITY FIND RANGE · "
+        "APPROVED FIND REDUNDANCIES RANGE · "
         f"{receipt.selection_mode} · "
         f"{'INCLUDE DESCENDANTS' if receipt.include_descendants else 'THIS CONTEXT ONLY'}"
     )
@@ -95,7 +96,7 @@ def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     child, recorder = _spawn()
     try:
-        child.expect("MEM FIND DUPLICATES · SETUP")
+        child.expect("MEM FIND REDUNDANCIES · SETUP")
         _BASE._settle(child)
         _snapshot(recorder, "01-entry-current-target")
 
@@ -124,7 +125,7 @@ def main() -> None:
         _snapshot(recorder, "06-exact-run-review")
 
         child.send("\r")
-        child.expect("APPROVED QUALITY FIND RANGE")
+        child.expect("APPROVED FIND REDUNDANCIES RANGE")
         child.expect("PRESS ENTER FOR READ-ONLY VERIFICATION")
         _BASE._settle(child)
         _snapshot(recorder, "07-approved-range-receipt")

@@ -130,6 +130,7 @@ class TestHelp:
         assert remove_command is not None and remove_command.hidden
         assert help_inventory.COMMAND_DISPLAY_ALIASES == {
             "delete": ("remove",),
+            "find-redundancies": ("find-duplicates",),
             "list": ("ls",),
         }
         assert list_command.callback.__wrapped__ is ls_command.callback.__wrapped__
@@ -150,6 +151,45 @@ class TestHelp:
         assert inventory_result.exit_code == 0
         assert "\ndelete (remove) " in inventory_result.output
         assert "\nremove " not in inventory_result.output
+
+    def test_help_folds_find_duplicates_into_read_only_find_redundancies(self):
+        root = get_command(app)
+        context = click.Context(root)
+        try:
+            find_duplicates = root.get_command(context, "find-duplicates")
+            find_redundancies = root.get_command(context, "find-redundancies")
+            find_redundancy = root.get_command(context, "find-redundancy")
+            entry = next(
+                entry
+                for entry in help_inventory.command_entries(context)
+                if entry.name == "find-redundancies"
+            )
+        finally:
+            context.close()
+
+        assert find_duplicates is not None and find_duplicates.hidden
+        assert find_redundancies is not None and not find_redundancies.hidden
+        assert find_redundancy is None
+        assert (
+            find_duplicates.callback.__wrapped__
+            is find_redundancies.callback.__wrapped__
+        )
+        assert help_inventory.COMMAND_DISPLAY_ALIASES["find-redundancies"] == (
+            "find-duplicates",
+        )
+        assert entry.aliases == ("find-duplicates",)
+        assert entry.operation_help.name == "find-redundancies"
+        assert entry.forms[0].startswith("mem find-redundancies")
+
+        root_result = invoke("--help")
+        inventory_result = invoke("help")
+
+        assert root_result.exit_code == 0
+        assert "│ find-duplicates " not in root_result.output
+        assert "│ find-redundancies " in root_result.output
+        assert inventory_result.exit_code == 0
+        assert "\nfind-redundancies (find-duplicates) " in inventory_result.output
+        assert "\nfind-duplicates " not in inventory_result.output
 
     def test_integrate_is_not_a_public_command(self):
         result = invoke("integrate", "new information")
@@ -180,6 +220,40 @@ class TestHelp:
         assert all(len(line) == 52 for line in lines)
         assert lines[-2] == "│" + " " * 50 + "│"
         assert lines[-1] == "└" + "─" * 50 + "┘"
+
+    def test_focused_command_cursor_anchor_follows_the_complete_record(self):
+        root = get_command(app)
+        context = click.Context(root)
+        try:
+            entry = next(
+                entry
+                for entry in help_inventory.command_entries(context)
+                if entry.name == "eval"
+            )
+        finally:
+            context.close()
+
+        fragments = help_inventory._help_group_fragments(
+            [(0, entry)],
+            title="SYSTEM & STUDY TOOLS",
+            width=180,
+            focused=True,
+            selected_index=0,
+            expanded_index=None,
+            selected_form=None,
+        )
+        cursor_index = next(
+            index
+            for index, (style, _text) in enumerate(fragments)
+            if style == "[SetCursorPosition]"
+        )
+        before_cursor = "".join(text for _style, text in fragments[:cursor_index])
+        after_cursor = "".join(text for _style, text in fragments[cursor_index + 1 :])
+
+        assert "▸ mem eval" in before_cursor
+        assert "WHEN ·" in before_cursor
+        assert before_cursor.endswith("\n")
+        assert after_cursor.startswith("┗")
 
     def test_information_box_is_full_width_and_only_in_by_kind(self):
         fragments = help_inventory._help_information_box_fragments(

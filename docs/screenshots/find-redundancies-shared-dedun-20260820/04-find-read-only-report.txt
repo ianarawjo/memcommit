@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ MEM FIND REDUNDANCIES                                                                                                                                                           ^┃
+┃ CONTEXT LOCATIONS                                                                                                                                                                ┃
+┃   SOURCE · quality/redundancy-capture                                                                                                                                            ┃
+┃ PROCESS LOCAL · 0/1 ANSWERED · 1 CONTEXTS · 2 SOURCE MEMORIES · 1 FINDINGS · 0 ANSWERED                                                                                          ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT MEM UNDERSTOOD                                                                                                                                                              ┃
+┃ SCOPE                                                                                                                                                                            ┃
+┃ Inspected 2 direct Memories across 1 frozen readable Context as one analysis frame. MULTIPLE TARGET SELECTION · THIS CONTEXT ONLY. Embedded Context edges were not followed.     ┃
+┃                                                                                                                                                                                  ┃
+┃ FINDINGS                                                                                                                                                                         ┃
+┃ Reported 1 actionable redundancy finding.                                                                                                                                        ┃
+┃                                                                                                                                                                                  ┃
+┃ BOUNDARY                                                                                                                                                                         ┃
+┃ Responses are process-local review notes. No Context or Memory changes have been applied.                                                                                        ┃
+┃                                                                                                                                                                                  ┃
+┃ ACTIONABLE FINDINGS · 1                                                                                                                                                          ┃
+┃ REDUNDANCY 1 · The parking garage is inaccessible after 10 p.m. ↔ Do not enter the parking garage after 22:00.                                                                   ┃
+┃ [SEMANTIC_EQUIVALENT] Both Memories prohibit garage access after the same 10 p.m. boundary.                                                                                      ┃
+┃ QUESTION · Should this emitted redundancy evidence link be retained?                                                                                                             ┃
+┃                                                                                                                                                                                  ┃
+┃ RESOLVE ALL · WHOLE-SET STRATEGY                                                                                                                                                 ┃
+┃ Choose a strategy below. It requests a revised proposal and never applies the target.                                                                                            ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› REPORT         Complete Find Redundancies report                                                                                                                               ^│
+│  REDUNDANCY     The parking garage is inaccessible after 10 p.m. ↔ Do not enter the parking garage after 22:00.                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ COMPLETE ]  Required review is complete · 1 optional review remains open. No whole-set action is required; close or revisit an item.                                            │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close H Help  y/Y copy  Q close

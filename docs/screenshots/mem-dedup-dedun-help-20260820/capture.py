@@ -44,14 +44,13 @@ def main() -> None:
     assert "byte-identical duplicates (dup)" in entry
     assert "semantic redundancies (dun)" in entry
     assert "mem consolidate" not in entry
-    assert "mem find-redundancies" not in entry
 
     child.send("\x1b[C")
     _BASE._pump(child, seconds=0.8)
     dedun = _BASE._snapshot(recorder, "02-dedun-expanded")
     assert "▾ mem dedun" in dedun
     assert "EXECUTION · SEMANTIC" in dedun
-    assert "semantic redundancy groups" in dedun
+    assert "Direct Context Memories -> semantic groups" in dedun
     assert "PARTIAL OVERLAP" in dedun
     assert "abc and bcd sharing bc" in dedun
     assert "run Atomize first" in dedun
@@ -66,6 +65,24 @@ def main() -> None:
     assert "exact-content groups" in dedup
     assert "no provider or TUI" in dedup
     assert "FORM 1 · mem dedup" in dedup
+
+    child.send("\x1b[D\x1b[H" + "\x1b[B" * 24)
+    _BASE._pump(child, seconds=0.8)
+    finder = _BASE._snapshot(recorder, "04-find-redundancies")
+    assert "▸ mem find-" in finder
+    assert "mem find-redundancies" in finder
+    assert "(find-duplicates)" in finder
+    assert "without changing any Source Context" in finder
+
+    child.send("\x1b[C")
+    _BASE._pump(child, seconds=0.8)
+    expanded_finder = _BASE._snapshot(
+        recorder,
+        "05-find-redundancies-expanded",
+    )
+    assert "▾ mem find-" in expanded_finder
+    assert "Read-only; reviewer responses remain process-local" in expanded_finder
+    assert "FORM 1 · mem find-redundancies" in expanded_finder
     _BASE._assert_color(recorder.getvalue())
     _close(child)
 

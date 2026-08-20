@@ -73,6 +73,9 @@ BEST_FOR_BY_OPERATION = {
         "Finding Memories that permit unclear or multiple interpretations."
     ),
     "find-conflicts": "Finding mutually incompatible claims or instructions.",
+    "find-redundancies": (
+        "Inspecting semantic redundancy before deciding whether any cleanup is needed."
+    ),
     "fit": (
         "Checking whether a defined set of Memories, Rules, Goals, Examples, "
         "or other propositions can jointly hold."

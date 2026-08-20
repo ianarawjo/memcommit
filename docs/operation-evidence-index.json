@@ -37,6 +37,8 @@
       "docs/dedun-callable-boundary-matrix.md",
       "docs/dedun-design-rationale.md",
       "docs/execution-receipt-review-lifecycle-design-rationale.md",
+      "docs/memory-quality-finders-design-rationale.md",
+      "docs/quality-finding-handoff-design-rationale.md",
       "docs/resolution-lifecycle-design-rationale.md"
     ],
     "delete": [
@@ -70,6 +72,12 @@
       "docs/read-report-lifecycle-design-rationale.md"
     ],
     "find-conflicts": [
+      "docs/read-report-lifecycle-design-rationale.md"
+    ],
+    "find-redundancies": [
+      "docs/find-redundancies-callable-boundary-matrix.md",
+      "docs/memory-quality-finders-design-rationale.md",
+      "docs/quality-finding-handoff-design-rationale.md",
       "docs/read-report-lifecycle-design-rationale.md"
     ],
     "fit": [

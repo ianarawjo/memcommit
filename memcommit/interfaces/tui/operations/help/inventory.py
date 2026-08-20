@@ -93,6 +93,7 @@ COMMAND_ANNOTATIONS = {
 # checkout do not belong here because they route to more than one operation.
 COMMAND_DISPLAY_ALIASES = {
     "delete": ("remove",),
+    "find-redundancies": ("find-duplicates",),
     "list": ("ls",),
 }
 
@@ -239,6 +240,7 @@ HELP_CATEGORY_GROUPS = (
         "CHECK, COMPARE & REVIEW",
         (
             "compare",
+            "find-redundancies",
             "find-ambiguities",
             "find-conflicts",
             "audit",
@@ -534,6 +536,10 @@ COMMAND_FORMS = {
     "find-conflicts": (
         "mem find-conflicts (current Context; no changes)",
         "mem find-conflicts --context [context] (explicit Context; no changes)",
+    ),
+    "find-redundancies": (
+        "mem find-redundancies (inspect semantic redundancy without changing Sources)",
+        "mem find-redundancies --context [context] (one-shot semantic redundancy report)",
     ),
     "forget": (
         "mem forget (enter interactive instruction and direct-Source setup)",
@@ -1255,8 +1261,6 @@ def _help_group_fragments(
         expanded = index == expanded_index
         owns_selection = index == selected_index
         command_focused = focused and owns_selection and selected_form is None
-        if command_focused:
-            fragments.append(("[SetCursorPosition]", ""))
         marker = "▾" if expanded else "▸"
         first_label = label_lines[index][0]
         # Each operation owns its junction. Keeping it next to that operation
@@ -1310,6 +1314,12 @@ def _help_group_fragments(
                     ]
                 )
             fragments.append((border_style, vertical + "\n"))
+        if command_focused:
+            # Anchor after the complete connected record. Prompt-toolkit only
+            # guarantees visibility through the cursor row; anchoring before
+            # a two-line record let the final WHEN row (and the closing border
+            # after `mem eval`) fall below the viewport at the end of Help.
+            fragments.append(("[SetCursorPosition]", ""))
         if expanded:
             if entry.operation_help is not None:
                 composed = compose_operation_help(
@@ -1413,8 +1423,6 @@ def _help_group_fragments(
                     break_long_words=True,
                     break_on_hyphens=False,
                 ) or [prefix]
-                if form_focused:
-                    fragments.append(("[SetCursorPosition]", ""))
                 for line in lines:
                     fragments.extend(
                         [
@@ -1426,6 +1434,10 @@ def _help_group_fragments(
                             (border_style, vertical + "\n"),
                         ]
                     )
+                if form_focused:
+                    # Wrapped Forms follow the same whole-record visibility
+                    # rule as collapsed commands.
+                    fragments.append(("[SetCursorPosition]", ""))
     if viewport_height is not None:
         # A–Z owns one box, so keep spare viewport rows inside that box instead
         # of implying that more unboxed content exists below the final command.

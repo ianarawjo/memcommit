@@ -1,0 +1,2 @@
+COMMAND EXIT · 0                                                                                                                                                                    
+FIND-REDUNDANCIES VERIFICATION · MEMORIES 2 · CHECKPOINTS 0 · CURRENT quality/redundancy-capture · PROVIDER OPERATIONS ['find_duplicates']

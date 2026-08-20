@@ -1,0 +1,52 @@
+┌────────────────────────────────────────────────────────────────────────────────────| VIEWER |────────────────────────────────────────────────────────────────────────────────────┐
+│                                                                                                                                                                                 ^│
+│ REDUNDANCY 1/1                                                                                                                                                                   │
+│ The parking garage is inaccessible after 10 p.m. ↔ Do not enter the parking garage after 22:00.                                                                                  │
+│ [SEMANTIC_EQUIVALENT] OPEN                                                                                                                                                       │
+│ REVIEW SET · REQUIRED 0 · OPTIONAL 1                                                                                                                                             │
+│ CLASSIFICATION                                                                                                                                                                   │
+│ SEMANTIC_EQUIVALENT                                                                                                                                                              │
+│                                                                                                                                                                                  │
+│ SOURCE MEMORIES                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│ SOURCE 1 · FROM quality/redundancy-capture                                                                                                                                       │
+│   [20000000] The parking garage is inaccessible after 10 p.m.                                                                                                                    │
+│                                                                                                                                                                                  │
+│ SOURCE 2 · FROM quality/redundancy-capture                                                                                                                                       │
+│   [20000000] Do not enter the parking garage after 22:00.                                                                                                                        │
+│                                                                                                                                                                                  │
+│ WHY THESE MEMORIES ARE REDUNDANT                                                                                                                                                 │
+│ Both Memories prohibit garage access after the same 10 p.m. boundary.                                                                                                            │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ RESPONSES ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ REVIEW DECISION                                                                                                                                                                 ^┃
+┃ Should this emitted redundancy evidence link be retained?                                                                                                                        ┃
+┃ EVIDENCE LINK DISPOSITION                                                                                                                                                        ┃
+┃ ↑/↓ move through choices and Response · Enter select                                                                                                                             ┃
+┃  1. CONFIRM LINK                                                                                                                                                                 ┃
+┃  Retain this pair as positive redundancy evidence.                                                                                                                               ┃
+┃                                                                                                                                                                                  ┃
+┃  2. REJECT LINK                                                                                                                                                                  ┃
+┃  Reject this evidence link; keep the two Memories distinct.                                                                                                                     v┃
+┃┌──────────────────────────────────────────────────────────────────────────────────| RESPONSE |──────────────────────────────────────────────────────────────────────────────────┐┃
+┃│›                                                                                                                                                                              ^│┃
+┃│                                                                                                                                                                                │┃
+┃│                                                                                                                                                                                │┃
+┃│                                                                                                                                                                               v│┃
+┃└────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│  REPORT         Complete Find Redundancies report                                                                                                                               ^│
+│› REDUNDANCY     The parking garage is inaccessible after 10 p.m. ↔ Do not enter the parking garage after 22:00.                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ COMPLETE ]  Required review is complete · 1 optional review remains open. No whole-set action is required; close or revisit an item.                                            │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ choice/Response  Enter select  Esc/Backspace report  Tab switch H Help  Q close

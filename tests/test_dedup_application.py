@@ -489,14 +489,16 @@ def test_cli_dedup_removes_only_exact_content_without_review(isolated_store):
     assert store.list_checkpoints(context.name)[0]["command"] == "dedup"
 
 
-def test_help_teaches_dup_and_dun_without_exposing_internal_stages():
+def test_help_teaches_exact_dedup_read_only_redundancy_and_applying_dedun():
     root_help = runner.invoke(app, ["--help"])
     dedun_help = runner.invoke(app, ["dedun", "--help"])
 
     assert root_help.exit_code == 0
     assert "byte-identical duplicates (dup)" in root_help.stdout
     assert "semantic redundancies (dun)" in root_help.stdout
-    assert "find-redundancies" not in root_help.stdout
+    assert "find-redundancies" in root_help.stdout
+    assert "Report semantically redundant direct Memories" in root_help.stdout
+    assert "changing any Source Context" in root_help.stdout
     assert "consolidate" not in root_help.stdout
     assert dedun_help.exit_code == 0
     assert "--context" in dedun_help.stdout

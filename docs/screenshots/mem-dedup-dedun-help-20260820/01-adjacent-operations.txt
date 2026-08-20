@@ -32,7 +32,7 @@ OPERATIONS                                                                      
 ┃     (legacy)    └ WHEN · Inspecting or changing stored global settings through the legacy low-level interface.                                                                  ┃ 
 ┃ ▸ mem contexts ─┬ List local Contexts and readable cross-Profile Context views.                                                                                                 ┃ 
 ┃                 └ WHEN · Exploring every Context currently available to the Profile.                                                                                            ┃ 
-┃ ▸ mem dedun ─┬ Find and resolve semantic redundancies (dun), retaining one unchanged existing Memory in each reviewed group.                                                    ┃ 
+┃ ▸ mem dedun ─┬ Find and resolve semantic redundancies (dun), retaining one unchanged existing Memory in each operation-decided group.                                           ┃ 
 ┃              └ WHEN · Removing semantic redundancy while preserving one exact existing Memory and its UID in each reviewed group.                                               ┃ 
 ┃ ▸ mem dedup ─┬ Remove byte-identical duplicates (dup) immediately, retaining the first existing UID for each exact-content group.                                               ┃ 
 ┃              └ WHEN · Removing byte-identical direct Memories while preserving the first existing UID.                                                                          ┃ 

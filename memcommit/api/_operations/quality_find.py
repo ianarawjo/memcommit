@@ -135,7 +135,7 @@ def find_quality(
         raise_public(SemanticInputError, error)
 
     operation = {
-        "duplicates": ops.find_duplicates,
+        "duplicates": ops.find_redundancies,
         "ambiguities": ops.find_ambiguities,
         "conflicts": ops.find_conflicts,
     }[kind]
@@ -154,7 +154,7 @@ def find_quality(
     except (TypeError, ValueError, RuntimeError) as error:
         raise_public(SemanticExecutionError, error)
     return QualityFindResult(
-        kind=kind,
+        kind="redundancies" if kind == "duplicates" else kind,
         context_names=source.context_names,
         source_digest=source.digest,
         memory_count=report.memory_count,

@@ -606,6 +606,11 @@ _OPERATION_DISCOVERY_TOKENS = {
     "dedun": ("dedun", "consolidate", "find_duplicates", "dedup"),
     "dedup": ("exact_dedup",),
     "eval": ("eval", "semantic_eval"),
+    "find-redundancies": (
+        "find_redundancies",
+        "find_duplicates",
+        "quality_find",
+    ),
     "help": ("help", "help_inventory"),
     "import": ("import", "import_profile"),
     "init": ("init", "context_init"),
@@ -637,6 +642,10 @@ def _operation_package_matches(module: str, tokens: tuple[str, ...]) -> bool:
 def _matrix_matches(path: Path, operation: str, tokens: tuple[str, ...]) -> bool:
     stem = path.stem.replace("-", "_")
     canonical = operation.replace("-", "_")
+    if operation == "find" and stem.startswith("find_redundancies_"):
+        # Literal Find owns the deliberately joint Find/Search matrix, but the
+        # longer quality-finder name is a separate canonical Help operation.
+        return False
     if stem == canonical or stem.startswith(canonical + "_"):
         return True
     if operation == "dedun":

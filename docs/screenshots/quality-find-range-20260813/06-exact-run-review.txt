@@ -1,4 +1,4 @@
- MEM FIND DUPLICATES · SETUP                                                                                                                                                        
+ MEM FIND REDUNDANCIES · SETUP                                                                                                                                                      
  MULTIPLE TARGETS · INCLUDE DESCENDANTS · 3 CONTEXT(S) · SOURCE UNCHANGED                                                                                                           
 ┌────────────────────────────────────────────────────────| TARGETS · PROFILE/CONTEXT · * CURRENT · ENTER/SPACE TO SELECT |─────────────────────────────────────────────────────────┐
 │  ·   PROFILE  ALL READABLE CONTEXTS                                                                                                                                             ^│
@@ -13,7 +13,7 @@
 │  CONTEXT RANGE · [ THIS CONTEXT ONLY ]  [ INCLUDE DESCENDANTS ] · ←/→ SELECT                                                                                                     │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ TO DO · ENTER TO RUN ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃› RUN FIND DUPLICATES                                                                                                                                                             ┃
+┃› RUN FIND REDUNDANCIES                                                                                                                                                           ┃
 ┃  Analyze direct Memories across 3 selected Contexts as one frame; Sources unchanged.                                                                                             ┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
  Enter run · ↑ setup · Tab/Shift-Tab pane · Esc/Q cancel

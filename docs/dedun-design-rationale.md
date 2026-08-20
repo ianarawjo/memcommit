@@ -19,15 +19,19 @@ rewriting or combining content. Dedun is short, symmetrical with Dedup, and
 names the product-specific safety contract precisely after Help teaches the
 `dup`/`dun` distinction once.
 
-## One public operation, staged internally
+## Shared analysis, Dedun-owned Apply
 
-The semantic lifecycle remains staged for safety, but its stages are not
-separate Help operations:
+The semantic analysis is also a complete public read-only operation, while
+Dedun owns the later applying stages:
 
 ```text
-mem dedun
+mem find-redundancies
   -> find SURFACE_EQUIVALENT / SEMANTIC_EQUIVALENT evidence
-  -> confirm evidence links
+  -> inspect or annotate evidence without changing a Source
+
+mem dedun
+  -> reuse the same analysis and evidence report
+  -> confirm eligible evidence links
   -> form connected redundancy groups
   -> choose one unchanged existing survivor per group
   -> review one exact command
@@ -40,9 +44,11 @@ choices. The final review emits a stateless `mem dedun` replay containing
 canonical semantic redundancy evidence, selections, and the frozen revision;
 those mechanical fields stay hidden from ordinary command Help.
 
-The former `find-redundancies`, `find-duplicates`, and `consolidate` spellings
-remain hidden executable compatibility aliases. They are not independent
-operations in the Help catalog or operation evidence ledger.
+`find-duplicates` remains a hidden exact callback alias of the canonical
+read-only `find-redundancies` command and is folded into that Help row. There
+is no singular `find-redundancy` command. The exact-review `consolidate`
+spelling remains hidden for existing stateless receipts; it is a Dedun Apply
+adapter, not another discovery operation.
 
 ## Invariants
 

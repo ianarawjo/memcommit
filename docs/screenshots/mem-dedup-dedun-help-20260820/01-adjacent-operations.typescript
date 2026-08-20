@@ -50,7 +50,7 @@
 [0m│[0;1m ▸ mem init ─[0;38;5;243m┬ [0mCreate a new empty Context and make it the current working Context.                                                                                               [0m│[179C[0;48;5;248m [0m
 [0m│[0;1m             [0;38;5;243m└ [0mWHEN · Starting a separate workspace for a new topic, task, or group of Memories.                                                                                 │[179C[0;1mv[0m
 [0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
-[0m ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help[98D[22A[0m[24A[11C[0m   BY KIND [4C[0;38;5;234;48;5;117m ✓ A–Z [0m
+[0m ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help[98D[20A[0m[26A[11C[0m   BY KIND [4C[0;38;5;234;48;5;117m ✓ A–Z [0m
 
 [0;1mOPERATIONS                                                                                                                                                                         [0m
 [0;38;5;117;1m┏ A–Z ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
@@ -79,7 +79,7 @@
 [2C[0;1m [C  (legacy)    [0;38;5;243m└ [0mWHEN[C· Inspecti[Cg or changing stor[Cd global[Csett[3Cs [Chrough the legacy[Clow-level[Cinterface.[0m
 [2C[0;1m▸[Cmem[Ccontexts ─[0;38;5;243m┬ [0mList local Cont[Cxts and[Creadable cros[C-Profile[CContext views.[0m
 [2C[0;1m [C   [C        [C [0;38;5;243m└[C[0mWHEN[C· Exploring every Context cur[Cently available to the Profile.[0m
-[C[0;38;5;234;48;5;117;1m ▸ mem dedun ─┬ Find and resolve semantic redundancies (dun), retaining one unchanged existing Memory in each reviewed group.                                                    [0m
+[C[0;38;5;234;48;5;117;1m ▸ mem dedun ─┬ Find and resolve semantic redundancies (dun), retaining one unchanged existing Memory in each operation-decided group.                                           [0m
 [C[0;38;5;234;48;5;117;1m              └ WHEN · Removing semantic redundancy while preserving one exact existing Memory and its UID in each reviewed group.                                               [0m
 [2C[0;1m▸[Cmem dedup[C─[0;38;5;243m┬ [0mR[2Cove byte-id[2Ctical duplicates (dup) immediately, retaining[Cthe first[Cexisting[CUID[Cfor[Ceach[Cexact-content[Cgroup.[0m
 [14C[0;1m [0;38;5;243m└ [0mWHEN · Removing byt[C-identical[Cdirect Memories while preserving the[Cfirst[Cexisting[CUID.[0m
@@ -96,4 +96,4 @@
 [0;38;5;117;1m┃[7C[0;1membed ─[0;38;5;243m┬ [0mPl[Cc[4Clive link[Ct[C one Memory or[CCon[Cext inside[Ca local[CTarg[Ct while[Cretaining[CSource[Cownership.[63C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[13C[0;1m [0;38;5;243m└ [0mWHEN · Reus[6CM[Cmo[Cy or Context in anoth[Cr[CC[Cntext while foll[Cwing later Source[Cchanges.[70C[0;38;5;117;1m┃[0m
 
-[76C[0msurface  H[Cfull help[0m[K[17A[96D[0m
+[76C[0msurface  H[Cfull help[0m[K[15A[96D[0m

@@ -2,22 +2,24 @@
 
 ## Reviewed scope
 
-Dedun is the single public semantic-redundancy operation. Discovery, evidence
-confirmation, survivor review, and exact Apply are phases of `mem dedun`, not
-separate Help operations. Byte-identical content identity belongs to Dedup and
-cannot enter this route.
+Dedun is the applying semantic-redundancy operation. It reuses the complete
+read-only Find Redundancies analyzer and report, then adds evidence
+confirmation, survivor review, and exact Apply. Byte-identical content identity
+belongs to Dedup and cannot enter this route.
 
 | Route | Public input | Application entry | Review/effect |
 | --- | --- | --- | --- |
-| CLI | `mem dedun [--context CONTEXT]` | semantic finder, then `prepare_dedup` / `apply_dedup` compatibility-named core | one continuous TTY review; non-TTY discovery is read-only |
+| CLI | `mem dedun [--context CONTEXT]` | shared redundancy finder, then `prepare_dedup` / `apply_dedup` compatibility-named core | one continuous TTY review; non-TTY discovery is read-only |
 | Exact CLI replay | hidden evidence/revision/survivor fields emitted by the final review | the same core | one checkpoint or no write |
-| Public Python | `find_redundancies`, then `plan_dedun` / `apply_dedun` | `api._operations.quality_find` and `api._operations.dedup` | typed evidence, `DedunPlanResult`, and `DedunApplyResult` |
-| Agent/MCP | `memcommit_quality_find(kind=redundancies)` and `memcommit_dedun` | the same public Python routes | JSON-safe evidence, plan, or checkpoint result |
+| Public Python | `plan_dedun` / `apply_dedun` over reviewed redundancy evidence | `api._operations.dedup` | `DedunPlanResult` and `DedunApplyResult` |
+| Agent/MCP | `memcommit_dedun` | the same public Python routes | JSON-safe plan or checkpoint result |
 
-The remaining `dedup_*`, `find_duplicates`, and `consolidate` module names are
-version-1 implementation or executable compatibility boundaries. Canonical
-user vocabulary is `dedun`, `semantic-redundancy-evidence-v1`, `REDUNDANCY`,
-`DEDUN`, and `memcommit_dedun`.
+The remaining `dedup_*` and `consolidate` module names are version-1
+implementation or executable compatibility boundaries. The separate
+`find_duplicates` command module is shared with Find Redundancies but installs
+the Apply handoff only when called by Dedun. Canonical applying vocabulary is
+`dedun`, `semantic-redundancy-evidence-v1`, `REDUNDANCY`, `DEDUN`, and
+`memcommit_dedun`.
 
 ## Shared behavior evidence
 

@@ -275,6 +275,14 @@ _OPERATIONS = (
         "One exact direct Context",
     ),
     _operation(
+        "find-redundancies",
+        "Report semantically redundant direct Memories without changing any Source Context.",
+        "Readable Context frame -> semantic redundancy evidence report",
+        ExecutionKind.SEMANTIC,
+        "Read-only; reviewer responses remain process-local",
+        "One or more readable Contexts as one frozen direct-Memory frame; lexical descendants optional",
+    ),
+    _operation(
         "forget",
         "Apply one complete keep/edit/delete decision batch for an instruction.",
         "Context + instruction -> decisions -> atomic curation -> receipt",

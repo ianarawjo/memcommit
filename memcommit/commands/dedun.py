@@ -77,7 +77,7 @@ def cmd(
         )
         return
     try:
-        find_duplicates.cmd(
+        find_duplicates.run_dedun(
             context_name=context_name,
             evidence_json=evidence_json,
         )

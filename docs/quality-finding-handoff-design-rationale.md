@@ -2,8 +2,8 @@
 
 ## Problem
 
-Dedun discovery, `find-ambiguities`, and `find-conflicts` begin as read-only
-observations. Their Resolution workbench can collect process-local responses,
+`find-redundancies`, `find-ambiguities`, `find-conflicts`, and Dedun's shared
+analysis begin as read-only observations. Their Resolution workbench can collect process-local responses,
 but a response is not itself an executable request, mutation authority, or a
 freshness guarantee. CLI, TUI, Python, and agent adapters therefore must not
 reconstruct different next-operation requests from rendered text.
@@ -72,8 +72,9 @@ separately submitted grounding guidance.
 
 Every adapter receives the same application-owned handoff:
 
-- Python exposes `find_duplicates`, `find_ambiguities`, and `find_conflicts`
-  on `MemCommitClient`, returning `QualityFindResult.handoffs`. A conflict is
+- Python exposes `find_redundancies`, `find_ambiguities`, and `find_conflicts`
+  on `MemCommitClient`, returning `QualityFindResult.handoffs`;
+  `find_duplicates` remains a compatibility name. A conflict is
   passed unchanged to `resolve_conflict_finding`.
 - CLI `mem find-conflicts --handoff-json` prints one canonical receipt per
   finding. `mem resolve --finding-handoff JSON` decodes that receipt and uses
@@ -96,9 +97,13 @@ synthesize its own digest, target, Memory selector, or guidance.
   silently shrinking the finder frame to one owner would change the question.
 - Semantic redundancy and ambiguity evidence identifies its receiving
   operation but does not pretend that Resolve implements Dedun or Clarify.
+- Find Redundancies does not install a handoff executor. Dedun alone accepts
+  confirmed eligible redundancy evidence and independently revalidates its
+  survivor and Apply boundary.
 - Serialized receipts are transferable but intentionally not durable sessions.
   Callers that retain them own that file or message lifecycle; MemCommit does
   not create a new cache containing finding reasons, questions, or responses.
 - Dedun and Clarify remain named routes rather than fake Resolve variants.
-  Their future executors must consume the same source-bound handoff while
-  retaining their own disposition and materialization semantics.
+  Dedun consumes the source-bound redundancy handoff while retaining its own
+  disposition and materialization semantics; a future Clarify executor must do
+  the same for ambiguity evidence.

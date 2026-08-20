@@ -617,18 +617,22 @@ def test_cli_finders_are_read_only_and_each_use_one_provider_call(
             lambda: provider,
         )
 
-    duplicate_result = runner.invoke(app, ["dedun"])
+    redundancy_result = runner.invoke(app, ["find-redundancies"])
+    dedun_result = runner.invoke(app, ["dedun"])
     ambiguity_result = runner.invoke(app, ["find-ambiguities"])
     conflict_result = runner.invoke(app, ["find-conflicts"])
 
-    assert duplicate_result.exit_code == 0
+    assert redundancy_result.exit_code == 0
+    assert dedun_result.exit_code == 0
     assert ambiguity_result.exit_code == 0
     assert conflict_result.exit_code == 0
-    assert "pair" not in duplicate_result.output
-    assert "2 direct memories, 0 findings" in duplicate_result.output
+    assert "pair" not in redundancy_result.output
+    assert "2 direct memories, 0 findings" in redundancy_result.output
+    assert "2 direct memories, 0 findings" in dedun_result.output
     assert "no ambiguity findings" in ambiguity_result.output
     assert "no conflict findings" in conflict_result.output
     assert [call[1] for call in provider.calls] == [
+        "find_duplicates",
         "find_duplicates",
         "find_ambiguities",
         "find_conflicts",
@@ -638,9 +642,14 @@ def test_cli_finders_are_read_only_and_each_use_one_provider_call(
     assert store.current_context_name() == ctx.name
 
 
+@pytest.mark.parametrize(
+    "command_name",
+    ["dedun", "find-redundancies", "find-duplicates"],
+)
 def test_cli_explicit_context_does_not_switch_current(
     isolated_store,
     monkeypatch,
+    command_name,
 ):
     store = MemoryStore()
     active = ops.init("active")
@@ -658,7 +667,7 @@ def test_cli_explicit_context_does_not_switch_current(
 
     result = runner.invoke(
         app,
-        ["dedun", "--context", target.name],
+        [command_name, "--context", target.name],
     )
 
     assert result.exit_code == 0

@@ -1,0 +1,52 @@
+ mem help · command inventory                                                                                                                                                       
+┌────────────────────────────────────────────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────────────────────────────────────────────┐
+│  LANGUAGE · [ ✓ EN ]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                                                                                                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
+│  VIEW · [   BY KIND ]  [ ✓ A–Z ] · ←/→ TO SELECT                                                                                                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┃ ▸ mem chunk ─┬ Mechanically split all splittable direct Memories in one Context, or one selected Memory, at configured sentence, clause, structural, literal, or size           ┃^
+┃              │ boundaries.                                                                                                                                                      ┃ 
+┃              └ WHEN · One or more direct Memories already have clear sentence or structural boundaries that should become separate Memories.                                    ┃ 
+┃ ▸ mem clear ─┬ Immediately remove all direct items from the current or explicit Context; Undo can restore them.                                                                 ┃ 
+┃              └ WHEN · Emptying a Context while retaining the Context itself.                                                                                                    ┃ 
+┃ ▸ mem compare ─┬ Compare Memories in two Contexts and report what they share, what differs, and what appears only on one side.                                                  ┃ 
+┃                └ WHEN · Comparing two Contexts as a whole to understand where they align and differ.                                                                            ┃ 
+┃ ▸ mem config ───┬ Read or write stored global configuration values.                                                                                                             ┃ 
+┃     (legacy)    └ WHEN · Inspecting or changing stored global settings through the legacy low-level interface.                                                                  ┃ 
+┃ ▸ mem contexts ─┬ List local Contexts and readable cross-Profile Context views.                                                                                                 ┃ 
+┃                 └ WHEN · Exploring every Context currently available to the Profile.                                                                                            ┃ 
+┃ ▸ mem dedun ─┬ Find and resolve semantic redundancies (dun), retaining one unchanged existing Memory in each operation-decided group.                                           ┃ 
+┃              └ WHEN · Removing semantic redundancy while preserving one exact existing Memory and its UID in each reviewed group.                                               ┃ 
+┃ ▸ mem dedup ─┬ Remove byte-identical duplicates (dup) immediately, retaining the first existing UID for each exact-content group.                                               ┃ 
+┃              └ WHEN · Removing byte-identical direct Memories while preserving the first existing UID.                                                                          ┃ 
+┃ ▸ mem delete ───┬ Select a Context or direct item to delete, or name it by locator, name, or UID.                                                                               ┃ 
+┃     (remove)    └ WHEN · Removing a specific Context or item that is no longer needed.                                                                                          ┃ 
+┃ ▸ mem diff ─┬ Show the differences recorded by a Context checkpoint or the active Update.                                                                                       ┃ 
+┃             └ WHEN · Verifying exactly what a recorded operation changed.                                                                                                       ┃ 
+┃ ▸ mem distill ─┬ Derive higher-level Rules or condition propositions from Case or Example propositions in a bounded Context, optionally guided by a Goal.                       ┃ 
+┃                └ WHEN · Inferring more general Rules or condition propositions from several concrete cases or examples.                                                         ┃ 
+┃ ▸ mem edit ─┬ Directly replace the content of one or more Memories selected by UID or prefix.                                                                                   ┃ 
+┃             └ WHEN · Directly correcting or replacing the content of specific existing Memories.                                                                                ┃ 
+┃ ▸ mem elaborate ─┬ Expand an abstract Goal, Rule, or condition into multiple more specific candidate propositions.                                                              ┃ 
+┃                  └ WHEN · Generating several more concrete candidate Rules or Cases from an abstract concept or condition.                                                      ┃ 
+┃ ▸ mem embed ─┬ Place a live link to one Memory or Context inside a local Target while retaining Source ownership.                                                               ┃ 
+┃              └ WHEN · Reusing a Memory or Context in another Context while following later Source changes.                                                                      ┃ 
+┃ ▸ mem eval ─────┬ Run and inspect the existing semantic evaluation campaigns.                                                                                                   ┃ 
+┃     (legacy)    └ WHEN · Using the existing research evaluation harness while the general evaluation interface is redesigned.                                                   ┃ 
+┃ ▸ mem find ─┬ Find exact text or explicit regular-expression (regex) matches in readable Memories.                                                                              ┃ 
+┃             └ WHEN · Locating exact words, identifiers, or text patterns within a selected Context scope.                                                                       ┃ 
+┃ ▸ mem find- ───────┬ Report ambiguous direct Memories in the current or explicit Context; no Context changes.                                                                   ┃ 
+┃     ambiguities    └ WHEN · Finding Memories that permit unclear or multiple interpretations.                                                                                   ┃ 
+┃ ▸ mem find- ─────┬ Report conflicting direct Memory pairs in the current or explicit Context; no Context changes.                                                               ┃ 
+┃     conflicts    └ WHEN · Finding mutually incompatible claims or instructions.                                                                                                 ┃ 
+┃ ▾ mem find-redundancies ─┬ Report semantically redundant direct Memories without changing any Source Context.                                                                   ┃ 
+┃     (find-duplicates)    └ WHEN · Inspecting semantic redundancy before deciding whether any cleanup is needed.                                                                 ┃ 
+┃   FLOW      · Readable Context frame -> semantic redundancy evidence report                                                                                                     ┃ 
+┃   EXECUTION · SEMANTIC                                                                                                                                                          ┃ 
+┃   EFFECT    · Read-only; reviewer responses remain process-local                                                                                                                ┃ 
+┃   RANGE     · One or more readable Contexts as one frozen direct-Memory frame; lexical descendants optional                                                                     ┃ 
+┃   FORM 1 · mem find-redundancies (inspect semantic redundancy without changing Sources)                                                                                         ┃ 
+┃   FORM 2 · mem find-redundancies --context [context] (one-shot semantic redundancy report)                                                                                      ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab surface  H full help

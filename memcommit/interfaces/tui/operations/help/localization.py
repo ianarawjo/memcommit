@@ -1061,6 +1061,7 @@ for _language in ("FR", "ZH", "KO", "MN"):
     _translations = OPERATION_TRANSLATIONS[_language]
     _translations["dedun"] = _translations["dedup"]
     _translations["dedup"] = _EXACT_DEDUP_TRANSLATIONS[_language]
+    _translations["find-redundancies"] = _translations["find-duplicates"]
     _translations.pop("find-duplicates")
 
 

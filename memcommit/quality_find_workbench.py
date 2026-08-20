@@ -525,7 +525,7 @@ def _duplicate_item(
             (
                 "confirm",
                 "CONFIRM LINK",
-                "Retain this pair as positive duplicate evidence.",
+                "Retain this pair as positive redundancy evidence.",
             ),
             (
                 "reject",
@@ -535,13 +535,13 @@ def _duplicate_item(
             (
                 "defer",
                 "DEFER",
-                "Leave this duplicate evidence link undecided.",
+                "Leave this redundancy evidence link undecided.",
             ),
         )
     )
     return ResolutionItem(
         uid=item_uid,
-        kind="DUPLICATE",
+        kind="REDUNDANCY",
         status=state,
         priority=finding.relation,
         title=f"{_preview(finding.left.content)} ↔ {_preview(finding.right.content)}",
@@ -549,7 +549,7 @@ def _duplicate_item(
         obligation="OPTIONAL",
         response_state=state,
         response_text=text,
-        question="Should this emitted duplicate evidence link be retained?",
+        question="Should this emitted redundancy evidence link be retained?",
         options=options,
         selected_option_uid=selected,
         issue_presentation=ResolutionIssuePresentation(
@@ -558,7 +558,7 @@ def _duplicate_item(
                     group_heading="",
                     sources_heading="SOURCE MEMORIES",
                     classification=finding.relation,
-                    reason_heading="WHY THESE MEMORIES ARE DUPLICATES",
+                    reason_heading="WHY THESE MEMORIES ARE REDUNDANT",
                     reason=finding.reason,
                     sources=sources,
                 ),
@@ -574,6 +574,8 @@ def _duplicate_item(
 def quality_find_resolution_view(
     session: QualityFindWorkbenchSession,
     source: Context | QualityFindSourceFrame,
+    *,
+    operation_label: str | None = None,
 ) -> ResolutionWorkbenchView:
     """Project one exact aggregate quality report into the Resolution contract."""
 
@@ -625,7 +627,7 @@ def quality_find_resolution_view(
             )
             for finding in session.report.findings
         )
-        finding_label = "duplicate"
+        finding_label = "redundancy"
 
     report = session.report
     metrics = [
@@ -675,11 +677,20 @@ def quality_find_resolution_view(
             ),
         ),
     )
-    operation_label = (
-        "DEDUN"
-        if session.kind == "duplicates"
-        else f"FIND {session.kind.upper()}"
+    default_operation_label = (
+        "DEDUN" if session.kind == "duplicates" else f"FIND {session.kind.upper()}"
     )
+    if operation_label is None:
+        operation_label = default_operation_label
+    elif (
+        not isinstance(operation_label, str)
+        or not operation_label.strip()
+        or operation_label != operation_label.strip()
+        or any(character in operation_label for character in "\r\n")
+    ):
+        raise QualityFindWorkbenchError(
+            "Quality finder operation label must be exact nonblank text."
+        )
     return ResolutionWorkbenchView(
         operation=operation_label,
         artifact_uid=session.uid,

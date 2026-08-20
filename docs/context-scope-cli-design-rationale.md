@@ -47,8 +47,9 @@ with multiple roles or independent traversal axes.
 - Existing `-R` remains an alias for recursive `mem list`/`mem ls` behavior
   because it is an established Unix-style spelling.
 - Commands whose semantic invariant is intentionally direct-only—Atomize,
-  whole-frame Forget, and the three quality finders (`find-duplicates`,
-  `find-ambiguities`, and `find-conflicts`)—do not advertise `-r`; accepting a
+  whole-frame Forget, and the semantic-quality operations (`find-redundancies`,
+  `dedun`, `find-ambiguities`, and `find-conflicts`)—do not advertise `-r`;
+  accepting a
   flag must mean the operation can actually execute that scope. The Atomize
   branch of `impact` rejects the common flags even though directional Update
   Impact supports them.

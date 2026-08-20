@@ -1,8 +1,8 @@
-"""Semantic discovery stage of the public Dedun operation."""
+"""Shared semantic-redundancy discovery for Find Redundancies and Dedun."""
 
 from __future__ import annotations
 
-from typing import Annotated, Optional
+from typing import Annotated, Callable, Optional
 
 import typer
 
@@ -40,6 +40,7 @@ from memcommit.quality_find_workbench import (
     create_quality_find_workbench,
 )
 from memcommit.quality_finding_handoff import (
+    QualityFindingHandoff,
     quality_finding_handoffs,
 )
 from memcommit.semantic_redundancy_evidence import (
@@ -55,24 +56,17 @@ _RELATION_COLORS = {
 }
 
 
-def cmd(
-    context_name: Annotated[
-        Optional[str],
-        typer.Option(
-            "--context",
-            "-c",
-            help="Context to inspect (defaults to current)",
-        ),
-    ] = None,
-    evidence_json: Annotated[
-        bool,
-        typer.Option(
-            "--evidence-json",
-            help="Print one canonical semantic redundancy evidence JSON per finding",
-        ),
-    ] = False,
+def _run(
+    *,
+    context_name: str | None,
+    evidence_json: bool,
+    dedun_handoff: bool,
 ) -> None:
-    """Report semantic redundancy evidence; never change Context content."""
+    """Run one shared analysis, optionally exposing Dedun's Apply handoff."""
+
+    operation_name = "dedun" if dedun_handoff else "find-redundancies"
+    operation_label = "Dedun" if dedun_handoff else "Find Redundancies"
+    progress_label = "DEDUN" if dedun_handoff else "FIND REDUNDANCIES"
     store = MemoryStore(create=False)
     if (
         context_name is None
@@ -81,22 +75,31 @@ def cmd(
     ):
         try:
             context_snapshot = ContextOperandSnapshot.capture(store)
-            completed = run_interactive_quality_find(
-                store,
-                current_name=context_snapshot.current_name,
-                kind="duplicates",
-                analyze=lambda source: ops.find_redundancies(
-                    source.analysis_context(),
-                    connect_codex_chatgpt_provider,
-                    context_name_by_uid=source.memory_context_names,
-                ),
-                duplicate_handoff_handler=lambda handoffs: (
+            handoff_handler: (
+                Callable[[tuple[QualityFindingHandoff, ...]], None] | None
+            ) = None
+            if dedun_handoff:
+                def apply_dedun_handoff(
+                    handoffs: tuple[QualityFindingHandoff, ...],
+                ) -> None:
                     run_dedun_resolution(
                         store,
                         current_name=context_snapshot.current_name,
                         handoffs=handoffs,
                     )
+
+                handoff_handler = apply_dedun_handoff
+            completed = run_interactive_quality_find(
+                store,
+                current_name=context_snapshot.current_name,
+                kind="duplicates",
+                operation_name=operation_name,
+                analyze=lambda source: ops.find_redundancies(
+                    source.analysis_context(),
+                    connect_codex_chatgpt_provider,
+                    context_name_by_uid=source.memory_context_names,
                 ),
+                duplicate_handoff_handler=handoff_handler,
             )
         except (
             FileNotFoundError,
@@ -110,13 +113,13 @@ def cmd(
             DedupError,
         ) as error:
             typer.secho(
-                "Dedun error: " + display_escape_text(str(error)),
+                f"{operation_label} error: " + display_escape_text(str(error)),
                 fg=typer.colors.RED,
                 err=True,
             )
             raise typer.Exit(1)
         if not completed:
-            typer.echo("Dedun cancelled.")
+            typer.echo(f"{operation_label} cancelled.")
         return
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
@@ -140,7 +143,7 @@ def cmd(
         ValueError,
     ) as error:
         typer.secho(
-            "Dedun error: " + display_escape_text(str(error)),
+            f"{operation_label} error: " + display_escape_text(str(error)),
             fg=typer.colors.RED,
             err=True,
         )
@@ -148,14 +151,14 @@ def cmd(
 
     try:
         with CommandProgress(
-            "DEDUN",
+            progress_label,
             "analyzing direct memories",
             total=1,
         ):
             report = ops.find_redundancies(ctx, connect_codex_chatgpt_provider)
     except (FindingsError, QueryProviderError) as error:
         typer.secho(
-            "Dedun error: " + display_escape_text(str(error)),
+            f"{operation_label} error: " + display_escape_text(str(error)),
             fg=typer.colors.RED,
             err=True,
         )
@@ -165,7 +168,11 @@ def cmd(
         (ctx,),
         context_names=(access.display_name,),
     )
-    annotate_quality_find_attempt("duplicates", source)
+    annotate_quality_find_attempt(
+        "duplicates",
+        source,
+        operation_name=operation_name,
+    )
 
     if evidence_json:
         session = create_quality_find_workbench("duplicates", source, report)
@@ -192,3 +199,45 @@ def cmd(
         render_memory("LEFT", finding.left)
         render_memory("RIGHT", finding.right)
         render_reason(finding.reason)
+
+
+def cmd(
+    context_name: Annotated[
+        Optional[str],
+        typer.Option(
+            "--context",
+            "-c",
+            help="Context to inspect (defaults to current)",
+        ),
+    ] = None,
+    evidence_json: Annotated[
+        bool,
+        typer.Option(
+            "--evidence-json",
+            help="Print one canonical semantic redundancy evidence JSON per finding",
+        ),
+    ] = False,
+) -> None:
+    """Report semantic redundancy evidence; never change Context content."""
+    _run(
+        context_name=context_name,
+        evidence_json=evidence_json,
+        dedun_handoff=False,
+    )
+
+
+def run_dedun(
+    *,
+    context_name: str | None,
+    evidence_json: bool,
+) -> None:
+    """Reuse Find Redundancies analysis with Dedun's reviewed Apply handoff."""
+
+    _run(
+        context_name=context_name,
+        evidence_json=evidence_json,
+        dedun_handoff=True,
+    )
+
+
+__all__ = ["cmd", "run_dedun"]
