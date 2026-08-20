@@ -261,6 +261,10 @@ def distill_impact_presentation(
             role="CHANGE",
             obligation="NONE",
             response_state="NOT_APPLICABLE",
+            compact_row_suffix=(
+                f"SUPPORT {len(rule.support_memory_uids)} · "
+                f"BOUNDARY {len(rule.boundary_memory_uids)}"
+            ),
             blocks=(
                 ResolutionDetailBlock(
                     heading="EVIDENCE BOUNDARY",
@@ -507,6 +511,7 @@ def elaborate_impact_presentation(
             for item in analysis.cases
         )
     )
+    rules_direction = analysis.mode is ElaborateMode.GOAL_TO_RULES
     items = tuple(
         ResolutionItem(
             uid=uid,
@@ -518,6 +523,9 @@ def elaborate_impact_presentation(
             role="CHANGE",
             obligation="NONE",
             response_state="NOT_APPLICABLE",
+            compact_row_suffix=(
+                "SUGGESTED · UNVERIFIED" if rules_direction else None
+            ),
             blocks=tuple(
                 ResolutionDetailBlock(heading="PROPOSAL DETAIL", text=line)
                 for line in detail

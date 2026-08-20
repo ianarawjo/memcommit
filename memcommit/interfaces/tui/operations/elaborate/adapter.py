@@ -49,8 +49,15 @@ def project_elaborate_clipboard(
         "ELABORATE:TITLE",
         "ELABORATE:STATUS",
     }:
+        kind = "RULE" if result.analysis.rules else "CASE"
+        count = len(result.analysis.rules or result.analysis.cases)
+        detail = "\n\n".join(
+            _proposal_text(result, kind, index)
+            for index in range(count)
+        )
         return ElaborateClipboardProjection(
-            elaborate_result_text(result),
+            elaborate_result_text(result)
+            + (f"\n\nPROPOSAL DETAILS\n\n{detail}" if detail else ""),
             "complete Elaborate proposal",
         )
     if focused_uid == "ELABORATE:OVERVIEW":

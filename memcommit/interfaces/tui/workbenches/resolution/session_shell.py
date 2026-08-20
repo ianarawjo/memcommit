@@ -57,6 +57,7 @@ from memcommit.interfaces.tui.components.frame import (
 from memcommit.interfaces.tui.components.scrollable_pane import (
     WrappedScrollbarMargin,
 )
+from memcommit.interfaces.console.content_row import render_numbered_content_row
 from memcommit.interfaces.console.terminal import (
     require_interactive_terminal,
 )
@@ -736,27 +737,45 @@ def resolution_workbench_fragments(
         expanded = selected and item.uid == navigation.expanded_item_uid
         if selected:
             fragments.append(("[SetCursorPosition]", ""))
-        fragments.append(
-            (
-                "class:selected" if selected else "",
+        if item.compact_row_suffix is not None:
+            fragments.append(
                 (
-                    f" {'▾' if expanded else ('›' if selected else ' ')} "
-                    f"{index:>2}. [{safe_terminal_text(item.priority)}] "
-                    f"{_line(item.title)}\n"
-                ),
+                    "class:selected" if selected else "",
+                    (
+                        f" {'▾' if expanded else ('›' if selected else ' ')} "
+                        + safe_terminal_text(
+                            render_numbered_content_row(
+                                index,
+                                item.title,
+                                suffix=item.compact_row_suffix,
+                            )
+                        )
+                        + "\n"
+                    ),
+                )
             )
-        )
-        fragments.append(
-            (
-                "",
+        else:
+            fragments.append(
                 (
-                    "       "
-                    f"{_item_kind_label(item)} · "
-                    f"{safe_terminal_text(item.status)} · "
-                    f"{_line(item.summary)}\n"
-                ),
+                    "class:selected" if selected else "",
+                    (
+                        f" {'▾' if expanded else ('›' if selected else ' ')} "
+                        f"{index:>2}. [{safe_terminal_text(item.priority)}] "
+                        f"{_line(item.title)}\n"
+                    ),
+                )
             )
-        )
+            fragments.append(
+                (
+                    "",
+                    (
+                        "       "
+                        f"{_item_kind_label(item)} · "
+                        f"{safe_terminal_text(item.status)} · "
+                        f"{_line(item.summary)}\n"
+                    ),
+                )
+            )
         if not expanded:
             continue
         if item.issue_presentation is not None:
@@ -1505,20 +1524,36 @@ def resolution_report_fragments(
         if not view.items:
             fragments.append(("", f"  {safe_terminal_text(view.empty_message)}\n"))
         for index, item in enumerate(view.items, start=1):
-            item_fragments = [
-                (
-                    "class:report-label",
-                    " "
-                    + safe_terminal_text(
-                        f"{_item_kind_label(item)} {index} · {item.title}"
+            if item.compact_row_suffix is not None:
+                item_fragments = [
+                    (
+                        "class:memory-object",
+                        " "
+                        + safe_terminal_text(
+                            render_numbered_content_row(
+                                index,
+                                item.title,
+                                suffix=item.compact_row_suffix,
+                            )
+                        )
+                        + "\n",
                     )
-                    + "\n",
-                ),
-                (
-                    "class:viewer-body",
-                    f" [{safe_terminal_text(item.priority)}] {safe_terminal_text(item.summary)}\n",
-                ),
-            ]
+                ]
+            else:
+                item_fragments = [
+                    (
+                        "class:report-label",
+                        " "
+                        + safe_terminal_text(
+                            f"{_item_kind_label(item)} {index} · {item.title}"
+                        )
+                        + "\n",
+                    ),
+                    (
+                        "class:viewer-body",
+                        f" [{safe_terminal_text(item.priority)}] {safe_terminal_text(item.summary)}\n",
+                    ),
+                ]
             if item.question:
                 item_fragments.append(
                     (

@@ -92,6 +92,24 @@ exact proposal without writing a Memory or checkpoint. This explicit Impact
 route replaces an implicit TTY preview as the ordinary way to inspect before
 saving.
 
+### Compact Rule rows preserve complete content
+
+Proposal catalogs use the same content-first visual grammar as compact
+Reference rows: `[N] CONTENT — METADATA`. Distill's suffix reports local
+evidence counts as `SUPPORT n · BOUNDARY n`; the exact supporting and boundary
+UIDs plus the rationale remain in the Rule detail. This keeps the default
+catalog to one logical row per Rule without treating rationale as a second
+peer Rule row.
+
+Rule content is folded to one logical line but is never shortened or
+paraphrased by the renderer. In particular, this route has no character-limit
+or ellipsis option. A narrow terminal may wrap the complete row physically;
+viewport wrapping must not change the copied text, proposal artifact, or
+durable Rule. The distinction matters because a trailing qualification can be
+the semantic boundary that makes an evidence-derived Rule safe. Focused Rule
+copy and whole-proposal copy retain the full rationale and exact evidence UID
+detail even though the default catalog projects only evidence counts.
+
 ## Interfaces and interaction
 
 Direct standalone Add is line-oriented by default and rejects `--tui`; the

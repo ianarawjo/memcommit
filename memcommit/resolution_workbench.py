@@ -425,6 +425,7 @@ class ResolutionItem:
     unresolved_refs: tuple[ResultRef, ...] = ()
     issue_presentation: ResolutionIssuePresentation | None = None
     kind_label: str | None = None
+    compact_row_suffix: str | None = None
     commentable: bool = False
 
     def __post_init__(self) -> None:
@@ -441,11 +442,20 @@ class ResolutionItem:
                 limit=(
                     RESOLUTION_KEY_LIMIT
                     if label.endswith("uid")
+                    else RESOLUTION_TEXT_LIMIT
+                    if label.endswith("title")
                     else RESOLUTION_LABEL_LIMIT
                 ),
                 one_line=True,
             )
         _text(self.summary, "resolution item summary")
+        if self.compact_row_suffix is not None:
+            _text(
+                self.compact_row_suffix,
+                "resolution item compact row suffix",
+                limit=RESOLUTION_LABEL_LIMIT,
+                one_line=True,
+            )
         if self.role not in {"DECISION", "OPTIONAL_REVIEW", "CHANGE"}:
             raise ResolutionWorkbenchError("Invalid resolution item role.")
         if self.obligation not in {None, "REQUIRED", "OPTIONAL", "NONE"}:

@@ -78,6 +78,22 @@ would-add set while leaving both endpoints unchanged. Generated propositions
 remain explicitly `SUGGESTED` and `UNVERIFIED` after Add; durable storage is
 not evidence acceptance.
 
+### Compact Rule rows preserve complete content
+
+Goal-to-Rules catalogs use `[N] CONTENT — SUGGESTED · UNVERIFIED`. The status
+suffix stays adjacent to every proposal, while its rationale remains available
+in the Rule detail instead of consuming a second default catalog row. This
+compact form applies only to Rule catalogs; Rules-to-Cases retains its distinct
+role, expected-result, and Source-Rule fields.
+
+The renderer folds stored whitespace into one logical row but never truncates
+or paraphrases Rule content. A terminal may visually wrap a long row at its
+viewport edge, yet the complete Rule remains present in display projection,
+copy output, typed analysis, and any later Add. An ellipsis would be unsafe
+here because the omitted tail may carry the condition that distinguishes an
+unverified suggestion from a broader claim. Focused and whole-proposal copy
+retain the full rationale even though the default catalog keeps it in detail.
+
 ## Ground route
 
 Ground CLI accepts one exact saved Ground and either `--from-goal` or

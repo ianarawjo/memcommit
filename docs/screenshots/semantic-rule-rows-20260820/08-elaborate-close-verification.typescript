@@ -1,0 +1,110 @@
+PTY · 180 columns × 52 rows
+$ mem impact elaborate --from capture/elaborate-source --to capture/elaborate-target --as goal
+MEM IMPACT · ELABORATE · 1/2 · FREEZING SOURCE AND TARGET . · 0sMEM IMPACT · ELABORATE · 2/2 · GENERATING PROPOSALS . · 0s      MEM IMPACT · ELABORATE · 2/2 · GENERATING PROPOSALS .. · 0sMEM IMPACT · ELABORATE · 2/2 · GENERATING PROPOSALS … · 0s                                                           [?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;2;139;213;255;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;2;139;213;255;1m┃[0m MEM ELABORATE · ADD PROPOSAL                                                                                                                                                    [0;1m^[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m CONTEXT LOCATIONS                                                                                                                                                               [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m   SOURCE · capture/elaborate-source                                                                                                                                             [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m   TARGET · capture/elaborate-target · EXISTING · UNCHANGED                                                                                                                      [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m PROPOSAL · READ-ONLY · UNVERIFIED · 1 INPUTS · 1 PROPOSALS · GOAL → RULES DIRECTION                                                                                             [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m WHAT MEM UNDERSTOOD                                                                                                                                                             [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ ASSESSMENT[0m                                                                                                                                                                      [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;139;213;255m One complete unverified Rule elaborates the Goal.[0m                                                                                                                               [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;244;245;247;1m UNVERIFIED PROPOSALS · 1[0m                                                                                                                                                        [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;202;211;245m [1] When generating a synthetic ticker, remove a leading article, discard legal-form suffixes, preserve meaningful numeric tokens, and keep the exact security-class qualifier b[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;202;211;245mefore applying the reviewed mapping; this final qualification remains part of the complete Rule and must remain visible without shortening the Rule. — SUGGESTED · UNVERIFIED[0m    [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m IMPACT · ELABORATE ADD · ENDPOINTS UNCHANGED                                                                                                                                    [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m These unverified Memories would be added to the existing Target. Neither Source nor Target has been changed.                                                                    [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                     [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;138;173;244;1m       ▸ + [ADD] [0;38;2;202;211;245m[54d162c3] When generating a synthetic ticker, remove a leading article, discard legal-form suffixes, preserve meaningful numeric tokens, and keep the exact[0m    [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;202;211;245m                            security-class qualifier before applying the reviewed mapping; this final qualification remains part of the complete Rule and must remain visible[0m    [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;202;211;245m                            without shortening the Rule.[0m                                                                                                                         [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[0;1m› REPORT         Complete Elaborate report[0m                                                                                                                                       [0;1m^[179C[0m│[0m
+[0m│  RULE           When generating a synthetic ticker, remove a leading article, discard legal-form suffixes, preserve meaningful numeric tokens, and keep the exact security-class[0;48;2;68;68;68m [179C[0m│[0m
+[0m│                 qualifier before applying the reviewed mapping; this final qualification remains part of the complete Rule and must remain visible without shortening the Rule. [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[ READ ONLY ]  No action available · This saved session can only be inspected.                                                                                                    [179C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m READ ONLY · PROPOSAL · READ-ONLY · UNVERIFIED · ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter inspect  Esc/Backspace close H Help  y/Y copy  Q close[177D[43A[C[0m[?25l[7A[0m                             [0m
+[C[0;38;2;139;213;255;1m REVIEW DETAIL · 1/1 · CHANGE · RULE · PROPOSED · UNVERIFIED[0m
+[C[0;38;2;139;213;255;1m When generating a synthetic ticker, remove a leading article, discard legal-form suffixes, preserve meaningful numeric tokens, and keep the exact security-class qualifier befor[0m
+[C[0;38;2;139;213;255;1me applying the reviewed mapping; this final qualification remains part of the complete Rule and must remain visible without shortening the Rule.[0m
+[C[0m                                                                                    [0m
+[C[0;38;2;139;213;255;1m WHY THIS NEEDS REVIEW[0m
+[C[0m This is an unverified operational hypothesis whose final qualification must remain inspectable.[0m
+[C[0m           [0m
+[C[0;38;2;139;213;255;1m OPERATION DETAIL[0m                                 [0m
+[C[0;38;2;255;255;255;1m DETAIL[0m
+[C[0m This is an unverified operational hypothesis whose final qualification must remain inspectable.[0m
+[C[0m                                                                                                                                                                                 [0m
+[C[0m                                                                                                                                                                             [0m
+
+[C[0m                                             [0m
+[C[0m                                                                                                             [0m
+[C[0m                                                            [0m
+[C[0m                                                                                                                                                                             [0m
+[C[0m                                                                                                                                                                             [0m
+[C[0m                                                        [0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[C[0m  REPORT         Complete Elaborate report[0m
+[C[0;1m› RULE           When generating a synthetic ticker, remove a leading article, discard legal-form suffixes, preserve meaningful numeric tokens, and keep the exact security-class[0m
+[C[0;1m                 qualifier before applying the reviewed mapping; this final qualification remains part of the complete Rule and must remain visible without shortening the Rule.[0m
+
+
+
+
+
+
+
+
+
+[53C[0msection/item  Tab switch[2CEnter inspect [CEsc/Backspace report H[CHelp [Cy/Y copy[C Q close[0m[K[51A[140D[0m[J[0m[?7h[?1049l[?2004lElaborate Impact closed; Source unchanged.
+
+READ-ONLY IMPACT VERIFICATION
+  SOURCE DIGEST UNCHANGED · True
+  TARGET DIGEST UNCHANGED · True
+  TARGET CHECKPOINTS · 0
+  COMPLETE RULE TAIL · without shortening the Rule.

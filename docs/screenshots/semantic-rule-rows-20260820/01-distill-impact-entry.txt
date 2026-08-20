@@ -1,0 +1,3 @@
+PTY · 180 columns × 52 rows                                                                                                                                                         
+$ mem impact distill --from capture/distill-source --to capture/distill-target                                                                                                      
+MEM IMPACT · DISTILL · 2/2 · DISTILLING RULES . · 0s

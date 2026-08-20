@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                                                                                                                                                                                 ^┃
+┃ REVIEW DETAIL · 1/1 · CHANGE · DISTILLED RULE · PROPOSED                                                                                                                         ┃
+┃ When generating a synthetic ticker, remove a leading article, discard legal-form suffixes, preserve meaningful numeric tokens, and keep the exact security-class qualifier befor ┃
+┃e applying the reviewed mapping; this final qualification remains part of the complete Rule and must remain visible without shortening the Rule.                                  ┃
+┃                                                                                                                                                                                  ┃
+┃ WHY THIS NEEDS REVIEW                                                                                                                                                            ┃
+┃ The final security-class qualification is part of the evidence-supported boundary and cannot be dropped.                                                                         ┃
+┃                                                                                                                                                                                  ┃
+┃ OPERATION DETAIL                                                                                                                                                                 ┃
+┃ EVIDENCE BOUNDARY                                                                                                                                                                ┃
+┃ SUPPORT · 1e797d43                                                                                                                                                               ┃
+┃BOUNDARY · dd1b2e78                                                                                                                                                               ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│  REPORT         Complete Distill report                                                                                                                                         ^│
+│› DISTILLED RULE When generating a synthetic ticker, remove a leading article, discard legal-form suffixes, preserve meaningful numeric tokens, and keep the exact security-class │
+│                 qualifier before applying the reviewed mapping; this final qualification remains part of the complete Rule and must remain visible without shortening the Rule.  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ READ ONLY ]  No action available · This saved session can only be inspected.                                                                                                    │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ READ ONLY · PROPOSAL · READ-ONLY · ↑/↓ section/item  Tab switch  Enter inspect  Esc/Backspace report H Help  y/Y copy  Q close

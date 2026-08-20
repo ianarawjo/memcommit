@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                                                                                                                                                                                 ^┃
+┃ REVIEW DETAIL · 1/1 · CHANGE · RULE · PROPOSED · UNVERIFIED                                                                                                                      ┃
+┃ When generating a synthetic ticker, remove a leading article, discard legal-form suffixes, preserve meaningful numeric tokens, and keep the exact security-class qualifier befor ┃
+┃e applying the reviewed mapping; this final qualification remains part of the complete Rule and must remain visible without shortening the Rule.                                  ┃
+┃                                                                                                                                                                                  ┃
+┃ WHY THIS NEEDS REVIEW                                                                                                                                                            ┃
+┃ This is an unverified operational hypothesis whose final qualification must remain inspectable.                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃ OPERATION DETAIL                                                                                                                                                                 ┃
+┃ DETAIL                                                                                                                                                                           ┃
+┃ This is an unverified operational hypothesis whose final qualification must remain inspectable.                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│  REPORT         Complete Elaborate report                                                                                                                                       ^│
+│› RULE           When generating a synthetic ticker, remove a leading article, discard legal-form suffixes, preserve meaningful numeric tokens, and keep the exact security-class │
+│                 qualifier before applying the reviewed mapping; this final qualification remains part of the complete Rule and must remain visible without shortening the Rule.  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ READ ONLY ]  No action available · This saved session can only be inspected.                                                                                                    │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ READ ONLY · PROPOSAL · READ-ONLY · UNVERIFIED · ↑/↓ section/item  Tab switch  Enter inspect  Esc/Backspace report H Help  y/Y copy  Q close

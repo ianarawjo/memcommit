@@ -120,6 +120,26 @@ def test_projection_rejects_duplicate_item_and_option_uids() -> None:
         )
 
 
+def test_compact_rule_row_retains_a_complete_title_beyond_label_length() -> None:
+    full_rule = "Complete Rule content " * 40
+
+    item = ResolutionItem(
+        uid="long-rule",
+        kind="RULE",
+        status="PROPOSED",
+        priority="CHANGE",
+        title=full_rule,
+        summary="The detailed rationale remains available.",
+        role="CHANGE",
+        obligation="NONE",
+        response_state="NOT_APPLICABLE",
+        compact_row_suffix="SUPPORT 2 · BOUNDARY 1",
+    )
+
+    assert item.title == full_rule
+    assert len(item.title) > 500
+
+
 def test_projection_rejects_non_boolean_results_visibility() -> None:
     with pytest.raises(
         ResolutionWorkbenchError,

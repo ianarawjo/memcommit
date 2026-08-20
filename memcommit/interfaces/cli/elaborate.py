@@ -6,6 +6,7 @@ import typer
 
 from memcommit.elaborate import ElaborateMode
 from memcommit.elaborate_application import ElaborateResult
+from memcommit.interfaces.console.content_row import render_numbered_content_row
 from memcommit.interfaces.console.text import safe_terminal_text
 
 
@@ -28,11 +29,13 @@ def elaborate_result_lines(result: ElaborateResult) -> tuple[str, ...]:
     if analysis.mode is ElaborateMode.GOAL_TO_RULES:
         lines.extend(("", f"PROPOSED RULES · {len(analysis.rules)}"))
         for index, rule in enumerate(analysis.rules, 1):
-            lines.extend(
-                (
-                    "",
-                    f"{index}. [Suggested] [Unverified] {safe_terminal_text(rule.content)}",
-                    f"   WHY · {safe_terminal_text(rule.rationale)}",
+            lines.append(
+                safe_terminal_text(
+                    render_numbered_content_row(
+                        index,
+                        rule.content,
+                        suffix="SUGGESTED · UNVERIFIED",
+                    )
                 )
             )
     else:

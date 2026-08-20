@@ -5,6 +5,7 @@ from __future__ import annotations
 import typer
 
 from memcommit.distill_application import DistillResult
+from memcommit.interfaces.console.content_row import render_numbered_content_row
 from memcommit.interfaces.console.text import safe_terminal_text
 
 
@@ -29,15 +30,16 @@ def distill_result_lines(result: DistillResult) -> tuple[str, ...]:
         f"PROPOSED RULES · {len(analysis.rules)}",
     ]
     for index, rule in enumerate(analysis.rules, 1):
-        support = ", ".join(uid[:8] for uid in rule.support_memory_uids)
-        boundary = ", ".join(uid[:8] for uid in rule.boundary_memory_uids) or "none"
-        lines.extend(
-            (
-                "",
-                f"{index}. [{rule.uid[:8]}] {safe_terminal_text(rule.content)}",
-                f"   SUPPORT · {support}",
-                f"   BOUNDARY · {boundary}",
-                f"   WHY · {safe_terminal_text(rule.rationale)}",
+        lines.append(
+            safe_terminal_text(
+                render_numbered_content_row(
+                    index,
+                    rule.content,
+                    suffix=(
+                        f"SUPPORT {len(rule.support_memory_uids)} · "
+                        f"BOUNDARY {len(rule.boundary_memory_uids)}"
+                    ),
+                )
             )
         )
     lines.extend(

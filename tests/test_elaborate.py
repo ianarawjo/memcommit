@@ -505,7 +505,10 @@ def test_mem_elaborate_plain_uses_the_typed_application(
 
     assert result.exit_code == 0, result.output
     assert "ELABORATE · GOAL → RULES" in result.output
-    assert "[Suggested] [Unverified]" in result.output
+    assert (
+        "[1] Confirm the selected option before acting. "
+        "— SUGGESTED · UNVERIFIED"
+    ) in result.output
     assert "Added 1 Elaborate Memories" in result.output
     assert len(store.load_direct(target.name).order) == 1
 

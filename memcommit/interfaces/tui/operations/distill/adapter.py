@@ -44,8 +44,13 @@ def project_distill_clipboard(
         "DISTILL:TITLE",
         "DISTILL:STATUS",
     }:
+        detail = "\n\n".join(
+            _rule_text(result, index)
+            for index in range(len(result.analysis.rules))
+        )
         return DistillClipboardProjection(
-            distill_result_text(result),
+            distill_result_text(result)
+            + (f"\n\nRULE DETAILS\n\n{detail}" if detail else ""),
             "complete Distill proposal",
         )
     if focused_uid == "DISTILL:GOAL":
