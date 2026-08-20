@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
+import io
+
 import pytest
 from typer.testing import CliRunner
 
 from memcommit.cli import app
+from memcommit.commands.command_progress import CommandProgress
 from memcommit.help_application import describe_operation
 from memcommit.interfaces.tui.operations.help import inventory
 from memcommit.query_provider import QueryProviderError
@@ -46,6 +49,7 @@ def test_help_request_renders_multiple_existing_description_when_rows(monkeypatc
     result = _invoke("help", "compare two Contexts and find related Memories")
 
     assert result.exit_code == 0
+    assert result.stderr == ""
     assert provider.calls == 1
     assert "mem compare ┬ Compare Memories in two Contexts" in result.stdout
     assert "└ WHEN · Comparing two Contexts as a whole" in result.stdout
@@ -94,6 +98,42 @@ def test_plain_help_does_not_connect_a_provider(monkeypatch):
     assert "mem command inventory" in result.stdout
 
 
+def test_thinking_progress_is_tty_only_and_focused_lookup_only(monkeypatch):
+    class _TTYBuffer(io.StringIO):
+        def isatty(self) -> bool:
+            return True
+
+    stream = _TTYBuffer()
+
+    def build_progress(operation, stage, *, total):
+        return CommandProgress(
+            operation,
+            stage,
+            total=total,
+            stream=stream,
+            interval=60,
+        )
+
+    provider = _Provider('{"operations":["update"]}')
+    monkeypatch.setattr(inventory, "CommandProgress", build_progress)
+    monkeypatch.setattr(inventory, "connect_help_provider", lambda: provider)
+
+    focused = _invoke("help", "update a campus wiki from mine")
+
+    assert focused.exit_code == 0
+    assert "mem update" in focused.stdout
+    assert "MEM HELP · 1/1 · THINKING . · 0s" in stream.getvalue()
+    assert stream.getvalue().endswith("\r")
+
+    stream.seek(0)
+    stream.truncate()
+    plain = _invoke("help")
+
+    assert plain.exit_code == 0
+    assert "mem command inventory" in plain.stdout
+    assert stream.getvalue() == ""
+
+
 def test_help_request_reports_provider_failure_without_partial_rows(monkeypatch):
     def fail():
         raise QueryProviderError("provider unavailable")
@@ -111,6 +151,11 @@ def test_study_help_rejects_copied_description_before_provider(monkeypatch):
     provider = _Provider('{"operations":["query"]}')
     monkeypatch.setattr(inventory, "active_profile_is_study", lambda: True)
     monkeypatch.setattr(inventory, "connect_help_provider", lambda: provider)
+
+    def fail_progress(*_args, **_kwargs):
+        raise AssertionError("Study preflight must not start Help progress")
+
+    monkeypatch.setattr(inventory, "CommandProgress", fail_progress)
 
     result = _invoke("help", describe_operation("query").summary)
 

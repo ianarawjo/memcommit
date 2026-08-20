@@ -1,0 +1,2 @@
+mem update ┬ Update a Target Context from a Source Context, resolving required execution decisions before atomic Apply.                                                             
+           └ WHEN · Updating an existing Context using newly verified Memories.

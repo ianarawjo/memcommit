@@ -22,6 +22,7 @@ from prompt_toolkit.output.defaults import create_output
 from prompt_toolkit.styles import Style, merge_styles
 from prompt_toolkit.widgets import Frame
 
+from memcommit.commands.command_progress import CommandProgress
 from memcommit.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
@@ -2248,8 +2249,12 @@ def cmd(
                     err=True,
                 )
                 raise typer.Exit(1)
-            provider = connect_help_provider()
-            operations = execute_help_lookup(plan, provider)
+            # Bare Help is local and deterministic. Start liveness feedback only
+            # after focused lookup preflight so invalid or Study-blocked input
+            # never looks like provider work has begun.
+            with CommandProgress("help", "thinking", total=1):
+                provider = connect_help_provider()
+                operations = execute_help_lookup(plan, provider)
         except (
             HelpLookupError,
             ProfileConfigError,

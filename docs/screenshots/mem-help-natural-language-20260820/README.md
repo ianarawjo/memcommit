@@ -1,12 +1,13 @@
 # Natural-language `mem help` live capture log
 
-This ordered set records five real provider-backed invocations of the focused
-Help lookup: one match, several matches, a metaphorical request, and an
-intentionally unrelated request, plus generic answer/problem-solving language
-that may validly resolve to Query. The command uses the pinned
-`gpt-5.6-sol` / `none` policy and lets the provider return only zero to three
-catalog operation names. Every visible summary and `WHEN` line comes back from
-the frozen authored Help catalog rather than from provider-written prose.
+This ordered set begins with one complete real provider-backed Help turn: its
+transient `THINKING` state followed by the final cleared Update match. It then
+records five more focused lookup outcomes: one match, several matches, a
+metaphorical request, an intentionally unrelated request, and generic
+answer/problem-solving language that may validly resolve to Query. The command
+uses the pinned `gpt-5.6-sol` / `none` policy. The provider returns only zero to
+three catalog operation names. Every visible summary and `WHEN` line comes back
+from the frozen authored Help catalog rather than from provider-written prose.
 
 ## Reproduction frame
 
@@ -25,13 +26,15 @@ the frozen authored Help catalog rather than from provider-written prose.
   `.typescript` and terminal-text `.txt` evidence remain beside every PNG.
 - Color verification: a separate bare `mem help` control in the same PTY must
   emit both ANSI foreground and focused-control background styles before the
-  captures run. Focused lookup output itself intentionally remains stable,
-  neutral line-oriented text.
+  captures run. Focused lookup output itself uses neutral line-oriented text;
+  the transient line animates in place and is erased before stable output.
 
 ## Ordered invocations
 
 | Image | Exact command | Visible state | Durable mutation |
 | --- | --- | --- | --- |
+| `00a-campus-wiki-thinking.png` | `mem help "how can I update those campus wiki from mine?"` | The provider-backed lookup is pending and the in-place `MEM HELP · 1/1 · THINKING` liveness line is visible | None |
+| `00b-campus-wiki-result.png` | Same running command; no additional input | The transient line has been erased and one compact Update record is visible | None |
 | `01-single-compare.png` | `mem help "두 Context의 차이를 보고 싶어"` | One compact Compare record: command, authored description, and authored `WHEN` only | None |
 | `02-multiple-compare-search.png` | `mem help "두 Context를 비교하고 관련 Memories도 의미로 찾고 싶어"` | Compare and Search records in provider-selected order, with no score or generated explanation | None |
 | `03-metaphorical-conflict.png` | `mem help "메모리들이 서로 싸우고 있는지 좀 봐줘"` | The metaphorical request resolves to Find Conflicts | None |
@@ -39,12 +42,12 @@ the frozen authored Help catalog rather than from provider-written prose.
 | `05-generic-answer-language-query.png` | `mem help "답 해결할 수 있는 문장"` | A generic request for an answer-producing sentence may resolve to Query | None |
 | `06-study-exact-copy-blocked.png` | `mem help "Generate an LLM-based answer from readable Context knowledge or an authorized concealed query-only view."` | The exact Query Description is rejected at the Study-only 50% copy boundary before provider connection | None |
 
-All five commands exit successfully after one bounded semantic lookup. None
-opens a Store, reads a Context or Memory, executes a suggested operation, or
-persists the selection. The capture assertions reject expanded `WHY`, `FLOW`,
-`EFFECT`, Form, Overview, and Command line content.
+All six provider-backed commands exit successfully after one bounded semantic
+lookup each. None opens a Store, reads a Context or Memory, executes a suggested
+operation, or persists the selection. The capture assertions reject expanded
+`WHY`, `FLOW`, `EFFECT`, Form, Overview, and Command line content.
 
-The capture Profile is an `init-study` participant Profile. These five
+The capture Profile is an `init-study` participant Profile. These six
 independently phrased requests remain below the Study copy threshold. A
-sixth exact-copy command exits with status 1 and records the pre-provider
+seventh exact-copy command exits with status 1 and records the pre-provider
 rejection branch without exposing the matched operation in its error.

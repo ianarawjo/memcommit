@@ -56,6 +56,8 @@ CASES = (
     ),
 )
 
+THINKING_REQUEST = "how can I update those campus wiki from mine?"
+
 
 def _spawn_lookup(
     executable: str,
@@ -122,6 +124,24 @@ def _capture_lookup(
     _assert_focused_contract(plain, expected_names)
 
 
+def _capture_thinking_path(executable: str) -> None:
+    """Capture the transient liveness line and its cleared final result."""
+
+    child, recorder = _spawn_lookup(executable, THINKING_REQUEST)
+    child.expect("MEM HELP · 1/1 · THINKING", timeout=15)
+    thinking = _BASE._snapshot(recorder, "00a-campus-wiki-thinking")
+    assert "MEM HELP · 1/1 · THINKING" in thinking
+
+    child.expect(pexpect.EOF, timeout=60)
+    child.close()
+    assert child.exitstatus == 0, (child.exitstatus, child.signalstatus)
+    raw = recorder.getvalue()
+    assert "52 180" in raw
+    result = _BASE._snapshot(recorder, "00b-campus-wiki-result")
+    _assert_focused_contract(result, ("mem update",))
+    assert "THINKING" not in result
+
+
 def _capture_study_copy_block(executable: str) -> None:
     from memcommit.help_application import describe_operation
 
@@ -167,6 +187,7 @@ def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
 
     _verify_color_capable_help(executable)
+    _capture_thinking_path(executable)
     for stem, request, expected_names in CASES:
         _capture_lookup(
             executable,

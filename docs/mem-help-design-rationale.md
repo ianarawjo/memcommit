@@ -89,6 +89,14 @@ crossing that bound rejects the lookup until a tested global reranker exists,
 rather than silently prefiltering operations and changing what the participant
 could discover.
 
+After that local preflight, a focused lookup in a TTY owns one transient
+`MEM HELP · 1/1 · THINKING …` line on stderr from provider connection through
+validated decoding. The line is cleared before the matched rows or an error is
+published. It is a liveness signal for the bounded Help turn, not provider
+reasoning or chain-of-thought. Bare `mem help`, Study-copy rejection, redirected
+or non-TTY stderr remain free of the indicator so stable stdout and the
+deterministic inventory do not change.
+
 The ordered live PTY evidence in
 [`docs/screenshots/mem-help-natural-language-20260820`](screenshots/mem-help-natural-language-20260820/README.md)
 records one, several, metaphorical, and no-match requests against the real
