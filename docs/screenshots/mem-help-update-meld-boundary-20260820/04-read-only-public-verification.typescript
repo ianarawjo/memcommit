@@ -1,0 +1,5 @@
+52 180
+update SEMANTIC_BOUNDARY
+Update is revision-oriented: it treats a Source as verified change evidence and semantically patches an existing Target. Meld is merge-oriented: it semantically combines two inputs while reconciling their relationships and conflicts, either into an existing Baseline or a new Result.
+meld SEMANTIC_BOUNDARY
+Update is revision-oriented: it treats a Source as verified change evidence and semantically patches an existing Target. Meld is merge-oriented: it semantically combines two inputs while reconciling their relationships and conflicts, either into an existing Baseline or a new Result.

@@ -115,7 +115,10 @@ prompt-toolkit selector:
   behavior, or verdict options when a flat paragraph would hide a meaningful
   choice. `LIMITATION` records explain an incomplete
   implementation boundary and `ACCESS_BOUNDARY` records explain an authority
-  distinction. The terminal shows their title and body only after expansion;
+  distinction. `SEMANTIC_BOUNDARY` records one concise distinction between
+  adjacent semantic operations; Update and Meld share the same revision-oriented
+  versus merge-oriented note so neither Help route implies that edit capability
+  separates them. The terminal shows their title and body only after expansion;
   Python and agent-facing discovery can address the same detail by its stable
   operation-local ID. A `TOOL_SELECTION` detail exposes one bounded summary
   during MCP discovery; an `ON_DEMAND` detail remains indexed without copying

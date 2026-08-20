@@ -1,0 +1,52 @@
+ mem help · command inventory                                                                                                                                                       
+┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                                                                                                                                                                   ^
+┌ DETERMINISTIC CONTENT CHANGES ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ NO LLM · Apply explicit inputs and reviewed choices through deterministic program logic to change content.                                                                      │ 
+│ ▸ mem edit             Directly replace the content of one or more Memories selected   │ USE WHEN: Directly correcting or replacing the content of specific existing Memories.  │ 
+│                        by UID or prefix.                                               │                                                                                        │ 
+│ ▸ mem replace          Preview and replace every literal or explicit                   │ USE WHEN: Correcting, renaming, or redacting exact text throughout a known local       │ 
+│                        regular-expression match in ordinary local Memories.            │           Context scope.                                                               │ 
+│ ▸ mem chunk            Mechanically split all splittable direct Memories in one        │ USE WHEN: A Memory already has clear text boundaries that should become separate       │ 
+│                        Context, or one selected Memory, at configured sentence,        │           Memories.                                                                    │ 
+│                        clause, structural, literal, or size boundaries.                │                                                                                        │ 
+│ ▸ mem delete (remove)  Select a Context or direct item to delete, or name it by        │ USE WHEN: Removing a specific Context or item that is no longer needed.                │ 
+│                        locator, name, or UID.                                          │                                                                                        │ 
+│ ▸ mem clear            Remove all direct items from the current or explicit Context    │ USE WHEN: Emptying a Context while retaining the Context itself.                       │ 
+│                        after confirmation.                                             │                                                                                        │ 
+│ ▸ mem merge            Add Source-only items to a selected Target, leave exact matches │ USE WHEN: Appending Source-only items or bringing a copied or branched Context into a  │ 
+│                        unchanged, and choose Source or Target for stored-item          │           selected Target Context without semantic synthesis.                          │ 
+│                        conflicts.                                                      │                                                                                        │ 
+│ ▸ mem dedup            Review confirmed duplicate groups, retain one existing Memory   │ USE WHEN: Removing confirmed semantic duplicates while preserving one exact existing   │ 
+│                        in each group, and delete the rest on Apply.                    │           Memory and its UID.                                                          │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┏ SEMANTIC TRANSFORMATIONS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃ LLM-BASED · Uses LLM semantic analysis to restructure, derive, translate, curate, or reconcile content.                                                                         ┃ 
+┃ ▸ mem atomize    Immediately atomize the current Context into independently reviewable │ USE WHEN: Untangling requirements or claims that were written together so each can be  ┃ 
+┃                  Memories and save the full analysis for Review.                       │           reviewed and revised independently.                                          ┃ 
+┃ ▸ mem distill    Derive higher-level Rules or condition propositions from Case or      │ USE WHEN: Inferring more general Rules or condition propositions from several concrete ┃ 
+┃                  Example propositions in a bounded Context, optionally guided by a     │           cases or examples.                                                           ┃ 
+┃                  Goal.                                                                 │                                                                                        ┃ 
+┃ ▸ mem elaborate  Expand an abstract Goal, Rule, or condition into multiple more        │ USE WHEN: Generating several more concrete candidate Rules or Cases from an abstract   ┃ 
+┃                  specific candidate propositions.                                      │           concept or condition.                                                        ┃ 
+┃ ▸ mem translate  Generate and save a reusable translated view of one Context or Memory │ USE WHEN: Reading or reusing Memory content in another language without replacing the  ┃ 
+┃                  while preserving the original content.                                │           original.                                                                    ┃ 
+┃ ▸ mem forget     Review keep/edit/delete decisions for one instruction, then apply the │ USE WHEN: Removing or rewriting Memories according to a natural-language instruction   ┃ 
+┃                  accepted batch.                                                       │           whose meaning must be interpreted.                                           ┃ 
+┃ ▸ mem resolve    Propose and verify minimum changes that make one bounded              │ USE WHEN: Deciding how to repair semantic conflicts or ambiguities within a bounded    ┃ 
+┃                  direct-Memory Context frame Fit YES.                                  │           Context frame.                                                               ┃ 
+┃ ▾ mem update     Update Memories in the Target Context from Memories in the Source     │ USE WHEN: Updating an existing Context using newly verified Memories.                  ┃ 
+┃                  Context, asking the user to review and choose when needed.            │                                                                                        ┃ 
+┃   FLOW      · Source Context -> Target Context                                                                                                                                  ┃ 
+┃   EXECUTION · SEMANTIC                                                                                                                                                          ┃ 
+┃   EFFECT    · Changes only the local Target after Apply                                                                                                                         ┃ 
+┃   RANGE     · Each endpoint exact or readable descendants                                                                                                                       ┃ 
+┃   UPDATE VS. MELD                                                                                                                                                               ┃ 
+┃   Update is revision-oriented: it treats a Source as verified change evidence and semantically patches an existing Target. Meld is merge-oriented: it semantically combines two ┃ 
+┃   inputs while reconciling their relationships and conflicts, either into an existing Baseline or a new Result.                                                                 ┃ 
+┃   FORM 1 · mem update (enter the interactive Update session launcher)                                                                                                           ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab next kind  H full help

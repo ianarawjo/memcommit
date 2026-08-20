@@ -62,12 +62,76 @@ def test_typed_detail_registry_has_stable_unique_ids_and_discovery_summaries():
         "COMPARISON",
         "LIMITATION",
         "ACCESS_BOUNDARY",
+        "SEMANTIC_BOUNDARY",
     }
     assert all(
         detail.discovery.value != "TOOL_SELECTION"
         or detail.discovery_summary is not None
         for detail in ALL_OPERATION_DETAILS
     )
+
+
+def test_update_and_meld_share_one_concise_semantic_boundary_note():
+    expected = (
+        "Update is revision-oriented: it treats a Source as verified change "
+        "evidence and semantically patches an existing Target. Meld is "
+        "merge-oriented: it semantically combines two inputs while reconciling "
+        "their relationships and conflicts, either into an existing Baseline or "
+        "a new Result."
+    )
+
+    for operation_name in ("update", "meld"):
+        [note] = [
+            detail
+            for detail in operation_help(operation_name).details
+            if detail.id == "update-vs-meld"
+        ]
+        assert note.kind.value == "SEMANTIC_BOUNDARY"
+        assert note.title == "UPDATE VS. MELD"
+        assert note.body == expected
+
+
+def test_update_meld_note_is_visible_only_in_each_expanded_help_record():
+    root, context = _root_context()
+    try:
+        entries = {
+            entry.name: entry
+            for entry in command_entries(context)
+            if entry.name in {"update", "meld"}
+        }
+    finally:
+        context.close()
+
+    for operation_name in ("update", "meld"):
+        collapsed = "".join(
+            text
+            for _style, text in _help_group_fragments(
+                [(0, entries[operation_name])],
+                title="SEMANTIC TRANSFORMATIONS",
+                width=180,
+                focused=True,
+                selected_index=0,
+                expanded_index=None,
+                selected_form=None,
+            )
+        )
+        expanded = "".join(
+            text
+            for _style, text in _help_group_fragments(
+                [(0, entries[operation_name])],
+                title="SEMANTIC TRANSFORMATIONS",
+                width=180,
+                focused=True,
+                selected_index=0,
+                expanded_index=0,
+                selected_form=None,
+            )
+        )
+
+        assert "UPDATE VS. MELD" not in collapsed
+        assert "UPDATE VS. MELD" in expanded
+        assert "Update is revision-oriented" in expanded
+        assert "Meld is merge-oriented" in expanded
 
 
 def test_add_has_one_structured_copy_or_link_comparison():

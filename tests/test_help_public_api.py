@@ -82,6 +82,17 @@ def test_client_projects_query_only_access_as_typed_detail(tmp_path):
     assert "QUERY without READ" in detail.body
 
 
+def test_client_projects_update_meld_semantic_boundary_on_both_operations(tmp_path):
+    client = MemCommitClient(root=tmp_path / "missing-store")
+
+    for operation in ("update", "meld"):
+        detail = client.describe_operation_detail(operation, "update-vs-meld")
+        assert detail.kind == "SEMANTIC_BOUNDARY"
+        assert detail.title == "UPDATE VS. MELD"
+        assert "revision-oriented" in detail.body
+        assert "merge-oriented" in detail.body
+
+
 def test_client_projects_reviewed_operation_boundaries_as_typed_comparisons(
     tmp_path,
 ):

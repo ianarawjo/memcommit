@@ -21,6 +21,7 @@ class HelpDetailKind(str, Enum):
     COMPARISON = "COMPARISON"
     LIMITATION = "LIMITATION"
     ACCESS_BOUNDARY = "ACCESS_BOUNDARY"
+    SEMANTIC_BOUNDARY = "SEMANTIC_BOUNDARY"
 
 
 class DetailDiscovery(str, Enum):
@@ -117,7 +118,7 @@ class OperationComparisonDetail(OperationHelpDetail):
 
 @dataclass(frozen=True)
 class OperationTextDetail(OperationHelpDetail):
-    """Typed prose for a limitation or access boundary."""
+    """Typed prose for a limitation, access, or semantic boundary."""
 
     detail_kind: HelpDetailKind = HelpDetailKind.LIMITATION
     body: str = ""
@@ -131,6 +132,7 @@ class OperationTextDetail(OperationHelpDetail):
         if self.detail_kind not in {
             HelpDetailKind.LIMITATION,
             HelpDetailKind.ACCESS_BOUNDARY,
+            HelpDetailKind.SEMANTIC_BOUNDARY,
         }:
             raise ValueError("Operation text detail kind must be a prose detail kind.")
         if not self.body.strip():

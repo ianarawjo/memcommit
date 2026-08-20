@@ -24,7 +24,8 @@ terminal-independent operation and detail query over the existing source.
 - `list_operation_details(name)` returns compact typed detail references for
   one exact operation; and
 - `describe_operation_detail(name, detail_id)` returns one exact complete
-  comparison, limitation, or access boundary by its stable operation-local ID.
+  comparison, limitation, access boundary, or semantic boundary by its stable
+  operation-local ID.
 
 Each record retains name, summary, flow, execution kind, effect, range, and the
 reviewed use situation. `use_when` is the public discovery name for the

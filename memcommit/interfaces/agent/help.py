@@ -240,7 +240,8 @@ def help_agent_tool_schema() -> JsonObject:
             "List public MemCommit operations or describe one stable meaning, "
             "flow, execution kind, effect, range, use-when guidance, maturity, "
             "and individually addressable typed details. List detail IDs or "
-            "request one full comparison, limitation, or access boundary. This "
+            "request one full comparison, limitation, access boundary, or "
+            "semantic boundary. This "
             "tool executes no operation and changes nothing."
         ),
         "parameters": {

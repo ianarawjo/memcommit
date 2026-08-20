@@ -205,6 +205,7 @@ def test_schema_is_json_safe_and_bounds_describe_names_to_the_catalog():
         "query-only-access",
         "selection-routes",
         "structural-boundary",
+        "update-vs-meld",
         "verdicts",
     ]
     assert schema["parameters"]["allOf"][1]["then"] == {"required": ["detail"]}
