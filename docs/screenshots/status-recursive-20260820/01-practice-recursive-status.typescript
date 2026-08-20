@@ -1,0 +1,11 @@
+LIVE PTY · 52 180
+[2J[H[38;2;138;173;244m$[0m mem status -r
+[1mOn context: practice[0m
+[1m
+Recursive scope[0m · Contexts 6  |  Memories 24  |  Embedded Contexts 1  |  Checkpoints 25
+  practice [OWNED] · CURRENT · Direct inventory empty
+  practice/1 [OWNED] · Memories 1  |  Checkpoints 2
+  practice/2 [OWNED] · Memories 1  |  Embedded Contexts 1  |  Checkpoints 12
+  practice/3 [OWNED] · Memories 3  |  Checkpoints 6
+  practice/description [OWNED] · Memories 2
+  practice/source [OWNED] · Memories 17  |  Checkpoints 5
