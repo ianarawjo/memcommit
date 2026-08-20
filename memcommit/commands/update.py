@@ -37,6 +37,7 @@ from memcommit.context import Context
 from memcommit.context_targeting.loading import load_context_scope
 from memcommit.context_targeting.presets import (
     ContextScopePreset,
+    legacy_root_only_option_alias,
     resolve_descendant_scopes,
     resolve_scope_preset,
 )
@@ -430,14 +431,16 @@ def cmd(
     source_descendants: Annotated[
         Optional[bool],
         typer.Option(
-            "--source-descendants/--source-only",
+            "--source-descendants/--source-root-only",
+            legacy_root_only_option_alias("source"),
             help="Include all readable descendant Contexts under Source A",
         ),
     ] = None,
     target_descendants: Annotated[
         Optional[bool],
         typer.Option(
-            "--target-descendants/--target-only",
+            "--target-descendants/--target-root-only",
+            legacy_root_only_option_alias("target"),
             help="Include all writable descendant Contexts under Target B",
         ),
     ] = None,

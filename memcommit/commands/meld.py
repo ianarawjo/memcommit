@@ -22,6 +22,7 @@ from memcommit.context import Context
 from memcommit.context_targeting.loading import load_context_scope
 from memcommit.context_targeting.presets import (
     ContextScopePreset,
+    legacy_root_only_option_alias,
     resolve_descendant_scopes,
     resolve_scope_preset,
 )
@@ -1374,14 +1375,16 @@ def cmd(
     left_descendants: Annotated[
         Optional[bool],
         typer.Option(
-            "--left-descendants/--left-only",
+            "--left-descendants/--left-root-only",
+            legacy_root_only_option_alias("left"),
             help="Include all readable descendants under PEER or INCOMING A",
         ),
     ] = None,
     right_descendants: Annotated[
         Optional[bool],
         typer.Option(
-            "--right-descendants/--right-only",
+            "--right-descendants/--right-root-only",
+            legacy_root_only_option_alias("right"),
             help=(
                 "Include readable descendants under PEER B, or writable "
                 "owner Contexts under directional BASELINE B"

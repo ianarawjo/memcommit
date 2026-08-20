@@ -24,6 +24,7 @@ from memcommit.commands.command_wait import (
     build_report_loading_view,
     run_command_wait,
 )
+from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.sever_sessions import (
     list_sever_session_catalog,
     reload_selected_sever_session,
@@ -37,6 +38,7 @@ from memcommit.interfaces.console.text import (
 )
 from memcommit.context_targeting.presets import (
     ContextScopePreset,
+    legacy_root_only_option_alias,
     resolve_descendant_scopes,
     resolve_scope_preset,
 )
@@ -110,6 +112,7 @@ def _start_progress(progress, event: SeverAnalysisProgress) -> None:
 def _start_analysis(
     *,
     store: MemoryStore,
+    current_name: str | None,
     source_name: str,
     criteria_name: str,
     output_name: str,
@@ -117,7 +120,6 @@ def _start_analysis(
     criteria_descendants: bool = True,
     provider_factory=None,
 ) -> SeverAnalysisResult:
-    current_name = store.current_context_name()
     source_access = resolve_context_access(
         store,
         source_name,
@@ -204,10 +206,12 @@ def _start(
 ) -> SeverSession:
     """Compatibility facade for historical command-level test callers."""
 
+    snapshot = ContextOperandSnapshot.capture(store)
     return _start_analysis(
         store=store,
-        source_name=source_name,
-        criteria_name=criteria_name,
+        current_name=snapshot.current_name,
+        source_name=snapshot.resolve(source_name),
+        criteria_name=snapshot.resolve(criteria_name),
         output_name=output_name,
         source_descendants=source_descendants,
         criteria_descendants=criteria_descendants,
@@ -537,14 +541,16 @@ def cmd(
     source_descendants: Annotated[
         Optional[bool],
         typer.Option(
-            "--source-descendants/--source-only",
+            "--source-descendants/--source-root-only",
+            legacy_root_only_option_alias("source"),
             help="Include the Source root's readable descendant Contexts",
         ),
     ] = None,
     criteria_descendants: Annotated[
         Optional[bool],
         typer.Option(
-            "--criteria-descendants/--criteria-only",
+            "--criteria-descendants/--criteria-root-only",
+            legacy_root_only_option_alias("criteria"),
             help="Include the Criteria root's readable descendant Contexts",
         ),
     ] = None,
@@ -604,6 +610,7 @@ def cmd(
         )
         raise typer.Exit(2)
     store = MemoryStore()
+    context_snapshot = ContextOperandSnapshot.capture(store)
     session_store = SeverSessionStore(store)
     try:
         if sessions_flag:
@@ -729,15 +736,17 @@ def cmd(
                 raise SeverCommandError(
                     "Starting Sever requires --criteria and --save-as."
                 )
-            source_name = source_name or store.current_context_name()
+            source_name = context_snapshot.resolve_or_current(source_name)
             if source_name is None:
                 raise SeverCommandError(
                     "Starting Sever requires --source or a current Context."
                 )
+            criteria_name = context_snapshot.resolve(criteria_name)
             if source_descendants is None or criteria_descendants is None:
                 raise SeverCommandError("Sever scope resolution produced no range.")
             analysis = _start_analysis(
                 store=store,
+                current_name=context_snapshot.current_name,
                 source_name=source_name,
                 criteria_name=criteria_name,
                 output_name=save_as,

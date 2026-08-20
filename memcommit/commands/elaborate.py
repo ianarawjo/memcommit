@@ -42,7 +42,6 @@ def cmd(
         Optional[list[str]],
         typer.Option(
             "--rule",
-            "-r",
             help=(
                 "Rule to elaborate into suggested Case propositions; repeat for "
                 "more Rules"

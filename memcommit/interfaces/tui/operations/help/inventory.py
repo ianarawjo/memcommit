@@ -362,6 +362,7 @@ COMMAND_FORMS = {
     "branch": (
         "mem branch (choose a local Source, parent location, and fresh target)",
         "mem branch [new_context] (branch the current Context and switch)",
+        "mem branch [new_context] --source-root-only (explicit Source root)",
         "mem branch [new_context] -r (branch the current Context subtree)",
     ),
     "checkout": (
@@ -392,6 +393,7 @@ COMMAND_FORMS = {
         "mem compare --to [context2] (current Context is context1)",
         "mem compare --from [context1] --to [context2] (explicit Contexts)",
         "mem compare --from [context1] --to [context2] -r (both readable subtrees)",
+        "mem compare --from [context1] --to [context2] -r --compared-root-only (Reference subtree, compared root)",
         "mem compare --from [context1] --to [context2] --reference-descendants --compared-descendants (include each readable subtree)",
     ),
     "config": (
@@ -520,6 +522,7 @@ COMMAND_FORMS = {
         "mem impact update --session [uid] (inspect the exact saved Update Impact; APPLY? opens its Apply flow)",
         "mem impact --from [source_context] --to [target_context] (directional preview)",
         "mem impact -r --from [source_context] --to [target_context] (recursive endpoints)",
+        "mem impact -r --from [source_context] --to [target_context] --target-root-only (Source subtree, target root)",
         "mem impact --from [source_context] (current Context is target)",
         "mem impact --to [target_context] (current Context is source)",
     ),
@@ -582,6 +585,7 @@ COMMAND_FORMS = {
         "mem meld team/draft-a team/draft-b team/merged-draft (example: symmetric Result)",
         "mem meld [peer_a] [peer_b] --to [result_context] (symmetric Result alias)",
         "mem meld [peer_a] [peer_b] [result_context] -r (both subtrees)",
+        "mem meld [peer_a] [peer_b] [result_context] -r --right-root-only (left subtree, right root)",
         "mem meld [peer_a] [peer_b] [result_context] --left-descendants --right-descendants (symmetric readable subtrees)",
         "mem meld [incoming_context] --into [baseline_context] (directional alias)",
         "mem meld [incoming_context] --left-descendants --into [baseline_context] --right-descendants (directional selected subtrees with owner-aware baseline writes)",
@@ -682,6 +686,7 @@ COMMAND_FORMS = {
         "mem sever --sessions (enter the interactive Sever session launcher)",
         "mem sever --source [source_context] --criteria [criteria_context] --save-as [result_context]",
         "mem sever -r --source [source_context] --criteria [criteria_context] --save-as [result_context]",
+        "mem sever -r --source [source_context] --criteria [criteria_context] --source-root-only --save-as [result_context]",
         "mem sever --criteria [criteria_context] --save-as [result_context] (current Context is source)",
         "mem sever --resume [uid] (open an exact saved Sever session)",
     ),
@@ -754,6 +759,7 @@ COMMAND_FORMS = {
         "mem update (enter the interactive Update session launcher)",
         "mem update --from [source_context] --to [target_context] (explicit direction)",
         "mem update -r --from [source_context] --to [target_context] (both subtrees)",
+        "mem update -r --from [source_context] --to [target_context] --target-root-only (Source subtree, target root)",
         "mem update --from [source_context] --source-descendants --to [target_context] --target-descendants (include both readable subtrees)",
         "mem update --from [source_context] (current Context is target)",
         "mem update --to [target_context] (current Context is source)",

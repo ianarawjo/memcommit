@@ -61,6 +61,7 @@ from memcommit.commands.update_render import (
 from memcommit.context_targeting.loading import load_context_scope
 from memcommit.context_targeting.presets import (
     ContextScopePreset,
+    legacy_root_only_option_alias,
     resolve_descendant_scopes,
     resolve_scope_preset,
 )
@@ -924,7 +925,7 @@ def _dispatch_impact(
         Optional[bool],
         typer.Option(
             "--source-descendants/--source-root-only",
-            " /--source-only",
+            legacy_root_only_option_alias("source"),
             help="Refine directional Update Source reach",
         ),
     ] = None,
@@ -932,7 +933,7 @@ def _dispatch_impact(
         Optional[bool],
         typer.Option(
             "--target-descendants/--target-root-only",
-            " /--target-only",
+            legacy_root_only_option_alias("target"),
             help="Refine directional Update Target reach",
         ),
     ] = None,
@@ -1160,7 +1161,7 @@ def cmd(
         Optional[bool],
         typer.Option(
             "--source-descendants/--source-root-only",
-            " /--source-only",
+            legacy_root_only_option_alias("source"),
             help="Refine Source reach",
         ),
     ] = None,
@@ -1168,7 +1169,7 @@ def cmd(
         Optional[bool],
         typer.Option(
             "--target-descendants/--target-root-only",
-            " /--target-only",
+            legacy_root_only_option_alias("target"),
             help="Refine Target reach",
         ),
     ] = None,

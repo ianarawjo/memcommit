@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from types import SimpleNamespace
 import uuid
 
 import pytest
@@ -522,7 +523,7 @@ def test_source_and_criteria_descendant_scopes_are_independent(
             "--source",
             "source",
             "-r",
-            "--source-only",
+            "--source-root-only",
             "--criteria",
             "criteria",
             "--save-as",
@@ -543,6 +544,58 @@ def test_source_and_criteria_descendant_scopes_are_independent(
     session = SeverSessionStore(store).list()[0]
     assert not session.source.include_descendants
     assert session.criteria.include_descendants
+
+
+def test_new_sever_setup_resolves_both_operands_against_one_current_snapshot(
+    isolated_store,
+    monkeypatch,
+):
+    current_reads: list[str] = []
+    resolved: list[tuple[str, str | None]] = []
+
+    def changing_current(_store):
+        value = "alpha/current" if not current_reads else "beta/current"
+        current_reads.append(value)
+        return value
+
+    def resolve_access(
+        _store,
+        operand,
+        *,
+        current_name,
+        required_permission,
+    ):
+        assert required_permission == "READ"
+        resolved.append((operand, current_name))
+        return SimpleNamespace(display_name=operand)
+
+    monkeypatch.setattr(MemoryStore, "current_context_name", changing_current)
+    monkeypatch.setattr(sever_command, "resolve_context_access", resolve_access)
+    monkeypatch.setattr(
+        sever_command,
+        "run_command_wait",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            sever_command.SeverCommandError("stop after operand resolution")
+        ),
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "sever",
+            "--criteria",
+            "../criteria",
+            "--save-as",
+            "result",
+        ],
+    )
+
+    assert result.exit_code == 1
+    assert current_reads == ["alpha/current"]
+    assert resolved == [
+        ("alpha/current", "alpha/current"),
+        ("alpha/criteria", "alpha/current"),
+    ]
 
 
 def test_sever_requires_exactly_one_criteria_and_new_output(isolated_store):

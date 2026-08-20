@@ -11,6 +11,7 @@ from memcommit.interfaces.console.text import (
 from memcommit.context_targeting.model import ContextScope
 from memcommit.context_targeting.presets import (
     ContextScopePreset,
+    legacy_root_only_option_alias,
     resolve_descendant_scopes,
     resolve_scope_preset,
 )
@@ -38,7 +39,8 @@ def cmd(
     source_descendants: Annotated[
         Optional[bool],
         typer.Option(
-            "--source-descendants/--source-only",
+            "--source-descendants/--source-root-only",
+            legacy_root_only_option_alias("source"),
             help="Branch the Source root and every local lexical descendant",
         ),
     ] = None,

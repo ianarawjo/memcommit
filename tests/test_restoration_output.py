@@ -371,7 +371,8 @@ def test_undo_reconstructs_meld_sever_and_translate_commands():
     )
     assert _restored_command(sever) == (
         "mem sever --source source/all --criteria rules/private "
-        "--save-as result/kept --source-descendants --criteria-only --accept"
+        "--save-as result/kept --source-descendants "
+        "--criteria-root-only --accept"
     )
     assert _restored_command(translate) == (
         "mem translate memory-uid --to Korean --in-place"

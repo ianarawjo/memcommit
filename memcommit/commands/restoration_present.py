@@ -306,12 +306,12 @@ def _sever_command(args: Mapping[str, object]) -> str | None:
     source_scope = (
         "--source-descendants"
         if record.get("source_scope") == "INCLUDE_DESCENDANTS"
-        else "--source-only"
+        else "--source-root-only"
     )
     criteria_scope = (
         "--criteria-descendants"
         if record.get("criteria_scope") == "INCLUDE_DESCENDANTS"
-        else "--criteria-only"
+        else "--criteria-root-only"
     )
     return (
         f"mem sever --source {_command_arg(source)} "
