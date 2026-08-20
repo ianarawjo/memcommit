@@ -20,8 +20,8 @@ class MeldApplicationFlowError(RuntimeError):
 class MeldApplicationFlowPort:
     """Adapt one accepted Meld session to the shared application phases.
 
-    The interactive workbench has already persisted every review turn before
-    this port is entered. The review phase therefore preserves the exact
+    The interactive workbench has already persisted every decision turn before
+    this port is entered. The decision phase therefore preserves the exact
     mutable session object expected by Meld's existing Apply and recovery
     implementation; cloning it here would change caller-visible lifecycle
     behavior and its saved-session CAS contract.
@@ -30,15 +30,15 @@ class MeldApplicationFlowPort:
     expected_session_digest: str
     applier: MeldApplier
 
-    def review(self, prepared: MeldSession) -> MeldSession:
-        """Hand off the exact session accepted by the operation host."""
+    def decide(self, prepared: MeldSession) -> MeldSession:
+        """Hand off the exact decision-complete session from the operation."""
 
         return prepared
 
-    def apply(self, reviewed: MeldSession) -> MeldApplicationReceipt:
+    def apply(self, decided: MeldSession) -> MeldApplicationReceipt:
         """Apply through the operation-owned dispatcher and verify its receipt."""
 
-        receipt = self.applier(reviewed, self.expected_session_digest)
+        receipt = self.applier(decided, self.expected_session_digest)
         if (
             not isinstance(receipt, tuple)
             or len(receipt) != 3
@@ -51,14 +51,14 @@ class MeldApplicationFlowPort:
             raise MeldApplicationFlowError(
                 "Meld Apply returned an invalid application receipt."
             )
-        application = reviewed.application
+        application = decided.application
         if (
-            reviewed.state != "APPLIED"
+            decided.state != "APPLIED"
             or application is None
             or application.checkpoint_uid != receipt[1]
             or len(application.result_memory_uids) != receipt[2]
         ):
             raise MeldApplicationFlowError(
-                "Meld Apply returned a receipt outside the reviewed session."
+                "Meld Apply returned a receipt outside the decided session."
             )
         return receipt

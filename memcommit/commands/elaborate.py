@@ -106,11 +106,11 @@ def cmd(
     ] = False,
     plain: Annotated[
         bool,
-        typer.Option("--plain", help="Print proposals instead of opening the Viewer"),
+        typer.Option("--plain", help="Print a read-only Ground result without a Viewer"),
     ] = False,
     tui: Annotated[
         bool,
-        typer.Option("--tui", help="Require the interactive proposal Viewer"),
+        typer.Option("--tui", help="Require the read-only Ground result Viewer"),
     ] = False,
 ) -> None:
     """Generate Rules or Cases and add them to an existing Context."""
@@ -214,7 +214,15 @@ def cmd(
             clipboard_writer=write_system_clipboard,
             terminal=SystemTerminalCapabilities(),
         )
-        result = runner.run(request, mode=mode)
+        if frozen_ground is None:
+            if tui:
+                raise ElaborateError(
+                    "Direct Elaborate Add is non-interactive; use "
+                    "'mem impact elaborate' to inspect without saving."
+                )
+            result = execute(request)
+        else:
+            result = runner.run(request, mode=mode)
         if frozen_ground is not None:
             # Ground remains an exact read-only proposal adapter until its
             # workspace source locks can participate in the same atomic Add.
@@ -222,20 +230,28 @@ def cmd(
         if result is None or prepared is None or ordinary_store is None:
             raise ElaborateError("Elaborate produced no addable proposal.")
         receipt = apply_prepared_elaborate_add(prepared, store=ordinary_store)
-        typer.echo("")
         typer.secho(
-            f"Added {receipt.count} Elaborate Memories to "
-            f"'{display_escape_text(receipt.target_name)}'.",
+            f"ELABORATE APPLIED · {display_escape_text(receipt.target_name)}",
             fg=typer.colors.GREEN,
+            bold=True,
         )
         source_label = receipt.source_name or "INLINE"
         typer.echo(
-            f"SOURCE · {display_escape_text(source_label)} · TARGET · "
-            f"{display_escape_text(receipt.target_name)}"
+            f"MODE · {prepared.result.analysis.mode.value} · "
+            "VERIFICATION · UNVERIFIED"
         )
         typer.echo(
-            f"CHECKPOINT · {receipt.checkpoint_uid[:8]} · RECOVERY · mem undo"
+            f"SOURCE · {display_escape_text(source_label)} · "
+            f"TARGET · {display_escape_text(receipt.target_name)}"
         )
+        typer.echo(f"EFFECTS · ADD {receipt.count} MEMORIES")
+        typer.echo(f"RECEIPT · {receipt.checkpoint_uid}")
+        typer.echo(f"CHECKPOINT · {receipt.checkpoint_uid}")
+        typer.echo(
+            "REVIEW · mem review elaborate --receipt "
+            f"{receipt.checkpoint_uid}"
+        )
+        typer.echo("RECOVERY · mem undo")
     except (
         ConsoleModeError,
         ElaborateError,

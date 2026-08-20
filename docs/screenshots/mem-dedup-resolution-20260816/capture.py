@@ -164,6 +164,7 @@ def _run_child(kind: str) -> None:
     import memcommit.commands.find_duplicates as find_command
     import memcommit.ops as ops
     from memcommit.cli import app
+    from memcommit.store import MemoryStore
 
     with tempfile.TemporaryDirectory(prefix="dedup-resolution-capture-") as directory:
         _configure_isolated_store(Path(directory) / ".mem")
@@ -199,6 +200,20 @@ def _run_child(kind: str) -> None:
             if isinstance(returned, int):
                 exit_code = returned
         print(f"COMMAND EXIT · {exit_code}")
+        if kind == "success" and exit_code == 0:
+            [checkpoint] = MemoryStore().list_checkpoints("dedup/capture")
+            print("POST-APPLICATION REVIEW · PROVIDER FREE", flush=True)
+            app(
+                args=[
+                    "review",
+                    "dedun",
+                    "--receipt",
+                    checkpoint["uid"],
+                    "--snapshot",
+                ],
+                prog_name="mem",
+                standalone_mode=False,
+            )
         _pause(_verification(kind, provider))
 
 
@@ -254,11 +269,9 @@ def _confirm_and_handoff(child: pexpect.spawn) -> None:
 def _select_survivor_and_review(child: pexpect.spawn) -> None:
     child.expect("MEM DEDUN · RESOLUTION SESSION")
     _BASE._settle(child, seconds=0.8)
+    # The recommendation is already a complete operation decision. Move from
+    # Items to To Do and open the exact Apply confirmation; no Viewer exists.
     child.send("\t\r")
-    _BASE._settle(child)
-    child.send("\t\r")
-    _BASE._settle(child)
-    child.send("\t\t\r")
     _BASE._settle(child)
 
 
@@ -297,13 +310,13 @@ def _capture_success() -> None:
         child.expect("MEM DEDUN · RESOLUTION SESSION")
         _BASE._settle(child, seconds=0.8)
         _snapshot(recorder, "10-dedup-plan-entry")
-        child.send("\t\r")
+        child.send("\r")
         _BASE._settle(child)
         _snapshot(recorder, "11-component-detail")
-        child.send("\t")
+        child.send("\x1b[B\r")
         _BASE._settle(child)
         _snapshot(recorder, "12-survivor-responses")
-        child.send("\r")
+        child.send("\x1b[A\r")
         _BASE._settle(child)
         _snapshot(recorder, "13-survivor-selected")
         child.send("\t\t")
@@ -317,6 +330,7 @@ def _capture_success() -> None:
         _snapshot(recorder, "16-success-receipt")
         child.send("\r")
         child.expect("SUCCESS VERIFICATION")
+        _BASE._settle(child)
         _snapshot(recorder, "17-read-only-store-verification")
         child.send("\r")
         child.expect(pexpect.EOF)
@@ -373,6 +387,8 @@ def main() -> None:
     )
     assert "CHECKPOINTS 1" in success
     assert "COMMANDS ['dedun']" in success
+    assert "MEM REVIEW · DEDUN" in success
+    assert "POST-APPLICATION REVIEW · PROVIDER FREE" in success
     stale = (OUT / "18-stale-source-rejected.txt").read_text(encoding="utf-8")
     assert "Source changed" in stale
     assert "CHECKPOINTS 0" in stale

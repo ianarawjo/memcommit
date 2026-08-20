@@ -6,7 +6,8 @@
       "docs/add-callable-boundary-matrix.md"
     ],
     "atomize": [
-      "docs/atomize-application-boundary-matrix.md"
+      "docs/atomize-application-boundary-matrix.md",
+      "docs/execution-receipt-review-lifecycle-design-rationale.md"
     ],
     "audit": [],
     "branch": [],
@@ -32,6 +33,7 @@
     "dedun": [
       "docs/dedun-callable-boundary-matrix.md",
       "docs/dedun-design-rationale.md",
+      "docs/execution-receipt-review-lifecycle-design-rationale.md",
       "docs/resolution-lifecycle-design-rationale.md"
     ],
     "delete": [
@@ -41,11 +43,13 @@
       "docs/mem-history-search-design-rationale.md"
     ],
     "distill": [
-      "docs/distill-elaborate-application-boundary-matrix.md"
+      "docs/distill-elaborate-application-boundary-matrix.md",
+      "docs/execution-receipt-review-lifecycle-design-rationale.md"
     ],
     "edit": [],
     "elaborate": [
-      "docs/distill-elaborate-application-boundary-matrix.md"
+      "docs/distill-elaborate-application-boundary-matrix.md",
+      "docs/execution-receipt-review-lifecycle-design-rationale.md"
     ],
     "embed": [
       "docs/embed-application-boundary-matrix.md",
@@ -69,7 +73,8 @@
     "forget": [
       "docs/forget-application-boundary-matrix.md",
       "docs/forget-public-python-api-design-rationale.md",
-      "docs/forget-agent-adapter-design-rationale.md"
+      "docs/forget-agent-adapter-design-rationale.md",
+      "docs/execution-receipt-review-lifecycle-design-rationale.md"
     ],
     "ground": [
       "docs/ground-workspace-application-boundary-matrix.md",
@@ -93,10 +98,12 @@
     ],
     "meld": [
       "docs/meld-application-boundary-matrix.md",
-      "docs/meld-session-lifecycle-design-rationale.md"
+      "docs/meld-session-lifecycle-design-rationale.md",
+      "docs/execution-receipt-review-lifecycle-design-rationale.md"
     ],
     "merge": [
-      "docs/merge-application-boundary-matrix.md"
+      "docs/merge-application-boundary-matrix.md",
+      "docs/execution-receipt-review-lifecycle-design-rationale.md"
     ],
     "profile": [
       "docs/context-name-portability-design-rationale.md"
@@ -125,17 +132,21 @@
     ],
     "resolve": [
       "docs/resolve-fit-repair-design-rationale.md",
+      "docs/execution-receipt-review-lifecycle-design-rationale.md",
       "docs/resolution-lifecycle-design-rationale.md"
     ],
     "revert": [],
-    "review": [],
+    "review": [
+      "docs/execution-receipt-review-lifecycle-design-rationale.md"
+    ],
     "search": [
       "docs/find-search-application-boundary-matrix.md",
       "docs/find-search-compact-scope-design-rationale.md",
       "docs/search-find-replace-design-rationale.md"
     ],
     "sever": [
-      "docs/sever-application-boundary-matrix.md"
+      "docs/sever-application-boundary-matrix.md",
+      "docs/execution-receipt-review-lifecycle-design-rationale.md"
     ],
     "share": [],
     "shell-init": [],
@@ -161,7 +172,8 @@
     "undo": [],
     "unlock": [],
     "update": [
-      "docs/update-application-boundary-matrix.md"
+      "docs/update-application-boundary-matrix.md",
+      "docs/execution-receipt-review-lifecycle-design-rationale.md"
     ]
   }
 }

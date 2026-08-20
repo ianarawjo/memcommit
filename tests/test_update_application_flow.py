@@ -88,7 +88,7 @@ def test_update_flow_dispatches_by_the_actual_mutation_owner(
         session,
         port=UpdateApplicationFlowPort(
             interactive=False,
-            reviewer=_unexpected,
+            decision_resolver=_unexpected,
             incorporate=_unexpected,
             local_applier=lambda reviewed: apply("local", reviewed),
             granted_source_applier=lambda reviewed: apply(
@@ -101,7 +101,7 @@ def test_update_flow_dispatches_by_the_actual_mutation_owner(
     )
 
     assert result.status == "APPLIED"
-    assert result.reviewed is session
+    assert result.decided is session
     assert result.applied is not None and result.applied.status == "applied"
     assert calls == [expected]
 
@@ -111,13 +111,13 @@ def test_interactive_update_can_replace_the_reviewed_revision_before_apply():
     revised = replace(session, uid=str(uuid.uuid4()))
     observed: list[tuple[UpdateSession, str | None]] = []
 
-    def review(prepared, incorporate, origin):
+    def decide(prepared, incorporate, origin):
         observed.append((prepared, origin))
         return incorporate(prepared, "revise")
 
     port = UpdateApplicationFlowPort(
         interactive=True,
-        reviewer=review,
+        decision_resolver=decide,
         incorporate=lambda _current, guidance: revised
         if guidance == "revise"
         else _unexpected(),
@@ -131,7 +131,7 @@ def test_interactive_update_can_replace_the_reviewed_revision_before_apply():
 
     assert observed == [(session, "EXACT_PREWARM")]
     assert result.prepared is session
-    assert result.reviewed is revised
+    assert result.decided is revised
     assert result.applied == _applied(revised)
 
 
@@ -139,7 +139,7 @@ def test_interactive_cancel_keeps_apply_unreachable():
     session = _staged()
     port = UpdateApplicationFlowPort(
         interactive=True,
-        reviewer=lambda *_args: None,
+        decision_resolver=lambda *_args: None,
         incorporate=_unexpected,
         local_applier=_unexpected,
         granted_source_applier=_unexpected,
@@ -157,14 +157,14 @@ def test_update_flow_rejects_a_receipt_for_a_different_review():
     different = replace(session, target_name="other-target")
     port = UpdateApplicationFlowPort(
         interactive=False,
-        reviewer=_unexpected,
+        decision_resolver=_unexpected,
         incorporate=_unexpected,
         local_applier=lambda _reviewed: _applied(different),
         granted_source_applier=_unexpected,
         granted_target_applier=_unexpected,
     )
 
-    with pytest.raises(UpdateApplicationFlowError, match="outside the reviewed"):
+    with pytest.raises(UpdateApplicationFlowError, match="outside the decided"):
         run_application_flow(session, port=port)
 
 
@@ -172,7 +172,7 @@ def test_update_flow_rejects_non_staged_input_and_review_output():
     session = _staged()
     port = UpdateApplicationFlowPort(
         interactive=True,
-        reviewer=lambda *_args: replace(session, status="impact"),
+        decision_resolver=lambda *_args: replace(session, status="impact"),
         incorporate=_unexpected,
         local_applier=_unexpected,
         granted_source_applier=_unexpected,

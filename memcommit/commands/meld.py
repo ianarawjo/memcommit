@@ -423,6 +423,36 @@ def render_meld_session(
     return "\n".join(lines)
 
 
+def render_meld_receipt(
+    session: MeldSession,
+    *,
+    recovered: bool = False,
+) -> str:
+    """Render terminal Meld success without reopening its analysis Viewer."""
+
+    if session.state != "APPLIED" or session.application is None:
+        raise MeldCommandError("Meld receipt requires an applied session.")
+    assessment = session.current_assessment
+    proposals = assessment.proposals if assessment is not None else ()
+    additions = sum(item.operation == "ADD" for item in proposals)
+    edits = sum(item.operation == "EDIT" for item in proposals)
+    lines = [
+        f"MELD APPLIED · {session.mode} · {session.target.context_name}",
+        f"EFFECTS · ADD {additions} · EDIT {edits}",
+        f"RESULT MEMORIES · {len(session.application.result_memory_uids)}",
+        f"RECEIPT · {session.uid}",
+        f"CHECKPOINT · {session.application.checkpoint_uid}",
+        f"REVIEW · mem review meld --session {session.uid}",
+    ]
+    if recovered:
+        lines.append("RECOVERY STATUS · prior application recovered; no duplicate write")
+    elif session.granted_target is None:
+        lines.append("RECOVERY · mem undo")
+    else:
+        lines.append("RECOVERY · governed by the granted authority owner")
+    return "\n".join(lines)
+
+
 def _load_bound_contexts(
     store: MemoryStore,
     session: MeldSession,
@@ -1883,7 +1913,11 @@ def cmd(
                 )
                 phase = "INITIAL ANALYSIS" if len(session.turns) > 1 else "ANALYSIS"
                 typer.echo(f"{phase} · {label} · PROVIDER NOT CALLED")
-            typer.echo(render_meld_session(session))
+            typer.echo(
+                render_meld_receipt(session)
+                if session.state == "APPLIED"
+                else render_meld_session(session)
+            )
             return
 
         if restart:
@@ -1973,7 +2007,11 @@ def cmd(
                         restarted.origin if restarted.origin != "PROVIDER" else None
                     ),
                 )
-            typer.echo(render_meld_session(session))
+            typer.echo(
+                render_meld_receipt(session)
+                if session.state == "APPLIED"
+                else render_meld_session(session)
+            )
             return
 
         if session.mode != requested_mode:
@@ -2043,23 +2081,7 @@ def cmd(
                 session=session,
                 expected_session_digest=expected_session_digest,
             )
-            typer.echo(render_meld_session(session))
-            if recovered:
-                typer.secho(
-                    "Recovered the prior meld application; no duplicate "
-                    "checkpoint was created.",
-                    fg=typer.colors.YELLOW,
-                )
-            else:
-                noun = (
-                    "meld changes" if session.mode == "DIRECTIONAL" else "meld results"
-                )
-                typer.secho(
-                    f"Applied {result_count} {noun} in checkpoint "
-                    f"[{checkpoint_uid[:8]}].",
-                    fg=typer.colors.GREEN,
-                    bold=True,
-                )
+            typer.echo(render_meld_receipt(session, recovered=recovered))
             return
 
         if defer_all:
@@ -2159,7 +2181,9 @@ def cmd(
                 provider_factory=connect_codex_chatgpt_provider,
             )
         typer.echo(
-            render_meld_session(
+            render_meld_receipt(session)
+            if session.state == "APPLIED"
+            else render_meld_session(
                 session,
                 expanded_issue_uid=expanded_uid,
             )

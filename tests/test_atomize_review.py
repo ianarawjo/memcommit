@@ -18,9 +18,9 @@ from memcommit.atomize_workbench import (
     AtomizeWorkbenchError,
     AtomizeWorkbenchSession,
     atomize_workbench_issue_projection,
+    project_atomize_workbench_findings,
 )
 from memcommit.cli import app
-from memcommit.commands.review_shell import RESPONSE_LABEL
 from memcommit.context import AutoCheckpoint, Memory
 from memcommit.store import MemoryStore
 
@@ -165,6 +165,26 @@ def _init_uncertain_context(store: MemoryStore):
     return ctx, memory
 
 
+def _stage_operation_response(
+    store: MemoryStore,
+    analysis: AtomizeAnalysisSession,
+    memory_uid: str,
+    text: str,
+) -> AtomizeWorkbenchSession:
+    """Stage one Atomize-owned execution decision without using Review."""
+
+    workbench = store.load_atomize_workbench(analysis)
+    assert workbench is not None
+    finding = next(
+        item
+        for item in project_atomize_workbench_findings(analysis)
+        if memory_uid in item.source_uids
+    )
+    workbench.response_for(finding.uid).text = text
+    store.save_atomize_workbench(workbench)
+    return workbench
+
+
 def test_atomize_review_comment_is_persisted_reanalyzed_and_applied(
     isolated_store,
     monkeypatch,
@@ -186,40 +206,21 @@ def test_atomize_review_comment_is_persisted_reanalyzed_and_applied(
     assert "UNCERTAIN" in preview.output
     assert "ISSUES" in preview.output
     assert "ATOMIZE UNCERTAINTY" in preview.output
-    assert review.exit_code == 0, review.output
-    assert "REVIEW ITEMS · 1" in review.output
-    assert (
-        f"ATOMIZE UNCERTAINTY 1 · [{memory.uid[:8]}] {memory.content}"
-        in review.output
-    )
-    assert "UNCERTAIN · REQUIRES CONTEXT" in review.output
-    assert review.output.index("CLASSIFICATION") < review.output.rindex(
-        memory.content
-    )
-    assert RESPONSE_LABEL not in review.output
-    assert "READING OPTIONS" not in review.output
+    assert review.exit_code == 1, review.output
+    assert "execution is not complete" in review.output
     assert len(provider.payloads) == 1
 
     comment = (
         "'the same NFC' means the staff-door NFC credential."
     )
-    responded = runner.invoke(
-        app,
-        [
-            "review",
-            "--respond-to",
-            memory.uid[:8],
-            "--response",
-            comment,
-        ],
-    )
-    assert responded.exit_code == 0, responded.output
-    assert "RESPONSES" in responded.output
-    assert f"Comment:\n      {comment}" in responded.output
     source_analysis = store.load_atomize_analysis(ctx.uid)
     assert source_analysis is not None
-    saved_workbench = store.load_atomize_workbench(source_analysis)
-    assert saved_workbench is not None
+    saved_workbench = _stage_operation_response(
+        store,
+        source_analysis,
+        memory.uid,
+        comment,
+    )
     assert saved_workbench.answered_count == 1
 
     refused = runner.invoke(app, ["atomize", "--save"])
@@ -271,9 +272,9 @@ def test_atomize_review_comment_is_persisted_reanalyzed_and_applied(
 
     # Reanalysis creates a fresh workbench for the new immutable analysis.
     # Both entry points resume it without another provider call.
-    resumed_review = runner.invoke(app, ["review", "--snapshot"])
-    assert resumed_review.exit_code == 0, resumed_review.output
-    assert "SUGGESTED SPLIT" in resumed_review.output
+    resumed_review = runner.invoke(app, ["review", "atomize", "--snapshot"])
+    assert resumed_review.exit_code == 1, resumed_review.output
+    assert "execution is not complete" in resumed_review.output
     resumed_preview = runner.invoke(app, ["impact", "atomize"])
     assert resumed_preview.exit_code == 0, resumed_preview.output
     assert "Resumed saved analysis" in resumed_preview.output
@@ -305,6 +306,12 @@ def test_atomize_review_comment_is_persisted_reanalyzed_and_applied(
     checkpoint = store.list_checkpoints("atomize/resolved")[0]
     assert checkpoint["args"]["source_review_uid"] == saved_workbench.uid
     assert checkpoint["args"]["declared_frame_count"] == 1
+    terminal_review = runner.invoke(
+        app,
+        ["review", "atomize", "--context", "atomize/resolved", "--snapshot"],
+    )
+    assert terminal_review.exit_code == 0, terminal_review.output
+    assert "APPLIED" in terminal_review.output
 
     # A later preview replaces the latest per-Context analysis. Applied
     # review evidence must therefore remain reconstructible from the
@@ -331,10 +338,22 @@ def test_atomize_review_comment_is_persisted_reanalyzed_and_applied(
         app,
         ["rationale", memory.uid[:8]],
     )
+    rationale_json = runner.invoke(
+        app,
+        ["rationale", memory.uid[:8], "--json"],
+    )
     assert rationale.exit_code == 0, rationale.output
     assert "PROVENANCE" in rationale.output
     assert "Reviewed declared context/comment" not in rationale.output
     assert "Reviewer response:" not in rationale.output
+    assert rationale_json.exit_code == 0, rationale_json.output
+    rationale_payload = json.loads(rationale_json.output)
+    recorded = rationale_payload["recorded_reason_events"][0]
+    assert recorded["declared_frame"] == comment
+    assert recorded["uncertainty_reason"]
+    assert recorded["child_evidence"][0]["frame_spans"] == [
+        "staff-door NFC credential"
+    ]
 
 
 def test_reviewed_frame_may_not_replace_source_memory_evidence():
@@ -431,10 +450,6 @@ def test_atomize_with_review_requires_a_nonempty_comment_without_provider_call(
     )
 
     assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
-    assert runner.invoke(
-        app,
-        ["review", "atomize", "--snapshot"],
-    ).exit_code == 0
     refused = runner.invoke(
         app,
         ["impact", "atomize", "--with-review"],
@@ -457,31 +472,29 @@ def test_plain_impact_resumes_without_incorporating_saved_comments(
         lambda: provider,
     )
     assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
-    assert runner.invoke(
-        app,
-        ["review", "atomize", "--snapshot"],
-    ).exit_code == 0
-    assert runner.invoke(
-        app,
-        [
-            "review",
-            "--respond-to",
-            memory.uid[:8],
-            "--response",
-            "'the same NFC' means the staff-door NFC credential.",
-        ],
-    ).exit_code == 0
+    source_analysis = store.load_atomize_analysis(store.load_current_direct().uid)
+    assert source_analysis is not None
+    comment = "'the same NFC' means the staff-door NFC credential."
+    workbench = _stage_operation_response(
+        store,
+        source_analysis,
+        memory.uid,
+        comment,
+    )
 
     analysis_before = store._atomize_analysis_path(
         store.load_current_direct().uid
     ).read_bytes()
     plain_reanalysis = runner.invoke(app, ["impact", "atomize"])
-    resumed_review = runner.invoke(app, ["review", "--snapshot"])
+    resumed_review = runner.invoke(app, ["review", "atomize", "--snapshot"])
 
     assert plain_reanalysis.exit_code == 0, plain_reanalysis.output
     assert "Resumed saved analysis" in plain_reanalysis.output
-    assert resumed_review.exit_code == 0, resumed_review.output
-    assert "'the same NFC' means" in resumed_review.output
+    assert resumed_review.exit_code == 1, resumed_review.output
+    assert "execution is not complete" in resumed_review.output
+    restored = store.load_atomize_workbench(source_analysis)
+    assert restored is not None
+    assert restored.responses == workbench.responses
     assert store._atomize_analysis_path(
         store.load_current_direct().uid
     ).read_bytes() == analysis_before
@@ -507,10 +520,6 @@ def test_review_and_atomize_schema_versions_reject_booleans(
     with pytest.raises(AtomizeImpactError):
         AtomizeAnalysisSession.from_dict(analysis_data)
 
-    assert runner.invoke(
-        app,
-        ["review", "atomize", "--snapshot"],
-    ).exit_code == 0
     workbench = store.load_atomize_workbench(analysis)
     assert workbench is not None
     workbench_data = workbench.to_dict()
@@ -574,10 +583,6 @@ def test_resuming_atomize_review_reports_a_malformed_analysis_cleanly(
         lambda: provider,
     )
     assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
-    assert runner.invoke(
-        app,
-        ["review", "atomize", "--snapshot"],
-    ).exit_code == 0
     store._atomize_analysis_path(ctx.uid).write_text(
         "{invalid",
         encoding="utf-8",
@@ -616,20 +621,12 @@ def test_atomize_analysis_rejects_forged_frame_content_and_positions(
     with pytest.raises(AtomizeImpactError):
         AtomizeAnalysisSession.from_dict(forged_position)
 
-    assert runner.invoke(
-        app,
-        ["review", "atomize", "--snapshot"],
-    ).exit_code == 0
-    assert runner.invoke(
-        app,
-        [
-            "review",
-            "--respond-to",
-            memory.uid[:8],
-            "--response",
-            "'the same NFC' means the staff-door NFC credential.",
-        ],
-    ).exit_code == 0
+    _stage_operation_response(
+        store,
+        analysis,
+        memory.uid,
+        "'the same NFC' means the staff-door NFC credential.",
+    )
     assert runner.invoke(
         app,
         ["impact", "atomize", "--with-review"],
@@ -729,26 +726,17 @@ def test_multiple_atomize_comments_share_one_source_analysis_and_stay_per_memory
     assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
     source_analysis = store.load_atomize_analysis(ctx.uid)
     assert source_analysis is not None
-    assert runner.invoke(
-        app,
-        ["review", "atomize", "--snapshot"],
-    ).exit_code == 0
     comments = {
         first.uid: "'that door' means the staff entrance.",
         second.uid: "'that entrance' means the main entrance.",
     }
     for memory_uid, comment in comments.items():
-        result = runner.invoke(
-            app,
-            [
-                "review",
-                "--respond-to",
-                memory_uid[:8],
-                "--response",
-                comment,
-            ],
+        _stage_operation_response(
+            store,
+            source_analysis,
+            memory_uid,
+            comment,
         )
-        assert result.exit_code == 0, result.output
 
     reanalyzed = runner.invoke(app, ["impact", "atomize", "--with-review"])
     assert reanalyzed.exit_code == 0, reanalyzed.output
@@ -838,21 +826,13 @@ def test_partial_atomize_review_isolated_to_answered_memory(
     assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
     source_analysis = store.load_atomize_analysis(ctx.uid)
     assert source_analysis is not None
-    assert runner.invoke(
-        app,
-        ["review", "atomize", "--snapshot"],
-    ).exit_code == 0
     comment = "'that door' means the staff entrance."
-    assert runner.invoke(
-        app,
-        [
-            "review",
-            "--respond-to",
-            first.uid[:8],
-            "--response",
-            comment,
-        ],
-    ).exit_code == 0
+    _stage_operation_response(
+        store,
+        source_analysis,
+        first.uid,
+        comment,
+    )
 
     reanalyzed = runner.invoke(app, ["impact", "atomize", "--with-review"])
 

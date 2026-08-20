@@ -270,7 +270,7 @@ def cmd(
         bool,
         typer.Option(
             "--save",
-            help="Apply the current saved preview as one checkpoint",
+            help="Apply an existing advanced Atomize session as one checkpoint",
         ),
     ] = False,
     save_as: Annotated[
@@ -289,7 +289,7 @@ def cmd(
         typer.Option(
             "--context",
             "-c",
-            help="Context to inspect or atomize (defaults to current)",
+            help="Context to atomize now (defaults to current)",
         ),
     ] = None,
     memory_selector: Annotated[
@@ -380,10 +380,9 @@ def cmd(
     ] = False,
 ) -> None:
     """Atomize the current Context or use an explicit advanced route."""
-    auto_apply_current = (
+    auto_apply_exact_context = (
         not save
         and save_as is None
-        and context_name is None
         and memory_selector is None
         and output_name is None
         and not show_all
@@ -674,8 +673,8 @@ def cmd(
                 typer.echo(render_grounding_session(grounding, session))
                 return
 
-        applying = save or save_as is not None or auto_apply_current
-        if auto_apply_current:
+        applying = save or save_as is not None or auto_apply_exact_context
+        if auto_apply_exact_context:
             existing_applied = session is not None and (
                 atomize_analysis_was_applied(store, direct_ctx, session.uid)
                 or atomize_workbench_was_applied(store, session)
@@ -868,7 +867,7 @@ def cmd(
             store, session
         ) or atomize_analysis_was_applied(store, direct_ctx, session.uid)
         if (
-            auto_apply_current
+            auto_apply_exact_context
             and not already_applied
             and workbench is not None
             and workbench.output_context_name != name
@@ -1076,6 +1075,7 @@ def cmd(
         session=applied_session,
         context_name=applied_name,
         result=result,
+        checkpoint_uid=applied.materialization.checkpoint_uid,
         created=created,
         unresolved_at_apply_count=int(application_audit["unresolved_at_apply_count"]),
         recovered_application=recovered_application,

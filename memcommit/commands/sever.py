@@ -286,6 +286,31 @@ def render_sever(session: SeverSession) -> str:
     return "\n".join(lines)
 
 
+def render_sever_receipt(session: SeverSession) -> str:
+    """Render terminal Sever success without reopening candidate details."""
+
+    if session.state != "APPLIED" or session.application is None:
+        raise SeverCommandError("Sever receipt requires an applied session.")
+    forgotten = sum(
+        candidate.selection == "FORGET"
+        or (
+            candidate.selection == "RECOMMENDED"
+            and candidate.recommendation == "FORGET"
+        )
+        for candidate in session.candidates
+    )
+    lines = [
+        f"SEVER APPLIED · {session.source.root_name} → {session.output_name}",
+        f"DECISIONS · KEEP {len(session.application.result_memory_uids)} · FORGET {forgotten}",
+        "SOURCE · UNCHANGED",
+        f"RECEIPT · {session.uid}",
+        f"CHECKPOINT · {session.application.checkpoint_uid}",
+        f"REVIEW · mem review sever --session {session.uid}",
+        "RECOVERY · mem undo",
+    ]
+    return "\n".join(lines)
+
+
 def _apply(store: MemoryStore, session: SeverSession) -> SeverSession:
     return execute_sever_apply(
         SeverApplyRequest(session=session),
@@ -814,8 +839,11 @@ def cmd(
 
         if sever_prewarm_origin:
             typer.echo("ANALYSIS · EXACT PREWARM · PROVIDER NOT CALLED")
-        typer.echo(render_sever(session))
-        typer.secho(f"Session · {session.uid}", fg=typer.colors.CYAN)
+        if session.state == "APPLIED":
+            typer.echo(render_sever_receipt(session))
+        else:
+            typer.echo(render_sever(session))
+            typer.secho(f"Session · {session.uid}", fg=typer.colors.CYAN)
     except (
         FileNotFoundError,
         OSError,

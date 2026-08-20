@@ -358,8 +358,8 @@ def session_todo_view(
         )
         return SessionTodoView(
             "REVIEW AND APPLY",
-            f"Review final {view.operation.title()} action",
-            f"{action.kind} is available. Enter to review before anything changes.",
+            f"Confirm final {view.operation.title()} Apply",
+            f"{action.kind} is available. Enter to confirm the decided state.",
         )
     if not whole_set_available:
         return SessionTodoView(
@@ -397,7 +397,12 @@ def _report_action(
         read_only=False,
         whole_set_available=bool(strategies),
     )
-    return todo.kind, todo.detail, False
+    heading = (
+        "APPLY CONFIRMATION"
+        if todo.kind == "REVIEW AND APPLY"
+        else todo.kind
+    )
+    return heading, f"{todo.label}. {todo.detail}", False
 
 
 def _current_impact(
@@ -1888,6 +1893,7 @@ def _seeded_report_sections(lines: list[str]) -> tuple[tuple[int, str], ...]:
         "RESOLVE ALL ·",
         "RESOLVE",
         "REVIEW AND APPLY",
+        "APPLY CONFIRMATION",
         "INCORPORATE RESPONSES",
         "IMPACT ·",
         "APPLY CHANGES ·",
@@ -1909,6 +1915,7 @@ def _seeded_report_sections(lines: list[str]) -> tuple[tuple[int, str], ...]:
                 "RESOLVE ALL ·",
                 "RESOLVE",
                 "REVIEW AND APPLY",
+                "APPLY CONFIRMATION",
                 "INCORPORATE RESPONSES",
                 "APPLY CHANGES ·",
                 "APPLY AS IS ·",
@@ -1923,6 +1930,7 @@ def _seeded_report_sections(lines: list[str]) -> tuple[tuple[int, str], ...]:
                         "RESOLVE ALL ·",
                         "RESOLVE",
                         "REVIEW AND APPLY",
+                        "APPLY CONFIRMATION",
                         "INCORPORATE RESPONSES",
                         "APPLY CHANGES ·",
                         "APPLY AS IS ·",
@@ -2239,9 +2247,9 @@ def resolution_review_fragments(
     action: SessionTodoView,
     focused_section: int = 0,
     content_width: int = 76,
-    review_title: str = "REVIEW AND APPLY",
+    review_title: str = "APPLY CONFIRMATION",
 ) -> list[tuple[str, str]]:
-    """Render the explicit final review without performing its action."""
+    """Render the exact Apply confirmation without performing its action."""
 
     show_policy = action.kind in {
         "INCORPORATE RESPONSES",
@@ -2844,7 +2852,7 @@ def run_resolution_workbench_shell(
     global_comment = {"value": False}
     strategy = {"index": 0}
     viewer_content = {"kind": "REPORT"}
-    final_review_title = {"value": "REVIEW AND APPLY"}
+    final_review_title = {"value": "APPLY CONFIRMATION"}
     final_review_origin: dict[str, _FinalReviewOrigin | None] = {"value": None}
     impact_reason_expanded: dict[str, str | None] = {"uid": None}
     navigation_accelerator = NavigationAccelerator()
@@ -2928,9 +2936,9 @@ def run_resolution_workbench_shell(
         """Keep the outer frame label aligned with its semantic surface."""
 
         viewer_content["kind"] = kind
-        # A final whole-set review is a distinct confirmation surface, not
+        # A final whole-set confirmation is a distinct surface, not
         # another report/detail Viewer. Removing the label also avoids two
-        # competing headings such as VIEWER and REVIEW AND APPLY.
+        # competing headings such as VIEWER and APPLY CONFIRMATION.
         viewer_frame.title = "" if kind == "REVIEW" else "VIEWER"
 
     # To Do summarizes the whole session before any individual row is opened,
@@ -3044,11 +3052,16 @@ def run_resolution_workbench_shell(
     def todo_fragments() -> list[tuple[str, str]]:
         todo = displayed_todo()
         focused = session_navigation.pane == "todo"
+        display_kind = (
+            "APPLY CONFIRMATION"
+            if todo.kind == "REVIEW AND APPLY"
+            else todo.kind
+        )
         return [
             ("[SetCursorPosition]", "") if focused else ("", ""),
             (
                 focused_control_style(focused=focused),
-                f"[ {safe_terminal_text(todo.kind)} ]",
+                f"[ {safe_terminal_text(display_kind)} ]",
             ),
             (
                 "",
@@ -3056,7 +3069,7 @@ def run_resolution_workbench_shell(
                 + _line(
                     f"{safe_terminal_text(todo.label)} · "
                     f"{safe_terminal_text(todo.detail)}",
-                    max(10, pane_content_width() - len(todo.kind) - 8),
+                    max(10, pane_content_width() - len(display_kind) - 8),
                 ),
             ),
         ]
@@ -3549,9 +3562,13 @@ def run_resolution_workbench_shell(
             else:
                 set_status(todo.detail)
             return
-        final_review_title["value"] = todo.kind
+        final_review_title["value"] = (
+            "APPLY CONFIRMATION"
+            if todo.kind == "REVIEW AND APPLY"
+            else todo.kind
+        )
         if viewer_content["kind"] != "REVIEW":
-            # Review is a temporary confirmation layer. Preserve the exact
+            # This is a temporary confirmation layer. Preserve the exact
             # semantic stop and visible frame so both Enter on its summary and
             # the shared back keys can unwind without guessing a destination.
             final_review_origin["value"] = _FinalReviewOrigin(
@@ -4558,10 +4575,15 @@ def run_resolution_workbench_shell(
                     "Tab inspect review  Esc/Backspace return "
                 )
             else:
+                todo_hint = (
+                    "apply confirmation"
+                    if todo.kind == "REVIEW AND APPLY"
+                    else todo.kind.lower()
+                )
                 navigation_help = (
                     " Tab switch  Q close "
                     if todo.kind == "COMPLETE"
-                    else f" Enter {todo.kind.lower()}  Tab switch  Esc/Backspace back "
+                    else f" Enter {todo_hint}  Tab switch  Esc/Backspace back "
                 )
         elif split_viewer_items and split_kind() == "RESOLVE_ALL":
             if viewer_content["kind"] == "REVIEW":

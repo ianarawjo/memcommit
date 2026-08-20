@@ -89,6 +89,26 @@ def _component_detail(component: DedupComponent) -> SemanticViewerDocument:
     )
 
 
+def _component_compact_context(component: DedupComponent) -> str:
+    """Keep the decision evidence adjacent without opening a separate Viewer."""
+
+    lines = ["MEMBERS"]
+    for member in component.members:
+        lines.append(
+            f"  #{member.ordinal} · [{safe_terminal_text(member.uid[:8])}] "
+            f"{safe_terminal_text(member.content)}"
+        )
+    lines.append("CONFIRMED EVIDENCE")
+    for evidence in component.evidence:
+        lines.append(
+            f"  {safe_terminal_text(evidence.relation)} · "
+            f"[{safe_terminal_text(evidence.left_uid[:8])}] ↔ "
+            f"[{safe_terminal_text(evidence.right_uid[:8])}] · "
+            f"{safe_terminal_text(evidence.reason)}"
+        )
+    return "\n".join(lines)
+
+
 def project_dedup_plan(plan: FrozenDedupPlan) -> SemanticViewerDocument:
     fragments: list[tuple[str, str]] = [
         ("class:title", "DEDUN · CONFIRMED SEMANTIC REDUNDANCIES\n"),
@@ -204,6 +224,7 @@ def dedup_resolution_spec(plan: FrozenDedupPlan) -> ResolutionWorkbenchSpec:
                 label=f"Choose one unchanged survivor from {len(component.members)} members.",
                 classification="REDUNDANCY GROUP",
                 detail=_component_detail(component),
+                compact_context=_component_compact_context(component),
                 choices=tuple(
                     ResolutionChoice(
                         member.uid,
@@ -216,6 +237,7 @@ def dedup_resolution_spec(plan: FrozenDedupPlan) -> ResolutionWorkbenchSpec:
                     )
                     for member in component.members
                 ),
+                default_choice_uid=component.recommended_survivor_uid,
             )
             for component in plan.components
         ),
@@ -223,6 +245,12 @@ def dedup_resolution_spec(plan: FrozenDedupPlan) -> ResolutionWorkbenchSpec:
         detail_title="VIEWER · REDUNDANCY GROUP EVIDENCE",
         responses_title="RESPONSES · REQUIRED · EXISTING SURVIVOR",
         items_title="ITEMS · REQUIRED REDUNDANCY GROUPS",
+        compact_summary=(
+            f"CONTEXT · {safe_terminal_text(plan.display_name)} · "
+            f"GROUPS {len(plan.components)} · choose one unchanged existing "
+            "survivor per group; recommendations are preselected."
+        ),
+        show_viewer=False,
     )
 
 
@@ -232,7 +260,9 @@ def _receipt(receipt: DedupReceipt) -> str:
         f"COMPONENTS · {len(receipt.selections)}\n"
         f"SURVIVORS · {len(receipt.survivor_uids)}\n"
         f"ABSORBED · {len(receipt.absorbed_uids)}\n"
+        f"RECEIPT · {receipt.checkpoint_uid}\n"
         f"CHECKPOINT · {receipt.checkpoint_uid}\n"
+        f"REVIEW · mem review dedun --receipt {receipt.checkpoint_uid}\n"
         "RECOVERY · mem undo"
     )
 

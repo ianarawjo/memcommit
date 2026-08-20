@@ -51,7 +51,9 @@ def render_dedup_receipt(receipt: DedupReceipt) -> None:
     _line("COMPONENTS", str(len(receipt.selections)))
     _line("SURVIVORS", ", ".join(receipt.survivor_uids))
     _line("ABSORBED", ", ".join(receipt.absorbed_uids))
+    _line("RECEIPT", receipt.checkpoint_uid)
     _line("CHECKPOINT", receipt.checkpoint_uid)
+    _line("REVIEW", f"mem review dedun --receipt {receipt.checkpoint_uid}")
     _line("RECOVERY", "mem undo")
 
 

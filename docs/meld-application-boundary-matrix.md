@@ -55,7 +55,7 @@ provider decoder, session publication, or Apply transaction.
 | Preserve remaining distinctions | `MeldPreservationRequest` | exact saved version; provider-free current symmetric schema; legacy/directional sessions use the ordinary assessment boundary | `preserve_meld(..., expected_version=...)` | `preserve` requires version | `--preserve-all` or TUI action |
 | Defer review | `MeldSessionSnapshot` | exact saved version, provider-free session transition, and CAS | `defer_meld(..., expected_version=...)` | `defer` requires version | `--defer-all` or TUI action |
 | Change symmetric destination | `MeldDestinationRequest` | empty-target validation and atomic Context/session relocation | not yet public | not yet exposed | TUI destination action |
-| Apply reviewed proposal | `MeldApplyRequest` | exact reviewed version, complete local or Grant-owner transaction, recovery, checkpoint receipts, rollback, and session CAS | `apply_meld(..., expected_version=...)` | `apply` requires version | `--accept` or exact TUI Apply |
+| Apply decided assessment | `MeldApplyRequest` | exact decided version, complete local or Grant-owner transaction, recovery, checkpoint receipts, rollback, and session CAS | `apply_meld(..., expected_version=...)` | `apply` requires version | completion of required decisions or exact compatibility `--accept` |
 
 ## Cache matrix
 
@@ -102,8 +102,8 @@ validation.
 - Every nonterminal saved-session mutation requires the version returned by
   `open`; stale comment, preserve, defer, and Apply requests stop before their
   provider/cache or mutation boundary.
-- Apply never calls the provider and consumes only the exact reviewed session
-  version. A repeated exact Apply may also name the reconstructable reviewed
+- Apply never calls the provider and consumes only the exact decided session
+  version. A repeated exact Apply may also name the reconstructable decided
   predecessor of the current APPLIED receipt; recovery must match its
   checkpoint and complete post-image and cannot publish another checkpoint.
 - CLI Apply calls the same typed `execute_meld_apply` service as Python and
@@ -149,3 +149,11 @@ audit covered exact, equivalent, and projected cache hits without provider
 construction; stale mutation rejection; all reviewed session actions; four
 authority/storage shapes; zero-change and ordinary checkpoint recovery;
 rollback; and Undo/Redo.
+
+## 2026-08-20 execution-receipt migration
+
+Meld's saved turns remain execution-owned judgments. Once the exact decided
+session is applied, the command renders only effect/result counts, the session
+and checkpoint identities, the post-application Review route, and recovery.
+`mem review meld` rejects non-APPLIED sessions and cannot continue a Meld turn
+or apply it. Staged sessions are resumed through `mem meld`.

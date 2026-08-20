@@ -18,6 +18,12 @@ from memcommit.atomize_workbench import (
     create_atomize_workbench,
     project_atomize_workbench_findings,
 )
+from memcommit.applied_checkpoint_review import (
+    CHECKPOINT_REVIEW_OPERATIONS,
+    applied_checkpoint_review_controller,
+    list_applied_checkpoint_reviews,
+    select_applied_checkpoint_review,
+)
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.review_shell import (
@@ -69,6 +75,7 @@ def _select_report_session(
     kind: str,
     title: str,
     session_uid: str | None,
+    selector_option: str = "--session",
 ) -> SessionPickerEntry | None:
     """Resolve an exact report artifact or return one TTY picker selection."""
     if session_uid is not None:
@@ -84,7 +91,8 @@ def _select_report_session(
         if len(entries) == 1:
             return entries[0]
         raise ReviewError(
-            f"Several saved {kind} artifacts are available; pass --session UID."
+            f"Several saved {kind} artifacts are available; pass "
+            f"{selector_option} UID."
         )
     receipt = choose_session(entries, title=title)
     if receipt is None:
@@ -110,6 +118,72 @@ def _show_operation_review(controller, *, snapshot: bool) -> None:
     run_review_report_shell(controller, interactive_actions=False)
 
 
+def _checkpoint_report_entries(
+    store: MemoryStore,
+    operation: str,
+) -> tuple[SessionPickerEntry, ...]:
+    """Project immutable application checkpoints through the common picker."""
+
+    from datetime import datetime
+
+    return tuple(
+        SessionPickerEntry(
+            kind=operation,
+            key=record.checkpoint_uid,
+            title=f"{record.context_name} · {record.checkpoint_uid[:8]}",
+            status="APPLIED",
+            subtitle=record.description,
+            group=record.context_name,
+            sort_timestamp=datetime.fromisoformat(record.timestamp).timestamp(),
+            detail=(
+                f"{operation.upper()} RECEIPT\n"
+                f"Context: {record.context_name}\n"
+                f"Checkpoint: {record.checkpoint_uid}\n"
+                f"Completed: {record.timestamp}\n\n"
+                "Enter opens immutable post-application evidence."
+            ),
+            reopen_argv=(
+                "mem",
+                "review",
+                operation,
+                "--receipt",
+                record.checkpoint_uid,
+            ),
+        )
+        for record in list_applied_checkpoint_reviews(store, operation)
+    )
+
+
+def _run_checkpoint_report(
+    store: MemoryStore,
+    *,
+    operation: str,
+    receipt_uid: str | None,
+    snapshot: bool,
+) -> None:
+    records = list_applied_checkpoint_reviews(store, operation)
+    if receipt_uid is not None:
+        try:
+            record = select_applied_checkpoint_review(records, receipt_uid)
+        except ValueError as error:
+            raise ReviewError(str(error)) from error
+    else:
+        selected = _select_report_session(
+            _checkpoint_report_entries(store, operation),
+            kind=operation,
+            title=f"MEM REVIEW · {operation.upper()} RECEIPTS",
+            session_uid=None,
+            selector_option="--receipt",
+        )
+        if selected is None:
+            return
+        record = select_applied_checkpoint_review(records, selected.key)
+    _show_operation_review(
+        applied_checkpoint_review_controller(record),
+        snapshot=snapshot,
+    )
+
+
 def _run_update_report(
     store: MemoryStore,
     *,
@@ -125,6 +199,11 @@ def _run_update_report(
         )
     if session_uid is not None and session.uid != session_uid:
         raise ReviewError(f"Saved Update artifact '{session_uid}' is not available.")
+    if session.status not in {"applied", "undone"}:
+        raise ReviewError(
+            "Update execution is not complete. Resume it with 'mem update'; "
+            "Review opens only terminal application evidence."
+        )
     _show_operation_review(update_review_report(session), snapshot=snapshot)
 
 
@@ -223,19 +302,11 @@ def _run_meld_report(
     if selected is None:
         return
     session = reload_selected_meld_session(store, by_key[selected.key])
-    if (
-        not snapshot
-        and _interactive_terminal()
-        and session.state not in {"APPLIED", "KEPT_REVIEW_ONLY"}
-    ):
-        from memcommit.commands.meld import run_meld_review
-
-        run_meld_review(
-            store=store,
-            session=session,
-            provider_factory=connect_codex_chatgpt_provider,
+    if session.state != "APPLIED":
+        raise ReviewError(
+            "Meld execution is not complete. Resume it with 'mem meld'; "
+            "Review opens only terminal application evidence."
         )
-        return
     _show_operation_review(meld_review_report(session), snapshot=snapshot)
 
 
@@ -264,11 +335,11 @@ def _run_sever_report(
     if selected is None:
         return
     session = reload_selected_sever_session(sessions, by_key[selected.key])
-    if not snapshot and _interactive_terminal() and session.state == "REVIEWING":
-        from memcommit.commands.sever import run_sever_review
-
-        run_sever_review(store, session)
-        return
+    if session.state != "APPLIED":
+        raise ReviewError(
+            "Sever execution is not complete. Resume it with 'mem sever'; "
+            "Review opens only terminal application evidence."
+        )
     _show_operation_review(sever_review_report(session), snapshot=snapshot)
 
 
@@ -333,6 +404,11 @@ def _run_atomize_workbench(
         ctx, applied = revalidate_saved_atomize_analysis(store, analysis)
     except ValueError as error:
         raise ReviewError(str(error)) from error
+    if not applied:
+        raise ReviewError(
+            "Atomize execution is not complete. Resume it with 'mem atomize'; "
+            "Review opens only terminal application evidence."
+        )
     if replace and applied:
         raise ReviewError(
             "An applied Atomize analysis is read-only and cannot replace its "
@@ -488,7 +564,8 @@ def cmd(
         typer.Argument(
             help=(
                 "Open a review report (audit, compare, meld, sever, update, "
-                "atomize, or ambiguities); "
+                "atomize, dedun, distill, elaborate, forget, resolve, or "
+                "ambiguities); "
                 "omit to enter the interactive Review session"
             )
         ),
@@ -498,6 +575,13 @@ def cmd(
         typer.Option(
             "--session",
             help="Exact saved operation artifact uid for an adaptive report",
+        ),
+    ] = None,
+    receipt_uid: Annotated[
+        Optional[str],
+        typer.Option(
+            "--receipt",
+            help="Exact or unambiguous applied checkpoint uid",
         ),
     ] = None,
     context_name: Annotated[
@@ -540,7 +624,7 @@ def cmd(
         ),
     ] = None,
 ) -> None:
-    """Open adaptive reports or stage responses without applying Memories."""
+    """Inspect terminal evidence or saved reports without applying Memories."""
     store = MemoryStore()
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
@@ -548,11 +632,14 @@ def cmd(
             None if context_name is None else context_snapshot.resolve(context_name)
         )
         normalized_kind = kind.casefold() if kind is not None else None
+        if session_uid is not None and receipt_uid is not None:
+            raise ReviewError("Use either --session or --receipt, not both.")
         selected_session_uid = session_uid
         launcher_receipt = None
         if (
             kind is None
             and session_uid is None
+            and receipt_uid is None
             and context_name is None
             and not snapshot
             and not replace_review
@@ -566,6 +653,31 @@ def cmd(
                 return
             normalized_kind = launcher_receipt.kind
             selected_session_uid = launcher_receipt.key
+        if normalized_kind in CHECKPOINT_REVIEW_OPERATIONS:
+            if launcher_receipt is None and session_uid is not None:
+                raise ReviewError(
+                    "Applied checkpoint Review uses --receipt, not --session."
+                )
+            if (
+                replace_review
+                or context_name is not None
+                or respond_to is not None
+                or response is not None
+            ):
+                raise ReviewError(
+                    "Applied checkpoint Review uses --receipt and --snapshot only."
+                )
+            _run_checkpoint_report(
+                store,
+                operation=normalized_kind,
+                receipt_uid=(
+                    selected_session_uid
+                    if launcher_receipt is not None
+                    else receipt_uid
+                ),
+                snapshot=snapshot,
+            )
+            return
         if normalized_kind == "audit":
             if (
                 replace_review
@@ -630,8 +742,10 @@ def cmd(
                 )
             ctx = store.load_direct(session.context_name)
         elif normalized_kind is None:
-            if session_uid is not None:
-                raise ReviewError("--session requires an explicit review kind.")
+            if session_uid is not None or receipt_uid is not None:
+                raise ReviewError(
+                    "--session or --receipt requires an explicit review kind."
+                )
             if replace_review:
                 raise ReviewError(
                     "--replace-review is valid only when starting an adapter."
@@ -662,7 +776,8 @@ def cmd(
                 raise ReviewError(
                     "Unsupported review adapter. "
                     "Implemented adapters are 'ambiguities', 'atomize', "
-                    "'audit', 'compare', 'meld', 'sever', and 'update'."
+                    "'audit', 'compare', 'dedun', 'distill', 'elaborate', "
+                    "'forget', 'meld', 'resolve', 'sever', and 'update'."
                 )
             if session_uid is not None:
                 raise ReviewError(

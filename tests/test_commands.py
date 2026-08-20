@@ -75,8 +75,8 @@ class TestHelp:
         assert any(
             line.startswith("update ")
             and "Target Context" in line
-            and "Source Context" in line
-            and "review and choose when needed" in line
+            and "Source" in line
+            and "execution decisions" in line
             for line in lines
         )
         list_row = next(line for line in lines if line.startswith("list (ls) "))
@@ -939,7 +939,7 @@ class TestHelp:
         assert result.exit_code == 0
         assert "Command: mem impact" in result.output
         assert "Usage: mem impact" in result.output
-        assert "Apply is a separate reviewed handoff" in result.output
+        assert "execution remains a separate operation invocation" in result.output
 
 
 # ---------------------------------------------------------------------------

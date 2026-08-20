@@ -30,6 +30,7 @@ from memcommit.interfaces.console.text import (
 )
 from memcommit.commands.update_render import (
     render_plan,
+    render_update_receipt,
     render_update_report_snapshot,
     review_update_application,
 )
@@ -615,8 +616,8 @@ def cmd(
                 granted_target=granted_target,
             )
         ):
-            render_plan(existing, applied=True)
-            typer.echo("This update was already applied locally.")
+            typer.echo(render_update_receipt(existing))
+            typer.echo("This Update receipt was already applied.")
             return
         if not replace_stage:
             typer.secho(
@@ -814,7 +815,7 @@ def cmd(
             session,
             port=UpdateApplicationFlowPort(
                 interactive=_interactive_terminal(),
-                reviewer=_review_update_for_application_flow,
+                decision_resolver=_review_update_for_application_flow,
                 incorporate=incorporate_comments,
                 local_applier=lambda reviewed: store.apply_staged_update(reviewed),
                 granted_source_applier=lambda reviewed: (
@@ -828,8 +829,11 @@ def cmd(
         )
         if application.status == "CANCELLED":
             current = store.load_staged_update() or session
-            render_plan(current, staged=True)
-            typer.echo("Update remains staged; no target changes were applied.")
+            typer.echo(
+                f"UPDATE INCOMPLETE · {current.source_name} → {current.target_name}"
+            )
+            typer.echo(f"SESSION · {current.uid}")
+            typer.echo("No target changes were applied. Resume with mem update.")
             return
         applied = application.applied
         if applied is None:
@@ -847,4 +851,4 @@ def cmd(
         typer.secho(f"Update error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
 
-    render_plan(applied, applied=True)
+    typer.echo(render_update_receipt(applied))

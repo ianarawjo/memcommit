@@ -12,14 +12,14 @@ presence of any Grant in the session and not the ownership of the Source.
 
 ## Frozen behavior
 
-| Case | Review behavior | Durable effect | Recovery |
+| Case | Execution-decision behavior | Durable effect | Recovery |
 | --- | --- | --- | --- |
-| Local Target, one or more operations | Decision-free proposal returns the exact Accept action without opening review | All affected Target owners and the applied session receipt | One operation-unit `mem undo` / `mem redo` |
+| Local Target, one or more operations | A decision-free plan advances directly to Apply | All affected Target owners and the applied session receipt | One operation-unit `mem undo` / `mem redo` |
 | Granted Source, local Target | Same as a local Source because the Source remains read-only | Local Target owners and the applied session receipt | One operation-unit `mem undo` / `mem redo` |
-| Granted Target, one or more operations | Exact final review remains mandatory in a TTY | Authority Target owners only after approval, plus the local applied receipt | Authority-aware command history; review is retained even when recovery exists |
-| Any Target, zero operations | No final review because no Context mutation exists | Applied session receipt only | No Context checkpoint and no Context Undo unit |
+| Granted Target, one or more operations | Exact authority-sensitive decision remains mandatory in a TTY | Authority Target owners only after approval, plus the local applied receipt | Authority-aware command history; decision evidence is retained even when recovery exists |
+| Any Target, zero operations | No additional decision because no Context mutation exists | Applied session receipt only | No Context checkpoint and no Context Undo unit |
 | Unanswered required item or pending response | No automatic Accept | None until the item is resolved or the response is incorporated | Not applicable |
-| Closed or cancelled authority review | Session remains staged | No Target owner changes | Reopen the staged session |
+| Closed or cancelled authority decision | Session remains staged | No Target owner changes | Reopen the staged session through Update |
 | Stale Source, Target, Grant, or session revision | Fail before publication | No partial success receipt | Re-run or reopen against current state |
 
 The zero-operation row is deliberately different from Merge. Merge can record
@@ -47,7 +47,7 @@ checkpoint solely to make operations look alike.
 - Multi-Context exception atomicity is verified. Crash atomicity is not: the
   current prototype has no durable transaction journal spanning several
   Context files. Final approval would not repair that storage limitation, so it
-  remains an explicit infrastructure follow-up rather than a review-policy
+  remains an explicit infrastructure follow-up rather than a decision-policy
   condition.
 
 ## Task 1 replay evidence
@@ -91,3 +91,12 @@ this slice. Before the focused-Memory schema change is released for the study,
 the canonical Update prewarm bundle must be rebuilt or given an explicit,
 tested compatibility migration. Silently accepting an older schema would make
 cache identity and frozen scope ambiguous.
+
+## 2026-08-20 execution-receipt migration
+
+Update's provider plan is internal prepared state. Required interactive
+choices produce a decided staged session; local decision-free execution
+advances automatically to Apply. Success prints only typed ADD/EDIT/REMOVE
+counts, session/checkpoint identities, `mem review update --session UID`, and
+recovery. Review accepts only APPLIED or historical UNDONE terminal evidence;
+an incomplete staged Update resumes through `mem update`.

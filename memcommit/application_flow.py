@@ -1,8 +1,9 @@
-"""Operation-neutral review-to-application phase orchestration.
+"""Operation-neutral decision-to-application phase orchestration.
 
 The flow deliberately owns only phase order. Operation adapters retain the
-meaning of review, freshness, authority, CAS, rollback, checkpoints, receipts,
-and recovery.
+meaning of decisions, freshness, authority, CAS, rollback, checkpoints,
+receipts, and recovery. Post-application Review is deliberately outside this
+module: it consumes a terminal receipt instead of participating in execution.
 """
 
 from __future__ import annotations
@@ -17,13 +18,13 @@ ApplicationFlowStatus = Literal["CANCELLED", "APPLIED"]
 
 
 class ApplicationFlowPort(Protocol[PreparedT, AppliedT]):
-    """Review and atomically apply one operation-owned prepared value."""
+    """Resolve execution decisions and atomically apply one prepared value."""
 
-    def review(self, prepared: PreparedT) -> PreparedT | None:
-        """Return the exact reviewed value, or None without applying it."""
+    def decide(self, prepared: PreparedT) -> PreparedT | None:
+        """Return the exact decided value, or None without applying it."""
 
-    def apply(self, reviewed: PreparedT) -> AppliedT:
-        """Revalidate and publish the reviewed value through one transaction."""
+    def apply(self, decided: PreparedT) -> AppliedT:
+        """Revalidate and publish the decided value through one transaction."""
 
 
 @dataclass(frozen=True)
@@ -32,18 +33,29 @@ class ApplicationFlowResult(Generic[PreparedT, AppliedT]):
 
     status: ApplicationFlowStatus
     prepared: PreparedT
-    reviewed: PreparedT | None
+    decided: PreparedT | None
     applied: AppliedT | None
 
     def __post_init__(self) -> None:
         if self.status == "CANCELLED":
-            if self.reviewed is not None or self.applied is not None:
+            if self.decided is not None or self.applied is not None:
                 raise ValueError("A cancelled application cannot publish phase values.")
             return
         if self.status != "APPLIED":
             raise ValueError("Application flow status is invalid.")
-        if self.reviewed is None or self.applied is None:
-            raise ValueError("An applied flow requires reviewed and applied values.")
+        if self.decided is None or self.applied is None:
+            raise ValueError("An applied flow requires decided and applied values.")
+
+    @property
+    def reviewed(self) -> PreparedT | None:
+        """Compatibility projection while callers migrate to ``decided``.
+
+        New execution code must not use this name. Review is a
+        post-application, receipt-bound read operation; this value is only the
+        decision-complete input consumed by Apply.
+        """
+
+        return self.decided
 
 
 def run_application_flow(
@@ -51,30 +63,30 @@ def run_application_flow(
     *,
     port: ApplicationFlowPort[PreparedT, AppliedT],
 ) -> ApplicationFlowResult[PreparedT, AppliedT]:
-    """Run PREPARED -> REVIEWED -> APPLIED without owning operation meaning.
+    """Run PREPARED -> DECIDED -> APPLIED without owning operation meaning.
 
     The port's ``apply`` method is the atomic boundary: it must revalidate the
-    exact reviewed value and return only after its operation-specific receipt
+    exact decided value and return only after its operation-specific receipt
     is durable. Exceptions propagate and therefore never produce a misleading
     APPLIED flow result.
     """
 
     if prepared is None:
         raise TypeError("Application flow requires a prepared value.")
-    reviewed = port.review(prepared)
-    if reviewed is None:
+    decided = port.decide(prepared)
+    if decided is None:
         return ApplicationFlowResult(
             status="CANCELLED",
             prepared=prepared,
-            reviewed=None,
+            decided=None,
             applied=None,
         )
-    applied = port.apply(reviewed)
+    applied = port.apply(decided)
     if applied is None:
         raise TypeError("Application port returned no applied receipt.")
     return ApplicationFlowResult(
         status="APPLIED",
         prepared=prepared,
-        reviewed=reviewed,
+        decided=decided,
         applied=applied,
     )

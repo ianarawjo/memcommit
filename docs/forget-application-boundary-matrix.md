@@ -36,7 +36,7 @@ run_forget_analysis
           |
           v
 ForgetSessionSnapshot
-  process-local review + opaque version
+  process-local decision ledger + opaque version
       |              |
       | select       | provider feedback
       v              v
@@ -55,16 +55,16 @@ run_forget_apply
 | Source freeze | `ForgetSourcePort` | `MemoryStoreForgetSourcePort` | READ/Grant resolution and complete direct loading finish before provider construction |
 | Semantic analysis | `run_forget_analysis` | `forget_provider` plus injected provider factory | The complete Source and instruction run in one bounded provider turn; no hidden partitioning |
 | Decoder | `forget_provider` and shared `selective_curation` | none | Exactly one KEEP/TRANSFORM/DROP disposition per direct Source Memory |
-| Review | `ForgetReview` inside `ForgetSessionSnapshot` | interface projection only | Review changes are immutable and retain every Source Memory, including KEEP |
-| Review version | `forget_snapshot_version` | none | Selection and provider revision return a new opaque version under the same process-local review UID |
+| Decision ledger | internal `ForgetReview` inside `ForgetSessionSnapshot` | interface projection only | The legacy domain type is immutable and retains every Source Memory, including KEEP; it is not the public Review operation |
+| Decision version | `forget_snapshot_version` | none | Selection and provider revision return a new opaque version under the same process-local decision UID |
 | Provider revision | `run_forget_revision` | injected provider factory | The original frozen Source, instruction, and role-ordered dialogue are reused as one whole frame |
-| No-op | `run_forget_apply` | none | An all-KEEP accepted review creates no checkpoint and does not enter mutation authority |
-| Apply | `run_forget_apply` | `MemoryStoreForgetSourcePort.apply` | Only sparse reviewed edits/removals enter the exact frozen Source mutation boundary |
+| No-op | `run_forget_apply` | none | An all-KEEP decided batch creates no checkpoint and does not enter mutation authority |
+| Apply | `run_forget_apply` | `MemoryStoreForgetSourcePort.apply` | Only sparse decided edits/removals enter the exact frozen Source mutation boundary |
 | Authority | runtime adapter | `authorized_context_mutation` | Local writes use Context CAS; granted writes retain required UPDATE/DELETE permissions through the authority save |
-| Receipt | `ForgetApplyReceipt` | Store checkpoint | Source identity, removed/edited counts, checkpoint, Grant state, and local Undo availability must match the reviewed effect |
-| Presentation | none | `interfaces.tui.operations.forget` plus the CLI adapter | Terminal wording, focus, review choices, and cancellation do not decide authority or mutate the Source |
+| Receipt | `ForgetApplyReceipt` | Store checkpoint | Source identity, removed/edited counts, checkpoint, Grant state, and local Undo availability must match the decided effect |
+| Presentation | none | `interfaces.tui.operations.forget` plus the CLI adapter | Terminal wording, focus, execution choices, and cancellation do not decide authority or mutate the Source |
 
-## Process-local review decision
+## Process-local execution decision
 
 Forget had no durable session before this extraction. Creating one merely to
 support adapters would add visible state, cleanup rules, resume semantics, and
@@ -93,11 +93,12 @@ dialogue as a portable token.
   and rejects duplicate, unavailable, or source-mismatched changes before
   application.
 - The CLI freezes the selected local or granted Source before constructing the
-  provider. Its existing setup, review, cancel, all-KEEP, Apply, checkpoint,
-  and Undo/Redo behavior remains unchanged.
+  provider. Interactive setup/decisions, cancel, all-KEEP, Apply, checkpoint,
+  and Undo/Redo retain their authority semantics; explicit non-TTY invocation
+  advances the complete provider decision set directly to Apply.
 - A provider cannot choose authority, Context names, checkpoint arguments, or
   executable operations. It returns only the strict curation decision ledger.
-- A changed local Context fails Store CAS without publishing the reviewed
+- A changed local Context fails Store CAS without publishing the decided
   removal. Granted authority remains frozen through the authority-store save.
 - Forget has no prepared-result cache. This extraction does not introduce one
   or treat another operation's cache proof as applicable.
@@ -137,3 +138,12 @@ identity-preserving facades over `interfaces.tui.operations.forget`.
 The stable Python facade is recorded in
 `forget-public-python-api-design-rationale.md`; the versioned process-local
 machine route is recorded in `forget-agent-adapter-design-rationale.md`.
+
+## 2026-08-20 execution-receipt migration
+
+Forget's whole-frame result is an execution decision set, not a public
+Proposal outcome. Decision-free local execution advances to atomic Apply and a
+compact receipt; required choices remain inside the Forget invocation. The
+checkpoint now stores every exact REMOVE/EDIT pre-image, post-image, and
+reason, enabling provider-free `mem review forget --receipt UID` after Apply.
+Granted-owner checkpoint evidence is not advertised as locally reviewable.

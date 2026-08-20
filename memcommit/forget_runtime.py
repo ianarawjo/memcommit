@@ -111,6 +111,36 @@ def _checkpoint_description(
     return f'Forgot ({instruction[:40]}): {", ".join(parts)}'
 
 
+def _checkpoint_effects(
+    changes: Sequence[ProposedChange],
+) -> list[dict[str, object]]:
+    """Persist the exact applied pre/post image for later read-only Review."""
+
+    effects: list[dict[str, object]] = []
+    for change in changes:
+        if isinstance(change, RemoveChange):
+            effects.append(
+                {
+                    "kind": "REMOVE",
+                    "memory_uid": change.uid,
+                    "before": change.content,
+                    "after": None,
+                    "reason": change.reason,
+                }
+            )
+        elif isinstance(change, EditChange):
+            effects.append(
+                {
+                    "kind": "EDIT",
+                    "memory_uid": change.uid,
+                    "before": change.old_content,
+                    "after": change.new_content,
+                    "reason": change.reason,
+                }
+            )
+    return effects
+
+
 @dataclass
 class MemoryStoreForgetSourcePort(ForgetSourcePort):
     """Freeze one direct readable Source and later mutate only that binding."""
@@ -178,6 +208,7 @@ class MemoryStoreForgetSourcePort(ForgetSourcePort):
                     command="forget",
                     args={
                         "query": instruction,
+                        "effects": _checkpoint_effects(changes),
                         **grant_checkpoint_args(token.access),
                     },
                     description=_checkpoint_description(instruction, changes),

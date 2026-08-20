@@ -147,7 +147,7 @@ def choose_forget_setup(
     header = Window(
         FormattedTextControl(
             " MEM FORGET · SETUP\n"
-            " ONE DIRECT CONTEXT · SOURCE CHANGES ONLY AFTER REVIEW AND APPLY"
+            " ONE DIRECT CONTEXT · SOURCE CHANGES ONLY AFTER DECISIONS AND APPLY"
         ),
         height=Dimension.exact(2),
         dont_extend_height=True,

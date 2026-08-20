@@ -180,12 +180,12 @@ def test_composer_keeps_common_meaning_separate_from_cli_forms():
     )
 
     assert operation.summary == (
-        "Update Memories in the Target Context from Memories in the Source Context, "
-        "asking the user to review and choose when needed."
+        "Update a Target Context from a Source Context, resolving required execution "
+        "decisions before atomic Apply."
     )
     assert operation.execution is ExecutionKind.SEMANTIC
     assert [(row.label, row.value) for row in composed.overview] == [
-        ("FLOW", "Source Context -> Target Context"),
+        ("FLOW", "Source Context -> decisions -> Target Apply -> receipt"),
         ("EXECUTION", "SEMANTIC"),
         ("EFFECT", "Changes only the local Target after Apply"),
         ("RANGE", "Each endpoint exact or readable descendants"),
@@ -221,7 +221,7 @@ def test_meld_help_distinguishes_symmetric_and_directional_modes():
     assert (
         "EFFECT",
         "Symmetric mode requires a distinct empty Result; directional mode "
-        "changes only the existing Target after reviewed Apply",
+        "changes only the existing Target after required execution decisions",
     ) in overview
     assert (
         "BEST FOR",
@@ -277,11 +277,11 @@ def test_elaborate_help_separates_candidate_rules_from_concrete_cases():
         "abstract concept or condition."
     )
     assert operation_help("elaborate").flow == (
-        "Goal -> suggested Rules; Rules -> suggested Case propositions"
+        "Goal -> added Rules; Rules -> added Case propositions -> receipt"
     )
 
 
-def test_collapsed_by_kind_row_connects_summary_and_when_guidance():
+def test_collapsed_by_kind_row_connects_summary_and_when_without_extra_height():
     root, context = _root_context()
     try:
         entry = next(
@@ -512,7 +512,7 @@ def test_expanded_tui_entry_projects_composed_meaning_before_cli_forms():
     )
 
     assert rendered.index("FLOW") < rendered.index("FORM 1")
-    assert "Source Context -> Target Context" in rendered
+    assert "Source Context -> decisions -> Target Apply -> receipt" in rendered
     assert "EXECUTION · SEMANTIC" in rendered
     assert "Changes only the local Target after Apply" in rendered
     assert "Updating an existing Context using newly verified Memories." in rendered

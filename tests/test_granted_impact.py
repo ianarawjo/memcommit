@@ -1973,8 +1973,9 @@ def test_granted_impact_then_update_changes_only_run_authority(
     assert impact.exit_code == 0, impact.output
     assert update.exit_code == 0, update.output
     assert repeated.exit_code == 0, repeated.output
-    assert "Updated granted authority target campus-wiki" in update.output
-    assert "already applied locally" in repeated.output
+    assert "UPDATE APPLIED · task-root → campus-wiki" in update.output
+    assert "RECOVERY · governed by the granted authority owner" in update.output
+    assert "This Update receipt was already applied." in repeated.output
     assert provider_calls == 1
     assert active_store.load_direct(source.name).to_dict() == source_before
     assert authority_store.load_direct(
@@ -2052,7 +2053,7 @@ def test_granted_target_empty_update_records_only_an_idempotent_receipt(
     assert impact.exit_code == 0, impact.output
     assert update.exit_code == 0, update.output
     assert repeated.exit_code == 0, repeated.output
-    assert "already applied locally" in repeated.output
+    assert "This Update receipt was already applied." in repeated.output
     assert provider_calls == 1
     applied = active_store.load_staged_update()
     assert applied.status == "applied"

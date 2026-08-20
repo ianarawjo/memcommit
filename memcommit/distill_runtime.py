@@ -220,6 +220,7 @@ def apply_prepared_distill_add(
                 "response_char_limit": analysis.semantic_config.response_char_limit,
             },
             "source_digest": analysis.source.digest,
+            "overview": analysis.overview,
             "source_scope": (
                 "INCLUDE_DESCENDANTS"
                 if analysis.source.include_descendants
@@ -358,6 +359,7 @@ class MemoryStoreDistillOutputPort:
                             "response_char_limit": analysis.semantic_config.response_char_limit,
                         },
                         "source_context": analysis.source.context_name,
+                        "overview": analysis.overview,
                         "source_digest": analysis.source.digest,
                         "source_scope": (
                             "INCLUDE_DESCENDANTS"

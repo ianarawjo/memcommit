@@ -387,9 +387,36 @@ class MemoryStoreResolvePort:
                             "contract": RESOLVE_CONTRACT_VERSION,
                             "revision": frame.revision,
                             "candidate_uid": candidate.uid,
+                            "candidate_summary": candidate.summary,
+                            "grounded": candidate.grounded,
+                            "verification_reason": candidate.verification_reason,
+                            "issues": [
+                                {
+                                    "uid": issue.uid,
+                                    "kind": issue.kind,
+                                    "memory_uids": list(issue.memory_uids),
+                                    "selected_interpretation": (
+                                        issue.selected_interpretation
+                                    ),
+                                    "basis_memory_uids": list(issue.basis_memory_uids),
+                                    "assumptions": list(issue.assumptions),
+                                    "reason": issue.reason,
+                                }
+                                for issue in candidate.issues
+                            ],
+                            "fit": {
+                                "question_id": candidate.fit.question_id,
+                                "verdict": candidate.fit.verdict,
+                                "reason": candidate.fit.reason,
+                                "considered_proposition_ids": list(
+                                    candidate.fit.considered_proposition_ids
+                                ),
+                                "material_proposition_ids": list(
+                                    candidate.fit.material_proposition_ids
+                                ),
+                            },
                             "effects": [
-                                effect.canonical_value()
-                                for effect in candidate.effects
+                                effect.canonical_value() for effect in candidate.effects
                             ],
                             "guidance": frame.request.guidance,
                             **grant_checkpoint_args(access),

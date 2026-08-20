@@ -131,7 +131,7 @@ BEST_FOR_BY_OPERATION = {
     ),
     "rename": "Giving an existing managed Profile a clearer name.",
     "revert": "Restoring a Context to a deliberately saved recovery point.",
-    "review": "Revisiting a saved analysis, proposal, or result state.",
+    "review": "Inspecting applied evidence or revisiting a saved report state.",
     "sever": (
         "Selecting or transforming Source content according to defined criteria."
     ),

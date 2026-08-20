@@ -1,4 +1,4 @@
-"""Distill evidence-bound Rules from one Context into a reviewed proposal."""
+"""Distill evidence-bound Rules and publish an execution receipt."""
 
 from __future__ import annotations
 
@@ -150,21 +150,21 @@ def cmd(
         typer.Option(
             "--apply",
             hidden=True,
-            help="Create --save-as from this exact proposal without a TTY prompt",
+            help="Create --save-as from the operation-owned Distill decision",
         ),
     ] = False,
     plain: Annotated[
         bool,
         typer.Option(
             "--plain",
-            help="Print the reviewed proposal instead of opening the Viewer",
+            help="Print a read-only legacy or Ground result without a Viewer",
         ),
     ] = False,
     tui: Annotated[
         bool,
         typer.Option(
             "--tui",
-            help="Require the interactive Distill setup and Viewer",
+            help="Require the read-only legacy or Ground result Viewer",
         ),
     ] = False,
 ) -> None:
@@ -244,20 +244,20 @@ def cmd(
                     ),
                 )
             receipt = apply_prepared_distill_add(prepared, store=store)
-            typer.echo(render_distill(prepared.result))
-            typer.echo("")
             typer.secho(
-                f"Added {receipt.count} distilled Rules to "
-                f"'{display_escape_text(receipt.target_name)}'.",
+                f"DISTILL APPLIED · {display_escape_text(endpoints.source_name)} "
+                f"→ {display_escape_text(receipt.target_name)}",
                 fg=typer.colors.GREEN,
+                bold=True,
             )
+            typer.echo(f"EFFECTS · ADD {receipt.count} RULES")
+            typer.echo(f"RECEIPT · {receipt.checkpoint_uid}")
+            typer.echo(f"CHECKPOINT · {receipt.checkpoint_uid}")
             typer.echo(
-                f"SOURCE · {display_escape_text(endpoints.source_name)} · "
-                f"TARGET · {display_escape_text(endpoints.target_name)}"
+                "REVIEW · mem review distill --receipt "
+                f"{receipt.checkpoint_uid}"
             )
-            typer.echo(
-                f"CHECKPOINT · {receipt.checkpoint_uid[:8]} · RECOVERY · mem undo"
-            )
+            typer.echo("RECOVERY · mem undo")
             return
         frozen_ground: FrozenGroundDistill | FrozenGroundWorkspaceDistill | None = (
             freeze_ground_distill(store, ground_name=ground)
@@ -374,18 +374,22 @@ def cmd(
             clipboard_writer=write_system_clipboard,
             terminal=SystemTerminalCapabilities(),
         )
-        result = runner.run(
-            (
-                frozen_ground.request
-                if frozen_ground is not None
-                else DistillRequest(
-                    context_locator=context_name,
-                    goal=goal,
-                    include_descendants=traversal.include_descendants,
-                    follow_embeds=traversal.follow_embeds,
-                )
-            ),
-            mode=mode,
+        execution_request = (
+            frozen_ground.request
+            if frozen_ground is not None
+            else DistillRequest(
+                context_locator=context_name,
+                goal=goal,
+                include_descendants=traversal.include_descendants,
+                follow_embeds=traversal.follow_embeds,
+            )
+        )
+        # The hidden compatibility Apply form is still execution-first: its
+        # proposal is internal staging and must not become a pre-Apply report.
+        result = (
+            execute(execution_request)
+            if save_as is not None and apply
+            else runner.run(execution_request, mode=mode)
         )
         if result is None:
             typer.echo("Distill cancelled; Source unchanged.")
@@ -405,11 +409,19 @@ def cmd(
             )
             typer.echo("")
             typer.secho(
-                f"Created Distill Result '{receipt.output_name}' with "
-                f"{len(receipt.result_memory_uids)} Rules; Source unchanged.",
+                f"DISTILL APPLIED · RESULT {receipt.output_name}",
                 fg=typer.colors.GREEN,
+                bold=True,
             )
-            typer.echo(f"CHECKPOINT · {receipt.checkpoint_uid[:8]} · RECOVERY · mem undo")
+            typer.echo(f"EFFECTS · ADD {len(receipt.result_memory_uids)} RULES")
+            typer.echo("SOURCE · UNCHANGED")
+            typer.echo(f"RECEIPT · {receipt.checkpoint_uid}")
+            typer.echo(f"CHECKPOINT · {receipt.checkpoint_uid}")
+            typer.echo(
+                "REVIEW · mem review distill --receipt "
+                f"{receipt.checkpoint_uid}"
+            )
+            typer.echo("RECOVERY · mem undo")
         elif save_as is not None:
             typer.echo(
                 f"RESULT · {display_escape_text(save_as)} · NOT CREATED · "

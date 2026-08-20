@@ -1898,7 +1898,8 @@ def test_context_meld_one_shot_reply_resume_and_provider_free_apply(
     )
     assert applied.exit_code == 0, applied.output
     assert len(provider.payloads) == 1
-    assert "Applied 2 meld results" in applied.output
+    assert "MELD APPLIED · SYMMETRIC" in applied.output
+    assert "RESULT MEMORIES · 2" in applied.output
     current = store.load_direct(target.name)
     assert [memory.content for memory in current.iter_items()] == [
         (
@@ -1931,7 +1932,7 @@ def test_context_meld_one_shot_reply_resume_and_provider_free_apply(
         ["meld", left.name, right.name, target.name, "--accept"],
     )
     assert second_accept.exit_code == 0
-    assert "no duplicate checkpoint" in second_accept.output
+    assert "prior application recovered; no duplicate write" in second_accept.output
     assert len(store.list_checkpoints(target.name)) == 1
     assert len(provider.payloads) == 1
 
@@ -2230,7 +2231,8 @@ def test_directional_meld_edits_adds_and_preserves_baseline_then_recovers(
     )
 
     assert applied.exit_code == 0, applied.output
-    assert "Applied 2 meld changes" in applied.output
+    assert "MELD APPLIED · DIRECTIONAL" in applied.output
+    assert "EFFECTS · ADD 1 · EDIT 1" in applied.output
     current = store.load_direct(baseline.name)
     memories = tuple(current.iter_items())
     assert [memory.uid for memory in memories[:2]] == [
@@ -2266,7 +2268,7 @@ def test_directional_meld_edits_adds_and_preserves_baseline_then_recovers(
     )
 
     assert repeated.exit_code == 0, repeated.output
-    assert "no duplicate checkpoint" in repeated.output
+    assert "prior application recovered; no duplicate write" in repeated.output
     assert len(store.list_checkpoints(baseline.name)) == 1
     assert len(provider.payloads) == 1
 
@@ -2447,7 +2449,7 @@ def test_directional_accept_recovers_after_receipt_save_failure(
     )
 
     assert recovered.exit_code == 0, recovered.output
-    assert "Recovered the prior meld application" in recovered.output
+    assert "prior application recovered; no duplicate write" in recovered.output
     assert len(store.list_checkpoints(baseline.name)) == 1
     assert store.load_meld_session(baseline.uid).state == "APPLIED"
     assert len(provider.payloads) == 1
@@ -2478,7 +2480,8 @@ def test_zero_change_directional_meld_checkpoints_and_repeats_provider_free(
     )
 
     assert applied.exit_code == 0, applied.output
-    assert "Applied 0 meld changes" in applied.output
+    assert "MELD APPLIED · DIRECTIONAL" in applied.output
+    assert "EFFECTS · ADD 0 · EDIT 0" in applied.output
     current = store.load_direct(baseline.name)
     assert [(memory.uid, memory.content) for memory in current.iter_items()] == [
         (
@@ -2501,7 +2504,7 @@ def test_zero_change_directional_meld_checkpoints_and_repeats_provider_free(
         ["meld", incoming.name, "--into", baseline.name, "--accept"],
     )
     assert repeated.exit_code == 0, repeated.output
-    assert "no duplicate checkpoint" in repeated.output
+    assert "prior application recovered; no duplicate write" in repeated.output
     assert len(store.list_checkpoints(baseline.name)) == 1
     assert len(provider.payloads) == 1
 
@@ -2593,7 +2596,7 @@ def test_zero_change_directional_meld_recovers_checkpoint_after_receipt_failure(
     )
 
     assert recovered.exit_code == 0, recovered.output
-    assert "Recovered the prior meld application" in recovered.output
+    assert "prior application recovered; no duplicate write" in recovered.output
     assert len(store.list_checkpoints(baseline.name)) == 1
     assert store.load_meld_session(baseline.uid).state == "APPLIED"
     assert len(provider.payloads) == 1
@@ -3313,7 +3316,7 @@ def test_accept_recovers_checkpoint_after_receipt_save_failure(
     )
 
     assert recovered.exit_code == 0, recovered.output
-    assert "Recovered the prior meld application" in recovered.output
+    assert "prior application recovered; no duplicate write" in recovered.output
     assert len(store.list_checkpoints(target.name)) == 1
     assert store.load_meld_session(target.uid).state == "APPLIED"
 

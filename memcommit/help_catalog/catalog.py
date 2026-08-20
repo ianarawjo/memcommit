@@ -155,7 +155,7 @@ _OPERATIONS = (
         "distill",
         "Derive higher-level Rules or condition propositions from Case or Example "
         "propositions in a bounded Context, optionally guided by a Goal.",
-        "Case/Example Context + Goal? -> reviewed Rules",
+        "Case/Example Context + Goal? -> decisions -> added Rules -> receipt",
         ExecutionKind.SEMANTIC,
         "Standalone adds to one existing Target; Impact previews without changing endpoints",
         "One exact local Source, its readable descendants, or one bound Ground candidate frame",
@@ -164,9 +164,9 @@ _OPERATIONS = (
         "elaborate",
         "Expand an abstract Goal, Rule, or condition into multiple more specific "
         "candidate propositions.",
-        "Goal -> suggested Rules; Rules -> suggested Case propositions",
+        "Goal -> added Rules; Rules -> added Case propositions -> receipt",
         ExecutionKind.SEMANTIC,
-        "Standalone adds unverified proposals to one existing Target; Impact is read-only",
+        "Standalone atomically adds unverified results to one existing Target; Impact is read-only",
         "One Goal or Rule set, inline or from one exact Ground revision",
     ),
     _operation(
@@ -233,12 +233,12 @@ _OPERATIONS = (
     ),
     _operation(
         "resolve",
-        "Propose and verify minimum changes that make one bounded direct-Memory "
-        "Context frame Fit YES.",
-        "Bounded Context frame + optional guidance -> verified repair candidates -> exact Apply",
+        "Automatically interpret incompatibility Issues in one complete direct-Memory "
+        "Context frame and verify one small Fit-YES plan.",
+        "Complete Context frame + optional guidance -> one grounded automatic Apply or one assumed read-only interpretation",
         ExecutionKind.SEMANTIC,
-        "Read-only until one exact candidate is explicitly applied; Apply creates one checkpoint",
-        "One bounded direct Context frame; explicit Memory UID prefixes limit mutation targets",
+        "Assumed plans stay process-local; a grounded plan applies as one checkpoint",
+        "One complete bounded direct Context frame; explicit Memory UID prefixes limit edits, not semantic reading",
     ),
     _operation(
         "dedup",
@@ -252,10 +252,10 @@ _OPERATIONS = (
     _operation(
         "dedun",
         "Find and resolve semantic redundancies (dun), retaining one unchanged "
-        "existing Memory in each reviewed group.",
-        "Direct Context Memories -> semantic redundancy groups -> reviewed survivor -> exact Apply",
+        "existing Memory in each operation-decided group.",
+        "Direct Context Memories -> semantic groups -> survivor decisions -> exact Apply -> receipt",
         ExecutionKind.SEMANTIC,
-        "Read-only through analysis and review; approved Apply deletes absorbed UIDs in one checkpoint",
+        "The invocation expresses Apply intent; required survivor decisions precede one checkpoint",
         "One reviewed direct Context group per Apply; inbound references block version 1 Apply",
     ),
     _operation(
@@ -276,10 +276,10 @@ _OPERATIONS = (
     ),
     _operation(
         "forget",
-        "Review keep/edit/delete decisions for one instruction, then apply the accepted batch.",
-        "Context + instruction -> reviewed curation batch",
+        "Apply one complete keep/edit/delete decision batch for an instruction.",
+        "Context + instruction -> decisions -> atomic curation -> receipt",
         ExecutionKind.SEMANTIC,
-        "Changes Source only after reviewed acceptance",
+        "An explicit invocation expresses Apply intent; Source changes only after complete decisions",
         "One exact direct Source frame",
     ),
     _operation(
@@ -305,7 +305,7 @@ _OPERATIONS = (
         "applying them.",
         "Operation inputs or session -> impact report",
         ExecutionKind.MIXED,
-        "Impact is read-only; Apply is a separate reviewed handoff",
+        "Impact is read-only; execution remains a separate operation invocation",
         "Operation-owned Source and Target ranges",
     ),
     _operation(
@@ -371,7 +371,7 @@ _OPERATIONS = (
         "INCOMING -> BASELINE; PEER A + PEER B -> RESULT",
         ExecutionKind.SEMANTIC,
         "Symmetric mode requires a distinct empty Result; directional mode "
-        "changes only the existing Target after reviewed Apply",
+        "changes only the existing Target after required execution decisions",
         "Each side exact or readable descendants",
     ),
     _operation(
@@ -463,10 +463,9 @@ _OPERATIONS = (
     ),
     _operation(
         "review",
-        "Open a saved semantic artifact to inspect its analysis, proposal, or "
-        "result state and, when supported, record review responses. Review never "
-        "applies Memories.",
-        "Saved semantic artifact -> report and optional review responses",
+        "Inspect terminal execution evidence or a saved read-only report and, "
+        "where supported, record report responses. Review never applies Memories.",
+        "Applied receipt or saved report artifact -> evidence/report",
         ExecutionKind.MIXED,
         "No Context content changes",
         "One saved operation artifact",
@@ -477,7 +476,7 @@ _OPERATIONS = (
         "according to a Criteria Context.",
         "Source Context + Criteria Context -> new Result Context",
         ExecutionKind.SEMANTIC,
-        "Creates reviewed Result; Source remains unchanged",
+        "Creates one decided Result and receipt; Source remains unchanged",
         "Source exact or descendants; Criteria exact scoped frame",
     ),
     _operation(
@@ -574,9 +573,9 @@ _OPERATIONS = (
     ),
     _operation(
         "update",
-        "Update Memories in the Target Context from Memories in the Source Context, "
-        "asking the user to review and choose when needed.",
-        "Source Context -> Target Context",
+        "Update a Target Context from a Source Context, resolving required execution "
+        "decisions before atomic Apply.",
+        "Source Context -> decisions -> Target Apply -> receipt",
         ExecutionKind.SEMANTIC,
         "Changes only the local Target after Apply",
         "Each endpoint exact or readable descendants",

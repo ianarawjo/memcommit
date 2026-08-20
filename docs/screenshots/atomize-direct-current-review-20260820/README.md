@@ -2,7 +2,7 @@
 
 This ordered replay records the direct current-Context contract: bare
 `mem atomize` does not open a session, applies one complete saved analysis in
-place, prints representative full split content, and leaves that analysis
+place, prints a compact receipt, and leaves that complete analysis
 available in read-only `mem review atomize`.
 
 ## Environment
@@ -22,10 +22,9 @@ available in read-only `mem review atomize`.
    - Exact command: `mem atomize`
    - Current Context: `atomize/direct-current`
    - Preceding input: none
-   - Visible state: four splits summarized as eight children; the first three
-     source/child groups show stable UIDs and full realistic Memory text, one
-     additional split is handed to Review, and typed review-finding counts are
-     zero
+   - Visible state: four splits are summarized as eight children with typed
+     effect counts, complete receipt/checkpoint identities, the exact Review
+     route, and recovery; no Memory body or post-success Viewer is printed
    - Durable mutation: one Context checkpoint and one terminal workbench
      receipt; four source Memories become eight children
 
@@ -53,6 +52,6 @@ available in read-only `mem review atomize`.
    - Durable mutation: none
 
 The recorder fails if the terminal is not 180×52 and color-capable, bare
-Atomize opens a session instead of completing, representative output omits its
-handoff, applied Review is not marked read-only, or review changes the one
+Atomize opens a session instead of completing, the compact receipt omits its
+Review handoff, applied Review is not marked read-only, or Review changes the one
 checkpoint/receipt pair.

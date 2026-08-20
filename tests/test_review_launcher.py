@@ -62,7 +62,7 @@ def test_review_projection_preserves_operation_state_and_hides_argv_indexes():
     assert "NOT EXECUTED" not in projected.detail
 
 
-def test_aggregate_catalog_collects_all_operation_states_without_normalizing(
+def test_aggregate_catalog_excludes_nonterminal_execution_states(
     isolated_store,
     monkeypatch,
 ):
@@ -118,9 +118,7 @@ def test_aggregate_catalog_collects_all_operation_states_without_normalizing(
     entries = review_sessions.review_session_entries(MemoryStore())
 
     assert [(entry.kind, entry.status) for entry in entries] == [
-        ("atomize", "READY_TO_APPLY"),
         ("compare", "CURRENT"),
-        ("sever", "OPEN"),
         ("meld", "APPLIED"),
     ]
     assert all(entry.detail_only for entry in entries)

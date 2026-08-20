@@ -179,6 +179,35 @@ def render_update_report_snapshot(
     )
 
 
+def render_update_receipt(session: UpdateSession) -> str:
+    """Render terminal Update success without reopening its full report."""
+
+    if session.status != "applied" or session.application is None:
+        raise ValueError("Update receipt requires an applied session.")
+    edits, additions, removals = count_operations(session)
+    checkpoints = session.application.checkpoints
+    lines = [
+        f"UPDATE APPLIED · {session.source_name} → {session.target_name}",
+        f"EFFECTS · ADD {additions} · EDIT {edits} · REMOVE {removals}",
+        f"RECEIPT · {session.uid}",
+    ]
+    if not session.operations:
+        lines.insert(1, "OUTCOME · NO CHANGE · no Context checkpoint")
+    if checkpoints:
+        lines.append(
+            "CHECKPOINTS · "
+            + " · ".join(
+                f"{item.context_name} [{item.checkpoint_uid}]" for item in checkpoints
+            )
+        )
+    lines.append(f"REVIEW · mem review update --session {session.uid}")
+    if session.granted_target is None and checkpoints:
+        lines.append("RECOVERY · mem undo")
+    elif session.granted_target is not None:
+        lines.append("RECOVERY · governed by the granted authority owner")
+    return "\n".join(lines)
+
+
 def render_plan(
     session: UpdateSession,
     *,

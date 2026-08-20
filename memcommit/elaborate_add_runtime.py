@@ -176,6 +176,7 @@ def apply_prepared_elaborate_add(
             "mode": analysis.mode.value,
             "verification": "UNVERIFIED",
             "origin": prepared.result.origin,
+            "overview": analysis.overview,
             "inputs": list(analysis.inputs),
             "proposals": proposal_records,
         },

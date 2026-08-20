@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from dataclasses import replace
+
 from typer.testing import CliRunner
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
@@ -21,7 +23,10 @@ from memcommit.update import (
     AddOperation,
     ContextFingerprint,
     SourceReference,
+    UpdateApplicationReceipt,
+    UpdateCheckpointReceipt,
     UpdateSession,
+    operation_digest,
 )
 
 
@@ -127,8 +132,36 @@ def test_update_existing_change_blocks_are_preserved_as_review_report():
 
 
 def test_mem_review_update_prints_saved_exact_change_report(isolated_store):
-    session = _update_session()
-    MemoryStore().save_impact_plan(session)
+    prepared = _update_session()
+    owner = prepared.operations[0]
+    staged = replace(
+        prepared,
+        status="staged",
+        target_contexts=(
+            *prepared.target_contexts,
+            ContextFingerprint(
+                owner.owner_context_uid,
+                owner.owner_context_name,
+                "c" * 64,
+            ),
+        ),
+    )
+    session = staged.with_application(
+        UpdateApplicationReceipt(
+            applied_at="2026-08-05T00:01:00+00:00",
+            operation_digest=operation_digest(staged.operations),
+            target_digest=staged.target_digest,
+            target_contexts=staged.target_contexts,
+            checkpoints=(
+                UpdateCheckpointReceipt(
+                    owner.owner_context_uid,
+                    owner.owner_context_name,
+                    "44444444-4444-4444-8444-444444444444",
+                ),
+            ),
+        )
+    )
+    MemoryStore().save_staged_update(session)
 
     result = runner.invoke(app, ["review", "update", "--snapshot"])
 

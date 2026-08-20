@@ -140,7 +140,9 @@ def test_elaborate_endpoint_matrix_adds_atomically(
     result = runner.invoke(app, ["elaborate", *argv])
 
     assert result.exit_code == 0, result.output
+    assert f"ELABORATE APPLIED · {expected_target}" in result.output
     assert f"SOURCE · {expected_source} · TARGET · {expected_target}" in result.output
+    assert "EFFECTS · ADD 2 MEMORIES" in result.output
     for name, count in before.items():
         expected = count + 2 if name == expected_target else count
         assert len(store.load_direct(name).order) == expected
@@ -179,7 +181,7 @@ def test_elaborate_context_role_is_explicit_and_not_name_based(
     )
 
     assert result.exit_code == 0, result.output
-    assert "ELABORATE · GOAL → RULES" in result.output
+    assert "MODE · GOAL_TO_RULES · VERIFICATION · UNVERIFIED" in result.output
     assert "Confirm the selected ticker before acting." in (
         memory.content for memory in store.load_direct("ordinary-output").memories.values()
     )
@@ -230,7 +232,11 @@ def test_distill_endpoint_matrix_adds_to_existing_target(
     result = runner.invoke(app, ["distill", *argv])
 
     assert result.exit_code == 0, result.output
-    assert f"SOURCE · {expected_source} · TARGET · {expected_target}" in result.output
+    assert (
+        f"DISTILL APPLIED · {expected_source} → {expected_target}"
+        in result.output
+    )
+    assert "EFFECTS · ADD 1 RULES" in result.output
     for name, count in before.items():
         expected = count + 1 if name == expected_target else count
         assert len(store.load_direct(name).order) == expected
@@ -413,7 +419,7 @@ def test_relative_endpoints_share_one_current_snapshot(
     )
 
     assert result.exit_code == 0, result.output
-    assert "SOURCE · relative/source · TARGET · relative/target" in result.output
+    assert "DISTILL APPLIED · relative/source → relative/target" in result.output
     assert len(store.load_direct(target.name).order) == 2
 
 

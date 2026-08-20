@@ -1,19 +1,8 @@
 52 180
-MEM ATOMIZE · 1/2 · CONNECTING PROVIDER . · 0sMEM ATOMIZE · 2/2 · ANALYZING MEMORY STRUCTURE . · 0s                                                     [32m[1mApplied atomize analysis to 'atomize/direct-current' from analysis [317a5b1a].[0m
-  4 splits -> 8 children
-  0 Memories preserved in place
-  [7b9881b8] The Main Building entrance accepts a physical NFC card. | Mobile-app authentication is not accepted at that entrance.
-    -> [600b910b] The Main Building entrance accepts a physical NFC card.
-    -> [b5fd1934] Mobile-app authentication is not accepted at that entrance.
-  [d355e1e6] The staff entrance uses the same physical NFC card. | Staff should not rely on mobile-app authentication.
-    -> [4284d4e6] The staff entrance uses the same physical NFC card.
-    -> [9d02d82b] Staff should not rely on mobile-app authentication.
-  [1ed62304] The library opens at 10:00 on weekends. | The research desk closes at 16:00.
-    -> [eedf16c4] The library opens at 10:00 on weekends.
-    -> [85496d62] The research desk closes at 16:00.
-[2m  … 1 more split in mem review atomize[0m
-  Review · 0 ambiguities · 0 conflicts · 0 atomize uncertainties
-  Full analysis · mem review atomize
-  Recovery · mem undo
-One Context checkpoint created. The saved analysis remains linked for Review.
+MEM ATOMIZE · 1/2 · CONNECTING PROVIDER . · 0sMEM ATOMIZE · 2/2 · ANALYZING MEMORY STRUCTURE . · 0s                                                     [32m[1mATOMIZE APPLIED · atomize/direct-current[0m
+EFFECTS · SPLIT 4 · CHILDREN 8 · KEEP 0
+RECEIPT · b101ad45-b25f-43ea-b872-4cff1c9cbab6
+CHECKPOINT · 52be83a2-7449-437f-9c44-1a6494404523
+REVIEW · mem review atomize --context atomize/direct-current
+RECOVERY · mem undo
 DIRECT APPLY VERIFIED · MEMORIES 8 · CHECKPOINTS 1 · RECEIPT True

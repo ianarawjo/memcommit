@@ -261,7 +261,8 @@ def test_accept_materializes_only_reviewed_result_content(isolated_store, monkey
     )
 
     assert result.exit_code == 0, result.output
-    assert "APPLIED · SOURCE UNCHANGED" in result.output
+    assert "SEVER APPLIED · local/personal-memory → healthcare-draft" in result.output
+    assert "SOURCE · UNCHANGED" in result.output
     output = store.load_direct("healthcare-draft")
     assert [item.content for item in output.iter_items()] == [
         "Needs step-free access at appointments."

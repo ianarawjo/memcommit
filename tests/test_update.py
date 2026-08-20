@@ -1027,9 +1027,9 @@ def test_impact_then_update_reuses_plan_and_materializes_local_fork(
     assert "1 edit, 0 additions" in impact.output
     assert "No changes applied." in impact.output
     assert update.exit_code == 0, update.output
-    assert f"Applied update: {TASK1_SOURCE} -> {TASK1_TARGET}" in update.output
-    assert f"Updated local working copy {TASK1_TARGET}." in update.output
-    assert "No shared origin was changed." in update.output
+    assert f"UPDATE APPLIED · {TASK1_SOURCE} → {TASK1_TARGET}" in update.output
+    assert "REVIEW · mem review update --session" in update.output
+    assert "RECOVERY · mem undo" in update.output
     assert connections == ["connected"]
     assert len(provider.calls) == 1
 
@@ -1098,7 +1098,8 @@ def test_tty_update_keeps_stage_when_impact_apply_review_is_closed(
     result = runner.invoke(app, ["update", "--to", TASK1_TARGET])
 
     assert result.exit_code == 0, result.output
-    assert "Update remains staged; no target changes were applied." in result.output
+    assert "UPDATE INCOMPLETE" in result.output
+    assert "No target changes were applied. Resume with mem update." in result.output
     assert len(reviewed) == 1
     staged = store.load_staged_update()
     assert staged is not None
@@ -1324,7 +1325,7 @@ def test_impact_then_update_accept_from_with_current_target(
     assert impact.exit_code == 0, impact.output
     assert update.exit_code == 0, update.output
     assert f"Impact: {TASK1_SOURCE} -> {TASK1_TARGET}" in impact.output
-    assert f"Applied update: {TASK1_SOURCE} -> {TASK1_TARGET}" in update.output
+    assert f"UPDATE APPLIED · {TASK1_SOURCE} → {TASK1_TARGET}" in update.output
     assert store.current_context_name() == TASK1_TARGET
     assert len(provider.calls) == 1
 
@@ -1402,7 +1403,7 @@ def test_explicit_from_and_to_work_without_current_context(
     assert impact.exit_code == 0, impact.output
     assert update.exit_code == 0, update.output
     assert f"Impact: {TASK1_SOURCE} -> {TASK1_TARGET}" in impact.output
-    assert f"Applied update: {TASK1_SOURCE} -> {TASK1_TARGET}" in update.output
+    assert f"UPDATE APPLIED · {TASK1_SOURCE} → {TASK1_TARGET}" in update.output
     assert store.current_context_name() is None
     assert len(provider.calls) == 1
 
@@ -1438,7 +1439,7 @@ def test_from_and_to_relative_locators_share_one_current_snapshot(
     assert impact.exit_code == 0, impact.output
     assert update.exit_code == 0, update.output
     assert f"Impact: {TASK1_SOURCE} -> {TASK1_TARGET}" in impact.output
-    assert f"Applied update: {TASK1_SOURCE} -> {TASK1_TARGET}" in update.output
+    assert f"UPDATE APPLIED · {TASK1_SOURCE} → {TASK1_TARGET}" in update.output
     assert len(provider.calls) == 1
 
 
@@ -1769,7 +1770,7 @@ def test_repeated_update_is_idempotent_and_does_not_reconnect(
 
     assert first.exit_code == 0
     assert second.exit_code == 0
-    assert "already applied locally" in second.output
+    assert "receipt was already applied" in second.output
     assert len(provider.calls) == 1
     assert (isolated_store / "staged-update.json").read_bytes() == first_bytes
     assert store.list_checkpoints(TASK1_TARGET_CHILD) == checkpoints_before
@@ -2063,7 +2064,7 @@ def test_empty_update_records_applied_receipt_without_context_checkpoint(
     result = runner.invoke(app, ["update", "--to", TASK1_TARGET])
 
     assert result.exit_code == 0, result.output
-    assert "(no changes needed)" in result.output
+    assert "OUTCOME · NO CHANGE · no Context checkpoint" in result.output
     applied = store.load_staged_update()
     assert applied.status == "applied"
     assert applied.operations == ()
@@ -2080,7 +2081,7 @@ def test_empty_update_records_applied_receipt_without_context_checkpoint(
     repeated = runner.invoke(app, ["update", "--to", TASK1_TARGET])
 
     assert repeated.exit_code == 0, repeated.output
-    assert "already applied locally" in repeated.output
+    assert "receipt was already applied" in repeated.output
     assert len(provider.calls) == 1
     assert (isolated_store / "staged-update.json").read_bytes() == receipt_bytes
     assert store.list_checkpoints(TASK1_TARGET) == []
@@ -2199,7 +2200,7 @@ def test_update_requires_explicit_replace_for_a_different_stage(
     )
 
     assert replaced.exit_code == 0, replaced.output
-    assert "Applied update" in replaced.output
+    assert "UPDATE APPLIED" in replaced.output
     assert store.load_staged_update().target_name == "other-target"
     assert len(provider.calls) == 2
 

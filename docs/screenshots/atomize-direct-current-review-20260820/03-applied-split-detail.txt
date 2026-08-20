@@ -1,7 +1,7 @@
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃                                                                                                                                                                                 ^┃
 ┃ SUGGESTED SPLIT 1/4                                                                                                                                                              ┃
-┃ [7b9881b8] The Main Building entrance accepts a physical NFC card. | Mobile-app authentication is not accepted at that entrance.                                                 ┃
+┃ [6792dd09] The Main Building entrance accepts a physical NFC card. | Mobile-app authentication is not accepted at that entrance.                                                 ┃
 ┃ [REVIEW] OPEN                                                                                                                                                                    ┃
 ┃ REVIEW SET · REQUIRED 0 · OPTIONAL 4                                                                                                                                             ┃
 ┃ CLASSIFICATION                                                                                                                                                                   ┃
@@ -10,7 +10,7 @@
 ┃ SOURCE MEMORY                                                                                                                                                                    ┃
 ┃                                                                                                                                                                                  ┃
 ┃ SOURCE 1 · FROM atomize/direct-current                                                                                                                                           ┃
-┃   [7b9881b8] The Main Building entrance accepts a physical NFC card. | Mobile-app authentication is not accepted at that entrance.                                               ┃
+┃   [6792dd09] The Main Building entrance accepts a physical NFC card. | Mobile-app authentication is not accepted at that entrance.                                               ┃
 ┃                                                                                                                                                                                  ┃
 ┃ WHY THIS MEMORY SPLIT                                                                                                                                                            ┃
 ┃ The source contains two independently revisable claims.                                                                                                                          ┃
@@ -38,10 +38,10 @@
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 ┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
 │  REPORT         Complete Atomize report                                                                                                                                         ^│
-│› SUGGESTED SPLIT [7b9881b8] The Main Building entrance accepts a physical NFC card. | Mobile-app authentication is not accepted at that entrance.                                │
-│  SUGGESTED SPLIT [d355e1e6] The staff entrance uses the same physical NFC card. | Staff should not rely on mobile-app authentication.                                            │
-│  SUGGESTED SPLIT [1ed62304] The library opens at 10:00 on weekends. | The research desk closes at 16:00.                                                                         │
-│  SUGGESTED SPLIT [0fed81b1] The north elevator serves floors one through four. | The fifth floor requires the south elevator.                                                    │
+│› SUGGESTED SPLIT [6792dd09] The Main Building entrance accepts a physical NFC card. | Mobile-app authentication is not accepted at that entrance.                                │
+│  SUGGESTED SPLIT [073cab22] The staff entrance uses the same physical NFC card. | Staff should not rely on mobile-app authentication.                                            │
+│  SUGGESTED SPLIT [ea8a1b56] The library opens at 10:00 on weekends. | The research desk closes at 16:00.                                                                         │
+│  SUGGESTED SPLIT [01952b82] The north elevator serves floors one through four. | The fifth floor requires the south elevator.                                                    │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                 v│

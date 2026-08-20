@@ -741,8 +741,10 @@ def test_mem_distill_applies_the_exact_rendered_proposal(
     )
 
     assert result.exit_code == 0, result.output
-    assert "STATUS · EVIDENCE-BOUND PROPOSAL" in result.output
-    assert "Created Distill Result 'distill/cli-rules' with 1 Rules" in result.output
+    assert "STATUS · EVIDENCE-BOUND PROPOSAL" not in result.output
+    assert "DISTILL APPLIED · RESULT distill/cli-rules" in result.output
+    assert "EFFECTS · ADD 1 RULES" in result.output
+    assert "REVIEW · mem review distill --receipt" in result.output
     assert store.context_exists("distill/cli-rules")
     assert len(store.load_direct(source.name).order) == 2
 
@@ -794,5 +796,5 @@ def test_mem_distill_help_inventory_exposes_goal_review_and_apply_forms():
         'mem distill --from [source] --goal "[goal]" (guide Rule relevance)',
         "mem distill --from [source] -r (include descendants and embeds)",
         "mem distill --ground [name] "
-        "(review Rules from its exact Goal and working-candidate frame)",
+        "(inspect read-only Rules from its exact Goal and working-candidate frame)",
     )

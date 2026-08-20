@@ -105,7 +105,12 @@ def render_resolve_receipt(receipt: ResolveReceipt) -> None:
     _line("CREATED", str(len(receipt.created_uids)))
     _line("UPDATED", str(len(receipt.updated_uids)))
     _line("DELETED", str(len(receipt.deleted_uids)))
+    _line("RECEIPT", receipt.checkpoint_uid)
     _line("CHECKPOINT", receipt.checkpoint_uid)
+    _line(
+        "REVIEW",
+        f"mem review resolve --receipt {receipt.checkpoint_uid}",
+    )
     _line("RECOVERY", "mem undo")
 
 

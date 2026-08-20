@@ -204,4 +204,4 @@ PTY 180 52
 
 [C[0mSelected · ✓ CONFIRM LINK[0m[K[51A[26D[0m[J[0m[?7h[?1049l[?2004l[31mDedun error: The confirmed duplicate Source changed. Run the finder again.[0m
 COMMAND EXIT · 1
-STALE VERIFICATION · MEMORIES [('20000000-0000-4000-8000-000000000100', 'The office opens at eight on weekdays.'), ('20000000-0000-4000-8000-000000000200', 'The weekday office opening time is 08:00.'), ('20000000-0000-4000-8000-000000000300', 'The office closes at 17:00 on weekdays.'), ('94e82174-715a-4060-873c-f5949740e7e7', 'A concurrent holiday schedule arrived.')] · CHECKPOINTS 0 · COMMANDS [] · PROVIDER OPERATIONS ['find_duplicates']
+STALE VERIFICATION · MEMORIES [('20000000-0000-4000-8000-000000000100', 'The office opens at eight on weekdays.'), ('20000000-0000-4000-8000-000000000200', 'The weekday office opening time is 08:00.'), ('20000000-0000-4000-8000-000000000300', 'The office closes at 17:00 on weekdays.'), ('4690b858-615d-47bb-aab8-8f761178232d', 'A concurrent holiday schedule arrived.')] · CHECKPOINTS 0 · COMMANDS [] · PROVIDER OPERATIONS ['find_duplicates']

@@ -118,8 +118,9 @@ HELP_CORE_CONCEPTS = (
     ),
     (
         "SESSION",
-        "A saved record of an analysis or review workflow that can be reopened "
-        "and continued; it does not itself mean Context changes were applied.",
+        "Stores an analysis or review workflow so it can be reopened and "
+        "continued. Apply results and checkpoint history separately show "
+        "whether Context changes were made.",
     ),
     (
         "CHECKPOINT",
@@ -288,7 +289,7 @@ HELP_CATEGORY_DESCRIPTIONS = {
     "CHECK, COMPARE & REVIEW": (
         "MIXED",
         "Check compatibility, differences, quality, or expected impact. Review "
-        "saved analysis and decide what should happen next.",
+        "saved reports or evidence from operations that already completed.",
     ),
     "GROUND WORKBENCH": (
         "LLM-BASED",
@@ -359,19 +360,19 @@ COMMAND_FORMS = {
         "mem fit --ground [ground] --receipt [uid] (reopen one current or stale Ground receipt)",
     ),
     "resolve": (
-        "mem resolve (analyze the current direct-Memory frame and open review)",
-        "mem resolve --context [context] --plain (propose verified UPDATE-only Fit repairs)",
-        "mem resolve [memory_uid] --context [context] (restrict mutation to exact direct Memories)",
-        "mem resolve --context [context] --allow-create (also permit CREATE candidates)",
-        'mem resolve --context [context] --allow-delete --guidance "[grounds]" (permit grounded DELETE candidates)',
-        "mem resolve --context [context] --candidate [full_id] --expected-revision [revision] --apply (regenerate, verify, and apply one exact candidate)",
+        "mem resolve (automatically apply one grounded full-frame plan, or show a non-applicable outcome)",
+        "mem resolve --context [context] --plain (apply a grounded plan or print ASSUMED / ALREADY_FIT)",
+        "mem resolve [memory_uid] --context [context] (limit edits, while every turn still reads the complete frame)",
+        "mem resolve --context [context] --no-create (limit the automatic plan to existing-Memory edits)",
+        'mem resolve --context [context] --allow-delete --guidance "[grounds]" (exceptionally permit grounded retirement)',
+        "mem resolve --context [context] --candidate [full_id] --expected-revision [revision] --apply (replay an externally reviewed exact plan)",
     ),
     "dedup": (
         "mem dedup (remove exact duplicates from the current Context)",
         "mem dedup [context] (remove exact duplicates from one explicit Context)",
     ),
     "dedun": (
-        "mem dedun (find, review, and resolve semantic redundancies)",
+        "mem dedun (find, decide, and atomically resolve semantic redundancies)",
         "mem dedun --context [context] (analyze one explicit Context)",
     ),
     "atomize": (
@@ -442,7 +443,7 @@ COMMAND_FORMS = {
         'mem distill --from [source] --goal "[goal]" (guide Rule relevance)',
         "mem distill --from [source] -r (include descendants and embeds)",
         "mem distill --ground [name] "
-        "(review Rules from its exact Goal and working-candidate frame)",
+        "(inspect read-only Rules from its exact Goal and working-candidate frame)",
     ),
     "elaborate": (
         "mem elaborate (elaborate current direct Memories as Rules and add Cases to current)",
@@ -514,7 +515,7 @@ COMMAND_FORMS = {
     ),
     "forget": (
         "mem forget (enter interactive instruction and direct-Source setup)",
-        'mem forget "[instruction]" (review and apply selective forgetting)',
+        'mem forget "[instruction]" (decide and atomically apply selective forgetting)',
     ),
     "ground": (
         "mem ground (enter the interactive Ground session)",
@@ -531,8 +532,8 @@ COMMAND_FORMS = {
         'mem impact forget "[instruction]" --context [context] (preview one exact direct Source)',
         "mem impact distill --from [source] --to [target] (preview Distill Add; endpoints unchanged)",
         "mem impact elaborate --from [source] --to [target] (preview Elaborate Add; endpoints unchanged)",
-        "mem impact resolve --context [context] (preview one verified candidate or the candidate choice)",
-        "mem impact resolve --context [context] --candidate [full_id] (preview one exact effect set)",
+        "mem impact resolve --context [context] (preview one automatic full-frame interpretation plan)",
+        "mem impact resolve --context [context] --candidate [full_id] (preview its exact effect set)",
         "mem impact meld (inspect a saved Meld Impact; APPLY? opens its Apply flow)",
         "mem impact meld --session [uid] (inspect an exact saved Meld Impact; APPLY? opens its Apply flow)",
         "mem impact sever (inspect a saved Sever Impact; APPLY? opens its Apply flow)",
@@ -691,12 +692,13 @@ COMMAND_FORMS = {
         "mem review (enter the interactive Review session)",
         "mem review audit (open a saved three-finder Audit)",
         "mem review compare (open a saved Compare report)",
-        "mem review meld (open a saved Meld report)",
-        "mem review sever (open a saved Sever report)",
-        "mem review update (open the saved Update report)",
+        "mem review meld (open terminal evidence for an applied Meld)",
+        "mem review sever (open terminal evidence for an applied Sever)",
+        "mem review update (open terminal evidence for an applied Update)",
         "mem review [kind] --session [uid] (exact Audit, Compare, Meld, Sever, or Update artifact)",
-        "mem review atomize (open the current Context's saved Atomize analysis)",
-        "mem review atomize --context [context] (Context-bound Atomize review)",
+        "mem review atomize (open the current Context's applied Atomize evidence)",
+        "mem review atomize --context [context] (Context-bound applied Atomize evidence)",
+        "mem review dedun|distill|elaborate|forget|resolve --receipt [uid] (open exact applied checkpoint evidence)",
         "mem review ambiguities (analyze current-Context ambiguities)",
         "mem review ambiguities --context [context] (Context-bound Ambiguity review)",
     ),

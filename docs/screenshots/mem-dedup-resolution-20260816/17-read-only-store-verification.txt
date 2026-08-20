@@ -1,3 +1,17 @@
 COMMAND EXIT · 0                                                                                                                                                                    
+POST-APPLICATION REVIEW · PROVIDER FREE                                                                                                                                             
+MEM REVIEW · DEDUN                                                                                                                                                                  
+Completed operation evidence. This Review is read-only and cannot change or apply the recorded result.                                                                              
+                                                                                                                                                                                    
+STATUS · APPLIED · RECEIPT 496122f3-eb30-489f-9c78-bb65a6fd15be                                                                                                                     
+CONTEXT · dedup/capture                                                                                                                                                             
+COMPLETED · 2026-08-20T11:23:08.155589                                                                                                                                              
+OUTCOME · Resolved 1 semantic redundancy group(s); absorbed 1 Memory item(s)                                                                                                        
+                                                                                                                                                                                    
+RESOLVED GROUPS · 1                                                                                                                                                                 
+1. SURVIVOR · [20000000]                                                                                                                                                            
+   KEEP · [20000000] The office opens at eight on weekdays.                                                                                                                         
+   ABSORB · [20000000] The weekday office opening time is 08:00.                                                                                                                    
+   EVIDENCE · SEMANTIC_EQUIVALENT · Both Memories state the same weekday opening time without adding a distinct condition.                                                          
 SUCCESS VERIFICATION · MEMORIES [('20000000-0000-4000-8000-000000000100', 'The office opens at eight on weekdays.'), ('20000000-0000-4000-8000-000000000300', 'The office closes at 
 17:00 on weekdays.')] · CHECKPOINTS 1 · COMMANDS ['dedun'] · PROVIDER OPERATIONS ['find_duplicates']

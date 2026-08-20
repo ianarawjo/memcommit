@@ -1,4 +1,4 @@
-"""Update adapter for the operation-neutral application phase flow."""
+"""Update adapter for the operation-neutral execution phase flow."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from memcommit.update import UpdateSession
 
 
 UpdateIncorporate = Callable[[UpdateSession, str], UpdateSession]
-UpdateReviewer = Callable[
+UpdateDecisionResolver = Callable[
     [UpdateSession, UpdateIncorporate, str | None],
     UpdateSession | None,
 ]
@@ -17,15 +17,15 @@ UpdateApplier = Callable[[UpdateSession], UpdateSession]
 
 
 class UpdateApplicationFlowError(RuntimeError):
-    """The Update adapter crossed an invalid review or Apply boundary."""
+    """The Update adapter crossed an invalid decision or Apply boundary."""
 
 
 @dataclass(frozen=True)
 class UpdateApplicationFlowPort:
-    """Adapt one staged Update to shared review/application phase order."""
+    """Adapt one staged Update to shared decision/application phase order."""
 
     interactive: bool
-    reviewer: UpdateReviewer
+    decision_resolver: UpdateDecisionResolver
     incorporate: UpdateIncorporate
     local_applier: UpdateApplier
     granted_source_applier: UpdateApplier
@@ -36,8 +36,8 @@ class UpdateApplicationFlowPort:
         if type(self.interactive) is not bool:
             raise TypeError("Update interactive state must be boolean.")
 
-    def review(self, prepared: UpdateSession) -> UpdateSession | None:
-        """Retain noninteractive parity or enter the existing Update review."""
+    def decide(self, prepared: UpdateSession) -> UpdateSession | None:
+        """Resolve only execution-time Update choices and approval."""
 
         if not isinstance(prepared, UpdateSession) or prepared.status != "staged":
             raise UpdateApplicationFlowError(
@@ -45,39 +45,39 @@ class UpdateApplicationFlowPort:
             )
         if not self.interactive:
             return prepared
-        reviewed = self.reviewer(
+        decided = self.decision_resolver(
             prepared,
             self.incorporate,
             self.analysis_origin,
         )
-        if reviewed is None:
+        if decided is None:
             return None
-        if not isinstance(reviewed, UpdateSession) or reviewed.status != "staged":
+        if not isinstance(decided, UpdateSession) or decided.status != "staged":
             raise UpdateApplicationFlowError(
-                "Update review returned an invalid staged session."
+                "Update decision resolver returned an invalid staged session."
             )
-        return reviewed
+        return decided
 
-    def apply(self, reviewed: UpdateSession) -> UpdateSession:
+    def apply(self, decided: UpdateSession) -> UpdateSession:
         """Dispatch by the mutation owner, then verify the durable receipt."""
 
-        if not isinstance(reviewed, UpdateSession) or reviewed.status != "staged":
+        if not isinstance(decided, UpdateSession) or decided.status != "staged":
             raise UpdateApplicationFlowError(
-                "Update Apply requires the exact staged review."
+                "Update Apply requires the exact staged decisions."
             )
-        if reviewed.granted_target is not None:
-            applied = self.granted_target_applier(reviewed)
-        elif reviewed.granted_source is not None:
-            applied = self.granted_source_applier(reviewed)
+        if decided.granted_target is not None:
+            applied = self.granted_target_applier(decided)
+        elif decided.granted_source is not None:
+            applied = self.granted_source_applier(decided)
         else:
-            applied = self.local_applier(reviewed)
+            applied = self.local_applier(decided)
         if (
             not isinstance(applied, UpdateSession)
             or applied.status != "applied"
             or applied.application is None
-            or replace(applied, status="staged", application=None) != reviewed
+            or replace(applied, status="staged", application=None) != decided
         ):
             raise UpdateApplicationFlowError(
-                "Update Apply returned a receipt outside the reviewed session."
+                "Update Apply returned a receipt outside the decided session."
             )
         return applied

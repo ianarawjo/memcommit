@@ -28,6 +28,7 @@ from memcommit.atomize_workbench import (
     atomize_workbench_declared_frames,
     atomize_workbench_response_digest,
     create_atomize_workbench,
+    project_atomize_workbench_findings,
 )
 from memcommit.atomize_workflow import (
     ATOMIZE_AGGREGATE_TIMEOUT_SECONDS,
@@ -451,7 +452,7 @@ def test_cli_reuses_one_analysis_then_bare_atomize_applies_and_review_reopens(
     assert len(provider.payloads) == 1
     assert f"Analysis [{analysis.uid[:8]}]" in first.output
     assert "the provider was not called" in second.output
-    assert "Applied atomize analysis" in direct.output
+    assert "ATOMIZE APPLIED" in direct.output
     for output in [first.output, review.output]:
         assert "WHAT MEM UNDERSTOOD" in output
         assert "WHAT HAPPENED" in output
@@ -559,9 +560,9 @@ def test_bare_interactive_atomize_applies_the_current_context_without_a_session(
     result = runner.invoke(app, ["atomize"])
 
     assert result.exit_code == 0, result.output
-    assert "Applied atomize analysis" in result.output
-    assert "Review · 1 ambiguity · 0 conflicts · 1 atomize uncertainty" in result.output
-    assert "Full analysis · mem review atomize" in result.output
+    assert "ATOMIZE APPLIED" in result.output
+    assert "JUDGMENTS · 2 unresolved findings recorded as applied-as-is" in result.output
+    assert "REVIEW · mem review atomize" in result.output
     assert len(provider.payloads) == 1
     assert len(store.list_checkpoints(ctx.name)) == len(checkpoints_before) + 1
     analysis = store.load_atomize_analysis(ctx.uid)
@@ -616,13 +617,11 @@ def test_bare_atomize_receipt_samples_content_and_applied_review_remains_complet
     applied = runner.invoke(app, ["atomize"])
 
     assert applied.exit_code == 0, applied.output
-    for source in sources[:3]:
-        assert f"[{source.uid[:8]}] {source.content}" in applied.output
-    assert source_contents[3] not in applied.output
-    assert "… 1 more split in mem review atomize" in applied.output
-    assert "Review · 0 ambiguities · 0 conflicts · 0 atomize uncertainties" in (
-        applied.output
-    )
+    assert "ATOMIZE APPLIED" in applied.output
+    assert "EFFECTS · SPLIT 4 · CHILDREN 8 · KEEP 0" in applied.output
+    assert "REVIEW · mem review atomize" in applied.output
+    for source in sources:
+        assert source.content not in applied.output
     assert len(provider.payloads) == 1
 
     checkpoints_after_apply = store.list_checkpoints(ctx.name)
@@ -738,8 +737,9 @@ def test_atomize_launcher_new_persists_input_output_on_shared_workbench(
         ["atomize", "--context", ctx.name],
     )
     assert resumed.exit_code == 0, resumed.output
-    assert "provider was not called" in resumed.output
-    assert "workbench/atomized-output" in resumed.output
+    assert f"ATOMIZE APPLIED · {ctx.name}" in resumed.output
+    assert "REVIEW · mem review atomize --context" in resumed.output
+    assert not store.context_exists("workbench/atomized-output")
     assert len(provider.payloads) == 1
 
 
@@ -1050,6 +1050,13 @@ def test_workbench_response_reanalysis_and_save_gate_keep_provenance(
     checkpoints_before = store.list_checkpoints(ctx.name)
 
     comment = "'same NFC' means the staff-door NFC credential."
+    finding = next(
+        item
+        for item in project_atomize_workbench_findings(source_analysis)
+        if memory.uid in item.source_uids
+    )
+    source_workbench.response_for(finding.uid).text = comment
+    store.save_atomize_workbench(source_workbench)
     responded = runner.invoke(
         app,
         [
@@ -1063,7 +1070,8 @@ def test_workbench_response_reanalysis_and_save_gate_keep_provenance(
     )
     blocked = runner.invoke(app, ["atomize", "--save"])
 
-    assert responded.exit_code == 0
+    assert responded.exit_code == 1
+    assert "execution is not complete" in responded.output
     assert blocked.exit_code == 1
     assert "have not been incorporated" in blocked.output
     assert len(provider.payloads) == 1
@@ -1079,7 +1087,7 @@ def test_workbench_response_reanalysis_and_save_gate_keep_provenance(
     assert current is not None and current.uid != source_analysis.uid
     assert provider.payloads[-1]["memories"][0]["declared_frame"] == comment
     assert current.source_review_uid == source_workbench.uid
-    assert current.declared_frames[0].review_item_uid.startswith("atomize:")
+    assert current.declared_frames[0].review_item_uid.endswith(memory.uid)
     assert store.list_checkpoints(ctx.name) == checkpoints_before
 
 
@@ -1738,11 +1746,14 @@ def test_shared_atomize_apply_action_uses_the_normal_save_boundary(
         lambda **_kwargs: ResolutionWorkbenchAction(kind="ACCEPT"),
     )
 
-    result = runner.invoke(app, ["atomize", "--context", ctx.name])
+    result = runner.invoke(
+        app,
+        ["atomize", "--context", ctx.name, "--output", ctx.name],
+    )
 
     assert result.exit_code == 0, result.output
-    assert "Applied atomize analysis" in result.output
-    assert "Recovery · mem undo" in result.output
+    assert "ATOMIZE APPLIED" in result.output
+    assert "RECOVERY · mem undo" in result.output
     assert len(store.list_checkpoints(ctx.name)) == len(checkpoints_before) + 1
     assert store.load_direct(ctx.name).uid == ctx.uid
 
@@ -1786,7 +1797,10 @@ def test_atomize_persists_shared_destination_change_before_final_apply(
         ),
     )
 
-    result = runner.invoke(app, ["atomize", "--context", ctx.name])
+    result = runner.invoke(
+        app,
+        ["atomize", "--context", ctx.name, "--output", "workbench/old-output"],
+    )
 
     assert result.exit_code == 0, result.output
     assert not store.context_exists("workbench/old-output")
@@ -1823,14 +1837,14 @@ def test_applied_output_preview_does_not_become_a_second_session_owner(
     assert output_analysis.uid == opened.analysis.uid
     assert store.load_atomize_workbench(output_analysis) is None
 
-    # Reading the applied Output needs a temporary projection for display, but
-    # it must not persist that projection as a second shared-session owner.
+    # Re-executing an applied Output reports the terminal state without
+    # reopening a pre-Apply Viewer or persisting a second session owner.
     preview = runner.invoke(
         app,
         ["atomize", "--context", "workbench/applied-output"],
     )
     assert preview.exit_code == 0, preview.output
-    assert "APPLIED" in preview.output
+    assert "already applied" in preview.output
     assert store.load_atomize_workbench(output_analysis) is None
 
     reviewed_output = runner.invoke(
@@ -1886,11 +1900,14 @@ def test_compound_atomize_action_incorporates_then_uses_normal_apply_boundary(
         ),
     )
 
-    result = runner.invoke(app, ["atomize", "--context", ctx.name])
+    result = runner.invoke(
+        app,
+        ["atomize", "--context", ctx.name, "--output", ctx.name],
+    )
 
     assert result.exit_code == 0, result.output
-    assert "Applied atomize analysis" in result.output
-    assert "Recovery · mem undo" in result.output
+    assert "ATOMIZE APPLIED" in result.output
+    assert "RECOVERY · mem undo" in result.output
     assert len(store.list_checkpoints(ctx.name)) == len(checkpoints_before) + 1
     checkpoint = store.list_checkpoints(ctx.name)[-1]
     assert checkpoint["args"]["source_review_uid"] == opened.workbench.uid
@@ -1911,7 +1928,7 @@ def test_unanswered_atomize_findings_apply_as_is_and_are_checkpointed(
     result = runner.invoke(app, ["atomize", "--context", ctx.name, "--save"])
 
     assert result.exit_code == 0, result.output
-    assert "Applied as is with 2 unresolved findings recorded" in result.output
+    assert "JUDGMENTS · 2 unresolved findings recorded as applied-as-is" in result.output
     checkpoint = store.list_checkpoints(ctx.name)[0]
     args = checkpoint["args"]
     assert args["application_mode"] == "AS_IS"

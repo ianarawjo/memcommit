@@ -258,6 +258,40 @@ class MemoryStoreDedupPort:
                                 }
                                 for selection in selections
                             ],
+                            # Review is a terminal evidence projection, so the
+                            # checkpoint must carry the exact judged groups—not
+                            # only pointers to process-local finder artifacts.
+                            "components": [
+                                {
+                                    "component_uid": component.uid,
+                                    "survivor_uid": selection.survivor_uid,
+                                    "members": [
+                                        {
+                                            "uid": member.uid,
+                                            "content": member.content,
+                                            "ordinal": member.ordinal,
+                                            "selected": (
+                                                member.uid == selection.survivor_uid
+                                            ),
+                                        }
+                                        for member in component.members
+                                    ],
+                                    "evidence": [
+                                        {
+                                            "finding_uid": item.finding_uid,
+                                            "handoff_uid": item.handoff_uid,
+                                            "left_uid": item.left_uid,
+                                            "right_uid": item.right_uid,
+                                            "relation": item.relation,
+                                            "reason": item.reason,
+                                        }
+                                        for item in component.evidence
+                                    ],
+                                }
+                                for component, selection in zip(
+                                    plan.components, selections, strict=True
+                                )
+                            ],
                             "redundancy_evidence_uids": [
                                 handoff.uid for handoff in plan.request.handoffs
                             ],

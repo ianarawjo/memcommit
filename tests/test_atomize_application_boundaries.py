@@ -152,8 +152,8 @@ def test_all_atomic_apply_records_a_deliberate_no_change_checkpoint(
     )
 
     assert applied.exit_code == 0, applied.output
-    assert "0 splits -> 0 children" in applied.output
-    assert "1 Memories preserved in place" in applied.output
+    assert "ATOMIZE APPLIED · atomize/apply-boundary" in applied.output
+    assert "EFFECTS · SPLIT 0 · CHILDREN 0 · KEEP 1" in applied.output
     current = store.load_direct(context.name)
     assert current.to_dict() == before
     assert [item.uid for item in current.iter_items() if isinstance(item, Memory)] == [
@@ -269,7 +269,7 @@ def test_retry_recovers_terminal_receipt_from_exact_atomize_checkpoint(
     )
 
     assert retried.exit_code == 0, retried.output
-    assert "Recovered the exact prior checkpoint" in retried.output
+    assert "RECOVERY STATUS · prior checkpoint recovered" in retried.output
     terminal = store.load_atomize_workbench(opened.analysis)
     assert terminal is not None and terminal.application is not None
     assert terminal.application.checkpoint_uid == history[0]["uid"]
@@ -289,7 +289,8 @@ def test_save_as_publishes_one_final_checkpoint_and_restores_one_lifecycle(
     )
 
     assert applied.exit_code == 0, applied.output
-    assert "One Atomize checkpoint created" in applied.output
+    assert "ATOMIZE APPLIED · atomize/output" in applied.output
+    assert "CONTEXT · CREATED AND CURRENT · atomize/output" in applied.output
     output = store.load_direct("atomize/output")
     output_record = output.to_dict()
     assert output.uid != source.uid
@@ -439,7 +440,7 @@ def test_save_as_retry_finishes_source_receipt_without_second_checkpoint(
     )
 
     assert retried.exit_code == 0, retried.output
-    assert "Recovered the exact prior checkpoint" in retried.output
+    assert "RECOVERY STATUS · prior checkpoint recovered" in retried.output
     assert store.list_checkpoints("atomize/retry") == checkpoints
     terminal = store.load_atomize_workbench(opened.analysis)
     assert terminal is not None and terminal.application is not None
@@ -481,7 +482,7 @@ def test_receipt_recovery_does_not_overwrite_later_context_edits(
     )
 
     assert recovered.exit_code == 0, recovered.output
-    assert "Recovered the exact prior checkpoint" in recovered.output
+    assert "RECOVERY STATUS · prior checkpoint recovered" in recovered.output
     assert store._context_file(context.name).read_bytes() == context_before_recovery
     assert store.list_checkpoints(context.name) == history_before_recovery
     terminal = store.load_atomize_workbench(opened.analysis)

@@ -7,7 +7,7 @@
 
 Sever is the second operation slice used to test the target application
 architecture after Summarize. Its semantic analysis, private saved-session
-lifecycle, review revisions, and require-new Apply now have typed,
+lifecycle, execution-decision revisions, and require-new Apply now have typed,
 terminal-independent entry points. Existing CLI setup, saved-session launching,
 and Resolution presentation remain interface adapters and have not yet been
 presented as a stable Python API.
@@ -63,12 +63,12 @@ SeverPersistedApplyResult
 | --- | --- | --- | --- | --- |
 | Analysis input | `SeverAnalysisRequest` | `MemoryStoreSeverInputPort` | CLI flags and three-pane setup map Source, Criteria, Result, and the two ranges | Relative CLI locators are frozen to canonical public names before confirmation; runtime repeats authority checks before disclosure |
 | Frozen evidence | `FrozenSeverInputs` | `capture_sever_binding` | No interface may append hidden Memories | Source and Criteria each retain exact Context identities, digests, ordinary Memories, Grant binding, range, and excluded query-only names |
-| Cache | `SeverPreparedLookup` | installed Sever prewarm adapter | Interface receives the typed exact/equivalent/projected origin | Lookup runs only after authority and complete frame capture; a prepared review must exactly match the requested frozen bindings and output name after any adapter-owned safe projection |
+| Cache | `SeverPreparedLookup` | installed Sever prewarm adapter | Interface receives the typed exact/equivalent/projected origin | Lookup runs only after authority and complete frame capture; a prepared decision ledger must exactly match the requested frozen bindings and output name after any adapter-owned safe projection |
 | Provider | lazy `SeverProviderFactory` | configured provider supplied by the composition boundary | Progress is projected from typed stages | Cache hits never construct a provider; live work remains one whole-frame selective-curation turn |
-| Review result | `SeverAnalysisResult` | strict provider decoder or fresh prepared review | Resolution Workbench renders the typed review | The review covers every Source Memory exactly once and creates no Result Context |
+| Decision result | `SeverAnalysisResult` | strict provider decoder or fresh prepared ledger | Resolution Workbench renders outstanding choices | The ledger covers every Source Memory exactly once and creates no Result Context |
 | Session lifecycle | `SeverSessionRepository`, `SeverSessionSnapshot` | `MemoryStoreSeverSessionRepository` | launchers and `--resume` open a snapshot; interfaces never calculate a record digest | Create, load, and replace share one opaque optimistic-CAS contract |
-| Review revision | `SeverDecisionRequest` | repository replace under the snapshot token | scripted choices and TUI responses submit the same exact candidate UID and selection | stale revisions fail before they can overwrite a newer review; custom content is valid only for `CUSTOM` |
-| Destination revision | `SeverDestinationRequest`, `SeverDestinationPort` | live Store name validation plus repository CAS | the Save Location editor supplies only the proposed exact name | an existing or invalid output cannot alter the review, and changing a name does not rerun analysis |
+| Decision revision | `SeverDecisionRequest` | repository replace under the snapshot token | scripted choices and TUI responses submit the same exact candidate UID and selection | stale revisions fail before they can overwrite a newer decision; custom content is valid only for `CUSTOM` |
+| Destination revision | `SeverDestinationRequest`, `SeverDestinationPort` | live Store name validation plus repository CAS | the Save Location editor supplies only the proposed exact name | an existing or invalid output cannot alter the decisions, and changing a name does not rerun analysis |
 | Apply input | `SeverPersistedApplyRequest` | `MemoryStoreSeverOutputPort` plus the session repository | CLI `--accept` and TUI Accept call the same persisted use case | the current token is reloaded before any output effect; local frames and granted identity/revision/content are fresh at the Result commit point |
 | Apply result | `SeverPersistedApplyResult` | require-new Context, checkpoint, APPLIED-session replacement, and exact compensation | interfaces receive the resulting snapshot | Source and Criteria bindings, candidates, output name, and grounded summary cannot change during Apply; a synchronous receipt failure publishes neither side |
 | Interrupted Apply | same persisted request | exact Context/checkpoint recovery in `MemoryStoreSeverOutputPort` | retry uses the ordinary Apply path | only a Result whose digest and sole Sever checkpoint match the accepted session is adopted; an unrelated occupant remains a collision |
@@ -99,9 +99,9 @@ imports the runtime owner directly rather than reaching through the command.
   provider construction.
 - Query-only routes never disclose hidden content. Live `MemoryRef` values fail
   rather than being copied into a retained frame.
-- Prepared and provider-produced reviews cross the same validation gate;
+- Prepared and provider-produced decision ledgers cross the same validation gate;
   neither may change Source, Criteria, ranges, output name, or review state.
-- Every durable review mutation consumes the exact version token returned by
+- Every durable decision mutation consumes the exact version token returned by
   create or open. The repository is the only layer that interprets that token
   as the current record digest.
 - Apply reloads the durable snapshot before output creation. A stale REVIEWING
@@ -201,3 +201,11 @@ protection, and Context-operand consumers passed in full.
 | Already APPLIED retry | No new Context, checkpoint, or revision | persisted idempotence test |
 | Close/cancel before Accept | REVIEWING session retained; no Result | workbench CLOSE test |
 | Undo then Redo | Whole Result and matching receipt removed/restored as one unit | command tests + PTY |
+
+## 2026-08-20 execution-receipt migration
+
+Sever decisions and Result creation are one execution lifecycle. APPLIED
+success now prints a compact KEEP/FORGET receipt instead of the candidate
+report. `mem review sever --session UID` accepts only an APPLIED session and
+cannot decide candidates or materialize a Result; REVIEWING sessions resume
+through `mem sever`.

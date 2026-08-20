@@ -17,7 +17,7 @@ Last reviewed: 2026-08-20.
 | Publication | default standalone → existing Target, all Rules or none; legacy require-new Apply remains compatible | default standalone → existing Target, all proposals or none | `VERIFIED` endpoint, checkpoint, target/source drift, and no-partial-publication tests |
 | Authority | standalone local Source; physical typed Ground inputs fail before provider until authority-aware projection exists | inline or exact directly owned Ground Memories; typed Goal/Rule input fails before provider | fail-closed boundary tested; no silent typed-item omission |
 | Plain CLI | default Add renderer plus receipt; explicit Impact is read-only | default Add renderer plus receipt; explicit Impact is read-only | `VERIFIED` |
-| TUI | Impact owns interactive preview; legacy review retains shared setup + Viewer | explicit Impact owns preview; proposal Viewer remains available | `VERIFIED` in component tests; refreshed Add/Impact PTY evidence is recorded separately |
+| TUI | Impact owns interactive preview; the hidden legacy/Ground read-only adapter retains its Viewer | Impact owns preview; only the Ground read-only adapter retains its result Viewer | `VERIFIED` in component tests; refreshed Add/Impact PTY evidence is recorded separately |
 | Public Python | typed proposal; exact in-process Distill Apply; Ground projections | typed unverified proposal; Ground projections | `VERIFIED` focused tests |
 | Agent/MCP | proposal only, `effect: NONE` | proposal only, `effect: NONE`, `verification: UNVERIFIED` | intentional first-slice boundary; CLI mutation does not silently broaden callable authority |
 | Clipboard | focused `y`, whole document `Y` | focused `y`, whole document `Y` | `VERIFIED` |
@@ -61,3 +61,13 @@ propositions therefore remain hypotheses rather than fabricated evidence.
 5. Resolve physical `/contexts` MemoryRefs, embeds, query routes, and granted
    links only through an authority-aware projection; durable membership alone
    does not authorize provider disclosure.
+
+## 2026-08-20 execution-receipt migration
+
+Standalone Distill and Elaborate are direct semantic Adds. They freeze,
+decode, decide the complete generated set, append atomically, and return a
+compact receipt; they do not render the proposal Viewer before reporting
+success. Their full overview, rationale, support/provenance, verification
+state, and result identities are stored in the same application checkpoint and
+are available through `mem review distill|elaborate --receipt UID`. Explicit
+Impact and the Ground-owned proposal variants remain read-only exceptions.

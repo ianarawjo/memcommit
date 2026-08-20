@@ -1,24 +1,15 @@
  MEM DEDUN · RESOLUTION SESSION                                                                                                                                                     
  SEMANTIC EVIDENCE · EXISTING UID SURVIVOR · EXACT WHOLE-SET APPLY                                                                                                                  
-┌──────────────────────────────────────────────────────────────────────| VIEWER · REDUNDANCY GROUP EVIDENCE |──────────────────────────────────────────────────────────────────────┐
-│REDUNDANCY GROUP · EXISTING SURVIVOR ONLY                                                                                                                                        ^│
-│ID · dedup-component-4c8bc32e0fadecebc21a247ecd98bdce9ea0d169a7e37837cfdaa97176ef3706                                                                                             │
-│Choose one existing UID. Its wording stays unchanged; every other member UID is absorbed.                                                                                         │
-│                                                                                                                                                                                  │
-│MEMBERS                                                                                                                                                                           │
-│  RECOMMENDED · #1 · [20000000-0000-4000-8000-000000000100]                                                                                                                       │
-│  The office opens at eight on weekdays.                                                                                                                                          │
-│  #2 · [20000000-0000-4000-8000-000000000200]                                                                                                                                     │
-│  The weekday office opening time is 08:00.                                                                                                                                       │
-│                                                                                                                                                                                  │
-│CONFIRMED EVIDENCE                                                                                                                                                                │
-│  SEMANTIC_EQUIVALENT · [20000000] ↔ [20000000]                                                                                                                                   │
-│  WHY · Both Memories state the same weekday opening time without adding a distinct condition.                                                                                    │
-│                                                                                                                                                                                  │
-│                                                                                                                                                                                 v│
-└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+CONTEXT · dedup/capture · GROUPS 1 · choose one unchanged existing survivor per group; recommendations are preselected.                                                             
+                                                                                                                                                                                    
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ RESPONSES · REQUIRED · EXISTING SURVIVOR ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃QUESTION · Choose one unchanged survivor from 2 members.                                                                                                                          ┃
+┃MEMBERS                                                                                                                                                                           ┃
+┃  #1 · [20000000] The office opens at eight on weekdays.                                                                                                                          ┃
+┃  #2 · [20000000] The weekday office opening time is 08:00.                                                                                                                       ┃
+┃CONFIRMED EVIDENCE                                                                                                                                                                ┃
+┃  SEMANTIC_EQUIVALENT · [20000000] ↔ [20000000] · Both Memories state the same weekday opening time without adding a distinct condition.                                          ┃
+┃                                                                                                                                                                                  ┃
+┃DECISION · Choose one unchanged survivor from 2 members.                                                                                                                          ┃
 ┃                                                                                                                                                                                  ┃
 ┃✓ 1. KEEP [20000000] · RECOMMENDED                                                                                                                                                ┃
 ┃  Keep Context item #1 unchanged; absorb the other UIDs.                                                                                                                          ┃
@@ -26,27 +17,15 @@
 ┃  2. KEEP [20000000]                                                                                                                                                              ┃
 ┃  Keep Context item #2 unchanged; absorb the other UIDs.                                                                                                                          ┃
 ┃                                                                                                                                                                                  ┃
-┃                                                                                                                                                                                  ┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 ┌──────────────────────────────────────────────────────────────────────| ITEMS · REQUIRED REDUNDANCY GROUPS |──────────────────────────────────────────────────────────────────────┐
 │REQUIRED 1 · ANSWERED 1 · REMAINING 0                                                                                                                                             │
 │✓ 1. REDUNDANCY GROUP · Choose one unchanged survivor from 2 members.                                                                                                             │
 │                                                                                                                                                                                  │
-│                                                                                                                                                                                  │
-│                                                                                                                                                                                  │
-│                                                                                                                                                                                  │
-│                                                                                                                                                                                  │
-│                                                                                                                                                                                  │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌───────────────────────────────────────────────────────────────────────────| TO DO · ONE NEXT ACTION |────────────────────────────────────────────────────────────────────────────┐
-│REVIEW AND APPLY                                                                                                                                                                  │
-│Enter opens the exact whole-set final review.                                                                                                                                     │
+│APPLY CONFIRMATION                                                                                                                                                                │
+│Enter confirms the exact decided whole set before publication.                                                                                                                    │
 │[ PRESS ENTER ]                                                                                                                                                                   │
-│                                                                                                                                                                                  │
-│                                                                                                                                                                                  │
-│                                                                                                                                                                                  │
-│                                                                                                                                                                                  │
-│                                                                                                                                                                                  │
-│                                                                                                                                                                                  │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
- ↑/↓ move · Enter open/select · Tab frames · Esc/Backspace back · y focused · Y complete · Q close
+ ↑/↓ move · Enter open/select · Tab frames · Esc/Backspace back · Q close

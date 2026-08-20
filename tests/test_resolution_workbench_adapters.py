@@ -504,7 +504,7 @@ def test_unanswered_atomize_quality_finding_advances_to_apply_as_is() -> None:
         session_review_action_view(view, {}, whole_set_available=True).kind
         == "APPLY AS IS"
     )
-    assert todo.label == "Review final Atomize action"
+    assert todo.label == "Confirm final Atomize Apply"
     final_action = session_review_action_view(view, {}, whole_set_available=True)
     assert final_action.detail.startswith(
         "1 unresolved finding will be recorded at apply. "
@@ -537,7 +537,7 @@ def test_reviewed_atomize_split_advances_shared_todo_to_apply() -> None:
         session_review_action_view(view, {}, whole_set_available=True).kind
         == "APPLY AS IS"
     )
-    assert todo.label == "Review final Atomize action"
+    assert todo.label == "Confirm final Atomize Apply"
     assert "APPLY AS IS is available" in todo.detail
 
 

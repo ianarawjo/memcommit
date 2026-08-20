@@ -17,7 +17,8 @@
       },
       "atomize": {
         "evidence": [
-          "docs/atomize-application-boundary-matrix.md"
+          "docs/atomize-application-boundary-matrix.md",
+          "docs/execution-receipt-review-lifecycle-design-rationale.md"
         ],
         "reason": "Analysis, saved review, reanalysis, both Apply directions, recovery, and public projection are verified as one structural lifecycle."
       },
@@ -30,13 +31,15 @@
       },
       "distill": {
         "evidence": [
-          "docs/distill-elaborate-application-boundary-matrix.md"
+          "docs/distill-elaborate-application-boundary-matrix.md",
+          "docs/execution-receipt-review-lifecycle-design-rationale.md"
         ],
         "reason": "CLI, TUI, public, agent, MCP, Ground, provider, and prepared-result routes share the reviewed Distill application contract."
       },
       "elaborate": {
         "evidence": [
-          "docs/distill-elaborate-application-boundary-matrix.md"
+          "docs/distill-elaborate-application-boundary-matrix.md",
+          "docs/execution-receipt-review-lifecycle-design-rationale.md"
         ],
         "reason": "CLI, TUI, public, agent, MCP, Ground, provider, and prepared-result routes share the reviewed Elaborate application contract."
       },
@@ -65,7 +68,8 @@
         "evidence": [
           "docs/forget-application-boundary-matrix.md",
           "docs/forget-public-python-api-design-rationale.md",
-          "docs/forget-agent-adapter-design-rationale.md"
+          "docs/forget-agent-adapter-design-rationale.md",
+          "docs/execution-receipt-review-lifecycle-design-rationale.md"
         ],
         "reason": "CLI, TUI, Python, agent, and MCP routes share one complete-frame process-local Analyze, Select, Revise, authority/CAS Apply, and exact in-process replay lifecycle."
       },
@@ -85,14 +89,16 @@
       },
       "merge": {
         "evidence": [
-          "docs/merge-application-boundary-matrix.md"
+          "docs/merge-application-boundary-matrix.md",
+          "docs/execution-receipt-review-lifecycle-design-rationale.md"
         ],
         "reason": "Direct and recursive Merge planning, review, application, and presentation use the same frozen typed plan and runtime."
       },
       "meld": {
         "evidence": [
           "docs/meld-application-boundary-matrix.md",
-          "docs/meld-session-lifecycle-design-rationale.md"
+          "docs/meld-session-lifecycle-design-rationale.md",
+          "docs/execution-receipt-review-lifecycle-design-rationale.md"
         ],
         "reason": "CLI, TUI, Python, and agent routes share typed Start, Restart, saved-turn, cache/provider, CAS, and Apply lifecycles with exact/equivalent/projected reuse and one reviewed-session version contract."
       },
@@ -127,6 +133,7 @@
       "resolve": {
         "evidence": [
           "docs/resolve-fit-repair-design-rationale.md",
+          "docs/execution-receipt-review-lifecycle-design-rationale.md",
           "docs/resolution-lifecycle-design-rationale.md"
         ],
         "reason": "Direct-Memory Fit repair exposes CLI, TUI, public, agent, and MCP projections over one typed analysis, exact replay, authority, and checkpointed Apply boundary."
@@ -135,6 +142,7 @@
         "evidence": [
           "docs/dedun-callable-boundary-matrix.md",
           "docs/dedun-design-rationale.md",
+          "docs/execution-receipt-review-lifecycle-design-rationale.md",
           "docs/resolution-lifecycle-design-rationale.md"
         ],
         "reason": "Semantic redundancy discovery, evidence confirmation, survivor review, and exact Apply form one Dedun operation whose CLI, Python, agent, and MCP projections share Grant revalidation, reference blocking, and one checkpointed application boundary."
@@ -148,7 +156,8 @@
       },
       "sever": {
         "evidence": [
-          "docs/sever-application-boundary-matrix.md"
+          "docs/sever-application-boundary-matrix.md",
+          "docs/execution-receipt-review-lifecycle-design-rationale.md"
         ],
         "reason": "Analysis, cache reuse, saved-session review, destination revision, and Apply execute through typed application/runtime boundaries."
       },
@@ -191,7 +200,8 @@
       },
       "update": {
         "evidence": [
-          "docs/update-application-boundary-matrix.md"
+          "docs/update-application-boundary-matrix.md",
+          "docs/execution-receipt-review-lifecycle-design-rationale.md"
         ],
         "reason": "Apply policy and recovery are verified, but the remaining Update routes have not been traced into one complete reviewed application boundary."
       }

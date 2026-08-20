@@ -62,10 +62,13 @@ def cmd(
     allow_create: Annotated[
         bool,
         typer.Option(
-            "--allow-create",
-            help="Permit a verified candidate to add direct Memories",
+            "--allow-create/--no-create",
+            help=(
+                "Allow the automatic interpretation plan to add grounded direct "
+                "Memories; enabled by default"
+            ),
         ),
-    ] = False,
+    ] = True,
     allow_delete: Annotated[
         bool,
         typer.Option(
@@ -112,14 +115,14 @@ def cmd(
         bool,
         typer.Option(
             "--plain",
-            help="Print the proposal or receipt instead of opening the TUI",
+            help="Print non-applicable outcomes instead of opening the TUI",
         ),
     ] = False,
     tui: Annotated[
         bool,
         typer.Option(
             "--tui",
-            help="Require the interactive Resolve review and exact Apply flow",
+            help="Require an interactive view for non-applicable outcomes",
         ),
     ] = False,
 ) -> None:
@@ -186,6 +189,20 @@ def cmd(
             receipt = apply_resolve(
                 analysis,
                 candidate_uid,
+                frame_port=port,
+            )
+            render_resolve_receipt(receipt)
+            return
+
+        # A PROPOSAL is already the operation-owned, independently Fit-verified
+        # unique judgment. Resolve is an execution command, so that judgment is
+        # applied atomically here; the full reasoning remains available later
+        # through the immutable checkpoint Review.
+        if analysis.status == "PROPOSAL":
+            candidate = analysis.candidates[0]
+            receipt = apply_resolve(
+                analysis,
+                candidate.uid,
                 frame_port=port,
             )
             render_resolve_receipt(receipt)

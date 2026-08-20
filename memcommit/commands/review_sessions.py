@@ -10,6 +10,10 @@ from __future__ import annotations
 from dataclasses import replace
 from datetime import datetime
 
+from memcommit.applied_checkpoint_review import (
+    CHECKPOINT_REVIEW_OPERATIONS,
+    list_applied_checkpoint_reviews,
+)
 from memcommit.commands.audit_sessions import audit_session_entries
 from memcommit.commands.atomize_sessions import atomize_session_entries
 from memcommit.commands.compare_sessions import comparison_session_entries
@@ -87,6 +91,8 @@ def _saved_update_entry(store: MemoryStore) -> SessionPickerEntry | None:
         path = store.impact_plan_file
     if session is None:
         return None
+    if session.status not in {"applied", "undone"}:
+        return None
     entry = SessionPickerEntry(
         kind="update",
         key=session.uid,
@@ -107,6 +113,35 @@ def _saved_update_entry(store: MemoryStore) -> SessionPickerEntry | None:
         reopen_argv=("mem", "review", "update", "--session", session.uid),
     )
     return _review_entry(entry)
+
+
+def _checkpoint_review_entries(store: MemoryStore) -> tuple[SessionPickerEntry, ...]:
+    entries: list[SessionPickerEntry] = []
+    for operation in sorted(CHECKPOINT_REVIEW_OPERATIONS):
+        for record in list_applied_checkpoint_reviews(store, operation):
+            entry = SessionPickerEntry(
+                kind=operation,
+                key=record.checkpoint_uid,
+                title=f"{record.context_name} · {record.checkpoint_uid[:8]}",
+                status="APPLIED",
+                subtitle=record.description,
+                group=record.context_name,
+                sort_timestamp=datetime.fromisoformat(record.timestamp).timestamp(),
+                detail=(
+                    f"Receipt {record.checkpoint_uid}\n"
+                    f"Completed {record.timestamp}\n\n"
+                    "Immutable post-application evidence."
+                ),
+                reopen_argv=(
+                    "mem",
+                    "review",
+                    operation,
+                    "--receipt",
+                    record.checkpoint_uid,
+                ),
+            )
+            entries.append(_review_entry(entry))
+    return tuple(entries)
 
 
 def _saved_review_entry(store: MemoryStore) -> SessionPickerEntry | None:
@@ -155,17 +190,23 @@ def review_session_entries(store: MemoryStore) -> tuple[SessionPickerEntry, ...]
     """Return every saved session that the Review host can currently view."""
 
     entries: list[SessionPickerEntry] = []
+    entries.extend(_checkpoint_review_entries(store))
     entries.extend(
         _review_entry(entry)
         for entry in audit_session_entries(QualityAuditStore(store))
     )
-    entries.extend(_review_entry(entry) for entry in atomize_session_entries(store))
+    entries.extend(
+        _review_entry(entry)
+        for entry in atomize_session_entries(store)
+        if entry.status == "APPLIED"
+    )
     entries.extend(_review_entry(entry) for entry in comparison_session_entries(store))
     entries.extend(
         _review_entry(entry)
         for entry in (
             catalog_entry.picker_entry
             for catalog_entry in list_sever_session_catalog(SeverSessionStore(store))
+            if catalog_entry.picker_entry.status == "APPLIED"
         )
     )
     entries.extend(
@@ -183,6 +224,7 @@ def review_session_entries(store: MemoryStore) -> tuple[SessionPickerEntry, ...]
             )
         )
         for catalog_entry in list_meld_session_catalog(store)
+        if catalog_entry.status == "APPLIED"
     )
     update_entry = _saved_update_entry(store)
     if update_entry is not None:

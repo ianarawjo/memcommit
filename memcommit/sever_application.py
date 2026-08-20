@@ -350,19 +350,19 @@ def _validated_snapshot(
 
 @dataclass(frozen=True)
 class SeverSessionApplicationFlowPort:
-    """Adapt an accepted saved Sever review to the shared phase order.
+    """Adapt a decision-complete saved Sever session to shared phase order.
 
     Sever decisions and destination changes are already durable session
-    revisions before final acceptance. Consequently this adapter's review
+    revisions before final acceptance. Consequently this adapter's decision
     phase is intentionally an identity handoff: the command owns the visible
-    review loop, while this port preserves the exact accepted CAS snapshot for
+    decision loop, while this port preserves the exact accepted CAS snapshot for
     the existing require-new materialization transaction.
     """
 
     repository: SeverSessionRepository
     output_port: SeverOutputPort
 
-    def review(
+    def decide(
         self,
         prepared: SeverSessionSnapshot,
     ) -> SeverSessionSnapshot:
@@ -372,14 +372,14 @@ class SeverSessionApplicationFlowPort:
 
     def apply(
         self,
-        reviewed: SeverSessionSnapshot,
+        decided: SeverSessionSnapshot,
     ) -> SeverPersistedApplyResult:
         """Create the Result and commit its session receipt as one outcome."""
 
-        current = self.repository.load(reviewed.session.uid)
-        if current != reviewed:
+        current = self.repository.load(decided.session.uid)
+        if current != decided:
             raise SeverApplicationError(
-                "The Sever session changed before Apply. Reopen the review."
+                "The Sever session changed before Apply. Reopen its decisions."
             )
         if current.session.state == "APPLIED":
             return SeverPersistedApplyResult(

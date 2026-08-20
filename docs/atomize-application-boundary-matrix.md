@@ -52,8 +52,8 @@ exact opaque session revision
 typed Apply result or retained save-as state
         |
         v
-render command receipt (at most three complete split examples + typed
-review-finding counts + `mem review atomize` handoff)
+render compact command receipt (effect counts + typed unresolved-judgment
+count + receipt/checkpoint identities + `mem review atomize` handoff)
 ```
 
 `memcommit.atomize_application` owns provider-free response/Output edits and
@@ -102,10 +102,12 @@ pair publication, exact reanalysis pair-CAS, and synchronous restoration path. T
 - Atomize currently accepts local ordinary Contexts. Grant-aware readable
   Source and authority-owned mutation are not silently inferred from picker
   visibility and are not part of this application slice.
-- Bare `mem atomize` freezes the current ordinary Context, opens the complete
-  whole-Context analysis scope, and immediately requests in-place Apply. It
+- Ordinary `mem atomize`, with or without an explicit `--context`, freezes that
+  exact ordinary Context, opens the complete whole-Context analysis scope, and
+  immediately requests in-place Apply. It
   does not grant a launcher, workbench, or saved Output plan authority to
-  redirect that ordinary route. Explicit flags retain the advanced workflow.
+  redirect that ordinary route. `--sessions`, `--output`, `--memory`, and the
+  grounding actions retain the advanced workflow.
 - An applied terminal workbench plus its recognized checkpoint is sufficient
   to reopen the complete analysis in read-only Review after the live Context
   digest changed. It is not sufficient to edit a response or reapply the
@@ -116,8 +118,8 @@ pair publication, exact reanalysis pair-CAS, and synchronous restoration path. T
 | Case | Current effect | Evidence state | Extraction requirement |
 | --- | --- | --- | --- |
 | Preview or workbench open | Analysis/workbench artifacts only; no Context checkpoint | existing preview, workbench, and Study-prewarm tests | typed analysis result must remain non-applying |
-| Bare current-Context command | compatible complete analysis is created/reused and immediately applied in place; no launcher or workbench is opened | `test_bare_interactive_atomize_applies_the_current_context_without_a_session` | freeze current name, complete scope, and in-place Output before ordinary Apply |
-| Compact direct receipt | first three split sources and every child are shown with UID plus full safe text; remaining split count and typed review counts hand off to Review | `test_bare_atomize_receipt_samples_content_and_applied_review_remains_complete` | Memory has no separate name; presentation must not fabricate one, truncate the durable analysis, or imply findings were resolved |
+| Ordinary exact-Context command | compatible complete analysis is created/reused and immediately applied in place; no launcher or workbench is opened | bare and explicit-Context execution tests | freeze exact name, complete scope, and in-place Output before ordinary Apply |
+| Compact direct receipt | split/child/keep counts and unresolved-judgment count hand off to exact post-application Review; no Memory body is reprinted | compact receipt and applied Review tests | presentation must not truncate durable evidence, imply findings were resolved, or turn evidence into a post-success Viewer |
 | Applied Review reopen | complete analysis remains read-only and provider-free despite the post-split Context digest; each item title pairs source UID with its content preview | direct receipt/review and adapter tests | accept only exact terminal receipt/checkpoint evidence; reject response edits |
 | Close/cancel before final action | Saved review may remain; no Context effect | shared Resolution CLOSE and workbench persistence tests | application port must never be called |
 | Local current analysis, one or more splits | one in-place Context checkpoint, complete SPLIT/KEEP/PRESERVE trace | `test_saved_atomize_analysis_applies_once_with_recorded_lineage` | consume exact analysis and workbench revision |
@@ -272,3 +274,12 @@ explicit refresh, stale rejection, and analysis/workbench pair restoration.
 - no unification of structural Atomize and grounding-proposal schemas;
 - no conversion of pair-shaped conflicts into unary provider guidance; and
 - no expansion from local ordinary Contexts to Grant-authorized mutation.
+
+## 2026-08-20 execution-receipt migration
+
+Atomize execution now ends with effect counts, analysis/session receipt,
+checkpoint, post-application `mem review atomize`, and recovery. It no longer
+reprints sample split contents after Apply. Required responses remain owned by
+the Atomize invocation; Review accepts only an applied analysis and is
+read-only. This supersedes earlier wording that treated Review as an execution
+resume surface. The full analysis is retained, not discarded.

@@ -1,47 +1,47 @@
  [REVIEW] The source contains two independently revisable claims.                                                                                                                   
                                                                                                                                                                                     
-[7b9881b8] The Main Building entrance accepts a physical NFC card. | Mobile-app authentication is not accepted at that entrance.                                                    
+[6792dd09] The Main Building entrance accepts a physical NFC card. | Mobile-app authentication is not accepted at that entrance.                                                    
   CLASSIFICATION                                                                                                                                                                    
     COMPOSITE · 2 CHILDREN                                                                                                                                                          
   SOURCE MEMORY                                                                                                                                                                     
     SOURCE 1 · FROM atomize/direct-current                                                                                                                                          
-      [7b9881b8] The Main Building entrance accepts a physical NFC card. | Mobile-app authentication is not accepted at that entrance.                                              
+      [6792dd09] The Main Building entrance accepts a physical NFC card. | Mobile-app authentication is not accepted at that entrance.                                              
   WHY THIS MEMORY SPLIT                                                                                                                                                             
     The source contains two independently revisable claims.                                                                                                                         
   RESPONSES                                                                                                                                                                         
     RESPONSE                                                                                                                                                                        
       (none)                                                                                                                                                                        
   PROPOSED CHILDREN                                                                                                                                                                 
-[d355e1e6] The staff entrance uses the same physical NFC card. | Staff should not rely on mobile-app authentication.                                                                
+[073cab22] The staff entrance uses the same physical NFC card. | Staff should not rely on mobile-app authentication.                                                                
   CLASSIFICATION                                                                                                                                                                    
     COMPOSITE · 2 CHILDREN                                                                                                                                                          
   SOURCE MEMORY                                                                                                                                                                     
     SOURCE 1 · FROM atomize/direct-current                                                                                                                                          
-      [d355e1e6] The staff entrance uses the same physical NFC card. | Staff should not rely on mobile-app authentication.                                                          
+      [073cab22] The staff entrance uses the same physical NFC card. | Staff should not rely on mobile-app authentication.                                                          
   WHY THIS MEMORY SPLIT                                                                                                                                                             
     The source contains two independently revisable claims.                                                                                                                         
   RESPONSES                                                                                                                                                                         
     RESPONSE                                                                                                                                                                        
       (none)                                                                                                                                                                        
   PROPOSED CHILDREN                                                                                                                                                                 
-[1ed62304] The library opens at 10:00 on weekends. | The research desk closes at 16:00.                                                                                             
+[ea8a1b56] The library opens at 10:00 on weekends. | The research desk closes at 16:00.                                                                                             
   CLASSIFICATION                                                                                                                                                                    
     COMPOSITE · 2 CHILDREN                                                                                                                                                          
   SOURCE MEMORY                                                                                                                                                                     
     SOURCE 1 · FROM atomize/direct-current                                                                                                                                          
-      [1ed62304] The library opens at 10:00 on weekends. | The research desk closes at 16:00.                                                                                       
+      [ea8a1b56] The library opens at 10:00 on weekends. | The research desk closes at 16:00.                                                                                       
   WHY THIS MEMORY SPLIT                                                                                                                                                             
     The source contains two independently revisable claims.                                                                                                                         
   RESPONSES                                                                                                                                                                         
     RESPONSE                                                                                                                                                                        
       (none)                                                                                                                                                                        
   PROPOSED CHILDREN                                                                                                                                                                 
-[0fed81b1] The north elevator serves floors one through four. | The fifth floor requires the south elevator.                                                                        
+[01952b82] The north elevator serves floors one through four. | The fifth floor requires the south elevator.                                                                        
   CLASSIFICATION                                                                                                                                                                    
     COMPOSITE · 2 CHILDREN                                                                                                                                                          
   SOURCE MEMORY                                                                                                                                                                     
     SOURCE 1 · FROM atomize/direct-current                                                                                                                                          
-      [0fed81b1] The north elevator serves floors one through four. | The fifth floor requires the south elevator.                                                                  
+      [01952b82] The north elevator serves floors one through four. | The fifth floor requires the south elevator.                                                                  
   WHY THIS MEMORY SPLIT                                                                                                                                                             
     The source contains two independently revisable claims.                                                                                                                         
   RESPONSES                                                                                                                                                                         

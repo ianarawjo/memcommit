@@ -260,7 +260,7 @@ def test_report_places_context_locations_above_understanding_and_apply_last():
     assert "incoming -> baseline" not in rendered
     assert rendered.index("CONTEXT LOCATIONS") < rendered.index("WHAT MEM UNDERSTOOD")
     assert "SAVE LOCATION" not in rendered
-    assert "REVIEW AND APPLY" in rendered
+    assert "APPLY CONFIRMATION" in rendered
 
 
 def test_report_action_focus_includes_its_explanatory_paragraph():
@@ -276,11 +276,11 @@ def test_report_action_focus_includes_its_explanatory_paragraph():
     )
 
     assert any(
-        style == "class:viewer-section" and "REVIEW AND APPLY" in text
+        style == "class:viewer-section" and "APPLY CONFIRMATION" in text
         for style, text in fragments
     )
     assert any(
-        style == "class:viewer-body.focused" and "Enter to review" in text
+        style == "class:viewer-body.focused" and "Enter to confirm" in text
         for style, text in fragments
     )
 
@@ -1873,7 +1873,7 @@ def test_review_and_apply_requires_final_confirmation_and_can_go_back():
         focused_section=1,
     )
     rendered = "".join(text for _style, text in fragments)
-    assert "REVIEW AND APPLY" in rendered
+    assert "APPLY CONFIRMATION" in rendered
     assert "APPLY AS IS" in rendered
     assert "Esc/Backspace returns without applying." in rendered
     assert any(
@@ -2506,7 +2506,7 @@ def test_todo_derives_conflict_then_incorporate_then_apply_states():
     )
     assert incorporate.unresolved_item_uids == ()
     assert incorporate.detail == (
-        "INCORPORATE RESPONSES is available. Enter to review before anything changes."
+        "INCORPORATE RESPONSES is available. Enter to confirm the decided state."
     )
     incorporate_report = "".join(
         text
@@ -2517,7 +2517,7 @@ def test_todo_derives_conflict_then_incorporate_then_apply_states():
             review_and_apply=True,
         )
     )
-    assert "REVIEW AND APPLY" in incorporate_report
+    assert "APPLY CONFIRMATION" in incorporate_report
 
     apply_view = replace(
         open_view,
@@ -2595,7 +2595,7 @@ def test_todo_exposes_adapter_declared_apply_as_is_without_required_gate():
             review_and_apply=True,
         )
     )
-    assert "REVIEW AND APPLY" in report
+    assert "APPLY CONFIRMATION" in report
 
 
 def test_saved_response_uses_response_frame_and_todo_incorporation():

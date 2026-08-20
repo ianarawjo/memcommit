@@ -24,14 +24,12 @@ from memcommit.context import Context
 from memcommit.forget_application import (
     ForgetAnalysisRequest,
     ForgetApplyRequest,
-    ForgetRevisionRequest,
     ForgetSessionSnapshot,
     ForgetSourcePort,
     FrozenForgetSource,
     prepare_forget_snapshot,
     run_forget_analysis,
     run_forget_apply,
-    run_forget_revision,
 )
 from memcommit.forget_runtime import (
     MemoryStoreForgetSourcePort,
@@ -44,7 +42,7 @@ from memcommit.interfaces.tui.operations.forget import (
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.query_provider import CodexChatGPTProvider, QueryProviderError
-from memcommit.semantic.changes import EditChange, RemoveChange, ProposedChange
+from memcommit.semantic.changes import ProposedChange
 from memcommit.store import MemoryStore
 
 
@@ -78,7 +76,7 @@ def _forget_wait_view(ctx: Context, info: str) -> CommandWaitView:
             "INSTRUCTION",
             safe_terminal_text(info),
             "",
-            "The review report will replace this setup after the provider returns.",
+            "Execution decisions will replace this setup after the provider returns.",
         ]
     )
     return CommandWaitView(title="FORGET CONFIRMED INPUTS · READ-ONLY", text=text)
@@ -173,28 +171,6 @@ def _run_resolution_forget(
     )
 
 
-def _print_proposals(proposals: list[ProposedChange], query: str) -> None:
-    typer.echo()
-    typer.secho(f'Proposed changes for "{query}"', bold=True)
-    typer.echo("-" * 56)
-    if not proposals:
-        typer.secho("  (no changes proposed - nothing matched)", dim=True)
-        typer.echo("-" * 56)
-        return
-
-    for i, change in enumerate(proposals, 1):
-        if isinstance(change, RemoveChange):
-            typer.secho(f'  {i}  REMOVE  [{change.uid[:8]}]  "{change.content}"', fg=typer.colors.RED, bold=True)
-            typer.secho(f"       Reason: {change.reason}", dim=True)
-        elif isinstance(change, EditChange):
-            typer.secho(f'  {i}  EDIT    [{change.uid[:8]}]  "{change.old_content}"', fg=typer.colors.YELLOW, bold=True)
-            typer.secho(f'         -> "{change.new_content}"', fg=typer.colors.GREEN)
-            typer.secho(f"       Reason: {change.reason}", dim=True)
-        typer.echo()
-
-    typer.echo("-" * 56)
-
-
 def _run_interactive_forget_snapshot(
     source_port: ForgetSourcePort,
     request: ForgetAnalysisRequest,
@@ -211,7 +187,6 @@ def _run_interactive_forget_snapshot(
         )
     source = source_port.freeze(request)
     ctx = source.context
-    info = request.instruction
     typer.secho("Consulting the configured Forget provider...", dim=True)
     # The shared wait is intentionally silent outside a TTY, preserving the
     # stable redirected output while keeping one orchestration path.
@@ -225,40 +200,10 @@ def _run_interactive_forget_snapshot(
             provider_factory=provider_factory,
         ),
     )
-    snapshot = result.snapshot
-
-    while True:
-        proposals = snapshot.review.changes()
-        _print_proposals(proposals, info)
-
-        if not proposals:
-            typer.echo("Nothing to apply.")
-            return snapshot
-
-        n = len(proposals)
-        label = "change" if n == 1 else "changes"
-        typer.echo(f"Apply {'this' if n == 1 else 'these'} {n} {label}?")
-        typer.secho("  y = apply    n = abort    r = revise with feedback", dim=True)
-        decision = typer.prompt(">", default="", show_default=False).strip()
-
-        if decision.lower() in ("y", "yes"):
-            return snapshot
-
-        if decision.lower() in ("n", "no"):
-            typer.echo("Aborted - no changes made.")
-            return None
-
-        feedback = decision if not decision.lower().startswith("r") else ""
-        if not feedback:
-            feedback = typer.prompt("Describe what to change", default="", show_default=False).strip()
-        if not feedback:
-            continue
-
-        typer.secho("Revising with the configured Forget provider...", dim=True)
-        snapshot = run_forget_revision(
-            ForgetRevisionRequest(snapshot=snapshot, feedback=feedback),
-            provider_factory=provider_factory,
-        )
+    # An explicit non-interactive invocation already expresses Apply intent.
+    # Provider decisions remain internal staging and flow directly into the
+    # atomic mutation; detailed evidence is available from the receipt Review.
+    return result.snapshot
 
 
 def _run_interactive_forget(
@@ -420,12 +365,11 @@ def cmd(
     apply_receipt = result.receipt
     if not result.applied:
         annotate_command_outcome("NO_CHANGE")
-        if _interactive_terminal():
-            typer.echo(
-                "Forget complete · SOURCE "
-                f"{safe_terminal_text(apply_receipt.source_name)} · "
-                "no changes needed · Context unchanged · no checkpoint"
-            )
+        typer.echo(
+            "FORGET COMPLETE · SOURCE "
+            f"{safe_terminal_text(apply_receipt.source_name)}"
+        )
+        typer.echo("OUTCOME · NO CHANGE · Context unchanged · no checkpoint")
         return
 
     effects: list[str] = []
@@ -433,20 +377,25 @@ def cmd(
         effects.append(f"{apply_receipt.removed_count} removed")
     if apply_receipt.edited_count:
         effects.append(f"{apply_receipt.edited_count} edited")
-    if _interactive_terminal():
-        checkpoint_label = (
-            f" · checkpoint [{apply_receipt.checkpoint_uid[:8]}]"
-            if apply_receipt.checkpoint_uid is not None
-            else ""
-        )
-        recovery_label = (
-            " · recovery mem undo" if apply_receipt.undo_available else ""
-        )
-        typer.secho(
-            "Forget applied · SOURCE "
-            f"{safe_terminal_text(apply_receipt.source_name)} · "
-            f"{', '.join(effects)}{checkpoint_label}{recovery_label}",
-            fg=typer.colors.GREEN,
-        )
+    typer.secho(
+        "FORGET APPLIED · SOURCE "
+        f"{safe_terminal_text(apply_receipt.source_name)}",
+        fg=typer.colors.GREEN,
+        bold=True,
+    )
+    typer.echo(
+        f"EFFECTS · REMOVE {apply_receipt.removed_count} · "
+        f"EDIT {apply_receipt.edited_count}"
+    )
+    if apply_receipt.checkpoint_uid is not None:
+        typer.echo(f"RECEIPT · {apply_receipt.checkpoint_uid}")
+        typer.echo(f"CHECKPOINT · {apply_receipt.checkpoint_uid}")
+        if not apply_receipt.granted:
+            typer.echo(
+                "REVIEW · mem review forget --receipt "
+                f"{apply_receipt.checkpoint_uid}"
+            )
+    if apply_receipt.undo_available:
+        typer.echo("RECOVERY · mem undo")
     else:
-        typer.secho(f"Done: {', '.join(effects)}.", fg=typer.colors.GREEN)
+        typer.echo("RECOVERY · governed by the granted authority owner")
