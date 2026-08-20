@@ -1,0 +1,30 @@
+LIVE COLOR PTY · 52 180                                                                                                                                                             
+CURRENT CONTEXT · practice/source                                                                                                                                                   
+                                                                                                                                                                                    
+$ mem contexts                                                                                                                                                                      
+         practice                                                                                                                                                                   
+         practice/1                                                                                                                                                                 
+         practice/2                                                                                                                                                                 
+         practice/3                                                                                                                                                                 
+         practice/description                                                                                                                                                       
+*        practice/source                                                                                                                                                            
+         task-1                                                                                                                                                                     
+         task-1/description                                                                                                                                                         
+         task-1/participant                                                                                                                                                         
+         task-1/participant/construction-updates                                                                                                                                    
+         task-1/participant/construction-updates/building-access                                                                                                                    
+         task-1/participant/construction-updates/event-relocations                                                                                                                  
+         task-1/participant/construction-updates/facility-updates                                                                                                                   
+         task-1/participant/construction-updates/route-changes                                                                                                                      
+         task-1/participant/construction-updates/shop-updates                                                                                                                       
+         task-1/participant/construction-updates/temporary-parking                                                                                                                  
+  GRANT  task-1/campus-wiki  READ + QUERY + EDIT + DELETE + EXPORT · FROM study-20260819T175451Z-5ce5d722-granted-memory                                                            
+  GRANT  task-1/campus-wiki/building-access  READ + QUERY + EDIT + DELETE + EXPORT · FROM study-20260819T175451Z-5ce5d722-granted-memory                                            
+  GRANT  task-1/campus-wiki/construction-details  QUERY · FROM study-20260819T175451Z-5ce5d722-granted-memory                                                                       
+  GRANT  task-1/campus-wiki/event-relocations  READ + QUERY + EDIT + DELETE + EXPORT · FROM study-20260819T175451Z-5ce5d722-granted-memory                                          
+  GRANT  task-1/campus-wiki/facility-updates  READ + QUERY + EDIT + DELETE + EXPORT · FROM study-20260819T175451Z-5ce5d722-granted-memory                                           
+  GRANT  task-1/campus-wiki/route-changes  READ + QUERY + EDIT + DELETE + EXPORT · FROM study-20260819T175451Z-5ce5d722-granted-memory                                              
+  GRANT  task-1/campus-wiki/shop-updates  READ + QUERY + EDIT + DELETE + EXPORT · FROM study-20260819T175451Z-5ce5d722-granted-memory                                               
+  GRANT  task-1/campus-wiki/temporary-parking  READ + QUERY + EDIT + DELETE + EXPORT · FROM study-20260819T175451Z-5ce5d722-granted-memory                                          
+         task-2                                                                                                                                                                     
+         task-2/description

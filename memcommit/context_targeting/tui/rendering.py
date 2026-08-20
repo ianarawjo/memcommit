@@ -11,6 +11,7 @@ from memcommit.interfaces.console.text import (
 from memcommit.context_targeting.tui.tree import ContextTreeRow, ContextTreeState
 from memcommit.source_projection.presentation import (
     SourceDisplayValue,
+    SourceTokenRole,
     normalize_source_display_tokens,
 )
 from memcommit.source_projection.tui import render_source_display_tokens
@@ -61,17 +62,34 @@ def render_context_tree_rows(
             f"{'  ' * row.depth}{branch} "
         )
         value = f"{display_escape_text(row.name)}{display_escape_text(decoration.value_suffix)}"
-        annotation_tokens = normalize_source_display_tokens(decoration.annotation)
+        display_tokens = normalize_source_display_tokens(decoration.annotation)
+        ownership_tokens = tuple(
+            token for token in display_tokens if token.role is SourceTokenRole.OWNERSHIP
+        )
+        annotation_tokens = tuple(
+            token
+            for token in display_tokens
+            if token.role is not SourceTokenRole.OWNERSHIP
+        )
         if decoration.value_style is None:
-            fragments.append((decoration.cursor_style, prefix + value))
+            if ownership_tokens:
+                fragments.append((decoration.cursor_style, prefix))
+                fragments.extend(
+                    render_source_display_tokens(
+                        ownership_tokens,
+                        override_style=decoration.cursor_style,
+                    )
+                )
+                fragments.append((decoration.cursor_style, " " + value))
+            else:
+                fragments.append((decoration.cursor_style, prefix + value))
             annotation_style = decoration.cursor_style
         else:
-            fragments.extend(
-                (
-                    (decoration.cursor_style, prefix),
-                    (decoration.value_style, value),
-                )
-            )
+            fragments.append((decoration.cursor_style, prefix))
+            if ownership_tokens:
+                fragments.extend(render_source_display_tokens(ownership_tokens))
+                fragments.append((decoration.cursor_style, " "))
+            fragments.append((decoration.value_style, value))
             annotation_style = decoration.value_style
         if annotation_tokens:
             fragments.append((annotation_style, "  "))

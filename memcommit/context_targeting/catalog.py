@@ -5,20 +5,16 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from memcommit.profile_config import (
-    ProfileRegistry,
     load_profile_registry,
     profile_store_dir,
 )
-from memcommit.source_projection.model import context_access_facts
 from memcommit.source_projection.presentation import (
     SourceDisplayToken,
     SourceDisplayValue,
     SourceTokenRole,
     combine_source_display_tokens,
-    source_display_tokens,
 )
 from memcommit.store import MemoryStore
-from memcommit.study_operation_policy import analysis_boundary_label
 
 
 @dataclass(frozen=True)
@@ -36,40 +32,74 @@ class GrantedContextNavigation:
         return self.selectable_names
 
 
+_GRANT_NAVIGATION_CAPABILITY_ORDER = (
+    "READ",
+    "QUERY",
+    "EDIT",
+    "DELETE",
+    "EXPORT",
+    "SHARE",
+)
+
+
+def grant_navigation_capability_labels(
+    permissions: tuple[str, ...],
+) -> tuple[str, ...]:
+    """Project exact Grant atoms into the compact Context-navigation lens.
+
+    Context navigation distinguishes the operations a person can recognize at
+    a glance. The exact tuple remains on the Grant and remains authoritative;
+    dependent DERIVE, COMBINE, retention, and embedding atoms are deliberately
+    not duplicated in this orientation-only summary.
+    """
+
+    permission_set = frozenset(permissions)
+    enabled = {
+        "READ": "READ" in permission_set,
+        "QUERY": "QUERY" in permission_set,
+        # CREATE and UPDATE are the two ordinary content-editing capabilities.
+        # DELETE remains separate because it has a materially different risk.
+        "EDIT": bool(permission_set & {"CREATE", "UPDATE"}),
+        "DELETE": "DELETE" in permission_set,
+        "EXPORT": "EXPORT" in permission_set,
+        "SHARE": "SHARE" in permission_set,
+    }
+    labels = tuple(
+        label for label in _GRANT_NAVIGATION_CAPABILITY_ORDER if enabled[label]
+    )
+    if not labels:
+        raise ValueError("Grant navigation requires a visible capability.")
+    return labels
+
+
+def grant_navigation_capability_text(permissions: tuple[str, ...]) -> str:
+    """Return the compact, ordered capability cluster for one Grant row."""
+
+    return " + ".join(grant_navigation_capability_labels(permissions))
+
+
 def grant_navigation_annotation(
     permissions: tuple[str, ...],
 ) -> tuple[SourceDisplayToken, ...]:
-    """Render Grant authority through the application-wide source grammar."""
+    """Render ownership and compact capability facts for Context navigation."""
 
-    facts = context_access_facts(
-        granted=True,
-        permission="READ" if "READ" in permissions else "QUERY",
-        permissions=permissions,
+    # Keep ownership separate so every Context-tree renderer can place GRANT
+    # before the public name instead of hiding it in trailing metadata.
+    return (
+        SourceDisplayToken("GRANT", SourceTokenRole.OWNERSHIP),
+        SourceDisplayToken(
+            grant_navigation_capability_text(permissions),
+            SourceTokenRole.CAPABILITY,
+        ),
     )
-    return source_display_tokens(facts, include_permissions=True)
 
 
 def grant_navigation_display_annotation(
-    public_name: str,
     permissions: tuple[str, ...],
-    *,
-    registry: ProfileRegistry | None = None,
 ) -> SourceDisplayValue:
-    """Compose one public row from exact Grant permissions and analysis policy."""
+    """Compose one compact public row without weakening exact authorization."""
 
-    return combine_source_display_tokens(
-        grant_navigation_annotation(permissions),
-        SourceDisplayToken(
-            "ANALYSIS "
-            + analysis_boundary_label(
-                public_name,
-                granted=True,
-                readable="READ" in permissions,
-                registry=registry,
-            ),
-            SourceTokenRole.NOTE,
-        ),
-    )
+    return combine_source_display_tokens(grant_navigation_annotation(permissions))
 
 
 def freeze_granted_context_navigation(
@@ -103,9 +133,7 @@ def freeze_granted_context_navigation(
         if attachment.uid != grant.attachment_context_uid:
             continue
         annotation = grant_navigation_display_annotation(
-            grant.public_name,
             grant.permissions,
-            registry=registry,
         )
         if "READ" not in grant.permissions:
             # The public route is useful orientation, but its bindings would

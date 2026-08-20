@@ -1,0 +1,51 @@
+         task-3/local/guardrails                                                                                                                                                    
+         task-3/local/guardrails/approval-and-delivery                                                                                                                              
+         task-3/local/guardrails/audit-and-recovery                                                                                                                                 
+         task-3/local/guardrails/channel-and-format                                                                                                                                 
+         task-3/local/guardrails/downstream-use                                                                                                                                     
+         task-3/local/guardrails/evidence-and-uncertainty                                                                                                                           
+         task-3/local/guardrails/minimization-and-redaction                                                                                                                         
+         task-3/local/guardrails/privacy-and-others                                                                                                                                 
+         task-3/local/guardrails/purpose-and-scope                                                                                                                                  
+         task-3/local/guardrails/recipient-and-authority                                                                                                                            
+         task-3/local/guardrails/retention-and-revocation                                                                                                                           
+         task-3/local/personal-memory                                                                                                                                               
+         task-3/local/personal-memory/2024                                                                                                                                          
+         task-3/local/personal-memory/2024/01                                                                                                                                       
+         task-3/local/personal-memory/2024/02                                                                                                                                       
+         task-3/local/personal-memory/2024/03                                                                                                                                       
+         task-3/local/personal-memory/2024/04                                                                                                                                       
+         task-3/local/personal-memory/2024/05                                                                                                                                       
+         task-3/local/personal-memory/2024/06                                                                                                                                       
+         task-3/local/personal-memory/2024/07                                                                                                                                       
+         task-3/local/personal-memory/2024/08                                                                                                                                       
+         task-3/local/personal-memory/2024/09                                                                                                                                       
+         task-3/local/personal-memory/2024/10                                                                                                                                       
+         task-3/local/personal-memory/2024/11                                                                                                                                       
+         task-3/local/personal-memory/2024/12                                                                                                                                       
+         task-3/local/personal-memory/2025                                                                                                                                          
+         task-3/local/personal-memory/2025/01                                                                                                                                       
+         task-3/local/personal-memory/2025/02                                                                                                                                       
+         task-3/local/personal-memory/2025/03                                                                                                                                       
+         task-3/local/personal-memory/2025/04                                                                                                                                       
+         task-3/local/personal-memory/2025/05                                                                                                                                       
+         task-3/local/personal-memory/2025/06                                                                                                                                       
+         task-3/local/personal-memory/2025/07                                                                                                                                       
+         task-3/local/personal-memory/2025/08                                                                                                                                       
+         task-3/local/personal-memory/2025/09                                                                                                                                       
+         task-3/local/personal-memory/2025/10                                                                                                                                       
+         task-3/local/personal-memory/2025/11                                                                                                                                       
+         task-3/local/personal-memory/2025/12                                                                                                                                       
+         task-3/local/personal-memory/2026                                                                                                                                          
+         task-3/local/personal-memory/2026/01                                                                                                                                       
+         task-3/local/personal-memory/2026/02                                                                                                                                       
+         task-3/local/personal-memory/2026/03                                                                                                                                       
+         task-3/local/personal-memory/2026/04                                                                                                                                       
+         task-3/local/personal-memory/2026/05                                                                                                                                       
+         task-3/local/personal-memory/2026/06                                                                                                                                       
+  GRANT  task-3/government/healthcare-agent  SHARE · FROM study-20260819T175451Z-5ce5d722-granted-memory                                                                            
+  GRANT  task-3/remote/government/healthcare-agent/info-request/questions-and-answers  QUERY · FROM study-20260819T175451Z-5ce5d722-granted-memory                                  
+  GRANT  task-3/remote/government/healthcare-agent/info-request/transmission-guidance  READ + EXPORT · FROM study-20260819T175451Z-5ce5d722-granted-memory                          
+  GRANT  task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance  READ + EXPORT · FROM study-20260819T175451Z-5ce5d722-granted-memory          
+                                                                                                                                                                                    
+CONTEXTS COMPLETE · CURRENT UNCHANGED · practice/source

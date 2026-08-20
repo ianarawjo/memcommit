@@ -1,4 +1,10 @@
-# `mem contexts` read-only browser capture log
+# Historical `mem contexts` read-only browser capture log
+
+> Superseded on 2026-08-20. `mem contexts` now prints its stable catalog in
+> terminals and pipes alike; bare `mem switch` owns top-level interactive
+> Context navigation. These files retain the earlier browser experiment for
+> research history and are not current behavioral evidence. See
+> [`context-listing-design-rationale.md`](../../context-listing-design-rationale.md).
 
 This ordered capture records the ordinary `mem contexts` command using the
 same namespace tree as `mem switch`, while demonstrating that closing the

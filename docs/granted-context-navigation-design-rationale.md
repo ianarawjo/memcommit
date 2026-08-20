@@ -12,13 +12,35 @@ Task 2 workflow.
 
 ## Navigation contract
 
-- Every granted row displays its complete normalized permission tuple, such as
-  `[grant READ]`, `[grant CREATE + READ + UPDATE + DELETE + QUERY]`, or
-  `[grant QUERY + SAVE QUERY SESSION]`. This keeps the experimental condition
-  visible instead of collapsing several capabilities into an ambiguous edit
-  label. `SAVE QUERY SESSION` is the user-facing name for the persisted
-  `SESSION_LOG` permission; the friendlier label does not change serialized
-  grants or command authorization.
+- Every granted row puts a fixed `GRANT` ownership marker before its public
+  Context name. Position carries the primary safety meaning: the row is a view
+  of another Profile's Context, not a locally owned Context merely decorated
+  with extra metadata. The authority Profile remains visible after `FROM`.
+- Static `mem contexts` does not move those rows into a trailing Grant-only
+  block. It projects the combined frozen catalog in the same depth-first public
+  hierarchy as a fully expanded Switch tree, so one public name has one stable
+  neighborhood across the two commands. The explicit `GRANT` prefix remains
+  the ownership boundary.
+- Context navigation is an orientation surface, not a permission audit. Its
+  trailing capability cluster therefore projects the exact normalized Grant
+  into the compact vocabulary `READ`, `QUERY`, `EDIT`, `DELETE`, `EXPORT`, and
+  `SHARE`. `EDIT` summarizes ordinary `CREATE` or `UPDATE` capability while
+  `DELETE` remains explicit because of its different risk. Dependency atoms
+  such as `DERIVE`, `COMBINE`, `ACCEPT_DERIVED`, analysis retention, embedding,
+  and query-session retention remain on the exact Grant and remain mandatory
+  at execution, but are not repeated on every Context row. For example, the
+  study views render as `READ + QUERY + EDIT + DELETE + EXPORT`, `READ +
+  EXPORT`, or `QUERY` instead of printing the complete atomic tuple.
+- The capability cluster uses the shared teal source-capability style. The
+  `GRANT` marker and Context name stay neutral, except that the exact current
+  Context name and leading `*` retain the established green current treatment.
+  A single color for the cluster avoids making `DELETE` look executed or
+  `EDIT` look successful; focus still overrides the cluster in an interactive
+  picker.
+- An operation-owned selector may append the one extra capability that makes a
+  row usable in that operation. Embed setup, for example, appends `EMBED` only
+  to rows that passed its exact `EMBED` authorization check; the compact base
+  catalog itself does not imply that capability.
 - A granted `READ` Context and every READ-visible frozen descendant are
   selectable in `mem switch`. Selectability is derived from the structured
   `READ` permission, never by interpreting the user-facing annotation.
@@ -127,6 +149,11 @@ authorization receipt. Each consuming command freezes the current registry and
 authority identities for its own operation. A replacement grant with the same
 unambiguous public route can therefore become the newly resolved view; a stale
 or revoked route cannot continue exposing its earlier authority content.
+
+The compact navigation vocabulary is deliberately not reversible into the
+complete atomic permission tuple. Permission management and authorization
+receipts must continue to use the exact Grant record; no command may authorize
+an operation by parsing `mem contexts`, picker text, color, or compact labels.
 
 This change does not grant query permission to Advisor content and does not
 make proposal guidelines readable. It also does not add authority history,

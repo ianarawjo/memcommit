@@ -1,70 +1,67 @@
-import sys
-
 import typer
 
-from memcommit.context_targeting.tui.picker import choose_context, context_memory_rows
-from memcommit.authority.access import (
-    resolve_context_access,
-)
-from memcommit.commands.readable_context_catalog import (
-    freeze_profile_context_navigation,
-)
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
 from memcommit.context_targeting.catalog import (
     freeze_granted_context_navigation,
+    grant_navigation_capability_text,
 )
+from memcommit.context_targeting.resolution import order_context_names_by_hierarchy
+from memcommit.interfaces.console.theme import SOURCE_CAPABILITY_RGB
 from memcommit.profile_config import ProfileConfigError, load_profile_registry
 from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore
-from memcommit.source_projection.presentation import source_display_text
 
 
-def _interactive_terminal() -> bool:
-    return sys.stdin.isatty() and sys.stdout.isatty()
+_OWNED_PREFIX = "       "
 
 
-def _browse_contexts(
-    store: MemoryStore,
+def _context_name(name: str, *, current: bool) -> str:
+    label = display_escape_text(name)
+    if not current:
+        return label
+    return typer.style(label, fg=typer.colors.GREEN, bold=True)
+
+
+def _current_marker(current: bool) -> str:
+    if not current:
+        return "  "
+    return typer.style("* ", fg=typer.colors.GREEN, bold=True)
+
+
+def _owned_context_line(name: str, *, current: bool) -> str:
+    return (
+        _current_marker(current)
+        + _OWNED_PREFIX
+        + _context_name(
+            name,
+            current=current,
+        )
+    )
+
+
+def _granted_context_line(
+    name: str,
     *,
-    current: str | None,
-    names: list[str],
-) -> None:
-    """Open the shared Context tree without returning an executable target."""
-
-    granted_navigation = freeze_granted_context_navigation(store)
-    readable_names = set(names) | set(granted_navigation.selectable_names)
-    initial_name = current if current in readable_names else names[0]
-    initial_access = resolve_context_access(
-        store,
-        initial_name,
-        current_name=current,
-        required_permission="READ",
+    current: bool,
+    capabilities: str,
+    authority_profile: str,
+) -> str:
+    ownership = typer.style("GRANT", bold=True) + "  "
+    access = typer.style(
+        capabilities,
+        fg=SOURCE_CAPABILITY_RGB,
+        bold=True,
     )
-    navigation = freeze_profile_context_navigation(
-        store,
-        initial_access,
-        granted_navigation=granted_navigation,
-    )
-
-    def load_memories(context_name: str):
-        return context_memory_rows(navigation.catalog.load(context_name))
-
-    # The return value is intentionally discarded. Browse mode never produces
-    # a Context target, and this command has no state-writing continuation.
-    choose_context(
-        navigation.local_names,
-        current=initial_name,
-        title="Browse Contexts",
-        virtual_names=navigation.virtual_names,
-        selectable_virtual_names=navigation.selectable_virtual_names,
-        virtual_annotations=navigation.virtual_annotations,
-        memory_loader=load_memories,
-        browse_only=True,
-        initially_expand_selected=False,
-        initially_expand_all=False,
-        initially_show_memories=False,
+    return (
+        _current_marker(current)
+        + ownership
+        + _context_name(name, current=current)
+        + "  "
+        + access
+        + " · FROM "
+        + display_escape_text(authority_profile)
     )
 
 
@@ -77,34 +74,13 @@ def cmd() -> None:
     if not names:
         typer.echo("No contexts yet. Run 'mem init <name>' to create one.")
         return
-    if _interactive_terminal():
-        try:
-            _browse_contexts(
-                store,
-                current=current,
-                names=names,
-            )
-        except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
-            typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
-            raise typer.Exit(1)
-        return
-
     try:
         granted_navigation = freeze_granted_context_navigation(store)
         virtual_names = granted_navigation.names
-        annotations = granted_navigation.annotations
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
         typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
 
-    # Noninteractive output remains a stable, line-oriented catalog for pipes,
-    # test runners, and agents that cannot drive the full-screen browser.
-    for name in names:
-        label = display_escape_text(name)
-        if name == current:
-            typer.secho(f"* {label}", fg=typer.colors.GREEN, bold=True)
-        else:
-            typer.echo(f"  {label}")
     try:
         registry = load_profile_registry()
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
@@ -117,8 +93,16 @@ def cmd() -> None:
         if grant.grantee_profile_uid == registry.active.uid
     )
     local_names = frozenset(names)
-    for name in virtual_names:
+    public_names = order_context_names_by_hierarchy(
+        (*names, *(name for name in virtual_names if name not in local_names))
+    )
+    # Contexts is an orientation command, so a terminal receives the same
+    # stable catalog as a pipe. Project the local-plus-Grant snapshot through
+    # the same public-name hierarchy as Switch instead of creating a second,
+    # ownership-grouped ordering; the GRANT prefix carries ownership meaning.
+    for name in public_names:
         if name in local_names:
+            typer.echo(_owned_context_line(name, current=name == current))
             continue
         candidates = tuple(
             grant
@@ -131,18 +115,10 @@ def cmd() -> None:
             candidates,
             key=lambda grant: len(grant.public_name.split("/")),
         )
-        annotation = (
-            source_display_text(annotations[name])
-            + " · FROM "
-            + display_escape_text(profiles[effective.authority_profile_uid])
+        line = _granted_context_line(
+            name,
+            current=name == current,
+            capabilities=grant_navigation_capability_text(effective.permissions),
+            authority_profile=profiles[effective.authority_profile_uid],
         )
-        line = (
-            ("* " if name == current else "  ")
-            + display_escape_text(name)
-            + "  "
-            + annotation
-        )
-        if name == current:
-            typer.secho(line, fg=typer.colors.GREEN, bold=True)
-        else:
-            typer.echo(line)
+        typer.echo(line)

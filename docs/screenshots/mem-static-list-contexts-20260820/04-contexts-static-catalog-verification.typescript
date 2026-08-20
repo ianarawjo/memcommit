@@ -1,0 +1,121 @@
+LIVE COLOR PTY · 52 180
+CURRENT CONTEXT · practice/source
+
+$ mem contexts
+         practice
+         practice/1
+         practice/2
+         practice/3
+         practice/description
+[32m[1m* [0m       [32m[1mpractice/source[0m
+         task-1
+         task-1/description
+         task-1/participant
+         task-1/participant/construction-updates
+         task-1/participant/construction-updates/building-access
+         task-1/participant/construction-updates/event-relocations
+         task-1/participant/construction-updates/facility-updates
+         task-1/participant/construction-updates/route-changes
+         task-1/participant/construction-updates/shop-updates
+         task-1/participant/construction-updates/temporary-parking
+  [38;2;244;245;247m[1mGRANT[0m  task-1/campus-wiki  [38;2;139;213;202m[1mREAD + QUERY + EDIT + DELETE + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-1/campus-wiki/building-access  [38;2;139;213;202m[1mREAD + QUERY + EDIT + DELETE + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-1/campus-wiki/construction-details  [38;2;139;213;202m[1mQUERY[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-1/campus-wiki/event-relocations  [38;2;139;213;202m[1mREAD + QUERY + EDIT + DELETE + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-1/campus-wiki/facility-updates  [38;2;139;213;202m[1mREAD + QUERY + EDIT + DELETE + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-1/campus-wiki/route-changes  [38;2;139;213;202m[1mREAD + QUERY + EDIT + DELETE + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-1/campus-wiki/shop-updates  [38;2;139;213;202m[1mREAD + QUERY + EDIT + DELETE + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-1/campus-wiki/temporary-parking  [38;2;139;213;202m[1mREAD + QUERY + EDIT + DELETE + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+         task-2
+         task-2/description
+         task-2/participant
+         task-2/participant/proposal-workspace
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor1  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor1/budget  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor1/claim-evidence  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor1/compensation  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor1/emphasis  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor1/ethics  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor1/evaluation  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor1/expression  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor1/feasibility  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor1/methods  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor1/reproducibility  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor1/review  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor1/safety  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor1/scope  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor1/structure  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor1/style  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor1/terminology  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor2  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor2/budget  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor2/claim-evidence  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor2/compensation  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor2/emphasis  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor2/ethics  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor2/evaluation  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor2/expression  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor2/feasibility  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor2/methods  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor2/reproducibility  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor2/review  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor2/safety  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor2/scope  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor2/structure  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor2/style  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/advisor2/terminology  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-2/proposal-submission-guidelines  [38;2;139;213;202m[1mQUERY[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+         task-3
+         task-3/description
+         task-3/local
+         task-3/local/guardrails
+         task-3/local/guardrails/approval-and-delivery
+         task-3/local/guardrails/audit-and-recovery
+         task-3/local/guardrails/channel-and-format
+         task-3/local/guardrails/downstream-use
+         task-3/local/guardrails/evidence-and-uncertainty
+         task-3/local/guardrails/minimization-and-redaction
+         task-3/local/guardrails/privacy-and-others
+         task-3/local/guardrails/purpose-and-scope
+         task-3/local/guardrails/recipient-and-authority
+         task-3/local/guardrails/retention-and-revocation
+         task-3/local/personal-memory
+         task-3/local/personal-memory/2024
+         task-3/local/personal-memory/2024/01
+         task-3/local/personal-memory/2024/02
+         task-3/local/personal-memory/2024/03
+         task-3/local/personal-memory/2024/04
+         task-3/local/personal-memory/2024/05
+         task-3/local/personal-memory/2024/06
+         task-3/local/personal-memory/2024/07
+         task-3/local/personal-memory/2024/08
+         task-3/local/personal-memory/2024/09
+         task-3/local/personal-memory/2024/10
+         task-3/local/personal-memory/2024/11
+         task-3/local/personal-memory/2024/12
+         task-3/local/personal-memory/2025
+         task-3/local/personal-memory/2025/01
+         task-3/local/personal-memory/2025/02
+         task-3/local/personal-memory/2025/03
+         task-3/local/personal-memory/2025/04
+         task-3/local/personal-memory/2025/05
+         task-3/local/personal-memory/2025/06
+         task-3/local/personal-memory/2025/07
+         task-3/local/personal-memory/2025/08
+         task-3/local/personal-memory/2025/09
+         task-3/local/personal-memory/2025/10
+         task-3/local/personal-memory/2025/11
+         task-3/local/personal-memory/2025/12
+         task-3/local/personal-memory/2026
+         task-3/local/personal-memory/2026/01
+         task-3/local/personal-memory/2026/02
+         task-3/local/personal-memory/2026/03
+         task-3/local/personal-memory/2026/04
+         task-3/local/personal-memory/2026/05
+         task-3/local/personal-memory/2026/06
+  [38;2;244;245;247m[1mGRANT[0m  task-3/government/healthcare-agent  [38;2;139;213;202m[1mSHARE[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-3/remote/government/healthcare-agent/info-request/questions-and-answers  [38;2;139;213;202m[1mQUERY[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-3/remote/government/healthcare-agent/info-request/transmission-guidance  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+  [38;2;244;245;247m[1mGRANT[0m  task-3/remote/government/healthcare-agent/info-request/transmission-guidance/public-guidance  [38;2;139;213;202m[1mREAD + EXPORT[0m · FROM study-20260819T175451Z-5ce5d722-granted-memory
+
+CONTEXTS COMPLETE · CURRENT UNCHANGED · practice/source

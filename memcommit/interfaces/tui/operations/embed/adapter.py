@@ -12,6 +12,11 @@ from memcommit.context_targeting.catalog import freeze_granted_context_navigatio
 from memcommit.embed_runtime import MemoryStoreEmbedPort
 from memcommit.interfaces.tui.operations.embed.model import EmbedTuiSetup
 from memcommit.interfaces.tui.operations.embed.screen import run_embed_tui
+from memcommit.source_projection.presentation import (
+    SourceDisplayToken,
+    SourceTokenRole,
+    combine_source_display_tokens,
+)
 
 
 def build_embed_tui_setup(port: MemoryStoreEmbedPort) -> EmbedTuiSetup:
@@ -21,9 +26,10 @@ def build_embed_tui_setup(port: MemoryStoreEmbedPort) -> EmbedTuiSetup:
     navigation = freeze_granted_context_navigation(port.store)
     child_names = tuple(sorted(set(local_names) | set(navigation.names)))
     selectable = set(local_names)
+    annotations = dict(navigation.annotations)
     for name in navigation.names:
         try:
-            resolve_context_access(
+            access = resolve_context_access(
                 port.store,
                 name,
                 current_name=port.current_context_name,
@@ -32,6 +38,13 @@ def build_embed_tui_setup(port: MemoryStoreEmbedPort) -> EmbedTuiSetup:
         except (FileNotFoundError, RuntimeError, ValueError):
             continue
         selectable.add(name)
+        if access.is_granted:
+            # Navigation stays compact, while this operation-owned selector
+            # names the extra capability that makes the row selectable here.
+            annotations[name] = combine_source_display_tokens(
+                annotations[name],
+                SourceDisplayToken("EMBED", SourceTokenRole.CAPABILITY),
+            )
     return EmbedTuiSetup(
         child_names=child_names,
         child_selectable_names=frozenset(selectable),
@@ -42,9 +55,7 @@ def build_embed_tui_setup(port: MemoryStoreEmbedPort) -> EmbedTuiSetup:
             if port.current_context_name in local_names
             else None
         ),
-        child_annotations=tuple(
-            (name, navigation.annotations[name]) for name in navigation.names
-        ),
+        child_annotations=tuple((name, annotations[name]) for name in navigation.names),
     )
 
 

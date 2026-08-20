@@ -1,4 +1,10 @@
-# Profile-wide List and Context browser capture log
+# Historical Profile-wide List and Context browser capture log
+
+> Superseded on 2026-08-20. List and Contexts now print terminal-independent
+> reports; bare Switch owns top-level interactive Context navigation. This
+> ordered set remains as evidence of the rejected Profile-wide browser
+> experiment. See
+> [`context-listing-design-rationale.md`](../../context-listing-design-rationale.md).
 
 This ordered capture verifies that interactive List and Context browsing use
 the complete Profile catalog used by Switch. A supplied or current Context is

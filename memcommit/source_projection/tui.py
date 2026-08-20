@@ -12,7 +12,9 @@ from memcommit.source_projection.presentation import (
 
 
 _TOKEN_STYLES = {
+    SourceTokenRole.OWNERSHIP: "class:source-ownership",
     SourceTokenRole.ACCESS: "class:source-access",
+    SourceTokenRole.CAPABILITY: "class:source-capability",
     SourceTokenRole.REACH: "class:source-reach",
     SourceTokenRole.FORM: "class:reference",
     SourceTokenRole.STATE: "class:source-state",

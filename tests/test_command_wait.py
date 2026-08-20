@@ -112,9 +112,7 @@ def test_default_context_browser_includes_opaque_grant_routes(monkeypatch):
             names=("public/readable", "public/query"),
             annotations={
                 "public/readable": grant_navigation_annotation(("READ",)),
-                "public/query": grant_navigation_annotation(
-                    ("QUERY", "SESSION_LOG")
-                ),
+                "public/query": grant_navigation_annotation(("QUERY", "SESSION_LOG")),
             },
             selectable_names=frozenset({"public/readable"}),
         ),
@@ -126,7 +124,7 @@ def test_default_context_browser_includes_opaque_grant_routes(monkeypatch):
     assert browser.names == ("local", "public/query", "public/readable")
     assert browser.readable_names == frozenset({"local", "public/readable"})
     assert source_display_text(browser.annotations["public/query"]) == (
-        "QUERY GRANT · PERMISSIONS QUERY + SAVE QUERY SESSION · UNAVAILABLE"
+        "GRANT · QUERY · UNAVAILABLE"
     )
     assert browser.memory_loader is not None
     try:

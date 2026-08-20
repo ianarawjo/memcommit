@@ -1,5 +1,4 @@
 import shutil
-import sys
 from typing import Annotated, Literal, Optional
 
 import typer
@@ -31,16 +30,7 @@ from memcommit.authority.access import (
     resolve_context_access,
     revalidate_granted_context_binding,
 )
-from memcommit.commands.readable_context_catalog import (
-    freeze_profile_context_navigation,
-    freeze_readable_context_catalog,
-)
-from memcommit.context_targeting.tui.picker import (
-    ContextMemoryRow,
-    ContextTree,
-    choose_context,
-    context_memory_rows,
-)
+from memcommit.commands.readable_context_catalog import freeze_readable_context_catalog
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
@@ -56,7 +46,6 @@ from memcommit.source_projection.model import (
     SourceState,
 )
 from memcommit.source_projection.presentation import (
-    SourceDisplayValue,
     source_annotation_text,
     source_display_text,
     source_object_label,
@@ -67,10 +56,6 @@ _LIST_SNAPSHOT_VERSION = 2
 _GRANTED_LIST_RECEIPT_VERSION = 1
 _MemoryLayout = Literal["hanging", "inline"]
 _MIN_HANGING_CONTENT_WIDTH = 20
-
-
-def _interactive_terminal() -> bool:
-    return sys.stdin.isatty() and sys.stdout.isatty()
 
 
 def _one_line(content: str) -> str:
@@ -347,134 +332,6 @@ def _snapshot_context(
             ancestors=frozenset({ctx.uid}),
         ),
     }
-
-
-def _snapshot_memory_rows(
-    snapshot: dict[str, object],
-) -> tuple[ContextMemoryRow, ...]:
-    """Adapt only direct Memory occurrences to the shared tree presentation."""
-
-    rows: list[ContextMemoryRow] = []
-    for item in _require_items(snapshot.get("items")):
-        kind = _require_string(item, "kind")
-        uid = _require_string(item, "uid")
-        if kind == "memory":
-            rows.append(
-                ContextMemoryRow(
-                    uid[:8],
-                    _require_string(item, "content"),
-                    source=SourceDisplayFacts(form=SourceForm.MEMORY),
-                )
-            )
-        elif kind in {"memory_ref", "memory_snapshot_ref"}:
-            content = item.get("resolved_content")
-            target_name = _require_string(item, "target_context_name")
-            form = (
-                SourceForm.MEMORY_REFERENCE
-                if kind == "memory_snapshot_ref"
-                else SourceForm.MEMORY_EMBED
-            )
-            rows.append(
-                ContextMemoryRow(
-                    uid[:8],
-                    content
-                    if isinstance(content, str)
-                    else target_name,
-                    source=SourceDisplayFacts(
-                        form=form,
-                        states=(
-                            (SourceState.READ_ONLY,)
-                            if isinstance(content, str)
-                            else (SourceState.DANGLING,)
-                        ),
-                    ),
-                )
-            )
-    return tuple(rows)
-
-
-def _snapshot_browser_tree(
-    snapshot: dict[str, object],
-) -> tuple[
-    ContextTree,
-    tuple[str, ...],
-    tuple[str, ...],
-    dict[str, str],
-    dict[str, SourceDisplayValue],
-    dict[str, SourceDisplayValue],
-    dict[str, tuple[ContextMemoryRow, ...]],
-]:
-    """Adapt the frozen recursive occurrence graph to the common tree UI.
-
-    Occurrence IDs, rather than Context names, preserve repeated embeds and
-    cycles. They remain process-local and are never returned as locators.
-    """
-
-    root = _require_record(snapshot.get("context"))
-    root_name = _require_string(root, "name")
-    root_id = "occurrence:0"
-    ordered: list[str] = [root_id]
-    virtual: list[str] = []
-    children: dict[str, tuple[str, ...]] = {}
-    parents: dict[str, str | None] = {root_id: None}
-    labels = {root_id: root_name}
-    local_annotations: dict[str, SourceDisplayValue] = {}
-    virtual_annotations: dict[str, SourceDisplayValue] = {}
-    memories: dict[str, tuple[ContextMemoryRow, ...]] = {}
-
-    def visit(parent_id: str, items: list[dict[str, object]]) -> None:
-        memories[parent_id] = _snapshot_memory_rows({"items": items})
-        child_ids: list[str] = []
-        contexts, _ = _group_snapshot_items(items)
-        for index, item in enumerate(contexts):
-            kind = _require_string(item, "kind")
-            child_id = f"{parent_id}/{index}"
-            child_ids.append(child_id)
-            ordered.append(child_id)
-            parents[child_id] = parent_id
-            if kind == "query_context_ref":
-                labels[child_id] = _require_string(item, "name")
-                virtual_annotations[child_id] = SourceDisplayFacts(
-                    form=SourceForm.QUERY_VIEW,
-                )
-                virtual.append(child_id)
-                children[child_id] = ()
-                continue
-            labels[child_id] = _require_string(item, "name")
-            cycle = _require_bool(item, "cycle")
-            local_annotations[child_id] = SourceDisplayFacts(
-                reach=(
-                    SourceReach.VIA_EMBED
-                    if kind == "context"
-                    else SourceReach.DESCENDANT
-                ),
-                states=(SourceState.CYCLE,) if cycle else (),
-            )
-            if cycle:
-                child_items: list[dict[str, object]] = []
-            else:
-                value = item.get("children")
-                child_items = [] if value is None else _require_items(value)
-            visit(child_id, child_items)
-        children[parent_id] = tuple(child_ids)
-
-    visit(root_id, _require_items(snapshot.get("items")))
-    materialized = tuple(name for name in ordered if name not in set(virtual))
-    tree = ContextTree(
-        roots=(root_id,),
-        children_by_name=children,
-        parent_by_name=parents,
-        materialized_names=frozenset(materialized),
-    )
-    return (
-        tree,
-        materialized,
-        tuple(virtual),
-        labels,
-        local_annotations,
-        virtual_annotations,
-        memories,
-    )
 
 
 def _snapshot_error() -> ValueError:
@@ -1003,8 +860,7 @@ def cmd(
         typer.Argument(
             help=(
                 "Existing Context to list by canonical name or explicit "
-                "relative locator; omit to enter the current Context browser "
-                "in a TTY or print it otherwise"
+                "relative locator; omit to list the current Context"
             )
         ),
     ] = None,
@@ -1190,42 +1046,6 @@ def cmd(
         context_names=context_names,
         recursive=recursive,
     )
-    if (
-        not copy_result
-        and _interactive_terminal()
-    ):
-        navigation = freeze_profile_context_navigation(active_store, access)
-        materialized_navigation_names = (
-            set(navigation.local_names)
-            | set(navigation.selectable_virtual_names)
-        )
-        target_memory_contexts = frozenset(
-            name
-            for name in materialized_navigation_names
-            if name == access.display_name
-            or (recursive and name.startswith(access.display_name + "/"))
-        )
-
-        choose_context(
-            navigation.local_names,
-            current=access.display_name,
-            title=f"List · {access.display_name}",
-            virtual_names=navigation.virtual_names,
-            selectable_virtual_names=navigation.selectable_virtual_names,
-            virtual_annotations=navigation.virtual_annotations,
-            memory_loader=lambda name: context_memory_rows(
-                navigation.catalog.load(name)
-            ),
-            browse_only=True,
-            initially_expand_selected=not recursive,
-            initially_expand_all=False,
-            initially_expand_subtree_root=(
-                access.display_name if recursive else None
-            ),
-            initially_show_memories=False,
-            initially_show_memory_contexts=target_memory_contexts,
-        )
-        return
     annotated_text = _render_snapshot(
         snapshot,
         with_ids=True,

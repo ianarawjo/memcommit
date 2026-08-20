@@ -3,7 +3,10 @@
 import pytest
 
 from memcommit.context_targeting.model import ContextScope, DirectMemoryTarget
-from memcommit.context_targeting.resolution import expand_lexical_context_names
+from memcommit.context_targeting.resolution import (
+    expand_lexical_context_names,
+    order_context_names_by_hierarchy,
+)
 from memcommit.context_targeting.loading import load_context_scope
 from memcommit.context_targeting.tui.reach import (
     ContextReachState,
@@ -21,6 +24,7 @@ from memcommit.context_targeting.tui.memory_selection import (
 from memcommit.context_targeting.tui.tree import (
     build_context_tree,
     context_subtree_names,
+    visible_context_rows,
 )
 
 
@@ -40,6 +44,33 @@ def test_lexical_scope_expansion_deduplicates_overlapping_targets():
         scope,
         ("other", "task/child", "task/child/deep", "task/peer"),
     ) == ("task", "task/child", "task/child/deep", "task/peer")
+
+
+def test_public_catalog_order_matches_a_fully_expanded_context_tree():
+    catalog = (
+        "practice",
+        "task-1",
+        "task-1/description",
+        "task-2",
+        "task-1/campus-wiki",
+        "task-1/campus-wiki/public",
+        "external",
+    )
+    ordered = order_context_names_by_hierarchy(catalog)
+    tree = build_context_tree(catalog)
+
+    assert ordered == (
+        "practice",
+        "task-1",
+        "task-1/description",
+        "task-1/campus-wiki",
+        "task-1/campus-wiki/public",
+        "task-2",
+        "external",
+    )
+    assert tuple(
+        row.name for row in visible_context_rows(tree, tree.expandable_names)
+    ) == ordered
 
 
 def test_context_scope_rejects_non_boolean_descendant_policy():

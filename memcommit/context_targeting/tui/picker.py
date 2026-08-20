@@ -73,6 +73,7 @@ from memcommit.source_projection.model import (
 )
 from memcommit.source_projection.presentation import (
     SourceDisplayValue,
+    SourceTokenRole,
     normalize_source_display_tokens,
     source_annotation_tokens,
     source_object_label,
@@ -437,22 +438,42 @@ def render_context_options(
         annotation = (annotations or {}).get(row.name)
         if annotation is None and not row.materialized:
             annotation = SourceDisplayFacts(states=(SourceState.UNAVAILABLE,))
-        annotation_tokens = normalize_source_display_tokens(annotation)
+        display_tokens = normalize_source_display_tokens(annotation)
+        ownership_tokens = tuple(
+            token for token in display_tokens if token.role is SourceTokenRole.OWNERSHIP
+        )
+        annotation_tokens = tuple(
+            token
+            for token in display_tokens
+            if token.role is not SourceTokenRole.OWNERSHIP
+        )
         display_name = (display_names or {}).get(row.name, row.name)
         # Keep raw names in the tree for identity and return only an escaped
         # label to prompt-toolkit; selection never returns presentation text.
-        fragments.append(
-            (
-                style,
-                navigable_tree_row_prefix(
-                    selected=is_selected,
-                    current=is_current,
-                    depth=row.depth,
-                    branch=branch,
-                )
-                + display_escape_text(display_name),
-            )
+        prefix = navigable_tree_row_prefix(
+            selected=is_selected,
+            current=is_current,
+            depth=row.depth,
+            branch=branch,
         )
+        if ownership_tokens:
+            fragments.append((style, prefix))
+            fragments.extend(
+                render_source_display_tokens(
+                    ownership_tokens,
+                    override_style=style,
+                )
+            )
+            fragments.append((style, " "))
+            fragments.append(
+                (
+                    # The shared focus bar must remain the only active color.
+                    style or "class:report-neutral",
+                    display_escape_text(display_name),
+                )
+            )
+        else:
+            fragments.append((style, prefix + display_escape_text(display_name)))
         if annotation_tokens:
             fragments.append((style, "  "))
             fragments.extend(

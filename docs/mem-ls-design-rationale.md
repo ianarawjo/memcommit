@@ -322,52 +322,28 @@ root -> left  -> shared
 valid embed paths. A global "visited" set would incorrectly suppress the
 second path.
 
-## 10. Interactive terminal browser
+## 10. Terminal-independent listing
 
-With interactive stdin and stdout, and without `--copy` or `--paste`,
-`mem list` or `mem ls` opens the shared Context tree as a read-only browser
-over the complete Profile navigation catalog used by `mem switch`. The exact
-resolved target is the initial focused row, not the root or visibility boundary
-of the tree. This prevents a nested current Context from hiding its ancestors,
-siblings, other local roots, readable Grant rows, or opaque QUERY-only routes.
-Direct Memory and MemoryRef rows start visible only for the resolved target,
-or for its selected subtree under `-R`; unrelated Profile rows remain collapsed
-and unread until explicitly opened. Lowercase `m` hides or restores them for
-the focused Context, while uppercase `M` operates on all Contexts. Neither makes
-Memory rows selectable. Enter opens or
-collapses the focused Context, arrows navigate one depth at a time, `A`
-toggles full expansion, and `q` closes without changing any Context or current
-pointer. A Context leaf is still expandable: its `▸`/`▾` marker, Enter, and
-Left/Right keys control its direct-Memory rows rather than leaving it as a
-non-actionable dot.
+`mem list` and `mem ls` always render the frozen target-rooted snapshot. A
+terminal does not open a second Profile-wide browser. Bare List resolves the
+current Context; an explicit operand resolves that Context; `-r` / `-R`
+expands the same recursive namespace and embed scope represented in the
+output.
 
-Plain `mem list` starts with the target's direct Context children visible.
-`mem list -R` starts with the target's lexical descendant subtree expanded,
-while the rest of the Profile remains available for orientation. It does not
-eagerly expand the whole Profile. The TUI tree is reconstructed from the same
-ordinary and granted public-name catalogs as Switch; a QUERY-only route is an
-opaque nonmaterialized row and is never passed to the Memory loader.
+This keeps visible navigation equal to requested scope. The earlier browser
+experiment showed unrelated Profile roots beside one exact List result, so a
+person could not tell whether List described the current Context or offered a
+Profile navigation action. Dim or grayscale styling would only weaken those
+rows visually while leaving the competing scope in place. Interactive Profile
+navigation now belongs to bare `mem switch`.
 
-The stable noninteractive renderer, `--copy`, and `--paste` retain the exact
-target-rooted snapshot contract. That snapshot continues to preserve embedded
-Context occurrences, repeated embeds, cycles, MemoryRef resolution, and opaque
-query pointers. Profile-wide navigation is therefore a presentation contract,
-not a silent broadening of a list receipt or copied scope.
-
-The tree interaction and Profile catalog are deliberately shared with
-`mem contexts` and the bare `mem switch` picker; command meaning comes from the
-initial row, presentation options, and continuation, not from a separate key
-grammar. `mem contexts` enters with Memories hidden, `mem list` enters with the
-resolved target focused and direct Memories visible, and `mem switch` consumes
-an accepted Context as a state-changing target. Opaque Grant rows remain
-virtual annotations, so catalog visibility never becomes READ permission.
-
-Noninteractive stdout retains the stable text format for scripts, tests, and
-agents. `--copy`, `--with-ids`, and `--paste` also retain their existing text
-and structured-snapshot contract even in a terminal; clipboard commands never
-open the browser. Grant resolution happens before presentation, and the
-browser consumes only the authorized frozen projection. It never opens a
-query-only source.
+TTY and non-TTY output therefore share the same text format, authorization,
+and snapshot construction. Embedded Context occurrences, repeated embeds,
+cycles, MemoryRef resolution, opaque query pointers, and readable granted
+descendants continue to use the existing snapshot contract. `--copy`,
+`--with-ids`, and `--paste` are unchanged and never depend on terminal state.
+The cross-command rationale is recorded in
+[`context-listing-design-rationale.md`](context-listing-design-rationale.md).
 
 ## 11. Relationship to `mem show`
 

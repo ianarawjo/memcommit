@@ -486,21 +486,35 @@ def test_init_study_selects_the_initialized_complete_profile(
     assert "Already using profile 'profile-view'." in selected.output
     contexts = _subprocess_mem(tmp_path, "contexts")
     assert contexts.returncode == 0, contexts.stderr
-    assert "* practice" in contexts.stdout
+    assert "*        practice" in contexts.stdout
     assert "task-1/participant/construction-updates" in contexts.stdout
     assert "task-1/campus-wiki" in contexts.stdout
     assert (
-        "READ GRANT · PERMISSIONS CREATE + READ + EMBED + UPDATE + DELETE + QUERY + "
-        "DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + "
-        "SAVE_ANALYSIS"
+        "GRANT  task-1/campus-wiki  READ + QUERY + EDIT + DELETE + EXPORT"
         in contexts.stdout
     )
     assert "task-1/campus-wiki/construction-details" in contexts.stdout
-    assert (
-        "QUERY GRANT · PERMISSIONS QUERY + SAVE QUERY SESSION" in contexts.stdout
-    )
+    assert "GRANT  task-1/campus-wiki/construction-details  QUERY" in contexts.stdout
+    assert "PERMISSIONS" not in contexts.stdout
     assert "FROM profile-view-granted-memory" in contexts.stdout
     assert "authoring-notes" not in contexts.stdout
+    context_lines = contexts.stdout.splitlines()
+    participant_index = next(
+        index
+        for index, line in enumerate(context_lines)
+        if line.strip() == "task-1/participant"
+    )
+    campus_index = next(
+        index
+        for index, line in enumerate(context_lines)
+        if "GRANT  task-1/campus-wiki  " in line
+    )
+    task_two_index = next(
+        index
+        for index, line in enumerate(context_lines)
+        if line.strip() == "task-2"
+    )
+    assert participant_index < campus_index < task_two_index
 
     task_one = _subprocess_mem(
         tmp_path,
@@ -582,10 +596,7 @@ def test_init_study_selects_the_initialized_complete_profile(
     assert switched.returncode == 0, switched.stderr
     task_two_contexts = _subprocess_mem(tmp_path, "contexts")
     assert "task-2/advisor1" in task_two_contexts.stdout
-    assert (
-        "READ GRANT · PERMISSIONS READ + EMBED + DERIVE + COMBINE + EXPORT + "
-        "SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS" in task_two_contexts.stdout
-    )
+    assert "GRANT  task-2/advisor1  READ + EXPORT" in task_two_contexts.stdout
     read_only_add = _subprocess_mem(
         tmp_path,
         "add",
@@ -607,21 +618,14 @@ def test_init_study_selects_the_initialized_complete_profile(
     assert "task-1/campus-wiki" in virtual_names
     assert "task-1/campus-wiki/route-changes" in virtual_names
     assert source_display_text(annotations["task-1/campus-wiki"]) == (
-        "READ GRANT · PERMISSIONS CREATE + READ + EMBED + UPDATE + DELETE + QUERY + "
-        "DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + "
-        "SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED"
+        "GRANT · READ + QUERY + EDIT + DELETE + EXPORT"
     )
     assert source_display_text(annotations["task-2/advisor1"]) == (
-        "READ GRANT · PERMISSIONS READ + EMBED + DERIVE + COMBINE + EXPORT + "
-        "SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · "
-        "ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED"
+        "GRANT · READ + EXPORT"
     )
     assert source_display_text(
         annotations["task-2/proposal-submission-guidelines"]
-    ) == (
-        "QUERY GRANT · PERMISSIONS QUERY + SAVE QUERY SESSION · "
-        "ANALYSIS RATIONALE BLOCKED + TRACE BLOCKED"
-    )
+    ) == "GRANT · QUERY"
     picker_state = _granted_picker_state()
     assert "task-2/advisor1" in picker_state.selectable_names
     assert (

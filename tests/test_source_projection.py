@@ -2,6 +2,10 @@ from memcommit.commands.find_search_workbench import (
     FindSearchResult,
     _has_granted_materialization_source,
 )
+from memcommit.context_targeting.catalog import (
+    grant_navigation_annotation,
+    grant_navigation_capability_labels,
+)
 from memcommit.context_targeting.tui.rendering import (
     ContextTreeRowDecoration,
     render_context_tree_rows,
@@ -115,6 +119,61 @@ def test_shared_context_tree_renders_typed_source_tokens_not_raw_copy():
     assert rendered.endswith("alpha  READ GRANT · VIA EMBED")
     assert ("class:source-access", "READ GRANT") in fragments
     assert ("class:source-reach", "VIA EMBED") in fragments
+
+
+def test_grant_navigation_separates_ownership_from_compact_capabilities():
+    tokens = grant_navigation_annotation(
+        (
+            "CREATE",
+            "READ",
+            "EMBED",
+            "UPDATE",
+            "DELETE",
+            "QUERY",
+            "DERIVE",
+            "COMBINE",
+            "EXPORT",
+            "ACCEPT_DERIVED",
+            "SAVE_BOUND_ANALYSIS",
+            "SAVE_ANALYSIS",
+        )
+    )
+
+    assert grant_navigation_capability_labels(
+        (
+            "CREATE",
+            "READ",
+            "UPDATE",
+            "DELETE",
+            "QUERY",
+            "EXPORT",
+        )
+    ) == ("READ", "QUERY", "EDIT", "DELETE", "EXPORT")
+    assert [token.role for token in tokens] == [
+        SourceTokenRole.OWNERSHIP,
+        SourceTokenRole.CAPABILITY,
+    ]
+    assert render_source_display_tokens(tokens) == [
+        ("class:source-ownership", "GRANT"),
+        ("", " · "),
+        ("class:source-capability", "READ + QUERY + EDIT + DELETE + EXPORT"),
+    ]
+
+
+def test_shared_context_tree_places_grant_before_the_public_name():
+    state = ContextTreeState.create(build_context_tree(("public",)), selected="public")
+
+    fragments = render_context_tree_rows(
+        state,
+        lambda _row, _cursor: ContextTreeRowDecoration(
+            annotation=grant_navigation_annotation(("READ", "EXPORT"))
+        ),
+    )
+
+    rendered = "".join(text for _style, text in fragments)
+    assert rendered.endswith("· GRANT public  READ + EXPORT")
+    assert ("class:source-ownership", "GRANT") in fragments
+    assert ("class:source-capability", "READ + EXPORT") in fragments
 
 
 def test_find_authority_gate_uses_frozen_names_not_display_wording():

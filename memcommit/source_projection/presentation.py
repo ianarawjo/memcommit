@@ -18,7 +18,9 @@ from memcommit.source_projection.model import (
 class SourceTokenRole(str, Enum):
     """Presentation role used by terminal adapters without embedding colors."""
 
+    OWNERSHIP = "OWNERSHIP"
     ACCESS = "ACCESS"
+    CAPABILITY = "CAPABILITY"
     REACH = "REACH"
     FORM = "FORM"
     STATE = "STATE"

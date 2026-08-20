@@ -148,8 +148,9 @@ def test_ls_projects_read_view_and_masks_narrower_query_view(
     assert shown.exit_code == 0, shown.output
     assert PUBLIC in shown.output
     assert contexts.exit_code == 0, contexts.output
-    assert "READ GRANT · PERMISSIONS CREATE + READ + UPDATE" in contexts.output
-    assert "QUERY GRANT · PERMISSIONS QUERY" in contexts.output
+    assert "GRANT  campus-wiki  READ + EDIT" in contexts.output
+    assert "GRANT  campus-wiki/construction-details  QUERY" in contexts.output
+    assert "PERMISSIONS" not in contexts.output
     assert "FROM task-1-campus-authority" in contexts.output
 
 

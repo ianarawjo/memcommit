@@ -28,6 +28,7 @@ from memcommit.commands.context_picker import (
     choose_context,
 )
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.context_targeting.catalog import grant_navigation_annotation
 from memcommit.source_projection.model import SourceForm, SourceReach, SourceState
 from memcommit.store import MemoryStore
 
@@ -333,6 +334,43 @@ def test_picker_memory_viewport_anchor_moves_focus_bar_without_selecting():
     )
     focused_style = _CONTEXT_PICKER_STYLE.get_attrs_for_style_str("class:focused")
     assert focused_style.reverse
+
+
+def test_picker_keeps_grant_identity_neutral_and_colors_capabilities():
+    tree = build_context_tree(
+        ("owned", "public/shared"),
+        materialized_names={"owned"},
+    )
+    fragments = _render_context_options(
+        _visible_context_rows(tree, set()),
+        selected="owned",
+        current="owned",
+        annotations={
+            "public/shared": grant_navigation_annotation(("READ",)),
+        },
+    )
+
+    assert ("class:source-ownership", "GRANT") in fragments
+    assert ("class:report-neutral", "public/shared") in fragments
+    assert ("class:source-capability", "READ") in fragments
+
+    focused_fragments = _render_context_options(
+        _visible_context_rows(tree, set()),
+        selected="public/shared",
+        current="owned",
+        annotations={
+            "public/shared": grant_navigation_annotation(("READ",)),
+        },
+    )
+    assert ("class:selected", "GRANT") in focused_fragments
+    assert ("class:selected", "public/shared") in focused_fragments
+    assert ("class:selected", "READ") in focused_fragments
+    assert _CONTEXT_PICKER_STYLE.get_attrs_for_style_str(
+        "class:source-ownership"
+    ).color == "f4f5f7"
+    assert _CONTEXT_PICKER_STYLE.get_attrs_for_style_str(
+        "class:source-capability"
+    ).color == "8bd5ca"
 
 
 def test_picker_selectable_memory_uses_pointer_and_returns_exact_receipt():
@@ -1048,48 +1086,6 @@ def test_picker_browse_mode_never_returns_the_focused_context():
         )
 
     assert selected is None
-
-
-def test_contexts_tty_reuses_the_picker_as_a_read_only_browser(
-    isolated_store,
-    monkeypatch,
-):
-    invoke("init", "alpha")
-    invoke("add", "alpha memory")
-    invoke("init", "beta")
-    observed: dict[str, object] = {}
-
-    def browse(names, **kwargs):
-        observed["names"] = names
-        observed.update(kwargs)
-        return "alpha"
-
-    monkeypatch.setattr(
-        "memcommit.commands.contexts._interactive_terminal",
-        lambda: True,
-    )
-    monkeypatch.setattr(
-        "memcommit.commands.contexts.choose_context",
-        browse,
-    )
-
-    result = invoke("contexts")
-
-    assert result.exit_code == 0, result.output
-    assert tuple(observed["names"]) == ("alpha", "beta")
-    assert observed["current"] == "beta"
-    assert observed["title"] == "Browse Contexts"
-    assert observed["browse_only"] is True
-    assert observed["initially_expand_selected"] is False
-    assert observed["initially_expand_all"] is False
-    assert observed["initially_show_memories"] is False
-    assert observed["virtual_names"] == ()
-    assert observed["selectable_virtual_names"] == frozenset()
-    assert [row.content for row in observed["memory_loader"]("alpha")] == [
-        "alpha memory"
-    ]
-    # Even a misbehaving wrapper return cannot become a Switch continuation.
-    assert MemoryStore().current_context_name() == "beta"
 
 
 def test_bare_switch_uses_picker_result(
