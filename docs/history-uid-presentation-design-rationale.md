@@ -5,8 +5,8 @@
 Context history previously placed several unlabelled eight-character values in
 the same visual sentence. The leading value was a Checkpoint UID, a value in a
 Memory description could be a Memory UID, and Undo or Redo descriptions placed
-a restoration receipt UID in the same bracket grammar. A branched Context also
-copied its Source history without recording a new Branch checkpoint, so the
+a restoration receipt UID in the same bracket grammar. Older branched Contexts
+also copied Source history without recording a new Branch checkpoint, so the
 location browser counted copied Source commands as if they had been executed
 directly against the branch.
 
@@ -52,8 +52,10 @@ Context is inherited lineage and appears under
 `INHERITED HISTORY · source <name>`. Branch deliberately preserves Source
 checkpoint and Memory identities, so this comparison retains provenance while
 the branch's independently editable Context receives a new UID. Direct rows
-always appear before inherited rows. `init` is a creation baseline, remains
-visible, and is not counted as a command.
+always appear before inherited rows. A current Branch writes one owned direct
+creation checkpoint after copying that inherited lineage, so Log shows the
+recoverable Branch command without reclassifying Source commands. `init` is a
+creation baseline, remains visible, and is not counted as a command.
 
 Descendant counts continue to mean commands directly owned by lexical child
 Contexts. Inherited commands are not added to either the current Context's
@@ -66,8 +68,10 @@ History display and the command restoration stack use
 `command_history.command_unit_uid` as the sole command-unit projection. This is
 necessary for multi-Context Update, Meld, Merge, and Replace checkpoints: the
 same command may produce one physical checkpoint per affected Context but must
-count as one command unit. Undo and Redo instead deduplicate on their shared
-restoration receipt.
+count as one command unit. Recursive Branch uses the same rule: every created
+target checkpoint carries one shared Branch operation UID and complete target
+membership. Undo and Redo instead deduplicate on their shared restoration
+receipt.
 
 ## Boundaries and limitations
 
@@ -75,8 +79,10 @@ Legacy checkpoints without a valid snapshot owner header remain classified as
 direct because there is no retained evidence that can safely name an inherited
 Source. Exact and subtree Branch histories retain historical snapshot owners,
 so current Branch output can be classified without adding a second provenance
-registry. Branch creation itself still has no checkpoint row; this change
-clarifies copied lineage but does not invent an unrecorded Branch event.
+registry. Branches created before the lifecycle receipt was introduced still
+have no direct Branch row and are not retroactively made Undoable; inventing an
+unrecorded creation event would risk deleting a Context with no trustworthy
+target membership or pre-Branch selection.
 
 The selected detail region is passive and read-only. It does not change the
 current Context, load referenced content, mutate history, or weaken Revert's

@@ -346,6 +346,22 @@ def _translate_command(args: Mapping[str, object]) -> str | None:
     return command
 
 
+def _branch_command(args: Mapping[str, object]) -> str | None:
+    record = args.get("branch_tree")
+    if not isinstance(record, Mapping):
+        return None
+    target = record.get("target_root")
+    if not isinstance(target, str):
+        return None
+    command = f"mem branch {_command_arg(target)}"
+    command += (
+        " --source-descendants"
+        if record.get("include_descendants") is True
+        else " --source-root-only"
+    )
+    return command
+
+
 def _restored_command(unit: ContextCommandUnit) -> str:
     """Render a canonical effective command from retained checkpoint args."""
 
@@ -425,6 +441,10 @@ def _restored_command(unit: ContextCommandUnit) -> str:
             f"--from {_command_arg(args['source'])} "
             f"--into {_command_arg(args['into'])}"
         )
+    if unit.command == "branch":
+        command = _branch_command(args)
+        if command is not None:
+            return command
     if unit.command == "merge" and isinstance(args.get("source"), str):
         return f"mem merge {_command_arg(args['source'])}"
     if unit.command == "forget" and isinstance(args.get("query"), str):

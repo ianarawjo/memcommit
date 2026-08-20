@@ -209,6 +209,7 @@ def test_log_labels_uid_namespaces_and_separates_inherited_branch_history(
 
     assert result.exit_code == 0, result.output
     assert "DIRECT COMMANDS · practice/2" in result.output
+    assert "[branch]" in result.output
     assert "INHERITED HISTORY · source practice/1" in result.output
     assert "[CHECKPOINT " in result.output
     assert f"[MEMORY {memory_uid[:8]}]" in result.output

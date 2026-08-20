@@ -81,19 +81,22 @@ def test_explicit_subtree_branch_clones_hierarchy_and_internal_pointers(
         branch_child.name,
     )
     branch_root_history = store.list_checkpoints("experiment")
-    assert [entry["uid"] for entry in branch_root_history] == [
+    assert branch_root_history[0]["command"] == "branch"
+    assert [entry["uid"] for entry in branch_root_history[1:]] == [
         entry["uid"] for entry in root_history
     ]
     history_embedded = next(
         value
-        for value in branch_root_history[0]["snapshot"]["memories"].values()
+        for value in branch_root_history[1]["snapshot"]["memories"].values()
         if value["type"] == "context_ref"
     )
     assert (history_embedded["uid"], history_embedded["name"]) == (
         branch_child.uid,
         branch_child.name,
     )
-    assert store.list_checkpoints("experiment/child") == child_history
+    branch_child_history = store.list_checkpoints("experiment/child")
+    assert branch_child_history[0]["command"] == "branch"
+    assert branch_child_history[1:] == child_history
 
     changed = store.load_for_update("experiment/child")
     ops.add(changed, "branch-only fact")
@@ -108,7 +111,7 @@ def test_explicit_subtree_branch_clones_hierarchy_and_internal_pointers(
     # embedded child to the original Source hierarchy.
     store.revert(
         "experiment",
-        branch_root_history[0]["uid"],
+        branch_root_history[1]["uid"],
         keep_history=True,
     )
     restored_root = store.load_direct("experiment")
@@ -119,6 +122,100 @@ def test_explicit_subtree_branch_clones_hierarchy_and_internal_pointers(
         branch_child.uid,
         branch_child.name,
     )
+
+
+def test_recursive_branch_undo_cancels_the_complete_created_tree_and_redo_restores_it(
+    isolated_store,
+):
+    store = MemoryStore()
+    source_root, source_child, _memory = _source_hierarchy(store)
+    source_records = {
+        source_root.name: store.load_direct(source_root.name).to_dict(),
+        source_child.name: store.load_direct(source_child.name).to_dict(),
+    }
+
+    branched = runner.invoke(app, ["branch", "experiment", "-r"])
+
+    assert branched.exit_code == 0, branched.output
+    branch_records = {
+        name: store.load_direct(name).to_dict()
+        for name in ("experiment", "experiment/child")
+    }
+    branch_history_uids = {
+        name: [entry["uid"] for entry in store.list_checkpoints(name)]
+        for name in branch_records
+    }
+
+    undone = runner.invoke(app, ["undo"])
+
+    assert undone.exit_code == 0, undone.output
+    assert "Undid command: mem branch experiment --source-descendants" in (
+        undone.output
+    )
+    assert "Affected Contexts: 2" in undone.output
+    assert not store.context_exists("experiment")
+    assert not store.context_exists("experiment/child")
+    assert store.current_context_name() == "source"
+    assert {
+        name: store.load_direct(name).to_dict() for name in source_records
+    } == source_records
+
+    redone = runner.invoke(app, ["redo"])
+
+    assert redone.exit_code == 0, redone.output
+    assert "Redid command: mem branch experiment --source-descendants" in (
+        redone.output
+    )
+    assert store.current_context_name() == "experiment"
+    assert {
+        name: store.load_direct(name).to_dict() for name in branch_records
+    } == branch_records
+    for name, original_uids in branch_history_uids.items():
+        restored_uids = [
+            entry["uid"] for entry in store.list_checkpoints(name)
+        ]
+        assert restored_uids[-len(original_uids) :] == original_uids
+
+
+def test_recursive_branch_undo_failure_restores_every_created_context(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    _source_hierarchy(store)
+    assert runner.invoke(app, ["branch", "experiment", "-r"]).exit_code == 0
+    records = {
+        name: store.load_direct(name).to_dict()
+        for name in ("experiment", "experiment/child")
+    }
+    histories = {
+        name: store.list_checkpoints(name) for name in records
+    }
+    original_save = MemoryStore._save_locked
+    undo_saves = 0
+
+    def fail_second_undo(self, context, auto_checkpoint, **kwargs):
+        nonlocal undo_saves
+        if auto_checkpoint is not None and auto_checkpoint.command == "undo":
+            undo_saves += 1
+            if undo_saves == 2:
+                raise OSError("injected Branch Undo failure")
+        return original_save(self, context, auto_checkpoint, **kwargs)
+
+    monkeypatch.setattr(MemoryStore, "_save_locked", fail_second_undo)
+
+    undone = runner.invoke(app, ["undo"])
+
+    assert undone.exit_code == 1
+    assert "injected Branch Undo failure" in undone.stderr
+    assert store.current_context_name() == "experiment"
+    assert {
+        name: store.load_direct(name).to_dict() for name in records
+    } == records
+    assert {
+        name: store.list_checkpoints(name) for name in histories
+    } == histories
+    assert store.list_command_context_archives() == ()
 
 
 def test_exact_branch_keeps_legacy_shallow_live_reference(isolated_store):

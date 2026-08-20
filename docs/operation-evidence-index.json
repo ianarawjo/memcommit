@@ -10,7 +10,10 @@
       "docs/execution-receipt-review-lifecycle-design-rationale.md"
     ],
     "audit": [],
-    "branch": [],
+    "branch": [
+      "docs/history-uid-presentation-design-rationale.md",
+      "docs/mem-branch-design-rationale.md"
+    ],
     "check-conformance": [],
     "checkout": [
       "docs/switch-application-boundary-matrix.md"

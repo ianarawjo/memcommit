@@ -8,6 +8,7 @@ Memory content is opened while building the stacks.
 """
 from __future__ import annotations
 
+import uuid
 from dataclasses import dataclass
 from typing import Any, Literal
 
@@ -60,6 +61,28 @@ class CommandRestoreResult:
     direction: RestoreDirection
     receipt_uid: str
     checkpoints: tuple[Checkpoint, ...]
+
+
+@dataclass(frozen=True)
+class BranchTreeContext:
+    """One Source-to-target identity mapping in a Branch command receipt."""
+
+    source_uid: str
+    source_name: str
+    target_uid: str
+    target_name: str
+
+
+@dataclass(frozen=True)
+class BranchTreeReceipt:
+    """Frozen lifecycle identity for one exact or recursive Branch."""
+
+    operation_uid: str
+    source_root: str
+    target_root: str
+    include_descendants: bool
+    current_before: str | None
+    contexts: tuple[BranchTreeContext, ...]
 
 
 @dataclass(frozen=True)
@@ -295,6 +318,16 @@ def command_unit_uid(
                 and operation_uid
             ):
                 return f"replace:{operation_uid}"
+    if command == "branch":
+        record = args.get("branch_tree")
+        if isinstance(record, dict):
+            operation_uid = record.get("operation_uid")
+            if (
+                record.get("version") == 1
+                and isinstance(operation_uid, str)
+                and operation_uid
+            ):
+                return f"branch:{operation_uid}"
     return f"checkpoint:{checkpoint_uid}"
 
 
@@ -318,6 +351,121 @@ def _command_contexts(
     if len(result) != len(set(result)):
         raise CommandHistoryError("Command Context membership contains duplicates.")
     return tuple(result)
+
+
+def branch_tree_receipt(args: dict[str, Any]) -> BranchTreeReceipt:
+    """Validate and normalize one complete Branch creation receipt.
+
+    Branch copies Source history into independently owned target Contexts, so
+    inherited checkpoints cannot prove where the target lifecycle began. This
+    explicit receipt is the sole boundary that lets command history treat the
+    target pre-image as absent without mistaking inherited Source state for a
+    prior target state.
+    """
+
+    record = args.get("branch_tree")
+    expected_fields = {
+        "version",
+        "operation_uid",
+        "source_root",
+        "target_root",
+        "include_descendants",
+        "current_before",
+        "contexts",
+    }
+    if not isinstance(record, dict) or set(record) != expected_fields:
+        raise CommandHistoryError("Branch creation receipt is invalid.")
+    operation_uid = record.get("operation_uid")
+    try:
+        canonical_operation_uid = str(uuid.UUID(operation_uid))
+    except (AttributeError, TypeError, ValueError) as error:
+        raise CommandHistoryError("Branch operation uid is invalid.") from error
+    source_root = record.get("source_root")
+    target_root = record.get("target_root")
+    include_descendants = record.get("include_descendants")
+    current_before = record.get("current_before")
+    raw_contexts = record.get("contexts")
+    if (
+        record.get("version") != 1
+        or operation_uid != canonical_operation_uid
+        or not isinstance(source_root, str)
+        or not source_root
+        or not isinstance(target_root, str)
+        or not target_root
+        or source_root == target_root
+        or type(include_descendants) is not bool
+        or (current_before is not None and not isinstance(current_before, str))
+        or not isinstance(raw_contexts, list)
+        or not raw_contexts
+    ):
+        raise CommandHistoryError("Branch creation receipt is invalid.")
+
+    contexts: list[BranchTreeContext] = []
+    for raw in raw_contexts:
+        if not isinstance(raw, dict) or set(raw) != {
+            "source_uid",
+            "source_name",
+            "target_uid",
+            "target_name",
+        }:
+            raise CommandHistoryError("Branch Context receipt is invalid.")
+        values = tuple(
+            raw.get(key)
+            for key in (
+                "source_uid",
+                "source_name",
+                "target_uid",
+                "target_name",
+            )
+        )
+        if not all(isinstance(value, str) and value for value in values):
+            raise CommandHistoryError("Branch Context receipt is invalid.")
+        source_uid, source_name, target_uid, target_name = values
+        assert isinstance(source_uid, str)
+        assert isinstance(source_name, str)
+        assert isinstance(target_uid, str)
+        assert isinstance(target_name, str)
+        if source_name != source_root and not source_name.startswith(
+            source_root + "/"
+        ):
+            raise CommandHistoryError(
+                "Branch Context receipt escapes its Source subtree."
+            )
+        expected_target = target_root + source_name[len(source_root) :]
+        if target_name != expected_target:
+            raise CommandHistoryError(
+                "Branch Context receipt does not preserve subtree suffixes."
+            )
+        contexts.append(
+            BranchTreeContext(
+                source_uid=source_uid,
+                source_name=source_name,
+                target_uid=target_uid,
+                target_name=target_name,
+            )
+        )
+
+    source_identities = [(item.source_uid, item.source_name) for item in contexts]
+    target_identities = [(item.target_uid, item.target_name) for item in contexts]
+    command_contexts = _command_contexts(args.get("command_contexts"))
+    if (
+        len(source_identities) != len(set(source_identities))
+        or len(target_identities) != len(set(target_identities))
+        or not any(item.source_name == source_root for item in contexts)
+        or not any(item.target_name == target_root for item in contexts)
+        or (not include_descendants and len(contexts) != 1)
+        or command_contexts is None
+        or set(command_contexts) != set(target_identities)
+    ):
+        raise CommandHistoryError("Branch creation membership is invalid.")
+    return BranchTreeReceipt(
+        operation_uid=canonical_operation_uid,
+        source_root=source_root,
+        target_root=target_root,
+        include_descendants=include_descendants,
+        current_before=current_before,
+        contexts=tuple(contexts),
+    )
 
 
 def _context_parts(
@@ -435,6 +583,56 @@ def _context_parts(
             if isinstance(recorded_before, dict)
             else None
         )
+        branch_receipt = (
+            branch_tree_receipt(args)
+            if command == "branch" and "branch_tree" in args
+            else None
+        )
+        is_branch_creation = (
+            branch_receipt is not None
+            and any(
+                item.target_uid == context.uid
+                and item.target_name == context.name
+                for item in branch_receipt.contexts
+            )
+        )
+        if branch_receipt is not None and not is_branch_creation:
+            raise CommandHistoryError(
+                "Branch checkpoint owner is outside its creation membership."
+            )
+        if is_branch_creation and (not owned or not auto):
+            raise CommandHistoryError(
+                "Branch creation checkpoint does not own its automatic snapshot."
+            )
+        if is_branch_creation:
+            originals.append(
+                _OriginalPart(
+                    unit_uid=command_unit_uid(
+                        checkpoint_uid=uid,
+                        command=command,
+                        args=args,
+                    ),
+                    command=command,
+                    description=description,
+                    timestamp=timestamp,
+                    expected_contexts=_command_contexts(
+                        args.get("command_contexts")
+                    ),
+                    args=args,
+                    change=CommandContextChange(
+                        context_uid=context.uid,
+                        context_name=context.name,
+                        # Inherited Source checkpoints describe lineage, not a
+                        # pre-existing target. Branch therefore has an absent
+                        # target pre-image even when ``effective`` is nonempty.
+                        before=None,
+                        after=snapshot,
+                        checkpoint_uid=uid,
+                    ),
+                )
+            )
+            effective = snapshot
+            continue
         merge_tree = args.get("merge_tree")
         is_legacy_recursive_merge = (
             command == "merge"

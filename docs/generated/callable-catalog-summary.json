@@ -1,9 +1,9 @@
 {
-  "callable_count": 9840,
+  "callable_count": 9846,
   "callable_kinds": {
     "async-function": 13,
-    "class": 1611,
-    "function": 7634,
+    "class": 1613,
+    "function": 7638,
     "lambda": 582
   },
   "module_count": 769,
@@ -20,8 +20,8 @@
     "PARTIAL_SURFACE": 5
   },
   "visibility": {
-    "local": 2105,
-    "private": 3169,
-    "public": 4566
+    "local": 2106,
+    "private": 3171,
+    "public": 4569
   }
 }

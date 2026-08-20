@@ -115,7 +115,9 @@ def test_branch_can_create_a_context_in_another_namespace(isolated_store):
     store = MemoryStore()
     assert store.context_exists("review/main")
     assert store.current_context_name() == "review/main"
-    assert len(store.list_checkpoints("review/main")) == 1
+    history = store.list_checkpoints("review/main")
+    assert len(history) == 2
+    assert history[0]["command"] == "branch"
 
 
 def test_branch_does_not_leave_target_when_source_history_is_unsafe(isolated_store):
@@ -519,10 +521,39 @@ def test_branch_can_create_root_alongside_existing_descendant(isolated_store):
     assert [item.content for item in child_after.iter_items()] == [
         "Existing child data."
     ]
-    assert store.list_checkpoints("review") == source_history
+    branch_history = store.list_checkpoints("review")
+    assert branch_history[0]["command"] == "branch"
+    assert branch_history[1:] == source_history
     assert runner.invoke(app, ["add", "Review-only change."]).exit_code == 0
     assert store.list_checkpoints("source") == source_history
-    assert len(store.list_checkpoints("review")) == len(source_history) + 1
+    assert len(store.list_checkpoints("review")) == len(source_history) + 2
+
+
+def test_branch_undo_removes_only_the_new_root_beside_an_existing_descendant(
+    isolated_store,
+):
+    assert runner.invoke(app, ["init", "source"]).exit_code == 0
+    assert runner.invoke(app, ["add", "Branched root data."]).exit_code == 0
+    assert runner.invoke(app, ["init", "review/existing-child"]).exit_code == 0
+    store = MemoryStore()
+    child_record = store.load_direct("review/existing-child").to_dict()
+    assert runner.invoke(app, ["switch", "source"]).exit_code == 0
+    assert runner.invoke(app, ["branch", "review"]).exit_code == 0
+    branch_record = store.load_direct("review").to_dict()
+
+    undone = runner.invoke(app, ["undo"])
+
+    assert undone.exit_code == 0, undone.output
+    assert not store.context_exists("review")
+    assert store.load_direct("review/existing-child").to_dict() == child_record
+    assert store.current_context_name() == "source"
+
+    redone = runner.invoke(app, ["redo"])
+
+    assert redone.exit_code == 0, redone.output
+    assert store.load_direct("review").to_dict() == branch_record
+    assert store.load_direct("review/existing-child").to_dict() == child_record
+    assert store.current_context_name() == "review"
 
 
 def test_failed_root_branch_rollback_preserves_existing_descendant(

@@ -117,7 +117,10 @@ class TestBranchAndMergeWorkflow:
         contents = [getattr(m, "content", "") for m in merged_ctx.memories.values()]
         assert any("Rust" in c for c in contents)
 
-    def test_branch_status_shows_parent_checkpoint_count(self, isolated_store):
+    def test_branch_status_counts_inherited_history_and_its_creation_receipt(
+        self,
+        isolated_store,
+    ):
         mem("init", "main")
         mem("add", "memory one")
         mem("add", "memory two")
@@ -128,7 +131,7 @@ class TestBranchAndMergeWorkflow:
 
         r = mem("status")
         assert r.exit_code == 0
-        assert f"Checkpoints {parent_cp_count}" in r.output
+        assert f"Checkpoints {parent_cp_count + 1}" in r.output
 
     def test_branch_log_shows_parent_history(self, isolated_store):
         mem("init", "main")

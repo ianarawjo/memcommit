@@ -100,6 +100,99 @@ def test_undo_normalizes_inherited_checkpoint_identity(isolated_store):
     assert [memory.content for memory in restored.memories.values()] == ["inherited"]
 
 
+def test_undo_immediately_after_branch_cancels_the_created_context(
+    isolated_store,
+):
+    invoke("init", "source")
+    invoke("add", "inherited")
+    store = MemoryStore()
+    source_record = store.load_direct("source").to_dict()
+    source_history = store.list_checkpoints("source")
+
+    branched = invoke("branch", "feature")
+
+    assert branched.exit_code == 0, branched.output
+    branch_record = store.load_direct("feature").to_dict()
+    branch_uid = branch_record["uid"]
+    branch_history_uids = [
+        entry["uid"] for entry in store.list_checkpoints("feature")
+    ]
+    assert store.current_context_name() == "feature"
+
+    undone = invoke("undo")
+
+    assert undone.exit_code == 0, undone.output
+    assert "Undid command: mem branch feature --source-root-only" in undone.output
+    assert not store.context_exists("feature")
+    assert store.current_context_name() == "source"
+    assert store.load_direct("source").to_dict() == source_record
+    assert store.list_checkpoints("source") == source_history
+    archived = store.list_command_context_archives()
+    assert len(archived) == 1
+    assert archived[0][0].uid == branch_uid
+
+    redone = invoke("redo")
+
+    assert redone.exit_code == 0, redone.output
+    assert "Redid command: mem branch feature --source-root-only" in redone.output
+    assert store.load_direct("feature").to_dict() == branch_record
+    assert store.current_context_name() == "feature"
+    restored_history_uids = [
+        entry["uid"] for entry in store.list_checkpoints("feature")
+    ]
+    assert restored_history_uids[-len(branch_history_uids) :] == branch_history_uids
+    assert store.list_command_context_archives() == ()
+
+
+def test_branch_restore_preserves_a_later_unrelated_current_selection(
+    isolated_store,
+):
+    invoke("init", "source")
+    invoke("add", "source fact")
+    invoke("init", "other")
+    invoke("switch", "source")
+    invoke("branch", "feature")
+    invoke("switch", "other")
+    store = MemoryStore()
+
+    undone = invoke("undo")
+
+    assert undone.exit_code == 0, undone.output
+    assert not store.context_exists("feature")
+    assert store.current_context_name() == "other"
+
+    redone = invoke("redo")
+
+    assert redone.exit_code == 0, redone.output
+    assert store.context_exists("feature")
+    assert store.current_context_name() == "other"
+
+
+def test_branch_redo_does_not_replace_a_new_context_with_the_same_name(
+    isolated_store,
+):
+    invoke("init", "source")
+    invoke("add", "source fact")
+    invoke("branch", "feature")
+    store = MemoryStore()
+    original_branch_uid = store.load_direct("feature").uid
+    assert invoke("undo").exit_code == 0
+    competitor = ops.init("feature")
+    competitor.add("independent replacement")
+    store.save(competitor)
+
+    redone = invoke("redo")
+
+    assert redone.exit_code == 1
+    assert "Affected Context 'feature' already exists" in redone.output
+    current = store.load_direct("feature")
+    assert current.uid == competitor.uid
+    assert current.uid != original_branch_uid
+    assert [memory.content for memory in current.memories.values()] == [
+        "independent replacement"
+    ]
+
+
 def test_undo_fails_without_a_recorded_context_command(isolated_store):
     store = MemoryStore()
     context = ops.init("bare")
