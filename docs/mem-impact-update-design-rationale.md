@@ -282,7 +282,7 @@ that controller.
 
 The policy records two deliberate exclusions: `translate` changes a
 representation rather than previewing a Memory state transition, and `ground`
-retains its exact-command approval protocol. `consolidate` is recorded as
+retains its exact-command approval protocol. `dedun` is recorded as
 deferred while its command split and reviewed candidate adapter stabilize. It
 is semantically eligible, but Impact must not infer a proposal contract from an
 in-progress command refactor.

@@ -1,13 +1,13 @@
- MEM DEDUP · RESOLUTION SESSION                                                                                                                                                     
- DETERMINISTIC · EXISTING UID SURVIVOR · EXACT WHOLE-SET APPLY                                                                                                                      
+ MEM DEDUN · RESOLUTION SESSION                                                                                                                                                     
+ SEMANTIC EVIDENCE · EXISTING UID SURVIVOR · EXACT WHOLE-SET APPLY                                                                                                                  
 ┌───────────────────────────────────────────────────────────────────────────| VIEWER · COMPLETE REPORT |───────────────────────────────────────────────────────────────────────────┐
-│DEDUP · CONFIRMED DUPLICATE COMPONENTS                                                                                                                                           ^│
+│DEDUN · CONFIRMED SEMANTIC REDUNDANCIES                                                                                                                                          ^│
 │CONTEXT · dedup/capture                                                                                                                                                           │
-│REVISION · a2b87e8629f4d890a4efdc4e43160967e389bee66305d865b61313a5c2d12615                                                                                                       │
+│REVISION · 6d413a90bf9c948195355161ce0a48f4d7d64ac318249b071aacddb36336f2a3                                                                                                       │
 │COMPONENTS · 1                                                                                                                                                                    │
 │                                                                                                                                                                                  │
 │DETERMINISTIC BOUNDARY                                                                                                                                                            │
-│Only EXACT, SURFACE_EQUIVALENT, and SEMANTIC_EQUIVALENT finder links are present. Dedup does not rewrite or integrate content.                                                    │
+│Only SURFACE_EQUIVALENT and SEMANTIC_EQUIVALENT evidence links are present. Dedun does not rewrite or integrate content.                                                          │
 │                                                                                                                                                                                  │
 │COMPONENT 1 · 2 MEMBERS                                                                                                                                                           │
 │RECOMMENDED SURVIVOR · [20000000-0000-4000-8000-000000000100]                                                                                                                     │
@@ -16,9 +16,9 @@
 │APPLY · one checkpoint · inbound references to absorbed UIDs block the complete operation.                                                                                        │
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-┌────────────────────────────────────────────────────────────────────| ITEMS · REQUIRED DUPLICATE COMPONENTS |─────────────────────────────────────────────────────────────────────┐
+┌──────────────────────────────────────────────────────────────────────| ITEMS · REQUIRED REDUNDANCY GROUPS |──────────────────────────────────────────────────────────────────────┐
 │REQUIRED 1 · ANSWERED 1 · REMAINING 0                                                                                                                                             │
-│✓ 1. DUPLICATE COMPONENT · Choose one unchanged survivor from 2 members.                                                                                                          │
+│✓ 1. REDUNDANCY GROUP · Choose one unchanged survivor from 2 members.                                                                                                             │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
@@ -28,17 +28,17 @@
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ TO DO · ONE NEXT ACTION ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃FINAL REVIEW · ITEM-BY-ITEM DECISIONS                                                                                                                                             ┃
 ┃PROPOSED COMMAND · NOT RUN                                                                                                                                                        ┃
-┃  mem dedup --finding-handoff '{"classification":"SEMANTIC_EQUIVALENT","contract":"quality-finding-handoff-v1","finding_uid":"duplicate:20000000-0000-4000-8000-000000000100:20000┃
-┃000-0000-4000-8000-000000000200","kind":"DUPLICATE","memory_context_names":["dedup/capture","dedup/capture"],"memory_uids":["20000000-0000-4000-8000-000000000100","20000000-0000-┃
-┃4000-8000-000000000200"],"proposed_readings":[],"qualifiers":[],"question":"","reason":"Both Memories state the same weekday opening time without adding a distinct condition.","r┃
-┃eview_draft":{"selected_option_uid":"duplicate:20000000-0000-4000-8000-000000000100:20000000-0000-4000-8000-000000000200:confirm","text":""},"route":"DEDUP","source_frame_digest"┃
-┃:"c3edff2c0c269c255c06c80261ba47c892f8041273bbd26fe93b4169f4bf55b9","sources":[{"context_uid":"10000000-0000-4000-8000-000000000100","direct_memory_digest":"d66204323e907cdff9bfe┃
-┃9481d0d63d4ec1fcd5de80016eb3f163fe514886d9c","display_name":"dedup/capture"}],"uid":"finding-a02cdea9047fcdd51aca9a008f363deb00806b8a102562344c445f5b1cdcab1d"}' --survivor dedup-┃
-┃component-4c8bc32e0fadecebc21a247ecd98bdce9ea0d169a7e37837cfdaa97176ef3706=20000000-0000-4000-8000-000000000100 --expected-revision a2b87e8629f4d890a4efdc4e43160967e389bee66305d8┃
-┃65b61313a5c2d12615 --apply                                                                                                                                                        ┃
+┃  mem dedun --evidence '{"classification":"SEMANTIC_EQUIVALENT","contract":"semantic-redundancy-evidence-v1","finding_uid":"duplicate:20000000-0000-4000-8000-000000000100:2000000┃
+┃0-0000-4000-8000-000000000200","kind":"REDUNDANCY","memory_context_names":["dedup/capture","dedup/capture"],"memory_uids":["20000000-0000-4000-8000-000000000100","20000000-0000-4┃
+┃000-8000-000000000200"],"proposed_readings":[],"qualifiers":[],"question":"","reason":"Both Memories state the same weekday opening time without adding a distinct condition.","re┃
+┃view_draft":{"selected_option_uid":"duplicate:20000000-0000-4000-8000-000000000100:20000000-0000-4000-8000-000000000200:confirm","text":""},"route":"DEDUN","source_frame_digest":┃
+┃"c3edff2c0c269c255c06c80261ba47c892f8041273bbd26fe93b4169f4bf55b9","sources":[{"context_uid":"10000000-0000-4000-8000-000000000100","direct_memory_digest":"d66204323e907cdff9bfe9┃
+┃481d0d63d4ec1fcd5de80016eb3f163fe514886d9c","display_name":"dedup/capture"}],"uid":"finding-a02cdea9047fcdd51aca9a008f363deb00806b8a102562344c445f5b1cdcab1d"}' --survivor dedup-c┃
+┃omponent-4c8bc32e0fadecebc21a247ecd98bdce9ea0d169a7e37837cfdaa97176ef3706=20000000-0000-4000-8000-000000000100 --expected-revision 6d413a90bf9c948195355161ce0a48f4d7d64ac318249b0┃
+┃71aacddb36336f2a3 --apply                                                                                                                                                         ┃
 ┃                                                                                                                                                                                  ┃
 ┃EFFECTS · ONE COMMAND                                                                                                                                                             ┃
-┃  Frozen Context revision · a2b87e8629f4d890a4efdc4e43160967e389bee66305d865b61313a5c2d12615.                                                                                     ┃
+┃  Frozen Context revision · 6d413a90bf9c948195355161ce0a48f4d7d64ac318249b071aacddb36336f2a3.                                                                                     ┃
 ┃  Keep 1 unchanged existing survivor UID(s).                                                                                                                                      ┃
 ┃  Absorb 1 of 2 component member UID(s): 20000000-0000-4000-8000-000000000200                                                                                                     ┃
 ┃  No replacement wording is generated and unrelated Memories stay unchanged.                                                                                                      ┃
@@ -49,4 +49,4 @@
 ┃[ PRESS ENTER TO APPLY THIS EXACT WHOLE SET ]                                                                                                                                     ┃
 ┃                                                                                                                                                                                  ┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
- Apply failed · Dedup cannot absorb Memories with inbound references in version 1: dedup/observer#30000000.
+ Apply failed · Dedun cannot absorb Memories with inbound references in version 1: dedup/observer#30000000.

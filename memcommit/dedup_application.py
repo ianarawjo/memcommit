@@ -1,9 +1,8 @@
-"""Operation-owned contracts for applying confirmed duplicate findings.
+"""Operation-owned contracts for applying confirmed semantic redundancy.
 
-Dedup does not discover equivalence and never authors canonical replacement
-text. It consumes exact positive finder receipts, keeps one existing Memory
-per connected component, and removes the other existing UIDs after an exact
-whole-set review.
+Dedun consumes confirmed semantic evidence, keeps one existing Memory per
+connected group, and removes the other existing UIDs after exact whole-set
+review. It never authors canonical replacement text.
 """
 
 from __future__ import annotations
@@ -29,27 +28,27 @@ if TYPE_CHECKING:
     from memcommit.update import GrantedUpdateTarget
 
 
-DEDUP_CONTRACT_VERSION = "dedup-v1"
+DEDUP_CONTRACT_VERSION = "semantic-dedun-v1"
 DEDUP_ELIGIBLE_RELATIONS = frozenset(
-    {"EXACT", "SURFACE_EQUIVALENT", "SEMANTIC_EQUIVALENT"}
+    {"SURFACE_EQUIVALENT", "SEMANTIC_EQUIVALENT"}
 )
 
 
 class DedupError(RuntimeError):
-    """A Dedup request, frozen plan, decision, or Apply is invalid."""
+    """A semantic Dedun request, frozen plan, decision, or Apply is invalid."""
 
 
 class DedupAuthorityError(DedupError):
-    """The current authority cannot apply the confirmed duplicate plan."""
+    """The current authority cannot apply the confirmed redundancy plan."""
 
 
 class DedupConflictError(DedupError):
-    """The frozen Source or exact Dedup decision changed before Apply."""
+    """The frozen Source or exact Dedun decision changed before Apply."""
 
 
 @dataclass(frozen=True)
 class DedupRequest:
-    """One or more confirmed duplicate edges from the same finder frame."""
+    """One or more confirmed redundancy edges from the same semantic frame."""
 
     handoffs: tuple[QualityFindingHandoff, ...]
 
@@ -58,36 +57,40 @@ class DedupRequest:
             not isinstance(handoff, QualityFindingHandoff)
             for handoff in self.handoffs
         ):
-            raise DedupError("Dedup requires at least one typed finding handoff.")
+            raise DedupError(
+                "Dedun requires at least one typed semantic redundancy evidence item."
+            )
         first = self.handoffs[0]
         if len(first.sources) != 1:
             raise DedupError(
-                "Dedup v1 requires findings from one exact direct Context."
+                "Dedun v1 requires evidence from one exact direct Context."
             )
         source = first.sources[0]
         seen_edges: set[frozenset[str]] = set()
         seen_findings: set[str] = set()
         for handoff in self.handoffs:
             if handoff.kind != "DUPLICATE" or handoff.route != "DEDUP":
-                raise DedupError("Dedup accepts only positive duplicate handoffs.")
+                raise DedupError(
+                    "Dedun accepts only positive semantic redundancy evidence."
+                )
             if (
                 len(handoff.sources) != 1
                 or handoff.sources[0] != source
                 or handoff.source_frame_digest != first.source_frame_digest
             ):
                 raise DedupError(
-                    "All Dedup findings must share one exact frozen Source frame."
+                    "All Dedun evidence must share one exact frozen Source frame."
                 )
             if (
                 len(handoff.memory_uids) != 2
                 or any(name != source.display_name for name in handoff.memory_context_names)
             ):
                 raise DedupError(
-                    "Each Dedup finding must name two directly owned Memories."
+                    "Each Dedun evidence item must name two directly owned Memories."
                 )
             if handoff.classification not in DEDUP_ELIGIBLE_RELATIONS:
                 raise DedupError(
-                    f"Dedup cannot apply relation '{handoff.classification}'."
+                    f"Dedun cannot apply relation '{handoff.classification}'."
                 )
             edge = frozenset(handoff.memory_uids)
             if (
@@ -95,7 +98,9 @@ class DedupRequest:
                 or edge in seen_edges
                 or handoff.finding_uid in seen_findings
             ):
-                raise DedupError("Dedup findings repeat or contain an invalid pair.")
+                raise DedupError(
+                    "Dedun evidence repeats or contains an invalid pair."
+                )
             seen_edges.add(edge)
             seen_findings.add(handoff.finding_uid)
 
@@ -118,15 +123,15 @@ class DedupMember:
 
     def __post_init__(self) -> None:
         if not isinstance(self.uid, str) or not self.uid:
-            raise DedupError("Dedup member UID must be nonempty text.")
+            raise DedupError("Dedun member UID must be nonempty text.")
         if not isinstance(self.content, str):
-            raise DedupError("Dedup member content must be text.")
+            raise DedupError("Dedun member content must be text.")
         if (
             isinstance(self.ordinal, bool)
             or not isinstance(self.ordinal, int)
             or self.ordinal < 1
         ):
-            raise DedupError("Dedup member ordinal must be positive.")
+            raise DedupError("Dedun member ordinal must be positive.")
 
 
 @dataclass(frozen=True)
@@ -160,7 +165,7 @@ class DedupComponent:
             or not self.evidence
             or self.recommended_survivor_uid not in member_uids
         ):
-            raise DedupError("Dedup component is invalid.")
+            raise DedupError("Dedun redundancy group is invalid.")
 
 
 @dataclass(frozen=True)
@@ -175,7 +180,7 @@ class DedupSelection:
             isinstance(value, str) and value
             for value in (self.component_uid, self.survivor_uid)
         ):
-            raise DedupError("Dedup selection identities must be nonempty text.")
+            raise DedupError("Dedun selection identities must be nonempty text.")
 
 
 @dataclass(frozen=True)
@@ -193,7 +198,7 @@ class FrozenDedupPlan:
 
     def __post_init__(self) -> None:
         if not self.components:
-            raise DedupError("Dedup plan requires at least one component.")
+            raise DedupError("Dedun plan requires at least one redundancy group.")
 
 
 @dataclass(frozen=True)
@@ -227,11 +232,11 @@ def dedup_resolution_case(plan: FrozenDedupPlan) -> ResolutionCase:
     """Project component survivor choices into the common exact validator."""
 
     if not isinstance(plan, FrozenDedupPlan):
-        raise TypeError("Dedup resolution requires a frozen plan.")
+        raise TypeError("Dedun resolution requires a frozen plan.")
     return ResolutionCase(
         binding=ResolutionBinding(
-            operation="dedup",
-            artifact_uid="dedup:" + plan.context_uid,
+            operation="dedun",
+            artifact_uid="dedun:" + plan.context_uid,
             revision=plan.revision,
         ),
         requirements=tuple(
@@ -253,7 +258,7 @@ def validate_dedup_selections(
     if not isinstance(plan, FrozenDedupPlan) or any(
         not isinstance(selection, DedupSelection) for selection in selections
     ):
-        raise TypeError("Dedup selection validation requires typed values.")
+        raise TypeError("Dedun selection validation requires typed values.")
     case = dedup_resolution_case(plan)
     try:
         progress = require_resolution_ready(
@@ -272,15 +277,16 @@ def validate_dedup_selections(
     except ResolutionValidationError as error:
         if error.code == "UNRESOLVED_REQUIRED":
             raise DedupError(
-                "Dedup has unresolved components: " + ", ".join(error.item_uids)
+                "Dedun has unresolved redundancy groups: "
+                + ", ".join(error.item_uids)
             ) from error
         if error.code == "UNKNOWN_ITEM":
             raise DedupError(
-                f"Dedup selection names an unknown component '{error.item_uids[0]}'."
+                f"Dedun selection names an unknown group '{error.item_uids[0]}'."
             ) from error
         if error.code == "DUPLICATE_ITEM":
             raise DedupError(
-                f"Dedup selection repeats component '{error.item_uids[0]}'."
+                f"Dedun selection repeats group '{error.item_uids[0]}'."
             ) from error
         if error.code == "UNAVAILABLE_CHOICE":
             raise DedupError(
@@ -311,7 +317,7 @@ def recommended_dedup_selections(
 
 def prepare_dedup(request: DedupRequest, *, port: DedupPort) -> FrozenDedupPlan:
     if not isinstance(request, DedupRequest):
-        raise TypeError("Dedup requires a typed request.")
+        raise TypeError("Dedun requires a typed request.")
     return port.freeze(request)
 
 

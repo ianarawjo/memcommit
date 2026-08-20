@@ -1,4 +1,4 @@
-"""Versioned JSON-safe agent adapter for deterministic Dedup."""
+"""Versioned JSON-safe agent adapter for semantic Dedun."""
 
 from __future__ import annotations
 
@@ -6,8 +6,8 @@ from collections.abc import Mapping
 from typing import Literal
 
 from memcommit.api import (
-    DedupApplyResult,
-    DedupPlanResult,
+    DedunApplyResult,
+    DedunPlanResult,
     MemCommitClient,
     SemanticAuthorityError,
     SemanticConflictError,
@@ -26,24 +26,27 @@ from memcommit.interfaces.agent.contract import (
     text_value,
 )
 from memcommit.interfaces.agent.quality_find import (
-    quality_finding_handoff_agent_schema,
+    semantic_redundancy_evidence_agent_schema,
 )
 from memcommit.quality_finding_handoff import (
     QualityFindingHandoff,
     QualityFindingHandoffError,
 )
+from memcommit.semantic_redundancy_evidence import (
+    semantic_redundancy_evidence_from_dict,
+)
 
 
 DEDUP_AGENT_CONTRACT_VERSION = 1
-DEDUP_AGENT_TOOL_NAME = "memcommit_dedup"
+DEDUP_AGENT_TOOL_NAME = "memcommit_dedun"
 DedupAgentKind = Literal["analyze", "apply"]
 
 
 def _handoffs(value: object) -> tuple[QualityFindingHandoff, ...]:
     if not isinstance(value, list) or not value:
-        raise AgentRequestError("finding_handoffs must be a nonempty array.")
+        raise AgentRequestError("evidence must be a nonempty array.")
     try:
-        handoffs = tuple(QualityFindingHandoff.from_dict(item) for item in value)
+        handoffs = tuple(semantic_redundancy_evidence_from_dict(item) for item in value)
     except (QualityFindingHandoffError, TypeError, ValueError) as error:
         raise AgentRequestError(str(error)) from error
     return handoffs
@@ -77,7 +80,7 @@ def _survivors(value: object) -> dict[str, str]:
 def _parse_request(
     payload: object,
 ) -> tuple[DedupAgentKind, tuple[QualityFindingHandoff, ...], dict[str, str] | None, str | None]:
-    value = object_value(payload, label="Dedup request")
+    value = object_value(payload, label="Dedun request")
     version = value.get("version")
     if (
         isinstance(version, bool)
@@ -90,11 +93,11 @@ def _parse_request(
     kind = value.get("kind")
     if kind not in {"analyze", "apply"}:
         raise AgentRequestError("kind must be analyze or apply.")
-    required = {"version", "kind", "finding_handoffs"}
+    required = {"version", "kind", "evidence"}
     if kind == "apply":
         required |= {"survivors", "expected_revision"}
-    exact_fields(value, required=required, label=f"Dedup {kind} request")
-    handoffs = _handoffs(value["finding_handoffs"])
+    exact_fields(value, required=required, label=f"Dedun {kind} request")
+    handoffs = _handoffs(value["evidence"])
     if kind == "analyze":
         return "analyze", handoffs, None, None
     return (
@@ -105,7 +108,7 @@ def _parse_request(
     )
 
 
-def _plan_result(result: DedupPlanResult) -> JsonObject:
+def _plan_result(result: DedunPlanResult) -> JsonObject:
     return {
         "context_name": result.context_name,
         "context_uid": result.context_uid,
@@ -140,7 +143,7 @@ def _plan_result(result: DedupPlanResult) -> JsonObject:
     }
 
 
-def _apply_result(result: DedupApplyResult) -> JsonObject:
+def _apply_result(result: DedunApplyResult) -> JsonObject:
     return {
         "context_name": result.context_name,
         "context_uid": result.context_uid,
@@ -153,25 +156,25 @@ def _apply_result(result: DedupApplyResult) -> JsonObject:
 
 
 _PUBLIC_ERRORS: tuple[tuple[type[SemanticError], str, str], ...] = (
-    (SemanticInputError, "invalid_request", "The Dedup request is invalid."),
-    (SemanticContextError, "context_unavailable", "The Dedup Context is unavailable."),
-    (SemanticAuthorityError, "authority_denied", "Dedup authority was denied."),
-    (SemanticConflictError, "concurrent_update", "The Dedup Source changed."),
-    (SemanticStorageError, "storage_failure", "Dedup storage failed safely."),
+    (SemanticInputError, "invalid_request", "The Dedun request is invalid."),
+    (SemanticContextError, "context_unavailable", "The Dedun Context is unavailable."),
+    (SemanticAuthorityError, "authority_denied", "Dedun authority was denied."),
+    (SemanticConflictError, "concurrent_update", "The Dedun Source changed."),
+    (SemanticStorageError, "storage_failure", "Dedun storage failed safely."),
     (
         SemanticExecutionError,
         "execution_failed",
-        "Dedup failed before publishing a complete outcome.",
+        "Dedun failed before publishing a complete outcome.",
     ),
 )
 
 
 class DedupAgentAdapter:
-    """Expose deterministic planning and stateless exact replay."""
+    """Expose semantic redundancy planning and stateless exact replay."""
 
     def __init__(self, client: MemCommitClient) -> None:
         if not isinstance(client, MemCommitClient):
-            raise TypeError("DedupAgentAdapter requires a MemCommitClient.")
+            raise TypeError("Dedun adapter requires a MemCommitClient.")
         self._client = client
 
     def invoke(self, payload: object) -> JsonObject:
@@ -189,7 +192,7 @@ class DedupAgentAdapter:
                 retryable=False,
             )
         try:
-            plan = self._client.plan_dedup(
+            plan = self._client.plan_dedun(
                 handoffs,
                 expected_revision=expected_revision,
             )
@@ -197,7 +200,7 @@ class DedupAgentAdapter:
                 _plan_result(plan)
                 if kind == "analyze"
                 else _apply_result(
-                    self._client.apply_dedup(
+                    self._client.apply_dedun(
                         plan,
                         survivors=survivors or {},
                     )
@@ -227,8 +230,8 @@ class DedupAgentAdapter:
             return error_response(
                 version=DEDUP_AGENT_CONTRACT_VERSION,
                 kind=kind,
-                code="dedup_failed",
-                message="Dedup failed without a more specific public category.",
+                code="dedun_failed",
+                message="Dedun failed without a more specific public category.",
                 retryable=False,
             )
         except Exception:
@@ -236,7 +239,7 @@ class DedupAgentAdapter:
                 version=DEDUP_AGENT_CONTRACT_VERSION,
                 kind=kind,
                 code="internal_error",
-                message="The Dedup tool failed internally.",
+                message="The Dedun tool failed internally.",
                 retryable=False,
             )
         return {
@@ -252,21 +255,21 @@ def dedup_agent_tool_schema() -> JsonObject:
     return {
         "name": DEDUP_AGENT_TOOL_NAME,
         "description": (
-            "Plan connected components from confirmed duplicate finder handoffs, "
+            "Plan groups from confirmed semantic redundancy evidence, "
             "or revalidate and atomically apply one exact existing-survivor choice "
-            "per component. Dedup never rewrites Memory content."
+            "per group. Dedun never rewrites Memory content."
         ),
         "parameters": {
             "type": "object",
             "additionalProperties": False,
-            "required": ["version", "kind", "finding_handoffs"],
+            "required": ["version", "kind", "evidence"],
             "properties": {
                 "version": {"type": "integer", "const": DEDUP_AGENT_CONTRACT_VERSION},
                 "kind": {"type": "string", "enum": ["analyze", "apply"]},
-                "finding_handoffs": {
+                "evidence": {
                     "type": "array",
                     "minItems": 1,
-                    "items": quality_finding_handoff_agent_schema(),
+                    "items": semantic_redundancy_evidence_agent_schema(),
                 },
                 "survivors": {
                     "type": "array",

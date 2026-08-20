@@ -94,7 +94,7 @@ def test_read_and_analysis_commands_share_relative_context_operand_boundary(
         empty_report,
     )
     monkeypatch.setattr(
-        "memcommit.commands.find_duplicates.ops.find_duplicates",
+        "memcommit.commands.find_duplicates.ops.find_redundancies",
         empty_report,
     )
     monkeypatch.setattr(
@@ -114,7 +114,7 @@ def test_read_and_analysis_commands_share_relative_context_operand_boundary(
         ],
         ["find", "evidence", "--context", "../to"],
         ["find-ambiguities", "--context", "../to"],
-        ["find-duplicates", "--context", "../to"],
+        ["dedun", "--context", "../to"],
         ["find-conflicts", "--context", "../to"],
     )
 

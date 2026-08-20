@@ -1,7 +1,7 @@
- MEM DEDUP · RESOLUTION SESSION                                                                                                                                                     
- DETERMINISTIC · EXISTING UID SURVIVOR · EXACT WHOLE-SET APPLY                                                                                                                      
-┌────────────────────────────────────────────────────────────────────| VIEWER · DUPLICATE COMPONENT EVIDENCE |─────────────────────────────────────────────────────────────────────┐
-│DEDUP COMPONENT · EXISTING SURVIVOR ONLY                                                                                                                                         ^│
+ MEM DEDUN · RESOLUTION SESSION                                                                                                                                                     
+ SEMANTIC EVIDENCE · EXISTING UID SURVIVOR · EXACT WHOLE-SET APPLY                                                                                                                  
+┌──────────────────────────────────────────────────────────────────────| VIEWER · REDUNDANCY GROUP EVIDENCE |──────────────────────────────────────────────────────────────────────┐
+│REDUNDANCY GROUP · EXISTING SURVIVOR ONLY                                                                                                                                        ^│
 │ID · dedup-component-4c8bc32e0fadecebc21a247ecd98bdce9ea0d169a7e37837cfdaa97176ef3706                                                                                             │
 │Choose one existing UID. Its wording stays unchanged; every other member UID is absorbed.                                                                                         │
 │                                                                                                                                                                                  │
@@ -28,9 +28,9 @@
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-┌────────────────────────────────────────────────────────────────────| ITEMS · REQUIRED DUPLICATE COMPONENTS |─────────────────────────────────────────────────────────────────────┐
+┌──────────────────────────────────────────────────────────────────────| ITEMS · REQUIRED REDUNDANCY GROUPS |──────────────────────────────────────────────────────────────────────┐
 │REQUIRED 1 · ANSWERED 1 · REMAINING 0                                                                                                                                             │
-│✓ 1. DUPLICATE COMPONENT · Choose one unchanged survivor from 2 members.                                                                                                          │
+│✓ 1. REDUNDANCY GROUP · Choose one unchanged survivor from 2 members.                                                                                                             │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │

@@ -2,7 +2,7 @@
 
 ## Problem
 
-`find-duplicates`, `find-ambiguities`, and `find-conflicts` are read-only
+Dedun discovery, `find-ambiguities`, and `find-conflicts` begin as read-only
 observations. Their Resolution workbench can collect process-local responses,
 but a response is not itself an executable request, mutation authority, or a
 freshness guarantee. CLI, TUI, Python, and agent adapters therefore must not
@@ -10,12 +10,12 @@ reconstruct different next-operation requests from rendered text.
 
 The motivating Task 1 flow is a staged pipeline:
 
-`merge -> dedup -> resolve -> audit`
+`merge -> dedup -> dedun -> resolve -> audit`
 
 Each stage has a different meaning and must freeze its own source and authority.
-Merge combines frames, Dedup decides duplicate disposition, Resolve repairs a
-non-fitting direct-Memory frame, and Audit checks the resulting state. No stage
-implicitly performs a later one.
+Merge combines frames, Dedup removes exact copies, Dedun decides semantic
+redundancy disposition, Resolve repairs a non-fitting direct-Memory frame, and
+Audit checks the resulting state. No stage implicitly performs a later one.
 
 ## Application contract
 
@@ -33,7 +33,7 @@ The routes are deliberately explicit:
 
 | Finding | Route | Current execution status |
 | --- | --- | --- |
-| Duplicate | `DEDUP` | Typed route only |
+| Semantic redundancy | internal `DEDUP` compatibility value | Public evidence uses `REDUNDANCY` / `DEDUN` and executes as `mem dedun` |
 | Ambiguity | `CLARIFY` | Typed route only |
 | Conflict | `RESOLVE` | Same-Context conversion implemented |
 
@@ -94,11 +94,11 @@ synthesize its own digest, target, Memory selector, or guidance.
 - Cross-Context conflicts do not enter Resolve v1. Repairing them requires an
   operation whose post-image and ownership semantics cover multiple Contexts;
   silently shrinking the finder frame to one owner would change the question.
-- Duplicate and ambiguity handoffs identify their future operations but do not
-  pretend that Resolve implements Dedup or Clarify.
+- Semantic redundancy and ambiguity evidence identifies its receiving
+  operation but does not pretend that Resolve implements Dedun or Clarify.
 - Serialized receipts are transferable but intentionally not durable sessions.
   Callers that retain them own that file or message lifecycle; MemCommit does
   not create a new cache containing finding reasons, questions, or responses.
-- Dedup and Clarify remain named routes rather than fake Resolve variants.
+- Dedun and Clarify remain named routes rather than fake Resolve variants.
   Their future executors must consume the same source-bound handoff while
   retaining their own disposition and materialization semantics.

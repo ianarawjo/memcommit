@@ -167,8 +167,8 @@ IMPACT_ROUTES = ImpactRouteRegistry(
     ),
     deferred=(
         DeferredImpactRoute(
-            "consolidate",
-            "The command split and reviewed candidate adapter are still being "
+            "dedun",
+            "The semantic review and candidate adapter are still being "
             "stabilized; Impact must not guess that artifact contract.",
         ),
     ),

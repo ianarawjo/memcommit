@@ -943,7 +943,7 @@ def test_find_and_quality_finders_read_granted_current_projection(
     assert DETAIL_SECRET not in "\n".join(provider.prompts)
 
     active.set_current(source.name)
-    for command in ("find-duplicates", "find-ambiguities", "find-conflicts"):
+    for command in ("dedun", "find-ambiguities", "find-conflicts"):
         quality = runner.invoke(app, [command, "--context", "campus-wiki"])
         assert quality.exit_code == 0, quality.output + quality.stderr
 

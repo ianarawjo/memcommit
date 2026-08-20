@@ -188,6 +188,7 @@ HELP_CATEGORY_GROUPS = (
             "translate",
             "forget",
             "resolve",
+            "dedun",
             "update",
             "meld",
             "sever",
@@ -197,7 +198,6 @@ HELP_CATEGORY_GROUPS = (
         "CHECK, COMPARE & REVIEW",
         (
             "compare",
-            "find-duplicates",
             "find-ambiguities",
             "find-conflicts",
             "audit",
@@ -348,10 +348,12 @@ COMMAND_FORMS = {
         "mem resolve --context [context] --candidate [full_id] --expected-revision [revision] --apply (regenerate, verify, and apply one exact candidate)",
     ),
     "dedup": (
-        "mem dedup (show the required find-duplicates handoff error)",
-        "mem dedup --finding-handoff '[json]' (review confirmed duplicate components)",
-        "mem dedup --finding-handoff '[json]' --plain (print deterministic survivor recommendations)",
-        "mem dedup --finding-handoff '[json]' --survivor [component]=[memory] --expected-revision [revision] --apply (apply one exact complete survivor set)",
+        "mem dedup (remove exact duplicates from the current Context)",
+        "mem dedup [context] (remove exact duplicates from one explicit Context)",
+    ),
+    "dedun": (
+        "mem dedun (find, review, and resolve semantic redundancies)",
+        "mem dedun --context [context] (analyze one explicit Context)",
     ),
     "atomize": (
         "mem atomize (atomize the current Context now; inspect the saved analysis with mem review)",
@@ -490,10 +492,6 @@ COMMAND_FORMS = {
     "find-conflicts": (
         "mem find-conflicts (current Context; no changes)",
         "mem find-conflicts --context [context] (explicit Context; no changes)",
-    ),
-    "find-duplicates": (
-        "mem find-duplicates (current Context; no changes)",
-        "mem find-duplicates --context [context] (explicit Context; no changes)",
     ),
     "forget": (
         "mem forget (enter interactive instruction and direct-Source setup)",

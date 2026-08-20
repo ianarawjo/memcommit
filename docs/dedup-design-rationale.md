@@ -1,137 +1,71 @@
-# Deterministic Dedup application boundary
+# Exact Dedup application boundary
 
-## Status
+## Problem and command contract
 
-`mem dedup` is implemented as a provider-free operation across CLI, TUI,
-public Python, agent, and MCP projections. It consumes typed
-`find-duplicates` receipts, constructs connected components from confirmed
-positive equivalence edges, collects exactly one existing survivor UID per
-component, and applies the complete deletion set in one checkpoint.
+`dedup` previously meant two different things: finding byte-identical stored
+items and applying provider-confirmed semantic equivalence. That made the
+obvious command fail for a Context containing two Memories with the same text:
+`mem dedup` demanded an opaque finder handoff instead of removing the copy.
 
-The quality finder remains read-only. Selecting `CONFIRM LINK` is process-local
-review state until the person activates the `DEDUP` To Do row. That activation
-submits a typed batch; it does not itself authorize or perform deletion.
-
-## Motivating scenario
-
-Task 1 can legitimately use this visible pipeline:
-
-```text
-merge
-  -> find-duplicates
-  -> confirm eligible duplicate links
-  -> dedup
-  -> continue conflict/ambiguity review
-```
-
-This does not make Merge semantic. Merge still owns deterministic structural
-collision handling. The later finder supplies duplicate evidence over the
-merged result, and Dedup owns the separate survivor/deletion decision.
-
-## Typed contract
+`mem dedup [CONTEXT]` and `MemCommitClient.dedup(context_name)` now have one
+narrow, provider-free meaning. They examine
+direct ordinary Memories, groups content by exact Python string equality,
+retains the first UID in the Context's explicit item order, removes every later
+UID in that group, and records the whole change in one checkpoint. With no
+operand it uses the Context that was current when the command began. Existing
+Context locator syntax is resolved through the shared locator boundary.
 
 ```text
-QualityFindingHandoff[DUPLICATE, DEDUP]...
-  -> DedupRequest
-  -> fresh source/Grant validation
-  -> FrozenDedupPlan(components, revision)
-  -> ResolutionCase(one required survivor choice per component)
-  -> DedupSelection...
-  -> exact whole-set review
-  -> atomic Apply + DedupReceipt
+direct Context
+  -> byte-identical content groups
+  -> first-in-Context survivor per group
+  -> reference and freshness validation
+  -> one atomic removal checkpoint
 ```
 
-Only `EXACT`, `SURFACE_EQUIVALENT`, and `SEMANTIC_EQUIVALENT` edges are
-eligible. `OVERLAP`, `UNKNOWN`, and `DISTINCT` cannot enter a Dedup plan.
-Duplicate edges must name two directly owned Memories in one exact frozen
-Context. Connected components use all eligible confirmed edges, including
-transitive links. Finder edge order does not choose the survivor.
-
-The deterministic recommendation is the first component member in the
-Context's existing direct-item order. It is a proposal, not automatic Apply.
-The reviewer may choose any existing member of that exact component.
+There is no semantic provider call, candidate screen, survivor picker,
+finding receipt, or second `--apply` invocation. The command invocation is the
+approval boundary, matching other immediately Undoable deterministic commands.
+A no-op prints that no exact duplicates exist and creates no checkpoint.
 
 ## Invariants
 
-- Keep exactly one existing stable UID per connected component.
-- Keep the survivor's wording byte-for-byte unchanged.
-- Name and remove every other component member UID.
-- Leave unrelated direct items and their relative order unchanged.
-- Bind the plan to the complete Context record digest, direct-Memory finder
-  digest, Context UID, public display name, handoff identities, and component
-  identities.
-- Reject stale Source or revision replay before mutation.
-- Require every component decision through the shared Resolution validator.
-- Scan the direct Context graph for inbound `MemoryRef` values while holding
-  the same command lock used for deletion and checkpoint publication.
-- Publish all component deletions in one checkpoint or publish nothing.
+- Equality is byte-for-byte stored content equality. Unicode, whitespace,
+  punctuation, casing, and line endings are not normalized.
+- Only directly owned `Memory` items participate. References, query views, and
+  embedded Contexts are neither compared nor removed.
+- The earliest direct item retains its exact content, UID, provenance, and
+  position. Later byte-identical UIDs are removed.
+- Every exact group in the frozen Context is applied together or nothing is
+  published. A changed Context digest fails before mutation.
+- An inbound `MemoryRef` to any would-be removed UID blocks the whole command.
+  Retargeting a reference is not inferred merely because content is equal.
+- Granted targets require `READ + DELETE` and are revalidated at the normal
+  authorized mutation boundary.
+- A successful mutation records contract `exact-dedup-v1`, exact survivor and
+  absorbed UIDs, and remains recoverable with `mem undo`.
 
-The receiver deliberately ignores `QualityFindingReviewDraft`. Review state
-becomes executable input only when its adapter explicitly selects eligible
-confirmed handoffs and constructs `DedupRequest`. A crafted handoff still gains
-no mutation authority: Dedup resolves and revalidates the Source and Grant.
+## Semantic redundancy is Dedun
 
-## Authority and Grant boundary
+Different wording that appears interchangeable is not an exact duplicate.
+`mem dedun` owns provider-backed discovery, semantic evidence confirmation,
+survivor review, and exact Apply. It excludes `EXACT` rows and accepts only
+`SURFACE_EQUIVALENT` or `SEMANTIC_EQUIVALENT` evidence. Its review screen and
+survivor decision remain distinct from exact Dedup. The old
+`find-redundancies`, `find-duplicates`, and `consolidate` spellings are hidden
+compatibility aliases; finder and handoff terminology is not part of ordinary
+command Help.
 
-Ordinary local ownership needs no Grant. A granted target requires
-`READ + DERIVE + DELETE` before the plan is shown and again through Apply.
-Revocation or any Grant-binding change invalidates the frozen plan. Explicit
-root Python clients do not inherit host Profile Grants.
+## Alternatives and limits
 
-Dedup V1 exposes only deletion of absorbed duplicates. It has no CREATE,
-UPDATE, canonical rewrite, or information-integration capability to grant or
-deny. Those effects belong to Normalize, Meld, Update, or Fit Resolve and must
-use their own operation contracts.
-
-## TUI and adapter boundary
-
-Dedup uses the same visible deterministic Resolution Session topology as Merge
-and Fit Resolve:
-
-```text
-VIEWER -> conditional RESPONSES -> ITEMS -> TO DO -> exact final review
-```
-
-The shared shell owns focus, selection markers, frame order, back navigation,
-and exact approval mechanics. The Dedup adapter owns component evidence,
-existing-survivor choices, exact argv, receipt wording, and application calls.
-
-Find quality sessions use the compatible shared topology but retain their own
-process-local response model. `SessionPicker` is intentionally absent because
-Dedup plans are one-shot process-local artifacts, not durable resumable
-sessions. Trace and Rationale may reuse read-only Viewer/navigation mechanics;
-they do not acquire Responses, mutation decisions, or Dedup persistence.
-
-CLI exact replay repeats every canonical finding handoff and supplies one
-`--survivor COMPONENT=MEMORY` per component plus `--expected-revision` and
-`--apply`. Python keeps the typed frozen plan object. The agent/MCP adapter
-reconstructs the plan from handoffs and requires the reviewed opaque revision
-and survivor array before Apply. All routes converge on `prepare_dedup()` and
-`apply_dedup()`.
-
-## Rejected alternatives
-
-- **Merge and then silently collapse duplicates:** rejected because structural
-  combination does not prove semantic substitutability and would hide a
-  deletion inside another operation's checkpoint.
-- **Rewrite a canonical combined Memory:** rejected because equivalence does
-  not authorize wording changes, and `OVERLAP` may contain unique facts.
-- **Let finder drafts mutate directly:** rejected because inspection and
-  mutation require separate authority, freshness, and exact-approval checks.
-- **Pick the shortest or model-preferred wording:** rejected because that adds
-  a semantic authoring policy to a deterministic deletion operation.
-- **Persist an implicit finding cache:** rejected for V1. Exact receipts and
-  revision replay keep the boundary visible without a new sensitive session
-  artifact.
-
-## Intentional limitations
-
-- Inbound references block the entire V1 Apply. Safe reference migration is
-  not silently inferred and remains future operation-owned work.
-- Cross-Context duplicate groups are rejected. Moving or coalescing ownership
-  is a different multi-Context operation.
-- A free-form finder response is retained as review context only; it cannot
-  create a new Dedup relation or survivor choice.
-- Dedup does not establish truth, provenance quality, or Fit. It trusts only
-  the eligible confirmed relation receipts as deletion candidates and retains
-  the reviewer's exact survivor decision.
+- Automatically running semantic inference from `mem dedup` was rejected:
+  model equivalence is evidence requiring a different review and authority
+  boundary, while exact equality is complete and deterministic.
+- Conservative normalization was rejected for exact Dedup because it would
+  silently redefine stored content identity. Surface-equivalent wording stays
+  in the semantic redundancy route.
+- Automatically migrating inbound references was rejected for version 1. A
+  reference names identity, not just current text, so migration needs its own
+  reviewed contract.
+- Cross-Context grouping is intentionally out of scope. Exact Dedup changes one
+  direct Context per invocation.

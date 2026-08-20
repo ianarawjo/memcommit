@@ -1,13 +1,13 @@
- MEM DEDUP · RESOLUTION SESSION                                                                                                                                                     
- DETERMINISTIC · EXISTING UID SURVIVOR · EXACT WHOLE-SET APPLY                                                                                                                      
+ MEM DEDUN · RESOLUTION SESSION                                                                                                                                                     
+ SEMANTIC EVIDENCE · EXISTING UID SURVIVOR · EXACT WHOLE-SET APPLY                                                                                                                  
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER · COMPLETE REPORT ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃DEDUP · CONFIRMED DUPLICATE COMPONENTS                                                                                                                                           ^┃
+┃DEDUN · CONFIRMED SEMANTIC REDUNDANCIES                                                                                                                                          ^┃
 ┃CONTEXT · dedup/capture                                                                                                                                                           ┃
-┃REVISION · a2b87e8629f4d890a4efdc4e43160967e389bee66305d865b61313a5c2d12615                                                                                                       ┃
+┃REVISION · 6d413a90bf9c948195355161ce0a48f4d7d64ac318249b071aacddb36336f2a3                                                                                                       ┃
 ┃COMPONENTS · 1                                                                                                                                                                    ┃
 ┃                                                                                                                                                                                  ┃
 ┃DETERMINISTIC BOUNDARY                                                                                                                                                            ┃
-┃Only EXACT, SURFACE_EQUIVALENT, and SEMANTIC_EQUIVALENT finder links are present. Dedup does not rewrite or integrate content.                                                    ┃
+┃Only SURFACE_EQUIVALENT and SEMANTIC_EQUIVALENT evidence links are present. Dedun does not rewrite or integrate content.                                                          ┃
 ┃                                                                                                                                                                                  ┃
 ┃COMPONENT 1 · 2 MEMBERS                                                                                                                                                           ┃
 ┃RECOMMENDED SURVIVOR · [20000000-0000-4000-8000-000000000100]                                                                                                                     ┃
@@ -21,9 +21,9 @@
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                 v┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-┌────────────────────────────────────────────────────────────────────| ITEMS · REQUIRED DUPLICATE COMPONENTS |─────────────────────────────────────────────────────────────────────┐
+┌──────────────────────────────────────────────────────────────────────| ITEMS · REQUIRED REDUNDANCY GROUPS |──────────────────────────────────────────────────────────────────────┐
 │REQUIRED 1 · ANSWERED 0 · REMAINING 1                                                                                                                                             │
-│· 1. DUPLICATE COMPONENT · Choose one unchanged survivor from 2 members.                                                                                                          │
+│· 1. REDUNDANCY GROUP · Choose one unchanged survivor from 2 members.                                                                                                             │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │

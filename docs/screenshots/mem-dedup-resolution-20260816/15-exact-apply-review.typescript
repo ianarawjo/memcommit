@@ -1,5 +1,5 @@
 PTY 180 52
-[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM FIND DUPLICATES · SETUP[0m
+[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM DEDUN · SETUP[0m
 [0m MULTIPLE TARGETS · THIS CONTEXT ONLY · 1 CONTEXT(S) · SOURCE UNCHANGED[0m
 [0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ TARGETS · PROFILE/CONTEXT · * CURRENT · ENTER/SPACE TO SELECT ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
 [0;38;5;117;1m┃[0m  ·   PROFILE  ALL READABLE CONTEXTS                                                                                                                                             [0;1m^[179C[0;38;5;117;1m┃[0m
@@ -11,7 +11,7 @@ PTY 180 52
 [0m│  CONTEXT RANGE · [0;38;5;234;48;5;117m[ THIS CONTEXT ONLY ][0m  [ INCLUDE DESCENDANTS ] · ←/→ SELECT                                                                                                     [179C│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
 [0m┌─────────────────────────────────────────────────────────────────────────────| TO DO · ENTER TO RUN |─────────────────────────────────────────────────────────────────────────────[179C┐[0m
-[0m│  RUN FIND DUPLICATES                                                                                                                                                             [179C│[0m
+[0m│  RUN DEDUN                                                                                                                                                                       [179C│[0m
 [0m│  Analyze direct Memories across 1 selected Context as one frame; Sources unchanged.                                                                                              [179C│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
 [0m ↑/↓ move/cross · ←/→ collapse/expand · Enter/Space select · A expand all · Tab/Shift-Tab pane · Esc/Q cancel[0m
@@ -68,11 +68,11 @@ PTY 180 52
 [0m│  CONTEXT RANGE · [0;38;5;234;48;5;117m[ THIS CONTEXT ONLY ][0m  [ INCLUDE DESCENDANTS ] · ←/→ SELECT                                                                                                     [179C│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
 [0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ TO DO · ENTER TO RUN ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
-[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m› RUN FIND DUPLICATES[0m                                                                                                                                                             [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m› RUN DEDUN[0m                                                                                                                                                                       [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m  Analyze direct Memories across 1 selected Context as one frame; Sources unchanged.                                                                                              [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
-[C[0mEnter run · ↑ setup[C· Tab/Shift-Tab pane · Esc/Q cancel[0m[K[3A[55D[0m[12A[J[0m[?7h[?1049l[?2004lMEM FIND DUPLICATES · 1/1 · ANALYZING 3 DIRECT MEMORIES ACROSS 1 CONTEXTS . · 0s                                                                                [?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
-[0;38;5;117;1m┃[0m MEM FIND DUPLICATES                                                                                                                                                             [0;1m^[179C[0;38;5;117;1m┃[0m
+[C[0mEnter run · ↑ setup[C· Tab/Shift-Tab pane · Esc/Q cancel[0m[K[3A[55D[0m[12A[J[0m[?7h[?1049l[?2004lMEM DEDUN · 1/1 · ANALYZING 3 DIRECT MEMORIES ACROSS 1 CONTEXTS . · 0s                                                                      [?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;5;117;1m┃[0m MEM DEDUN                                                                                                                                                                       [0;1m^[179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m CONTEXT LOCATIONS                                                                                                                                                               [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m   SOURCE · dedup/capture                                                                                                                                                        [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m PROCESS LOCAL · 0/1 ANSWERED · 1 CONTEXTS · 3 SOURCE MEMORIES · 1 FINDINGS · 0 ANSWERED                                                                                         [0;48;5;238m [179C[0;38;5;117;1m┃[0m
@@ -110,7 +110,7 @@ PTY 180 52
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
 [0m┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
-[0m│[0;1m› REPORT         Complete Find Duplicates report[0m                                                                                                                                 [0;1m^[179C[0m│[0m
+[0m│[0;1m› REPORT         Complete Dedun report[0m                                                                                                                                           [0;1m^[179C[0m│[0m
 [0m│  DUPLICATE      The office opens at eight on weekdays. ↔ The weekday office opening time is 08:00.                                                                              [0;48;5;238m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
@@ -162,7 +162,7 @@ PTY 180 52
 [0m│[0;38;5;231m└────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[179C[0m│[0m
 [0m└[84C─────────[85C┘[0m
 [0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ ITEMS ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
-[0;38;5;117;1m┃[0m  REPORT         Complete Find Duplicates report                                                                                                                                 [0;1m^[179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  REPORT         Complete Dedun report                                                                                                                                           [0;1m^[179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0;1;7m› DUPLICATE      The office opens at eight on weekdays. ↔ The weekday office opening time is 08:00.[0m                                                                              [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
@@ -213,7 +213,7 @@ PTY 180 52
 
 
 [0m┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
-[0m│  REPORT         Complete Find Duplicates report                                                                                                                                 [0;1m^[179C[0m│[0m
+[0m│  REPORT         Complete Dedun report                                                                                                                                           [0;1m^[179C[0m│[0m
 [0m│[0;1m› DUPLICATE      The office opens at eight on weekdays. ↔ The weekday office opening time is 08:00.[0m                                                                              [0;48;5;238m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
@@ -324,7 +324,7 @@ PTY 180 52
 
 
 
-[3C[0mDEDUP ] [CDedup 1 confirmed duplicate link(s) · Enter[Cto submit only[Cth[C confirmed eligible link[C. Dedup will recheck the Source, DELETE authority, components, and inbound r…[0m
+[3C[0mDEDUN ] [CDedun 1 confirmed semantic redundancy li[Ck(s) · Enter to [Cubmit only the confirmed el[Cgible links. Dedun will recheck[Cth[C Source, DELETE authority, components, and…[0m
 
 [C[0mSele[Cted · ✓ CONFIRM[CLINK[0m[K[51A[26D[0m[?25l[0m
 
@@ -375,18 +375,18 @@ PTY 180 52
 
 
 [0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ TO DO ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
-[0;38;5;117;1m┃[0;1m[ DEDUP ][0m  Dedup 1 confirmed duplicate link(s) · Enter to submit only the confirmed eligible links. Dedup will recheck the Source, DELETE authority, components, and inbound r…   [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m[ DEDUN ][0m  Dedun 1 confirmed semantic redundancy link(s) · Enter to submit only the confirmed eligible links. Dedun will recheck the Source, DELETE authority, components, and…   [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
-[C[0mEnt[Cr dedup [CTab switch  Esc/Backspace back H Help  Q close[2A[59D[0m[49A[J[0m[?7h[?1049l[?2004l[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM DEDUP · RESOLUTION SESSION[0m
-[0m DETERMINISTIC · EXISTING UID SURVIVOR · EXACT WHOLE-SET APPLY[0m
+[C[0mEnt[Cr dedun [CTab switch  Esc/Backspace back H Help  Q close[2A[59D[0m[49A[J[0m[?7h[?1049l[?2004l[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM DEDUN · RESOLUTION SESSION[0m
+[0m SEMANTIC EVIDENCE · EXISTING UID SURVIVOR · EXACT WHOLE-SET APPLY[0m
 [0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER · COMPLETE REPORT ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
-[0;38;5;117;1m┃DEDUP · CONFIRMED DUPLICATE COMPONENTS[0m                                                                                                                                           [0;1m^[179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃DEDUN · CONFIRMED SEMANTIC REDUNDANCIES[0m                                                                                                                                          [0;1m^[179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃CONTEXT · dedup/capture[0m                                                                                                                                                          [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃REVISION · a2b87e8629f4d890a4efdc4e43160967e389bee66305d865b61313a5c2d12615[0m                                                                                                      [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃REVISION · 6d413a90bf9c948195355161ce0a48f4d7d64ac318249b071aacddb36336f2a3[0m                                                                                                      [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃COMPONENTS · 1[0m                                                                                                                                                                   [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0;38;5;117mDETERMINISTIC BOUNDARY[0m                                                                                                                                                           [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;117mOnly EXACT, SURFACE_EQUIVALENT, and SEMANTIC_EQUIVALENT finder links are present. Dedup does not rewrite or integrate content.[0m                                                   [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;117mOnly SURFACE_EQUIVALENT and SEMANTIC_EQUIVALENT evidence links are present. Dedun does not rewrite or integrate content.[0m                                                         [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃COMPONENT 1 · 2 MEMBERS[0m                                                                                                                                                          [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0;38;5;150;1mRECOMMENDED SURVIVOR · [20000000-0000-4000-8000-000000000100][0m                                                                                                                    [0;48;5;238m [179C[0;38;5;117;1m┃[0m
@@ -400,9 +400,9 @@ PTY 180 52
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
-[0m┌────────────────────────────────────────────────────────────────────| ITEMS · REQUIRED DUPLICATE COMPONENTS |─────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m┌──────────────────────────────────────────────────────────────────────| ITEMS · REQUIRED REDUNDANCY GROUPS |──────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│[0;38;5;231;1mREQUIRED 1 · ANSWERED 0 · REMAINING 1[0m                                                                                                                                             [179C│[0m
-[0m│· 1. DUPLICATE COMPONENT · Choose one unchanged survivor from 2 members.                                                                                                          [179C│[0m
+[0m│· 1. REDUNDANCY GROUP · Choose one unchanged survivor from 2 members.                                                                                                             [179C│[0m
 [0m│                                                                                                                                                                                  [179C│[0m
 [0m│                                                                                                                                                                                  [179C│[0m
 [0m│                                                                                                                                                                                  [179C│[0m
@@ -428,21 +428,21 @@ PTY 180 52
 [0m│                                                                                                                                                                                  [179C│[0m
 [0m│                                                                                                                                                                                  [179C│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
-[0m ↑/↓ move · Enter open/select · Tab frames · Esc/Backspace back · y focused · Y complete · Q close[98D[48A[C[0m[?25l[A[68C[0;38;5;117;1m┃ VIEWER[C· DUPLICATE COMPONENT EVIDENCE ┃[0m
-[7C[0;38;5;117;1mCOMPONENT ·[CEXISTING SURVIVOR ONLY[0m
+[0m ↑/↓ move · Enter open/select · Tab frames · Esc/Backspace back · y focused · Y complete · Q close[98D[48A[C[0m[?25l[A[70C[0;38;5;117;1m┃ VIEWER · REDUNDANCY GROUP EVIDENCE ┃[0m
+[C[0;38;5;117;1mR[4CDAN[CY GROUP · [CXIS[2CNG SURVIVOR ONLY[0m
 [C[0;38;5;117;1mID · dedup-com[Conen[C-4c8bc32e0fadecebc21a247ecd98bdce9ea0d169a7e37837cfdaa97176ef3706[0m
 [C[0;38;5;117mChoose one existing UID. Its wording stays unchanged; every other member UID is absorbed.[0m
 [C[0m              [0m
 [C[0;38;5;117;1mMEMBERS[0m
 [C[0;38;5;150;1m  RECOMMENDED · #1 · [20000000-0000-4000-8000-000000000100][0m
-[C[0;38;5;117;1m  The office opens at eight on weekdays.[0m                                                                                      [0m
+[C[0;38;5;117;1m  The office opens at eight on weekdays.[0m                                                                                [0m
 [C[0;38;5;117;1m  #2 · [20000000-0000-4000-8000-000000000200][0m
 [C[0;38;5;117;1m  The weekday office opening time is 08:00.[0m
 [C[0m                                                             [0m
 [C[0;38;5;117;1mCONFIRMED EVIDENCE[0m [0m
 [C[0;38;5;117m  SEMANTIC_EQUIVALENT · [20000000] ↔ [20000000][0m
 [C[0;38;5;117m  WHY · Both Memories state the same weekday opening time without adding a distinct condition.[0m
-
+[178C[0;48;5;238m [0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
 [0m┌───────────────────────────────────────────────────────────────────| RESPONSES · REQUIRED · EXISTING SURVIVOR |───────────────────────────────────────────────────────────────────[179C┐[0m
@@ -451,14 +451,14 @@ PTY 180 52
 [0m│  1. KEEP [20000000] · RECOMMENDED                                                                                                                                                [179C│[0m
 [0m│  Keep Context item #1 unchanged; absorb the other UIDs.                                                                                                                          [179C│[0m
 [C[0m                                     [0m
-[C[0m [C2[2CKEEP [20000000]                                                    [0m
+[C[0m [C2[2CK[CEP [20000000]                                                 [0m
 [C[0m  Keep Context item #2 unchanged; absorb the other UIDs.[0m
 
 [0m│                                                                                                                                                                                  [179C│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
-[0m┌────────────────────────────────────────────────────────────────────| ITEMS · REQUIRED DUPLICATE COMPONENTS |─────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m┌──────────────────────────────────────────────────────────────────────| ITEMS · REQUIRED REDUNDANCY GROUPS |──────────────────────────────────────────────────────────────────────[179C┐[0m
 [C[0;38;5;231;1mREQUIRED 1 · ANSWERED 0 · REMAINING 1[0m
-[C[0m· 1. DUPLICATE COMPONENT · Choose one unchanged survivor from 2 members.[0m
+[C[0m· 1. REDUNDANCY GROUP · Choose one unchanged survivor from 2 members.[0m
 
 [0m│                                                                                                                                                                                  [179C│[0m
 [0m│                                                                                                                                                                                  [179C│[0m
@@ -469,8 +469,8 @@ PTY 180 52
 [0m┌───────────────────────────────────────────────────────────────────────────| TO DO · ONE NEXT ACTION |────────────────────────────────────────────────────────────────────────────[179C┐[0m
 [C[0;38;5;231mOPEN FIRST UNRESOLVED · Choose one unchanged survivor from 2 members.[0m
 [C[0;38;5;231mEnter opens this required item. Apply stays unavailable.[0m
-[C[0m[ PRESS ENTER ][40A[15D[0m[?25l[A[0m┌────────────────────────────────────────────────────────────────────| VIEWER · DUPLICATE COMPONENT EVIDENCE |─────────────────────────────────────────────────────────────────────[179C┐[0m
-[0m│DEDUP COMPONENT · EXISTING SURVIVOR ONLY                                                                                                                                         [0;1m^[179C[0m│[0m
+[C[0m[ PRESS ENTER ][40A[15D[0m[?25l[A[0m┌──────────────────────────────────────────────────────────────────────| VIEWER · REDUNDANCY GROUP EVIDENCE |──────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│REDUNDANCY GROUP · EXISTING SURVIVOR ONLY                                                                                                                                        [0;1m^[179C[0m│[0m
 [0m│[0;38;5;231;1mID · dedup-component-4c8bc32e0fadecebc21a247ecd98bdce9ea0d169a7e37837cfdaa97176ef3706[0m                                                                                            [0;48;5;238m [179C[0m│[0m
 [0m│[0;38;5;231mChoose one existing UID. Its wording stays unchanged; every other member UID is absorbed.[0m                                                                                        [0;48;5;238m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
@@ -528,7 +528,7 @@ PTY 180 52
 
 
 [23C[0;38;5;231;1m1[13C0[0m
-[C[0;38;5;234;48;5;117m✓ 1. DUPLICATE COMPONENT · Choose one unchanged survivor from 2 members.[0m
+[C[0;38;5;234;48;5;117m✓ 1. REDUNDANCY GROUP · Choose one unchanged survivor from 2 members.[0m
 
 
 
@@ -588,25 +588,25 @@ PTY 180 52
 [0;38;5;117;1m┃[0m                                                                                                                                                                                  [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                  [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                  [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[7A[C[0m[?25l[41A[68C[0m───────|[CVIEWER · COMPLETE REPORT |──────[0m
-[7C[0m· CONFIRMED[CDUPLICATE COMPONENTS  [0m
+[0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[7A[C[0m[?25l[41A[70C[0m─────| VIEWER · COMPLETE REPORT |─────[0m
+[C[0mD[4C · [CONFIRMED S[CMAN[2CC REDUNDANCIES  [0m
 [C[0;38;5;231;1mCONTEXT · dedu[C/cap[Cure[0m                                                              [0m
-[C[0;38;5;231;1mREVISION · a2b87e8629f4d890a4efdc4e43160967e389bee66305d865b61313a5c2d12615[0m              [0m
+[C[0;38;5;231;1mREVISION · 6d413a90bf9c948195355161ce0a48f4d7d64ac318249b071aacddb36336f2a3[0m              [0m
 [C[0;38;5;231;1mCOMPONENTS · 1[0m
 [C[0m       [0m
 [C[0;38;5;231mDETERMINISTIC BOUNDARY[0m                                     [0m
-[C[0;38;5;231mOnly EXACT, SURFACE_EQUIVALENT, and SEMANTIC_EQUIVALENT finder links are present. Dedup does not rewrite or integrate content.[0m
+[C[0;38;5;231mOnly SURFACE_EQUIVALENT and SEMANTIC_EQUIVALENT evidence links are present. Dedun does not rewrite or integrate content.[0m
 [C[0m                                             [0m
 [C[0mCOMPONENT 1 · 2 MEMBERS                    [0m
 [C[0;38;5;150;1mRECOMMENDED SURVIVOR · [20000000-0000-4000-8000-000000000100][0m
 [C[0;38;5;231mCONFIRMED LINKS · 1[0m
 [C[0m                                               [0m
-[C[0;38;5;210;1mAPPLY · one checkpoint · inbound references to absorbed UIDs block the complete operation.[0m    [0m
+[C[0;38;5;210;1mAPPLY · one checkpoint · inbound references to absorbed UIDs block the complete operation.[0m    [83C[0;48;5;238m [0m
 [0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
-[0m┌[68C| ITEMS · REQUIRED DUPLICATE COMPONENTS |[69C┐[0m
+[0m┌[70C| ITEMS · REQUIRED REDUNDANCY GROUPS |[70C┐[0m
 [0m│[0;38;5;231;1mREQUIRED 1 · ANSWERED 1 · REMAINING 0[0m                                                                                                                                             [179C│[0m
-[C[0;38;5;234;48;5;117m✓ 1. DUPLICATE COMPONENT · Choose one unchanged survivor from 2 members.[0m
+[C[0;38;5;234;48;5;117m✓ 1. REDUNDANCY GROUP · Choose one unchanged survivor from 2 members.[0m
 
 [C[0m                                  [0m
 [C[0m                                                        [0m
@@ -616,17 +616,17 @@ PTY 180 52
 [0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ TO DO · ONE NEXT ACTION ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
 [0;38;5;117;1m┃[0;38;5;231;1mFINAL REVIEW · ITEM-BY-ITEM DECISIONS[0m                                                                                                                                             [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0;38;5;231mPROPOSED COMMAND · NOT RUN[0m                                                                                                                                                        [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;231m  mem dedup --finding-handoff '{"classification":"SEMANTIC_EQUIVALENT","contract":"quality-finding-handoff-v1","finding_uid":"duplicate:20000000-0000-4000-8000-000000000100:20000[179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;231m000-0000-4000-8000-000000000200","kind":"DUPLICATE","memory_context_names":["dedup/capture","dedup/capture"],"memory_uids":["20000000-0000-4000-8000-000000000100","20000000-0000-[179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;231m4000-8000-000000000200"],"proposed_readings":[],"qualifiers":[],"question":"","reason":"Both Memories state the same weekday opening time without adding a distinct condition.","r[179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;231meview_draft":{"selected_option_uid":"duplicate:20000000-0000-4000-8000-000000000100:20000000-0000-4000-8000-000000000200:confirm","text":""},"route":"DEDUP","source_frame_digest"[179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;231m:"c3edff2c0c269c255c06c80261ba47c892f8041273bbd26fe93b4169f4bf55b9","sources":[{"context_uid":"10000000-0000-4000-8000-000000000100","direct_memory_digest":"d66204323e907cdff9bfe[179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;231m9481d0d63d4ec1fcd5de80016eb3f163fe514886d9c","display_name":"dedup/capture"}],"uid":"finding-a02cdea9047fcdd51aca9a008f363deb00806b8a102562344c445f5b1cdcab1d"}' --survivor dedup-[179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;231mcomponent-4c8bc32e0fadecebc21a247ecd98bdce9ea0d169a7e37837cfdaa97176ef3706=20000000-0000-4000-8000-000000000100 --expected-revision a2b87e8629f4d890a4efdc4e43160967e389bee66305d8[179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;231m65b61313a5c2d12615 --apply[0m                                                                                                                                                        [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231m  mem dedun --evidence '{"classification":"SEMANTIC_EQUIVALENT","contract":"semantic-redundancy-evidence-v1","finding_uid":"duplicate:20000000-0000-4000-8000-000000000100:2000000[179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231m0-0000-4000-8000-000000000200","kind":"REDUNDANCY","memory_context_names":["dedup/capture","dedup/capture"],"memory_uids":["20000000-0000-4000-8000-000000000100","20000000-0000-4[179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231m000-8000-000000000200"],"proposed_readings":[],"qualifiers":[],"question":"","reason":"Both Memories state the same weekday opening time without adding a distinct condition.","re[179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231mview_draft":{"selected_option_uid":"duplicate:20000000-0000-4000-8000-000000000100:20000000-0000-4000-8000-000000000200:confirm","text":""},"route":"DEDUN","source_frame_digest":[179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231m"c3edff2c0c269c255c06c80261ba47c892f8041273bbd26fe93b4169f4bf55b9","sources":[{"context_uid":"10000000-0000-4000-8000-000000000100","direct_memory_digest":"d66204323e907cdff9bfe9[179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231m481d0d63d4ec1fcd5de80016eb3f163fe514886d9c","display_name":"dedup/capture"}],"uid":"finding-a02cdea9047fcdd51aca9a008f363deb00806b8a102562344c445f5b1cdcab1d"}' --survivor dedup-c[179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231momponent-4c8bc32e0fadecebc21a247ecd98bdce9ea0d169a7e37837cfdaa97176ef3706=20000000-0000-4000-8000-000000000100 --expected-revision 6d413a90bf9c948195355161ce0a48f4d7d64ac318249b0[179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231m71aacddb36336f2a3 --apply[0m                                                                                                                                                         [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                  [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0;38;5;231mEFFECTS · ONE COMMAND[0m                                                                                                                                                             [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;231m  Frozen Context revision · a2b87e8629f4d890a4efdc4e43160967e389bee66305d865b61313a5c2d12615.[0m                                                                                     [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231m  Frozen Context revision · 6d413a90bf9c948195355161ce0a48f4d7d64ac318249b071aacddb36336f2a3.[0m                                                                                     [179C[0;38;5;117;1m┃[0m
 [C[0;38;5;231m  Keep[C1 unchanged existing survivor UID(s).[0m
 [C[0;38;5;231m  Absorb 1 of 2[Ccomponent member UID(s): 20000000-0000-4000-8000-000000000200[0m
 [C[0;38;5;231m  No replacement wording is generated and unrelated Memories stay unchanged.[0m

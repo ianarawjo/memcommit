@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
+from copy import deepcopy
 
 from memcommit.api import (
     MemCommitClient,
@@ -21,6 +22,10 @@ from memcommit.interfaces.agent.contract import (
     exact_fields,
     object_value,
     text_value,
+)
+from memcommit.semantic_redundancy_evidence import (
+    SEMANTIC_REDUNDANCY_EVIDENCE_VERSION,
+    semantic_redundancy_evidence_dict,
 )
 
 
@@ -105,6 +110,25 @@ def quality_finding_handoff_agent_schema() -> JsonObject:
     }
 
 
+def semantic_redundancy_evidence_agent_schema() -> JsonObject:
+    """Return the strict public evidence schema accepted by Dedun."""
+
+    schema = deepcopy(quality_finding_handoff_agent_schema())
+    properties = schema["properties"]
+    assert isinstance(properties, dict)
+    properties["contract"] = {
+        "type": "string",
+        "const": SEMANTIC_REDUNDANCY_EVIDENCE_VERSION,
+    }
+    properties["kind"] = {"type": "string", "const": "REDUNDANCY"}
+    properties["route"] = {"type": "string", "const": "DEDUN"}
+    properties["classification"] = {
+        "type": "string",
+        "enum": ["SURFACE_EQUIVALENT", "SEMANTIC_EQUIVALENT"],
+    }
+    return schema
+
+
 def _parse_request(payload: object) -> tuple[str, tuple[str, ...]]:
     value = object_value(payload, label="Quality Find request")
     exact_fields(
@@ -123,9 +147,9 @@ def _parse_request(payload: object) -> tuple[str, tuple[str, ...]]:
             f"version must be exactly {QUALITY_FIND_AGENT_CONTRACT_VERSION}."
         )
     kind = text_value(value["kind"], field="kind")
-    if kind not in {"duplicates", "ambiguities", "conflicts"}:
+    if kind not in {"redundancies", "ambiguities", "conflicts"}:
         raise AgentRequestError(
-            "kind must be duplicates, ambiguities, or conflicts."
+            "kind must be redundancies, ambiguities, or conflicts."
         )
     raw_names = value.get("context_names", [])
     if not isinstance(raw_names, list):
@@ -198,7 +222,7 @@ class QualityFindAgentAdapter:
             )
         try:
             operation = {
-                "duplicates": self._client.find_duplicates,
+                "redundancies": self._client.find_redundancies,
                 "ambiguities": self._client.find_ambiguities,
                 "conflicts": self._client.find_conflicts,
             }[kind]
@@ -248,7 +272,14 @@ class QualityFindAgentAdapter:
                 "source_digest": result.source_digest,
                 "memory_count": result.memory_count,
                 "pair_count": result.pair_count,
-                "findings": [handoff.to_dict() for handoff in result.handoffs],
+                "evidence": [
+                    (
+                        semantic_redundancy_evidence_dict(handoff)
+                        if kind == "redundancies"
+                        else handoff.to_dict()
+                    )
+                    for handoff in result.evidence
+                ],
                 "effect": "NONE",
             },
         }
@@ -260,8 +291,8 @@ def quality_find_agent_tool_schema() -> JsonObject:
     return {
         "name": QUALITY_FIND_AGENT_TOOL_NAME,
         "description": (
-            "Find duplicate evidence, ambiguities, or conflicts in one frozen "
-            "readable Context frame. Returns typed next-operation handoffs and "
+            "Find semantic redundancies, ambiguities, or conflicts in one frozen "
+            "readable Context frame. Returns typed evidence and "
             "never mutates a Context."
         ),
         "parameters": {
@@ -275,7 +306,7 @@ def quality_find_agent_tool_schema() -> JsonObject:
                 },
                 "kind": {
                     "type": "string",
-                    "enum": ["duplicates", "ambiguities", "conflicts"],
+                    "enum": ["redundancies", "ambiguities", "conflicts"],
                 },
                 "context_names": {
                     "type": "array",
@@ -292,4 +323,5 @@ __all__ = [
     "QualityFindAgentAdapter",
     "quality_find_agent_tool_schema",
     "quality_finding_handoff_agent_schema",
+    "semantic_redundancy_evidence_agent_schema",
 ]

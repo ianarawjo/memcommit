@@ -28,7 +28,7 @@ nor can a friendly command name stand in for the effects it eventually writes.
 | Surface | Required authority | Durable behavior |
 |---|---|---|
 | switch, ls, show, status, summarize | READ | Public virtual pointer or read-only output |
-| find, find-duplicates, find-ambiguities, find-conflicts | READ | Current projection only; QUERY-only overrides excluded |
+| find, dedun discovery, find-ambiguities, find-conflicts | READ | Current projection only; QUERY-only overrides excluded |
 | query | QUERY | Provider-mediated result; SESSION_LOG separately controls saved query sessions |
 | add | CREATE | Authority Memory and checkpoint |
 | edit | UPDATE | Authority Memory and checkpoint |

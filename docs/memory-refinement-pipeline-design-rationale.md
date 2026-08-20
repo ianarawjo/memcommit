@@ -1,5 +1,10 @@
 # Memory refinement pipeline
 
+> Naming amendment (2026-08-20): exact stored duplicates are removed by
+> `mem dedup`; semantic redundancy discovery, review, and Apply are now the
+> single `mem dedun` operation. Historical pipeline sections below retain
+> `find-duplicates` and semantic `dedup` where they document the earlier split.
+
 The detailed reasoning behind the three quality judgments—including why
 ambiguity is unary, why conflict targets pairs, why duplicate discovery returns
 binary relation evidence from a whole-Context pass, why ambiguity uses two

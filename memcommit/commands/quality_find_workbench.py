@@ -151,11 +151,15 @@ def interactive_quality_find_available() -> bool:
 
 
 def _operation_label(kind: QualitySetupKind) -> str:
-    return "AUDIT" if kind == "audit" else f"FIND {kind.upper()}"
+    if kind == "audit":
+        return "AUDIT"
+    if kind == "duplicates":
+        return "DEDUN"
+    return f"FIND {kind.upper()}"
 
 
 def _read_report_operation(kind: QualityFindKind):
-    return f"find-{kind}"
+    return "dedun" if kind == "duplicates" else f"find-{kind}"
 
 
 def annotate_quality_find_attempt(
@@ -633,15 +637,15 @@ def run_quality_find_resolution_workbench(
             else (
                 lambda: (
                     SessionTodoView(
-                        "DEDUP",
+                        "DEDUN",
                         (
-                            "Dedup "
+                            "Dedun "
                             f"{len(confirmed_duplicate_handoffs())} confirmed "
-                            "duplicate link(s)"
+                            "semantic redundancy link(s)"
                         ),
                         (
                             "Enter to submit only the confirmed eligible links. "
-                            "Dedup will recheck the Source, DELETE authority, "
+                            "Dedun will recheck the Source, DELETE authority, "
                             "components, and inbound references before exact Apply."
                         ),
                     )
@@ -675,7 +679,7 @@ def run_quality_find_resolution_workbench(
                 confirmed = confirmed_duplicate_handoffs()
                 if duplicate_handoff_handler is None or not confirmed:
                     raise QualityFindWorkbenchError(
-                        "Confirmed duplicate handoff is unavailable in this adapter."
+                        "Confirmed redundancy evidence is unavailable in this adapter."
                     )
                 duplicate_handoff_handler(confirmed)
                 return session

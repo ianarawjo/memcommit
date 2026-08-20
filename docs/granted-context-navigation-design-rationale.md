@@ -71,7 +71,7 @@ the same resolver with their required permission and therefore reject an
 Advisor READ grant.
 
 READ does not expose authority checkpoint history. Current-state `mem find`
-and the three quality finders (`find-duplicates`, `find-ambiguities`, and
+and the semantic quality operations (`dedun`, `find-ambiguities`, and
 `find-conflicts`) use the same bounded READ projection as listing: recursive
 Find includes READ-visible namespace descendants, while a more-specific
 QUERY-only override never becomes candidate evidence. Temporal Find fails

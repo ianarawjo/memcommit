@@ -4,6 +4,13 @@ Status: working design as of 2026-07-28
 
 This document preserves the reasoning that led to:
 
+> Current naming amendment (2026-08-20): exact stored-content cleanup is now
+> `mem dedup`; semantic redundancy discovery, review, and Apply are one
+> `mem dedun` operation. In this product vocabulary, `dup` means exact stored
+> duplicate and `dun` means semantic redundancy. Historical sections retain
+> the former `find-duplicates`/semantic-`dedup` names when describing the
+> experiments and decisions that originally used them.
+
 ```text
 mem find-duplicates
 mem find-ambiguities

@@ -211,7 +211,7 @@ def test_interactive_orchestration_replays_recent_target_without_saved_session(
     store.create_context(child)
     store.set_current(root.name)
     target = ReadReportTarget(
-        operation="find-duplicates",
+        operation="dedun",
         context_names=(root.name, child.name),
         target_names=(root.name,),
         selection_mode="SINGLE",
@@ -275,7 +275,7 @@ def test_profile_recent_reexpands_the_current_frozen_readable_catalog(
     store.create_context(added_later)
     store.set_current(original.name)
     target = ReadReportTarget(
-        operation="find-duplicates",
+        operation="dedun",
         # This is the effective Profile membership recorded by the old run.
         context_names=(original.name,),
         target_names=(),
@@ -565,7 +565,7 @@ def test_conflict_workbench_hands_off_the_selected_typed_finding():
     [
         ("find_ambiguities", "find-ambiguities", "ambiguities"),
         ("find_conflicts", "find-conflicts", "conflicts"),
-        ("find_duplicates", "find-duplicates", "duplicates"),
+        ("find_duplicates", "dedun", "duplicates"),
     ],
 )
 def test_flagless_tty_commands_route_to_the_shared_quality_workbench(

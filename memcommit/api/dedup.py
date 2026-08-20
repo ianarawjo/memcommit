@@ -1,4 +1,4 @@
-"""Stable public values for deterministic Dedup planning and Apply."""
+"""Stable public values for exact Dedup and semantic Dedun."""
 
 from __future__ import annotations
 
@@ -10,7 +10,25 @@ if TYPE_CHECKING:
 
 
 @dataclass(frozen=True)
-class DedupMemberResult:
+class ExactDedupGroupResult:
+    survivor_uid: str
+    absorbed_uids: tuple[str, ...]
+    content: str
+
+
+@dataclass(frozen=True)
+class ExactDedupResult:
+    context_name: str
+    groups: tuple[ExactDedupGroupResult, ...]
+    checkpoint_uid: str | None
+
+    @property
+    def removed_count(self) -> int:
+        return sum(len(group.absorbed_uids) for group in self.groups)
+
+
+@dataclass(frozen=True)
+class DedunMemberResult:
     uid: str
     content: str
     ordinal: int
@@ -18,7 +36,7 @@ class DedupMemberResult:
 
 
 @dataclass(frozen=True)
-class DedupEvidenceResult:
+class DedunEvidenceResult:
     finding_uid: str
     relation: str
     left_uid: str
@@ -27,24 +45,24 @@ class DedupEvidenceResult:
 
 
 @dataclass(frozen=True)
-class DedupComponentResult:
+class DedunComponentResult:
     uid: str
-    members: tuple[DedupMemberResult, ...]
-    evidence: tuple[DedupEvidenceResult, ...]
+    members: tuple[DedunMemberResult, ...]
+    evidence: tuple[DedunEvidenceResult, ...]
     recommended_survivor_uid: str
 
 
 @dataclass(frozen=True)
-class DedupPlanResult:
+class DedunPlanResult:
     context_name: str
     context_uid: str
     revision: str
-    components: tuple[DedupComponentResult, ...]
+    components: tuple[DedunComponentResult, ...]
     _application_plan: "FrozenDedupPlan" = field(repr=False, compare=False)
 
 
 @dataclass(frozen=True)
-class DedupApplyResult:
+class DedunApplyResult:
     context_name: str
     context_uid: str
     revision: str
@@ -53,10 +71,26 @@ class DedupApplyResult:
     absorbed_uids: tuple[str, ...]
 
 
+# Compatibility aliases for callers compiled against the former semantic
+# Dedup/Consolidate public vocabulary.
+DedupMemberResult = DedunMemberResult
+DedupEvidenceResult = DedunEvidenceResult
+DedupComponentResult = DedunComponentResult
+DedupPlanResult = DedunPlanResult
+DedupApplyResult = DedunApplyResult
+
+
 __all__ = [
     "DedupApplyResult",
     "DedupComponentResult",
     "DedupEvidenceResult",
     "DedupMemberResult",
     "DedupPlanResult",
+    "DedunApplyResult",
+    "DedunComponentResult",
+    "DedunEvidenceResult",
+    "DedunMemberResult",
+    "DedunPlanResult",
+    "ExactDedupGroupResult",
+    "ExactDedupResult",
 ]

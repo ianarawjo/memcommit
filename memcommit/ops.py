@@ -743,16 +743,31 @@ def impact_atomize(
     )
 
 
+def find_redundancies(
+    ctx: Context,
+    provider_factory: Callable[[], "FindingsProvider"],
+    *,
+    context_name_by_uid: "Mapping[str, str] | None" = None,
+) -> "DuplicateReport":
+    """Find semantically redundant direct Memories without mutating *ctx*."""
+    from memcommit.findings import find_duplicates as _find_duplicates
+
+    return _find_duplicates(
+        ctx,
+        provider_factory,
+        context_name_by_uid=context_name_by_uid,
+    )
+
+
 def find_duplicates(
     ctx: Context,
     provider_factory: Callable[[], "FindingsProvider"],
     *,
     context_name_by_uid: "Mapping[str, str] | None" = None,
 ) -> "DuplicateReport":
-    """Find duplicate direct-Memory pairs without mutating *ctx*."""
-    from memcommit.findings import find_duplicates as _find_duplicates
+    """Compatibility alias for :func:`find_redundancies`."""
 
-    return _find_duplicates(
+    return find_redundancies(
         ctx,
         provider_factory,
         context_name_by_uid=context_name_by_uid,

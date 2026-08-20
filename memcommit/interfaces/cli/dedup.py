@@ -1,4 +1,4 @@
-"""Plain terminal projection for deterministic Dedup plans and receipts."""
+"""Plain terminal projection for semantic Dedun plans and receipts."""
 
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ def _line(label: str, value: str) -> None:
 
 
 def render_dedup_plan_plain(plan: FrozenDedupPlan) -> None:
-    typer.secho("DEDUP · CONFIRMED DUPLICATE COMPONENTS", bold=True)
+    typer.secho("DEDUN · CONFIRMED SEMANTIC REDUNDANCIES", bold=True)
     _line("CONTEXT", plan.display_name)
     _line("REVISION", plan.revision)
     _line("COMPONENTS", str(len(plan.components)))
@@ -38,14 +38,14 @@ def render_dedup_plan_plain(plan: FrozenDedupPlan) -> None:
             _line("WHY", evidence.reason)
     typer.echo()
     typer.echo(
-        "APPLY · rerun every --finding-handoff, then add one "
+        "APPLY · rerun every --evidence, then add one "
         "--survivor COMPONENT=MEMORY per component, --expected-revision "
         f"{plan.revision}, and --apply"
     )
 
 
 def render_dedup_receipt(receipt: DedupReceipt) -> None:
-    typer.secho("DEDUP APPLIED", fg=typer.colors.GREEN, bold=True)
+    typer.secho("DEDUN APPLIED", fg=typer.colors.GREEN, bold=True)
     _line("CONTEXT", receipt.context_name)
     _line("REVISION", receipt.revision)
     _line("COMPONENTS", str(len(receipt.selections)))

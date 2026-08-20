@@ -1,5 +1,9 @@
 # Mem Help Content Review
 
+> Historical snapshot: the 2026-08-20 Help revision replaced the semantic
+> `find-duplicates`/Apply split with `mem dedun`; exact identity cleanup is
+> `mem dedup`. The tables below preserve the 2026-08-15 reviewed catalog.
+
 Status: working draft, 2026-08-15
 
 This document freezes the current review copy before it is promoted into the

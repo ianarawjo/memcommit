@@ -1,4 +1,4 @@
-"""Interactive adapter from confirmed duplicate findings into Dedup."""
+"""Internal bridge from confirmed semantic evidence into Dedun resolution."""
 
 from __future__ import annotations
 
@@ -14,13 +14,13 @@ from memcommit.quality_finding_handoff import QualityFindingHandoff
 from memcommit.store import MemoryStore
 
 
-def run_duplicate_dedup_handoff(
+def run_dedun_resolution(
     store: MemoryStore,
     *,
     current_name: str | None,
     handoffs: tuple[QualityFindingHandoff, ...],
 ) -> None:
-    """Open normal Dedup review after fresh Source and authority validation."""
+    """Open Dedun review after fresh Source and authority validation."""
 
     request = DedupRequest(handoffs)
     port = MemoryStoreDedupPort(store, current_name=current_name)
@@ -36,4 +36,13 @@ def run_duplicate_dedup_handoff(
     )
 
 
-__all__ = ["run_duplicate_dedup_handoff"]
+# Compatibility names for internal callers and plugins compiled against v1.
+run_redundancy_consolidation = run_dedun_resolution
+run_duplicate_dedup_handoff = run_dedun_resolution
+
+
+__all__ = [
+    "run_dedun_resolution",
+    "run_duplicate_dedup_handoff",
+    "run_redundancy_consolidation",
+]

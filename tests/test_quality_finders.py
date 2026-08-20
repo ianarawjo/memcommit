@@ -176,7 +176,6 @@ def test_find_duplicates_scans_representatives_without_pair_targets(
 
     assert report.memory_count == 6
     assert [finding.relation for finding in report.findings] == [
-        "EXACT",
         "SURFACE_EQUIVALENT",
         "SEMANTIC_EQUIVALENT",
     ]
@@ -201,6 +200,30 @@ def test_find_duplicates_scans_representatives_without_pair_targets(
     assert schema["properties"]["findings"]["maxItems"] == 2
 
 
+def test_find_duplicates_keeps_each_stored_memory_indivisible():
+    ctx = ops.init("partial-overlap")
+    ops.add(ctx, "abc")
+    ops.add(ctx, "bcd")
+    provider = PayloadProvider(
+        lambda operation, payload: {"findings": []}
+    )
+
+    report = find_duplicates(ctx, lambda: provider)
+
+    assert report.findings == ()
+    assert len(provider.calls) == 1
+    prompt, _operation, schema, payload = provider.calls[0]
+    assert [memory["content"] for memory in payload["memories"]] == [
+        "abc",
+        "bcd",
+    ]
+    assert "complete stored content as one indivisible judgment unit" in prompt
+    assert "Atomize must first" in prompt
+    assert schema["properties"]["findings"]["items"]["properties"][
+        "relation"
+    ]["enum"] == ["SEMANTIC_EQUIVALENT"]
+
+
 def test_find_duplicates_avoids_provider_for_one_mechanical_component():
     ctx = ops.init("duplicates")
     ops.add(ctx, "same")
@@ -208,7 +231,7 @@ def test_find_duplicates_avoids_provider_for_one_mechanical_component():
 
     report = find_duplicates(ctx, ForbiddenProvider())
 
-    assert [finding.relation for finding in report.findings] == ["EXACT"]
+    assert report.findings == ()
 
 
 def test_mechanical_duplicate_forest_is_linear_and_preserves_relation_tiers():
@@ -218,7 +241,7 @@ def test_mechanical_duplicate_forest_is_linear_and_preserves_relation_tiers():
 
     report = find_duplicates(ctx, ForbiddenProvider())
 
-    assert len(report.findings) == 3
+    assert len(report.findings) == 1
     assert [
         (
             finding.left.content,
@@ -227,9 +250,7 @@ def test_mechanical_duplicate_forest_is_linear_and_preserves_relation_tiers():
         )
         for finding in report.findings
     ] == [
-        ("same", "same", "EXACT"),
         ("same", " same ", "SURFACE_EQUIVALENT"),
-        (" same ", " same ", "EXACT"),
     ]
 
 
@@ -596,7 +617,7 @@ def test_cli_finders_are_read_only_and_each_use_one_provider_call(
             lambda: provider,
         )
 
-    duplicate_result = runner.invoke(app, ["find-duplicates"])
+    duplicate_result = runner.invoke(app, ["dedun"])
     ambiguity_result = runner.invoke(app, ["find-ambiguities"])
     conflict_result = runner.invoke(app, ["find-conflicts"])
 
@@ -637,12 +658,13 @@ def test_cli_explicit_context_does_not_switch_current(
 
     result = runner.invoke(
         app,
-        ["find-duplicates", "--context", target.name],
+        ["dedun", "--context", target.name],
     )
 
     assert result.exit_code == 0
     assert "Context: target" in result.output
-    assert "EXACT" in result.output
+    assert "0 findings" in result.output
+    assert "EXACT" not in result.output
     assert store.current_context_name() == active.name
 
 
@@ -693,7 +715,7 @@ def test_cli_direct_scope_does_not_open_memory_ref_or_embedded_context_files(
     results = [
         runner.invoke(app, [command])
         for command in [
-            "find-duplicates",
+            "dedun",
             "find-ambiguities",
             "find-conflicts",
         ]

@@ -8,27 +8,21 @@ the limits of the ordinary-reading judge, see
 
 ## Decision
 
-The first quality-analysis surface consists of three explicit, read-only
-commands:
+The quality-analysis surface consists of one semantic-redundancy operation and
+two explicit read-only finders:
 
 ```text
-mem find-duplicates
+mem dedun
 mem find-ambiguities
 mem find-conflicts
 ```
 
-The names are intentionally parallel and plural. Each command can return zero
-or more findings, and the `find-` prefix promises inspection rather than
-mutation. Shorter alternatives such as `duplicates`, `ambiguities`,
-`conflicts`, or `dupes` save a few characters but do not state whether the
-command lists, changes, or resolves anything. The existing `mem find <query>`
-remains a separate operation for ranking Memories relevant to a user-supplied
-query; it is not a quality or relationship judge.
-
-These three commands are the smallest useful analysis layer. `reconcile`,
-`dedup`, editing, and deletion are later consumers or mutation stages. A
-finder never chooses a winner, rewrites a Memory, removes a UID, or claims that
-an identified problem has been resolved.
+`dedun` is a deliberate product term: `dup` denotes exact stored duplicates,
+while `dun` denotes semantic redundancy. Dedun's discovery and evidence review
+are read-only; only its separately reviewed exact Apply removes redundant UIDs.
+The `find-` prefix remains on Ambiguities and Conflicts because those operations
+only report. The existing `mem find <query>` is separate literal text lookup,
+not a quality or relationship judge.
 
 The implemented [`mem review ambiguities`](memory-review-shell-design-rationale.md)
 is a separate consumer of an ambiguity report. It persists selected readings
@@ -40,7 +34,7 @@ read-only/mutation contract or apply those annotations to Memories.
 The explicit Context forms retain the stable one-shot report contract:
 
 ```text
-mem find-duplicates --context NAME
+mem dedun --context NAME
 mem find-ambiguities --context NAME
 mem find-conflicts --context NAME
 ```
@@ -219,7 +213,7 @@ The judgments and their public evidence deliberately have different arities:
 
 | Command | Discovery input and result unit | Primary labels |
 |---|---|---|
-| `find-duplicates` | whole selected direct-Memory frame; positive evidence links identify unordered Memory pairs | emitted: `EXACT`, `SURFACE_EQUIVALENT`, `SEMANTIC_EQUIVALENT`; rejection boundaries: `OVERLAP`, `UNKNOWN`, `DISTINCT` |
+| `dedun` discovery | whole selected direct-Memory frame; positive evidence links identify unordered Memory pairs | emitted: `SURFACE_EQUIVALENT`, `SEMANTIC_EQUIVALENT`; byte-identical content belongs to `dedup`; rejection boundaries: `OVERLAP`, `UNKNOWN`, `DISTINCT` |
 | `find-ambiguities` | one Memory interpreted inside the complete selected frame | `SINGLE`, `DOMINANT`, `COMPETING` crossed with `NONE`, `HELPFUL`, `REQUIRED` |
 | `find-conflicts` | one unordered pair of Memories | `YES`, `MAY`, `NO` |
 
@@ -227,7 +221,7 @@ Consequently, a selected frame with `n` direct Memories has `n` unary ambiguity
 targets and admits up to `n(n-1)/2` possible binary relations. That
 cardinality does not prescribe the execution strategy. `find-conflicts`
 currently names every unordered pair as an explicit target.
-`find-duplicates` instead discovers equivalence components from a
+Dedun discovery instead discovers equivalence components from a
 whole-Context input and emits only a linear set of positive pair-shaped
 evidence links. It never materializes the candidate-pair space.
 
@@ -261,7 +255,7 @@ Duplicate relations likewise preserve boundaries that a removal stage needs:
 - `DISTINCT` means the Memories are not substitutable.
 
 `OVERLAP`, `UNKNOWN`, and `DISTINCT` are calibration and rejection boundaries,
-not positive `find-duplicates` output. In particular, related information and
+not positive Dedun evidence. In particular, related information and
 missing scope must not be presented under a command whose positive result says
 that a pair is duplicate.
 
@@ -395,7 +389,7 @@ groups must be disjoint and use only those known IDs; the local program emits
 one representative-to-member link per remaining group member. Thus the public
 pair shape is evidence, not a pre-enumerated search target.
 
-## Relationship to atomize, dedup, and reconcile
+## Relationship to atomize, dedup, dedun, and reconcile
 
 Atomization remains the preferred first refinement stage because a composite
 Memory can hide an internal duplicate or make two partly overlapping records
@@ -404,10 +398,11 @@ to the finders, not a fourth quality finder and not behavior silently performed
 by any `find-*` command. The finders can still inspect unatomized intake, but
 their labels apply to the stored Memory boundaries they receive.
 
-`find-duplicates` reports only positive duplicate evidence links. A future
-`dedup` operation will validate their connected components, turn confirmed
-equivalence into a stale-safe plan, select an existing survivor UID, check
-inbound references, and create a checkpoint when the plan is applied.
+`dedup` first removes byte-identical direct Memories without a provider or
+review screen. `dedun` then discovers only positive evidence over differently
+stored wording, validates connected groups, turns confirmed equivalence into a
+stale-safe plan, selects an existing survivor UID, checks inbound references,
+and creates a checkpoint on Apply.
 `OVERLAP` and `UNKNOWN` remain negative golden boundaries and must never flow
 into removal.
 

@@ -1,4 +1,4 @@
-"""Find duplicate direct Memories without modifying the Context."""
+"""Semantic discovery stage of the public Dedun operation."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ import typer
 
 import memcommit.ops as ops
 from memcommit.commands.duplicate_dedup_handoff import (
-    run_duplicate_dedup_handoff,
+    run_dedun_resolution,
 )
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.authority.access import GrantedReadStore, resolve_context_access
@@ -40,8 +40,10 @@ from memcommit.quality_find_workbench import (
     create_quality_find_workbench,
 )
 from memcommit.quality_finding_handoff import (
-    quality_finding_handoff_json,
     quality_finding_handoffs,
+)
+from memcommit.semantic_redundancy_evidence import (
+    semantic_redundancy_evidence_json,
 )
 
 
@@ -62,19 +64,19 @@ def cmd(
             help="Context to inspect (defaults to current)",
         ),
     ] = None,
-    handoff_json: Annotated[
+    evidence_json: Annotated[
         bool,
         typer.Option(
-            "--handoff-json",
-            help="Print one canonical JSON handoff per finding",
+            "--evidence-json",
+            help="Print one canonical semantic redundancy evidence JSON per finding",
         ),
     ] = False,
 ) -> None:
-    """Report duplicate evidence; never merge, remove, or checkpoint it."""
+    """Report semantic redundancy evidence; never change Context content."""
     store = MemoryStore(create=False)
     if (
         context_name is None
-        and not handoff_json
+        and not evidence_json
         and interactive_quality_find_available()
     ):
         try:
@@ -83,13 +85,13 @@ def cmd(
                 store,
                 current_name=context_snapshot.current_name,
                 kind="duplicates",
-                analyze=lambda source: ops.find_duplicates(
+                analyze=lambda source: ops.find_redundancies(
                     source.analysis_context(),
                     connect_codex_chatgpt_provider,
                     context_name_by_uid=source.memory_context_names,
                 ),
                 duplicate_handoff_handler=lambda handoffs: (
-                    run_duplicate_dedup_handoff(
+                    run_dedun_resolution(
                         store,
                         current_name=context_snapshot.current_name,
                         handoffs=handoffs,
@@ -108,13 +110,13 @@ def cmd(
             DedupError,
         ) as error:
             typer.secho(
-                "Find duplicates error: " + display_escape_text(str(error)),
+                "Dedun error: " + display_escape_text(str(error)),
                 fg=typer.colors.RED,
                 err=True,
             )
             raise typer.Exit(1)
         if not completed:
-            typer.echo("Find duplicates cancelled.")
+            typer.echo("Dedun cancelled.")
         return
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
@@ -138,7 +140,7 @@ def cmd(
         ValueError,
     ) as error:
         typer.secho(
-            "Find duplicates error: " + display_escape_text(str(error)),
+            "Dedun error: " + display_escape_text(str(error)),
             fg=typer.colors.RED,
             err=True,
         )
@@ -146,14 +148,14 @@ def cmd(
 
     try:
         with CommandProgress(
-            "FIND DUPLICATES",
+            "DEDUN",
             "analyzing direct memories",
             total=1,
         ):
-            report = ops.find_duplicates(ctx, connect_codex_chatgpt_provider)
+            report = ops.find_redundancies(ctx, connect_codex_chatgpt_provider)
     except (FindingsError, QueryProviderError) as error:
         typer.secho(
-            "Find duplicates error: " + display_escape_text(str(error)),
+            "Dedun error: " + display_escape_text(str(error)),
             fg=typer.colors.RED,
             err=True,
         )
@@ -165,10 +167,10 @@ def cmd(
     )
     annotate_quality_find_attempt("duplicates", source)
 
-    if handoff_json:
+    if evidence_json:
         session = create_quality_find_workbench("duplicates", source, report)
         for handoff in quality_finding_handoffs(session):
-            typer.echo(quality_finding_handoff_json(handoff))
+            typer.echo(semantic_redundancy_evidence_json(handoff))
         return
 
     render_heading(
@@ -177,13 +179,13 @@ def cmd(
         finding_count=len(report.findings),
     )
     if not report.findings:
-        typer.echo("\n  (no duplicate findings)")
+        typer.echo("\n  (no semantic redundancy findings)")
         return
 
     for finding in report.findings:
         typer.echo()
         typer.secho(
-            f"  DUPLICATE  {finding.relation}",
+            f"  REDUNDANCY  {finding.relation}",
             fg=_RELATION_COLORS.get(finding.relation, typer.colors.YELLOW),
             bold=True,
         )

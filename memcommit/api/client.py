@@ -25,7 +25,7 @@ from memcommit.api.atomize import (
     AtomizeStructuralApplyResult,
 )
 from memcommit.api.compare import ComparisonResult
-from memcommit.api.dedup import DedupApplyResult, DedupPlanResult
+from memcommit.api.dedup import DedunApplyResult, DedunPlanResult, ExactDedupResult
 from memcommit.api.embed import EmbeddedContextResult, EmbeddedMemoryResult
 from memcommit.api.forget import (
     ForgetApplyResult,
@@ -440,15 +440,23 @@ class MemCommitClient:
             expected_revision=expected_revision,
         )
 
-    def find_duplicates(
+    def find_redundancies(
         self,
         context_names: Sequence[str] = (),
     ) -> QualityFindResult:
-        """Find duplicate evidence in one frozen readable Context frame."""
+        """Find semantic redundancy evidence in one readable Context frame."""
 
         from memcommit.api._operations.quality_find import find_quality
 
         return find_quality(self._runtime, "duplicates", context_names)
+
+    def find_duplicates(
+        self,
+        context_names: Sequence[str] = (),
+    ) -> QualityFindResult:
+        """Compatibility alias for :meth:`find_redundancies`."""
+
+        return self.find_redundancies(context_names)
 
     def find_ambiguities(
         self,
@@ -508,33 +516,86 @@ class MemCommitClient:
             candidate_uid=candidate_uid,
         )
 
+    def dedup(self, context_name: str | None = None) -> ExactDedupResult:
+        """Remove byte-identical direct Memories in one checkpoint."""
+
+        from memcommit.api._operations.exact_dedup import dedup_exact
+
+        return dedup_exact(self._runtime, context_name)
+
+    def plan_dedun(
+        self,
+        evidence: Sequence[QualityFindingHandoff],
+        *,
+        expected_revision: str | None = None,
+    ) -> DedunPlanResult:
+        """Plan survivor choices from confirmed semantic redundancy evidence."""
+
+        from memcommit.api._operations.dedup import plan_dedun
+
+        return plan_dedun(
+            self._runtime,
+            evidence,
+            expected_revision=expected_revision,
+        )
+
+    def apply_dedun(
+        self,
+        plan: DedunPlanResult,
+        *,
+        survivors: Mapping[str, str],
+    ) -> DedunApplyResult:
+        """Apply one exact complete existing-survivor mapping."""
+
+        from memcommit.api._operations.dedup import apply_dedun
+
+        return apply_dedun(self._runtime, plan, survivors=survivors)
+
+    def plan_consolidation(
+        self,
+        handoffs: Sequence[QualityFindingHandoff],
+        *,
+        expected_revision: str | None = None,
+    ) -> DedunPlanResult:
+        """Compatibility alias for :meth:`plan_dedun`."""
+
+        return self.plan_dedun(
+            handoffs,
+            expected_revision=expected_revision,
+        )
+
+    def apply_consolidation(
+        self,
+        plan: DedunPlanResult,
+        *,
+        survivors: Mapping[str, str],
+    ) -> DedunApplyResult:
+        """Compatibility alias for :meth:`apply_dedun`."""
+
+        return self.apply_dedun(plan, survivors=survivors)
+
     def plan_dedup(
         self,
         handoffs: Sequence[QualityFindingHandoff],
         *,
         expected_revision: str | None = None,
-    ) -> DedupPlanResult:
-        """Plan survivor choices from exact confirmed duplicate receipts."""
+    ) -> DedunPlanResult:
+        """Compatibility alias for :meth:`plan_dedun`."""
 
-        from memcommit.api._operations.dedup import plan_dedup
-
-        return plan_dedup(
-            self._runtime,
+        return self.plan_dedun(
             handoffs,
             expected_revision=expected_revision,
         )
 
     def apply_dedup(
         self,
-        plan: DedupPlanResult,
+        plan: DedunPlanResult,
         *,
         survivors: Mapping[str, str],
-    ) -> DedupApplyResult:
-        """Apply one exact complete existing-survivor mapping."""
+    ) -> DedunApplyResult:
+        """Compatibility alias for :meth:`apply_dedun`."""
 
-        from memcommit.api._operations.dedup import apply_dedup
-
-        return apply_dedup(self._runtime, plan, survivors=survivors)
+        return self.apply_dedun(plan, survivors=survivors)
 
     def distill_context(
         self,

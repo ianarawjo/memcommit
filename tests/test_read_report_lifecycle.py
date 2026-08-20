@@ -79,7 +79,7 @@ def test_shared_recents_deduplicate_targets_and_keep_operations_separate(
     assert len(recents) == 1
     assert recents[0].attempt_uid == latest
     assert recents[0].target == target
-    assert read_report_recents(store, operation="find-duplicates") == ()
+    assert read_report_recents(store, operation="dedun") == ()
 
 
 def test_recent_launcher_returns_identity_and_never_an_execution_receipt(
@@ -87,19 +87,19 @@ def test_recent_launcher_returns_identity_and_never_an_execution_receipt(
 ):
     store = MemoryStore()
     target = ReadReportTarget(
-        operation="find-duplicates",
+        operation="dedun",
         context_names=("notes",),
         target_names=("notes",),
         selection_mode="SINGLE",
         ranges=("DIRECT",),
     )
     _record(store, target, "2026-08-16T11:00:00+00:00")
-    recents = read_report_recents(store, operation="find-duplicates")
+    recents = read_report_recents(store, operation="dedun")
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("\r")
         selected = choose_read_report_recent(
             recents,
-            operation="find-duplicates",
+            operation="dedun",
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,

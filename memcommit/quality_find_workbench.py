@@ -675,11 +675,16 @@ def quality_find_resolution_view(
             ),
         ),
     )
+    operation_label = (
+        "DEDUN"
+        if session.kind == "duplicates"
+        else f"FIND {session.kind.upper()}"
+    )
     return ResolutionWorkbenchView(
-        operation=f"FIND {session.kind.upper()}",
+        operation=operation_label,
         artifact_uid=session.uid,
         revision=session.context_digest,
-        title=f"MEM FIND {session.kind.upper()}",
+        title=f"MEM {operation_label}",
         route=session.source.route,
         status=f"PROCESS LOCAL · {session.answered_count}/{len(items)} ANSWERED",
         metrics=tuple(metrics),

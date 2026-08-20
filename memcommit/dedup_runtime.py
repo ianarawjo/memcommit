@@ -73,9 +73,9 @@ class MemoryStoreDedupPort:
 
     def __post_init__(self) -> None:
         if not isinstance(self.active_store, MemoryStore):
-            raise TypeError("Dedup runtime requires a MemoryStore.")
+            raise TypeError("Dedun runtime requires a MemoryStore.")
         if not isinstance(self.allow_grants, bool):
-            raise TypeError("Dedup grant availability must be boolean.")
+            raise TypeError("Dedun grant availability must be boolean.")
 
     def _access(self, request: DedupRequest) -> ContextAccess:
         source = request.source
@@ -101,12 +101,12 @@ class MemoryStoreDedupPort:
         )
         if missing:
             raise DedupAuthorityError(
-                "Dedup Grant lacks required authority: " + ", ".join(missing)
+                "Dedun Grant lacks required authority: " + ", ".join(missing)
             )
 
     def freeze(self, request: DedupRequest) -> FrozenDedupPlan:
         if not isinstance(request, DedupRequest):
-            raise TypeError("Dedup freeze requires a typed request.")
+            raise TypeError("Dedun freeze requires a typed request.")
         access = self._access(request)
         self._require_grant_permissions(access)
         source = request.source
@@ -161,7 +161,7 @@ class MemoryStoreDedupPort:
             return access
         if not self.active_store.context_exists(plan.context_name):
             raise DedupConflictError(
-                f"Dedup Context '{plan.context_name}' no longer exists."
+                f"Dedun Context '{plan.context_name}' no longer exists."
             )
         return ContextAccess(
             store=self.active_store,
@@ -197,7 +197,7 @@ class MemoryStoreDedupPort:
         if not isinstance(plan, FrozenDedupPlan) or any(
             not isinstance(selection, DedupSelection) for selection in selections
         ):
-            raise TypeError("Dedup Apply requires a frozen plan and selections.")
+            raise TypeError("Dedun Apply requires a frozen plan and selections.")
         selections = validate_dedup_selections(plan, selections)
         survivor_uids = tuple(selection.survivor_uid for selection in selections)
         absorbed_uids = tuple(
@@ -207,7 +207,7 @@ class MemoryStoreDedupPort:
             if member.uid != selection.survivor_uid
         )
         if not absorbed_uids:
-            raise DedupError("Dedup Apply requires at least one absorbed Memory.")
+            raise DedupError("Dedun Apply requires at least one absorbed Memory.")
         access = self._revalidated_access(plan)
         with authorized_context_mutation(
             access,
@@ -222,7 +222,7 @@ class MemoryStoreDedupPort:
                     or context_record_digest(current) != plan.context_digest
                 ):
                     raise DedupConflictError(
-                        "The Dedup Source changed before Apply; nothing was written."
+                        "The Dedun Source changed before Apply; nothing was written."
                     )
                 inbound = self._inbound_references(
                     access.store,
@@ -235,19 +235,19 @@ class MemoryStoreDedupPort:
                         for owner, reference_uid in inbound
                     )
                     raise DedupConflictError(
-                        "Dedup cannot absorb Memories with inbound references in "
+                        "Dedun cannot absorb Memories with inbound references in "
                         f"version 1: {locations}."
                     )
                 for uid in absorbed_uids:
                     if not isinstance(current.memories.get(uid), Memory):
                         raise DedupConflictError(
-                            f"Dedup Memory '{uid[:8]}' is no longer directly owned."
+                            f"Dedun Memory '{uid[:8]}' is no longer directly owned."
                         )
                     current.remove(uid)
                 checkpoint = access.store._save_command_locked(  # noqa: SLF001
                     current,
                     AutoCheckpoint(
-                        command="dedup",
+                        command="dedun",
                         args={
                             "contract": DEDUP_CONTRACT_VERSION,
                             "revision": plan.revision,
@@ -258,21 +258,21 @@ class MemoryStoreDedupPort:
                                 }
                                 for selection in selections
                             ],
-                            "finding_handoff_uids": [
+                            "redundancy_evidence_uids": [
                                 handoff.uid for handoff in plan.request.handoffs
                             ],
                             **grant_checkpoint_args(access),
                         },
                         description=(
-                            f"Deduplicated {len(plan.components)} component(s); "
-                            f"absorbed {len(absorbed_uids)} Memory item(s)"
+                            f"Resolved {len(plan.components)} semantic redundancy "
+                            f"group(s); absorbed {len(absorbed_uids)} Memory item(s)"
                         ),
                     ),
                     expected_context_digest=plan.context_digest,
                 )
                 if checkpoint is None:
                     raise DedupError(
-                        "Dedup Apply produced no checkpoint for a nonempty plan."
+                        "Dedun Apply produced no checkpoint for a nonempty plan."
                     )
         return DedupReceipt(
             context_uid=plan.context_uid,

@@ -26,7 +26,7 @@ environment's `site-packages`, and discovered this exact registry order:
 15. `memcommit_fit`
 16. `memcommit_forget`
 17. `memcommit_resolve`
-18. `memcommit_dedup`
+18. `memcommit_dedun`
 
 The client then invoked Add and verified its checkpoint independently. It
 planned provider-free Replace over both added Memories, applied the exact

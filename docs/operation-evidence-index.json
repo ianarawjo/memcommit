@@ -26,7 +26,12 @@
     "config": [],
     "contexts": [],
     "dedup": [
-      "docs/dedup-design-rationale.md",
+      "docs/dedup-callable-boundary-matrix.md",
+      "docs/dedup-design-rationale.md"
+    ],
+    "dedun": [
+      "docs/dedun-callable-boundary-matrix.md",
+      "docs/dedun-design-rationale.md",
       "docs/resolution-lifecycle-design-rationale.md"
     ],
     "delete": [
@@ -53,9 +58,6 @@
       "docs/read-report-lifecycle-design-rationale.md"
     ],
     "find-conflicts": [
-      "docs/read-report-lifecycle-design-rationale.md"
-    ],
-    "find-duplicates": [
       "docs/read-report-lifecycle-design-rationale.md"
     ],
     "fit": [

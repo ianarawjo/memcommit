@@ -7,7 +7,7 @@ contract binds a complete set of required or optional items to one frozen
 operation artifact revision, validates exact item and choice identities,
 rejects duplicate or capability-crossing submissions, preserves frozen item
 order, and reports whether required work remains. Structural Merge, saved Meld
-issue turns, public Fit-repair Resolve, and deterministic Dedup are production
+issue turns, public Fit-repair Resolve, and semantic Dedun are production
 consumers.
 
 This is distinct from the shared Resolution Workbench.  The workbench owns
@@ -27,7 +27,7 @@ session-local drafts.
 
 ## Motivating problem
 
-Merge, Meld, future Fit repair, Dedup, and clarification can all contain an
+Merge, Meld, future Fit repair, Dedun, and clarification can all contain an
 unresolved stage, but the condition and legal repair differ:
 
 | Operation | Unsatisfied condition | Operation-owned resolution |
@@ -35,7 +35,7 @@ unresolved stage, but the condition and legal repair differ:
 | Merge | one or more structural collisions have no legal disposition | exact `KEEP_TARGET` or `TAKE_SOURCE` choices |
 | Meld | Source disposition is incomplete or a required issue remains | preservation, coalescing, synthesis, or grounded semantic revision |
 | Fit repair | the complete proposition frame is `MAY` or `NO` | a grounded minimum-change candidate independently verified as `YES` |
-| Dedup | a confirmed duplicate component has no survivor plan | one unchanged existing survivor plus the complete absorbed-UID plan; V1 blocks inbound references rather than migrating them |
+| Dedun | a confirmed semantic redundancy group has no survivor plan | one unchanged existing survivor plus the complete absorbed-UID plan; V1 blocks inbound references rather than migrating them |
 | Clarification | one materially ambiguous reading remains ungrounded | an explicit interpretation or scope supplied by evidence or the person |
 
 Calling every operation Fit would erase these distinctions.  Conversely,
@@ -155,14 +155,14 @@ The former working name `reconcile` bundled ambiguity clarification and
 conflict repair too broadly.  Quality surfaces instead route by finding type:
 
 ```text
-duplicate -> dedup
+semantic redundancy -> dedun
 ambiguity -> clarify, and Resolve only if joint Fit remains MAY/NO
 conflict  -> Resolve
 ```
 
-Find and Audit remain read-only. Typed quality-finding handoffs create a
+Quality discovery and Audit remain read-only. Typed semantic evidence creates a
 separately authorized, frozen operation request; they do not mutate from the
-finder. Conflict-to-Resolve and confirmed-duplicate-to-Dedup are implemented;
+discovery stage. Conflict-to-Resolve and confirmed-redundancy-to-Dedun are implemented;
 clarification remains separate future work.
 
 Resolve V1 projects its verified candidate UIDs as the legal choices of one
@@ -177,25 +177,26 @@ The TUI now carries that same Resolve case rather than constructing an
 unbound candidate menu; this does not make candidate generation deterministic,
 only the already-verified candidate selection and exact Apply handoff.
 
-## Deterministic Dedup vertical slice
+## Semantic Dedun vertical slice with exact Apply
 
-`DedupRequest` accepts only typed single-Context duplicate handoffs whose
-classification is `EXACT`, `SURFACE_EQUIVALENT`, or `SEMANTIC_EQUIVALENT`.
+The compatibility-named `DedupRequest` accepts only typed single-Context
+semantic redundancy evidence whose classification is `SURFACE_EQUIVALENT` or
+`SEMANTIC_EQUIVALENT`; exact stored duplicates belong to `mem dedup`.
 The operation creates connected components, projects each component as one
 required Resolution item, and makes its existing member UIDs the only legal
 choices. Context order supplies the deterministic recommendation; it does not
 bypass explicit selection or exact whole-set approval.
 
 The shared lifecycle validates component/choice identity and complete
-coverage. Dedup alone owns finder-source revalidation, Grant
+coverage. Dedun alone owns Source revalidation, Grant
 `READ + DERIVE + DELETE`, unchanged-survivor semantics, absorbed-UID
 calculation, command locking, inbound-reference blocking, Context CAS, and the
 single checkpoint. No provider or generic solver callback is involved. The
 full contract is recorded in
-[`dedup-design-rationale.md`](dedup-design-rationale.md).
+[`dedun-design-rationale.md`](dedun-design-rationale.md).
 The deterministic workbench projects component and member UIDs directly from
 `dedup_resolution_case(plan)` and revalidates the complete outcome before the
-Dedup adapter translates it to survivor selections.
+Dedun adapter translates it to survivor selections.
 
 ## Interface and persistence boundary
 
@@ -214,7 +215,7 @@ Dedup adapter translates it to survivor selections.
   freshness, and receipt validation.  Resolution never weakens that boundary.
 
 The boundary audit is executable rather than a directory-name convention.
-Static dependency tests require the Dedup and Resolve application owners to
+Static dependency tests require the Dedun and Resolve application owners to
 remain independent of command, TUI, prompt-toolkit, and Typer modules; require
 their plain and TUI presenters plus public Python assembly to import the same
 operation owner; and require agent adapters to enter through the public API
@@ -228,7 +229,7 @@ the same CLI/TUI gate but deliberately has no public or agent adapter yet.
   applicable, while optional/comment/provider-turn parity remains the
   separately tracked `TUI-03` migration.
 - Merge remains provider-free and has no semantic rewrite candidate.
-- Dedup reference migration and clarification persistence remain future
-  operation-owned work. Typed conflict and duplicate handoffs are implemented,
-  but Resolve and Dedup deliberately retain different solvers and mutation
+- Dedun reference migration and clarification persistence remain future
+  operation-owned work. Typed conflict receipts and semantic redundancy evidence are implemented,
+  but Resolve and Dedun deliberately retain different solvers and mutation
   semantics.

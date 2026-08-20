@@ -132,6 +132,7 @@ def test_context_scope_commands_expose_both_common_short_flags(path):
         ("atomize",),
         ("find-ambiguities",),
         ("find-conflicts",),
+        ("dedun",),
         ("find-duplicates",),
         ("find-redundancies",),
         ("forget",),

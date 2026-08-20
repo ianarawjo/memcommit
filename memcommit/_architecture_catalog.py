@@ -600,6 +600,11 @@ def _client_methods(repository: Path) -> dict[str, set[str]]:
 
 _OPERATION_DISCOVERY_TOKENS = {
     "checkout": ("checkout", "branch", "switch"),
+    # Semantic Dedun retains version-1 finder, Consolidate, and Dedup module
+    # names while exact Dedup owns explicit exact_dedup modules. Keeping the
+    # mapping authored prevents the evidence ledger from conflating the routes.
+    "dedun": ("dedun", "consolidate", "find_duplicates", "dedup"),
+    "dedup": ("exact_dedup",),
     "eval": ("eval", "semantic_eval"),
     "help": ("help", "help_inventory"),
     "import": ("import", "import_profile"),
@@ -631,6 +636,14 @@ def _operation_package_matches(module: str, tokens: tuple[str, ...]) -> bool:
 
 def _matrix_matches(path: Path, operation: str, tokens: tuple[str, ...]) -> bool:
     stem = path.stem.replace("-", "_")
+    canonical = operation.replace("-", "_")
+    if stem == canonical or stem.startswith(canonical + "_"):
+        return True
+    if operation == "dedun":
+        # Its implementation modules retain version-1 aliases, but evidence
+        # files are authored under canonical operation names and must not
+        # cross-link with exact Dedup.
+        return False
     if any(stem == token or stem.startswith(token + "_") for token in tokens):
         return True
     # This is the one current matrix that deliberately owns two operations.

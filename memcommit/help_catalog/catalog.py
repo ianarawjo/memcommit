@@ -242,12 +242,21 @@ _OPERATIONS = (
     ),
     _operation(
         "dedup",
-        "Review confirmed duplicate groups, retain one existing Memory in each "
-        "group, and delete the rest on Apply.",
-        "Confirmed duplicate handoffs -> reviewed survivors -> exact Apply",
+        "Remove byte-identical duplicates (dup) immediately, retaining the "
+        "first existing UID for each exact-content group.",
+        "Direct Context Memories -> exact-content groups -> atomic removal",
         ExecutionKind.DETERMINISTIC,
-        "Read-only until exact Apply; Apply deletes absorbed UIDs in one checkpoint",
-        "One exact direct Context; inbound references block version 1 Apply",
+        "Deletes later exact copies in one checkpoint; no provider or TUI",
+        "One exact direct Context; inbound references block removal",
+    ),
+    _operation(
+        "dedun",
+        "Find and resolve semantic redundancies (dun), retaining one unchanged "
+        "existing Memory in each reviewed group.",
+        "Direct Context Memories -> semantic redundancy groups -> reviewed survivor -> exact Apply",
+        ExecutionKind.SEMANTIC,
+        "Read-only through analysis and review; approved Apply deletes absorbed UIDs in one checkpoint",
+        "One reviewed direct Context group per Apply; inbound references block version 1 Apply",
     ),
     _operation(
         "find-ambiguities",
@@ -261,14 +270,6 @@ _OPERATIONS = (
         "find-conflicts",
         "Report conflicting direct Memory pairs in the current or explicit Context; no Context changes.",
         "Context Memories -> conflict report",
-        ExecutionKind.SEMANTIC,
-        "No Context content changes",
-        "One exact direct Context",
-    ),
-    _operation(
-        "find-duplicates",
-        "Report duplicate direct Memories in the current or explicit Context; no Context changes.",
-        "Context Memories -> duplicate report",
         ExecutionKind.SEMANTIC,
         "No Context content changes",
         "One exact direct Context",

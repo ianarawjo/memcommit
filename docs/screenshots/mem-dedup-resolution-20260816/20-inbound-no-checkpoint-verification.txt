@@ -1,4 +1,4 @@
-Find duplicates error: Resolution application failed: Dedup cannot absorb Memories with inbound references in version 1: dedup/observer#30000000.                                   
+Dedun error: Resolution application failed: Dedun cannot absorb Memories with inbound references in version 1: dedup/observer#30000000.                                             
 COMMAND EXIT · 1                                                                                                                                                                    
 INBOUND VERIFICATION · MEMORIES [('20000000-0000-4000-8000-000000000100', 'The office opens at eight on weekdays.'), ('20000000-0000-4000-8000-000000000200', 'The weekday office op
 ening time is 08:00.'), ('20000000-0000-4000-8000-000000000300', 'The office closes at 17:00 on weekdays.')] · CHECKPOINTS 0 · COMMANDS [] · PROVIDER OPERATIONS ['find_duplicates']

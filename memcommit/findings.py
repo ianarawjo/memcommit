@@ -519,13 +519,18 @@ def find_duplicates(
     *,
     context_name_by_uid: Mapping[str, str] | None = None,
 ) -> DuplicateReport:
-    """Discover duplicate components without enumerating candidate pairs."""
+    """Discover semantic redundancies without returning byte-exact copies."""
     candidates = collect_direct_memories(
         ctx,
         context_name_by_uid=context_name_by_uid,
     )
     mechanical, semantic_candidates = _mechanical_duplicate_forest(candidates)
-    findings = list(mechanical)
+    # Byte-identical copies belong to provider-free `mem dedup`. Conservative
+    # surface equivalence remains evidence here because its stored wording is
+    # different and therefore still needs the semantic consolidation boundary.
+    findings = [
+        finding for finding in mechanical if finding.relation != "EXACT"
+    ]
 
     if len(semantic_candidates) >= 2:
         candidate_by_id = {
@@ -569,6 +574,11 @@ def find_duplicates(
                 "context_name. The supplied Memories are one "
                 "representative from each exact/surface-equivalent component; "
                 "do not construct or request an all-pairs comparison table. "
+                "Treat each candidate's complete stored content as one "
+                "indivisible judgment unit: do not split a Memory or extract "
+                "matching substrings or propositions. If only a proper part "
+                "would be redundant, omit the group; Atomize must first make "
+                "that part a separately reviewable Memory. "
                 "Return disjoint groups of two or more candidate IDs only when "
                 "every member is mutually substitutable without information "
                 "loss under the same subject, predicate, object, place, "

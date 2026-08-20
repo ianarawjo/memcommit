@@ -129,12 +129,20 @@
         ],
         "reason": "Direct-Memory Fit repair exposes CLI, TUI, public, agent, and MCP projections over one typed analysis, exact replay, authority, and checkpointed Apply boundary."
       },
-      "dedup": {
+      "dedun": {
         "evidence": [
-          "docs/dedup-design-rationale.md",
+          "docs/dedun-callable-boundary-matrix.md",
+          "docs/dedun-design-rationale.md",
           "docs/resolution-lifecycle-design-rationale.md"
         ],
-        "reason": "Confirmed duplicate handoffs enter one provider-free component plan with CLI, TUI, Python, agent, and MCP projections over exact survivor review, Grant revalidation, reference blocking, and one checkpointed Apply boundary."
+        "reason": "Semantic redundancy discovery, evidence confirmation, survivor review, and exact Apply form one Dedun operation whose CLI, Python, agent, and MCP projections share Grant revalidation, reference blocking, and one checkpointed application boundary."
+      },
+      "dedup": {
+        "evidence": [
+          "docs/dedup-callable-boundary-matrix.md",
+          "docs/dedup-design-rationale.md"
+        ],
+        "reason": "The direct CLI and public Python routes enter one provider-free exact-content application boundary that retains first-in-Context UIDs and removes later byte-identical copies in one checkpoint."
       },
       "sever": {
         "evidence": [
@@ -203,7 +211,6 @@
       "eval",
       "find-ambiguities",
       "find-conflicts",
-      "find-duplicates",
       "ground",
       "impact",
       "import",

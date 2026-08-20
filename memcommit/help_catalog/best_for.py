@@ -34,8 +34,12 @@ BEST_FOR_BY_OPERATION = {
     "contexts": "Exploring every Context currently available to the Profile.",
     "delete": "Removing a specific Context or item that is no longer needed.",
     "dedup": (
-        "Removing confirmed semantic duplicates while preserving one exact "
-        "existing Memory and its UID."
+        "Removing byte-identical direct Memories while preserving the first "
+        "existing UID."
+    ),
+    "dedun": (
+        "Removing semantic redundancy while preserving one exact existing "
+        "Memory and its UID in each reviewed group."
     ),
     "diff": "Verifying exactly what a recorded operation changed.",
     "distill": (
@@ -69,7 +73,6 @@ BEST_FOR_BY_OPERATION = {
         "Finding Memories that permit unclear or multiple interpretations."
     ),
     "find-conflicts": "Finding mutually incompatible claims or instructions.",
-    "find-duplicates": ("Locating semantically redundant Memories before cleanup."),
     "fit": (
         "Checking whether a defined set of Memories, Rules, Goals, Examples, "
         "or other propositions can jointly hold."

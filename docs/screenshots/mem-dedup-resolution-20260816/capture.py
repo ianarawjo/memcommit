@@ -1,4 +1,4 @@
-"""Capture Find-Duplicates to Dedup in a real 180x52 color PTY."""
+"""Capture the complete semantic Dedun flow in a real 180x52 color PTY."""
 
 from __future__ import annotations
 
@@ -171,7 +171,7 @@ def _run_child(kind: str) -> None:
         provider = _Provider()
         find_command.connect_codex_chatgpt_provider = lambda: provider
         if kind == "stale":
-            original_handoff = find_command.run_duplicate_dedup_handoff
+            original_handoff = find_command.run_dedun_resolution
 
             def stale_handoff(store, *, current_name, handoffs):
                 changed = store.load_for_update("dedup/capture")
@@ -183,13 +183,13 @@ def _run_child(kind: str) -> None:
                     handoffs=handoffs,
                 )
 
-            find_command.run_duplicate_dedup_handoff = stale_handoff
+            find_command.run_dedun_resolution = stale_handoff
 
         print("PTY", os.get_terminal_size().columns, os.get_terminal_size().lines)
         exit_code = 0
         try:
             returned = app(
-                args=["find-duplicates"],
+                args=["dedun"],
                 prog_name="mem",
                 standalone_mode=False,
             )
@@ -236,7 +236,7 @@ def _snapshot(recorder: io.StringIO, stem: str) -> None:
 
 
 def _enter_finder(child: pexpect.spawn) -> None:
-    child.expect("MEM FIND DUPLICATES · SETUP")
+    child.expect("MEM DEDUN · SETUP")
     _BASE._settle(child)
     child.send("\t\t\r")
     child.expect("PROCESS LOCAL")
@@ -252,7 +252,7 @@ def _confirm_and_handoff(child: pexpect.spawn) -> None:
 
 
 def _select_survivor_and_review(child: pexpect.spawn) -> None:
-    child.expect("MEM DEDUP · RESOLUTION SESSION")
+    child.expect("MEM DEDUN · RESOLUTION SESSION")
     _BASE._settle(child, seconds=0.8)
     child.send("\t\r")
     _BASE._settle(child)
@@ -265,7 +265,7 @@ def _select_survivor_and_review(child: pexpect.spawn) -> None:
 def _capture_success() -> None:
     child, recorder = _spawn("success")
     try:
-        child.expect("MEM FIND DUPLICATES · SETUP")
+        child.expect("MEM DEDUN · SETUP")
         _BASE._settle(child)
         _snapshot(recorder, "01-finder-setup-entry")
         child.send("\t")
@@ -294,7 +294,7 @@ def _capture_success() -> None:
         _BASE._settle(child)
         _snapshot(recorder, "09-dedup-handoff")
         child.send("\r")
-        child.expect("MEM DEDUP · RESOLUTION SESSION")
+        child.expect("MEM DEDUN · RESOLUTION SESSION")
         _BASE._settle(child, seconds=0.8)
         _snapshot(recorder, "10-dedup-plan-entry")
         child.send("\t\r")
@@ -330,7 +330,7 @@ def _capture_stale() -> None:
     try:
         _enter_finder(child)
         _confirm_and_handoff(child)
-        child.expect("Find duplicates error")
+        child.expect("Dedun error")
         child.expect("STALE VERIFICATION")
         _BASE._settle(child)
         _snapshot(recorder, "18-stale-source-rejected")
@@ -372,7 +372,7 @@ def main() -> None:
         encoding="utf-8"
     )
     assert "CHECKPOINTS 1" in success
-    assert "COMMANDS ['dedup']" in success
+    assert "COMMANDS ['dedun']" in success
     stale = (OUT / "18-stale-source-rejected.txt").read_text(encoding="utf-8")
     assert "Source changed" in stale
     assert "CHECKPOINTS 0" in stale

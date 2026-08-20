@@ -497,7 +497,7 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
                 handler=resolve.invoke,
             ),
             operation_binding(
-                "dedup",
+                "dedun",
                 name=DEDUP_AGENT_TOOL_NAME,
                 schema_factory=dedup_agent_tool_schema,
                 handler=dedup.invoke,

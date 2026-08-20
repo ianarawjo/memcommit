@@ -1,4 +1,4 @@
-"""Plan and exactly apply confirmed duplicate components."""
+"""Remove byte-identical direct Memories without semantic inference or review."""
 
 from __future__ import annotations
 
@@ -6,151 +6,41 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.clipboard import write_system_clipboard
-from memcommit.dedup_application import (
-    DedupConflictError,
-    DedupError,
-    DedupRequest,
-    DedupSelection,
-    apply_dedup,
-    prepare_dedup,
-)
-from memcommit.dedup_runtime import MemoryStoreDedupPort
-from memcommit.interfaces.cli.dedup import (
-    render_dedup_plan_plain,
-    render_dedup_receipt,
-)
-from memcommit.interfaces.console import (
-    ConsoleMode,
-    ConsoleModeError,
-    SystemTerminalCapabilities,
-    resolve_console_mode,
-)
+from memcommit.authority.access import resolve_context_access
+from memcommit.commands.context_operand import ContextOperandSnapshot
+from memcommit.exact_dedup_application import ExactDedupError, apply_exact_dedup
 from memcommit.interfaces.console.text import display_escape_text
-from memcommit.interfaces.tui.operations.dedup import run_dedup_tui
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
-from memcommit.quality_finding_handoff import (
-    QualityFindingHandoffError,
-    quality_finding_handoff_from_json,
-)
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
 
 
-def _selection(value: str) -> DedupSelection:
-    if value.count("=") != 1:
-        raise DedupError("Dedup --survivor must be COMPONENT=MEMORY.")
-    component_uid, survivor_uid = value.split("=", 1)
-    return DedupSelection(component_uid, survivor_uid)
-
-
 def cmd(
-    finding_handoffs: Annotated[
-        Optional[list[str]],
-        typer.Option(
-            "--finding-handoff",
-            help="Canonical duplicate handoff JSON; repeat for every confirmed link",
-        ),
-    ] = None,
-    survivors: Annotated[
-        Optional[list[str]],
-        typer.Option(
-            "--survivor",
-            help="Exact COMPONENT=MEMORY survivor decision; repeat per component",
-        ),
-    ] = None,
-    expected_revision: Annotated[
+    context_name: Annotated[
         Optional[str],
-        typer.Option(
-            "--expected-revision",
-            help="Exact frozen revision printed by the reviewed Dedup plan",
-        ),
+        typer.Argument(help="Context to deduplicate (defaults to current)"),
     ] = None,
-    apply_now: Annotated[
-        bool,
-        typer.Option("--apply", help="Apply the exact complete survivor set"),
-    ] = False,
-    plain: Annotated[
-        bool,
-        typer.Option("--plain", help="Print the plan or receipt instead of the TUI"),
-    ] = False,
-    tui: Annotated[
-        bool,
-        typer.Option("--tui", help="Require the interactive Dedup review flow"),
-    ] = False,
 ) -> None:
-    """Keep one existing Memory per confirmed duplicate component."""
+    """Remove later byte-identical Memories, retaining the first existing UID."""
 
+    active_store = MemoryStore(create=False)
     try:
-        mode = resolve_console_mode(plain=plain, tui=tui)
-        if not finding_handoffs:
-            raise DedupError(
-                "Dedup requires at least one --finding-handoff from find-duplicates."
-            )
-        if apply_now:
-            if not survivors or expected_revision is None:
-                raise DedupError(
-                    "Dedup --apply requires --survivor and --expected-revision."
-                )
-            if mode is ConsoleMode.TUI:
-                raise DedupError(
-                    "Dedup --apply is already exact; do not combine it with --tui."
-                )
-        elif survivors or expected_revision is not None:
-            raise DedupError(
-                "Dedup --survivor and --expected-revision require --apply."
-            )
-        request = DedupRequest(
-            tuple(quality_finding_handoff_from_json(item) for item in finding_handoffs)
+        snapshot = ContextOperandSnapshot.capture(active_store)
+        access = resolve_context_access(
+            active_store,
+            context_name,
+            current_name=snapshot.current_name,
+            required_permission="READ",
         )
-        store = MemoryStore(create=False)
-        try:
-            current_name = store.current_context_name()
-        except FileNotFoundError:
-            current_name = None
-        port = MemoryStoreDedupPort(store, current_name=current_name)
-        plan = prepare_dedup(request, port=port)
-        if expected_revision is not None and plan.revision != expected_revision:
-            raise DedupConflictError(
-                "The reviewed Dedup revision was not regenerated; nothing was written."
-            )
-        if apply_now:
-            receipt = apply_dedup(
-                plan,
-                tuple(_selection(value) for value in survivors or ()),
-                port=port,
-            )
-            render_dedup_receipt(receipt)
-            return
-        interactive = SystemTerminalCapabilities().is_interactive()
-        selected_mode = (
-            ConsoleMode.TUI
-            if mode is ConsoleMode.AUTO and interactive
-            else ConsoleMode.PLAIN
-            if mode is ConsoleMode.AUTO
-            else mode
-        )
-        if selected_mode is ConsoleMode.TUI:
-            run_dedup_tui(
-                plan,
-                apply_selections=lambda values: apply_dedup(
-                    plan,
-                    values,
-                    port=port,
-                ),
-                clipboard_writer=write_system_clipboard,
-            )
-        else:
-            render_dedup_plan_plain(plan)
+        context = access.store.load_direct(access.context_name)
+        receipt = apply_exact_dedup(access, context)
     except (
         ConcurrentContextUpdateError,
-        ConsoleModeError,
-        DedupError,
+        ExactDedupError,
         FileNotFoundError,
         OSError,
         ProfileConfigError,
         ProfileError,
-        QualityFindingHandoffError,
         RuntimeError,
         TypeError,
         ValueError,
@@ -161,6 +51,17 @@ def cmd(
             err=True,
         )
         raise typer.Exit(1)
+
+    context_label = display_escape_text(receipt.context_name)
+    if receipt.removed_count == 0:
+        typer.echo(f"No exact duplicate Memories in '{context_label}'.")
+        return
+    typer.secho(
+        f"Deduplicated '{context_label}': removed {receipt.removed_count} exact "
+        f"duplicate Memory item(s); kept {len(receipt.groups)} original UID(s).",
+        fg=typer.colors.GREEN,
+    )
+    typer.echo(f"Checkpoint [{receipt.checkpoint_uid[:8]}] · recovery: mem undo")
 
 
 __all__ = ["cmd"]

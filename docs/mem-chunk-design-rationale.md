@@ -92,7 +92,7 @@ repeated content.
 - Chunk does not decide whether a sentence is an atomic claim.
 - Context scope does not include lexical descendants or embedded traversal.
 - Chunk does not consume quality-finding handoffs or redundancy evidence.
-  Confirmed semantic redundancy from `find-redundancies` belongs to
-  Consolidate, while conflict finding handoffs belong to Resolve.
+  Confirmed semantic redundancy belongs to Dedun, while conflict finding
+  handoffs belong to Resolve.
 - The change does not retroactively rewrite existing paragraph-based
   checkpoints or their reconstructed lineage.

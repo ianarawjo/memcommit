@@ -1,5 +1,5 @@
 PTY 180 52
-[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM FIND DUPLICATES · SETUP[0m
+[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM DEDUN · SETUP[0m
 [0m MULTIPLE TARGETS · THIS CONTEXT ONLY · 1 CONTEXT(S) · SOURCE UNCHANGED[0m
 [0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ TARGETS · PROFILE/CONTEXT · * CURRENT · ENTER/SPACE TO SELECT ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
 [0;38;5;117;1m┃[0m  ·   PROFILE  ALL READABLE CONTEXTS                                                                                                                                             [0;1m^[179C[0;38;5;117;1m┃[0m
@@ -11,7 +11,7 @@ PTY 180 52
 [0m│  CONTEXT RANGE · [0;38;5;234;48;5;117m[ THIS CONTEXT ONLY ][0m  [ INCLUDE DESCENDANTS ] · ←/→ SELECT                                                                                                     [179C│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
 [0m┌─────────────────────────────────────────────────────────────────────────────| TO DO · ENTER TO RUN |─────────────────────────────────────────────────────────────────────────────[179C┐[0m
-[0m│  RUN FIND DUPLICATES                                                                                                                                                             [179C│[0m
+[0m│  RUN DEDUN                                                                                                                                                                       [179C│[0m
 [0m│  Analyze direct Memories across 1 selected Context as one frame; Sources unchanged.                                                                                              [179C│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
 [0m ↑/↓ move/cross · ←/→ collapse/expand · Enter/Space select · A expand all · Tab/Shift-Tab pane · Esc/Q cancel[0m
@@ -50,8 +50,8 @@ PTY 180 52
 
 
 
-[0m [47A[C[0m[4A[J[0m[?7h[?1049l[?2004lMEM FIND DUPLICATES · 1/1 · ANALYZING 3 DIRECT MEMORIES ACROSS 1 CONTEXTS . · 0s                                                                                [?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
-[0;38;5;117;1m┃[0m MEM FIND DUPLICATES                                                                                                                                                             [0;1m^[179C[0;38;5;117;1m┃[0m
+[0m [47A[C[0m[4A[J[0m[?7h[?1049l[?2004lMEM DEDUN · 1/1 · ANALYZING 3 DIRECT MEMORIES ACROSS 1 CONTEXTS . · 0s                                                                      [?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;5;117;1m┃[0m MEM DEDUN                                                                                                                                                                       [0;1m^[179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m CONTEXT LOCATIONS                                                                                                                                                               [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m   SOURCE · dedup/capture                                                                                                                                                        [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m PROCESS LOCAL · 0/1 ANSWERED · 1 CONTEXTS · 3 SOURCE MEMORIES · 1 FINDINGS · 0 ANSWERED                                                                                         [0;48;5;238m [179C[0;38;5;117;1m┃[0m
@@ -89,7 +89,7 @@ PTY 180 52
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
 [0m┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
-[0m│[0;1m› REPORT         Complete Find Duplicates report[0m                                                                                                                                 [0;1m^[179C[0m│[0m
+[0m│[0;1m› REPORT         Complete Dedun report[0m                                                                                                                                           [0;1m^[179C[0m│[0m
 [0m│  DUPLICATE      The office opens at eight on weekdays. ↔ The weekday office opening time is 08:00.                                                                              [0;48;5;238m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
@@ -101,7 +101,7 @@ PTY 180 52
 [0m┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│[ COMPLETE ]  Required review is complete · 1 optional review remains open. No whole-set action is required; close or revisit an item.                                            [179C│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
-[0m ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close H Help  y/Y copy  Q close[128D[44A[C[0m[?25l[6A[0m                    [0m
+[0m ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close H Help  y/Y copy  Q close[128D[44A[C[0m[?25l[6A[0m          [0m
 [2C[0mDUPLICATE 1/1    [0m
 [C[0;38;5;231;1m The office opens at eight on weekdays. ↔ The weekday office opening time is 08:00.[0m
 [2C[0m[SEMANTIC_EQUIVALENT] OP[CN                                                             [0m
@@ -140,7 +140,7 @@ PTY 180 52
 [0m│[0;38;5;231m└────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[179C[0m│[0m
 [0m└[84C─────────[85C┘[0m
 [0m┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
-[3C[0mRE[CORT   [6CComplete Find Duplicates report                                                   [78C[0;1m^[0m
+[3C[0mRE[CORT   [6CComplete Dedun report                                                             [78C[0;1m^[0m
 [C[0;1m› DUPLICATE      The office opens at eight on weekdays. ↔ The weekday office opening time is 08:00.[0m
 
 
@@ -200,8 +200,8 @@ PTY 180 52
 
 
 
-[3C[0mDEDUP ] [CDedup 1 confirmed duplicate link(s) · Enter[Cto submit only[Cth[C confirmed eligible link[C. Dedup will recheck the Source, DELETE authority, components, and inbound r…[0m
+[3C[0mDEDUN ] [CDedun 1 confirmed semantic redundancy li[Ck(s) · Enter to [Cubmit only the confirmed el[Cgible links. Dedun will recheck[Cth[C Source, DELETE authority, components, and…[0m
 
-[C[0mSelected · ✓ CONFIRM LINK[0m[K[51A[26D[0m[J[0m[?7h[?1049l[?2004l[31mFind duplicates error: The confirmed duplicate Source changed. Run the finder again.[0m
+[C[0mSelected · ✓ CONFIRM LINK[0m[K[51A[26D[0m[J[0m[?7h[?1049l[?2004l[31mDedun error: The confirmed duplicate Source changed. Run the finder again.[0m
 COMMAND EXIT · 1
-STALE VERIFICATION · MEMORIES [('20000000-0000-4000-8000-000000000100', 'The office opens at eight on weekdays.'), ('20000000-0000-4000-8000-000000000200', 'The weekday office opening time is 08:00.'), ('20000000-0000-4000-8000-000000000300', 'The office closes at 17:00 on weekdays.'), ('d7b463fc-28cb-476f-a804-056a575ab995', 'A concurrent holiday schedule arrived.')] · CHECKPOINTS 0 · COMMANDS [] · PROVIDER OPERATIONS ['find_duplicates']
+STALE VERIFICATION · MEMORIES [('20000000-0000-4000-8000-000000000100', 'The office opens at eight on weekdays.'), ('20000000-0000-4000-8000-000000000200', 'The weekday office opening time is 08:00.'), ('20000000-0000-4000-8000-000000000300', 'The office closes at 17:00 on weekdays.'), ('94e82174-715a-4060-873c-f5949740e7e7', 'A concurrent holiday schedule arrived.')] · CHECKPOINTS 0 · COMMANDS [] · PROVIDER OPERATIONS ['find_duplicates']

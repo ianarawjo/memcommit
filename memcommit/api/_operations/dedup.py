@@ -7,11 +7,11 @@ from collections.abc import Mapping, Sequence
 from memcommit.api._runtime import ClientRuntime
 from memcommit.api._support.errors import raise_public
 from memcommit.api.dedup import (
-    DedupApplyResult,
-    DedupComponentResult,
-    DedupEvidenceResult,
-    DedupMemberResult,
-    DedupPlanResult,
+    DedunApplyResult,
+    DedunComponentResult,
+    DedunEvidenceResult,
+    DedunMemberResult,
+    DedunPlanResult,
 )
 from memcommit.api.errors import (
     SemanticAuthorityError,
@@ -75,16 +75,16 @@ def _port(runtime: ClientRuntime) -> MemoryStoreDedupPort:
     )
 
 
-def _public(plan) -> DedupPlanResult:
-    return DedupPlanResult(
+def _public(plan) -> DedunPlanResult:
+    return DedunPlanResult(
         context_name=plan.display_name,
         context_uid=plan.context_uid,
         revision=plan.revision,
         components=tuple(
-            DedupComponentResult(
+            DedunComponentResult(
                 uid=component.uid,
                 members=tuple(
-                    DedupMemberResult(
+                    DedunMemberResult(
                         uid=member.uid,
                         content=member.content,
                         ordinal=member.ordinal,
@@ -95,7 +95,7 @@ def _public(plan) -> DedupPlanResult:
                     for member in component.members
                 ),
                 evidence=tuple(
-                    DedupEvidenceResult(
+                    DedunEvidenceResult(
                         finding_uid=evidence.finding_uid,
                         relation=evidence.relation,
                         left_uid=evidence.left_uid,
@@ -112,22 +112,24 @@ def _public(plan) -> DedupPlanResult:
     )
 
 
-def plan_dedup(
+def plan_dedun(
     runtime: ClientRuntime,
-    handoffs: Sequence[QualityFindingHandoff],
+    evidence: Sequence[QualityFindingHandoff],
     *,
     expected_revision: str | None = None,
-) -> DedupPlanResult:
-    """Freeze confirmed finder receipts into deterministic components."""
+) -> DedunPlanResult:
+    """Freeze confirmed semantic redundancy evidence into components."""
 
     try:
-        if isinstance(handoffs, (str, bytes)):
-            raise TypeError("Dedup handoffs must be a sequence of typed receipts.")
-        request = DedupRequest(tuple(handoffs))
+        if isinstance(evidence, (str, bytes)):
+            raise TypeError(
+                "Dedun evidence must be a sequence of typed semantic receipts."
+            )
+        request = DedupRequest(tuple(evidence))
         plan = prepare_dedup(request, port=_port(runtime))
         if expected_revision is not None and plan.revision != expected_revision:
             raise DedupConflictError(
-                "The reviewed Dedup revision was not regenerated."
+                "The reviewed Dedun revision was not regenerated."
             )
     except DedupAuthorityError as error:
         raise_public(SemanticAuthorityError, error)
@@ -144,16 +146,16 @@ def plan_dedup(
     return _public(plan)
 
 
-def apply_dedup(
+def apply_dedun(
     runtime: ClientRuntime,
-    plan: DedupPlanResult,
+    plan: DedunPlanResult,
     *,
     survivors: Mapping[str, str],
-) -> DedupApplyResult:
+) -> DedunApplyResult:
     """Apply one exact complete survivor mapping from a reviewed plan."""
 
-    if not isinstance(plan, DedupPlanResult):
-        raise SemanticInputError("Dedup Apply requires a DedupPlanResult.")
+    if not isinstance(plan, DedunPlanResult):
+        raise SemanticInputError("Dedun Apply requires a DedunPlanResult.")
     if not isinstance(survivors, Mapping) or any(
         not isinstance(component_uid, str)
         or not component_uid
@@ -162,7 +164,7 @@ def apply_dedup(
         for component_uid, survivor_uid in survivors.items()
     ):
         raise SemanticInputError(
-            "Dedup survivors must map component UIDs to Memory UIDs."
+            "Dedun survivors must map group UIDs to Memory UIDs."
         )
     try:
         receipt = apply_core_dedup(
@@ -185,7 +187,7 @@ def apply_dedup(
         raise_public(SemanticStorageError, error)
     except (RuntimeError, TypeError, ValueError) as error:
         raise_public(SemanticExecutionError, error)
-    return DedupApplyResult(
+    return DedunApplyResult(
         context_name=receipt.context_name,
         context_uid=receipt.context_uid,
         revision=receipt.revision,
@@ -195,4 +197,18 @@ def apply_dedup(
     )
 
 
-__all__ = ["apply_dedup", "plan_dedup"]
+# Compatibility aliases for the pre-Dedun public Python surface.
+plan_consolidation = plan_dedun
+apply_consolidation = apply_dedun
+plan_dedup = plan_dedun
+apply_dedup = apply_dedun
+
+
+__all__ = [
+    "apply_consolidation",
+    "apply_dedun",
+    "apply_dedup",
+    "plan_consolidation",
+    "plan_dedun",
+    "plan_dedup",
+]

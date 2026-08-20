@@ -74,6 +74,7 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
     assert "memcommit.interfaces.agent.query" in by_operation["query"].agent_modules
     assert by_operation["query"].curated_state == "CLOSED"
     assert by_operation["resolve"].curated_state == "CLOSED"
+    assert by_operation["dedun"].curated_state == "CLOSED"
     assert by_operation["dedup"].curated_state == "CLOSED"
     assert by_operation["find"].curated_state == "CLOSED"
     assert by_operation["meld"].curated_state == "CLOSED"

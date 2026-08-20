@@ -13,8 +13,10 @@ from memcommit.commands import (
     check_conformance,
     chunk,
     compare,
+    consolidate,
     contexts,
     dedup,
+    dedun,
     delete,
     diff,
     distill,
@@ -241,6 +243,13 @@ app.command(
     help=operation_summary("dedup"),
 )(dedup.cmd)
 app.command(
+    "dedun",
+    help=operation_summary("dedun"),
+)(dedun.cmd)
+# Pre-Dedun spellings remain executable for exact-command receipts and scripts,
+# but command discovery teaches one semantic-redundancy operation.
+app.command("consolidate", hidden=True)(consolidate.cmd)
+app.command(
     "checkpoint",
     help=operation_summary("checkpoint"),
 )(checkpoint.cmd)
@@ -286,10 +295,8 @@ app.command(
     "find",
     help=operation_summary("find"),
 )(literal_find.cmd)
-app.command(
-    "find-duplicates",
-    help=operation_summary("find-duplicates"),
-)(find_duplicates.cmd)
+app.command("find-redundancies", hidden=True)(find_duplicates.cmd)
+app.command("find-duplicates", hidden=True)(find_duplicates.cmd)
 app.command(
     "find-ambiguities",
     help=operation_summary("find-ambiguities"),

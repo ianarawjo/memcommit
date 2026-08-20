@@ -1,5 +1,8 @@
 # Mem Help review progress
 
+> Historical review tracker: current Help uses `mem dedup` for exact stored
+> duplicates and `mem dedun` for semantic redundancy discovery through Apply.
+
 Updated: 2026-08-16
 
 This is the compact session ledger for the 62 public operations. The reviewed
