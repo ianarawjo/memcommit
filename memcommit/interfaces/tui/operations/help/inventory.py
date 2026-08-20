@@ -1174,10 +1174,10 @@ def render_help_lookup_entries(
         return "No Help candidates available."
     width = max(40, content_width)
     rendered: list[str] = []
-    for rank, entry in enumerate(entries, start=1):
+    for entry in entries:
         rows = _help_command_rows(
             entry,
-            command_prefixes=(f"{rank} · mem {entry.name} ",),
+            command_prefixes=(f"mem {entry.name} ",),
             content_width=width,
             language=language,
         )

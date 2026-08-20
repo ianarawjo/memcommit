@@ -14,7 +14,7 @@ checkpoint, or Undo lifecycle.
 | --- | --- | --- | --- | --- | --- |
 | Plain `mem help` | `interfaces.tui.operations.help.inventory.cmd` in a non-TTY | `command_entries` takes `list_operation_help()` once | Plain alphabetized inventory plus CLI-owned forms, maturity tags, and canonical expanded details | None | `test_help_catalog.py`, `test_help_application.py` |
 | Interactive `mem help` | Same command in a TTY | Same frozen application snapshot | Grouped/A–Z browser; collapsed maturity tags; expanded typed details | None | Help renderer tests, `docs/screenshots/mem-help-import-query-details-20260816/`, and the full reviewed sequence in `docs/screenshots/mem-help-reviewed-content-20260816/` |
-| Natural-language `mem help REQUEST` | Same command with one positional request in TTY or non-TTY | `prepare_help_lookup` freezes and preflights the complete catalog before `connect_help_provider`; `execute_help_lookup` requires exactly three distinct exact IDs | Three existing collapsed Help rows in semantic order: visible rank, `mem NAME`, summary, and `WHEN`; no browser, why, confidence, forms, or generated prose | None | `test_help_lookup_application.py`, `test_help_lookup_cli.py`, `test_help_lookup_provider_policy.py` |
+| Natural-language `mem help REQUEST` | Same command with one positional request in TTY or non-TTY | `prepare_help_lookup` freezes and preflights the complete catalog before `connect_help_provider`; `execute_help_lookup` requires exactly three distinct exact IDs | Three existing collapsed Help rows in semantic order: `mem NAME`, summary, and `WHEN`; no ordinal, browser, why, confidence, forms, or generated prose | None | `test_help_lookup_application.py`, `test_help_lookup_cli.py`, `test_help_lookup_provider_policy.py` |
 | Shell selection | Hidden `--emit-selection` route | Same frozen application snapshot | One interface-owned command template on stdout | None | Existing Help selection tests |
 | Selected CLI detail | One `CommandEntry` from the snapshot | Catalog meaning already bound to the entry | Common meaning composed with registered CLI syntax | None | `test_help_catalog.py` |
 | Python list | `MemCommitClient.list_operations()` | `_operations.help.list_operations` → `list_operation_help` | `HelpCatalogResult` of immutable DTOs, including compact typed-detail references | None | `test_help_public_api.py`, import-boundary tests |
@@ -50,8 +50,8 @@ checkpoint, or Undo lifecycle.
    connection; uses `gpt-5.6-sol` with reasoning effort `none`; declares
    `TOP_K_RERANK`; and publishes no partial or prefiltered result.
 9. Lookup output is exactly three unique exact catalog names. The interface
-   supplies their visible ordinal ranks plus canonical summary and best-for
-   copy only after validation; the model cannot add reasons, confidence,
+   preserves their semantic order and supplies canonical summary and best-for
+   copy only after validation, without ordinal labels; the model cannot add reasons, confidence,
    explanations, command forms, or prose. Semantic order is not randomized, so
    fitness and display-position effects remain an intentional study limitation.
 10. Agent/MCP Help is discovery only. It cannot execute another tool or confer

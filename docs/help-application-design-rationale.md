@@ -80,9 +80,9 @@ When a positional request is supplied, `mem help REQUEST` bypasses the full
 browser, performs one lookup, and renders each selected operation through the
 same collapsed command-row projection already used by interactive Help. Each
 row contains only `mem NAME`, the canonical summary, and canonical `WHEN`
-(`best_for`) text. Results retain provider order and receive visible ordinal
-rank `1` through `3`; no confidence or generated rationale is shown. The
-command exits after rendering. Bare `mem help`, shell selection, exact
+(`best_for`) text. Results retain provider order without a visible ordinal
+label; no confidence or generated rationale is shown. The command exits after
+rendering. Bare `mem help`, shell selection, exact
 Python/agent Help, and MCP discovery retain their existing deterministic
 behavior and do not connect a provider.
 

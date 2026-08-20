@@ -36,14 +36,14 @@ policy is `gpt-5.6-sol` with reasoning effort `none`. The model selects IDs
 only; it cannot author the visible description, best-for text, explanation,
 score, command form, or rationale.
 
-Each validated candidate is rendered with its semantic rank and the existing
-collapsed Help record:
+Each validated candidate is rendered in semantic order as the existing
+collapsed Help record, without an explicit ordinal label:
 
 ```text
-1 · mem compare ┬ Compare Memories in two Contexts and report what they share,
-                │ what differs, and what appears only on one side.
-                └ WHEN · Comparing two Contexts as a whole to understand where
-                         they align and differ.
+mem compare ┬ Compare Memories in two Contexts and report what they share,
+            │ what differs, and what appears only on one side.
+            └ WHEN · Comparing two Contexts as a whole to understand where
+                     they align and differ.
 ```
 
 The first candidate is the strongest semantic fit. When fewer than three
@@ -57,12 +57,13 @@ overview, forms, or execution action. The focused lookup exits after the three
 rows; it does not open the full-screen browser, create a transcript, read a
 Store or Memory, or execute any candidate.
 
-Visible order is not randomized or counterbalanced. Semantic rank and display
-position therefore coincide intentionally. This keeps the interface and study
-condition simple, but it means later analysis cannot separate semantic fitness
-from primacy or rank-label effects. Candidate selection by rank may be reported
-descriptively; position bias is a recorded limitation rather than a separate
-experimental manipulation.
+Visible order is not randomized or counterbalanced. Semantic fitness and
+display position therefore coincide intentionally, even though the interface
+does not print ordinal labels. This keeps the interface and study condition
+simple, but it means later analysis cannot separate semantic fitness from
+primacy. Candidate selection by display position may be reported descriptively;
+position bias is a recorded limitation rather than a separate experimental
+manipulation.
 
 Direct matching is semantic rather than a catalog-vocabulary gate. A short,
 colloquial, metaphorical, or fragmentary request may match when its intended

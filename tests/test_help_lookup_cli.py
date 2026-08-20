@@ -42,7 +42,7 @@ def _invoke(*args: str):
     )
 
 
-def test_help_request_renders_three_ranked_existing_description_when_rows(monkeypatch):
+def test_help_request_renders_three_ordered_existing_description_when_rows(monkeypatch):
     provider = _Provider(
         '{"operations":["compare","search","query"]}'
     )
@@ -53,11 +53,14 @@ def test_help_request_renders_three_ranked_existing_description_when_rows(monkey
     assert result.exit_code == 0
     assert result.stderr == ""
     assert provider.calls == 1
-    assert "1 · mem compare ┬ Compare Memories in two Contexts" in result.stdout
+    assert "mem compare ┬ Compare Memories in two Contexts" in result.stdout
     assert "└ WHEN · Comparing two Contexts as a whole" in result.stdout
-    assert "2 · mem search ┬ Semantically rank Memories" in result.stdout
+    assert "mem search ┬ Semantically rank Memories" in result.stdout
     assert "└ WHEN · Finding relevant Memories through meaning" in result.stdout
-    assert "3 · mem query ┬ Generate an LLM-based answer" in result.stdout
+    assert "mem query ┬ Generate an LLM-based answer" in result.stdout
+    assert "1 ·" not in result.stdout
+    assert "2 ·" not in result.stdout
+    assert "3 ·" not in result.stdout
     assert result.stdout.index("mem compare") < result.stdout.index("mem search")
     assert result.stdout.index("mem search") < result.stdout.index("mem query")
     assert "WHY" not in result.stdout

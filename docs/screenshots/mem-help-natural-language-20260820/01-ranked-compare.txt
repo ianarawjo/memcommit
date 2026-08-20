@@ -1,8 +1,8 @@
-1 · mem compare ┬ Compare Memories in two Contexts and report what they share, what differs, and what appears only on one side.                                                     
-                └ WHEN · Comparing two Contexts as a whole to understand where they align and differ.                                                                               
+mem compare ┬ Compare Memories in two Contexts and report what they share, what differs, and what appears only on one side.                                                         
+            └ WHEN · Comparing two Contexts as a whole to understand where they align and differ.                                                                                   
                                                                                                                                                                                     
-2 · mem diff ┬ Show the differences recorded by a Context checkpoint or the active Update.                                                                                          
-             └ WHEN · Verifying exactly what a recorded operation changed.                                                                                                          
+mem diff ┬ Show the differences recorded by a Context checkpoint or the active Update.                                                                                              
+         └ WHEN · Verifying exactly what a recorded operation changed.                                                                                                              
                                                                                                                                                                                     
-3 · mem meld ┬ Semantically incorporate an incoming Context into an authoritative baseline, or derive a separate Result from two equal peers.                                       
-             └ WHEN · Combining two bodies of work when overlap, conflicts, and newly synthesized content must be reviewed semantically.
+mem meld ┬ Semantically incorporate an incoming Context into an authoritative baseline, or derive a separate Result from two equal peers.                                           
+         └ WHEN · Combining two bodies of work when overlap, conflicts, and newly synthesized content must be reviewed semantically.

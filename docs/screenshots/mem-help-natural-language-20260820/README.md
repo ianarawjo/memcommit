@@ -35,8 +35,8 @@ from provider-written prose.
 | Image | Exact command | Visible state | Durable mutation |
 | --- | --- | --- | --- |
 | `00a-campus-wiki-thinking.png` | `mem help "how can I update those campus wiki from mine?"` | The provider-backed lookup is pending and the in-place `MEM HELP · 1/1 · THINKING` liveness line is visible | None |
-| `00b-campus-wiki-result.png` | Same running command; no additional input | The transient line has been erased; Update leads three ranked compact candidates | None |
-| `01-ranked-compare.png` | `mem help "두 Context의 차이를 보고 싶어"` | Compare leads three ranked candidates; every row contains only ordinal, command, authored description, and authored `WHEN` | None |
+| `00b-campus-wiki-result.png` | Same running command; no additional input | The transient line has been erased; Update leads three ordered compact candidates | None |
+| `01-ranked-compare.png` | `mem help "두 Context의 차이를 보고 싶어"` | Compare leads three ordered candidates; every row contains only command, authored description, and authored `WHEN` | None |
 | `02-ranked-compare-search.png` | `mem help "두 Context를 비교하고 관련 Memories도 의미로 찾고 싶어"` | Compare and Search appear in semantic order inside one fixed three-candidate frame | None |
 | `03-ranked-metaphorical-conflict.png` | `mem help "메모리들이 서로 싸우고 있는지 좀 봐줘"` | Find Conflicts leads the three candidates selected from metaphorical language | None |
 | `04-ranked-unrelated.png` | `mem help "🦆 보라색 냉장고가 달에서 왈츠를 춘다 ??? 123"` | Even unrelated wording receives three closest exploratory catalog possibilities | None |
@@ -44,7 +44,7 @@ from provider-written prose.
 | `06-study-exact-copy-blocked.png` | `mem help "Generate an LLM-based answer from readable Context knowledge or an authorized concealed query-only view."` | The exact Query Description is rejected at the Study-only 50% copy boundary before provider connection | None |
 
 All six provider-backed commands exit successfully after one bounded semantic
-lookup each and expose exactly three distinct visible ranks. None opens a Store,
+lookup each and expose exactly three distinct operation rows. None opens a Store,
 reads a Context or Memory, executes a suggested operation, or persists the
 selection. The capture assertions reject expanded `WHY`, `FLOW`, `EFFECT`,
 Form, Overview, and Command line content.

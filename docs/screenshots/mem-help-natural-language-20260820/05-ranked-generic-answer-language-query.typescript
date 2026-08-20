@@ -1,9 +1,9 @@
 52 180
-[2J[HMEM HELP · 1/1 · THINKING . · 0sMEM HELP · 1/1 · THINKING .. · 0sMEM HELP · 1/1 · THINKING … · 0s MEM HELP · 1/1 · THINKING . · 1sMEM HELP · 1/1 · THINKING .. · 1sMEM HELP · 1/1 · THINKING … · 1s MEM HELP · 1/1 · THINKING . · 2sMEM HELP · 1/1 · THINKING .. · 2sMEM HELP · 1/1 · THINKING … · 2s MEM HELP · 1/1 · THINKING . · 3sMEM HELP · 1/1 · THINKING .. · 3sMEM HELP · 1/1 · THINKING … · 3s MEM HELP · 1/1 · THINKING . · 4sMEM HELP · 1/1 · THINKING .. · 4sMEM HELP · 1/1 · THINKING … · 4s MEM HELP · 1/1 · THINKING . · 5sMEM HELP · 1/1 · THINKING .. · 5sMEM HELP · 1/1 · THINKING … · 6s MEM HELP · 1/1 · THINKING . · 6sMEM HELP · 1/1 · THINKING .. · 6sMEM HELP · 1/1 · THINKING … · 7s MEM HELP · 1/1 · THINKING . · 7sMEM HELP · 1/1 · THINKING .. · 7sMEM HELP · 1/1 · THINKING … · 8s MEM HELP · 1/1 · THINKING . · 8sMEM HELP · 1/1 · THINKING .. · 8s                                 1 · mem query ┬ Generate an LLM-based answer from readable Context knowledge or an authorized concealed query-only view.
-              └ WHEN · Getting a grounded natural-language answer instead of a list of matching Memories.
+[2J[HMEM HELP · 1/1 · THINKING . · 0sMEM HELP · 1/1 · THINKING .. · 0sMEM HELP · 1/1 · THINKING … · 0s MEM HELP · 1/1 · THINKING . · 1sMEM HELP · 1/1 · THINKING .. · 1sMEM HELP · 1/1 · THINKING … · 1s MEM HELP · 1/1 · THINKING . · 2sMEM HELP · 1/1 · THINKING .. · 2sMEM HELP · 1/1 · THINKING … · 2s MEM HELP · 1/1 · THINKING . · 3sMEM HELP · 1/1 · THINKING .. · 3sMEM HELP · 1/1 · THINKING … · 3s MEM HELP · 1/1 · THINKING . · 4s                                mem query ┬ Generate an LLM-based answer from readable Context knowledge or an authorized concealed query-only view.
+          └ WHEN · Getting a grounded natural-language answer instead of a list of matching Memories.
 
-2 · mem search ┬ Semantically rank Memories relevant to a natural-language request across selected Contexts.
-               └ WHEN · Finding relevant Memories through meaning and context, including related content without obvious keyword overlap.
+mem search ┬ Semantically rank Memories relevant to a natural-language request across selected Contexts.
+           └ WHEN · Finding relevant Memories through meaning and context, including related content without obvious keyword overlap.
 
-3 · mem show ┬ Show a Memory, reference, embedded Context, or the direct contents of a current/explicit Context.
-             └ WHEN · Reading the complete content of a known item or Context.
+mem show ┬ Show a Memory, reference, embedded Context, or the direct contents of a current/explicit Context.
+         └ WHEN · Reading the complete content of a known item or Context.

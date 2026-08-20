@@ -91,12 +91,12 @@ def _assert_focused_contract(plain: str, expected_names: tuple[str, ...]) -> Non
         assert name in plain
     positions = [plain.index(name) for name in expected_names]
     assert positions == sorted(positions)
-    ranked_names = re.findall(
-        r"(?m)^([123]) · mem ([a-z][a-z0-9-]*) ",
+    ordered_names = re.findall(
+        r"(?m)^mem ([a-z][a-z0-9-]*) ",
         plain,
     )
-    assert [rank for rank, _name in ranked_names] == ["1", "2", "3"]
-    assert len({name for _rank, name in ranked_names}) == 3
+    assert len(ordered_names) == 3
+    assert len(set(ordered_names)) == 3
     assert "WHEN ·" in plain
     for forbidden in (
         "WHY",
