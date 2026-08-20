@@ -198,3 +198,14 @@ def test_elaborate_case_impact_keeps_its_distinct_effect_projection() -> None:
     assert presentation.show_impact_ledger is True
     assert "IMPACT · ELABORATE ADD · ENDPOINTS UNCHANGED" in rendered
     assert "[ADD]" in rendered
+    assert "[CHANGE]" not in rendered
+    assert "PROPOSAL DETAIL" not in rendered
+    assert presentation.view.items[0].priority == "SUGGESTED"
+    assert presentation.view.items[0].role == "OPTIONAL_REVIEW"
+    assert presentation.view.items[0].show_summary_priority is False
+    assert len(presentation.view.items[0].blocks) == 1
+    assert presentation.view.items[0].blocks[0].heading == "RULE COVERAGE · ALL 1"
+    assert presentation.view.items[0].blocks[0].text == (
+        "RULE 1 · The qualifier remains explicit.\n"
+        "EXPECTED · Keep the class qualifier."
+    )

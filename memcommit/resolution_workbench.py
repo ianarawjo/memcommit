@@ -427,6 +427,7 @@ class ResolutionItem:
     kind_label: str | None = None
     compact_row_suffix: str | None = None
     commentable: bool = False
+    show_summary_priority: bool = True
 
     def __post_init__(self) -> None:
         for value, label in (
@@ -526,6 +527,10 @@ class ResolutionItem:
             )
         if not isinstance(self.commentable, bool):
             raise ResolutionWorkbenchError("Invalid resolution item commentability.")
+        if not isinstance(self.show_summary_priority, bool):
+            raise ResolutionWorkbenchError(
+                "Invalid resolution item summary-priority visibility."
+            )
         if len({option.uid for option in options}) != len(options):
             raise ResolutionWorkbenchError("Duplicate resolution option uid.")
         if self.selected_option_uid is not None and self.selected_option_uid not in {

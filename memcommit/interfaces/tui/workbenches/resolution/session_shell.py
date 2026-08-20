@@ -1556,7 +1556,12 @@ def resolution_report_fragments(
                     ),
                     (
                         "class:viewer-body",
-                        f" [{safe_terminal_text(item.priority)}] {safe_terminal_text(item.summary)}\n",
+                        (
+                            f" [{safe_terminal_text(item.priority)}] "
+                            if item.show_summary_priority
+                            else " "
+                        )
+                        + f"{safe_terminal_text(item.summary)}\n",
                     ),
                 ]
             if item.question:

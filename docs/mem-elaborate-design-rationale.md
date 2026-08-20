@@ -158,7 +158,10 @@ Goal-to-Rules catalogs use `[N] CONTENT — SUGGESTED · UNVERIFIED`. The status
 suffix stays adjacent to every proposal, while its rationale remains available
 in the Rule detail instead of consuming a second default catalog row. This
 compact form applies only to Rule catalogs; Rules-to-Cases retains its distinct
-role, expected-result, and complete Rule-coverage fields.
+role, expected-result, and complete Rule-coverage fields. Case proposals are
+classified as `SUGGESTED`, not as generic Resolution `CHANGE` items: Impact has
+not mutated either endpoint, and presentation must not imply otherwise. Their
+rationale remains visible without a bracketed priority badge.
 
 The renderer folds stored whitespace into one logical row but never truncates
 or paraphrases Rule content. A terminal may visually wrap a long row at its
@@ -176,6 +179,10 @@ endpoint immutability remains visible in the Context-location header and
 close-time digest verification. Rules-to-Cases keeps its separate proposal and
 Impact projections because the compact Rule-only catalog contract does not
 apply to Case role, expected-result, and complete Rule-coverage fields.
+Case detail groups the complete coverage trace into one block headed
+`RULE COVERAGE · ALL N`; it does not manufacture one identically titled block
+per Rule. This keeps every unshortened Rule check, expected result, and Target
+usage trace while avoiding repeated two-line `PROPOSAL DETAIL` pairs.
 
 ## Ground route
 

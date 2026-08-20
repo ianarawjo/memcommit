@@ -504,6 +504,20 @@ def elaborate_impact_presentation(
             return ()
         return ("TARGET USED · " + (", ".join(refs) or "NONE"),)
 
+    def proposal_blocks(detail: tuple[str, ...]) -> tuple[ResolutionDetailBlock, ...]:
+        if not detail:
+            return ()
+        heading, *body = detail
+        if heading.startswith("TARGET USED · "):
+            heading, _separator, target_refs = heading.partition(" · ")
+            body = [target_refs]
+        return (
+            ResolutionDetailBlock(
+                heading=heading,
+                text="\n".join(body),
+            ),
+        )
+
     proposals = (
         tuple(
             (
@@ -541,19 +555,15 @@ def elaborate_impact_presentation(
             uid=uid,
             kind=kind,
             status="PROPOSED · UNVERIFIED",
-            priority="CHANGE",
+            priority="SUGGESTED",
             title=" ".join(content.split()),
             summary=rationale,
-            role="CHANGE",
+            role="OPTIONAL_REVIEW",
             obligation="NONE",
             response_state="NOT_APPLICABLE",
-            compact_row_suffix=(
-                "SUGGESTED · UNVERIFIED" if rules_direction else None
-            ),
-            blocks=tuple(
-                ResolutionDetailBlock(heading="PROPOSAL DETAIL", text=line)
-                for line in detail
-            ),
+            compact_row_suffix=("SUGGESTED · UNVERIFIED" if rules_direction else None),
+            blocks=proposal_blocks(detail),
+            show_summary_priority=False,
         )
         for uid, kind, content, rationale, detail in proposals
     )
