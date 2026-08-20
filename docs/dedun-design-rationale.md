@@ -74,6 +74,11 @@ rule are complete in program logic. Dedun shows semantic evidence and an
 existing-survivor review because model judgment can be wrong. The semantic
 screen uses “redundancy group,” never “duplicate component.”
 
+Public Help exposes the indivisible-unit rule as the typed `partial-overlap`
+semantic-boundary note. This makes the Atomize-before-Dedun route discoverable
+when only one claim or a shared proper part overlaps, instead of implying that
+Dedun may remove a fragment from a stored Memory.
+
 Dedun version 1 does not synthesize canonical wording, migrate inbound
 references, atomize compound Memories, or apply one group across multiple
 Contexts. Rewriting belongs to Normalize, Meld, Update, or Fit Resolve;

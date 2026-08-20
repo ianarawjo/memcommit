@@ -20,7 +20,7 @@ read-only.
 | Capture | Exact command | PTY | Profile / current Context | Preceding input | Visible state | Durable mutation |
 |---|---|---|---|---|---|---|
 | `01-adjacent-operations` | `mem help` | `180×52` | not consulted / not consulted | `Shift-Tab`, `Right` to A–Z, `Tab`, `Home`, `Down` ×12 | adjacent Dedun semantic summary and Dedup exact summary; old split operations absent | none |
-| `02-dedun-expanded` | same process | `180×52` | not consulted / not consulted | `Right` | semantic execution, redundancy-group flow, review-before-Apply effect, and only the simple `mem dedun` forms | none |
+| `02-dedun-expanded` | same process | `180×52` | not consulted / not consulted | `Right` | semantic execution, redundancy-group flow, the `PARTIAL OVERLAP` whole-Memory boundary with Atomize-first guidance, review-before-Apply effect, and only the simple `mem dedun` forms | none |
 | `03-dedup-expanded` | same process | `180×52` | not consulted / not consulted | `Left`, `Down`, `Right` | deterministic exact-content grouping, immediate checkpoint effect, and no provider/TUI boundary | none |
 
 Every numbered state has a raw `.typescript`, terminal-text `.txt`, and

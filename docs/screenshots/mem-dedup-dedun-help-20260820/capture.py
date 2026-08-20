@@ -52,6 +52,9 @@ def main() -> None:
     assert "▾ mem dedun" in dedun
     assert "EXECUTION · SEMANTIC" in dedun
     assert "semantic redundancy groups" in dedun
+    assert "PARTIAL OVERLAP" in dedun
+    assert "abc and bcd sharing bc" in dedun
+    assert "run Atomize first" in dedun
     assert "FORM 1 · mem dedun" in dedun
     assert "--evidence" not in dedun
 

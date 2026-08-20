@@ -5,6 +5,7 @@ from types import MappingProxyType
 from memcommit.help_catalog.details.add import ADD_DETAILS
 from memcommit.help_catalog.details.atomize import ATOMIZE_DETAILS
 from memcommit.help_catalog.details.check_conformance import CHECK_CONFORMANCE_DETAILS
+from memcommit.help_catalog.details.dedun import DEDUN_DETAILS
 from memcommit.help_catalog.details.distill import DISTILL_DETAILS
 from memcommit.help_catalog.details.eval import EVAL_DETAILS
 from memcommit.help_catalog.details.fit import FIT_DETAILS
@@ -26,6 +27,7 @@ _DETAIL_GROUPS = (
     ADD_DETAILS,
     ATOMIZE_DETAILS,
     CHECK_CONFORMANCE_DETAILS,
+    DEDUN_DETAILS,
     DISTILL_DETAILS,
     EVAL_DETAILS,
     FIT_DETAILS,

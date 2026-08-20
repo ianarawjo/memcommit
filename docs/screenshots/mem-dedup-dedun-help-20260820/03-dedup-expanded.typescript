@@ -116,24 +116,30 @@
 [C[0m   EXECUTION · SEMA[CTIC        [C              [C      [C        [C     [C          [C   [C     [C        [C    [0m
 [C[0m   EFFECT    · Read-only through analysis and[Creview;[Capproved Apply deletes absorbed UIDs[Cin[Cone checkpoint[0m
 [C[0m   RANGE     · One reviewed direct[CCont[Cxt group p[Cr Apply; inbound references block version[C1[CApply[0m
+[C[0;1m   PARTIAL OVERLAP                                                                                                                                                               [0m
+[C[0m   Dedun treats each complete stored direct Memory as one indivisible ju[Cgment[Cunit.[CShared[Cwording[Cor[Ca[Cshared[Cproper[Cpart—including[Cabc[Cand[Cbcd[Csharing[Cbc—is[COVERLAP,[Cnot[0m
+[C[0m   semantic redundancy, so Dedun do[Cs[Cnot [Cplit [Cr rem[Cve it. If only[Cone cl[Cim[Cinside a multi-claim Memory is re[Cundant, run[CAtomize first, then run Dedun[Con[Cthe[Cseparately[0m
+[C[0m   reviewable Memories. [C         [C    [C       [C     [C  [C         [C            [C    [C       [C        [C     [C  [C         [0m
 [C[0;38;5;234;48;5;117;1;7m   FORM 1 · mem dedun (find, review, and resolve semantic redundancies)                                                                                                          [0m
 [C[0;38;5;189m   FORM 2 · mem dedun --context [context] (analyze one explicit Context)                                                                                                         [0m
-[9C[0;1medup ─[0;38;5;243m┬ [0mRemove byte-identica[2Cd[Cplicates ([Cup) immediately, retaining the first existing UID for each exact-content gr[Cup.      [C      [C  [C [C     [0m
-[15C[0;38;5;243m└ [0mWHEN ·[CRemoving byte-identical direct[CMemories while pre[Cervi[Cg[Cthe first existing UID.    [C  [C         [0m
-[8C[0;1mdelete ───[0;38;5;243m┬ [0mSe[Cect a Context[Cor direct item[Cto[Cdel[Cte, [2C name it by locator, name, or UID.[0m
-[6C[0;1m(remove)    [0;38;5;243m└ [0mWHEN · Removing a specific Context or item [Cha[2Cis[Cno longer needed.[C         [0m
-[8C[0;1mdiff ─[0;38;5;243m┬ [0mShow the differences recorded[Cby a C[Cntext checkpoint[Cor [Che activ[2CU[Cdate. [C         [C             [0m
-[14C[0;38;5;243m└ [0mWHEN · Verifyi[Cg exactly what a recorded op[Cration changed. [C  [C     [C    [C  [C        [C       [C  [C          [0m
-[8C[0;1mdistill ─[0;38;5;243m┬ [0mDerive higher-level Rules [2C c[Cndition propositions from Cas[C or Example propositions[Cin a bounded[CContext,[Coptionally[Cguided[Cby[Ca[CGoal.[0m
-[15C[0;1m  [0;38;5;243m└ [0mWHEN[C· Inferring [3Ce[Cgeneral Rules[Cor condition propositions from several con[Crete cases[Cor[Cexamples.[0m
+[8C[0;1mdedup ─[0;38;5;243m┬ [0mRemove byte-identic[Cl duplicates (dup) immed[Cately, retaining[Cthe first existi[Cg UID fo[C each exact-content[Cgroup.[0m
+[15C[0;38;5;243m└ [0mWHEN · Removi[Cg byte-id[Cntical dire[Ct Memories while pres[Crving th[C fi[Cst[Cexisting UID.      [C  [C          [0m
+[8C[0;1mdel[Cte ───[0;38;5;243m┬ [0mS[Clect a Contex[C or dir[Cct item[Ct[C d[Clete, or n[Cme it by locator, nam[C, or UID.     [C          [0m
+[6C[0;1m(remove)[C   [0;38;5;243m└ [0mWHEN · Removing a specific Con[Cext[Cor it[Cm[Ctha[C is[Cno [Conger needed.    [C      [C        [0m
 
-[60C[0mpr[Cfill command[Cline  Tab surface  H[Cfull help[11A[106D[0m[6A[2C[0;1m▸[0m
+[60C[0mpr[Cfill command[Cline  Tab surface  H[Cfull help[7A[106D[0m[10A[2C[0;1m▸[0m
 
 [C[0;1m ▾ mem dedup ─[0;38;5;243m┬ [0mRemove by[2C-identical duplicates (dup) immediately, retaining the first existing UID for[Ceach[Cexact-content[Cgroup.[0m
 [C[0;1m              [0;38;5;243m└ [0mWHE[C · Removing[Cbyte-identical[Cdirect[CMemories[Cwhile[Cpreserving[Cthe[Cfirst[Cexisting[CUID.[0m
 [4C[0mFLOW  [6CDirect Con[Cext Memories ->[Cexact-content g[2Cups[C-> atomic r[Cmoval     [C    [C  [C   [C          [0m
 [4C[0mEXECUTION[3CDETERMINISTIC      [C       [C     [C   [C      [C       [C          [C     [C       [C [C     [0m
 [C[0m   EFFECT    · Deletes later exact copies in one checkpoint; no provider or TUI                                                                                                  [0m
-[C[0m   RANGE     · One exact direct Context; inbound references block removal                                                                                                        [0m
+[4C[0mRANGE[C    · One exact dir[Cct Context; inbound refere[Cces block removal     [C     [C      [C       [C  [C [C      [C      [C              [C   [C   [C   [C       [C     [C        [C   [0m
 [C[0;38;5;234;48;5;117;1;7m   FORM 1 · mem dedup (remove exact duplicates from the current Context)                                                                                                         [0m
-[C[0;38;5;189m   FORM 2 · mem dedup [context] (remove exact duplicates from one explicit Context)                                                                                              [A[178D[0m
+[C[0;38;5;189m   FORM 2 · mem dedup [context] (remove exact duplicates from one explicit Context)                                                                                              [0m
+[C[0;1m ▸ mem delete ───[0;38;5;243m┬ [0mSelect a Context or direct item to delete, or name it by locator, name, or UID.                                                                               [0m
+[C[0;1m     (remove)    [0;38;5;243m└ [0mWHEN · Removing a specific Context or item that is no longer needed.                                                                                          [0m
+[9C[0;1miff ─[0;38;5;243m┬ [0mShow the differ[2Cces recorded by a Context checkpoint or the ac[Cive Updat[C.      [C   [C   [C    [C             [C      [0m
+[14C[0;38;5;243m└ [0mWHEN · Verify[4Cexactly what a[Crecorded operation chang[Cd.     [C   [C     [C        [C    [0m
+[9C[0;1mistill [C[0;38;5;243m┬ [0mDerive higher-level Rules or condition propositions[Cfrom Case or Example[Cp[Copositions[Cin[Ca[Cbounded[CContext,[Coptionally[Cguided[Cby[Ca[CGoal.[0m
+[6C[0;1m        [3C[0;38;5;243m└ [0mWHEN · Inferr[4Cmore general Rules[4Ccondi[Cion[Cprop[Csitions[Cfrom several[Cconcrete[Ccases[Cor[Cexamples.[7A[121D[0m
