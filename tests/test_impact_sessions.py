@@ -13,6 +13,7 @@ import memcommit.commands.update as update_command
 import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.commands.help_inventory import COMMAND_FORMS
+from memcommit.commands.impact_registry import IMPACT_ROUTES, ImpactLifecycle
 from memcommit.commands.impact_sessions import (
     render_impact_session_snapshot,
     update_impact_presentation,
@@ -49,8 +50,26 @@ def test_help_names_every_supported_impact_operation():
     result = runner.invoke(app, ["impact", "--help"])
 
     assert result.exit_code == 0, result.output
-    for operation in ("atomize", "meld", "sever", "update"):
+    for operation in IMPACT_ROUTES.names:
         assert operation in result.output
+    assert IMPACT_ROUTES.route("forget").lifecycle is ImpactLifecycle.PREPARE_PROCESS_LOCAL
+    assert IMPACT_ROUTES.route("distill").lifecycle is ImpactLifecycle.PREPARE_PROCESS_LOCAL
+    assert IMPACT_ROUTES.route("resolve").lifecycle is ImpactLifecycle.PREPARE_PROCESS_LOCAL
+    assert {route.name for route in IMPACT_ROUTES.deferred} == {"consolidate"}
+    assert {operation.name for operation in IMPACT_ROUTES.excluded} == {
+        "ground",
+        "translate",
+    }
+    assert any(
+        form.startswith('mem impact forget "[instruction]"')
+        for form in COMMAND_FORMS["impact"]
+    )
+    assert any(
+        form.startswith("mem impact distill") for form in COMMAND_FORMS["impact"]
+    )
+    assert any(
+        form.startswith("mem impact resolve") for form in COMMAND_FORMS["impact"]
+    )
     assert any(form.startswith("mem impact meld") for form in COMMAND_FORMS["impact"])
     assert any(
         form.startswith("mem impact update") for form in COMMAND_FORMS["impact"]
@@ -97,7 +116,8 @@ def test_saved_operation_route_rejects_planning_options(isolated_store, monkeypa
     result = runner.invoke(app, ["impact", "meld", "--to", "target"])
 
     assert result.exit_code == 2
-    assert "opens a saved session" in result.stderr
+    assert "No such option" in result.stderr
+    assert "--to" in result.stderr
 
 
 def test_saved_update_impact_renders_exact_diff_with_apply_handoff():

@@ -22,8 +22,9 @@ IMPACT_DETAILS = (
             OperationComparisonOption(
                 label="OPERATION-SPECIFIC",
                 guidance=(
-                    "Use mem impact OPERATION to preview Atomize or inspect a "
-                    "saved Meld, Sever, or Update Impact."
+                    "Use mem impact OPERATION to prepare Atomize, Forget, Distill, "
+                    "or Resolve effects, or inspect a saved Meld, Sever, or Update "
+                    "Impact."
                 ),
             ),
             OperationComparisonOption(

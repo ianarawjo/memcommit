@@ -1,0 +1,3 @@
+PTY · 180 columns × 52 rows                                                                                                                                                         
+$ mem impact distill capture/impact-distill --save-as capture/impact-distill-result                                                                                                 
+MEM IMPACT · DISTILL · 2/2 · DISTILLING RULES . · 0s

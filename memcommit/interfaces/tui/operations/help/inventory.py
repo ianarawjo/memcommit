@@ -507,6 +507,11 @@ COMMAND_FORMS = {
     "impact": (
         "mem impact atomize (preview atomization of the current Context)",
         "mem impact atomize --context [context] (preview atomization of one Context)",
+        'mem impact forget "[instruction]" (preview complete in-place decisions; Source unchanged)',
+        'mem impact forget "[instruction]" --context [context] (preview one exact direct Source)',
+        "mem impact distill [context] --save-as [result_context] (preview fresh Result Memories; not created)",
+        "mem impact resolve --context [context] (preview one verified candidate or the candidate choice)",
+        "mem impact resolve --context [context] --candidate [full_id] (preview one exact effect set)",
         "mem impact meld (inspect a saved Meld Impact; APPLY? opens its Apply flow)",
         "mem impact meld --session [uid] (inspect an exact saved Meld Impact; APPLY? opens its Apply flow)",
         "mem impact sever (inspect a saved Sever Impact; APPLY? opens its Apply flow)",

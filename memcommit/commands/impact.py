@@ -39,6 +39,12 @@ from memcommit.authority.access import (
     resolve_context_access,
 )
 from memcommit.commands.impact_sessions import ImpactSessionPresentation
+from memcommit.commands.impact_process_local import (
+    distill_cmd as distill_impact_cmd,
+    forget_cmd as forget_impact_cmd,
+    resolve_cmd as resolve_impact_cmd,
+)
+from memcommit.commands.impact_registry import IMPACT_ROUTES
 from memcommit.interfaces.tui.workbenches.review import ReviewCancelled
 from memcommit.interfaces.tui.components.operation_launcher.session import (
     SessionOpenReceipt,
@@ -80,8 +86,18 @@ from memcommit.update import UpdateError, plan_update, session_matches
 from memcommit.update_endpoints import resolve_update_endpoints
 
 
+app = typer.Typer(
+    invoke_without_command=True,
+    no_args_is_help=False,
+    help=(
+        "Preview operation-owned effects without applying them, or omit the "
+        "operation for a directional Update preview."
+    ),
+)
+
+
 class ImpactOperation(str, Enum):
-    """Operation-owned artifacts supported by the Impact command."""
+    """Internal discriminator used by the legacy dispatcher behind the registry."""
 
     atomize = "atomize"
     meld = "meld"
@@ -841,7 +857,7 @@ def _atomize_impact(
         )
 
 
-def cmd(
+def _dispatch_impact(
     operation: Annotated[
         Optional[ImpactOperation],
         typer.Argument(
@@ -907,14 +923,16 @@ def cmd(
     source_descendants: Annotated[
         Optional[bool],
         typer.Option(
-            "--source-descendants/--source-only",
+            "--source-descendants/--source-root-only",
+            " /--source-only",
             help="Refine directional Update Source reach",
         ),
     ] = None,
     target_descendants: Annotated[
         Optional[bool],
         typer.Option(
-            "--target-descendants/--target-only",
+            "--target-descendants/--target-root-only",
+            " /--target-only",
             help="Refine directional Update Target reach",
         ),
     ] = None,
@@ -1091,3 +1109,199 @@ def cmd(
         source_descendants=source_descendants,
         target_descendants=target_descendants,
     )
+
+
+@app.callback(invoke_without_command=True)
+def cmd(
+    ctx: typer.Context,
+    source_name: Annotated[
+        Optional[str],
+        typer.Option(
+            "--from",
+            help="Source Context A; if --to is omitted, current supplies B",
+        ),
+    ] = None,
+    target_name: Annotated[
+        Optional[str],
+        typer.Option(
+            "--to",
+            help="Target Context B; if --from is omitted, current supplies A",
+        ),
+    ] = None,
+    source_memory: Annotated[
+        Optional[str],
+        typer.Option(
+            "--source-memory",
+            metavar="UID_OR_PREFIX",
+            help="Focus one Source Memory",
+        ),
+    ] = None,
+    target_memory: Annotated[
+        Optional[str],
+        typer.Option(
+            "--target-memory",
+            metavar="UID_OR_PREFIX",
+            help="Focus one Target Memory",
+        ),
+    ] = None,
+    direct: Annotated[
+        bool,
+        typer.Option("-d", "--direct", help="Use only explicit endpoint roots"),
+    ] = False,
+    recursive: Annotated[
+        bool,
+        typer.Option(
+            "-r",
+            "--recursive",
+            help="Include descendants under both endpoints",
+        ),
+    ] = False,
+    source_descendants: Annotated[
+        Optional[bool],
+        typer.Option(
+            "--source-descendants/--source-root-only",
+            " /--source-only",
+            help="Refine Source reach",
+        ),
+    ] = None,
+    target_descendants: Annotated[
+        Optional[bool],
+        typer.Option(
+            "--target-descendants/--target-root-only",
+            " /--target-only",
+            help="Refine Target reach",
+        ),
+    ] = None,
+) -> None:
+    """Preview directional Update effects when no named operation is supplied."""
+
+    directional_options = (
+        source_name is not None
+        or target_name is not None
+        or source_memory is not None
+        or target_memory is not None
+        or direct
+        or recursive
+        or source_descendants is not None
+        or target_descendants is not None
+    )
+    if ctx.invoked_subcommand is not None:
+        if directional_options:
+            _usage_error(
+                "directional Update options cannot be combined with a named "
+                "Impact operation."
+            )
+        return
+    _dispatch_impact(
+        operation=None,
+        source_name=source_name,
+        target_name=target_name,
+        source_memory=source_memory,
+        target_memory=target_memory,
+        direct=direct,
+        recursive=recursive,
+        source_descendants=source_descendants,
+        target_descendants=target_descendants,
+    )
+
+
+def atomize_impact_cmd(
+    context_name: Annotated[
+        Optional[str],
+        typer.Option(
+            "--context",
+            "-c",
+            help="Context to analyze (defaults to current)",
+        ),
+    ] = None,
+    memory_selector: Annotated[
+        Optional[str],
+        typer.Option(
+            "--memory",
+            metavar="UID_OR_PREFIX",
+            help="Analyze one direct Memory with its neighbors as context",
+        ),
+    ] = None,
+    show_all: Annotated[
+        bool,
+        typer.Option("--all", help="Include unchanged ATOMIC Memories"),
+    ] = False,
+    with_review: Annotated[
+        bool,
+        typer.Option(
+            "--with-review",
+            help="Reanalyze using saved unary workbench responses",
+        ),
+    ] = False,
+    refresh: Annotated[
+        bool,
+        typer.Option(
+            "--refresh",
+            help="Replace the saved analysis with a new semantic completion",
+        ),
+    ] = False,
+) -> None:
+    """Preview one Context's exhaustive Atomize classification and splits."""
+
+    _dispatch_impact(
+        operation=ImpactOperation.atomize,
+        context_name=context_name,
+        memory_selector=memory_selector,
+        show_all=show_all,
+        with_review=with_review,
+        refresh=refresh,
+    )
+
+
+def _saved_impact_cmd(operation: ImpactOperation, session_uid: str | None) -> None:
+    _dispatch_impact(operation=operation, session_uid=session_uid)
+
+
+def meld_impact_cmd(
+    session_uid: Annotated[
+        Optional[str],
+        typer.Option("--session", help="Exact saved Meld artifact uid"),
+    ] = None,
+) -> None:
+    """Inspect one exact saved Meld assessment."""
+
+    _saved_impact_cmd(ImpactOperation.meld, session_uid)
+
+
+def sever_impact_cmd(
+    session_uid: Annotated[
+        Optional[str],
+        typer.Option("--session", help="Exact saved Sever artifact uid"),
+    ] = None,
+) -> None:
+    """Inspect one exact saved Sever result."""
+
+    _saved_impact_cmd(ImpactOperation.sever, session_uid)
+
+
+def update_impact_cmd(
+    session_uid: Annotated[
+        Optional[str],
+        typer.Option("--session", help="Exact saved Update artifact uid"),
+    ] = None,
+) -> None:
+    """Inspect one exact saved Update plan."""
+
+    _saved_impact_cmd(ImpactOperation.update, session_uid)
+
+
+# Registry installation is deliberately last: every public named route must
+# have exactly one operation adapter, while the callback remains the separate
+# directional Update form.
+IMPACT_ROUTES.install(
+    app,
+    {
+        "atomize": atomize_impact_cmd,
+        "forget": forget_impact_cmd,
+        "distill": distill_impact_cmd,
+        "resolve": resolve_impact_cmd,
+        "meld": meld_impact_cmd,
+        "sever": sever_impact_cmd,
+        "update": update_impact_cmd,
+    },
+)

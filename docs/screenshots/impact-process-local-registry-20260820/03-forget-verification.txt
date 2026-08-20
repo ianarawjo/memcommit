@@ -1,0 +1,7 @@
+Forget Impact closed; Source unchanged.                                                                                                                                             
+                                                                                                                                                                                    
+READ-ONLY ROUTE VERIFICATION                                                                                                                                                        
+  OPERATION · FORGET                                                                                                                                                                
+  SOURCE DIGEST UNCHANGED · True                                                                                                                                                    
+  CHECKPOINT COUNT UNCHANGED · True                                                                                                                                                 
+  APPLY HANDOFF · ABSENT

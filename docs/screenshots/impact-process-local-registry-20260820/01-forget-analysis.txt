@@ -1,0 +1,3 @@
+PTY · 180 columns × 52 rows                                                                                                                                                         
+$ mem impact forget Forget the old desk location. --context capture/impact-forget                                                                                                   
+MEM IMPACT · FORGET · 2/2 · ANALYZING DECISIONS . · 0s

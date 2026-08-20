@@ -1,0 +1,8 @@
+Distill Impact closed; Source unchanged.                                                                                                                                            
+                                                                                                                                                                                    
+READ-ONLY ROUTE VERIFICATION                                                                                                                                                        
+  OPERATION · DISTILL                                                                                                                                                               
+  SOURCE DIGEST UNCHANGED · True                                                                                                                                                    
+  CHECKPOINT COUNT UNCHANGED · True                                                                                                                                                 
+  RESULT NOT CREATED · True                                                                                                                                                         
+  APPLY HANDOFF · ABSENT

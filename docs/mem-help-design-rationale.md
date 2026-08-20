@@ -303,20 +303,23 @@ For example, `mem update` exposes its interactive Update session launcher
 before its three directional endpoint forms,
 while `mem impact` omits bare invocation because it requires a directional or
 named operation route. Its expanded Forms enumerate `impact atomize`, the
-three directional Update planners, and the saved-session inspections
-`impact meld`, `impact sever`, and `impact update`; the latter may also name an
-exact artifact with `--session UID`. Those saved-session Form labels also name
-the optional `APPLY?` handoff so the inventory does not misdescribe Impact as
-a dead-end viewer: the handoff opens the owning operation's separate Apply
-flow and does not itself mutate anything. This is intentionally more explicit
-than the optional positional operand shown by generic parser usage, because
-the operation names select materially different saved artifacts and provider
-boundaries. A message-less `mem checkpoint` and the default-English
-`mem translate` route are likewise shown because both are callable behaviors,
-not syntax errors. `find` exposes its bare interactive search-and-scope route,
-describes the default descendant-and-embed frame, and describes retained-history
-selection as an explicitly temporal query instead of inventing a `--history`
-option that the parser does not implement. Resource imports and write-protection
+process-local `impact forget`, `impact distill`, and `impact resolve`
+previews, the three directional Update planners, and the saved-session
+inspections `impact meld`, `impact sever`, and `impact update`; the latter may
+also name an exact artifact with `--session UID`. The process-local Form labels
+state that no Source is changed and no Result is created. The saved-session
+Form labels name the optional `APPLY?` handoff so the inventory does not
+misdescribe Impact as a dead-end viewer: the handoff opens the owning
+operation's separate Apply flow and does not itself mutate anything. This is
+intentionally more explicit than the optional positional operand shown by
+generic parser usage, because the operation names select materially different
+artifacts and provider boundaries. A message-less `mem checkpoint` and the
+default-English `mem translate` route are likewise shown because both are
+callable behaviors, not syntax errors. `find` exposes its bare interactive
+search-and-scope route, describes the default descendant-and-embed frame, and
+describes retained-history selection as an explicitly temporal query instead
+of inventing a `--history` option that the parser does not implement. Resource
+imports and write-protection
 groups enumerate their distinct public grammars rather than collapsing them
 into ambiguous positional placeholders.
 

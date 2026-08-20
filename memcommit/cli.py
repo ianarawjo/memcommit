@@ -319,15 +319,16 @@ app.command(
     help=operation_summary("ground"),
 )(ground.cmd)
 app.command(
-    "impact",
-    help=operation_summary("impact"),
-)(impact.cmd)
-app.command(
     "update",
     help=operation_summary("update"),
 )(update.cmd)
 
 # --- Sub-apps ---
+app.add_typer(
+    impact.app,
+    name="impact",
+    help=operation_summary("impact"),
+)
 app.add_typer(
     eval_app,
     name="eval",

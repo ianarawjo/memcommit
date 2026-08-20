@@ -836,13 +836,16 @@ def test_cli_rejects_mixed_or_incomplete_impact_forms_before_provider(
     )
 
     assert mixed.exit_code == 2
-    assert "cannot be combined" in mixed.stderr
+    assert "No such option" in mixed.stderr
+    assert "--to" in mixed.stderr
     assert mixed_from.exit_code == 2
-    assert "cannot be combined" in mixed_from.stderr
+    assert "No such option" in mixed_from.stderr
+    assert "--from" in mixed_from.stderr
     assert missing.exit_code == 2
     assert "choose an endpoint" in missing.stderr
     assert wrong_options.exit_code == 2
-    assert "only valid" in wrong_options.stderr
+    assert "No such option" in wrong_options.stderr
+    assert "--all" in wrong_options.stderr
 
 
 def test_saved_atomize_analysis_applies_once_with_recorded_lineage(

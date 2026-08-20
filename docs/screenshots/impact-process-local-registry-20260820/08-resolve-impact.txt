@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ MEM RESOLVE · VERIFIED FIT REPAIR                                                                                                                                               ^┃
+┃ CONTEXT LOCATIONS                                                                                                                                                                ┃
+┃   SOURCE · capture/impact-resolve                                                                                                                                                ┃
+┃ VERIFIED CANDIDATE · READ-ONLY · 1 EFFECTS · YES FIT · D0 C0 U1 COST                                                                                                             ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT MEM UNDERSTOOD                                                                                                                                                              ┃
+┃ CANDIDATE                                                                                                                                                                        ┃
+┃ Scope the second schedule to weekends.                                                                                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃ INDEPENDENT FIT VERIFICATION                                                                                                                                                     ┃
+┃ The candidate uses only cited Source content.                                                                                                                                    ┃
+┃                                                                                                                                                                                  ┃
+┃ EXACT EFFECTS · 1                                                                                                                                                                ┃
+┃ RESOLVE UPDATE 1 · The office opens at 9 on weekends.                                                                                                                            ┃
+┃ [CHANGE] The weekend scope preserves both schedule claims.                                                                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃ IMPACT · RESOLVE · SAME SOURCE                                                                                                                                                   ┃
+┃ These are the exact effects of one independently Fit-verified candidate. This Impact view cannot apply them.                                                                     ┃
+┃ Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                      ┃
+┃       ▸ ~ [UPDATE] capture/impact-resolve [4a24eacf]                                                                                                                             ┃
+┃             - The office opens at 9.                                                                                                                                             ┃
+┃             + The office opens at 9 on weekends.                                                                                                                                 ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› REPORT         Complete Resolve report                                                                                                                                         ^│
+│  RESOLVE UPDATE The office opens at 9 on weekends.                                                                                                                               │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ READ ONLY ]  No action available · This saved session can only be inspected.                                                                                                    │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ READ ONLY · VERIFIED CANDIDATE · READ-ONLY · ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter inspect  Esc/Backspace close H Help  y/Y copy  Q close

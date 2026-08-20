@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ MEM FORGET · SELECTIVE SOURCE REVISION                                                                                                                                          ^┃
+┃ CONTEXT LOCATIONS                                                                                                                                                                ┃
+┃   SOURCE · capture/impact-forget                                                                                                                                                 ┃
+┃ REVIEWING · 2 SOURCE · 1 instruction CRITERION · 1 CHANGES                                                                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT MEM UNDERSTOOD                                                                                                                                                              ┃
+┃ ASSESSMENT                                                                                                                                                                       ┃
+┃ Remove the obsolete location and retain current access guidance.                                                                                                                 ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT APPLIES                                                                                                                                                                     ┃
+┃ The one Forget instruction was evaluated against all 2 direct Source Memories in one batch. The current reviewed result changes 1; unchanged Memories remain explicit and inspec ┃
+┃table in Items.                                                                                                                                                                   ┃
+┃                                                                                                                                                                                  ┃
+┃ IMPACT · FORGET · SAME SOURCE                                                                                                                                                    ┃
+┃ These are the complete reviewed in-place Source transitions. This Impact view cannot apply them.                                                                                 ┃
+┃ Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                      ┃
+┃       ▸ − [DROP] capture/impact-forget [e664d435]                                                                                                                                ┃
+┃             - The desk used to be beside the west entrance.                                                                                                                      ┃
+┃                                                                                                                                                                                  ┃
+┃       ▸ = [KEEP] capture/impact-forget [2405cc18]                                                                                                                                ┃
+┃             = Step-free access remains at the north entrance.                                                                                                                    ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› REPORT         Complete Forget report                                                                                                                                          ^│
+│  FORGET DECISION The desk used to be beside the west entrance.                                                                                                                   │
+│  FORGET DECISION Step-free access remains at the north entrance.                                                                                                                 │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ READ ONLY ]  No action available · This saved session can only be inspected.                                                                                                    │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ READ ONLY · REVIEWING · ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter inspect  Esc/Backspace close A accept  H Help  y/Y copy  Q close

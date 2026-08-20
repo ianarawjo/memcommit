@@ -243,6 +243,50 @@ surface. This stack behavior is shared by Update, Meld, and Sever; a successful
 or otherwise terminal application ends the loop. Closing Impact leaves the
 session and every Context unchanged. Terminal artifacts omit the handoff.
 
+### Named Impact route registry and process-local artifacts
+
+The public named routes are now composed through one typed registry rather
+than a command-local enum or whitelist. The registry records only discovery,
+Help text, and the way each route obtains its artifact:
+
+| Lifecycle | Routes | Meaning |
+|---|---|---|
+| `PREPARE_DURABLE` | `atomize` | Prepare or reopen the operation-owned durable analysis, then project it read-only. |
+| `PREPARE_PROCESS_LOCAL` | `forget`, `distill`, `resolve` | Run the owning application analysis and project its process-local result without inventing persistence. |
+| `OPEN_SAVED` | `meld`, `sever`, `update` | Reload an existing operation-owned artifact before projection. |
+
+This registry is deliberately not a universal semantic-operation interface.
+It does not own provider construction, authority, cache identity, review state,
+CAS, checkpointing, or Apply. Every handler calls the operation's application
+or runtime boundary and then adapts the returned artifact to the immutable
+`ImpactController`. Registry installation requires an exact handler set, so a
+Help entry cannot silently exist without a callable route and a callable route
+cannot silently bypass the authored list.
+
+`mem impact forget` shows one complete batch of in-place KEEP, TRANSFORM, and
+DROP transitions over the frozen direct Source. `mem impact distill` shows the
+Memories a fresh Result would contain and labels the proposed Result
+`NOT CREATED`. `mem impact resolve` shows the exact before/after effects when
+there is one selected verified candidate. If Resolve returns multiple mutually
+exclusive candidates, the first Impact view shows the candidate set instead of
+flattening the alternatives into one false combined effect plan; an exact
+`--candidate` selects the diff projection.
+
+These three process-local routes expose no `APPLY?` handoff. Their artifacts
+are not durable sessions, so leaving the Impact host must not imply that a later
+owning command can reuse the same provider result or revision. The person may
+run the owning command separately, which repeats its normal analysis and Apply
+checks. A future in-process handoff would require an operation-owned controller
+that retains the exact artifact and revalidates it; the registry alone is not
+that controller.
+
+The policy records two deliberate exclusions: `translate` changes a
+representation rather than previewing a Memory state transition, and `ground`
+retains its exact-command approval protocol. `consolidate` is recorded as
+deferred while its command split and reviewed candidate adapter stabilize. It
+is semantically eligible, but Impact must not infer a proposal contract from an
+in-progress command refactor.
+
 `mem update` accepts the same three forms. `--from` and `--to` are therefore
 composable endpoint selectors, not mutually exclusive modes. At least one must
 be supplied. If an omitted endpoint has no current Context, the command fails
@@ -260,12 +304,15 @@ namespace root such as `task-1/participant` can deliberately supply Memories
 from `task-1/participant/...` without making recursive input an invisible
 default.
 
-The equivalent explicit flags are `--source-descendants` and
-`--target-descendants`; `--source-only` and `--target-only` select the defaults.
-Source and Target scopes are independent. Query-only overrides remain excluded,
-and a local endpoint does not absorb a separately attached Grant merely because
-the attachment happens to sit below it: the selected endpoint's ownership or
-Grant identity remains the authorization boundary.
+The equivalent canonical pairs are
+`--source-descendants/--source-root-only` and
+`--target-descendants/--target-root-only`. The older `--source-only` and
+`--target-only` spellings remain accepted compatibility aliases for the
+root-only values. Source and Target scopes are independent. Query-only
+overrides remain excluded, and a local endpoint does not absorb a separately
+attached Grant merely because the attachment happens to sit below it: the
+selected endpoint's ownership or Grant identity remains the authorization
+boundary.
 
 The graph-widening rule itself lives in the shared `load_context_scope`
 utility used by Update, Compare, and eligible Meld roles. Presentation remains
@@ -285,16 +332,20 @@ Planning and saved-session inspection forms are mutually exclusive:
 ```text
 mem impact [--from A] [--to B] directional update preview
 mem impact atomize      unary atomization preview
+mem impact forget       process-local in-place Forget preview
+mem impact distill      process-local fresh-Result preview
+mem impact resolve      process-local verified repair preview
 mem impact update       saved Update effect inspection
 mem impact meld         saved Meld effect inspection
 mem impact sever        saved Sever effect inspection
 ```
 
-Supplying `atomize` together with either `--from` or `--to`, or supplying no
-directional endpoint and no operation, is a usage error. `--context`, `--all`,
-`--with-review`, and `--refresh` belong only to the unary atomize form.
-`--session` belongs only to a saved Update, Meld, or Sever inspection. A saved
-session operation cannot be combined with planning or Atomize options.
+Supplying a named operation together with directional `--from` or `--to`, or
+supplying no directional endpoint and no operation, is a usage error. Typer
+subcommands give each named route an operation-specific option grammar:
+`--all`, `--with-review`, and `--refresh` belong only to Atomize; `--session`
+belongs only to saved Update, Meld, or Sever inspection; and Forget, Distill,
+and Resolve expose only the operands accepted by their prepare adapters.
 
 `impact` plans and previews the edits, additions, and explicitly supported
 whole-Memory removals that would make B reflect A. It does not change either
