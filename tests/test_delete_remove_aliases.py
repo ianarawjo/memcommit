@@ -116,10 +116,12 @@ def test_both_spellings_use_shared_picker_for_context_selection(
     store.set_current("keeper")
     observed: dict[str, object] = {}
 
+    selections = iter(("victim", None))
+
     def choose(names, **kwargs):
         observed["names"] = names
         observed.update(kwargs)
-        return "victim"
+        return next(selections)
 
     monkeypatch.setattr("memcommit.commands.delete.choose_context", choose)
 
@@ -128,6 +130,8 @@ def test_both_spellings_use_shared_picker_for_context_selection(
     assert result.exit_code == 0, result.output
     assert observed["selectable_memories"] is True
     assert observed["initially_show_memories"] is True
+    assert observed["exit_label"] == "close"
+    assert callable(observed["nested_accept_handler"])
     assert not store.context_exists("victim")
 
 
@@ -143,15 +147,111 @@ def test_both_spellings_apply_exact_picker_item_receipt(
     store.create_context(owner)
     store.set_current(owner.name)
 
+    receipts = []
+
+    def choose(*_args, **kwargs):
+        receipts.append(
+            kwargs["nested_accept_handler"](
+                owner.name,
+                memory.uid,
+            )
+        )
+        return None
+
     monkeypatch.setattr(
         "memcommit.commands.delete.choose_context",
-        lambda *_args, **_kwargs: ContextMemorySelection(
-            context_name=owner.name,
-            selector=memory.uid,
-        ),
+        choose,
     )
 
     result = runner.invoke(app, [command])
 
     assert result.exit_code == 0, result.output
+    assert result.output == ""
+    assert receipts[0].label == "REMOVED"
+    assert receipts[0].detail_style == receipts[0].label_style
     assert memory.uid not in store.load_direct(owner.name).memories
+
+
+@pytest.mark.parametrize("command", ("delete", "remove"))
+def test_picker_session_removes_multiple_items_until_closed(
+    isolated_store,
+    monkeypatch,
+    command,
+):
+    store = MemoryStore()
+    owner = ops.init("owner")
+    first = ops.add(owner, "remove first")
+    second = ops.add(owner, "remove second")
+    store.create_context(owner)
+    store.set_current(owner.name)
+    initial_targets: list[str | ContextMemorySelection | None] = []
+    receipts = []
+
+    def choose(*_args, **kwargs):
+        initial_targets.append(kwargs["initial_target"])
+        handler = kwargs["nested_accept_handler"]
+        receipts.extend(
+            (
+                handler(owner.name, first.uid),
+                handler(owner.name, second.uid),
+            )
+        )
+        return None
+
+    monkeypatch.setattr("memcommit.commands.delete.choose_context", choose)
+
+    result = runner.invoke(app, [command])
+
+    assert result.exit_code == 0, result.output
+    assert store.load_direct(owner.name).memories == {}
+    assert result.output == ""
+    assert [receipt.label for receipt in receipts] == ["REMOVED", "REMOVED"]
+    assert all(
+        receipt.detail_style == receipt.label_style for receipt in receipts
+    )
+    assert initial_targets == [None]
+    assert [
+        checkpoint["command"]
+        for checkpoint in store.list_checkpoints(owner.name)[:2]
+    ] == ["remove", "remove"]
+
+    first_undo = runner.invoke(app, ["undo"])
+    assert first_undo.exit_code == 0, first_undo.output
+    assert set(store.load_direct(owner.name).memories) == {second.uid}
+
+    second_undo = runner.invoke(app, ["undo"])
+    assert second_undo.exit_code == 0, second_undo.output
+    assert set(store.load_direct(owner.name).memories) == {
+        first.uid,
+        second.uid,
+    }
+
+
+def test_picker_item_failure_stays_in_footer_without_normal_output(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    owner = ops.init("owner")
+    memory = ops.add(owner, "keep me")
+    store.create_context(owner)
+    store.set_current(owner.name)
+    receipts = []
+
+    def choose(*_args, **kwargs):
+        receipts.append(
+            kwargs["nested_accept_handler"](
+                owner.name,
+                "missing-item-uid",
+            )
+        )
+        return None
+
+    monkeypatch.setattr("memcommit.commands.delete.choose_context", choose)
+
+    result = runner.invoke(app, ["remove"])
+
+    assert result.exit_code == 0, result.output
+    assert result.output == ""
+    assert receipts[0].label == "DELETE FAILED"
+    assert memory.uid in store.load_direct(owner.name).memories

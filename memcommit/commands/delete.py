@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Annotated, Optional
 
@@ -10,6 +11,7 @@ from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.context_targeting.tui.picker import (
     ContextMemoryRow,
     ContextMemorySelection,
+    ContextPickerActionReceipt,
     choose_context,
 )
 from memcommit.authority.access import (
@@ -113,6 +115,11 @@ def _picker_rows(context: Context) -> tuple[ContextMemoryRow, ...]:
 def _choose_target(
     store: MemoryStore,
     snapshot: ContextOperandSnapshot,
+    *,
+    initial_target: str | ContextMemorySelection | None = None,
+    item_handler: (
+        Callable[[str, str], ContextPickerActionReceipt] | None
+    ) = None,
 ) -> str | ContextMemorySelection | None:
     names = tuple(store.list_context_names())
     if not names:
@@ -122,11 +129,49 @@ def _choose_target(
         current=snapshot.current_name,
         title="Delete or Remove · SELECT A CONTEXT OR DIRECT ITEM",
         accept_label="delete",
+        exit_label="close",
         memory_loader=lambda name: _picker_rows(store.load_direct(name)),
         initially_expand_selected=True,
         initially_show_memories=True,
         selectable_memories=True,
+        initial_target=initial_target,
+        nested_accept_handler=item_handler,
     )
+
+
+def _next_item_target(
+    target: _ItemTarget,
+) -> ContextMemorySelection | None:
+    """Keep a repeated picker beside the item that was just removed."""
+    rows_before = _picker_rows(target.context)
+    removed_index = next(
+        index
+        for index, row in enumerate(rows_before)
+        if row.selector == target.item.uid
+    )
+    rows_after = tuple(
+        row for row in rows_before if row.selector != target.item.uid
+    )
+    if not rows_after:
+        return None
+    next_row = rows_after[min(removed_index, len(rows_after) - 1)]
+    assert next_row.selector is not None
+    return ContextMemorySelection(
+        context_name=target.access.context_name,
+        selector=next_row.selector,
+    )
+
+
+def _next_context_target(
+    names_before: tuple[str, ...],
+    removed_name: str,
+) -> str | None:
+    """Choose the nearest surviving Context after one interactive deletion."""
+    removed_index = names_before.index(removed_name)
+    names_after = tuple(name for name in names_before if name != removed_name)
+    if not names_after:
+        return None
+    return names_after[min(removed_index, len(names_after) - 1)]
 
 
 def _context_target(
@@ -288,23 +333,29 @@ def _report_removed_item(item: Information) -> None:
         )
 
 
-def _delete_item(target: _ItemTarget) -> None:
+def _commit_item_deletion(target: _ItemTarget) -> Information:
+    """Commit one exact deletion without choosing its presentation surface."""
     # Resolve first and then remove by the frozen full UID. This prevents an
     # ambiguous prefix from changing meaning inside this command invocation.
     item = ops.remove(target.context, target.item.uid)
+    with authorized_context_mutation(target.access):
+        target.access.store.save(
+            target.context,
+            AutoCheckpoint(
+                command="remove",
+                args={
+                    "uid": item.uid,
+                    **grant_checkpoint_args(target.access),
+                },
+                description=_item_description(item),
+            ),
+        )
+    return item
+
+
+def _delete_item(target: _ItemTarget) -> None:
     try:
-        with authorized_context_mutation(target.access):
-            target.access.store.save(
-                target.context,
-                AutoCheckpoint(
-                    command="remove",
-                    args={
-                        "uid": item.uid,
-                        **grant_checkpoint_args(target.access),
-                    },
-                    description=_item_description(item),
-                ),
-            )
+        item = _commit_item_deletion(target)
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
         typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
@@ -343,25 +394,24 @@ def cmd(
     snapshot = ContextOperandSnapshot.capture(store)
 
     if selector is None:
-        try:
-            selected = _choose_target(store, snapshot)
-        except (FileNotFoundError, OSError, RuntimeError, ValueError) as error:
-            typer.secho(
-                f"Error: {display_escape_text(str(error))}",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
-        if selected is None:
-            typer.echo("Deletion cancelled.")
-            return
-        if isinstance(selected, ContextMemorySelection):
+        initial_target: str | ContextMemorySelection | None = None
+        attempted_item_deletions = 0
+        completed_deletions = 0
+
+        def delete_picker_item(
+            selected_context_name: str,
+            selected_item_uid: str,
+        ) -> ContextPickerActionReceipt:
+            nonlocal attempted_item_deletions, completed_deletions
+            attempted_item_deletions += 1
+            remove_style = "class:impact.remove"
             try:
                 item_target = _exact_local_item_target(
                     store,
-                    selected.context_name,
-                    selected.selector,
+                    selected_context_name,
+                    selected_item_uid,
                 )
+                removed_item = _commit_item_deletion(item_target)
             except (
                 FileNotFoundError,
                 KeyError,
@@ -371,24 +421,85 @@ def cmd(
                 RuntimeError,
                 ValueError,
             ) as error:
+                return ContextPickerActionReceipt(
+                    label="DELETE FAILED",
+                    detail=str(error),
+                    label_style=remove_style,
+                )
+            completed_deletions += 1
+            return ContextPickerActionReceipt(
+                label="REMOVED",
+                detail=_item_description(removed_item).removeprefix("Removed "),
+                label_style=remove_style,
+                detail_style=remove_style,
+            )
+
+        while True:
+            try:
+                selected = _choose_target(
+                    store,
+                    snapshot,
+                    initial_target=initial_target,
+                    item_handler=delete_picker_item,
+                )
+            except (
+                FileNotFoundError,
+                OSError,
+                RuntimeError,
+                ValueError,
+            ) as error:
+                if completed_deletions and not store.list_context_names():
+                    return
                 typer.secho(
                     f"Error: {display_escape_text(str(error))}",
                     fg=typer.colors.RED,
                     err=True,
                 )
                 raise typer.Exit(1)
-            _delete_item(item_target)
-            return
-        context_target = _exact_context_target(store, selected)
-        if context_target is None:
-            typer.secho(
-                f"Error: Context '{display_escape_text(selected)}' no longer exists.",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
-        _delete_context(store, context_target, force=force)
-        return
+            if selected is None:
+                if not completed_deletions and not attempted_item_deletions:
+                    typer.echo("Deletion cancelled.")
+                return
+            if isinstance(selected, ContextMemorySelection):
+                try:
+                    item_target = _exact_local_item_target(
+                        store,
+                        selected.context_name,
+                        selected.selector,
+                    )
+                except (
+                    FileNotFoundError,
+                    KeyError,
+                    OSError,
+                    ProfileConfigError,
+                    ProfileError,
+                    RuntimeError,
+                    ValueError,
+                ) as error:
+                    typer.secho(
+                        f"Error: {display_escape_text(str(error))}",
+                        fg=typer.colors.RED,
+                        err=True,
+                    )
+                    raise typer.Exit(1)
+                initial_target = _next_item_target(item_target)
+                if initial_target is None:
+                    initial_target = item_target.access.context_name
+                _delete_item(item_target)
+                completed_deletions += 1
+                continue
+            names_before = tuple(store.list_context_names())
+            context_target = _exact_context_target(store, selected)
+            if context_target is None:
+                typer.secho(
+                    f"Error: Context '{display_escape_text(selected)}' no longer exists.",
+                    fg=typer.colors.RED,
+                    err=True,
+                )
+                raise typer.Exit(1)
+            initial_target = _next_context_target(names_before, selected)
+            _delete_context(store, context_target, force=force)
+            completed_deletions += 1
 
     context_target: _ContextTarget | None = None
     item_target: _ItemTarget | None = None

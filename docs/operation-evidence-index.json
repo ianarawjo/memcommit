@@ -29,7 +29,9 @@
       "docs/dedup-design-rationale.md",
       "docs/resolution-lifecycle-design-rationale.md"
     ],
-    "delete": [],
+    "delete": [
+      "docs/unified-delete-selector-design-rationale.md"
+    ],
     "diff": [],
     "distill": [
       "docs/distill-elaborate-application-boundary-matrix.md"

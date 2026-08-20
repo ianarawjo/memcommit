@@ -158,6 +158,16 @@ class ContextMemoryRow:
     details: tuple[ContextMemoryDetail, ...] = ()
 
 
+@dataclass(frozen=True)
+class ContextPickerActionReceipt:
+    """One in-place nested action projected through the picker footer."""
+
+    label: str
+    detail: str
+    label_style: str = "class:memcommit.notification"
+    detail_style: str = ""
+
+
 def context_memory_rows(context: Context) -> tuple[ContextMemoryRow, ...]:
     """Project every direct Context item as one picker row.
 
@@ -952,6 +962,7 @@ def choose_context(
     names: Sequence[str],
     *,
     current: str | None,
+    initial_target: str | DirectMemoryTarget | None = None,
     local_annotations: Mapping[str, SourceDisplayValue] | None = None,
     virtual_names: Sequence[str] = (),
     selectable_virtual_names: AbstractSet[str] = frozenset(),
@@ -963,6 +974,7 @@ def choose_context(
     title: str = "Select a Context",
     accept_label: str = "select",
     nested_accept_label: str | None = None,
+    exit_label: str | None = None,
     memory_loader: Callable[[str], Sequence[ContextMemoryRow]] | None = None,
     browse_only: bool = False,
     initially_expand_selected: bool = False,
@@ -975,6 +987,9 @@ def choose_context(
     descendant_scope_names: AbstractSet[str] = frozenset(),
     selectable_memories: bool = False,
     nested_selection_factory: (Callable[[str, str], _NestedSelectionT] | None) = None,
+    nested_accept_handler: (
+        Callable[[str, str], ContextPickerActionReceipt] | None
+    ) = None,
     memory_scope_root: str | None = None,
     memory_reach_state: ContextReachState | None = None,
 ) -> str | ContextSubtreeSelection | ContextMemorySelection | _NestedSelectionT | None:
@@ -993,6 +1008,7 @@ def choose_context(
         or set(options).intersection(virtual)
     ):
         raise ValueError("Virtual Context selection received invalid names.")
+    catalog = (*options, *virtual)
     local_labels = dict(local_annotations or {})
     annotations = {**local_labels, **dict(virtual_annotations or {})}
     selectable_virtual = frozenset(selectable_virtual_names)
@@ -1022,12 +1038,36 @@ def choose_context(
         raise ValueError(
             "Nested rows cannot return both Memory and operation selections."
         )
+    if nested_accept_handler is not None and (
+        not callable(nested_accept_handler)
+        or memory_loader is None
+        or nested_selection_factory is not None
+    ):
+        raise ValueError(
+            "An in-place nested action requires an item loader and no "
+            "selection factory."
+        )
+    if isinstance(initial_target, DirectMemoryTarget):
+        if (
+            memory_loader is None
+            or initial_target.context_name
+            not in (frozenset(options) | selectable_virtual)
+        ):
+            raise ValueError(
+                "An initial direct-item target requires its Context in the catalog."
+            )
+        initial_context_name = initial_target.context_name
+    elif initial_target is not None:
+        if not isinstance(initial_target, str) or initial_target not in catalog:
+            raise ValueError("The initial Context target is outside the catalog.")
+        initial_context_name = initial_target
+    else:
+        initial_context_name = current if current in catalog else options[0]
     if (memory_scope_root is None) != (memory_reach_state is None):
         raise ValueError(
             "A scoped Memory picker requires both its root and reach state."
         )
 
-    catalog = (*options, *virtual)
     subtree_names = frozenset(descendant_scope_names)
     if not subtree_names <= set(catalog):
         raise ValueError("Descendant-scope Contexts are outside the catalog.")
@@ -1061,6 +1101,14 @@ def choose_context(
         or not accept_label.strip()
         or any(character in accept_label for character in "\r\n")
         or (
+            exit_label is not None
+            and (
+                not isinstance(exit_label, str)
+                or not exit_label.strip()
+                or any(character in exit_label for character in "\r\n")
+            )
+        )
+        or (
             nested_accept_label is not None
             and (
                 not isinstance(nested_accept_label, str)
@@ -1085,7 +1133,7 @@ def choose_context(
             raise ValueError("Context tree override does not match its catalog.")
     state = ContextTreeState.create(
         tree,
-        selected=current if current in catalog else options[0],
+        selected=initial_context_name,
     )
     if initially_expand_selected and state.selected_name in tree.expandable_names:
         state.expanded.add(state.selected_name)
@@ -1105,12 +1153,19 @@ def choose_context(
         state.memory_visibility_overrides.update(
             {name: True for name in initial_memory_contexts}
         )
+    if isinstance(initial_target, DirectMemoryTarget):
+        # An exact initial row is also an explicit request to reveal its local
+        # Memory layer; callers need not coordinate a second visibility flag.
+        state.memory_visibility_overrides[initial_target.context_name] = True
     memory_cache: dict[str, tuple[ContextMemoryRow, ...]] = {}
     memory_anchor: tuple[str, int] | None = None
     copy_status: PlainTextClipboardReceipt | None = None
+    action_status: ContextPickerActionReceipt | None = None
     navigation_accelerator = NavigationAccelerator()
     nested_items_selectable = (
-        selectable_memories or nested_selection_factory is not None
+        selectable_memories
+        or nested_selection_factory is not None
+        or nested_accept_handler is not None
     )
 
     def memory_name_is_in_reach(name: str) -> bool:
@@ -1129,8 +1184,9 @@ def choose_context(
             and memory_name_is_in_reach(row.name)
         )
 
-    def clear_copy_status() -> None:
-        nonlocal copy_status
+    def clear_footer_status() -> None:
+        nonlocal action_status, copy_status
+        action_status = None
         copy_status = None
 
     def load_visible_memories() -> None:
@@ -1154,6 +1210,24 @@ def choose_context(
                 )
 
     load_visible_memories()
+    if isinstance(initial_target, DirectMemoryTarget):
+        initial_rows = memory_cache.get(initial_target.context_name, ())
+        initial_memory_index = next(
+            (
+                index
+                for index, row in enumerate(initial_rows)
+                if row.selector == initial_target.selector
+            ),
+            None,
+        )
+        if initial_memory_index is not None:
+            # This is a focus hint, not a selection receipt. If the row changed
+            # concurrently, retaining its Context is safer than targeting a
+            # different item at the same index.
+            memory_anchor = (
+                initial_target.context_name,
+                initial_memory_index,
+            )
     # Expansion is deliberately process-local. Opening the picker must never
     # turn a navigation preference into Context, Profile, or current-state data.
     bindings = KeyBindings()
@@ -1203,7 +1277,7 @@ def choose_context(
 
     def move_navigation_unit(direction: int) -> bool:
         nonlocal memory_anchor
-        clear_copy_status()
+        clear_footer_status()
         units = navigation_units()
         current = current_navigation_unit()
         index = units.index(current)
@@ -1279,7 +1353,7 @@ def choose_context(
     def _expand_or_enter_context(event) -> None:
         nonlocal memory_anchor
         navigation_accelerator.reset()
-        clear_copy_status()
+        clear_footer_status()
         if memory_anchor is not None:
             return
         state.expand_selected(include_leaf_memories=memory_loader is not None)
@@ -1290,7 +1364,7 @@ def choose_context(
     def _collapse_or_leave_context(event) -> None:
         nonlocal memory_anchor
         navigation_accelerator.reset()
-        clear_copy_status()
+        clear_footer_status()
         if memory_anchor is not None:
             memory_anchor = None
             event.app.invalidate()
@@ -1303,7 +1377,7 @@ def choose_context(
     def _toggle_expand_all(event) -> None:
         nonlocal memory_anchor
         navigation_accelerator.reset()
-        clear_copy_status()
+        clear_footer_status()
         memory_anchor = None
         state.toggle_expand_all()
         load_visible_memories()
@@ -1313,7 +1387,7 @@ def choose_context(
     def _toggle_memories(event) -> None:
         nonlocal memory_anchor
         navigation_accelerator.reset()
-        clear_copy_status()
+        clear_footer_status()
         if memory_loader is not None:
             state.toggle_memories()
             load_visible_memories()
@@ -1325,7 +1399,7 @@ def choose_context(
     def _toggle_selected_memories(event) -> None:
         nonlocal memory_anchor
         navigation_accelerator.reset()
-        clear_copy_status()
+        clear_footer_status()
         if memory_loader is not None:
             state.toggle_selected_memories()
             load_visible_memories()
@@ -1336,6 +1410,7 @@ def choose_context(
     def copy_focused(event, *, visible_branch: bool) -> None:
         nonlocal copy_status
         navigation_accelerator.reset()
+        clear_footer_status()
         try:
             projection = project_context_picker_clipboard(
                 state.visible_rows(),
@@ -1388,13 +1463,61 @@ def choose_context(
 
     @bindings.add("enter", filter=unframed_tree_focus)
     def _accept_context(event) -> None:
+        nonlocal action_status, memory_anchor
         navigation_accelerator.reset()
-        clear_copy_status()
+        clear_footer_status()
         if memory_anchor is not None:
             if nested_items_selectable:
                 context_name, memory_index = memory_anchor
                 memory = memory_cache[context_name][memory_index]
                 if memory.selector is not None:
+                    if nested_accept_handler is not None:
+                        receipt = nested_accept_handler(
+                            context_name,
+                            memory.selector,
+                        )
+                        if not isinstance(receipt, ContextPickerActionReceipt):
+                            raise TypeError(
+                                "A nested action must return a picker receipt."
+                            )
+                        action_status = receipt
+                        assert memory_loader is not None
+                        try:
+                            refreshed_rows = tuple(memory_loader(context_name))
+                        except (OSError, RuntimeError, ValueError):
+                            refreshed_rows = (
+                                ContextMemoryRow(
+                                    "unavailable",
+                                    "Memory preview changed",
+                                ),
+                            )
+                        memory_cache[context_name] = refreshed_rows
+                        state.selected_name = context_name
+                        same_item_index = next(
+                            (
+                                index
+                                for index, row in enumerate(refreshed_rows)
+                                if row.selector == memory.selector
+                            ),
+                            None,
+                        )
+                        next_index = (
+                            same_item_index
+                            if same_item_index is not None
+                            else (
+                                min(memory_index, len(refreshed_rows) - 1)
+                                if refreshed_rows
+                                else None
+                            )
+                        )
+                        memory_anchor = (
+                            (context_name, next_index)
+                            if next_index is not None
+                            and refreshed_rows[next_index].selector is not None
+                            else None
+                        )
+                        event.app.invalidate()
+                        return
                     event.app.exit(
                         result=(
                             nested_selection_factory(
@@ -1453,7 +1576,7 @@ def choose_context(
         ):
             memory_anchor = None
         load_visible_memories()
-        clear_copy_status()
+        clear_footer_status()
         event.app.invalidate()
 
     @bindings.add("left", filter=reach_focus, eager=True)
@@ -1604,7 +1727,11 @@ def choose_context(
             if memory_anchor is not None
             else "y copy Context  Y copy visible branch  "
         )
-        close_action = "q close" if browse_only else "q cancel"
+        close_action = (
+            "Esc/q " + display_escape_text(exit_label)
+            if exit_label is not None
+            else ("q close" if browse_only else "q cancel")
+        )
         normal_footer = (
             _CONTEXT_NAVIGATION_HINT
             + f"{expansion_action}  {memory_action}{copy_action}"
@@ -1612,6 +1739,19 @@ def choose_context(
             f" · {navigation_index + 1}/{len(units)}"
             f" · {len(tree.materialized_names)} selectable"
         )
+        if action_status is not None:
+            return [
+                (
+                    action_status.label_style,
+                    " " + display_escape_text(action_status.label),
+                ),
+                (
+                    action_status.detail_style,
+                    " · "
+                    + display_escape_text(action_status.detail),
+                ),
+                ("", f"  {close_action}"),
+            ]
         if copy_status is None:
             return normal_footer
         return [

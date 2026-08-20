@@ -9,6 +9,7 @@ from typer.testing import CliRunner
 from memcommit.cli import app
 from memcommit.clipboard import ClipboardError
 from memcommit.commands.context_picker import (
+    ContextPickerActionReceipt,
     ContextMemorySelection,
     _CONTEXT_NAVIGATION_HINT,
     _CONTEXT_PICKER_STYLE,
@@ -89,6 +90,67 @@ def test_picker_preselects_current_and_accepts_enter():
         )
 
     assert selected == "beta"
+
+
+def test_picker_can_resume_on_one_exact_direct_item():
+    rows = (
+        ContextMemoryRow("first", "first", selector="first-full"),
+        ContextMemoryRow("second", "second", selector="second-full"),
+    )
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\r")
+        selected = choose_context(
+            ("alpha",),
+            current="alpha",
+            initial_target=ContextMemorySelection("alpha", "second-full"),
+            memory_loader=lambda _name: rows,
+            initially_show_memories=True,
+            selectable_memories=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == ContextMemorySelection("alpha", "second-full")
+
+
+def test_picker_in_place_nested_action_refreshes_without_closing():
+    rows = [
+        ContextMemoryRow("first", "first", selector="first-full"),
+        ContextMemoryRow("second", "second", selector="second-full"),
+        ContextMemoryRow("third", "third", selector="third-full"),
+    ]
+    accepted: list[str] = []
+
+    def remove_row(_context_name: str, selector: str):
+        accepted.append(selector)
+        rows[:] = [row for row in rows if row.selector != selector]
+        return ContextPickerActionReceipt(
+            label="REMOVED",
+            detail=selector,
+            label_style="class:semantic.remove",
+        )
+
+    with create_pipe_input() as pipe_input:
+        # Context -> first item -> remove; focus stays at the same row index,
+        # now occupied by second. Remove again, then close the same app.
+        pipe_input.send_text("\x1b[B\r\rq")
+        selected = choose_context(
+            ("alpha",),
+            current="alpha",
+            memory_loader=lambda _name: rows,
+            initially_show_memories=True,
+            selectable_memories=True,
+            nested_accept_handler=remove_row,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+            exit_label="close",
+        )
+
+    assert selected is None
+    assert accepted == ["first-full", "second-full"]
+    assert [row.selector for row in rows] == ["third-full"]
 
 
 def test_picker_moves_with_arrows_and_clamps_at_boundaries():

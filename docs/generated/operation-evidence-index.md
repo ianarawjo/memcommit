@@ -20,7 +20,7 @@ only from `docs/operation-evidence-index.json`.
 | `config` | `UNREVIEWED` | — | — |
 | `contexts` | `UNREVIEWED` | — | — |
 | `dedup` | `CLOSED` | [`dedup-design-rationale.md`](../dedup-design-rationale.md)<br>[`resolution-lifecycle-design-rationale.md`](../resolution-lifecycle-design-rationale.md) | Confirmed duplicate handoffs enter one provider-free component plan with CLI, TUI, Python, agent, and MCP projections over exact survivor review, Grant revalidation, reference blocking, and one checkpointed Apply boundary. |
-| `delete` | `UNREVIEWED` | — | — |
+| `delete` | `UNREVIEWED` | [`unified-delete-selector-design-rationale.md`](../unified-delete-selector-design-rationale.md) | — |
 | `diff` | `UNREVIEWED` | — | — |
 | `distill` | `CLOSED` | [`distill-elaborate-application-boundary-matrix.md`](../distill-elaborate-application-boundary-matrix.md) | CLI, TUI, public, agent, MCP, Ground, provider, and prepared-result routes share the reviewed Distill application contract. |
 | `edit` | `UNREVIEWED` | — | — |
