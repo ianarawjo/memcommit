@@ -257,14 +257,16 @@ creation event was found.
 The default human Rationale projection is deliberately smaller than its
 evidence model. It shows the selected **MEMORY**, at most one compact
 **PROVENANCE** paragraph containing actual retained operation reasons, and at
-most one contextual **WHY** paragraph explicitly marked as inferred and not
-recorded. Provenance without a retained reason is the status `no reason
+most one contextual **APPARENT PURPOSE** paragraph explicitly marked as
+inferred and not recorded. Provenance without a retained reason is the status `no reason
 recorded`; a present reason is labeled in the section heading rather than
 prefixed again inside the paragraph. It does not repeat Trace's operation list, endpoint contents, UIDs,
-or positions. WHY asks for the Memory's plausible functional purpose in this
-Context and may directly judge that it appears redundant, obsolete,
-unsupported, placeholder-like, or without a meaningful rationale. It must not
-turn that contextual judgment into author intent or historical causation.
+or positions. APPARENT PURPOSE asks whether the Memory has a distinct current
+function that nearby Memories do not already supply. It may directly judge that
+the target appears redundant, obsolete, unsupported, placeholder-like, or
+without a meaningful current purpose. This label deliberately avoids presenting
+contextual usefulness as the historical reason the Memory was authored or
+changed.
 
 With hidden Grant history, an unrequested provider, insufficient Context, or
 provider failure, the relevant section keeps only a short status label; it does

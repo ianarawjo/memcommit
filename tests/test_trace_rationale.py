@@ -608,7 +608,10 @@ def test_task1_rationale_separates_origin_review_and_context_inference(
     assert result.exit_code == 0
     assert "PROVENANCE — no reason recorded" in result.output
     assert "CREATED" not in result.output
-    assert "WHY — inferred from Context, not recorded" in result.output
+    assert (
+        "APPARENT PURPOSE — inferred from Context, not recorded"
+        in result.output
+    )
     assert "limit entry to staff" in result.output
     assert "SAVED ANALYSIS" not in result.output
     assert "EVIDENCE USED FOR INFERENCE" not in result.output
@@ -728,7 +731,7 @@ def test_rationale_excludes_stale_review_and_uses_no_provider_when_requested(
 
     assert result.exit_code == 0
     assert "The responsible person is unnamed." not in result.output
-    assert "WHY — not requested" in result.output
+    assert "APPARENT PURPOSE — not requested" in result.output
     assert "Provenance alone does not establish" not in result.output
     assert structured.exit_code == 0
     assert json.loads(structured.output)["stale_analysis"] is True
@@ -828,7 +831,7 @@ def test_invalid_context_inference_falls_back_without_rendering_model_text(
 
     assert result.exit_code == 0
     assert "MALICIOUS INVENTION" not in result.output
-    assert "WHY — unavailable" in result.output
+    assert "APPARENT PURPOSE — unavailable" in result.output
     assert "cited an unknown Memory" not in result.output
     assert structured.exit_code == 0, structured.output
     payload = json.loads(structured.output)

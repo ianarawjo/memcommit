@@ -30,6 +30,9 @@ _SPEC.loader.exec_module(_BASE)
 _BASE.OUT = OUT
 _BASE.COLUMNS = COLUMNS
 _BASE.ROWS = ROWS
+# Menlo has no Hangul glyphs. Keep its terminal metrics and use a system font
+# only for Korean glyphs so the real PTY's cell alignment stays intact.
+_BASE.HANGUL_FONT_PATH = "/System/Library/Fonts/AppleSDGothicNeo.ttc"
 
 
 def _isolate_store(root: Path) -> None:
@@ -60,10 +63,10 @@ def _prepare_fixture() -> str:
     from memcommit.context import Memory
     from memcommit.store import MemoryStore
 
-    init.cmd("practice/source", parents=True)
+    init.cmd("rationale/korean", parents=True)
     add.cmd(
-        "If I later ask for polishing, preserve the structure and citation-needed "
-        "markers, and change only wording that causes a problem.",
+        "나중에 문장을 다듬어 달라고 하면 구조와 인용 필요 표시는 유지하고, "
+        "문제가 되는 표현만 바꾼다.",
         input_source=None,
         paste=False,
         context_name=None,
@@ -76,19 +79,19 @@ def _prepare_fixture() -> str:
     )
     edit.cmd(
         target.uid,
-        "If I later ask for polishing, preserve the overall structure and "
-        "citation-needed markers, and change only wording that causes a problem.",
+        "나중에 문장을 다듬어 달라고 하면 전체 구조와 인용 필요 표시는 "
+        "유지하고, 문제가 되는 표현만 바꾼다.",
         input_source=None,
         context_name=None,
     )
     add.cmd(
-        "When I ask how a draft reads, assess its organization before editing it.",
+        "초안이 어떻게 읽히는지 물으면 수정하기 전에 먼저 구성과 흐름을 평가한다.",
         input_source=None,
         paste=False,
         context_name=None,
     )
     add.cmd(
-        "When I ask to change one expression, leave project-specific terms alone.",
+        "한 표현만 바꾸라고 하면 프로젝트 고유 용어와 이미 합의한 표현은 그대로 둔다.",
         input_source=None,
         paste=False,
         context_name=None,
@@ -106,10 +109,9 @@ class _Provider:
             candidate["candidate_id"] for candidate in payload["candidates"]
         ]
         explanation = (
-            "This Memory preserves the controlling rule for later polishing: "
-            "change only problematic wording while protecting structure, "
-            "citation markers, and project terms. It is useful rather than "
-            "redundant because nearby Memories add narrower review constraints."
+            "이 Memory는 이후 문장 다듬기의 변경 범위를 고정한다. 주변 규칙이 "
+            "검토 순서와 용어 보존을 보완하므로 중복이 아니라 전체 편집 원칙으로 "
+            "기능한다."
         )
         explanation_limit = output_schema["properties"]["explanation"][
             "maxLength"
@@ -138,7 +140,7 @@ def _run_child() -> None:
         assert before == after
         print(
             f"RATIONALE CLOSED · TARGET [{target_uid[:8]}] · "
-            "CURRENT practice/source · READ ONLY · STORE CONTENT UNCHANGED"
+            "CURRENT rationale/korean · READ ONLY · STORE CONTENT UNCHANGED"
         )
 
 
@@ -183,7 +185,7 @@ def main() -> None:
 
     child, recorder = _spawn()
     try:
-        child.expect("RATIONALE · SELECT A MEMORY · practice/source")
+        child.expect("RATIONALE · SELECT A MEMORY · rationale/korean")
         _BASE._settle(child)
         _snapshot(recorder, "01-target-entry")
 
@@ -209,7 +211,8 @@ def main() -> None:
     assert "PTY 180 52" in raw
     assert "MEMORY" in plain
     assert "PROVENANCE" in plain
-    assert "WHY — inferred from Context, not recorded" in plain
+    assert "APPARENT PURPOSE — inferred from Context, not recorded" in plain
+    assert "전체 편집 원칙으로 기능한다" in plain
     assert "LIMITS" not in plain
     assert "Context(s)" not in plain
     assert "SAVED ANALYSIS" not in plain

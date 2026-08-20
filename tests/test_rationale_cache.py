@@ -42,8 +42,8 @@ class RationaleProvider:
     def complete(self, prompt, *, operation, output_schema=None):
         assert operation == "rationale inference"
         assert output_schema is not None
-        assert "most plausible functional purpose" in prompt
-        assert "no meaningful rationale is evident" in prompt
+        assert "contributes a distinct useful function" in prompt
+        assert "no meaningful current purpose" in prompt
         assert "ordinary local reading" not in prompt
         payload = json.loads(prompt.split(RATIONALE_MARKER, 1)[1])
         self.calls.append(payload)
@@ -468,7 +468,7 @@ def test_tiny_semantic_frame_skips_provider_and_emits_only_status(
     structured = invoke("rationale", target.uid, "--json")
 
     assert result.exit_code == 0, result.output
-    assert "WHY — insufficient Context" in result.output
+    assert "APPARENT PURPOSE — insufficient Context" in result.output
     assert "available semantic evidence" not in result.output
     assert structured.exit_code == 0, structured.output
     payload = json.loads(structured.output)
@@ -506,7 +506,10 @@ def test_inference_minimum_boundary_skips_15_but_accepts_16_characters(
 ):
     store = MemoryStore()
     below = ops.init("rationale-below-minimum")
-    below_target, _ = ops.add_many(below, ["12345678", "abcdefgh"])
+    below_target, _ = ops.add_many(
+        below,
+        ["일단 적어 둔다", "관련 규칙 없음"],
+    )
     store.save(below)
     store.set_current(below.name)
     _forbid_provider(monkeypatch)
@@ -520,7 +523,10 @@ def test_inference_minimum_boundary_skips_15_but_accepts_16_characters(
     assert rejected_payload["character_budgets"]["inference_limit"] == 15
 
     accepted = ops.init("rationale-at-minimum")
-    accepted_target, _ = ops.add_many(accepted, ["12345678", "abcdefghi"])
+    accepted_target, _ = ops.add_many(
+        accepted,
+        ["일단 적어 둔다", "관련 규칙은 없다"],
+    )
     store.save(accepted)
     store.set_current(accepted.name)
     calls: list[int] = []
@@ -536,7 +542,7 @@ def test_inference_minimum_boundary_skips_15_but_accepts_16_characters(
             ][0]
             return json.dumps(
                 {
-                    "explanation": "No purpose seen.",
+                    "explanation": "유지할 이유는 보이지 않는다.",
                     "support_ids": [candidate["candidate_id"]],
                 }
             )
@@ -550,7 +556,9 @@ def test_inference_minimum_boundary_skips_15_but_accepts_16_characters(
     assert accepted_payload["inference_status"] == "AVAILABLE"
     assert accepted_payload["character_budgets"]["inference_source"] == 17
     assert accepted_payload["character_budgets"]["inference_limit"] == 16
-    assert accepted_payload["inference"]["explanation"] == "No purpose seen."
+    assert accepted_payload["inference"]["explanation"] == (
+        "유지할 이유는 보이지 않는다."
+    )
 
 
 def test_terminal_escaping_cannot_expand_visible_inference_past_its_limit(
@@ -582,7 +590,9 @@ def test_terminal_escaping_cannot_expand_visible_inference_past_its_limit(
     assert result.exit_code == 0, result.output
     assert "\u202e" not in result.output
     lines = result.output.splitlines()
-    inference_index = lines.index("WHY — inferred from Context, not recorded")
+    inference_index = lines.index(
+        "APPARENT PURPOSE — inferred from Context, not recorded"
+    )
     visible_explanation = lines[inference_index + 1].strip()
     assert len(visible_explanation) <= 16
 
@@ -750,7 +760,7 @@ def test_long_provenance_projection_is_capped_at_320_characters(
     provenance = lines[lines.index("PROVENANCE — recorded reason") + 1].strip()
     assert len(provenance) <= 320
     assert provenance.startswith("This Memory was retained")
-    assert "WHY — not requested" in result.output
+    assert "APPARENT PURPOSE — not requested" in result.output
     assert "LIMITS" not in result.output
 
 

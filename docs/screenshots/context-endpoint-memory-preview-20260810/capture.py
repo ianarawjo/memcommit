@@ -19,6 +19,7 @@ OUT = ROOT / "docs/screenshots/context-endpoint-memory-preview-20260810"
 COLUMNS = 180
 ROWS = 52
 FONT_PATH = "/System/Library/Fonts/Menlo.ttc"
+HANGUL_FONT_PATH: str | None = None
 DOWN = "\x1b[B"
 
 _NAMED_COLORS = {
@@ -163,6 +164,16 @@ def _render(raw: str, stem: str) -> None:
 
     regular = ImageFont.truetype(FONT_PATH, 16, index=0)
     bold = ImageFont.truetype(FONT_PATH, 16, index=1)
+    hangul_regular = (
+        ImageFont.truetype(HANGUL_FONT_PATH, 16, index=0)
+        if HANGUL_FONT_PATH is not None
+        else None
+    )
+    hangul_bold = (
+        ImageFont.truetype(HANGUL_FONT_PATH, 16, index=2)
+        if HANGUL_FONT_PATH is not None
+        else None
+    )
     cell_width = math.ceil(regular.getlength("M"))
     cell_height = 21
     margin = 16
@@ -188,10 +199,25 @@ def _render(raw: str, stem: str) -> None:
                 )
             if char.data and char.data != " ":
                 box_drawing = "\u2500" <= char.data <= "\u257f"
+                contains_hangul = any(
+                    "\u1100" <= value <= "\u11ff"
+                    or "\u3130" <= value <= "\u318f"
+                    or "\uac00" <= value <= "\ud7af"
+                    for value in char.data
+                )
+                selected_font = bold if char.bold and not box_drawing else regular
+                if contains_hangul and hangul_regular is not None:
+                    # The terminal still owns cell width; this only supplies
+                    # glyphs that the monospaced Latin font does not contain.
+                    selected_font = (
+                        hangul_bold
+                        if char.bold and hangul_bold is not None
+                        else hangul_regular
+                    )
                 draw.text(
                     (x, y),
                     char.data,
-                    font=bold if char.bold and not box_drawing else regular,
+                    font=selected_font,
                     fill=foreground,
                 )
             if char.underscore:

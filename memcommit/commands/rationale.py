@@ -118,7 +118,8 @@ def render_rationale(
     if inference is not None:
         cache_label = " · cached" if report.inference_cached else ""
         typer.secho(
-            "\nWHY — inferred from Context, not recorded" + cache_label,
+            "\nAPPARENT PURPOSE — inferred from Context, not recorded"
+            + cache_label,
             bold=True,
         )
         typer.echo(
@@ -129,12 +130,12 @@ def render_rationale(
             )
         )
     elif report.inference_status == "NOT_REQUESTED":
-        typer.secho("\nWHY — not requested", bold=True)
+        typer.secho("\nAPPARENT PURPOSE — not requested", bold=True)
     elif report.inference_status == "INSUFFICIENT_EVIDENCE":
-        typer.secho("\nWHY — insufficient Context", bold=True)
+        typer.secho("\nAPPARENT PURPOSE — insufficient Context", bold=True)
     else:
         typer.secho(
-            "\nWHY — unavailable",
+            "\nAPPARENT PURPOSE — unavailable",
             bold=True,
         )
 

@@ -1,23 +1,23 @@
-[32mEnsured context hierarchy 'practice/source'.[0m
-  Created: practice, practice/source
-  Current: practice/source
-[32mAdded [817bab09] If I later ask for polishing, preserve the structure and citation-needed markers, and change only wording that causes a problem.[0m
-[32m[1mEdited [817bab09] in 'practice/source':[0m
-[31m  - If I later ask for polishing, preserve the structure and citation-needed markers, and change only wording that causes a problem.[0m
-[32m  + If I later ask for polishing, preserve the overall structure and citation-needed markers, and change only wording that causes a problem.[0m
-[32mAdded [6dfeddaa] When I ask how a draft reads, assess its organization before editing it.[0m
-[32mAdded [c74e607d] When I ask to change one expression, leave project-specific terms alone.[0m
+[32mEnsured context hierarchy 'rationale/korean'.[0m
+  Created: rationale, rationale/korean
+  Current: rationale/korean
+[32mAdded [af695937] 나중에 문장을 다듬어 달라고 하면 구조와 인용 필요 표시는 유지하고, 문제가 되는 표현만 바꾼다.[0m
+[32m[1mEdited [af695937] in 'rationale/korean':[0m
+[31m  - 나중에 문장을 다듬어 달라고 하면 구조와 인용 필요 표시는 유지하고, 문제가 되는 표현만 바꾼다.[0m
+[32m  + 나중에 문장을 다듬어 달라고 하면 전체 구조와 인용 필요 표시는 유지하고, 문제가 되는 표현만 바꾼다.[0m
+[32mAdded [4b075a12] 초안이 어떻게 읽히는지 물으면 수정하기 전에 먼저 구성과 흐름을 평가한다.[0m
+[32mAdded [2961f294] 한 표현만 바꾸라고 하면 프로젝트 고유 용어와 이미 합의한 표현은 그대로 둔다.[0m
 PTY 180 52
-[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m RATIONALE · SELECT A MEMORY · practice/source[0m
-[0m Roots · practice/source[0m
+[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m RATIONALE · SELECT A MEMORY · rationale/korean[0m
+[0m Roots · rationale/korean[0m
 [0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ RANGE ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
 [0;38;5;117;1m┃[0m› [0;38;5;234;48;5;117;1m[ THIS CONTEXT ONLY ][0m  [ INCLUDE DESCENDANTS ] · ←/→ SELECT                                                                                                                     [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
 [0m┌─────────────────────────────────────────────────────────────────────────────| CONTEXTS & MEMORIES |──────────────────────────────────────────────────────────────────────────────[179C┐[0m
-[0m│[0;1;7m› * ▾ practice/source[0m                                                                                                                                                            [0;1m^[179C[0m│[0m
-[0m│[0;38;5;189m  · [817bab09] [r2] If I later ask for polishing, preserve the overall structure and citation-needed markers, and change only wording that causes a problem.[0m                     [0;48;5;238m [179C[0m│[0m
-[0m│[0;38;5;189m  · [6dfeddaa] [r1] When I ask how a draft reads, assess its organization before editing it.[0m                                                                                     [0;48;5;238m [179C[0m│[0m
-[0m│[0;38;5;189m  · [c74e607d] [r1] When I ask to change one expression, leave project-specific terms alone.[0m                                                                                     [0;48;5;238m [179C[0m│[0m
+[0m│[0;1;7m› * ▾ rationale/korean[0m                                                                                                                                                           [0;1m^[179C[0m│[0m
+[0m│[0;38;5;189m  · [af695937] [r2] 나중에 문장을 다듬어 달라고 하면 전체 구조와 인용 필요 표시는 유지하고, 문제가 되는 표현만 바꾼다.[0m                                                           [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m  · [4b075a12] [r1] 초안이 어떻게 읽히는지 물으면 수정하기 전에 먼저 구성과 흐름을 평가한다.[0m                                                                                     [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m  · [2961f294] [r1] 한 표현만 바꾸라고 하면 프로젝트 고유 용어와 이미 합의한 표현은 그대로 둔다.[0m                                                                                 [0;48;5;238m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
@@ -63,10 +63,10 @@ PTY 180 52
 [0m│  [0;38;5;234;48;5;117m[ THIS CONTEXT ONLY ][0m  [ INCLUDE DESCENDANTS ] · ←/→ SELECT                                                                                                                     [179C│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
 [0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ CONTEXTS & MEMORIES ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
-[0;38;5;117;1m┃[0m› * ▾ practice/source                                                                                                                                                            [0;1m^[179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1;7m  › [817bab09] [r2] If I later ask for polishing, preserve the overall structure and citation-needed markers, and change only wording that causes a problem.[0m                     [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;189m  · [6dfeddaa] [r1] When I ask how a draft reads, assess its organization before editing it.[0m                                                                                     [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;189m  · [c74e607d] [r1] When I ask to change one expression, leave project-specific terms alone.[0m                                                                                     [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m› * ▾ rationale/korean                                                                                                                                                           [0;1m^[179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1;7m  › [af695937] [r2] 나중에 문장을 다듬어 달라고 하면 전체 구조와 인용 필요 표시는 유지하고, 문제가 되는 표현만 바꾼다.[0m                                                           [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;189m  · [4b075a12] [r1] 초안이 어떻게 읽히는지 물으면 수정하기 전에 먼저 구성과 흐름을 평가한다.[0m                                                                                     [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;189m  · [2961f294] [r1] 한 표현만 바꾸라고 하면 프로젝트 고유 용어와 이미 합의한 표현은 그대로 둔다.[0m                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
@@ -109,16 +109,16 @@ PTY 180 52
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
 [C[0m↑↓ move[C ←→ expand  A restore tree  m THIS Context:[Chid[C items · M EVERY Contex[C: hide[Citems  y/Y copy item  Enter open rationale  q close · 2/4 · 1 Contexts[44A[157D[0m[7A[J[0m[?7h[?1049l[?2004lMEM RATIONALE · 1/2 · CONNECTING PROVIDER . · 0sMEM RATIONALE · 2/2 · INFERRING RATIONALE . · 0s                                                [?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
-[0;38;5;117;1m┃[0mRationale [817bab09] · practice/source                                                                                                                                           [0;1m^[179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0mRationale [af695937] · rationale/korean                                                                                                                                          [0;1m^[179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0mMEMORY                                                                                                                                                                           [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m  If I later ask for polishing, preserve the overall structure and citation-needed markers, and change only wording that causes a problem.                                       [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  나중에 문장을 다듬어 달라고 하면 전체 구조와 인용 필요 표시는 유지하고, 문제가 되는 표현만 바꾼다.                                                                             [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0mPROVENANCE — no reason recorded                                                                                                                                                  [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0mWHY — inferred from Context, not recorded                                                                                                                                        [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m  This Memory preserves the controlling rule for later polishing: change only problematic wording while protecting structure, citation                                           [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m  markers, and project terms. It is useful rather than redundant because nearby Memories add narrower review constraints.                                                        [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0mAPPARENT PURPOSE — inferred from Context, not recorded                                                                                                                           [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  이 Memory는 이후 문장 다듬기의 변경 범위를 고정한다. 주변 규칙이 검토 순서와 용어 보존을 보완하므로 중복이 아니라 전체 편집 원칙으로 기능한다.                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m

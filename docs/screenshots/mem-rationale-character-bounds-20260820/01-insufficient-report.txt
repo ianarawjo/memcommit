@@ -1,12 +1,12 @@
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃Rationale [7a57b465] · bounds/insufficient                                                                                                                                       ^┃
+┃Rationale [88122c62] · bounds/insufficient                                                                                                                                       ^┃
 ┃                                                                                                                                                                                  ┃
 ┃MEMORY                                                                                                                                                                            ┃
-┃  A                                                                                                                                                                               ┃
+┃  가                                                                                                                                                                              ┃
 ┃                                                                                                                                                                                  ┃
 ┃PROVENANCE — no reason recorded                                                                                                                                                   ┃
 ┃                                                                                                                                                                                  ┃
-┃WHY — insufficient Context                                                                                                                                                        ┃
+┃APPARENT PURPOSE — insufficient Context                                                                                                                                           ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃

@@ -1,19 +1,19 @@
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃Rationale [64ac1081] · bounds/oversized-context                                                                                                                                  ^┃
+┃Rationale [2db4b701] · bounds/oversized-context                                                                                                                                  ^┃
 ┃                                                                                                                                                                                  ┃
 ┃MEMORY                                                                                                                                                                            ┃
-┃  Large target.                                                                                                                                                                   ┃
+┃  큰 Context의 대상 항목이다.                                                                                                                                                     ┃
 ┃                                                                                                                                                                                  ┃
 ┃PROVENANCE — no reason recorded                                                                                                                                                   ┃
 ┃                                                                                                                                                                                  ┃
-┃WHY — inferred from Context, not recorded                                                                                                                                         ┃
-┃  This Memory preserves a stable editing rule that coordinates the surrounding constraints without duplicating their details. This Memory                                         ┃
-┃  preserves a stable editing rule that coordinates the surrounding constraints without duplicating their details. This Memory preserves a                                         ┃
-┃  stable editing rule that coordinates the surrounding constraints without duplicating their details. This Memory preserves a stable editing                                      ┃
-┃  rule that coordinates the surrounding constraints without duplicating                                                                                                           ┃
-┃                                                                                                                                                                                  ┃
-┃                                                                                                                                                                                  ┃
-┃                                                                                                                                                                                  ┃
+┃APPARENT PURPOSE — inferred from Context, not recorded                                                                                                                            ┃
+┃  이 Memory는 흩어진 편집 제약을 반복하지 않고 하나의 적용 원칙으로 묶어 두는 역할을 한다. 이 Memory는 흩어진 편집 제약을 반복하지 않고 하나의 적용 원칙으로 묶어 두는 역할을 한  ┃
+┃다. 이 Memory는 흩어진 편집 제약을 반복하지 않고                                                                                                                                  ┃
+┃  하나의 적용 원칙으로 묶어 두는 역할을 한다. 이 Memory는 흩어진 편집 제약을 반복하지 않고 하나의 적용 원칙으로 묶어 두는 역할을 한다. 이 Memory는 흩어진 편집 제약을 반복하지 않 ┃
+┃고 하나의 적용 원칙으로 묶어 두는 역할을 한다. 이                                                                                                                                 ┃
+┃  Memory는 흩어진 편집 제약을 반복하지 않고 하나의 적용 원칙으로 묶어 두는 역할을 한다. 이 Memory는 흩어진 편집 제약을 반복하지 않고 하나의 적용 원칙으로 묶어 두는 역할을 한다.  ┃
+┃이 Memory는 흩어진 편집 제약을 반복하지 않고                                                                                                                                      ┃
+┃  하나의 적용 원칙으로 묶어 두는 역할을 한다. 이 Memory는 흩어진 편집 제약을 반복하지 않고 하나의 적용 원칙으로                                                                   ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃

@@ -134,7 +134,7 @@ def test_bare_recorded_rationale_selects_before_any_provider_call(
     assert result.exit_code == 0, result.output
     assert "Rationale [" in result.output
     assert "portable note" in result.output
-    assert "WHY — not requested" in result.output
+    assert "APPARENT PURPOSE — not requested" in result.output
 
 
 def test_trace_descendant_range_opens_the_selected_owner_history(
@@ -225,7 +225,7 @@ def test_rationale_picker_groups_memories_under_their_public_context(
             ("notes/child", "child note"),
         ],
     }
-    assert "WHY — not requested" in result.output
+    assert "APPARENT PURPOSE — not requested" in result.output
 
 
 def test_interactive_rationale_report_uses_common_viewer(

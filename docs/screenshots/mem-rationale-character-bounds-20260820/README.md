@@ -1,6 +1,7 @@
 # `mem rationale` character-bound edge-case captures
 
-This evidence set runs five actual Rationale paths in isolated stores. Each
+This evidence set runs five actual Rationale paths with Korean Memory content
+and Korean accepted output in isolated stores. Each
 report is captured from a `180×52` color PTY and followed by a close receipt
 that verifies the Context was unchanged.
 
@@ -11,7 +12,8 @@ that verifies the Context was unchanged.
 - PTY: `180` columns × `52` rows, verified inside every child
 - Environment: `TERM=xterm-256color`, `COLORTERM=truecolor`, `NO_COLOR` unset
 - Renderer: real cumulative PTY ANSI streams replayed through `pyte` at the
-  full `1832×1124` Menlo canvas
+  full `1832×1124` Menlo canvas with Apple SD Gothic Neo supplying only Hangul
+  glyphs
 - Durable boundary: every scenario uses a temporary isolated store; accepted
   inference may create its replaceable cache, but Context content must remain
   byte-equivalent
@@ -21,10 +23,10 @@ that verifies the Context was unchanged.
 | Report | Evidence condition | Expected result |
 | --- | --- | --- |
 | `01-insufficient-report.png` | 2 source characters | limit 1; provider connection count 0; status only |
-| `03-minimum-report.png` | 17 source characters | dynamic limit 16; the exact 16-character judgment `No purpose seen.` is accepted |
+| `03-minimum-report.png` | 17 Korean source characters | dynamic limit 16; the exact 16-character judgment `유지할 이유는 보이지 않는다.` is accepted |
 | `05-over-limit-report.png` | 33 source characters | dynamic limit 32; a 33-character result is rejected and not cached |
-| `07-oversized-context-report.png` | 105 candidates exceed the real 1,000,000-character input bound | nearest 49 candidates retained; absolute limit 480; exact 480-character result accepted |
-| `09-long-provenance-report.png` | one retained atomize reason longer than 320 characters | provenance source exceeds 320; only the recorded reason is projected and capped at 320; provider not requested |
+| `07-oversized-context-report.png` | 105 Korean candidates exceed the real 1,000,000-character input bound | nearest 49 candidates retained; absolute limit 480; exact 480-character Korean result accepted |
+| `09-long-provenance-report.png` | one retained Korean atomize reason longer than 320 characters | provenance source exceeds 320; only the recorded reason is projected and capped at 320; provider not requested |
 
 Each odd-numbered image is the report state. Its following even-numbered image
 is the terminal receipt after `q`, including the observed source/limit or
@@ -34,3 +36,5 @@ The over-limit provider deliberately returns repeated `P` characters. The
 capture asserts that this unvalidated text never appears in any rendered report.
 Every report also asserts that no human `LIMITS` section or Context-count row is
 rendered; those diagnostics remain available from `--json`.
+The application chrome remains English; Korean here exercises the contract that
+semantic output follows the target Memory's language.

@@ -1,12 +1,12 @@
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃Rationale [c43efc89] · bounds/over-limit                                                                                                                                         ^┃
+┃Rationale [86db113c] · bounds/over-limit                                                                                                                                         ^┃
 ┃                                                                                                                                                                                  ┃
 ┃MEMORY                                                                                                                                                                            ┃
-┃  Target fragment.                                                                                                                                                                ┃
+┃  목적이 불분명한 임시 항목이다.                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃PROVENANCE — no reason recorded                                                                                                                                                   ┃
 ┃                                                                                                                                                                                  ┃
-┃WHY — unavailable                                                                                                                                                                 ┃
+┃APPARENT PURPOSE — unavailable                                                                                                                                                    ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃

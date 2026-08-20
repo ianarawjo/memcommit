@@ -1,14 +1,14 @@
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃Rationale [817bab09] · practice/source                                                                                                                                           ^┃
+┃Rationale [af695937] · rationale/korean                                                                                                                                          ^┃
 ┃                                                                                                                                                                                  ┃
 ┃MEMORY                                                                                                                                                                            ┃
-┃  If I later ask for polishing, preserve the overall structure and citation-needed markers, and change only wording that causes a problem.                                        ┃
+┃  나중에 문장을 다듬어 달라고 하면 전체 구조와 인용 필요 표시는 유지하고, 문제가 되는 표현만 바꾼다.                                                                              ┃
 ┃                                                                                                                                                                                  ┃
 ┃PROVENANCE — no reason recorded                                                                                                                                                   ┃
 ┃                                                                                                                                                                                  ┃
-┃WHY — inferred from Context, not recorded                                                                                                                                         ┃
-┃  This Memory preserves the controlling rule for later polishing: change only problematic wording while protecting structure, citation                                            ┃
-┃  markers, and project terms. It is useful rather than redundant because nearby Memories add narrower review constraints.                                                         ┃
+┃APPARENT PURPOSE — inferred from Context, not recorded                                                                                                                            ┃
+┃  이 Memory는 이후 문장 다듬기의 변경 범위를 고정한다. 주변 규칙이 검토 순서와 용어 보존을 보완하므로 중복이 아니라 전체 편집 원칙으로 기능한다.                                  ┃
+┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃

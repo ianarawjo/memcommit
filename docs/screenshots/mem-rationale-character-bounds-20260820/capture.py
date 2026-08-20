@@ -51,7 +51,7 @@ def _run_insufficient() -> None:
 
     store, context, memories = _stored_context(
         "bounds/insufficient",
-        ["A", "B"],
+        ["가", "나"],
     )
     before = context.to_dict()
     connections = 0
@@ -76,7 +76,7 @@ def _run_minimum() -> None:
 
     store, context, memories = _stored_context(
         "bounds/minimum",
-        ["12345678", "abcdefghi"],
+        ["일단 적어 둔다", "관련 규칙은 없다"],
     )
     before = context.to_dict()
     observed: dict[str, int] = {}
@@ -90,7 +90,7 @@ def _run_minimum() -> None:
             payload = json.loads(prompt.split("RATIONALE PAYLOAD:\n", 1)[1])
             return json.dumps(
                 {
-                    "explanation": "No purpose seen.",
+                    "explanation": "유지할 이유는 보이지 않는다.",
                     "support_ids": [payload["candidates"][0]["candidate_id"]],
                 }
             )
@@ -111,7 +111,7 @@ def _run_over_limit() -> None:
 
     store, context, memories = _stored_context(
         "bounds/over-limit",
-        ["Target fragment.", "Visible neighbor."],
+        ["목적이 불분명한 임시 항목이다.", "주변 규칙과 연결되지 않는다."],
     )
     before = context.to_dict()
     observed: dict[str, int] = {}
@@ -142,8 +142,9 @@ def _run_over_limit() -> None:
 def _run_oversized_context() -> None:
     from memcommit.commands import rationale
 
-    contents = ["Large target."] + [
-        f"{index:03d}" + (chr(65 + index % 26) * 9_997)
+    korean_fill = "가나다라마바사아자차카타파하"
+    contents = ["큰 Context의 대상 항목이다."] + [
+        f"{index:03d}" + (korean_fill[index % len(korean_fill)] * 9_997)
         for index in range(105)
     ]
     store, context, memories = _stored_context(
@@ -153,10 +154,10 @@ def _run_oversized_context() -> None:
     before = context.to_dict()
     observed: dict[str, object] = {}
     sentence = (
-        "This Memory preserves a stable editing rule that coordinates the "
-        "surrounding constraints without duplicating their details. "
+        "이 Memory는 흩어진 편집 제약을 반복하지 않고 하나의 적용 원칙으로 "
+        "묶어 두는 역할을 한다. "
     )
-    explanation = (sentence * 8)[:480]
+    explanation = (sentence * 10)[:480]
     assert len(explanation) == 480
 
     class Provider:
@@ -197,7 +198,7 @@ def _run_long_provenance() -> None:
 
     store = MemoryStore()
     context = ops.init("bounds/long-provenance")
-    source = ops.add(context, "Initial " + ("A" * 240))
+    source = ops.add(context, "초안 " + ("가" * 240))
     store.save(
         context,
         AutoCheckpoint(command="add", args={}, description="Added long Memory"),
@@ -206,14 +207,13 @@ def _run_long_provenance() -> None:
     context.remove(source.uid)
     target = Memory(
         uid="10000000-0000-4000-8000-000000000001",
-        content="Current " + ("B" * 240),
+        content="현재 " + ("나" * 240),
     )
     context.add(target, position=source_position)
     reason = (
-        "This Memory was retained because the reviewed local rule needs one "
-        "stable statement of purpose without repeating the surrounding "
-        "inventory. "
-    ) * 4
+        "검토된 로컬 규칙의 목적을 주변 항목과 중복 없이 한 문장으로 남기기 위해 "
+        "이 Memory를 유지했다. "
+    ) * 7
     store.save(
         context,
         AutoCheckpoint(
@@ -312,11 +312,17 @@ def main() -> None:
             path.unlink()
 
     cases = (
-        ("insufficient", "WHY — insufficient Context"),
-        ("minimum", "WHY — inferred from Context, not recorded"),
-        ("over-limit", "WHY — unavailable"),
-        ("oversized-context", "WHY — inferred from Context, not recorded"),
-        ("long-provenance", "WHY — not requested"),
+        ("insufficient", "APPARENT PURPOSE — insufficient Context"),
+        (
+            "minimum",
+            "APPARENT PURPOSE — inferred from Context, not recorded",
+        ),
+        ("over-limit", "APPARENT PURPOSE — unavailable"),
+        (
+            "oversized-context",
+            "APPARENT PURPOSE — inferred from Context, not recorded",
+        ),
+        ("long-provenance", "APPARENT PURPOSE — not requested"),
     )
     for index, (scenario, expected) in enumerate(cases, start=1):
         child, recorder = _spawn(scenario)
@@ -352,6 +358,7 @@ def main() -> None:
     assert "LIMIT 320" in combined
     assert "LIMITS" not in combined
     assert "Context(s)" not in combined
+    assert "유지할 이유는 보이지 않는다." in combined
 
 
 if __name__ == "__main__":
