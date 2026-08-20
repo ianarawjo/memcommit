@@ -44,6 +44,8 @@ SEMANTIC_VIEWER_STYLE = Style.from_dict(
         "memory-object": "fg:#cad3f5",
         "memory-object.focused": "fg:#8bd5ff bold",
         "historical-memory-badge": "fg:#c9ad93",
+        "history-receipt": "fg:#c9ad93 bold",
+        "history-source": "fg:#f4f5f7 bold",
         "reference": "fg:#c6a0f6",
         "impact.keep": "fg:#a6da95 bold",
         "impact.keep.focused": "fg:#a6da95 bold",

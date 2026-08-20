@@ -1,0 +1,9 @@
+52 180                                                                                                                                                                              
+READ-ONLY HISTORY VERIFICATION                                                                                                                                                      
+PTY 180 52                                                                                                                                                                          
+Context: practice/2                                                                                                                                                                 
+Current pointer unchanged: True                                                                                                                                                     
+Memory restored by final Undo: True                                                                                                                                                 
+Direct commands: 6                                                                                                                                                                  
+Inherited commands: 1                                                                                                                                                               
+Checkpoint count unchanged: True

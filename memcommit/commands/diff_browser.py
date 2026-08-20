@@ -1,20 +1,25 @@
-"""Shared location-first browser for Diff, Log, and Revert checkpoints."""
+"""Shared location-first browser for Diff and Revert checkpoints."""
 
 from __future__ import annotations
 
 from collections import defaultdict
 from collections.abc import Mapping, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, replace as dataclass_replace
 
 from memcommit.commands.checkpoint_diff import (
     checkpoint_diff_detail_renderer,
     checkpoint_restore_detail_renderer,
 )
 from memcommit.context_targeting.tui.picker import (
+    ContextMemoryBadge,
+    ContextMemoryDetail,
     ContextMemoryRow,
     ContextSubtreeSelection,
 )
-from memcommit.commands.history_location_picker import choose_history_location
+from memcommit.commands.history_location_picker import (
+    CheckpointLocationSelection,
+    choose_history_location,
+)
 from memcommit.commands.history_picker import (
     HISTORY_BACK,
     HistoryBackNavigation,
@@ -28,6 +33,13 @@ from memcommit.commands.update_checkpoint_history import (
     choose_update_checkpoint_subtree,
 )
 from memcommit.context_locator import resolve_context_locator
+from memcommit.history_display import (
+    HistoryDisplayRow,
+    checkpoint_command_identity,
+    checkpoint_inherited_from,
+    history_action_style,
+    project_history_display_rows,
+)
 from memcommit.store import (
     MemoryStore,
     checkpoint_history_digest,
@@ -59,32 +71,7 @@ def _update_locations(session: UpdateSession | None) -> tuple[str, ...]:
 def _checkpoint_operation_identity(checkpoint: Mapping[str, object]) -> str | None:
     """Return the command-unit identity represented by one checkpoint file."""
 
-    command = checkpoint.get("command")
-    if command == "init":
-        # Init is the baseline for later transitions, not a Diff operation.
-        return None
-    uid = checkpoint.get("uid")
-    if not isinstance(uid, str) or not uid:
-        return None
-    args = checkpoint.get("args")
-    args = args if isinstance(args, dict) else {}
-    if command == "update":
-        session_uid = args.get("update_session_uid")
-        operation_digest = args.get("operation_digest")
-        if (
-            isinstance(session_uid, str)
-            and session_uid
-            and isinstance(operation_digest, str)
-            and operation_digest
-        ):
-            return f"update:{session_uid}:{operation_digest}"
-    if command in {"undo", "redo"}:
-        restore = args.get("command_restore")
-        if isinstance(restore, dict):
-            receipt_uid = restore.get("receipt_uid")
-            if isinstance(receipt_uid, str) and receipt_uid:
-                return f"restore:{receipt_uid}"
-    return f"checkpoint:{uid}"
+    return checkpoint_command_identity(checkpoint)
 
 
 def _local_operation_ids(
@@ -92,20 +79,34 @@ def _local_operation_ids(
     names: Sequence[str],
     *,
     manual: bool = False,
-) -> dict[str, set[str]]:
-    operations: dict[str, set[str]] = {}
+) -> tuple[dict[str, set[str]], dict[str, set[str]]]:
+    direct: dict[str, set[str]] = {}
+    inherited: dict[str, set[str]] = {}
     for name in names:
+        context = store.load_direct(name)
         checkpoints = [
             checkpoint
             for checkpoint in store.list_checkpoints(name)
             if not manual or not checkpoint.get("auto", False)
         ]
-        operations[name] = set(
-            identity
-            for checkpoint in checkpoints
-            if (identity := _checkpoint_operation_identity(checkpoint)) is not None
-        )
-    return operations
+        direct[name] = set()
+        inherited[name] = set()
+        for checkpoint in checkpoints:
+            identity = _checkpoint_operation_identity(checkpoint)
+            if identity is None:
+                continue
+            destination = (
+                inherited
+                if checkpoint_inherited_from(
+                    checkpoint,
+                    context_name=name,
+                    context_uid=context.uid,
+                )
+                is not None
+                else direct
+            )
+            destination[name].add(identity)
+    return direct, inherited
 
 
 def _update_operation_ids(session: UpdateSession | None) -> dict[str, set[str]]:
@@ -126,28 +127,33 @@ def _update_operation_ids(session: UpdateSession | None) -> dict[str, set[str]]:
 def _operation_annotations(
     catalog: Sequence[str],
     operations_by_name: Mapping[str, set[str]],
+    inherited_by_name: Mapping[str, set[str]] | None = None,
 ) -> dict[str, str]:
     """Count distinct direct and descendant command units for every row."""
 
     annotations: dict[str, str] = {}
     for name in catalog:
         direct = operations_by_name.get(name, set())
+        inherited = (inherited_by_name or {}).get(name, set())
         prefix = name + "/"
         descendants: set[str] = set()
         for owner, identities in operations_by_name.items():
             if owner.startswith(prefix):
                 descendants.update(identities)
         annotations[name] = (
-            f"{len(direct)} direct · {len(descendants)} descendant "
-            f"operation{'s' if len(descendants) != 1 else ''}"
+            f"{len(direct)} direct · {len(inherited)} inherited · "
+            f"{len(descendants)} descendant commands"
         )
     return annotations
 
 
 def _checkpoint_operation_rows(
     checkpoints: Sequence[Mapping[str, object]],
+    *,
+    context_name: str,
+    context_uid: str,
 ) -> tuple[ContextMemoryRow, ...]:
-    """Project direct operations plus a non-counted creation boundary."""
+    """Project typed direct and inherited command rows plus creation baseline."""
 
     creation_atomize_uids = {
         source_uid
@@ -160,59 +166,100 @@ def _checkpoint_operation_rows(
         )
         and source_uid
     }
-    rows: list[ContextMemoryRow] = []
-    seen: set[str] = set()
-    for checkpoint in checkpoints:
-        command = str(checkpoint.get("command") or "checkpoint")
-        timestamp = str(checkpoint.get("timestamp") or "")[:16].replace("T", " ")
-        uid = str(checkpoint.get("uid") or "")[:8]
-        description = str(
-            checkpoint.get("description")
-            or checkpoint.get("message")
-            or "(no description)"
+    atomize_creation_checkpoints = {
+        checkpoint_uid
+        for checkpoint in checkpoints
+        if checkpoint.get("command") == "init"
+        and isinstance(checkpoint.get("args"), Mapping)
+        and checkpoint["args"].get("source_analysis_uid") in creation_atomize_uids
+        and isinstance(checkpoint_uid := checkpoint.get("uid"), str)
+        and checkpoint_uid
+    }
+    filtered = tuple(
+        checkpoint
+        for checkpoint in checkpoints
+        if not (
+            checkpoint.get("command") == "atomize"
+            and isinstance(checkpoint.get("args"), Mapping)
+            and checkpoint["args"].get("analysis_uid") in creation_atomize_uids
         )
-        detail = f"{timestamp} · {uid} · {' '.join(description.split())}"
-        if command == "init":
-            args = checkpoint.get("args")
-            atomize_created = (
-                isinstance(args, Mapping)
-                and isinstance(args.get("source_analysis_uid"), str)
-                and bool(args["source_analysis_uid"])
-            )
-            # Creation is a lifecycle boundary rather than another operation,
-            # so it remains outside direct/descendant counts. The second badge
-            # names Atomize only when its durable init receipt proves that
-            # provenance; an oldest retained checkpoint is not enough proof.
-            rows.append(
-                ContextMemoryRow(
-                    "created",
-                    ("[atomize] " if atomize_created else "") + detail,
-                    style="report-neutral",
-                )
-            )
-            continue
-        args = checkpoint.get("args")
+    )
+    return _context_rows_from_history(
+        project_history_display_rows(
+            filtered,
+            context_name=context_name,
+            context_uid=context_uid,
+        ),
+        context_name=context_name,
+        atomize_creation_checkpoints=atomize_creation_checkpoints,
+    )
+
+
+def _context_rows_from_history(
+    rows: Sequence[HistoryDisplayRow],
+    *,
+    context_name: str,
+    atomize_creation_checkpoints: set[str] | None = None,
+) -> tuple[ContextMemoryRow, ...]:
+    projected: list[ContextMemoryRow] = []
+    last_section: str | None = None
+    for row in rows:
+        section = (
+            f"INHERITED HISTORY · source {row.inherited_from}"
+            if row.inherited_from is not None
+            else f"DIRECT COMMANDS · {context_name}"
+        )
+        section_label = section if section != last_section else None
+        last_section = section
+        badges = [ContextMemoryBadge(badge.text, badge.style) for badge in row.badges]
         if (
-            command == "atomize"
-            and isinstance(args, Mapping)
-            and args.get("analysis_uid") in creation_atomize_uids
+            row.is_creation
+            and atomize_creation_checkpoints
+            and row.checkpoint_uid in atomize_creation_checkpoints
         ):
-            # Save-as Atomize persists a baseline init and the applied result
-            # separately. Their shared analysis UID proves one creation flow,
-            # so the Context overview folds both into [created] [atomize].
-            continue
-        identity = _checkpoint_operation_identity(checkpoint)
-        if identity is None or identity in seen:
-            continue
-        seen.add(identity)
-        rows.append(
+            badges.insert(1, ContextMemoryBadge("ATOMIZE", "history-source"))
+        projected.append(
             ContextMemoryRow(
-                command,
-                detail,
+                row.command,
+                f"{row.timestamp} · {row.summary}",
                 style="report-neutral",
+                selector=row.checkpoint_uid,
+                label_style=history_action_style(row.command),
+                badges=tuple(badges),
+                section_label=section_label,
+                detail_title=f"{row.command.upper()} · {row.summary}",
+                details=tuple(
+                    ContextMemoryDetail(detail.label, detail.value, detail.style)
+                    for detail in row.details
+                ),
             )
         )
-    return tuple(rows)
+    return tuple(projected)
+
+
+def _checkpoint_version_rows(
+    checkpoints: Sequence[Mapping[str, object]],
+    *,
+    context_name: str,
+    context_uid: str,
+) -> tuple[ContextMemoryRow, ...]:
+    """Project every exact restorable version without operation deduplication.
+
+    The Context stage is allowed to choose a checkpoint, but it does not decide
+    whether that checkpoint is a useful or legal Revert result. In particular,
+    correlated Init/Atomize records and repeated command identities remain
+    independently focusable because they represent different persisted states.
+    """
+
+    return _context_rows_from_history(
+        project_history_display_rows(
+            checkpoints,
+            context_name=context_name,
+            context_uid=context_uid,
+            deduplicate_commands=False,
+        ),
+        context_name=context_name,
+    )
 
 
 def _update_operation_rows(
@@ -228,19 +275,30 @@ def _update_operation_rows(
     operation_count = sum(
         operation.owner_context_name == name for operation in session.operations
     )
-    checkpoint = next(
+    checkpoint_uid = next(
         (
-            receipt.checkpoint_uid[:8]
+            receipt.checkpoint_uid
             for receipt in session.application.checkpoints
             if receipt.context_name == name
         ),
         "(not created)",
     )
+    checkpoint_badge = (
+        checkpoint_uid[:8] if checkpoint_uid != "(not created)" else checkpoint_uid
+    )
     rows = [
         ContextMemoryRow(
             "update",
-            f"{operation_count} Memory changes · checkpoint {checkpoint}",
+            f"{operation_count} Memory changes",
             style="report-neutral",
+            label_style=history_action_style("update"),
+            badges=(ContextMemoryBadge(f"CHECKPOINT {checkpoint_badge}"),),
+            section_label=f"DIRECT COMMANDS · {name}",
+            detail_title=f"UPDATE · {operation_count} Memory changes",
+            details=(
+                ContextMemoryDetail("Checkpoint", checkpoint_uid),
+                ContextMemoryDetail("History role", f"direct · {name}"),
+            ),
         )
     ]
     if session.status == "undone":
@@ -250,8 +308,11 @@ def _update_operation_rows(
                 "undo",
                 "restored the retained Update operation",
                 style="report-neutral",
+                label_style=history_action_style("undo"),
+                section_label=f"DIRECT COMMANDS · {name}",
             ),
         )
+        rows[1] = dataclass_replace(rows[1], section_label=None)
     return tuple(rows)
 
 
@@ -264,6 +325,7 @@ def _browse_local_checkpoints(
     show_diffs: bool = True,
     mode: HistoryPickerMode = "log",
     keep_history: bool = False,
+    staged_checkpoint_uid: str | None = None,
 ) -> ReviewedCheckpointSelection | HistoryBackNavigation | None:
     context = store.load_direct(context_name)
     all_checkpoints = store.list_checkpoints(context_name)
@@ -298,6 +360,7 @@ def _browse_local_checkpoints(
         ),
         back_navigation=back_navigation,
         keep_history=keep_history,
+        staged_checkpoint_uid=staged_checkpoint_uid,
     )
     if isinstance(result, HistorySelectionReceipt):
         return ReviewedCheckpointSelection(
@@ -338,18 +401,27 @@ def browse_checkpoint_locations(
         raise ValueError(f"No Context locations are available for {title}.")
 
     operations_by_name: dict[str, set[str]] = defaultdict(set)
+    inherited_by_name: dict[str, set[str]] = defaultdict(set)
     projected_update_operations = {
         name: identities
         for name, identities in _update_operation_ids(session).items()
         if name not in local_names
     }
-    for source in (
-        _local_operation_ids(store, local_names, manual=manual),
-        projected_update_operations,
-    ):
+    local_operations, local_inherited = _local_operation_ids(
+        store,
+        local_names,
+        manual=manual,
+    )
+    for source in (local_operations, projected_update_operations):
         for name, identities in source.items():
             operations_by_name[name].update(identities)
-    annotations = _operation_annotations(catalog, operations_by_name)
+    for name, identities in local_inherited.items():
+        inherited_by_name[name].update(identities)
+    annotations = _operation_annotations(
+        catalog,
+        operations_by_name,
+        inherited_by_name,
+    )
 
     changed_descendant_roots = tuple(
         name
@@ -359,23 +431,30 @@ def browse_checkpoint_locations(
     selector_current = store.current_context_name()
 
     def load_operations(name: str) -> tuple[ContextMemoryRow, ...]:
-        local_rows = (
-            _checkpoint_operation_rows(
+        if name in local_names:
+            context = store.load_direct(name)
+            local_rows = (
+                _checkpoint_version_rows
+                if mode == "revert"
+                else _checkpoint_operation_rows
+            )(
                 tuple(
                     checkpoint
                     for checkpoint in store.list_checkpoints(name)
                     if not manual or not checkpoint.get("auto", False)
-                )
+                ),
+                context_name=name,
+                context_uid=context.uid,
             )
-            if name in local_names
-            else ()
-        )
+        else:
+            local_rows = ()
         projected_rows = (
             () if name in local_names else _update_operation_rows(session, name)
         )
         return (*local_rows, *projected_rows)
 
     while True:
+        staged_checkpoint_uid: str | None = None
         if context_locator is None:
             location_selection = choose_history_location(
                 selectable,
@@ -385,6 +464,7 @@ def browse_checkpoint_locations(
                 catalog_names=catalog,
                 descendant_scope_names=changed_descendant_roots,
                 operation_loader=load_operations,
+                select_nested_checkpoints=mode == "revert",
             )
             if location_selection is None:
                 return
@@ -400,7 +480,11 @@ def browse_checkpoint_locations(
                 if result is HISTORY_BACK:
                     continue
                 return
-            context_name = location_selection
+            if isinstance(location_selection, CheckpointLocationSelection):
+                context_name = location_selection.context_name
+                staged_checkpoint_uid = location_selection.checkpoint_uid
+            else:
+                context_name = location_selection
             selector_current = context_name
         else:
             context_name = resolve_context_locator(
@@ -431,6 +515,7 @@ def browse_checkpoint_locations(
                 show_diffs=show_diffs,
                 mode=mode,
                 keep_history=keep_history,
+                staged_checkpoint_uid=staged_checkpoint_uid,
             )
         if result is HISTORY_BACK and context_locator is None:
             continue

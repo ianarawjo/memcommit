@@ -39,6 +39,7 @@ from memcommit.interfaces.tui.core.theme import (
     SEMANTIC_VIEWER_STYLE,
     focused_control_style,
 )
+from memcommit.history_display import history_action_style
 from memcommit.interfaces.tui.core.keybindings import (
     bind_case_insensitive_key,
 )
@@ -142,15 +143,15 @@ def _compact(value: str, width: int) -> str:
     return elide_terminal_text(display_escape_text(value), width)
 
 
-def _render_entry_line(
+def _entry_line_parts(
     entry: HistoryPickerItem,
     *,
     entries: Sequence[HistoryPickerItem],
     selected: bool,
     checked: bool = False,
     available_width: int,
-) -> str:
-    """Render command and description columns from the live Items width."""
+) -> tuple[str, str, str, str]:
+    """Lay out one History row before presentation styles are applied."""
 
     pointer = "›" if selected else " "
     marker = "✓" if checked else " "
@@ -205,10 +206,63 @@ def _render_entry_line(
         display_escape_text(entry.description or "(no description)"),
         widths["description"],
     )
+    return prefix, command, suffix, description
+
+
+def _render_entry_line(
+    entry: HistoryPickerItem,
+    *,
+    entries: Sequence[HistoryPickerItem],
+    selected: bool,
+    checked: bool = False,
+    available_width: int,
+) -> str:
+    """Render the stable plain projection of one History Items row."""
+
     return elide_terminal_text(
-        f"{prefix}{command}{suffix}{description}",
+        "".join(
+            _entry_line_parts(
+                entry,
+                entries=entries,
+                selected=selected,
+                checked=checked,
+                available_width=available_width,
+            )
+        ),
         available_width,
     )
+
+
+def _render_entry_fragments(
+    entry: HistoryPickerItem,
+    *,
+    entries: Sequence[HistoryPickerItem],
+    selected: bool,
+    checked: bool = False,
+    available_width: int,
+) -> StyleAndTextTuples:
+    """Color only the action token; keyboard focus still owns the whole row."""
+
+    parts = _entry_line_parts(
+        entry,
+        entries=entries,
+        selected=selected,
+        checked=checked,
+        available_width=available_width,
+    )
+    rendered = "".join(parts)
+    focused_style = "class:memcommit.table.selected" if selected else ""
+    if terminal_cell_width(rendered) > available_width:
+        return [(focused_style, elide_terminal_text(rendered, available_width))]
+    prefix, command, suffix, description = parts
+    return [
+        (focused_style, prefix),
+        (
+            focused_style or f"class:{history_action_style(entry.command)}",
+            command,
+        ),
+        (focused_style, suffix + description),
+    ]
 
 
 def _indented_detail(value: str) -> tuple[str, ...]:
@@ -257,6 +311,7 @@ def choose_history(
     title: str | None = None,
     workbench_navigation: SessionWorkbenchNavigation | None = None,
     keep_history: bool = False,
+    staged_checkpoint_uid: str | None = None,
 ) -> HistorySelectionReceipt | HistoryBackNavigation | None:
     """Inspect history or return one exact checkpoint selection.
 
@@ -293,6 +348,13 @@ def choose_history(
         raise ValueError("History initial detail state must be boolean.")
     if not isinstance(keep_history, bool):
         raise ValueError("History preservation state must be boolean.")
+    if staged_checkpoint_uid is not None and (
+        mode != "revert"
+        or staged_checkpoint_uid not in {entry.uid for entry in options}
+    ):
+        raise ValueError(
+            "A staged Revert checkpoint must belong to the visible history."
+        )
     for value, label in (
         (empty_detail, "History empty detail"),
         (title, "History picker title"),
@@ -311,7 +373,15 @@ def choose_history(
 
     navigation = workbench_navigation or SessionWorkbenchNavigation(pane="items")
     navigation.focus("items")
-    navigation.move_row(len(options), 0)
+    staged_row = next(
+        (
+            index
+            for index, entry in enumerate(options)
+            if entry.uid == staged_checkpoint_uid
+        ),
+        0,
+    )
+    navigation.move_row(len(options), staged_row)
     navigation.preview_selected_row()
     # History now follows the shared Items/Viewer contract by default.  The
     # explicit override remains for compatibility with callers that want an
@@ -319,7 +389,7 @@ def choose_history(
     details_open = {
         "value": True if initial_details_open is None else initial_details_open
     }
-    selected_checkpoint = {"uid": None}
+    selected_checkpoint = {"uid": staged_checkpoint_uid}
     history_policy = (
         HorizontalChoiceState(
             (
@@ -367,18 +437,15 @@ def choose_history(
             selected = index == navigation.row_index
             if selected:
                 fragments.append(("[SetCursorPosition]", ""))
-            fragments.append(
-                (
-                    "class:memcommit.table.selected" if selected else "",
-                    _render_entry_line(
-                        entry,
-                        entries=visible,
-                        selected=selected,
-                        checked=(
-                            mode == "revert" and entry.uid == selected_checkpoint["uid"]
-                        ),
-                        available_width=available_width,
+            fragments.extend(
+                _render_entry_fragments(
+                    entry,
+                    entries=visible,
+                    selected=selected,
+                    checked=(
+                        mode == "revert" and entry.uid == selected_checkpoint["uid"]
                     ),
+                    available_width=available_width,
                 )
             )
             if index < end - 1:
@@ -439,9 +506,7 @@ def choose_history(
             )
         else:
             action = "Enter viewer"
-        return (
-            f" FOCUS ITEMS · ↑/↓ move  {action}  Tab switch  {close}" f"  ·  {position}"
-        )
+        return f" FOCUS ITEMS · ↑/↓ move  {action}  Tab switch  {close}  ·  {position}"
 
     list_control = FormattedTextControl(
         text=render_entries,
@@ -717,7 +782,11 @@ def choose_history(
         Application(
             layout=Layout(
                 HSplit(body),
-                focused_element=list_control,
+                focused_element=(
+                    policy_control
+                    if staged_checkpoint_uid is not None
+                    else list_control
+                ),
             ),
             key_bindings=bindings,
             full_screen=True,

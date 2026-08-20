@@ -93,7 +93,9 @@ def test_tty_log_opens_shared_picker(isolated_store, monkeypatch):
     assert observed["context_name"] == "notes"
     assert observed["locations"] == ("notes",)
     assert observed["location_title"] == "LOG · SELECT A CONTEXT"
-    assert observed["annotations"]["notes"] == ("1 direct · 0 descendant operations")
+    assert observed["annotations"]["notes"] == (
+        "1 direct · 0 inherited · 0 descendant commands"
+    )
     assert [row.label for row in observed["operation_rows"]] == ["add", "created"]
     assert observed["operation_rows"][0].style == "report-neutral"
     assert not observed["operation_rows"][1].content.startswith("[atomize]")

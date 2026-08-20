@@ -14,6 +14,7 @@ from memcommit.commands.history_picker import (
     HistoryPickerEntry,
     HistorySelectionReceipt,
     _render_detail,
+    _render_entry_fragments,
     _render_entry_line,
     _visible_bounds,
     choose_history,
@@ -65,6 +66,29 @@ def test_history_row_gives_wide_viewport_to_description():
     assert "…" not in wide
     assert "…" in narrow
     assert get_cwidth(narrow) <= 70
+
+
+def test_history_row_colors_only_the_unfocused_action_token():
+    candidate = entry(1)
+
+    unfocused = _render_entry_fragments(
+        candidate,
+        entries=(candidate,),
+        selected=False,
+        available_width=100,
+    )
+    focused = _render_entry_fragments(
+        candidate,
+        entries=(candidate,),
+        selected=True,
+        available_width=100,
+    )
+
+    assert any(
+        style == "class:impact.add" and text.strip() == "add"
+        for style, text in unfocused
+    )
+    assert all(style == "class:memcommit.table.selected" for style, _text in focused)
 
 
 def test_revert_stages_exact_checkpoint_then_history_policy_then_apply():
@@ -144,6 +168,29 @@ def test_revert_tui_can_keep_all_newer_checkpoints():
         context_name="journal",
         checkpoint_uid=candidate.uid,
         keep_history=True,
+    )
+
+
+def test_revert_accepts_a_checkpoint_staged_in_the_context_tree():
+    candidates = (entry(1), entry(2))
+    with create_pipe_input() as pipe_input:
+        # The Context tree's exact-version Enter already performed checkpoint
+        # selection. History policy and Apply therefore remain, without a
+        # redundant second selection of the same UID in Items.
+        pipe_input.send_text("\r\r")
+        selected = choose_history(
+            candidates,
+            context_name="journal",
+            mode="revert",
+            staged_checkpoint_uid=candidates[1].uid,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == HistorySelectionReceipt(
+        context_name="journal",
+        checkpoint_uid=candidates[1].uid,
     )
 
 
@@ -344,7 +391,7 @@ def test_detail_contains_full_checkpoint_and_direct_change_summaries():
         "1 MemoryRef · 1 query-only Context · 1 embedded Context"
     ) in rendered
     assert (
-        "              Transition: +1 added · ~2 edited · " "-3 removed · 4 reordered"
+        "              Transition: +1 added · ~2 edited · -3 removed · 4 reordered"
     ) in rendered
 
 

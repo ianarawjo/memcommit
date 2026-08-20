@@ -1,0 +1,52 @@
+ REVERT · SELECT A CONTEXT                                                                                                                                                          
+ Roots · practice/1 · practice/2                                                                                                                                                    
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    ▸ practice/1  1 direct · 0 inherited · 0 descendant commands                                                                                                                   ^
+› * ▾ practice/2  6 direct · 1 inherited · 0 descendant commands                                                                                                                    
+  DIRECT COMMANDS · practice/2                                                                                                                                                      
+  · [undo] [CHECKPOINT 78acfe89] [RECEIPT 8f673594] [SOURCE remove f54e0f67] 2026-08-20 08:13 · restored mem remove                                                                 
+  · [redo] [CHECKPOINT ca2232f3] [RECEIPT 15c8e283] [SOURCE remove f54e0f67] 2026-08-20 08:13 · reapplied mem remove                                                                
+  · [undo] [CHECKPOINT b48fd445] [RECEIPT f84ee54b] [SOURCE remove f54e0f67] 2026-08-20 08:13 · restored mem remove                                                                 
+  · [remove] [CHECKPOINT f54e0f67] [MEMORY a5bb51ec] 2026-08-20 08:13 · removed "dfadfadfadfasf"                                                                                    
+  · [edit] [CHECKPOINT 465410f3] [MEMORY a5bb51ec] 2026-08-20 08:13 · content changed · Memory identity preserved                                                                   
+  · [embed] [CHECKPOINT dec920b6] [AFTER MEMORY a5bb51ec] 2026-08-20 08:13 · child practice/1 · into practice/2                                                                     
+  INHERITED HISTORY · source practice/1                                                                                                                                             
+  · [add] [CHECKPOINT 1fb892c6] [MEMORY a5bb51ec] 2026-08-20 08:13 · created "123123 gogogo"                                                                                        
+  · [created] [CHECKPOINT 61194ad8] [CONTEXT 51e32364] 2026-08-20 08:13 · baseline for CONTEXT practice/1 · not counted as a command                                                
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ ↑↓ move  ←→ expand  A expand all  m THIS Context: hide items · M EVERY Context: show items  y copy Context  Y copy visible branch  Enter open checkpoints  q cancel · 2/10 · 2 sele

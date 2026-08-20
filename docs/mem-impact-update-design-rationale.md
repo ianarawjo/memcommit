@@ -142,22 +142,28 @@ Impact projection itself.
 The default TTY grammar is `mem diff [CONTEXT]`. Bare `mem diff` first opens
 the same complete Context tree used by other Context-selecting flows; a Context
 operand resolves directly to that location and skips only this first selector.
-The second screen is the shared checkpoint browser also used by `mem log`.
-Tree annotations count command operations rather than physical checkpoint
-files: `N direct · M descendant operations`. A multi-Context Update shares its
+The second screen is the shared checkpoint browser owned by interactive
+history inspection flows.
+Tree annotations count command units rather than physical checkpoint files:
+`N direct · M inherited · K descendant commands`. Copied Branch lineage stays
+visible under its Source but is not attributed to the branch as a direct
+command. A multi-Context Update shares its
 session/digest identity across every owner and therefore counts once in every
 covering subtree; one Undo or Redo likewise shares its restoration receipt and
 counts once. `init` is the baseline for later transitions and is not presented
 as a Diff operation. Direct and descendant counts remain separate so a parent
 does not falsely appear to own its children's independently restorable history.
-Log and Diff use this same location controller rather than maintaining separate
+Diff and Revert use this same location controller rather than maintaining separate
 catalog, count, or scrolling implementations. Their Context rows and inline
 operation rows therefore form the same navigation-unit sequence: `m` toggles
 the focused Context's operations, `M` toggles all visible operation rows, and
 Up/Down traverses both without turning a preview into a Context selection.
 Operation previews use neutral report styling, not the lavender reserved for
-actual Memory objects. Log retains checkpoint metadata detail while Diff adds
-the directional before/after renderer.
+actual Memory objects. Every compact identifier is role-labelled; focusing a
+command exposes its exact typed identifiers in a passive detail region. Revert
+retains checkpoint restoration review while Diff adds the directional
+before/after renderer. Static `mem log` does not enter this controller and
+retains its existing terminal-independent compatibility output.
 Local Contexts expose their recorded checkpoint history even when no saved
 Update exists. A currently saved Update additionally contributes its frozen
 target catalog and granted affected locations, so its authority-owned

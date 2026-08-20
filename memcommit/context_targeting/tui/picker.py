@@ -5,13 +5,19 @@ from __future__ import annotations
 import sys
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field
-from typing import AbstractSet, Literal, Mapping
+from typing import AbstractSet, Literal, Mapping, TypeVar
 
 from prompt_toolkit.application import Application, get_app
 from prompt_toolkit.filters import Condition
 from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
-from prompt_toolkit.layout import FormattedTextControl, HSplit, Layout, Window
+from prompt_toolkit.layout import (
+    ConditionalContainer,
+    FormattedTextControl,
+    HSplit,
+    Layout,
+    Window,
+)
 from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import Style, merge_styles
@@ -101,11 +107,38 @@ _CONTEXT_PICKER_STYLE = merge_styles(
 CONTEXT_PICKER_STYLE = _CONTEXT_PICKER_STYLE
 
 
+_NestedSelectionT = TypeVar("_NestedSelectionT")
+
+
+def memory_visibility_key_hint(state: ContextTreeState) -> str:
+    """Name the lowercase local and uppercase global preview scopes.
+
+    The case difference is easy to miss in a dense terminal footer.  Keep the
+    key spelling, current action, and affected Context range together so every
+    tree-based caller exposes the same presentation contract.
+    """
+
+    local_action = "hide" if state.memories_visible_for(state.selected_name) else "show"
+    global_action = "hide" if state.show_memories else "show"
+    return (
+        f"m THIS Context: {local_action} items · M EVERY Context: {global_action} items"
+    )
+
+
 @dataclass(frozen=True)
 class ContextMemoryBadge:
     """One independently styled badge attached to a Memory preview row."""
 
     text: str
+    style: str | None = None
+
+
+@dataclass(frozen=True)
+class ContextMemoryDetail:
+    """One trusted key/value field for a focused nested picker row."""
+
+    label: str
+    value: str
     style: str | None = None
 
 
@@ -120,6 +153,9 @@ class ContextMemoryRow:
     source: SourceDisplayFacts | None = None
     label_style: str | None = None
     badges: tuple[ContextMemoryBadge, ...] = ()
+    section_label: str | None = None
+    detail_title: str | None = None
+    details: tuple[ContextMemoryDetail, ...] = ()
 
 
 def context_memory_rows(context: Context) -> tuple[ContextMemoryRow, ...]:
@@ -198,7 +234,7 @@ ContextMemorySelection = DirectMemoryTarget
 
 @dataclass(frozen=True)
 class ContextPickerNavigationUnit:
-    """One viewport stop; only Context units are semantically selectable."""
+    """One viewport stop; callers explicitly opt nested rows into selection."""
 
     kind: Literal["CONTEXT", "MEMORY"]
     context_name: str
@@ -511,6 +547,14 @@ def render_context_memory_previews(
 
     fragments: list[tuple[str, str]] = []
     for memory_index, memory in enumerate(memories):
+        if memory.section_label is not None:
+            fragments.append(("", "\n"))
+            fragments.append(
+                (
+                    "class:report-label",
+                    "  " * (row.depth + 1) + display_escape_text(memory.section_label),
+                )
+            )
         fragments.append(("", "\n"))
         memory_is_focused = memory_anchor == (row.name, memory_index)
         if memory_is_focused:
@@ -555,6 +599,7 @@ def render_context_memory_previews(
             (label_style, f"[{display_escape_text(display_label)}]"),
         ]
         for badge in memory.badges:
+            styled_leading_fragments.append((memory_style, " "))
             badge_style = (
                 memory_style
                 if memory_is_focused or badge.style is None
@@ -611,6 +656,37 @@ def render_context_memory_previews(
                     " " * (get_cwidth(leading) + annotation_width) + continuation,
                 )
             )
+    return fragments
+
+
+def render_context_memory_detail(
+    memory: ContextMemoryRow | None,
+) -> list[tuple[str, str]]:
+    """Render the exact typed fields attached to one focused nested row."""
+
+    if memory is None or not memory.details:
+        return []
+    title = memory.detail_title or memory.label
+    label_width = max(len(detail.label) for detail in memory.details)
+    fragments: list[tuple[str, str]] = [
+        ("class:report-label", f" SELECTED COMMAND · {display_escape_text(title)}")
+    ]
+    for detail in memory.details:
+        fragments.append(("", "\n"))
+        fragments.append(
+            (
+                "class:report-neutral",
+                f" {display_escape_text(detail.label):<{label_width}}  ",
+            )
+        )
+        fragments.append(
+            (
+                f"class:{detail.style}"
+                if detail.style is not None
+                else "class:report-neutral",
+                display_escape_text(detail.value),
+            )
+        )
     return fragments
 
 
@@ -843,6 +919,8 @@ def context_option_continuation_prefixes(
         if not memory_is_visible or not row.materialized:
             continue
         for memory in (memories_by_context or {}).get(row.name, ()):
+            if memory.section_label is not None:
+                prefixes.append(" " * (2 * (row.depth + 1)))
             leading = (
                 "  " * (row.depth + 1) + f"· [{display_escape_text(memory.label)}] "
             )
@@ -884,6 +962,7 @@ def choose_context(
     require_tty: bool = True,
     title: str = "Select a Context",
     accept_label: str = "select",
+    nested_accept_label: str | None = None,
     memory_loader: Callable[[str], Sequence[ContextMemoryRow]] | None = None,
     browse_only: bool = False,
     initially_expand_selected: bool = False,
@@ -895,10 +974,11 @@ def choose_context(
     display_names: Mapping[str, str] | None = None,
     descendant_scope_names: AbstractSet[str] = frozenset(),
     selectable_memories: bool = False,
+    nested_selection_factory: (Callable[[str, str], _NestedSelectionT] | None) = None,
     memory_scope_root: str | None = None,
     memory_reach_state: ContextReachState | None = None,
-) -> str | ContextSubtreeSelection | ContextMemorySelection | None:
-    """Return the selected Context name, or ``None`` when cancelled."""
+) -> str | ContextSubtreeSelection | ContextMemorySelection | _NestedSelectionT | None:
+    """Return one caller-authorized Context or exact nested-item receipt."""
     options = tuple(names)
     virtual = tuple(virtual_names)
     if not options:
@@ -936,6 +1016,12 @@ def choose_context(
         )
     if selectable_memories and memory_loader is None:
         raise ValueError("Selectable Memories require a Memory loader.")
+    if nested_selection_factory is not None and memory_loader is None:
+        raise ValueError("Selectable nested items require an item loader.")
+    if selectable_memories and nested_selection_factory is not None:
+        raise ValueError(
+            "Nested rows cannot return both Memory and operation selections."
+        )
     if (memory_scope_root is None) != (memory_reach_state is None):
         raise ValueError(
             "A scoped Memory picker requires both its root and reach state."
@@ -974,6 +1060,14 @@ def choose_context(
         or not isinstance(accept_label, str)
         or not accept_label.strip()
         or any(character in accept_label for character in "\r\n")
+        or (
+            nested_accept_label is not None
+            and (
+                not isinstance(nested_accept_label, str)
+                or not nested_accept_label.strip()
+                or any(character in nested_accept_label for character in "\r\n")
+            )
+        )
     ):
         raise ValueError("Context selection labels must be nonempty single lines.")
 
@@ -1015,6 +1109,9 @@ def choose_context(
     memory_anchor: tuple[str, int] | None = None
     copy_status: PlainTextClipboardReceipt | None = None
     navigation_accelerator = NavigationAccelerator()
+    nested_items_selectable = (
+        selectable_memories or nested_selection_factory is not None
+    )
 
     def memory_name_is_in_reach(name: str) -> bool:
         if memory_scope_root is None or memory_reach_state is None:
@@ -1073,7 +1170,7 @@ def choose_context(
             display_names=labels,
             wrap_width=wrap_width,
             memory_anchor=memory_anchor,
-            selectable_memories=selectable_memories,
+            selectable_memories=nested_items_selectable,
         )
 
     def navigation_units() -> tuple[ContextPickerNavigationUnit, ...]:
@@ -1094,6 +1191,15 @@ def choose_context(
             if candidate in units:
                 return candidate
         return ContextPickerNavigationUnit("CONTEXT", state.selected_name)
+
+    def focused_nested_row() -> ContextMemoryRow | None:
+        if memory_anchor is None:
+            return None
+        context_name, memory_index = memory_anchor
+        memories = memory_cache.get(context_name, ())
+        if not 0 <= memory_index < len(memories):
+            return None
+        return memories[memory_index]
 
     def move_navigation_unit(direction: int) -> bool:
         nonlocal memory_anchor
@@ -1285,14 +1391,21 @@ def choose_context(
         navigation_accelerator.reset()
         clear_copy_status()
         if memory_anchor is not None:
-            if selectable_memories:
+            if nested_items_selectable:
                 context_name, memory_index = memory_anchor
                 memory = memory_cache[context_name][memory_index]
                 if memory.selector is not None:
                     event.app.exit(
-                        result=ContextMemorySelection(
-                            context_name=context_name,
-                            selector=memory.selector,
+                        result=(
+                            nested_selection_factory(
+                                context_name,
+                                memory.selector,
+                            )
+                            if nested_selection_factory is not None
+                            else ContextMemorySelection(
+                                context_name=context_name,
+                                selector=memory.selector,
+                            )
                         )
                     )
                     return
@@ -1429,6 +1542,28 @@ def choose_context(
         get_line_prefix=continuation_prefix,
         right_margins=[WrappedScrollbarMargin(display_arrows=True)],
     )
+    detail_control = FormattedTextControl(
+        lambda: render_context_memory_detail(focused_nested_row()),
+        focusable=False,
+        show_cursor=False,
+    )
+    detail_visible = Condition(
+        lambda: bool(focused_nested_row() is not None and focused_nested_row().details)
+    )
+    detail_region = ConditionalContainer(
+        HSplit(
+            [
+                Window(height=1, char="─", dont_extend_height=True),
+                Window(
+                    detail_control,
+                    wrap_lines=True,
+                    height=Dimension(min=3, max=9, preferred=7),
+                    dont_extend_height=True,
+                ),
+            ]
+        ),
+        filter=detail_visible,
+    )
 
     def render_footer():
         if reach_control is not None and get_app().layout.has_focus(reach_control):
@@ -1443,8 +1578,8 @@ def choose_context(
         if memory_anchor is not None:
             memory = memory_cache[memory_anchor[0]][memory_anchor[1]]
             enter_action = (
-                f"Enter {display_escape_text(accept_label)}"
-                if selectable_memories and memory.selector is not None
+                "Enter " + display_escape_text(nested_accept_label or accept_label)
+                if nested_items_selectable and memory.selector is not None
                 else "Enter preview only"
             )
         elif name in tree.materialized_names:
@@ -1463,15 +1598,7 @@ def choose_context(
             enter_action = "Enter open"
         memory_action = ""
         if memory_loader is not None:
-            local_action = (
-                "m hide items here"
-                if state.memories_visible_for(state.selected_name)
-                else "m show items here"
-            )
-            global_action = (
-                "M hide all items" if state.show_memories else "M show all items"
-            )
-            memory_action = f"{local_action}  {global_action}  "
+            memory_action = memory_visibility_key_hint(state) + "  "
         copy_action = (
             "y/Y copy item  "
             if memory_anchor is not None
@@ -1525,23 +1652,28 @@ def choose_context(
                 header,
                 Window(height=1, char="─"),
                 options_window,
-                Window(height=1, char="─"),
+                detail_region,
+                Window(height=1, char="─", dont_extend_height=True),
                 footer,
             ]
         )
-    app: Application[str | ContextSubtreeSelection | ContextMemorySelection | None] = (
-        Application(
-            layout=Layout(
-                body,
-                focused_element=(reach_control or control),
-            ),
-            key_bindings=bindings,
-            full_screen=True,
-            erase_when_done=True,
-            input=app_input,
-            output=app_output,
-            style=_CONTEXT_PICKER_STYLE,
-        )
+    app: Application[
+        str
+        | ContextSubtreeSelection
+        | ContextMemorySelection
+        | _NestedSelectionT
+        | None
+    ] = Application(
+        layout=Layout(
+            body,
+            focused_element=(reach_control or control),
+        ),
+        key_bindings=bindings,
+        full_screen=True,
+        erase_when_done=True,
+        input=app_input,
+        output=app_output,
+        style=_CONTEXT_PICKER_STYLE,
     )
     try:
         return app.run()

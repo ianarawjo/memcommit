@@ -247,7 +247,7 @@ def _restore_part(
     )
 
 
-def _unit_uid(
+def command_unit_uid(
     *,
     checkpoint_uid: str,
     command: str,
@@ -495,7 +495,7 @@ def _context_parts(
         ):
             originals.append(
                 _OriginalPart(
-                    unit_uid=_unit_uid(
+                    unit_uid=command_unit_uid(
                         checkpoint_uid=uid,
                         command=command,
                         args=args,
@@ -539,7 +539,7 @@ def _context_parts(
             continue
         originals.append(
             _OriginalPart(
-                unit_uid=_unit_uid(
+                unit_uid=command_unit_uid(
                     checkpoint_uid=uid,
                     command=command,
                     args=args,
