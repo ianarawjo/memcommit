@@ -140,10 +140,12 @@ prompt-toolkit selector:
   above the pinned footer separator. The blank space therefore remains visibly
   part of the complete A–Z inventory instead of resembling additional unboxed
   content. `BY KIND` keeps content-sized boxes and spacing between categories.
-- Each command record keeps its name and description on one aligned line
-  inside the owning category box. A description wraps only when the terminal
-  width requires it, with continuation text aligned to its original start
-  column. The box containing the focused command uses the
+- Each command record binds its unlabelled operation summary and compact
+  `WHEN ·` use case with one `┬ / │ / └` junction after the displayed command:
+  `mem operation ─┬ Summary` followed by an aligned `└ WHEN · Use case`.
+  Summary and When continuations retain that relationship at every terminal
+  width instead of switching to a separate wide-screen column grammar. The box
+  containing the focused command uses the
   common blue heavy border, while only the exact focused command or Form gets
   the blue selection surface. Expansion keeps Forms immediately beneath their
   command without introducing a nested command box. The next command begins
@@ -249,7 +251,7 @@ Ordinary TUI entry is described inside expanded Forms instead of repeating a
 badge across the inventory.
 
 One implementation-scope exception may use a compact bracketed maturity tag.
-`import [PARTIAL]` keeps Import's ordinary Summary and `USE WHEN` readable in
+`import [PARTIAL]` keeps Import's ordinary Summary and `WHEN ·` use case readable in
 the collapsed inventory, while its expanded `CURRENT LIMITATION` detail states
 exactly which transfers exist and which broader import/export routes do not.
 This tag is Help-facing product maturity, not an operation-route judgment: it

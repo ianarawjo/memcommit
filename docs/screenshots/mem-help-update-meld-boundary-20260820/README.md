@@ -16,7 +16,7 @@ consult a Profile or current Context, and every state is read-only.
 
 | Capture | Exact command | PTY | Profile / current Context | Preceding input | Visible state | Durable mutation |
 |---|---|---|---|---|---|---|
-| `01-update-meld-collapsed` | `mem help` | `180×52` | not consulted / not consulted | `Tab` ×4, `Down` ×6 | Update focused; no expanded boundary note | none |
+| `01-update-meld-collapsed` | `mem help` | `180×52` | not consulted / not consulted | `Tab` ×4, `Down` ×7 | Update focused; no expanded boundary note | none |
 | `02-update-note-expanded` | same process | `180×52` | not consulted / not consulted | `Right` | Update expanded with the shared revision-oriented versus merge-oriented note | none |
 | `03-meld-note-expanded` | same process | `180×52` | not consulted / not consulted | `Left`, `Down`, `Right` | Meld expanded with the byte-identical shared note | none |
 | `04-read-only-public-verification` | `python -c` public Help detail lookup | `180×52` | not consulted / not consulted | separate process | Both operation-local detail IDs resolve to `SEMANTIC_BOUNDARY` and the same body | none |

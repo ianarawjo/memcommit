@@ -29,6 +29,11 @@ from memcommit.interfaces.tui.core.keybindings import (
     NavigationAccelerator,
     bind_case_insensitive_key,
 )
+from memcommit.interfaces.tui.core.text_layout import (
+    pad_terminal_text,
+    terminal_cell_width,
+    wrap_terminal_text,
+)
 from memcommit.interfaces.tui.components.frame import (
     bind_focused_frame_style,
     horizontal_rule,
@@ -977,19 +982,8 @@ def _entry_line(
     return f"{label:<{name_width}} - {entry.description}"
 
 
-_HELP_SIDE_BY_SIDE_MIN_BODY_WIDTH = 108
-_HELP_WIDE_COLUMN_SEPARATOR = " │ "
-_HELP_USE_WHEN_LABEL = "USE WHEN:"
-_HELP_USE_WHEN_PREFIX = _HELP_USE_WHEN_LABEL + " "
-
-
-def _wrapped_help_text(value: str, *, width: int) -> list[str]:
-    return textwrap.wrap(
-        display_escape_text(value),
-        width=max(1, width),
-        break_long_words=True,
-        break_on_hyphens=False,
-    ) or [""]
+_HELP_USE_WHEN_LABEL = "WHEN"
+_HELP_USE_WHEN_PREFIX = _HELP_USE_WHEN_LABEL + " · "
 
 
 def _help_command_rows(
@@ -997,92 +991,62 @@ def _help_command_rows(
     *,
     command_prefix: str,
     content_width: int,
-) -> list[tuple[str, str, int | None]]:
-    """Project summary and use case beside each other when space permits."""
+) -> list[tuple[str, str, str, int | None]]:
+    """Project one command as a connected Description/When record."""
 
-    body_width = max(1, content_width - len(command_prefix))
+    prefix_width = terminal_cell_width(command_prefix)
+    connector_width = 2
+    body_width = max(1, content_width - prefix_width - connector_width)
     best_for = None if entry.operation_help is None else entry.operation_help.best_for
-    if best_for is None:
-        summary_lines = _wrapped_help_text(entry.description, width=body_width)
-        return [
-            (
-                command_prefix if index == 0 else " " * len(command_prefix),
-                line.ljust(body_width),
-                None,
-            )
-            for index, line in enumerate(summary_lines)
-        ]
-
-    if body_width >= _HELP_SIDE_BY_SIDE_MIN_BODY_WIDTH:
-        # The divider makes the equal Summary and use-case columns readable as
-        # distinct roles without adding another row to the wide inventory.
-        column_width = content_width - len(_HELP_WIDE_COLUMN_SEPARATOR)
-        left_width = column_width // 2
-        summary_width = max(1, left_width - len(command_prefix))
-        best_for_width = max(1, column_width - left_width)
-        summary_lines = _wrapped_help_text(
-            entry.description,
-            width=summary_width,
-        )
-        best_for_lines = textwrap.wrap(
-            _HELP_USE_WHEN_PREFIX + display_escape_text(best_for),
-            width=best_for_width,
-            subsequent_indent=" " * len(_HELP_USE_WHEN_PREFIX),
-            break_long_words=True,
-            break_on_hyphens=False,
-        ) or [_HELP_USE_WHEN_LABEL]
-        row_count = max(len(summary_lines), len(best_for_lines))
-        rows: list[tuple[str, str, int | None]] = []
-        for row_index in range(row_count):
-            prefix = command_prefix if row_index == 0 else " " * len(command_prefix)
-            summary = summary_lines[row_index] if row_index < len(summary_lines) else ""
-            use_case = (
-                best_for_lines[row_index] if row_index < len(best_for_lines) else ""
-            )
-            rows.append(
-                (
-                    prefix,
-                    summary.ljust(summary_width)
-                    + _HELP_WIDE_COLUMN_SEPARATOR
-                    + use_case.ljust(best_for_width),
-                    summary_width + len(_HELP_WIDE_COLUMN_SEPARATOR)
-                    if row_index == 0
-                    else None,
-                )
-            )
-        return rows
-
-    summary_lines = _wrapped_help_text(entry.description, width=body_width)
-    rows = [
-        (
-            command_prefix if index == 0 else " " * len(command_prefix),
-            line.ljust(body_width),
-            None,
-        )
-        for index, line in enumerate(summary_lines)
+    summary_lines = wrap_terminal_text(
+        display_escape_text(entry.description),
+        body_width,
+    )
+    body_rows: list[tuple[str, int | None, bool]] = [
+        (pad_terminal_text(line, body_width), None, False) for line in summary_lines
     ]
-
-    stacked_prefix = " " * min(
-        len(command_prefix),
-        max(0, content_width - 1),
-    )
-    use_case_prefix = stacked_prefix + _HELP_USE_WHEN_PREFIX
-    best_for_lines = textwrap.wrap(
-        use_case_prefix + display_escape_text(best_for),
-        width=content_width,
-        subsequent_indent=" " * len(use_case_prefix),
-        break_long_words=True,
-        break_on_hyphens=False,
-    ) or [stacked_prefix + _HELP_USE_WHEN_LABEL]
-    rows.extend(
-        (
-            "",
-            line.ljust(content_width),
-            len(stacked_prefix) if index == 0 else None,
+    if best_for is not None:
+        value_width = max(1, body_width - terminal_cell_width(_HELP_USE_WHEN_PREFIX))
+        use_case_lines = wrap_terminal_text(display_escape_text(best_for), value_width)
+        continuation = " " * terminal_cell_width(_HELP_USE_WHEN_PREFIX)
+        body_rows.extend(
+            (
+                pad_terminal_text(
+                    (_HELP_USE_WHEN_PREFIX if index == 0 else continuation) + line,
+                    body_width,
+                ),
+                0 if index == 0 else None,
+                True,
+            )
+            for index, line in enumerate(use_case_lines)
         )
-        for index, line in enumerate(best_for_lines)
-    )
-    return rows
+
+    semantic_row_count = len(body_rows)
+    row_count = max(semantic_row_count, 1)
+    has_when = any(is_when for _body, _offset, is_when in body_rows)
+
+    def connector(index: int) -> str:
+        if index >= semantic_row_count:
+            return " " * connector_width
+        if not has_when:
+            return "─ " if index == 0 else " " * connector_width
+        if index == 0:
+            return "┬ "
+        if body_rows[index][2] and not body_rows[index - 1][2]:
+            return "└ "
+        if body_rows[index][2]:
+            return " " * connector_width
+        return "│ "
+
+    return [
+        (
+            command_prefix if index == 0 else " " * prefix_width,
+            connector(index),
+            body_rows[index][0],
+            body_rows[index][1],
+        )
+        for index in range(row_count)
+    ]
 
 
 def _render_plain_inventory(entries: list[CommandEntry]) -> None:
@@ -1169,9 +1133,9 @@ def _help_group_fragments(
         if command_focused:
             fragments.append(("[SetCursorPosition]", ""))
         command_prefix = (
-            f"{'▾' if expanded else '▸'} mem {labels[index]:<{name_width}}  "
+            f"{'▾' if expanded else '▸'} mem {labels[index]:<{name_width}} ─"
         )
-        for prefix, body, use_when_offset in _help_command_rows(
+        for prefix, connector, body, use_when_offset in _help_command_rows(
             entry,
             command_prefix=command_prefix,
             content_width=content_width,
@@ -1184,6 +1148,7 @@ def _help_group_fragments(
                 else "class:help-command"
             )
             fragments.append((prefix_style, f" {prefix}"))
+            fragments.append((body_style, connector))
             if use_when_offset is None:
                 fragments.append((body_style, f"{body} "))
             else:
@@ -1191,10 +1156,7 @@ def _help_group_fragments(
                 fragments.extend(
                     [
                         (body_style, body[:use_when_offset]),
-                        (
-                            f"{body_style} bold".strip(),
-                            body[use_when_offset:label_end],
-                        ),
+                        (body_style, body[use_when_offset:label_end]),
                         (body_style, body[label_end:] + " "),
                     ]
                 )
