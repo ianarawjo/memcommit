@@ -249,6 +249,19 @@ The [180×52 compact Rationale capture](screenshots/mem-rationale-compact-202608
 records target selection, the shortened Viewer, and read-only close
 verification.
 
+The [character-bound edge-case capture](screenshots/mem-rationale-character-bounds-20260820/README.md)
+additionally verifies the boundary rather than only the ordinary presentation:
+2 source characters produce limit 1 and no provider connection; 16 source
+characters produce limit 15 and still skip inference; 17 source characters
+produce limit 16 and accept an exact-length result; and a 600-character frame
+accepts 480 characters but rejects 481 without replacing the valid cache. An
+actual Context above the 1,000,000-character input bound freezes 49 of 105
+nearest candidates, reports that reduction, and still caps output at 480. A
+3,313-character retained Trace projects at 320. Tests also cover NFC-equivalent
+deduplication, multiline and control-character rejection, and terminal escaping
+that cannot expand visible prose past its semantic limit. Every captured path
+leaves Context content unchanged.
+
 `--recorded-only` neither reads nor writes the inference cache and never
 connects the inference provider. `--refresh` bypasses a matching cache entry
 and replaces it only after a new provider response passes normal validation;

@@ -108,6 +108,13 @@ class BadRationaleProvider:
                     "support_ids": [],
                 }
             )
+        if self.mode == "control-character":
+            return json.dumps(
+                {
+                    "explanation": "POISON\u0000control",
+                    "support_ids": [],
+                }
+            )
         assert self.mode == "invalid-output"
         return json.dumps(
             {
@@ -343,6 +350,7 @@ def test_invalid_cache_is_never_rendered_and_a_fresh_result_repairs_it(
         "invalid-output",
         "over-character-limit",
         "multiple-paragraphs",
+        "control-character",
     ],
 )
 def test_failed_or_invalid_provider_result_is_not_cached(
@@ -486,6 +494,235 @@ def test_nfc_equivalent_evidence_counts_once_before_provider_planning(
     assert payload["inference_status"] == "INSUFFICIENT_EVIDENCE"
     assert payload["character_budgets"]["inference_source"] == 1
     assert payload["character_budgets"]["inference_limit"] == 0
+
+
+def test_inference_minimum_boundary_skips_15_but_accepts_16_characters(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    below = ops.init("rationale-below-minimum")
+    below_target, _ = ops.add_many(below, ["12345678", "abcdefgh"])
+    store.save(below)
+    store.set_current(below.name)
+    _forbid_provider(monkeypatch)
+
+    rejected = invoke("rationale", below_target.uid, "--json")
+
+    assert rejected.exit_code == 0, rejected.output
+    rejected_payload = json.loads(rejected.output)
+    assert rejected_payload["inference_status"] == "INSUFFICIENT_EVIDENCE"
+    assert rejected_payload["character_budgets"]["inference_source"] == 16
+    assert rejected_payload["character_budgets"]["inference_limit"] == 15
+
+    accepted = ops.init("rationale-at-minimum")
+    accepted_target, _ = ops.add_many(accepted, ["12345678", "abcdefghi"])
+    store.save(accepted)
+    store.set_current(accepted.name)
+    calls: list[int] = []
+
+    class Provider:
+        def complete(self, prompt, *, operation, output_schema=None):
+            assert operation == "rationale inference"
+            assert output_schema is not None
+            limit = output_schema["properties"]["explanation"]["maxLength"]
+            calls.append(limit)
+            candidate = json.loads(prompt.split(RATIONALE_MARKER, 1)[1])[
+                "candidates"
+            ][0]
+            return json.dumps(
+                {
+                    "explanation": "0123456789ABCDEF",
+                    "support_ids": [candidate["candidate_id"]],
+                }
+            )
+
+    _patch_provider(monkeypatch, Provider())
+    accepted_result = invoke("rationale", accepted_target.uid, "--json")
+
+    assert accepted_result.exit_code == 0, accepted_result.output
+    accepted_payload = json.loads(accepted_result.output)
+    assert calls == [16]
+    assert accepted_payload["inference_status"] == "AVAILABLE"
+    assert accepted_payload["character_budgets"]["inference_source"] == 17
+    assert accepted_payload["character_budgets"]["inference_limit"] == 16
+    assert accepted_payload["inference"]["explanation"] == "0123456789ABCDEF"
+
+
+def test_terminal_escaping_cannot_expand_visible_inference_past_its_limit(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    ctx = ops.init("rationale-terminal-escape")
+    target, _ = ops.add_many(ctx, ["12345678", "abcdefghi"])
+    store.save(ctx)
+    store.set_current(ctx.name)
+
+    class Provider:
+        def complete(self, prompt, *, operation, output_schema=None):
+            candidate = json.loads(prompt.split(RATIONALE_MARKER, 1)[1])[
+                "candidates"
+            ][0]
+            return json.dumps(
+                {
+                    "explanation": "123456789012345\u202e",
+                    "support_ids": [candidate["candidate_id"]],
+                }
+            )
+
+    _patch_provider(monkeypatch, Provider())
+
+    result = invoke("rationale", target.uid)
+
+    assert result.exit_code == 0, result.output
+    assert "\u202e" not in result.output
+    lines = result.output.splitlines()
+    inference_index = lines.index("INFERENCE — within Context, not recorded")
+    visible_explanation = lines[inference_index + 2].strip()
+    assert len(visible_explanation) <= 16
+
+
+def test_absolute_480_character_boundary_accepts_exact_and_rejects_one_more(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    ctx = ops.init("rationale-absolute-boundary")
+    target, _ = ops.add_many(ctx, ["T" * 300, "N" * 300])
+    store.save(ctx)
+    store.set_current(ctx.name)
+    limits: list[int] = []
+
+    class ExactProvider:
+        def complete(self, prompt, *, operation, output_schema=None):
+            assert output_schema is not None
+            limit = output_schema["properties"]["explanation"]["maxLength"]
+            limits.append(limit)
+            candidate = json.loads(prompt.split(RATIONALE_MARKER, 1)[1])[
+                "candidates"
+            ][0]
+            return json.dumps(
+                {
+                    "explanation": "X" * limit,
+                    "support_ids": [candidate["candidate_id"]],
+                }
+            )
+
+    _patch_provider(monkeypatch, ExactProvider())
+    exact = invoke("rationale", target.uid, "--json")
+
+    assert exact.exit_code == 0, exact.output
+    exact_payload = json.loads(exact.output)
+    assert limits == [480]
+    assert len(exact_payload["inference"]["explanation"]) == 480
+    cache_path = rationale_inference_path(ctx.uid, target.uid)
+    cached_before = cache_path.read_bytes()
+
+    too_long = BadRationaleProvider("over-character-limit")
+    _patch_provider(monkeypatch, too_long)
+    rejected = invoke("rationale", target.uid, "--refresh", "--json")
+
+    assert rejected.exit_code == 0, rejected.output
+    rejected_payload = json.loads(rejected.output)
+    assert rejected_payload["inference"] is None
+    assert rejected_payload["inference_status"] == "UNAVAILABLE"
+    assert cache_path.read_bytes() == cached_before
+
+    _forbid_provider(monkeypatch)
+    reused = invoke("rationale", target.uid, "--json")
+    assert reused.exit_code == 0, reused.output
+    assert len(json.loads(reused.output)["inference"]["explanation"]) == 480
+
+
+def test_oversized_context_reduces_candidates_and_keeps_output_at_480(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    ctx = ops.init("rationale-oversized-context")
+    contents = ["Large target."] + [
+        f"{index:03d}" + (chr(65 + index % 26) * 9_997)
+        for index in range(105)
+    ]
+    target, *_ = ops.add_many(ctx, contents)
+    store.save(ctx)
+    store.set_current(ctx.name)
+    observed: dict[str, object] = {}
+
+    class Provider:
+        def complete(self, prompt, *, operation, output_schema=None):
+            assert output_schema is not None
+            payload = json.loads(prompt.split(RATIONALE_MARKER, 1)[1])
+            observed["candidate_count"] = len(payload["candidates"])
+            observed["context_scope"] = payload["context_scope"]
+            observed["limit"] = output_schema["properties"]["explanation"][
+                "maxLength"
+            ]
+            return json.dumps(
+                {
+                    "explanation": "L" * 480,
+                    "support_ids": [payload["candidates"][0]["candidate_id"]],
+                }
+            )
+
+    _patch_provider(monkeypatch, Provider())
+    structured = invoke("rationale", target.uid, "--json")
+
+    assert structured.exit_code == 0, structured.output
+    payload = json.loads(structured.output)
+    assert 0 < observed["candidate_count"] < 105
+    assert observed["context_scope"].startswith("nearest readable subtree")
+    assert observed["limit"] == 480
+    assert len(payload["inference"]["explanation"]) == 480
+    assert any("nearest-Memory subset" in item for item in payload["warnings"])
+
+
+def test_long_provenance_projection_is_capped_at_320_characters(
+    isolated_store,
+    monkeypatch,
+):
+    from memcommit.context import AutoCheckpoint
+
+    store = MemoryStore()
+    ctx = ops.init("rationale-long-provenance")
+    target = ops.add(ctx, "Initial " + ("A" * 240))
+    store.save(
+        ctx,
+        AutoCheckpoint(command="add", args={}, description="Added long Memory"),
+    )
+    for index in range(12):
+        content = f"Revision {index:02d} " + (chr(66 + index) * 240)
+        ops.edit(ctx, target.uid, content)
+        store.save(
+            ctx,
+            AutoCheckpoint(
+                command="edit",
+                args={"uid": target.uid, "content": content},
+                description=f"Long revision {index:02d}",
+            ),
+        )
+    store.set_current(ctx.name)
+    _forbid_provider(monkeypatch)
+
+    result = invoke("rationale", target.uid, "--recorded-only")
+    structured = invoke(
+        "rationale",
+        target.uid,
+        "--recorded-only",
+        "--json",
+    )
+
+    assert result.exit_code == 0, result.output
+    assert structured.exit_code == 0, structured.output
+    payload = json.loads(structured.output)
+    budgets = payload["character_budgets"]
+    assert budgets["provenance_source"] > 320
+    assert budgets["provenance_limit"] == 320
+    lines = result.output.splitlines()
+    provenance = lines[lines.index("PROVENANCE") + 1].strip()
+    assert len(provenance) <= 320
+    assert "INFERENCE — not requested" in result.output
 
 
 def test_cache_publication_failure_keeps_the_valid_inference_available(

@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃Rationale [8c69f08c] · bounds/oversized-context                                                                                                                                  ^┃
+┃                                                                                                                                                                                  ┃
+┃MEMORY                                                                                                                                                                            ┃
+┃  Large target.                                                                                                                                                                   ┃
+┃                                                                                                                                                                                  ┃
+┃PROVENANCE                                                                                                                                                                        ┃
+┃  HISTORY_GAP (UNRECORDED) · ? (earliest origin not retained) → [8c69f08c]@1 “Large target.”                                                                                      ┃
+┃                                                                                                                                                                                  ┃
+┃INFERENCE — within Context, not recorded                                                                                                                                          ┃
+┃  bounds/oversized-context and readable descendants · 1 Context(s)                                                                                                                ┃
+┃  Large Context evidence is reduced to a bounded nearest-Memory frame, while the explanation remains shorter than the semantic source. Large                                      ┃
+┃  Context evidence is reduced to a bounded nearest-Memory frame, while the explanation remains shorter than the semantic source. Large                                            ┃
+┃  Context evidence is reduced to a bounded nearest-Memory frame, while the explanation remains shorter than the semantic source. Large                                            ┃
+┃  Context evidence is reduced to a bounded nearest-Memory frame, while the ex                                                                                                     ┃
+┃                                                                                                                                                                                  ┃
+┃LIMITS                                                                                                                                                                            ┃
+┃  - The current Context contains changes that no retained checkpoint explains.                                                                                                    ┃
+┃  - The Context exceeded the one-shot rationale input limit; inference used an explicit nearest-Memory subset.                                                                    ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ RATIONALE REPORT · ↑/↓ scroll · PgUp/PgDn page · Home/End · Esc/Backspace/Q close · read-only
