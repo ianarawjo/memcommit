@@ -38,7 +38,8 @@ ADD_DETAILS = (
                 label="EXACT MEMORY VERSION",
                 guidance=(
                     "Use mem reference to retain an immutable snapshot of the "
-                    "reviewed Source Memory."
+                    "reviewed Source Memory. Run it bare interactively, or use "
+                    "mem reference MEMORY_SELECTOR --from SOURCE_CONTEXT."
                 ),
             ),
             OperationComparisonOption(

@@ -28,8 +28,8 @@ def _close(child: object) -> None:
 
 def _assert_merge_copy(rendered: str) -> None:
     assert "mem merge" in rendered
-    assert "Add Source-only items to the current Target" in rendered
-    assert "USE WHEN: Bringing work from a copied or branched" in rendered
+    assert "Add Source-only items to a selected Target" in rendered
+    assert "WHEN · Appending Source-only items or bringing a copied" in rendered
 
 
 def main() -> None:
@@ -45,7 +45,7 @@ def main() -> None:
     # completely visible while remaining collapsed.
     child.send("\x1b[Z\x1b[C")
     _BASE._pump(child, seconds=0.3)
-    child.send("\t\x1b[H" + "\x1b[B" * 36)
+    child.send("\t\x1b[H" + "\x1b[B" * 38)
     _BASE._pump(child, seconds=0.8)
     collapsed = _BASE._snapshot(recorder, "01-wide-collapsed")
     assert "▸ mem merge" in collapsed
@@ -53,13 +53,14 @@ def main() -> None:
     assert "FORM 1" not in collapsed
     _BASE._assert_color(recorder.getvalue())
 
-    child.send("\x1b[A\x1b[C")
+    child.send("\x1b[A\x1b[C\x1b[B")
     _BASE._pump(child, seconds=0.8)
     expanded = _BASE._snapshot(recorder, "02-wide-expanded")
     assert "▾ mem merge" in expanded
     _assert_merge_copy(expanded)
-    assert "Source Context -> current Target Context" in expanded
+    assert "Source Context -> selected Target Context" in expanded
     assert "EXECUTION · DETERMINISTIC" in expanded
+    assert "--into [target_context]" in expanded
     assert "FORM 1" in expanded
     _close(child)
 
@@ -69,7 +70,7 @@ def main() -> None:
     _BASE._pump(compact_child, seconds=0.8)
     compact_child.send("\x1b[Z\x1b[C")
     _BASE._pump(compact_child, seconds=0.3)
-    compact_child.send("\t\x1b[H" + "\x1b[B" * 36)
+    compact_child.send("\t\x1b[H" + "\x1b[B" * 38)
     _BASE._pump(compact_child, seconds=0.8)
     compact = _BASE._snapshot(compact_recorder, "03-compact-collapsed")
     assert "30 100" in compact_recorder.getvalue()
@@ -77,12 +78,13 @@ def main() -> None:
     _assert_merge_copy(compact)
     assert "FORM 1" not in compact
 
-    compact_child.send("\x1b[A\x1b[C")
+    compact_child.send("\x1b[A\x1b[C\x1b[B")
     _BASE._pump(compact_child, seconds=0.8)
     compact_expanded = _BASE._snapshot(compact_recorder, "04-compact-expanded")
     assert "▾ mem merge" in compact_expanded
     _assert_merge_copy(compact_expanded)
     assert "EXECUTION · DETERMINISTIC" in compact_expanded
+    assert "--into [target_context]" in compact_expanded
     assert "FORM 1" in compact_expanded
     assert (
         _BASE.re.search(

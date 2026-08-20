@@ -30,27 +30,27 @@ _BASE.ROWS = ROWS
 
 CASES = (
     (
-        "01-single-compare",
+        "01-ranked-compare",
         "두 Context의 차이를 보고 싶어",
         ("mem compare",),
     ),
     (
-        "02-multiple-compare-search",
+        "02-ranked-compare-search",
         "두 Context를 비교하고 관련 Memories도 의미로 찾고 싶어",
         ("mem compare", "mem search"),
     ),
     (
-        "03-metaphorical-conflict",
+        "03-ranked-metaphorical-conflict",
         "메모리들이 서로 싸우고 있는지 좀 봐줘",
         ("mem find-conflicts",),
     ),
     (
-        "04-unrelated-no-match",
+        "04-ranked-unrelated",
         "🦆 보라색 냉장고가 달에서 왈츠를 춘다 ??? 123",
         (),
     ),
     (
-        "05-generic-answer-language-query",
+        "05-ranked-generic-answer-language-query",
         "답 해결할 수 있는 문장",
         ("mem query",),
     ),
@@ -87,14 +87,16 @@ def _spawn_lookup(
 
 
 def _assert_focused_contract(plain: str, expected_names: tuple[str, ...]) -> None:
-    if not expected_names:
-        assert plain.strip() == "No matching MemCommit operations."
-        return
     for name in expected_names:
         assert name in plain
     positions = [plain.index(name) for name in expected_names]
     assert positions == sorted(positions)
-    assert plain.count("\nmem ") == len(expected_names) - 1
+    ranked_names = re.findall(
+        r"(?m)^([123]) · mem ([a-z][a-z0-9-]*) ",
+        plain,
+    )
+    assert [rank for rank, _name in ranked_names] == ["1", "2", "3"]
+    assert len({name for _rank, name in ranked_names}) == 3
     assert "WHEN ·" in plain
     for forbidden in (
         "WHY",

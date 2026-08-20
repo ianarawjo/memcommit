@@ -1,9 +1,10 @@
 # `mem help` Merge wording verification
 
 This ordered capture set verifies that deterministic Merge is described as
-Source-only addition plus explicit Source/Target selection, while `USE WHEN`
-stays focused on the copied-or-branched Context scenario instead of requiring
-the user to understand stored-identity mechanics first.
+Source-only addition into a selected Target, that `--into TARGET` reproduces
+the interactive Target choice, and that `USE WHEN` stays focused on the
+copied-or-branched Context scenario instead of requiring the user to understand
+stored-identity mechanics first.
 
 Every image comes from the actual installed `mem` executable in a
 color-capable PTY with `NO_COLOR` removed, `TERM=xterm-256color`, and
@@ -16,10 +17,10 @@ every state is read-only.
 
 | Capture | Exact command | PTY | Profile / current Context | Preceding input | Visible state | Durable mutation |
 |---|---|---|---|---|---|---|
-| `01-wide-collapsed` | `mem help` | `180×52` | not consulted / not consulted | `Shift-Tab`, `Right` to A–Z, `Tab`, `Home`, `Down` ×36 | collapsed Merge Summary and scenario-based `USE WHEN`; Profile owns focus so the complete Merge row remains visible | none |
-| `02-wide-expanded` | same process | `180×52` | not consulted / not consulted | `Up`, `Right` | expanded deterministic Merge contract and first form | none |
-| `03-compact-collapsed` | separate `mem help` | `100×30` | not consulted / not consulted | `Shift-Tab`, `Right` to A–Z, `Tab`, `Home`, `Down` ×36 | stacked compact Summary and `USE WHEN`; Profile owns focus so the complete Merge row remains visible | none |
-| `04-compact-expanded` | same compact process | `100×30` | not consulted / not consulted | `Up`, `Right` | compact expanded Merge contract and first form | none |
+| `01-wide-collapsed` | `mem help` | `180×52` | not consulted / not consulted | `Shift-Tab`, `Right` to A–Z, `Tab`, `Home`, `Down` ×38 | collapsed Merge Summary and scenario-based `USE WHEN`; Profile owns focus so the complete Merge row remains visible | none |
+| `02-wide-expanded` | same process | `180×52` | not consulted / not consulted | `Up`, `Right`, `Down` | expanded deterministic Merge contract, selected-Target Flow, and focused explicit `--into` form | none |
+| `03-compact-collapsed` | separate `mem help` | `100×30` | not consulted / not consulted | `Shift-Tab`, `Right` to A–Z, `Tab`, `Home`, `Down` ×38 | stacked compact Summary and `USE WHEN`; Profile owns focus so the complete Merge row remains visible | none |
+| `04-compact-expanded` | same compact process | `100×30` | not consulted / not consulted | `Up`, `Right`, `Down` | compact expanded Merge contract and focused explicit `--into` form | none |
 
 Every numbered state has a raw `.typescript`, terminal-text `.txt`, and
 full-canvas `.png` artifact beside this log.

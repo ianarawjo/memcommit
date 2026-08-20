@@ -36,9 +36,13 @@ closed.
 |---|---|
 | BY KIND and A–Z share the same operation copy | Reviewed |
 | Every BY KIND box explains intent; execution-pure groups identify LLM use | Reviewed |
-| Wide view uses equal summary/use-case columns | Reviewed |
-| Compact view stacks the use case below the summary | Reviewed |
-| `USE WHEN:` aligns with the summary body; only the label is bold; wrapped use-case text aligns after the label | Reviewed |
+| Wide and compact views share one vertical Description/Use When structure | Reviewed |
+| Each operation branches immediately into Summary and neutral `WHEN ·`; display-only label continuations share the first-row branch | Reviewed |
+| Only the labels are bold; each wrapped value aligns after its own label | Reviewed |
+| Long names and display-only suffixes may use both command-column rows without changing command spelling | Reviewed |
+| Process-local `EN · FR · ZH · KO · MN` selector above VIEW | Reviewed for learning copy |
+| All languages cover category, concept, key, Description, and Use When prose with terminal-cell-safe layout | Reviewed |
+| Expanded contract and typed-detail translation parity | Pending |
 | Representative actual-color PTY evidence at `180×52` and `100×30` | Reviewed for Search wording; Merge and Dedup; Atomize, Distill, Elaborate, Translate, Resolve, Meld, and Sever; Audit, Impact, Review, Fit, and Check Conformance; Ground; Log, Diff, Undo, and Revert; Profile; Provider, Config, and Eval; and the Import/Query typed-detail presentation |
 
 `replace` is now a public operation under Deterministic Content Changes; its

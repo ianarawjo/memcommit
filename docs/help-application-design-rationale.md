@@ -50,13 +50,13 @@ receipt.
 
 `memcommit.help_lookup_application` owns that bounded semantic selection. It
 freezes the complete public catalog, treats the request and catalog as
-untrusted provider data, and accepts only an ordered array of zero to three
-exact operation names. Each candidate exposes the model to the canonical
+untrusted provider data, and accepts only an ordered array of exactly three
+distinct operation names. Each candidate exposes the model to the canonical
 summary, best-for, flow, execution, effect, range, maturity, and only
 tool-selection detail summaries. The model never returns descriptions,
-reasons, scores, forms, or commands. An empty array is the closed no-match
-result. Unknown, duplicate, over-limit, explanatory, or malformed output fails
-the complete turn without publishing partial rows.
+reasons, scores, forms, or commands. A short or empty array is invalid just as
+an unknown, duplicate, over-limit, explanatory, or malformed result is; the
+complete turn fails without publishing partial rows.
 
 The complete compact catalog is one frozen `TOP_K_RERANK` frame. The current
 adapter supports only one-shot execution; if the catalog ever exceeds the
@@ -80,11 +80,11 @@ When a positional request is supplied, `mem help REQUEST` bypasses the full
 browser, performs one lookup, and renders each selected operation through the
 same collapsed command-row projection already used by interactive Help. Each
 row contains only `mem NAME`, the canonical summary, and canonical `WHEN`
-(`best_for`) text. Results retain provider order, are not numbered or scored,
-and the command exits after rendering. A no-match result prints one fixed
-interface-owned message. Bare `mem help`, shell selection, exact Python/agent
-Help, and MCP discovery retain their existing deterministic behavior and do
-not connect a provider.
+(`best_for`) text. Results retain provider order and receive visible ordinal
+rank `1` through `3`; no confidence or generated rationale is shown. The
+command exits after rendering. Bare `mem help`, shell selection, exact
+Python/agent Help, and MCP discovery retain their existing deterministic
+behavior and do not connect a provider.
 
 `MemCommitClient.list_operations()`, `describe_operation()`,
 `list_operation_details()`, and `describe_operation_detail()` project the same
@@ -119,12 +119,21 @@ route callable and testable without moving presentation details into the
 catalog. Exact names keep discovery deterministic and make unknown operations
 fail visibly instead of guessing an alias.
 
-Restricting the semantic model to ID selection also protects study exposure.
-Generated `WHY` prose, adjacent alternatives, confidence scores, and complete
-operation details were rejected because they teach more of the operation model
-than the requested compact answer. Returning several direct matches remains
-necessary for requests containing several actions, but every match receives
-the same fixed two-part Help row and the hard maximum remains three.
+Restricting the semantic model to ID selection also bounds study exposure.
+Generated `WHY` prose, confidence scores, and complete operation details remain
+excluded because they teach more of the operation model than the fixed compact
+rows. Adjacent alternatives are now intentional: when fewer than three direct
+matches exist, lower ranks complete one fixed three-candidate exploration
+frame with the closest useful behaviors or boundary contrasts.
+
+The alternative of returning only direct matches was rejected for the study
+condition because variable result counts expose an implicit confidence cue and
+one obvious match does little to stimulate consideration of other operations.
+The display preserves semantic order instead of randomizing or counterbalancing
+it because rank effects are not the experiment's primary question. As a result,
+semantic fit and display position are confounded by design; rank-selection
+rates may be described, but the route does not support a causal claim about
+whether relevance or primacy produced a choice.
 
 The alternative of scraping Click/Typer help was rejected because registered
 syntax is interface-specific and cannot faithfully express execution kind,

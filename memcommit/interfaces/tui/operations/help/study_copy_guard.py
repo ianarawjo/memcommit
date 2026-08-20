@@ -9,6 +9,11 @@ from typing import Literal, Sequence
 
 from memcommit.help_catalog.model import OperationHelp
 from memcommit.profile_config import load_profile_registry, study_run_identity
+from memcommit.interfaces.tui.operations.help.localization import (
+    HELP_LANGUAGES,
+    HelpLanguage,
+    operation_copy,
+)
 
 
 STUDY_HELP_COPY_THRESHOLD_NUMERATOR = 1
@@ -21,7 +26,7 @@ class StudyHelpAuthoredField:
     """One visible authored Description or When value used by Help."""
 
     operation_name: str
-    language: Literal["EN"]
+    language: HelpLanguage
     kind: Literal["DESCRIPTION", "WHEN"]
     text: str
 
@@ -31,7 +36,7 @@ class StudyHelpCopyMatch:
     """Content-free evidence that one request crossed the Study threshold."""
 
     operation_name: str
-    language: Literal["EN"]
+    language: HelpLanguage
     kind: Literal["DESCRIPTION", "WHEN"]
     exact_run_tokens: int
     authored_field_tokens: int
@@ -63,26 +68,33 @@ def _longest_exact_token_run(
 def authored_study_help_fields(
     operations: Sequence[OperationHelp],
 ) -> tuple[StudyHelpAuthoredField, ...]:
-    """Freeze every visible Description/When value a participant can copy."""
+    """Freeze every localized Description/When value a participant can copy."""
 
     fields: list[StudyHelpAuthoredField] = []
     for operation in operations:
-        fields.extend(
-            (
-                StudyHelpAuthoredField(
-                    operation.name,
-                    "EN",
-                    "DESCRIPTION",
-                    operation.summary,
-                ),
-                StudyHelpAuthoredField(
-                    operation.name,
-                    "EN",
-                    "WHEN",
-                    operation.best_for,
-                ),
+        for language in HELP_LANGUAGES:
+            localized = operation_copy(
+                language,
+                operation.name,
+                english_description=operation.summary,
+                english_use_when=operation.best_for,
             )
-        )
+            fields.extend(
+                (
+                    StudyHelpAuthoredField(
+                        operation.name,
+                        language,
+                        "DESCRIPTION",
+                        localized.description,
+                    ),
+                    StudyHelpAuthoredField(
+                        operation.name,
+                        language,
+                        "WHEN",
+                        localized.use_when,
+                    ),
+                )
+            )
     return tuple(fields)
 
 

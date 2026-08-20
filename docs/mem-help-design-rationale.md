@@ -31,26 +31,38 @@ mem help "compare two Contexts and find relevant Memories"
 
 The command freezes the same complete public operation catalog, submits its
 canonical selection fields plus the request to one bounded semantic turn, and
-accepts an ordered list of zero to three exact operation names. The pinned
+requires an ordered list of exactly three distinct operation names. The pinned
 policy is `gpt-5.6-sol` with reasoning effort `none`. The model selects IDs
 only; it cannot author the visible description, best-for text, explanation,
 score, command form, or rationale.
 
-Each validated match is rendered with the existing collapsed Help record:
+Each validated candidate is rendered with its semantic rank and the existing
+collapsed Help record:
 
 ```text
-mem compare ┬ Compare Memories in two Contexts and report what they share,
-            │ what differs, and what appears only on one side.
-            └ WHEN · Comparing two Contexts as a whole to understand where
-                     they align and differ.
+1 · mem compare ┬ Compare Memories in two Contexts and report what they share,
+                │ what differs, and what appears only on one side.
+                └ WHEN · Comparing two Contexts as a whole to understand where
+                         they align and differ.
 ```
 
-Several rows may appear when several operations directly satisfy distinct
-parts of the request. They retain model order but carry no rank number,
-confidence, `WHY`, alternatives section, expanded overview, forms, or execution
-action. An empty selection renders one fixed no-match sentence. The focused
-lookup exits after those rows; it does not open the full-screen browser, create
-a transcript, read a Store or Memory, or execute any selected command.
+The first candidate is the strongest semantic fit. When fewer than three
+operations directly satisfy the request, the second and third may be useful
+adjacent alternatives or behavior contrasts. This fixed three-candidate frame
+is deliberate study scaffolding: it keeps exposure cardinality constant and
+can prompt a participant to consider actions beyond the most obvious match.
+Even a weak, unrelated, or nonsensical nonblank request receives the three
+closest catalog possibilities. Results carry no confidence, `WHY`, expanded
+overview, forms, or execution action. The focused lookup exits after the three
+rows; it does not open the full-screen browser, create a transcript, read a
+Store or Memory, or execute any candidate.
+
+Visible order is not randomized or counterbalanced. Semantic rank and display
+position therefore coincide intentionally. This keeps the interface and study
+condition simple, but it means later analysis cannot separate semantic fitness
+from primacy or rank-label effects. Candidate selection by rank may be reported
+descriptively; position bias is a recorded limitation rather than a separate
+experimental manipulation.
 
 Direct matching is semantic rather than a catalog-vocabulary gate. A short,
 colloquial, metaphorical, or fragmentary request may match when its intended
@@ -62,7 +74,7 @@ for the product lookup to reject an otherwise valid request.
 
 The active Profile's immutable provenance narrows that rule during a live
 `init-study` run. Before provider connection, focused Help freezes every
-authored `DESCRIPTION` and `WHEN` value in the current Help projection,
+authored `DESCRIPTION` and `WHEN` value in all five supported Help languages,
 normalizes Unicode, case, punctuation, underscores, and whitespace into exact
 tokens, and measures the longest contiguous token sequence shared with the
 request. If that exact run covers at least 50% of any one authored field, the
@@ -95,13 +107,17 @@ validated decoding. The line is cleared before the matched rows or an error is
 published. It is a liveness signal for the bounded Help turn, not provider
 reasoning or chain-of-thought. Bare `mem help`, Study-copy rejection, redirected
 or non-TTY stderr remain free of the indicator so stable stdout and the
-deterministic inventory do not change.
+deterministic inventory do not change. The operation-neutral progress renderer
+belongs to `interfaces.console.progress`; the former command-module path is an
+import-only compatibility facade so the Help interface never depends outward
+on a command adapter.
 
 The ordered live PTY evidence in
 [`docs/screenshots/mem-help-natural-language-20260820`](screenshots/mem-help-natural-language-20260820/README.md)
-records one, several, metaphorical, and no-match requests against the real
-provider route. Each capture retains the raw terminal stream and proves that
-the lookup exits without consulting or mutating a Context.
+records direct, multi-action, metaphorical, unrelated, and generic requests
+against the real provider route. Each successful lookup displays three ranked
+candidates. Every capture retains the raw terminal stream and proves that the
+lookup exits without consulting or mutating a Context.
 
 ## Interactive terminal contract
 
@@ -133,9 +149,21 @@ prompt-toolkit selector:
   the command list, only the retained choice surface and `✓` remain active.
 - `BY KIND` assigns each command one primary discovery category and renders
   each category as one titled box containing all of its command records.
+  Category names and their complete execution-basis descriptions are bold so
+  each box establishes a visible semantic boundary before its operation rows;
+  the surrounding border remains ordinary chrome when the box is not focused.
   Before those categories, one neutral `CORE CONCEPTS` and
-  `COMMON KEYS` information box explains Memory, Context, Profile,
-  Grant, Session, and Checkpoint plus the shared navigation grammar. It belongs
+  `COMMON KEYS` information box explains Memory, Context, Profile, Operation,
+  Grant, Session, and Checkpoint plus the shared navigation grammar. Memory,
+  Context, and Profile are defined relationally: Profiles isolate Context
+  stores; Memories are independently selectable records stored inside a
+  Context; and Contexts contain Memories while `/` expresses child hierarchy.
+  The primer explains that operations which support descendant scope may treat
+  one Context and its descendants as a subtree, without implying that every
+  operation expands descendants automatically.
+  Operation is included because the browser's central abstraction is a
+  reusable action over selected Memories or Contexts, not merely a shell
+  command. It belongs
   to the scrolling inventory rather than the fixed header, so it moves out of
   view as the person browses and does not permanently reduce command space.
   `A–Z` omits this primer entirely and begins with its lexical command box.
@@ -146,8 +174,13 @@ prompt-toolkit selector:
   qualifier in the heading or navigation action. Operation-specific footers
   remain authoritative for keys that are not common enough to appear in this
   primer.
-  The `MEMORY` type label uses the shared light-lavender Memory token, making
-  the primer a compact legend for Memory-object text elsewhere in the TUI.
+  The `MEMORY` type label uses the shared bold light-lavender Memory token,
+  making the primer a compact legend for Memory-object text elsewhere in the
+  TUI.
+  Session copy states its resumable-workflow purpose positively, then points to
+  Apply results and checkpoint history as the separate evidence of Context
+  mutation. This preserves the lifecycle boundary without framing the Session
+  definition as a negation.
   Only that label is tinted: its definition and the other concepts remain
   neutral explanatory prose, while focus may temporarily replace the tint with
   the shared blue treatment.
@@ -158,6 +191,9 @@ prompt-toolkit selector:
   the common blue row/frame treatment so scrolling can keep it visible, but
   Enter, Left, Right, and full-command Help deliberately perform no action.
   Common Keys remains reference prose rather than five additional focus stops.
+  A neutral `OPERATIONS` heading separates this primer from the category boxes
+  in both discovery views. The heading makes the list's object explicit without
+  adding another nested frame or focus stop.
   Inside a category it preserves an intentional workflow order: orient and
   inspect first, then navigate or create, then perform semantic work, with
   destructive or broad cleanup actions last. Primary commands and any
@@ -222,11 +258,26 @@ prompt-toolkit selector:
   above the pinned footer separator. The blank space therefore remains visibly
   part of the complete A–Z inventory instead of resembling additional unboxed
   content. `BY KIND` keeps content-sized boxes and spacing between categories.
-- Each command record binds its unlabelled operation summary and compact
-  `WHEN ·` use case with one `┬ / │ / └` junction after the displayed command:
-  `mem operation ─┬ Summary` followed by an aligned `└ WHEN · Use case`.
-  Summary and When continuations retain that relationship at every terminal
-  width instead of switching to a separate wide-screen column grammar. The box
+- Each command record uses the same vertical semantic structure at every
+  terminal width without adding a fixed third row. The first row pairs the
+  command with its unlabelled operation summary; the second begins with the
+  compact, neutral `WHEN ·` cue and its use case. Every operation owns a
+  compact `┬ / │ / └` junction immediately after its displayed label:
+  `mem operation ─┬ Summary` and an aligned `└ WHEN · Use case`. The
+  resulting ragged Description edge deliberately keeps visual emphasis on the
+  left-to-right command list instead of forming one dominant category-wide
+  prose block. This binds both learning blocks without a full-width background
+  band, blank row, or per-command frame. Description
+  continuations retain the vertical guide; When continuations align beneath
+  their value after the closing branch. Wide terminals retain
+  the same reading order rather than switching to two equal columns. The
+  command label may use both physical rows: aliases, annotations, and maturity
+  tags occupy its second row, while a long hyphenated command may split after a
+  visible hyphen. A four-cell hanging indent keeps that continuation subordinate
+  without pushing it past the complete `mem ` prefix. The first row still owns
+  the junction; the second label row shares the aligned vertical branch with
+  wrapped Description text. This is a presentation-only projection; the canonical
+  command spelling, Form, and prefilled command remain unchanged. The box
   containing the focused command uses the
   common blue heavy border, while only the exact focused command or Form gets
   the blue selection surface. Expansion keeps Forms immediately beneath their
@@ -333,7 +384,7 @@ Ordinary TUI entry is described inside expanded Forms instead of repeating a
 badge across the inventory.
 
 One implementation-scope exception may use a compact bracketed maturity tag.
-`import [PARTIAL]` keeps Import's ordinary Summary and `WHEN ·` use case readable in
+`import [PARTIAL]` keeps Import's ordinary Summary and `USE WHEN` readable in
 the collapsed inventory, while its expanded `CURRENT LIMITATION` detail states
 exactly which transfers exist and which broader import/export routes do not.
 This tag is Help-facing product maturity, not an operation-route judgment: it
@@ -361,8 +412,13 @@ would not explain the route. Bracketed lowercase values such as `[context1]`,
 both the kind and number of values to replace instead of exposing
 implementation-relative roles such as LEFT and RIGHT; the brackets are not
 literal operands or a claim that the corresponding CLI parameter is optional.
-Memory-facing commands similarly use `[memory]` instead of generic parser
-names such as INFO, SELECTOR, or UID when Memory is the user-facing object.
+Memory-facing forms name the value's semantic role rather than collapsing
+different strings into `[memory]`: Add uses `[memory_content]` for literal new
+content, while Edit, Reference, Embed, Trace, and other object routes use
+`[memory_selector]` for an existing Memory UID or unambiguous prefix. Reference
+separately labels `--from [source_context]`; that option never accepts the
+Memory selector. Edit labels `--input [batch_file]` because it consumes
+UID-tab-content records rather than inline replacement content.
 Free-text placeholders that commonly contain whitespace retain double quotes
 in both the displayed Form and the selected shell template. Structured names,
 UIDs, flags, and paths remain unquoted so their token boundaries stay visible.
@@ -383,7 +439,9 @@ subcommands. Parser-valid spellings whose callback deliberately returns a
 usage error, such as bare `mem impact`, are not advertised as meaningful Forms.
 Bare `mem query` now appears because a terminal opens its interactive Question
 and Source workbench; outside a terminal it still requires an explicit
-selector. Group help alone is also not treated as an operation, while
+selector. Bare Edit likewise exposes its direct-Memory setup flow, while its
+non-TTY route retains explicit operands. Group help alone is
+also not treated as an operation, while
 groups with real bare callbacks (`lock`, `unlock`, and `profile`) expose them.
 
 For example, `mem update` exposes its interactive Update session launcher
@@ -489,6 +547,39 @@ Only callable visible commands are listed. Proposed but unregistered
 operations are omitted rather than shown as commands a participant could try.
 Their design state remains in the focused operation rationale documents and
 the external function inventory.
+
+## Process-local learning languages
+
+Interactive `mem help` exposes `EN · FR · ZH · KO · MN` in a LANGUAGE control
+above VIEW. The selection is process-local, starts at English on every launch,
+and changes no Profile, Context, Memory, session, provider input, or study
+fixture. In study-owned session Help, a language change is recorded only as a
+content-free `HELP LANGUAGE <code>` TUI action so language exposure can be
+accounted for without altering the task data.
+
+The localized learning layer covers Core Concept definitions, common-key
+guidance, category descriptions, and every operation's collapsed
+`DESCRIPTION` and `USE WHEN` prose. Command names, flags, Forms, and the
+  canonical nouns `Memory`, `Context`, `Profile`, `Operation`, `Grant`,
+  `Session`, and `Checkpoint` stay English so translated guidance continues to
+  name the exact objects and commands the participant must operate. Expanded
+Flow/Execution/Effect/Range values and typed route details also remain the
+canonical English contract in this initial rollout; translating those safety
+and invocation boundaries requires a separate reviewed parity pass rather than
+an unchecked fallback.
+
+All four non-English catalogs are checked in and must cover exactly the same
+62 visible operation names. Runtime provider translation is deliberately not
+used: two participants choosing the same language must see the same copy.
+`ZH` and `KO` use language rather than country codes; `MN` currently denotes
+Mongolian Cyrillic. The renderer wraps and pads translated prose by terminal
+cells rather than Python character count, because Chinese and Korean glyphs
+occupy two terminal columns. The screenshot renderer uses CJK-capable fallback
+fonts while preserving the actual color PTY stream and cell placement.
+The evidence renderer paints all ANSI cell backgrounds before drawing glyphs:
+a CJK glyph lives in one leading terminal cell but spans two, so painting a
+styled following cell afterward could erase half of that glyph even though the
+live terminal and raw PTY text are correct.
 
 ## Relationship to `mem --help`
 

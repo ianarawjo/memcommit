@@ -1,27 +1,27 @@
  mem help · command inventory                                                                       
+┌────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────┐
+│  LANGUAGE · [ ✓ EN ]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
 │  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
-│ ▸ mem share   Send one ordinary Context through a grant-backed receiver endpoint.               │^
-│               USE WHEN: Delivering an owned Context to an authorized receiver.                  │ 
-│ ▸ mem lock    Lock the current Context, a recursive Context set, Memory, or Profile.            │ 
-│               USE WHEN: Preventing accidental modification of stable material.                  │ 
-│ ▸ mem unlock  Unlock the current Context, a recursive set, Memory, or Profile.                  │ 
-│               USE WHEN: Reopening protected material for intentional revision.                  │ 
+│             └ WHEN · Preventing accidental modification of stable material.                     │^
+│ ▸ mem unlock ─┬ Unlock the current Context, a recursive set, Memory, or Profile.                │ 
+│               └ WHEN · Reopening protected material for intentional revision.                   │ 
 └─────────────────────────────────────────────────────────────────────────────────────────────────┘ 
                                                                                                     
 ┏ SYSTEM & STUDY TOOLS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
 ┃ Configure MemCommit and prepare or run study and evaluation utilities.                          ┃ 
-┃ ▸ mem help             Enter the interactive command browser and open syntax help.              ┃ 
-┃                        USE WHEN: Discovering available operations and their invocation forms.   ┃ 
-┃ ▸ mem provider         Select and verify Codex, Ollama, or OpenRouter semantic execution.       ┃ 
-┃                        USE WHEN: Choosing which backend semantic operations should use, or      ┃ 
-┃                                  checking that it is ready before durable work.                 ┃ 
-┃ ▸ mem shell-init       Print opt-in shell integration for interactive command prefill.          ┃ 
-┃                        USE WHEN: Enabling optional shell-specific conveniences.                 ┃ 
-┃ ▾ mem config (legacy)  Read or write stored global configuration values.                        ┃ 
-┃                        USE WHEN: Inspecting or changing stored global settings through the      ┃ 
-┃                                  legacy low-level interface.                                    ┃ 
+┃ ▸ mem help ─┬ Enter the interactive command browser and open syntax help.                       ┃ 
+┃             └ WHEN · Discovering available operations and their invocation forms.               ┃ 
+┃ ▸ mem provider ─┬ Select and verify Codex, Ollama, or OpenRouter semantic execution.            ┃ 
+┃                 └ WHEN · Choosing which backend semantic operations should use, or checking     ┃ 
+┃                          that it is ready before durable work.                                  ┃ 
+┃ ▸ mem shell-init ─┬ Print opt-in shell integration for interactive command prefill.             ┃ 
+┃                   └ WHEN · Enabling optional shell-specific conveniences.                       ┃ 
+┃ ▾ mem config ───┬ Read or write stored global configuration values.                             ┃ 
+┃     (legacy)    └ WHEN · Inspecting or changing stored global settings through the legacy       ┃ 
+┃                          low-level interface.                                                   ┃ 
 ┃   FLOW      · Configuration key <-> value                                                       ┃ 
 ┃   EXECUTION · DETERMINISTIC                                                                     ┃ 
 ┃   EFFECT    · May change global configuration                                                   ┃ 

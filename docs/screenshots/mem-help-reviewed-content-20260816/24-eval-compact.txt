@@ -1,20 +1,20 @@
  mem help · command inventory                                                                       
+┌────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────┐
+│  LANGUAGE · [ ✓ EN ]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
 │  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
-┃                        USE WHEN: Choosing which backend semantic operations should use, or      ┃^
-┃                                  checking that it is ready before durable work.                 ┃ 
-┃ ▸ mem shell-init       Print opt-in shell integration for interactive command prefill.          ┃ 
-┃                        USE WHEN: Enabling optional shell-specific conveniences.                 ┃ 
-┃ ▸ mem config (legacy)  Read or write stored global configuration values.                        ┃ 
-┃                        USE WHEN: Inspecting or changing stored global settings through the      ┃ 
-┃                                  legacy low-level interface.                                    ┃ 
-┃ ▸ mem init-study       Copy one Study baseline into an isolated participant/authority Profile   ┃ 
-┃                        pair.                                                                    ┃ 
-┃                        USE WHEN: Preparing a reproducible, isolated user-study environment.     ┃ 
-┃ ▾ mem eval (legacy)    Run and inspect the existing semantic evaluation campaigns.              ┃ 
-┃                        USE WHEN: Using the existing research evaluation harness while the       ┃ 
-┃                                  general evaluation interface is redesigned.                    ┃ 
+┃                   └ WHEN · Enabling optional shell-specific conveniences.                       ┃^
+┃ ▸ mem config ───┬ Read or write stored global configuration values.                             ┃ 
+┃     (legacy)    └ WHEN · Inspecting or changing stored global settings through the legacy       ┃ 
+┃                          low-level interface.                                                   ┃ 
+┃ ▸ mem init-study ─┬ Copy one Study baseline into an isolated participant/authority Profile      ┃ 
+┃                   │ pair.                                                                       ┃ 
+┃                   └ WHEN · Preparing a reproducible, isolated user-study environment.           ┃ 
+┃ ▾ mem eval ─────┬ Run and inspect the existing semantic evaluation campaigns.                   ┃ 
+┃     (legacy)    └ WHEN · Using the existing research evaluation harness while the general       ┃ 
+┃                          evaluation interface is redesigned.                                    ┃ 
 ┃   FLOW      · Fixed evaluation fixtures -> retained campaign results                            ┃ 
 ┃   EXECUTION · MIXED                                                                             ┃ 
 ┃   EFFECT    · Changes evaluation ledgers, not Context content                                   ┃ 

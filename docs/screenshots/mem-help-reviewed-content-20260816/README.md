@@ -6,6 +6,37 @@ Check/Compare/Review, Ground, History, Profile, and selected System operation
 copy. Expanded states also verify the canonical typed details for Merge,
 Atomize, Distill, Translate, Impact, Fit, Check Conformance, Log, Revert,
 Profile, Provider, and legacy Eval.
+Every captured viewport uses the same connected summary then `WHEN ·` record.
+Each operation owns a compact `┬ / │ / └` junction immediately after its
+displayed label, producing `mem operation ─┬ Summary` and an aligned
+`└ WHEN · Use case`. The intentionally ragged Description edge keeps the
+operation list visually primary and binds each command to its learning copy
+without a background band or fixed third row. Wide screens retain the same
+left-to-right reading order. A label may use both record rows for an alias,
+annotation, maturity tag, or a long command split after its visible hyphen;
+the continuation uses a four-cell hanging indent, while the junction still
+begins on the first row and the continuation shares its vertical branch. This
+wrapping is display-only.
+
+The `HELP LANGUAGE` control above VIEW provides deterministic process-local
+`EN`, `FR`, `ZH`, `KO`, and `MN` learning copy. Captures 25–29 verify each
+selection and its translated Core Concepts, including the reusable Operation
+abstraction. The neutral `OPERATIONS` heading separates that primer from the
+categorized operation list without changing command spelling or task data.
+Chinese and Korean screenshots use a CJK-capable font fallback
+when rendering the actual PTY stream; terminal cell placement and ANSI color
+remain the recorded application output.
+
+Captures 30–64 continue through the complete categorized Operations inventory
+in every supported Help language. Each language starts from its selected
+process-local `HELP LANGUAGE` value, moves focus through `INVENTORY VIEW` to
+the operation list, presses `Home`, then presses `PageDown` seven times. Help
+advances ten semantic rows per press and clamps the last capture to `mem eval`;
+at 180×52, adjacent pages overlap so no category boundary is omitted. Every page
+is an independent full-resolution color-PTY `.typescript`, `.txt`, and `.png`
+record and remains read-only. The `30-36`, `37-43`, `44-50`, `51-57`, and
+`58-64` `operations-all-wide.png` files are derivative two-column contact
+sheets for convenient comparison; they do not replace the ordered PTY evidence.
 
 Every image comes from the actual installed `mem` executable in a color-capable
 PTY with `NO_COLOR` removed, `TERM=xterm-256color`, and
@@ -20,6 +51,9 @@ Browse category to the named category. The recorder visits that category's
 last row with `Down`, returns to the named operation with `Up`, and uses
 `Right` to expand the operation and focus its first Form. Visiting the last row
 first gives both viewport sizes a stable category-local scroll position.
+Language captures start at the initial Browse row, use `Shift-Tab` twice to
+focus LANGUAGE, and then use `Right` zero through four times. The choice is
+read-only and lasts only for that Help process.
 
 | Capture stem | Category / operation | Preceding keys | Visible contract | Durable mutation |
 |---|---|---|---|---|
@@ -47,6 +81,11 @@ first gives both viewport sizes a stable category-local scroll position.
 | `22-provider-{wide,compact}` | System / Provider | `Tab` ×10, `Down` ×5, `Up` ×4, `Right` | status, selection, and explicit probe | none |
 | `23-config-{wide,compact}` | System / Config | `Tab` ×10, `Down` ×5, `Up` ×2, `Right` | legacy stored-setting interface | none |
 | `24-eval-{wide,compact}` | System / Eval | `Tab` ×10, `Down` ×5, `Right` | legacy fixed-fixture evaluation scope | none |
+| `25-language-en-{wide,compact}` | Help language / EN | `Shift-Tab` ×2 | canonical English learning copy | none |
+| `26-language-fr-{wide,compact}` | Help language / FR | `Shift-Tab` ×2, `Right` | French learning copy | none |
+| `27-language-zh-{wide,compact}` | Help language / ZH | `Shift-Tab` ×2, `Right` ×2 | Simplified Chinese learning copy | none |
+| `28-language-ko-{wide,compact}` | Help language / KO | `Shift-Tab` ×2, `Right` ×3 | Korean learning copy | none |
+| `29-language-mn-{wide,compact}` | Help language / MN | `Shift-Tab` ×2, `Right` ×4 | Mongolian Cyrillic learning copy | none |
 
 Every numbered state has a raw `.typescript`, terminal-text `.txt`, and
 full-canvas `.png` artifact beside this log. `capture.py` records and renders

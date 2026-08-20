@@ -197,6 +197,7 @@ def test_schema_is_json_safe_and_bounds_describe_names_to_the_catalog():
         "evaluation-scope",
         "fit-or-conformance",
         "history-routes",
+        "interactive-commands",
         "invocation",
         "management-actions",
         "materialization-routes",

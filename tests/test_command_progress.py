@@ -5,7 +5,7 @@ import io
 
 import pytest
 
-from memcommit.commands.command_progress import (
+from memcommit.interfaces.console.progress import (
     CommandProgress,
     busy_suffix,
     progressing_provider_factory,
@@ -114,7 +114,7 @@ def test_progressing_provider_factory_starts_only_when_provider_is_requested(
         )
 
     monkeypatch.setattr(
-        "memcommit.commands.command_progress.CommandProgress",
+        "memcommit.interfaces.console.progress.CommandProgress",
         build_progress,
     )
     calls = []

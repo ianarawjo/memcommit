@@ -52,6 +52,7 @@ from memcommit.interfaces.console.text import (
 )
 from memcommit.context_targeting.presets import (
     ContextScopePreset,
+    legacy_root_only_option_alias,
     resolve_descendant_scopes,
     resolve_scope_preset,
 )
@@ -315,14 +316,16 @@ def cmd(
     reference_descendants: Annotated[
         Optional[bool],
         typer.Option(
-            "--reference-descendants/--reference-only",
+            "--reference-descendants/--reference-root-only",
+            legacy_root_only_option_alias("reference"),
             help="Include all readable descendants under REFERENCE A",
         ),
     ] = None,
     compared_descendants: Annotated[
         Optional[bool],
         typer.Option(
-            "--compared-descendants/--compared-only",
+            "--compared-descendants/--compared-root-only",
+            legacy_root_only_option_alias("compared"),
             help="Include all readable descendants under PEER B",
         ),
     ] = None,

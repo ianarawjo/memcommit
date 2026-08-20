@@ -1,0 +1,52 @@
+ mem help · command inventory                                                                                                                                                       
+┌────────────────────────────────────────────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────────────────────────────────────────────┐
+│  LANGUAGE · [ ✓ EN ]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                                                                                                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+│                  └ WHEN · Understanding why a Memory exists or reached its current form.                                                                                        │^
+│ ▸ mem checkpoint ─┬ Save the current Context as a manual recovery point for Diff or Revert.                                                                                     │ 
+│                   └ WHEN · Creating a recovery point before risky work.                                                                                                         │ 
+│ ▸ mem undo ─┬ Undo the most recent recorded command as one unit.                                                                                                                │ 
+│             └ WHEN · Reversing the latest recorded mutation as one operation.                                                                                                   │ 
+│ ▸ mem redo ─┬ Redo the most recently undone recorded Context command.                                                                                                           │ 
+│             └ WHEN · Reapplying a command that was undone accidentally.                                                                                                         │ 
+│ ▸ mem revert ─┬ Restore one local Context to a selected checkpoint, reviewing the exact impact when selection is interactive.                                                   │ 
+│               └ WHEN · Restoring a Context to a deliberately saved recovery point.                                                                                              │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┌ PROFILES ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ NO LLM · Select and administer complete local Profile stores and their managed names.                                                                                           │ 
+│ ▸ mem profile ─┬ Select and manage complete local MemoryStore Profiles. Profiles can also be renamed or permanently removed through the picker or with mem profile rename and   │ 
+│                │ mem profile remove.                                                                                                                                            │ 
+│                └ WHEN · Managing separate users, environments, or Memory stores.                                                                                                │ 
+│ ▸ mem rename ─┬ Rename the current or an explicit managed Profile without moving or rewriting its store; mem profile rename is the explicit equivalent.                         │ 
+│               └ WHEN · Giving an existing managed Profile a clearer name.                                                                                                       │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┌ SHARING & PROTECTION ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ NO LLM · Deliver owned Contexts and protect Memory, Context, or Profile writes.                                                                                                 │ 
+│ ▸ mem share ─┬ Send one ordinary Context through a grant-backed receiver endpoint.                                                                                              │ 
+│              └ WHEN · Delivering an owned Context to an authorized receiver.                                                                                                    │ 
+│ ▸ mem lock ─┬ Lock the current Context, a recursive Context set, Memory, or Profile.                                                                                            │ 
+│             └ WHEN · Preventing accidental modification of stable material.                                                                                                     │ 
+│ ▸ mem unlock ─┬ Unlock the current Context, a recursive set, Memory, or Profile.                                                                                                │ 
+│               └ WHEN · Reopening protected material for intentional revision.                                                                                                   │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┏ SYSTEM & STUDY TOOLS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃ Configure MemCommit and prepare or run study and evaluation utilities.                                                                                                          ┃ 
+┃ ▸ mem help ─┬ Enter the interactive command browser and open syntax help.                                                                                                       ┃ 
+┃             └ WHEN · Discovering available operations and their invocation forms.                                                                                               ┃ 
+┃ ▸ mem provider ─┬ Select and verify Codex, Ollama, or OpenRouter semantic execution.                                                                                            ┃ 
+┃                 └ WHEN · Choosing which backend semantic operations should use, or checking that it is ready before durable work.                                               ┃ 
+┃ ▸ mem shell-init ─┬ Print opt-in shell integration for interactive command prefill.                                                                                             ┃ 
+┃                   └ WHEN · Enabling optional shell-specific conveniences.                                                                                                       ┃ 
+┃ ▸ mem config ───┬ Read or write stored global configuration values.                                                                                                             ┃ 
+┃     (legacy)    └ WHEN · Inspecting or changing stored global settings through the legacy low-level interface.                                                                  ┃ 
+┃ ▸ mem init-study ─┬ Copy one Study baseline into an isolated participant/authority Profile pair.                                                                                ┃ 
+┃                   └ WHEN · Preparing a reproducible, isolated user-study environment.                                                                                           ┃ 
+┃ ▸ mem eval ─────┬ Run and inspect the existing semantic evaluation campaigns.                                                                                                   ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help

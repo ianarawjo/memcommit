@@ -22,7 +22,7 @@ from prompt_toolkit.output.defaults import create_output
 from prompt_toolkit.styles import Style, merge_styles
 from prompt_toolkit.widgets import Frame
 
-from memcommit.commands.command_progress import CommandProgress
+from memcommit.interfaces.console.progress import CommandProgress
 from memcommit.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
@@ -67,6 +67,15 @@ from memcommit.help_lookup_application import (
 from memcommit.infrastructure.providers.find_query import connect_help_provider
 from memcommit.profile_config import ProfileConfigError
 from memcommit.query_provider import QueryProviderError
+from memcommit.interfaces.tui.operations.help.localization import (
+    HELP_LANGUAGES,
+    HelpLanguage,
+    category_description,
+    common_key_description,
+    core_concept_description,
+    operation_copy,
+    validate_translation_coverage,
+)
 from memcommit.interfaces.tui.operations.help.study_copy_guard import (
     active_profile_is_study,
     authored_study_help_fields,
@@ -100,15 +109,26 @@ COMMAND_RELATED_FORMS = {
 HELP_CORE_CONCEPTS = (
     (
         "MEMORY",
-        "An atomic unit of information stored in a Context.",
+        "The basic record unit stored inside a Context and independently "
+        "selected, reviewed, or changed by Memory-level operations.",
     ),
     (
         "CONTEXT",
-        "A named workspace that organizes Memories and other Contexts.",
+        "A named hierarchical workspace that contains Memories and organizes "
+        "child Contexts. The / separator expresses hierarchy in names such as "
+        "task-1/participant; operations with descendant scope can treat a "
+        "Context and its descendant Contexts as one subtree. Commands use the "
+        "current Context when none is specified.",
     ),
     (
         "PROFILE",
-        "An ownership and storage boundary for Contexts.",
+        "An isolated ownership and storage boundary containing Contexts; "
+        "different Profiles may contain the same Context name.",
+    ),
+    (
+        "OPERATION",
+        "A reusable action that reads, analyzes, or changes selected Memories "
+        "or Contexts through defined inputs and behavior.",
     ),
     (
         "GRANT",
@@ -134,7 +154,7 @@ HELP_CORE_CONCEPTS = (
 # contract. Only the Memory type label adopts the Memory token; its explanatory
 # prose remains neutral so a report sentence is not mistaken for Memory data.
 HELP_CORE_CONCEPT_STYLES = {
-    "MEMORY": "class:memory-object",
+    "MEMORY": "class:memory-object bold",
 }
 
 HELP_COMMON_KEYS = (
@@ -332,12 +352,12 @@ HELP_COMMAND_ORDER = {
 
 COMMAND_FORMS = {
     "add": (
-        'mem add "[memory]" (add one Memory to the current Context)',
+        'mem add "[memory_content]" (add one Memory to the current Context)',
         "mem add (open the interactive multi-Memory editor)",
-        'mem add --memory "[memory]" --memory "[memory]" (add an explicit batch)',
+        'mem add --memory "[memory_content]" --memory "[memory_content]" (add an explicit batch)',
         "mem add --input [file] (add one Memory per non-empty line)",
         "mem add --paste (paste one or more Memories)",
-        'mem add "[memory]" --context [context] (add to an explicit Context)',
+        'mem add "[memory_content]" --context [context] (add to an explicit Context)',
         "mem add --input [file] --context [context] (batch-add to an explicit Context)",
         "mem add --paste --context [context] (paste into an explicit Context)",
     ),
@@ -407,8 +427,8 @@ COMMAND_FORMS = {
         "mem chunk [memory_selector] --break-on [punctuation] --min-chars 200 --max-chars 1000 (compose literal and size boundaries)",
     ),
     "clear": (
-        "mem clear (clear the current Context after confirmation)",
-        "mem clear [context] (clear an explicit Context after confirmation)",
+        "mem clear (immediately clear the current Context; Undo can restore)",
+        "mem clear [context] (immediately clear one explicit Context; Undo can restore)",
     ),
     "compare": (
         "mem compare (enter the interactive Compare session launcher)",
@@ -460,10 +480,11 @@ COMMAND_FORMS = {
         "(use the exact active Ground Rules through the same application)",
     ),
     "edit": (
-        'mem edit [memory] "[new_content]" (replace one direct Memory)',
-        "mem edit --input [file] (replace Memories from a batch file)",
-        'mem edit [memory] "[new_content]" --context [context] (explicit Context)',
-        "mem edit --input [file] --context [context] (batch-edit an explicit Context)",
+        'mem edit [memory_selector] "[new_content]" (replace one direct Memory)',
+        "mem edit (choose one direct Memory and review its replacement interactively)",
+        "mem edit --input [batch_file] (batch mode: UID<TAB>CONTENT records)",
+        'mem edit [memory_selector] "[new_content]" --context [context] (explicit Context)',
+        "mem edit --input [batch_file] --context [context] (batch-edit an explicit Context)",
     ),
     "replace": (
         "mem replace (choose text, local scope, and review exact changes interactively)",
@@ -478,9 +499,9 @@ COMMAND_FORMS = {
         "mem embed [child_context] --into [target_context] (append)",
         "mem embed [child_context] --into [target_context] --before [item]",
         "mem embed [child_context] --into [target_context] --after [item]",
-        "mem embed [memory] --from [source_context] --into [target_context] (live Memory link)",
-        "mem embed [memory] --from [source_context] --into [target_context] --before [item]",
-        "mem embed [memory] --from [source_context] --into [target_context] --after [item]",
+        "mem embed [memory_selector] --from [source_context] --into [target_context] (live Memory link)",
+        "mem embed [memory_selector] --from [source_context] --into [target_context] --before [item]",
+        "mem embed [memory_selector] --from [source_context] --into [target_context] --after [item]",
     ),
     "eval": (
         "mem eval semantic status (show retained semantic campaign status)",
@@ -554,8 +575,8 @@ COMMAND_FORMS = {
         "mem import context [source_context] --from-profile [source_profile] (one Context root)",
         "mem import context [source_context] --from-profile [source_profile] --as [new_root] (renamed Context root)",
         "mem import context [source_context] --from-profile [source_profile] -r (Context tree)",
-        "mem import memory [memory] --from-profile [source_profile] --context [source_context] (into current Context)",
-        "mem import memory [memory] --from-profile [source_profile] --context [source_context] --into [target_context]",
+        "mem import memory [memory_selector] --from-profile [source_profile] --context [source_context] (into current Context)",
+        "mem import memory [memory_selector] --from-profile [source_profile] --context [source_context] --into [target_context]",
         "mem import [profile_name] --from [store] (legacy clean-baseline Profile spelling)",
     ),
     "init": (
@@ -571,7 +592,7 @@ COMMAND_FORMS = {
         "mem init-study [profile_name] --from-profile [baseline_profile] (explicit baseline)",
     ),
     "list": (
-        "mem list (enter the interactive Context browser in a TTY; print otherwise)",
+        "mem list (list the current Context)",
         "mem list [context] (explicit Context listing)",
         "mem list -r (recursive current-Context listing; -R remains an alias)",
         "mem list [context] -R (recursive Context listing)",
@@ -584,15 +605,16 @@ COMMAND_FORMS = {
         "mem lock -r (lock the current Context namespace)",
         "mem lock context [context] (lock an explicit Context)",
         "mem lock context [context] --recursive (lock an explicit Context namespace)",
-        "mem lock memory [memory] (lock a direct Memory in the current Context)",
-        "mem lock memory [memory] --context [context] (lock a direct Memory)",
+        "mem lock memory [memory_selector] (lock a direct Memory in the current Context)",
+        "mem lock memory [memory_selector] --context [context] (lock a direct Memory)",
         "mem lock profile (lock the active Profile)",
     ),
     "log": (
-        "mem log (select a Context, then browse its checkpoints in a TTY; print otherwise)",
-        'mem log "[query]" (semantic history search)',
-        "mem log --memory [memory] (Memory-lineage view; canonical Trace route)",
-        "mem log --memory [memory] --context [context] (explicit Context and Memory)",
+        "mem log (print the current Context's checkpoints)",
+        'mem log "[query]" (print semantic history matches)',
+        "mem log --context [context] (print one explicit Context's checkpoints)",
+        "mem log --memory [memory_selector] (print one compact Memory lineage)",
+        "mem log --memory [memory_selector] --context [context] (print an explicit Context and Memory lineage)",
         "mem log --operations (Profile command attempts)",
         "mem log --actions (current Study Profile action events)",
     ),
@@ -667,14 +689,14 @@ COMMAND_FORMS = {
         "mem query --show-session [session_name] (show one saved transcript)",
     ),
     "rationale": (
-        "mem rationale (open Recents or browse readable Contexts, then select a Memory)",
-        "mem rationale [memory] (explain one current or historical Memory)",
+        "mem rationale (open Recents or select a Memory from the current readable Context)",
+        "mem rationale [memory_selector] (explain one current or historical Memory)",
         "mem rationale --context [context] (start Memory selection in one readable Context)",
-        "mem rationale [memory] --context [context] (explicit Context and Memory)",
+        "mem rationale [memory_selector] --context [context] (explicit Context and Memory)",
     ),
     "reference": (
-        "mem reference [memory] --from [source_context] (snapshot into current Context)",
-        "mem reference [memory] --from [source_context] --into [target_context] (immutable snapshot)",
+        "mem reference [memory_selector] --from [source_context] (snapshot into current Context)",
+        "mem reference [memory_selector] --from [source_context] --into [target_context] (immutable snapshot)",
     ),
     "rename": (
         "mem rename [new_name] (rename the active Profile)",
@@ -748,24 +770,25 @@ COMMAND_FORMS = {
     ),
     "translate": (
         "mem translate (show/save a default-English view of the current Context)",
-        "mem translate [memory] (show/save one default-English Memory view)",
+        "mem translate [memory_selector] (show/save one default-English Memory view)",
         "mem translate --to [language] (show/save a current-Context view)",
-        "mem translate [memory] --to [language] (show/save one Memory view)",
+        "mem translate [memory_selector] --to [language] (show/save one Memory view)",
         "mem translate --save-as [result_context] (default-English new Context and switch)",
-        "mem translate [memory] --save-as [result_context] (new Context replacing one Memory; switch)",
+        "mem translate [memory_selector] --save-as [result_context] (new Context replacing one Memory; switch)",
         "mem translate --to [language] --save-as [result_context] (new translated Context and switch)",
-        "mem translate [memory] --to [language] --save-as [result_context] (new Context replacing one Memory; switch)",
+        "mem translate [memory_selector] --to [language] --save-as [result_context] (new Context replacing one Memory; switch)",
         "mem translate --in-place (add default-English sibling Memories)",
-        "mem translate [memory] --in-place (add one default-English sibling Memory)",
+        "mem translate [memory_selector] --in-place (add one default-English sibling Memory)",
         "mem translate --to [language] --in-place (add translated sibling Memories)",
-        "mem translate [memory] --to [language] --in-place (add one translated sibling Memory)",
+        "mem translate [memory_selector] --to [language] --in-place (add one translated sibling Memory)",
     ),
     "trace": (
-        "mem trace (open Recents or browse local Contexts, then select a Memory)",
-        "mem trace [memory] (shorthand for mem log --memory [memory])",
+        "mem trace (open Recents or select a Memory from the current Context)",
+        "mem trace [memory_selector] (interactively inspect the lineage printed by mem log --memory)",
         "mem trace --context [context] (start Memory selection in one local Context)",
-        "mem trace [memory] --context [context] (explicit Context and Memory)",
-        "mem trace [memory] --plain (print instead of opening History explorer)",
+        "mem trace [memory_selector] --context [context] (explicit Context and Memory)",
+        "mem trace [memory_selector] --plain (print the bounded lineage "
+        "document instead of opening its read-only Viewer)",
     ),
     "undo": ("mem undo (undo the latest recorded Context command)",),
     "unlock": (
@@ -773,8 +796,8 @@ COMMAND_FORMS = {
         "mem unlock -r (unlock the current Context namespace)",
         "mem unlock context [context] (unlock an explicit Context)",
         "mem unlock context [context] --recursive (unlock an explicit Context namespace)",
-        "mem unlock memory [memory] (unlock a direct Memory in the current Context)",
-        "mem unlock memory [memory] --context [context] (unlock a direct Memory)",
+        "mem unlock memory [memory_selector] (unlock a direct Memory in the current Context)",
+        "mem unlock memory [memory_selector] --context [context] (unlock a direct Memory)",
         "mem unlock profile (unlock the active Profile)",
     ),
     "update": (
@@ -942,6 +965,7 @@ def command_entries(root: typer.Context) -> list[CommandEntry]:
             err=True,
         )
         raise typer.Exit(1)
+    validate_translation_coverage(visible_names)
 
     description_mismatches = sorted(
         name
@@ -989,6 +1013,28 @@ def _entry_label(entry: CommandEntry) -> str:
     return label
 
 
+_HELP_SPLIT_COMMAND_LABEL_MIN = 14
+
+
+def _entry_label_lines(entry: CommandEntry) -> tuple[str, ...]:
+    """Project one exact command label into at most two display-only rows."""
+
+    suffixes: list[str] = []
+    if entry.aliases:
+        suffixes.append(f"({', '.join(entry.aliases)})")
+    if entry.annotation:
+        suffixes.append(f"({entry.annotation})")
+    if entry.maturity:
+        suffixes.append(f"[{entry.maturity}]")
+    if suffixes:
+        return entry.name, " ".join(suffixes)
+    if len(entry.name) >= _HELP_SPLIT_COMMAND_LABEL_MIN and "-" in entry.name:
+        head, tail = entry.name.rsplit("-", 1)
+        if head and tail:
+            return head + "-", tail
+    return (entry.name,)
+
+
 def _entry_line(
     entry: CommandEntry,
     *,
@@ -1002,43 +1048,76 @@ _HELP_USE_WHEN_LABEL = "WHEN"
 _HELP_USE_WHEN_PREFIX = _HELP_USE_WHEN_LABEL + " · "
 
 
+def _wrap_prefixed_terminal_text(
+    prefix: str,
+    value: str,
+    *,
+    width: int,
+) -> list[str]:
+    """Wrap translated prose after one stable terminal-cell prefix."""
+
+    prefix_width = terminal_cell_width(prefix)
+    value_width = max(1, width - prefix_width)
+    value_lines = wrap_terminal_text(display_escape_text(value), value_width)
+    continuation = " " * prefix_width
+    return [
+        (prefix if index == 0 else continuation) + line
+        for index, line in enumerate(value_lines)
+    ]
+
+
 def _help_command_rows(
     entry: CommandEntry,
     *,
-    command_prefix: str,
+    command_prefixes: tuple[str, ...],
     content_width: int,
+    language: HelpLanguage = "EN",
 ) -> list[tuple[str, str, str, int | None]]:
     """Project one command as a connected Description/When record."""
 
-    prefix_width = terminal_cell_width(command_prefix)
+    prefix_width = terminal_cell_width(command_prefixes[0])
+    if any(terminal_cell_width(prefix) != prefix_width for prefix in command_prefixes):
+        raise ValueError("Help command prefixes must share one display width.")
+    # The two-cell connector belongs to the record rather than either text
+    # column. This preserves the previous row count while making the command,
+    # description, and use case read as one connected unit.
     connector_width = 2
     body_width = max(1, content_width - prefix_width - connector_width)
-    best_for = None if entry.operation_help is None else entry.operation_help.best_for
+    english_use_when = (
+        "" if entry.operation_help is None else entry.operation_help.best_for
+    )
+    localized = operation_copy(
+        language,
+        entry.name,
+        english_description=entry.description,
+        english_use_when=english_use_when,
+    )
     summary_lines = wrap_terminal_text(
-        display_escape_text(entry.description),
+        display_escape_text(localized.description),
         body_width,
     )
     body_rows: list[tuple[str, int | None, bool]] = [
         (pad_terminal_text(line, body_width), None, False) for line in summary_lines
     ]
-    if best_for is not None:
-        value_width = max(1, body_width - terminal_cell_width(_HELP_USE_WHEN_PREFIX))
-        use_case_lines = wrap_terminal_text(display_escape_text(best_for), value_width)
-        continuation = " " * terminal_cell_width(_HELP_USE_WHEN_PREFIX)
+    if not localized.use_when:
+        best_for_lines: list[str] = []
+    else:
+        best_for_lines = _wrap_prefixed_terminal_text(
+            _HELP_USE_WHEN_PREFIX,
+            localized.use_when,
+            width=body_width,
+        )
         body_rows.extend(
             (
-                pad_terminal_text(
-                    (_HELP_USE_WHEN_PREFIX if index == 0 else continuation) + line,
-                    body_width,
-                ),
+                pad_terminal_text(line, body_width),
                 0 if index == 0 else None,
                 True,
             )
-            for index, line in enumerate(use_case_lines)
+            for index, line in enumerate(best_for_lines)
         )
 
+    row_count = max(len(body_rows), len(command_prefixes))
     semantic_row_count = len(body_rows)
-    row_count = max(semantic_row_count, 1)
     has_when = any(is_when for _body, _offset, is_when in body_rows)
 
     def connector(index: int) -> str:
@@ -1056,10 +1135,14 @@ def _help_command_rows(
 
     return [
         (
-            command_prefix if index == 0 else " " * prefix_width,
+            (
+                command_prefixes[index]
+                if index < len(command_prefixes)
+                else " " * prefix_width
+            ),
             connector(index),
-            body_rows[index][0],
-            body_rows[index][1],
+            body_rows[index][0] if index < semantic_row_count else " " * body_width,
+            body_rows[index][1] if index < semantic_row_count else None,
         )
         for index in range(row_count)
     ]
@@ -1083,18 +1166,20 @@ def render_help_lookup_entries(
     entries: list[CommandEntry],
     *,
     content_width: int = 100,
+    language: HelpLanguage = "EN",
 ) -> str:
     """Render only matched operations as their existing collapsed Help rows."""
 
     if not entries:
-        return "No matching MemCommit operations."
+        return "No Help candidates available."
     width = max(40, content_width)
     rendered: list[str] = []
-    for entry in entries:
+    for rank, entry in enumerate(entries, start=1):
         rows = _help_command_rows(
             entry,
-            command_prefix=f"mem {entry.name} ",
+            command_prefixes=(f"{rank} · mem {entry.name} ",),
             content_width=width,
+            language=language,
         )
         rendered.append(
             "\n".join(
@@ -1115,6 +1200,7 @@ def _help_group_fragments(
     expanded_index: int | None,
     selected_form: int | None,
     viewport_height: int | None = None,
+    language: HelpLanguage = "EN",
 ) -> list[tuple[str, str]]:
     """Render one discovery kind and its command records in a single box."""
     if not entries:
@@ -1125,62 +1211,81 @@ def _help_group_fragments(
     title_label = f" {display_escape_text(title)} "[:inner_width]
     border_style = "class:help-group.focused" if focused else "class:help-group"
     horizontal = "━" if focused else "─"
-    top = ("┏" if focused else "┌") + title_label
-    top += horizontal * max(0, inner_width - len(title_label))
-    top += "┓" if focused else "┐"
-    fragments: list[tuple[str, str]] = [(border_style, top + "\n")]
+    fragments: list[tuple[str, str]] = [
+        (border_style, "┏" if focused else "┌"),
+        (border_style + " bold", title_label),
+        (
+            border_style,
+            horizontal * max(0, inner_width - len(title_label))
+            + ("┓" if focused else "┐")
+            + "\n",
+        ),
+    ]
     vertical = "┃" if focused else "│"
-    category_description = HELP_CATEGORY_DESCRIPTIONS.get(title)
-    if category_description is not None:
-        classification, description = category_description
+    category_copy = HELP_CATEGORY_DESCRIPTIONS.get(title)
+    if category_copy is not None:
+        classification, description = category_copy
         prefix = f"{classification} · " if classification is not None else ""
-        lines = textwrap.wrap(
-            prefix + display_escape_text(description),
+        lines = _wrap_prefixed_terminal_text(
+            prefix,
+            category_description(
+                language,
+                title,
+                description,
+            ),
             width=content_width,
-            subsequent_indent=" " * len(prefix),
-            break_long_words=True,
-            break_on_hyphens=False,
-        ) or [prefix]
-        for line_index, line in enumerate(lines):
+        )
+        for line in lines:
             fragments.extend([(border_style, vertical), ("", " ")])
-            if line_index == 0 and classification is not None:
-                fragments.extend(
-                    [
-                        (
-                            "class:help-category-description bold",
-                            line[: len(classification)],
-                        ),
-                        (
-                            "class:help-category-description",
-                            line[len(classification) :],
-                        ),
-                    ]
-                )
-            else:
-                fragments.append(("class:help-category-description", line))
+            fragments.append(("class:help-category-description bold", line))
             fragments.extend(
                 [
-                    ("", " " * (content_width - len(line) + 1)),
+                    (
+                        "",
+                        " " * (content_width - terminal_cell_width(line) + 1),
+                    ),
                     (border_style, vertical + "\n"),
                 ]
             )
-    labels = {
-        index: display_escape_text(_entry_label(entry)) for index, entry in entries
+    label_lines = {
+        index: tuple(display_escape_text(line) for line in _entry_label_lines(entry))
+        for index, entry in entries
     }
-    name_width = max(len(label) for label in labels.values())
     for index, entry in entries:
         expanded = index == expanded_index
         owns_selection = index == selected_index
         command_focused = focused and owns_selection and selected_form is None
         if command_focused:
             fragments.append(("[SetCursorPosition]", ""))
-        command_prefix = (
-            f"{'▾' if expanded else '▸'} mem {labels[index]:<{name_width}} ─"
+        marker = "▾" if expanded else "▸"
+        first_label = label_lines[index][0]
+        # Each operation owns its junction. Keeping it next to that operation
+        # prevents a category-wide prose column from visually overpowering the
+        # command list. A display-only continuation still reserves enough
+        # left-side width, but the branch always begins on the first row.
+        connector_name_width = max(len(line) for line in label_lines[index])
+        first_command_prefix = f"{marker} mem {first_label} " + "─" * (
+            connector_name_width - len(first_label) + 1
         )
-        for prefix, connector, body, use_when_offset in _help_command_rows(
+        # Four cells keeps a continuation visibly subordinate while pulling it
+        # two cells left of the old post-"mem " alignment. Pad on the right so
+        # every label row still reaches the first-row junction.
+        continuation_indent = " " * 4
+        command_prefixes = (
+            first_command_prefix,
+            *(
+                pad_terminal_text(
+                    continuation_indent + line,
+                    terminal_cell_width(first_command_prefix),
+                )
+                for line in label_lines[index][1:]
+            ),
+        )
+        for prefix, connector, body, label_offset in _help_command_rows(
             entry,
-            command_prefix=command_prefix,
+            command_prefixes=command_prefixes,
             content_width=content_width,
+            language=language,
         ):
             fragments.append((border_style, vertical))
             body_style = "class:help-command.selected" if command_focused else ""
@@ -1190,15 +1295,17 @@ def _help_group_fragments(
                 else "class:help-command"
             )
             fragments.append((prefix_style, f" {prefix}"))
-            fragments.append((body_style, connector))
-            if use_when_offset is None:
+            connector_style = body_style if command_focused else "class:help-connector"
+            fragments.append((connector_style, connector))
+            if label_offset is None:
                 fragments.append((body_style, f"{body} "))
             else:
-                label_end = use_when_offset + len(_HELP_USE_WHEN_LABEL)
+                label = _HELP_USE_WHEN_LABEL
+                label_end = label_offset + len(label)
                 fragments.extend(
                     [
-                        (body_style, body[:use_when_offset]),
-                        (body_style, body[use_when_offset:label_end]),
+                        (body_style, body[:label_offset]),
+                        (body_style, body[label_offset:label_end]),
                         (body_style, body[label_end:] + " "),
                     ]
                 )
@@ -1235,7 +1342,9 @@ def _help_group_fragments(
                                 (border_style, vertical + "\n"),
                             ]
                         )
-            details = () if entry.operation_help is None else entry.operation_help.details
+            details = (
+                () if entry.operation_help is None else entry.operation_help.details
+            )
             for detail in details:
                 detail_lines: list[tuple[str, str]] = []
                 title_prefix = "  "
@@ -1348,9 +1457,9 @@ def _help_group_width(terminal_columns: int) -> int:
 
 
 def _help_list_viewport_height(terminal_rows: int) -> int:
-    """Return rows left after Help's fixed header, view, rule, and footer."""
+    """Return rows left after Help's fixed header, controls, rule, and footer."""
 
-    return max(2, terminal_rows - 6)
+    return max(2, terminal_rows - 9)
 
 
 def _help_information_box_fragments(
@@ -1359,6 +1468,7 @@ def _help_information_box_fragments(
     by_kind: bool,
     focused_concept_index: int | None = None,
     focused: bool = False,
+    language: HelpLanguage = "EN",
 ) -> list[tuple[str, str]]:
     """Render the BY KIND primer as focusable concepts plus key reference."""
     if not by_kind:
@@ -1399,33 +1509,35 @@ def _help_information_box_fragments(
         selectable: bool,
         label_styles: dict[str, str] | None = None,
     ) -> None:
-        label_width = max(len(label) for label, _description in items)
+        label_width = max(terminal_cell_width(label) for label, _description in items)
         for item_index, (label, description) in enumerate(items):
             row_focused = selectable and focused and focused_concept_index == item_index
-            prefix = f"{label:<{label_width}}  "
-            lines = textwrap.wrap(
+            prefix = pad_terminal_text(label, label_width) + "  "
+            lines = wrap_terminal_text(
                 display_escape_text(description),
-                width=max(1, content_width - len(prefix)),
-                break_long_words=True,
-                break_on_hyphens=False,
-            ) or [""]
+                max(1, content_width - terminal_cell_width(prefix)),
+            )
             for line_index, line in enumerate(lines):
                 if row_focused and line_index == 0:
                     fragments.append(("[SetCursorPosition]", ""))
                 row_prefix = prefix if line_index == 0 else " " * len(prefix)
                 padding = " " * max(
                     0,
-                    content_width - len(row_prefix) - len(line),
+                    content_width
+                    - terminal_cell_width(row_prefix)
+                    - terminal_cell_width(line),
                 )
                 fragments.extend(
                     [
                         (border_style, "┃" if guide_focused else "│"),
                         (
-                            "class:selected" if row_focused else "",
-                            " " + row_prefix + line + padding + " ",
-                        )
-                        if row_focused
-                        else ("", " "),
+                            (
+                                "class:selected" if row_focused else "",
+                                " " + row_prefix + line + padding + " ",
+                            )
+                            if row_focused
+                            else ("", " ")
+                        ),
                     ]
                 )
                 if not row_focused:
@@ -1446,12 +1558,27 @@ def _help_information_box_fragments(
 
     border("CORE CONCEPTS", middle=False)
     rows(
-        HELP_CORE_CONCEPTS,
+        tuple(
+            (
+                label,
+                core_concept_description(language, label, description),
+            )
+            for label, description in HELP_CORE_CONCEPTS
+        ),
         selectable=True,
         label_styles=HELP_CORE_CONCEPT_STYLES,
     )
     border("COMMON KEYS", middle=True)
-    rows(HELP_COMMON_KEYS, selectable=False)
+    rows(
+        tuple(
+            (
+                key,
+                common_key_description(language, key, description),
+            )
+            for key, description in HELP_COMMON_KEYS
+        ),
+        selectable=False,
+    )
     fragments.append(
         (
             border_style,
@@ -1486,6 +1613,18 @@ def _ordered_help_entries(
     )
 
 
+def _help_section_heading_fragments(
+    *,
+    title: str,
+    width: int,
+) -> list[tuple[str, str]]:
+    """Mark a semantic section without nesting the category frames below it."""
+
+    width = max(36, width)
+    displayed = display_escape_text(title)[:width]
+    return [("class:category", displayed + " " * (width - len(displayed)) + "\n")]
+
+
 def run_help_selector(
     entries: list[CommandEntry],
     *,
@@ -1508,7 +1647,12 @@ def run_help_selector(
         raise ValueError("Help exploration labels must be nonblank.")
     if require_tty and (not sys.stdin.isatty() or not sys.stdout.isatty()):
         raise ValueError("Interactive help requires a terminal.")
-
+    language_state = HorizontalChoiceState(
+        tuple(
+            HorizontalChoiceOption(language, language) for language in HELP_LANGUAGES
+        ),
+        selected_uid="EN",
+    )
     view_state = HorizontalChoiceState(
         (
             HorizontalChoiceOption("CATEGORY", "BY KIND"),
@@ -1536,6 +1680,15 @@ def run_help_selector(
     def emit_explore_action(action: str, command_name: str | None = None) -> None:
         if mode == "EXPLORE" and on_explore_action is not None:
             on_explore_action(action, command_name)
+
+    def selected_language() -> HelpLanguage:
+        return language_state.selected_uid  # type: ignore[return-value]
+
+    def select_language(delta: int) -> None:
+        """Change only process-local Help prose; never mutate study data."""
+
+        if language_state.move(delta):
+            emit_explore_action("LANGUAGE", language_state.selected_uid)
 
     def select_view(delta: int) -> None:
         selected_name = visible_entries["value"][selected_index["value"]].name
@@ -1609,12 +1762,20 @@ def run_help_selector(
             return
 
         groups = visible_groups()
+        if event.app.layout.has_focus(language_control):
+            if direction > 0:
+                event.app.layout.focus(view_control)
+            else:
+                focus_group(groups[-1])
+                event.app.layout.focus(list_control)
+            event.app.invalidate()
+            return
         if event.app.layout.has_focus(view_control):
-            # A complete cycle must leave VIEW toward the opposite edge of the
-            # list. Retaining the last group here would recreate the old
-            # VIEW/last-group two-stop loop after one pass through the screen.
-            focus_group(groups[0] if direction > 0 else groups[-1])
-            event.app.layout.focus(list_control)
+            if direction < 0:
+                event.app.layout.focus(language_control)
+            else:
+                focus_group(groups[0])
+                event.app.layout.focus(list_control)
             event.app.invalidate()
             return
 
@@ -1625,9 +1786,7 @@ def run_help_selector(
         target_index = (
             0
             if group_index is None and direction > 0
-            else group_index + direction
-            if group_index is not None
-            else -1
+            else group_index + direction if group_index is not None else -1
         )
         if 0 <= target_index < len(groups):
             focus_group(groups[target_index])
@@ -1658,10 +1817,17 @@ def run_help_selector(
                 by_kind=by_kind,
                 focused_concept_index=selected_concept_index["value"],
                 focused=list_focused,
+                language=selected_language(),
             )
         )
         if fragments:
             fragments.append(("", "\n"))
+        fragments.extend(
+            _help_section_heading_fragments(
+                title="OPERATIONS",
+                width=card_width,
+            )
+        )
         groups = visible_groups()
         for group_index, (title, group_entries) in enumerate(groups):
             group_focused = (
@@ -1683,6 +1849,7 @@ def run_help_selector(
                     viewport_height=(
                         None if by_kind else _help_list_viewport_height(terminal_rows)
                     ),
+                    language=selected_language(),
                 )
             )
             if group_index < len(groups) - 1:
@@ -1691,6 +1858,19 @@ def run_help_selector(
 
     list_control = FormattedTextControl(
         text=render_entries,
+        focusable=True,
+        show_cursor=False,
+    )
+    language_control = FormattedTextControl(
+        lambda: render_horizontal_choice(
+            language_state,
+            title="LANGUAGE",
+            focused=(
+                app_ref.get("app") is not None
+                and app_ref["app"].layout.has_focus(language_control)
+            ),
+            inline_boxed=True,
+        ),
         focusable=True,
         show_cursor=False,
     )
@@ -1709,6 +1889,7 @@ def run_help_selector(
     )
     surface_focus = SurfaceFocusController(
         (
+            FocusSurface("language", language_control),
             FocusSurface("view", view_control),
             FocusSurface("commands", list_control),
         )
@@ -1964,6 +2145,36 @@ def run_help_selector(
         select_view(-1)
         event.app.invalidate()
 
+    @bindings.add("left", filter=has_focus(language_control), eager=True)
+    def _previous_language(event) -> None:
+        navigation_accelerator.reset()
+        select_language(-1)
+        event.app.invalidate()
+
+    @bindings.add("right", filter=has_focus(language_control), eager=True)
+    def _next_language(event) -> None:
+        navigation_accelerator.reset()
+        select_language(1)
+        event.app.invalidate()
+
+    @bindings.add("down", filter=has_focus(language_control), eager=True)
+    def _leave_language(event) -> None:
+        surface_focus.focus_relative(
+            event.app,
+            1,
+            wrap=False,
+        )
+        event.app.invalidate()
+
+    @bindings.add("up", filter=has_focus(view_control), eager=True)
+    def _enter_language(event) -> None:
+        surface_focus.focus_relative(
+            event.app,
+            -1,
+            wrap=False,
+        )
+        event.app.invalidate()
+
     @bindings.add("right", filter=has_focus(view_control), eager=True)
     def _next_view(event) -> None:
         navigation_accelerator.reset()
@@ -2020,6 +2231,19 @@ def run_help_selector(
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
+    language = Window(
+        language_control,
+        height=Dimension.exact(1),
+        dont_extend_height=True,
+    )
+    language_frame = Frame(language, title="HELP LANGUAGE")
+    bind_focused_frame_style(
+        language_frame,
+        is_focused=lambda: (
+            app_ref.get("app") is not None
+            and app_ref["app"].layout.has_focus(language_control)
+        ),
+    )
     view_frame = Frame(view, title="INVENTORY VIEW")
     bind_focused_frame_style(
         view_frame,
@@ -2033,6 +2257,10 @@ def run_help_selector(
         return_label = (
             f"return to {explore_return_label}" if mode == "EXPLORE" else "cancel"
         )
+        if app_ref.get("app") is not None and app_ref["app"].layout.has_focus(
+            language_control
+        ):
+            return " LANGUAGE: ←/→ choose · ↓ view · Tab next · Q " + return_label
         if app_ref.get("app") is not None and app_ref["app"].layout.has_focus(
             view_control
         ):
@@ -2053,9 +2281,11 @@ def run_help_selector(
         enter_action = (
             "Enter open forms"
             if selected_form["value"] is None
-            else "Enter inspect form"
-            if mode == "EXPLORE"
-            else "Enter prefill command line"
+            else (
+                "Enter inspect form"
+                if mode == "EXPLORE"
+                else "Enter prefill command line"
+            )
         )
         detail_action = (
             f"H hide Help  Q return to {explore_return_label}"
@@ -2077,7 +2307,16 @@ def run_help_selector(
     )
     application: Application[HelpSelection | None] = Application(
         layout=Layout(
-            HSplit([header, view_frame, body, horizontal_rule(right_gutter=1), footer]),
+            HSplit(
+                [
+                    header,
+                    language_frame,
+                    view_frame,
+                    body,
+                    horizontal_rule(right_gutter=1),
+                    footer,
+                ]
+            ),
             focused_element=list_control,
         ),
         key_bindings=bindings,
@@ -2095,6 +2334,7 @@ def run_help_selector(
                         "title": "bold",
                         "selected": "fg:#10242f bg:#8bd5ff bold",
                         "help-command.selected": "fg:#10242f bg:#8bd5ff",
+                        "help-connector": "fg:#6e738d",
                         "form": "fg:#cad3f5",
                         "category": "bold",
                         "help-command": "bold",

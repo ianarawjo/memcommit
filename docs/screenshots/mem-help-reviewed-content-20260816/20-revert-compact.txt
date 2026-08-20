@@ -1,16 +1,16 @@
  mem help · command inventory                                                                       
+┌────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────┐
+│  LANGUAGE · [ ✓ EN ]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
 │  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
-┃ ▸ mem checkpoint  Save the current Context as a manual recovery point for Diff or Revert.       ┃^
-┃                   USE WHEN: Creating a recovery point before risky work.                        ┃ 
-┃ ▸ mem undo        Undo the most recent recorded command as one unit.                            ┃ 
-┃                   USE WHEN: Reversing the latest recorded mutation as one operation.            ┃ 
-┃ ▸ mem redo        Redo the most recently undone recorded Context command.                       ┃ 
-┃                   USE WHEN: Reapplying a command that was undone accidentally.                  ┃ 
-┃ ▾ mem revert      Restore one local Context to a selected checkpoint, reviewing the exact       ┃ 
-┃                   impact when selection is interactive.                                         ┃ 
-┃                   USE WHEN: Restoring a Context to a deliberately saved recovery point.         ┃ 
+┃             └ WHEN · Reversing the latest recorded mutation as one operation.                   ┃^
+┃ ▸ mem redo ─┬ Redo the most recently undone recorded Context command.                           ┃ 
+┃             └ WHEN · Reapplying a command that was undone accidentally.                         ┃ 
+┃ ▾ mem revert ─┬ Restore one local Context to a selected checkpoint, reviewing the exact impact  ┃ 
+┃               │ when selection is interactive.                                                  ┃ 
+┃               └ WHEN · Restoring a Context to a deliberately saved recovery point.              ┃ 
 ┃   FLOW      · Checkpoint -> restored Context state                                              ┃ 
 ┃   EXECUTION · MIXED                                                                             ┃ 
 ┃   EFFECT    · Restores one Context; interactive or semantic selection requires reviewed         ┃ 

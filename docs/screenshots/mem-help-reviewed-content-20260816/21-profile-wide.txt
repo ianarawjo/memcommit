@@ -1,43 +1,43 @@
  mem help · command inventory                                                                                                                                                       
+┌────────────────────────────────────────────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────────────────────────────────────────────┐
+│  LANGUAGE · [ ✓ EN ]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                                                                                                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
 │  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-│                          responses. Review never applies Memories.                     │                                                                                        │^
-│ ▸ mem fit                Judge whether a defined set of Memories or other propositions │ USE WHEN: Checking whether a defined set of Memories, Rules, Goals, Examples, or other │ 
-│                          is jointly compatible under ordinary interpretation,          │           propositions can jointly hold.                                               │ 
-│                          returning YES, MAY, or NO.                                    │                                                                                        │ 
-│ ▸ mem check-conformance  Check one Context or saved Ground Examples against explicit   │ USE WHEN: Verifying whether existing Memories or Examples satisfy stated Rules or      │ 
-│                          Rules or condition propositions and report conformance        │           condition propositions.                                                      │ 
-│                          issues.                                                       │                                                                                        │ 
-└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘^
                                                                                                                                                                                     
 ┌ GROUND WORKBENCH ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
 │ LLM-BASED · Turn abstract ideas into reviewable common ground by developing a Goal, Rules, and example Memories together.                                                       │ 
-│ ▸ mem ground  Develop an abstract idea into a reviewable Ground by shaping its Goal,   │ USE WHEN: Working out how an abstract goal should operate in practice through jointly  │ 
-│               Rules, and example Memories together.                                    │           revised Rules and concrete Examples.                                         │ 
+│ ▸ mem ground ─┬ Develop an abstract idea into a reviewable Ground by shaping its Goal, Rules, and example Memories together.                                                    │ 
+│               └ WHEN · Working out how an abstract goal should operate in practice through jointly revised Rules and concrete Examples.                                         │ 
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
                                                                                                                                                                                     
 ┌ HISTORY & RECOVERY ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
 │ MIXED · Inspect provenance and recorded changes. Restore an earlier state through explicit history operations.                                                                  │ 
-│ ▸ mem log         Browse or search recorded Context, Memory, and Profile history.      │ USE WHEN: Investigating previous operations, checkpoints, or Memory history.           │ 
-│ ▸ mem diff        Show the differences recorded by a Context checkpoint or the active  │ USE WHEN: Verifying exactly what a recorded operation changed.                         │ 
-│                   Update.                                                              │                                                                                        │ 
-│ ▸ mem trace       Trace one retained Memory through its recorded lineage.              │ USE WHEN: Determining where a Memory came from and how it changed.                     │ 
-│ ▸ mem rationale   Explain one Memory from recorded provenance and, when needed,        │ USE WHEN: Understanding why a Memory exists or reached its current form.               │ 
-│                   inference.                                                           │                                                                                        │ 
-│ ▸ mem checkpoint  Save the current Context as a manual recovery point for Diff or      │ USE WHEN: Creating a recovery point before risky work.                                 │ 
-│                   Revert.                                                              │                                                                                        │ 
-│ ▸ mem undo        Undo the most recent recorded command as one unit.                   │ USE WHEN: Reversing the latest recorded mutation as one operation.                     │ 
-│ ▸ mem redo        Redo the most recently undone recorded Context command.              │ USE WHEN: Reapplying a command that was undone accidentally.                           │ 
-│ ▸ mem revert      Restore one local Context to a selected checkpoint, reviewing the    │ USE WHEN: Restoring a Context to a deliberately saved recovery point.                  │ 
-│                   exact impact when selection is interactive.                          │                                                                                        │ 
+│ ▸ mem log ─┬ Browse or search recorded Context, Memory, and Profile history.                                                                                                    │ 
+│            └ WHEN · Investigating previous operations, checkpoints, or Memory history.                                                                                          │ 
+│ ▸ mem diff ─┬ Show the differences recorded by a Context checkpoint or the active Update.                                                                                       │ 
+│             └ WHEN · Verifying exactly what a recorded operation changed.                                                                                                       │ 
+│ ▸ mem trace ─┬ Trace one retained Memory through its recorded lineage.                                                                                                          │ 
+│              └ WHEN · Determining where a Memory came from and how it changed.                                                                                                  │ 
+│ ▸ mem rationale ─┬ Explain one Memory from recorded provenance and, when needed, inference.                                                                                     │ 
+│                  └ WHEN · Understanding why a Memory exists or reached its current form.                                                                                        │ 
+│ ▸ mem checkpoint ─┬ Save the current Context as a manual recovery point for Diff or Revert.                                                                                     │ 
+│                   └ WHEN · Creating a recovery point before risky work.                                                                                                         │ 
+│ ▸ mem undo ─┬ Undo the most recent recorded command as one unit.                                                                                                                │ 
+│             └ WHEN · Reversing the latest recorded mutation as one operation.                                                                                                   │ 
+│ ▸ mem redo ─┬ Redo the most recently undone recorded Context command.                                                                                                           │ 
+│             └ WHEN · Reapplying a command that was undone accidentally.                                                                                                         │ 
+│ ▸ mem revert ─┬ Restore one local Context to a selected checkpoint, reviewing the exact impact when selection is interactive.                                                   │ 
+│               └ WHEN · Restoring a Context to a deliberately saved recovery point.                                                                                              │ 
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
                                                                                                                                                                                     
 ┏ PROFILES ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
 ┃ NO LLM · Select and administer complete local Profile stores and their managed names.                                                                                           ┃ 
-┃ ▾ mem profile  Select and manage complete local MemoryStore Profiles. Profiles can     │ USE WHEN: Managing separate users, environments, or Memory stores.                     ┃ 
-┃                also be renamed or permanently removed through the picker or with mem   │                                                                                        ┃ 
-┃                profile rename and mem profile remove.                                  │                                                                                        ┃ 
+┃ ▾ mem profile ─┬ Select and manage complete local MemoryStore Profiles. Profiles can also be renamed or permanently removed through the picker or with mem profile rename and   ┃ 
+┃                │ mem profile remove.                                                                                                                                            ┃ 
+┃                └ WHEN · Managing separate users, environments, or Memory stores.                                                                                                ┃ 
 ┃   FLOW      · Profile registry <-> Profile administration                                                                                                                       ┃ 
 ┃   EXECUTION · DETERMINISTIC                                                                                                                                                     ┃ 
 ┃   EFFECT    · May switch, import, rename, or permanently remove Profiles; Grant subcommands manage cross-Profile views                                                          ┃ 

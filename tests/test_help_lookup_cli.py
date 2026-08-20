@@ -42,8 +42,10 @@ def _invoke(*args: str):
     )
 
 
-def test_help_request_renders_multiple_existing_description_when_rows(monkeypatch):
-    provider = _Provider('{"operations":["compare","search"]}')
+def test_help_request_renders_three_ranked_existing_description_when_rows(monkeypatch):
+    provider = _Provider(
+        '{"operations":["compare","search","query"]}'
+    )
     monkeypatch.setattr(inventory, "connect_help_provider", lambda: provider)
 
     result = _invoke("help", "compare two Contexts and find related Memories")
@@ -51,11 +53,13 @@ def test_help_request_renders_multiple_existing_description_when_rows(monkeypatc
     assert result.exit_code == 0
     assert result.stderr == ""
     assert provider.calls == 1
-    assert "mem compare ┬ Compare Memories in two Contexts" in result.stdout
+    assert "1 · mem compare ┬ Compare Memories in two Contexts" in result.stdout
     assert "└ WHEN · Comparing two Contexts as a whole" in result.stdout
-    assert "mem search ┬ Semantically rank Memories" in result.stdout
+    assert "2 · mem search ┬ Semantically rank Memories" in result.stdout
     assert "└ WHEN · Finding relevant Memories through meaning" in result.stdout
+    assert "3 · mem query ┬ Generate an LLM-based answer" in result.stdout
     assert result.stdout.index("mem compare") < result.stdout.index("mem search")
+    assert result.stdout.index("mem search") < result.stdout.index("mem query")
     assert "WHY" not in result.stdout
     assert "FLOW" not in result.stdout
     assert "EFFECT" not in result.stdout
@@ -63,15 +67,14 @@ def test_help_request_renders_multiple_existing_description_when_rows(monkeypatc
     assert "Command line" not in result.stdout
 
 
-def test_help_request_can_return_one_or_none(monkeypatch):
+def test_help_request_rejects_short_or_empty_provider_selections(monkeypatch):
     provider = _Provider('{"operations":["query"]}')
     monkeypatch.setattr(inventory, "connect_help_provider", lambda: provider)
 
     one = _invoke("help", "answer from my readable Context")
 
-    assert one.exit_code == 0
-    assert "mem query ┬ Generate an LLM-based answer" in one.stdout
-    assert one.stdout.count("\nmem ") == 0
+    assert one.exit_code == 1
+    assert "invalid structured output" in one.stderr
 
     none_provider = _Provider('{"operations":[]}')
     monkeypatch.setattr(
@@ -81,8 +84,8 @@ def test_help_request_can_return_one_or_none(monkeypatch):
     )
     none = _invoke("help", "🦆 ??? 123")
 
-    assert none.exit_code == 0
-    assert none.stdout == "No matching MemCommit operations.\n"
+    assert none.exit_code == 1
+    assert "invalid structured output" in none.stderr
 
 
 def test_plain_help_does_not_connect_a_provider(monkeypatch):
@@ -114,7 +117,9 @@ def test_thinking_progress_is_tty_only_and_focused_lookup_only(monkeypatch):
             interval=60,
         )
 
-    provider = _Provider('{"operations":["update"]}')
+    provider = _Provider(
+        '{"operations":["update","meld","merge"]}'
+    )
     monkeypatch.setattr(inventory, "CommandProgress", build_progress)
     monkeypatch.setattr(inventory, "connect_help_provider", lambda: provider)
 
@@ -148,7 +153,9 @@ def test_help_request_reports_provider_failure_without_partial_rows(monkeypatch)
 
 
 def test_study_help_rejects_copied_description_before_provider(monkeypatch):
-    provider = _Provider('{"operations":["query"]}')
+    provider = _Provider(
+        '{"operations":["query","search","elaborate"]}'
+    )
     monkeypatch.setattr(inventory, "active_profile_is_study", lambda: True)
     monkeypatch.setattr(inventory, "connect_help_provider", lambda: provider)
 
@@ -168,7 +175,9 @@ def test_study_help_rejects_copied_description_before_provider(monkeypatch):
 
 
 def test_same_description_is_allowed_outside_study(monkeypatch):
-    provider = _Provider('{"operations":["query"]}')
+    provider = _Provider(
+        '{"operations":["query","search","elaborate"]}'
+    )
     monkeypatch.setattr(inventory, "connect_help_provider", lambda: provider)
 
     result = _invoke("help", describe_operation("query").summary)

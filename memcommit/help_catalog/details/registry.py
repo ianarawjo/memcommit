@@ -18,6 +18,9 @@ from memcommit.help_catalog.details.profile import PROFILE_DETAILS
 from memcommit.help_catalog.details.provider import PROVIDER_DETAILS
 from memcommit.help_catalog.details.query import QUERY_DETAILS
 from memcommit.help_catalog.details.revert import REVERT_DETAILS
+from memcommit.help_catalog.details.semantic_session_commands import (
+    SEMANTIC_SESSION_COMMAND_DETAILS,
+)
 from memcommit.help_catalog.details.translate import TRANSLATE_DETAILS
 from memcommit.help_catalog.details.update_meld import UPDATE_MELD_DETAILS
 from memcommit.help_catalog.model import OperationHelpDetail
@@ -40,6 +43,7 @@ _DETAIL_GROUPS = (
     PROVIDER_DETAILS,
     QUERY_DETAILS,
     REVERT_DETAILS,
+    SEMANTIC_SESSION_COMMAND_DETAILS,
     TRANSLATE_DETAILS,
     UPDATE_MELD_DETAILS,
 )

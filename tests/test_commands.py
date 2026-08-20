@@ -99,8 +99,7 @@ class TestHelp:
         assert any(line.startswith("help ") for line in lines)
         assert "bare → TUI" not in result.output
         assert any(
-            line.startswith("atomize ")
-            and "independently reviewable Memories" in line
+            line.startswith("atomize ") and "independently reviewable Memories" in line
             for line in lines
         )
         assert any(
@@ -109,8 +108,7 @@ class TestHelp:
             for line in lines
         )
         assert any(
-            line.startswith("reference ")
-            and "immutable read-only snapshot" in line
+            line.startswith("reference ") and "immutable read-only snapshot" in line
             for line in lines
         )
         assert any(
@@ -177,7 +175,7 @@ class TestHelp:
         )
         lines = "".join(text for _style, text in fragments).splitlines()
 
-        assert help_inventory._help_list_viewport_height(52) == 46
+        assert help_inventory._help_list_viewport_height(52) == 43
         assert len(lines) == 8
         assert all(len(line) == 52 for line in lines)
         assert lines[-2] == "│" + " " * 50 + "│"
@@ -196,18 +194,25 @@ class TestHelp:
         assert any(line.startswith("├ COMMON KEYS ") for line in lines)
         assert all(len(line) == 100 for line in lines)
         assert "MEMORY" in rendered
-        assert "An atomic unit of information" in rendered
+        assert "basic record unit" in rendered
+        assert "task-1/participant" in rendered
+        assert "separator expresses hierarchy" in prose
+        assert "descendant Contexts as one subtree" in prose
+        assert "OPERATION" in rendered
+        assert "reusable action" in prose
         assert any(
-            style == "class:memory-object" and "MEMORY" in text
+            style == "class:memory-object bold" and "MEMORY" in text
             for style, text in fragments
         )
         assert not any(
-            style == "class:memory-object" and "An atomic unit" in text
+            style == "class:memory-object bold" and "basic record unit" in text
             for style, text in fragments
         )
         assert "without direct ownership" in prose
         assert "read or query a Context" in prose
         assert "run permitted operations" in prose
+        assert "Apply results and checkpoint history" in prose
+        assert "does not itself mean" not in prose
         assert "created for each applied operation" in prose
         assert "recorded per affected Context" in prose
         assert "Esc / Backspace" in rendered
@@ -219,6 +224,14 @@ class TestHelp:
             )
             == []
         )
+
+    def test_operation_section_heading_is_full_width_and_neutral(self):
+        fragments = help_inventory._help_section_heading_fragments(
+            title="OPERATIONS",
+            width=100,
+        )
+
+        assert fragments == [("class:category", "OPERATIONS" + " " * 90 + "\n")]
 
     def test_each_core_concept_can_own_focus_without_an_action(self):
         for concept_index, (label, _description) in enumerate(
@@ -373,8 +386,12 @@ class TestHelp:
         assert rendered.count("┏") == 1
         assert rendered.count("┛") == 1
         explain_line = next(line for line in lines if "▾ mem explain" in line)
-        assert "Explain a sufficiently" in explain_line
-        assert "▸ mem find     Find one relevant record." in rendered
+        assert "mem explain ── Explain a" in explain_line
+        assert "sufficiently" in rendered
+        assert "long" in rendered
+        assert "operation" in rendered
+        assert "▸ mem find" in rendered
+        assert "Find one relevant" in rendered
         assert "terminal edge." in rendered
         assert "FORM 1 · mem explain" in rendered
         find_line = next(
@@ -431,31 +448,26 @@ class TestHelp:
             "(example: directional Baseline)"
         ) in forms
         assert (
-            "mem meld --into [baseline_context] (current Context is incoming)"
-            in forms
+            "mem meld --into [baseline_context] (current Context is incoming)" in forms
         )
         assert (
-            "mem meld --from [incoming_context] (current Context is baseline)"
-            in forms
+            "mem meld --from [incoming_context] (current Context is baseline)" in forms
         )
-        result_form = next(
-            form for form in forms if "--to [result_context]" in form
-        )
+        result_form = next(form for form in forms if "--to [result_context]" in form)
         assert help_inventory._selectable_form_line(result_form) == (
             "mem meld [peer_a] [peer_b] --to [result_context]"
         )
 
     def test_forms_name_editable_values_by_semantic_role(self):
         assert help_inventory.COMMAND_FORMS["add"][0].startswith(
-            'mem add "[memory]"'
+            'mem add "[memory_content]"'
         )
         assert help_inventory.COMMAND_FORMS["edit"][0].startswith(
-            'mem edit [memory] "[new_content]"'
+            'mem edit [memory_selector] "[new_content]"'
         )
         assert help_inventory.COMMAND_FORMS["rename"] == (
             "mem rename [new_name] (rename the active Profile)",
-            "mem rename [profile_name] [new_name] "
-            "(rename an explicit Profile)",
+            "mem rename [profile_name] [new_name] (rename an explicit Profile)",
         )
         assert help_inventory.COMMAND_RELATED_FORMS["rename"] == (
             "mem profile rename [new_name] "
@@ -472,7 +484,7 @@ class TestHelp:
             "mem checkpoint (save without a message)"
         )
         assert help_inventory.COMMAND_FORMS["translate"][0] == (
-            "mem translate " "(show/save a default-English view of the current Context)"
+            "mem translate (show/save a default-English view of the current Context)"
         )
         assert help_inventory.COMMAND_FORMS["init-study"][:2] == (
             "mem init-study (edit or generate a Study Profile name)",
@@ -482,7 +494,7 @@ class TestHelp:
             "mem checkout (enter the Git-style interactive Context picker)"
         )
         assert help_inventory.COMMAND_FORMS["checkout"][3] == (
-            "mem checkout -b [new_context] " "(create and switch to a Context branch)"
+            "mem checkout -b [new_context] (create and switch to a Context branch)"
         )
         assert help_inventory.COMMAND_FORMS["init"][0].startswith("mem init (")
         assert help_inventory.COMMAND_FORMS["branch"][0].startswith("mem branch (")
@@ -566,8 +578,7 @@ class TestHelp:
             for form in forms:
                 command_line = help_inventory._selectable_form_line(form)
                 assert shlex.split(command_line)[:2] == ["mem", command_name], (
-                    f"{command_name} owns a form for another command: "
-                    f"{command_line}"
+                    f"{command_name} owns a form for another command: {command_line}"
                 )
                 for placeholder, sample in samples.items():
                     command_line = command_line.replace(placeholder, sample)
@@ -584,13 +595,15 @@ class TestHelp:
     def test_meaningful_bare_callbacks_have_a_bare_form(self):
         root = get_command(app)
         context = click.Context(root)
-        semantic_usage_errors = {"add", "edit", "elaborate", "impact"}
+        semantic_usage_errors = {"add", "elaborate", "impact"}
 
         for command_name in root.list_commands(context):
             command = root.get_command(context, command_name)
             if command is None or command.hidden:
                 continue
-            if isinstance(command, click.Group):
+            if command_name in semantic_usage_errors:
+                meaningful_bare = False
+            elif isinstance(command, click.Group):
                 meaningful_bare = command.invoke_without_command
             else:
                 required_arguments = [
@@ -599,7 +612,7 @@ class TestHelp:
                     if isinstance(parameter, click.Argument) and parameter.required
                 ]
                 meaningful_bare = (
-                    not required_arguments and command_name not in semantic_usage_errors
+                    not required_arguments
                 )
             if not meaningful_bare:
                 continue
@@ -630,7 +643,7 @@ class TestHelp:
     def test_free_text_placeholders_include_shell_quotes(self):
         assert (
             help_inventory._selectable_form_line(help_inventory.COMMAND_FORMS["add"][0])
-            == 'mem add "[memory]"'
+            == 'mem add "[memory_content]"'
         )
         assert (
             help_inventory._selectable_form_line(
@@ -704,7 +717,7 @@ class TestHelp:
             )
 
         assert result is None
-        assert bound == ["INVENTORY VIEW"]
+        assert bound == ["HELP LANGUAGE", "INVENTORY VIEW"]
 
     def test_selector_tab_advances_through_by_kind_groups(self):
         entries = [
@@ -744,9 +757,9 @@ class TestHelp:
             for name in ("add", "find")
         ]
         with create_pipe_input() as pipe_input:
-            # Create -> Search -> VIEW, then switch projection. A–Z keeps
+            # Create -> Search -> LANGUAGE -> VIEW, then switch projection. A–Z keeps
             # its single list surface and the selected command by name.
-            pipe_input.send_text("\t\t\x1b[C\t\r\r")
+            pipe_input.send_text("\t\t\t\x1b[C\t\r\r")
             selected = run_help_selector(
                 entries,
                 app_input=pipe_input,
@@ -769,9 +782,9 @@ class TestHelp:
             for name in ("init", "add", "find")
         ]
         with create_pipe_input() as pipe_input:
-            # Retain add inside Create, cross Search and VIEW, then re-enter
+            # Retain add inside Create, cross Search, LANGUAGE, and VIEW, then re-enter
             # Create. Tab traversal preserves that kind's cursor.
-            pipe_input.send_text("\x1b[B\t\t\t\r\r")
+            pipe_input.send_text("\x1b[B\t\t\t\t\r\r")
             selected = run_help_selector(
                 entries,
                 app_input=pipe_input,
@@ -794,7 +807,7 @@ class TestHelp:
             for name in ("add", "find", "edit")
         ]
         with create_pipe_input() as pipe_input:
-            pipe_input.send_text("\x1b[Z\x1b[Z\r\r")
+            pipe_input.send_text("\x1b[Z\x1b[Z\x1b[Z\r\r")
             selected = run_help_selector(
                 entries,
                 app_input=pipe_input,
@@ -876,6 +889,22 @@ class TestHelp:
         assert ("FORM", "alpha") in actions
         assert actions[-1] == ("HIDE", None)
         assert not any(action == "DETAIL" for action, _command in actions)
+
+    def test_explore_mode_reports_process_local_help_language_changes(self):
+        actions: list[tuple[str, str | None]] = []
+        with create_pipe_input() as pipe_input:
+            pipe_input.send_text("\x1b[Z\x1b[Z\x1b[Ch")
+            selected = run_help_selector(
+                self.selector_entries(),
+                app_input=pipe_input,
+                app_output=DummyOutput(),
+                require_tty=False,
+                mode="EXPLORE",
+                on_explore_action=lambda action, value: actions.append((action, value)),
+            )
+
+        assert selected is None
+        assert actions == [("LANGUAGE", "FR"), ("HIDE", None)]
 
     def test_selector_reuses_shared_held_arrow_acceleration(self, monkeypatch):
         class FiveStepAccelerator:

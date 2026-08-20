@@ -1,2 +1,0 @@
-mem find-conflicts ┬ Report conflicting direct Memory pairs in the current or explicit Context; no Context changes.                                                                 
-                   └ WHEN · Finding mutually incompatible claims or instructions.

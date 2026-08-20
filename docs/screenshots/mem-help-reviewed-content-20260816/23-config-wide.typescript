@@ -1,194 +1,185 @@
 52 180
 [?12l[?25h[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;1m mem help · command inventory[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│  LANGUAGE · [[0;38;5;234;48;5;117m ✓ EN [0m]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                                                                                                     [179C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
 [0m┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│  VIEW · [[0;38;5;234;48;5;117m ✓ BY KIND [0m]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 [179C│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
 [0m┌ CORE CONCEPTS ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[179C[0;1m^[0m
-[0m│ [0;38;5;189mMEMORY      [0mAn atomic unit of information stored in a Context.                                                                                                                  [0m│[179C[0;48;5;238m [0m
-[0m│ [0;1mCONTEXT     [0mA named workspace that organizes Memories and other Contexts.                                                                                                       [0m│[179C[0;48;5;238m [0m
-[0m│ [0;1mPROFILE     [0mAn ownership and storage boundary for Contexts.                                                                                                                     [0m│[179C[0;48;5;238m [0m
+[0m│ [0;38;5;189;1mMEMORY      [0mThe basic record unit stored inside a Context and independently selected, reviewed, or changed by Memory-level operations.                                          [0m│[179C[0;48;5;238m [0m
+[0m│ [0;1mCONTEXT     [0mA named hierarchical workspace that contains Memories and organizes child Contexts. The / separator expresses hierarchy in names such as task-1/participant;        [0m│[179C[0;48;5;238m [0m
+[0m│             operations with descendant scope can treat a Context and its descendant Contexts as one subtree. Commands use the current Context when none is specified.           [0m│[179C[0;48;5;238m [0m
+[0m│ [0;1mPROFILE     [0mAn isolated ownership and storage boundary containing Contexts; different Profiles may contain the same Context name.                                               [0m│[179C[0;48;5;238m [0m
+[0m│ [0;1mOPERATION   [0mA reusable action that reads, analyzes, or changes selected Memories or Contexts through defined inputs and behavior.                                               [0m│[179C[0;48;5;238m [0m
 [0m│ [0;1mGRANT       [0mA permission relationship that can be given or received, selectively allowing someone without direct ownership to read or query a Context and its Memories, or run  [0m│[179C[0;48;5;238m [0m
 [0m│             permitted operations on them, while the Grant remains valid.                                                                                                        [0m│[179C[0;48;5;238m [0m
-[0m│ [0;1mSESSION     [0mA saved record of an analysis or review workflow that can be reopened and continued; it does not itself mean Context changes were applied.                          [0m│[179C[0;48;5;238m [0m
+[0m│ [0;1mSESSION     [0mStores an analysis or review workflow so it can be reopened and continued. Apply results and checkpoint history separately show whether Context changes were made.  [0m│[179C[0;48;5;238m [0m
 [0m│ [0;1mCHECKPOINT  [0mA recoverable history boundary created for each applied operation and recorded per affected Context.                                                                [0m│[179C[0;48;5;238m [0m
 [0m├ COMMON KEYS ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤[179C[0;48;5;238m [0m
-[0m│ [0;1m↑/↓              [0mMove or scroll within the focused surface.                                                                                                                     [0m│[179C[0;48;5;238m [0m
-[0m│ [0;1m←/→              [0mChange a horizontal choice, expand, or go back according to focus.                                                                                             [0m│[179C[0;48;5;238m [0m
-[0m│ [0;1mTab / Shift-Tab  [0mMove focus between visible surfaces.                                                                                                                           [0m│[179C[0;48;5;238m [0m
-[0m│ [0;1mEnter            [0mOpen, select, or submit the focused action.                                                                                                                    [0m│[179C[0;48;5;238m [0m
+[0m│ [0;1m↑/↓              [0mMove or scroll within the focused surface.                                                                                                                     [0m│[179C[0;48;5;248m [0m
+[0m│ [0;1m←/→              [0mChange a horizontal choice, expand, or go back according to focus.                                                                                             [0m│[179C[0;48;5;248m [0m
+[0m│ [0;1mTab / Shift-Tab  [0mMove focus between visible surfaces.                                                                                                                           [0m│[179C[0;48;5;248m [0m
+[0m│ [0;1mEnter            [0mOpen, select, or submit the focused action.                                                                                                                    [0m│[179C[0;48;5;248m [0m
 [0m│ [0;1mH                [0mOpen or hide Help from a session's read-only navigation surface.                                                                                               [0m│[179C[0;48;5;248m [0m
 [0m│ [0;1mEsc / Backspace  [0mGo back one layer; Backspace edits text in writable fields.                                                                                                    [0m│[179C[0;48;5;248m [0m
 [0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[179C[0;48;5;248m [0m
 [179C[0;48;5;248m [0m
+[0;1mOPERATIONS                                                                                                                                                                         [179C[0;48;5;248m [0m
 [0;38;5;117;1m┏ BROWSE & NAVIGATE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[179C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0m [0;1mNO LLM[0m · Inspect the current location and available Contexts, then move through the Context namespace.                                                                          [0;38;5;117;1m┃[179C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m ▸ mem status     Show the current Context's inventory, first five direct Memories,     │ USE WHEN: Getting oriented to what the current Context contains, how it is connected,  [0;38;5;117;1m┃[179C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m                  relationships, and latest checkpoints.                                │           and which operations were recently applied.                                  [0;38;5;117;1m┃[179C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0;1m ▸ mem pwd        [0mPrint the current canonical Context name without loading its          │ [0;1mUSE WHEN:[0m Confirming the active Context in a script or terminal.                       [0;38;5;117;1m┃[179C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0;1m                  [0mcontents.                                                             │                                                                                        [0;38;5;117;1m┃[179C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0;1m ▸ mem contexts   [0mBrowse local Contexts and readable cross-Profile Context views        │ [0;1mUSE WHEN:[0m Exploring every Context currently available to the Profile.                  [0;38;5;117;1m┃[179C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0;1m                  [0mwithout switching.                                                    │                                                                                        [0;38;5;117;1m┃[179C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0;1m ▸ mem list (ls)  [0mList a Context's direct items—Memories, Memory references, query      │ [0;1mUSE WHEN:[0m Inspecting the structure and direct contents of a Context.                   [0;38;5;117;1m┃[179C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0;1m                  [0mviews, and embedded Contexts—and its readable child Contexts. Use -r  │                                                                                        [0;38;5;117;1m┃[179C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0;1m                  [0mto recursively include items from descendant and embedded Contexts;   │                                                                                        [0;38;5;117;1m┃[179C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0;1m                  [0mls is the compact alias.                                              │                                                                                        [0;38;5;117;1m┃[179C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0;1m ▸ mem show       [0mShow a Memory, reference, embedded Context, or the direct contents of │ [0;1mUSE WHEN:[0m Reading the complete content of a known item or Context.                     [0;38;5;117;1m┃[179C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0;1m                  [0ma current/explicit Context.                                           │                                                                                        [0;38;5;117;1m┃[179C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0;1m ▸ mem switch     [0mEnter the interactive Context picker, or switch to an explicit        │ [0;1mUSE WHEN:[0m Moving the working position to another existing Context.                     [0;38;5;117;1m┃[179C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0;1m                  [0mContext.                                                              │                                                                                        [0;38;5;117;1m┃[179C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0;1m ▸ mem checkout   [0mSwitch Contexts using Git-style syntax; with -b, create and switch to │ [0;1mUSE WHEN:[0m Using a Git-like workflow to switch or create a branch.                      [0;38;5;117;1m┃[179C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0;1m                  [0ma new Context branch.                                                 │                                                                                        [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0m [0;1mNO LLM · Inspect the current location and available Contexts, then move through the Context namespace.[0m                                                                          [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m ▸ mem status ─┬ Show the current Context's inventory, first five direct Memories, relationships, and latest checkpoints.                                                        [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m               └ WHEN · Getting oriented to what the current Context contains, how it is connected, and which operations were recently applied.                                  [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem pwd ─[0;38;5;243m┬ [0mPrint the current canonical Context name without loading its contents.                                                                                             [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m            [0;38;5;243m└ [0mWHEN · Confirming the active Context in a script or terminal.                                                                                                      [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem contexts ─[0;38;5;243m┬ [0mBrowse local Contexts and readable cross-Profile Context views without switching.                                                                             [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m                 [0;38;5;243m└ [0mWHEN · Exploring every Context currently available to the Profile.                                                                                            [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem list ─[0;38;5;243m┬ [0mList a Context's direct items—Memories, Memory references, query views, and embedded Contexts—and its readable child Contexts. Use -r to recursively include      [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m     (ls)    [0;38;5;243m│ [0mitems from descendant and embedded Contexts; ls is the compact alias.                                                                                             [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m             [0;38;5;243m└ [0mWHEN · Inspecting the structure and direct contents of a Context.                                                                                                 [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem show ─[0;38;5;243m┬ [0mShow a Memory, reference, embedded Context, or the direct contents of a current/explicit Context.                                                                 [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m             [0;38;5;243m└ [0mWHEN · Reading the complete content of a known item or Context.                                                                                                   [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem switch ─[0;38;5;243m┬ [0mEnter the interactive Context picker, or switch to an explicit Context.                                                                                         [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m               [0;38;5;243m└ [0mWHEN · Moving the working position to another existing Context.                                                                                                 [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem checkout ─[0;38;5;243m┬ [0mSwitch Contexts using Git-style syntax; with -b, create and switch to a new Context branch.                                                                   [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m                 [0;38;5;243m└ [0mWHEN · Using a Git-like workflow to switch or create a branch.                                                                                                [0;38;5;117;1m┃[179C[0;48;5;248m [0m
 [0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[179C[0;48;5;248m [0m
 [179C[0;48;5;248m [0m
-[0m┌ CREATE, COPY & CONNECT ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[179C[0;48;5;248m [0m
-[0m│ [0;1mNO LLM[0m · Create Contexts or Memories, copy or import resources, or connect existing material.                                                                                   [0m│[179C[0;48;5;248m [0m
-[0m│[0;1m ▸ mem init              [0mCreate a new empty Context and make it the current working     │ [0;1mUSE WHEN:[0m Starting a separate workspace for a new topic, task, or group of Memories.   [0m│[179C[0;48;5;248m [0m
-[0m│[0;1m                         [0mContext.                                                       │                                                                                        [0m│[179C[0;48;5;248m [0m
-[0m│[0;1m ▸ mem add               [0mAdd one or more Memories to the current or explicit Context.   │ [0;1mUSE WHEN:[0m Adding one or more facts, instructions, or notes directly to a Context.      [0m│[179C[0;48;5;248m [0m
-[0m│[0;1m ▸ mem branch            [0mCopy a Context or subtree into a new branch and switch to it.  │ [0;1mUSE WHEN:[0m Editing a Context or subtree independently while preserving the original.    [0m│[179C[0;48;5;248m [0m
-[0m│[0;1m ▸ mem import [PARTIAL]  [0mImport a clean-baseline Profile, Context tree, or Memory by    │ [0;1mUSE WHEN:[0m Bringing externally supplied material into a locally managed store.          [0m│[179C[0;48;5;248m [0m
-[0m│[0;1m                         [0mvalue while preserving resource identity.                      │                                                                                        [0m│[179C[0;48;5;248m [0m
-[0m│[0;1m ▸ mem reference         [0mCopy one direct Source Memory version into a Target as an      │ [0;1mUSE WHEN:[0m Retaining one exact Memory version even if its Source later changes or       │[179C[0;1mv[0m
+[0m┌[0;1m CREATE, COPY & CONNECT [0m─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[179C[0;48;5;248m [0m
+[0m│ [0;1mNO LLM · Create Contexts or Memories, copy or import resources, or connect existing material.[0m                                                                                   [0m│[179C[0;48;5;248m [0m
+[0m│[0;1m ▸ mem init ─[0;38;5;243m┬ [0mCreate a new empty Context and make it the current working Context.                                                                                               [0m│[179C[0;48;5;248m [0m
+[0m│[0;1m             [0;38;5;243m└ [0mWHEN · Starting a separate workspace for a new topic, task, or group of Memories.                                                                                 │[179C[0;1mv[0m
 [0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
-[0m ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help[98D[28A[0m[19A[0m│[0;1m ▸ mem check-conformance  [0mCheck one Context or saved Ground Examples against explicit   │ [0;1mUSE WHEN:[0m Verifying whether existing Memories or Examples satisfy stated Rules or      [0m│[0m
-[0m│[0;1m                          [0mRules or cond[Ction p[Copositions and report[Cconformance[8C│[11Ccondition[Cpropositions.[54C[0m│[179C[0;48;5;248m [0m
-[0m│[0;1m                          [0missues.  [C         [C        [C   [C     [C         [14C│[88C[0m│[179C[0;48;5;248m [0m
+[0m ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help[98D[22A[0m[22A[0m                                                                                                                                                                                   [0m
+[0m┌[0;1m HISTORY & RECOVERY [0m─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[179C[0;48;5;248m [0m
+[0m│[C[0;1mMIXED · Inspect provenance and recorded changes. Restore an earlier state through explicit history operations.[0m [C         [C         [C  [C     [C    [C  [C                   [8C[0m│[179C[0;48;5;248m [0m
+[0m│[0;1m ▸ mem log ─[0;38;5;243m┬ [0mBrowse or[Csearch recorded[CCont[Cxt, Memory, and Profile h[Cstory.       [C        [C  [C   [C        [C        [C   [C   [C       [C       [C    [C    [C  [C          [11C[0m│[179C[0;48;5;248m [0m
+[0m│[0;1m            [0;38;5;243m└ [0mWHEN · Investigating[Cprevious operations,[2Checkpo[2Cts, or Memory history.        [C   [C       [C   [C    [C       [C     [47C[0m│[179C[0;48;5;248m [0m
+[0m│[0;1m ▸ mem diff ─[0;38;5;243m┬ [0mShow th[2Cdifferences[3Ccorded by a Context checkpoint or th[C active Update.   [C       [C       [C      [C   [C         [47C[0m│[179C[0;48;5;248m [0m
+[0m│[0;1m             [0;38;5;243m└ [0mWHEN · Verifying exactly what [C recorded operation chang[Cd.       [C        [C       [C       [C      [C         [C  [C    [C  [C     [C [C       [C   [C   [C         [C  [C   [2C[0m│[179C[0;48;5;248m [0m
+[0m│[0;1m ▸ mem trace ─[0;38;5;243m┬ [0mTrac[C one [Ce[Cai[Ced Memory through its [Cecord[Cd lineage.  [104C[0m│[179C[0;48;5;248m [0m
+[0m│[0;1m              [0;38;5;243m└ [0mWHEN ·[CDeterm[Cning[Cwher[C a Memory came from and[Chow it ch[2Cged.        [C     [C       [C   [C          [C       [C          [C    [C       [C       [C       [C    [C     [2C[0m│[179C[0;48;5;248m [0m
+[0m│[0;1m ▸ mem rationale ─[0;38;5;243m┬ [0mExplain one Memory from[Crecorded p[Covenance and,[Cwh[Cn needed, inference.   [C        [C        [64C[0m│[179C[0;48;5;248m [0m
+[0m│[0;1m                  [0;38;5;243m└ [0mWHEN · Understanding why a Memory exists or reached its current form.                                                                                        [0m│[179C[0;48;5;248m [0m
+[0m│[0;1m ▸ mem checkpoint ─[0;38;5;243m┬ [0mSave[Cthe current Cont[Cxt as a manual recovery[Cpoint[Cfor[CDiff[Cor[CRevert.[85C[0m│[0m
+[0m│[0;1m                   [0;38;5;243m└ [0mWHEN · C[Ceating a recovery [Coint[Cbefore risky w[2Ck.  [C  [C      [93C[0m│[0m
+[0m│[0;1m ▸ mem undo ─[0;38;5;243m┬ [0mUndo the most[Cr[Ccent recorded[Ccomm[Cnd as[Cone[Cunit.[112C[0m│[0m
+[0m│[0;1m             [0;38;5;243m└ [0mWHEN · Rev[Crsing[Cthe latest r[Ccorded muta[4C as[Cone[Coperation.[99C[0m│[0m
+[0m│[0;1m ▸ mem redo ─[0;38;5;243m┬ [0mRedo the most rec[Cntly undone rec[Crded Context command.   [C        [95C[0m│[0m
+[0m│[0;1m             [0;38;5;243m└ [0mWHEN · Reapplying a command that was undone accidentally.     [100C[0m│[0m
+[0m│[0;1m ▸ mem revert ─[0;38;5;243m┬ [0mRestore one local Context to a selected checkpoint, reviewing the exact impact when selection is interactive.                                                   [0m│[0m
+[0m│[0;1m               [0;38;5;243m└ [0mWHEN · Restoring a Context to a deliberately saved recovery point.                                                                                              [0m│[0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
+[0m                                                                                                                                                                                   [0m
+[0m┌[0;1m PROFILES [0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[0m
+[0m│ [0;1mNO LLM · Select and administer complete local Profile stores and their managed names.[0m                                                                                           [0m│[0m
+[0m│[0;1m ▸ mem profile ─[0;38;5;243m┬ [0mSelect and manage complete local MemoryStore Profiles. Profiles can also be renamed or permanently removed through the picker or with mem profile rename and   [0m│[0m
+[0m│[C[0;1m [C   [C   [C     [0;38;5;243m│ [0mmem profil[C remove.    [C       [C    [C       [C       [C   [C         [93C[0m│[0m
+[0m│[12C[0;1m    [0;38;5;243m└ [0mWHEN · Managing separat[2Cusers, environments, or Me[Cory stores.[96C[0m│[0m
+[0m│[7C[0;1mre[Came ─[0;38;5;243m┬ [0mRename the [Current or an explicit managed Profile without moving[Cor rewriting its store;[Cmem[Cprofile[Crename[Cis[Cthe[Cexplicit[Cequivalent.[25C[0m│[0m
+[0m│[15C[0;38;5;243m└ [0mWHEN ·[CGiving an existing managed P[Cofile a clearer name.  [C        [92C[0m│[0m
 [0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[179C[0;48;5;248m [0m
-[0m                                                                                                                                                                                   [179C[0;48;5;248m [0m
-[0m┌ GROUND WORKBENCH ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[179C[0;48;5;248m [0m
-[0m│[C[0;1mLLM-BASED[0m · Turn abstract ideas into reviewable common ground by developing a Goal, Rules, and example Memories together.       [C       [C    [C        [26C[0m│[179C[0;48;5;248m [0m
-[0m│[0;1m ▸ mem ground  [0mD[Cvelop an abstract[Cidea into a reviewabl[C Ground by shaping its Goal,   │ [0;1mUSE WHEN:[0m Working out how[Can[Cabstract[Cgoal[Cshould[Coperate[Cin[Cpractice[Cthrough[Cjointly[2C[0m│[179C[0;48;5;248m [0m
-[0m│[0;1m               [0mRules, and example Memories together.                                    │           revised Rules and concrete Examples.                                         [0m│[179C[0;48;5;248m [0m
-[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[179C[0;48;5;248m [0m
-[0m                                                                                                                                                                                   [179C[0;48;5;248m [0m
-[0m┌ HISTORY & RECOVERY ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[179C[0;48;5;248m [0m
-[0m│[C[0;1mMIXED[0m · Inspect provenance and recorded changes. Restore an earlier state through explicit history operations.[66C│[179C[0;48;5;248m [0m
-[0m│[0;1m ▸ mem log         [0mBrowse[Cor search[Crecorded Context, Memory, a[Cd Prof[Cle[Chistory[7C│[C[0;1mUSE WHEN:[C[0mInvestigating[Cprevious[Coperations,[Ccheckpoints,[Cor[CMemory[Chistory.[11C[0m│[0m
-[0m│[0;1m ▸ mem diff        [0mShow the differences recorded by a Context checkpoint or the[Cactive[2C│[C[0;1mUSE WHEN:[C[0mVerifying[Cexactly[Cwhat[Ca[Crecorded[Coperation[Cchanged.[25C[0m│[0m
-[0m│[0;1m                   [0mUpdate.                                                              │                                                                                        [0m│[0m
-[0m│[0;1m ▸ mem trace       [0mTrace one retained Memory through its recorded lineage.              │ [0;1mUSE WHEN:[0m Determining where a Memory came from and how it changed.                     [0m│[0m
-[0m│[0;1m ▸ mem rationale   [0mExplain one Memory from recorded provenance and, when needed,        │ [0;1mUSE WHEN:[0m Understanding why a Memory exists or reached its current form.               [0m│[0m
-[0m│[0;1m                   [0minference.                                                           │              [74C[0m│[0m
-[0m│[0;1m ▸ mem checkpoint  [0mSave the current Context as a manual recovery point for Diff or      │ [0;1mUSE WHEN:[0m Creating a recovery point before risky work.                                 [0m│[0m
-[0m│[0;1m                   [0mRevert.                                                              │                                                                                        [0m│[0m
-[0m│[7C[0;1mun[Co[7C [0mUndo[5Cmost recent re[Corded comma[Cd as one [Cnit.     [C   [22CReversing the l[Ctest recorded[Cmut[Ction as[2Cne operation.[21C[0m│[0m
-[0m│[C[0;1m▸[Cmem[Credo[7C [0mRedo [Che[Cmost[Crecently[Cundone[Crecorded[CContext[Ccommand.[16C[0;1mUSE WHEN:[C[0mReapplying[Ca[Ccommand[Cthat[Cwas[Cundone[Caccidentally.[27C[0m│[0m
-[0m│[7C[0;1mrevert  [3C [0mRestore one[Cl[Ccal Context to [C s[Clected checkpoint, reviewing[Cthe[16CRest[6Ca Context to a deliberately s[Cved[Crecov[Cry po[Cnt[19C[0m│[0m
-[0m│[18C[0;1m [0mexact impact when[Cselection[Cis[Cinteractive.[115C[0m│[0m
-[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
-[0m                                                                                                                                                                                   [0m
-[0m┌ PROFILES ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[0m
-[0m│ [0;1mNO LLM[0m · Select and administer complete local Profile stores and their managed names.[2C [88C[0m│[0m
-[0m│[7C[0;1mpr[Cfile[2C[0mSelect[2Cnd [Canage complet[C local M[CmoryS[Core Profil[Cs. Profiles can [C  [13CManaging s[Cparate users, [2Cvironments, or Mem[2Cy stores[22C[0m│[0m
-[0m│[16Calso be renamed or perman[Cn[Cly[Cremoved[Cthrough[Cthe[Cpicker[Cor[Cwith[Cmem[92C[0m│[179C[0;48;5;248m [0m
-[0m│[C[0;1m [C   [C      [3C[0mprofile[Crename and mem pr[Cfile remov[C. [C  [C      [C  [C  [C        [10C         [C      [C   [C       [C        [C  [C       [C        [C        [21C[0m│[179C[0;48;5;238m [0m
-[0m│[C[0;1m▸[Cmem[Crename[3C[0mRename the[Ccurrent[Cor[Can[Cexplicit[Cmanaged[CProfile[Cwithout[Cmoving[Cor[7C[0;1mUSE WHEN:[C[0mGiving[Can[Cexisting[Cmanaged[CProfile[Ca[Cclearer[Cname.[27C[0m│[179C[0;48;5;238m [0m
-[0m│[C[0;1m [C   [C        [C[0mrewr[2Cing its s[Core; mem profile rename is the[Cexplicit [Cquivalen[C. [C  [3C         [C     [C [C        [C        [C  [C      [C  [C      [C [C       [22C[0m│[179C[0;48;5;238m [0m
-[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[179C[0;48;5;238m [0m
 [0m                                                                                                                                                                                   [179C[0;48;5;238m [0m
-[0m┌ SHARING & PROTECTION ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[179C[0;48;5;238m [0m
-[0m│ [0;1mNO LLM[0m · Deliver owned Contexts and protect Memory, Context, or Profile writes.                                                                                                 [0m│[179C[0;48;5;238m [0m
-[C[0;1m ▸ mem share   [0mSend one ordinary Context through a grant-backed receiver endpoint.      │ [0;1mUSE WHEN:[C[0mDelivering[Can[Cowned[CContext[Cto[Can[Cauthorized[Creceiver.[24C[0;48;5;238m [0m
-[8C[0;1mlock[4C[0mLock the cu[Crent[CCo[Ctext, a recursive Context[Cset, Memo[Cy, or P[Cofile.[15CPreventing[Caccidental modification of stable ma[Cerial. [C     [C  [C         [4C[0;48;5;238m [0m
-[2C[0;1m▸[Cmem[Cunlock[2C[0mUnlock the current[CContext,[Ca[Crecursive[Cset,[CMemory,[Cor[CProfile.[11C[0;1mUSE WHEN:[C[0mReopening[Cprotected[Cmaterial[Cfor[Cintentional[Crevision.[24C[0;48;5;238m [0m
+[0m┌[0;1m SHARING & PROTECTION [0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[179C[0;48;5;238m [0m
+[0m│ [0;1mNO LLM · Deliver owned Contexts and protect Memory, Context, or Profile writes.[0m [C  [C [C                [C        [65C[0m│[179C[0;48;5;238m [0m
+[0m│[C[0;1m▸[Cmem[Cshare[C─[0;38;5;243m┬ [0mSend on[C ordinary[CC[Cntex[C through a gr[Cnt-backed receiver [Cndpoint.[94C[0m│[179C[0;48;5;238m [0m
+[0m│[C[0;1m [C   [C      [C[0;38;5;243m└ [0mWHEN ·[CDelivering an owned Context to an authorized[Crec[Civer.  [C        [89C[0m│[179C[0;48;5;238m [0m
+[0m│[C[0;1m▸[Cmem[Clock[C─[0;38;5;243m┬ [0mLock the[Ccurrent Context, a[Crecursive Context set, Memory, or Profile.[92C[0m│[179C[0;48;5;238m [0m
+[0m│[C[0;1m [C   [C      [0;38;5;243m└ [0mWHEN · Preventing accidental modification of s[Cable mat[Crial.  [C      [C  [C [C   [C       [C       [67C[0m│[179C[0;48;5;238m [0m
+[0m│[C[0;1m▸[Cmem[Cunlock[C─[0;38;5;243m┬ [0mUnlock[Cthe current Context, a recursive set,[CMemo[Cy, or Profile[97C[0m│[179C[0;48;5;238m [0m
+[0m│[0;1m               [0;38;5;243m└ [0mWHEN · Reopening protected material for intentional revision.                                                                                                   [0m│[179C[0;48;5;238m [0m
 [0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[179C[0;48;5;238m [0m
-[0m                                                                                                                                                                                   [179C[0;48;5;238m [0m
-[0;38;5;117;1m┏ SYSTEM & STUDY TOOLS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
-[0;38;5;117;1m┃[0m [0mConfigure MemCommit and prepare or run study and evaluation utilities.[17C [88C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m ▸ mem help             Enter the interactive command browser and open syntax help.     │ USE WHEN: Discovering available operations and their invocation forms.                 [0;38;5;117;1m┃[0m[45A[2C[0;1m [C   [C        [0mRules, and example Mem[Cri[Cs t[Cgether.[C      [C        [C       [C        [5C         [Cr[Cv[Csed Rules and[Cconcrete[CExampl[2C.  [C        [C       [C      [C     [C  [0m
-[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
-[0m                                                                                                                                                                                   [0m
-[0m┌ HISTORY & RECOVERY [157C┐[0m
-[0m│ [0;1mMIXED[0m · Inspect provenance and recorded changes. Restore an earlier state through explicit history operations.                                                                  [0m│[0m
-[0m│[0;1m ▸ mem log         [0mBrowse or search recorded Context, Memory, and Profile history.      │ [0;1mUSE WHEN:[0m Investigating previous operations, checkpoints, or Memory history.           [0m│[0m
-[C[0;1m ▸ mem diff        [0mShow the differences recorded by a Context checkpoint or the active  │ [0;1mUSE WHEN:[0m Verifying exactly what[Ca[Crecorded[Coperation[Cchanged.[0m
-[2C[0;1m [C   [C      [2C    [0mUpdate.        [C    [C    [C [C          [C      [C  [C       [C   [C     [5C         [C       [C   [C   [C  [C        [C    [C      [C       [C  [C        [C       [C       [0m
-[2C[0;1m▸[Cmem[Ctrace[3C    [0mTrace one retain[Cd Memory through[Cits[Crecorded[Clineage.[16C[0;1mUSE WHEN:[C[0mD[Ctermining where[Ca Memory[Ccame from[Cand[Chow[Cit[Cchanged.[0m
-[0m│[0;1m ▸ mem rationale   [0mExplain one Memory from recorded provenance and, when needed,        │ [0;1mUSE WHEN:[0m Understanding why a Memory exists or reached its current form.               [0m│[0m
-[0m│[0;1m                   [0minference.                                                           │                                                                                        [0m│[0m
-[0m│[0;1m ▸ mem checkpoint  [0mSave the current Context as a manual recovery point for Diff or      │ [0;1mUSE WHEN:[0m Creating a recovery point before risky work.                                 [0m│[0m
-[C[0;1m                   [0mRevert.                                                              │                      [0m
-[8C[0;1mundo[8C[0mUndo the most recent [Cecorded command as one unit.    [C        [18CRe[2Crs[Cng the[Clatest recorded mutation as o[Ce ope[Cation. [C        [0m
-[8C[0;1mredo[8C[0mRedo[5Cmost [2Ccently undone[Crecorded Context command. [C   [C      [14CR[Capplying a [Command [Ch[Ct was un[Cone acc[Cdentally.  [0m
-[2C[0;1m▸[Cmem[Crevert[6C[0mRestore[Cone[Clocal[CContext[Cto[Ca[Cselected[Ccheckpoint,[Creviewing[Cthe[6C[0;1mUSE WHEN:[C[0mRestoring[Ca[CContext[Cto[Ca[Cdeliberately[Csaved[Crecovery[Cpoint.[0m
-[2C[0;1m [C   [C     [7C[0mex[2Ct[Cimpact when selection is interactive.   [C        [16C         [C           [C     [C [C      [C    [C    [C   [C   [C  [C        [0m
-[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
-[0m                                                                                                                                                                                   [0m
-[0m┌ PROFILES ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[0m
-[C[0m [0;1mNO LLM[0m · Select and administer complete local Profile stores and their managed names.[2C [0m
-[8C[0;1mprofile[2C[0mSelect and manage complet[C local[CMe[CoryStore Profiles.[CProfiles[Ccan[17CManaging separate use[Cs, environments,[Cor[CMemory stores[0m
-[2C[0;1m [C   [C    [5C[0malso be[Crena[Ced o[C p[Crmanently removed through the picker or[Cwith[Cmem[5C         [C          [C [C       [C    [C   [C      [C             [0m
-[2C[0;1m [C   [C      [3C[0mprofile [2Cnam[2Cand mem profile remove.    [C           [C         [C   [6C         [C         [C [C       [C  [C [C            [C     [C        [C      [0m
-[2C[0;1m▸[Cmem[Crename[3C[0mRename [Che current or an explic[Ct[Cmanaged Profile[Cwithout[Cmoving[Cor[7C[0;1mUSE WHEN:[C[0mGiving[Can[Cexisting[Cmanaged[CProfile[Ca[Cclearer[Cname.[0m
-[0m│[0;1m                [0mrewriting its store; mem profile rename is the explicit equivalent.     │                                                                                        [0m│[0m
-[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
-[0m                                                                                                                                                                                   [0m
-[0m┌ SHARING & PROTECTION ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[0m
-[C[0m [0;1mNO LLM[0m · Deliver owned Contexts and protect Memory, Context, or Profile writes.   [5C [C         [C        [C        [C      [C             [C  [C      [C       [0m
-[2C[0;1m▸[Cmem[Cshare[3C[0mSend on[2Cordinary Context through a gran[C-backed r[Cce[Cver endpo[Cnt.   [5C[0;1mUSE WHEN:[C[0mDelivering[Can[Cowned[CContext[Cto[Can[Cauthorized[Creceiver.[24C[0;48;5;248m [0m
-[2C[0;1m▸[Cmem[Clock[4C[0mLock th[2Ccurrent Cont[Cxt, a recu[Csive Context[Cset,[CMemory,[Cor[CProfile.[5C[0;1mUSE WHEN:[C[0mPreventing[Caccidental[Cmodification[Cof[Cstable[Cmaterial.[24C[0;48;5;248m [0m
-[8C[0;1munlock[2C[0mUnlock the cur[Cent C[Cntext, a recursive set, Memory, or Profile. [C  [17CReopening[Cprotected material for intentional[Crevision.[24C[0;48;5;248m [0m
-[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
 [0m                                                                                                                                                                                   [0m
 [0;38;5;117;1m┏ SYSTEM & STUDY TOOLS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
-[0;38;5;117;1m┃[0m [0mConfigure MemCommit and prepare or run study and evaluation utilities.                                                                                                          [0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m ▸ mem help             [0mEnter the interactive command browser and open syntax help.[5C│[C[0;1mUSE WHEN:[C[0mDiscovering[Cavailable[Coperations[Cand[Ctheir[Cinvocation[Cforms.[17C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[7C[0;1mprovider         [0mSelect and verify Codex,[COllama, or OpenRouter semantic   [18CChoosing which backend s[Cman[Cic operations should use,[Cor[Cchecking[Cthat[Cit[3C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[C[0;1m [C   [C    [4C         [0mexecution.      [C [C         [C       [C    [C       [C  [C        [5C         [Cis r[Cady before dur[Cble work.     [C  [C      [C         [23C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[7C[0;1mshell-init       [0mPrint op[C-in shell[Cint[Cgrat[Con[Cfor interactive[Ccommand prefill.[13CEnabling o[Ctional shell-speci[Cic[Cconven[Ce[Cces.        [23C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m ▸ mem config (legacy)  [0mRead or write stored global configuration values.               │ [0;1mUSE WHEN:[0m Inspecting or changing stored global settings through the legacy low-level   [0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m                        [0m                                                                │           interface.                                                                   [0;38;5;117;1m┃[179C[0;48;5;238m [0m
-[0;38;5;117;1m┃[0;1m ▸ mem init-study       [0mCopy one Study baseline into an isolated participant/authority  │ [0;1mUSE WHEN:[0m Preparing a reproducible, isolated user-study environment.                   [0;38;5;117;1m┃[179C[0;48;5;238m [0m
-[C[0;1m                        [0mProfile pair.                                  [17C│[89C[0;48;5;238m [0m
-[8C[0;38;5;234;48;5;117;1meval[C(legacy)[4CRun and inspect the [Cxisting semantic[Cevaluation campaigns[18CUsing the exist[Cng r[Csearch evalu[Ction ha[Cness while the general[Cevaluation[176D[0m[4A[C[0;38;5;234;48;5;117;1m ▸ mem config (legacy)  Read or write stored global configuration values.               │ USE WHEN: Inspecting or changing stored global settings through the legacy low-level   [0m
-[C[0;38;5;234;48;5;117;1m                                                                                        │           interface.                                                                   [0m
+[0;38;5;117;1m┃[0m [0;1mConfigure MemCommit and prepare or run study and evaluation utilities.[0m  [C        [95C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m ▸ mem help ─┬ Enter the interactive command browser and open syntax help.                                                                                                       [0;38;5;117;1m┃[0m[42A[0m│[0;1m                  [0;38;5;243m└ [0mWHEN · Understanding why a Memory exists or reached its current form.                                                                                        [0m│[0m
+[0m│[0;1m ▸ mem checkpoint ─[0;38;5;243m┬ [0mSave the current Context as a manual recovery point for Diff or Revert.                                                                                     [0m│[0m
+[C[0;1m                   [0;38;5;243m└ [0mWHEN · Creating a recovery point before risky work.                                       [0m
+[8C[0;1mundo ─[0;38;5;243m┬ [0mUndo the[Cmost rec[Cnt r[Ccorded command as one unit.   [C        [0m
+[13C[0;1m [0;38;5;243m└ [0mWHEN · Reversing the latest reco[Cded mutation as one operati[Cn.[C        [0m
+[8C[0;1mredo[4C[0mRedo[5Cmost [2Ccently undone[Crecorded Context command. [C   [C      [C       [0m
+[23C[0mR[Capplying a [Command [Ch[Ct was un[Cone acc[Cdentally.  [0m
+[8C[0;1mrevert ─[0;38;5;243m┬ [0mRestore on[C local[CContext to a selected checkpo[2Ct, reviewing[Cthe[Cexact[Cimpact[Cwhen[Cselection[Cis[Cinteractive.[0m
+[15C[0;1m [0;38;5;243m└ [0mWHEN · Restoring a Context to a deliberately saved[Crecovery point.[0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
+[0m                                                                                                                                                                                   [0m
+[0m┌[0;1m PROFILES [0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[0m
+[C[0m [0;1mNO LLM · Select and administer complete local Profile stores and their managed names.[0m
+[8C[0;1mprofile ─[0;38;5;243m┬ [0mSelect and[Cmanage[Ccomplete[Cl[Ccal MemoryStore Profiles.[CProfiles[Ccan[Calso[Cbe[Crenamed[Cor[Cpermanently[Cremoved[Cthrough[Cthe[Cpicker[Cor[Cwith[Cmem[Cprofile[Crename[Cand[0m
+[14C[0;1m   [0;38;5;243m│ [0mmem[Cprofile remove.     [C        [C        [C  [C   [C          [0m
+[2C[0;1m [C   [C    [C    [0;38;5;243m└ [0mWHEN · Managing separate users, envir[2Cm[Cn[Cs, or Memory[Cstores.[0m
+[2C[0;1m▸[Cmem[Crename ─[0;38;5;243m┬ [0mRename the current [Cr [2C explicit ma[Caged[CProfile without[Cmoving[Cor[Crewriting[Cits[Cstore;[Cmem[Cprofile[Crename[Cis[Cthe[Cexplicit[Cequivalent.[0m
+[2C[0;1m [C   [C      [C [0;38;5;243m└[C[0mWHEN · Giving an exis[Cing[Cman[Cged Profile a clearer[Cname.    [C   [C     [C      [C    [C         [C  [C            [0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
+[0m                                                                                                                                                                                   [0m
+[0m┌[0;1m SHARING & PROTECTION [0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[0m
+[0m│ [0;1mNO LLM · Deliver owned Contexts and protect Memory, Context, or Profile writes.[0m                                                                                                 [0m│[0m
+[C[0;1m ▸ mem share ─[0;38;5;243m┬ [0mSend one ordinary Context through a grant-backed receiver endpoint.   [0m
+[2C[0;1m [C   [C       [0;38;5;243m└ [0mWHEN · Deliveri[Cg an [Cwned Context[Cto an authorized r[Cceiver.    [C   [C    [C  [C       [C  [C           [C       [C       [C   [C      [C  [C    [C   [C       [C      [C   [0m
+[2C[0;1m▸[Cmem[Clock[C─[0;38;5;243m┬ [0mLock the curr[Cnt C[Cntext,[Ca[Crecursive[CContext[Cset,[CMemory,[Cor[CProfile.[0m
+[14C[0;38;5;243m└ [0mWHEN · Preve[Cting acciden[Cal modificat[Con of stable[Cmate[Cial.     [0m
+[8C[0;1munlock[4C[0mUnlock[13CContext, a recursive set, Memory, or Profile.[C  [C         [C   [C      [C   [C       [C      [C  [C   [C        [C           [0m
+[25C[0mReopening[Cprotected material for intentional[Crevision.[0m
+[179C[0;48;5;248m [0m
+[179C[0;48;5;248m [0m
+[0;38;5;117;1m┏ SYSTEM & STUDY TOOLS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[C[0;1mConfigure MemCommit and prepare[Cor run study and evalua[Cion utilities.[0m         [97C[0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[7C[0;1mhelp ─[0;38;5;243m┬ [0mEnter[Cth[2Cinter[Cctive command browser and open syntax help.         [94C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[13C[0;38;5;243m└ [0mWHEN · Disco[8Cvailable [Cpera[Cions and [2Ceir invocat[Con forms.[95C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[7C[0;1mprovider ─[0;38;5;243m┬ [0mSel[Cct and verify Codex, Ollama, or Op[CnRouter[Cs[2Cantic execut[Con[93C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[13C[0;1m    [0;38;5;243m└ [0mWHEN · Choosing which backend semantic oper[Ctions should use,[Cor[Cchecking[Cthat[Cit[Cis[Cready[Cbefore[Cdurable[Cwork.[47C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[7C[0;1mshell-init ─[0;38;5;243m┬ [0mPrint opt-in shell in[Cegration for interactive command prefill.[93C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[15C[0;1m    [0;38;5;243m└ [0mWHEN · E[Cabling optional shell-specific conveniences.    [99C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m ▸ mem config ───[0;38;5;243m┬ [0mRead or write stored global configuration values.                                                                                                             [0;38;5;117;1m┃[179C[0;48;5;238m [0m
+[0;38;5;117;1m┃[0;1m     (legacy)    [0;38;5;243m└ [0mWHEN · Inspecting or changing stored global settings through the legacy low-level interface.                                                                  [0;38;5;117;1m┃[179C[0;48;5;238m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem init-study ─[0;38;5;243m┬ [0mCopy one Study baseline into an isolated participant/authority Profile pair.                                                                                [0;38;5;117;1m┃[179C[0;48;5;238m [0m
+[C[0;1m                   [0;38;5;243m└ [0mWHEN · Preparing a reproducible, isolated user-study[Cenvironment.[92C[0;48;5;238m [0m
+[8C[0;38;5;234;48;5;117;1meval[2C────┬ Run and inspect the existing semantic[Cevaluation campaigns.[79D[0m[4A[C[0;38;5;234;48;5;117;1m ▸ mem config ───┬ Read or write stored global configuration values.                                                                                                             [0m
+[C[0;38;5;234;48;5;117;1m     (legacy)    └ WHEN · Inspecting or changing stored global settings through the legacy low-level interface.                                                                  [0m
 
 
-[C[0;1m ▸ mem eval (legacy)    [0mRun and inspect the existing semantic evaluation campaigns.     │ [0;1mUSE WHEN:[0m Using the existing research evaluation harness while the general evaluation  [4A[178D[0m[41A[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
-[0m                                                                                                                                                                                   [0m
-[0m┌ HISTORY & RECOVERY ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[0m
-[0m│ [0;1mMIXED[0m · Inspect provenance and recorded changes. Restore an earlier state through explicit history operations.                                                                  [0m│[0m
-[C[0;1m ▸ mem log         [0mBrowse or search recorded Context, Memory, and Profile history.      │ [0;1mUSE WHEN:[0m Investigating[Cprevious[Coperations,[Ccheckpoints,[Cor[CMemory[Chistory.[0m
-[8C[0;1mdiff[8C[0mSh[2C the differenc[Cs [Cecorded by a[CContext[Ccheckp[Cint or the active[14CVerify[Cng exactly what[Ca recorded operati[Cn changed.     [C        [0m
-[2C[0;1m [C   [C    [8C[0mUpdate. [C           [C        [C  [C [C       [C          [C  [C   [C      [4C         [C         [C       [C    [C [C        [C         [C        [0m
-[2C[0;1m▸[Cmem[Ctrace[7C[0mTrace one[Cretained[CMemory[Cthrough[Cits[Crecorded[Clineage.[16C[0;1mUSE WHEN:[C[0mDetermining[Cwhere[Ca[CMemory[Ccame[Cfrom[Cand[Chow[Cit[Cchanged.[0m
-[8C[0;1mrationale[3C[0mExplain one Memory[Cfrom reco[Cded provenance and, when needed,[20CUnd[2Cstanding why[10Cexists [Cr[Creac[Ced[3Cs curr[Cnt[Cform.[0m
-[2C[0;1m [C   [C         [3C[0minfere[Cce. [C      [C    [C        [C          [C    [C    [C       [10C         [C             [C   [C [C      [C      [C  [C       [C   [C       [C     [0m
-[2C[0;1m▸[Cmem[Ccheckpoint[2C[0mSav[C the current[CContext[Cas[Ca[Cmanual[Crecovery[Cpoint[Cfor[CDiff[Cor[8C[0;1mUSE WHEN:[C[0mCreating[Ca[Crecovery[Cpoint[Cbefore[Crisky[Cwork.[0m
-[2C[0;1m [C   [C          [2C[0mRe[2Cr[C. [C       [C       [C  [C [C      [C        [C     [C   [C    [C  [8C         [C        [C [C        [C     [C      [C     [C     [0m
-[2C[0;1m▸[Cmem[Cundo[8C[0mUndo [Che[Cmost[Crecent[Crecorded[Ccommand[Cas[Cone[Cunit.[21C[0;1mUSE WHEN:[C[0mReversing[Cthe[Clatest[Crecorded[Cmutation[Cas[Cone[Coperation.[0m
-[8C[0;1mre[10C[0mRe[18Cly undone[Crecorded Cont[Cxt command.[28Capplying a command[Cthat was[Cundone accide[Ctally.      [0m
-[10C[0;1mvert[8C[0mstore one local Context to a selected checkpoint, reviewing[Cthe[18Cstoring a Context to [C deliberately saved recovery[Cpoint.[0m
-[2C[0;1m [C   [C      [6C[0mexact impact when[Cselection is[Cint[Cractive.        [C         [C   [6C         [C         [C [C       [C  [C [C            [C     [C        [C      [0m
+[C[0;1m ▸ mem eval ─────[0;38;5;243m┬ [0mRun and inspect the existing semantic evaluation campaigns.                                                                                                   [4A[178D[0m[38A[2C[0;1m▸[Cmem[Ccheckpoint[C─[0;38;5;243m┬ [0mSave the curre[Ct Context as a manual rec[Cve[Cy point for Diff or Revert.[0m
+[2C[0;1m [C   [C          [C [0;38;5;243m└[C[0mWHEN[C· Creating a recovery point befo[2C risk[2Cw[Crk.[C   [C    [C  [C       [0m
+[2C[0;1m▸[Cmem[Cundo[C─[0;38;5;243m┬ [0mUndo the most [2Ccent recorded command as one un[Ct. [C     [0m
+[2C[0;1m [C   [C    [C [0;38;5;243m└[C[0mWHEN[C· Reversing the[Clatest re[2Crded mutation as one[Coperation.[0m
+[2C[0;1m▸[Cmem[Credo[C─[0;38;5;243m┬[C[0mRedo[Cthe most recently undone recor[Ced Context command.        [0m
+[2C[0;1m [C   [C    [C [0;38;5;243m└[C[0mWHEN[C· Reapplying a command that was und[2Ce accidentally.[0m
+[2C[0;1m▸[Cmem[Crevert ─[0;38;5;243m┬ [0mRestor[C one local[CC[Cntext[2Co a[Cselected che[Ckpoi[2C, reviewing[Cthe[Cexact[Cimpact[Cwhen[Cselection[Cis[Cinteractive.[0m
+[2C[0;1m [C   [C      [C [0;38;5;243m└[C[0mWHEN · Restoring a Context to a delib[Crately saved recov[Cry point.     [C      [C    [C         [C  [C            [0m
 [0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
 [0m                                                                                                                                                                                   [0m
-[0m┌ PROFILES ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[0m
-[0m│ [0;1mNO LLM[0m · Select and administer complete local Profile stores and their managed names.                                                                                           [0m│[0m
-[C[0;1m ▸ mem profile  [0mSelect and manage complete local MemoryStore Profiles. Profiles can   [2C│[C[0;1mUSE WHEN:[C[0mManaging[Cseparate[Cusers,[Cenvironments,[Cor[CMemory[Cstores.[0m
-[2C[0;1m [C   [C       [2C[0malso be renamed or perman[Cntly removed through the picke[C or with mem[5C         [C        [C        [C      [C             [C  [C      [C       [0m
-[17C[0mprofil[8C and[Cm[Cm profi[Ce[7C.[C       [C   [C      [C  [C    [C   [0m
-[2C[0;1m▸[Cmem[Crename[3C[0mRename th[C curre[Ct[Cor an exp[Cicit managed[CProfile[Cwithout[Cmoving[Cor[7C[0;1mUSE WHEN:[C[0mGiving[Can[Cexisting[Cmanaged[CProfile[Ca[Cclearer[Cname.[0m
-[2C[0;1m [C   [C      [3C[0mr[Cwriting its store; mem[Cprof[Cle rename is the expl[Ccit equi[Calent.[7C         [C      [C  [C        [C       [C       [C [C       [C     [0m
+[0m┌[0;1m PROFILES [0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[0m
+[0m│ [0;1mNO LLM · Select and administer complete local Profile stores and their managed names.[0m                                                                                           [0m│[0m
+[C[0;1m ▸ mem profile ─[0;38;5;243m┬ [0mSelect and manage complete local MemoryStore Profiles. Profiles can also[Cbe[Crenamed[Cor[Cpermanently[Cremoved[Cthrough[Cthe[Cpicker[Cor[Cwith[Cmem[Cprofile[Crename[Cand[0m
+[2C[0;1m [C   [C       [C [0;38;5;243m│[C[0mm[Cm profile remove.       [C     [C           [C         [C        [C   [C    [C  [C       [C  [C           [C       [C       [C   [C      [C  [C    [C   [C       [C      [C   [0m
+[17C[0;38;5;243m└[C[0mWHEN · Managing s[Cparate[Cusers,[Cenvironments,[Cor[CMemory[Cstores.[0m
+[2C[0;1m▸[Cmem[Crename[C─[0;38;5;243m┬ [0mRename the current or [Cn explicit managed Profile[Cwithout m[Cving[Cor[Crewriting[Cits[Cstore;[Cmem[Cprofile[Crename[Cis[Cthe[Cexplicit[Cequivalent.[0m
+[2C[0;1m [C   [C      [C [0;38;5;243m└[C[0mWHEN ·[CGiving an existi[Cg managed[CProfile[Ca clearer name.[C      [C  [C         [C   [C      [C   [C       [C      [C  [C   [C        [C           [0m
 [0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
 [0m                                                                                                                                                                                   [0m
-[0m┌ SHARING & PROTECTION ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[0m
-[0m│ [0;1mNO LLM[0m · Deliver owned Contexts and protect Memory, Context, or Profile writes.                                                                                                 [0m│[0m
-[C[0;1m ▸ mem share   [0mSend one ordinary Context through a grant-backed receiver endpoint.[6C│[C[0;1mUSE WHEN:[C[0mDelivering[Can[Cowned[CContext[Cto[Can[Cauthorized[Creceiver.[0m
-[8C[0;1mlock [3C[0mLock[Cth[2Ccurrent Context,[Ca [Cecursive Context set, M[Cmory, or Profile.[15CPrevent[5Cccidental modification of stable[Cmat[Crial[0m
-[8C[0;1munlock[2C[0mUnlock the current Context,[Ca recursive set, Memory, or Profile.      [15CReop[2Cing protected mater[Cal for intentional[Crevis[Con[25C[0;48;5;248m [0m
-[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[179C[0;48;5;238m [0m
+[0m┌[0;1m SHARING & PROTECTION [0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[0m
+[0m│ [0;1mNO LLM · Deliver owned Contexts and protect Memory, Context, or Profile writes.[0m                                                                                                 [0m│[0m
+[C[0;1m ▸ mem share ─[0;38;5;243m┬ [0mSend one ordinary Context through a grant-backed receiver endpoint.[0m
+[2C[0;1m [C   [C     [C [0;38;5;243m└[C[0mWHEN[C· Delivering[Can owned Context to [2C authorized rec[Civ[Cr.      [0m
+[2C[0;1m▸[Cmem[Clock[C─[0;38;5;243m┬ [0mLock the curr[Cnt Context, a[Crecursive Co[Ctex[C set, Memory, o[C Profile.[0m
+[2C[0;1m [C   [C    [C [0;38;5;243m└[C[0mWHEN[C· Preventing accident[Cl modif[Ccati[2C of stable material.[C        [0m
+[2C[0;1m▸[Cmem[Cunlock ─[0;38;5;243m┬ [0mUnlock th[C current Context, a recurs[Cve[Cset, Memory, o[C Profile.[0m
+[2C[0;1m [C   [C      [C [0;38;5;243m└[C[0mWHEN ·[CReopening protected m[Cterial for[Cin[Centional revisi[Cn.   [0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
 [0m                                                                                                                                                                                   [0m
 [0;38;5;117;1m┏ SYSTEM & STUDY TOOLS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
-[0;38;5;117;1m┃[0m [0mConfigure MemCommit and prepare or run study and evaluation utilities.                                                                                                          [0;38;5;117;1m┃[0m
-[C[0;1m ▸ mem help             [0mEnter the interactive command browser and open syntax[Chelp.[5C│[C[0;1mUSE WHEN:[C[0mDiscovering[Cavailable[Coperations[Cand[Ctheir[Cinvocation[Cforms.[0m
-[8C[0;1mprovider[9C[0mSel[Cct and verify Codex, Ollama, or Ope[CRout[Cr[2Cemantic    [17CChoosing which backend s[Cm[Cntic opera[Cions[Cshould use, [2C checking[Cthat[Cit[0m
-[2C[0;1m [C   [C        [9C[0mexecu[Cio[C.[C      [C      [C       [C  [C          [C        [11C         [Cis ready[Cbefore durable work.  [C          [C      [C    [C  [C        [C    [C  [0m
-[2C[0;1m▸[Cmem[Cshell-init[7C[0mPrint opt-in[Cshell[Cintegration[Cfor[Cinteractive[Ccommand[Cprefill.[3C[0;1mUSE WHEN:[C[0mEnabling[Coptional she[Cl-specific[Cconveniences.[0m
-[2C[0;1m▾[5Cconfig (legacy)[2C[0mRead or wr[Cte stored glob[Cl con[Cigura[Cion values.     [C        [13CI[Cspecting or changing stored global setting[C through[Cthe[Clegacy[Clow-level[0m
-[C[0;1m                        [0m                                                                │           interface.                                                                   [0m
-[C[0m   FLOW      · Configuration key <-> value                                                                                                                                       [C[0;48;5;238m [0m
-[C[0m   EXECUTION · DETERMINISTIC[C   [C     [C        [C    [C  [C        [C                     [2C [C         [C         [C [C             [C        [C          [C            [20C[0;48;5;248m [0m
-[C[0m   EFFECT    · May change global configuration[42C [89C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0m [0;1mConfigure MemCommit and prepare or run study and evaluation utilities.[0m                                                                                                          [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[C[0;1m ▸ mem help ─[0;38;5;243m┬ [0mEnter the interactive command browser and open syntax help.[104C[0;48;5;238m [0m
+[2C[0;1m [C   [C    [C [0;38;5;243m└[C[0mWHEN · Discov[2Cing available operations and their invocation[Cforms.[0m
+[2C[0;1m▸[Cmem[Cprovider ─[0;38;5;243m┬ [0mSelect and verify Codex,[COllama, or[COpenRouter seman[2Cc execution.[0m
+[2C[0;1m [C   [C        [C [0;38;5;243m└[C[0mWHEN ·[CChoosing which backend semantic operations should use, or checking[Cthat[Cit[Cis[Cready[Cbefore[Cdurable[Cwork.[0m
+[2C[0;1m▸[Cmem[Cshell-init ─[0;38;5;243m┬ [0mPrint opt-[2C shell integration for interac[2Cve comman[2Cpr[Cfill.        [C    [C  [C  [C     [C      [C       [C     [0m
+[2C[0;1m [C   [C          [C [0;38;5;243m└[C[0mWHEN · Enabling opt[Conal shell-spec[Cfic conveniences. [C        [0m
+[2C[0;1m▾[Cmem[Cconfig[C───[0;38;5;243m┬ [0mRead or write stored global configuration[Cvalu[Cs.      [0m
+[C[0;1m     (legacy)    [0;38;5;243m└ [0mWHEN · Inspecting or changing stored global settings through the legacy low-level interface.                                                                  [0m
+[C[0m   FLOW      · Configuration key <-> value                                                                                                                                       [0m
+[C[0m   EXECUTION · DETERMINISTIC [C     [C        [C    [C  [C        [C                     [C       [C     [81C[0;48;5;238m [0m
+[C[0m   EFFECT    · May change[Cglobal co[Cfigu[Cati[Cn       [C        [C          [C            [92C[0;48;5;248m [0m
 [C[0;38;5;234;48;5;117;1;7m   FORM 1 · mem config show (show global configuration)                                                                                                                          [0m
 
 [60C[0mpr[Cfill command[Cline[C Tab[Cnext kind  H[Cfull help[2A[108D[0m

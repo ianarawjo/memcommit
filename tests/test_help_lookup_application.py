@@ -34,28 +34,40 @@ def _operations():
     )
 
 
-def test_lookup_returns_multiple_exact_catalog_records_in_model_order():
+def test_lookup_returns_exactly_three_catalog_records_in_model_order():
     plan = prepare_help_lookup(
         "Compare two Contexts and find relevant Memories.",
         operations=_operations(),
     )
-    provider = _Provider('{"operations":["compare","search"]}')
+    provider = _Provider(
+        '{"operations":["compare","search","query"]}'
+    )
 
     result = execute_help_lookup(plan, provider)
 
-    assert [operation.name for operation in result] == ["compare", "search"]
+    assert [operation.name for operation in result] == [
+        "compare",
+        "search",
+        "query",
+    ]
     assert provider.calls[0][1] == "help"
     assert provider.calls[0][2] == plan.output_schema
+    assert plan.output_schema["properties"]["operations"]["minItems"] == 3
     assert plan.output_schema["properties"]["operations"]["maxItems"] == 3
 
 
-def test_lookup_none_is_an_empty_result_without_generated_explanation():
+def test_lookup_weak_request_still_returns_three_ranked_candidates():
     plan = prepare_help_lookup("🦆 ??? 123", operations=_operations())
-    provider = _Provider('{"operations":[]}')
+    provider = _Provider(
+        '{"operations":["query","search","compare"]}'
+    )
 
-    assert execute_help_lookup(plan, provider) == ()
+    assert [
+        operation.name for operation in execute_help_lookup(plan, provider)
+    ] == ["query", "search", "compare"]
     payload = json.loads(plan.prompt.partition("HELP LOOKUP PAYLOAD:\n")[2])
     assert payload["request"] == "🦆 ??? 123"
+    assert payload["result_count"] == 3
     assert set(payload["operations"][0]) >= {
         "name",
         "summary",
@@ -83,6 +95,9 @@ def test_lookup_prompt_allows_short_outcome_language_without_catalog_terms():
         "not json",
         '{"operations":["missing"]}',
         '{"operations":["compare","compare"]}',
+        '{"operations":[]}',
+        '{"operations":["compare"]}',
+        '{"operations":["compare","query"]}',
         '{"operations":["compare","query","search","compare"]}',
         '{"operations":["compare"],"why":"because"}',
         '{"operations":"compare"}',
@@ -104,6 +119,11 @@ def test_lookup_rejects_malformed_unknown_duplicate_or_explanatory_output(raw):
 def test_lookup_rejects_invalid_input_before_provider_execution(lookup_text):
     with pytest.raises(HelpLookupError):
         prepare_help_lookup(lookup_text, operations=_operations())
+
+
+def test_lookup_rejects_catalog_too_small_for_three_distinct_candidates():
+    with pytest.raises(HelpLookupError, match="at least 3"):
+        prepare_help_lookup("request", operations=_operations()[:2])
 
 
 def test_lookup_declares_bounded_top_k_semantics_without_hidden_staging():

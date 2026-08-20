@@ -1,0 +1,197 @@
+52 180
+[?12l[?25h[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;1m mem help · command inventory[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│  LANGUAGE · [[0;38;5;234;48;5;117m ✓ EN [0m]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                                                                                                     [179C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│  VIEW · [[0;38;5;234;48;5;117m ✓ BY KIND [0m]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 [179C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m┌ CORE CONCEPTS ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[179C[0;1m^[0m
+[0m│ [0;38;5;189;1mMEMORY      [0mThe basic record unit stored inside a Context and independently selected, reviewed, or changed by Memory-level operations.                                          [0m│[179C[0;48;5;238m [0m
+[0m│ [0;1mCONTEXT     [0mA named hierarchical workspace that contains Memories and organizes child Contexts. The / separator expresses hierarchy in names such as task-1/participant;        [0m│[179C[0;48;5;238m [0m
+[0m│             operations with descendant scope can treat a Context and its descendant Contexts as one subtree. Commands use the current Context when none is specified.           [0m│[179C[0;48;5;238m [0m
+[0m│ [0;1mPROFILE     [0mAn isolated ownership and storage boundary containing Contexts; different Profiles may contain the same Context name.                                               [0m│[179C[0;48;5;238m [0m
+[0m│ [0;1mOPERATION   [0mA reusable action that reads, analyzes, or changes selected Memories or Contexts through defined inputs and behavior.                                               [0m│[179C[0;48;5;238m [0m
+[0m│ [0;1mGRANT       [0mA permission relationship that can be given or received, selectively allowing someone without direct ownership to read or query a Context and its Memories, or run  [0m│[179C[0;48;5;238m [0m
+[0m│             permitted operations on them, while the Grant remains valid.                                                                                                        [0m│[179C[0;48;5;238m [0m
+[0m│ [0;1mSESSION     [0mStores an analysis or review workflow so it can be reopened and continued. Apply results and checkpoint history separately show whether Context changes were made.  [0m│[179C[0;48;5;238m [0m
+[0m│ [0;1mCHECKPOINT  [0mA recoverable history boundary created for each applied operation and recorded per affected Context.                                                                [0m│[179C[0;48;5;238m [0m
+[0m├ COMMON KEYS ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤[179C[0;48;5;238m [0m
+[0m│ [0;1m↑/↓              [0mMove or scroll within the focused surface.                                                                                                                     [0m│[179C[0;48;5;248m [0m
+[0m│ [0;1m←/→              [0mChange a horizontal choice, expand, or go back according to focus.                                                                                             [0m│[179C[0;48;5;248m [0m
+[0m│ [0;1mTab / Shift-Tab  [0mMove focus between visible surfaces.                                                                                                                           [0m│[179C[0;48;5;248m [0m
+[0m│ [0;1mEnter            [0mOpen, select, or submit the focused action.                                                                                                                    [0m│[179C[0;48;5;248m [0m
+[0m│ [0;1mH                [0mOpen or hide Help from a session's read-only navigation surface.                                                                                               [0m│[179C[0;48;5;248m [0m
+[0m│ [0;1mEsc / Backspace  [0mGo back one layer; Backspace edits text in writable fields.                                                                                                    [0m│[179C[0;48;5;248m [0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[179C[0;48;5;248m [0m
+[179C[0;48;5;248m [0m
+[0;1mOPERATIONS                                                                                                                                                                         [179C[0;48;5;248m [0m
+[0;38;5;117;1m┏ BROWSE & NAVIGATE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0m [0;1mNO LLM · Inspect the current location and available Contexts, then move through the Context namespace.[0m                                                                          [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m ▸ mem status ─┬ Show the current Context's inventory, first five direct Memories, relationships, and latest checkpoints.                                                        [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m               └ WHEN · Getting oriented to what the current Context contains, how it is connected, and which operations were recently applied.                                  [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem pwd ─[0;38;5;243m┬ [0mPrint the current canonical Context name without loading its contents.                                                                                             [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m            [0;38;5;243m└ [0mWHEN · Confirming the active Context in a script or terminal.                                                                                                      [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem contexts ─[0;38;5;243m┬ [0mBrowse local Contexts and readable cross-Profile Context views without switching.                                                                             [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m                 [0;38;5;243m└ [0mWHEN · Exploring every Context currently available to the Profile.                                                                                            [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem list ─[0;38;5;243m┬ [0mList a Context's direct items—Memories, Memory references, query views, and embedded Contexts—and its readable child Contexts. Use -r to recursively include      [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m     (ls)    [0;38;5;243m│ [0mitems from descendant and embedded Contexts; ls is the compact alias.                                                                                             [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m             [0;38;5;243m└ [0mWHEN · Inspecting the structure and direct contents of a Context.                                                                                                 [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem show ─[0;38;5;243m┬ [0mShow a Memory, reference, embedded Context, or the direct contents of a current/explicit Context.                                                                 [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m             [0;38;5;243m└ [0mWHEN · Reading the complete content of a known item or Context.                                                                                                   [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem switch ─[0;38;5;243m┬ [0mEnter the interactive Context picker, or switch to an explicit Context.                                                                                         [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m               [0;38;5;243m└ [0mWHEN · Moving the working position to another existing Context.                                                                                                 [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem checkout ─[0;38;5;243m┬ [0mSwitch Contexts using Git-style syntax; with -b, create and switch to a new Context branch.                                                                   [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m                 [0;38;5;243m└ [0mWHEN · Using a Git-like workflow to switch or create a branch.                                                                                                [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[179C[0;48;5;248m [0m
+[179C[0;48;5;248m [0m
+[0m┌[0;1m CREATE, COPY & CONNECT [0m─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[179C[0;48;5;248m [0m
+[0m│ [0;1mNO LLM · Create Contexts or Memories, copy or import resources, or connect existing material.[0m                                                                                   [0m│[179C[0;48;5;248m [0m
+[0m│[0;1m ▸ mem init ─[0;38;5;243m┬ [0mCreate a new empty Context and make it the current working Context.                                                                                               [0m│[179C[0;48;5;248m [0m
+[0m│[0;1m             [0;38;5;243m└ [0mWHEN · Starting a separate workspace for a new topic, task, or group of Memories.                                                                                 │[179C[0;1mv[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[0m ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help[98D[22A[0m[28A[0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ HELP LANGUAGE ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;5;117;1m┃[0m› LANGUAGE · [0;38;5;117;1m[[0;38;5;234;48;5;117;1m ✓ EN [0;38;5;117;1m][0m  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                                                                                                     [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[0m┌[0;1m BROWSE & NAVIGATE [0m──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[0m
+[0m│[177C│[0m
+[0m│[0;1m ▸ mem status ─[0;38;5;243m┬ [0mShow the current Context's inventory, first five direct Memories, relationships, and latest checkpoints.                                                        [0m│[0m
+[0m│[0;1m               [0;38;5;243m└ [0mWHEN · Getting oriented to what the current Context contains, how it is connected, and which operations were recently applied.                                  [0m│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
+
+
+
+
+
+
+[C[0mLANGUAGE: ←/→ choose · ↓ view · Tab next · Q[Ccancel[0m[K[49A[51D[0m[A[0m┌────────────────────────────────────────────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│  LANGUAGE · [   EN ]  [   FR ]  [[0;38;5;234;48;5;117m ✓ ZH [0m]  [   KO ]  [   MN ] · ←/→ TO SELECT                                                                                                     [179C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+
+
+
+[0;38;5;117;1m┏ CORE CONCEPTS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1;7m MEMORY      存储在 Context 中，并由 Memory 级 operation 独立选择、审查或修改的基本记录单元。                                                                                    [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[13C[0m包含 Memory 并组织子[CC[Cntext 的命名层级工作区。分隔符[C/ 在 task-1/part[Ccipant 这样的名称中表示层级；支持 descendant 范围的[Coperation 可将一个 Context 及其下级[6C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[13C[0mContext 作为一个 subtree 一并处理。未指定 Contex[C 时，command 使用当前 Context。[C  [C   [C        [C        [C   [C   [C       [C       [C    [C    [C  [C          [11C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[13C[0m包含 Con[2Cxt 的独立所有权与存储边界；不同 Pr[Cfile 可以包含相同的 Context name。   [C   [C       [C   [C    [C       [C     [47C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[13C[0m一种可复用的操作，按照已定义的输入与行为读取、分析或修改选定的 Memory 或 Context。      [C       [C      [C   [C         [47C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[13C[0m一种可授予或接收的权限关系；在[CGrant 有效期间，它可选择性允许非直接所有者读取或查询 Context 及其 Memory，或运行获准 operation。[C [C       [C   [C   [C         [C  [C   [2C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0;1mSESSION     [0m保存分析或审查 workfl[Cw，以便重新打开并继续。Apply 结果和 checkpoint[Chistory[C会另行显示是否发生了[CContext[C修改。[52C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0;1mCHECKPOINT[2C[0m每个已应用 operation 创建并按受影响 Contex[2C记录的可恢复历史边界。        [C     [C       [C   [C          [C       [C          [C    [C       [C       [C       [C    [C     [2C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┣ COMMON KEYS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫[0m
+[0;38;5;117;1m┃[0m [0;1m↑/↓              [0m在当前聚焦区域中移动或滚动。                                                                                                                                   [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0;1m←[C→[14C[0m根据焦点更改横向选择、展开或返回。        [117C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0;1mTab[C/[CShift-Tab[2C[0m在可见区域之间移动焦点。   [C       [C  [C  [C    [C         [C  [C      [93C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0;1mEnter[C         [2C[0m打开、选择或提交当前操作。[C         [123C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0;1mH    [12C[0m从 ses[Cion 的只读导航区域打开或隐藏[CHelp。 [116C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0;1mEsc[C/[CBackspace[2C[0m返回一层；在可写字段中[CBack[Cpace 用于删除文本。        [C        [95C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m
+[0m                                                                                                                                                                                   [0m
+[0;1mOPERATIONS                                                                                                                                                                         [0m
+[0m┌[0;1m BROWSE & NAVIGATE [0m──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[0m
+[0m│ [0;1mNO LLM · 检查当前位置和可用 Context，然后在 Context 命名空间中移动。[0m                                                                                                            [0m│[0m
+[C[0;1m ▸ mem status ─[0;38;5;243m┬ [0m显示当前 Context 的清单、前五个直接 Memory、关系和最新 checkpoint。                   [0m
+[2C[0;1m [C   [C      [C [0;38;5;243m└[C[0mWHEN[C· 了解当前 Context 包含什么、如何连接以及最近应用了哪些 operation 时。     [C   [C      [C            [0m
+[2C[0;1m▸[Cmem[Cpwd[C─[0;38;5;243m┬ [0m输出当前规范 Co[Ctext 名称，而不加载其内容。   [C       [C         [C   [C  [C  [C          [C   [C     [C          [C    [C        [C        [0m
+[2C[0;1m [C   [C   [C [0;38;5;243m└[C[0mWHEN · 在脚本或终端中确认当前活动 Co[Ctext 时。  [C       [C   [C         [0m
+[2C[0;1m▸[Cmem[Ccontexts ─[0;38;5;243m┬ [0m浏览本地 Context[C和可读的跨 Prof[Cle Contex[2C视图，而不进行切换。[0m
+[2C[0;1m [C   [C        [C [0;38;5;243m└[C[0mWHEN ·[C查看当前 Profile 可访问的全部 Context 时。       [C     [C       [C          [0m
+[2C[0;1m▸[Cmem[Clist[C─[0;38;5;243m┬ [0m列出 Context 的直接项目——Mem[Cry、Memo[Cy reference、qu[Cry view[C和嵌入的[CContext——以及可读子[CContext；-r[C递归包含后代和嵌入[CContext[C中的项目，ls[C是简短别名。[0m
+[2C[0;1m [C  (ls)  [C [0;38;5;243m└[C[0mWHEN[C·[C检查 Context 的结构和直接内容时。      [C           [C     [C      [C   [C        [C            [C   [C        [C     [C         [C   [C  [C  [C           [C       [0m
+[2C[0;1m▸[Cmem [Chow[C─[0;38;5;243m┬[C[0m显示 Mem[Cry、refere[Cce、嵌入的 Context，或当前/指定 Context 的直接内容。[0m
+[23C[0m阅读已知项目或[CContext 的完整内容时。       [C  [C [C        [0m
+[9C[0;1mwitch ─[0;38;5;243m┬ [0m进入交互式 Context 选择器，或切换到明确指定的 Context。[C        [C  [C [C                [C        [0m
+[14C[0;1m  [0;38;5;243m└ [0mWHEN[C· 将工作位置移动到另一个现有[CContext 时。   [C  [C        [0m
+[8C[0;1mcheckout ─[0;38;5;243m┬ [0m使用类似 Git 的语法切换 Context；使用 -b 时创建并切换到新的 Context 分支。[0m
+[16C[0;1m  [0;38;5;243m└ [0mWHEN[C· 以类似 Git 的工作流切换或创建分支时。        [C        [0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
+[0m                                                                                                                                                                                   [0m
+[0m┌[0;1m CREATE, COPY & CONNECT [153C[0m┐[0m
+[0m│ [0;1mNO LLM · 创建 Context 或 Memory，复制或导入资源，或连接现有材料。[0m                                                                                                               [0m│[0m
+[0m│[0;1m ▸ mem init ─[0;38;5;243m┬ [0m创建一个新的空 Context，并将其设为当前工作 Context。                                                                                                              [0m│[0m
+[C[0;1m             [0;38;5;243m└ [0mWHEN · 为新主题、任务或一组 Memory 建立独立工作区时。                          [0m
+[8C[0;1madd ─[0;38;5;243m┬ [0m向当前或指定 Context 添加一个或多个 Memory。       [C       [C        [0m
+[13C[0;38;5;243m└ [0mWHEN · 将一个或多个事实、指令或笔记直接添加到 Context 时。  [C  [C     [C  [C         [0m
+
+[C[0m↑/↓ move (hold accelerates)  Tab first kind[0m[K[43A[44D[0m[A[0m┌ CORE CONCEPTS ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[0m
+[0m│ [0;38;5;189;1mMEMORY      [0m存储在 Context 中，并由 Memory 级 operation 独立选择、审查或修改的基本记录单元。                                                                                    [0m│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m├ COMMON KEYS ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
+
+
+[0;38;5;117;1m┏ BROWSE & NAVIGATE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m ▸ mem list ─┬ 列出 Context 的直接项目——Memory、Memory reference、query view 和嵌入的 Context——以及可读子 Context；-r 递归包含后代和嵌入 Context 中的项目，ls 是简短别名。       [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m     (ls)    └ WHEN · 检查 Context 的结构和直接内容时。                                                                                                                          [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m
+
+
+
+
+
+
+
+
+[30C[0m→ expand/forms[C ← back  Enter open forms  Tab next kind  H full help[17A[98D[0m

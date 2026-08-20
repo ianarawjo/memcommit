@@ -1,19 +1,19 @@
  mem help · command inventory                                                                       
+┌────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────┐
+│  LANGUAGE · [ ✓ EN ]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
 │  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
-│               USE WHEN: Preventing accidental modification of stable material.                  │^
-│ ▸ mem unlock  Unlock the current Context, a recursive set, Memory, or Profile.                  │ 
-│               USE WHEN: Reopening protected material for intentional revision.                  │ 
-└─────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────┘^
                                                                                                     
 ┏ SYSTEM & STUDY TOOLS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
 ┃ Configure MemCommit and prepare or run study and evaluation utilities.                          ┃ 
-┃ ▸ mem help             Enter the interactive command browser and open syntax help.              ┃ 
-┃                        USE WHEN: Discovering available operations and their invocation forms.   ┃ 
-┃ ▾ mem provider         Select and verify Codex, Ollama, or OpenRouter semantic execution.       ┃ 
-┃                        USE WHEN: Choosing which backend semantic operations should use, or      ┃ 
-┃                                  checking that it is ready before durable work.                 ┃ 
+┃ ▸ mem help ─┬ Enter the interactive command browser and open syntax help.                       ┃ 
+┃             └ WHEN · Discovering available operations and their invocation forms.               ┃ 
+┃ ▾ mem provider ─┬ Select and verify Codex, Ollama, or OpenRouter semantic execution.            ┃ 
+┃                 └ WHEN · Choosing which backend semantic operations should use, or checking     ┃ 
+┃                          that it is ready before durable work.                                  ┃ 
 ┃   FLOW      · Provider configuration <-> status or probe                                        ┃ 
 ┃   EXECUTION · DETERMINISTIC                                                                     ┃ 
 ┃   EFFECT    · May change provider configuration or make a probe request                         ┃ 

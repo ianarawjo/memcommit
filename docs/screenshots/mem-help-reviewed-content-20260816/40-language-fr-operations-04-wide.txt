@@ -1,0 +1,52 @@
+ mem help · command inventory                                                                                                                                                       
+┌────────────────────────────────────────────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────────────────────────────────────────────┐
+│  LANGUAGE · [   EN ]  [ ✓ FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                                                                                                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+│ NO LLM · Appliquer des entrées explicites et des choix révisés avec une logique de programme déterministe pour modifier le contenu.                                             │^
+│ ▸ mem edit ─┬ Remplacer directement le contenu d’une ou plusieurs Memories sélectionnées par UID ou préfixe.                                                                    │ 
+│             └ WHEN · Corriger ou remplacer directement le contenu de Memories existantes précises.                                                                              │ 
+│ ▸ mem replace ─┬ Prévisualiser et remplacer chaque correspondance littérale ou regex explicite dans les Memories locales ordinaires.                                            │ 
+│                └ WHEN · Corriger, renommer ou masquer un texte exact dans une portée locale de Context connue.                                                                  │ 
+│ ▸ mem chunk ─┬ Découper mécaniquement une Memory directe aux limites des titres, paragraphes ou phrases approximatives.                                                         │ 
+│              └ WHEN · Une Memory possède déjà des limites textuelles claires qui doivent devenir des Memories distinctes.                                                       │ 
+│ ▸ mem delete ───┬ Sélectionner un Context ou un élément direct à supprimer, ou le désigner par locator, nom ou UID.                                                             │ 
+│     (remove)    └ WHEN · Supprimer un Context ou un élément précis devenu inutile.                                                                                              │ 
+│ ▸ mem clear ─┬ Supprimer après confirmation tous les éléments directs du Context courant ou indiqué.                                                                            │ 
+│              └ WHEN · Vider un Context tout en conservant le Context lui-même.                                                                                                  │ 
+│ ▸ mem merge ─┬ Ajouter au Target courant les éléments présents uniquement dans la Source, laisser les correspondances exactes inchangées et choisir Source ou Target lors des   │ 
+│              │ conflits d’éléments enregistrés.                                                                                                                                 │ 
+│              └ WHEN · Ajouter les éléments propres à la Source ou réintégrer dans le Context courant un Context copié ou branché, sans synthèse sémantique.                     │ 
+│ ▸ mem dedup ─┬ Examiner les groupes de doublons confirmés, conserver une Memory existante dans chaque groupe et supprimer les autres lors de Apply.                             │ 
+│              └ WHEN · Supprimer les doublons sémantiques confirmés tout en conservant une Memory existante exacte et son UID.                                                   │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┌ SEMANTIC TRANSFORMATIONS ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ LLM-BASED · Utiliser l’analyse sémantique d’un LLM pour restructurer, dériver, traduire, sélectionner ou réconcilier du contenu.                                                │ 
+│ ▸ mem atomize ─┬ Analyser des Memories composites et séparer leurs propositions distinctes en Memories révisables indépendamment.                                               │ 
+│                └ WHEN · Démêler des exigences ou affirmations écrites ensemble afin de pouvoir les examiner et les réviser séparément.                                          │ 
+│ ▸ mem distill ─┬ Dériver des Rules ou propositions conditionnelles de niveau supérieur à partir de propositions Case ou Example dans un Context borné, avec un Goal facultatif. │ 
+│                └ WHEN · Inférer des Rules ou propositions conditionnelles plus générales à partir de plusieurs cas ou exemples concrets.                                        │ 
+│ ▸ mem elaborate ─┬ Développer un Goal, une Rule ou une condition abstraite en plusieurs propositions candidates plus précises.                                                  │ 
+│                  └ WHEN · Produire plusieurs Rules ou Cases candidats plus concrets à partir d’un concept ou d’une condition abstraite.                                         │ 
+│ ▸ mem translate ─┬ Générer et enregistrer une vue traduite réutilisable d’un Context ou d’une Memory en préservant le contenu original.                                         │ 
+│                  └ WHEN · Lire ou réutiliser le contenu d’une Memory dans une autre langue sans remplacer l’original.                                                           │ 
+│ ▸ mem forget ─┬ Examiner les décisions conserver/modifier/supprimer pour une consigne, puis appliquer le lot accepté.                                                           │ 
+│               └ WHEN · Supprimer ou réécrire des Memories selon une consigne en langage naturel dont le sens doit être interprété.                                              │ 
+│ ▸ mem resolve ─┬ Proposer et vérifier les changements minimaux qui rendent Fit YES un cadre borné de Context à Memories directes.                                               │ 
+│                └ WHEN · Décider comment réparer des conflits sémantiques ou des ambiguïtés dans un cadre de Context borné.                                                      │ 
+│ ▸ mem update ─┬ Mettre à jour les Memories du Target Context à partir des Memories du Source Context, en demandant une révision et un choix lorsque nécessaire.                 │ 
+│               └ WHEN · Mettre à jour un Context existant avec des Memories nouvellement vérifiées.                                                                              │ 
+│ ▸ mem meld ─┬ Réconcilier sémantiquement deux Contexts, soit dans un Result distinct, soit en incorporant des changements proposés à un Target Context existant.                │ 
+│             └ WHEN · Combiner deux ensembles de travail lorsque chevauchements, conflits et nouveau contenu synthétisé doivent être examinés sémantiquement.                    │ 
+│ ▸ mem sever ─┬ Créer un Result en sélectionnant, transformant ou excluant des Source Memories selon un Criteria Context.                                                        │ 
+│              └ WHEN · Sélectionner ou transformer le contenu Source selon des critères définis.                                                                                 │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┏ CHECK, COMPARE & REVIEW ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃ MIXED · Vérifier compatibilité, différences, qualité ou impact attendu. Examiner l’analyse enregistrée et décider de la suite.                                                  ┃ 
+┃ ▸ mem compare ─┬ Comparer les Memories de deux Contexts et indiquer ce qu’ils partagent, ce qui diffère et ce qui n’apparaît que d’un côté.                                     ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help

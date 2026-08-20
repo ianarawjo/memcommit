@@ -1,17 +1,16 @@
 30 100
 [?12l[?25h[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;1m mem help · command inventory[0m
+[0m┌────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────[99C┐[0m
+[0m│  LANGUAGE · [[0;38;5;234;48;5;117m ✓ EN [0m]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                     [99C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────[99C┘[0m
 [0m┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────[99C┐[0m
 [0m│  VIEW · [[0;38;5;234;48;5;117m ✓ BY KIND [0m]  [   A–Z ] · ←/→ TO SELECT                                                 [99C│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────[99C┘[0m
-[0m┌ CORE CONCEPTS ──────────────────────────────────────────────────────────────────────────────────┐[99C[0;1m^[0m
-[0m│ [0;38;5;189mMEMORY      [0mAn atomic unit of information stored in a Context.                                  [0m│[99C[0;48;5;238m [0m
-[0m│ [0;1mCONTEXT     [0mA named workspace that organizes Memories and other Contexts.                       [0m│[99C[0;48;5;238m [0m
-[0m│ [0;1mPROFILE     [0mAn ownership and storage boundary for Contexts.                                     [0m│[99C[0;48;5;248m [0m
-[0m│ [0;1mGRANT       [0mA permission relationship that can be given or received, selectively allowing       [0m│[99C[0;48;5;248m [0m
-[0m│             someone without direct ownership to read or query a Context and its Memories, or    [0m│[99C[0;48;5;248m [0m
-[0m│             run permitted operations on them, while the Grant remains valid.                    [0m│[99C[0;48;5;248m [0m
-[0m│ [0;1mSESSION     [0mA saved record of an analysis or review workflow that can be reopened and           [0m│[99C[0;48;5;248m [0m
-[0m│             continued; it does not itself mean Context changes were applied.                    [0m│[99C[0;48;5;248m [0m
+[0m│ [0;1mGRANT       [0mA permission relationship that can be given or received, selectively allowing       [0m│[99C[0;1m^[0m
+[0m│             someone without direct ownership to read or query a Context and its Memories, or    [0m│[99C[0;48;5;238m [0m
+[0m│             run permitted operations on them, while the Grant remains valid.                    [0m│[99C[0;48;5;238m [0m
+[0m│ [0;1mSESSION     [0mStores an analysis or review workflow so it can be reopened and continued. Apply    [0m│[99C[0;48;5;248m [0m
+[0m│             results and checkpoint history separately show whether Context changes were made.   [0m│[99C[0;48;5;248m [0m
 [0m│ [0;1mCHECKPOINT  [0mA recoverable history boundary created for each applied operation and recorded per  [0m│[99C[0;48;5;248m [0m
 [0m│             affected Context.                                                                   [0m│[99C[0;48;5;248m [0m
 [0m├ COMMON KEYS ────────────────────────────────────────────────────────────────────────────────────┤[99C[0;48;5;248m [0m
@@ -23,84 +22,76 @@
 [0m│ [0;1mEsc / Backspace  [0mGo back one layer; Backspace edits text in writable fields.                    [0m│[99C[0;48;5;248m [0m
 [0m└─────────────────────────────────────────────────────────────────────────────────────────────────┘[99C[0;48;5;248m [0m
 [99C[0;48;5;248m [0m
+[0;1mOPERATIONS                                                                                         [99C[0;48;5;248m [0m
 [0;38;5;117;1m┏ BROWSE & NAVIGATE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[99C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0m [0;1mNO LLM[0m · Inspect the current location and available Contexts, then move through the Context     [0;38;5;117;1m┃[99C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0m [0m         namespace.                                                                             [0;38;5;117;1m┃[99C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m ▸ mem status     Show the current Context's inventory, first five direct Memories,              [0;38;5;117;1m┃[99C[0;1mv[0m
+[0;38;5;117;1m┃[0m [0;1mNO LLM · Inspect the current location and available Contexts, then move through the Context[0m     [0;38;5;117;1m┃[99C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0m [0;1m         namespace.[0m                                                                             [0;38;5;117;1m┃[99C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m ▸ mem status ─┬ Show the current Context's inventory, first five direct Memories,               [0;38;5;117;1m┃[99C[0;1mv[0m
 [0m───────────────────────────────────────────────────────────────────────────────────────────────────[0m
-[0m ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help[98D[2A[0m[23A[0m│[0;1m ▸ mem fit                [0mJudge whether a defined set of Memories or other propositions is       [0m│[0m
-[0m│[0;1m                          [0mjointly co[Cpatible under ordinary interpretation,[Creturning[CYES,[CMAY,[2C[0m│[99C[0;48;5;248m [0m
-[0m│[0;1m                          [0mor NO.   [C         [C        [C   [C     [C         [23C[0m│[99C[0;48;5;248m [0m
-[0m│[0;1m [0m              [C         [C[0;1mUSE WHEN:[0m Checking whether a defined[Cset[Cof[CMemories,[CRules,[CGoals,[4C[0m│[0m
-[0m│[0;1m [0m             [C          [C          Examples, or other pr[Cpositions can jointly hold.     [7C[0m│[0m
-[0m│[0;1m ▸ mem check-conformance  [0mCheck one[CCo[Ctext or sav[Cd Ground Examples against[Cexplicit Rules or[3C[0m│[0m
-[0m│[0;1m                          [0mc[Cndition pr[Cpositions and[Creport conforma[Cce issues.[18C[0m│[0m
-[0m│[0;1m [0m             [C     [C     [0;1mUSE WHEN:[0m Verifying[Cwhether existing Memories or Examples satisfy[6C[0m│[0m
-[0m│[0;1m [12C[0m          [C  [C    [C   [Cs[Cated[CRules [Cr condition propositions.  [20C[0m│[0m
+[0m ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help[98D[2A[0m[20A[0m│[0;1m            [0;38;5;243m└ [0mWHEN · Checking whether a defined[Cs[Ct of Memori[Cs, Rules, Goals, Examp[Ces, or[6C[0m│[0m
+[0m│[0;1m            [0;38;5;243m  [0m      [Cother proposi[Ci[Cns can jointly hold.     [C [C       [C   [C   [C         [C  [4C[0m│[99C[0;48;5;248m [0m
+[0m│[0;1m ▸ mem check- ──────[0;38;5;243m┬ [0mCh[Cck one Context or saved Ground Examples against explicit[CRules[Cor[7C[0m│[99C[0;48;5;248m [0m
+[0m│[0;1m     conformance    [0;38;5;243m│ [0mco[Cdition[Cp[Copos[Ctions and rep[Crt conformance issues. [C          [C     [4C[0m│[0m
+[0m│[0;1m                    [0;38;5;243m└ [0mWHEN · Ver[Cfying whether existing Memori[Cs o[2CExamples s[Ctisfy stated   [3C[0m│[0m
+[0m│[0;1m                    [0;38;5;243m  [0m    [C  Rules[Cor condition propositions.       [C         [C   [C        [C   [2C[0m│[0m
 [0m└─────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
 [0m                                                                                                   [0m
-[0m┌ GROUND WORKBENCH ───────────────────────────────────────────────────────────────────────────────┐[0m
-[0m│[C[0;1mLLM-BASED[0m · Turn abstract ideas into reviewable common ground by developing a Goal, Rules, and[2C│[0m
-[0m│[C            example Memories together.      [C       [C  [C  [C    [C         [C  [C      [13C[0m│[0m
-[0m│[0;1m ▸ mem ground  [0mDevelop[Can abstract idea [Cnto[Ca [Cevi[Cwable[CGround[Cby[Cshaping[Cits[CGoal,[CRules,[Cand[C[0m│[0m
-[0m│[0;1m               [0mexam[Cle Memories[Ctogether.[C   [C       [C       [36C[0m│[99C[0;48;5;248m [0m
-[0m│[0;1m [0m              [0;1mUSE WHEN:[0m Working out h[Cw[2Cn ab[Ctract[Cgo[Cl should operate in pr[2Ctice[Cthrough[5C[0m│[99C[0;48;5;238m [0m
-[0m│[0;1m [0m                   [C    j[Cint[Cy revised Rules[Cand concrete Examples.[C       [20C[0m│[99C[0;48;5;238m [0m
-[0m└─────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
-
+[0m┌[0;1m GROUND WORKBENCH [0m───────────────────────────────────────────────────────────────────────────────┐[0m
+[0m│[C[0;1mLLM-BASED · Turn abstract ideas into reviewable common ground by developing a Goal, Rules, and[2C[0m│[0m
+[0m│[C[0;1m            example Memories together.[0m     [C         [43C[0m│[0m
+[0m│[0;1m ▸ mem ground ─[0;38;5;243m┬ [0mDev[Clop an abstract idea[Cinto a reviewable Ground[Cby[Cshaping[Cits[CGoal,[CRules,[3C[0m│[0m
+[0m│[0;1m               [0;38;5;243m│ [0mand example Memories togeth[Cr.     [C         [C          [C        [15C[0m│[0m
+[0m│[0;1m               [0;38;5;243m└ [0mWHEN · Working out how an [Cbstrac[C goal should operate in practice[Cthrough[6C[0m│[99C[0;48;5;248m [0m
+[0m│[0;1m               [0;38;5;243m  [0m       jointly revised Rules and concrete Examples.                             [0m│[99C[0;48;5;238m [0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────┘[99C[0;48;5;238m [0m
+[0m                                                                                                   [0m
 [2C[0;38;5;117;1mHISTORY & RECOVERY [0m
-[2C[0;1mMIXED[0m · Inspect provenanc[C and recorded ch[Cnges. R[Cst[Cre an earlier state through [Cxplicit [0m
-[10C[0mhistory operations.[0m
-[8C[0;38;5;234;48;5;117;1mlog   [5C Browse or search recorded[CContext, Memo[Cy,[Cand Profile[Chistory. [84D[0m[23A[8C[0;1mground[2C[0mDevelop an abstract id[Ca[Cinto a revi[Cwable Gr[Cund by shaping its Goal, Rules,[Cand[0m
-[16C[0mexample Memor[Ces together.   [C     [C        [C               [C         [C    [C    [0m
-[2C[0m              [0;1mUSE WHEN:[0m W[2Cking[Cout[Chow[Can[Cabstract[Cgoal[Cshould[Coperate[Cin[Cpractice[Cthrough[0m
-[26C[0mjointly revis[Cd Rules and concr[Cte Examples.[C         [C      [C      [0m
+[2C[0;1mMIXED · Inspect provenanc[C and recorded ch[Cnges. R[Cst[Cre an earlier state through [Cxplicit[0m [0m
+[10C[0;1mhistory operations.[0m
+[8C[0;38;5;234;48;5;117;1mlog ─┬ Browse or search recorded Context, Memory, and[CProfile history.     [83D[0m[20A[13C[0;1m   [0;38;5;243m  [0m [C [C   jo[2Ctly revised[CRules and concrete Examples.   [C      [C         [C  [0m
 [0m└─────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
 [0m                                                                                                   [0m
 [0;38;5;117;1m┏ HISTORY & RECOVERY ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
-[0;38;5;117;1m┃[0m [0;1mMIXED[0m · Inspect provenance and recorded changes. Restore an earlier state through explicit[6C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m [0m        history operations.[8C      [C     [C  [C         [C             [22C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m ▸ mem log         [0mBrowse or search recorded Context, Memory, and Profile history.               [0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m [0m                  [0;1mUSE WHEN:[0m Investigating previous operations, checkpoints, or Memory history.  [0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m ▸ mem diff        [0mShow the differences recorded by a Context checkpoint or the active Update.   [0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m [0m                  [0;1mUSE WHEN:[0m Verifying exactly what a recorded operation changed.              [2C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m ▸ mem trace       [0mTrace one retained Memory[Cthrough[Cits[Crecorded[Clineage.[23C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[C[0m                  [0;1mUSE WHEN:[0m Determ[Cning where[Ca Memory came from and how it changed.[C      [C   [C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[C[0;1m▸[Cmem[Crationale   [0mExplain on[C Memory f[Com[Crecorded[Cprovenance[Cand,[Cwhen[Cneeded,[Cinference.[6C[0;38;5;117;1m┃[99C[0;48;5;248m [0m
-[0;38;5;117;1m┃[15C[0m    [0;1mUS[C WHEN:[0m U[Cders[Canding why a Memory exists or r[Cach[Cd its current form. [5C[0;38;5;117;1m┃[99C[0;48;5;248m [0m
-[0;38;5;117;1m┃[C[0;1m▸ mem checkpoint  [0mSave[Cthe current Context a[3C manual recovery point[Cfor[CDiff[Cor[CRevert.[7C[0;38;5;117;1m┃[99C[0;48;5;238m [0m
-[0;38;5;117;1m┃[0;1m [0m                  [0;1mUSE WHEN:[0m Creating a recovery point before risky work.                        [0;38;5;117;1m┃[99C[0;48;5;238m [0m
-[0;38;5;117;1m┃[0;1m ▸ mem undo        [0mUndo the most recent recorded command as one unit.                            [0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m [0m                  [0;1mUSE WHEN:[0m Reversing the latest recorded mutation as one operation.            [0;38;5;117;1m┃[0m
-[C[0;1m ▸ mem redo        [0mRedo the most recently undone recorded Context command.                 [0m
-[C[0;1m [0m                  [0;1mUSE WHEN:[C[0mReapplying[Ca[Ccommand[Cthat[Cwas[Cundone[Caccidentally.[0m
-[8C[0;38;5;234;48;5;117;1mrevert[6CRestore one lo[Cal Context[Ct[C a selected checkpoint, r[Cviewing the[Cexact[91D[0m[4A[C[0;38;5;234;48;5;117;1m ▸ mem undo        Undo the most recent recorded command as one unit.                            [0m
-[C[0;38;5;234;48;5;117;1m                   USE WHEN: Reversing the latest recorded mutation as one operation.            [0m
+[0;38;5;117;1m┃[0m [0;1mMIXED · Inspect provenance and recorded changes. Restore an earlier state through explicit[6C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m [0;1m        history operations.[C[0m     [C  [C         [C             [36C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m ▸ mem log ─[0;38;5;243m┬ [0mBrowse or search recorded Context, Memory, and Profile history.                    [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m            [0;38;5;243m└ [0mWHEN · Investigating previous operations, checkpoints, or Memory history.          [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m ▸ mem diff ─[0;38;5;243m┬ [0mShow the differences recorded by a Context checkpoint or the active Update.       [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m             [0;38;5;243m└ [0mWHEN · Verifying exactly what a recorded operation changed.                     [2C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m ▸ mem trace ─[0;38;5;243m┬ [0mTrace one retained Memory[Cthrough[Cits[Crecorded[Clineage.[26C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0;1m [C   [C      [C[0;38;5;243m└ [0mWHEN · Determining wher[C a Memory cam[C from[Cand how it changed.  [C     [C      [3C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0;1m▸[Cmem[Crationale ─[0;38;5;243m┬ [0mExplain on[C Memory from recorded[Cprovenance[Cand,[Cwhen[Cneeded,[Cinference.[5C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[15C[0;1m   [0;38;5;243m└ [0mWHEN · Understanding why a Memory exi[Cts or[Creached[2Cts current[Cfo[Cm.  [6C[0;38;5;117;1m┃[99C[0;48;5;248m [0m
+[0;38;5;117;1m┃[C[0;1m▸[Cmem[Ccheckpoint ─[0;38;5;243m┬ [0mSave the cu[Crent Context[2Cs a manual recovery point[Cfor[CDiff[Cor[CRevert.[5C[0;38;5;117;1m┃[99C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m                   [0;38;5;243m└ [0mWHEN · Creating a recovery point before risky work.                         [0;38;5;117;1m┃[99C[0;48;5;238m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem undo ─[0;38;5;243m┬ [0mUndo the most recent recorded command as one unit.                                [0;38;5;117;1m┃[99C[0;48;5;238m [0m
+[0;38;5;117;1m┃[0;1m             [0;38;5;243m└ [0mWHEN · Reversing the latest recorded mutation as one operation.                   [0;38;5;117;1m┃[0m
+[C[0;1m ▸ mem redo ─[0;38;5;243m┬ [0mRedo the most recently undone recorded Context command.                     [0m
+[C[0;1m             [0;38;5;243m└ [0mWHEN · Reapplying[Ca[Ccommand[Cthat[Cwas[Cundone[Caccidentally.[0m
+[8C[0;38;5;234;48;5;117;1mrevert ─┬ Rest[2Ce one local Context [Co a selected[Ccheckp[Cint,[Creviewing[Cthe[Cexact[Cimpact[96D[0m[4A[C[0;38;5;234;48;5;117;1m ▸ mem undo ─┬ Undo the most recent recorded command as one unit.                                [0m
+[C[0;38;5;234;48;5;117;1m             └ WHEN · Reversing the latest recorded mutation as one operation.                   [0m
 
 
-[C[0;1m ▸ mem revert      [0mRestore one local Context to a selected checkpoint, reviewing the exact       [4A[98D[0m[19A[2C[0m              [0;1mUSE WHEN:[0m Working out how an abstract goal[Csh[2Cl[2Coperate in[Cpractice through[C   [0m
-[2C[0m                     [C  j[Cintly revis[Cd Rules[Cand[Cconcrete[CExamples.[0m
-[0m└─────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
-[0m                                                                                                   [0m
+[C[0;1m ▸ mem revert ─[0;38;5;243m┬ [0mRestore one local Context to a selected checkpoint, reviewing the exact impact  [4A[98D[0m[16A[0m                                                                                                   [0m
 [0;38;5;117;1m┏ HISTORY & RECOVERY ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
-[0;38;5;117;1m┃[0m [0;1mMIXED[0m · Inspect provenance and recorded changes. Restore an earlier state through explicit      [0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m [0m        history operations.                                                                     [0;38;5;117;1m┃[0m
-[C[0;1m ▸ mem log         [0mBrowse or search recorded Context, Memory, and Profile history.         [0m
-[C[0;1m [0m                  [0;1mUSE WHEN:[C[0mInvestigating[Cprevious[Coperations,[Ccheckpoints,[Cor[CMemory[Chistory.[0m
-[8C[0;1mdiff[8C[0mSh[2C the differenc[Cs [Cecorded by a[CContext[Ccheckp[Cint or the active[CUpdate.[0m
-[30C[0mVerify[Cng exactly what[Ca recorded operati[Cn changed.     [C        [0m
-[8C[0;1mtrace[7C[0mTrace one retained Memory through its r[Ccorded lineage. [C   [C      [C       [0m
-[30C[0mD[Cterm[2Cing where[Ca Memory [Came fr[Cm and how it changed.[0m
-[8C[0;1mrationale[3C[0mExplain one Memory[Cfrom reco[Cded provenance and, when needed,[Cinference.[0m
-[30C[0mUnd[2Cstanding why[10Cexists [Cr[Creac[Ced[3Cs curr[Cnt[Cform.[0m
-[8C[0;1mcheckpoint[2C[0mSave the curr[Cnt Context as a manual recov[Cry point for Diff or R[Cv[Crt. [0m
-[30C[0mCreating a recovery[Cpoint b[Cfore risky work.[C   [C       [C     [0m
-[2C[0;1m▾[5Cundo      [2C[0mUndo[5Cmost recent recorded[Ccomm[Cnd as one unit. [C   [C    [C  [C       [0m
-[30C[0mReversing th[C latest record[Cd mutation[Cas one[Coperation.[0m
+[0;38;5;117;1m┃[0m [0;1mMIXED · Inspect provenance and recorded changes. Restore an earlier state through explicit[0m      [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m [0;1m        history operations.[0m                                                                     [0;38;5;117;1m┃[0m
+[C[0;1m ▸ mem log ─[0;38;5;243m┬ [0mBrowse or search recorded Context, Memory, and Profile history.              [0m
+[C[0;1m            [0;38;5;243m└ [0mWHEN · Investigating[Cprevious[Coperations,[Ccheckpoints,[Cor[CMemory[Chistory.[0m
+[8C[0;1mdiff ─[0;38;5;243m┬ [0mShow the[Cdifferences r[Ccorded by a Context checkpo[Cnt[Cor [Che active[CUpdate.[0m
+[13C[0;1m [0;38;5;243m└ [0mWHEN · Verifying exactly what a [Cecorded[Cop[Cratio[C changed.    [C        [0m
+[8C[0;1mtrace ─[0;38;5;243m┬ [0mTrace one retai[Ced Memory through[Cits record[Cd lineage.[C   [C      [C       [0m
+[14C[0;1m [0;38;5;243m└ [0mWHEN · Determining where a Memo[Cy cam[C from [Cnd how it changed.[0m
+[8C[0;1mrationale ─[0;38;5;243m┬ [0mExplain one Memory from [Cecorded p[Covenance a[Cd, when[Cneeded,[Cinference.[0m
+[15C[0;1m    [0;38;5;243m└ [0mWHEN · Understanding[Cwhy a Memory exists or[Creached its current[Cform.[0m
+[8C[0;1mcheckpoint ─[0;38;5;243m┬ [0mSave the current Context as a manual recovery point for Diff[Cor Revert[0m
+[19C[0;1m [0;38;5;243m└ [0mWHEN · Cr[Cating a recovery point[Cbefore[Crisky work.   [C       [C     [0m
+[2C[0;1m▾[5Cundo ─[0;38;5;243m┬ [0mUndo the most recent rec[Crd[Cd comm[Cnd as one unit. [C     [C   [C    [C  [C       [0m
+[14C[0;38;5;243m└ [0mWHEN · Reversing [Che l[Ctest r[Ccorded mutation[Cas one [Cperation.[0m
 [C[0m   FLOW      · Command history -> reversed Context effects                                       [0m
 [C[0m   EXECUTION · DETERMINISTIC                                                                     [0m
-[C[0m   EFFECT    · Restores[Cev[Cry Cont[Cxt and[CMem[Cry[Cchange rec[Crd[Cd by th[Ct command[0m
-[C[0m [2CRANGE[5C·[COne[Cmost-recent recoverable co[Cmand unit [Ccross all affected Contexts[0m
+[C[0m   EFFECT    · [2Cstores[Cevery Context[Ca[2C M[Cmory change recorded by that[Ccommand[0m
+[C[0m   RANGE     · One most-recent recoverable[Ccommand unit across all [Cffected[CContexts[0m
 [C[0;38;5;234;48;5;117;1;7m   FORM 1 · mem undo (undo the latest recorded Context command)                                  [0m
 
 [60C[0mpr[Cfill command[Cline[C Tab[Cnext kind  H[Cf[2A[0m

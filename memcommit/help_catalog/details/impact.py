@@ -15,8 +15,8 @@ IMPACT_DETAILS = (
         use_when="Choosing the operation-specific or directional Impact form.",
         discovery=DetailDiscovery.ON_DEMAND,
         explanation=(
-            "Impact remains read-only in either form; Apply is a separate reviewed "
-            "action."
+            "Impact remains read-only in either form; Apply belongs to a separate "
+            "execution operation."
         ),
         options=(
             OperationComparisonOption(

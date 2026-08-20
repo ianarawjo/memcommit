@@ -1,0 +1,8 @@
+1 · mem find-conflicts ┬ Report conflicting direct Memory pairs in the current or explicit Context; no Context changes.                                                             
+                       └ WHEN · Finding mutually incompatible claims or instructions.                                                                                               
+                                                                                                                                                                                    
+2 · mem fit ┬ Judge whether a defined set of Memories or other propositions is jointly compatible under ordinary interpretation, returning YES, MAY, or NO.                         
+            └ WHEN · Checking whether a defined set of Memories, Rules, Goals, Examples, or other propositions can jointly hold.                                                    
+                                                                                                                                                                                    
+3 · mem audit ┬ Run Duplicate, Ambiguity, and Conflict checks plus optional Rule Conformance, then review the combined saved result.                                                
+              └ WHEN · Performing a combined quality review before revising a Context.

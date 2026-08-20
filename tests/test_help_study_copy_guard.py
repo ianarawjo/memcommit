@@ -66,18 +66,23 @@ def test_less_than_half_or_distributed_words_are_allowed():
     )
 
 
-def test_every_visible_description_and_when_is_frozen_for_each_operation():
+def test_every_localized_description_and_when_is_frozen_for_each_operation():
     fields = guard.authored_study_help_fields((describe_operation("query"),))
 
-    assert len(fields) == 2
+    assert len(fields) == 10
     assert {(field.language, field.kind) for field in fields} == {
-        ("EN", "DESCRIPTION"),
-        ("EN", "WHEN"),
+        (language, kind)
+        for language in ("EN", "FR", "ZH", "KO", "MN")
+        for kind in ("DESCRIPTION", "WHEN")
     }
-    description = next(field for field in fields if field.kind == "DESCRIPTION")
-    match = guard.find_study_help_copy_match(description.text, fields)
+    korean = next(
+        field
+        for field in fields
+        if field.language == "KO" and field.kind == "DESCRIPTION"
+    )
+    match = guard.find_study_help_copy_match(korean.text, fields)
     assert match is not None
-    assert match.language == "EN"
+    assert match.language == "KO"
 
 
 @pytest.mark.parametrize("role", ["PARTICIPANT", "GRANTED_MEMORY"])

@@ -1,19 +1,19 @@
  mem help · command inventory                                                                       
+┌────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────┐
+│  LANGUAGE · [ ✓ EN ]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
 │  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
-┃                          result state and, when supported, record review responses. Review      ┃^
-┃                          never applies Memories.                                                ┃ 
-┃                          USE WHEN: Revisiting a saved analysis, proposal, or result state.      ┃ 
-┃ ▸ mem fit                Judge whether a defined set of Memories or other propositions is       ┃ 
-┃                          jointly compatible under ordinary interpretation, returning YES, MAY,  ┃ 
-┃                          or NO.                                                                 ┃ 
-┃                          USE WHEN: Checking whether a defined set of Memories, Rules, Goals,    ┃ 
-┃                                    Examples, or other propositions can jointly hold.            ┃ 
-┃ ▾ mem check-conformance  Check one Context or saved Ground Examples against explicit Rules or   ┃ 
-┃                          condition propositions and report conformance issues.                  ┃ 
-┃                          USE WHEN: Verifying whether existing Memories or Examples satisfy      ┃ 
-┃                                    stated Rules or condition propositions.                      ┃ 
+┃               └ WHEN · Revisiting a saved analysis, proposal, or result state.                  ┃^
+┃ ▸ mem fit ─┬ Judge whether a defined set of Memories or other propositions is jointly           ┃ 
+┃            │ compatible under ordinary interpretation, returning YES, MAY, or NO.               ┃ 
+┃            └ WHEN · Checking whether a defined set of Memories, Rules, Goals, Examples, or      ┃ 
+┃                     other propositions can jointly hold.                                        ┃ 
+┃ ▾ mem check- ──────┬ Check one Context or saved Ground Examples against explicit Rules or       ┃ 
+┃     conformance    │ condition propositions and report conformance issues.                      ┃ 
+┃                    └ WHEN · Verifying whether existing Memories or Examples satisfy stated      ┃ 
+┃                             Rules or condition propositions.                                    ┃ 
 ┃   FLOW      · Rules or condition propositions + Ground Examples or Context -> Conformance       ┃ 
 ┃               report                                                                            ┃ 
 ┃   EXECUTION · SEMANTIC                                                                          ┃ 

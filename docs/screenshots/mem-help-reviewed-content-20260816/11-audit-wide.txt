@@ -1,4 +1,7 @@
  mem help · command inventory                                                                                                                                                       
+┌────────────────────────────────────────────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────────────────────────────────────────────┐
+│  LANGUAGE · [ ✓ EN ]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                                                                                                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
 │  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
@@ -6,47 +9,44 @@
                                                                                                                                                                                     
 ┌ SEMANTIC TRANSFORMATIONS ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
 │ LLM-BASED · Uses LLM semantic analysis to restructure, derive, translate, curate, or reconcile content.                                                                         │ 
-│ ▸ mem atomize    Analyze composite Memories and separate their distinct propositions   │ USE WHEN: Untangling requirements or claims that were written together so each can be  │ 
-│                  into independently reviewable Memories.                               │           reviewed and revised independently.                                          │ 
-│ ▸ mem distill    Derive higher-level Rules or condition propositions from Case or      │ USE WHEN: Inferring more general Rules or condition propositions from several concrete │ 
-│                  Example propositions in a bounded Context, optionally guided by a     │           cases or examples.                                                           │ 
-│                  Goal.                                                                 │                                                                                        │ 
-│ ▸ mem elaborate  Expand an abstract Goal, Rule, or condition into multiple more        │ USE WHEN: Generating several more concrete candidate Rules or Cases from an abstract   │ 
-│                  specific candidate propositions.                                      │           concept or condition.                                                        │ 
-│ ▸ mem translate  Generate and save a reusable translated view of one Context or Memory │ USE WHEN: Reading or reusing Memory content in another language without replacing the  │ 
-│                  while preserving the original content.                                │           original.                                                                    │ 
-│ ▸ mem forget     Review keep/edit/delete decisions for one instruction, then apply the │ USE WHEN: Removing or rewriting Memories according to a natural-language instruction   │ 
-│                  accepted batch.                                                       │           whose meaning must be interpreted.                                           │ 
-│ ▸ mem resolve    Propose and verify minimum changes that make one bounded              │ USE WHEN: Deciding how to repair semantic conflicts or ambiguities within a bounded    │ 
-│                  direct-Memory Context frame Fit YES.                                  │           Context frame.                                                               │ 
-│ ▸ mem update     Update Memories in the Target Context from Memories in the Source     │ USE WHEN: Updating an existing Context using newly verified Memories.                  │ 
-│                  Context, asking the user to review and choose when needed.            │                                                                                        │ 
-│ ▸ mem meld       Semantically reconcile two Contexts, either into a separate Result or │ USE WHEN: Combining two bodies of work when overlap, conflicts, and newly synthesized  │ 
-│                  by incorporating proposed changes into an existing Target Context.    │           content must be reviewed semantically.                                       │ 
-│ ▸ mem sever      Create a Result by selecting, transforming, or excluding Source       │ USE WHEN: Selecting or transforming Source content according to defined criteria.      │ 
-│                  Memories according to a Criteria Context.                             │                                                                                        │ 
+│ ▸ mem atomize ─┬ Analyze composite Memories and separate their distinct propositions into independently reviewable Memories.                                                    │ 
+│                └ WHEN · Untangling requirements or claims that were written together so each can be reviewed and revised independently.                                         │ 
+│ ▸ mem distill ─┬ Derive higher-level Rules or condition propositions from Case or Example propositions in a bounded Context, optionally guided by a Goal.                       │ 
+│                └ WHEN · Inferring more general Rules or condition propositions from several concrete cases or examples.                                                         │ 
+│ ▸ mem elaborate ─┬ Expand an abstract Goal, Rule, or condition into multiple more specific candidate propositions.                                                              │ 
+│                  └ WHEN · Generating several more concrete candidate Rules or Cases from an abstract concept or condition.                                                      │ 
+│ ▸ mem translate ─┬ Generate and save a reusable translated view of one Context or Memory while preserving the original content.                                                 │ 
+│                  └ WHEN · Reading or reusing Memory content in another language without replacing the original.                                                                 │ 
+│ ▸ mem forget ─┬ Review keep/edit/delete decisions for one instruction, then apply the accepted batch.                                                                           │ 
+│               └ WHEN · Removing or rewriting Memories according to a natural-language instruction whose meaning must be interpreted.                                            │ 
+│ ▸ mem resolve ─┬ Propose and verify minimum changes that make one bounded direct-Memory Context frame Fit YES.                                                                  │ 
+│                └ WHEN · Deciding how to repair semantic conflicts or ambiguities within a bounded Context frame.                                                                │ 
+│ ▸ mem update ─┬ Update Memories in the Target Context from Memories in the Source Context, asking the user to review and choose when needed.                                    │ 
+│               └ WHEN · Updating an existing Context using newly verified Memories.                                                                                              │ 
+│ ▸ mem meld ─┬ Semantically reconcile two Contexts, either into a separate Result or by incorporating proposed changes into an existing Target Context.                          │ 
+│             └ WHEN · Combining two bodies of work when overlap, conflicts, and newly synthesized content must be reviewed semantically.                                         │ 
+│ ▸ mem sever ─┬ Create a Result by selecting, transforming, or excluding Source Memories according to a Criteria Context.                                                        │ 
+│              └ WHEN · Selecting or transforming Source content according to defined criteria.                                                                                   │ 
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
                                                                                                                                                                                     
 ┏ CHECK, COMPARE & REVIEW ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
 ┃ MIXED · Check compatibility, differences, quality, or expected impact. Review saved analysis and decide what should happen next.                                                ┃ 
-┃ ▸ mem compare            Compare Memories in two Contexts and report what they share,  │ USE WHEN: Comparing two Contexts as a whole to understand where they align and differ. ┃ 
-┃                          what differs, and what appears only on one side.              │                                                                                        ┃ 
-┃ ▸ mem find-duplicates    Report duplicate direct Memories in the current or explicit   │ USE WHEN: Locating semantically redundant Memories before cleanup.                     ┃ 
-┃                          Context; no Context changes.                                  │                                                                                        ┃ 
-┃ ▸ mem find-ambiguities   Report ambiguous direct Memories in the current or explicit   │ USE WHEN: Finding Memories that permit unclear or multiple interpretations.            ┃ 
-┃                          Context; no Context changes.                                  │                                                                                        ┃ 
-┃ ▸ mem find-conflicts     Report conflicting direct Memory pairs in the current or      │ USE WHEN: Finding mutually incompatible claims or instructions.                        ┃ 
-┃                          explicit Context; no Context changes.                         │                                                                                        ┃ 
-┃ ▾ mem audit              Run Duplicate, Ambiguity, and Conflict checks plus optional   │ USE WHEN: Performing a combined quality review before revising a Context.              ┃ 
-┃                          Rule Conformance, then review the combined saved result.      │                                                                                        ┃ 
+┃ ▸ mem compare ─┬ Compare Memories in two Contexts and report what they share, what differs, and what appears only on one side.                                                  ┃ 
+┃                └ WHEN · Comparing two Contexts as a whole to understand where they align and differ.                                                                            ┃ 
+┃ ▸ mem find- ──────┬ Report duplicate direct Memories in the current or explicit Context; no Context changes.                                                                    ┃ 
+┃     duplicates    └ WHEN · Locating semantically redundant Memories before cleanup.                                                                                             ┃ 
+┃ ▸ mem find- ───────┬ Report ambiguous direct Memories in the current or explicit Context; no Context changes.                                                                   ┃ 
+┃     ambiguities    └ WHEN · Finding Memories that permit unclear or multiple interpretations.                                                                                   ┃ 
+┃ ▸ mem find- ─────┬ Report conflicting direct Memory pairs in the current or explicit Context; no Context changes.                                                               ┃ 
+┃     conflicts    └ WHEN · Finding mutually incompatible claims or instructions.                                                                                                 ┃ 
+┃ ▾ mem audit ─┬ Run Duplicate, Ambiguity, and Conflict checks plus optional Rule Conformance, then review the combined saved result.                                             ┃ 
+┃              └ WHEN · Performing a combined quality review before revising a Context.                                                                                           ┃ 
 ┃   FLOW      · Context + Rules? -> saved Audit report                                                                                                                            ┃ 
 ┃   EXECUTION · SEMANTIC                                                                                                                                                          ┃ 
 ┃   EFFECT    · No Context content changes                                                                                                                                        ┃ 
 ┃   RANGE     · One exact direct Context                                                                                                                                          ┃ 
 ┃   FORM 1 · mem audit (choose one Context, run Duplicate + Ambiguity + Conflict, save, and review)                                                                               ┃ 
 ┃   FORM 2 · mem audit --context [context] (run and save all three finders for one exact Context)                                                                                 ┃ 
-┃   FORM 3 · mem audit --context [context] --against [rules_context] (add the shared Conformance check)                                                                           ┃ 
-┃   FORM 4 · mem audit --context [context] --snapshot (save and print the combined report)                                                                                        ┃ 
-┃ ▸ mem impact             Preview or inspect an operation's expected Context effects    │ USE WHEN: Verifying an operation's proposed effects before its separate Apply action.  ┃v
+┃   FORM 3 · mem audit --context [context] --against [rules_context] (add the shared Conformance check)                                                                           ┃v
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
  ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab next kind  H full help

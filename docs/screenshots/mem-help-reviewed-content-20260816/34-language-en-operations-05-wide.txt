@@ -1,0 +1,52 @@
+ mem help · command inventory                                                                                                                                                       
+┌────────────────────────────────────────────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────────────────────────────────────────────┐
+│  LANGUAGE · [ ✓ EN ]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                                                                                                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+│ ▸ mem forget ─┬ Review keep/edit/delete decisions for one instruction, then apply the accepted batch.                                                                           │^
+│               └ WHEN · Removing or rewriting Memories according to a natural-language instruction whose meaning must be interpreted.                                            │ 
+│ ▸ mem resolve ─┬ Propose and verify minimum changes that make one bounded direct-Memory Context frame Fit YES.                                                                  │ 
+│                └ WHEN · Deciding how to repair semantic conflicts or ambiguities within a bounded Context frame.                                                                │ 
+│ ▸ mem update ─┬ Update Memories in the Target Context from Memories in the Source Context, asking the user to review and choose when needed.                                    │ 
+│               └ WHEN · Updating an existing Context using newly verified Memories.                                                                                              │ 
+│ ▸ mem meld ─┬ Semantically reconcile two Contexts, either into a separate Result or by incorporating proposed changes into an existing Target Context.                          │ 
+│             └ WHEN · Combining two bodies of work when overlap, conflicts, and newly synthesized content must be reviewed semantically.                                         │ 
+│ ▸ mem sever ─┬ Create a Result by selecting, transforming, or excluding Source Memories according to a Criteria Context.                                                        │ 
+│              └ WHEN · Selecting or transforming Source content according to defined criteria.                                                                                   │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┌ CHECK, COMPARE & REVIEW ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ MIXED · Check compatibility, differences, quality, or expected impact. Review saved analysis and decide what should happen next.                                                │ 
+│ ▸ mem compare ─┬ Compare Memories in two Contexts and report what they share, what differs, and what appears only on one side.                                                  │ 
+│                └ WHEN · Comparing two Contexts as a whole to understand where they align and differ.                                                                            │ 
+│ ▸ mem find- ──────┬ Report duplicate direct Memories in the current or explicit Context; no Context changes.                                                                    │ 
+│     duplicates    └ WHEN · Locating semantically redundant Memories before cleanup.                                                                                             │ 
+│ ▸ mem find- ───────┬ Report ambiguous direct Memories in the current or explicit Context; no Context changes.                                                                   │ 
+│     ambiguities    └ WHEN · Finding Memories that permit unclear or multiple interpretations.                                                                                   │ 
+│ ▸ mem find- ─────┬ Report conflicting direct Memory pairs in the current or explicit Context; no Context changes.                                                               │ 
+│     conflicts    └ WHEN · Finding mutually incompatible claims or instructions.                                                                                                 │ 
+│ ▸ mem audit ─┬ Run Duplicate, Ambiguity, and Conflict checks plus optional Rule Conformance, then review the combined saved result.                                             │ 
+│              └ WHEN · Performing a combined quality review before revising a Context.                                                                                           │ 
+│ ▸ mem impact ─┬ Preview or inspect an operation's expected Context effects without applying them.                                                                               │ 
+│               └ WHEN · Verifying an operation's proposed effects before its separate Apply action.                                                                              │ 
+│ ▸ mem review ─┬ Open a saved semantic artifact to inspect its analysis, proposal, or result state and, when supported, record review responses. Review never applies Memories.  │ 
+│               └ WHEN · Revisiting a saved analysis, proposal, or result state.                                                                                                  │ 
+│ ▸ mem fit ─┬ Judge whether a defined set of Memories or other propositions is jointly compatible under ordinary interpretation, returning YES, MAY, or NO.                      │ 
+│            └ WHEN · Checking whether a defined set of Memories, Rules, Goals, Examples, or other propositions can jointly hold.                                                 │ 
+│ ▸ mem check- ──────┬ Check one Context or saved Ground Examples against explicit Rules or condition propositions and report conformance issues.                                 │ 
+│     conformance    └ WHEN · Verifying whether existing Memories or Examples satisfy stated Rules or condition propositions.                                                     │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┌ GROUND WORKBENCH ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ LLM-BASED · Turn abstract ideas into reviewable common ground by developing a Goal, Rules, and example Memories together.                                                       │ 
+│ ▸ mem ground ─┬ Develop an abstract idea into a reviewable Ground by shaping its Goal, Rules, and example Memories together.                                                    │ 
+│               └ WHEN · Working out how an abstract goal should operate in practice through jointly revised Rules and concrete Examples.                                         │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┏ HISTORY & RECOVERY ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃ MIXED · Inspect provenance and recorded changes. Restore an earlier state through explicit history operations.                                                                  ┃ 
+┃ ▸ mem log ─┬ Browse or search recorded Context, Memory, and Profile history.                                                                                                    ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help

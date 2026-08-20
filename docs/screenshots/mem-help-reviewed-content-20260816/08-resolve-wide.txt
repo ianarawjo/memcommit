@@ -1,48 +1,48 @@
  mem help · command inventory                                                                                                                                                       
+┌────────────────────────────────────────────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────────────────────────────────────────────┐
+│  LANGUAGE · [ ✓ EN ]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                                                                                                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
 │  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-│                  across selected Contexts.                                             │           content without obvious keyword overlap.                                     │^
-│ ▸ mem query      Generate an LLM-based answer from readable Context knowledge or an    │ USE WHEN: Getting a grounded natural-language answer instead of a list of matching     │ 
-│                  authorized concealed query-only view.                                 │           Memories.                                                                    │ 
-│ ▸ mem summarize  Show an LLM-derived overview of ordinary Memories in a readable       │ USE WHEN: Obtaining a concise overview of a Context or subtree.                        │ 
-│                  Context scope.                                                        │                                                                                        │ 
+│ ▸ mem query ─┬ Generate an LLM-based answer from readable Context knowledge or an authorized concealed query-only view.                                                         │^
+│              └ WHEN · Getting a grounded natural-language answer instead of a list of matching Memories.                                                                        │ 
+│ ▸ mem summarize ─┬ Show an LLM-derived overview of ordinary Memories in a readable Context scope.                                                                               │ 
+│                  └ WHEN · Obtaining a concise overview of a Context or subtree.                                                                                                 │ 
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
                                                                                                                                                                                     
 ┌ DETERMINISTIC CONTENT CHANGES ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
 │ NO LLM · Apply explicit inputs and reviewed choices through deterministic program logic to change content.                                                                      │ 
-│ ▸ mem edit             Directly replace the content of one or more Memories selected   │ USE WHEN: Directly correcting or replacing the content of specific existing Memories.  │ 
-│                        by UID or prefix.                                               │                                                                                        │ 
-│ ▸ mem replace          Preview and replace every literal or explicit                   │ USE WHEN: Correcting, renaming, or redacting exact text throughout a known local       │ 
-│                        regular-expression match in ordinary local Memories.            │           Context scope.                                                               │ 
-│ ▸ mem chunk            Mechanically split one direct Memory at header, paragraph, or   │ USE WHEN: A Memory already has clear text boundaries that should become separate       │ 
-│                        approximate sentence boundaries.                                │           Memories.                                                                    │ 
-│ ▸ mem delete (remove)  Select a Context or direct item to delete, or name it by        │ USE WHEN: Removing a specific Context or item that is no longer needed.                │ 
-│                        locator, name, or UID.                                          │                                                                                        │ 
-│ ▸ mem clear            Remove all direct items from the current or explicit Context    │ USE WHEN: Emptying a Context while retaining the Context itself.                       │ 
-│                        after confirmation.                                             │                                                                                        │ 
-│ ▸ mem merge            Add Source-only items to the current Target, leave exact        │ USE WHEN: Appending Source-only items or bringing a copied or branched Context back    │ 
-│                        matches unchanged, and choose Source or Target for stored-item  │           into the current Context without semantic synthesis.                         │ 
-│                        conflicts.                                                      │                                                                                        │ 
-│ ▸ mem dedup            Review confirmed duplicate groups, retain one existing Memory   │ USE WHEN: Removing confirmed semantic duplicates while preserving one exact existing   │ 
-│                        in each group, and delete the rest on Apply.                    │           Memory and its UID.                                                          │ 
+│ ▸ mem edit ─┬ Directly replace the content of one or more Memories selected by UID or prefix.                                                                                   │ 
+│             └ WHEN · Directly correcting or replacing the content of specific existing Memories.                                                                                │ 
+│ ▸ mem replace ─┬ Preview and replace every literal or explicit regular-expression match in ordinary local Memories.                                                             │ 
+│                └ WHEN · Correcting, renaming, or redacting exact text throughout a known local Context scope.                                                                   │ 
+│ ▸ mem chunk ─┬ Mechanically split one direct Memory at header, paragraph, or approximate sentence boundaries.                                                                   │ 
+│              └ WHEN · A Memory already has clear text boundaries that should become separate Memories.                                                                          │ 
+│ ▸ mem delete ───┬ Select a Context or direct item to delete, or name it by locator, name, or UID.                                                                               │ 
+│     (remove)    └ WHEN · Removing a specific Context or item that is no longer needed.                                                                                          │ 
+│ ▸ mem clear ─┬ Remove all direct items from the current or explicit Context after confirmation.                                                                                 │ 
+│              └ WHEN · Emptying a Context while retaining the Context itself.                                                                                                    │ 
+│ ▸ mem merge ─┬ Add Source-only items to the current Target, leave exact matches unchanged, and choose Source or Target for stored-item conflicts.                               │ 
+│              └ WHEN · Appending Source-only items or bringing a copied or branched Context back into the current Context without semantic synthesis.                            │ 
+│ ▸ mem dedup ─┬ Review confirmed duplicate groups, retain one existing Memory in each group, and delete the rest on Apply.                                                       │ 
+│              └ WHEN · Removing confirmed semantic duplicates while preserving one exact existing Memory and its UID.                                                            │ 
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
                                                                                                                                                                                     
 ┏ SEMANTIC TRANSFORMATIONS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
 ┃ LLM-BASED · Uses LLM semantic analysis to restructure, derive, translate, curate, or reconcile content.                                                                         ┃ 
-┃ ▸ mem atomize    Analyze composite Memories and separate their distinct propositions   │ USE WHEN: Untangling requirements or claims that were written together so each can be  ┃ 
-┃                  into independently reviewable Memories.                               │           reviewed and revised independently.                                          ┃ 
-┃ ▸ mem distill    Derive higher-level Rules or condition propositions from Case or      │ USE WHEN: Inferring more general Rules or condition propositions from several concrete ┃ 
-┃                  Example propositions in a bounded Context, optionally guided by a     │           cases or examples.                                                           ┃ 
-┃                  Goal.                                                                 │                                                                                        ┃ 
-┃ ▸ mem elaborate  Expand an abstract Goal, Rule, or condition into multiple more        │ USE WHEN: Generating several more concrete candidate Rules or Cases from an abstract   ┃ 
-┃                  specific candidate propositions.                                      │           concept or condition.                                                        ┃ 
-┃ ▸ mem translate  Generate and save a reusable translated view of one Context or Memory │ USE WHEN: Reading or reusing Memory content in another language without replacing the  ┃ 
-┃                  while preserving the original content.                                │           original.                                                                    ┃ 
-┃ ▸ mem forget     Review keep/edit/delete decisions for one instruction, then apply the │ USE WHEN: Removing or rewriting Memories according to a natural-language instruction   ┃ 
-┃                  accepted batch.                                                       │           whose meaning must be interpreted.                                           ┃ 
-┃ ▾ mem resolve    Propose and verify minimum changes that make one bounded              │ USE WHEN: Deciding how to repair semantic conflicts or ambiguities within a bounded    ┃ 
-┃                  direct-Memory Context frame Fit YES.                                  │           Context frame.                                                               ┃ 
+┃ ▸ mem atomize ─┬ Analyze composite Memories and separate their distinct propositions into independently reviewable Memories.                                                    ┃ 
+┃                └ WHEN · Untangling requirements or claims that were written together so each can be reviewed and revised independently.                                         ┃ 
+┃ ▸ mem distill ─┬ Derive higher-level Rules or condition propositions from Case or Example propositions in a bounded Context, optionally guided by a Goal.                       ┃ 
+┃                └ WHEN · Inferring more general Rules or condition propositions from several concrete cases or examples.                                                         ┃ 
+┃ ▸ mem elaborate ─┬ Expand an abstract Goal, Rule, or condition into multiple more specific candidate propositions.                                                              ┃ 
+┃                  └ WHEN · Generating several more concrete candidate Rules or Cases from an abstract concept or condition.                                                      ┃ 
+┃ ▸ mem translate ─┬ Generate and save a reusable translated view of one Context or Memory while preserving the original content.                                                 ┃ 
+┃                  └ WHEN · Reading or reusing Memory content in another language without replacing the original.                                                                 ┃ 
+┃ ▸ mem forget ─┬ Review keep/edit/delete decisions for one instruction, then apply the accepted batch.                                                                           ┃ 
+┃               └ WHEN · Removing or rewriting Memories according to a natural-language instruction whose meaning must be interpreted.                                            ┃ 
+┃ ▾ mem resolve ─┬ Propose and verify minimum changes that make one bounded direct-Memory Context frame Fit YES.                                                                  ┃ 
+┃                └ WHEN · Deciding how to repair semantic conflicts or ambiguities within a bounded Context frame.                                                                ┃ 
 ┃   FLOW      · Bounded Context frame + optional guidance -> verified repair candidates -> exact Apply                                                                            ┃ 
 ┃   EXECUTION · SEMANTIC                                                                                                                                                          ┃ 
 ┃   EFFECT    · Read-only until one exact candidate is explicitly applied; Apply creates one checkpoint                                                                           ┃ 

@@ -1,18 +1,18 @@
  mem help · command inventory                                                                       
+┌────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────┐
+│  LANGUAGE · [ ✓ EN ]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
 │  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
-┃ ▸ mem delete (remove)  Select a Context or direct item to delete, or name it by locator, name,  ┃^
-┃                        or UID.                                                                  ┃ 
-┃                        USE WHEN: Removing a specific Context or item that is no longer needed.  ┃ 
-┃ ▸ mem clear            Remove all direct items from the current or explicit Context after       ┃ 
-┃                        confirmation.                                                            ┃ 
-┃                        USE WHEN: Emptying a Context while retaining the Context itself.         ┃ 
-┃ ▾ mem merge            Add Source-only items to the current Target, leave exact matches         ┃ 
-┃                        unchanged, and choose Source or Target for stored-item conflicts.        ┃ 
-┃                        USE WHEN: Appending Source-only items or bringing a copied or branched   ┃ 
-┃                                  Context back into the current Context without semantic         ┃ 
-┃                                  synthesis.                                                     ┃ 
+┃     (remove)    │ UID.                                                                          ┃^
+┃                 └ WHEN · Removing a specific Context or item that is no longer needed.          ┃ 
+┃ ▸ mem clear ─┬ Remove all direct items from the current or explicit Context after confirmation. ┃ 
+┃              └ WHEN · Emptying a Context while retaining the Context itself.                    ┃ 
+┃ ▾ mem merge ─┬ Add Source-only items to the current Target, leave exact matches unchanged, and  ┃ 
+┃              │ choose Source or Target for stored-item conflicts.                               ┃ 
+┃              └ WHEN · Appending Source-only items or bringing a copied or branched Context back ┃ 
+┃                       into the current Context without semantic synthesis.                      ┃ 
 ┃   FLOW      · Source Context -> current Target Context                                          ┃ 
 ┃   EXECUTION · DETERMINISTIC                                                                     ┃ 
 ┃   EFFECT    · Changes Target only after every required conflict has KEEP TARGET or TAKE SOURCE; ┃ 

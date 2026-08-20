@@ -8,6 +8,8 @@ import importlib.util
 from pathlib import Path
 import shutil
 
+from PIL import Image, ImageDraw, ImageFont
+
 
 ROOT = Path(__file__).resolve().parents[3]
 OUT = ROOT / "docs/screenshots/mem-help-reviewed-content-20260816"
@@ -28,6 +30,13 @@ class CaptureTarget:
     row_downs: int
     expanded: bool
     expected: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class LanguageCaptureTarget:
+    code: str
+    right_moves: int
+    expected: str
 
 
 TARGETS = (
@@ -85,7 +94,7 @@ TARGETS = (
         4,
         5,
         True,
-        ("mem resolve", "direct-Memory Context frame"),
+        ("mem resolve", "bounded direct-Memory", "FLOW"),
     ),
     CaptureTarget(
         "09-meld",
@@ -106,7 +115,7 @@ TARGETS = (
         5,
         4,
         True,
-        ("mem audit", "combined saved result"),
+        ("mem audit", "saved Audit report"),
     ),
     CaptureTarget(
         "12-impact",
@@ -190,18 +199,27 @@ TARGETS = (
         10,
         3,
         True,
-        ("mem config (legacy)", "stored global configuration"),
+        ("mem config", "(legacy)", "stored global configuration"),
     ),
     CaptureTarget(
         "24-eval",
         10,
         5,
         True,
-        ("mem eval (legacy)", "EVALUATION SCOPE", "remains future work."),
+        ("mem eval", "(legacy)", "EVALUATION SCOPE", "remains future work."),
     ),
 )
 
+LANGUAGE_TARGETS = (
+    LanguageCaptureTarget("EN", 0, "basic record unit"),
+    LanguageCaptureTarget("FR", 1, "unité d’enregistrement de base stockée"),
+    LanguageCaptureTarget("ZH", 2, "存储在 Context 中"),
+    LanguageCaptureTarget("KO", 3, "Context 안에 저장되며"),
+    LanguageCaptureTarget("MN", 4, "Context дотор хадгалагдаж"),
+)
+
 _CATEGORY_ROW_COUNTS = {2: 4, 3: 7, 4: 9, 5: 9, 6: 1, 7: 8, 8: 2, 10: 6}
+_LANGUAGE_OPERATION_PAGE_COUNT = 7
 
 
 def _close(child: object) -> None:
@@ -252,9 +270,166 @@ def _capture_target(executable: str, target: CaptureTarget, *, compact: bool) ->
     _close(child)
 
 
+def _capture_language(
+    executable: str,
+    target: LanguageCaptureTarget,
+    *,
+    compact: bool,
+) -> None:
+    if compact:
+        _BASE.COLUMNS = 100
+        _BASE.ROWS = 30
+        viewport = "compact"
+    else:
+        _BASE.COLUMNS = 180
+        _BASE.ROWS = 52
+        viewport = "wide"
+
+    child, recorder = _BASE._spawn(executable, interactive=True)
+    _BASE._pump(child, seconds=0.55)
+    # Commands start focused. Two reverse Tab steps reach VIEW and then the
+    # process-local LANGUAGE selector without changing any study data.
+    child.send("\x1b[Z\x1b[Z")
+    child.send("\x1b[C" * target.right_moves)
+    _BASE._pump(child, seconds=0.5)
+
+    stem = f"{25 + target.right_moves:02d}-language-{target.code.lower()}-{viewport}"
+    plain = _BASE._snapshot(recorder, stem)
+    normalized = " ".join(plain.split())
+    assert "HELP LANGUAGE" in normalized
+    assert f"✓ {target.code}" in normalized
+    assert target.expected in normalized, (target.code, viewport, plain)
+
+    raw = recorder.getvalue()
+    expected_size = "30 100" if compact else "52 180"
+    assert expected_size in raw
+    assert _BASE.re.search(r"\x1b\[[0-9;]*38;(?:2|5);", raw) is not None
+    assert _BASE.re.search(r"\x1b\[[0-9;]*48;(?:2|5);", raw) is not None
+    _close(child)
+
+
+def _write_language_operation_sheet(
+    target: LanguageCaptureTarget,
+    *,
+    viewport: str,
+    page_stems: list[str],
+) -> None:
+    """Compose full-resolution PTY pages without replacing their evidence."""
+
+    pages = [Image.open(OUT / f"{stem}.png") for stem in page_stems]
+    try:
+        page_width, page_height = pages[0].size
+        columns = 2
+        rows = (len(pages) + columns - 1) // columns
+        label_height = 30
+        sheet = Image.new(
+            "RGB",
+            (page_width * columns, (page_height + label_height) * rows),
+            "#101217",
+        )
+        draw = ImageDraw.Draw(sheet)
+        font = ImageFont.truetype(_BASE.FONT_PATH, 18, index=1)
+        for index, page in enumerate(pages):
+            column = index % columns
+            row = index // columns
+            x = column * page_width
+            y = row * (page_height + label_height)
+            draw.text(
+                (x + 16, y + 4),
+                (
+                    f"{target.code} · OPERATIONS "
+                    f"{index + 1}/{len(page_stems)} · {viewport.upper()}"
+                ),
+                font=font,
+                fill="#cad3f5",
+            )
+            sheet.paste(page, (x, y + label_height))
+        start = 30 + target.right_moves * _LANGUAGE_OPERATION_PAGE_COUNT
+        end = start + _LANGUAGE_OPERATION_PAGE_COUNT - 1
+        sheet.save(
+            OUT
+            / (
+                f"{start:02d}-{end:02d}-language-{target.code.lower()}-"
+                f"operations-all-{viewport}.png"
+            )
+        )
+    finally:
+        for page in pages:
+            page.close()
+
+
+def _capture_language_operation_pages(
+    executable: str,
+    target: LanguageCaptureTarget,
+    *,
+    compact: bool,
+) -> None:
+    if compact:
+        _BASE.COLUMNS = 100
+        _BASE.ROWS = 30
+        viewport = "compact"
+    else:
+        _BASE.COLUMNS = 180
+        _BASE.ROWS = 52
+        viewport = "wide"
+
+    child, recorder = _BASE._spawn(executable, interactive=True)
+    _BASE._pump(child, seconds=0.55)
+    child.send("\x1b[Z\x1b[Z")
+    child.send("\x1b[C" * target.right_moves)
+    # Language -> View -> operation list, then freeze the first list position.
+    child.send("\t\t\x1b[H")
+    _BASE._pump(child, seconds=0.35)
+
+    page_stems: list[str] = []
+    for page in range(1, _LANGUAGE_OPERATION_PAGE_COUNT + 1):
+        # Help advances ten semantic rows and clamps the final page to the last
+        # operation. Adjacent 180x52 captures therefore overlap rather than
+        # leaving an undocumented category boundary between them.
+        child.send("\x1b[6~")
+        _BASE._pump(child, seconds=0.35)
+        number = (
+            30
+            + target.right_moves * _LANGUAGE_OPERATION_PAGE_COUNT
+            + page
+            - 1
+        )
+        stem = (
+            f"{number:02d}-language-{target.code.lower()}-operations-"
+            f"{page:02d}-{viewport}"
+        )
+        plain = _BASE._snapshot(recorder, stem)
+        normalized = " ".join(plain.split())
+        assert "HELP LANGUAGE" in normalized
+        assert f"✓ {target.code}" in normalized
+        assert "mem " in normalized
+        if page == _LANGUAGE_OPERATION_PAGE_COUNT:
+            assert "mem eval" in normalized
+        page_stems.append(stem)
+
+    raw = recorder.getvalue()
+    expected_size = "30 100" if compact else "52 180"
+    assert expected_size in raw
+    assert _BASE.re.search(r"\x1b\[[0-9;]*38;(?:2|5);", raw) is not None
+    assert _BASE.re.search(r"\x1b\[[0-9;]*48;(?:2|5);", raw) is not None
+    _close(child)
+    _write_language_operation_sheet(
+        target,
+        viewport=viewport,
+        page_stems=page_stems,
+    )
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--viewport", choices=("wide", "compact", "both"), default="both")
+    parser.add_argument(
+        "--viewport", choices=("wide", "compact", "both"), default="both"
+    )
+    parser.add_argument(
+        "--captures",
+        choices=("operations", "languages", "language-pages", "both"),
+        default="both",
+    )
     parser.add_argument(
         "--start",
         default=TARGETS[0].stem,
@@ -265,15 +440,28 @@ def main() -> None:
     if executable is None:
         raise RuntimeError("mem executable is unavailable")
     OUT.mkdir(parents=True, exist_ok=True)
-    targets = TARGETS[next(i for i, target in enumerate(TARGETS) if target.stem == args.start) :]
+    targets = TARGETS[
+        next(i for i, target in enumerate(TARGETS) if target.stem == args.start) :
+    ]
     viewports = {
         "wide": (False,),
         "compact": (True,),
         "both": (False, True),
     }[args.viewport]
     for compact in viewports:
-        for target in targets:
-            _capture_target(executable, target, compact=compact)
+        if args.captures in {"operations", "both"}:
+            for target in targets:
+                _capture_target(executable, target, compact=compact)
+        if args.captures in {"languages", "both"}:
+            for target in LANGUAGE_TARGETS:
+                _capture_language(executable, target, compact=compact)
+        if args.captures == "language-pages":
+            for target in LANGUAGE_TARGETS:
+                _capture_language_operation_pages(
+                    executable,
+                    target,
+                    compact=compact,
+                )
 
 
 if __name__ == "__main__":

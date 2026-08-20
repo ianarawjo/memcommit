@@ -18,6 +18,8 @@ from memcommit.help_catalog import (
 )
 from memcommit.help_catalog.best_for import BEST_FOR_BY_OPERATION
 from memcommit.help_catalog.details import ALL_OPERATION_DETAILS, DETAILS_BY_OPERATION
+from memcommit.interfaces.tui.core.text_layout import terminal_cell_width
+from memcommit.interfaces.tui.operations.help.localization import HELP_LANGUAGES
 
 
 def _root_context():
@@ -312,12 +314,61 @@ def test_collapsed_by_kind_row_connects_summary_and_when_without_extra_height():
     assert "└ WHEN · Comparing two Contexts" in when_line
     assert lines.index(when_line) == command_index + 1
     assert any(
+        style == "class:help-command.selected" and text == "┬ "
+        for style, text in fragments
+    )
+    assert any(
         style == "class:help-command.selected" and text == "WHEN"
         for style, text in fragments
     )
+    assert "DESCRIPTION:" not in rendered
     assert "USE WHEN:" not in rendered
     assert "BEST FOR" not in rendered
     assert "FORM 1" not in rendered
+
+
+def test_adjacent_command_records_use_connectors_without_background_bands():
+    root, context = _root_context()
+    try:
+        entries = [
+            entry
+            for entry in command_entries(context)
+            if entry.name in {"compare", "review"}
+        ]
+    finally:
+        context.close()
+
+    fragments = _help_group_fragments(
+        list(enumerate(entries)),
+        title="CHECK, COMPARE & REVIEW",
+        width=180,
+        focused=False,
+        selected_index=0,
+        expanded_index=None,
+        selected_form=None,
+    )
+
+    assert not any("help-zebra" in style for style, _text in fragments)
+    assert any(
+        style == "class:help-connector" and text == "┬ "
+        for style, text in fragments
+    )
+    assert any(style == "" and text == "WHEN" for style, text in fragments)
+    assert any(
+        style == "class:help-command" and "▸ mem review" in text
+        for style, text in fragments
+    )
+    assert any(
+        style == "class:help-group bold" and text == " CHECK, COMPARE & REVIEW "
+        for style, text in fragments
+    )
+    category_copy = [
+        (style, text)
+        for style, text in fragments
+        if "Check compatibility" in text
+    ]
+    assert category_copy
+    assert all(style == "class:help-category-description bold" for style, _ in category_copy)
 
 
 def test_every_help_category_explains_its_intent_and_execution_basis():
@@ -438,11 +489,96 @@ def test_collapsed_a_z_rows_use_the_same_connected_record():
 
     assert "─┬ Compare Memories" in command_line
     assert "└ WHEN · Comparing two Contexts" in when_line
+    assert "DESCRIPTION:" not in rendered
     assert "USE WHEN:" not in rendered
     assert "BEST FOR" not in rendered
 
 
-def test_collapsed_narrow_row_preserves_the_connected_when_record():
+def test_every_help_language_localizes_learning_copy_without_renaming_commands():
+    root, context = _root_context()
+    try:
+        entry = next(
+            entry for entry in command_entries(context) if entry.name == "atomize"
+        )
+    finally:
+        context.close()
+
+    expected_copy = {
+        "EN": "Immediately atomize the current Context",
+        "FR": "Atomiser immédiatement le Context courant",
+        "ZH": "立即将当前 Context 原子化",
+        "KO": "현재 Context를 독립적으로 검토할 수 있는 Memory로 즉시 atomize",
+        "MN": "Одоогийн Context-г тус тусад нь хянах боломжтой Memory болгон шууд atomize",
+    }
+    for language in HELP_LANGUAGES:
+        rendered = "".join(
+            text
+            for _style, text in _help_group_fragments(
+                [(0, entry)],
+                title="SEMANTIC TRANSFORMATIONS",
+                width=100,
+                focused=True,
+                selected_index=0,
+                expanded_index=None,
+                selected_form=None,
+                language=language,
+            )
+        )
+
+        assert "mem atomize" in rendered
+        assert expected_copy[language] in rendered
+        assert all(terminal_cell_width(line) == 100 for line in rendered.splitlines())
+
+
+def test_long_and_annotated_command_labels_use_both_record_rows():
+    root, context = _root_context()
+    try:
+        entries = command_entries(context)
+    finally:
+        context.close()
+
+    selected = {
+        entry.name: entry
+        for entry in entries
+        if entry.name in {"delete", "check-conformance", "config", "import"}
+    }
+    rendered = "".join(
+        text
+        for _style, text in _help_group_fragments(
+            list(enumerate(selected.values())),
+            title="A–Z",
+            width=100,
+            focused=True,
+            selected_index=0,
+            expanded_index=None,
+            selected_form=None,
+        )
+    )
+    lines = rendered.splitlines()
+
+    expected_labels = {
+        "delete": "(remove)",
+        "check-": "conformance",
+        "config": "(legacy)",
+        "import": "[PARTIAL]",
+    }
+    for first_row, second_row in expected_labels.items():
+        command_index = next(
+            index for index, line in enumerate(lines) if f"▸ mem {first_row}" in line
+        )
+        assert "─┬" in lines[command_index]
+        assert second_row in lines[command_index + 1]
+        assert "mem " not in lines[command_index + 1]
+        assert lines[command_index + 1].index(second_row) == lines[
+            command_index
+        ].index("mem") + 2
+        assert lines[command_index].index("┬") == lines[command_index + 1].index(
+            "│" if "│" in lines[command_index + 1] else "└"
+        )
+    assert all(len(line) == 100 for line in lines)
+
+
+def test_collapsed_narrow_row_connects_wrapped_summary_and_when_blocks():
     root, context = _root_context()
     try:
         entry = next(
@@ -475,17 +611,23 @@ def test_collapsed_narrow_row_preserves_the_connected_when_record():
 
     assert all(len(line) == 90 for line in lines)
     assert best_for_index > command_index
-    summary_start = lines[command_index].index("Compare Memories")
     connector_start = lines[command_index].index("┬")
-    label_start = lines[best_for_index].index("WHEN ·")
+    summary_start = lines[command_index].index("Compare Memories")
+    when_label_start = lines[best_for_index].index("WHEN ·")
     use_case_start = lines[best_for_index].index("Comparing two Contexts")
+    summary_continuation = next(
+        line for line in lines if "what appears only on one side." in line
+    )
     continuation = next(line for line in lines if "align and differ." in line)
     assert summary_start == connector_start + len("┬ ")
-    assert label_start == summary_start
-    assert use_case_start == label_start + len("WHEN · ")
+    assert summary_continuation[summary_start:].startswith(
+        "differs, and what appears only on one side."
+    )
+    assert when_label_start == summary_start
+    assert use_case_start == when_label_start + len("WHEN · ")
     assert continuation.index("align and differ.") == use_case_start
     assert "└ WHEN ·" in lines[best_for_index]
-    assert "USE WHEN:" not in rendered
+    assert "│" not in continuation[connector_start : connector_start + 2]
     assert "BEST FOR" not in rendered
 
 
@@ -665,7 +807,8 @@ def test_import_partial_tag_is_collapsed_while_its_limitation_is_expanded():
         )
     )
 
-    assert "mem import [PARTIAL]" in collapsed
+    assert "mem import" in collapsed
+    assert "[PARTIAL]" in collapsed
     assert "CURRENT LIMITATION" not in collapsed
     assert "CURRENT LIMITATION" in expanded
     assert "MemCommit-to-MemCommit transfer" in expanded
@@ -731,7 +874,7 @@ def test_final_help_categories_match_their_reviewed_runtime_boundaries():
     assert ground.summary.startswith("Develop an abstract idea")
     assert "Ground workspace Contexts" in ground.effect
     assert log.summary == (
-        "Browse or search recorded Context, Memory, and Profile history."
+        "Print or search recorded Context, Memory, and Profile history."
     )
     assert diff.flow == "Context checkpoint or active Update -> diff report"
     assert undo.summary == "Undo the most recent recorded command as one unit."

@@ -1,0 +1,84 @@
+30 100
+[?12l[?25h[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;1m mem help · command inventory[0m
+[0m┌────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────[99C┐[0m
+[0m│  LANGUAGE · [[0;38;5;234;48;5;117m ✓ EN [0m]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                     [99C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────[99C┘[0m
+[0m┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────[99C┐[0m
+[0m│  VIEW · [[0;38;5;234;48;5;117m ✓ BY KIND [0m]  [   A–Z ] · ←/→ TO SELECT                                                 [99C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────[99C┘[0m
+[0m│ [0;1mGRANT       [0mA permission relationship that can be given or received, selectively allowing       [0m│[99C[0;1m^[0m
+[0m│             someone without direct ownership to read or query a Context and its Memories, or    [0m│[99C[0;48;5;238m [0m
+[0m│             run permitted operations on them, while the Grant remains valid.                    [0m│[99C[0;48;5;238m [0m
+[0m│ [0;1mSESSION     [0mStores an analysis or review workflow so it can be reopened and continued. Apply    [0m│[99C[0;48;5;248m [0m
+[0m│             results and checkpoint history separately show whether Context changes were made.   [0m│[99C[0;48;5;248m [0m
+[0m│ [0;1mCHECKPOINT  [0mA recoverable history boundary created for each applied operation and recorded per  [0m│[99C[0;48;5;248m [0m
+[0m│             affected Context.                                                                   [0m│[99C[0;48;5;248m [0m
+[0m├ COMMON KEYS ────────────────────────────────────────────────────────────────────────────────────┤[99C[0;48;5;248m [0m
+[0m│ [0;1m↑/↓              [0mMove or scroll within the focused surface.                                     [0m│[99C[0;48;5;248m [0m
+[0m│ [0;1m←/→              [0mChange a horizontal choice, expand, or go back according to focus.             [0m│[99C[0;48;5;248m [0m
+[0m│ [0;1mTab / Shift-Tab  [0mMove focus between visible surfaces.                                           [0m│[99C[0;48;5;248m [0m
+[0m│ [0;1mEnter            [0mOpen, select, or submit the focused action.                                    [0m│[99C[0;48;5;248m [0m
+[0m│ [0;1mH                [0mOpen or hide Help from a session's read-only navigation surface.               [0m│[99C[0;48;5;248m [0m
+[0m│ [0;1mEsc / Backspace  [0mGo back one layer; Backspace edits text in writable fields.                    [0m│[99C[0;48;5;248m [0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────┘[99C[0;48;5;248m [0m
+[99C[0;48;5;248m [0m
+[0;1mOPERATIONS                                                                                         [99C[0;48;5;248m [0m
+[0;38;5;117;1m┏ BROWSE & NAVIGATE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[99C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0m [0;1mNO LLM · Inspect the current location and available Contexts, then move through the Context[0m     [0;38;5;117;1m┃[99C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0m [0;1m         namespace.[0m                                                                             [0;38;5;117;1m┃[99C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m ▸ mem status ─┬ Show the current Context's inventory, first five direct Memories,               [0;38;5;117;1m┃[99C[0;1mv[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[0m ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help[98D[2A[0m[26A[0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ HELP LANGUAGE ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[99C┓[0m
+[0;38;5;117;1m┃[0m› LANGUAGE · [0;38;5;117;1m[[0;38;5;234;48;5;117;1m ✓ EN [0;38;5;117;1m][0m  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                     [99C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[99C┛[0m
+
+
+
+[0m┌ CORE CONCEPTS ──────────────────────────────────────────────────────────────────────────────────┐[0m
+[2C[0;38;5;189;1mMEMORY      [0mThe basic record unit stor[Cd inside[Ca Context and[Cindependently[Cselected, reviewed,[0m
+[14C[0mor changed by[CMemory-level operations. [C   [C     [C       [C      [0m
+[2C[0;1mCONTEXT[5C[0mA named hier[Crch[Ccal workspace that conta[Cns Memories and organizes chil[C Contexts.[0m
+[14C[0mThe / [Ceparator expresses hierarchy in names suc[C as task-1/participant; oper[Ctions[0m
+[2C[0m            with descendant [Cc[Cpe[Ccan treat a Context and its descendant Contexts[Cas [Cne  [C   [0m
+[14C[0msubtre[C.[3Cmmands[Cuse[Cthe[Ccurrent[CContext[Cwhen[Cnone[Cis[Cspecified.[0m
+[0m│ [0;1mPROFILE     [0mAn isolated ownership and storage boundary containing Contexts; different Profiles  [0m│[0m
+[2C[0m            may contain the same Contex[C name.    [C        [0m
+[2C[0;1mOPERATION[3C[0mA reusable acti[Cn tha[C reads, analyzes, or changes selected Mem[Cries or[CContexts[0m
+[2C[0m            through de[Cined[Cinputs and behavio[C.     [0m
+[2C[0;1mGRANT[7C[0mA permission r[Clati[Cnship tha[C can be given or received,[Cselectively[Callowing[0m
+[2C[0m            someone without dir[Cct[Cownership to read or quer[2Ca Context and its Memories,[Cor[0m
+[2C[0m            run permitted oper[Ctions on them,[Cwh[Cle[2Che Grant remains va[Cid[0m
+[0m│ [0;1mSESSION     [0mStores an analysis or review workflow so it can be reopened and continued. Apply    [0m│[0m
+[0m│             results and checkpoint history separately show whether Context changes were made.   [0m│[0m
+[0m│ [0;1mCHECKPOINT  [0mA recoverable history boundary created for each applied operation and recorded per  [0m│[0m
+[0m│             affected Context.                                                                   [0m│[0m
+[0m├ COMMON KEYS ────────────────────────────────────────────────────────────────────────────────────┤[0m
+[0m│[C[0;1m↑/↓              [0mMove[Cor[Cscroll[Cwithin[Cthe[Cfocused[Csurface.[37C[0m│[0m
+[0m│ [0;1m←/→              [0mChange a horizontal choice, expand, or go back according to focus.             │[0m
+
+[C[0mLANGUAGE: ←/→ choose · ↓ view · Tab next · Q[Ccancel[0m[K[27A[51D[0m[13C[0m[   EN ][12C[0;38;5;117;1m[[0;38;5;234;48;5;117;1m ✓ ZH [0;38;5;117;1m][0m
+
+
+
+
+
+[14C[0m存储在 Cont[Cxt 中，并由 Memory 级 operation 独立选择、审查或修改的基本记录单元。   [0m
+[2C[0;1mCONTEXT     [0m包含 Memory 并组织子 Context 的命名层级工作区。分隔符[C/[C在[Ctask-1/participant[0m
+[2C[0m            这样的名称中表示层级；支持 descendant 范围的[Coperation 可将一个 Context 及其下级   [0m
+[14C[0mContext 作为一个 subtre[C 一并处理。未指定 Context[C时，command 使用当前 Cont[Cxt。   [0m
+[2C[0;1mPROFILE     [0m包含[CCont[Cxt 的独立所有权与存储边界；不同[CProf[Cle[C可以包含相同的 Context[Cname。[0m
+[2C[0;1mOPERATION   [0m一种可复用的操作，按照已定义的输入与行为读取、分析或修改选定的 Memory[C或[CContext。[0m
+[2C[0;1mG[CANT  [5C[0m一种可授予或接收的权限关系；在 Grant 有效期间，它可选择性允许非直接所有者读取或查询[0m
+[14C[0mContext 及其 M[Cmory，或运行获准 operation。[0m
+[2C[0;1mSESSION  [3C[0m保存分析或审查 workflow，以便重新打开并继续。Apply[C结果和 checkpo[Cnt[Chist[Cry    [0m
+[14C[0m会另行显示是否发生了 Context 修改。 [0m
+[2C[0;1mCHECKPOINT[2C[0m每个已应用 operation 创建并按受影响 Context[C记录的可恢复历史边界。  [C        [0m
+[0m├ COMMON KEYS ────────────────────────────────────────────────────────────────────────────────────┤[0m
+[2C[0;1m↑/↓              [0m在当前聚焦区域中移动或滚动。[C     [C   [C     [C       [C      [0m
+[2C[0;1m←/→    [5C     [0m根据焦点更改横向选择、展开或返回。 [C  [C   [C  [C        [C   [C          [C     [0m
+[2C[0;1mTab / Shift-Tab  [0m在可见区域之间移动焦点。 [C          [C    [C       [C       [C       [C    [C     [0m
+[2C[0;1mEnter     [2C     [0m打开、选择或提交当前操作。       [C   [C    [C       [C         [C   [C        [C   [0m
+[2C[0;1mH                [0m从 session 的只读导航区域打开或隐藏[CHelp。[0m
+[0m│ [0;1mEsc / Backspace  [0m返回一层；在可写字段中 Backspace 用于删除文本。                                [0m│[0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
+[0m                                                                                                   [25A[C[0m

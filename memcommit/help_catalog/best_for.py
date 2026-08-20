@@ -20,8 +20,8 @@ BEST_FOR_BY_OPERATION = {
     "checkout": "Using a Git-like workflow to switch or create a branch.",
     "checkpoint": "Creating a recovery point before risky work.",
     "chunk": (
-        "A Memory already has clear text boundaries that should become "
-        "separate Memories."
+        "One or more direct Memories already have clear sentence or structural "
+        "boundaries that should become separate Memories."
     ),
     "clear": "Emptying a Context while retaining the Context itself.",
     "compare": (

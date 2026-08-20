@@ -1,25 +1,25 @@
  mem help · command inventory                                                                       
+┌────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────┐
+│  LANGUAGE · [ ✓ EN ]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
 │  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
-┃                  preserving the original content.                                               ┃^
-┃                  USE WHEN: Reading or reusing Memory content in another language without        ┃ 
-┃                            replacing the original.                                              ┃ 
-┃ ▸ mem forget     Review keep/edit/delete decisions for one instruction, then apply the accepted ┃ 
-┃                  batch.                                                                         ┃ 
-┃                  USE WHEN: Removing or rewriting Memories according to a natural-language       ┃ 
-┃                            instruction whose meaning must be interpreted.                       ┃ 
-┃ ▸ mem resolve    Propose and verify minimum changes that make one bounded direct-Memory Context ┃ 
-┃                  frame Fit YES.                                                                 ┃ 
-┃                  USE WHEN: Deciding how to repair semantic conflicts or ambiguities within a    ┃ 
-┃                            bounded Context frame.                                               ┃ 
-┃ ▸ mem update     Update Memories in the Target Context from Memories in the Source Context,     ┃ 
-┃                  asking the user to review and choose when needed.                              ┃ 
-┃                  USE WHEN: Updating an existing Context using newly verified Memories.          ┃ 
-┃ ▾ mem meld       Semantically reconcile two Contexts, either into a separate Result or by       ┃ 
-┃                  incorporating proposed changes into an existing Target Context.                ┃ 
-┃                  USE WHEN: Combining two bodies of work when overlap, conflicts, and newly      ┃ 
-┃                            synthesized content must be reviewed semantically.                   ┃ 
+┃ ▸ mem forget ─┬ Review keep/edit/delete decisions for one instruction, then apply the accepted  ┃^
+┃               │ batch.                                                                          ┃ 
+┃               └ WHEN · Removing or rewriting Memories according to a natural-language           ┃ 
+┃                        instruction whose meaning must be interpreted.                           ┃ 
+┃ ▸ mem resolve ─┬ Propose and verify minimum changes that make one bounded direct-Memory Context ┃ 
+┃                │ frame Fit YES.                                                                 ┃ 
+┃                └ WHEN · Deciding how to repair semantic conflicts or ambiguities within a       ┃ 
+┃                         bounded Context frame.                                                  ┃ 
+┃ ▸ mem update ─┬ Update Memories in the Target Context from Memories in the Source Context,      ┃ 
+┃               │ asking the user to review and choose when needed.                               ┃ 
+┃               └ WHEN · Updating an existing Context using newly verified Memories.              ┃ 
+┃ ▾ mem meld ─┬ Semantically reconcile two Contexts, either into a separate Result or by          ┃ 
+┃             │ incorporating proposed changes into an existing Target Context.                   ┃ 
+┃             └ WHEN · Combining two bodies of work when overlap, conflicts, and newly            ┃ 
+┃                      synthesized content must be reviewed semantically.                         ┃ 
 ┃   FLOW      · PEER A + PEER B -> RESULT; INCOMING -> EXISTING TARGET                            ┃ 
 ┃   EXECUTION · SEMANTIC                                                                          ┃ 
 ┃   EFFECT    · Symmetric mode requires a distinct empty Result; directional mode changes only    ┃ 

@@ -1,20 +1,20 @@
  mem help · command inventory                                                                       
+┌────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────┐
+│  LANGUAGE · [ ✓ EN ]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
 │  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
-│ ▸ mem ground  Develop an abstract idea into a reviewable Ground by shaping its Goal, Rules, and │^
-│               example Memories together.                                                        │ 
-│               USE WHEN: Working out how an abstract goal should operate in practice through     │ 
-│                         jointly revised Rules and concrete Examples.                            │ 
+│                        jointly revised Rules and concrete Examples.                             │^
 └─────────────────────────────────────────────────────────────────────────────────────────────────┘ 
                                                                                                     
 ┏ HISTORY & RECOVERY ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
 ┃ MIXED · Inspect provenance and recorded changes. Restore an earlier state through explicit      ┃ 
 ┃         history operations.                                                                     ┃ 
-┃ ▸ mem log         Browse or search recorded Context, Memory, and Profile history.               ┃ 
-┃                   USE WHEN: Investigating previous operations, checkpoints, or Memory history.  ┃ 
-┃ ▾ mem diff        Show the differences recorded by a Context checkpoint or the active Update.   ┃ 
-┃                   USE WHEN: Verifying exactly what a recorded operation changed.                ┃ 
+┃ ▸ mem log ─┬ Browse or search recorded Context, Memory, and Profile history.                    ┃ 
+┃            └ WHEN · Investigating previous operations, checkpoints, or Memory history.          ┃ 
+┃ ▾ mem diff ─┬ Show the differences recorded by a Context checkpoint or the active Update.       ┃ 
+┃             └ WHEN · Verifying exactly what a recorded operation changed.                       ┃ 
 ┃   FLOW      · Context checkpoint or active Update -> diff report                                ┃ 
 ┃   EXECUTION · DETERMINISTIC                                                                     ┃ 
 ┃   EFFECT    · Read-only                                                                         ┃ 
@@ -24,7 +24,7 @@
 ┃   FORM 3 · mem diff --raw (exact unified diff)                                                  ┃ 
 ┃   FORM 4 · mem diff --stat (summary only)                                                       ┃ 
 ┃   FORM 5 · mem diff --verbose (complete UIDs and source/target fingerprints)                    ┃ 
-┃ ▸ mem trace       Trace one retained Memory through its recorded lineage.                       ┃ 
-┃                   USE WHEN: Determining where a Memory came from and how it changed.            ┃v
+┃ ▸ mem trace ─┬ Trace one retained Memory through its recorded lineage.                          ┃ 
+┃              └ WHEN · Determining where a Memory came from and how it changed.                  ┃v
 ─────────────────────────────────────────────────────────────────────────────────────────────────── 
  ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab next kind  H f

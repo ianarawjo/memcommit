@@ -1,17 +1,16 @@
 30 100
 [?12l[?25h[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;1m mem help · command inventory[0m
+[0m┌────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────[99C┐[0m
+[0m│  LANGUAGE · [[0;38;5;234;48;5;117m ✓ EN [0m]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                     [99C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────[99C┘[0m
 [0m┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────[99C┐[0m
 [0m│  VIEW · [[0;38;5;234;48;5;117m ✓ BY KIND [0m]  [   A–Z ] · ←/→ TO SELECT                                                 [99C│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────[99C┘[0m
-[0m┌ CORE CONCEPTS ──────────────────────────────────────────────────────────────────────────────────┐[99C[0;1m^[0m
-[0m│ [0;38;5;189mMEMORY      [0mAn atomic unit of information stored in a Context.                                  [0m│[99C[0;48;5;238m [0m
-[0m│ [0;1mCONTEXT     [0mA named workspace that organizes Memories and other Contexts.                       [0m│[99C[0;48;5;238m [0m
-[0m│ [0;1mPROFILE     [0mAn ownership and storage boundary for Contexts.                                     [0m│[99C[0;48;5;248m [0m
-[0m│ [0;1mGRANT       [0mA permission relationship that can be given or received, selectively allowing       [0m│[99C[0;48;5;248m [0m
-[0m│             someone without direct ownership to read or query a Context and its Memories, or    [0m│[99C[0;48;5;248m [0m
-[0m│             run permitted operations on them, while the Grant remains valid.                    [0m│[99C[0;48;5;248m [0m
-[0m│ [0;1mSESSION     [0mA saved record of an analysis or review workflow that can be reopened and           [0m│[99C[0;48;5;248m [0m
-[0m│             continued; it does not itself mean Context changes were applied.                    [0m│[99C[0;48;5;248m [0m
+[0m│ [0;1mGRANT       [0mA permission relationship that can be given or received, selectively allowing       [0m│[99C[0;1m^[0m
+[0m│             someone without direct ownership to read or query a Context and its Memories, or    [0m│[99C[0;48;5;238m [0m
+[0m│             run permitted operations on them, while the Grant remains valid.                    [0m│[99C[0;48;5;238m [0m
+[0m│ [0;1mSESSION     [0mStores an analysis or review workflow so it can be reopened and continued. Apply    [0m│[99C[0;48;5;248m [0m
+[0m│             results and checkpoint history separately show whether Context changes were made.   [0m│[99C[0;48;5;248m [0m
 [0m│ [0;1mCHECKPOINT  [0mA recoverable history boundary created for each applied operation and recorded per  [0m│[99C[0;48;5;248m [0m
 [0m│             affected Context.                                                                   [0m│[99C[0;48;5;248m [0m
 [0m├ COMMON KEYS ────────────────────────────────────────────────────────────────────────────────────┤[99C[0;48;5;248m [0m
@@ -23,103 +22,92 @@
 [0m│ [0;1mEsc / Backspace  [0mGo back one layer; Backspace edits text in writable fields.                    [0m│[99C[0;48;5;248m [0m
 [0m└─────────────────────────────────────────────────────────────────────────────────────────────────┘[99C[0;48;5;248m [0m
 [99C[0;48;5;248m [0m
+[0;1mOPERATIONS                                                                                         [99C[0;48;5;248m [0m
 [0;38;5;117;1m┏ BROWSE & NAVIGATE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[99C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0m [0;1mNO LLM[0m · Inspect the current location and available Contexts, then move through the Context     [0;38;5;117;1m┃[99C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0m [0m         namespace.                                                                             [0;38;5;117;1m┃[99C[0;48;5;248m [0m
-[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m ▸ mem status     Show the current Context's inventory, first five direct Memories,              [0;38;5;117;1m┃[99C[0;1mv[0m
+[0;38;5;117;1m┃[0m [0;1mNO LLM · Inspect the current location and available Contexts, then move through the Context[0m     [0;38;5;117;1m┃[99C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0m [0;1m         namespace.[0m                                                                             [0;38;5;117;1m┃[99C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m ▸ mem status ─┬ Show the current Context's inventory, first five direct Memories,               [0;38;5;117;1m┃[99C[0;1mv[0m
 [0m───────────────────────────────────────────────────────────────────────────────────────────────────[0m
-[0m ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help[98D[2A[0m[23A[0m│[0;1m                        [0mapproximate sentence boundaries.                                         [0m│[0m
-[0m│[0;1m [0m              [C      [C [0;1mUSE WHEN:[0m A Memory[Calrea[Cy has[Cclear [Cext[Cboundaries[Cthat[Cshould[Cbecome[2C[0m│[99C[0;48;5;248m [0m
-[0m│[0;1m [0m             [C     [C         [C   separ[Cte Memories.  [C   [C     [C         [23C[0m│[99C[0;48;5;248m [0m
-[0m│[0;1m ▸ mem delete (remove)  [0mSelect a Context or direct[Citem to delete,[Cor[Cname[Cit[Cby[Clocator,[Cname,[2C[0m│[0m
-[0m│[0;1m                        [0mor UID.       [C    [C   [C  [C     [C  [C         [C           [C        [7C[0m│[0m
-[0m│[0;1m [12C[0m       [C   [0;1mUSE WHEN:[0m Removing a specific[CContext or[Citem that is no[Clonger needed.[2C[0m│[0m
-[0m│[0;1m ▸ mem clear            [0mRem[Cv[C [Cll direct items from[5Ccurrent or explic[Ct Context[Cafter[7C[0m│[0m
-[0m│[0;1m                        [0mconfirm[Ctio[C.     [C  [C      [C        [C    [C   [C  [C        [C   [11C[0m│[0m
-[0m│[0;1m [12C[0m          [C[0;1mUSE WHEN:[0m Emp[Cying[Ca Contex[C while retaining[Cthe Context[Citself.[9C[0m│[99C[0;48;5;248m [0m
-[0m│[0;1m ▸ mem merge            [0mAdd Source-only items to the current[CTarget,[Cleave exact matches   [C   [2C[0m│[99C[0;48;5;238m [0m
-[0m│[0;1m                        [0munchanged,[Cand[Cchoose[CSource[Cor[CTarget[Cfor[Cstored-item[Cconflicts.[8C[0m│[99C[0;48;5;238m [0m
-[0m│[0;1m [0m                       [0;1mUSE WHEN:[0m Appending Source-only items or bringing a copied or branched   [0m│[0m
-[0m│[0;1m [0m                     [C  [C      [C Contex[C back into[Cthe current[CContext[Cwithout[Csemantic[9C[0m│[0m
-[0m│[0;1m [0m                       [C [C       synthes[Cs. [C       [C  [C  [C    [C         [C  [C      [13C[0m│[0m
-[0m│[0;1m ▸ mem dedup            [0mReview confirmed duplicate groups,[Cretain[Cone[Cexisting[CMemory[Cin[Ceach[4C[0m│[0m
-[0m│[0;1m                        [0mgroup, and[Cdelete[5Crest on[CApply. [36C[0m│[0m
-[0m│[0;1m [0m                     [C [0;1mUSE WHEN:[0m Removing[Cconf[Crmed[Cs[Cmantic dupl[Cc[2Ces while preserving[Cone[4C[0m│[0m
-[0m│[0;1m [0m                   [C    [C   [C    exact existing Memory and its UID. [C       [20C[0m│[0m
+[0m ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help[98D[2A[0m[20A[0m│[0;1m              [0;38;5;243m└ [0mWHEN · A Memory already [2Cs[2Clear text boundari[Cs that should become separate[4C[0m│[0m
+[0m│[0;1m              [0;38;5;243m  [0m    [C  Memories.   [C         [C  [C    [C  [C     [C [C       [C   [C   [C         [C  [4C[0m│[99C[0;48;5;248m [0m
+[0m│[0;1m ▸ mem delete ───[0;38;5;243m┬ [0mSelect a Context or direct item to d[Clete, o[C n[Cme it by locator,[Cname,[Cor[4C[0m│[99C[0;48;5;248m [0m
+[0m│[0;1m     (remove)    [0;38;5;243m│ [0mUID.        [C  [C      [C        [C  [C  [C   [C  [C        [C   [C          [C     [4C[0m│[0m
+[0m│[0;1m                 [0;38;5;243m└ [0mWHEN · R[Cmoving a specific Context or item that is [Co longer n[Ceded. [C     [3C[0m│[0m
+[0m│[0;1m ▸ mem clear ─[0;38;5;243m┬ [0mRemove a[Cl[Cd[Crect items f[Com the current or ex[Clicit[CContext after[Cconfirmation.[C[0m│[0m
+[0m│[0;1m              [0;38;5;243m└ [0mWHEN · Emptying[Ca[CContext[Cwhile[Cretaining[Cthe[CContext[Citself.[20C[0m│[0m
+[0m│[0;1m ▸ mem merge ─[0;38;5;243m┬ [0mAdd Source-only items to the current Target, leave exact matches unchanged, and  [0m│[99C[0;48;5;248m [0m
+[0m│[0;1m              [0;38;5;243m│ [0mcho[Cs[2CSour[Ce or[CTarget[Cfor[Cstored-item conflicts.[31C[0m│[99C[0;48;5;238m [0m
+[0m│[0;1m              [0;38;5;243m└ [0mWHEN · Appending Source-[Cnly items or[Cb[Cinging a[Ccopie[C or[Cbranched Context[Cback[C[0m│[99C[0;48;5;238m [0m
+[0m│[0;1m              [0;38;5;243m  [0m      [Cinto th[C current Context without[Csemantic[Csynthesis.[22C[0m│[0m
+[0m│[0;1m ▸ mem dedup ─[0;38;5;243m┬ [0mRevi[Cw confirmed duplica[Ce groups, ret[Cin [2Ce[Cexisting[CMemory[Cin[Ceach[Cgroup,[Cand[C[0m│[0m
+[0m│[0;1m              [0;38;5;243m│ [0mdelete[Cthe rest on Apply. [C         [C         [C          [C        [15C[0m│[0m
+[0m│[0;1m              [0;38;5;243m└ [0mWHEN[C· Rem[Cving confirmed semantic duplicates while pres[Crving[Cone[Cexact[9C[0m│[0m
+[0m│[0;1m              [0;38;5;243m  [0m       existing Memory and its UID.                                              [0m│[0m
 [0m└─────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
-
+[0m                                                                                                   [0m
 [2C[0;38;5;117;1mSEMANTIC[CTRANSFORMATIONS [0m
-[2C[0;1mLLM-BASED[0m · Uses[CLLM[Csemantic an[Clysis to[Crestructure, d[Crive, translate, curate, or reconcile[0m
-[11C[0m   content.[0m
-[8C[0;38;5;234;48;5;117;1ma[Comize[4CAnalyze composi[Ce Memorie[2Ca[Cd separate their dist[Cnct prop[Cs[Ctions[Cinto[91D[0m[23A[0;38;5;117;1m┃[C[0;1m▸[Cmem[Celaborate[2C[0mExpand an abstract Goal, Rule, or condition[Cinto[Cmultiple[Cmore[Cspecific[8C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[C[0;1m                 [0mcandidate propositions. [C       [C   [C     [C    [C          [C    [C      [C      [2C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[18C[0;1mUSE WHEN:[C[0mGenerating several more concrete[Ccandidate[CRules[Cor[CCases[Cfrom[Can[4C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[C[0m                           abstract concept o[C [Condition.[C       [C  [C    [C  [C  [C        [C     [2C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[C[0;1m▸[Cmem[Ctranslate[2C[0mGenerate[Cand save[Ca[Creusable[Ctranslated[Cview[Cof[Cone[CContext[Cor[CMemory[Cwhile[4C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[C[0;1m                 [0mpreserving the original content.   [C       [C  [C    [C    [C  [C  [C      [C       [2C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[C[0m                 [0;1mUSE WHEN:[0m R[Cading o[C reusing Mem[Cry content in[Canother language without [7C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[C[0m                           replaci[Cg[Cthe[Coriginal.[46C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[C[0;1m▸ mem forget     [0mReview keep/edit/delete decisions for one instruction,[Cthen apply the accepted[C[0;38;5;117;1m┃[99C[0;48;5;248m [0m
-[0;38;5;117;1m┃[C[0;1m [C   [C     [6C[0mbatch.   [C           [C     [C  [C   [C       [C       [C     [C     [C       [9C[0;38;5;117;1m┃[99C[0;48;5;248m [0m
-[0;38;5;117;1m┃[C[0m                 [0;1mUSE WHEN:[0m Removing or rewriting M[Cm[2Cies according to a natural-language[7C[0;38;5;117;1m┃[99C[0;48;5;248m [0m
-[0;38;5;117;1m┃[24C[0m    instructio[C whose meaning mus[C be[Cinte[Cpreted. [C      [C  [C        [3C[0;38;5;117;1m┃[99C[0;48;5;238m [0m
-[0;38;5;117;1m┃[C[0;1m▸ mem resolve    [0mPropose[Cand[Cverify minimum cha[Cges that make one bounded direct-Memory[CContext[C[0;38;5;117;1m┃[99C[0;48;5;238m [0m
-[0;38;5;117;1m┃[C[0;1m                 [0mframe[CFit[CYES.[2C          [53C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[C[0m                 [0;1mUSE WHEN:[0m Deciding how[Cto rep[Cir[Csemantic conflicts[Cor ambi[Cuities w[Cthin a[4C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[C[0m                           bounded Con[2Cx[C frame.[C  [C      [37C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[C[0;1m▸ mem update     [0mUpdate Memories[Cin the Target Context from Memor[Ces in[Ct[Ce Sou[Cce Context, [4C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[C[0;1m                 [0masking[Cthe[Cuser[Cto review and choose when[Cneeded. [29C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m [0m                 [0;1mUSE WHEN:[0m Updating an existing Context using newly verified Memories.          [0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m ▸ mem meld       [0mSemantically reconcile two Contexts, either into a separate Result or by       [0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m                  [0mincorporating proposed changes into an existing Target Context.                [0;38;5;117;1m┃[0m
-[C[0;1m [0m                 [0;1mUSE WHEN:[0m Combining two bodies of work when overlap, conflicts, and newly    [0m
-[C[0;1m [0m                    [7Csynthesized[Ccontent[Cmust[Cbe[Creviewed[Csemantically.[0m
-[8C[0;38;5;234;48;5;117;1msever  [4CCreate a Result by selecting, transforming, or excluding Source Memories[91D[0m[23A[C[0;38;5;234;48;5;117;1m ▸ mem distill    Derive higher-level Rules or condition propositions from Case or Example       [0m
-[C[0;38;5;234;48;5;117;1m                  propositions in a bounded Context, optionally guided by a Goal.                [0m
-[C[0;38;5;234;48;5;117;1m                  USE WHEN: Inferring more general Rules or condition propositions from several  [0m
-[C[0;38;5;234;48;5;117;1m                            concrete cases or examples.                                          [0m
-[8C[0;1mel[Cbor[5C[0mExpand an abstract Goal, Rule, or condition into multipl[C more[Cspecific    [0m
-[19C[0mcandidate propositio[Cs.[C        [0m
-[29C[0mG[Cnerating[Cs[Cveral[Cmore concrete ca[Cdida[Ce Ru[Ces or Cases from[Can[0m
-[29C[0mabstract concept or condition.[0m
-[8C[0;1mtranslate[2C[0mG[Cnerate and save a reusable translated view of one Con[Cext[Cor Memory[Cwhile   [0m
-[19C[0mpreserving[Cthe[Coriginal[Ccontent.[0m
-[31C[0mading or reusing Memory content in a[Cother lang[Cage without [0m
-[29C[0mreplacing the [Crigin[Cl.  [C    [C  [C            [0m
-[8C[0;1mforget [4C[0mReview keep/edit/delete decisions for one instructio[C, then apply the accepted[0m
-[19C[0mbatch.   [C    [0m
-[29C[0mR[Cmov[4Cor rewriting Memories a[Ccord[Cng t[C a natural-language [C [0m
-[29C[0minstructi[2C whose meaning[Cmust[Cbe[Cinterpreted.[0m
-[8C[0;1mresolve[4C[0mPropose and v[Crify[Cminimum changes that make one bounded direct-Mem[Cry Context[0m
-[19C[0mframe Fit YES. [C  [C      [C   [C      [C    [C       [0m
-[29C[0mDecid[4Chow to repair semantic conflicts o[C ambiguities within[Ca[0m
-[2C[0m                           bounded Context frame.    [C      [C    [C [C        [C      [C  [C  [0m
-[2C[0;1m▸[Cmem[Cupdate[5C[0mUpdate Memories in the[CTarget Co[2Cext from Memories in[Cthe Source[CContext,[0m
-[2C[0;1m                 [0masking the user to review and choose when [Ceed[Cd.   [C          [C   [C     [0m
-[19C[0;1mUSE WHEN:[C[0mUpdating an[Cexisting Context us[Cng newly verified Memories.[0m
-[C[0;1m ▸ mem meld       [0mSemantically reconcile two Contexts, either into a separate Result or by       [23A[98D[0m[C[0;1m ▾ mem distill    [0mDerive higher-level Rules or condition propositions from Case or Example       [0m
-[C[0;1m                  [0mpropositions in a bounded Context, optionally guided by a Goal.                [0m
-[C[0;1m [0m                 [0;1mUSE WHEN:[0m Inferring more general Rules or condition propositions from several  [0m
-[C[0;1m [0m                           concrete cases or examples.                                          [0m
-[C[0m   FLOW      · Case/Example[CCon[Cext + Goal? -> reviewed Rules[C    [C        [C    [C        [0m
-[C[0m   EXECUTION · SEMANTIC    [C             [0m
-[C[0m [2CEFFECT[4C·[CSource and Grou[Cd s[Cay unchanged; standalone Apply m[Cy create[Ca new Result [C  [0m
-[C[0m [2CRANGE[5C·[COne[Cexact[Cloc[Cl Source, its readable descendants,[Cor[Cone[Cbound[CGround[Ccandidate[0m
-[C[0m               fram[C      [C   [C    [C [C        [C          [C    [C  [C   [C       [C  [C      [C     [0m
-[C[0;1m   DISTILL OR ATOMIZE                                                                            [C[0;48;5;248m [0m
-[C[0m [2CThe[Cbounded[CSource Context supplies[Csupporting p[Coposi[Cions. An [Cptional Go[Cl focuses the[6C[0;48;5;238m [0m
-[C[0m [2Cdirection[Cof[CDistill's[Cde[Civatio[C.[C   [C         [47C[0;48;5;238m [0m
-[C[0m   - DISTILL · Derive a higher-level Rul[2Cor condition proposition across Case or Example       [2C[0;48;5;248m [0m
-[C[0m     propositions.      [0m
-[C[0m [2C-[CATOMIZE[C·[CSeparate distinct prop[Csitions already pr[2Cent in composite Memories without[0m
-[C[0m [4Cderiving[Ca[Chigher-level Rule.     [C     [C       [C    [C  [C            [0m
+[2C[0;1mLLM-BASED · Uses[CLLM[Csemantic an[Clysis to[Crestructure, d[Crive, translate, curate, or reconcile[0m
+[11C[0;1m   content.[0m
+[8C[0;38;5;234;48;5;117;1ma[Comize ─┬ Analyz[3Composite Memories and separate their distin[3Cpropositions[Cinto[91D[0m[20A[0;38;5;117;1m┃[14C[0;1m    [0;38;5;243m  [C[0m [C [C  abstr[Cct concept[Cor condition.        [C    [C      [C      [C        [4C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0;1m▸[Cmem[Ctranslate ─[0;38;5;243m┬ [0mGenerate and[Csave[Ca[Creusable[Ctranslated[Cview[Cof[Cone[CContext[Cor[CMemory[Cwhile[2C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0;1m [C   [C      [C    [0;38;5;243m│ [0mpr[Cserving [Che original con[2Cnt. [C       [C  [C    [C  [C  [C        [C     [C  [4C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[5C[0;1m        [4C [0;38;5;243m└ [0mWHEN[C·[CReading[Cor[Creusing[CMemory[Ccontent[Cin[Canother[Clanguage[Cwithout[9C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[17C[0;1m [C[0;38;5;243m [0m   [C [C replacing[Cth[C or[Cginal.   [C  [C    [C    [C  [C  [C      [C       [10C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[7C[0;1mforget ─[0;38;5;243m┬ [0mRevi[Cw keep/edi[C/delete decisions for one instru[Ction, [Chen[2Cpply[Cthe accepted [C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[14C[0;1m [0;38;5;243m│ [0mbatch.        [C [C       [C     [C         [C   [C       [C       [20C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0;1m [C   [C     [C  [0;38;5;243m└ [0mWHEN · R[Cm[Cving or rewri[Cing Memories according to a natural-language     [C   [2C[0;38;5;117;1m┃[99C[0;48;5;248m [0m
+[0;38;5;117;1m┃[14C[0;1m [C[0;38;5;243m [0m     [C instruction whose meaning must be interpreted.[27C[0;38;5;117;1m┃[99C[0;48;5;248m [0m
+[0;38;5;117;1m┃[C[0;1m▸[Cmem[Cresolve ─[0;38;5;243m┬ [0mPropose a[2C verify minimum[Cchanges that make[Cone bounded[Cdire[Ct-Mem[Cry Context[C[0;38;5;117;1m┃[99C[0;48;5;248m [0m
+[0;38;5;117;1m┃[14C[0;1m  [0;38;5;243m│ [0mframe Fit[CYES.       [C       [C       [C        [C          [22C[0;38;5;117;1m┃[99C[0;48;5;238m [0m
+[0;38;5;117;1m┃[C[0;1m [C   [C     [C   [0;38;5;243m└ [0mWHEN[C· Deciding how to repair [Ceman[Cic c[2Cflict[C or ambiguit[Ces within a  [C   [C[0;38;5;117;1m┃[99C[0;48;5;238m [0m
+[0;38;5;117;1m┃[14C[0;1m  [0;38;5;243m  [0m    [C  bounded Context frame.[50C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0;1m▸[Cmem[Cupdate[C─[0;38;5;243m┬ [0mUpdate Memories i[C the Target Context from Memori[Cs in the Sourc[2CContext,[6C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[14C[0;1m [0;38;5;243m│ [0masking the user to [Ceview[Cand[Cchoose[Cwhen[Cneeded.[31C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m               [0;38;5;243m└ [0mWHEN · Updating an existing Context using newly verified Memories.              [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m ▸ mem meld ─[0;38;5;243m┬ [0mSemantically reconcile two Contexts, either into a separate Result or by          [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m             [0;38;5;243m│ [0mincorporating proposed changes into an existing Target Context.                   [0;38;5;117;1m┃[0m
+[C[0;1m             [0;38;5;243m└ [0mWHEN · Combining two bodies of work when overlap, conflicts, and newly          [0m
+[C[0;1m             [0;38;5;243m  [0m      [Csynthesized[Ccontent[Cmust[Cbe[Creviewed[Csemantically.[0m
+[8C[0;38;5;234;48;5;117;1msever ─┬ Create a Result by select[Cng, transfo[Cming, or excluding[CSource Memories  [91D[0m[20A[C[0;38;5;234;48;5;117;1m ▸ mem distill ─┬ Derive higher-level Rules or condition propositions from Case or Example       [0m
+[C[0;38;5;234;48;5;117;1m                │ propositions in a bounded Context, optionally guided by a Goal.                [0m
+[C[0;38;5;234;48;5;117;1m                └ WHEN · Inferring more general Rules or condition propositions from several     [0m
+[C[0;38;5;234;48;5;117;1m                         concrete cases or examples.                                             [0m
+[2C[0;1m▸[Cmem[Celaborate[C─[0;38;5;243m┬[C[0mExpand[Can abstrac[C Goal, Rule,[Cor[Ccondition[Cinto[Cmultiple[Cmore[Cspecific[0m
+[2C[0;1m [C   [C      [C    [0;38;5;243m│ [0mcandidate propositions.       [C   [C   [C            [C    [C     [C   [C        [0m
+[16C[0;1m   [0;38;5;243m└ [0mWHEN[C·[CGenerating[Cseveral[Cmore[Cconcrete[Ccandidate[CRules[Cor[CCases[Cfrom[Can[0m
+[16C[0;1m   [0;38;5;243m  [0m [C [C   abstract[Cconcept or cond[Ction.       [C  [C [C                [0m
+[2C[0;1m▸[Cmem[Ctranslate ─[0;38;5;243m┬ [0mGenerate and save a reus[Cble translated view of one[CContext[Cor[CMemory[Cwhile[0m
+[2C[0;1m [C   [C       [C   [0;38;5;243m│ [0mpre[2Crving the original content.[C    [C    [C   [C       [C             [C       [0m
+[17C[0;1m  [0;38;5;243m└ [0mWHEN · Reading[Cor[Creusing[CMemory[Ccontent[Cin[Canother[Clanguage[Cwithout[0m
+[17C[0;1m  [0;38;5;243m  [0m  [C [C  replacing the[Corig[Cnal.      [C         [C  [C           [C      [C [0m
+[2C[0;1m▸[Cmem[Cforget[C─[0;38;5;243m┬[C[0mReview[Ckeep/edit/del[Cte[Cdecisions[Cfor[Cone[Cinstruction,[Cthen[Capply[Cthe[Caccepted[0m
+[2C[0;1m [C   [C      [C [0;38;5;243m│[C[0mbatch.[C        [C  [C   [C      [C       [C    [C        [C  [C   [C      [C        [0m
+[16C[0;38;5;243m└[C[0mWHEN ·[CRemoving[Cor[3Cwriting Mem[Cri[Cs according to[Ca[Cnatural-language[0m
+[16C[0;38;5;243m [C[0m    [C [Cinstructio[2Cwho[Ce meani[Cg must be i[Cterpreted.   [C         [0m
+[8C[0;1mr[Csolve ─[0;38;5;243m┬ [0mPropose and verify minimum changes that make one bounded[Cdirec[C-Memory[CContext[0m
+[14C[0;1m   [0;38;5;243m│ [0mf[Came F[Ct YES.     [C       [C    [C  [C        [C      [C        [0m
+[14C[0;1m   [0;38;5;243m└ [0mWHEN · Dec[Cding how to repair semantic conflicts or ambiguities [Cithin[Ca[0m
+[14C[0;1m   [0;38;5;243m  [4C[0m   bounded Context frame.  [C        [C             [0m
+[C[0;1m ▸ mem update ─[0;38;5;243m┬ [0mUpdate Memories in the Target Context from Memories in the Source Context,      [20A[98D[0m[C[0;1m ▾ mem distill ─[0;38;5;243m┬ [0mDerive higher-level Rules or condition propositions from Case or Example       [0m
+[C[0;1m                [0;38;5;243m│ [0mpropositions in a bounded Context, optionally guided by a Goal.                [0m
+[C[0;1m                [0;38;5;243m└ [0mWHEN · Inferring more general Rules or condition propositions from several     [0m
+[C[0;1m                [0;38;5;243m  [0m       concrete cases or examples.                                             [0m
+[C[0m   FLOW      · Case/[2Cample Context + Goal? -> r[Cviewed Rules  [C    [C        [C    [C        [0m
+[C[0m   EXECUTION · SEMANTIC      [C             [0m
+[C[0m   EFFECT    · Source and Ground stay[Cunchanged; standalon[2CApply may[Ccreate a[Cnew Result[C  [0m
+[C[0m   RANGE     · One exact[Clocal Source, its readable descendants,[Cor[Cone[Cbound[CGround[Ccandidate[0m
+[C[0m               frame        [C   [C    [C [C        [C          [C    [C  [C   [C       [C  [C      [C     [3C[0;48;5;248m [0m
+[C[0;1m   DISTILL OR ATOMIZE                                                                            [C[0;48;5;238m [0m
+[C[0m   The bounded Source Context supplies s[Cpporting prop[Csitions.[CA[C option[Cl Goal[Cfocuses[Cthe[6C[0;48;5;238m [0m
+[C[0m   direction of Distill's[Cderiv[Ct[Con.   [C         [48C[0;48;5;248m [0m
+[C[0m   - DISTILL · Deri[Ce a[Chigher-level Rule or conditi[Cn[Cproposi[Cion across Case or Example      [0m
+[C[0m     propositions.     [0m
+[C[0m   - ATOMIZE · Separate[Cdistinct[Cp[Copositio[Cs[Calready present in[Cc[Cmposi[Ce Memories without[0m
+[C[0m     deriving a higher-level Rule. [C     [C       [C    [C  [C            [0m
 [C[0;38;5;234;48;5;117;1;7m   FORM 1 · mem distill (review Rules distilled from the current Context)                        [0m
 [C[0;38;5;189m   FORM 2 · mem distill [context] (review Rules from one explicit Context)                       [0m
 [C[0;38;5;189m   FORM 3 · mem distill [context] --goal "[goal]" (guide Rule relevance with a Goal)             [0m
 [C[0;38;5;189m   FORM 4 · mem distill [context] -r (include descendants and embedded Contexts)                 [0m
 [C[0;38;5;189m   FORM 5 · mem distill [context] --save-as [result_context] (review without creating the        [0m
-[C[0;38;5;189m            Result)                                                                              [0m
-[C[0;38;5;189m   FORM 6 · mem distill [context] --save-as [result_context] --apply (create the exact reviewed  [0m
-[C[0;38;5;189m            Rule Context)                                                                        [0m
 
-[60C[0mpr[Cfill command[Cline[C Tab[Cnext kind  H[Cf[9A[0m
+[60C[0mpr[Cfill command[Cline[C Tab[Cnext kind  H[Cf[6A[0m

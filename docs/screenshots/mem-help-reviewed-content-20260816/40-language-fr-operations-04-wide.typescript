@@ -1,0 +1,323 @@
+52 180
+[?12l[?25h[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;1m mem help · command inventory[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│  LANGUAGE · [[0;38;5;234;48;5;117m ✓ EN [0m]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                                                                                                     [179C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│  VIEW · [[0;38;5;234;48;5;117m ✓ BY KIND [0m]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 [179C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m┌ CORE CONCEPTS ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[179C[0;1m^[0m
+[0m│ [0;38;5;189;1mMEMORY      [0mThe basic record unit stored inside a Context and independently selected, reviewed, or changed by Memory-level operations.                                          [0m│[179C[0;48;5;238m [0m
+[0m│ [0;1mCONTEXT     [0mA named hierarchical workspace that contains Memories and organizes child Contexts. The / separator expresses hierarchy in names such as task-1/participant;        [0m│[179C[0;48;5;238m [0m
+[0m│             operations with descendant scope can treat a Context and its descendant Contexts as one subtree. Commands use the current Context when none is specified.           [0m│[179C[0;48;5;238m [0m
+[0m│ [0;1mPROFILE     [0mAn isolated ownership and storage boundary containing Contexts; different Profiles may contain the same Context name.                                               [0m│[179C[0;48;5;238m [0m
+[0m│ [0;1mOPERATION   [0mA reusable action that reads, analyzes, or changes selected Memories or Contexts through defined inputs and behavior.                                               [0m│[179C[0;48;5;238m [0m
+[0m│ [0;1mGRANT       [0mA permission relationship that can be given or received, selectively allowing someone without direct ownership to read or query a Context and its Memories, or run  [0m│[179C[0;48;5;238m [0m
+[0m│             permitted operations on them, while the Grant remains valid.                                                                                                        [0m│[179C[0;48;5;238m [0m
+[0m│ [0;1mSESSION     [0mStores an analysis or review workflow so it can be reopened and continued. Apply results and checkpoint history separately show whether Context changes were made.  [0m│[179C[0;48;5;238m [0m
+[0m│ [0;1mCHECKPOINT  [0mA recoverable history boundary created for each applied operation and recorded per affected Context.                                                                [0m│[179C[0;48;5;238m [0m
+[0m├ COMMON KEYS ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤[179C[0;48;5;238m [0m
+[0m│ [0;1m↑/↓              [0mMove or scroll within the focused surface.                                                                                                                     [0m│[179C[0;48;5;248m [0m
+[0m│ [0;1m←/→              [0mChange a horizontal choice, expand, or go back according to focus.                                                                                             [0m│[179C[0;48;5;248m [0m
+[0m│ [0;1mTab / Shift-Tab  [0mMove focus between visible surfaces.                                                                                                                           [0m│[179C[0;48;5;248m [0m
+[0m│ [0;1mEnter            [0mOpen, select, or submit the focused action.                                                                                                                    [0m│[179C[0;48;5;248m [0m
+[0m│ [0;1mH                [0mOpen or hide Help from a session's read-only navigation surface.                                                                                               [0m│[179C[0;48;5;248m [0m
+[0m│ [0;1mEsc / Backspace  [0mGo back one layer; Backspace edits text in writable fields.                                                                                                    [0m│[179C[0;48;5;248m [0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[179C[0;48;5;248m [0m
+[179C[0;48;5;248m [0m
+[0;1mOPERATIONS                                                                                                                                                                         [179C[0;48;5;248m [0m
+[0;38;5;117;1m┏ BROWSE & NAVIGATE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0m [0;1mNO LLM · Inspect the current location and available Contexts, then move through the Context namespace.[0m                                                                          [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m ▸ mem status ─┬ Show the current Context's inventory, first five direct Memories, relationships, and latest checkpoints.                                                        [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m               └ WHEN · Getting oriented to what the current Context contains, how it is connected, and which operations were recently applied.                                  [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem pwd ─[0;38;5;243m┬ [0mPrint the current canonical Context name without loading its contents.                                                                                             [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m            [0;38;5;243m└ [0mWHEN · Confirming the active Context in a script or terminal.                                                                                                      [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem contexts ─[0;38;5;243m┬ [0mBrowse local Contexts and readable cross-Profile Context views without switching.                                                                             [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m                 [0;38;5;243m└ [0mWHEN · Exploring every Context currently available to the Profile.                                                                                            [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem list ─[0;38;5;243m┬ [0mList a Context's direct items—Memories, Memory references, query views, and embedded Contexts—and its readable child Contexts. Use -r to recursively include      [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m     (ls)    [0;38;5;243m│ [0mitems from descendant and embedded Contexts; ls is the compact alias.                                                                                             [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m             [0;38;5;243m└ [0mWHEN · Inspecting the structure and direct contents of a Context.                                                                                                 [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem show ─[0;38;5;243m┬ [0mShow a Memory, reference, embedded Context, or the direct contents of a current/explicit Context.                                                                 [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m             [0;38;5;243m└ [0mWHEN · Reading the complete content of a known item or Context.                                                                                                   [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem switch ─[0;38;5;243m┬ [0mEnter the interactive Context picker, or switch to an explicit Context.                                                                                         [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m               [0;38;5;243m└ [0mWHEN · Moving the working position to another existing Context.                                                                                                 [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m ▸ mem checkout ─[0;38;5;243m┬ [0mSwitch Contexts using Git-style syntax; with -b, create and switch to a new Context branch.                                                                   [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┃[0;1m                 [0;38;5;243m└ [0mWHEN · Using a Git-like workflow to switch or create a branch.                                                                                                [0;38;5;117;1m┃[179C[0;48;5;248m [0m
+[0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[179C[0;48;5;248m [0m
+[179C[0;48;5;248m [0m
+[0m┌[0;1m CREATE, COPY & CONNECT [0m─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[179C[0;48;5;248m [0m
+[0m│ [0;1mNO LLM · Create Contexts or Memories, copy or import resources, or connect existing material.[0m                                                                                   [0m│[179C[0;48;5;248m [0m
+[0m│[0;1m ▸ mem init ─[0;38;5;243m┬ [0mCreate a new empty Context and make it the current working Context.                                                                                               [0m│[179C[0;48;5;248m [0m
+[0m│[0;1m             [0;38;5;243m└ [0mWHEN · Starting a separate workspace for a new topic, task, or group of Memories.                                                                                 │[179C[0;1mv[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[0m ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help[98D[22A[0m[28A[0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ HELP LANGUAGE ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;5;117;1m┃[0m› LANGUAGE · [0;38;5;117;1m[[0;38;5;234;48;5;117;1m ✓ EN [0;38;5;117;1m][0m  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                                                                                                     [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[0m┌[0;1m BROWSE & NAVIGATE [0m──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[0m
+[0m│[177C│[0m
+[0m│[0;1m ▸ mem status ─[0;38;5;243m┬ [0mShow the current Context's inventory, first five direct Memories, relationships, and latest checkpoints.                                                        [0m│[0m
+[0m│[0;1m               [0;38;5;243m└ [0mWHEN · Getting oriented to what the current Context contains, how it is connected, and which operations were recently applied.                                  [0m│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
+
+
+
+
+
+
+[C[0mLANGUAGE: ←/→ choose · ↓ view · Tab next · Q[Ccancel[0m[K[49A[51D[0m[A[0m┌────────────────────────────────────────────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│  LANGUAGE · [   EN ]  [[0;38;5;234;48;5;117m ✓ FR [0m]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                                                                                                     [179C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+
+
+
+[0;38;5;117;1m┏ CORE CONCEPTS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1;7m MEMORY      L’unité d’enregistrement de base stockée dans un Context et sélectionnée, révisée ou modifiée indépendamment par les operations au niveau Memory.                   [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[13C[0mUn espace de travai[2Cn[Cmmé et hiérar[Chique qui c[Cntient [Ces Memories et orga[Cise des Contexts enfants. L[C [Céparateu[C / exprime la hiér[Crchie dans des noms comme[4C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[13C[0mtask-1/participant ; les operations avec une[Cp[Cr[Cée descendant[C p[Cuve[3Ctraiter un C[2Ctext et ses Contexts d[Cscendants comme un seul sous-arbre. Sans Context[7C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0m            i[Cd[Cqué, les commands[Cutilisent le Co[Ctext[3Cur[Cnt.  [C         [C         [C        [C   [C       [C   [C    [C       [C     [47C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0;1mPROFILE  [3C[0mUne frontière [Csolée de propriété et de[Csto[Ck[Cge contenant des Contexts[C; plusieurs Profil[Cs p[Cuve[Ct contenir le même[Cnom[Cde[CContext.[31C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0;1mOPERATION[3C[0mUne action réutilisable qui lit, analyse ou[Cmodifi[C d[Cs Memories ou Contexts sélectionnés selon d[Cs entrée[C et[Cun[Ccomportement définis.  [C   [C   [C         [C  [C   [2C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0;1mGRANT       [0mUne relati[Cn d’autorisation reçue ou acco[Cdée[Cqui permet sélectivement[Cde[Clire[Cou[Cinterroger[Cun[CContext[Cet[Cses[CMemories,[Cou[Cd’y[Cexécuter[Cdes[Copérations[Cpermises,[3C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0m            tant que le Grant reste [Calide.      [C  [C  [C   [C  [C        [C   [C          [C     [C       [C   [C          [C       [C          [C    [C       [C       [C       [C    [C     [2C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0;1mSESSION   [2C[0mEn[2Cgist[Ce un[Cworkflow d’an[Cl[Cse ou de[Crévision[2Cfin de[Cpouvoir le rouvrir et le poursuivre. Les résultats[Cd’Apply[Cet[Cl’historique[Cdes[Ccheckpoints[Cindiquent[8C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m             séparément si des changements de Context ont été effectués.                                                                                                         [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0;1mCHECKPOINT[2C[0mUne fr[Cntiè[Ce d’historique[Crécupérable[Ccréée pour[Cchaque[Copération[Cappliquée[Cet[Cenregistrée[Cpar[CContext[Caffecté.[52C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┣ COMMON KEYS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫[0m
+[0;38;5;117;1m┃[C[0;1m↑/↓[C [C         [2C[0mDéplacer ou fair[C défiler dans la [Curface[Cactive.[110C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0;1m←/→  [12C[0mModifier un ch[Cix hor[Czontal, dév[Clopper ou[Crevenir[Cselon[Cle[Cfocus.[92C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0;1mTab[C/[CShift-Tab[2C[0mDéplacer le focus[Centre les [Curfaces visib[Ces.         [C        [95C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[2C[0;1mnter[C         [2C[0mOuvrir,[Csélectionner ou soumettre l’ac[Cio[2Cactive. [C       [100C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m [0;1mH                [0mOuvrir ou masquer Help depuis la navigation en lecture seule d’une session.                                                                                    [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m [0;1mEsc / Backspace  [0mRevenir d’un niveau ; Backspace modifie le texte dans les champs éditables.                                                                                    [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m
+[0m                                                                                                                                                                                   [0m
+[0;1mOPERATIONS                                                                                                                                                                         [0m
+[0m┌[0;1m BROWSE & NAVIGATE [0m──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[0m
+[C[0m [0;1mNO LLM · Inspecter l’emplacement courant et les Contexts disponibles, puis parcourir l’espace de noms des Contexts.[0m    [C    [C        [C        [0m
+[8C[0;1mstatus ─[0;38;5;243m┬ [0mAfficher l’i[Cventaire du[9Ccourant, ses[Ccinq premières M[Cmories[Cdirectes,[Cses[Crelations[Cet[Cses[Cderniers[Ccheckpoints.[0m
+[13C[0;1m   [0;38;5;243m└ [0mWHEN · S’or[Center d[Cns l[2Cc[4Cnu[Cdu[CContext c[Curant, ses connexions[Cet[Cles[Copérations[Crécemment[Cappliquées.[0m
+[8C[0;1mpwd ─[0;38;5;243m┬ [0mAfficher l[2Cn[Cm can[2Cique du Context courant sans charger son[Ccontenu.     [C          [0m
+[13C[0;38;5;243m└ [0mWHEN · Confirmer le Cont[Cxt[Cactif dans un script ou un terminal.       [0m
+[8C[0;1mcon[Cexts ─[0;38;5;243m┬ [0mP[Crc[Curir les Contexts locaux et les vues de Context inter-Profile lisibles sans[Cchanger de Con[Cext.      [C     [C         [C   [C  [C  [C           [C       [0m
+[6C[0;1m    [4C    [0;38;5;243m└ [0mWHEN ·[CExplorer [Cous l[Cs Contexts actuellement[Caccessibles[2Cu Profile.[0m
+[2C[0;1m▸[Cmem[Clist[C─[0;38;5;243m┬[C[0mLister[Cle[C éléments directs d’un Context—Mem[Cri[Cs, ré[Cérences, vues[Cquery[Cet[CContexts[Cintégrés—ainsi[Cque[Cses[CContexts[Cenfants[Clisibles[C;[C-r[Cinclut[Crécursivement[0m
+[2C[0;1m [C  (l[C)  [C [0;38;5;243m│[C[0mles desc[Cndants [Ct élém[Cnts intégrés, et ls[Cest l’al[Cas court.    [C  [C [C                [C        [0m
+[23C[0mEx[Cm[2Cer la[Cstructure et le c[Cntenu direc[C d’un[0m
+[9C[0;1mhow ─[0;38;5;243m┬ [0mAfficher une Memory, une référence, un C[Cntext intégré ou le [Contenu direct[Cdu[CContext[Ccourant/indiqué.[0m
+[14C[0;38;5;243m└ [0mWHEN ·[CLire le contenu complet d’un éléme[Ct ou Context connu.    [0m
+[8C[0;1mswitch ─[0;38;5;243m┬ [0mOuvr[Cr le sél[Cc[Ceur [2Cteractif d[2CCo[2Ce[Ct[Cou bascule[C vers un[CCon[Cext explicite.     [C       [0m
+[16C[0;38;5;243m└ [0mWHEN ·[CDéplacer la pos[Ction de travail vers un autre Context existant.[0m
+[0m│[0;1m ▸ mem checkout ─[0;38;5;243m┬ [0mChanger de Context avec une syntaxe de type Git ; avec -b, créer une nouvelle branche de Context et y basculer.                                               [0m│[0m
+[0m│[0;1m                 [0;38;5;243m└ [0mWHEN · Employer un flux de type Git pour changer de branche ou en créer une.                                                                                  [0m│[0m
+[0m└────────────────────────[153C┘[0m
+[0m                                                                                                                                                                                   [0m
+[0m┌[0;1m CREATE, COPY & CONNECT [0m─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[0m
+[C[0m [0;1mNO LLM · Créer des Contexts ou des Memories, copier ou importer des ressources, ou relier du contenu existant.[0m
+
+[C[0m↑/↓ move (hold accelerates)  Tab first kind[0m[K[43A[44D[0m[A[0m┌ CORE CONCEPTS ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[0m
+[0m│ [0;38;5;189;1mMEMORY      [0mL’unité d’enregistrement de base stockée dans un Context et sélectionnée, révisée ou modifiée indépendamment par les operations au niveau Memory.                   [0m│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m├ COMMON KEYS ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m│[177C│[0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
+
+
+[0;38;5;117;1m┏ BROWSE & NAVIGATE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m ▸ mem list ─┬ Lister les éléments directs d’un Context—Memories, références, vues query et Contexts intégrés—ainsi que ses Contexts enfants lisibles ; -r inclut récursivement  [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m     (ls)    │ les descendants et éléments intégrés, et ls est l’alias court.                                                                                                    [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m             └ WHEN · Examiner la structure et le contenu direct d’un Context.                                                                                                   [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┃[177C┃[0m
+[0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛[0m
+
+
+
+
+[30C[0m→ expand/forms[C ← back  Enter open forms  Tab next kind  H full help[14A[98D[0m[30A[0m│ [0;1mH                [0mOuvrir ou masquer Help depuis la navigation en lecture seule d’une session.                                                                                    [0m│[0m
+[2C[0;1mEsc / Backspace  [0mRevenir d’un niv[Cau[C; Backspace modifie le texte dans les champs [Cditable[C. [C  [C        [C              [C   [C   [C          [C  [C      [C       [20C[0;48;5;248m [0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[179C[0;48;5;248m [0m
+[0m                                                                                                                                                                                   [179C[0;48;5;248m [0m
+[0;1mOPERATIONS                                                                                                                                                                         [0m
+[0m┌[0;1m BROWSE & NAVIGATE [0m──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[0m
+[0m│[C[0;1mNO LLM · Inspecter l’emplacement courant et les Contexts disponibles, puis parcourir l’espace de noms des Contexts.[0m    [C  [C  [C            [C        [29C[0m│[0m
+[0m│[0;1m ▸ mem status ─[0;38;5;243m┬ [0mAfficher[Cl[Cinventaire du Context[Ccourant,[Cses[Ccinq premières Memories[Cd[3Cctes, s[Cs relations e[C ses derniers checkpoints. [C        [C   [C          [C         [3C[0m│[0m
+[0m│[0;1m               [0;38;5;243m└ [0mWHEN[C· S’orient[Cr dans le contenu[Cdu[CContext[Ccourant,[Cses[Cconnexions[Cet[Cles[Copérations[Crécemment[Cappliquées.[52C[0m│[0m
+[0m│[0;1m ▸ mem pwd ─[0;38;5;243m┬ [0mAffiche[C le nom can[Cnique du Context courant sans charger s[Cn conten[C.   [C  [C  [C           [C   [C         [C       [C  [C            [C   [C           [C         [8C[0m│[0m
+[0m│[0;1m            [0;38;5;243m└ [0mWHEN · Conf[Crm[Cr[Cle Cont[Cx[C actif dans un script ou un terminal.[99C[0m│[179C[0;48;5;238m [0m
+[0m│[0;1m ▸ mem contexts ─[0;38;5;243m┬ [0mParcourir le[C Contexts locaux et[Cles vues de Cont[Cxt inter-Profi[Ce lisibles sans changer de Context.      [52C[0m│[179C[0;48;5;238m [0m
+[0m│[0;1m                 [0;38;5;243m└ [0mWHEN · Explorer tous les Contexts actuellement accessibles au Profile.                                                                                        [0m│[179C[0;48;5;238m [0m
+[0m│[0;1m ▸ mem list ─[0;38;5;243m┬ [0mLister les éléments directs d’u[C Context—Memories, références,[Cvues[Cquery[Cet[CContexts[Cintégrés—ainsi[Cque[Cses[CContexts[Cenfants[Clisibles[C;[C-r[Cinclut[Crécursivement[2C[0m│[179C[0;48;5;238m [0m
+[0m│[0;1m     (ls)    [0;38;5;243m│ [0mles descendants et éléments intégr[Cs, et ls[Cest l’al[Cas court. [C      [92C[0m│[0m
+[0m│[0;1m             [0;38;5;243m└ [0mWHEN · Examin[Cr la [Ctructure et le contenu dir[Cct[Cd’un[CContext.[99C[0m│[0m
+[0m│[0;1m ▸ mem show ─[0;38;5;243m┬ [0mAfficher une M[Cmory, une référence, un Context intégré[Cou[Cle[Ccontenu[Cdirect[Cdu[CContext[Ccourant/indiqué.[59C[0m│[0m
+[0m│[0;1m             [0;38;5;243m└ [0mWHEN · Lire le contenu complet d’un[Célémen[C [Cu[CCont[Cx[C connu.  [C     [C        [84C[0m│[0m
+[0m│[0;1m ▸ mem switch ─[0;38;5;243m┬ [0mOuvrir le sélecteur interactif de Context ou basculer ver[2Cun Context explicite.[80C[0m│[0m
+[0m│[0;1m               [0;38;5;243m└ [0mWHEN · Déplacer la position de travail vers un autre Context existant.                                                                                          [0m│[0m
+[0m│[0;1m ▸ mem checkout ─[0;38;5;243m┬ [0mChanger de Context avec une syntaxe de type Git ; avec -b, créer une nouvelle branche de Context et y basculer.                                               [0m│[0m
+[0m│[0;1m                 [0;38;5;243m└ [0mWHEN · Employer un flux de type Git pour changer de branche ou en créer une.                                                                                  [0m│[0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
+[0m                                                                                                                                                                                   [0m
+[0m┌[0;1m CREATE, COPY & CONNECT [0m─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[0m
+[0m│ [0;1mNO LLM · Créer des Contexts ou des Memories, copier ou importer des ressources, ou relier du contenu existant.[0m  [C           [52C[0m│[0m
+[0m│[7C[0;1minit ─[0;38;5;243m┬ [0mCréer un nouveau C[2Ctext[Cvide e[C en[Cfai[Ce le Context d[C travail courant.[90C[0m│[0m
+[0m│[12C[0;1m [0;38;5;243m└ [0mWHEN · Commencer un espace[Cde trav[Cil[Cdistinct p[2Cr un nouve[Cu sujet,[Cune[Cnouvelle[Ctâche[Cou[Cun[Cgroupe[Cde[CMemories.[48C[0m│[0m
+[0m│[7C[0;1madd ─[0;38;5;243m┬ [0mAjouter une ou[Cplusieurs Memories au Context courant ou indiqué.       [C        [C    [C       [C  [C        [58C[0m│[0m
+[0m│[12C[0;38;5;243m└ [0mWHEN · Ajouter di[2Cctement à un Context un ou plusieurs fa[Cts, consignes ou[Cnotes.[81C[0m│[0m
+[0m│[0;1m ▸ mem branch ─[0;38;5;243m┬ [0mCopier un Context ou un sous-arbre dans une nouvelle branche et y basculer.                                                                                     [0m│[0m
+[0m│[0;1m               [0;38;5;243m└ [0mWHEN · Modifier indépendamment un Context ou un sous-arbre tout en préservant l’original.                                                                       [0m│[0m
+[0m│[0;1m ▸ mem import ────[0;38;5;243m┬ [0mImporter par valeur un Profile, un arbre de Context ou une Memory de référence propre tout en préservant l’identité de la ressource.                         [0m│[0m
+[0m│[C[0;1m [C  [PARTIAL]    [0;38;5;243m└ [0mWHEN · Intr[Cduire du cont[2Cu fo[Crni de l’extérieur dans[Cun store géré localement.[C                [59C[0m│[0m
+[0m│[C[0;1m▸[Cmem[Creference ─[0;38;5;243m┬ [0mCop[Cer[Cune version direc[Ce de Sourc[C Memory dans un Target[Csous[Cforme[Cde[Csnapshot[Cimmuable[Cen[Clecture[Cseule.[49C[0m│[0m
+[0m│[C[0;1m [C   [C      [C    [0;38;5;243m└ [0mWHEN ·[CConserve[2Cu[Ce vers[Con [Cxacte de[CMemory même[Csi [Ca Source change ou disparaît[Censuite.[65C[0m│[0m
+[0m│[C[0;1m▸[Cmem[Cembed[C─[0;38;5;243m┬ [0mPlacer dans un Target local un lien v[Cvant vers[Cune Mem[Cry ou[Cun Context[Ctout[Cen[Cconservant[Cla[Cpropriété[Cde[Cla[CSource.[43C[0m│[0m
+[0m│[C[0;1m [C   [C       [0;38;5;243m└ [0mWHEN · Réutiliser une[CMemory ou u[C Context dans un[Cautr[C Context [Cn[Csuivant les modifications ultéri[Cures de la Source.[42C[0m│[0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
+[0m                                                                                                                                                                                   [0m
+[0;38;5;117;1m┏ SEARCH & EXPLAIN ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
+[0;38;5;117;1m┃[0m [0;1mMIXED · Trouver directement un texte exact, ou utiliser la recherche, les réponses et la synthèse sémantiques basées sur un LLM dans la portée autorisée sélectionnée.[0m          [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;234;48;5;117;1m ▸ mem find ─┬ Trouver dans les Memories lisibles un texte exact ou des correspondances d’expression régulière explicite (regex).                                                [0;38;5;117;1m┃[0m[42A[0m│[C[0;1mNO LLM · Créer des Contexts ou des Memories, copier ou importer des ressources, ou relier du contenu existant.[66C[0m│[0m
+[0m│[0;1m ▸ mem init ─[0;38;5;243m┬ [0mCréer u[C nouveau Context[Cvide et [Cn fa[Cre le Context de travail courant.      [84C[0m│[0m
+[0m│[0;1m             [0;38;5;243m└ [0mWHEN · Commencer un espace de travail distinct pour un nouveau sujet, une nouvelle tâche ou un groupe de Memories.                                                [0m│[0m
+[0m│[0;1m ▸ mem add ─[0;38;5;243m┬ [0mAjouter une ou plusieurs Memories au Context courant ou indiqué.                                                                                                   [0m│[179C[0;48;5;248m [0m
+[0m│[0;1m            [0;38;5;243m└ [0mWHEN · Ajouter directement à un Context un ou plusieurs faits, consignes ou notes.                                                                                 [0m│[179C[0;48;5;248m [0m
+[0m│[0;1m ▸ mem branch ─[0;38;5;243m┬ [0mCopier un Context ou un sous-arbre dans une nouvelle branche et y basculer.                                                                                     [0m│[179C[0;48;5;248m [0m
+[C[0;1m               [0;38;5;243m└ [0mWHEN · Modifier indépendamment un Context ou un sous-arbre tout en préservant l’original.          [62C[0;48;5;248m [0m
+[8C[0;1mimport[2C───[0;38;5;243m┬ [0mImpo[Cter par v[Cleur [Cn Profile, [Cn arbre de Context ou une Memory de [Céférence propre t[Cut[2Cn[Cpréservant l’id[Cntité de la[Cressource.[26C[0;48;5;248m [0m
+[6C[0;1m[PARTIAL][C   [0;38;5;243m└ [0mWHEN · Introduire du contenu fourni de l’exté[Cieur[Cdans u[C store géré localement.  [C         [C           [53C[0;48;5;248m [0m
+[8C[0;1mreference ─[0;38;5;243m┬ [0mCopi[Cr une vers[Con directe de Source Memory[Cdans un[CTarget sous forme[Cde[Csnapshot[Cimmuable[Cen[Clecture[Cseule.[0m
+[13C[0;1m      [0;38;5;243m└ [0mWHEN · Conserver une vers[Con exacte[Cde Memory[Cmême si s[C Source[Cchange[Cou[Cdisparaît[Censuite.[0m
+[8C[0;1membed ─[0;38;5;243m┬ [0mPlace[C dans un Targe[C loca[C un li[Cn[Cvivant vers[Cune Memory ou un Context tout en conservant[Cla[Cpropriété[Cde[Cla[CSource.[0m
+[15C[0;38;5;243m└ [0mWHEN · Réutiliser une Memory [Cu un Context dans un autre Context[Cen suivant[Cles[Cmodifications[Cultérieures[Cde[Cla[CSource.[0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[179C[0;48;5;238m [0m
+[0m                                                                                                                                                                                   [179C[0;48;5;238m [0m
+[0m┌[0;1m SEARCH & EXPLAIN [0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[179C[0;48;5;238m [0m
+[C[0m [0;1mMIXED · Trouver directement un texte exact, ou utiliser la recherche, les réponses et la synthèse sémantiques basées sur un LLM dans la portée autorisée sélectionnée.[11C[0;48;5;238m [0m
+[2C[0;1m▸[Cmem[Cfind[C─[0;38;5;243m┬[C[0mTrouver dans les Memories lisibles un texte[Cexact ou des correspondances[Cd’expression[Crégulière[Cexplicite[C(regex).[49C[0;48;5;238m [0m
+[2C[0;1m [C   [C      [0;38;5;243m└ [0mWHEN · Localiser d[Cs mots, identifiants ou m[Ctifs textuels exacts dans une porté[C de[CContext[Csélectionnée.[57C[0;48;5;238m [0m
+[2C[0;1m▸[Cmem[Csearch[C─[0;38;5;243m┬[C[0mClasser sém[Cntiquement les Memories pertinentes pour[Cune demande en langage[Cnaturel[Cdans[Cles[CContexts[Csélectionnés.[0m
+[2C[0;1m [C   [C        [0;38;5;243m└ [0mWHEN · T[Couver des Memories pertinentes par le sens[Cet le contexte, y compris du co[Ctenu lié sans r[Ccouvrement évident[Cde[Cmots-clés.[0m
+[2C[0;1m▸[Cmem[Cquery[C─[0;38;5;243m┬ [0mProduire une réponse basée[Csur un LLM à pa[Ctir des connaissances d[C Cont[Cxt lisibles[Cou[Cd’une[Cvue[Cquery-only[Cmasquée[Cet[Cautorisée.[0m
+[0m│[0;1m              [0;38;5;243m└ [0mWHEN · Obtenir une réponse en langage naturel fondée sur les données plutôt qu’une liste de Memories correspondantes.                                            [0m│[0m
+[0m│[0;1m ▸ mem summarize ─[0;38;5;243m┬ [0mAfficher un aperçu dérivé par LLM des Memories ordinaires dans une portée de Context lisible.                                                                [0m│[0m
+[0m│[0;1m                  [0;38;5;243m└ [0mWHEN · Obtenir un aperçu concis d’un Context ou d’un sous-arbre.                                                                                             [0m│[0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
+[0m                                                                                                                                                                                   [0m
+[0;38;5;117;1m┏ DETERMINISTIC CONTENT CHANGES ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
+[0;38;5;117;1m┃[0m [0;1mNO LLM · Appliquer des entrées explicites et des choix révisés avec une logique de programme déterministe pour modifier le contenu.[45C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0;1m▸[Cmem[Cedit[C─[0;38;5;243m┬ [0mRemplacer di[Cectement le contenu d’une[Cou[Cplusieurs Memor[Ce[C sélectionnées[Cpar UID[Cou[Cpréfixe.[68C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0;1m [C   [C      [0;38;5;243m└ [0mWHEN · Corriger ou remplacer direct[Cment le co[Ctenu d[2CMemori[Cs exist[Cntes précises.[78C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0;1m▸[Cmem[Creplace[C─[0;38;5;243m┬ [0mPrévisual[Cser et remplacer chaque corresp[Cnda[Cce littérale [2C r[Cgex explici[Ce dans les Memories[Clocales[Cordinaires.[44C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0;1m [C   [C      [C  [0;38;5;243m└ [0mWHEN · Co[Criger, r[Cnommer ou masquer[Cun t[Cxt[2Cexact dans[5Cportée[Clocale d[C Context conn[Ce.  [C          [C          [C  [C  [C          [25C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0;1m▸[Cmem chunk ─[0;38;5;243m┬ [0mDécouper[Cmécaniquement [Cne Memory di[Cecte aux limit[Cs des titre[C, parag[Caphes ou phrases[Capproximatives.[57C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0;1m [C   [C       [0;38;5;243m└ [0mWHEN · Une[CMemory possè[Ce déjà[3Cs limites textuelles clai[Ces qui doivent[3Cve[Cir des[CMe[Cories[Cdistinctes.      [49C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0;1m▸[Cmem[Cdelete[C───[0;38;5;243m┬ [0mSélectionner un Cont[Cxt ou u[2Célément dir[Cct à[Csupprimer,[Cou le désign[Cr par locator, [Com ou UID.[61C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0;1m [C  (r[2Cove)    [0;38;5;243m└ [0mWHEN · Supprimer un Context[Cou un élément précis[Cd[Cvenu[Cinutile.     [C    [C  [C          [C  [C         [C  [C  [C       [43C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[C[0;1m▸[Cmem[Cclear[C─[0;38;5;243m┬[C[0mSupprimer aprè[C confirmation[Ctous les éléments directs du Context courant ou indiqué.        [C           [C  [C  [C       [42C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m              [0;38;5;243m└ [0mWHEN · Vider un Context tout en conservant le Context lui-même.                                                                                                  [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m ▸ mem merge ─[0;38;5;243m┬ [0mAjouter au Target courant les éléments présents uniquement dans la Source, laisser les correspondances exactes inchangées et choisir Source ou Target lors des   [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1m              [0;38;5;243m│ [0mconflits d’éléments enregistrés.                                                                                                                                 [0;38;5;117;1m┃[0m
+[C[0;1m              [0;38;5;243m└ [0mWHEN · Ajouter les éléments propres à la Source ou réintégrer dans le Context courant un Context copié ou branché, sans synthèse sémantique.           [0m
+[8C[0;38;5;234;48;5;117;1mdedup ─┬ Examiner les groupes d[C doublons co[Cfirmés, conserver une Memory existante dans chaque [Croupe et supprimer les autres[Clors[Cde[CApply.[149D[0m[42A[11C[0;1mAppliqu[Cr[Cdes [Cn[Crées[Cexplicites et[Cdes choix[Crévisés av[Cc[Cune logique[Cde[Cprogramme[Cdéterministe pour modifier le contenu.[0m
+[8C[0;1med[6C[0mRemplacer dir[Ccteme[2C le[Ccontenu[Cd’une ou[Cplusieurs Memories sélectio[Cnées[Cpar[CUID[Cou[Cpréfixe.[0m
+[25C[0mrriger o[C r[Cm[Clacer di[Cectement le [Contenu[Cde[CMemories existant[Cs précis[Cs.    [C  [C  [C      [C  [C         [0m
+[8C[0;1mreplace ─[0;38;5;243m┬ [0mPrévisualiser et remplace[C chaq[Ce correspondance[Clittérale ou[Cregex[Cexplicite[Cdans[Cles[CMemories[Clocales[Cordinaires.[0m
+[13C[0;1m    [0;38;5;243m└ [0mWHEN · Co[Criger, renommer ou masquer un texte exact[Cd[Cns une porté[C l[Ccale de Context[Cconnue.[0m
+[8C[0;1mchu[Ck ─[0;38;5;243m┬ [0mDécouper méca[Ciquement une Memo[Cy directe aux limites[Cdes titr[Cs, paragraphes[Cou[Cphrases[Capproximatives.[0m
+[15C[0;38;5;243m└ [0mWHEN · Une Memo[Cy possède déjà des[Climites[Ctextuelle[C claires qui doivent devenir des Memories[Cdistinctes.[0m
+[8C[0;1mdelete[4C[0;38;5;243m┬ [0mSélectionner un Context[Cou un élément direct[Cà supprimer, ou le désigner par locat[Cr, nom ou UID.        [C          [C  [C  [C          [0m
+[6C[0;1m(remove) [3C[0;38;5;243m└ [0mWHEN · Supp[Cimer un Context ou un élém[Cnt précis devenu inutile. [C    [C           [77C[0;48;5;248m [0m
+[8C[0;1mclea[C ─[0;38;5;243m┬ [0mSupprimer après confirmation tous[Cles élém[Cnts directs du Con[Cext courant[Cou[Ci[Cdiqué.[C        [C  [C       [C      [50C[0;48;5;248m [0m
+[15C[0;38;5;243m└ [0mWHEN · Vider un Context tout en conservant[Cl[C Context lu[C-même.    [C      [C  [C         [C        [66C[0;48;5;248m [0m
+[8C[0;1mmerge[4C[0mAjouter [Cu Target courant [Ces é[Céments présent[4Ciqu[2Cent[Cdans la Source, laisser les correspondances exactes[Cinchangées[Cet[Cchoisir[CSource[Cou[CTarget[Clors[Cdes[4C[0;48;5;248m [0m
+[15C[0;38;5;243m│[C[0mconflits d’é[Cém[Cnts [Cnr[Cgistrés.  [C       [C    [C  [C     [C       [C  [C       [C   [C             [C           [C  [C  [C       [43C[0;48;5;248m [0m
+[0m│[0;1m              [0;38;5;243m└ [0mWHEN · Ajouter les éléments propres à la Source ou réintégrer dans le Context courant un Context copié ou branché, sans synthèse sémantique.                     [0m│[179C[0;48;5;248m [0m
+[0m│[0;1m ▸ mem dedup ─[0;38;5;243m┬ [0mExaminer les groupes de doublons confirmés, conserver une Memory existante dans chaque groupe et supprimer les autres lors de Apply.                             [0m│[179C[0;48;5;248m [0m
+[0m│[0;1m              [0;38;5;243m└ [0mWHEN · Supprimer les doublons sémantiques confirmés tout en conservant une Memory existante exacte et son UID.                                                   [0m│[0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
+[0m                                                                                                                                                                                   [0m
+[0m┌[0;1m SEMANTIC TRANSFORMATIONS [0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐[179C[0;48;5;238m [0m
+[C[0m [0;1mLLM-BASED · Utiliser l’analyse sémantique d’un LLM pour restructurer, dériver, traduire, sélectionner ou réconcilier du contenu.[0m   [46C[0;48;5;238m [0m
+[2C[0;1m▸[Cmem[Catomize[C─[0;38;5;243m┬ [0mAnalyse[C des Memori[Cs composites [Ct séparer leurs propositions distin[Ctes en[CMemories rév[Csable[2Cindépendamment.     [C  [C          [29C[0;48;5;238m [0m
+[2C[0;1m [C   [C     [C   [0;38;5;243m└ [0mWHEN ·[CDémêler des[Cexig[Cnces[Cou[Caffirmations[Cécrites en[Cembl[C afin de pouvo[Cr les examiner et les réviser séparém[Cnt.[C          [32C[0;48;5;238m [0m
+[2C[0;1m▸[Cmem[Cdistill ─[0;38;5;243m┬ [0mDériver des R[Cl[Cs ou propositions co[Cditionnelles de niv[Cau sup[Crieur à partir de propositions Ca[Ce [Cu Example dans[Cun[CContext[Cborné,[Cavec[Cun[CGoal[Cfacultatif.[2C[0;48;5;238m [0m
+[2C[0;1m [C   [C         [0;38;5;243m└ [0mWHEN · Inférer d[Cs Rules ou[2Cropositions cond[Ctionnelles plus générales à partir de plus[Ceurs cas[Cou[Cexemples[Cconcrets.[41C[0;48;5;238m [0m
+[2C[0;1m▸[Cmem[Celaborate[C─[0;38;5;243m┬[C[0mDévelopper un Goal, une Rule ou[Cune condition abstraite en plusieurs[Cpropositions[Ccandidates[Cplus[Cprécises.[51C[0;48;5;238m [0m
+[0m│[0;1m                  [0;38;5;243m└ [0mWHEN · Produire plusieurs Rules ou Cases candidats plus concrets à partir d’un concept ou d’une condition abstraite.                                         [0m│[0m
+[0m│[0;1m ▸ mem translate ─[0;38;5;243m┬ [0mGénérer et enregistrer une vue traduite réutilisable d’un Context ou d’une Memory en préservant le contenu original.                                         [0m│[0m
+[0m│[0;1m                  [0;38;5;243m└ [0mWHEN · Lire ou réutiliser le contenu d’une Memory dans une autre langue sans remplacer l’original.                                                           [0m│[0m
+[0m│[0;1m ▸ mem forget ─[0;38;5;243m┬ [0mExaminer les décisions conserver/modifier/supprimer pour une consigne, puis appliquer le lot accepté.              [45C[0m│[0m
+[0m│[C[0;1m [C   [C    [C   [0;38;5;243m└ [0mWHEN · Supprim[Cr ou[Créé[Crir[C des Memories selon une c[Cnsigne en langag[C naturel d[Cnt le sens[Cdoit[Cêtre[Cinterprété.[46C[0m│[0m
+[0m│[C[0;1m▸[Cmem[Cresolve ─[0;38;5;243m┬ [0mPropose[C et vérifier les changem[Cnts minimaux q[Ci rendent Fit YES u[C cadre borné de[CContext[Cà[CMemories[Cdirectes.[47C[0m│[0m
+[0m│[C[0;1m [C   [C       [C [0;38;5;243m└[C[0mWHEN · Décider comment réparer d[Cs conflits sémant[Cques ou[Cdes ambiguïtés dans u[C cadre de Context borné.          [44C[0m│[0m
+[0m│[C[0;1m▸[Cmem[Cupdate[C─[0;38;5;243m┬ [0mMettre à jour les[CM[Cm[Cri[Cs[Cd[2CT[Crget Co[Ctext à[Cpartir de[2CMemories du Source Context, en demandant[Cune[Crévision[Cet[Cun[Cchoix[Clorsque[Cnécessaire.[17C[0m│[0m
+[0m│[C[0;1m [C   [C     [C  [0;38;5;243m└ [0mWHEN · Mettre à jour un Context ex[Cstant[2Cvec des Memories nouvellement vérifiées.     [C               [57C[0m│[0m
+[0m│[C[0;1m▸[Cmem[Cmeld[C─[0;38;5;243m┬ [0mRéconcilier[Csé[Cantiquement[2Ceux[CContexts, [Coit dans un[CResult distinct, soit en [Cncorporant d[3Cchangements[Cproposés[Cà[Cun[CTarget[CContext[Cexistant.[16C[0m│[0m
+[0m│[C[0;1m [C   [C      [0;38;5;243m└ [0mWHEN · Combi[Cer deux e[Cs[Cmbles[Cde[Ctravail[Clo[Csque chevauch[Cments, confl[Cts et nouveau contenu[Csynthétisé[Cdoivent[Cêtre[Cexaminés[Csémantiquement.[20C[0m│[0m
+[0m│[C[0;1m▸[Cmem sever ─[0;38;5;243m┬ [0mCréer un Result en sélectionnant,[Ctransformant ou exclua[Ct[Cdes Source[CMemories[Cselon[Cun[CCriteria[CContext.[56C[0m│[0m
+[0m│[C[0;1m [C   [C     [C [0;38;5;243m└[C[0mWHEN · Sélectionner ou transformer le[Ccont[2Cu Sou[Cce [Celon des critères défin[Cs.     [76C[0m│[0m
+[0m└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
+[0m                                                                                                                                                                                   [0m
+[0;38;5;117;1m┏ CHECK, COMPARE & REVIEW ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
+[C[0m [0;1mMIXED · Vérifier compatibilité, différences, qualité ou impact attendu. Examiner l’analyse enregistrée et décider de la suite.[0m   [C    [C        [C           [0m
+[8C[0;38;5;234;48;5;117;1mcompare ─┬ Compa[Cer les Memories[2Ce deux Contexts et[Cindiquer ce qu’ils partagent, ce qui diffère et ce qui n’appa[Caît que d’un côté. [C      [149D[0m

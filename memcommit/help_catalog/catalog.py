@@ -105,10 +105,10 @@ _OPERATIONS = (
     ),
     _operation(
         "clear",
-        "Remove all direct items from the current or explicit Context after confirmation.",
+        "Immediately remove all direct items from the current or explicit Context; Undo can restore them.",
         "Context direct items -> empty Context",
         ExecutionKind.DETERMINISTIC,
-        "Destructive Context change after confirmation",
+        "Checkpointed Context change with command-unit Undo/Redo",
         "One exact Context",
     ),
     _operation(
@@ -129,7 +129,7 @@ _OPERATIONS = (
     ),
     _operation(
         "contexts",
-        "Browse local Contexts and readable cross-Profile Context views without switching.",
+        "List local Contexts and readable cross-Profile Context views.",
         "Profile access -> readable Context catalog",
         ExecutionKind.DETERMINISTIC,
         "Read-only; current Context is unchanged",
@@ -358,7 +358,7 @@ _OPERATIONS = (
     ),
     _operation(
         "log",
-        "Browse or search recorded Context, Memory, and Profile history.",
+        "Print or search recorded Context, Memory, and Profile history.",
         "Recorded history or query -> history report",
         ExecutionKind.MIXED,
         "Read-only",

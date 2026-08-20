@@ -1,0 +1,52 @@
+ mem help · command inventory                                                                                                                                                       
+┌────────────────────────────────────────────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────────────────────────────────────────────┐
+│  LANGUAGE · [   EN ]  [ ✓ FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                                                                                                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌ CORE CONCEPTS ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐^
+│ MEMORY      L’unité d’enregistrement de base stockée dans un Context et sélectionnée, révisée ou modifiée indépendamment par les operations au niveau Memory.                   │ 
+│ CONTEXT     Un espace de travail nommé et hiérarchique qui contient des Memories et organise des Contexts enfants. Le séparateur / exprime la hiérarchie dans des noms comme    │ 
+│             task-1/participant ; les operations avec une portée descendante peuvent traiter un Context et ses Contexts descendants comme un seul sous-arbre. Sans Context       │ 
+│             indiqué, les commands utilisent le Context courant.                                                                                                                 │ 
+│ PROFILE     Une frontière isolée de propriété et de stockage contenant des Contexts ; plusieurs Profiles peuvent contenir le même nom de Context.                               │ 
+│ OPERATION   Une action réutilisable qui lit, analyse ou modifie des Memories ou Contexts sélectionnés selon des entrées et un comportement définis.                             │ 
+│ GRANT       Une relation d’autorisation reçue ou accordée qui permet sélectivement de lire ou interroger un Context et ses Memories, ou d’y exécuter des opérations permises,   │ 
+│             tant que le Grant reste valide.                                                                                                                                     │ 
+│ SESSION     Enregistre un workflow d’analyse ou de révision afin de pouvoir le rouvrir et le poursuivre. Les résultats d’Apply et l’historique des checkpoints indiquent        │ 
+│             séparément si des changements de Context ont été effectués.                                                                                                         │ 
+│ CHECKPOINT  Une frontière d’historique récupérable créée pour chaque opération appliquée et enregistrée par Context affecté.                                                    │ 
+├ COMMON KEYS ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤ 
+│ ↑/↓              Déplacer ou faire défiler dans la surface active.                                                                                                              │ 
+│ ←/→              Modifier un choix horizontal, développer ou revenir selon le focus.                                                                                            │ 
+│ Tab / Shift-Tab  Déplacer le focus entre les surfaces visibles.                                                                                                                 │ 
+│ Enter            Ouvrir, sélectionner ou soumettre l’action active.                                                                                                             │ 
+│ H                Ouvrir ou masquer Help depuis la navigation en lecture seule d’une session.                                                                                    │ 
+│ Esc / Backspace  Revenir d’un niveau ; Backspace modifie le texte dans les champs éditables.                                                                                    │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+OPERATIONS                                                                                                                                                                          
+┏ BROWSE & NAVIGATE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃ NO LLM · Inspecter l’emplacement courant et les Contexts disponibles, puis parcourir l’espace de noms des Contexts.                                                             ┃ 
+┃ ▸ mem status ─┬ Afficher l’inventaire du Context courant, ses cinq premières Memories directes, ses relations et ses derniers checkpoints.                                      ┃ 
+┃               └ WHEN · S’orienter dans le contenu du Context courant, ses connexions et les opérations récemment appliquées.                                                    ┃ 
+┃ ▸ mem pwd ─┬ Afficher le nom canonique du Context courant sans charger son contenu.                                                                                             ┃ 
+┃            └ WHEN · Confirmer le Context actif dans un script ou un terminal.                                                                                                   ┃ 
+┃ ▸ mem contexts ─┬ Parcourir les Contexts locaux et les vues de Context inter-Profile lisibles sans changer de Context.                                                          ┃ 
+┃                 └ WHEN · Explorer tous les Contexts actuellement accessibles au Profile.                                                                                        ┃ 
+┃ ▸ mem list ─┬ Lister les éléments directs d’un Context—Memories, références, vues query et Contexts intégrés—ainsi que ses Contexts enfants lisibles ; -r inclut récursivement  ┃ 
+┃     (ls)    │ les descendants et éléments intégrés, et ls est l’alias court.                                                                                                    ┃ 
+┃             └ WHEN · Examiner la structure et le contenu direct d’un Context.                                                                                                   ┃ 
+┃ ▸ mem show ─┬ Afficher une Memory, une référence, un Context intégré ou le contenu direct du Context courant/indiqué.                                                           ┃ 
+┃             └ WHEN · Lire le contenu complet d’un élément ou Context connu.                                                                                                     ┃ 
+┃ ▸ mem switch ─┬ Ouvrir le sélecteur interactif de Context ou basculer vers un Context explicite.                                                                                ┃ 
+┃               └ WHEN · Déplacer la position de travail vers un autre Context existant.                                                                                          ┃ 
+┃ ▸ mem checkout ─┬ Changer de Context avec une syntaxe de type Git ; avec -b, créer une nouvelle branche de Context et y basculer.                                               ┃ 
+┃                 └ WHEN · Employer un flux de type Git pour changer de branche ou en créer une.                                                                                  ┃ 
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ 
+                                                                                                                                                                                    
+┌ CREATE, COPY & CONNECT ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ NO LLM · Créer des Contexts ou des Memories, copier ou importer des ressources, ou relier du contenu existant.                                                                  │v
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help

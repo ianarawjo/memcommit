@@ -1,0 +1,52 @@
+ mem help · command inventory                                                                                                                                                       
+┌────────────────────────────────────────────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────────────────────────────────────────────┐
+│  LANGUAGE · [ ✓ EN ]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                                                                                                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌ CREATE, COPY & CONNECT ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐^
+│ NO LLM · Create Contexts or Memories, copy or import resources, or connect existing material.                                                                                   │ 
+│ ▸ mem init ─┬ Create a new empty Context and make it the current working Context.                                                                                               │ 
+│             └ WHEN · Starting a separate workspace for a new topic, task, or group of Memories.                                                                                 │ 
+│ ▸ mem add ─┬ Add one or more Memories to the current or explicit Context.                                                                                                       │ 
+│            └ WHEN · Adding one or more facts, instructions, or notes directly to a Context.                                                                                     │ 
+│ ▸ mem branch ─┬ Copy a Context or subtree into a new branch and switch to it.                                                                                                   │ 
+│               └ WHEN · Editing a Context or subtree independently while preserving the original.                                                                                │ 
+│ ▸ mem import ────┬ Import a clean-baseline Profile, Context tree, or Memory by value while preserving resource identity.                                                        │ 
+│     [PARTIAL]    └ WHEN · Bringing externally supplied material into a locally managed store.                                                                                   │ 
+│ ▸ mem reference ─┬ Copy one direct Source Memory version into a Target as an immutable read-only snapshot.                                                                      │ 
+│                  └ WHEN · Retaining one exact Memory version even if its Source later changes or disappears.                                                                    │ 
+│ ▸ mem embed ─┬ Place a live link to one Memory or Context inside a local Target while retaining Source ownership.                                                               │ 
+│              └ WHEN · Reusing a Memory or Context in another Context while following later Source changes.                                                                      │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┌ SEARCH & EXPLAIN ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ MIXED · Find exact text directly, or use LLM-based semantic retrieval, answering, and summarization within the selected authorized scope.                                       │ 
+│ ▸ mem find ─┬ Find exact text or explicit regular-expression (regex) matches in readable Memories.                                                                              │ 
+│             └ WHEN · Locating exact words, identifiers, or text patterns within a selected Context scope.                                                                       │ 
+│ ▸ mem search ─┬ Semantically rank Memories relevant to a natural-language request across selected Contexts.                                                                     │ 
+│               └ WHEN · Finding relevant Memories through meaning and context, including related content without obvious keyword overlap.                                        │ 
+│ ▸ mem query ─┬ Generate an LLM-based answer from readable Context knowledge or an authorized concealed query-only view.                                                         │ 
+│              └ WHEN · Getting a grounded natural-language answer instead of a list of matching Memories.                                                                        │ 
+│ ▸ mem summarize ─┬ Show an LLM-derived overview of ordinary Memories in a readable Context scope.                                                                               │ 
+│                  └ WHEN · Obtaining a concise overview of a Context or subtree.                                                                                                 │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┏ DETERMINISTIC CONTENT CHANGES ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃ NO LLM · Apply explicit inputs and reviewed choices through deterministic program logic to change content.                                                                      ┃ 
+┃ ▸ mem edit ─┬ Directly replace the content of one or more Memories selected by UID or prefix.                                                                                   ┃ 
+┃             └ WHEN · Directly correcting or replacing the content of specific existing Memories.                                                                                ┃ 
+┃ ▸ mem replace ─┬ Preview and replace every literal or explicit regular-expression match in ordinary local Memories.                                                             ┃ 
+┃                └ WHEN · Correcting, renaming, or redacting exact text throughout a known local Context scope.                                                                   ┃ 
+┃ ▸ mem chunk ─┬ Mechanically split one direct Memory at header, paragraph, or approximate sentence boundaries.                                                                   ┃ 
+┃              └ WHEN · A Memory already has clear text boundaries that should become separate Memories.                                                                          ┃ 
+┃ ▸ mem delete ───┬ Select a Context or direct item to delete, or name it by locator, name, or UID.                                                                               ┃ 
+┃     (remove)    └ WHEN · Removing a specific Context or item that is no longer needed.                                                                                          ┃ 
+┃ ▸ mem clear ─┬ Remove all direct items from the current or explicit Context after confirmation.                                                                                 ┃ 
+┃              └ WHEN · Emptying a Context while retaining the Context itself.                                                                                                    ┃ 
+┃ ▸ mem merge ─┬ Add Source-only items to the current Target, leave exact matches unchanged, and choose Source or Target for stored-item conflicts.                               ┃ 
+┃              └ WHEN · Appending Source-only items or bringing a copied or branched Context back into the current Context without semantic synthesis.                            ┃ 
+┃ ▸ mem dedup ─┬ Review confirmed duplicate groups, retain one existing Memory in each group, and delete the rest on Apply.                                                       ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help

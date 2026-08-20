@@ -1,13 +1,14 @@
 # Natural-language `mem help` live capture log
 
 This ordered set begins with one complete real provider-backed Help turn: its
-transient `THINKING` state followed by the final cleared Update match. It then
-records five more focused lookup outcomes: one match, several matches, a
-metaphorical request, an intentionally unrelated request, and generic
-answer/problem-solving language that may validly resolve to Query. The command
-uses the pinned `gpt-5.6-sol` / `none` policy. The provider returns only zero to
-three catalog operation names. Every visible summary and `WHEN` line comes back
-from the frozen authored Help catalog rather than from provider-written prose.
+transient `THINKING` state followed by the final three-candidate ranked result.
+It then records five more focused lookup outcomes: a single-action request, a
+multi-action request, metaphorical language, an intentionally unrelated
+request, and generic answer/problem-solving language. The command uses the
+pinned `gpt-5.6-sol` / `none` policy. Every successful lookup requires exactly
+three distinct catalog operation names in semantic order. Every visible summary
+and `WHEN` line comes back from the frozen authored Help catalog rather than
+from provider-written prose.
 
 ## Reproduction frame
 
@@ -34,18 +35,19 @@ from the frozen authored Help catalog rather than from provider-written prose.
 | Image | Exact command | Visible state | Durable mutation |
 | --- | --- | --- | --- |
 | `00a-campus-wiki-thinking.png` | `mem help "how can I update those campus wiki from mine?"` | The provider-backed lookup is pending and the in-place `MEM HELP · 1/1 · THINKING` liveness line is visible | None |
-| `00b-campus-wiki-result.png` | Same running command; no additional input | The transient line has been erased and one compact Update record is visible | None |
-| `01-single-compare.png` | `mem help "두 Context의 차이를 보고 싶어"` | One compact Compare record: command, authored description, and authored `WHEN` only | None |
-| `02-multiple-compare-search.png` | `mem help "두 Context를 비교하고 관련 Memories도 의미로 찾고 싶어"` | Compare and Search records in provider-selected order, with no score or generated explanation | None |
-| `03-metaphorical-conflict.png` | `mem help "메모리들이 서로 싸우고 있는지 좀 봐줘"` | The metaphorical request resolves to Find Conflicts | None |
-| `04-unrelated-no-match.png` | `mem help "🦆 보라색 냉장고가 달에서 왈츠를 춘다 ??? 123"` | Fixed no-match sentence; no speculative operation is shown | None |
-| `05-generic-answer-language-query.png` | `mem help "답 해결할 수 있는 문장"` | A generic request for an answer-producing sentence may resolve to Query | None |
+| `00b-campus-wiki-result.png` | Same running command; no additional input | The transient line has been erased; Update leads three ranked compact candidates | None |
+| `01-ranked-compare.png` | `mem help "두 Context의 차이를 보고 싶어"` | Compare leads three ranked candidates; every row contains only ordinal, command, authored description, and authored `WHEN` | None |
+| `02-ranked-compare-search.png` | `mem help "두 Context를 비교하고 관련 Memories도 의미로 찾고 싶어"` | Compare and Search appear in semantic order inside one fixed three-candidate frame | None |
+| `03-ranked-metaphorical-conflict.png` | `mem help "메모리들이 서로 싸우고 있는지 좀 봐줘"` | Find Conflicts leads the three candidates selected from metaphorical language | None |
+| `04-ranked-unrelated.png` | `mem help "🦆 보라색 냉장고가 달에서 왈츠를 춘다 ??? 123"` | Even unrelated wording receives three closest exploratory catalog possibilities | None |
+| `05-ranked-generic-answer-language-query.png` | `mem help "답 해결할 수 있는 문장"` | Query leads three candidates for generic answer-producing language | None |
 | `06-study-exact-copy-blocked.png` | `mem help "Generate an LLM-based answer from readable Context knowledge or an authorized concealed query-only view."` | The exact Query Description is rejected at the Study-only 50% copy boundary before provider connection | None |
 
 All six provider-backed commands exit successfully after one bounded semantic
-lookup each. None opens a Store, reads a Context or Memory, executes a suggested
-operation, or persists the selection. The capture assertions reject expanded
-`WHY`, `FLOW`, `EFFECT`, Form, Overview, and Command line content.
+lookup each and expose exactly three distinct visible ranks. None opens a Store,
+reads a Context or Memory, executes a suggested operation, or persists the
+selection. The capture assertions reject expanded `WHY`, `FLOW`, `EFFECT`,
+Form, Overview, and Command line content.
 
 The capture Profile is an `init-study` participant Profile. These six
 independently phrased requests remain below the Study copy threshold. A

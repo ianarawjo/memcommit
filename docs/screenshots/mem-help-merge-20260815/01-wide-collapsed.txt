@@ -1,52 +1,52 @@
  mem help · command inventory                                                                                                                                                       
+┌────────────────────────────────────────────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────────────────────────────────────────────┐
+│  LANGUAGE · [ ✓ EN ]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                                                                                                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
 │  VIEW · [   BY KIND ]  [ ✓ A–Z ] · ←/→ TO SELECT                                                                                                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-┃ ▸ mem diff               Inspect recorded Context or Update changes without applying   │ USE WHEN: Verifying exactly what a recorded operation changed.                         ┃^
-┃                          them.                                                         │                                                                                        ┃ 
-┃ ▸ mem distill            Derive reusable Rules from Case or Example propositions in a  │ USE WHEN: Extracting reusable rules from evidence-rich source material.                ┃ 
-┃                          selected Context scope, using an optional Goal to focus       │                                                                                        ┃ 
-┃                          relevance.                                                    │                                                                                        ┃ 
-┃ ▸ mem edit               Replace direct Memory content by UID or prefix in the current │ USE WHEN: Correcting or revising a known Memory in place.                              ┃ 
-┃                          or explicit Context.                                          │                                                                                        ┃ 
-┃ ▸ mem elaborate          Propose candidate Rules from a Goal, or concrete Case         │ USE WHEN: An abstract Goal needs starter Rule candidates, or existing Rules need       ┃ 
-┃                          propositions from existing Rules.                             │           additional concrete Case propositions for review.                            ┃ 
-┃ ▸ mem embed              Place a Child Context inside a target while retaining its     │ USE WHEN: Reusing a Context inside another Context without copying it.                 ┃ 
-┃                          identity and ownership.                                       │                                                                                        ┃ 
-┃ ▸ mem eval               Run and inspect staged semantic evaluation campaigns.         │ USE WHEN: Measuring operation behavior against repeatable fixtures.                    ┃ 
-┃ ▸ mem find               Search selected Contexts with explicit lexical-descendant and │ USE WHEN: Finding relevant Memories across a selected Context scope.                   ┃ 
-┃                          embedded-Context reach.                                       │                                                                                        ┃ 
-┃ ▸ mem find-ambiguities   Report ambiguous direct Memories in the current or explicit   │ USE WHEN: Finding Memories that permit unclear or multiple interpretations.            ┃ 
-┃                          Context; no Context changes.                                  │                                                                                        ┃ 
-┃ ▸ mem find-conflicts     Report conflicting direct Memory pairs in the current or      │ USE WHEN: Finding mutually incompatible claims or instructions.                        ┃ 
-┃                          explicit Context; no Context changes.                         │                                                                                        ┃ 
-┃ ▸ mem find-duplicates    Report duplicate direct Memories in the current or explicit   │ USE WHEN: Locating semantically redundant Memories before cleanup.                     ┃ 
-┃                          Context; no Context changes.                                  │                                                                                        ┃ 
-┃ ▸ mem fit                Judge whether two or more propositions can jointly hold under │ USE WHEN: Checking whether Memories, Rules, Goals, or other propositions can coexist   ┃ 
-┃                          ordinary readings.                                            │           without contradiction.                                                       ┃ 
-┃ ▸ mem forget             Review keep/edit/delete decisions for one instruction, then   │ USE WHEN: Removing or transforming material according to a semantic criterion.         ┃ 
-┃                          apply the accepted batch.                                     │                                                                                        ┃ 
-┃ ▸ mem ground             Create or continue a reviewed Goal-Rules-Memories Ground      │ USE WHEN: Building a reviewed evaluation or behavior contract from evidence.           ┃ 
-┃                          workbench.                                                    │                                                                                        ┃ 
-┃ ▸ mem help               Enter the interactive command browser and open syntax help.   │ USE WHEN: Discovering available operations and their invocation forms.                 ┃ 
-┃ ▸ mem impact             Preview or inspect operation Impact; no Context changes occur │ USE WHEN: Checking expected consequences before accepting a transformation.            ┃ 
-┃                          before its reviewed Apply handoff.                            │                                                                                        ┃ 
-┃ ▸ mem import             Import a clean-baseline Profile, Context tree, or Memory by   │ USE WHEN: Bringing externally supplied material into a locally managed store.          ┃ 
-┃                          value while preserving resource identity.                     │                                                                                        ┃ 
-┃ ▸ mem init               Create a named Context, optionally ensure its parents, and    │ USE WHEN: Starting a new empty Context hierarchy.                                      ┃ 
-┃                          switch to it.                                                 │                                                                                        ┃ 
-┃ ▸ mem init-study         Copy one Study baseline into an isolated                      │ USE WHEN: Preparing a reproducible, isolated user-study environment.                   ┃ 
-┃                          participant/authority Profile pair.                           │                                                                                        ┃ 
-┃ ▸ mem list (ls)          Browse child Contexts and direct items; ls is the equivalent  │ USE WHEN: Inspecting the structure and direct contents of a Context.                   ┃ 
-┃                          compact spelling.                                             │                                                                                        ┃ 
-┃ ▸ mem lock               Lock the current Context, a recursive Context set, Memory, or │ USE WHEN: Preventing accidental modification of stable material.                       ┃ 
-┃                          Profile.                                                      │                                                                                        ┃ 
-┃ ▸ mem log                Browse Context checkpoints, inspect one Memory lineage with   │ USE WHEN: Investigating previous operations, checkpoints, or Memory history.           ┃ 
-┃                          --memory, search history, or list Profile command attempts.   │                                                                                        ┃ 
-┃ ▸ mem meld               Semantically reconcile two Contexts into either a separate    │ USE WHEN: Combining separately developed Contexts into a shared Result, or             ┃ 
-┃                          Result or an authoritative Baseline.                          │           incorporating proposed changes into an existing Baseline.                    ┃ 
-┃ ▸ mem merge              Add Source-only items to the current Target, choosing Source  │ USE WHEN: Bringing work from a copied or branched Context back into the current        ┃ 
-┃                          or Target wherever stored items conflict.                     │           Context.                                                                     ┃ 
-┃ ▸ mem profile            Enter the interactive Profile selector, or manage complete    │ USE WHEN: Managing separate users, environments, or Memory stores.                     ┃v
+┃             └ WHEN · Directly correcting or replacing the content of specific existing Memories.                                                                                ┃^
+┃ ▸ mem elaborate ─┬ Expand an abstract Goal, Rule, or condition into multiple more specific candidate propositions.                                                              ┃ 
+┃                  └ WHEN · Generating several more concrete candidate Rules or Cases from an abstract concept or condition.                                                      ┃ 
+┃ ▸ mem embed ─┬ Place a live link to one Memory or Context inside a local Target while retaining Source ownership.                                                               ┃ 
+┃              └ WHEN · Reusing a Memory or Context in another Context while following later Source changes.                                                                      ┃ 
+┃ ▸ mem eval ─────┬ Run and inspect the existing semantic evaluation campaigns.                                                                                                   ┃ 
+┃     (legacy)    └ WHEN · Using the existing research evaluation harness while the general evaluation interface is redesigned.                                                   ┃ 
+┃ ▸ mem find ─┬ Find exact text or explicit regular-expression (regex) matches in readable Memories.                                                                              ┃ 
+┃             └ WHEN · Locating exact words, identifiers, or text patterns within a selected Context scope.                                                                       ┃ 
+┃ ▸ mem find- ───────┬ Report ambiguous direct Memories in the current or explicit Context; no Context changes.                                                                   ┃ 
+┃     ambiguities    └ WHEN · Finding Memories that permit unclear or multiple interpretations.                                                                                   ┃ 
+┃ ▸ mem find- ─────┬ Report conflicting direct Memory pairs in the current or explicit Context; no Context changes.                                                               ┃ 
+┃     conflicts    └ WHEN · Finding mutually incompatible claims or instructions.                                                                                                 ┃ 
+┃ ▸ mem find- ────────┬ Report semantically interchangeable direct Memories in the current or explicit Context; no Context changes.                                               ┃ 
+┃     redundancies    └ WHEN · Locating semantically interchangeable Memories before consolidation.                                                                               ┃ 
+┃ ▸ mem fit ─┬ Judge whether a defined set of Memories or other propositions is jointly compatible under ordinary interpretation, returning YES, MAY, or NO.                      ┃ 
+┃            └ WHEN · Checking whether a defined set of Memories, Rules, Goals, Examples, or other propositions can jointly hold.                                                 ┃ 
+┃ ▸ mem forget ─┬ Review keep/edit/delete decisions for one instruction, then apply the accepted batch.                                                                           ┃ 
+┃               └ WHEN · Removing or rewriting Memories according to a natural-language instruction whose meaning must be interpreted.                                            ┃ 
+┃ ▸ mem ground ─┬ Develop an abstract idea into a reviewable Ground by shaping its Goal, Rules, and example Memories together.                                                    ┃ 
+┃               └ WHEN · Working out how an abstract goal should operate in practice through jointly revised Rules and concrete Examples.                                         ┃ 
+┃ ▸ mem help ─┬ Enter the interactive command browser and open syntax help.                                                                                                       ┃ 
+┃             └ WHEN · Discovering available operations and their invocation forms.                                                                                               ┃ 
+┃ ▸ mem impact ─┬ Preview or inspect an operation's expected Context effects without applying them.                                                                               ┃ 
+┃               └ WHEN · Verifying an operation's proposed effects before its separate Apply action.                                                                              ┃ 
+┃ ▸ mem import ────┬ Import a clean-baseline Profile, Context tree, or Memory by value while preserving resource identity.                                                        ┃ 
+┃     [PARTIAL]    └ WHEN · Bringing externally supplied material into a locally managed store.                                                                                   ┃ 
+┃ ▸ mem init ─┬ Create a new empty Context and make it the current working Context.                                                                                               ┃ 
+┃             └ WHEN · Starting a separate workspace for a new topic, task, or group of Memories.                                                                                 ┃ 
+┃ ▸ mem init-study ─┬ Copy one Study baseline into an isolated participant/authority Profile pair.                                                                                ┃ 
+┃                   └ WHEN · Preparing a reproducible, isolated user-study environment.                                                                                           ┃ 
+┃ ▸ mem list ─┬ List a Context's direct items—Memories, Memory references, query views, and embedded Contexts—and its readable child Contexts. Use -r to recursively include      ┃ 
+┃     (ls)    │ items from descendant and embedded Contexts; ls is the compact alias.                                                                                             ┃ 
+┃             └ WHEN · Inspecting the structure and direct contents of a Context.                                                                                                 ┃ 
+┃ ▸ mem lock ─┬ Lock the current Context, a recursive Context set, Memory, or Profile.                                                                                            ┃ 
+┃             └ WHEN · Preventing accidental modification of stable material.                                                                                                     ┃ 
+┃ ▸ mem log ─┬ Print or search recorded Context, Memory, and Profile history.                                                                                                     ┃ 
+┃            └ WHEN · Investigating previous operations, checkpoints, or Memory history.                                                                                          ┃ 
+┃ ▸ mem meld ─┬ Semantically incorporate an incoming Context into an authoritative baseline, or derive a separate Result from two equal peers.                                    ┃ 
+┃             └ WHEN · Combining two bodies of work when overlap, conflicts, and newly synthesized content must be reviewed semantically.                                         ┃ 
+┃ ▸ mem merge ─┬ Add Source-only items to a selected Target, leave exact matches unchanged, and choose Source or Target for stored-item conflicts.                                ┃ 
+┃              └ WHEN · Appending Source-only items or bringing a copied or branched Context into a selected Target Context without semantic synthesis.                           ┃ 
+┃ ▸ mem profile ─┬ Select and manage complete local MemoryStore Profiles. Profiles can also be renamed or permanently removed through the picker or with mem profile rename and   ┃v
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
  ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab surface  H full help

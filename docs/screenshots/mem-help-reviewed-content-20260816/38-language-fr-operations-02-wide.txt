@@ -1,0 +1,52 @@
+ mem help · command inventory                                                                                                                                                       
+┌────────────────────────────────────────────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────────────────────────────────────────────┐
+│  LANGUAGE · [   EN ]  [ ✓ FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                                                                                                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+│ H                Ouvrir ou masquer Help depuis la navigation en lecture seule d’une session.                                                                                    │^
+│ Esc / Backspace  Revenir d’un niveau ; Backspace modifie le texte dans les champs éditables.                                                                                    │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+OPERATIONS                                                                                                                                                                          
+┌ BROWSE & NAVIGATE ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ NO LLM · Inspecter l’emplacement courant et les Contexts disponibles, puis parcourir l’espace de noms des Contexts.                                                             │ 
+│ ▸ mem status ─┬ Afficher l’inventaire du Context courant, ses cinq premières Memories directes, ses relations et ses derniers checkpoints.                                      │ 
+│               └ WHEN · S’orienter dans le contenu du Context courant, ses connexions et les opérations récemment appliquées.                                                    │ 
+│ ▸ mem pwd ─┬ Afficher le nom canonique du Context courant sans charger son contenu.                                                                                             │ 
+│            └ WHEN · Confirmer le Context actif dans un script ou un terminal.                                                                                                   │ 
+│ ▸ mem contexts ─┬ Parcourir les Contexts locaux et les vues de Context inter-Profile lisibles sans changer de Context.                                                          │ 
+│                 └ WHEN · Explorer tous les Contexts actuellement accessibles au Profile.                                                                                        │ 
+│ ▸ mem list ─┬ Lister les éléments directs d’un Context—Memories, références, vues query et Contexts intégrés—ainsi que ses Contexts enfants lisibles ; -r inclut récursivement  │ 
+│     (ls)    │ les descendants et éléments intégrés, et ls est l’alias court.                                                                                                    │ 
+│             └ WHEN · Examiner la structure et le contenu direct d’un Context.                                                                                                   │ 
+│ ▸ mem show ─┬ Afficher une Memory, une référence, un Context intégré ou le contenu direct du Context courant/indiqué.                                                           │ 
+│             └ WHEN · Lire le contenu complet d’un élément ou Context connu.                                                                                                     │ 
+│ ▸ mem switch ─┬ Ouvrir le sélecteur interactif de Context ou basculer vers un Context explicite.                                                                                │ 
+│               └ WHEN · Déplacer la position de travail vers un autre Context existant.                                                                                          │ 
+│ ▸ mem checkout ─┬ Changer de Context avec une syntaxe de type Git ; avec -b, créer une nouvelle branche de Context et y basculer.                                               │ 
+│                 └ WHEN · Employer un flux de type Git pour changer de branche ou en créer une.                                                                                  │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┌ CREATE, COPY & CONNECT ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ NO LLM · Créer des Contexts ou des Memories, copier ou importer des ressources, ou relier du contenu existant.                                                                  │ 
+│ ▸ mem init ─┬ Créer un nouveau Context vide et en faire le Context de travail courant.                                                                                          │ 
+│             └ WHEN · Commencer un espace de travail distinct pour un nouveau sujet, une nouvelle tâche ou un groupe de Memories.                                                │ 
+│ ▸ mem add ─┬ Ajouter une ou plusieurs Memories au Context courant ou indiqué.                                                                                                   │ 
+│            └ WHEN · Ajouter directement à un Context un ou plusieurs faits, consignes ou notes.                                                                                 │ 
+│ ▸ mem branch ─┬ Copier un Context ou un sous-arbre dans une nouvelle branche et y basculer.                                                                                     │ 
+│               └ WHEN · Modifier indépendamment un Context ou un sous-arbre tout en préservant l’original.                                                                       │ 
+│ ▸ mem import ────┬ Importer par valeur un Profile, un arbre de Context ou une Memory de référence propre tout en préservant l’identité de la ressource.                         │ 
+│     [PARTIAL]    └ WHEN · Introduire du contenu fourni de l’extérieur dans un store géré localement.                                                                            │ 
+│ ▸ mem reference ─┬ Copier une version directe de Source Memory dans un Target sous forme de snapshot immuable en lecture seule.                                                 │ 
+│                  └ WHEN · Conserver une version exacte de Memory même si sa Source change ou disparaît ensuite.                                                                 │ 
+│ ▸ mem embed ─┬ Placer dans un Target local un lien vivant vers une Memory ou un Context tout en conservant la propriété de la Source.                                           │ 
+│              └ WHEN · Réutiliser une Memory ou un Context dans un autre Context en suivant les modifications ultérieures de la Source.                                          │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┏ SEARCH & EXPLAIN ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃ MIXED · Trouver directement un texte exact, ou utiliser la recherche, les réponses et la synthèse sémantiques basées sur un LLM dans la portée autorisée sélectionnée.          ┃ 
+┃ ▸ mem find ─┬ Trouver dans les Memories lisibles un texte exact ou des correspondances d’expression régulière explicite (regex).                                                ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help

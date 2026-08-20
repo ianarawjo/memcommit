@@ -1,12 +1,12 @@
  mem help · command inventory                                                                       
+┌────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────┐
+│  LANGUAGE · [ ✓ EN ]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
 │  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
-┃ ▾ mem fit                Judge whether a defined set of Memories or other propositions is       ┃^
-┃                          jointly compatible under ordinary interpretation, returning YES, MAY,  ┃ 
-┃                          or NO.                                                                 ┃ 
-┃                          USE WHEN: Checking whether a defined set of Memories, Rules, Goals,    ┃ 
-┃                                    Examples, or other propositions can jointly hold.            ┃ 
+┃            └ WHEN · Checking whether a defined set of Memories, Rules, Goals, Examples, or      ┃^
+┃                     other propositions can jointly hold.                                        ┃ 
 ┃   FLOW      · Propositions + optional background -> YES / MAY / NO; Ground + bound Contexts ->  ┃ 
 ┃               complete Fit receipt                                                              ┃ 
 ┃   EXECUTION · SEMANTIC                                                                          ┃ 

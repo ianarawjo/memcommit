@@ -1,11 +1,14 @@
  mem help · command inventory                                                                       
+┌────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────┐
+│  LANGUAGE · [ ✓ EN ]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
 │  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
-┃ ▾ mem atomize    Analyze composite Memories and separate their distinct propositions into       ┃^
-┃                  independently reviewable Memories.                                             ┃ 
-┃                  USE WHEN: Untangling requirements or claims that were written together so each ┃ 
-┃                            can be reviewed and revised independently.                           ┃ 
+┃ ▾ mem atomize ─┬ Analyze composite Memories and separate their distinct propositions into       ┃^
+┃                │ independently reviewable Memories.                                             ┃ 
+┃                └ WHEN · Untangling requirements or claims that were written together so each    ┃ 
+┃                         can be reviewed and revised independently.                              ┃ 
 ┃   FLOW      · Context Memories -> reviewed atomic Memories                                      ┃ 
 ┃   EXECUTION · SEMANTIC                                                                          ┃ 
 ┃   EFFECT    · Changes material only after explicit acceptance                                   ┃ 
@@ -21,10 +24,7 @@
 ┃   FORM 2 · mem atomize --context [context] (enter that Context's interactive Atomize session)   ┃ 
 ┃   FORM 3 · mem atomize --sessions (enter the interactive Atomize session launcher)              ┃ 
 ┃   FORM 4 · mem atomize --evaluate "[issue]" (directional atomic review)                         ┃ 
-┃ ▸ mem distill    Derive higher-level Rules or condition propositions from Case or Example       ┃ 
-┃                  propositions in a bounded Context, optionally guided by a Goal.                ┃ 
-┃                  USE WHEN: Inferring more general Rules or condition propositions from several  ┃ 
-┃                            concrete cases or examples.                                          ┃ 
-┃ ▸ mem elaborate  Expand an abstract Goal, Rule, or condition into multiple more specific        ┃v
+┃ ▸ mem distill ─┬ Derive higher-level Rules or condition propositions from Case or Example       ┃ 
+┃                │ propositions in a bounded Context, optionally guided by a Goal.                ┃v
 ─────────────────────────────────────────────────────────────────────────────────────────────────── 
  ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab next kind  H f

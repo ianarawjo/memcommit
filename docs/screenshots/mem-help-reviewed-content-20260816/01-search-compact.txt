@@ -1,24 +1,24 @@
  mem help · command inventory                                                                       
+┌────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────┐
+│  LANGUAGE · [ ✓ EN ]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
 │  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
-│ ▸ mem embed             Place a live link to one Memory or Context inside a local Target while  │^
-│                         retaining Source ownership.                                             │ 
-│                         USE WHEN: Reusing a Memory or Context in another Context while          │ 
-│                                   following later Source changes.                               │ 
+│                       Source changes.                                                           │^
 └─────────────────────────────────────────────────────────────────────────────────────────────────┘ 
                                                                                                     
 ┏ SEARCH & EXPLAIN ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
 ┃ MIXED · Find exact text directly, or use LLM-based semantic retrieval, answering, and           ┃ 
 ┃         summarization within the selected authorized scope.                                     ┃ 
-┃ ▸ mem find       Find exact text or explicit regular-expression (regex) matches in readable     ┃ 
-┃                  Memories.                                                                      ┃ 
-┃                  USE WHEN: Locating exact words, identifiers, or text patterns within a         ┃ 
-┃                            selected Context scope.                                              ┃ 
-┃ ▾ mem search     Semantically rank Memories relevant to a natural-language request across       ┃ 
-┃                  selected Contexts.                                                             ┃ 
-┃                  USE WHEN: Finding relevant Memories through meaning and context, including     ┃ 
-┃                            related content without obvious keyword overlap.                     ┃ 
+┃ ▸ mem find ─┬ Find exact text or explicit regular-expression (regex) matches in readable        ┃ 
+┃             │ Memories.                                                                         ┃ 
+┃             └ WHEN · Locating exact words, identifiers, or text patterns within a selected      ┃ 
+┃                      Context scope.                                                             ┃ 
+┃ ▾ mem search ─┬ Semantically rank Memories relevant to a natural-language request across        ┃ 
+┃               │ selected Contexts.                                                              ┃ 
+┃               └ WHEN · Finding relevant Memories through meaning and context, including related ┃ 
+┃                        content without obvious keyword overlap.                                 ┃ 
 ┃   FLOW      · Context set + query -> ranked Memories                                            ┃ 
 ┃   EXECUTION · SEMANTIC                                                                          ┃ 
 ┃   EFFECT    · Search results are read-only; optional reviewed Save As creates a new local       ┃ 

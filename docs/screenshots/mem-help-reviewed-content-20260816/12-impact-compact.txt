@@ -1,20 +1,20 @@
  mem help · command inventory                                                                       
+┌────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────┐
+│  LANGUAGE · [ ✓ EN ]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
 │  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
-┃                          USE WHEN: Finding Memories that permit unclear or multiple             ┃^
-┃                                    interpretations.                                             ┃ 
-┃ ▸ mem find-conflicts     Report conflicting direct Memory pairs in the current or explicit      ┃ 
-┃                          Context; no Context changes.                                           ┃ 
-┃                          USE WHEN: Finding mutually incompatible claims or instructions.        ┃ 
-┃ ▸ mem audit              Run Duplicate, Ambiguity, and Conflict checks plus optional Rule       ┃ 
-┃                          Conformance, then review the combined saved result.                    ┃ 
-┃                          USE WHEN: Performing a combined quality review before revising a       ┃ 
-┃                                    Context.                                                     ┃ 
-┃ ▾ mem impact             Preview or inspect an operation's expected Context effects without     ┃ 
-┃                          applying them.                                                         ┃ 
-┃                          USE WHEN: Verifying an operation's proposed effects before its         ┃ 
-┃                                    separate Apply action.                                       ┃ 
+┃ ▸ mem find- ─────┬ Report conflicting direct Memory pairs in the current or explicit Context;   ┃^
+┃     conflicts    │ no Context changes.                                                          ┃ 
+┃                  └ WHEN · Finding mutually incompatible claims or instructions.                 ┃ 
+┃ ▸ mem audit ─┬ Run Duplicate, Ambiguity, and Conflict checks plus optional Rule Conformance,    ┃ 
+┃              │ then review the combined saved result.                                           ┃ 
+┃              └ WHEN · Performing a combined quality review before revising a Context.           ┃ 
+┃ ▾ mem impact ─┬ Preview or inspect an operation's expected Context effects without applying     ┃ 
+┃               │ them.                                                                           ┃ 
+┃               └ WHEN · Verifying an operation's proposed effects before its separate Apply      ┃ 
+┃                        action.                                                                  ┃ 
 ┃   FLOW      · Operation inputs or session -> impact report                                      ┃ 
 ┃   EXECUTION · MIXED                                                                             ┃ 
 ┃   EFFECT    · Impact is read-only; Apply is a separate reviewed handoff                         ┃ 

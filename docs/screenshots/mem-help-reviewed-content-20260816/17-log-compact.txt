@@ -1,17 +1,17 @@
  mem help · command inventory                                                                       
+┌────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────┐
+│  LANGUAGE · [ ✓ EN ]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
 │  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
-│               example Memories together.                                                        │^
-│               USE WHEN: Working out how an abstract goal should operate in practice through     │ 
-│                         jointly revised Rules and concrete Examples.                            │ 
-└─────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────┘^
                                                                                                     
 ┏ HISTORY & RECOVERY ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
 ┃ MIXED · Inspect provenance and recorded changes. Restore an earlier state through explicit      ┃ 
 ┃         history operations.                                                                     ┃ 
-┃ ▾ mem log         Browse or search recorded Context, Memory, and Profile history.               ┃ 
-┃                   USE WHEN: Investigating previous operations, checkpoints, or Memory history.  ┃ 
+┃ ▾ mem log ─┬ Browse or search recorded Context, Memory, and Profile history.                    ┃ 
+┃            └ WHEN · Investigating previous operations, checkpoints, or Memory history.          ┃ 
 ┃   FLOW      · Recorded history or query -> history report                                       ┃ 
 ┃   EXECUTION · MIXED                                                                             ┃ 
 ┃   EFFECT    · Read-only                                                                         ┃ 

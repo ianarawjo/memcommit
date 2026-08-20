@@ -14,6 +14,7 @@ import time
 import pexpect
 import pyte
 from PIL import Image, ImageDraw, ImageFont
+from prompt_toolkit.utils import get_cwidth
 
 
 ROOT = Path("/Users/KimMunyeong/Github/memcommit")
@@ -21,6 +22,8 @@ OUT = ROOT / "docs/screenshots/mem-help-command-naming-20260813"
 COLUMNS = 180
 ROWS = 52
 FONT_PATH = "/System/Library/Fonts/Menlo.ttc"
+WIDE_FONT_PATH = "/System/Library/Fonts/AppleSDGothicNeo.ttc"
+HAN_FONT_PATH = "/System/Library/Fonts/Hiragino Sans GB.ttc"
 
 _NAMED_COLORS = {
     "default": "#e6e9ef",
@@ -93,6 +96,13 @@ def _snapshot(recorder: _Recorder, stem: str) -> str:
 
     regular = ImageFont.truetype(FONT_PATH, 16, index=0)
     bold = ImageFont.truetype(FONT_PATH, 16, index=1)
+    # Menlo renders CJK glyphs as empty boxes. The real PTY stream is correct,
+    # so use a macOS CJK fallback only for double-cell characters when turning
+    # that stream into a PNG. Terminal placement still comes from pyte.
+    wide_regular = ImageFont.truetype(WIDE_FONT_PATH, 16, index=0)
+    wide_bold = ImageFont.truetype(WIDE_FONT_PATH, 16, index=6)
+    han_regular = ImageFont.truetype(HAN_FONT_PATH, 16, index=0)
+    han_bold = ImageFont.truetype(HAN_FONT_PATH, 16, index=2)
     cell_width = math.ceil(regular.getlength("M"))
     cell_height = 21
     margin = 16
@@ -102,6 +112,10 @@ def _snapshot(recorder: _Recorder, stem: str) -> str:
         "#101217",
     )
     draw = ImageDraw.Draw(image)
+    # Paint the complete terminal background before any glyphs. A wide CJK
+    # glyph is stored in its leading pyte cell but spans the following cell;
+    # painting that following cell afterward would erase half of the glyph
+    # whenever an ANSI background such as Help's zebra band is active.
     for row in range(ROWS):
         for column in range(COLUMNS):
             character = screen.buffer[row][column]
@@ -116,12 +130,28 @@ def _snapshot(recorder: _Recorder, stem: str) -> str:
                     (x, y, x + cell_width - 1, y + cell_height - 1),
                     fill=background,
                 )
+
+    for row in range(ROWS):
+        for column in range(COLUMNS):
+            character = screen.buffer[row][column]
+            foreground = _color(character.fg)
+            background = _color(character.bg, background=True)
+            if character.reverse:
+                foreground, background = background, foreground
+            x = margin + column * cell_width
+            y = margin + row * cell_height
             if character.data and character.data != " ":
                 box_drawing = "\u2500" <= character.data <= "\u257f"
+                if any("\u3400" <= value <= "\u9fff" for value in character.data):
+                    font = han_bold if character.bold else han_regular
+                elif get_cwidth(character.data) > 1:
+                    font = wide_bold if character.bold else wide_regular
+                else:
+                    font = bold if character.bold and not box_drawing else regular
                 draw.text(
                     (x, y),
                     character.data,
-                    font=bold if character.bold and not box_drawing else regular,
+                    font=font,
                     fill=foreground,
                 )
             if character.underscore:
@@ -152,14 +182,8 @@ def _pump(child: pexpect.spawn, *, seconds: float = 0.55) -> None:
 def _spawn(executable: str, *, interactive: bool) -> tuple[pexpect.spawn, _Recorder]:
     argv = shlex.join([executable, "help"])
     if not interactive:
-        argv += (
-            " </dev/null | "
-            "rg '^(branch|checkout|list|ls|switch) '"
-        )
-    command = (
-        f"stty rows {ROWS} cols {COLUMNS}; stty size; "
-        f"exec {argv}"
-    )
+        argv += " </dev/null | rg '^(branch|checkout|list|ls|switch) '"
+    command = f"stty rows {ROWS} cols {COLUMNS}; stty size; exec {argv}"
     recorder = _Recorder()
     child = pexpect.spawn(
         "/bin/zsh",
