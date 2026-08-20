@@ -1,8 +1,8 @@
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃Rationale [d9e8f400] · provenance/oversized-context                                                                                                                              ^┃
+┃Rationale [ea920b2f] · provenance/oversized-context                                                                                                                              ^┃
 ┃                                                                                                                                                                                  ┃
 ┃MEMORY                                                                                                                                                                            ┃
-┃  큰 Context에서도 이 대상의 기록 이유만 확인한다.                                                                                                                                ┃
+┃  다듬기 요청에서는 기존 구조와 인용 표시를 보존하고, 명시된 표현만 수정한다.                                                                                                     ┃
 ┃                                                                                                                                                                                  ┃
 ┃PROVENANCE — no reason recorded                                                                                                                                                   ┃
 ┃                                                                                                                                                                                  ┃

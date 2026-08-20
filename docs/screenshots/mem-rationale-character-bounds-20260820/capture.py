@@ -107,7 +107,7 @@ def _run_no_reason() -> None:
 
     store, context, memories = _stored_context(
         "provenance/no-reason",
-        ["아직 기록 이유가 없는 한국어 Memory다."],
+        ["다듬기 요청에서는 기존 구조와 인용 표시를 보존한다."],
     )
     before = context.to_dict()
     _guard_provenance_only()
@@ -124,10 +124,16 @@ def _run_recorded_reason() -> None:
     from memcommit.commands import rationale
     from memcommit.rationale_cache import rationale_inference_path
 
-    reason = "중복된 초안 규칙을 하나의 검토 기준으로 합치기 위해 유지했다."
+    reason = (
+        "다듬기 요청이 전체 재작성으로 번지지 않도록 변경 범위를 명시된 "
+        "표현으로 제한하기 위해 유지했다."
+    )
     store, context, target = _recorded_context(
         "provenance/recorded-reason",
-        content="문장 검토에서는 구조와 인용 표시를 보존한다.",
+        content=(
+            "다듬기 요청에서는 기존 구조와 인용 표시를 보존하고, "
+            "명시된 표현만 수정한다."
+        ),
         reason=reason,
         target_uid="30000000-0000-4000-8000-000000000001",
     )
@@ -147,7 +153,9 @@ def _run_oversized_context() -> None:
     from memcommit.rationale_cache import rationale_inference_path
 
     korean_fill = "가나다라마바사아자차카타파하"
-    contents = ["큰 Context에서도 이 대상의 기록 이유만 확인한다."] + [
+    contents = [
+        "다듬기 요청에서는 기존 구조와 인용 표시를 보존하고, 명시된 표현만 수정한다."
+    ] + [
         f"{index:03d}" + (korean_fill[index % len(korean_fill)] * 9_997)
         for index in range(105)
     ]
@@ -293,7 +301,7 @@ def main() -> None:
     assert "APPARENT PURPOSE" not in combined
     assert "PROVIDER CALLS 0" in combined
     assert "CACHE UNTOUCHED" in combined
-    assert "중복된 초안 규칙을 하나의 검토 기준으로 합치기 위해 유지했다." in combined
+    assert "다듬기 요청이 전체 재작성으로 번지지 않도록" in combined
     assert "SEMANTIC SOURCE OVER 1000000" in combined
     assert "PROJECTION LIMIT 160" in combined
     assert "LIMITS" not in combined

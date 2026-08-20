@@ -104,13 +104,23 @@ def test_inference_options_are_removed_from_rationale_help(isolated_store):
 def test_provenance_projection_uses_only_the_latest_recorded_reason():
     report = SimpleNamespace(
         recorded_reason_events=(
-            SimpleNamespace(reason="이전 작업의 이유다."),
-            SimpleNamespace(reason="현재 형태를 만든\n 최신 작업의   이유다."),
+            SimpleNamespace(
+                reason="초기에는 다듬기 요청을 문서 전체 재작성으로 처리했다."
+            ),
+            SimpleNamespace(
+                reason=(
+                    "다듬기 요청이 전체 재작성으로 번지지 않도록\n "
+                    "구조와 인용 표시를 보존하고   명시된 표현만 수정한다."
+                )
+            ),
         ),
         provenance_character_limit=160,
     )
 
-    assert _provenance_summary(report) == "현재 형태를 만든 최신 작업의 이유다."
+    assert _provenance_summary(report) == (
+        "다듬기 요청이 전체 재작성으로 번지지 않도록 구조와 인용 표시를 "
+        "보존하고 명시된 표현만 수정한다."
+    )
 
 
 def test_long_provenance_projection_is_capped_at_160_characters(

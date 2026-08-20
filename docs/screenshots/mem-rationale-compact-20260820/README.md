@@ -1,8 +1,10 @@
 # Compact `mem rationale` capture log
 
 This ordered evidence set records the shortened Rationale path. The human
-report keeps only the selected Memory and a Trace-derived provenance summary.
+report keeps only the selected Memory and its latest Trace-derived reason.
 It neither requests nor renders a contextual purpose.
+The Korean fixture is the canonical scoped-polishing provenance example shared
+with the character-bound cases.
 
 ## Reproduction frame
 

@@ -276,6 +276,34 @@ than the Trace evidence it summarizes. JSON retains typed origin, review, and
 legacy inference fields for compatibility, but provenance-only execution sets
 inference, fallback evidence, and inference character counts to empty or zero.
 
+### Provenance example family: scoped polishing
+
+Rationale keeps one coherent Korean example family around a narrowly scoped
+polishing request. These are retained Trace-data fixtures, not provider prompt
+examples; no model receives them and the compact projection never rewrites
+their meaning.
+
+1. **No retained reason.** The Memory is “다듬기 요청에서는 기존 구조와 인용
+   표시를 보존한다.” Rationale reports `no reason recorded` instead of filling
+   the gap.
+2. **One retained reason.** The Memory adds `명시된 표현만 수정한다.` and the
+   operation records “다듬기 요청이 전체 재작성으로 번지지 않도록 변경 범위를
+   명시된 표현으로 제한하기 위해 유지했다.” Rationale shows that reason
+   verbatim after whitespace normalization.
+3. **A later reason supersedes an earlier one in the compact view.** An earlier
+   operation records that polishing meant rewriting the whole document; the
+   later operation records the structure-, citation-, and expression-preserving
+   boundary. The human report shows only the later reason. Trace and JSON retain
+   both, so compactness does not erase history.
+4. **An overlong retained reason.** The operation records a coherent explanation
+   of why the narrower boundary was introduced and how it prevents unwanted
+   deletion or restructuring. Rationale keeps the longest complete prefix below
+   160 characters and appends an ellipsis; it never uses repeated filler text to
+   manufacture the boundary.
+
+The same family appears in the compact and character-bound PTY evidence, while
+the million-character Context case varies only the unrelated surrounding frame.
+
 The [180×52 compact Rationale capture](screenshots/mem-rationale-compact-20260820/README.md)
 records target selection, the shortened Viewer, and read-only close
 verification.

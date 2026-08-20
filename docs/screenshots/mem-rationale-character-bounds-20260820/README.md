@@ -9,6 +9,12 @@ The directory name is retained from the earlier character-bound experiment so
 existing study links remain valid; its contents now record the provenance-only
 replacement contract.
 
+All four reports use one scoped-polishing example family: preserve the existing
+structure and citation markers, and limit a polishing request to explicitly
+named wording. The cases vary whether a reason was retained, whether unrelated
+Context content is enormous, and whether the reason exceeds the compact bound.
+These are persisted provenance fixtures rather than provider prompt examples.
+
 ## Reproduction frame
 
 - Command: `python docs/screenshots/mem-rationale-character-bounds-20260820/capture.py`
@@ -25,9 +31,9 @@ replacement contract.
 
 | Report | Evidence condition | Expected result |
 | --- | --- | --- |
-| `01-no-reason-report.png` | selected Memory has no retained operation reason | `PROVENANCE — no reason recorded`; no filler explanation |
-| `03-recorded-reason-report.png` | one compact Korean reason is retained in explicit trace metadata | only that latest recorded Korean reason is projected |
-| `05-oversized-context-report.png` | 106 Korean Memories exceed 1,000,000 semantic characters | target provenance still opens without contextual analysis, provider, or cache |
+| `01-no-reason-report.png` | the polishing boundary has no retained operation reason | `PROVENANCE — no reason recorded`; no filler explanation |
+| `03-recorded-reason-report.png` | one compact reason records why polishing must not become a full rewrite | only that latest recorded Korean reason is projected |
+| `05-oversized-context-report.png` | the same polishing Memory sits beside 105 Korean Memories exceeding 1,000,000 semantic characters | target provenance still opens without contextual analysis, provider, or cache |
 | `07-long-reason-report.png` | one coherent retained Korean reason exceeds 160 characters | the latest reason is projected at the 160-character cap, ending at a complete sentence rather than repeated filler |
 
 Each odd-numbered image is the report state. Its following even-numbered image
