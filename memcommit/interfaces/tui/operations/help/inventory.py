@@ -414,22 +414,23 @@ COMMAND_FORMS = {
         "mem diff --verbose (complete UIDs and source/target fingerprints)",
     ),
     "distill": (
-        "mem distill (review Rules distilled from the current Context)",
-        "mem distill [context] (review Rules from one explicit Context)",
-        'mem distill [context] --goal "[goal]" (guide Rule relevance with a Goal)',
-        "mem distill [context] -r (include descendants and embedded Contexts)",
-        "mem distill [context] --save-as [result_context] "
-        "(review without creating the Result)",
-        "mem distill [context] --save-as [result_context] --apply "
-        "(create the exact reviewed Rule Context)",
+        "mem distill (distill current and add Rules back to current)",
+        "mem distill --to [target] (distill current into an existing target)",
+        "mem distill --from [source] (distill a source into current)",
+        "mem distill --from [source] --to [target] (explicit existing endpoints)",
+        'mem distill --from [source] --goal "[goal]" (guide Rule relevance)',
+        "mem distill --from [source] -r (include descendants and embeds)",
         "mem distill --ground [name] "
         "(review Rules from its exact Goal and working-candidate frame)",
     ),
     "elaborate": (
-        'mem elaborate --goal "[goal]" (propose candidate Rules)',
-        'mem elaborate --rule "[rule]" (propose concrete Cases)',
+        "mem elaborate (elaborate current direct Memories as Rules and add Cases to current)",
+        "mem elaborate --from [source] --to [target] (explicit existing endpoints)",
+        "mem elaborate --from [source] --as goal (treat its one direct Memory as a Goal)",
+        'mem elaborate --goal "[goal]" (add candidate Rules to current)',
+        'mem elaborate --rule "[rule]" --to [target] (add concrete Cases)',
         'mem elaborate --rule "[rule1]" --rule "[rule2]" '
-        "(propose concrete Cases across explicit Rules)",
+        "(add concrete Cases across explicit Rules to current)",
         "mem elaborate --ground [name] --from-goal "
         "(use the exact Ground Goal through the same application)",
         "mem elaborate --ground [name] --from-rules "
@@ -511,7 +512,8 @@ COMMAND_FORMS = {
         "mem impact atomize --context [context] (preview atomization of one Context)",
         'mem impact forget "[instruction]" (preview complete in-place decisions; Source unchanged)',
         'mem impact forget "[instruction]" --context [context] (preview one exact direct Source)',
-        "mem impact distill [context] --save-as [result_context] (preview fresh Result Memories; not created)",
+        "mem impact distill --from [source] --to [target] (preview Distill Add; endpoints unchanged)",
+        "mem impact elaborate --from [source] --to [target] (preview Elaborate Add; endpoints unchanged)",
         "mem impact resolve --context [context] (preview one verified candidate or the candidate choice)",
         "mem impact resolve --context [context] --candidate [full_id] (preview one exact effect set)",
         "mem impact meld (inspect a saved Meld Impact; APPLY? opens its Apply flow)",

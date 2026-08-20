@@ -1,35 +1,35 @@
 # Distill and Elaborate application boundary matrix
 
-Last reviewed: 2026-08-16.
+Last reviewed: 2026-08-20.
 
 | Concern | Distill | Elaborate | Evidence state |
 | --- | --- | --- | --- |
 | Meaning | Case/Example Context propositions → evidence-linked Rules; optional Goal focuses relevance | Goal → at least one suggested Rule, or Rules → at least one suggested Case | `VERIFIED` in domain tests |
 | Typed application entry | `run_distill(DistillRequest, ...)` | `run_elaborate(ElaborateRequest, ...)` | `VERIFIED` source-level absence of command/terminal imports; fresh-process package isolation is tracked separately by `IMPORT-01` |
-| Production runtime | local Store source/output ports and lazy provider factory | lazy provider factory; no Store for inline input | `VERIFIED` focused tests |
+| Production runtime | exact local Source port, pre-provider existing-Target freeze, atomic generated-Memory Add, and lazy provider factory | exact ordinary Context Source/Target freeze, inline Target freeze, atomic generated-Memory Add, and lazy provider factory | `VERIFIED` focused tests |
+| Directional endpoints | omitted `--from`/`--to` fill from one Current snapshot; Source may equal Target | same four-way endpoint matrix; inline input has only a Target | `VERIFIED` CLI matrix and same-Context pre-image tests |
 | Ground adapter | physical Goal plus ordinary `/examples` and `/contexts` subtree Memories; legacy Goal + `WORKING_CANDIDATES` remains transitional | physical exact Goal or directly owned Rules; legacy Ground Goal/Rules remains transitional | `VERIFIED` operation-local pre/post input tests; unrelated physical lane edits do not invalidate a safe request |
 | Provider planning | complete Source frame, `WHOLE_FRAME_ONLY` | complete input tuple, `WHOLE_FRAME_ONLY`; nonempty proposal set | `VERIFIED` strict schema (`minItems: 1`), empty-response, and oversized-miss tests; provider construction remains zero before pre-call rejection |
 | Prepared reuse | exact Source frame + Goal + config only | exact direction + normalized input tuple + config only | `VERIFIED` injectable port; no persisted artifact |
 | Projection reuse | rejected; changing any proposition can change the complete Rule set | rejected; proposal set is defined over the complete input | intentional `N/A` |
 | Configuration | one `DistillSemanticConfig` snapshot validates request, schema, live and prepared output | one `ElaborateSemanticConfig` snapshot validates request, schema, live and prepared output | `VERIFIED` nondefault-limit tests |
-| Session | process-local result with opaque frozen Source token | process-local read-only result | intentional `N/A`; no durable session |
-| Apply | reviewed standalone result → require-new local Context | none | Distill `VERIFIED`; Elaborate intentional `N/A` |
+| Session | process-local exact proposal; Impact does not persist it | process-local exact proposal; Impact does not persist it | intentional `N/A`; no durable session |
+| Publication | default standalone → existing Target, all Rules or none; legacy require-new Apply remains compatible | default standalone → existing Target, all proposals or none | `VERIFIED` endpoint, checkpoint, target/source drift, and no-partial-publication tests |
 | Authority | standalone local Source; physical typed Ground inputs fail before provider until authority-aware projection exists | inline or exact directly owned Ground Memories; typed Goal/Rule input fails before provider | fail-closed boundary tested; no silent typed-item omission |
-| Plain CLI | same typed result renderer | same typed result renderer | `VERIFIED` |
-| TUI | shared Context Summary setup + semantic Viewer | semantic Viewer | `VERIFIED` in component tests and ordered actual-color PTY trace |
+| Plain CLI | default Add renderer plus receipt; explicit Impact is read-only | default Add renderer plus receipt; explicit Impact is read-only | `VERIFIED` |
+| TUI | Impact owns interactive preview; legacy review retains shared setup + Viewer | explicit Impact owns preview; proposal Viewer remains available | `VERIFIED` in component tests; refreshed Add/Impact PTY evidence is recorded separately |
 | Public Python | typed proposal; exact in-process Distill Apply; Ground projections | typed unverified proposal; Ground projections | `VERIFIED` focused tests |
-| Agent/MCP | proposal only, `effect: NONE` | proposal only, `effect: NONE`, `verification: UNVERIFIED` | `VERIFIED` in-process invocation and installed-wheel six-tool discovery |
+| Agent/MCP | proposal only, `effect: NONE` | proposal only, `effect: NONE`, `verification: UNVERIFIED` | intentional first-slice boundary; CLI mutation does not silently broaden callable authority |
 | Clipboard | focused `y`, whole document `Y` | focused `y`, whole document `Y` | `VERIFIED` |
 
 ## Verification evidence
 
-The final focused regression run passed `240` tests. One source-environment
-MCP stdio test skipped because the checkout interpreter does not install the
-optional `mcp` dependency. The independent installed-wheel gate installed
-`memcommit[mcp]` into a fresh environment, used MCP 2.0.0, and passed official
-stdio discovery of Query, Add, Meld, Distill, Elaborate, and Fit plus a real
-Add call. The same installed environment passed the `IMPORT-01` root/client
-isolation assertions from outside the checkout.
+Focused regression covers both four-way endpoint matrices, same-Context
+pre-images, context-role validation, atomic multi-Memory publication,
+pre-provider missing targets, concurrent Source/Target drift, and Impact's
+zero-checkpoint guarantee. Installed-wheel callable verification remains a
+separate gate because this CLI Add slice intentionally leaves public and MCP
+routes proposal-only.
 
 The ordered actual-color PTY set under
 `docs/screenshots/distill-elaborate-shared-app-20260815/` contains 18 states at
@@ -40,14 +40,14 @@ and compact evidence under `docs/screenshots/mem-distill-help-20260815/`.
 
 ## Publication boundaries
 
-Distill inference never mutates its Source. Standalone Apply revalidates the
-exact frozen frame and publishes one new Context/checkpoint. Ground Distill
-cannot Apply through its CLI, public result, agent tool, or MCP projection.
+Distill inference never mutates its Source by itself. Standalone publication
+revalidates the exact frozen frame and appends to an existing Target in one
+checkpoint. Ground Distill cannot publish through its CLI, public result,
+agent tool, or MCP projection.
 
-Elaborate never saves or accepts its proposals. A caller must use a separate
-reviewed Ground or Context operation to promote one. This prevents generated
-Case propositions from becoming fabricated evidence merely because they were
-well-formed.
+Standalone Elaborate stores its proposals but never marks them verified or
+accepted. Ground Elaborate remains proposal-only. Stored generated Case
+propositions therefore remain hypotheses rather than fabricated evidence.
 
 ## Remaining gates
 

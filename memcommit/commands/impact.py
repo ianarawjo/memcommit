@@ -41,6 +41,7 @@ from memcommit.authority.access import (
 from memcommit.commands.impact_sessions import ImpactSessionPresentation
 from memcommit.commands.impact_process_local import (
     distill_cmd as distill_impact_cmd,
+    elaborate_cmd as elaborate_impact_cmd,
     forget_cmd as forget_impact_cmd,
     resolve_cmd as resolve_impact_cmd,
 )
@@ -1300,6 +1301,7 @@ IMPACT_ROUTES.install(
         "atomize": atomize_impact_cmd,
         "forget": forget_impact_cmd,
         "distill": distill_impact_cmd,
+        "elaborate": elaborate_impact_cmd,
         "resolve": resolve_impact_cmd,
         "meld": meld_impact_cmd,
         "sever": sever_impact_cmd,

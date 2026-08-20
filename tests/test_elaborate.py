@@ -484,7 +484,14 @@ def test_ground_elaborate_rejects_revision_change_during_provider(isolated_store
     assert all(store.list_checkpoints(context.name) == [] for context in contexts)
 
 
-def test_mem_elaborate_plain_uses_the_typed_application(monkeypatch) -> None:
+def test_mem_elaborate_plain_uses_the_typed_application(
+    isolated_store,
+    monkeypatch,
+) -> None:
+    store = MemoryStore()
+    target = ops.init("elaborate/inline-target")
+    store.create_context(target)
+    store.set_current(target.name)
     monkeypatch.setattr(
         elaborate_command,
         "connect_semantic_provider",
@@ -499,7 +506,8 @@ def test_mem_elaborate_plain_uses_the_typed_application(monkeypatch) -> None:
     assert result.exit_code == 0, result.output
     assert "ELABORATE · GOAL → RULES" in result.output
     assert "[Suggested] [Unverified]" in result.output
-    assert "Nothing has been saved or accepted." in result.output
+    assert "Added 1 Elaborate Memories" in result.output
+    assert len(store.load_direct(target.name).order) == 1
 
 
 def test_physical_ground_goal_elaborate_freezes_only_the_goal_memory(

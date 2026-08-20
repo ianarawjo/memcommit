@@ -1,0 +1,3 @@
+PTY · 180 columns × 52 rows
+$ mem impact elaborate --from capture/elaborate-source --to capture/elaborate-target
+MEM IMPACT · ELABORATE · 1/2 · FREEZING SOURCE AND TARGET . · 0sMEM IMPACT · ELABORATE · 2/2 · GENERATING PROPOSALS . · 0s      

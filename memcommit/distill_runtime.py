@@ -9,6 +9,7 @@ from typing import Iterator, Protocol
 import uuid
 
 from memcommit.context import AutoCheckpoint, Context, Memory
+from memcommit.context_naming import validate_portable_context_name
 from memcommit.distill import DistillError, DistillProvider
 from memcommit.distill_application import (
     DistillApplyReceipt,
@@ -23,7 +24,13 @@ from memcommit.distill_config import (
     DEFAULT_DISTILL_SEMANTIC_CONFIG,
     DistillSemanticConfig,
 )
-from memcommit.store import MemoryStore, context_record_digest, validate_context_name
+from memcommit.semantic_add_runtime import (
+    FrozenSemanticAddTarget,
+    SemanticAddReceipt,
+    append_semantic_memories,
+    freeze_semantic_add_target,
+)
+from memcommit.store import MemoryStore, context_record_digest
 from memcommit.summarize_application import (
     FrozenSummarySource,
     SummarizeRequest,
@@ -35,6 +42,14 @@ from memcommit.summarize_runtime import MemoryStoreSummarySourcePort
 class DistillProviderFactory(Protocol):
     def __call__(self) -> DistillProvider:
         """Construct the configured provider lazily."""
+
+
+@dataclass(frozen=True)
+class _LocalDistillSourceToken:
+    """Delegate binding plus exact local Context bytes used by Distill."""
+
+    delegate: FrozenSummarySource
+    local_bindings: tuple[tuple[str, str, str], ...]
 
 
 @dataclass
@@ -49,7 +64,8 @@ class LocalMemoryStoreDistillSourcePort:
         return cls(store=store, delegate=MemoryStoreSummarySourcePort.capture(store))
 
     def freeze(self, request: SummarizeRequest) -> FrozenSummarySource:
-        source = self.delegate.freeze(request)
+        delegated = self.delegate.freeze(request)
+        source = delegated
         names = {
             source.frame.context_name,
             *(item.context_name for item in source.frame.sources),
@@ -62,10 +78,164 @@ class LocalMemoryStoreDistillSourcePort:
                 "Distill currently requires an entirely local Source frame; "
                 "granted Context distillation is not yet authorized."
             )
-        return source
+        bindings = tuple(
+            (
+                name,
+                context.uid,
+                context_record_digest(context),
+            )
+            for name in sorted(names)
+            for context in (self.store.load_direct(name),)
+        )
+        # Rebuild once after binding every local record. If any visible input
+        # changed during capture, the request fails before provider disclosure;
+        # later unrelated local drift is caught by the retained record digests.
+        current = self.delegate.revalidate(delegated)
+        if current != delegated.frame:
+            raise DistillError(
+                "The Distill Source changed while it was being frozen."
+            )
+        return FrozenSummarySource(
+            frame=delegated.frame,
+            token=_LocalDistillSourceToken(
+                delegate=delegated,
+                local_bindings=bindings,
+            ),
+        )
 
     def revalidate(self, source: FrozenSummarySource):
-        return self.delegate.revalidate(source)
+        token = source.token
+        if not isinstance(token, _LocalDistillSourceToken):
+            raise DistillError("The frozen local Distill Source is invalid.")
+        return self.delegate.revalidate(token.delegate)
+
+    def source_bindings(
+        self,
+        source: FrozenSummarySource,
+    ) -> tuple[tuple[str, str, str], ...]:
+        token = source.token
+        if not isinstance(token, _LocalDistillSourceToken):
+            raise DistillError("The frozen local Distill Source is invalid.")
+        return token.local_bindings
+
+
+@dataclass(frozen=True)
+class PreparedDistillAdd:
+    """Exact Distill result paired with its pre-provider Target snapshot."""
+
+    result: DistillResult
+    target: FrozenSemanticAddTarget
+    source_port: LocalMemoryStoreDistillSourcePort
+
+
+def prepare_distill_add(
+    request: DistillRequest,
+    *,
+    store: MemoryStore,
+    target_name: str,
+    provider_factory: DistillProviderFactory,
+    config: DistillSemanticConfig = DEFAULT_DISTILL_SEMANTIC_CONFIG,
+    prepared_lookup: DistillPreparedLookup | None = None,
+) -> PreparedDistillAdd:
+    """Freeze both endpoints, then prepare one non-mutating Add proposal."""
+
+    source_port = LocalMemoryStoreDistillSourcePort.capture(store)
+    # Target is captured before Source disclosure/provider construction. This
+    # makes a successful publication refer to the exact destination the person
+    # selected at command entry, including Source == Target.
+    target = freeze_semantic_add_target(store, target_name)
+
+    @contextmanager
+    def provider_session() -> Iterator[DistillProvider]:
+        yield provider_factory()
+
+    result = run_distill(
+        request,
+        source_port=source_port,
+        provider_session_factory=provider_session,
+        config=config,
+        prepared_lookup=prepared_lookup,
+    )
+    return PreparedDistillAdd(
+        result=result,
+        target=target,
+        source_port=source_port,
+    )
+
+
+def apply_prepared_distill_add(
+    prepared: PreparedDistillAdd,
+    *,
+    store: MemoryStore,
+) -> SemanticAddReceipt:
+    """Append the complete supported Rule set to one existing Context."""
+
+    if not isinstance(prepared, PreparedDistillAdd):
+        raise TypeError("Distill Add requires a prepared result.")
+    analysis = prepared.result.analysis
+    if not analysis.rules:
+        raise DistillError("Distill produced no supported Rules to add.")
+    current = prepared.source_port.revalidate(prepared.result.frozen_source)
+    if current.digest != analysis.source.digest or current != analysis.source:
+        raise DistillError(
+            "The Distill Source changed before Add; no generated Memories "
+            "were added."
+        )
+    source_bindings = prepared.source_port.source_bindings(
+        prepared.result.frozen_source
+    )
+    result_records = [
+        {
+            "rule_uid": rule.uid,
+            "content": rule.content,
+            "support_memory_uids": list(rule.support_memory_uids),
+            "boundary_memory_uids": list(rule.boundary_memory_uids),
+            "rationale": rule.rationale,
+        }
+        for rule in analysis.rules
+    ]
+    goal_digest = (
+        hashlib.sha256(analysis.goal.encode("utf-8")).hexdigest()
+        if analysis.goal is not None
+        else None
+    )
+    return append_semantic_memories(
+        store=store,
+        operation="distill",
+        source_name=analysis.source.context_name,
+        target=prepared.target,
+        contents=tuple(rule.content for rule in analysis.rules),
+        source_bindings=source_bindings,
+        operation_args={
+            "version": 2,
+            "analysis_uid": analysis.uid,
+            "analysis_digest": analysis.digest,
+            "provider_contract_version": analysis.provider_contract_version,
+            "origin": prepared.result.origin,
+            "semantic_config": {
+                "max_rules": analysis.semantic_config.max_rules,
+                "rule_text_limit": analysis.semantic_config.rule_text_limit,
+                "rationale_limit": analysis.semantic_config.rationale_limit,
+                "overview_limit": analysis.semantic_config.overview_limit,
+                "response_char_limit": analysis.semantic_config.response_char_limit,
+            },
+            "source_digest": analysis.source.digest,
+            "source_scope": (
+                "INCLUDE_DESCENDANTS"
+                if analysis.source.include_descendants
+                else "THIS_CONTEXT_ONLY"
+            ),
+            "goal": analysis.goal,
+            "goal_digest": goal_digest,
+            "rules": result_records,
+            "outside_memory_uids": list(analysis.outside_memory_uids),
+        },
+        description=(
+            f"Added {len(analysis.rules)} distilled Rules from "
+            f"'{analysis.source.context_name}' to "
+            f"'{prepared.target.context_name}'"
+        ),
+    )
 
 
 def execute_distill(
@@ -110,7 +280,7 @@ class MemoryStoreDistillOutputPort:
         source_port: SummarySourcePort,
     ) -> DistillApplyReceipt:
         analysis = request.result.analysis
-        validate_context_name(request.output_name)
+        validate_portable_context_name(request.output_name)
         if request.output_name == analysis.source.context_name:
             raise DistillError("Distill Result must be separate from its Source.")
         if self.store.context_exists(request.output_name):

@@ -1,0 +1,3 @@
+PTY · 180 columns × 52 rows
+$ mem elaborate --from capture/elaborate-source --to capture/elaborate-target
+MEM ELABORATE · 1/1 · GENERATING REVIEW PROPOSALS . · 0s

@@ -48,7 +48,7 @@ def elaborate_result_lines(result: ElaborateResult) -> tuple[str, ...]:
                     f"   WHY · {safe_terminal_text(case.rationale)}",
                 )
             )
-    lines.extend(("", "Nothing has been saved or accepted."))
+    lines.extend(("", "PROPOSALS · SUGGESTED · UNVERIFIED"))
     return tuple(lines)
 
 

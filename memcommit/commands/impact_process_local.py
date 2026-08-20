@@ -28,7 +28,13 @@ from memcommit.context_targeting.presets import (
 )
 from memcommit.distill import DistillError
 from memcommit.distill_application import DistillRequest, DistillResult
-from memcommit.distill_runtime import execute_distill
+from memcommit.distill_runtime import execute_distill, prepare_distill_add
+from memcommit.elaborate import ElaborateError, ElaborateMode
+from memcommit.elaborate_add_runtime import (
+    freeze_elaborate_context_source,
+    prepare_elaborate_add,
+)
+from memcommit.elaborate_application import ElaborateRequest, ElaborateResult
 from memcommit.fit_judgment import FitJudgmentError
 from memcommit.forget_application import (
     ForgetAnalysisRequest,
@@ -64,6 +70,10 @@ from memcommit.resolve_application import (
 )
 from memcommit.resolve_runtime import MemoryStoreResolvePort
 from memcommit.resolve_semantic import ProviderResolveSemanticPort
+from memcommit.semantic_add_runtime import (
+    resolve_semantic_add_endpoints,
+    resolve_semantic_add_target,
+)
 from memcommit.resolution_workbench import (
     ResolutionContextLocation,
     ResolutionDetailBlock,
@@ -227,12 +237,14 @@ def forget_cmd(
 def distill_impact_presentation(
     result: DistillResult,
     *,
-    save_as: str | None,
+    target_name: str | None = None,
+    save_as: str | None = None,
 ) -> ImpactSessionPresentation:
-    """Project one exact Distill proposal as a require-new Result preview."""
+    """Project one exact Distill proposal without publishing its Add."""
 
     analysis = result.analysis
-    result_name = save_as or "UNNAMED RESULT"
+    result_name = target_name or save_as or "UNNAMED TARGET"
+    existing_target = target_name is not None
     scope = (
         "CONTEXT + DESCENDANTS/EMBEDS"
         if analysis.source.include_descendants or analysis.source.follow_embeds
@@ -292,7 +304,11 @@ def distill_impact_presentation(
         artifact_uid=analysis.uid,
         revision=analysis.digest,
         title="MEM DISTILL · RULE PROPOSAL",
-        route=f"SOURCE {analysis.source.context_name} → NEW RESULT {result_name}",
+        route=(
+            f"SOURCE {analysis.source.context_name} → TARGET {result_name}"
+            if existing_target
+            else f"SOURCE {analysis.source.context_name} → NEW RESULT {result_name}"
+        ),
         status="PROPOSAL · READ-ONLY",
         metrics=(
             ResolutionMetric("SOURCE", str(len(analysis.source.sources))),
@@ -301,7 +317,11 @@ def distill_impact_presentation(
         ),
         context_locations=(
             ResolutionContextLocation("SOURCE", analysis.source.context_name),
-            ResolutionContextLocation("RESULT", result_name, "NOT CREATED"),
+            ResolutionContextLocation(
+                "TARGET" if existing_target else "RESULT",
+                result_name,
+                "EXISTING · UNCHANGED" if existing_target else "NOT CREATED",
+            ),
         ),
         overview=analysis.overview,
         overview_sections=sections,
@@ -315,10 +335,17 @@ def distill_impact_presentation(
         view=view,
         controller=ImpactController.from_resolution(
             view,
-            title="IMPACT · DISTILL RESULT · SOURCE UNCHANGED",
+            title=(
+                "IMPACT · DISTILL ADD · ENDPOINTS UNCHANGED"
+                if existing_target
+                else "IMPACT · DISTILL RESULT · SOURCE UNCHANGED"
+            ),
             summary=(
-                "These Rules would be added to a fresh Result Context. No Result "
-                "has been created and the Source remains unchanged."
+                "These Rules would be added to the existing Target Context. "
+                "Neither Source nor Target has been changed."
+                if existing_target
+                else "These Rules would be added to a fresh Result Context. "
+                "No Result has been created and the Source remains unchanged."
             ),
         ),
         handoff_available=False,
@@ -329,8 +356,17 @@ def distill_cmd(
     context_name: Annotated[
         Optional[str],
         typer.Argument(
+            hidden=True,
             help="Existing local Source Context (defaults to current)",
         ),
+    ] = None,
+    source_name: Annotated[
+        Optional[str],
+        typer.Option("--from", help="Existing Source Context (defaults to current)"),
+    ] = None,
+    target_name: Annotated[
+        Optional[str],
+        typer.Option("--to", help="Existing Target Context (defaults to current)"),
     ] = None,
     goal: Annotated[
         Optional[str],
@@ -352,11 +388,12 @@ def distill_cmd(
         Optional[str],
         typer.Option(
             "--save-as",
+            hidden=True,
             help="Proposed fresh Result Context name (shown but never created)",
         ),
     ] = None,
 ) -> None:
-    """Prepare and inspect a Distill Result while leaving both endpoints untouched."""
+    """Inspect the Rules Distill would add while leaving both endpoints untouched."""
 
     try:
         preset = resolve_scope_preset(
@@ -366,6 +403,13 @@ def distill_cmd(
         )
         traversal = resolve_context_traversal(preset=preset)
         store = MemoryStore(create=False)
+        snapshot = ContextOperandSnapshot.capture(store)
+        if context_name is not None and source_name is not None:
+            raise DistillError("Use either positional Context or --from, not both.")
+        if save_as is not None and (source_name is not None or target_name is not None):
+            raise DistillError(
+                "Legacy --save-as cannot be combined with --from or --to."
+            )
         if save_as is not None:
             store.assert_context_creatable(save_as)
         with CommandProgress(
@@ -373,21 +417,51 @@ def distill_cmd(
             "freezing the complete Source frame",
             total=2,
         ) as progress:
-            result = execute_distill(
-                DistillRequest(
-                    context_locator=context_name,
-                    goal=goal,
-                    include_descendants=traversal.include_descendants,
-                    follow_embeds=traversal.follow_embeds,
-                ),
-                store=store,
-                provider_factory=lambda: (
-                    progress.update("distilling Rules", step=2)
-                    or connect_semantic_provider()
-                ),
-            )
+            if save_as is not None:
+                result = execute_distill(
+                    DistillRequest(
+                        context_locator=context_name,
+                        goal=goal,
+                        include_descendants=traversal.include_descendants,
+                        follow_embeds=traversal.follow_embeds,
+                    ),
+                    store=store,
+                    provider_factory=lambda: (
+                        progress.update("distilling Rules", step=2)
+                        or connect_semantic_provider()
+                    ),
+                )
+                resolved_target = None
+            else:
+                endpoints = resolve_semantic_add_endpoints(
+                    source_locator=(
+                        source_name if source_name is not None else context_name
+                    ),
+                    target_locator=target_name,
+                    current=snapshot.current_name,
+                )
+                prepared = prepare_distill_add(
+                    DistillRequest(
+                        context_locator=endpoints.source_name,
+                        goal=goal,
+                        include_descendants=traversal.include_descendants,
+                        follow_embeds=traversal.follow_embeds,
+                    ),
+                    store=store,
+                    target_name=endpoints.target_name,
+                    provider_factory=lambda: (
+                        progress.update("distilling Rules", step=2)
+                        or connect_semantic_provider()
+                    ),
+                )
+                result = prepared.result
+                resolved_target = endpoints.target_name
         _show_process_local_impact(
-            distill_impact_presentation(result, save_as=save_as),
+            distill_impact_presentation(
+                result,
+                target_name=resolved_target,
+                save_as=save_as,
+            ),
             operation="distill",
         )
     except (
@@ -402,6 +476,205 @@ def distill_cmd(
         ValueError,
     ) as error:
         _impact_error("distill", error)
+
+
+def elaborate_impact_presentation(
+    result: ElaborateResult,
+    *,
+    source_name: str | None,
+    target_name: str,
+) -> ImpactSessionPresentation:
+    """Project the exact unverified Memories Elaborate would add."""
+
+    analysis = result.analysis
+    proposals = (
+        tuple(
+            (item.uid, "RULE", item.content, item.rationale, ())
+            for item in analysis.rules
+        )
+        if analysis.mode is ElaborateMode.GOAL_TO_RULES
+        else tuple(
+            (
+                item.uid,
+                f"CASE · {item.case_role}",
+                item.proposition,
+                item.rationale,
+                (
+                    f"SOURCE RULE · {item.source_rule_index}",
+                    f"EXPECTED · {item.expected or '(open)'}",
+                ),
+            )
+            for item in analysis.cases
+        )
+    )
+    items = tuple(
+        ResolutionItem(
+            uid=uid,
+            kind=kind,
+            status="PROPOSED · UNVERIFIED",
+            priority="CHANGE",
+            title=" ".join(content.split()),
+            summary=rationale,
+            role="CHANGE",
+            obligation="NONE",
+            response_state="NOT_APPLICABLE",
+            blocks=tuple(
+                ResolutionDetailBlock(heading="PROPOSAL DETAIL", text=line)
+                for line in detail
+            ),
+        )
+        for uid, kind, content, rationale, detail in proposals
+    )
+    results = tuple(
+        ResolutionResult(
+            uid=uid,
+            marker="+",
+            label="ADD",
+            text=content,
+            reason=rationale,
+            rules=detail,
+        )
+        for uid, _kind, content, rationale, detail in proposals
+    )
+    display_source = source_name or "INLINE INPUT"
+    direction = (
+        "GOAL → RULES"
+        if analysis.mode is ElaborateMode.GOAL_TO_RULES
+        else "RULES → CASES"
+    )
+    view = ResolutionWorkbenchView(
+        operation="elaborate",
+        artifact_uid=analysis.uid,
+        revision=analysis.digest,
+        title="MEM ELABORATE · ADD PROPOSAL",
+        route=f"SOURCE {display_source} → TARGET {target_name}",
+        status="PROPOSAL · READ-ONLY · UNVERIFIED",
+        metrics=(
+            ResolutionMetric("INPUTS", str(len(analysis.inputs))),
+            ResolutionMetric("PROPOSALS", str(len(proposals))),
+            ResolutionMetric("DIRECTION", direction),
+        ),
+        context_locations=(
+            ResolutionContextLocation("SOURCE", display_source),
+            ResolutionContextLocation("TARGET", target_name, "EXISTING · UNCHANGED"),
+        ),
+        overview=analysis.overview,
+        overview_sections=(
+            ResolutionOverviewSection("assessment", "ASSESSMENT", analysis.overview),
+        ),
+        list_label="UNVERIFIED PROPOSALS",
+        items=items,
+        empty_message="No Elaborate proposals were returned.",
+        results_label="PROPOSED ADD MEMORIES",
+        results=results,
+    )
+    return ImpactSessionPresentation(
+        view=view,
+        controller=ImpactController.from_resolution(
+            view,
+            title="IMPACT · ELABORATE ADD · ENDPOINTS UNCHANGED",
+            summary=(
+                "These unverified Memories would be added to the existing "
+                "Target. Neither Source nor Target has been changed."
+            ),
+        ),
+        handoff_available=False,
+    )
+
+
+def elaborate_cmd(
+    goal: Annotated[
+        Optional[str],
+        typer.Option("--goal", "-g", help="Inline Goal to elaborate into Rules"),
+    ] = None,
+    rule: Annotated[
+        Optional[list[str]],
+        typer.Option("--rule", help="Inline Rule to elaborate into Cases; repeatable"),
+    ] = None,
+    source_name: Annotated[
+        Optional[str],
+        typer.Option("--from", help="Existing Source Context (defaults to current)"),
+    ] = None,
+    target_name: Annotated[
+        Optional[str],
+        typer.Option("--to", help="Existing Target Context (defaults to current)"),
+    ] = None,
+    as_role: Annotated[
+        str,
+        typer.Option("--as", help="Interpret Context Source as rules or one goal"),
+    ] = "rules",
+) -> None:
+    """Inspect the Memories Elaborate would add without saving them."""
+
+    try:
+        store = MemoryStore(create=False)
+        snapshot = ContextOperandSnapshot.capture(store)
+        inline = goal is not None or bool(rule)
+        frozen_source = None
+        if inline:
+            if source_name is not None:
+                raise ElaborateError(
+                    "Inline --goal/--rule input cannot be combined with --from."
+                )
+            if as_role != "rules":
+                raise ElaborateError("--as applies only to a Context Source.")
+            request = ElaborateRequest(goal=goal, rules=tuple(rule or ()))
+            resolved_source = None
+            resolved_target = resolve_semantic_add_target(
+                target_locator=target_name,
+                current=snapshot.current_name,
+            )
+        else:
+            endpoints = resolve_semantic_add_endpoints(
+                source_locator=source_name,
+                target_locator=target_name,
+                current=snapshot.current_name,
+            )
+            if as_role not in {"goal", "rules"}:
+                raise ElaborateError("Elaborate --as must be 'goal' or 'rules'.")
+            frozen_source = freeze_elaborate_context_source(
+                store,
+                context_name=endpoints.source_name,
+                role=as_role,
+            )
+            request = frozen_source.request
+            resolved_source = endpoints.source_name
+            resolved_target = endpoints.target_name
+        with CommandProgress(
+            "IMPACT · ELABORATE",
+            "freezing source and target",
+            total=2,
+        ) as progress:
+            prepared = prepare_elaborate_add(
+                store=store,
+                request=request,
+                target_name=resolved_target,
+                source=frozen_source,
+                provider_factory=lambda: (
+                    progress.update("generating proposals", step=2)
+                    or connect_semantic_provider()
+                ),
+            )
+        _show_process_local_impact(
+            elaborate_impact_presentation(
+                prepared.result,
+                source_name=resolved_source,
+                target_name=resolved_target,
+            ),
+            operation="elaborate",
+        )
+    except (
+        ElaborateError,
+        FileNotFoundError,
+        OSError,
+        ProfileConfigError,
+        ProfileError,
+        QueryProviderError,
+        RuntimeError,
+        TypeError,
+        ValueError,
+    ) as error:
+        _impact_error("elaborate", error)
 
 
 def _resolve_change(effect) -> MemoryChange:
@@ -749,6 +1022,8 @@ def resolve_cmd(
 __all__ = [
     "distill_cmd",
     "distill_impact_presentation",
+    "elaborate_cmd",
+    "elaborate_impact_presentation",
     "forget_cmd",
     "forget_impact_presentation",
     "resolve_cmd",

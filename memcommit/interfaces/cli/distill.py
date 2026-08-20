@@ -16,7 +16,7 @@ def distill_result_lines(result: DistillResult) -> tuple[str, ...]:
     analysis = result.analysis
     lines = [
         f"DISTILL · {safe_terminal_text(analysis.source.context_name)}",
-        "STATUS · REVIEW ONLY · SOURCE UNCHANGED · "
+        "STATUS · EVIDENCE-BOUND PROPOSAL · "
         + ("RECURSIVE" if analysis.source.include_descendants else "DIRECT")
         + f" · {result.origin.replace('_', ' ')}",
         "",
@@ -44,7 +44,7 @@ def distill_result_lines(result: DistillResult) -> tuple[str, ...]:
         (
             "",
             f"OUTSIDE PROPOSED RULES · {len(analysis.outside_memory_uids)} Memories",
-            "No Result Context or checkpoint has been created.",
+            "PROPOSAL · EVIDENCE-BOUND",
         )
     )
     return tuple(lines)

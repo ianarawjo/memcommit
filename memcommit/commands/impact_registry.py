@@ -137,7 +137,12 @@ IMPACT_ROUTES = ImpactRouteRegistry(
         ImpactRoute(
             "distill",
             ImpactLifecycle.PREPARE_PROCESS_LOCAL,
-            "Preview the Rules a Distill Result would contain.",
+            "Preview the Rules Distill would add to an existing Target.",
+        ),
+        ImpactRoute(
+            "elaborate",
+            ImpactLifecycle.PREPARE_PROCESS_LOCAL,
+            "Preview the unverified Memories Elaborate would add.",
         ),
         ImpactRoute(
             "resolve",

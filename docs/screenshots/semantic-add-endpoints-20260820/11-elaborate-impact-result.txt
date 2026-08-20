@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ MEM ELABORATE · ADD PROPOSAL                                                                                                                                                    ^┃
+┃ CONTEXT LOCATIONS                                                                                                                                                                ┃
+┃   SOURCE · capture/elaborate-source                                                                                                                                              ┃
+┃   TARGET · capture/elaborate-target · EXISTING · UNCHANGED                                                                                                                       ┃
+┃ PROPOSAL · READ-ONLY · UNVERIFIED · 1 INPUTS · 2 PROPOSALS · RULES → CASES DIRECTION                                                                                             ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT MEM UNDERSTOOD                                                                                                                                                              ┃
+┃ ASSESSMENT                                                                                                                                                                       ┃
+┃ A fit and boundary make the ticker Rule concrete.                                                                                                                                ┃
+┃                                                                                                                                                                                  ┃
+┃ UNVERIFIED PROPOSALS · 2                                                                                                                                                         ┃
+┃ CASE · FIT 1 · Identifying Apple by ticker returns AAPL.                                                                                                                         ┃
+┃ [CHANGE] This is a fitting ticker Case.                                                                                                                                          ┃
+┃                                                                                                                                                                                  ┃
+┃ CASE · BOUNDARY 2 · Mentioning Apple without asking for its ticker.                                                                                                              ┃
+┃ [CHANGE] This bounds when the Rule applies.                                                                                                                                      ┃
+┃                                                                                                                                                                                  ┃
+┃ IMPACT · ELABORATE ADD · ENDPOINTS UNCHANGED                                                                                                                                     ┃
+┃ These unverified Memories would be added to the existing Target. Neither Source nor Target has been changed.                                                                     ┃
+┃ Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                      ┃
+┃       ▸ + [ADD] [051f353b] Identifying Apple by ticker returns AAPL.                                                                                                             ┃
+┃       ▸ + [ADD] [a59be7c2] Mentioning Apple without asking for its ticker.                                                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› REPORT         Complete Elaborate report                                                                                                                                       ^│
+│  CASE · FIT     Identifying Apple by ticker returns AAPL.                                                                                                                        │
+│  CASE · BOUNDARY Mentioning Apple without asking for its ticker.                                                                                                                 │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ READ ONLY ]  No action available · This saved session can only be inspected.                                                                                                    │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ READ ONLY · PROPOSAL · READ-ONLY · UNVERIFIED · ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter inspect  Esc/Backspace close H Help  y/Y copy  Q close

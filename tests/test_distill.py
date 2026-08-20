@@ -741,7 +741,7 @@ def test_mem_distill_applies_the_exact_rendered_proposal(
     )
 
     assert result.exit_code == 0, result.output
-    assert "STATUS · REVIEW ONLY · SOURCE UNCHANGED" in result.output
+    assert "STATUS · EVIDENCE-BOUND PROPOSAL" in result.output
     assert "Created Distill Result 'distill/cli-rules' with 1 Rules" in result.output
     assert store.context_exists("distill/cli-rules")
     assert len(store.load_direct(source.name).order) == 2
@@ -787,14 +787,12 @@ def test_mem_distill_save_as_without_apply_remains_read_only(
 
 def test_mem_distill_help_inventory_exposes_goal_review_and_apply_forms():
     assert COMMAND_FORMS["distill"] == (
-        "mem distill (review Rules distilled from the current Context)",
-        "mem distill [context] (review Rules from one explicit Context)",
-        'mem distill [context] --goal "[goal]" (guide Rule relevance with a Goal)',
-        "mem distill [context] -r (include descendants and embedded Contexts)",
-        "mem distill [context] --save-as [result_context] "
-        "(review without creating the Result)",
-        "mem distill [context] --save-as [result_context] --apply "
-        "(create the exact reviewed Rule Context)",
+        "mem distill (distill current and add Rules back to current)",
+        "mem distill --to [target] (distill current into an existing target)",
+        "mem distill --from [source] (distill a source into current)",
+        "mem distill --from [source] --to [target] (explicit existing endpoints)",
+        'mem distill --from [source] --goal "[goal]" (guide Rule relevance)',
+        "mem distill --from [source] -r (include descendants and embeds)",
         "mem distill --ground [name] "
         "(review Rules from its exact Goal and working-candidate frame)",
     )

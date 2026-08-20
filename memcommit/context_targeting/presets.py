@@ -27,6 +27,20 @@ class ContextTraversal:
     follow_embeds: bool
 
 
+def legacy_root_only_option_alias(role: str) -> str:
+    """Return Click's extra-negative-alias declaration for one scope role.
+
+    Click uses a leading space to attach an additional spelling to the negative
+    side of a boolean pair. Keeping that parser-specific convention here lets
+    commands present ``--<role>-root-only`` as canonical while continuing to
+    accept the historical ``--<role>-only`` input.
+    """
+
+    if not role or any(part == "" for part in role.split("-")):
+        raise ValueError("Context scope role must be a nonempty dashed name.")
+    return f" /--{role}-only"
+
+
 def resolve_scope_preset(
     *,
     direct: bool,

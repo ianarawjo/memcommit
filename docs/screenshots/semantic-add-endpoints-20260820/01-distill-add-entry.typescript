@@ -1,0 +1,3 @@
+PTY · 180 columns × 52 rows
+$ mem distill --from capture/distill-source --to capture/distill-target
+MEM DISTILL · 1/2 · FREEZING SOURCE AND TARGET . · 0sMEM DISTILL · 2/2 · DISTILLING RULES . · 0s          

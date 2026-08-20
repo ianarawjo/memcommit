@@ -157,7 +157,7 @@ _OPERATIONS = (
         "propositions in a bounded Context, optionally guided by a Goal.",
         "Case/Example Context + Goal? -> reviewed Rules",
         ExecutionKind.SEMANTIC,
-        "Source and Ground stay unchanged; standalone Apply may create a new Result",
+        "Standalone adds to one existing Target; Impact previews without changing endpoints",
         "One exact local Source, its readable descendants, or one bound Ground candidate frame",
     ),
     _operation(
@@ -166,7 +166,7 @@ _OPERATIONS = (
         "candidate propositions.",
         "Goal -> suggested Rules; Rules -> suggested Case propositions",
         ExecutionKind.SEMANTIC,
-        "Read-only; every proposal remains suggested and unverified",
+        "Standalone adds unverified proposals to one existing Target; Impact is read-only",
         "One Goal or Rule set, inline or from one exact Ground revision",
     ),
     _operation(

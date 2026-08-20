@@ -23,15 +23,26 @@ from memcommit.context_targeting.presets import (
     resolve_context_traversal,
     resolve_scope_preset,
 )
+from memcommit.context_targeting.tui.picker import (
+    ContextMemoryRow,
+    context_memory_rows,
+)
+from memcommit.context_naming import validate_portable_context_name
 from memcommit.distill import DistillError
 from memcommit.distill_application import (
     DistillApplyRequest,
     DistillRequest,
     DistillResult,
 )
-from memcommit.distill_runtime import execute_distill, execute_distill_apply
+from memcommit.distill_runtime import (
+    apply_prepared_distill_add,
+    execute_distill,
+    execute_distill_apply,
+    prepare_distill_add,
+)
 from memcommit.ground_distill import (
     FrozenGroundDistill,
+    FrozenGroundWorkspaceDistill,
     execute_ground_distill,
     freeze_ground_distill,
 )
@@ -46,7 +57,22 @@ from memcommit.interfaces.tui.operations.distill import DistillTuiSetup
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.query_provider import QueryProviderError, connect_semantic_provider
-from memcommit.store import MemoryStore, validate_context_name
+from memcommit.semantic_add_runtime import resolve_semantic_add_endpoints
+from memcommit.store import MemoryStore
+from memcommit.summarize import SummaryFrame
+
+
+def _summary_frame_memory_rows(frame: SummaryFrame) -> tuple[ContextMemoryRow, ...]:
+    """Project the exact frozen Ground evidence consumed by Distill."""
+
+    return tuple(
+        ContextMemoryRow(
+            label=f"{source.context_name} · {source.memory_uid[:8]}",
+            content=source.content,
+            selector=source.memory_uid,
+        )
+        for source in frame.sources
+    )
 
 
 def render_distill(result: DistillResult) -> str:
@@ -59,10 +85,25 @@ def cmd(
     context_name: Annotated[
         Optional[str],
         typer.Argument(
+            hidden=True,
             help=(
                 "Existing local Context to distill by canonical name or explicit "
                 "relative locator (defaults to current)"
             )
+        ),
+    ] = None,
+    source_name: Annotated[
+        Optional[str],
+        typer.Option(
+            "--from",
+            help="Existing Source Context (defaults to current)",
+        ),
+    ] = None,
+    target_name: Annotated[
+        Optional[str],
+        typer.Option(
+            "--to",
+            help="Existing Context that receives distilled Rules (defaults to current)",
         ),
     ] = None,
     goal: Annotated[
@@ -100,6 +141,7 @@ def cmd(
         Optional[str],
         typer.Option(
             "--save-as",
+            hidden=True,
             help="Fresh local Context name for the reviewed Rules",
         ),
     ] = None,
@@ -107,6 +149,7 @@ def cmd(
         bool,
         typer.Option(
             "--apply",
+            hidden=True,
             help="Create --save-as from this exact proposal without a TTY prompt",
         ),
     ] = False,
@@ -125,7 +168,7 @@ def cmd(
         ),
     ] = False,
 ) -> None:
-    """Distill reusable Rules; Source is unchanged and Apply requires a new Result."""
+    """Distill reusable Rules and add them to an existing Context."""
 
     try:
         preset = resolve_scope_preset(
@@ -137,6 +180,8 @@ def cmd(
         mode = resolve_console_mode(plain=plain, tui=tui)
         if ground is not None and (
             context_name is not None
+            or source_name is not None
+            or target_name is not None
             or goal is not None
             or direct
             or recursive
@@ -149,6 +194,12 @@ def cmd(
             )
         if apply and save_as is None:
             raise DistillError("--apply requires --save-as RESULT_CONTEXT.")
+        if context_name is not None and source_name is not None:
+            raise DistillError("Use either positional Context or --from, not both.")
+        if save_as is not None and (source_name is not None or target_name is not None):
+            raise DistillError(
+                "Legacy --save-as cannot be combined with --from or --to."
+            )
         resources: tuple[MemoryStore, ContextOperandSnapshot] | None = None
 
         def command_resources() -> tuple[MemoryStore, ContextOperandSnapshot]:
@@ -159,13 +210,62 @@ def cmd(
             return resources
 
         store, _snapshot = command_resources()
-        frozen_ground: FrozenGroundDistill | None = (
+        if ground is None and save_as is None:
+            if tui:
+                raise DistillError(
+                    "Direct Distill Add is non-interactive; use "
+                    "'mem impact distill' to inspect without saving."
+                )
+            endpoints = resolve_semantic_add_endpoints(
+                source_locator=(
+                    source_name if source_name is not None else context_name
+                ),
+                target_locator=target_name,
+                current=_snapshot.current_name,
+            )
+            request = DistillRequest(
+                context_locator=endpoints.source_name,
+                goal=goal,
+                include_descendants=traversal.include_descendants,
+                follow_embeds=traversal.follow_embeds,
+            )
+            with CommandProgress(
+                "DISTILL",
+                "freezing source and target",
+                total=2,
+            ) as progress:
+                prepared = prepare_distill_add(
+                    request,
+                    store=store,
+                    target_name=endpoints.target_name,
+                    provider_factory=lambda: (
+                        progress.update("distilling Rules", step=2)
+                        or connect_semantic_provider()
+                    ),
+                )
+            receipt = apply_prepared_distill_add(prepared, store=store)
+            typer.echo(render_distill(prepared.result))
+            typer.echo("")
+            typer.secho(
+                f"Added {receipt.count} distilled Rules to "
+                f"'{display_escape_text(receipt.target_name)}'.",
+                fg=typer.colors.GREEN,
+            )
+            typer.echo(
+                f"SOURCE · {display_escape_text(endpoints.source_name)} · "
+                f"TARGET · {display_escape_text(endpoints.target_name)}"
+            )
+            typer.echo(
+                f"CHECKPOINT · {receipt.checkpoint_uid[:8]} · RECOVERY · mem undo"
+            )
+            return
+        frozen_ground: FrozenGroundDistill | FrozenGroundWorkspaceDistill | None = (
             freeze_ground_distill(store, ground_name=ground)
             if ground is not None
             else None
         )
         if save_as is not None:
-            validate_context_name(save_as)
+            validate_portable_context_name(save_as)
             if store.context_exists(save_as):
                 raise DistillError(
                     f"Distill Result Context already exists: '{save_as}'."
@@ -210,6 +310,23 @@ def cmd(
                     raise DistillError(
                         "Ground Distill cannot change its frozen Source or reach."
                     )
+                ground_preview_frame = (
+                    frozen_ground.candidate_frame
+                    if isinstance(frozen_ground, FrozenGroundWorkspaceDistill)
+                    else frozen_ground.example_frame
+                )
+                if ground_preview_frame is not None:
+                    def memory_loader(_name: str) -> tuple[ContextMemoryRow, ...]:
+                        return _summary_frame_memory_rows(ground_preview_frame)
+
+                else:
+                    def memory_loader(
+                        context_name: str,
+                    ) -> tuple[ContextMemoryRow, ...]:
+                        return context_memory_rows(
+                            active_store.load_direct(context_name)
+                        )
+
                 return DistillTuiSetup(
                     names=(name,),
                     selected_context=name,
@@ -218,6 +335,7 @@ def cmd(
                         name if active_snapshot.current_name == name else None
                     ),
                     source_locked=True,
+                    memory_loader=memory_loader,
                 )
             selected_access = resolve_context_access(
                 active_store,
@@ -245,6 +363,9 @@ def cmd(
                 ),
                 current_context=current if current in names else None,
                 annotations=annotations,
+                memory_loader=lambda name: context_memory_rows(
+                    catalog.load_direct(name)
+                ),
             )
 
         runner = build_distill_console_runner(

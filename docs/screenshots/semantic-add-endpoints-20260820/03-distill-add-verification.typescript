@@ -1,0 +1,33 @@
+PTY · 180 columns × 52 rows
+$ mem distill --from capture/distill-source --to capture/distill-target
+MEM DISTILL · 1/2 · FREEZING SOURCE AND TARGET . · 0sMEM DISTILL · 2/2 · DISTILLING RULES . · 0s          MEM DISTILL · 2/2 · DISTILLING RULES .. · 0sMEM DISTILL · 2/2 · DISTILLING RULES … · 0s                                            DISTILL · capture/distill-source
+STATUS · EVIDENCE-BOUND PROPOSAL · DIRECT · LIVE
+
+GOAL · RELEVANCE FOCUS ONLY
+(none)
+
+WHAT MEM UNDERSTOOD
+The examples support one bounded ticker mapping Rule.
+
+PROPOSED RULES · 1
+
+1. [a9833327] Use AAPL for Apple and MSFT for Microsoft.
+   SUPPORT · 0a55ce78, c5791de3
+   BOUNDARY · none
+   WHY · Both mappings are directly supported.
+
+OUTSIDE PROPOSED RULES · 0 Memories
+PROPOSAL · EVIDENCE-BOUND
+
+[32mAdded 1 distilled Rules to 'capture/distill-target'.[0m
+SOURCE · capture/distill-source · TARGET · capture/distill-target
+CHECKPOINT · db756953 · RECOVERY · mem undo
+CAPTURE GATE · PRESS V FOR RESULT VERIFICATION
+v
+
+DURABLE RESULT VERIFICATION
+  SOURCE · capture/distill-source
+  TARGET · capture/distill-target
+  TARGET MEMORIES · 1
+  CHECKPOINT COMMAND · distill
+  DISTINCT SOURCE UNCHANGED · True
