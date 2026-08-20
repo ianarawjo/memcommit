@@ -1,13 +1,20 @@
-"""Interactive and semantic extensions to ``mem log``."""
+"""Stable printed and semantic output contracts for ``mem log``."""
 
 from __future__ import annotations
 
+import inspect
 import json
 
+import click
 from typer.testing import CliRunner
 
 from memcommit.cli import app
+from memcommit.commands import log as log_command
 from memcommit.context import Memory
+from memcommit.interfaces.console.theme import (
+    SemanticColorRole,
+    semantic_color_rgb,
+)
 from memcommit.store import MemoryStore
 
 
@@ -47,93 +54,88 @@ class CheckpointPlanProvider:
         )
 
 
-def test_tty_log_opens_shared_picker(isolated_store, monkeypatch):
+def test_log_is_terminal_independent_and_prints_only_the_current_context(
+    isolated_store,
+):
+    invoke("init", "other")
+    invoke("add", "other memory")
+    invoke("checkpoint", "other checkpoint")
     invoke("init", "notes")
-    invoke("add", "one")
-    observed = {}
-
-    monkeypatch.setattr(
-        "memcommit.commands.log._interactive_terminal",
-        lambda: True,
-    )
-
-    def choose_location(names, **kwargs):
-        observed["locations"] = names
-        observed["location_title"] = kwargs["title"]
-        observed["annotations"] = kwargs["annotations"]
-        observed["operation_rows"] = kwargs["operation_loader"]("notes")
-        return "notes"
-
-    monkeypatch.setattr(
-        "memcommit.commands.diff_browser.choose_history_location",
-        choose_location,
-    )
-
-    def choose(
-        entries,
-        *,
-        context_name,
-        mode,
-        initial_details_open,
-        empty_message,
-        **_kwargs,
-    ):
-        observed["entries"] = entries
-        observed["context_name"] = context_name
-        observed["mode"] = mode
-        observed["initial_details_open"] = initial_details_open
-        observed["empty_message"] = empty_message
-        return None
-
-    monkeypatch.setattr("memcommit.commands.diff_browser.choose_history", choose)
+    invoke("add", "note memory")
+    invoke("checkpoint", "notes checkpoint")
 
     result = invoke("log")
-
-    assert result.exit_code == 0
-    assert observed["context_name"] == "notes"
-    assert observed["locations"] == ("notes",)
-    assert observed["location_title"] == "LOG · SELECT A CONTEXT"
-    assert observed["annotations"]["notes"] == (
-        "1 direct · 0 inherited · 0 descendant commands"
-    )
-    assert [row.label for row in observed["operation_rows"]] == ["add", "created"]
-    assert observed["operation_rows"][0].style == "report-neutral"
-    assert not observed["operation_rows"][1].content.startswith("[atomize]")
-    assert observed["mode"] == "log"
-    assert observed["initial_details_open"] is True
-    assert observed["empty_message"] == "No checkpoints for this Context yet."
-    assert len(observed["entries"]) == 2
-    assert "Snapshot:" in observed["entries"][0].detail
-
-
-def test_plain_log_bypasses_picker_even_in_a_tty(
-    isolated_store,
-    monkeypatch,
-):
-    invoke("init", "notes")
-    monkeypatch.setattr(
-        "memcommit.commands.log._interactive_terminal",
-        lambda: True,
-    )
-    monkeypatch.setattr(
-        "memcommit.commands.log.choose_history",
-        lambda *args, **kwargs: (_ for _ in ()).throw(
-            AssertionError("plain log must not open the picker")
-        ),
-    )
-
-    result = invoke("log", "--plain")
+    explicit = invoke("log", "--context", "other")
 
     assert result.exit_code == 0
     assert "Log for 'notes'" in result.output
+    assert "notes checkpoint" in result.output
+    assert "other checkpoint" not in result.output
+    assert explicit.exit_code == 0
+    assert "Log for 'other'" in explicit.output
+    assert "other checkpoint" in explicit.output
+    assert "notes checkpoint" not in explicit.output
+    source = inspect.getsource(log_command)
+    assert "_interactive_terminal" not in source
+    assert "browse_checkpoint_locations" not in source
+    assert "choose_history" not in source
+    assert "history_display_row_segments" in source
 
 
-def test_log_memory_plain_is_the_canonical_trace_projection(isolated_store):
+def test_plain_remains_a_compatible_alias_for_the_static_report(isolated_store):
+    invoke("init", "notes")
+    invoke("add", "one")
+
+    default = invoke("log")
+    plain = invoke("log", "--plain")
+
+    assert default.exit_code == 0
+    assert plain.exit_code == 0
+    assert default.output == plain.output
+
+
+def test_log_colors_only_known_action_columns_in_a_color_terminal(isolated_store):
+    invoke("init", "notes")
+    added = invoke("add", "one")
+    memory_uid = added.output.split("[", 1)[1].split("]", 1)[0]
+    invoke("edit", memory_uid, "edited")
+    invoke("remove", memory_uid)
+    invoke("undo")
+    invoke("redo")
+    invoke("checkpoint", "reviewed baseline")
+
+    colored = runner.invoke(app, ["log"], color=True)
+
+    assert colored.exit_code == 0, colored.output
+    expected = {
+        "init": SemanticColorRole.CREATE,
+        "add": SemanticColorRole.ADD,
+        "edit": SemanticColorRole.EDIT,
+        "remove": SemanticColorRole.REMOVE,
+        "undo": SemanticColorRole.UNDO,
+        "redo": SemanticColorRole.REDO,
+        "checkpoint": SemanticColorRole.HISTORY,
+    }
+    for label, role in expected.items():
+        assert click.style(
+            f"[{label}]",
+            fg=semantic_color_rgb(role),
+            bold=True,
+        ) in colored.output
+
+    plain_output = click.unstyle(colored.output)
+    assert "reviewed baseline" in plain_output
+    assert "[CHECKPOINT " in plain_output
+    assert "[RECEIPT " in plain_output
+    assert "[SOURCE remove " in plain_output
+
+
+def test_log_memory_always_prints_the_canonical_trace_projection(isolated_store):
     invoke("init", "notes")
     invoke("add", "one")
     memory_uid = _memory_uid("notes")
 
-    through_log = invoke("log", "--memory", memory_uid, "--plain")
+    through_log = invoke("log", "--memory", memory_uid)
     through_trace = invoke("trace", memory_uid, "--plain")
 
     assert through_log.exit_code == 0, through_log.output
@@ -141,30 +143,7 @@ def test_log_memory_plain_is_the_canonical_trace_projection(isolated_store):
     assert through_log.output == through_trace.output
 
 
-def test_log_memory_uses_the_shared_trace_history_explorer(
-    isolated_store,
-    monkeypatch,
-):
-    invoke("init", "notes")
-    invoke("add", "one")
-    memory_uid = _memory_uid("notes")
-    observed: dict[str, str] = {}
-    monkeypatch.setattr("memcommit.commands.log._interactive_terminal", lambda: True)
-    monkeypatch.setattr(
-        "memcommit.commands.log.open_trace_history",
-        lambda report, *, context_name: observed.update(
-            context_name=context_name,
-            memory_uid=report.selected_uid,
-        ),
-    )
-
-    result = invoke("log", "--memory", memory_uid)
-
-    assert result.exit_code == 0, result.output
-    assert observed == {"context_name": "notes", "memory_uid": memory_uid}
-
-
-def test_semantic_log_prints_locally_resolved_checkpoint_outside_tty(
+def test_semantic_log_prints_locally_resolved_checkpoint(
     isolated_store,
     monkeypatch,
 ):
@@ -203,44 +182,35 @@ def test_manual_filter_applies_before_latest_semantic_reduction(
     assert "add" not in result.output
 
 
-def test_manual_picker_detail_uses_the_actual_preceding_checkpoint(
-    isolated_store,
-    monkeypatch,
-):
+def test_manual_log_prints_only_manual_checkpoints(isolated_store):
     invoke("init", "notes")
     invoke("add", "one")
     invoke("checkpoint", "manual one")
     invoke("add", "two")
     invoke("checkpoint", "manual two")
-    observed = {}
-    monkeypatch.setattr(
-        "memcommit.commands.log._interactive_terminal",
-        lambda: True,
-    )
-
-    monkeypatch.setattr(
-        "memcommit.commands.diff_browser.choose_history_location",
-        lambda *args, **kwargs: "notes",
-    )
-
-    def choose(
-        entries,
-        *,
-        context_name,
-        mode,
-        initial_details_open,
-        empty_message,
-        **_kwargs,
-    ):
-        observed["entries"] = entries
-        return None
-
-    monkeypatch.setattr("memcommit.commands.diff_browser.choose_history", choose)
-
     result = invoke("log", "--manual")
 
     assert result.exit_code == 0
-    assert len(observed["entries"]) == 2
-    assert "Transition: +0 added · ~0 edited · -0 removed" in (
-        observed["entries"][0].detail
-    )
+    assert "manual one" in result.output
+    assert "manual two" in result.output
+    assert "add" not in result.output
+
+
+def test_log_labels_uid_namespaces_and_separates_inherited_branch_history(
+    isolated_store,
+):
+    invoke("init", "practice/1")
+    added = invoke("add", "inherited memory")
+    memory_uid = added.output.split("[", 1)[1].split("]", 1)[0]
+    invoke("branch", "practice/2")
+    invoke("remove", memory_uid)
+
+    result = invoke("log")
+
+    assert result.exit_code == 0, result.output
+    assert "DIRECT COMMANDS · practice/2" in result.output
+    assert "INHERITED HISTORY · source practice/1" in result.output
+    assert "[CHECKPOINT " in result.output
+    assert f"[MEMORY {memory_uid[:8]}]" in result.output
+    assert "[init]" in result.output
+    assert "not counted as a command" in result.output

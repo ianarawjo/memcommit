@@ -1,24 +1,42 @@
-"""Project one Memory lineage into the common temporal-history workbench."""
+"""Project one Memory lineage as a bounded vertical diff document."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Iterable
 
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
+from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 
-from memcommit.commands.history_picker import HistoryPickerEntry, choose_history
+from memcommit.history_display import (
+    HistoryDisplayBadge,
+    HistoryDisplayRow,
+    HistoryRowSegment,
+    history_display_row_segments,
+)
 from memcommit.interfaces.console.text import (
     display_escape_text,
+)
+from memcommit.interfaces.tui.components.plain_text_clipboard import (
+    plain_text_from_fragments,
 )
 from memcommit.interfaces.tui.core.text_layout import (
     elide_terminal_text,
 )
+from memcommit.interfaces.tui.core.theme import (
+    semantic_action_style,
+)
+from memcommit.interfaces.tui.viewers.read_only import run_read_only_viewer
 from memcommit.provenance import MemoryState, TraceEvent, TraceReport
 
 
 _COMPACT_CONTENT_LIMIT = 44
 _COMPACT_STATES_LIMIT = 2
+DEFAULT_TRACE_OPERATION_LIMIT = 20
+MAX_TRACE_OPERATION_LIMIT = 200
+_TRACE_VIEWER_MIN_HEIGHT = 10
+_TRACE_VIEWER_MAX_HEIGHT = 28
 
 
 @dataclass(frozen=True)
@@ -33,17 +51,6 @@ class TraceOperationRow:
 
 def short_uid(uid: str, verbose: bool) -> str:
     return uid if verbose else uid[:8]
-
-
-def short_operation_uid(uid: str, verbose: bool) -> str:
-    """Keep compound command-unit identifiers useful in compact output."""
-
-    if verbose:
-        return uid
-    parts = uid.split(":")
-    if len(parts) >= 2 and parts[0] in {"checkpoint", "revert", "update"}:
-        return parts[1][:8]
-    return uid[:8]
 
 
 def _operation_key(event: TraceEvent, index: int) -> tuple[str, str]:
@@ -146,20 +153,17 @@ def trace_row_effect(row: TraceOperationRow) -> str:
     return "+".join(kinds)
 
 
-def trace_row_command(row: TraceOperationRow) -> str:
-    operations = [
-        event.command_operation
+def trace_row_action(row: TraceOperationRow) -> str:
+    """Return the action token used by the shared compact History row."""
+
+    operations = _unique_text(
+        event.command_operation.command
         for event in row.events
         if event.command_operation is not None
-    ]
+    )
     if operations:
-        operation = operations[0]
-        label = f"mem {display_escape_text(operation.command)}"
-        if operation.source_command is not None:
-            label += f" ← mem {display_escape_text(operation.source_command)}"
-        return label
-    commands = tuple(dict.fromkeys(event.command for event in row.events))
-    return "/".join(f"mem {display_escape_text(command)}" for command in commands)
+        return "/".join(operations)
+    return "/".join(_unique_text(event.command for event in row.events))
 
 
 def trace_row_timestamp(row: TraceOperationRow) -> str:
@@ -177,160 +181,653 @@ def trace_row_evidence(row: TraceOperationRow) -> str:
     return "/".join(dict.fromkeys(event.evidence for event in row.events))
 
 
+def _trace_row_summary(row: TraceOperationRow) -> str:
+    action = trace_row_action(row)
+    operation = next(
+        (
+            event.command_operation
+            for event in row.events
+            if event.command_operation is not None
+        ),
+        None,
+    )
+    if action in {"undo", "redo"} and operation is not None:
+        if operation.source_command:
+            effect = "restored" if action == "undo" else "reapplied"
+            return f"{effect} mem {operation.source_command}"
+    if action == "add" and row.after:
+        content = row.after[0].content
+        compact = (
+            elide_terminal_text(content, _COMPACT_CONTENT_LIMIT)
+            if content
+            else "(empty)"
+        )
+        return f'created "{compact}"'
+    if action == "edit":
+        return ""
+    if action == "remove" and row.before:
+        content = row.before[0].content
+        compact = (
+            elide_terminal_text(content, _COMPACT_CONTENT_LIMIT)
+            if content
+            else "(empty)"
+        )
+        return f'removed "{compact}"'
+    descriptions = _unique_text(event.description for event in row.events)
+    if descriptions:
+        return " / ".join(" ".join(description.split()) for description in descriptions)
+    return trace_row_effect(row).lower().replace("_", " ")
+
+
+def _short_identity(value: str) -> str:
+    parts = value.split(":")
+    return (parts[1] if len(parts) > 1 and parts[1] else parts[0])[:8]
+
+
+def trace_history_display_row(row: TraceOperationRow) -> HistoryDisplayRow:
+    """Adapt one lineage operation to the exact typed row used by Log."""
+
+    checkpoint_uids = _unique_text(event.checkpoint_uid for event in row.events)
+    checkpoint_uid = checkpoint_uids[0] if checkpoint_uids else row.identity
+    badges: list[HistoryDisplayBadge] = []
+    if len(checkpoint_uids) == 1:
+        badges.append(HistoryDisplayBadge(f"CHECKPOINT {checkpoint_uid[:8]}"))
+    elif checkpoint_uids:
+        badges.append(HistoryDisplayBadge(f"CHECKPOINTS {len(checkpoint_uids)}"))
+
+    operation = next(
+        (
+            event.command_operation
+            for event in row.events
+            if event.command_operation is not None
+        ),
+        None,
+    )
+    if operation is not None and operation.source_uid is not None:
+        badges.extend(
+            (
+                HistoryDisplayBadge(
+                    f"RECEIPT {_short_identity(operation.uid)}",
+                    "history-receipt",
+                ),
+                HistoryDisplayBadge(
+                    "SOURCE "
+                    f"{operation.source_command or 'command'} "
+                    f"{_short_identity(operation.source_uid)}",
+                    "history-source",
+                ),
+            )
+        )
+    elif row.identity not in checkpoint_uids:
+        badges.append(
+            HistoryDisplayBadge(
+                f"COMMAND {_short_identity(row.identity)}",
+                "history-source",
+            )
+        )
+
+    memory_uids = _unique_text(
+        state.uid for state in (*row.before, *row.after)
+    )
+    if len(memory_uids) == 1:
+        badges.append(
+            HistoryDisplayBadge(f"MEMORY {memory_uids[0][:8]}", "memory-object")
+        )
+    elif memory_uids:
+        badges.append(
+            HistoryDisplayBadge(f"MEMORIES {len(memory_uids)}", "memory-object")
+        )
+
+    return HistoryDisplayRow(
+        command=trace_row_action(row),
+        timestamp=trace_row_timestamp(row)[:16].replace("T", " "),
+        checkpoint_uid=checkpoint_uid,
+        command_identity=row.identity,
+        summary=_trace_row_summary(row),
+        badges=tuple(badges),
+        details=(),
+    )
+
+
 def format_trace_operation(
     row: TraceOperationRow,
     *,
     verbose: bool,
 ) -> str:
-    timestamp = display_escape_text(
-        trace_row_timestamp(row)[:16].replace("T", " ")
+    history_row = trace_history_display_row(row)
+    header = "".join(
+        display_escape_text(segment.text)
+        for segment in history_display_row_segments(history_row)
     )
+    # The shared Log summary is the compact semantic label; repeating the
+    # typed effect and evidence here would make one operation read three times.
+    if not verbose and trace_row_action(row) in {"add", "remove"}:
+        return header
     return (
-        f"{timestamp} · {trace_row_command(row)} · {trace_row_effect(row)} · "
-        f"{format_trace_states(row.before, verbose=verbose)} → "
-        f"{format_trace_states(row.after, verbose=verbose)} · "
-        f"{trace_row_evidence(row)}"
+        f"{header} · {format_trace_states(row.before, verbose=verbose)} → "
+        f"{format_trace_states(row.after, verbose=verbose)}"
     )
 
 
-def format_compact_trace_report(report: TraceReport) -> str:
-    """Return the stable plain projection shared by Log and Trace."""
+def _extend_effect_fragments(
+    fragments: StyleAndTextTuples,
+    effect: str,
+) -> None:
+    """Color typed child effects without assigning one hue to a mixed row."""
 
-    lines = [
-        f"Trace [{display_escape_text(short_uid(report.selected_uid, False))}] · "
-        f"{display_escape_text(report.context_name)}",
-        (
-            "RANGE · earliest retained evidence → current Context · "
-            "LATEST FIRST (↓ older); each row is BEFORE → AFTER"
-        ),
-        "NOW · "
-        + (
-            format_trace_states(report.current, verbose=False)
-            if report.current
-            else "∅ (lineage absent from current Context)"
-        ),
-        "OPERATIONS · latest first",
-    ]
-    rows = trace_operation_rows(report)
-    if not rows:
-        lines.append("(no retained operations for this lineage)")
-    else:
-        lines.extend(format_trace_operation(row, verbose=False) for row in rows)
-    lines.append(
-        "ORIGIN · "
-        + (
-            format_trace_states(report.originals, verbose=False)
-            if report.originals
-            else "? (earliest origin is not retained)"
+    for index, token in enumerate(effect.split("+")):
+        if index:
+            fragments.append(("class:report-neutral", "+"))
+        fragments.append(
+            (
+                semantic_action_style(token, fallback="class:report-label"),
+                display_escape_text(token),
+            )
         )
-    )
-    if report.analyses:
-        label = "analysis" if len(report.analyses) == 1 else "analyses"
-        lines.append(
-            f"ATTACHMENTS · {len(report.analyses)} saved {label} "
-            "(use --verbose for details)"
+
+
+def _state_uid(state: MemoryState, *, verbose: bool) -> str:
+    return display_escape_text(short_uid(state.uid, verbose))
+
+
+def _after_marker_action(row: TraceOperationRow) -> str:
+    before_uids = {state.uid for state in row.before}
+    after_uids = {state.uid for state in row.after}
+    if before_uids and before_uids == after_uids:
+        return "edit"
+    if trace_row_effect(row).startswith("RESTORED/"):
+        return "restored"
+    return "add"
+
+
+def _extend_diff_states(
+    fragments: StyleAndTextTuples,
+    row: TraceOperationRow,
+    *,
+    verbose: bool,
+) -> None:
+    """Render one lineage edge inline instead of opening a second Viewer."""
+
+    before = row.before or (None,)
+    after = row.after or (None,)
+    for marker, action, states in (
+        ("−", "remove", before),
+        ("+", _after_marker_action(row), after),
+    ):
+        marker_style = semantic_action_style(action, fallback="class:report-label")
+        for state in states:
+            fragments.append((marker_style, f"  {marker} "))
+            if state is None:
+                fragments.append(("class:report-neutral", "∅\n"))
+                continue
+            fragments.extend(
+                (
+                    (
+                        "class:memory-object",
+                        f"[{_state_uid(state, verbose=verbose)}]"
+                        f"@{state.position + 1} ",
+                    ),
+                    (
+                        "class:memory-object",
+                        display_escape_text(state.content) + "\n",
+                    ),
+                )
+            )
+
+
+def _unique_text(values: Iterable[str | None]) -> tuple[str, ...]:
+    return tuple(dict.fromkeys(value for value in values if value))
+
+
+def _extend_verbose_event_evidence(
+    fragments: StyleAndTextTuples,
+    row: TraceOperationRow,
+) -> None:
+    checkpoints = _unique_text(event.checkpoint_uid for event in row.events)
+    for checkpoint in checkpoints:
+        fragments.extend(
+            (
+                ("class:report-label", "  Checkpoint: "),
+                ("class:history-receipt", display_escape_text(checkpoint) + "\n"),
+            )
         )
-    else:
-        lines.append("ATTACHMENTS · none")
-    lines.extend(
-        "LIMIT · " + compact_text(warning, 120)
-        for warning in report.warnings
-    )
-    return "\n".join(lines)
-
-
-def _full_states(label: str, states: tuple[MemoryState, ...]) -> tuple[str, ...]:
-    if not states:
-        return (f"{label}: ∅",)
-    return (
-        f"{label}:",
-        *(
-            "  "
-            + f"[{display_escape_text(state.uid)}]@{state.position + 1} "
-            + display_escape_text(state.content)
-            for state in states
-        ),
-    )
-
-
-def _lineage_summary(report: TraceReport) -> tuple[str, ...]:
-    return (
-        f"Selected Memory: {display_escape_text(report.selected_uid)}",
-        "Lineage UIDs: "
-        + ", ".join(display_escape_text(uid) for uid in report.component_uids),
-        *_full_states("NOW", report.current),
-        *_full_states("EARLIEST RETAINED", report.originals),
-    )
-
-
-def _row_detail(report: TraceReport, row: TraceOperationRow) -> str:
-    reasons = tuple(
+    operations = tuple(
         dict.fromkeys(
-            display_escape_text(event.reason)
+            event.command_operation
             for event in row.events
-            if event.reason
+            if event.command_operation is not None
         )
     )
-    descriptions = tuple(
-        dict.fromkeys(
-            display_escape_text(event.description)
-            for event in row.events
-            if event.description
+    if not operations and row.identity not in checkpoints:
+        fragments.extend(
+            (
+                ("class:report-label", "  Command unit: "),
+                (
+                    "class:history-source",
+                    display_escape_text(row.identity) + "\n",
+                ),
+            )
         )
-    )
-    return "\n".join(
+    for operation in operations:
+        fragments.extend(
+            (
+                ("class:report-label", "  Operation: "),
+                (
+                    semantic_action_style(
+                        operation.command,
+                        fallback="class:report-neutral",
+                    ),
+                    display_escape_text(operation.command),
+                ),
+                (
+                    "class:history-receipt",
+                    f" [{display_escape_text(operation.uid)}]\n",
+                ),
+            )
+        )
+        if operation.source_command is not None and operation.source_uid is not None:
+            fragments.extend(
+                (
+                    ("class:report-label", "  Source operation: "),
+                    (
+                        semantic_action_style(
+                            operation.source_command,
+                            fallback="class:report-neutral",
+                        ),
+                        f"mem {display_escape_text(operation.source_command)}",
+                    ),
+                    (
+                        "class:history-receipt",
+                        f" [{display_escape_text(operation.source_uid)}]\n",
+                    ),
+                )
+            )
+        if len(operation.contexts) > 1:
+            fragments.extend(
+                (
+                    ("class:report-label", "  Affected Contexts: "),
+                    (
+                        "class:report-neutral",
+                        f"{len(operation.contexts)}\n",
+                    ),
+                )
+            )
+        for context in operation.contexts:
+            prefix = (
+                "  Affected Context: "
+                if len(operation.contexts) == 1
+                else "    − "
+            )
+            fragments.extend(
+                (
+                    ("class:report-label", prefix),
+                    (
+                        "class:report-neutral",
+                        f"{display_escape_text(context.name)} "
+                        f"[{display_escape_text(context.uid)}]\n",
+                    ),
+                )
+            )
+    for description in _unique_text(event.description for event in row.events):
+        fragments.extend(
+            (
+                ("class:report-label", "  Description: "),
+                ("class:report-neutral", display_escape_text(description) + "\n"),
+            )
+        )
+    for event in row.events:
+        occurrence = event.source_occurrence
+        if occurrence is not None:
+            detail = f"{occurrence.mode} item {occurrence.ordinal}/{occurrence.total}"
+            if occurrence.line_number is not None:
+                detail += f", source line {occurrence.line_number}"
+            qualifier = (
+                "exact raw line retained"
+                if occurrence.exact_raw_source
+                else "normalized line/order reconstructed"
+            )
+            fragments.extend(
+                (
+                    ("class:report-label", "  Source occurrence: "),
+                    ("class:report-neutral", f"{detail} ({qualifier})\n"),
+                )
+            )
+        if event.reason_codes:
+            fragments.extend(
+                (
+                    ("class:report-label", "  Rules: "),
+                    (
+                        "class:report-neutral",
+                        ", ".join(display_escape_text(code) for code in event.reason_codes)
+                        + "\n",
+                    ),
+                )
+            )
+        if event.declared_frame is not None:
+            review_uid = event.source_review_uid or "unrecorded"
+            fragments.extend(
+                (
+                    (
+                        "class:report-label",
+                        "  Reviewed declared context/comment "
+                        f"(review {display_escape_text(review_uid)}):\n",
+                    ),
+                    (
+                        "class:report-neutral",
+                        "    " + display_escape_text(event.declared_frame) + "\n",
+                    ),
+                )
+            )
+            if event.uncertainty_reason:
+                fragments.extend(
+                    (
+                        ("class:report-label", "  Requested because: "),
+                        (
+                            "class:report-neutral",
+                            display_escape_text(event.uncertainty_reason) + "\n",
+                        ),
+                    )
+                )
+        for evidence in event.child_evidence:
+            fragments.extend(
+                (
+                    (
+                        "class:report-label",
+                        "  Applied citations for "
+                        f"[{display_escape_text(evidence.result_uid)}]:\n",
+                    ),
+                    (
+                        "class:report-neutral",
+                        "    Source spans: "
+                        + " | ".join(
+                            display_escape_text(span) for span in evidence.source_spans
+                        )
+                        + "\n",
+                    ),
+                )
+            )
+            if evidence.frame_spans:
+                fragments.append(
+                    (
+                        "class:report-neutral",
+                        "    Declared-frame spans: "
+                        + " | ".join(
+                            display_escape_text(span) for span in evidence.frame_spans
+                        )
+                        + "\n",
+                    )
+                )
+
+
+def _history_segment_style(segment: HistoryRowSegment) -> str:
+    if segment.style == "semantic-action":
+        return semantic_action_style(
+            segment.action or segment.text,
+            fallback="class:report-label",
+        )
+    return f"class:{segment.style}"
+
+
+def _extend_operation(
+    fragments: StyleAndTextTuples,
+    row: TraceOperationRow,
+    *,
+    verbose: bool,
+) -> None:
+    fragments.extend(
         (
-            *_lineage_summary(report),
-            "",
-            f"Operation: {trace_row_command(row)}",
-            f"Effect: {trace_row_effect(row)}",
-            f"Evidence: {trace_row_evidence(row)}",
-            *_full_states("BEFORE", row.before),
-            *_full_states("AFTER", row.after),
-            *(f"Description: {value}" for value in descriptions),
-            *(f"Recorded reason: {value}" for value in reasons),
-            *(
-                ("", "LIMITS", *(f"  - {display_escape_text(value)}" for value in report.warnings))
-                if report.warnings
-                else ()
-            ),
+            _history_segment_style(segment),
+            display_escape_text(segment.text),
         )
+        for segment in history_display_row_segments(trace_history_display_row(row))
     )
+    fragments.append(("class:report-neutral", "\n"))
+    # Direct Add/Remove rows already name their one content-bearing endpoint.
+    # Edits and structural/restoration commands need the diff to communicate
+    # their meaning; verbose inspection deliberately expands every operation.
+    if verbose or trace_row_action(row) not in {"add", "remove"}:
+        _extend_diff_states(fragments, row, verbose=verbose)
+    for reason in _unique_text(event.reason for event in row.events):
+        fragments.extend(
+            (
+                ("class:report-label", "  Reason · "),
+                ("class:report-neutral", display_escape_text(reason) + "\n"),
+            )
+        )
+    if verbose:
+        fragments.append(("class:report-label", "  Lineage: "))
+        _extend_effect_fragments(fragments, trace_row_effect(row))
+        fragments.extend(
+            (
+                ("class:report-neutral", " · "),
+                ("class:report-label", trace_row_evidence(row)),
+                ("class:report-neutral", "\n"),
+            )
+        )
+        _extend_verbose_event_evidence(fragments, row)
+    fragments.append(("class:report-neutral", "\n"))
 
 
-def trace_history_entries(
+def _extend_analyses(
+    fragments: StyleAndTextTuples,
+    report: TraceReport,
+    *,
+    verbose: bool,
+) -> None:
+    if not report.analyses:
+        fragments.extend(
+            (
+                ("class:report-label", "ATTACHMENTS\n"),
+                ("class:report-neutral", "  none\n"),
+            )
+        )
+        return
+    label = "analysis" if len(report.analyses) == 1 else "analyses"
+    fragments.append(("class:report-label", "ATTACHMENTS\n"))
+    if not verbose:
+        fragments.append(
+            (
+                "class:report-neutral",
+                f"  {len(report.analyses)} saved {label} · use --verbose for details\n",
+            )
+        )
+        return
+    for analysis in report.analyses:
+        fragments.extend(
+            (
+                (
+                    "class:report-label",
+                    f"  {display_escape_text(analysis.kind)}  "
+                    f"{display_escape_text(analysis.status)}  ",
+                ),
+                (
+                    "class:report-neutral",
+                    f"{display_escape_text(analysis.classification)} / "
+                    f"{display_escape_text(analysis.action)}\n",
+                ),
+                (
+                    "class:history-receipt",
+                    f"  Analysis: {display_escape_text(analysis.analysis_uid)}"
+                    f" · Source: {display_escape_text(analysis.memory_uid)}\n",
+                ),
+                ("class:report-label", "  Reason: "),
+                ("class:report-neutral", display_escape_text(analysis.reason) + "\n"),
+            )
+        )
+        if analysis.reason_codes:
+            fragments.append(
+                (
+                    "class:report-neutral",
+                    "  Rules: "
+                    + ", ".join(
+                        display_escape_text(code) for code in analysis.reason_codes
+                    )
+                    + "\n",
+                )
+            )
+        if analysis.declared_frame is not None:
+            review_uid = analysis.source_review_uid or "unrecorded"
+            fragments.extend(
+                (
+                    (
+                        "class:report-label",
+                        "  Reviewed declared context/comment "
+                        f"(review {display_escape_text(review_uid)}):\n",
+                    ),
+                    (
+                        "class:report-neutral",
+                        "    " + display_escape_text(analysis.declared_frame) + "\n",
+                    ),
+                )
+            )
+            if analysis.declared_frame_reason:
+                fragments.extend(
+                    (
+                        ("class:report-label", "  Requested because: "),
+                        (
+                            "class:report-neutral",
+                            display_escape_text(analysis.declared_frame_reason) + "\n",
+                        ),
+                    )
+                )
+        for index, child in enumerate(analysis.children, 1):
+            fragments.extend(
+                (
+                    ("class:report-label", f"  Proposed child {index}: "),
+                    ("class:memory-object", display_escape_text(child.content) + "\n"),
+                    (
+                        "class:report-neutral",
+                        "    Source spans: "
+                        + " | ".join(
+                            display_escape_text(span) for span in child.source_spans
+                        )
+                        + "\n",
+                    ),
+                )
+            )
+            if child.frame_spans:
+                fragments.append(
+                    (
+                        "class:report-neutral",
+                        "    Declared-frame spans: "
+                        + " | ".join(
+                            display_escape_text(span) for span in child.frame_spans
+                        )
+                        + "\n",
+                    )
+                )
+
+
+def trace_document_fragments(
     report: TraceReport,
     *,
     verbose: bool = False,
-) -> tuple[HistoryPickerEntry, ...]:
-    """Adapt lineage operations to the common log/diff history picker."""
+    limit: int | None = DEFAULT_TRACE_OPERATION_LIMIT,
+) -> StyleAndTextTuples:
+    """Project one Memory lineage as a bounded, continuous vertical document."""
 
-    return tuple(
-        HistoryPickerEntry(
-            uid=row.identity,
-            timestamp=trace_row_timestamp(row),
-            command=trace_row_command(row),
-            description=(
-                f"{trace_row_effect(row)} · {trace_row_evidence(row)} · "
-                f"{format_trace_states(row.before, verbose=verbose)} → "
-                f"{format_trace_states(row.after, verbose=verbose)}"
-            ),
-            detail=_row_detail(report, row),
+    if limit is not None and not 1 <= limit <= MAX_TRACE_OPERATION_LIMIT:
+        raise ValueError(
+            f"Trace operation limit must be between 1 and {MAX_TRACE_OPERATION_LIMIT}."
         )
-        for row in trace_operation_rows(report)
+    rows = trace_operation_rows(report)
+    shown = rows if limit is None else rows[:limit]
+    hidden = len(rows) - len(shown)
+    selected_uid = display_escape_text(short_uid(report.selected_uid, verbose))
+    context_uid = (
+        f" [{display_escape_text(report.context_uid)}]" if verbose else ""
+    )
+    fragments: StyleAndTextTuples = [
+        ("class:report-label", "TRACE"),
+        (
+            "class:report-neutral",
+            f" · {display_escape_text(report.context_name)}{context_uid}\n",
+        ),
+        ("class:memory-object", f"[MEMORY {selected_uid}]"),
+        (
+            "class:report-neutral",
+            f" · {len(rows)} OPERATION{'S' if len(rows) != 1 else ''}"
+            " · LATEST FIRST",
+        ),
+    ]
+    if hidden:
+        fragments.append(
+            ("class:report-neutral", f" · SHOWING {len(shown)} OF {len(rows)}")
+        )
+    fragments.extend(
+        (
+            ("class:report-neutral", "\n\n"),
+        )
+    )
+    if shown:
+        for row in shown:
+            _extend_operation(fragments, row, verbose=verbose)
+    else:
+        fragments.append(
+            ("class:report-neutral", "No retained operation affects this lineage.\n\n")
+        )
+    if hidden:
+        fragments.extend(
+            (
+                ("class:history-receipt", f"… {hidden} OLDER OPERATIONS HIDDEN"),
+                (
+                    "class:report-neutral",
+                    " · use --all or --limit N\n\n",
+                ),
+            )
+        )
+    _extend_analyses(fragments, report, verbose=verbose)
+    if report.warnings:
+        fragments.append(("class:report-neutral", "\n"))
+        fragments.append(("class:report-label", "LIMITS\n"))
+        fragments.extend(
+            ("class:report-neutral", f"  − {display_escape_text(warning)}\n")
+            for warning in report.warnings
+        )
+    return fragments
+
+
+def format_compact_trace_report(
+    report: TraceReport,
+    *,
+    verbose: bool = False,
+    limit: int | None = DEFAULT_TRACE_OPERATION_LIMIT,
+) -> str:
+    """Return the ANSI-free document shared by Log and non-TTY Trace."""
+
+    return plain_text_from_fragments(
+        trace_document_fragments(report, verbose=verbose, limit=limit),
+        whole_document=True,
     )
 
 
-def trace_empty_detail(report: TraceReport) -> str:
-    """Render a lineage endpoint even when no retained operation exists."""
+def open_trace_viewer(
+    report: TraceReport,
+    *,
+    verbose: bool = False,
+    limit: int | None = DEFAULT_TRACE_OPERATION_LIMIT,
+    app_input: Input | None = None,
+    app_output: Output | None = None,
+    require_tty: bool = True,
+) -> None:
+    """Open the bounded lineage document without a second Items surface."""
 
-    return "\n".join(
-        (
-            *_lineage_summary(report),
-            "",
-            "No retained operation affects this lineage.",
-            *(f"LIMIT: {display_escape_text(value)}" for value in report.warnings),
-        )
+    fragments = trace_document_fragments(report, verbose=verbose, limit=limit)
+    plain = plain_text_from_fragments(fragments, whole_document=True)
+    # Frame borders and the footer need three rows beyond the logical document.
+    # Long traces stop growing and keep the same wrapped-row scroll mechanics.
+    compact_height = min(
+        max(plain.count("\n") + 4, _TRACE_VIEWER_MIN_HEIGHT),
+        _TRACE_VIEWER_MAX_HEIGHT,
+    )
+    run_read_only_viewer(
+        fragments,
+        title="TRACE REPORT",
+        frame_title="LINEAGE",
+        compact_height=compact_height,
+        app_input=app_input,
+        app_output=app_output,
+        require_tty=require_tty,
     )
 
 
@@ -343,17 +840,18 @@ def open_trace_history(
     app_output: Output | None = None,
     require_tty: bool = True,
 ) -> None:
-    """Open a Memory lineage through the same Items/Viewer shell as Log."""
+    """Compatibility adapter for callers migrating from the Items workbench.
 
-    entries = trace_history_entries(report, verbose=verbose)
-    choose_history(
-        entries,
-        context_name=context_name or report.context_name,
-        mode="log",
-        initial_details_open=True,
-        empty_message="No retained operations for this Memory lineage.",
-        empty_detail=trace_empty_detail(report),
-        title=f"TRACE · MEMORY [{report.selected_uid[:8]}]",
+    The Context name no longer changes presentation because the frozen report
+    already owns its canonical Context identity.  Existing callers still land
+    in the same single vertical Viewer instead of requiring a broad migration
+    alongside this focused Trace change.
+    """
+
+    del context_name
+    open_trace_viewer(
+        report,
+        verbose=verbose,
         app_input=app_input,
         app_output=app_output,
         require_tty=require_tty,

@@ -1,0 +1,16 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ LINEAGE ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃TRACE · notes                                                                                                                                                                    ^┃
+┃[MEMORY 4e84006f] · 3 OPERATIONS · LATEST FIRST                                                                                                                                   ┃
+┃                                                                                                                                                                                  ┃
+┃[remove] [CHECKPOINT eac7d39f] [MEMORY 4e84006f]  2026-08-20 10:36 · removed "Revised historical wording"                                                                         ┃
+┃                                                                                                                                                                                  ┃
+┃[edit] [CHECKPOINT 42ce2e54] [MEMORY 4e84006f]  2026-08-20 10:36                                                                                                                  ┃
+┃  − [4e84006f]@2 Retained historical wording                                                                                                                                      ┃
+┃  + [4e84006f]@2 Revised historical wording                                                                                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃[add] [CHECKPOINT 064e64d3] [MEMORY 4e84006f]  2026-08-20 10:36 · created "Retained historical wording"                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃ATTACHMENTS                                                                                                                                                                       ┃
+┃  none                                                                                                                                                                           v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ TRACE REPORT · ↑/↓ scroll · PgUp/PgDn page · Home/End · Esc/Backspace/Q close · read-only

@@ -16,23 +16,29 @@ HistoryBadgeStyle = Literal[
     "history-source",
 ]
 
-
-_HISTORY_ACTION_STYLES = {
-    "init": "impact.add",
-    "created": "impact.add",
-    "add": "impact.add",
-    "embed": "impact.custom",
-    "edit": "impact.edit",
-    "remove": "impact.remove",
-    "undo": "impact.redact",
-    "redo": "impact.reframe",
-}
+HistoryRowSegmentStyle = Literal[
+    "semantic-action",
+    "report-neutral",
+    "memory-object",
+    "history-receipt",
+    "history-source",
+]
 
 
 def history_action_style(command: str) -> str:
-    """Return an existing shared TUI class for one History action token."""
+    """Return the shared semantic TUI class without its ``class:`` prefix.
 
-    return _HISTORY_ACTION_STYLES.get(command.casefold(), "report-neutral")
+    Older History surfaces still accept this narrow string adapter.  Keeping
+    it here avoids forcing the Trace row refactor to migrate Diff and Revert in
+    the same change, while the color decision remains owned by the common
+    semantic palette.
+    """
+
+    from memcommit.interfaces.tui.core.theme import semantic_action_style
+
+    return semantic_action_style(command, fallback="class:report-neutral").removeprefix(
+        "class:"
+    )
 
 
 @dataclass(frozen=True)
@@ -73,6 +79,49 @@ class HistoryDisplayRow:
             if self.inherited_from is not None
             else "DIRECT COMMANDS"
         )
+
+
+@dataclass(frozen=True)
+class HistoryRowSegment:
+    """One adapter-neutral segment of the shared compact History row."""
+
+    text: str
+    style: HistoryRowSegmentStyle = "report-neutral"
+    action: str | None = None
+
+
+def history_display_row_segments(
+    row: HistoryDisplayRow,
+    *,
+    action: str | None = None,
+) -> tuple[HistoryRowSegment, ...]:
+    """Project the Log row grammar once for static and formatted adapters."""
+
+    command = row.command if action is None else action
+    segments: list[HistoryRowSegment] = [
+        HistoryRowSegment(f"[{command}]", "semantic-action", action=command)
+    ]
+    for badge in row.badges:
+        segments.extend(
+            (
+                HistoryRowSegment(" "),
+                HistoryRowSegment(f"[{badge.text}]", badge.style),
+            )
+        )
+    segments.extend(
+        (
+            HistoryRowSegment("  "),
+            HistoryRowSegment(row.timestamp),
+        )
+    )
+    if row.summary:
+        segments.extend(
+            (
+                HistoryRowSegment(" · "),
+                HistoryRowSegment(row.summary),
+            )
+        )
+    return tuple(segments)
 
 
 def _mapping(value: object) -> Mapping[str, Any]:

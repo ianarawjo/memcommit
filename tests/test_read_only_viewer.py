@@ -18,3 +18,16 @@ def test_read_only_viewer_supports_shared_navigation_and_back_close():
             app_output=DummyOutput(),
             require_tty=False,
         )
+
+
+def test_read_only_viewer_supports_a_bounded_inline_presentation():
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("q")
+        run_read_only_viewer(
+            [("class:report-label", "SHORT REPORT\n"), ("", "body")],
+            title="TRACE REPORT",
+            compact_height=10,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )

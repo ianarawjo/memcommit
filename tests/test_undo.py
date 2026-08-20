@@ -269,10 +269,11 @@ def test_history_and_trace_keep_command_undo_and_redo_operation_boundaries(
     rendered = invoke("trace", memory.uid[:8])
 
     assert rendered.exit_code == 0, rendered.output
-    assert "mem undo ← mem add" in rendered.output
-    assert "mem redo ← mem add" in rendered.output
-    assert rendered.output.index("mem redo ← mem add") < rendered.output.index(
-        "mem undo ← mem add"
+    assert "[undo] [CHECKPOINT " in rendered.output
+    assert "[redo] [CHECKPOINT " in rendered.output
+    assert rendered.output.count("[SOURCE add ") == 2
+    assert rendered.output.index("[redo] [CHECKPOINT ") < rendered.output.index(
+        "[undo] [CHECKPOINT "
     )
 
     detailed = invoke("trace", memory.uid[:8], "--verbose")

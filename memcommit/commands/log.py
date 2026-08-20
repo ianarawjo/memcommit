@@ -1,6 +1,5 @@
 from collections.abc import Sequence
 from dataclasses import replace
-import sys
 from typing import Annotated, Any, Optional
 
 import typer
@@ -14,12 +13,8 @@ from memcommit.command_attempts import (
 )
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.context_operand import ContextOperandSnapshot
-from memcommit.commands.diff_browser import browse_checkpoint_locations
-from memcommit.commands.history_picker import choose_history
 from memcommit.commands.history_present import (
-    checkpoint_picker_entries,
     history_result_recovery_label,
-    history_result_picker_entries,
 )
 from memcommit.commands.memory_history import (
     build_memory_history,
@@ -27,11 +22,22 @@ from memcommit.commands.memory_history import (
 )
 from memcommit.commands.trace_projection import (
     format_compact_trace_report,
-    open_trace_history,
 )
 from memcommit.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,
+)
+from memcommit.interfaces.console.theme import (
+    MEMORY_HEX,
+    SemanticColorRole,
+    semantic_action_role,
+    semantic_color_rgb,
+)
+from memcommit.history_display import (
+    HistoryDisplayRow,
+    HistoryRowSegment,
+    history_display_row_segments,
+    project_history_display_rows,
 )
 from memcommit.history import HistoryError, build_history
 from memcommit.history_search import (
@@ -55,24 +61,83 @@ from memcommit.study_action_log import (
 )
 
 
-def render_checkpoint_rows(entries: Sequence[dict[str, Any]], limit: int | None = None) -> None:
-    rows = entries[:limit] if limit is not None else entries
-    for cp in rows:
-        ts = cp["timestamp"][:16].replace("T", " ")
-        uid_short = cp["uid"][:8]
-        is_auto = cp.get("auto", False)
-        command = cp.get("command") or "checkpoint"
-        label = " ".join((cp.get("description") or cp.get("message") or "(no message)").split())
+def _styled_semantic_label(
+    text: str,
+    *,
+    action: str | None = None,
+    role: SemanticColorRole | None = None,
+) -> str:
+    """Style one trusted label while leaving surrounding report prose neutral."""
 
-        if is_auto:
-            typer.secho(f"  {uid_short}  {ts}  {command:<12}  {label}")
-        else:
-            msg = cp.get("message") or "(no message)"
-            typer.secho(f"  {uid_short}  {ts}  {'checkpoint':<12}  {msg}", fg=typer.colors.CYAN, bold=True)
+    resolved = role if role is not None else semantic_action_role(action or text)
+    safe = display_escape_text(text)
+    if resolved is None:
+        return safe
+    return typer.style(safe, fg=semantic_color_rgb(resolved), bold=True)
 
 
-def _interactive_terminal() -> bool:
-    return sys.stdin.isatty() and sys.stdout.isatty()
+def _rgb(value: str) -> tuple[int, int, int]:
+    return tuple(int(value[index : index + 2], 16) for index in (1, 3, 5))
+
+
+def _styled_history_segment(segment: HistoryRowSegment) -> str:
+    if segment.style == "semantic-action":
+        return _styled_semantic_label(segment.text, action=segment.action)
+    text = display_escape_text(segment.text)
+    if segment.style == "memory-object":
+        return typer.style(text, fg=_rgb(MEMORY_HEX))
+    if segment.style == "history-receipt":
+        return typer.style(
+            text,
+            fg=semantic_color_rgb(SemanticColorRole.HISTORY),
+            bold=True,
+        )
+    if segment.style == "history-source":
+        return typer.style(text, bold=True)
+    return text
+
+
+def _history_section(row: HistoryDisplayRow, context_name: str) -> str:
+    return (
+        f"INHERITED HISTORY · source {row.inherited_from}"
+        if row.inherited_from is not None
+        else f"DIRECT COMMANDS · {context_name}"
+    )
+
+
+def render_checkpoint_rows(
+    entries: Sequence[dict[str, Any]],
+    *,
+    context_name: str,
+    context_uid: str,
+    limit: int | None = None,
+) -> None:
+    """Print retained versions with every visible UID namespace named."""
+
+    selected = entries[:limit] if limit is not None else entries
+    rows = project_history_display_rows(
+        selected,
+        context_name=context_name,
+        context_uid=context_uid,
+        deduplicate_commands=False,
+    )
+    last_section: str | None = None
+    for row in rows:
+        section = _history_section(row, context_name)
+        if section != last_section:
+            if last_section is not None:
+                typer.echo()
+            typer.secho(display_escape_text(section), bold=True)
+            last_section = section
+        # Static Log keeps its established `init` action spelling for scripts
+        # while the interactive lifecycle overview uses the clearer `created`
+        # label. Both adapters still share the typed UID projection.
+        action = "init" if row.is_creation else row.command
+        rendered = "".join(
+            _styled_history_segment(segment)
+            for segment in history_display_row_segments(row, action=action)
+        )
+        typer.echo(f"  {rendered}")
 
 
 def _render_history_results(
@@ -90,8 +155,12 @@ def _render_history_results(
             else "current"
         )
         identity = result.checkpoint_uid or result.candidate_id
+        kind = _styled_semantic_label(
+            f"{result.kind:<17}",
+            role=SemanticColorRole.HISTORY,
+        )
         typer.echo(
-            f"  [{result.kind:<17} {identity[:8]}] "
+            f"  [{kind} {identity[:8]}] "
             f"{display_escape_text(timestamp)}  "
             f"{display_escape_text(result.description)}  "
             f"({display_escape_text(history_result_recovery_label(result))})"
@@ -122,12 +191,16 @@ def _render_operation_attempts(attempts: Sequence[CommandAttempt]) -> None:
             visible_outcome = "NOT FINALIZED"
         else:
             visible_outcome = attempt.status
+        operation = _styled_semantic_label(
+            f"{attempt.operation:<16}",
+            action=attempt.operation,
+        )
         suffix = " · ".join(
             value for value in (visible_outcome, elapsed) if value is not None
         )
         typer.echo(
             f"  [{attempt.uid[:8]}] {display_escape_text(timestamp)}  "
-            f"{attempt.operation:<16}{suffix}"
+            f"{operation}{suffix}"
         )
         sever = attempt.details.get("sever")
         if isinstance(sever, dict):
@@ -200,9 +273,10 @@ def _render_study_actions(
             if event.elapsed_seconds is None
             else f" +{event.elapsed_seconds:.3f}s"
         )
+        action = _styled_semantic_label(event.action, action=event.action)
         typer.echo(
             f"  [{event.attempt_uid[:8]}/{event.sequence}] "
-            f"{display_escape_text(timestamp)}{elapsed}  {event.action}"
+            f"{display_escape_text(timestamp)}{elapsed}  {action}"
         )
         details = " · ".join(
             f"{display_escape_text(key)}={display_escape_text(str(value))}"
@@ -217,9 +291,8 @@ def cmd(
         Optional[str],
         typer.Argument(
             help=(
-                "Optional natural-language history query; omit to select a "
-                "Context then browse its checkpoints in a TTY, or print the "
-                "current Context's checkpoints otherwise"
+                "Optional natural-language history query; omit to print the "
+                "current or explicitly selected Context's checkpoints"
             )
         ),
     ] = None,
@@ -228,7 +301,7 @@ def cmd(
         bool,
         typer.Option(
             "--plain",
-            help="Print rows instead of opening the terminal history picker",
+            help="Compatibility option; Log always prints stable rows",
         ),
     ] = False,
     limit: Annotated[
@@ -236,7 +309,7 @@ def cmd(
         typer.Option(
             "--limit",
             "-n",
-            help="Maximum semantic history matches to return (1-20)",
+            help="Maximum semantic matches or Memory-lineage operations (1-20)",
         ),
     ] = 20,
     operations: Annotated[
@@ -262,7 +335,7 @@ def cmd(
             "--memory",
             help=(
                 "Inspect one current or historical Memory lineage; "
-                "mem trace is the shorthand route"
+                "mem trace provides interactive inspection of the same lineage"
             ),
         ),
     ] = None,
@@ -275,6 +348,9 @@ def cmd(
         ),
     ] = None,
 ) -> None:
+    # Log is deliberately terminal-independent. Keep --plain accepted for
+    # existing scripts, but never let terminal capability change this report.
+    del plain
     if operations and actions:
         typer.secho(
             "--operations and --actions are separate log views.",
@@ -376,6 +452,13 @@ def cmd(
                 err=True,
             )
             raise typer.Exit(1)
+        if not 1 <= limit <= 20:
+            typer.secho(
+                "--limit must be between 1 and 20 for Memory lineage output.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
         if not name:
             typer.secho(
                 "No current context. Pass --context or run 'mem init <name>' first.",
@@ -411,37 +494,14 @@ def cmd(
                 err=True,
             )
             raise typer.Exit(1)
-        if _interactive_terminal() and not plain:
-            open_trace_history(report, context_name=history_context.display_name)
-        else:
-            typer.echo(format_compact_trace_report(report))
+        typer.echo(format_compact_trace_report(report, limit=limit))
         return
 
-    if query is None and _interactive_terminal() and not plain:
-        try:
-            browse_checkpoint_locations(
-                store,
-                session=None if manual else store.load_staged_update(),
-                context_locator=name if context_name is not None else None,
-                title="LOG",
-                manual=manual,
-                # Log and Diff share one temporal explorer. Log keeps the
-                # checkpoint catalog while Viewer exposes the selected exact
-                # direct-item transition, including Memory UIDs.
-                show_diffs=True,
-            )
-        except ValueError as error:
-            typer.secho(
-                f"History location picker error: {error}",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
-        return
     if not name:
         typer.secho("No current context. Run 'mem init <name>' first.", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
 
+    context = store.load_direct(name)
     all_entries = store.list_checkpoints(name)
     entries = all_entries
     if manual:
@@ -486,51 +546,7 @@ def cmd(
         if not results:
             _render_history_results(name, ())
             return
-        if _interactive_terminal() and not plain:
-            try:
-                choose_history(
-                    history_result_picker_entries(results),
-                    context_name=name,
-                    mode="log",
-                )
-            except ValueError as error:
-                typer.secho(
-                    f"History picker error: {error}",
-                    fg=typer.colors.RED,
-                    err=True,
-                )
-                raise typer.Exit(1)
-            return
         _render_history_results(name, results)
-        return
-
-    if _interactive_terminal() and not plain:
-        try:
-            projected = {
-                entry.uid: entry
-                for entry in checkpoint_picker_entries(all_entries)
-            }
-            choose_history(
-                [
-                    projected[entry["uid"]]
-                    for entry in entries
-                ],
-                context_name=name,
-                mode="log",
-                initial_details_open=True,
-                empty_message=(
-                    "No manual checkpoints for this Context yet."
-                    if manual
-                    else "No checkpoints for this Context yet."
-                ),
-            )
-        except ValueError as error:
-            typer.secho(
-                f"History picker error: {error}",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
         return
 
     if not entries:
@@ -540,4 +556,8 @@ def cmd(
 
     typer.secho(f"Log for '{name}':", bold=True)
     typer.echo()
-    render_checkpoint_rows(entries)
+    render_checkpoint_rows(
+        entries,
+        context_name=name,
+        context_uid=context.uid,
+    )

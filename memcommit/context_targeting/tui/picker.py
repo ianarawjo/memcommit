@@ -78,6 +78,7 @@ from memcommit.source_projection.model import (
     SourceState,
 )
 from memcommit.source_projection.presentation import (
+    SourceDisplayToken,
     SourceDisplayValue,
     SourceTokenRole,
     normalize_source_display_tokens,
@@ -151,6 +152,9 @@ class ContextMemoryRow:
     style: Literal["memory-object", "report-neutral"] = "memory-object"
     selector: str | None = None
     source: SourceDisplayFacts | None = None
+    object_label_override: str | None = None
+    supplemental_annotations: tuple[SourceDisplayToken, ...] = ()
+    annotation_style: str | None = None
     label_style: str | None = None
     badges: tuple[ContextMemoryBadge, ...] = ()
     section_label: str | None = None
@@ -220,6 +224,11 @@ def context_memory_rows(context: Context) -> tuple[ContextMemoryRow, ...]:
                     item.name,
                     style="report-neutral",
                     source=SourceDisplayFacts(form=SourceForm.QUERY_VIEW),
+                    object_label_override="context",
+                    supplemental_annotations=(
+                        SourceDisplayToken("QUERY ONLY", SourceTokenRole.FORM),
+                    ),
+                    annotation_style="context-query-only",
                 )
             )
         elif isinstance(item, Context):
@@ -232,6 +241,7 @@ def context_memory_rows(context: Context) -> tuple[ContextMemoryRow, ...]:
                         form=SourceForm.CONTEXT,
                         reach=SourceReach.VIA_EMBED,
                     ),
+                    annotation_style="context-embedded",
                 )
             )
     return tuple(rows)
@@ -589,12 +599,17 @@ def render_context_memory_previews(
         else:
             memory_pointer = "›" if selectable_memories and memory_is_focused else "·"
             memory_prefix = f"{memory_pointer} "
-        object_label = (
+        object_label = memory.object_label_override or (
             source_object_label(memory.source) if memory.source is not None else ""
         )
         display_label = (f"{object_label} " if object_label else "") + memory.label
         memory_annotations = (
-            source_annotation_tokens(memory.source) if memory.source is not None else ()
+            *(
+                source_annotation_tokens(memory.source)
+                if memory.source is not None
+                else ()
+            ),
+            *memory.supplemental_annotations,
         )
         label_style = (
             memory_style
@@ -621,7 +636,8 @@ def render_context_memory_previews(
         styled_leading_fragments.append((memory_style, " "))
         leading = "".join(text for _style, text in styled_leading_fragments)
         has_custom_badge_style = not memory_is_focused and (
-            memory.label_style is not None
+            memory.annotation_style is not None
+            or memory.label_style is not None
             or any(badge.style is not None for badge in memory.badges)
         )
         annotation_width = get_cwidth(
@@ -653,7 +669,15 @@ def render_context_memory_previews(
             fragments.extend(
                 render_source_display_tokens(
                     memory_annotations,
-                    override_style=(memory_style if memory_is_focused else ""),
+                    override_style=(
+                        memory_style
+                        if memory_is_focused
+                        else (
+                            f"class:{memory.annotation_style}"
+                            if memory.annotation_style is not None
+                            else ""
+                        )
+                    ),
                 )
             )
             fragments.append((memory_style, " · "))
@@ -707,6 +731,9 @@ def _clipboard_memory_row(memory: ContextMemoryRow) -> ContextMemoryRow:
         label=memory.label,
         content=" ".join(memory.content.split()) or "(empty)",
         style=memory.style,
+        object_label_override=memory.object_label_override,
+        supplemental_annotations=memory.supplemental_annotations,
+        annotation_style=memory.annotation_style,
         label_style=memory.label_style,
         selector=memory.selector,
         source=memory.source,
@@ -989,6 +1016,9 @@ def choose_context(
     nested_selection_factory: (Callable[[str, str], _NestedSelectionT] | None) = None,
     nested_accept_handler: (
         Callable[[str, str], ContextPickerActionReceipt] | None
+    ) = None,
+    context_accept_handler: (
+        Callable[[str], ContextPickerActionReceipt] | None
     ) = None,
     memory_scope_root: str | None = None,
     memory_reach_state: ContextReachState | None = None,
@@ -1324,14 +1354,11 @@ def choose_context(
         else None
     )
     reach_focus = Condition(
-        lambda: reach_control is not None
-        and get_app().layout.has_focus(reach_control)
+        lambda: reach_control is not None and get_app().layout.has_focus(reach_control)
     )
     tree_focus = ~reach_focus
     focus_controller: SurfaceFocusController | None = None
-    unframed_tree_focus = tree_focus & Condition(
-        lambda: focus_controller is None
-    )
+    unframed_tree_focus = tree_focus & Condition(lambda: focus_controller is None)
 
     @bindings.add("down", filter=unframed_tree_focus)
     def _next_context(event) -> None:
@@ -1537,6 +1564,16 @@ def choose_context(
             event.app.invalidate()
             return
         name = state.selected_name
+        if context_accept_handler is not None:
+            # Some consumers use Context rows strictly as navigation around
+            # exact nested targets. Keep their rejection meaning in the
+            # consumer while this shared surface owns the inline receipt.
+            receipt = context_accept_handler(name)
+            if not isinstance(receipt, ContextPickerActionReceipt):
+                raise TypeError("A Context action must return a picker receipt.")
+            action_status = receipt
+            event.app.invalidate()
+            return
         if name in subtree_names and name not in tree.materialized_names:
             # A catalog-only parent has no exact history of its own. Enter can
             # therefore open the frozen changed descendants without competing
@@ -1567,13 +1604,8 @@ def choose_context(
         nonlocal memory_anchor
         if memory_reach_state is None:
             return
-        memory_reach_state.choice.choose(
-            "SUBTREE" if include_descendants else "EXACT"
-        )
-        if (
-            memory_anchor is not None
-            and not memory_name_is_in_reach(memory_anchor[0])
-        ):
+        memory_reach_state.choice.choose("SUBTREE" if include_descendants else "EXACT")
+        if memory_anchor is not None and not memory_name_is_in_reach(memory_anchor[0]):
             memory_anchor = None
         load_visible_memories()
         clear_footer_status()
@@ -1705,6 +1737,8 @@ def choose_context(
                 if nested_items_selectable and memory.selector is not None
                 else "Enter preview only"
             )
+        elif context_accept_handler is not None:
+            enter_action = "Enter unavailable"
         elif name in tree.materialized_names:
             enter_action = (
                 "Enter open/collapse"
@@ -1732,12 +1766,17 @@ def choose_context(
             if exit_label is not None
             else ("q close" if browse_only else "q cancel")
         )
+        catalog_label = (
+            "Contexts"
+            if context_accept_handler is not None
+            else "selectable"
+        )
         normal_footer = (
             _CONTEXT_NAVIGATION_HINT
             + f"{expansion_action}  {memory_action}{copy_action}"
             + f"{enter_action}  {close_action}"
             f" · {navigation_index + 1}/{len(units)}"
-            f" · {len(tree.materialized_names)} selectable"
+            f" · {len(tree.materialized_names)} {catalog_label}"
         )
         if action_status is not None:
             return [

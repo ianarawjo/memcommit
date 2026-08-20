@@ -29,10 +29,11 @@ mem rationale MEMORY --refresh
 ```
 
 All Memory-targeted routes accept a current or retained historical direct-Memory
-UID or unambiguous prefix. `mem trace MEMORY` is the public shorthand for
-`mem log --memory MEMORY`; both enter the same retained-history controller and
-projection rather than invoking another CLI command. Neither command changes
-Contexts, checkpoints, saved
+UID or unambiguous prefix. `mem trace MEMORY` is the public interactive route for
+`mem log --memory MEMORY`; both use the same retained-history controller and
+compact projection rather than invoking another CLI command. Log always prints
+that projection, while Trace may open its interactive workbench in a TTY.
+Neither command changes Contexts, checkpoints, saved
 semantic analyses, proposals, or active state. `mem rationale` may update a
 replaceable provider-inference cache after a successful validated inference;
 `mem trace` and `mem rationale --recorded-only` remain storage-read-only.
@@ -41,49 +42,52 @@ In an interactive terminal, omitting `MEMORY` first opens the common session
 picker as a Recents launcher. Recent rows are scoped to the current operation,
 ordered newest first, and deduplicated by public Context name, Memory UID, and
 exact-versus-descendant range.
-The pinned `SELECT A MEMORY` action then opens a location-first Context tree,
-matching bare Log's ability to leave an empty current Context without changing
-global current state. Trace freezes every ordinary local Context; Rationale
-freezes all Profile-readable local and READ-granted public Contexts. Selecting
-one location opens the common read-only exact/subtree Context/Memory tree for
-that root. This keeps repeated inspection quick without replacing the complete
-namespace route needed for a new target. When the operation has no recent rows,
-the empty Recents catalog is skipped and the Context location tree opens
-directly; no saved-session-shaped decision exists in that case. An explicit
-`--context` bypasses Recents and the Profile location stage but still opens the
-scoped Memory selector when no Memory operand was supplied.
+The pinned `SELECT A MEMORY` action opens the common read-only exact/subtree
+Context/Memory tree directly on the command-start current Context. Trace freezes
+that ordinary local root and its lexical descendants. Rationale freezes the
+Profile-readable local and READ-granted catalog for authorization, then projects
+only the current public root and its lexical descendants into the target tree;
+an unrelated readable Context is not an implicit alternative location. When the
+operation has no recent rows, the empty Recents catalog is skipped and this
+current-root target tree opens directly; no saved-session-shaped decision exists
+in that case. An explicit `--context` bypasses Recents and anchors the same
+target tree at that canonical Context. Selecting a different non-current root is
+therefore an explicit CLI decision rather than a required first TUI step.
 
 Recents are derived only from completed command-attempt records. A record
 stores the operation, public or scoped Context name, Memory UID, and the
 content-free descendant boolean; it never copies Memory content, inferred
 rationale, Grant material, or provider data.
 Trace Recents also include completed `mem log --memory` attempts because that
-route is the same Memory-lineage view.
+route reads the same Memory-lineage data.
 Failed and cancelled attempts are not offered. Selecting a recent row freezes
 and revalidates its command-attempt receipt, then enters the ordinary command
 path, where current Context existence, UID resolution, and effective
 permissions are checked again. A recent row is therefore navigation history,
 not retained read authority or a report snapshot.
 
-After location selection, the shared target launcher begins with `THIS CONTEXT
-ONLY` and `INCLUDE DESCENDANTS` projected through the common
+The shared target launcher begins with `THIS CONTEXT ONLY` and `INCLUDE
+DESCENDANTS` projected through the common
 `ContextReachState`, then the common Context/Memory tree. It begins on the
-selected or explicitly scoped Context row, including when that exact row and
+current or explicitly scoped Context row, including when that exact row and
 its complete descendant range contain no Memory at all. Changing range and
-choosing another location never changes global current Context state.
+choosing a Memory never changes global current Context state.
 Rationale places every eligible Memory beneath its actual owner in the readable
 public hierarchy; a Grant attachment is never treated as a hierarchy edge.
 Trace may discover a Memory in a locally owned lexical descendant, but the
 resulting lineage still opens only that exact owner Context's history. Context
-rows browse or collapse the tree, while only an exact Memory row can complete
-selection.
+rows are navigation only: Left/Right browse or collapse the tree, and Enter on
+a Context leaves the picker open with the red textual receipt `CONTEXT NOT
+SELECTABLE`. Only Enter on an exact Memory row can complete selection. This
+explicit rejection prevents a Context cursor from being mistaken for a staged
+Context-wide report target.
 
 Immediately before report construction, Rationale refreezes and revalidates a
-location-first selection through the same Profile-readable namespace breadth.
-It does not silently narrow a selected granted location to a grant-only catalog
-after review. Trace likewise carries the canonical selected local name through
-its final owner-history load; raw relative operands never become picker or
-session identity.
+bare selection through the same Profile-readable namespace breadth, then
+reprojects the reviewed root and range. It does not silently narrow a granted
+root to a grant-only catalog after review. Trace likewise carries the canonical
+selected local owner through its final history load; raw relative operands
+never become picker or session identity.
 
 The two controls are composed through the same service-wide terminal chrome,
 not through an operation-owned Trace/Rationale shell. `RANGE` and `CONTEXTS &
@@ -92,19 +96,18 @@ MEMORIES` reuse `build_focused_frame`; their top-to-bottom layout reuses
 focused border and retained-choice fill. `SurfaceFocusController` owns
 Tab/Shift-Tab, boundary-aware vertical movement, and Enter dispatch across the
 two frames, while the existing reach and tree adapters retain their semantic
-actions. The unscoped Context browser used by Switch and Log retains its
-existing single-surface presentation. This avoids manufacturing a parallel
+actions. The unscoped Context browser used by Switch retains its existing
+single-surface presentation. This avoids manufacturing a parallel
 picker merely to reproduce frame lines or focus color.
 
-The location launcher freezes its complete eligible Profile catalog before it
-opens. The target launcher then freezes the selected root's eligible descendant
+The target launcher freezes the current or explicit root's eligible descendant
 catalog but starts with exact reach. It therefore remains open both when the
 root has zero direct candidates and descendants do have candidates, and when
 the complete exact-plus-descendant range is empty. Candidate absence is visible
-selector state, not a reason to strand the person at the empty current Context.
-Leaving an unscoped empty target selector returns to the frozen Profile
-location tree, like Back from an empty Log history; leaving that outer tree
-cancels the command.
+selector state. Leaving the target selector cancels the command; it does not
+insert or return to a second Context-location screen. A person who intentionally
+wants another root can reopen with `--context NAME` without changing the global
+current Context.
 
 Each eligible UID appears once per owner Context: currently present Memories
 first in canonical Context order, followed by historical-only Memories using
@@ -131,8 +134,11 @@ zero or deriving a count from current content. Up/Down, Left/Right,
 held-arrow acceleration, and wrapped scrolling all come from the common Context/Memory selector rather
 than a second operation-specific navigation grammar.
 
-The picker returns the exact root, owner Context, descendant boolean, and full
-UID, then enters the same report-building path as an explicit selector. It
+The picker renders the first eight UID characters as a compact identity badge,
+but that badge is presentation only. It returns the exact root, owner Context,
+descendant boolean, and full UID, then enters the same report-building path as
+an explicit selector. Explicit CLI selectors continue to accept either that
+full UID or an unambiguous prefix; ambiguity is rejected rather than guessed. It
 does not perform per-row semantic inference or open Memory references,
 embedded Contexts, or query-only sources. `mem rationale`
 connects its optional inference provider only after Enter selects a Memory;
@@ -142,20 +148,31 @@ so it does not combine a pre-picker live frame with post-picker history.
 The selected row names its recorded-change count before Enter: Trace covers
 the full retained lineage from earliest retained evidence through the current
 Context, while Rationale covers recorded evidence, saved analysis, and current
-interpretation. This shared first-stage launcher is the interactive boundary
+interpretation. This shared target launcher is the interactive boundary
 for choosing both reach and Memory; it does not silently broaden exact reach.
 
 Rationale renders its complete interactive report inside the common framed,
 wrapped, read-only `VIEWER`, whether its Memory came from Recents, the tree, or
-an explicit operand. Trace uses the shared temporal `ITEMS + VIEWER` workbench
-also used by Log and Diff: Items are lineage-affecting command units and Viewer
-shows the selected before/after evidence together with the complete lineage
-endpoints. Bare, recent, and explicit Trace targets all enter this workbench in
-a TTY. `--plain`, non-TTY, and JSON routes retain stable non-full-screen output.
-Both the standalone Rationale Viewer and the temporal Viewer move by visible
-wrapped rows through the common cursor-backed read pane; a hidden fixed cursor
-must not reset the viewport to its first logical line. The temporal workbench
-additionally uses shared Surface boundary traversal between Viewer and Items.
+an explicit operand. Trace instead projects one continuous vertical lineage
+document in that same common read-only Viewer. The selected Memory has already
+fixed the subject, so a second `ITEMS` surface would make the person choose an
+operation merely to reveal evidence that belongs directly in the report. The
+document renders every visible newest-first operation as the same typed compact
+History row used by Log, followed immediately by its inline `− before` / `+
+after` Memory diff. `NOW` and `ORIGIN` endpoint bands are intentionally omitted:
+the newest diff's after side and the oldest visible diff's before side already
+carry that state, while the shared `[command] [CHECKPOINT …] [MEMORY …]  time ·
+summary` grammar gives the operation the same scan landmarks as Log. Bare,
+recent, and explicit Trace targets all enter this single-surface Viewer in a TTY. `--plain` and
+non-TTY routes print the exact ANSI-free text projection of the same document;
+JSON retains the complete structured report. Both Rationale and Trace move by
+visible wrapped rows through the common cursor-backed read pane, so a hidden
+fixed cursor cannot reset the viewport to its first logical line.
+Trace sizes that Viewer to the document with a ten-row minimum and a 28-row
+application cap in the ordinary terminal buffer. A short lineage therefore
+does not reserve an empty 52-row canvas; a longer lineage stops growing and
+scrolls inside the same frame. This compactness changes presentation only, not
+the source freeze, operation bound, full plain document, or close behavior.
 Rationale reuses the same target and Trace projection, then adds its
 interpretation sections; it does not inherit Trace's owner-history authority
 when the target is granted.
@@ -165,36 +182,60 @@ first Memory;
 automation must pass an explicit UID or prefix. `--json` also requires an
 explicit selector so machine-readable stdout is never preceded by terminal
 selection traffic. Escape, `q`, and Ctrl-C cancel the picker without changing
-the store. In a TTY, even a Profile containing only empty Contexts still opens
-the location selector and an explicitly opened empty target range; it never
-connects a Rationale provider without an exact selected Memory.
+the store. In a TTY, even an empty current Context still opens its exact target
+range and offers `INCLUDE DESCENDANTS`; it never connects a Rationale provider
+without an exact selected Memory.
 
-By default, `mem trace` renders the entire selected lineage as compact
-operation rows. The current endpoint comes first, followed by operations in
-newest-first order, and the earliest retained origin comes last. A trusted
-range label states both directions explicitly: rows run downward into older
-history, while every row's `before → after` arrow still points forward in
-time. Creation is `∅ → Memory`; removal is `Memory → ∅`; a Revert, Undo, or
-Redo that removes a Memory is labeled `RESTORED/REMOVED` instead of relying on
-a bare minus sign.
+By default, `mem trace` bounds its human projection to the newest twenty
+lineage-affecting command units. `--limit N` selects another bound up to 200,
+while `--all` explicitly requests the complete retained lineage. Truncation is
+never silent: the heading states `SHOWING n OF total`, and a marker between the
+visible operations and attachments names the exact older count omitted.
+`--json` always keeps the complete report. Operations remain newest-first, but
+compact transition detail is deliberately asymmetric. A direct Add or Remove
+is one Log-style row because its action, Memory badge, and `created/removed
+"content"` summary already name the only content-bearing endpoint; rendering
+`− ∅` / `+ Memory` or `− Memory` / `+ ∅` would only repeat it. Edit,
+restoration, reorder, and structural or mixed commands retain their forward
+`− before` / `+ after` diff because the relationship between two states is the
+information being requested. A direct Edit row therefore stops after its
+timestamp instead of adding the generic `content changed · Memory identity
+preserved`; its diff owns the content explanation. `--verbose` expands every
+operation, including direct Add/Remove, for audit completeness.
+
+The compact row also does not repeat `CREATED · RECORDED`, `EDITED · RECORDED`,
+or another effect/evidence suffix after its already sufficient action and
+summary. When that provenance distinction is needed, `--verbose` adds a
+separate `Lineage:` detail such as `RESTORED/REMOVED · RECORDED`; JSON remains
+authoritative.
 
 Presentation groups events by retained command-unit receipt, then explicit
 operation identity, with checkpoint UID only as the legacy fallback when no
 stronger operation identity exists. Several events from one operation become
-one row. Compact restoration rows filter before/after states to the selected
+one row. Trace adapts that group to `HistoryDisplayRow` and both Log and Trace
+consume `history_display_row_segments`; command, typed UID badges, timestamp,
+summary spacing, and semantic action styling therefore cannot drift through
+parallel format strings. Trace alone appends the lineage diff; verbose Trace
+also adds typed effect/evidence detail because those are not properties of an
+ordinary compact Context Log row.
+Compact restoration rows filter before/after states to the selected
 lineage because a command-unit receipt may describe other changed Memories or
-Contexts. Multiline and control-bearing content is display-escaped and bounded
-inside the row. Checkpoint identity, descriptions, citations, complete UIDs,
-and saved-analysis detail move to `--verbose`; `--json` keeps the chronological
-structured event order for programmatic consumers.
+Contexts. Multiline and control-bearing content is display-escaped inside each
+wrapped Memory line. Checkpoint identity, descriptions, citations, complete
+UIDs, and saved-analysis detail move to `--verbose`; `--json` keeps the
+chronological structured event order for programmatic consumers. The TUI uses
+the shared terminal palette: Memory objects remain lavender; typed
+ADD/EDIT/REMOVE and restoration tokens carry their semantic roles; mixed
+operations such as Atomize remain neutral while their child diff markers carry
+the proven effect color. Stripping color leaves identical labels and ordering.
 
 Thus the human-facing scopes remain distinct:
 
-- `mem log` browses Context checkpoint states and restoration addresses;
-- `mem log --memory` filters that retained history to one proven UID lineage;
+- `mem log` prints one Context's checkpoint states and restoration addresses;
+- `mem log --memory` prints that retained history for one proven UID lineage;
 - `mem revert` restores one reviewed checkpoint;
 - `mem undo` and `mem redo` restore one global command unit;
-- `mem trace` is the shorthand for Log's Memory-lineage projection; and
+- `mem trace` interactively inspects Log's Memory-lineage data projection; and
 - `mem rationale` adds recorded reasons, saved analysis, and contextual
   interpretation to that lineage.
 
@@ -294,6 +335,10 @@ Only UID continuity and explicit or deterministically reconstructable
 `SPLIT`/`ABSORB` relations connect lineage components. Legacy `chunk` can be
 reconstructed only when its named method, source UID, exact children, and
 positions all agree. Otherwise trace reports a limit instead of guessing.
+Current Context-scoped Chunk checkpoints instead record every exact Source UID
+and ordered child-UID list; Trace reports those relations as `RECORDED` only
+after the complete identity map, order, method, optional literal/size controls,
+and reproduced contents agree.
 
 These labels describe agreement with the retained local files, not
 tamper-evidence. Checkpoint snapshots and their trace metadata are unsigned and

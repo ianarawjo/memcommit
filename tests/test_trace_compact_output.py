@@ -9,7 +9,13 @@ from typer.testing import CliRunner
 from memcommit.cli import app
 from memcommit.commands import trace as trace_command
 from memcommit.commands import trace_projection
-from memcommit.commands.trace_projection import trace_history_entries
+from memcommit.commands.trace_projection import (
+    format_compact_trace_report,
+    trace_document_fragments,
+)
+from memcommit.interfaces.tui.components.plain_text_clipboard import (
+    plain_text_from_fragments,
+)
 from memcommit.provenance import MemoryState, TraceEvent, TraceReport
 
 
@@ -72,10 +78,14 @@ def _report(
 
 
 def _operation_lines(output: str) -> list[str]:
-    return [line for line in output.splitlines() if line.startswith("2026-")]
+    return [
+        line
+        for line in output.splitlines()
+        if line.startswith("[") and "[CHECKPOINT " in line
+    ]
 
 
-def test_default_trace_is_newest_first_with_explicit_scope_and_endpoints(
+def test_default_trace_is_newest_first_with_log_rows_and_inline_diffs(
     capsys,
 ):
     original = _state(SELECTED_UID, "first wording")
@@ -105,22 +115,28 @@ def test_default_trace_is_newest_first_with_explicit_scope_and_endpoints(
     trace_command.render_trace(report)
     output = capsys.readouterr().out
 
-    assert "Trace [11111111] · test/compact" in output
-    assert (
-        "RANGE · earliest retained evidence → current Context · "
-        "LATEST FIRST (↓ older); each row is BEFORE → AFTER"
-    ) in output
-    assert "NOW · [11111111]@1 “current wording”" in output
-    assert "ORIGIN · [11111111]@1 “first wording”" in output
+    assert "TRACE · test/compact" in output
+    assert "[MEMORY 11111111] · 2 OPERATIONS · LATEST FIRST" in output
+    assert "NOW" not in output
+    assert "ORIGIN" not in output
     rows = _operation_lines(output)
     assert len(rows) == 2
-    assert "EDITED" in rows[0]
-    assert "first wording” → [11111111]@1 “current wording" in rows[0]
-    assert "CREATED" in rows[1]
-    assert "∅ → [11111111]@1 “first wording”" in rows[1]
+    assert rows[0] == (
+        "[edit] [CHECKPOINT bbbbbbbb] [MEMORY 11111111]  "
+        "2026-08-01 09:15"
+    )
+    assert rows[1].startswith(
+        "[add] [CHECKPOINT aaaaaaaa] [MEMORY 11111111]  "
+        '2026-07-30 11:31 · created "first wording"'
+    )
+    assert rows[1].endswith('created "first wording"')
+    assert " · EDITED · RECORDED" not in output
+    assert " · CREATED · RECORDED" not in output
+    assert "  − [11111111]@1 first wording\n  + [11111111]@1 current wording" in output
+    assert "  − ∅" not in output
 
 
-def test_trace_operations_project_into_the_common_history_items_viewer(
+def test_trace_projects_one_formatted_vertical_document_without_items_surface(
     monkeypatch,
 ):
     original = _state(SELECTED_UID, "first wording")
@@ -146,31 +162,32 @@ def test_trace_operations_project_into_the_common_history_items_viewer(
             ),
         ),
     )
-    entries = trace_history_entries(report)
     observed: dict[str, object] = {}
     monkeypatch.setattr(
         trace_projection,
-        "choose_history",
-        lambda projected, **kwargs: observed.update(
-            entries=projected,
-            kwargs=kwargs,
-        ),
+        "run_read_only_viewer",
+        lambda document, **kwargs: observed.update(document=document, kwargs=kwargs),
     )
 
-    trace_projection.open_trace_history(
+    trace_projection.open_trace_viewer(
         report,
-        context_name="public/notes",
         require_tty=False,
     )
 
-    assert [entry.command for entry in entries] == ["mem edit", "mem add"]
-    assert entries[0].uid == EDIT_CHECKPOINT_UID
-    assert "BEFORE:" in entries[0].detail
-    assert "AFTER:" in entries[0].detail
-    assert observed["entries"] == entries
-    assert observed["kwargs"]["mode"] == "log"
-    assert observed["kwargs"]["context_name"] == "public/notes"
-    assert observed["kwargs"]["title"] == "TRACE · MEMORY [11111111]"
+    document = observed["document"]
+    assert isinstance(document, list)
+    plain = plain_text_from_fragments(document, whole_document=True)
+    assert plain.index("[edit]") < plain.index("[add]")
+    assert "[CHECKPOINT bbbbbbbb] [MEMORY 11111111]" in plain
+    assert "NOW" not in plain and "ORIGIN" not in plain
+    assert "ITEMS" not in plain
+    assert observed["kwargs"]["title"] == "TRACE REPORT"
+    assert observed["kwargs"]["frame_title"] == "LINEAGE"
+    assert 10 <= observed["kwargs"]["compact_height"] <= 28
+    styles = {style for style, _text in document}
+    assert "class:semantic.edit" in styles
+    assert "class:semantic.remove" in styles
+    assert "class:memory-object" in styles
 
 
 def test_restore_that_removes_lineage_is_one_forward_transition_to_empty(
@@ -203,10 +220,60 @@ def test_restore_that_removes_lineage_is_one_forward_transition_to_empty(
     output = capsys.readouterr().out
 
     newest = _operation_lines(output)[0]
-    assert "mem revert · RESTORED/REMOVED" in newest
+    assert newest.startswith("[revert] [CHECKPOINT cccccccc]")
+    assert newest.endswith("restored/removed")
     assert "It’s going to rain today" not in newest
-    assert "It's going to rain today” → ∅" in newest
-    assert "NOW · ∅ (lineage absent from current Context)" in output
+    assert "  − [11111111]@1 It's going to rain today\n  + ∅" in output
+    assert "NOW" not in output
+
+
+def test_direct_add_and_remove_are_single_rows_while_edit_keeps_its_diff(capsys):
+    original = _state(SELECTED_UID, "first wording")
+    edited = _state(SELECTED_UID, "edited wording")
+    report = _report(
+        originals=(original,),
+        current=(),
+        events=(
+            _event(
+                "CREATED",
+                timestamp="2026-07-30T11:31:00Z",
+                command="add",
+                checkpoint_uid=CREATE_CHECKPOINT_UID,
+                after=(original,),
+            ),
+            _event(
+                "EDITED",
+                timestamp="2026-08-01T09:15:00Z",
+                command="edit",
+                checkpoint_uid=EDIT_CHECKPOINT_UID,
+                before=(original,),
+                after=(edited,),
+            ),
+            _event(
+                "REMOVED",
+                timestamp="2026-08-02T10:30:00Z",
+                command="remove",
+                checkpoint_uid=RESTORE_CHECKPOINT_UID,
+                before=(edited,),
+            ),
+        ),
+    )
+
+    trace_command.render_trace(report)
+    compact = capsys.readouterr().out
+    trace_command.render_trace(report, verbose=True)
+    verbose = capsys.readouterr().out
+
+    assert compact.count("  − ") == 1
+    assert compact.count("  + ") == 1
+    edit_row = next(line for line in compact.splitlines() if line.startswith("[edit]"))
+    assert edit_row.endswith("2026-08-01 09:15")
+    assert "content changed" not in compact
+    assert "  − [11111111]@1 first wording" in compact
+    assert "  + [11111111]@1 edited wording" in compact
+    assert "  − ∅" not in compact and "  + ∅" not in compact
+    assert verbose.count("  − ") == 3
+    assert verbose.count("  + ") == 3
 
 
 def test_multiline_and_terminal_controls_stay_on_one_escaped_operation_line(
@@ -232,7 +299,7 @@ def test_multiline_and_terminal_controls_stay_on_one_escaped_operation_line(
 
     rows = _operation_lines(output)
     assert len(rows) == 1
-    assert r"a\nb\t\x1b\u202ec" in rows[0]
+    assert r"a\nb\t\x1b\u202ec" in output
     assert "\x1b" not in output
     assert "\u202e" not in output
 
@@ -272,8 +339,10 @@ def test_same_operation_is_grouped_and_unrelated_states_are_filtered(capsys):
 
     rows = _operation_lines(output)
     assert len(rows) == 1
-    assert "REMOVED+CREATED" in rows[0]
-    assert "selected before” → [22222222]@1 “selected after" in rows[0]
+    assert rows[0].startswith("[atomize] [CHECKPOINT bbbbbbbb]")
+    assert rows[0].endswith("removed+created")
+    assert "  − [11111111]@1 selected before" in output
+    assert "  + [22222222]@1 selected after" in output
     assert UNRELATED_UID[:8] not in output
     assert "UNRELATED BEFORE" not in output
     assert "UNRELATED AFTER" not in output
@@ -301,11 +370,100 @@ def test_default_hides_checkpoint_detail_while_verbose_shows_full_uids(capsys):
     verbose = capsys.readouterr().out
 
     assert "Checkpoint:" not in compact
+    assert "Lineage: CREATED · RECORDED" not in compact
     assert SELECTED_UID not in compact
     assert CREATE_CHECKPOINT_UID not in compact
     assert "Checkpoint:" in verbose
+    assert "Lineage: CREATED · RECORDED" in verbose
     assert SELECTED_UID in verbose
     assert CREATE_CHECKPOINT_UID in verbose
+
+
+def test_bounded_trace_names_omitted_older_operations_without_hiding_origin():
+    state = _state(SELECTED_UID, "same wording")
+    events = tuple(
+        _event(
+            "EDITED",
+            timestamp=f"2026-08-{index + 1:02d}T09:15:00Z",
+            command="edit",
+            checkpoint_uid=f"{index:08d}-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            before=(state,),
+            after=(state,),
+        )
+        for index in range(3)
+    )
+    report = _report(originals=(state,), current=(state,), events=events)
+
+    bounded = format_compact_trace_report(report, limit=2)
+    complete = format_compact_trace_report(report, limit=None)
+
+    assert "SHOWING 2 OF 3" in bounded
+    assert "… 1 OLDER OPERATIONS HIDDEN · use --all or --limit N" in bounded
+    assert bounded.count("2026-") == 2
+    assert "ORIGIN" not in bounded
+    assert "HIDDEN" not in complete
+    assert complete.count("2026-") == 3
+
+
+def test_plain_projection_is_exactly_the_unstyled_tui_document():
+    state = _state(SELECTED_UID, "inspect me")
+    report = _report(
+        originals=(state,),
+        current=(state,),
+        events=(
+            _event(
+                "CREATED",
+                timestamp="2026-07-30T11:31:00Z",
+                command="add",
+                checkpoint_uid=CREATE_CHECKPOINT_UID,
+                after=(state,),
+            ),
+        ),
+    )
+
+    fragments = trace_document_fragments(report)
+
+    assert format_compact_trace_report(report) == plain_text_from_fragments(
+        fragments,
+        whole_document=True,
+    )
+
+
+def test_cli_limit_and_all_control_only_the_human_operation_projection(
+    isolated_store,
+    monkeypatch,
+):
+    assert runner.invoke(app, ["init", "bounded-trace"]).exit_code == 0
+    state = _state(SELECTED_UID, "same wording")
+    report = _report(
+        originals=(state,),
+        current=(state,),
+        events=tuple(
+            _event(
+                "EDITED",
+                timestamp=f"2026-08-{index + 1:02d}T09:15:00Z",
+                command="edit",
+                checkpoint_uid=f"{index:08d}-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                before=(state,),
+                after=(state,),
+            )
+            for index in range(3)
+        ),
+    )
+    monkeypatch.setattr(trace_command, "build_memory_history", lambda *_args: report)
+
+    bounded = runner.invoke(app, ["trace", SELECTED_UID, "--limit", "1"])
+    complete = runner.invoke(app, ["trace", SELECTED_UID, "--all"])
+    invalid = runner.invoke(app, ["trace", SELECTED_UID, "--limit", "0"])
+
+    assert bounded.exit_code == 0, bounded.output
+    assert bounded.output.count("2026-") == 1
+    assert "SHOWING 1 OF 3" in bounded.output
+    assert complete.exit_code == 0, complete.output
+    assert complete.output.count("2026-") == 3
+    assert "HIDDEN" not in complete.output
+    assert invalid.exit_code == 2
+    assert "--limit must be between 1 and 200" in invalid.output
 
 
 def test_json_keeps_structured_events_in_chronological_order(

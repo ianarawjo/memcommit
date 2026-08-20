@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from prompt_toolkit.application import Application
+from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout import FormattedTextControl, Layout, Window
@@ -17,7 +18,7 @@ from memcommit.interfaces.tui.components.frame import (
     build_tui_frame,
 )
 from memcommit.interfaces.tui.components.scrollable_pane import (
-    build_scrollable_text_pane,
+    build_scrollable_formatted_text_pane,
     move_wrapped_read_cursor,
     scroll_wrapped_page,
 )
@@ -35,22 +36,44 @@ def interactive_report_terminal() -> bool:
 
 
 def run_read_only_viewer(
-    text: str,
+    text: str | StyleAndTextTuples,
     *,
     title: str,
+    frame_title: str = "VIEWER",
+    compact_height: int | None = None,
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
 ) -> None:
-    """Show report text in the shared framed, wrapped, scrollable Viewer."""
+    """Show a report in the shared framed, wrapped, scrollable Viewer.
+
+    ``compact_height`` bounds short inspection reports in the ordinary terminal
+    buffer. It changes no navigation, read-only, or semantic-style behavior.
+    """
 
     if require_tty and not interactive_report_terminal():
         raise ValueError("Interactive report Viewer requires a terminal.")
+    if not isinstance(frame_title, str) or not frame_title or "\n" in frame_title:
+        raise ValueError("Read-only Viewer frame title must be one non-empty line.")
+    if compact_height is not None and (
+        not isinstance(compact_height, int)
+        or isinstance(compact_height, bool)
+        or compact_height < 6
+    ):
+        raise ValueError("Compact report Viewer height must be at least 6 rows.")
 
-    pane = build_scrollable_text_pane(
-        "VIEWER",
+    # The formatted pane keeps one shared cursor-backed scrolling contract for
+    # both neutral reports and semantic documents. A plain string remains a
+    # valid projection, so callers do not need a parallel Viewer shell merely
+    # to add trusted semantic color tokens.
+    pane = build_scrollable_formatted_text_pane(
+        frame_title,
         text,
-        height=Dimension(min=4, weight=1),
+        height=(
+            Dimension.exact(compact_height - 1)
+            if compact_height is not None
+            else Dimension(min=4, weight=1)
+        ),
     )
     footer = Window(
         FormattedTextControl(
@@ -93,13 +116,18 @@ def run_read_only_viewer(
         bindings.add(key)(close)
     bind_case_insensitive_key(bindings, "q")(close)
 
+    root = build_tui_frame(TuiRegion(pane.container), TuiRegion(footer))
+    if compact_height is not None:
+        # A compact report preserves the same Viewer and scrolling mechanics;
+        # only the bounded non-alternate-screen presentation differs.
+        root.height = Dimension.exact(compact_height)
     app: Application[None] = Application(
         layout=Layout(
-            build_tui_frame(TuiRegion(pane.container), TuiRegion(footer)),
+            root,
             focused_element=pane.text_area,
         ),
         key_bindings=bindings,
-        full_screen=True,
+        full_screen=compact_height is None,
         erase_when_done=True,
         mouse_support=False,
         input=app_input,

@@ -81,19 +81,20 @@ def test_trace_shows_newest_operation_first_with_forward_row_arrows(
     rows = [
         line
         for line in result.output.splitlines()
-        if len(line) >= 4 and line[:4].isdigit()
+        if line.startswith("[") and "[CHECKPOINT " in line
     ]
     assert [
-        next(kind for kind in ("EDITED", "CREATED") if kind in row)
+        next(action for action in ("[edit]", "[add]") if action in row)
         for row in rows
-    ] == ["EDITED", "EDITED", "CREATED"]
-    assert "revision one” →" in rows[0]
-    assert "revision two" in rows[0]
-    assert "draft” →" in rows[1]
-    assert "revision one" in rows[1]
-    assert "∅ →" in rows[2]
+    ] == ["[edit]", "[edit]", "[add]"]
+    assert "  − [" in result.output
+    assert "@1 revision one\n  + [" in result.output
+    assert "@1 revision two" in result.output
+    assert "@1 draft\n  + [" in result.output
+    assert "  − ∅" not in result.output
     assert "LATEST FIRST" in result.output
-    assert "NOW ·" in result.output
+    assert "NOW\n" not in result.output
+    assert "[MEMORY " in result.output
     assert "Checkpoint:" not in result.output
 
 
@@ -111,10 +112,12 @@ def test_trace_resolves_removed_historical_memory(isolated_store):
     result = invoke("trace", memory.uid[:8])
 
     assert result.exit_code == 0
-    assert "CREATED" in result.output
-    assert "REMOVED" in result.output
-    assert "temporary” → ∅" in result.output
-    assert "NOW · ∅ (lineage absent from current Context)" in result.output
+    assert "[add]" in result.output
+    assert "[remove]" in result.output
+    assert 'removed "temporary"' in result.output
+    assert "  − " not in result.output
+    assert "  + " not in result.output
+    assert "NOW" not in result.output
 
 
 def test_trace_reconstructs_legacy_chunk_lineage_both_directions(
@@ -143,12 +146,14 @@ def test_trace_reconstructs_legacy_chunk_lineage_both_directions(
     ]
     assert len(children) == 2
 
-    from_parent = invoke("trace", parent.uid[:8])
-    from_child = invoke("trace", children[1].uid[:8])
+    from_parent = invoke("trace", parent.uid[:8], "--verbose")
+    from_child = invoke("trace", children[1].uid[:8], "--verbose")
 
     for result in (from_parent, from_child):
         assert result.exit_code == 0
-        assert "SPLIT" in result.output
+        assert "[chunk] [CHECKPOINT " in result.output
+        assert "  − [" in result.output
+        assert "  + [" in result.output
         assert "RECONSTRUCTED" in result.output
         assert r"First block.\n\nSecond block." in result.output
         assert parent.uid[:8] in result.output
@@ -419,12 +424,14 @@ def test_trace_reads_current_state_after_revert(isolated_store):
     result = invoke("trace", memory.uid[:8])
 
     assert result.exit_code == 0
-    assert "RESTORED/CHANGED" in result.output
-    now_line = next(
-        line for line in result.output.splitlines() if line.startswith("NOW ·")
+    assert "[revert]" in result.output
+    lines = result.output.splitlines()
+    revert_index = next(
+        index for index, line in enumerate(lines) if line.startswith("[revert]")
     )
-    assert "keep" in now_line
-    assert "later" not in now_line
+    revert_diff = "\n".join(lines[revert_index : revert_index + 3])
+    assert "− [" in revert_diff and "later" in revert_diff
+    assert "+ [" in revert_diff and "keep" in revert_diff
 
 
 def test_trace_does_not_claim_uncheckpointed_current_state_as_origin(

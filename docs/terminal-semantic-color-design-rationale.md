@@ -1,0 +1,132 @@
+# Shared terminal semantic color design rationale
+
+## Problem
+
+Terminal presentation historically owned color at the individual command or
+screen. The interactive semantic Viewer used ADD blue, EDIT green, and REMOVE
+red, while line-oriented Diff and restoration receipts used different colors
+for the same labels. `mem log` printed automatic command rows without action
+color, and source rows could show GRANT and permissions through another local
+palette. A person therefore could not reuse color as a stable scanning aid
+across retained history, current review, and authority orientation.
+
+The current command refactor also makes presentation boundaries important.
+`mem log` is now one terminal-independent report; Diff, Revert, and saved
+Update retain checkpoint-oriented History surfaces; and interactive Trace uses
+one continuous read-only lineage document after its Memory is known. A shared
+palette must not reverse those separations or make terminal capability select a
+different command flow.
+
+## Contract
+
+`memcommit.interfaces.console.theme` is the sole authored palette and semantic
+classification source. It has no Typer or prompt-toolkit dependency. Console
+adapters translate a semantic role to a Click-compatible RGB tuple; TUI themes
+translate the same role to one prompt-toolkit class.
+
+The stable role mapping is:
+
+| Semantic role | Visible examples | Foreground |
+| --- | --- | --- |
+| CREATE | `create`, `init`, `branch`, `CREATED` | blue `#8aadf4` |
+| ADD | `add`, `ADD`, `ADDED` | blue `#8aadf4` |
+| EMBED | `embed`, `VIA EMBED`, embedded Context kind | yellow `#eed49f` |
+| EDIT | `edit`, `replace`, `EDITED` | green `#a6da95` |
+| REMOVE | `remove`, `delete`, `clear`, `REMOVED` | red `#ed8796` |
+| UNDO | `undo`, `revert`, `RESTORED` | peach `#f5a97f` |
+| REDO | `redo` | lavender `#b7bdf8` |
+| HISTORY | manual checkpoint and historical-version kind | brown `#c9ad93` |
+| GRANT | Grant ownership marker | neutral white `#f4f5f7` |
+| NAVIGATION_GRANT | Switch Context-category `GRANT` marker | green `#a6da95` |
+| CAPABILITY | READ/QUERY/EDIT capability cluster | teal `#8bd5ca` |
+| REFERENCE | durable Reference kind | mauve `#c6a0f6` |
+
+CREATE and ADD deliberately share a constructive family. Their explicit text
+continues to distinguish lifecycle creation from adding one direct item. A new
+hue is not assigned to every command because the number of operations exceeds
+the reliably distinguishable palette and color is never the only information
+channel.
+
+Mixed operations such as Update, Meld, and Atomize remain neutral at the
+top-level command label unless their own model proves one disposition. Their
+typed child effects carry ADD, EDIT, or REMOVE colors. This avoids presenting a
+mixed Update as an edit merely because EDIT happened to be its historical
+default color.
+
+Only the shortest trusted semantic token is tinted. Timestamps, UIDs,
+descriptions, report chrome, explanatory prose, and Memory bodies remain
+neutral or retain the Memory-object lavender. A focused History row uses the
+common focus treatment across the complete row; focus therefore overrides its
+unfocused action color instead of presenting two active visual states.
+
+Grant ownership and available capability are independent roles. Source
+projection in operation workbenches and static authority reports keeps the
+`GRANT` ownership identity neutral and bold, while a `READ + EDIT` capability
+cluster carries teal. The Switch Context picker has a narrower categorical
+scan contract established by the current navigation refactor: only `GRANT`,
+`VIA EMBED`, and `QUERY ONLY` are colored, so its `GRANT` marker uses the
+separate green `NAVIGATION_GRANT` role and its name and compact capability
+summary stay neutral. Both variants resolve through the same palette module;
+neither screen owns a raw green value.
+
+The exact stored permission atoms remain authoritative. Color does not grant
+access and does not collapse CREATE and UPDATE authority into a new persisted
+EDIT permission.
+
+## Plain and interactive adapters
+
+`mem log` retains identical line structure in terminals and pipes. Typer may
+emit semantic foreground escapes for a color-capable terminal, but stripping
+ANSI yields the same report as `--plain`. The presence of color never opens a
+picker or changes the selected Context.
+
+The shared History picker colors only the unfocused command column. Checkpoint,
+restore, and saved-Update details color action and child-effect tokens through
+the same classifier. Mechanical before/after Memory diff spans retain their
+separate directional contract: removed text is red, new text is green, and
+unchanged body text is white. An ADD action can consequently have a blue label
+and green newly present content without conflating operation identity with a
+textual diff direction.
+
+Trace composes the same palette without inheriting the checkpoint picker's
+two-surface topology. Each operation begins with the same adapter-neutral
+History row segments consumed by static Log: the action token uses its semantic
+role, Memory badges use lavender, receipt badges use retained-history brown,
+and source badges remain neutral bold. Timestamps, summaries, evidence labels,
+and report chrome remain neutral. Compact direct Add/Remove stop at that colored
+Log row; Edit, restoration, and structural or mixed commands append their diff.
+Direct Edit leaves its generic summary empty so the colored action token and
+the red/green diff do not repeat the same claim in prose.
+Verbose Trace expands every diff and adds the typed effect/evidence line without
+restating the Log row format in a second renderer. Inline `−` and
+`+` markers carry REMOVE plus the proven after-side ADD, EDIT, or restoration
+role, while the Memory text beside them stays lavender. A mixed Atomize or
+Update command remains neutral even when its lineage block contains colored
+child effects. The ANSI-free TUI projection and `--plain` output retain the
+same markers, labels, ordering, bounds, and omitted-operation count.
+
+## Alternatives considered
+
+- Giving every command a unique hue was rejected because colors would become
+  difficult to distinguish and would not generalize to new or mixed commands.
+- Reusing red/green alone for undo and redo was rejected because restoration
+  direction is not intrinsically destructive or successful. Their temporal
+  roles use peach and lavender, while actual restored effects remain explicit.
+- Parsing rendered strings such as `UPDATE · EDIT` was rejected because wording
+  and localization would then control semantics. Adapters receive typed command
+  or effect labels and resolve only registered aliases.
+- Putting palette constants in the TUI theme was rejected because the static
+  CLI would either depend on prompt-toolkit or duplicate the values.
+
+## Boundaries and limitations
+
+This contract covers semantic action, history, Grant/capability, and Reference
+colors. It does not migrate every legacy success, error, loading, analysis, or
+provider-status color in one change. Those roles may join the common palette
+later only after their meanings are classified.
+
+Color is presentation evidence, not operation evidence. It cannot authorize a
+command, prove a checkpoint disposition, alter history reconstruction, or
+change a Grant. Labels and symbols remain required so `NO_COLOR`, pipes,
+screen-reader-oriented text, and limited terminals preserve the complete
+meaning.

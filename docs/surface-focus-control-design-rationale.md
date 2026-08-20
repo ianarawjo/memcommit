@@ -81,13 +81,16 @@ pane even though keyboard focus had already moved. Crossing from final review
 into Items positions its Report row but does not close or apply the review;
 moving or activating an Items row remains the explicit content transition.
 
-Log, Diff, and Trace declare the smaller `VIEWER → ITEMS` topology. Their
-Viewer uses the common cursor-backed formatted-text pane so semantic diff
-styles survive while Up/Down advances actual wrapped visual rows. Its adapter
-reports `BOUNDARY` only at the true viewport edge; the controller then crosses
-to Items. Items likewise reports its first and last row boundaries instead of
-clamping invisibly. Rationale has only the common read-only Viewer, so it reuses
-the same wrapped-row movement primitive without fabricating an Items Surface.
+Diff declares the smaller `VIEWER → ITEMS` topology. Its Viewer uses the common
+cursor-backed formatted-text pane so semantic diff styles survive while
+Up/Down advances actual wrapped visual rows. Its adapter reports `BOUNDARY`
+only at the true viewport edge; the controller then crosses to Items. Items
+likewise reports its first and last row boundaries instead of clamping
+invisibly. Trace and Rationale each have one common read-only Viewer: Trace's
+already selected Memory expands into a continuous bounded lineage document,
+while Rationale expands into its explanatory report. Both reuse the same
+wrapped-row movement primitive without fabricating an Items Surface. Log is a
+terminal-independent static report and owns no focus topology.
 
 Share declares `CONTEXT → MEMORIES → ACTION`. Its Context Surface retains the
 two semantic Viewer sections for the selected Source and destination, while its

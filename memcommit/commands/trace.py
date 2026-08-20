@@ -16,7 +16,6 @@ from memcommit.commands.memory_history import (
 )
 from memcommit.commands.memory_picker import (
     ScopedMemoryPickerItem,
-    choose_memory_report_context,
     choose_memory_report_target,
 )
 from memcommit.commands.memory_report_recents import (
@@ -26,19 +25,16 @@ from memcommit.commands.memory_report_recents import (
 )
 from memcommit.interfaces.tui.viewers.read_only import interactive_report_terminal
 from memcommit.commands.trace_projection import (
+    DEFAULT_TRACE_OPERATION_LIMIT,
+    MAX_TRACE_OPERATION_LIMIT,
     format_compact_trace_report,
-    open_trace_history,
-    short_operation_uid as _operation_uid,
-    short_uid as _uid,
+    open_trace_viewer,
 )
 from memcommit.interfaces.console.text import (
     display_escape_text,
-    safe_terminal_text,
 )
 from memcommit.provenance import (
-    MemoryState,
     ProvenanceError,
-    TraceEvent,
     TraceReport,
     collect_trace_candidates,
 )
@@ -47,277 +43,21 @@ from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
 
 
-_EVIDENCE_COLORS = {
-    "RECORDED": typer.colors.GREEN,
-    "RECONSTRUCTED": typer.colors.CYAN,
-    "INFERRED": typer.colors.YELLOW,
-    "UNRECORDED": typer.colors.RED,
-}
+def render_trace(
+    report: TraceReport,
+    *,
+    verbose: bool = False,
+    limit: int | None = DEFAULT_TRACE_OPERATION_LIMIT,
+) -> None:
+    """Print the same bounded vertical lineage document used by the TUI."""
 
-
-def _render_content(prefix: str, state: MemoryState, *, verbose: bool) -> None:
-    typer.secho(f"  {prefix} [{_uid(state.uid, verbose)}]", bold=True)
-    for line in safe_terminal_text(state.content).splitlines() or [""]:
-        typer.echo(f"      {line}")
-
-
-def _render_event(event: TraceEvent, *, verbose: bool) -> None:
-    timestamp = (
-        event.timestamp[:16].replace("T", " ") if event.timestamp else "(current)"
-    )
-    typer.secho(f"{timestamp}  {event.kind}", bold=True, nl=False)
-    typer.secho(
-        f"  {event.evidence}",
-        fg=_EVIDENCE_COLORS[event.evidence],
-        bold=True,
-    )
-    checkpoint = (
-        _uid(event.checkpoint_uid, verbose)
-        if event.checkpoint_uid is not None
-        else "none"
-    )
-    typer.secho(
-        f"  Command: {safe_terminal_text(event.command)}  |  Checkpoint: {checkpoint}",
-        dim=True,
-    )
-    if event.description:
-        typer.secho(
-            f"  {safe_terminal_text(event.description)}",
-            dim=True,
-        )
-    operation = event.command_operation
-    if operation is not None:
-        typer.secho(
-            "  Operation: "
-            f"{safe_terminal_text(operation.command)} "
-            f"[{_operation_uid(operation.uid, verbose)}]",
-            bold=True,
-        )
-        if operation.source_command is not None and operation.source_uid is not None:
-            typer.echo(
-                "  Source operation: mem "
-                f"{safe_terminal_text(operation.source_command)} "
-                f"[{_operation_uid(operation.source_uid, verbose)}]"
-            )
-        if len(operation.contexts) == 1:
-            context = operation.contexts[0]
-            typer.echo(
-                "  Affected Context: "
-                f"{display_escape_text(context.name)} "
-                f"[{_uid(context.uid, verbose)}]"
-            )
-        else:
-            typer.echo(f"  Affected Contexts: {len(operation.contexts)}")
-            for context in operation.contexts:
-                typer.echo(
-                    "    - "
-                    f"{display_escape_text(context.name)} "
-                    f"[{_uid(context.uid, verbose)}]"
-                )
-    if event.kind in {
-        "EDITED",
-        "RESTORED",
-        "REORDERED",
-        "HISTORY_GAP",
-    }:
-        for state in event.before:
-            _render_content("-", state, verbose=verbose)
-        for state in event.after:
-            _render_content("+", state, verbose=verbose)
-    elif event.kind in {"SPLIT", "ABSORBED", "TRANSLATED"}:
-        for state in event.before:
-            _render_content("FROM", state, verbose=verbose)
-        for state in event.after:
-            _render_content("TO", state, verbose=verbose)
-    elif event.kind == "REMOVED":
-        for state in event.before:
-            _render_content("-", state, verbose=verbose)
-    else:
-        for state in event.after:
-            _render_content("+", state, verbose=verbose)
-
-    occurrence = event.source_occurrence
-    if occurrence is not None:
-        details = f"{occurrence.mode} item {occurrence.ordinal}/{occurrence.total}"
-        if occurrence.line_number is not None:
-            details += f", source line {occurrence.line_number}"
-        qualifier = (
-            "exact raw line retained"
-            if occurrence.exact_raw_source
-            else "normalized line/order reconstructed"
-        )
-        typer.secho(f"  Source occurrence: {details} ({qualifier})", dim=True)
-    if event.reason:
-        typer.echo(f"  Reason: {safe_terminal_text(event.reason)}")
-    if event.reason_codes:
-        typer.secho(
-            "  Rules: " + ", ".join(event.reason_codes),
-            dim=True,
-        )
-    if event.declared_frame is not None:
-        review_uid = (
-            _uid(event.source_review_uid, verbose)
-            if event.source_review_uid is not None
-            else "unrecorded"
-        )
-        typer.secho(
-            f"  Reviewed declared context/comment (review {review_uid}):",
-            fg=typer.colors.YELLOW,
-        )
-        for line in safe_terminal_text(event.declared_frame).splitlines() or [""]:
-            typer.echo(f"      {line}")
-        if event.uncertainty_reason:
-            typer.echo(
-                "  Requested because: " + safe_terminal_text(event.uncertainty_reason)
-            )
-    for evidence in event.child_evidence:
-        typer.secho(
-            f"  Applied citations for [{_uid(evidence.result_uid, verbose)}]:",
-            dim=True,
-        )
-        typer.secho(
-            "      Source spans: "
-            + " | ".join(safe_terminal_text(span) for span in evidence.source_spans),
-            dim=True,
-        )
-        if evidence.frame_spans:
-            typer.secho(
-                "      Declared-frame spans: "
-                + " | ".join(safe_terminal_text(span) for span in evidence.frame_spans),
-                dim=True,
-            )
-
-
-def _render_compact_trace(report: TraceReport) -> None:
-    """Render the complete retained range as newest-first operation rows."""
-    typer.echo(format_compact_trace_report(report))
-
-
-def _render_detailed_trace(report: TraceReport, *, verbose: bool) -> None:
-    typer.secho(
-        f"Trace for [{_uid(report.selected_uid, verbose)}]",
-        bold=True,
-    )
     typer.echo(
-        f"Context: {display_escape_text(report.context_name)} "
-        f"[{_uid(report.context_uid, verbose)}]"
+        format_compact_trace_report(
+            report,
+            verbose=verbose,
+            limit=limit,
+        )
     )
-
-    typer.secho("\nORIGINAL", bold=True)
-    if not report.originals:
-        typer.secho("  (original state is not retained)", fg=typer.colors.YELLOW)
-    for state in report.originals:
-        _render_content("ORIGIN", state, verbose=verbose)
-
-    typer.secho("\nCONTENT LINEAGE", bold=True)
-    if not report.events:
-        typer.echo("  (no retained content events)")
-    for index, event in enumerate(report.events):
-        if index:
-            typer.echo()
-        _render_event(event, verbose=verbose)
-
-    typer.secho("\nANALYSIS ATTACHMENTS — separated from content history", bold=True)
-    if not report.analyses:
-        typer.echo("  (no saved analysis for this lineage)")
-    for analysis in report.analyses:
-        color = (
-            typer.colors.GREEN
-            if analysis.status == "APPLIED"
-            else (
-                typer.colors.CYAN
-                if analysis.status == "CURRENT"
-                else typer.colors.YELLOW
-            )
-        )
-        typer.secho(
-            f"  {analysis.kind}  {analysis.status}  "
-            f"{analysis.classification} / {analysis.action}",
-            fg=color,
-            bold=True,
-        )
-        typer.secho(
-            f"  Analysis: {_uid(analysis.analysis_uid, verbose)}  "
-            f"|  Source: {_uid(analysis.memory_uid, verbose)}",
-            dim=True,
-        )
-        typer.echo(f"  Reason: {safe_terminal_text(analysis.reason)}")
-        typer.secho(
-            "  Rules: " + ", ".join(analysis.reason_codes),
-            dim=True,
-        )
-        if analysis.declared_frame is not None:
-            review_uid = (
-                _uid(analysis.source_review_uid, verbose)
-                if analysis.source_review_uid is not None
-                else "unrecorded"
-            )
-            typer.secho(
-                f"  Reviewed declared context/comment (review {review_uid}):",
-                fg=typer.colors.YELLOW,
-            )
-            for line in safe_terminal_text(analysis.declared_frame).splitlines() or [
-                ""
-            ]:
-                typer.echo(f"      {line}")
-            if analysis.declared_frame_reason:
-                typer.echo(
-                    "  Requested because: "
-                    + safe_terminal_text(analysis.declared_frame_reason)
-                )
-        for index, child in enumerate(analysis.children, 1):
-            typer.secho(f"  Proposed child {index}:", fg=typer.colors.GREEN)
-            for line in safe_terminal_text(child.content).splitlines() or [""]:
-                typer.echo(f"      {line}")
-            typer.secho(
-                "      Source spans: "
-                + " | ".join(safe_terminal_text(span) for span in child.source_spans),
-                dim=True,
-            )
-            if child.frame_spans:
-                typer.secho(
-                    "      Declared-frame spans: "
-                    + " | ".join(
-                        safe_terminal_text(span) for span in child.frame_spans
-                    ),
-                    dim=True,
-                )
-
-    typer.secho("\nCURRENT", bold=True)
-    if not report.current:
-        typer.secho(
-            "  (no descendant from this lineage is currently present)",
-            fg=typer.colors.YELLOW,
-        )
-    else:
-        for state in report.current:
-            _render_content("CURRENT", state, verbose=verbose)
-        if (
-            len(report.originals) == 1
-            and len(report.current) == 1
-            and report.originals[0].uid == report.current[0].uid
-            and report.originals[0].content == report.current[0].content
-        ):
-            typer.secho(
-                "  Same UID and content as the retained original — UNCHANGED",
-                fg=typer.colors.GREEN,
-            )
-
-    if report.warnings:
-        typer.secho("\nLIMITS", bold=True)
-        for warning in report.warnings:
-            typer.secho(
-                f"  - {safe_terminal_text(warning)}",
-                fg=typer.colors.YELLOW,
-            )
-
-
-def render_trace(report: TraceReport, *, verbose: bool = False) -> None:
-    """Use compact operation rows by default; retain full evidence on demand."""
-    if verbose:
-        _render_detailed_trace(report, verbose=True)
-        return
-    _render_compact_trace(report)
 
 
 def cmd(
@@ -326,8 +66,8 @@ def cmd(
         typer.Argument(
             help=(
                 "UID (or unambiguous prefix) of a current or historical "
-                "direct Memory; omit in a terminal to browse local Contexts "
-                "and select a Memory"
+                "direct Memory; omit in a terminal to select from the current "
+                "Context or its descendants"
             )
         ),
     ] = None,
@@ -337,8 +77,8 @@ def cmd(
             "--context",
             "-c",
             help=(
-                "Start Memory selection in this Context instead of the "
-                "local Context browser"
+                "Start Memory selection in this Context instead of the current "
+                "Context"
             ),
         ),
     ] = None,
@@ -350,6 +90,24 @@ def cmd(
             help="Expand full evidence detail and complete UIDs",
         ),
     ] = False,
+    limit: Annotated[
+        int,
+        typer.Option(
+            "--limit",
+            "-n",
+            help=(
+                "Maximum newest lineage operations to show "
+                f"(1-{MAX_TRACE_OPERATION_LIMIT})"
+            ),
+        ),
+    ] = DEFAULT_TRACE_OPERATION_LIMIT,
+    all_operations: Annotated[
+        bool,
+        typer.Option(
+            "--all",
+            help="Show every retained lineage operation",
+        ),
+    ] = False,
     as_json: Annotated[
         bool,
         typer.Option("--json", help="Emit the structured trace as JSON"),
@@ -358,11 +116,20 @@ def cmd(
         bool,
         typer.Option(
             "--plain",
-            help="Print the lineage instead of opening the shared History explorer",
+            help="Print the lineage document instead of opening its read-only Viewer",
         ),
     ] = False,
 ) -> None:
     """Show recorded and safely reconstructed content lineage."""
+    if not 1 <= limit <= MAX_TRACE_OPERATION_LIMIT:
+        typer.secho(
+            "Trace error: --limit must be between 1 and "
+            f"{MAX_TRACE_OPERATION_LIMIT}.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+    operation_limit = None if all_operations else limit
     store = MemoryStore(create=False)
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
@@ -385,63 +152,45 @@ def cmd(
                 "No current context. Pass --context or run 'mem init <name>' first."
             )
         if selector is None:
-            location_cursor = name
-            while True:
-                # Explicit relative locators were resolved against the command's
-                # frozen current snapshot above.  Keep that canonical result for
-                # every subsequent load and selector identity.
-                picker_root = name
-                if not explicit_context:
-                    picker_root = choose_memory_report_context(
-                        tuple(store.list_context_names()),
-                        current=location_cursor,
-                        operation="trace",
-                    )
-                    if picker_root is None:
-                        typer.echo("Trace cancelled.")
-                        return
-                    location_cursor = picker_root
-                history_scope = load_retained_history_scope(
-                    store,
-                    context_locator=picker_root,
-                    current_name=context_snapshot.current_name,
-                    # Freeze every descendant before the shared RANGE control
-                    # narrows or broadens what can actually be selected.
-                    include_descendants=True,
-                )
-                catalog_names = tuple(item.display_name for item in history_scope)
-                candidate_items = tuple(
-                    ScopedMemoryPickerItem(
-                        context_name=context.display_name,
-                        uid=candidate.uid,
-                        content=candidate.content,
-                        status=candidate.status,
-                        catalog_context_names=catalog_names,
-                        change_count=candidate.change_count,
-                    )
-                    for context in history_scope
-                    for candidate in collect_trace_candidates(
-                        store,
-                        context.context,
-                    )
-                )
-                selected = choose_memory_report_target(
-                    candidate_items,
-                    context_name=picker_root,
-                    operation="trace",
+            # The current or explicit Context is already the useful default.
+            # Freeze its descendants for the range control, but do not force a
+            # second location decision before the person can see its Memories.
+            history_scope = load_retained_history_scope(
+                store,
+                context_locator=name,
+                current_name=context_snapshot.current_name,
+                # Freeze every descendant before the shared RANGE control
+                # narrows or broadens what can actually be selected.
+                include_descendants=True,
+            )
+            catalog_names = tuple(item.display_name for item in history_scope)
+            candidate_items = tuple(
+                ScopedMemoryPickerItem(
+                    context_name=context.display_name,
+                    uid=candidate.uid,
+                    content=candidate.content,
+                    status=candidate.status,
                     catalog_context_names=catalog_names,
-                    initial_include_descendants=False,
+                    change_count=candidate.change_count,
                 )
-                if selected is None:
-                    if not explicit_context:
-                        # An empty or unwanted location returns to the same
-                        # Profile-wide Context selector used by Log.
-                        continue
-                    typer.echo("Trace cancelled.")
-                    return
-                selector = selected.memory_uid
-                context_name = selected.owner_context_name
-                break
+                for context in history_scope
+                for candidate in collect_trace_candidates(
+                    store,
+                    context.context,
+                )
+            )
+            selected = choose_memory_report_target(
+                candidate_items,
+                context_name=name,
+                operation="trace",
+                catalog_context_names=catalog_names,
+                initial_include_descendants=False,
+            )
+            if selected is None:
+                typer.echo("Trace cancelled.")
+                return
+            selector = selected.memory_uid
+            context_name = selected.owner_context_name
             # The pickers are read-only, but another process may have changed
             # the Context while they were open. Re-read before resolving the
             # exact UID so the report never mixes old live state with new history.
@@ -485,10 +234,10 @@ def cmd(
         )
         return
     if interactive_report_terminal() and not plain:
-        open_trace_history(
+        open_trace_viewer(
             report,
-            context_name=name,
             verbose=verbose,
+            limit=operation_limit,
         )
         return
-    render_trace(report, verbose=verbose)
+    render_trace(report, verbose=verbose, limit=operation_limit)
