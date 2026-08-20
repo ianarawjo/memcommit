@@ -509,7 +509,11 @@ def elaborate_impact_presentation(
                 item.proposition,
                 item.rationale,
                 (
-                    f"SOURCE RULE · {item.source_rule_index}",
+                    f"RULE COVERAGE · ALL {len(item.rule_checks)}",
+                    *(
+                        f"RULE {check.source_rule_index} · {check.evidence}"
+                        for check in item.rule_checks
+                    ),
                     f"EXPECTED · {item.expected or '(open)'}",
                 ),
             )

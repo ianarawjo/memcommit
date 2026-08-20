@@ -86,18 +86,36 @@ class ElaborateProvider:
                 if self.empty
                 else [
                     {
-                        "proposition": "A person explicitly confirms option A.",
+                        "proposition": (
+                            "A person explicitly confirms option A, and the system "
+                            "proceeds with option A only after that confirmation."
+                        ),
                         "expected": "Proceed with option A.",
                         "rationale": "This is an ordinary fitting Case.",
                         "case_role": "FIT",
-                        "source_rule_index": 1,
+                        "rule_checks": [
+                            {
+                                "source_rule_index": index,
+                                "evidence": "The proposition visibly complies with this Rule.",
+                            }
+                            for index, _rule in enumerate(payload["inputs"], 1)
+                        ],
                     },
                     {
-                        "proposition": "A person mentions option A without confirming it.",
+                        "proposition": (
+                            "A person mentions option A without confirming it, so the "
+                            "system asks for explicit confirmation and does not proceed."
+                        ),
                         "expected": "Do not proceed yet.",
                         "rationale": "This distinguishes mention from confirmation.",
                         "case_role": "BOUNDARY",
-                        "source_rule_index": 1,
+                        "rule_checks": [
+                            {
+                                "source_rule_index": index,
+                                "evidence": "The proposition visibly complies with this Rule.",
+                            }
+                            for index, _rule in enumerate(payload["inputs"], 1)
+                        ],
                     },
                 ],
             }
@@ -130,10 +148,48 @@ def test_rules_elaborate_to_diverse_unverified_case_propositions() -> None:
 
     assert result.analysis.mode is ElaborateMode.RULES_TO_CASES
     assert [case.case_role for case in result.analysis.cases] == ["FIT", "BOUNDARY"]
-    assert all(case.source_rule_index == 1 for case in result.analysis.cases)
+    assert all(
+        tuple(check.source_rule_index for check in case.rule_checks) == (1,)
+        for case in result.analysis.cases
+    )
     assert provider.calls[0][1]["properties"]["cases"]["minItems"] == 1
+    checks_schema = provider.calls[0][1]["properties"]["cases"]["items"][
+        "properties"
+    ]["rule_checks"]
+    assert checks_schema["minItems"] == checks_schema["maxItems"] == 1
     assert "Propose at least one and at most 3" in provider.calls[0][0]
+    assert "complete input Rule set together" in provider.calls[0][0]
     assert "not a reason to return an empty set" in provider.calls[0][0]
+
+
+def test_rules_elaborate_rejects_partial_or_reordered_rule_coverage() -> None:
+    class PartialCoverageProvider:
+        def complete(self, prompt, *, operation, output_schema=None):
+            return json.dumps(
+                {
+                    "overview": "The Case omits one source Rule.",
+                    "cases": [
+                        {
+                            "proposition": "One partial Case.",
+                            "expected": "A partial result must not be accepted.",
+                            "rationale": "Only the first Rule is checked.",
+                            "case_role": "FIT",
+                            "rule_checks": [
+                                {
+                                    "source_rule_index": 1,
+                                    "evidence": "Only Rule 1 appears.",
+                                }
+                            ],
+                        }
+                    ],
+                }
+            )
+
+    with pytest.raises(ElaborateError, match="every source Rule exactly once"):
+        execute_elaborate(
+            ElaborateRequest(rules=("Rule one.", "Rule two.")),
+            provider_factory=PartialCoverageProvider,
+        )
 
 
 @pytest.mark.parametrize(

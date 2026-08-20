@@ -25,7 +25,7 @@ from memcommit.semantic_execution import (
 
 
 ELABORATE_OPERATION = "elaborate"
-ELABORATE_PROVIDER_CONTRACT_VERSION = 2
+ELABORATE_PROVIDER_CONTRACT_VERSION = 3
 ELABORATE_PAYLOAD_MARKER = "ELABORATE PAYLOAD:\n"
 
 
@@ -111,13 +111,25 @@ class ElaboratedRule:
 
 
 @dataclass(frozen=True)
+class ElaboratedRuleCheck:
+    source_rule_index: int
+    evidence: str
+
+    def __post_init__(self) -> None:
+        if type(self.source_rule_index) is not int or self.source_rule_index < 1:
+            raise ElaborateError("Elaborated Rule check index is invalid.")
+        if not isinstance(self.evidence, str) or not self.evidence.strip():
+            raise ElaborateError("Elaborated Rule check evidence must be nonempty text.")
+
+
+@dataclass(frozen=True)
 class ElaboratedCase:
     uid: str
     proposition: str
     expected: str
     rationale: str
     case_role: str
-    source_rule_index: int
+    rule_checks: tuple[ElaboratedRuleCheck, ...]
 
     def __post_init__(self) -> None:
         try:
@@ -126,14 +138,17 @@ class ElaboratedCase:
             raise ElaborateError("Elaborated Case uid must be a UUID.") from error
         if not isinstance(self.proposition, str) or not self.proposition.strip():
             raise ElaborateError("Elaborated Case proposition must be nonempty text.")
-        if not isinstance(self.expected, str):
-            raise ElaborateError("Elaborated Case expected value must be text.")
+        if not isinstance(self.expected, str) or not self.expected.strip():
+            raise ElaborateError("Elaborated Case expected value must be nonempty text.")
         if not isinstance(self.rationale, str) or not self.rationale.strip():
             raise ElaborateError("Elaborated Case rationale must be nonempty text.")
         if self.case_role not in {"FIT", "BOUNDARY", "CONTRAST"}:
             raise ElaborateError("Elaborated Case role is invalid.")
-        if type(self.source_rule_index) is not int or self.source_rule_index < 1:
-            raise ElaborateError("Elaborated Case source Rule index is invalid.")
+        indexes = tuple(check.source_rule_index for check in self.rule_checks)
+        if not indexes or len(indexes) != len(set(indexes)):
+            raise ElaborateError(
+                "Elaborated Case must check source Rules exactly once."
+            )
 
 
 @dataclass(frozen=True)
@@ -174,8 +189,19 @@ class ElaborateAnalysis:
             raise ElaborateError("Elaborate returned duplicate Rule proposals.")
         if len({item.proposition.casefold() for item in self.cases}) != len(self.cases):
             raise ElaborateError("Elaborate returned duplicate Case proposals.")
-        if any(item.source_rule_index > len(self.inputs) for item in self.cases):
-            raise ElaborateError("Elaborate Case cites an unavailable source Rule.")
+        required_rule_indexes = tuple(range(1, len(self.inputs) + 1))
+        if any(
+            tuple(check.source_rule_index for check in item.rule_checks)
+            != required_rule_indexes
+            for item in self.cases
+        ):
+            # A Case is one joint model of the Rule frame. A partial citation
+            # would restore the former one-Rule-per-Case behavior while looking
+            # structurally valid to public adapters.
+            raise ElaborateError(
+                "Every Elaborate Case must check every source Rule exactly once "
+                "in input order."
+            )
         if self.provider_contract_version != ELABORATE_PROVIDER_CONTRACT_VERSION:
             raise ElaborateError("Unsupported Elaborate provider contract version.")
         if not isinstance(self.semantic_config, ElaborateSemanticConfig):
@@ -197,7 +223,13 @@ class ElaborateAnalysis:
                     "expected": case.expected,
                     "rationale": case.rationale,
                     "case_role": case.case_role,
-                    "source_rule_index": case.source_rule_index,
+                    "rule_checks": [
+                        {
+                            "source_rule_index": check.source_rule_index,
+                            "evidence": check.evidence,
+                        }
+                        for check in case.rule_checks
+                    ],
                 }
                 for case in self.cases
             ],
@@ -260,9 +292,14 @@ def validate_elaborate_analysis(
                 case.expected,
                 "Case expected value",
                 limit=config.text_limit,
-                empty=True,
             )
             _text(case.rationale, "Case rationale", limit=config.rationale_limit)
+            for check in case.rule_checks:
+                _text(
+                    check.evidence,
+                    "Case Rule-check evidence",
+                    limit=config.rationale_limit,
+                )
 
 
 def elaborate_execution_policy(
@@ -340,12 +377,13 @@ def _schema(
                     "expected",
                     "rationale",
                     "case_role",
-                    "source_rule_index",
+                    "rule_checks",
                 ],
                 "properties": {
                     "proposition": text,
                     "expected": {
                         "type": "string",
+                        "minLength": 1,
                         "maxLength": config.text_limit,
                     },
                     "rationale": rationale,
@@ -353,10 +391,23 @@ def _schema(
                         "type": "string",
                         "enum": ["FIT", "BOUNDARY", "CONTRAST"],
                     },
-                    "source_rule_index": {
-                        "type": "integer",
-                        "minimum": 1,
-                        "maximum": input_count,
+                    "rule_checks": {
+                        "type": "array",
+                        "minItems": input_count,
+                        "maxItems": input_count,
+                        "items": {
+                            "type": "object",
+                            "additionalProperties": False,
+                            "required": ["source_rule_index", "evidence"],
+                            "properties": {
+                                "source_rule_index": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": input_count,
+                                },
+                                "evidence": rationale,
+                            },
+                        },
                     },
                 },
             },
@@ -435,14 +486,23 @@ def analyze_elaborate(
     else:
         instruction = (
             f"Propose at least one and at most {config.max_case_proposals} "
-            "diverse concrete Case propositions that make the Rules testable or "
-            "easier to refine. An underspecified Rule is not a reason to return "
-            "an empty set: propose one concrete interpretation that can be "
-            "reviewed and corrected. Prefer a useful FIT plus a BOUNDARY or "
-            "CONTRAST when available, and make additional Cases distinct rather "
-            "than repetitive. Link each Case to one source Rule index. Every "
-            "Case is suggested and unverified; do not present it as real-world "
-            "evidence."
+            "diverse, self-contained positive Example Memories. Every Case must "
+            "instantiate and comply with the complete input Rule set together; do "
+            "not assign different Cases to different Rules. Preserve fixed roles, "
+            "relationships, event order, decision boundaries, and presentation form "
+            "required by the Rules while varying only legitimate instance slots. "
+            "The proposition itself must contain the complete compliant scenario "
+            "and outcome that would be stored as the Example Memory.\n\n"
+            "For every Case, provide rule_checks for every source Rule exactly once "
+            "and in input order. Each check must cite observable evidence in that "
+            "Case proposition; do not claim coverage that the proposition does not "
+            "show. FIT, BOUNDARY, and CONTRAST describe different useful kinds of "
+            "compliant examples. A CONTRAST may expose a tempting alternative, but "
+            "the stored proposition must still show the Rule-compliant handling, not "
+            "a Rule violation. An underspecified Rule is not a reason to return an "
+            "empty set: propose one joint interpretation that can be reviewed and "
+            "corrected. Every Case is suggested and unverified; do not present it as "
+            "real-world evidence."
         )
     prompt = (
         instruction
@@ -508,7 +568,7 @@ def analyze_elaborate(
                 "expected",
                 "rationale",
                 "case_role",
-                "source_rule_index",
+                "rule_checks",
             }:
                 raise ElaborateError("The Elaborate provider returned an invalid Case.")
             proposition = _text(
@@ -520,7 +580,6 @@ def analyze_elaborate(
                 value["expected"],
                 "Case expected value",
                 limit=config.text_limit,
-                empty=True,
             )
             rationale = _text(
                 value["rationale"],
@@ -528,27 +587,68 @@ def analyze_elaborate(
                 limit=config.rationale_limit,
             )
             role = value["case_role"]
-            source_rule_index = value["source_rule_index"]
             if role not in {"FIT", "BOUNDARY", "CONTRAST"}:
                 raise ElaborateError("The Elaborate provider returned an invalid Case role.")
-            if (
-                type(source_rule_index) is not int
-                or not 1 <= source_rule_index <= len(inputs)
+            checks_value = value["rule_checks"]
+            if not isinstance(checks_value, list):
+                raise ElaborateError("The Elaborate provider returned invalid Rule checks.")
+            rule_checks: list[ElaboratedRuleCheck] = []
+            for check_value in checks_value:
+                if not isinstance(check_value, dict) or set(check_value) != {
+                    "source_rule_index",
+                    "evidence",
+                }:
+                    raise ElaborateError(
+                        "The Elaborate provider returned an invalid Rule check."
+                    )
+                source_rule_index = check_value["source_rule_index"]
+                if (
+                    type(source_rule_index) is not int
+                    or not 1 <= source_rule_index <= len(inputs)
+                ):
+                    raise ElaborateError("A Case checked an unavailable source Rule.")
+                rule_checks.append(
+                    ElaboratedRuleCheck(
+                        source_rule_index=source_rule_index,
+                        evidence=_text(
+                            check_value["evidence"],
+                            "Case Rule-check evidence",
+                            limit=config.rationale_limit,
+                        ),
+                    )
+                )
+            if tuple(check.source_rule_index for check in rule_checks) != tuple(
+                range(1, len(inputs) + 1)
             ):
-                raise ElaborateError("A Case cited an unavailable source Rule.")
+                raise ElaborateError(
+                    "Every Elaborate Case must check every source Rule exactly once "
+                    "in input order."
+                )
             proposed_cases.append(
                 ElaboratedCase(
                     uid=str(
                         uuid.uuid5(
                             uuid.UUID(analysis_uid),
-                            f"case:{index}:{source_rule_index}:{proposition}",
+                            "case:"
+                            f"{index}:{proposition}:"
+                            + json.dumps(
+                                [
+                                    {
+                                        "source_rule_index": check.source_rule_index,
+                                        "evidence": check.evidence,
+                                    }
+                                    for check in rule_checks
+                                ],
+                                ensure_ascii=False,
+                                separators=(",", ":"),
+                            ),
                         )
                     ),
                     proposition=proposition,
                     expected=expected_value,
                     rationale=rationale,
                     case_role=role,
-                    source_rule_index=source_rule_index,
+                    rule_checks=tuple(rule_checks),
                 )
             )
     analysis = ElaborateAnalysis(
@@ -572,6 +672,7 @@ __all__ = [
     "ElaborateMode",
     "ElaborateProvider",
     "ElaboratedCase",
+    "ElaboratedRuleCheck",
     "ElaboratedRule",
     "analyze_elaborate",
     "normalize_elaborate_inputs",

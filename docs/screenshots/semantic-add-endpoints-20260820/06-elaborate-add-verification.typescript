@@ -1,28 +1,13 @@
 PTY · 180 columns × 52 rows
 $ mem elaborate --from capture/elaborate-source --to capture/elaborate-target
-MEM ELABORATE · 1/1 · GENERATING REVIEW PROPOSALS . · 0sMEM ELABORATE · 1/1 · GENERATING REVIEW PROPOSALS .. · 0sMEM ELABORATE · 1/1 · GENERATING REVIEW PROPOSALS … · 0s MEM ELABORATE · 1/1 · PROPOSAL READY . · 0s                                                        ELABORATE · RULES → CASES
-STATUS · REVIEW ONLY · SUGGESTED · UNVERIFIED · LIVE
-
-WHAT MEM UNDERSTOOD
-A fit and boundary make the ticker Rule concrete.
-
-PROPOSED CASES · 2
-
-1. [FIT] [Suggested] [Unverified] Identifying Apple by ticker returns AAPL.
-   SOURCE RULE · 1
-   EXPECTED · AAPL
-   WHY · This is a fitting ticker Case.
-
-2. [BOUNDARY] [Suggested] [Unverified] Mentioning Apple without asking for its ticker.
-   SOURCE RULE · 1
-   EXPECTED · Do not infer a lookup request.
-   WHY · This bounds when the Rule applies.
-
-PROPOSALS · SUGGESTED · UNVERIFIED
-
-[32mAdded 2 Elaborate Memories to 'capture/elaborate-target'.[0m
+MEM ELABORATE · 1/1 · GENERATING REVIEW PROPOSALS . · 0sMEM ELABORATE · 1/1 · GENERATING REVIEW PROPOSALS .. · 0sMEM ELABORATE · 1/1 · GENERATING REVIEW PROPOSALS … · 0s MEM ELABORATE · 1/1 · PROPOSAL READY . · 0s                                                        [32m[1mELABORATE APPLIED · capture/elaborate-target[0m
+MODE · RULES_TO_CASES · VERIFICATION · UNVERIFIED
 SOURCE · capture/elaborate-source · TARGET · capture/elaborate-target
-CHECKPOINT · 4c0651cc · RECOVERY · mem undo
+EFFECTS · ADD 2 MEMORIES
+RECEIPT · 574055cd-9ddb-458d-9680-68fc791849bd
+CHECKPOINT · 574055cd-9ddb-458d-9680-68fc791849bd
+REVIEW · mem review elaborate --receipt 574055cd-9ddb-458d-9680-68fc791849bd
+RECOVERY · mem undo
 CAPTURE GATE · PRESS V FOR RESULT VERIFICATION
 v
 

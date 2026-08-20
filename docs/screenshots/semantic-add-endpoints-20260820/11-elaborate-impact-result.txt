@@ -19,8 +19,8 @@
 ┃ IMPACT · ELABORATE ADD · ENDPOINTS UNCHANGED                                                                                                                                     ┃
 ┃ These unverified Memories would be added to the existing Target. Neither Source nor Target has been changed.                                                                     ┃
 ┃ Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                      ┃
-┃       ▸ + [ADD] [051f353b] Identifying Apple by ticker returns AAPL.                                                                                                             ┃
-┃       ▸ + [ADD] [a59be7c2] Mentioning Apple without asking for its ticker.                                                                                                       ┃
+┃       ▸ + [ADD] [c6bc5e91] Identifying Apple by ticker returns AAPL.                                                                                                             ┃
+┃       ▸ + [ADD] [d61d9e2d] Mentioning Apple without asking for its ticker.                                                                                                       ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃

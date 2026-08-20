@@ -87,7 +87,13 @@ class SemanticProvider:
                         "expected": "Proceed with A.",
                         "rationale": "This is a fitting Case.",
                         "case_role": "FIT",
-                        "source_rule_index": 1,
+                        "rule_checks": [
+                            {
+                                "source_rule_index": index,
+                                "evidence": "The proposition satisfies this Rule.",
+                            }
+                            for index, _rule in enumerate(payload["inputs"], 1)
+                        ],
                     }
                 ],
             }

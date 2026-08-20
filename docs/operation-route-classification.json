@@ -31,6 +31,7 @@
       },
       "distill": {
         "evidence": [
+          "docs/distill-elaborate-generative-reduction-design-rationale.md",
           "docs/distill-elaborate-application-boundary-matrix.md",
           "docs/execution-receipt-review-lifecycle-design-rationale.md"
         ],
@@ -38,6 +39,7 @@
       },
       "elaborate": {
         "evidence": [
+          "docs/distill-elaborate-generative-reduction-design-rationale.md",
           "docs/distill-elaborate-application-boundary-matrix.md",
           "docs/execution-receipt-review-lifecycle-design-rationale.md"
         ],

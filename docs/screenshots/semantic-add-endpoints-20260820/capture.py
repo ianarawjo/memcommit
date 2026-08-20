@@ -94,14 +94,24 @@ class _ElaborateProvider:
                         "expected": "AAPL",
                         "rationale": "This is a fitting ticker Case.",
                         "case_role": "FIT",
-                        "source_rule_index": 1,
+                        "rule_checks": [
+                            {
+                                "source_rule_index": 1,
+                                "evidence": "The Case uses the complete ticker Rule.",
+                            }
+                        ],
                     },
                     {
                         "proposition": "Mentioning Apple without asking for its ticker.",
                         "expected": "Do not infer a lookup request.",
                         "rationale": "This bounds when the Rule applies.",
                         "case_role": "BOUNDARY",
-                        "source_rule_index": 1,
+                        "rule_checks": [
+                            {
+                                "source_rule_index": 1,
+                                "evidence": "The Case preserves the ticker Rule boundary.",
+                            }
+                        ],
                     },
                 ],
             }
@@ -209,7 +219,6 @@ def _capture_add(operation: str, root: Path, number: int) -> None:
         child.expect(operation.upper())
         _BASE._settle(child, seconds=0.3)
         _BASE._snapshot(recorder, f"{number:02d}-{operation}-add-entry")
-        child.expect("Added .* " + ("Rules" if operation == "distill" else "Memories"))
         child.expect("CAPTURE GATE .* RESULT VERIFICATION")
         _BASE._settle(child, seconds=0.2)
         _BASE._snapshot(recorder, f"{number + 1:02d}-{operation}-add-receipt")
@@ -229,7 +238,9 @@ def _capture_impact(operation: str, root: Path, number: int) -> None:
         child.expect("IMPACT .* " + operation.upper())
         _BASE._settle(child, seconds=0.25)
         _BASE._snapshot(recorder, f"{number:02d}-{operation}-impact-entry")
-        child.expect("IMPACT .* ENDPOINTS UNCHANGED")
+        # Semantic styling can split the title with ANSI bytes; the shared
+        # unstyled footer is the stable final-screen readiness boundary.
+        child.expect("Enter inspect")
         _BASE._settle(child, seconds=0.4)
         _BASE._snapshot(recorder, f"{number + 1:02d}-{operation}-impact-result")
         child.send("q")

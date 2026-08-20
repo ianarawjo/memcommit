@@ -75,13 +75,19 @@ class ElaborateRuleProposal:
 
 
 @dataclass(frozen=True)
+class ElaborateRuleCheckProposal:
+    source_rule_index: int
+    evidence: str
+
+
+@dataclass(frozen=True)
 class ElaborateCaseProposal:
     uid: str
     proposition: str
     expected: str
     rationale: str
     case_role: str
-    source_rule_index: int
+    rule_checks: tuple[ElaborateRuleCheckProposal, ...]
 
 
 @dataclass(frozen=True)
@@ -102,6 +108,7 @@ __all__ = [
     "DistillRuleProposal",
     "ElaborateCaseProposal",
     "ElaborateProposal",
+    "ElaborateRuleCheckProposal",
     "ElaborateRuleProposal",
     "FitJudgmentResult",
     "FitPropositionInput",

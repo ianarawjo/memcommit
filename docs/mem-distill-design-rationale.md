@@ -44,6 +44,22 @@ Source Memory must be cited by at least one Rule or appear in the analysis-wide
 outside set. Cited and outside sets are disjoint, aliases are resolved locally,
 and every provider response crosses a strict schema and local decoder.
 
+Rules recover the complete generative family rather than only behavioral
+advice. The mandatory audit therefore compares shared language and
+language-mixing, register, tone, formality, person, viewpoint, tense, voice,
+exact expressions, actor and subject transitions, label order, sentence and
+event sequence, markup, placeholders, delimiters, capitalization, and
+punctuation. A surface-form claim is exact only when every cited support
+literally contains that form in the claimed position. Observed particle,
+inflection, spelling, or punctuation variants must remain alternatives or a
+conditioned form only when the Source itself supports that condition; hidden
+linguistic causes are not inferred. A majority pattern is not universal.
+Support and boundary aliases remain disjoint, and a mechanical consequence is
+not duplicated as a second Rule unless it independently constrains a new
+Example. Provider contract
+version 5 prevents prepared results from the earlier partial form audit from
+replaying under this stricter meaning.
+
 Distill is `WHOLE_FRAME_ONLY`. Relations among any Source propositions can
 change the complete Rule set, so an oversized frame is rejected instead of
 being silently batched. On an exact prepared miss, this complete-frame plan is

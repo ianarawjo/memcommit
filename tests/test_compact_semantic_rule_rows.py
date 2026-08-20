@@ -79,7 +79,12 @@ class _CaseElaborateProvider:
                         "expected": "Keep the class qualifier.",
                         "rationale": "The class can identify another security.",
                         "case_role": "BOUNDARY",
-                        "source_rule_index": 1,
+                        "rule_checks": [
+                            {
+                                "source_rule_index": 1,
+                                "evidence": "The qualifier remains explicit.",
+                            }
+                        ],
                     }
                 ],
             }

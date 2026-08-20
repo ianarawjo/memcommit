@@ -29,7 +29,11 @@ def _proposal_text(result: ElaborateResult, kind: str, index: int) -> str:
     return "\n".join(
         (
             f"[{case.case_role}] [Suggested] [Unverified] {case.proposition}",
-            f"SOURCE RULE · {case.source_rule_index}",
+            f"RULE COVERAGE · ALL {len(case.rule_checks)}",
+            *(
+                f"RULE {check.source_rule_index} · {check.evidence}"
+                for check in case.rule_checks
+            ),
             f"EXPECTED · {case.expected or '(open)'}",
             f"WHY · {case.rationale}",
         )
@@ -147,12 +151,24 @@ def project_elaborate_result(result: ElaborateResult) -> SemanticViewerDocument:
                             "[Suggested] [Unverified]\n",
                         ),
                         ("class:memory-object", f" {safe_terminal_text(case.proposition)}\n"),
-                        ("class:viewer-body", f" SOURCE RULE · {case.source_rule_index}\n"),
+                        (
+                            "class:viewer-body",
+                            f" RULE COVERAGE · ALL {len(case.rule_checks)}\n",
+                        ),
+                        *(
+                            (
+                                "class:viewer-body",
+                                " RULE "
+                                f"{check.source_rule_index} · "
+                                f"{safe_terminal_text(check.evidence)}\n",
+                            )
+                            for check in case.rule_checks
+                        ),
                         ("class:viewer-body", f" EXPECTED · {safe_terminal_text(case.expected or '(open)')}\n"),
                         ("class:viewer-body", f" WHY · {safe_terminal_text(case.rationale)}\n"),
                     ),
                     anchor="end",
-                    focus_indices=(0, 1, 2, 3, 4),
+                    focus_indices=tuple(range(5 + len(case.rule_checks))),
                 ),
             )
         )

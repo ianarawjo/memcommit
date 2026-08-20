@@ -46,7 +46,12 @@ def elaborate_result_lines(result: ElaborateResult) -> tuple[str, ...]:
                     "",
                     f"{index}. [{case.case_role}] [Suggested] [Unverified] "
                     f"{safe_terminal_text(case.proposition)}",
-                    f"   SOURCE RULE · {case.source_rule_index}",
+                    f"   RULE COVERAGE · ALL {len(case.rule_checks)}",
+                    *(
+                        "   RULE "
+                        f"{check.source_rule_index} · {safe_terminal_text(check.evidence)}"
+                        for check in case.rule_checks
+                    ),
                     f"   EXPECTED · {safe_terminal_text(case.expected or '(open)')}",
                     f"   WHY · {safe_terminal_text(case.rationale)}",
                 )

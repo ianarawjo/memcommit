@@ -157,7 +157,13 @@ def apply_prepared_elaborate_add(
                 "expected": item.expected,
                 "rationale": item.rationale,
                 "case_role": item.case_role,
-                "source_rule_index": item.source_rule_index,
+                "rule_checks": [
+                    {
+                        "source_rule_index": check.source_rule_index,
+                        "evidence": check.evidence,
+                    }
+                    for check in item.rule_checks
+                ],
             }
             for item in analysis.cases
         ]

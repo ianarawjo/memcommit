@@ -60,14 +60,26 @@ class _ElaborateProvider:
                         "expected": "Proceed with AAPL.",
                         "rationale": "This is a fitting Case.",
                         "case_role": "FIT",
-                        "source_rule_index": 1,
+                        "rule_checks": [
+                            {
+                                "source_rule_index": index,
+                                "evidence": "The proposition satisfies this Rule.",
+                            }
+                            for index, _rule in enumerate(payload["inputs"], 1)
+                        ],
                     },
                     {
                         "proposition": "The user mentions AAPL without confirming it.",
                         "expected": "Ask for confirmation.",
                         "rationale": "This is a boundary Case.",
                         "case_role": "BOUNDARY",
-                        "source_rule_index": 1,
+                        "rule_checks": [
+                            {
+                                "source_rule_index": index,
+                                "evidence": "The proposition satisfies this Rule.",
+                            }
+                            for index, _rule in enumerate(payload["inputs"], 1)
+                        ],
                     },
                 ],
             }

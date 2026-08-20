@@ -4,7 +4,7 @@ Last reviewed: 2026-08-20.
 
 | Concern | Distill | Elaborate | Evidence state |
 | --- | --- | --- | --- |
-| Meaning | Case/Example Context propositions → evidence-linked Rules; optional Goal focuses relevance | Goal → at least one suggested Rule, or Rules → at least one suggested Case | `VERIFIED` in domain tests |
+| Meaning | Case/Example Context propositions → evidence-linked generative Rules, including common language, tone, expression, and notation; optional Goal focuses relevance | Goal → at least one suggested Rule, or Rules → at least one suggested Case | `VERIFIED` in café and Cloze domain tests |
 | Typed application entry | `run_distill(DistillRequest, ...)` | `run_elaborate(ElaborateRequest, ...)` | `VERIFIED` source-level absence of command/terminal imports; fresh-process package isolation is tracked separately by `IMPORT-01` |
 | Production runtime | exact local Source port, pre-provider existing-Target freeze, atomic generated-Memory Add, and lazy provider factory | exact ordinary Context Source/Target freeze, inline Target freeze, atomic generated-Memory Add, and lazy provider factory | `VERIFIED` focused tests |
 | Directional endpoints | omitted `--from`/`--to` fill from one Current snapshot; Source may equal Target | same four-way endpoint matrix; inline input has only a Target | `VERIFIED` CLI matrix and same-Context pre-image tests |

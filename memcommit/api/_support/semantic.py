@@ -16,6 +16,7 @@ from memcommit.api.semantic import (
     DistillRuleProposal,
     ElaborateCaseProposal,
     ElaborateProposal,
+    ElaborateRuleCheckProposal,
     ElaborateRuleProposal,
 )
 
@@ -109,7 +110,13 @@ def project_elaborate(result) -> ElaborateProposal:
                 expected=case.expected,
                 rationale=case.rationale,
                 case_role=case.case_role,
-                source_rule_index=case.source_rule_index,
+                rule_checks=tuple(
+                    ElaborateRuleCheckProposal(
+                        source_rule_index=check.source_rule_index,
+                        evidence=check.evidence,
+                    )
+                    for check in case.rule_checks
+                ),
             )
             for case in analysis.cases
         ),

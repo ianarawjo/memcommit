@@ -43,11 +43,13 @@
       "docs/mem-history-search-design-rationale.md"
     ],
     "distill": [
+      "docs/distill-elaborate-generative-reduction-design-rationale.md",
       "docs/distill-elaborate-application-boundary-matrix.md",
       "docs/execution-receipt-review-lifecycle-design-rationale.md"
     ],
     "edit": [],
     "elaborate": [
+      "docs/distill-elaborate-generative-reduction-design-rationale.md",
       "docs/distill-elaborate-application-boundary-matrix.md",
       "docs/execution-receipt-review-lifecycle-design-rationale.md"
     ],
