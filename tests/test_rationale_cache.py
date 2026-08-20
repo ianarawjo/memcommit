@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from types import SimpleNamespace
 import uuid
 
 from typer.testing import CliRunner
@@ -12,6 +13,7 @@ import memcommit.ops as ops
 import memcommit.rationale as rationale_module
 import memcommit.store as store_module
 from memcommit.cli import app
+from memcommit.commands.rationale import _provenance_summary
 from memcommit.context import AutoCheckpoint, Memory
 from memcommit.rationale_cache import (
     CachedRationaleInference,
@@ -99,13 +101,28 @@ def test_inference_options_are_removed_from_rationale_help(isolated_store):
     assert refresh.exit_code == 2
 
 
-def test_long_provenance_projection_is_capped_at_320_characters(
+def test_provenance_projection_uses_only_the_latest_recorded_reason():
+    report = SimpleNamespace(
+        recorded_reason_events=(
+            SimpleNamespace(reason="이전 작업의 이유다."),
+            SimpleNamespace(reason="현재 형태를 만든\n 최신 작업의   이유다."),
+        ),
+        provenance_character_limit=160,
+    )
+
+    assert _provenance_summary(report) == "현재 형태를 만든 최신 작업의 이유다."
+
+
+def test_long_provenance_projection_is_capped_at_160_characters(
     isolated_store,
     monkeypatch,
 ):
     store = MemoryStore()
     context = ops.init("rationale-long-provenance")
-    source = ops.add(context, "초안 " + ("가" * 240))
+    source = ops.add(
+        context,
+        "다듬기 요청을 받으면 문서 전체를 다시 작성하고 인용 표시도 정리한다.",
+    )
     store.save(
         context,
         AutoCheckpoint(command="add", args={}, description="긴 Memory 추가"),
@@ -114,13 +131,19 @@ def test_long_provenance_projection_is_capped_at_320_characters(
     context.remove(source.uid)
     target = Memory(
         uid="10000000-0000-4000-8000-000000000001",
-        content="현재 " + ("나" * 240),
+        content=(
+            "다듬기 요청을 받으면 기존 구조와 인용 표시를 보존하고, "
+            "명시된 표현만 수정한다."
+        ),
     )
     context.add(target, position=source_position)
     reason = (
-        "검토된 로컬 규칙의 목적을 주변 항목과 중복 없이 한 문장으로 남기기 "
-        "위해 이 Memory를 유지했다. "
-    ) * 7
+        "초기 검토에서는 요청 범위가 모호해 문서 전체가 다시 작성될 가능성이 있었다. "
+        "그래서 구조와 인용 표시를 보존하고 명시적으로 지적된 표현만 수정한다는 "
+        "경계를 남겼다. 이 기록은 이후의 다듬기 요청에서도 변경 범위를 일관되게 "
+        "판단하고, 검토자가 원하지 않은 내용 삭제나 재구성을 피하기 위한 근거로 "
+        "사용된다."
+    )
     store.save(
         context,
         AutoCheckpoint(
@@ -153,12 +176,17 @@ def test_long_provenance_projection_is_capped_at_320_characters(
     assert structured.exit_code == 0, structured.output
     payload = json.loads(structured.output)
     budgets = payload["character_budgets"]
-    assert budgets["provenance_source"] > 320
-    assert budgets["provenance_limit"] == 320
+    assert budgets["provenance_source"] > 160
+    assert budgets["provenance_limit"] == 160
     lines = result.output.splitlines()
-    provenance = lines[lines.index("PROVENANCE — recorded reason") + 1].strip()
-    assert len(provenance) <= 320
-    assert provenance.startswith("검토된 로컬 규칙의 목적")
+    heading = "PROVENANCE — latest recorded reason"
+    provenance = lines[lines.index(heading) + 1].strip()
+    assert len(provenance) <= 160
+    assert provenance == (
+        "초기 검토에서는 요청 범위가 모호해 문서 전체가 다시 작성될 가능성이 있었다. "
+        "그래서 구조와 인용 표시를 보존하고 명시적으로 지적된 표현만 수정한다는 "
+        "경계를 남겼다.…"
+    )
     assert "APPARENT PURPOSE" not in result.output
 
 

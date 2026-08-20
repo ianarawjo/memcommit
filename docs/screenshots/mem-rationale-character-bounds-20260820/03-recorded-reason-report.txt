@@ -4,7 +4,7 @@
 ┃MEMORY                                                                                                                                                                            ┃
 ┃  문장 검토에서는 구조와 인용 표시를 보존한다.                                                                                                                                    ┃
 ┃                                                                                                                                                                                  ┃
-┃PROVENANCE — recorded reason                                                                                                                                                      ┃
+┃PROVENANCE — latest recorded reason                                                                                                                                               ┃
 ┃  중복된 초안 규칙을 하나의 검토 기준으로 합치기 위해 유지했다.                                                                                                                   ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃

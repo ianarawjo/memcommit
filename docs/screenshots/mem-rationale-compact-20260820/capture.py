@@ -199,7 +199,7 @@ def main() -> None:
     plain = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.txt"))
     assert "PTY 180 52" in raw
     assert "MEMORY" in plain
-    assert "PROVENANCE — recorded reason" in plain
+    assert "PROVENANCE — latest recorded reason" in plain
     assert "검토 원칙을 기록하기 위해 유지했다" in plain
     assert "APPARENT PURPOSE" not in plain
     assert "LIMITS" not in plain

@@ -26,9 +26,9 @@ replacement contract.
 | Report | Evidence condition | Expected result |
 | --- | --- | --- |
 | `01-no-reason-report.png` | selected Memory has no retained operation reason | `PROVENANCE — no reason recorded`; no filler explanation |
-| `03-recorded-reason-report.png` | one compact Korean reason is retained in explicit trace metadata | only that recorded Korean reason is projected |
+| `03-recorded-reason-report.png` | one compact Korean reason is retained in explicit trace metadata | only that latest recorded Korean reason is projected |
 | `05-oversized-context-report.png` | 106 Korean Memories exceed 1,000,000 semantic characters | target provenance still opens without contextual analysis, provider, or cache |
-| `07-long-reason-report.png` | one retained Korean reason exceeds 320 characters | recorded reason is projected at the 320-character provenance cap |
+| `07-long-reason-report.png` | one coherent retained Korean reason exceeds 160 characters | the latest reason is projected at the 160-character cap, ending at a complete sentence rather than repeated filler |
 
 Each odd-numbered image is the report state. Its following even-numbered image
 is the terminal receipt after `q`, including `PROVIDER CALLS 0`,

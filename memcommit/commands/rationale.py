@@ -60,24 +60,36 @@ def _bounded_summary(value: str, character_limit: int) -> str:
     if character_limit == 1:
         return "…"
     prefix = value[: character_limit - 1].rstrip()
-    boundary = prefix.rfind(" ")
-    if boundary >= character_limit // 2:
-        prefix = prefix[:boundary].rstrip()
+    sentence_boundaries = tuple(
+        index + 1
+        for index, character in enumerate(prefix)
+        if character in ".!?。！？"
+    )
+    minimum_complete_sentence = min(40, max(1, character_limit // 4))
+    if (
+        sentence_boundaries
+        and sentence_boundaries[-1] >= minimum_complete_sentence
+    ):
+        prefix = prefix[: sentence_boundaries[-1]].rstrip()
+    else:
+        word_boundary = prefix.rfind(" ")
+        if word_boundary >= character_limit // 2:
+            prefix = prefix[:word_boundary].rstrip()
     return prefix + "…"
 
 
 def _provenance_summary(report: RationaleReport) -> str:
-    reasons = tuple(
-        dict.fromkeys(
-            event.reason.strip()
-            for event in report.recorded_reason_events
-            if event.reason and event.reason.strip()
-        )
-    )
-    return _bounded_summary(
-        " / ".join(reasons),
-        report.provenance_character_limit,
-    )
+    for event in reversed(report.recorded_reason_events):
+        if event.reason and event.reason.strip():
+            # Rationale is a compact view of the current form, so it shows one
+            # latest retained reason instead of splicing several historical
+            # explanations into prose that no operation actually recorded.
+            reason = " ".join(event.reason.split())
+            return _bounded_summary(
+                reason,
+                report.provenance_character_limit,
+            )
+    return ""
 
 
 def render_rationale(
@@ -101,7 +113,7 @@ def render_rationale(
     elif not report.recorded_reason_events:
         typer.secho("\nPROVENANCE — no reason recorded", bold=True)
     else:
-        typer.secho("\nPROVENANCE — recorded reason", bold=True)
+        typer.secho("\nPROVENANCE — latest recorded reason", bold=True)
         provenance = safe_terminal_text(_provenance_summary(report))
         typer.echo(
             "  "

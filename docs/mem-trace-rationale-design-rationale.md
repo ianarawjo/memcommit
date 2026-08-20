@@ -229,7 +229,7 @@ Thus the human-facing scopes remain distinct:
 - `mem revert` restores one reviewed checkpoint;
 - `mem undo` and `mem redo` restore one global command unit;
 - `mem trace` interactively inspects Log's Memory-lineage data projection; and
-- `mem rationale` shows one Memory and the compact recorded reasons retained in
+- `mem rationale` shows one Memory and the latest recorded reason retained in
   that lineage.
 
 Trace must not become the execution authority for Undo or Redo. A per-Memory
@@ -248,20 +248,26 @@ that Memory was created; `mem rationale` therefore reports that no retained
 creation event was found.
 
 The default human Rationale projection is deliberately smaller than its
-evidence model. It shows the selected **MEMORY**, at most one compact
-**PROVENANCE** paragraph containing actual retained operation reasons.
+evidence model. It shows the selected **MEMORY** and at most one compact
+**PROVENANCE** paragraph containing the latest nonempty retained operation
+reason. It never joins several historical reasons with generated connective
+prose; older reasons remain available in Trace and JSON.
 Provenance without a retained reason is the status `no reason recorded`; a
-present reason is labeled in the section heading rather than prefixed again
-inside the paragraph. It does not repeat Trace's operation list, endpoint
+present reason is labeled `latest recorded reason` in the section heading
+rather than prefixed again inside the paragraph. It does not repeat Trace's operation list, endpoint
 contents, UIDs, positions, saved reviews, proposals, or contextual judgments.
 When a Grant withholds authority history, the status is `hidden by Grant`.
 
 Provenance uses an NFC-normalized Unicode character budget rather than a word
 count. Its source is the retained event kind, command, evidence label, reason,
 and before/after content; its projected paragraph limit is
-`min(320, source characters - 1)`. Retained earliest/current endpoint content
+`min(160, source characters - 1)`. Embedded line breaks and repeated whitespace
+in the retained reason collapse to ordinary spaces. An over-limit reason keeps
+the longest complete sentence prefix that fits when one is available, then
+uses an ellipsis; otherwise it falls back to a word boundary. Retained
+earliest/current endpoint content
 also contributes to the conservative source bound even though the compact
-paragraph now projects only unique recorded reasons. A trace with no retained
+paragraph projects only the latest recorded reason. A trace with no retained
 event, or history hidden by a Grant, has a zero provenance budget. A trace with
 events but no reason may have a nonzero potential budget while still emitting
 only `no reason recorded`; the implementation never fills that budget with
@@ -276,7 +282,7 @@ verification.
 
 The [provenance-bound edge-case capture](screenshots/mem-rationale-character-bounds-20260820/README.md)
 additionally verifies no recorded reason, a compact recorded reason, and a
-retained reason longer than 320 characters. Every path performs zero provider
+retained reason longer than 160 characters. Every path performs zero provider
 calls, leaves legacy inference caches untouched, and leaves Context content
 unchanged.
 

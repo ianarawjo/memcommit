@@ -26,7 +26,7 @@ It neither requests nor renders a contextual purpose.
 | --- | --- | --- | --- |
 | `01-target-entry.png` | Launch bare Rationale | Exact-range target selector for `rationale/korean` with Korean Memories | None |
 | `02-target-focused.png` | `Tab`, `Down` | Edited target Memory is focused | None |
-| `03-compact-report.png` | `Enter` | Viewer shows Korean Memory content and its Korean recorded reason | None |
+| `03-compact-report.png` | `Enter` | Viewer shows Korean Memory content and its latest Korean recorded reason | None |
 | `04-read-only-verification.png` | `q` | Child verifies current Context content is unchanged | None |
 
 The capture asserts that APPARENT PURPOSE, Saved Analysis, Context-count, and

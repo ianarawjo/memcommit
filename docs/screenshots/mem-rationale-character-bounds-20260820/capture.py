@@ -172,12 +172,18 @@ def _run_long_provenance() -> None:
     from memcommit.rationale_cache import rationale_inference_path
 
     reason = (
-        "검토된 로컬 규칙의 목적을 주변 항목과 중복 없이 한 문장으로 남기기 위해 "
-        "이 Memory를 유지했다. "
-    ) * 7
+        "초기 검토에서는 요청 범위가 모호해 문서 전체가 다시 작성될 가능성이 있었다. "
+        "그래서 구조와 인용 표시를 보존하고 명시적으로 지적된 표현만 수정한다는 "
+        "경계를 남겼다. 이 기록은 이후의 다듬기 요청에서도 변경 범위를 일관되게 "
+        "판단하고, 검토자가 원하지 않은 내용 삭제나 재구성을 피하기 위한 근거로 "
+        "사용된다."
+    )
     store, context, target = _recorded_context(
         "provenance/long-reason",
-        content="현재 " + ("나" * 240),
+        content=(
+            "다듬기 요청을 받으면 기존 구조와 인용 표시를 보존하고, "
+            "명시된 표현만 수정한다."
+        ),
         reason=reason,
         target_uid="40000000-0000-4000-8000-000000000001",
     )
@@ -188,7 +194,7 @@ def _run_long_provenance() -> None:
     assert not rationale_inference_path(context.uid, target.uid).exists()
     print(
         f"SCENARIO long-reason VERIFIED · REASON {len(reason)} CHARS · "
-        "PROJECTION LIMIT 320 · PROVIDER CALLS 0 · CACHE UNTOUCHED · "
+        "PROJECTION LIMIT 160 · PROVIDER CALLS 0 · CACHE UNTOUCHED · "
         "STORE UNCHANGED"
     )
 
@@ -251,9 +257,9 @@ def main() -> None:
 
     cases = (
         ("no-reason", "PROVENANCE — no reason recorded"),
-        ("recorded-reason", "PROVENANCE — recorded reason"),
+        ("recorded-reason", "PROVENANCE — latest recorded reason"),
         ("oversized-context", "PROVENANCE — no reason recorded"),
-        ("long-reason", "PROVENANCE — recorded reason"),
+        ("long-reason", "PROVENANCE — latest recorded reason"),
     )
     for index, (scenario, expected) in enumerate(cases, start=1):
         child, recorder = _spawn(scenario)
@@ -289,7 +295,7 @@ def main() -> None:
     assert "CACHE UNTOUCHED" in combined
     assert "중복된 초안 규칙을 하나의 검토 기준으로 합치기 위해 유지했다." in combined
     assert "SEMANTIC SOURCE OVER 1000000" in combined
-    assert "PROJECTION LIMIT 320" in combined
+    assert "PROJECTION LIMIT 160" in combined
     assert "LIMITS" not in combined
     assert "Context(s)" not in combined
 
