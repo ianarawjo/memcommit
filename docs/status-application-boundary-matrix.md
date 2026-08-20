@@ -9,8 +9,8 @@ checkpoint facts, and performs no provider or mutation lifecycle.
 
 | Route | Entry | Application path | Projection | Effect | Evidence |
 | --- | --- | --- | --- | --- | --- |
-| Detailed direct | `mem status`, `mem status -d` | `execute_status` → `MemoryStoreStatusSource.freeze` → `inspect_status` | Inventory, conditional relationships, first-five Memory preview, latest-five checkpoints | None | application and CLI tests |
-| Detailed recursive | `mem status -r` | same boundary with lexical and embed reach enabled | Current detail plus aggregate and per-Context direct counts | None | recursive namespace/embed tests |
+| Detailed direct | `mem status`, `mem status -d` | `execute_status` → `MemoryStoreStatusSource.freeze` → `inspect_status` | Nonzero direct inventory or an explicit empty marker, conditional relationships, nonempty first-five Memory preview, nonempty latest-five checkpoints | None | application and CLI tests |
+| Detailed recursive | `mem status -r` | same boundary with lexical and embed reach enabled | One nonzero aggregate and compact direct-count row per Context, using an explicit marker for an empty direct inventory; no asymmetric current-only details | None | recursive namespace/embed tests |
 | Compact direct | `mem status -s` | same typed result | One current Context count row | None | short-output tests |
 | Compact recursive | `mem status -sr` | same typed result | One direct-count row per Context | None | short recursive tests |
 | Profile lineage | `mem status -b`, `mem status -sb` | same typed result plus frozen Profile identity | Profile and Context lineage | None | branch-style orientation tests |

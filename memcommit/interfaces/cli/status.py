@@ -10,6 +10,16 @@ from memcommit.source_projection.presentation import source_display_text
 from memcommit.status_application import StatusContextResult, StatusResult
 
 
+_COUNT_LABELS = (
+    "Memories",
+    "Memory Refs",
+    "Query Views",
+    "Embedded Contexts",
+    "Grants",
+    "Checkpoints",
+)
+
+
 def _lineage(name: str) -> str:
     return " > ".join(name.split("/"))
 
@@ -23,33 +33,42 @@ def _access_label(context: StatusContextResult) -> str:
     return label
 
 
-def _counts(context: StatusContextResult, *, separator: str) -> str:
-    return separator.join(
-        (
-            f"Memories {context.memory_count}",
-            f"Memory Refs {len(context.memory_references)}",
-            f"Query Views {len(context.query_views)}",
-            f"Embedded Contexts {len(context.embedded_contexts)}",
-            f"Grants {len(context.grants)}",
-            f"Checkpoints {context.checkpoint_count}",
-        )
+def _count_values(context: StatusContextResult) -> tuple[int, ...]:
+    return (
+        context.memory_count,
+        len(context.memory_references),
+        len(context.query_views),
+        len(context.embedded_contexts),
+        len(context.grants),
+        context.checkpoint_count,
     )
 
 
-def _recursive_totals(result: StatusResult) -> str:
-    return "  |  ".join(
-        (
-            f"Contexts {len(result.contexts)}",
-            f"Memories {sum(context.memory_count for context in result.contexts)}",
-            "Memory Refs "
-            + str(sum(len(context.memory_references) for context in result.contexts)),
-            "Query Views "
-            + str(sum(len(context.query_views) for context in result.contexts)),
-            "Embedded Contexts "
-            + str(sum(len(context.embedded_contexts) for context in result.contexts)),
-            f"Grants {sum(len(context.grants) for context in result.contexts)}",
-            "Checkpoints "
-            + str(sum(context.checkpoint_count for context in result.contexts)),
+def _visible_counts(
+    values: tuple[int, ...],
+    *,
+    separator: str,
+    empty: str,
+) -> str:
+    labelled = tuple(zip(_COUNT_LABELS, values, strict=True))
+    visible = tuple(f"{label} {value}" for label, value in labelled if value)
+    return separator.join(visible) if visible else empty
+
+
+def _inline_counts(context: StatusContextResult) -> str:
+    return _visible_counts(
+        _count_values(context),
+        separator=" · ",
+        empty="Direct inventory empty",
+    )
+
+
+def _recursive_count_values(result: StatusResult) -> tuple[int, ...]:
+    return tuple(
+        sum(values)
+        for values in zip(
+            *(_count_values(context) for context in result.contexts),
+            strict=True,
         )
     )
 
@@ -63,21 +82,31 @@ def _render_short(result: StatusResult, *, branch: bool) -> None:
         )
         typer.echo(
             f"{display_escape_text(prefix)} [{_access_label(context)}] · "
-            + _counts(context, separator=" · ")
+            + _inline_counts(context)
         )
 
 
 def _render_recursive_overview(result: StatusResult) -> None:
-    typer.secho("\nRecursive scope:", bold=True)
-    typer.echo("  " + _recursive_totals(result))
-    typer.secho("\nContext status:", bold=True)
+    typer.secho("\nRecursive scope", bold=True, nl=False)
+    typer.echo(
+        f" · Contexts {len(result.contexts)}  |  "
+        + _visible_counts(
+            _recursive_count_values(result),
+            separator="  |  ",
+            empty="Inventory empty",
+        )
+    )
     for index, context in enumerate(result.contexts):
         current = " · CURRENT" if index == 0 else ""
         typer.echo(
             f"  {display_escape_text(context.name)} "
-            f"[{_access_label(context)}]{current}"
+            f"[{_access_label(context)}]{current} · "
+            + _visible_counts(
+                _count_values(context),
+                separator="  |  ",
+                empty="Direct inventory empty",
+            )
         )
-        typer.echo("    " + _counts(context, separator="  |  "))
 
 
 def _render_relationships(context: StatusContextResult) -> None:
@@ -116,8 +145,6 @@ def _render_relationships(context: StatusContextResult) -> None:
 
 def _render_memory_preview(context: StatusContextResult) -> None:
     if not context.memory_preview:
-        typer.secho("\nMemory preview:", bold=True)
-        typer.echo("  (no direct Memories)")
         return
     typer.secho(
         "\nMemory preview · "
@@ -134,8 +161,6 @@ def _render_memory_preview(context: StatusContextResult) -> None:
 
 def _render_recent_changes(context: StatusContextResult) -> None:
     if not context.recent_checkpoints:
-        typer.secho("\nRecent changes:", bold=True)
-        typer.echo("  (no checkpoints yet)")
         return
     typer.secho(
         "\nRecent changes · latest "
@@ -182,13 +207,15 @@ def render_status(
             + source_display_text(current.source, include_permissions=True),
             dim=True,
         )
-    typer.secho("\nInventory:", bold=True)
-    typer.echo("  " + _counts(current, separator="  |  "))
-    if result.include_descendants or result.follow_embeds:
+    recursive = result.include_descendants or result.follow_embeds
+    if recursive:
         _render_recursive_overview(result)
-    _render_relationships(current)
-    _render_memory_preview(current)
-    _render_recent_changes(current)
+    else:
+        typer.secho("\nInventory", bold=True, nl=False)
+        typer.echo(" · " + _inline_counts(current))
+        _render_relationships(current)
+        _render_memory_preview(current)
+        _render_recent_changes(current)
 
 
 __all__ = ["render_status"]

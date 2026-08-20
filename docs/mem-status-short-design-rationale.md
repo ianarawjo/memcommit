@@ -42,13 +42,26 @@ The latest checkpoint rows summarize applied operations but do not claim to
 show the exact changes. The checkpoint UID is retained as the handoff to
 `mem diff` or `mem log`.
 
+Zero-valued categories are omitted from count rows so the few facts that
+distinguish Contexts remain visible. When every direct category is zero, Status
+renders `Direct inventory empty`; this states the boundary explicitly without
+six repeated zero-value fragments. Empty preview and recent-change sections are
+also omitted instead of adding two more negative facts to the report. This
+matters at namespace roots, where the current Context may be intentionally
+empty while its descendants hold the useful Memories.
+
 ## Scope and compact forms
 
 - `mem status` and `mem status -d` show the current exact Context.
 - `mem status -r` adds aggregate and per-Context direct counts for readable
-  lexical descendants and embedded Contexts. The Memory preview and detailed
-  relationship rows remain anchored to the current Context, so recursive
-  orientation cannot silently become a body dump.
+  lexical descendants and embedded Contexts. Each Context and its nonzero
+  direct counts occupy one compact row beneath the aggregate; a Context with no
+  direct facts gets the explicit empty marker. It does not repeat the current
+  direct inventory in a separate section. Recursive Status is an inventory
+  overview, so it does not append current-only relationship, preview, or
+  checkpoint details. Those remain available through detailed direct Status
+  and cannot make recursive orientation look like a descendant body or history
+  dump.
 - `mem status -s` emits one line per Context with canonical name, access, and
   direct counts.
 - `mem status -sr` emits the compact row for every Context in the frozen

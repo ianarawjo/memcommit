@@ -25,7 +25,7 @@ def test_status_sb_is_one_line_with_profile_context_lineage_and_counts(
         "## standalone :: task-2 > participant > proposal-workspace [OWNED]"
     )
     assert "Memories 1" in result.output
-    assert "Checkpoints 0" in result.output
+    assert "Checkpoints 0" not in result.output
 
 
 def test_status_short_does_not_change_detailed_default(isolated_store):
@@ -38,11 +38,12 @@ def test_status_short_does_not_change_detailed_default(isolated_store):
     detailed = runner.invoke(app, ["status"])
 
     assert short.exit_code == 0, short.output
-    assert short.output.startswith("notes [OWNED] · Memories 0")
+    assert short.output == "notes [OWNED] · Direct inventory empty\n"
     assert detailed.exit_code == 0, detailed.output
     assert "On context: notes" in detailed.output
-    assert "Memory preview:" in detailed.output
-    assert "(no direct Memories)" in detailed.output
+    assert "Inventory · Direct inventory empty" in detailed.output
+    assert "Memory preview:" not in detailed.output
+    assert "Recent changes:" not in detailed.output
 
 
 def test_status_direct_flag_preserves_the_default_output(isolated_store):
@@ -81,13 +82,12 @@ def test_status_recursive_reports_descendants_and_embeds_once(isolated_store):
     recursive = runner.invoke(app, ["status", "-r"])
 
     assert direct.exit_code == 0, direct.output
-    assert "Recursive scope:" not in direct.output
+    assert "Recursive scope" not in direct.output
     assert recursive.exit_code == 0, recursive.output
-    assert "Contexts 3  |  Memories 6" in recursive.output
+    assert "Recursive scope · Contexts 3  |  Memories 6" in recursive.output
+    assert "Embedded Contexts 2" in recursive.output
     assert "scope/child [OWNED]" in recursive.output
     assert "outside [OWNED]" in recursive.output
-    assert "Memories 2" in recursive.output
-    assert "Memories 3" in recursive.output
     # The child is both a lexical descendant and an embed, but it has one row.
     assert recursive.output.count("scope/child [OWNED]") == 1
 
@@ -107,8 +107,36 @@ def test_status_short_recursive_uses_one_direct_count_row_per_context(
 
     assert result.exit_code == 0, result.output
     assert result.output.count("\n") == 2
-    assert result.output.startswith("scope [OWNED] · Memories 0")
+    assert result.output.startswith("scope [OWNED] · Direct inventory empty")
     assert "scope/child [OWNED] · Memories 1" in result.output
+
+
+def test_status_recursive_compacts_context_rows_and_omits_zero_counts(
+    isolated_store,
+):
+    store = MemoryStore()
+    root = ops.init("practice")
+    description = ops.init("practice/description")
+    source = ops.init("practice/source")
+    ops.add(description, "Description one")
+    ops.add(description, "Description two")
+    for index in range(12):
+        ops.add(source, f"Source {index}")
+    for context in (root, description, source):
+        store.save(context)
+    store.set_current(root.name)
+
+    result = runner.invoke(app, ["status", "-r"])
+
+    assert result.exit_code == 0, result.output
+    assert "Inventory" not in result.output
+    assert "Recursive scope · Contexts 3  |  Memories 14" in result.output
+    assert "practice [OWNED] · CURRENT · Direct inventory empty" in result.output
+    assert "practice/description [OWNED] · Memories 2" in result.output
+    assert "practice/source [OWNED] · Memories 12" in result.output
+    assert "Memory Refs 0" not in result.output
+    assert "Memory preview:" not in result.output
+    assert "Recent changes:" not in result.output
 
 
 def test_status_rejects_conflicting_scope_presets(isolated_store):
@@ -136,6 +164,7 @@ def test_status_previews_first_five_memories_and_latest_five_checkpoints(
         )
 
     result = runner.invoke(app, ["status"])
+    recursive = runner.invoke(app, ["status", "-r"])
 
     assert result.exit_code == 0, result.output
     assert "Memory preview · first 5 of 7:" in result.output
@@ -148,6 +177,13 @@ def test_status_previews_first_five_memories_and_latest_five_checkpoints(
     assert "Change 2" in result.output
     assert "Change 1" not in result.output
     assert "Change 0" not in result.output
+    assert recursive.exit_code == 0, recursive.output
+    assert (
+        "Recursive scope · Contexts 1  |  Memories 7  |  Checkpoints 7"
+        in recursive.output
+    )
+    assert "Memory preview" not in recursive.output
+    assert "Recent changes" not in recursive.output
 
 
 def test_status_lists_direct_pointer_and_embed_relationships(isolated_store):
@@ -166,7 +202,10 @@ def test_status_lists_direct_pointer_and_embed_relationships(isolated_store):
 
     assert result.exit_code == 0, result.output
     assert "Relationships:" in result.output
-    assert f"MEMORY REF [{reference.uid[:8]}] source#{source_memory.uid[:8]}" in result.output
+    assert (
+        f"MEMORY REF [{reference.uid[:8]}] source#{source_memory.uid[:8]}"
+        in result.output
+    )
     assert f"EMBEDDED CONTEXT [{child.uid[:8]}] child" in result.output
 
 
