@@ -295,8 +295,8 @@ _OPERATIONS = (
     _operation(
         "help",
         "Enter the interactive command browser and open syntax help.",
-        "Operation catalog -> usage guidance",
-        ExecutionKind.DETERMINISTIC,
+        "Operation catalog + optional natural-language request -> usage guidance",
+        ExecutionKind.MIXED,
         "Read-only",
     ),
     _operation(

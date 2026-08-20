@@ -76,7 +76,8 @@
     ],
     "help": [
       "docs/help-application-boundary-matrix.md",
-      "docs/help-application-design-rationale.md"
+      "docs/help-application-design-rationale.md",
+      "docs/mem-help-design-rationale.md"
     ],
     "impact": [],
     "import": [],

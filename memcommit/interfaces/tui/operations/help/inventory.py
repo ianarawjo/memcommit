@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import shutil
 import sys
 import textwrap
 from collections.abc import Callable
@@ -57,6 +58,19 @@ from memcommit.help_catalog import (
     compose_operation_help,
 )
 from memcommit.help_application import list_operation_help
+from memcommit.help_lookup_application import (
+    HelpLookupError,
+    execute_help_lookup,
+    prepare_help_lookup,
+)
+from memcommit.infrastructure.providers.find_query import connect_help_provider
+from memcommit.profile_config import ProfileConfigError
+from memcommit.query_provider import QueryProviderError
+from memcommit.interfaces.tui.operations.help.study_copy_guard import (
+    active_profile_is_study,
+    authored_study_help_fields,
+    find_study_help_copy_match,
+)
 
 
 COMMAND_ANNOTATIONS = {
@@ -1060,6 +1074,32 @@ def _render_plain_inventory(entries: list[CommandEntry]) -> None:
                 name_width=name_width,
             )
         )
+
+
+def render_help_lookup_entries(
+    entries: list[CommandEntry],
+    *,
+    content_width: int = 100,
+) -> str:
+    """Render only matched operations as their existing collapsed Help rows."""
+
+    if not entries:
+        return "No matching MemCommit operations."
+    width = max(40, content_width)
+    rendered: list[str] = []
+    for entry in entries:
+        rows = _help_command_rows(
+            entry,
+            command_prefix=f"mem {entry.name} ",
+            content_width=width,
+        )
+        rendered.append(
+            "\n".join(
+                (prefix + connector + body).rstrip()
+                for prefix, connector, body, _label_offset in rows
+            )
+        )
+    return "\n\n".join(rendered)
 
 
 def _help_group_fragments(
@@ -2144,6 +2184,16 @@ def _selection_output() -> Output:
 
 def cmd(
     ctx: typer.Context,
+    request: Annotated[
+        str | None,
+        typer.Argument(
+            show_default=False,
+            help=(
+                "Natural-language operation request; when supplied, return "
+                "up to three matching Help rows and exit"
+            ),
+        ),
+    ] = None,
     emit_selection: Annotated[
         bool,
         typer.Option(
@@ -2164,6 +2214,67 @@ def cmd(
         raise typer.Exit(1)
 
     entries = command_entries(root)
+    if request is not None:
+        if emit_selection:
+            typer.secho(
+                "Help error: a natural-language request cannot be combined "
+                "with shell selection.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        try:
+            # Freeze and preflight the complete catalog before provider access.
+            catalog_operations = tuple(
+                entry.operation_help
+                for entry in entries
+                if entry.operation_help is not None
+            )
+            plan = prepare_help_lookup(
+                request,
+                operations=catalog_operations,
+            )
+            if active_profile_is_study() and find_study_help_copy_match(
+                plan.request,
+                authored_study_help_fields(plan.operations),
+            ) is not None:
+                typer.secho(
+                    "Help error: Study lookup requires original task wording; "
+                    "the request exactly matches at least 50% of one Help "
+                    "Description/WHEN entry.",
+                    fg=typer.colors.RED,
+                    err=True,
+                )
+                raise typer.Exit(1)
+            provider = connect_help_provider()
+            operations = execute_help_lookup(plan, provider)
+        except (
+            HelpLookupError,
+            ProfileConfigError,
+            QueryProviderError,
+            OSError,
+        ) as error:
+            typer.secho(
+                f"Help error: {display_escape_text(str(error))}",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1) from error
+        entries_by_name = {entry.name: entry for entry in entries}
+        matched_entries = [
+            entries_by_name[operation.name] for operation in operations
+        ]
+        typer.echo(
+            render_help_lookup_entries(
+                matched_entries,
+                content_width=(
+                    root.terminal_width
+                    or shutil.get_terminal_size(fallback=(100, 24)).columns
+                ),
+            )
+        )
+        return
+
     if emit_selection:
         if not _selection_terminal():
             typer.secho(

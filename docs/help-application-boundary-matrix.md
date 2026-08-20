@@ -3,14 +3,18 @@
 ## Closure statement
 
 Every currently implemented Help route reads the same 62-operation semantic
-catalog through one terminal-independent discovery boundary. Interface syntax
-and layout remain projections. Help has no Store, authority, provider, cache,
-session, Apply, checkpoint, or Undo lifecycle.
+catalog through a terminal-independent discovery boundary. Exact catalog
+queries remain provider-free. The optional natural-language CLI route adds one
+bounded provider-backed ID-selection turn, then renders only canonical catalog
+copy. No Help route opens a Store or authority source, reads Memory content,
+creates a session, executes a selected operation, or enters an Apply,
+checkpoint, or Undo lifecycle.
 
 | Route | Entry | Application path | Projection | Effect | Evidence |
 | --- | --- | --- | --- | --- | --- |
 | Plain `mem help` | `interfaces.tui.operations.help.inventory.cmd` in a non-TTY | `command_entries` takes `list_operation_help()` once | Plain alphabetized inventory plus CLI-owned forms, maturity tags, and canonical expanded details | None | `test_help_catalog.py`, `test_help_application.py` |
 | Interactive `mem help` | Same command in a TTY | Same frozen application snapshot | Grouped/A–Z browser; collapsed maturity tags; expanded typed details | None | Help renderer tests, `docs/screenshots/mem-help-import-query-details-20260816/`, and the full reviewed sequence in `docs/screenshots/mem-help-reviewed-content-20260816/` |
+| Natural-language `mem help REQUEST` | Same command with one positional request in TTY or non-TTY | `prepare_help_lookup` freezes and preflights the complete catalog before `connect_help_provider`; `execute_help_lookup` accepts only zero to three exact IDs | Existing collapsed Help rows in selected order: `mem NAME`, summary, and `WHEN`; fixed no-match message; no browser, why, score, forms, or generated prose | None | `test_help_lookup_application.py`, `test_help_lookup_cli.py`, `test_help_lookup_provider_policy.py` |
 | Shell selection | Hidden `--emit-selection` route | Same frozen application snapshot | One interface-owned command template on stdout | None | Existing Help selection tests |
 | Selected CLI detail | One `CommandEntry` from the snapshot | Catalog meaning already bound to the entry | Common meaning composed with registered CLI syntax | None | `test_help_catalog.py` |
 | Python list | `MemCommitClient.list_operations()` | `_operations.help.list_operations` → `list_operation_help` | `HelpCatalogResult` of immutable DTOs, including compact typed-detail references | None | `test_help_public_api.py`, import-boundary tests |
@@ -39,9 +43,16 @@ session, Apply, checkpoint, or Undo lifecycle.
    are retrieved through the same application boundary by exact ID.
 6. CLI forms, aliases, categories, and responsive layout remain interface
    values and do not enter Python or agent semantic records.
-7. A Help call must succeed without creating a missing Store and without
-   constructing or calling a provider.
-8. Agent/MCP Help is discovery only. It cannot execute another tool or confer
+7. Bare CLI, Python, agent, and MCP Help must succeed without creating a
+   missing Store and without constructing or calling a provider. Only a
+   nonblank positional CLI request authorizes the bounded semantic selector.
+8. Natural-language lookup freezes the complete catalog before provider
+   connection; uses `gpt-5.6-sol` with reasoning effort `none`; declares
+   `TOP_K_RERANK`; and publishes no partial or prefiltered result.
+9. Lookup output is zero to three unique exact catalog names. The interface
+   supplies canonical summary and best-for copy only after validation; the
+   model cannot add reasons, scores, explanations, command forms, or prose.
+10. Agent/MCP Help is discovery only. It cannot execute another tool or confer
    authority to do so.
 
 ## Intentional exclusions

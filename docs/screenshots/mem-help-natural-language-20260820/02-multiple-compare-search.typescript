@@ -1,0 +1,6 @@
+52 180
+[2J[Hmem compare ┬ Compare Memories in two Contexts and report what they share, what differs, and what appears only on one side.
+            └ WHEN · Comparing two Contexts as a whole to understand where they align and differ.
+
+mem search ┬ Semantically rank Memories relevant to a natural-language request across selected Contexts.
+           └ WHEN · Finding relevant Memories through meaning and context, including related content without obvious keyword overlap.

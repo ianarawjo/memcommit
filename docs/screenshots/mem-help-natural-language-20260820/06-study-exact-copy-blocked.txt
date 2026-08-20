@@ -1,0 +1,1 @@
+Help error: Study lookup requires original task wording; the request exactly matches at least 50% of one Help Description/WHEN entry.

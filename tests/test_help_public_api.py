@@ -28,7 +28,7 @@ def test_client_describes_one_json_safe_public_value(tmp_path):
     result = MemCommitClient(root=tmp_path / "missing-store").describe_operation("help")
 
     assert result.name == "help"
-    assert result.execution == "DETERMINISTIC"
+    assert result.execution == "MIXED"
     assert result.effect == "Read-only"
     assert result.range is None
 

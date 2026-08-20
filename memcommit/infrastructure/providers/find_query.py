@@ -1,4 +1,4 @@
-"""Benchmark-selected provider composition for Find and Query."""
+"""Pinned provider composition for Find, Query, and Help lookup."""
 
 from __future__ import annotations
 
@@ -32,6 +32,11 @@ FIND_PROVIDER_POLICY = OperationProviderPolicy(
 )
 QUERY_PROVIDER_POLICY = OperationProviderPolicy(
     operation="query",
+    model="gpt-5.6-sol",
+    reasoning_effort="none",
+)
+HELP_PROVIDER_POLICY = OperationProviderPolicy(
+    operation="help",
     model="gpt-5.6-sol",
     reasoning_effort="none",
 )
@@ -124,6 +129,24 @@ def connect_ordinary_query_provider(
     )
 
 
+def connect_help_provider(
+    *,
+    model: str | None = None,
+    reasoning_effort: str | None = None,
+    timeout_seconds: float | None = None,
+) -> CodexChatGPTProvider:
+    """Connect the pinned natural-language Help lookup policy."""
+
+    return _connect_pinned_codex_provider(
+        _configured_policy(
+            HELP_PROVIDER_POLICY,
+            model=model,
+            reasoning_effort=reasoning_effort,
+        ),
+        timeout_seconds=timeout_seconds,
+    )
+
+
 def connect_query_route_provider(
     provider_id: str,
     *,
@@ -146,9 +169,11 @@ def connect_query_route_provider(
 
 __all__ = [
     "FIND_PROVIDER_POLICY",
+    "HELP_PROVIDER_POLICY",
     "QUERY_PROVIDER_POLICY",
     "OperationProviderPolicy",
     "connect_find_provider",
+    "connect_help_provider",
     "connect_ordinary_query_provider",
     "connect_query_route_provider",
 ]

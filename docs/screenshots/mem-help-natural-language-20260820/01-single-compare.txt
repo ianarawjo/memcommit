@@ -1,0 +1,2 @@
+mem compare ┬ Compare Memories in two Contexts and report what they share, what differs, and what appears only on one side.                                                         
+            └ WHEN · Comparing two Contexts as a whole to understand where they align and differ.

@@ -71,9 +71,10 @@
       "help": {
         "evidence": [
           "docs/help-application-boundary-matrix.md",
-          "docs/help-application-design-rationale.md"
+          "docs/help-application-design-rationale.md",
+          "docs/mem-help-design-rationale.md"
         ],
-        "reason": "Plain and interactive CLI, Python, agent, and MCP discovery routes share one Store-free, provider-free list/describe application boundary over the canonical Help operation catalog."
+        "reason": "Bare CLI, Python, agent, and MCP discovery remain Store-free and provider-free over the canonical catalog; the positional CLI request route freezes the same complete catalog in a terminal-independent application, uses one bounded provider turn only to select exact IDs, and renders canonical Help rows without execution or partial publication."
       },
       "init": {
         "evidence": [

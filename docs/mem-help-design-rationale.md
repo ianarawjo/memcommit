@@ -21,6 +21,80 @@ It reports capabilities; it does not recommend a command sequence or perform
 work for the participant. Source registration order remains free to group
 related implementation code; neither Help projection depends on it.
 
+## Natural-language focused lookup
+
+Supplying one positional request changes only the discovery projection:
+
+```text
+mem help "compare two Contexts and find relevant Memories"
+```
+
+The command freezes the same complete public operation catalog, submits its
+canonical selection fields plus the request to one bounded semantic turn, and
+accepts an ordered list of zero to three exact operation names. The pinned
+policy is `gpt-5.6-sol` with reasoning effort `none`. The model selects IDs
+only; it cannot author the visible description, best-for text, explanation,
+score, command form, or rationale.
+
+Each validated match is rendered with the existing collapsed Help record:
+
+```text
+mem compare ┬ Compare Memories in two Contexts and report what they share,
+            │ what differs, and what appears only on one side.
+            └ WHEN · Comparing two Contexts as a whole to understand where
+                     they align and differ.
+```
+
+Several rows may appear when several operations directly satisfy distinct
+parts of the request. They retain model order but carry no rank number,
+confidence, `WHY`, alternatives section, expanded overview, forms, or execution
+action. An empty selection renders one fixed no-match sentence. The focused
+lookup exits after those rows; it does not open the full-screen browser, create
+a transcript, read a Store or Memory, or execute any selected command.
+
+Direct matching is semantic rather than a catalog-vocabulary gate. A short,
+colloquial, metaphorical, or fragmentary request may match when its intended
+effect is still distinguishable; it need not repeat `Memory`, `Context`, or the
+authored Help wording. In particular, generic outcome language asking for an
+answer-producing sentence or response may match `query`. Lexical overlap with
+the catalog is therefore an evaluation-corpus provenance concern, not a reason
+for the product lookup to reject an otherwise valid request.
+
+The active Profile's immutable provenance narrows that rule during a live
+`init-study` run. Before provider connection, focused Help freezes every
+authored `DESCRIPTION` and `WHEN` value in the current Help projection,
+normalizes Unicode, case, punctuation, underscores, and whitespace into exact
+tokens, and measures the longest contiguous token sequence shared with the
+request. If that exact run covers at least 50% of any one authored field, the
+Study lookup exits with a stable original-wording error. It does not reveal the
+matched operation, language, field, or score and does not connect a provider.
+
+The 50% denominator is the authored field, not the request: the boundary asks
+how much catalog copy was reused rather than how much ordinary task language
+happened to use MemCommit terms. The threshold is inclusive, deterministic,
+and has no fuzzy, embedding, semantic-similarity, stop-word, or human-review
+stage. Consequently a reordering or paraphrase that breaks the contiguous exact
+run is allowed; this is an intentional limitation of the requested exact-copy
+criterion. Both participant and granted-memory Study roles are recognized by
+validated `init-study` source provenance rather than mutable Profile names.
+Bare Help and focused Help outside an active Study Profile retain their normal
+behavior. The provenance check opens only the external Profile registry; it
+does not open a Store, Context, or Memory.
+
+Bare `mem help` remains the complete deterministic inventory below, in both its
+plain and interactive forms. The semantic provider is connected only after a
+nonblank positional request and complete-catalog preflight. Provider or decoder
+failure publishes no partial rows. The whole catalog currently fits one call;
+crossing that bound rejects the lookup until a tested global reranker exists,
+rather than silently prefiltering operations and changing what the participant
+could discover.
+
+The ordered live PTY evidence in
+[`docs/screenshots/mem-help-natural-language-20260820`](screenshots/mem-help-natural-language-20260820/README.md)
+records one, several, metaphorical, and no-match requests against the real
+provider route. Each capture retains the raw terminal stream and proves that
+the lookup exits without consulting or mutating a Context.
+
 ## Interactive terminal contract
 
 In an interactive terminal, `mem help` presents the inventory as a
