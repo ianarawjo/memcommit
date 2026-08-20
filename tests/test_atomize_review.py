@@ -188,7 +188,10 @@ def test_atomize_review_comment_is_persisted_reanalyzed_and_applied(
     assert "ATOMIZE UNCERTAINTY" in preview.output
     assert review.exit_code == 0, review.output
     assert "REVIEW ITEMS · 1" in review.output
-    assert f"ATOMIZE UNCERTAINTY 1 · {memory.content}" in review.output
+    assert (
+        f"ATOMIZE UNCERTAINTY 1 · [{memory.uid[:8]}] {memory.content}"
+        in review.output
+    )
     assert "UNCERTAIN · REQUIRES CONTEXT" in review.output
     assert review.output.index("CLASSIFICATION") < review.output.rindex(
         memory.content
