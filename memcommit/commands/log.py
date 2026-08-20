@@ -106,13 +106,28 @@ def _render_operation_attempts(attempts: Sequence[CommandAttempt]) -> None:
     for attempt in attempts:
         timestamp = attempt.started_at[:16].replace("T", " ")
         elapsed = (
-            "running"
+            None
             if attempt.elapsed_seconds is None
             else f"{attempt.elapsed_seconds:.1f}s"
         )
+        if attempt.status == "COMPLETED":
+            visible_outcome = (
+                attempt.outcome.replace("_", " ")
+                if attempt.outcome is not None
+                else None
+            )
+        elif attempt.status == "RUNNING":
+            # A retained start record proves only that finalization is absent;
+            # it cannot safely claim that another process is still alive.
+            visible_outcome = "NOT FINALIZED"
+        else:
+            visible_outcome = attempt.status
+        suffix = " · ".join(
+            value for value in (visible_outcome, elapsed) if value is not None
+        )
         typer.echo(
             f"  [{attempt.uid[:8]}] {display_escape_text(timestamp)}  "
-            f"{attempt.status:<11} {attempt.operation:<16} {elapsed}"
+            f"{attempt.operation:<16}{suffix}"
         )
         sever = attempt.details.get("sever")
         if isinstance(sever, dict):
@@ -147,7 +162,7 @@ def _render_operation_attempts(attempts: Sequence[CommandAttempt]) -> None:
             kind = safe_terminal_text(str(attempt.failure["kind"]))
             exit_code = attempt.failure.get("exit_code")
             suffix = f" · exit {exit_code}" if exit_code is not None else ""
-            typer.echo(f"      COMMAND · {kind}{suffix}")
+            typer.echo(f"      {kind}{suffix}")
 
 
 def _missing_study_action_sequences(events: Sequence[StudyActionEvent]) -> int:

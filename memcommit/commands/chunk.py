@@ -5,6 +5,7 @@ from typing import Annotated, Optional
 import typer
 
 import memcommit.ops as ops
+from memcommit.command_attempts import annotate_command_outcome
 from memcommit.authority.access import (
     authorized_context_mutation,
     grant_checkpoint_args,
@@ -180,6 +181,7 @@ def cmd(
         raise typer.Exit(1)
 
     if not proposals:
+        annotate_command_outcome("NO_CHANGE")
         if memory_selector is not None:
             typer.secho(
                 f"Memory [{original.uid[:8]}] produced only {len(chunks)} chunk(s) "
@@ -244,6 +246,7 @@ def cmd(
         "Apply? [y/n]", default="", show_default=False
     ).strip().lower()
     if decision not in ("y", "yes"):
+        annotate_command_outcome("CANCELLED")
         typer.echo("Aborted — no changes made.")
         raise typer.Exit(0)
 

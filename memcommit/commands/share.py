@@ -7,6 +7,7 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.command_attempts import annotate_command_outcome
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
@@ -60,13 +61,16 @@ def cmd(
                 preview = choose_share_preview(source, recipient or None)
             except ShareFlowUnavailable as unavailable:
                 run_share_unavailable_viewer(str(unavailable))
+                annotate_command_outcome("CANCELLED")
                 typer.echo("Share closed; nothing was sent.")
                 return
             if preview is None:
+                annotate_command_outcome("CANCELLED")
                 typer.echo("Share closed; nothing was sent.")
                 return
             receipt = run_share_viewer(preview)
             if receipt.action == "close":
+                annotate_command_outcome("CANCELLED")
                 typer.echo("Share closed; nothing was sent.")
                 return
             delivery = deliver_prepared_share(preview)
@@ -99,6 +103,7 @@ def cmd(
     if delivery.created:
         typer.secho("Shared Context.", fg=typer.colors.GREEN, bold=True)
     else:
+        annotate_command_outcome("NO_CHANGE")
         typer.echo("Context was already shared; no duplicate was created.")
     typer.echo(f"Share: {delivery.uid}")
     typer.echo("To: " + display_escape_text(delivery.endpoint))

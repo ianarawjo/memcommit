@@ -6,6 +6,7 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.command_attempts import annotate_command_outcome
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.context_targeting.presets import (
     ContextScopePreset,
@@ -221,7 +222,10 @@ def cmd(
                 raise ValueError(
                     "Replace plan digest does not match the reviewed plan; preview again."
                 )
-            typer.echo(render_replace_apply_result(apply(plan)))
+            result = apply(plan)
+            if not result.applied:
+                annotate_command_outcome("NO_CHANGE")
+            typer.echo(render_replace_apply_result(result))
             return
 
         if mode is ConsoleMode.TUI or (
@@ -241,7 +245,12 @@ def cmd(
                 apply=apply,
             )
             if outcome is None:
+                annotate_command_outcome("CANCELLED")
                 typer.echo("Replace closed.")
+            elif outcome.apply_result is None:
+                annotate_command_outcome("CANCELLED")
+            elif not outcome.apply_result.applied:
+                annotate_command_outcome("NO_CHANGE")
             return
 
         assert request is not None

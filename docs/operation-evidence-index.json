@@ -82,7 +82,9 @@
     "init-study": [],
     "list": [],
     "lock": [],
-    "log": [],
+    "log": [
+      "docs/command-attempt-ledger-design-rationale.md"
+    ],
     "meld": [
       "docs/meld-application-boundary-matrix.md",
       "docs/meld-session-lifecycle-design-rationale.md"

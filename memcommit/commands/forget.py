@@ -3,6 +3,7 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.command_attempts import annotate_command_outcome
 from memcommit.commands.command_wait import (
     CommandWaitView,
     build_report_loading_view,
@@ -345,6 +346,7 @@ def cmd(
                 annotations=annotations,
             )
             if setup_receipt is None:
+                annotate_command_outcome("CANCELLED")
                 typer.echo("Forget cancelled.")
                 return
             # The receipt is already canonical in the frozen public catalog.
@@ -386,6 +388,7 @@ def cmd(
         raise typer.Exit(1)
 
     if reviewed is None:
+        annotate_command_outcome("CANCELLED")
         if _interactive_terminal():
             typer.echo(
                 "Forget cancelled · SOURCE "
@@ -416,6 +419,7 @@ def cmd(
 
     apply_receipt = result.receipt
     if not result.applied:
+        annotate_command_outcome("NO_CHANGE")
         if _interactive_terminal():
             typer.echo(
                 "Forget complete · SOURCE "

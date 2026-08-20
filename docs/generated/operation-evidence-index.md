@@ -41,7 +41,7 @@ only from `docs/operation-evidence-index.json`.
 | `init-study` | `UNREVIEWED` | — | — |
 | `list` | `UNREVIEWED` | — | — |
 | `lock` | `UNREVIEWED` | — | — |
-| `log` | `UNREVIEWED` | — | — |
+| `log` | `UNREVIEWED` | [`command-attempt-ledger-design-rationale.md`](../command-attempt-ledger-design-rationale.md) | — |
 | `meld` | `CLOSED` | [`meld-application-boundary-matrix.md`](../meld-application-boundary-matrix.md)<br>[`meld-session-lifecycle-design-rationale.md`](../meld-session-lifecycle-design-rationale.md) | CLI, TUI, Python, and agent routes share typed Start, Restart, saved-turn, cache/provider, CAS, and Apply lifecycles with exact/equivalent/projected reuse and one reviewed-session version contract. |
 | `merge` | `CLOSED` | [`merge-application-boundary-matrix.md`](../merge-application-boundary-matrix.md) | Direct and recursive Merge planning, review, application, and presentation use the same frozen typed plan and runtime. |
 | `profile` | `UNREVIEWED` | — | — |

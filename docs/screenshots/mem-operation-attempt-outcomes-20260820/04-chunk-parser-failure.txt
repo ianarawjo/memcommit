@@ -1,0 +1,10 @@
+LIVE COLOR PTY · 52 180                                                                                                                                                             
+                                                                                                                                                                                    
+$ mem chunk --method invalid-method                                                                                                                                                 
+Usage: mem chunk [OPTIONS] [MEMORY_SELECTOR]                                                                                                                                        
+Try 'mem chunk -h' for help.                                                                                                                                                        
+╭─ Error ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ Invalid value for '--method' / '-m': 'invalid-method' is not one of 'markdown_headers', 'paragraphs', 'sentences', 'clauses'.                                                    │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                    
+CHUNK FAILURE COMPLETE · EXIT 2

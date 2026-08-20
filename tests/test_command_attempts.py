@@ -8,7 +8,9 @@ from typer.testing import CliRunner
 import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.command_attempts import (
+    CommandAttempt,
     CommandAttemptLedger,
+    annotate_command_outcome,
     begin_command_attempt,
     finish_command_attempt,
 )
@@ -46,6 +48,54 @@ def test_started_attempt_is_durable_before_command_completion(isolated_store):
     assert retained.completed_at is None
     assert retained.elapsed_seconds is None
     finish_command_attempt(active, status="INTERRUPTED", failure_kind="TestCleanup")
+
+
+def test_exceptional_completion_outcome_is_durable_and_v1_remains_readable(
+    isolated_store,
+):
+    active = begin_command_attempt(
+        store_dir=isolated_store,
+        operation="chunk",
+        stdin_tty=False,
+        stdout_tty=False,
+    )
+    annotate_command_outcome("NO_CHANGE")
+
+    running = CommandAttemptLedger(isolated_store).load(active.record.uid)
+    assert running.status == "RUNNING"
+    assert running.outcome == "NO_CHANGE"
+
+    finished = finish_command_attempt(active, status="COMPLETED")
+    assert finished.outcome == "NO_CHANGE"
+    encoded = finished.to_dict()
+    assert encoded["version"] == 2
+
+    legacy = dict(encoded)
+    legacy["version"] = 1
+    legacy.pop("outcome")
+    restored = CommandAttempt.from_dict(legacy)
+    assert restored.status == "COMPLETED"
+    assert restored.outcome is None
+
+
+def test_failure_supersedes_a_provisional_completion_outcome(isolated_store):
+    active = begin_command_attempt(
+        store_dir=isolated_store,
+        operation="edit",
+        stdin_tty=False,
+        stdout_tty=False,
+    )
+    annotate_command_outcome("NO_CHANGE")
+
+    finished = finish_command_attempt(
+        active,
+        status="FAILED",
+        failure_kind="RenderError",
+        exit_code=1,
+    )
+
+    assert finished.status == "FAILED"
+    assert finished.outcome is None
 
 
 def test_root_logs_success_failure_and_never_raw_argv(isolated_store, monkeypatch):
@@ -139,13 +189,70 @@ def test_operation_log_lists_prior_attempt_without_listing_itself(
 ):
     _enable_attempt_log(monkeypatch)
     assert runner.invoke(app, ["init", "working"]).exit_code == 0
+    added = runner.invoke(app, ["add", "unchanged content"])
+    assert added.exit_code == 0
+    memory_uid = added.output.split("[", 1)[1].split("]", 1)[0]
+    unchanged = runner.invoke(app, ["edit", memory_uid, "unchanged content"])
+    assert unchanged.exit_code == 0
 
     shown = runner.invoke(app, ["log", "--operations"])
 
     assert shown.exit_code == 0, shown.output
     assert "Operation attempts · recent first" in shown.output
-    assert "COMPLETED" in shown.output
+    assert "COMPLETED" not in shown.output
+    assert "NO CHANGE" in shown.output
     assert "init" in shown.output
     assert "log" not in shown.output.split("Operation attempts", 1)[1]
     records = CommandAttemptLedger(isolated_store).list()
-    assert [record.operation for record in records[:2]] == ["log", "init"]
+    assert [record.operation for record in records[:4]] == [
+        "log",
+        "edit",
+        "add",
+        "init",
+    ]
+    assert records[1].outcome == "NO_CHANGE"
+
+
+def test_chunk_without_splittable_memory_records_no_change_not_a_checkpoint(
+    isolated_store,
+    monkeypatch,
+):
+    _enable_attempt_log(monkeypatch)
+    assert runner.invoke(app, ["init", "working"]).exit_code == 0
+    assert runner.invoke(app, ["add", "one clause"]).exit_code == 0
+    store = MemoryStore()
+    checkpoint_count = len(store.list_checkpoints("working"))
+
+    result = runner.invoke(app, ["chunk"])
+
+    assert result.exit_code == 0, result.output
+    attempt = CommandAttemptLedger(isolated_store).list()[0]
+    assert attempt.operation == "chunk"
+    assert attempt.status == "COMPLETED"
+    assert attempt.outcome == "NO_CHANGE"
+    assert len(store.list_checkpoints("working")) == checkpoint_count
+
+
+def test_operation_log_calls_unfinalized_start_not_finalized(
+    isolated_store,
+    monkeypatch,
+):
+    _enable_attempt_log(monkeypatch)
+    active = begin_command_attempt(
+        store_dir=isolated_store,
+        operation="chunk",
+        stdin_tty=False,
+        stdout_tty=False,
+    )
+    try:
+        shown = runner.invoke(app, ["log", "--operations"])
+    finally:
+        finish_command_attempt(
+            active,
+            status="INTERRUPTED",
+            failure_kind="TestCleanup",
+        )
+
+    assert shown.exit_code == 0, shown.output
+    assert "NOT FINALIZED" in shown.output
+    assert "RUNNING" not in shown.output

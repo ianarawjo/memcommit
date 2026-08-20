@@ -1,0 +1,10 @@
+LIVE COLOR PTY · 52 180
+
+$ mem chunk --method invalid-method
+[33mUsage: [0mmem chunk [OPTIONS] [MEMORY_SELECTOR]
+[2mTry [0m[2;34m'mem chunk [0m[1;2;34m-h[0m[2;34m'[0m[2m for help.[0m
+[31m╭─[0m[31m Error [0m[31m─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m[31m─╮[0m
+[31m│[0m Invalid value for '[1;36m-[0m[1;36m-method[0m' / '[1;32m-m[0m': 'invalid-method' is not one of 'markdown_headers', 'paragraphs', 'sentences', 'clauses'.                                                    [31m│[0m
+[31m╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯[0m
+
+CHUNK FAILURE COMPLETE · EXIT 2

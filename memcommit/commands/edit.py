@@ -3,6 +3,7 @@ from typing import Annotated, Optional
 import typer
 
 import memcommit.ops as ops
+from memcommit.command_attempts import annotate_command_outcome
 from memcommit.commands.batch_input import parse_edit_lines, read_text_input
 from memcommit.authority.access import (
     authorized_context_mutation,
@@ -98,6 +99,7 @@ def cmd(
             raise typer.Exit(1)
 
         if not changes:
+            annotate_command_outcome("NO_CHANGE")
             typer.secho(
                 f"All {len(edits)} memories are unchanged.",
                 fg=typer.colors.YELLOW,
@@ -159,6 +161,7 @@ def cmd(
         raise typer.Exit(1)
 
     if original.content == content:
+        annotate_command_outcome("NO_CHANGE")
         typer.secho(
             f"Memory [{original.uid[:8]}] is unchanged.",
             fg=typer.colors.YELLOW,

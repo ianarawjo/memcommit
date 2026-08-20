@@ -23,7 +23,9 @@ from memcommit.read_report import ReadReportTarget
 
 
 AttemptStatus = Literal["RUNNING", "COMPLETED", "FAILED", "INTERRUPTED"]
+CommandOutcome = Literal["NO_CHANGE", "CANCELLED"]
 _FINAL_STATUSES = frozenset({"COMPLETED", "FAILED", "INTERRUPTED"})
+_COMPLETION_OUTCOMES = frozenset({"NO_CHANGE", "CANCELLED"})
 _OPERATION = re.compile(r"[a-z0-9][a-z0-9-]{0,63}\Z")
 _SCOPE = frozenset({"THIS_CONTEXT_ONLY", "INCLUDE_DESCENDANTS"})
 
@@ -63,6 +65,7 @@ class CommandAttempt:
     stdin_tty: bool
     stdout_tty: bool
     details: dict[str, object]
+    outcome: CommandOutcome | None
     failure: dict[str, object] | None
 
     def validated(self) -> "CommandAttempt":
@@ -90,6 +93,12 @@ class CommandAttempt:
             raise CommandAttemptError("Finished command attempt timing is invalid.")
         if not isinstance(self.stdin_tty, bool) or not isinstance(self.stdout_tty, bool):
             raise CommandAttemptError("Command attempt terminal flags are invalid.")
+        if self.outcome is not None and self.outcome not in _COMPLETION_OUTCOMES:
+            raise CommandAttemptError("Command attempt outcome is invalid.")
+        if self.status in {"FAILED", "INTERRUPTED"} and self.outcome is not None:
+            raise CommandAttemptError(
+                "Unsuccessful command attempt cannot retain a completion outcome."
+            )
         _validated_details(self.details)
         _validated_failure(self.failure, status=self.status)
         return self
@@ -97,7 +106,7 @@ class CommandAttempt:
     def to_dict(self) -> dict[str, object]:
         self.validated()
         return {
-            "version": 1,
+            "version": 2,
             "uid": self.uid,
             "operation": self.operation,
             "status": self.status,
@@ -109,12 +118,13 @@ class CommandAttempt:
                 "stdout_tty": self.stdout_tty,
             },
             "details": self.details,
+            "outcome": self.outcome,
             "failure": self.failure,
         }
 
     @classmethod
     def from_dict(cls, value: object) -> "CommandAttempt":
-        if not isinstance(value, dict) or set(value) != {
+        version_one_fields = {
             "version",
             "uid",
             "operation",
@@ -125,7 +135,16 @@ class CommandAttempt:
             "terminal",
             "details",
             "failure",
-        } or value.get("version") != 1:
+        }
+        if not isinstance(value, dict):
+            raise CommandAttemptError("Command attempt record is invalid.")
+        version = value.get("version")
+        if not (
+            version == 1
+            and set(value) == version_one_fields
+            or version == 2
+            and set(value) == {*version_one_fields, "outcome"}
+        ):
             raise CommandAttemptError("Command attempt record is invalid.")
         terminal = value.get("terminal")
         if not isinstance(terminal, dict) or set(terminal) != {"stdin_tty", "stdout_tty"}:
@@ -140,6 +159,11 @@ class CommandAttempt:
             stdin_tty=terminal.get("stdin_tty"),  # type: ignore[arg-type]
             stdout_tty=terminal.get("stdout_tty"),  # type: ignore[arg-type]
             details=value.get("details"),  # type: ignore[arg-type]
+            outcome=(
+                value.get("outcome")  # type: ignore[arg-type]
+                if version == 2
+                else None
+            ),
             failure=value.get("failure"),  # type: ignore[arg-type]
         )
         return attempt.validated()
@@ -365,6 +389,7 @@ def begin_command_attempt(
         stdin_tty=stdin_tty,
         stdout_tty=stdout_tty,
         details={},
+        outcome=None,
         failure=None,
     )
     active = ActiveCommandAttempt(
@@ -380,6 +405,28 @@ def begin_command_attempt(
 def current_command_attempt_uid() -> str | None:
     active = _ACTIVE_ATTEMPT.get()
     return active.record.uid if active is not None else None
+
+
+def annotate_command_outcome(outcome: CommandOutcome) -> None:
+    """Persist one exceptional normal-completion outcome on the active command.
+
+    Normal success is deliberately implicit.  Commands call this only when
+    they can prove that the whole invocation ended without a Context effect or
+    was cancelled before its operation-owned completion boundary.
+    """
+
+    if outcome not in _COMPLETION_OUTCOMES:
+        raise CommandAttemptError("Command attempt outcome is invalid.")
+    active = _ACTIVE_ATTEMPT.get()
+    if active is None:
+        return
+    if active.record.status != "RUNNING":
+        raise CommandAttemptError("Finished command attempt cannot change outcome.")
+    if active.record.outcome is not None and active.record.outcome != outcome:
+        raise CommandAttemptError("Command attempt outcome is already finalized.")
+    updated = replace(active.record, outcome=outcome)
+    active.ledger.replace(updated)
+    active.record = updated
 
 
 def annotate_sever_attempt(**updates: object) -> None:
@@ -485,6 +532,10 @@ def finish_command_attempt(
         status=status,
         completed_at=_timestamp(),
         elapsed_seconds=max(0.0, time.monotonic() - active.monotonic_started_at),
+        # A later failure supersedes a provisional normal-completion annotation.
+        # The durable checkpoint/receipt remains authoritative for any effect
+        # already published before that failure.
+        outcome=active.record.outcome if status == "COMPLETED" else None,
         failure=failure,
     )
     active.ledger.replace(finished)

@@ -1,0 +1,10 @@
+LIVE COLOR PTY · 52 180
+
+$ mem chunk 30d0e68d
+
+[1mProposed split of [30d0e68d] in Context 'outcome-demo' → 2 chunks (method=sentences)[0m
+────────────────────────────────────────────────────────
+[36m   1  The first sentence is retained.[0m
+[36m   2  The second sentence is retained.[0m
+────────────────────────────────────────────────────────
+Apply? [y/n]: 
