@@ -148,7 +148,7 @@ def test_distill_impact_rule_row_is_compact_without_losing_detail(
 
 def test_elaborate_rule_rows_keep_complete_unverified_content() -> None:
     result = execute_elaborate(
-        ElaborateRequest(goal="Generate a qualified ticker Rule."),
+        ElaborateRequest(goal="Generate a qualified ticker Rule.", number=1),
         provider_factory=_LongElaborateProvider,
     )
     plain = elaborate_result_text(result)
@@ -183,7 +183,10 @@ def test_elaborate_rule_rows_keep_complete_unverified_content() -> None:
 
 def test_elaborate_case_impact_keeps_its_distinct_effect_projection() -> None:
     result = execute_elaborate(
-        ElaborateRequest(rules=("Preserve an exact security class.",)),
+        ElaborateRequest(
+            rules=("Preserve an exact security class.",),
+            number=1,
+        ),
         provider_factory=_CaseElaborateProvider,
     )
     presentation = elaborate_impact_presentation(

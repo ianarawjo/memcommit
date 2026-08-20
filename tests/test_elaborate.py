@@ -65,34 +65,74 @@ class ElaborateProvider:
         assert output_schema is not None
         self.calls.append((prompt, output_schema))
         payload = json.loads(prompt.split(ELABORATE_PAYLOAD_MARKER, 1)[1])
+        number = payload["number"]
         if payload["mode"] == "GOAL_TO_RULES":
+            rules = (
+                (
+                    "Confirm the selected option before acting.",
+                    "This operationalizes the requested confirmation.",
+                ),
+                (
+                    "Record which option was explicitly confirmed.",
+                    "This keeps the confirmed choice reviewable.",
+                ),
+                (
+                    "Do not act when confirmation is missing or ambiguous.",
+                    "This defines the confirmation boundary.",
+                ),
+                (
+                    "Reconfirm after the selected option changes.",
+                    "This prevents stale confirmation from authorizing a new choice.",
+                ),
+            )
             return json.dumps(
                 {
-                    "overview": "The Goal can be made reviewable through one Rule hypothesis.",
+                    "overview": f"The Goal yields exactly {number} Rule hypotheses.",
                     "rules": []
                     if self.empty
                     else [
                         {
-                            "content": "Confirm the selected option before acting.",
-                            "rationale": "This operationalizes the requested confirmation.",
+                            "content": content,
+                            "rationale": rationale,
                         }
+                        for content, rationale in rules[:number]
                     ],
                 }
             )
+        case_specs = (
+            (
+                "A person explicitly confirms option A, and the system proceeds "
+                "with option A only after that confirmation.",
+                "Proceed with option A.",
+                "This is an ordinary fitting Case.",
+                "FIT",
+            ),
+            (
+                "A person mentions option A without confirming it, so the system "
+                "asks for explicit confirmation and does not proceed.",
+                "Do not proceed yet.",
+                "This distinguishes mention from confirmation.",
+                "BOUNDARY",
+            ),
+            (
+                "A person confirms option A and then requests option B, so the "
+                "system obtains fresh confirmation for B before proceeding.",
+                "Proceed with B only after fresh confirmation.",
+                "This contrasts current confirmation with stale confirmation.",
+                "CONTRAST",
+            ),
+        )
         return json.dumps(
             {
-                "overview": "The Rule benefits from a fit and a boundary Case.",
+                "overview": f"The Rule yields exactly {number} diverse Cases.",
                 "cases": []
                 if self.empty
                 else [
                     {
-                        "proposition": (
-                            "A person explicitly confirms option A, and the system "
-                            "proceeds with option A only after that confirmation."
-                        ),
-                        "expected": "Proceed with option A.",
-                        "rationale": "This is an ordinary fitting Case.",
-                        "case_role": "FIT",
+                        "proposition": proposition,
+                        "expected": expected,
+                        "rationale": rationale,
+                        "case_role": role,
                         "rule_checks": [
                             {
                                 "source_rule_index": index,
@@ -100,23 +140,8 @@ class ElaborateProvider:
                             }
                             for index, _rule in enumerate(payload["inputs"], 1)
                         ],
-                    },
-                    {
-                        "proposition": (
-                            "A person mentions option A without confirming it, so the "
-                            "system asks for explicit confirmation and does not proceed."
-                        ),
-                        "expected": "Do not proceed yet.",
-                        "rationale": "This distinguishes mention from confirmation.",
-                        "case_role": "BOUNDARY",
-                        "rule_checks": [
-                            {
-                                "source_rule_index": index,
-                                "evidence": "The proposition visibly complies with this Rule.",
-                            }
-                            for index, _rule in enumerate(payload["inputs"], 1)
-                        ],
-                    },
+                    }
+                    for proposition, expected, rationale, role in case_specs[:number]
                 ],
             }
         )
@@ -178,13 +203,13 @@ def test_goal_elaborates_to_bounded_unverified_rule_proposals() -> None:
     )
 
     assert result.analysis.mode is ElaborateMode.GOAL_TO_RULES
-    assert len(result.analysis.rules) == 1
+    assert len(result.analysis.rules) == 3
     assert result.analysis.cases == ()
-    assert provider.calls[0][1]["properties"]["rules"]["minItems"] == 1
-    assert provider.calls[0][1]["properties"]["rules"]["maxItems"] == 4
-    assert "Propose at least one and at most 4" in provider.calls[0][0]
+    assert provider.calls[0][1]["properties"]["rules"]["minItems"] == 3
+    assert provider.calls[0][1]["properties"]["rules"]["maxItems"] == 3
+    assert "Propose exactly 3" in provider.calls[0][0]
     assert "not a reason to return an empty set" in provider.calls[0][0]
-    assert result.analysis.number is None
+    assert result.analysis.number == 3
 
 
 def test_rules_elaborate_to_diverse_unverified_case_propositions() -> None:
@@ -195,20 +220,25 @@ def test_rules_elaborate_to_diverse_unverified_case_propositions() -> None:
     )
 
     assert result.analysis.mode is ElaborateMode.RULES_TO_CASES
-    assert [case.case_role for case in result.analysis.cases] == ["FIT", "BOUNDARY"]
+    assert [case.case_role for case in result.analysis.cases] == [
+        "FIT",
+        "BOUNDARY",
+        "CONTRAST",
+    ]
     assert all(
         tuple(check.source_rule_index for check in case.rule_checks) == (1,)
         for case in result.analysis.cases
     )
-    assert provider.calls[0][1]["properties"]["cases"]["minItems"] == 1
+    assert provider.calls[0][1]["properties"]["cases"]["minItems"] == 3
+    assert provider.calls[0][1]["properties"]["cases"]["maxItems"] == 3
     checks_schema = provider.calls[0][1]["properties"]["cases"]["items"][
         "properties"
     ]["rule_checks"]
     assert checks_schema["minItems"] == checks_schema["maxItems"] == 1
-    assert "Propose at least one and at most 3" in provider.calls[0][0]
+    assert "Propose exactly 3" in provider.calls[0][0]
     assert "complete input Rule set together" in provider.calls[0][0]
     assert "not a reason to return an empty set" in provider.calls[0][0]
-    assert result.analysis.number is None
+    assert result.analysis.number == 3
 
 
 @pytest.mark.parametrize(
@@ -248,16 +278,27 @@ def test_elaborate_number_requires_exactly_n_proposals(
 
 
 def test_elaborate_number_rejects_a_provider_count_mismatch() -> None:
-    provider = ElaborateProvider()
+    class MismatchProvider:
+        def complete(self, prompt, *, operation, output_schema=None):
+            return json.dumps(
+                {
+                    "overview": "Only one Rule was returned.",
+                    "rules": [
+                        {
+                            "content": "One Rule only.",
+                            "rationale": "This deliberately violates the exact count.",
+                        }
+                    ],
+                }
+            )
+
+    provider = MismatchProvider()
 
     with pytest.raises(ElaborateError, match="invalid Rules"):
         execute_elaborate(
             ElaborateRequest(goal="Make this Goal operational.", number=2),
             provider_factory=lambda: provider,
         )
-
-    assert len(provider.calls) == 1
-
 
 @pytest.mark.parametrize(
     "elaborate_request",
@@ -307,7 +348,7 @@ def test_rules_elaborate_rejects_partial_or_reordered_rule_coverage() -> None:
 
     with pytest.raises(ElaborateError, match="every source Rule exactly once"):
         execute_elaborate(
-            ElaborateRequest(rules=("Rule one.", "Rule two.")),
+            ElaborateRequest(rules=("Rule one.", "Rule two."), number=1),
             provider_factory=PartialCoverageProvider,
         )
 
@@ -613,6 +654,7 @@ def test_ground_rules_use_the_same_rules_to_cases_application(isolated_store):
         store,
         ground_name=session.contract_name,
         direction="RULES_TO_CASES",
+        number=1,
     )
 
     result = execute_ground_elaborate(
@@ -622,7 +664,7 @@ def test_ground_rules_use_the_same_rules_to_cases_application(isolated_store):
     )
 
     assert result.elaborate.analysis.mode is ElaborateMode.RULES_TO_CASES
-    assert len(result.elaborate.analysis.cases) == 2
+    assert len(result.elaborate.analysis.cases) == 1
     assert store.load_ground_session(session.contract_name) == session
 
 
@@ -723,9 +765,9 @@ def test_mem_elaborate_plain_uses_the_typed_application(
     assert result.exit_code == 0, result.output
     assert "ELABORATE APPLIED · elaborate/inline-target" in result.output
     assert "MODE · GOAL_TO_RULES · VERIFICATION · UNVERIFIED" in result.output
-    assert "EFFECTS · ADD 1 MEMORIES" in result.output
+    assert "EFFECTS · ADD 3 MEMORIES" in result.output
     assert "REVIEW · mem review elaborate --receipt" in result.output
-    assert len(store.load_direct(target.name).order) == 1
+    assert len(store.load_direct(target.name).order) == 3
 
 
 def test_physical_ground_goal_elaborate_freezes_only_the_goal_memory(

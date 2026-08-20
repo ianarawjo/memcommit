@@ -12,19 +12,19 @@ Rules --Elaborate--> suggested FIT / BOUNDARY / CONTRAST Case propositions
 
 All outputs are `[Suggested] [Unverified]`. A Goal is intent rather than
 evidence, and generated Cases are not real-world observations. Each direction
-must nevertheless return at least one candidate. Elaborate exists to make an
+must nevertheless return a complete candidate set. Elaborate exists to make an
 abstract or underspecified idea concrete enough to inspect and correct, so a
-sparse input is not a valid reason to return an empty result. When no exact
-number is requested, the provider need not pad to the configured maximum;
-proposals beyond the required first one should add a distinct Rule hypothesis
-or Case role. `--n N` (also `-n` and `--number`) deliberately changes that
-contract: the provider must return exactly `N` distinct proposals or the
-complete operation fails.
+sparse input is not a valid reason to return an empty result. Omitting the
+number means exactly three distinct proposals in both directions. `--n N`
+(also `-n` and `--number`) overrides that default with another exact count or
+the complete operation fails.
 
 ## Shared application contract
 
 `ElaborateRequest` accepts exactly one direction: one nonempty Goal or one or
-more distinct nonempty Rules, plus an optional exact proposal number.
+more distinct nonempty Rules, plus an optional override for the exact proposal
+number. The normalized request always carries an exact count, defaulting to
+three.
 `ElaborateSemanticConfig` owns the safe directional maxima, text, rationale,
 overview, and response limits. One complete request is
 `WHOLE_FRAME_ONLY`; hidden batching could duplicate, omit, or distort the
@@ -32,9 +32,9 @@ requested proposal set. Input normalization occurs before prepared lookup; on
 an exact prepared miss, the one-turn budget is validated before provider
 construction.
 
-Provider output uses a strict direction-specific schema. Goal input returns
-one to four Rules by default. Rule input returns one to three Cases by default,
-while `--number` fixes both JSON Schema bounds to the same requested value.
+Provider output uses a strict direction-specific schema. Both directions
+return exactly three proposals by default, while `--number` fixes both JSON
+Schema bounds to the requested override.
 The supported exact range is therefore 1–4 for Goal-to-Rules and 1–3 for
 Rules-to-Cases; the directional bounds continue to prevent an unbounded
 one-turn request. The provider instruction, decoder, typed analysis validator,
@@ -56,8 +56,8 @@ are operational. The references are present in both directions but never
 become current input Rules: `rule_checks` still range exactly over the
 request's Rule tuple. Provider contract version 4 prevented an unreferenced
 prompt result from replaying; version 5 introduced typed Target ambient
-context, and version 6 distinguishes an exact requested proposal number from
-the default bounded range.
+context, version 6 introduced an optional exact proposal number, and version 7
+makes the omitted number normalize to the exact default of three.
 
 The nonempty-output invariant is enforced independently by the Provider
 instruction, JSON Schema `minItems`, strict decoder, and typed analysis. This
@@ -208,7 +208,7 @@ a TTY. The explicit semantic TUI Viewer and plain CLI project the same typed res
 uses shared neutral report chrome and deterministic focused/whole-document
 `y`/`Y` copy. The public Python client exposes the same two directions plus
 exact Ground projections. Versioned agent and MCP tools expose all four input
-forms and the same optional exact number, and return
+forms and the same optional exact-count override, and return
 `verification: UNVERIFIED` and `effect: NONE`; this first Add
 slice does not silently broaden those callable adapters into mutations.
 Agent contract version 3 adds the name-only/content-safe Target ambient frame

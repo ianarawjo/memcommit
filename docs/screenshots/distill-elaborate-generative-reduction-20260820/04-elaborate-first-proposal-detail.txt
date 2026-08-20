@@ -1,25 +1,25 @@
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃                                                                                                                                                                                 ^┃
-┃ REVIEW DETAIL · 1/2 · SUGGESTED · CASE · FIT · PROPOSED · UNVERIFIED                                                                                                             ┃
-┃ A customer ordered a small hot cappuccino with oat milk, a double shot, and a thick layer of foam, asking to keep the size, temperature, milk, and shots unchanged but make it l ┃
-┃ess foamy. The barista asked whether to use a thin layer of foam or remove the foam entirely. The customer chose a thin layer of foam. The barista confirmed a small hot cappucci ┃
-┃no with oat milk, a double shot, and a thin layer of foam, with the size, temperature, milk, and shots unchanged, then prepared the drink.                                        ┃
+┃ REVIEW DETAIL · 1/3 · SUGGESTED · CASE · FIT · PROPOSED · UNVERIFIED                                                                                                             ┃
+┃ A customer ordered a small hot cappuccino with whole milk and a double shot at a cafe, asking to keep the size, temperature, milk, and shots unchanged but make it less foamy. T ┃
+┃he barista asked whether to leave a thin layer of foam or remove the foam entirely. The customer chose a thin layer of foam. The barista confirmed a small hot cappuccino with wh ┃
+┃ole milk, a double shot, and a thin layer of foam, with the size, temperature, milk, and shots unchanged, then prepared the drink.                                                ┃
 ┃                                                                                                                                                                                  ┃
 ┃ WHY THIS NEEDS REVIEW                                                                                                                                                            ┃
-┃ This FIT case directly follows the established four-sentence cafe-order pattern while using foam as the single adjusted attribute.                                               ┃
+┃ FIT: a straightforward complete instantiation that adjusts only foam after the customer chooses between two concrete options.                                                    ┃
 ┃                                                                                                                                                                                  ┃
 ┃ OPERATION DETAIL                                                                                                                                                                 ┃
 ┃ RULE COVERAGE · ALL 7                                                                                                                                                            ┃
-┃ RULE 1 · The proposition is exactly four chronological sentences, uses third person and past tense, and proceeds from order to clarification, selection, and preparation.        ┃
-┃RULE 2 · Sentence 1 begins exactly with `A customer` and specifies a small hot cappuccino with oat milk, a double shot, and a thick layer of foam.                                ┃
-┃RULE 3 · Sentence 1 requests adjustment of exactly one attribute—foam—through `make it less foamy`, while explicitly preserving size, temperature, milk, and shots.               ┃
-┃RULE 4 · Sentence 2 begins exactly with `The barista` and offers exactly two concrete implementations: a thin foam layer or no foam.                                              ┃
-┃RULE 5 · Sentence 3 begins exactly with `The customer` and selects the offered thin-layer implementation.                                                                         ┃
-┃RULE 6 · Sentence 4 begins exactly with `The barista`, confirms the thin foam layer, and restates the preserved size, temperature, milk, and shots.                               ┃
-┃RULE 7 · Sentence 4 ends exactly with `then prepared the drink.`                                                                                                                  ┃
-┃EXPECTED · A compliant positive Example Memory: the barista resolves one relative adjustment through a two-option customer choice, confirms the selected change and preserved att ┃
-┃ributes, and prepares the drink.                                                                                                                                                  ┃
+┃ RULE 1 · The proposition is exactly four chronological sentences written as a short third-person, past-tense narrative.                                                          ┃
+┃RULE 2 · The first sentence begins exactly with `A customer`, says the order occurs `at a cafe`, identifies a small hot cappuccino, and states whole milk and a double shot.      ┃
+┃RULE 3 · The first sentence requests only less foam and explicitly keeps the size, temperature, milk, and shots unchanged.                                                        ┃
+┃RULE 4 · The second sentence begins exactly with `The barista` and offers exactly two implementations: a thin foam layer or no foam.                                              ┃
+┃RULE 5 · The third sentence begins exactly with `The customer` and selects the offered thin-layer option.                                                                         ┃
+┃RULE 6 · The fourth sentence begins exactly with `The barista`, confirms the thin foam layer, and restates the preserved size, temperature, milk, and shots.                      ┃
+┃RULE 7 · The fourth sentence ends exactly with `then prepared the drink.`                                                                                                         ┃
+┃EXPECTED · Suggested positive Example Memory; unverified.                                                                                                                         ┃
 ┃TARGET USED · t1                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
@@ -38,13 +38,13 @@
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 ┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
 │  REPORT         Complete Elaborate report                                                                                                                                       ^│
-│› CASE · FIT     A customer ordered a small hot cappuccino with oat milk, a double shot, and a thick layer of foam, asking to keep the size, temperature, milk, and shots         │
-│                 unchanged but make it less foamy. The barista asked whether to use a thin layer of foam or remove the foam entirely. The customer chose a thin layer of foam.    │
-│                 The barista confirmed a small hot cappuccino with oat milk, a double shot, and a thin layer of foam, with the size, temperature, milk, and shots unchanged, then │
-│                 prepared the drink.                                                                                                                                              │
-│  CASE · BOUNDARY A customer ordered a large iced cold brew with light ice, no syrup, and one espresso shot, asking to keep the size, temperature, ice, and no-syrup condition    │
-│                  unchanged but make it less strong. The barista asked whether to remove the espresso shot or add more water. The customer chose to add more water. The barista   │
-│                  confirmed a large iced cold brew with light ice, no syrup, one espresso shot, and more water, with the size, temperature, ice, and no-syrup condition          v│
+│› CASE · FIT     A customer ordered a small hot cappuccino with whole milk and a double shot at a cafe, asking to keep the size, temperature, milk, and shots unchanged but make  │
+│                 it less foamy. The barista asked whether to leave a thin layer of foam or remove the foam entirely. The customer chose a thin layer of foam. The barista         │
+│                 confirmed a small hot cappuccino with whole milk, a double shot, and a thin layer of foam, with the size, temperature, milk, and shots unchanged, then prepared  │
+│                 the drink.                                                                                                                                                       │
+│  CASE · BOUNDARY A customer ordered a large iced cold brew with light ice and no syrup at a cafe, asking to keep the size, temperature, ice, and no-syrup condition unchanged    │
+│                  but make it stronger. The barista asked whether to add one espresso shot or add two espresso shots. The customer chose one espresso shot. The barista confirmed │
+│                  a large iced cold brew with one espresso shot, with the size, temperature, light ice, and no-syrup condition unchanged, then prepared the drink.               v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
 │[ READ ONLY ]  No action available · This saved session can only be inspected.                                                                                                    │

@@ -297,7 +297,8 @@ def elaborate_agent_tool_schema() -> JsonObject:
         "name": ELABORATE_AGENT_TOOL_NAME,
         "description": (
             "Propose unverified Rules from a Goal or Cases from Rules, using "
-            "inline input or one exact Ground; nothing is saved or accepted."
+            "inline input or one exact Ground; omission of number requests exactly "
+            "3 proposals, and nothing is saved or accepted."
         ),
         "parameters": {"type": "object", "oneOf": branches},
     }

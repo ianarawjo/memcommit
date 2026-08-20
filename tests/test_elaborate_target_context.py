@@ -138,6 +138,7 @@ def test_target_ambient_follows_local_embeds_deduplicates_cycles_and_keeps_query
         store,
         context_name=source.name,
         role="rules",
+        number=1,
     )
     source_digest = context_record_digest(store.load_direct(source.name))
     provider = TargetAwareProvider()
@@ -212,6 +213,7 @@ def test_same_context_source_wins_and_is_not_resent_as_target_ambient(
         store,
         context_name=current.name,
         role="rules",
+        number=1,
     )
     provider = TargetAwareProvider()
 
@@ -241,6 +243,7 @@ def test_embedded_target_drift_fails_after_provider_without_partial_add(
         store,
         context_name=source.name,
         role="rules",
+        number=1,
     )
 
     class DriftingProvider(TargetAwareProvider):
@@ -304,6 +307,7 @@ def test_physical_ground_uses_only_the_existing_destination_lane_as_ambient(
         store,
         ground_name="ambient-ground",
         direction="RULES_TO_CASES",
+        number=1,
     )
     provider = TargetAwareProvider()
 
@@ -378,6 +382,7 @@ def test_granted_embed_requires_read_embed_derive_and_combine_before_provider(
         store,
         context_name=source.name,
         role="rules",
+        number=1,
     )
     provider = TargetAwareProvider()
 

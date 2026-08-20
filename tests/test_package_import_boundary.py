@@ -447,7 +447,7 @@ client = MemCommitClient(
     create=True,
     semantic_provider_factory=Provider,
 )
-result = client.elaborate(goal='Confirm before acting.')
+result = client.elaborate(goal='Confirm before acting.', number=1)
 assert result.rules[0].content == 'Confirm the option before acting.'
 assert 'memcommit.api._operations.elaborate' in sys.modules
 assert 'memcommit.elaborate_application' in sys.modules

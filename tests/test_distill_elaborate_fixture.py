@@ -363,11 +363,14 @@ def test_every_distill_and_elaborate_prompt_quotes_all_reference_families() -> N
             )
 
     execute_elaborate(
-        ElaborateRequest(rules=tuple(cafe["rule_memories"])),
+        ElaborateRequest(rules=tuple(cafe["rule_memories"]), number=1),
         provider_factory=PromptCapturingElaborateProvider,
     )
     execute_elaborate(
-        ElaborateRequest(goal="Make one reusable procedure reviewable."),
+        ElaborateRequest(
+            goal="Make one reusable procedure reviewable.",
+            number=1,
+        ),
         provider_factory=PromptCapturingElaborateProvider,
     )
     assert len(PromptCapturingElaborateProvider.prompts) == 2

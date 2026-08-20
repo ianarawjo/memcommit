@@ -9,6 +9,7 @@ from dataclasses import dataclass
 class ElaborateSemanticConfig:
     """One immutable provider-contract limit snapshot."""
 
+    default_proposal_count: int = 3
     max_rule_proposals: int = 4
     max_case_proposals: int = 3
     text_limit: int = 2_000
@@ -18,6 +19,7 @@ class ElaborateSemanticConfig:
 
     def __post_init__(self) -> None:
         values = (
+            self.default_proposal_count,
             self.max_rule_proposals,
             self.max_case_proposals,
             self.text_limit,
@@ -27,6 +29,13 @@ class ElaborateSemanticConfig:
         )
         if any(type(value) is not int or value <= 0 for value in values):
             raise ValueError("Elaborate semantic limits must be positive integers.")
+        if self.default_proposal_count > min(
+            self.max_rule_proposals,
+            self.max_case_proposals,
+        ):
+            raise ValueError(
+                "Elaborate default proposals must fit both directional maxima."
+            )
 
 
 DEFAULT_ELABORATE_SEMANTIC_CONFIG = ElaborateSemanticConfig()

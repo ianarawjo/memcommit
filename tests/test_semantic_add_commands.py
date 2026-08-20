@@ -39,33 +39,74 @@ class _ElaborateProvider:
         assert operation == ELABORATE_OPERATION
         payload = json.loads(prompt.split(ELABORATE_PAYLOAD_MARKER, 1)[1])
         type(self).calls.append(payload)
+        number = payload["number"]
         target_refs = (
             {"target_context_refs": []}
             if "target_context" in payload
             else {}
         )
         if payload["mode"] == "GOAL_TO_RULES":
+            rule_specs = (
+                (
+                    "Confirm the selected ticker before acting.",
+                    "This operationalizes the stated Goal.",
+                ),
+                (
+                    "Record the exact ticker that was confirmed.",
+                    "This keeps the chosen ticker reviewable.",
+                ),
+                (
+                    "Ask again when the ticker selection changes.",
+                    "This prevents stale confirmation from authorizing a new ticker.",
+                ),
+                (
+                    "Do not act on an ambiguous ticker selection.",
+                    "This defines the safe confirmation boundary.",
+                ),
+            )
             return json.dumps(
                 {
-                    "overview": "One operational Rule makes the Goal concrete.",
+                    "overview": f"Exactly {number} Rules make the Goal concrete.",
                     "rules": [
                         {
-                            "content": "Confirm the selected ticker before acting.",
-                            "rationale": "This operationalizes the stated Goal.",
+                            "content": content,
+                            "rationale": rationale,
                             **target_refs,
                         }
+                        for content, rationale in rule_specs[:number]
                     ],
                 }
             )
+        case_specs = (
+            (
+                "The user explicitly confirms ticker AAPL.",
+                "Proceed with AAPL.",
+                "This is a fitting Case.",
+                "FIT",
+            ),
+            (
+                "The user mentions AAPL without confirming it.",
+                "Ask for confirmation.",
+                "This is a boundary Case.",
+                "BOUNDARY",
+            ),
+            (
+                "The user confirms AAPL and then changes the selection to MSFT, so "
+                "the system asks for fresh confirmation before proceeding.",
+                "Proceed only after MSFT is confirmed.",
+                "This contrasts fresh and stale confirmation.",
+                "CONTRAST",
+            ),
+        )
         return json.dumps(
             {
-                "overview": "A fit and boundary Case make the Rule concrete.",
+                "overview": f"Exactly {number} Cases make the Rule concrete.",
                 "cases": [
                     {
-                        "proposition": "The user explicitly confirms ticker AAPL.",
-                        "expected": "Proceed with AAPL.",
-                        "rationale": "This is a fitting Case.",
-                        "case_role": "FIT",
+                        "proposition": proposition,
+                        "expected": expected,
+                        "rationale": rationale,
+                        "case_role": role,
                         "rule_checks": [
                             {
                                 "source_rule_index": index,
@@ -74,21 +115,8 @@ class _ElaborateProvider:
                             for index, _rule in enumerate(payload["inputs"], 1)
                         ],
                         **target_refs,
-                    },
-                    {
-                        "proposition": "The user mentions AAPL without confirming it.",
-                        "expected": "Ask for confirmation.",
-                        "rationale": "This is a boundary Case.",
-                        "case_role": "BOUNDARY",
-                        "rule_checks": [
-                            {
-                                "source_rule_index": index,
-                                "evidence": "The proposition satisfies this Rule.",
-                            }
-                            for index, _rule in enumerate(payload["inputs"], 1)
-                        ],
-                        **target_refs,
-                    },
+                    }
+                    for proposition, expected, rationale, role in case_specs[:number]
                 ],
             }
         )
@@ -162,14 +190,14 @@ def test_elaborate_endpoint_matrix_adds_atomically(
     assert result.exit_code == 0, result.output
     assert f"ELABORATE APPLIED · {expected_target}" in result.output
     assert f"SOURCE · {expected_source} · TARGET · {expected_target}" in result.output
-    assert "EFFECTS · ADD 2 MEMORIES" in result.output
+    assert "EFFECTS · ADD 3 MEMORIES" in result.output
     for name, count in before.items():
-        expected = count + 2 if name == expected_target else count
+        expected = count + 3 if name == expected_target else count
         assert len(store.load_direct(name).order) == expected
     checkpoint = store.list_checkpoints(expected_target)[0]
     assert checkpoint["command"] == "elaborate"
     assert checkpoint["args"]["elaborate"]["effect"] == "ADD"
-    assert len(checkpoint["args"]["elaborate"]["result_memory_uids"]) == 2
+    assert len(checkpoint["args"]["elaborate"]["result_memory_uids"]) == 3
     assert len(_ElaborateProvider.calls[0]["inputs"]) == 1
 
 
@@ -522,5 +550,5 @@ def test_repeated_same_context_elaborate_sees_prior_output_only_later(
     second = runner.invoke(app, ["elaborate"])
 
     assert first.exit_code == second.exit_code == 0
-    assert [len(call["inputs"]) for call in _ElaborateProvider.calls] == [1, 3]
-    assert len(store.load_direct(current.name).order) == 5
+    assert [len(call["inputs"]) for call in _ElaborateProvider.calls] == [1, 4]
+    assert len(store.load_direct(current.name).order) == 7

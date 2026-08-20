@@ -90,7 +90,7 @@ def cmd(
             "-n",
             min=1,
             help=(
-                "Exact proposals to generate (Goal to Rules: "
+                "Exact proposals to generate (default 3; Goal to Rules: "
                 f"1-{DEFAULT_ELABORATE_SEMANTIC_CONFIG.max_rule_proposals}; "
                 "Rules to Cases: "
                 f"1-{DEFAULT_ELABORATE_SEMANTIC_CONFIG.max_case_proposals})"

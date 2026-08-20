@@ -29,7 +29,7 @@ from memcommit.semantic_execution import (
 
 
 ELABORATE_OPERATION = "elaborate"
-ELABORATE_PROVIDER_CONTRACT_VERSION = 6
+ELABORATE_PROVIDER_CONTRACT_VERSION = 7
 ELABORATE_PAYLOAD_MARKER = "ELABORATE PAYLOAD:\n"
 
 
@@ -177,15 +177,15 @@ def normalize_elaborate_number(
     mode: ElaborateMode,
     number: int | None,
     config: ElaborateSemanticConfig = DEFAULT_ELABORATE_SEMANTIC_CONFIG,
-) -> int | None:
-    """Validate one optional exact proposal count against the direction bound."""
+) -> int:
+    """Resolve the default or explicit exact count against the direction bound."""
 
     if not isinstance(mode, ElaborateMode):
         raise ElaborateError("Elaborate proposal count requires a valid direction.")
     if not isinstance(config, ElaborateSemanticConfig):
         raise TypeError("Elaborate requires an ElaborateSemanticConfig.")
     if number is None:
-        return None
+        number = config.default_proposal_count
     maximum = (
         config.max_rule_proposals
         if mode is ElaborateMode.GOAL_TO_RULES
@@ -338,7 +338,7 @@ class ElaborateAnalysis:
             if self.mode is ElaborateMode.GOAL_TO_RULES
             else len(self.cases)
         )
-        if number is not None and proposal_count != number:
+        if proposal_count != number:
             raise ElaborateError(
                 f"Elaborate analysis requires exactly {number} proposals."
             )
@@ -396,6 +396,7 @@ class ElaborateAnalysis:
             ),
             "number": self.number,
             "semantic_config": {
+                "default_proposal_count": self.semantic_config.default_proposal_count,
                 "max_rule_proposals": self.semantic_config.max_rule_proposals,
                 "max_case_proposals": self.semantic_config.max_case_proposals,
                 "text_limit": self.semantic_config.text_limit,
@@ -443,7 +444,7 @@ def validate_elaborate_analysis(
             )
         if len(analysis.rules) > config.max_rule_proposals:
             raise ElaborateError("Elaborate returned too many Rule proposals.")
-        if number is not None and len(analysis.rules) != number:
+        if len(analysis.rules) != number:
             raise ElaborateError(
                 f"Elaborate requires exactly {number} Rule proposals."
             )
@@ -457,7 +458,7 @@ def validate_elaborate_analysis(
             )
         if len(analysis.cases) > config.max_case_proposals:
             raise ElaborateError("Elaborate returned too many Case proposals.")
-        if number is not None and len(analysis.cases) != number:
+        if len(analysis.cases) != number:
             raise ElaborateError(
                 f"Elaborate requires exactly {number} Case proposals."
             )
@@ -512,7 +513,7 @@ def _schema(
     *,
     input_count: int,
     target_context: ElaborateTargetContext | None,
-    number: int | None,
+    number: int,
     config: ElaborateSemanticConfig,
 ) -> dict[str, object]:
     text = {"type": "string", "minLength": 1, "maxLength": config.text_limit}
@@ -551,10 +552,8 @@ def _schema(
             rule_properties["target_context_refs"] = target_refs
         properties["rules"] = {
             "type": "array",
-            "minItems": number if number is not None else 1,
-            "maxItems": (
-                number if number is not None else config.max_rule_proposals
-            ),
+            "minItems": number,
+            "maxItems": number,
             "items": {
                 "type": "object",
                 "additionalProperties": False,
@@ -607,10 +606,8 @@ def _schema(
             case_properties["target_context_refs"] = target_refs
         properties["cases"] = {
             "type": "array",
-            "minItems": number if number is not None else 1,
-            "maxItems": (
-                number if number is not None else config.max_case_proposals
-            ),
+            "minItems": number,
+            "maxItems": number,
             "items": {
                 "type": "object",
                 "additionalProperties": False,
@@ -643,8 +640,7 @@ def validate_elaborate_provider_plan(
         raise TypeError("Elaborate requires an ElaborateSemanticConfig.")
     number = normalize_elaborate_number(mode=mode, number=number, config=config)
     payload: dict[str, object] = {"mode": mode.value, "inputs": list(inputs)}
-    if number is not None:
-        payload["number"] = number
+    payload["number"] = number
     if target_context is not None:
         payload["target_context"] = target_context.prompt_record()
     schema = _schema(
@@ -654,11 +650,7 @@ def validate_elaborate_provider_plan(
         number=number,
         config=config,
     )
-    expected = number or (
-        config.max_rule_proposals
-        if mode is ElaborateMode.GOAL_TO_RULES
-        else config.max_case_proposals
-    )
+    expected = number
     plan = plan_semantic_execution(
         elaborate_execution_policy(mode=mode, config=config),
         json_budget(
@@ -723,8 +715,7 @@ def analyze_elaborate(
     ):
         raise TypeError("Elaborate Target Context must be typed.")
     payload: dict[str, object] = {"mode": mode.value, "inputs": list(inputs)}
-    if number is not None:
-        payload["number"] = number
+    payload["number"] = number
     if target_context is not None:
         payload["target_context"] = target_context.prompt_record()
     schema = _schema(
@@ -742,11 +733,7 @@ def analyze_elaborate(
         config=config,
     )
     if mode is ElaborateMode.GOAL_TO_RULES:
-        quantity = (
-            f"exactly {number}"
-            if number is not None
-            else f"at least one and at most {config.max_rule_proposals}"
-        )
+        quantity = f"exactly {number}"
         instruction = (
             f"Propose {quantity} "
             "independently useful candidate Rules that make the Goal more "
@@ -757,11 +744,7 @@ def analyze_elaborate(
             "reviewed; do not present factual claims or accepted decisions."
         )
     else:
-        quantity = (
-            f"exactly {number}"
-            if number is not None
-            else f"at least one and at most {config.max_case_proposals}"
-        )
+        quantity = f"exactly {number}"
         instruction = (
             f"Propose {quantity} "
             "diverse, self-contained positive Example Memories. Every Case must "
@@ -845,7 +828,7 @@ def analyze_elaborate(
             not isinstance(values, list)
             or not values
             or len(values) > config.max_rule_proposals
-            or (number is not None and len(values) != number)
+            or len(values) != number
         ):
             raise ElaborateError("The Elaborate provider returned invalid Rules.")
         expected_rule_fields = {"content", "rationale"}
@@ -878,7 +861,7 @@ def analyze_elaborate(
             not isinstance(values, list)
             or not values
             or len(values) > config.max_case_proposals
-            or (number is not None and len(values) != number)
+            or len(values) != number
         ):
             raise ElaborateError("The Elaborate provider returned invalid Cases.")
         expected_case_fields = {
