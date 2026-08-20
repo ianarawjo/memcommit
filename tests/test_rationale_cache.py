@@ -4,6 +4,7 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
+import unicodedata
 import uuid
 
 import pytest
@@ -44,12 +45,37 @@ class RationaleProvider:
         self.calls.append(payload)
         candidates = payload["candidates"]
         assert isinstance(candidates, list) and candidates
+        semantic_values = [
+            payload["target"]["content"],
+            *(candidate["content"] for candidate in candidates),
+        ]
+        saved_analysis = payload["saved_analysis"]
+        if saved_analysis is not None:
+            semantic_values.extend(
+                (
+                    saved_analysis["interpretation"],
+                    saved_analysis["clarification"],
+                    saved_analysis["reason"],
+                    saved_analysis["question"],
+                    *(item["text"] for item in saved_analysis["readings"]),
+                )
+            )
+        normalized = {
+            unicodedata.normalize("NFC", value).strip()
+            for value in semantic_values
+            if value.strip()
+        }
+        expected_limit = min(480, sum(map(len, normalized)) - 1)
+        assert (
+            output_schema["properties"]["explanation"]["maxLength"]
+            == expected_limit
+        )
+        explanation = f"{self.label}: context supports it."
+        assert len(explanation) <= expected_limit
         return json.dumps(
             {
-                "best_supported_reading": f"{self.label} reading",
-                "contextual_flow": f"{self.label} flow",
+                "explanation": explanation,
                 "support_ids": [candidates[0]["candidate_id"]],
-                "unresolved": [],
             }
         )
 
@@ -63,13 +89,30 @@ class BadRationaleProvider:
         self.calls += 1
         if self.mode == "provider-failure":
             raise QueryProviderError("rationale provider unavailable")
+        if self.mode == "over-character-limit":
+            assert output_schema is not None
+            explanation_limit = output_schema["properties"]["explanation"][
+                "maxLength"
+            ]
+            assert isinstance(explanation_limit, int)
+            return json.dumps(
+                {
+                    "explanation": "P" * (explanation_limit + 1),
+                    "support_ids": [],
+                }
+            )
+        if self.mode == "multiple-paragraphs":
+            return json.dumps(
+                {
+                    "explanation": "POISON first.\nPOISON second.",
+                    "support_ids": [],
+                }
+            )
         assert self.mode == "invalid-output"
         return json.dumps(
             {
-                "best_supported_reading": "POISON reading",
-                "contextual_flow": "POISON flow",
+                "explanation": "POISON reading follows a POISON flow.",
                 "support_ids": ["unknown-candidate"],
-                "unresolved": [],
             }
         )
 
@@ -114,7 +157,7 @@ def test_identical_cli_input_reuses_cache_and_reports_it_in_text_and_json(
     first = invoke("rationale", target.uid)
 
     assert first.exit_code == 0, first.output
-    assert "ORIGINAL reading" in first.output
+    assert "ORIGINAL: context" in first.output
     assert len(provider.calls) == 1
     assert rationale_inference_path(ctx.uid, target.uid).is_file()
 
@@ -123,14 +166,18 @@ def test_identical_cli_input_reuses_cache_and_reports_it_in_text_and_json(
     structured = invoke("rationale", target.uid, "--json")
 
     assert reused.exit_code == 0, reused.output
-    assert "ORIGINAL reading" in reused.output
-    assert "Reused cached inference for unchanged input" in reused.output
+    assert "ORIGINAL: context" in reused.output
+    assert "· cached" in reused.output
     assert structured.exit_code == 0, structured.output
     payload = json.loads(structured.output)
     assert payload["inference_cached"] is True
-    assert payload["inference"]["best_supported_reading"] == (
-        "ORIGINAL reading"
+    assert payload["inference"]["explanation"] == (
+        "ORIGINAL: context supports it."
     )
+    budgets = payload["character_budgets"]
+    explanation = payload["inference"]["explanation"]
+    assert len(explanation) <= budgets["inference_limit"]
+    assert budgets["inference_limit"] < budgets["inference_source"]
 
 
 def test_refresh_replaces_cache_and_conflicts_with_recorded_only(
@@ -147,8 +194,8 @@ def test_refresh_replaces_cache_and_conflicts_with_recorded_only(
     refreshed = invoke("rationale", target.uid, "--refresh")
 
     assert refreshed.exit_code == 0, refreshed.output
-    assert "REFRESHED reading" in refreshed.output
-    assert "Reused cached inference" not in refreshed.output
+    assert "REFRESHED: context" in refreshed.output
+    assert "· cached" not in refreshed.output
     assert len(replacement.calls) == 1
 
     _forbid_provider(monkeypatch)
@@ -163,8 +210,8 @@ def test_refresh_replaces_cache_and_conflicts_with_recorded_only(
     assert reused.exit_code == 0, reused.output
     payload = json.loads(reused.output)
     assert payload["inference_cached"] is True
-    assert payload["inference"]["best_supported_reading"] == (
-        "REFRESHED reading"
+    assert payload["inference"]["explanation"] == (
+        "REFRESHED: context supports it."
     )
     assert incompatible.exit_code == 1
     assert "cannot be combined with --recorded-only" in incompatible.output
@@ -202,8 +249,8 @@ def test_direct_memory_input_changes_invalidate_the_latest_slot(
     result = invoke("rationale", target.uid)
 
     assert result.exit_code == 0, result.output
-    assert "AFTER reading" in result.output
-    assert "Reused cached inference" not in result.output
+    assert "AFTER: context" in result.output
+    assert "· cached" not in result.output
     assert len(current_provider.calls) == 1
 
 
@@ -249,7 +296,7 @@ def _corrupt_cache(path: Path, mode: str) -> None:
     ) == 1
     assert _replace_nested_key(
         data,
-        "best_supported_reading",
+        "explanation",
         "POISON reading",
     ) == 1
     path.write_text(json.dumps(data), encoding="utf-8")
@@ -278,20 +325,25 @@ def test_invalid_cache_is_never_rendered_and_a_fresh_result_repairs_it(
     result = invoke("rationale", target.uid)
 
     assert result.exit_code == 0, result.output
-    assert "REPAIRED reading" in result.output
+    assert "REPAIRED: context" in result.output
     assert "POISON" not in result.output
     assert len(repair.calls) == 1
 
     _forbid_provider(monkeypatch)
     reused = invoke("rationale", target.uid)
     assert reused.exit_code == 0, reused.output
-    assert "REPAIRED reading" in reused.output
-    assert "Reused cached inference" in reused.output
+    assert "REPAIRED: context" in reused.output
+    assert "· cached" in reused.output
 
 
 @pytest.mark.parametrize(
     "failure_mode",
-    ["provider-failure", "invalid-output"],
+    [
+        "provider-failure",
+        "invalid-output",
+        "over-character-limit",
+        "multiple-paragraphs",
+    ],
 )
 def test_failed_or_invalid_provider_result_is_not_cached(
     isolated_store,
@@ -349,8 +401,8 @@ def test_failed_refresh_preserves_the_previous_cache(
     assert reused.exit_code == 0, reused.output
     payload = json.loads(reused.output)
     assert payload["inference_cached"] is True
-    assert payload["inference"]["best_supported_reading"] == (
-        "PRESERVED reading"
+    assert payload["inference"]["explanation"] == (
+        "PRESERVED: context supports it."
     )
 
 
@@ -389,6 +441,53 @@ def test_recorded_only_does_not_read_write_or_render_an_existing_cache(
     assert path.read_bytes() == before
 
 
+def test_tiny_semantic_frame_skips_provider_and_emits_only_status(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    ctx = ops.init("rationale-tiny-evidence")
+    target, _neighbor = ops.add_many(ctx, ["A", "B"])
+    store.save(ctx)
+    store.set_current(ctx.name)
+    _forbid_provider(monkeypatch)
+
+    result = invoke("rationale", target.uid)
+    structured = invoke("rationale", target.uid, "--json")
+
+    assert result.exit_code == 0, result.output
+    assert "INFERENCE — insufficient evidence" in result.output
+    assert "available semantic evidence" not in result.output
+    assert structured.exit_code == 0, structured.output
+    payload = json.loads(structured.output)
+    assert payload["inference_status"] == "INSUFFICIENT_EVIDENCE"
+    budgets = payload["character_budgets"]
+    assert budgets["inference_source"] == 2
+    assert budgets["inference_limit"] == 1
+    assert budgets["provenance_limit"] < budgets["provenance_source"]
+    assert not rationale_inference_path(ctx.uid, target.uid).exists()
+
+
+def test_nfc_equivalent_evidence_counts_once_before_provider_planning(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    ctx = ops.init("rationale-nfc-budget")
+    target, _neighbor = ops.add_many(ctx, ["e\u0301", "é"])
+    store.save(ctx)
+    store.set_current(ctx.name)
+    _forbid_provider(monkeypatch)
+
+    result = invoke("rationale", target.uid, "--json")
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.output)
+    assert payload["inference_status"] == "INSUFFICIENT_EVIDENCE"
+    assert payload["character_budgets"]["inference_source"] == 1
+    assert payload["character_budgets"]["inference_limit"] == 0
+
+
 def test_cache_publication_failure_keeps_the_valid_inference_available(
     isolated_store,
     monkeypatch,
@@ -409,7 +508,7 @@ def test_cache_publication_failure_keeps_the_valid_inference_available(
     result = invoke("rationale", target.uid)
 
     assert result.exit_code == 0, result.output
-    assert "UNCACHED reading" in result.output
+    assert "UNCACHED: context" in result.output
     assert "not cached because cache storage was unavailable" in result.output
     assert len(provider.calls) == 1
 
@@ -430,7 +529,7 @@ def test_legacy_context_identity_disables_cache_without_blocking_inference(
     result = invoke("rationale", target.uid)
 
     assert result.exit_code == 0, result.output
-    assert "LEGACY reading" in result.output
+    assert "LEGACY: context" in result.output
     assert "caching is unavailable for this Context" in result.output
     assert len(provider.calls) == 1
 
@@ -450,10 +549,11 @@ def test_cache_path_hashes_arbitrary_memory_uid_and_uses_runtime_store_root(
         output_schema={"type": "object"},
     )
     inference = CachedRationaleInference(
-        best_supported_reading="A bounded reading.",
-        contextual_flow="A bounded contextual flow.",
+        explanation=(
+            "A bounded reading follows the available contextual flow, while "
+            "the author's intent remains unknown."
+        ),
         support_memory_uids=(support_uid,),
-        unresolved=("Intent remains unknown.",),
     )
 
     save_rationale_inference(

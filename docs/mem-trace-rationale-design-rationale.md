@@ -213,16 +213,41 @@ current state itself. The UI shows it only under `CURRENT` and leaves
 that Memory was created; `mem rationale` therefore reports that no retained
 creation event was found.
 
-`mem rationale` layers:
+The default human Rationale projection is deliberately smaller than its
+evidence model. It shows the selected **MEMORY**, at most one compact
+**PROVENANCE** paragraph derived from Trace's earliest/current lineage and
+retained operation kinds, and at most one **INFERENCE** paragraph explicitly
+marked as contextual and not recorded. With no retained event, hidden Grant
+history, an unrequested provider, insufficient evidence, or provider failure,
+the relevant section keeps only a short status label and frozen scope metadata;
+it does not manufacture a filler explanation. The ordinary report no longer
+repeats recorded origin, transformation reasons, saved review fields, atomize
+attachments, unapplied proposals, provider error prose, or the full
+supporting-Memory bodies as separate sections. Those typed fields remain
+available through `--json`; shortening presentation must not erase evidence or
+reclassify analysis as provenance.
 
-- **RECORDED ORIGIN** — command/checkpoint evidence about intake;
-- **RECORDED RATIONALE** — reasons explicitly stored by a transformation;
-- **SAVED ANALYSIS — not a creation cause** — current ambiguity review;
-- **SAVED ATOMIZE ANALYSIS** — current, stale, or applied preview;
-- **UNAPPLIED PROPOSALS** — update/impact material that has not changed this
-  Memory;
-- **INFERRED WITHIN THE CURRENT CONTEXT — not recorded** — a best-effort
-  ordinary reading, freshly generated or reused from an exact-input cache.
+Both prose sections use NFC-normalized Unicode character budgets rather than
+word counts. Exact duplicate nonempty semantic strings count once, while JSON,
+opaque IDs, positions, and UI chrome do not count as evidence. Inference's
+source is the target, the frozen provider-visible candidate contents, and the
+provider-visible saved-analysis text. Its paragraph limit is
+`min(480, source characters - 1)`. If that limit is below 16 characters, the
+command does not connect the provider and reports `insufficient evidence`.
+Provenance's source is the retained event kind, command, evidence label,
+reason, and before/after content; its projected paragraph limit is
+`min(320, source characters - 1)`. Retained earliest/current endpoint content
+also contributes because the projection shows that transition. A trace with no
+retained event, or history hidden by a Grant, has a zero provenance budget and
+produces no paragraph. Therefore each explanation is strictly smaller than the
+evidence class it summarizes, and their combined prose is strictly smaller than
+the combined Context-plus-Trace semantic source whenever both are present. JSON exposes the
+source counts, limits, inference status, and any provider error so this boundary
+is testable without lengthening the ordinary report.
+
+The [180×52 compact Rationale capture](screenshots/mem-rationale-compact-20260820/README.md)
+records target selection, the shortened Viewer, and read-only close
+verification.
 
 `--recorded-only` neither reads nor writes the inference cache and never
 connects the inference provider. `--refresh` bypasses a matching cache entry
@@ -384,10 +409,42 @@ distance provide cues; they do not define the evidence boundary. Only an
 explicit size limit may reduce the frame, and that reduction must be reported.
 
 The provider receives opaque candidate IDs and must cite only allowlisted IDs.
-Unknown or duplicate IDs invalidate the response. The explanation may state a
-best-supported ordinary reading, describe contextual flow, and list what
-remains unresolved. It cannot claim to recover the author's actual intention
-or the historical reason the Memory was created.
+Unknown or duplicate IDs invalidate the response. It returns one paragraph
+that combines the best-supported ordinary reading, its contextual flow, and
+what remains unresolved. The request schema carries the dynamic character
+limit described above. Validation NFC-normalizes the explanation and rejects
+an over-limit result, a line or control break, or a second output field that
+could recreate the former multi-section explanation. A shorter paragraph
+remains valid when the frame supports only a narrow statement. The paragraph
+cannot claim to recover the author's actual intention or the historical reason
+the Memory was created.
+
+### Follow-up example design TODO
+
+Do not add prompt examples until representative cases and expected artifacts
+are chosen together. For each case below, create one minimal Context fixture,
+one expected paragraph below that fixture's dynamic character limit, one
+assertion identifying which supplied Memory IDs may support it, and one compact
+terminal capture paired with JSON evidence verification:
+
+- unchanged Memory with a clear local reading and no material uncertainty;
+- edited Memory whose current wording differs from its earliest retained form;
+- split or absorbed lineage where the provenance paragraph must express the
+  structural transition without inventing a semantic cause;
+- historical-only or removed Memory whose current lineage endpoint is absent;
+- locally supported reading with one concrete unresolved referent, boundary,
+  or exception;
+- insufficient local evidence that skips provider connection, provider
+  failure, and rejected over-character-limit or multi-paragraph output;
+- current saved analysis or an unapplied proposal that remains visible in JSON
+  but is not repeated in the compact human report;
+- granted READ and readable-descendant scopes, including hidden authority
+  history and size-limited candidate frames.
+
+The examples should be selected for boundary coverage, not copied into the
+prompt merely to improve prose style. NFC code-point length is deliberately
+language-neutral; grapheme or display-cell limits remain a separate evaluation
+question.
 
 For a historical UID that is no longer present in the current frame, rationale
 still uses the current directly owned Memories as its interpretation frame. It
@@ -430,8 +487,10 @@ therefore causes a cache miss. Display mode, picker use, trace-only evidence,
 and proposal-only state do not affect provider input and do not invalidate the
 entry.
 
-The cache persists only normalized explanation text, unresolved items, and
-the supporting ordinary Memory UIDs. Explanation text can quote or paraphrase
+The version-3 cache persists only the validated, NFC-canonical single-paragraph
+explanation and the supporting ordinary Memory UIDs. Version-1 multi-field and
+version-2 word-budget entries are ordinary cache misses rather than migration
+inputs. Explanation text can quote or paraphrase
 an ordinary Memory, which is why deletion shares the Context's privacy
 lifetime. The record does not persist the prompt, a separate candidate-frame
 payload, raw provider response, complete report, references, or query-only

@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 from contextlib import redirect_stdout
 from io import StringIO
+import textwrap
 from typing import Annotated, Optional
 
 import typer
@@ -14,13 +15,18 @@ from memcommit.commands.command_progress import progressing_provider_factory
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.memory_picker import (
     ScopedMemoryPickerItem,
-    choose_memory_report_context,
     choose_memory_report_target,
 )
 from memcommit.commands.memory_report_recents import (
     MemoryReportRecentSelection,
     MemoryReportSelectAction,
     choose_memory_report_recent,
+)
+from memcommit.commands.trace_projection import (
+    format_trace_states,
+    trace_operation_rows,
+    trace_row_effect,
+    trace_row_evidence,
 )
 from memcommit.interfaces.tui.viewers.read_only import (
     interactive_report_terminal,
@@ -30,13 +36,9 @@ from memcommit.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,
 )
-from memcommit.provenance import (
-    ProvenanceError,
-    TraceEvent,
-)
+from memcommit.provenance import ProvenanceError
 from memcommit.query_provider import connect_codex_chatgpt_provider
 from memcommit.rationale import (
-    ContextEvidence,
     RationaleError,
     RationaleReport,
     build_rationale,
@@ -50,7 +52,6 @@ from memcommit.rationale_scope import (
     rationale_trace,
     resolve_rationale_target,
 )
-from memcommit.context_targeting.catalog import grant_navigation_annotation
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore
@@ -60,37 +61,59 @@ def _uid(value: str, verbose: bool) -> str:
     return value if verbose else value[:8]
 
 
-def _render_memory(
-    evidence: ContextEvidence,
+def _compact_operation_flow(report: RationaleReport) -> str:
+    """Summarize retained lineage without reproducing Trace's full event log."""
+
+    rows = tuple(reversed(trace_operation_rows(report.trace)))
+    if not rows:
+        return "no retained operations"
+    labels = [trace_row_effect(row) for row in rows]
+    if len(labels) > 5:
+        hidden = len(labels) - 4
+        labels = [*labels[:2], f"+{hidden} operations", *labels[-2:]]
+    evidence = "/".join(
+        dict.fromkeys(
+            item
+            for row in rows
+            for item in trace_row_evidence(row).split("/")
+        )
+    )
+    return " → ".join(labels) + (f" ({evidence})" if evidence else "")
+
+
+def _bounded_summary(value: str, character_limit: int) -> str:
+    if character_limit <= 0:
+        return ""
+    if len(value) <= character_limit:
+        return value
+    if character_limit == 1:
+        return "…"
+    prefix = value[: character_limit - 1].rstrip()
+    boundary = prefix.rfind(" ")
+    if boundary >= character_limit // 2:
+        prefix = prefix[:boundary].rstrip()
+    return prefix + "…"
+
+
+def _provenance_summary(
+    report: RationaleReport,
     *,
     verbose: bool,
-) -> None:
-    typer.secho(
-        f"  [{_uid(evidence.memory.uid, verbose)}] "
-        f"{display_escape_text(evidence.context_name)} · "
-        f"position {evidence.position + 1}",
-        bold=True,
+) -> str:
+    earliest = (
+        format_trace_states(report.trace.originals, verbose=verbose)
+        if report.trace.originals
+        else "? (earliest origin not retained)"
     )
-    for line in safe_terminal_text(evidence.memory.content).splitlines() or [""]:
-        typer.echo(f"      {line}")
-
-
-def _render_origin(event: TraceEvent, *, verbose: bool) -> None:
-    timestamp = (
-        event.timestamp[:16].replace("T", " ") if event.timestamp else "(unknown time)"
+    current = (
+        format_trace_states(report.trace.current, verbose=verbose)
+        if report.trace.current
+        else "∅ (lineage absent from current Context)"
     )
-    checkpoint = _uid(event.checkpoint_uid, verbose) if event.checkpoint_uid else "none"
-    typer.echo(f"  {event.kind} via {safe_terminal_text(event.command)} at {timestamp}")
-    typer.secho(
-        f"  Checkpoint: {checkpoint}  |  Evidence: {event.evidence}",
-        dim=True,
+    return _bounded_summary(
+        f"{_compact_operation_flow(report)} · {earliest} → {current}",
+        report.provenance_character_limit,
     )
-    if event.source_occurrence is not None:
-        occurrence = event.source_occurrence
-        detail = f"{occurrence.mode} item {occurrence.ordinal}/{occurrence.total}"
-        if occurrence.line_number is not None:
-            detail += f", original line {occurrence.line_number}"
-        typer.echo(f"  Source occurrence: {detail}")
 
 
 def render_rationale(
@@ -98,277 +121,75 @@ def render_rationale(
     *,
     verbose: bool = False,
 ) -> None:
-    scope_reach = (
-        "and readable descendants"
-        if report.inference_scope_include_descendants
-        else "this Context only"
-    )
-    scope_display = (
-        f"{display_escape_text(report.inference_scope_name)} {scope_reach}"
-        if report.inference_scope_include_descendants
-        else f"{display_escape_text(report.inference_scope_name)} · {scope_reach}"
-    )
     typer.secho(
-        f"Rationale for [{_uid(report.trace.selected_uid, verbose)}]",
+        f"Rationale [{_uid(report.trace.selected_uid, verbose)}] · "
+        f"{display_escape_text(report.trace.context_name)}",
         bold=True,
     )
-    typer.echo(
-        f"Context: {display_escape_text(report.trace.context_name)} "
-        f"[{_uid(report.trace.context_uid, verbose)}]"
-    )
-    typer.echo(
-        "Rationale scope: "
-        f"{scope_display} "
-        f"· {report.inference_scope_context_count} Context(s)"
-    )
+    if verbose:
+        typer.secho(f"Context UID: {report.trace.context_uid}", dim=True)
     typer.secho("\nMEMORY", bold=True)
     for line in safe_terminal_text(report.target.content).splitlines() or [""]:
         typer.echo(f"  {line}")
 
-    if report.recorded_evidence_available:
-        typer.secho("\nRECORDED ORIGIN", bold=True)
-        if not report.origin_events:
-            typer.secho(
-                "  No retained creation event was found.",
-                fg=typer.colors.YELLOW,
-            )
-        for event in report.origin_events:
-            _render_origin(event, verbose=verbose)
-
-        typer.secho("\nRECORDED RATIONALE", bold=True)
-        if not report.recorded_reason_events:
-            typer.echo(
-                "  No semantic creation or transformation rationale was recorded."
-            )
-        for event in report.recorded_reason_events:
-            typer.secho(
-                f"  {event.kind}  {event.evidence}",
-                bold=True,
-            )
-            typer.echo(f"  {safe_terminal_text(event.reason or '')}")
-            if event.reason_codes:
-                typer.secho(
-                    "  Rules: " + ", ".join(event.reason_codes),
-                    dim=True,
-                )
-            if event.declared_frame is not None:
-                review_uid = (
-                    _uid(event.source_review_uid, verbose)
-                    if event.source_review_uid is not None
-                    else "unrecorded"
-                )
-                typer.secho(
-                    f"  Reviewed declared context/comment (review {review_uid}):",
-                    fg=typer.colors.YELLOW,
-                )
-                for line in safe_terminal_text(event.declared_frame).splitlines() or [
-                    ""
-                ]:
-                    typer.echo(f"      {line}")
-                if event.uncertainty_reason:
-                    typer.echo(
-                        "  Requested because: "
-                        + safe_terminal_text(event.uncertainty_reason)
-                    )
-            for evidence in event.child_evidence:
-                typer.secho(
-                    f"  Applied citations for [{_uid(evidence.result_uid, verbose)}]:",
-                    dim=True,
-                )
-                typer.secho(
-                    "      Source spans: "
-                    + " | ".join(
-                        safe_terminal_text(span) for span in evidence.source_spans
-                    ),
-                    dim=True,
-                )
-                if evidence.frame_spans:
-                    typer.secho(
-                        "      Declared-frame spans: "
-                        + " | ".join(
-                            safe_terminal_text(span) for span in evidence.frame_spans
-                        ),
-                        dim=True,
-                    )
-
+    if not report.recorded_evidence_available:
+        typer.secho("\nPROVENANCE — hidden by Grant", bold=True)
+    elif not report.trace.events:
+        typer.secho("\nPROVENANCE — none retained", bold=True)
     else:
-        typer.secho("\nAUTHORITY HISTORY", bold=True)
-        typer.secho(
-            "  Not exposed by this granted READ view. Trace, checkpoints, "
-            "and authority analysis artifacts remain unavailable.",
-            fg=typer.colors.YELLOW,
+        typer.secho("\nPROVENANCE", bold=True)
+        provenance = safe_terminal_text(
+            _provenance_summary(report, verbose=verbose)
         )
-
-    typer.secho("\nSAVED ANALYSIS — not a creation cause", bold=True)
-    analysis = report.saved_analysis
-    if analysis is None:
-        if report.stale_analysis:
-            typer.secho(
-                "  A related saved review exists but is stale and was not "
-                "used as current evidence.",
-                fg=typer.colors.YELLOW,
+        typer.echo(
+            "  "
+            + _bounded_summary(
+                provenance,
+                report.provenance_character_limit,
             )
-        else:
-            typer.echo("  (no current saved analysis for this Memory)")
-    else:
-        typer.secho(
-            f"  {analysis.interpretation} / {analysis.clarification}",
-            fg=typer.colors.YELLOW,
-            bold=True,
-        )
-        typer.echo(f"  Reason: {safe_terminal_text(analysis.reason)}")
-        if analysis.question:
-            typer.echo(f"  Question: {safe_terminal_text(analysis.question)}")
-        for label, reading in analysis.readings:
-            typer.echo(f"  [{label}] {safe_terminal_text(reading)}")
-        if analysis.selected_reading is not None:
-            typer.secho(
-                "  Selected: " + safe_terminal_text(analysis.selected_reading),
-                fg=typer.colors.GREEN,
-            )
-        if analysis.response.strip():
-            typer.echo("  Reviewer response: " + safe_terminal_text(analysis.response))
-
-    typer.secho("\nSAVED ATOMIZE ANALYSIS", bold=True)
-    if not report.trace.analyses:
-        typer.echo("  (no saved atomize analysis for this lineage)")
-    for atomize in report.trace.analyses:
-        typer.secho(
-            f"  {atomize.status}  {atomize.classification} / {atomize.action}",
-            fg=(
-                typer.colors.GREEN
-                if atomize.status == "APPLIED"
-                else (
-                    typer.colors.CYAN
-                    if atomize.status == "CURRENT"
-                    else typer.colors.YELLOW
-                )
-            ),
-            bold=True,
-        )
-        typer.echo(f"  Reason: {safe_terminal_text(atomize.reason)}")
-        typer.secho(
-            "  Rules: " + ", ".join(atomize.reason_codes),
-            dim=True,
-        )
-        if atomize.declared_frame is not None:
-            review_uid = (
-                _uid(atomize.source_review_uid, verbose)
-                if atomize.source_review_uid is not None
-                else "unrecorded"
-            )
-            typer.secho(
-                f"  Reviewed declared context/comment (review {review_uid}):",
-                fg=typer.colors.YELLOW,
-            )
-            for line in safe_terminal_text(atomize.declared_frame).splitlines() or [""]:
-                typer.echo(f"      {line}")
-            if atomize.declared_frame_reason:
-                typer.echo(
-                    "  Requested because: "
-                    + safe_terminal_text(atomize.declared_frame_reason)
-                )
-        for index, child in enumerate(atomize.children, 1):
-            typer.echo(f"  Proposed child {index}:")
-            for line in safe_terminal_text(child.content).splitlines() or [""]:
-                typer.echo(f"      {line}")
-            typer.secho(
-                "      Source spans: "
-                + " | ".join(safe_terminal_text(span) for span in child.source_spans),
-                dim=True,
-            )
-            if child.frame_spans:
-                typer.secho(
-                    "      Declared-frame spans: "
-                    + " | ".join(
-                        safe_terminal_text(span) for span in child.frame_spans
-                    ),
-                    dim=True,
-                )
-        if atomize.status != "APPLIED":
-            typer.secho(
-                "  This analysis is not recorded as an applied content change.",
-                dim=True,
-            )
-
-    typer.secho("\nUNAPPLIED PROPOSALS", bold=True)
-    if not report.proposals:
-        typer.echo("  (none linked to this lineage)")
-    for proposal in report.proposals:
-        typer.secho(
-            f"  {proposal.status.upper()} {proposal.operation.upper()} "
-            f"as {proposal.role}",
-            fg=typer.colors.CYAN,
-            bold=True,
-        )
-        typer.echo(f"  Reason: {safe_terminal_text(proposal.reason)}")
-        typer.secho(
-            "  This is a proposal, not part of the current Memory history.",
-            dim=True,
         )
 
     inference = report.inference
+    inference_scope = (
+        (
+            f"{display_escape_text(report.inference_scope_name)} "
+            "and readable descendants"
+        )
+        if report.inference_scope_include_descendants
+        else (
+            f"{display_escape_text(report.inference_scope_name)} · "
+            "this Context only"
+        )
+    ) + f" · {report.inference_scope_context_count} Context(s)"
     if inference is not None:
         typer.secho(
-            "\nEVIDENCE USED FOR INFERENCE WITHIN THE CURRENT CONTEXT RANGE",
+            "\nINFERENCE — within Context, not recorded",
             bold=True,
         )
+        cache_label = " · cached" if report.inference_cached else ""
         typer.secho(
-            "  These Memories support an ordinary reading; they are not "
-            "historical provenance.",
+            f"  {inference_scope}{cache_label}",
             dim=True,
         )
-        if not inference.evidence:
-            typer.echo("  (the inference cited no supporting Memory)")
-        for evidence in inference.evidence:
-            _render_memory(evidence, verbose=verbose)
-
-        typer.secho(
-            "\nBEST-EFFORT EXPLANATION — INFERRED WITHIN CONTEXT, not recorded "
-            f"· {scope_reach}",
-            bold=True,
-        )
-        if report.inference_cached:
-            typer.secho(
-                "  Reused cached inference for unchanged input; this is still "
-                "not recorded provenance.",
-                dim=True,
+        typer.echo(
+            "  "
+            + _bounded_summary(
+                safe_terminal_text(inference.explanation),
+                report.inference_character_limit,
             )
-        typer.echo(
-            "  Best-supported reading: "
-            + safe_terminal_text(inference.best_supported_reading)
         )
-        typer.echo(
-            "  Contextual flow: " + safe_terminal_text(inference.contextual_flow)
-        )
-        typer.secho("\nUNRESOLVED", bold=True)
-        if not inference.unresolved:
-            typer.echo("  (none reported by the contextual inference)")
-        for unresolved in inference.unresolved:
-            typer.echo(f"  - {safe_terminal_text(unresolved)}")
+    elif report.inference_status == "NOT_REQUESTED":
+        typer.secho("\nINFERENCE — not requested", bold=True)
+        typer.secho(f"  {inference_scope}", dim=True)
+    elif report.inference_status == "INSUFFICIENT_EVIDENCE":
+        typer.secho("\nINFERENCE — insufficient evidence", bold=True)
+        typer.secho(f"  {inference_scope}", dim=True)
     else:
         typer.secho(
-            f"\nCURRENT CONTEXT WINDOW — {scope_reach}, " "deterministic fallback only",
+            "\nINFERENCE — unavailable",
             bold=True,
         )
-        typer.secho(
-            "  No semantic relationship is asserted by this list.",
-            dim=True,
-        )
-        if not report.fallback_evidence:
-            typer.echo("  (no other direct Memories)")
-        for evidence in report.fallback_evidence:
-            _render_memory(evidence, verbose=verbose)
-        typer.secho("\nUNRESOLVED / UNRECORDED", bold=True)
-        typer.echo(
-            "  The author's intended meaning cannot be recovered from provenance alone."
-        )
-        if report.inference_error:
-            typer.secho(
-                "  Context inference unavailable: "
-                + safe_terminal_text(report.inference_error),
-                fg=typer.colors.YELLOW,
-            )
+        typer.secho(f"  {inference_scope}", dim=True)
 
     combined_warnings = tuple(dict.fromkeys((*report.trace.warnings, *report.warnings)))
     if combined_warnings:
@@ -389,7 +210,25 @@ def rationale_report_text(
     output = StringIO()
     with redirect_stdout(output):
         render_rationale(report, verbose=verbose)
-    return output.getvalue().rstrip("\n")
+    # The shared Viewer hard-wraps at the canvas edge. Keep this compact
+    # prose projection narrower so wrapping occurs between words and remains
+    # legible in both the standard 180-column study viewport and smaller TUIs.
+    lines: list[str] = []
+    for line in output.getvalue().rstrip("\n").splitlines():
+        indentation = line[: len(line) - len(line.lstrip())]
+        content = line[len(indentation) :]
+        lines.extend(
+            textwrap.wrap(
+                content,
+                width=140,
+                initial_indent=indentation,
+                subsequent_indent=indentation,
+                break_long_words=False,
+                break_on_hyphens=False,
+            )
+            or [""]
+        )
+    return "\n".join(lines)
 
 
 def cmd(
@@ -398,8 +237,8 @@ def cmd(
         typer.Argument(
             help=(
                 "UID (or unambiguous prefix) of a current or historical "
-                "direct Memory; omit in a terminal to browse readable "
-                "Contexts and select a Memory"
+                "direct Memory; omit in a terminal to select from the current "
+                "readable Context or its descendants"
             )
         ),
     ] = None,
@@ -410,7 +249,7 @@ def cmd(
             "-c",
             help=(
                 "Start Memory selection in this readable Context instead of "
-                "the Profile Context browser"
+                "the current Context"
             ),
         ),
     ] = None,
@@ -478,91 +317,52 @@ def cmd(
                     current_name=context_snapshot.current_name,
                 )
             )
-            location_cursor = name
-            while True:
-                picker_root = context_name
-                if profile_catalog is not None:
-                    catalog_names = tuple(profile_catalog.list_context_names())
-                    local_names = tuple(
-                        candidate_name
-                        for candidate_name in catalog_names
-                        if not profile_catalog.access_for(candidate_name).is_granted
-                    )
-                    granted_names = tuple(
-                        candidate_name
-                        for candidate_name in catalog_names
-                        if profile_catalog.access_for(candidate_name).is_granted
-                    )
-                    granted_annotations = {}
-                    for candidate_name in granted_names:
-                        access = profile_catalog.access_for(candidate_name)
-                        if access.view is None:
-                            raise RationaleError(
-                                "Readable granted Context lost its Grant receipt."
-                            )
-                        granted_annotations[candidate_name] = (
-                            grant_navigation_annotation(
-                                access.view.grant.permissions,
-                            )
-                        )
-                    picker_root = choose_memory_report_context(
-                        local_names,
-                        current=location_cursor,
-                        operation="rationale",
-                        virtual_names=granted_names,
-                        virtual_annotations=granted_annotations,
-                    )
-                    if picker_root is None:
-                        typer.echo("Rationale cancelled.")
-                        return
-                    location_cursor = picker_root
-                    picker_scope = rationale_scope_from_catalog(
-                        profile_catalog,
-                        picker_root,
-                        include_descendants=True,
-                    )
-                else:
-                    picker_scope = load_rationale_scope(
-                        store,
-                        picker_root,
-                        current_name=context_snapshot.current_name,
-                        # Freeze every eligible row before the shared RANGE
-                        # control narrows or broadens selectable Memories.
-                        include_descendants=True,
-                    )
-                candidates, owners = rationale_candidates(picker_scope)
-                scope_names = tuple(context.name for context in picker_scope.contexts)
-                selected = choose_memory_report_target(
-                    tuple(
-                        ScopedMemoryPickerItem(
-                            context_name=owners[candidate.uid][0].name,
-                            uid=candidate.uid,
-                            content=candidate.content,
-                            status=candidate.status,
-                            catalog_context_names=scope_names,
-                            change_count=candidate.change_count,
-                        )
-                        for candidate in candidates
-                    ),
-                    context_name=picker_scope.root_name,
-                    operation="rationale",
-                    catalog_context_names=scope_names,
-                    initial_include_descendants=False,
+            # A bare report starts where the person already is. The Profile
+            # catalog supplies authorized lexical descendants without turning
+            # unrelated readable Contexts into an extra location-picking step.
+            if profile_catalog is not None:
+                picker_scope = rationale_scope_from_catalog(
+                    profile_catalog,
+                    name,
+                    include_descendants=True,
                 )
-                if selected is None:
-                    if profile_catalog is not None:
-                        # Empty Contexts remain browsable locations. Backing
-                        # out returns to the frozen Profile Context selector.
-                        continue
-                    typer.echo("Rationale cancelled.")
-                    return
-                context_name = selected.root_context_name
-                selector = selected.memory_uid
-                include_descendants = selected.include_descendants
-                selected_from_profile = profile_catalog is not None
-                break
+            else:
+                picker_scope = load_rationale_scope(
+                    store,
+                    name,
+                    current_name=context_snapshot.current_name,
+                    # Freeze every eligible row before the shared RANGE
+                    # control narrows or broadens selectable Memories.
+                    include_descendants=True,
+                )
+            candidates, owners = rationale_candidates(picker_scope)
+            scope_names = tuple(context.name for context in picker_scope.contexts)
+            selected = choose_memory_report_target(
+                tuple(
+                    ScopedMemoryPickerItem(
+                        context_name=owners[candidate.uid][0].name,
+                        uid=candidate.uid,
+                        content=candidate.content,
+                        status=candidate.status,
+                        catalog_context_names=scope_names,
+                        change_count=candidate.change_count,
+                    )
+                    for candidate in candidates
+                ),
+                context_name=picker_scope.root_name,
+                operation="rationale",
+                catalog_context_names=scope_names,
+                initial_include_descendants=False,
+            )
+            if selected is None:
+                typer.echo("Rationale cancelled.")
+                return
+            context_name = selected.root_context_name
+            selector = selected.memory_uid
+            include_descendants = selected.include_descendants
+            selected_from_profile = profile_catalog is not None
             # Do not connect the inference provider until an exact Memory has
-            # been chosen. Re-read live state after both full-screen pickers.
+            # been chosen. Re-read live state after the full-screen picker.
         if selected_from_profile:
             # Revalidate through the same Profile-wide namespace used by the
             # picker.  Re-anchoring a granted target to its grant-only catalog

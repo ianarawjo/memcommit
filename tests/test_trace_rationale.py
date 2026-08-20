@@ -570,13 +570,11 @@ def test_task1_rationale_separates_origin_review_and_context_inference(
 
     provider = RationaleProvider(
         lambda data: {
-            "best_supported_reading": (
+            "explanation": (
                 "This is an unfinished instruction about what students "
-                "should be told."
-            ),
-            "contextual_flow": (
-                "The Context distinguishes physical-card mechanics from "
-                "staff-only eligibility."
+                "should be told. The Context distinguishes physical-card "
+                "mechanics from staff-only eligibility, but whether app "
+                "refers to access or notification remains unknown."
             ),
             "support_ids": [
                 candidate["candidate_id"]
@@ -590,9 +588,6 @@ def test_task1_rationale_separates_origin_review_and_context_inference(
                     ),
                 }
             ],
-            "unresolved": [
-                "Whether app refers to access or notification remains unknown."
-            ],
         }
     )
     monkeypatch.setattr(
@@ -601,16 +596,27 @@ def test_task1_rationale_separates_origin_review_and_context_inference(
     )
 
     result = invoke("rationale", target.uid[:8])
+    structured = invoke("rationale", target.uid[:8], "--json")
 
     assert result.exit_code == 0
-    assert "Source occurrence: paste item 7/51" in result.output
-    assert "No semantic creation or transformation rationale was recorded" in result.output
-    assert "SAVED ANALYSIS — not a creation cause" in result.output
-    assert "COMPETING / REQUIRED" in result.output
-    assert "INFERENCE WITHIN THE CURRENT CONTEXT" in result.output
-    assert "INFERRED WITHIN CONTEXT, not recorded" in result.output
+    assert "PROVENANCE" in result.output
+    assert "CREATED" in result.output
+    assert "INFERENCE — within Context, not recorded" in result.output
     assert "staff-only eligibility" in result.output
-    assert "nfc로 되어서 실물 카드만 필요하다." in result.output
+    assert "SAVED ANALYSIS" not in result.output
+    assert "EVIDENCE USED FOR INFERENCE" not in result.output
+    assert structured.exit_code == 0
+    payload = json.loads(structured.output)
+    assert payload["origin_events"][0]["source_occurrence"]["ordinal"] == 7
+    assert payload["saved_analysis"]["interpretation"] == "COMPETING"
+    budgets = payload["character_budgets"]
+    explanation = payload["inference"]["explanation"]
+    assert len(explanation) <= budgets["inference_limit"]
+    assert budgets["inference_limit"] < budgets["inference_source"]
+    lines = result.output.splitlines()
+    provenance = lines[lines.index("PROVENANCE") + 1].strip()
+    assert len(provenance) <= budgets["provenance_limit"]
+    assert budgets["provenance_limit"] < budgets["provenance_source"]
     assert len(provider.calls) == 1
     assert len(provider.calls[0]["candidates"]) == 50
 
@@ -707,11 +713,19 @@ def test_rationale_excludes_stale_review_and_uses_no_provider_when_requested(
     store.set_current("stale")
 
     result = invoke("rationale", target.uid[:8], "--recorded-only")
+    structured = invoke(
+        "rationale",
+        target.uid[:8],
+        "--recorded-only",
+        "--json",
+    )
 
     assert result.exit_code == 0
-    assert "saved review exists but is stale" in result.output
     assert "The responsible person is unnamed." not in result.output
-    assert "CURRENT CONTEXT WINDOW" in result.output
+    assert "INFERENCE — not requested" in result.output
+    assert "Provenance alone does not establish" not in result.output
+    assert structured.exit_code == 0
+    assert json.loads(structured.output)["stale_analysis"] is True
 
 
 def test_rationale_never_opens_query_only_source_or_mutates_authoritative_state(
@@ -743,14 +757,12 @@ def test_rationale_never_opens_query_only_source_or_mutates_authoritative_state(
     monkeypatch.setattr(MemoryStore, "load_query_source", forbidden)
     provider = RationaleProvider(
         lambda data: {
-            "best_supported_reading": "The visible fragment remains limited.",
-            "contextual_flow": "Only the visible direct Memory supports it.",
+            "explanation": "Context supports this; details remain open.",
             "support_ids": [
                 candidate["candidate_id"]
                 for candidate in data["candidates"]
                 if candidate["content"] == neighbor.content
             ],
-            "unresolved": [],
         }
     )
     monkeypatch.setattr(
@@ -796,10 +808,8 @@ def test_invalid_context_inference_falls_back_without_rendering_model_text(
     )
     provider = RationaleProvider(
         lambda data: {
-            "best_supported_reading": "MALICIOUS INVENTION",
-            "contextual_flow": "MALICIOUS INVENTION",
+            "explanation": "MALICIOUS",
             "support_ids": ["unknown"],
-            "unresolved": [],
         }
     )
     monkeypatch.setattr(
@@ -808,8 +818,12 @@ def test_invalid_context_inference_falls_back_without_rendering_model_text(
     )
 
     result = invoke("rationale", target.uid[:8])
+    structured = invoke("rationale", target.uid[:8], "--json")
 
     assert result.exit_code == 0
     assert "MALICIOUS INVENTION" not in result.output
-    assert "CURRENT CONTEXT WINDOW" in result.output
-    assert "cited an unknown Memory" in result.output
+    assert "INFERENCE — unavailable" in result.output
+    assert "cited an unknown Memory" not in result.output
+    assert structured.exit_code == 0, structured.output
+    payload = json.loads(structured.output)
+    assert "cited an unknown Memory" in payload["inference_error"]

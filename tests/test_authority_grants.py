@@ -395,10 +395,8 @@ def test_bare_rationale_location_picker_keeps_empty_local_and_read_grants(
             candidate = payload["candidates"][0]
             return json.dumps(
                 {
-                    "best_supported_reading": "The granted note is readable.",
-                    "contextual_flow": "The selected readable Context supports it.",
+                    "explanation": "Readable context supports this; details remain open.",
                     "support_ids": [candidate["candidate_id"]],
-                    "unresolved": [],
                 }
             )
 
@@ -479,10 +477,8 @@ def test_granted_read_allows_subtree_rationale_but_never_trace_history(
             calls.append(payload)
             return json.dumps(
                 {
-                    "best_supported_reading": "The public note is contextualized.",
-                    "contextual_flow": "The readable wiki note supports it.",
+                    "explanation": "Readable context supports this; details remain open.",
                     "support_ids": [payload["candidates"][0]["candidate_id"]],
-                    "unresolved": [],
                 }
             )
 
@@ -526,8 +522,7 @@ def test_granted_read_allows_subtree_rationale_but_never_trace_history(
     )
 
     assert rationale.exit_code == 0, rationale.output
-    assert "AUTHORITY HISTORY" in rationale.output
-    assert "not exposed by this granted read view" in rationale.output.casefold()
+    assert "PROVENANCE — hidden by Grant" in rationale.output
     assert calls
     assert {candidate["context_name"] for candidate in calls[0]["candidates"]} == {
         "campus-wiki"

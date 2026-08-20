@@ -16,18 +16,17 @@ import os
 from pathlib import Path
 import re
 import stat
+import unicodedata
 import uuid
 
 import memcommit.store as store_module
 
 
-CACHE_SCHEMA_VERSION = 1
-INFERENCE_CONTRACT = "memcommit.rationale.context-inference.v1"
-PROVIDER_CONTRACT = "memcommit.query-provider.rationale-inference.v1"
+CACHE_SCHEMA_VERSION = 3
+INFERENCE_CONTRACT = "memcommit.rationale.context-inference.v3"
+PROVIDER_CONTRACT = "memcommit.query-provider.rationale-inference.v3"
 
-_READING_CHAR_LIMIT = 2_000
-_FLOW_CHAR_LIMIT = 4_000
-_ITEM_CHAR_LIMIT = 1_000
+_EXPLANATION_CHAR_LIMIT = 480
 _MEMORY_UID_CHAR_LIMIT = 4_096
 _ITEM_LIMIT = 8
 _CACHE_FILE_BYTE_LIMIT = 256_000
@@ -83,22 +82,26 @@ def _strict_json_object(
 class CachedRationaleInference:
     """Provider-independent, already validated rationale inference."""
 
-    best_supported_reading: str
-    contextual_flow: str
+    explanation: str
     support_memory_uids: tuple[str, ...]
-    unresolved: tuple[str, ...]
 
     def __post_init__(self) -> None:
         _nonempty_text(
-            self.best_supported_reading,
-            "cached rationale reading",
-            _READING_CHAR_LIMIT,
+            self.explanation,
+            "cached rationale explanation",
+            _EXPLANATION_CHAR_LIMIT,
         )
-        _nonempty_text(
-            self.contextual_flow,
-            "cached rationale contextual flow",
-            _FLOW_CHAR_LIMIT,
-        )
+        normalized = unicodedata.normalize("NFC", self.explanation.strip())
+        if (
+            self.explanation != normalized
+            or "\n" in self.explanation
+            or "\r" in self.explanation
+            or any(
+                unicodedata.category(char) == "Cc"
+                for char in self.explanation
+            )
+        ):
+            raise ValueError("Invalid cached rationale explanation.")
         if (
             not isinstance(self.support_memory_uids, tuple)
             or len(self.support_memory_uids) > _ITEM_LIMIT
@@ -110,24 +113,11 @@ class CachedRationaleInference:
             self.support_memory_uids
         ):
             raise ValueError("Invalid cached rationale support Memories.")
-        if (
-            not isinstance(self.unresolved, tuple)
-            or len(self.unresolved) > _ITEM_LIMIT
-        ):
-            raise ValueError("Invalid cached rationale unresolved items.")
-        for item in self.unresolved:
-            _nonempty_text(
-                item,
-                "cached rationale unresolved item",
-                _ITEM_CHAR_LIMIT,
-            )
 
     def to_dict(self) -> dict[str, object]:
         return {
-            "best_supported_reading": self.best_supported_reading,
-            "contextual_flow": self.contextual_flow,
+            "explanation": self.explanation,
             "support_memory_uids": list(self.support_memory_uids),
-            "unresolved": list(self.unresolved),
         }
 
     @classmethod
@@ -137,24 +127,15 @@ class CachedRationaleInference:
     ) -> CachedRationaleInference:
         if (
             not isinstance(value, dict)
-            or set(value)
-            != {
-                "best_supported_reading",
-                "contextual_flow",
-                "support_memory_uids",
-                "unresolved",
-            }
+            or set(value) != {"explanation", "support_memory_uids"}
         ):
             raise ValueError("Invalid cached rationale inference.")
         support = value["support_memory_uids"]
-        unresolved = value["unresolved"]
-        if not isinstance(support, list) or not isinstance(unresolved, list):
+        if not isinstance(support, list):
             raise ValueError("Invalid cached rationale inference.")
         return cls(
-            best_supported_reading=value["best_supported_reading"],  # type: ignore[arg-type]
-            contextual_flow=value["contextual_flow"],  # type: ignore[arg-type]
+            explanation=value["explanation"],  # type: ignore[arg-type]
             support_memory_uids=tuple(support),  # type: ignore[arg-type]
-            unresolved=tuple(unresolved),  # type: ignore[arg-type]
         )
 
 

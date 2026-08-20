@@ -31,10 +31,10 @@ class _Provider:
         assert isinstance(candidates, list)
         return json.dumps(
             {
-                "best_supported_reading": "The advice follows the readable subtree.",
-                "contextual_flow": "An earlier observation supports the advice.",
+                "explanation": (
+                    "Earlier notes support using diagrams; details remain open."
+                ),
                 "support_ids": [candidate["candidate_id"] for candidate in candidates],
-                "unresolved": [],
             }
         )
 
@@ -79,9 +79,7 @@ def test_rationale_from_parent_uses_owned_descendant_memories(
         ("advisor", "Reviewers scan diagrams first."),
         ("advisor/style", "Drawing a diagram takes longer."),
     }
-    assert "Rationale scope: advisor and readable descendants · 2 Context(s)" in (
-        result.output
-    )
+    assert "advisor and readable descendants · 2 Context(s)" in result.output
 
 
 def test_locally_owned_trace_is_available_independent_of_study_task(

@@ -814,10 +814,10 @@ def test_rationale_local_root_combines_authorized_granted_public_subtree(
             candidates = payload["candidates"]
             return json.dumps(
                 {
-                    "best_supported_reading": "The public and local views align.",
-                    "contextual_flow": "The granted wiki supplies context.",
+                    "explanation": (
+                        "Public and local context align; details remain open."
+                    ),
                     "support_ids": [candidate["candidate_id"] for candidate in candidates],
-                    "unresolved": [],
                 }
             )
 
@@ -838,9 +838,7 @@ def test_rationale_local_root_combines_authorized_granted_public_subtree(
     }
     assert "task-root/campus-wiki" in candidate_contexts
     assert "task-root/campus-wiki/services" in candidate_contexts
-    assert "Rationale scope: task-root and readable descendants · 4 Context(s)" in (
-        result.output
-    )
+    assert "task-root and readable descendants · 4 Context(s)" in result.output
     assert DETAIL_SECRET not in json.dumps(payloads)
 
 
