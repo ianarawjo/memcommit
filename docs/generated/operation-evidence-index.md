@@ -14,7 +14,7 @@ only from `docs/operation-evidence-index.json`.
 | `check-conformance` | `UNREVIEWED` | — | — |
 | `checkout` | `UNREVIEWED` | [`switch-application-boundary-matrix.md`](../switch-application-boundary-matrix.md) | — |
 | `checkpoint` | `UNREVIEWED` | — | — |
-| `chunk` | `UNREVIEWED` | — | — |
+| `chunk` | `UNREVIEWED` | [`mem-chunk-design-rationale.md`](../mem-chunk-design-rationale.md) | — |
 | `clear` | `UNREVIEWED` | — | — |
 | `compare` | `CLOSED` | [`compare-application-boundary-matrix.md`](../compare-application-boundary-matrix.md)<br>[`compare-session-lifecycle-design-rationale.md`](../compare-session-lifecycle-design-rationale.md) | CLI, TUI, Python, agent, and MCP routes share one targetless Run, exact Open, and version-bound Refresh lifecycle with production cache ordering and no Context Apply. |
 | `config` | `UNREVIEWED` | — | — |

@@ -1522,6 +1522,47 @@ def _meld_change_evidence(
     return by_uid, None
 
 
+def _checkpoint_chunk_options(args: dict) -> dict[str, object] | None:
+    options: dict[str, object] = {}
+    if "break_on" in args:
+        break_on = args.get("break_on")
+        if not isinstance(break_on, str) or not break_on:
+            return None
+        options["break_on"] = break_on
+    for key in ("min_chars", "max_chars"):
+        if key not in args:
+            continue
+        value = args.get(key)
+        if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
+            return None
+        options[key] = value
+    min_chars = options.get("min_chars")
+    max_chars = options.get("max_chars")
+    if (
+        isinstance(min_chars, int)
+        and isinstance(max_chars, int)
+        and min_chars > max_chars
+    ):
+        return None
+    return options
+
+
+def _replay_checkpoint_chunk(
+    content: str,
+    method: str,
+    args: dict,
+) -> list[str]:
+    """Replay every authored mechanical boundary recorded by Chunk."""
+
+    return chunk_content(
+        content,
+        method,
+        break_on=args.get("break_on"),
+        min_chars=args.get("min_chars"),
+        max_chars=args.get("max_chars"),
+    )
+
+
 def _legacy_chunk_event(
     *,
     before: _Frame,
@@ -1543,6 +1584,9 @@ def _legacy_chunk_event(
         or not isinstance(method, str)
     ):
         return None
+    options = _checkpoint_chunk_options(args)
+    if options is None:
+        return None
 
     children = [after.memories[uid] for uid in after.order if uid in added]
     source_position = before.order.index(source_uid)
@@ -1554,9 +1598,10 @@ def _legacy_chunk_event(
     if before_without_source != after_without_children:
         return None
     try:
-        expected_contents = chunk_content(
+        expected_contents = _replay_checkpoint_chunk(
             before.memories[source_uid].content,
             method,
+            args,
         )
     except ValueError:
         return None
@@ -1574,6 +1619,91 @@ def _legacy_chunk_event(
         after=tuple(children),
         reason=f"Legacy structural split using method '{method}'.",
     )
+
+
+def _recorded_context_chunk_events(
+    *,
+    before: _Frame,
+    after: _Frame,
+    entry: dict,
+    removed: set[str],
+    added: set[str],
+) -> list[TraceEvent]:
+    """Validate a Context-scoped chunk checkpoint without content guessing."""
+
+    checkpoint_uid, timestamp, command, description, args = _checkpoint_fields(entry)
+    records = args.get("splits")
+    method = args.get("method")
+    if command != "chunk" or not isinstance(records, list) or not records:
+        return []
+    if not isinstance(method, str):
+        return []
+    options = _checkpoint_chunk_options(args)
+    if options is None:
+        return []
+
+    parsed: list[tuple[str, tuple[str, ...]]] = []
+    source_uids: set[str] = set()
+    chunk_uids: set[str] = set()
+    for record in records:
+        if not isinstance(record, dict) or set(record) != {"uid", "chunk_uids"}:
+            return []
+        source_uid = record.get("uid")
+        children = record.get("chunk_uids")
+        if (
+            not isinstance(source_uid, str)
+            or source_uid in source_uids
+            or source_uid not in before.memories
+            or not isinstance(children, list)
+            or len(children) < 2
+            or not all(isinstance(uid, str) for uid in children)
+            or len(children) != len(set(children))
+            or any(uid in chunk_uids for uid in children)
+        ):
+            return []
+        child_uids = tuple(children)
+        source_uids.add(source_uid)
+        chunk_uids.update(child_uids)
+        parsed.append((source_uid, child_uids))
+
+    if removed != source_uids or added != chunk_uids:
+        return []
+    replacements = dict(parsed)
+    expected_after_order: list[str] = []
+    for uid in before.order:
+        expected_after_order.extend(replacements.get(uid, (uid,)))
+    if tuple(expected_after_order) != after.order:
+        return []
+
+    events: list[TraceEvent] = []
+    for source_uid, child_uids in parsed:
+        try:
+            expected_contents = _replay_checkpoint_chunk(
+                before.memories[source_uid].content,
+                method,
+                args,
+            )
+        except ValueError:
+            return []
+        children = tuple(after.memories.get(uid) for uid in child_uids)
+        if any(child is None for child in children) or expected_contents != [
+            child.content for child in children if child is not None
+        ]:
+            return []
+        events.append(
+            TraceEvent(
+                kind="SPLIT",
+                evidence="RECORDED",
+                timestamp=timestamp,
+                checkpoint_uid=checkpoint_uid,
+                command=command,
+                description=description,
+                before=(before.memories[source_uid],),
+                after=tuple(child for child in children if child is not None),
+                reason=f"Context structural split using method '{method}'.",
+            )
+        )
+    return events
 
 
 def _translation_events(
@@ -2533,18 +2663,35 @@ def _transition_events(
     added -= translation_results
     warnings.extend(translation_warnings)
 
-    chunk_event = _legacy_chunk_event(
+    chunk_event = None
+    context_chunk_events = _recorded_context_chunk_events(
         before=before,
         after=after,
         entry=entry,
         removed=removed,
         added=added,
     )
-    if chunk_event is not None:
+    if context_chunk_events:
+        events.extend(context_chunk_events)
+        removed -= {
+            state.uid for event in context_chunk_events for state in event.before
+        }
+        added -= {
+            state.uid for event in context_chunk_events for state in event.after
+        }
+    else:
+        chunk_event = _legacy_chunk_event(
+            before=before,
+            after=after,
+            entry=entry,
+            removed=removed,
+            added=added,
+        )
+    if not context_chunk_events and chunk_event is not None:
         events.append(chunk_event)
         removed -= {state.uid for state in chunk_event.before}
         added -= {state.uid for state in chunk_event.after}
-    elif command == "chunk" and (removed or added):
+    elif not context_chunk_events and command == "chunk" and (removed or added):
         warnings.append(
             f"Checkpoint [{checkpoint_uid[:8]}] is a legacy chunk whose "
             "parent-child mapping could not be reconstructed safely."
@@ -2864,7 +3011,18 @@ def _history(
                 "recorded."
             )
         if previous is None:
-            previous = _empty_frame(frame.context_uid, frame.context_name)
+            command_before = entry.get("command_before")
+            if isinstance(command_before, dict):
+                # The first retained command may replace a Context that was
+                # initially saved without its own checkpoint. Its exact
+                # command pre-image is still sufficient to validate lineage;
+                # treating the frame as empty would erase every removed Source.
+                previous = _frame_from_snapshot(
+                    command_before,
+                    label=f"Checkpoint [{entry['uid'][:8]}] command pre-image",
+                )
+            else:
+                previous = _empty_frame(frame.context_uid, frame.context_name)
 
         _, _, command, _, args = _checkpoint_fields(entry)
         command_operation = _command_restore_operation(

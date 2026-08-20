@@ -234,7 +234,35 @@ def _command_unit(
         (
             "chunk",
             {"uid": "memory-uid", "method": "paragraphs"},
-            "mem chunk memory-uid --method paragraphs",
+            "mem chunk memory-uid --method paragraphs --context work/notes",
+        ),
+        (
+            "chunk",
+            {
+                "context": "work/notes",
+                "method": "sentences",
+                "splits": [
+                    {"uid": "memory-uid", "chunk_uids": ["a", "b"]}
+                ],
+            },
+            "mem chunk --method sentences --context work/notes",
+        ),
+        (
+            "chunk",
+            {
+                "context": "work/notes",
+                "method": "clauses",
+                "break_on": ",;",
+                "min_chars": 40,
+                "max_chars": 120,
+                "splits": [
+                    {"uid": "memory-uid", "chunk_uids": ["a", "b"]}
+                ],
+            },
+            (
+                "mem chunk --method clauses --break-on ',;' --min-chars 40 "
+                "--max-chars 120 --context work/notes"
+            ),
         ),
         (
             "clear",

@@ -385,7 +385,26 @@ def _restored_command(unit: ContextCommandUnit) -> str:
         command = f"mem chunk {_command_arg(args['uid'])}"
         if isinstance(args.get("method"), str):
             command += f" --method {_command_arg(args['method'])}"
-        return command
+        if isinstance(args.get("break_on"), str):
+            command += f" --break-on {_command_arg(args['break_on'])}"
+        for option in ("min_chars", "max_chars"):
+            value = args.get(option)
+            if isinstance(value, int) and not isinstance(value, bool) and value > 0:
+                command += f" --{option.replace('_', '-')} {value}"
+        target = args.get("context") or operand_context or context_name
+        return _with_context(command, target if isinstance(target, str) else None)
+    if unit.command == "chunk" and isinstance(args.get("splits"), list):
+        command = "mem chunk"
+        if isinstance(args.get("method"), str):
+            command += f" --method {_command_arg(args['method'])}"
+        if isinstance(args.get("break_on"), str):
+            command += f" --break-on {_command_arg(args['break_on'])}"
+        for option in ("min_chars", "max_chars"):
+            value = args.get(option)
+            if isinstance(value, int) and not isinstance(value, bool) and value > 0:
+                command += f" --{option.replace('_', '-')} {value}"
+        target = args.get("context") or operand_context or context_name
+        return _with_context(command, target if isinstance(target, str) else None)
     if unit.command == "clear":
         target = args.get("context") or context_name
         if isinstance(target, str):

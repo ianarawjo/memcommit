@@ -968,12 +968,21 @@ def derive_translation_context(
 # ---------------------------------------------------------------------------
 
 
-def chunk(ctx: Context, uid: str, method: str) -> tuple[Memory, list[Memory]]:
+def chunk(
+    ctx: Context,
+    uid: str,
+    method: str,
+    *,
+    break_on: str | None = None,
+    min_chars: int | None = None,
+    max_chars: int | None = None,
+) -> tuple[Memory, list[Memory]]:
     """
     Propose a chunked split of a Memory without mutating ctx.
 
     Resolves *uid* (or an unambiguous prefix) to a Memory, applies the named
-    chunking method, and returns ``(original_memory, new_memories)``.
+    chunking method and optional literal/length constraints, and returns
+    ``(original_memory, new_memories)``.
 
     When ``len(new_memories) <= 1`` the content could not be split further
     with the chosen method — the caller should take no action.
@@ -1000,6 +1009,12 @@ def chunk(ctx: Context, uid: str, method: str) -> tuple[Memory, list[Memory]]:
             f"'{uid[:8]}' is not a Memory directly owned by this Context — cannot chunk."
         )
 
-    raw_chunks = chunk_content(item.content, method)
+    raw_chunks = chunk_content(
+        item.content,
+        method,
+        break_on=break_on,
+        min_chars=min_chars,
+        max_chars=max_chars,
+    )
     new_memories = [Memory(uid=str(uuid.uuid4()), content=c) for c in raw_chunks]
     return item, new_memories

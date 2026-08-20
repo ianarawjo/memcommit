@@ -15,7 +15,9 @@
       "docs/switch-application-boundary-matrix.md"
     ],
     "checkpoint": [],
-    "chunk": [],
+    "chunk": [
+      "docs/mem-chunk-design-rationale.md"
+    ],
     "clear": [],
     "compare": [
       "docs/compare-application-boundary-matrix.md",

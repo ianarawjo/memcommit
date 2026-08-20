@@ -97,11 +97,11 @@ _OPERATIONS = (
     ),
     _operation(
         "chunk",
-        "Mechanically split one direct Memory at header, paragraph, or approximate sentence boundaries.",
-        "Memory -> ordered Memory chunks",
+        "Mechanically split all splittable direct Memories in one Context, or one selected Memory, at configured sentence, clause, structural, literal, or size boundaries.",
+        "Context direct Memories or one direct Memory -> ordered Memory chunks",
         ExecutionKind.DETERMINISTIC,
-        "Changes the Source Context after confirmation",
-        "One direct Memory",
+        "Changes one Source Context after confirmation",
+        "One exact Context; optional direct Memory selector",
     ),
     _operation(
         "clear",

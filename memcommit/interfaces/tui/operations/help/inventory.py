@@ -376,8 +376,11 @@ COMMAND_FORMS = {
         'mem checkpoint "[message]" (describe the saved checkpoint)',
     ),
     "chunk": (
-        "mem chunk [memory] (preview a paragraph split, then confirm)",
-        "mem chunk [memory] --method [method] (markdown_headers, paragraphs, or sentences)",
+        "mem chunk (preview sentence splits for all splittable direct Memories in the current Context, then confirm)",
+        "mem chunk [memory_selector] (split one direct Memory by sentences)",
+        "mem chunk --context [context] (all splittable direct Memories in one Context)",
+        "mem chunk [memory_selector] --context [context] --method [method] (sentences, clauses, paragraphs, or markdown_headers)",
+        "mem chunk [memory_selector] --break-on [punctuation] --min-chars 200 --max-chars 1000 (compose literal and size boundaries)",
     ),
     "clear": (
         "mem clear (clear the current Context after confirmation)",

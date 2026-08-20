@@ -251,19 +251,30 @@ instead of guessing which children inherit it. A heading, question, or process
 note is classified and retained rather than silently deleted for not being an
 atomic operational fact.
 
-The existing `mem chunk` provides a useful structural primitive but is not the
-Task 1 atomizer:
+`mem chunk` provides a useful structural primitive but is not the Task 1
+atomizer. At the time of the Task 1 evaluation it had the following narrower
+contract:
 
-- it splits one Memory by Markdown headers, paragraphs, or an approximate
-  English sentence boundary;
-- against the current 51 Memories, header and paragraph modes split none, and
-  sentence mode splits only one Memory into an operational clause plus the
-  incomplete fragment `Main building cafe`;
+- it splits one Memory mechanically by Markdown headers, paragraphs,
+  approximate sentence or clause boundaries, optional literal punctuation,
+  and optional character-size packing;
+- the original three-mode evaluation against the current 51 Memories found
+  that header and paragraph modes split none, while the then-English-oriented
+  sentence mode split only one Memory into an operational clause plus the
+  incomplete fragment `Main building cafe`; later language-neutral sentence,
+  clause, literal, and size controls do not turn Chunk into a semantic judge;
 - it replaces the original with fresh UIDs and preserves child order at the
   original position;
 - its checkpoint records the source UID and method, but not source-to-child
   lineage;
 - it does not scan for inbound `memory_ref` values before removing the source.
+
+Chunk now defaults to language-neutral approximate sentence boundaries and can
+review every splittable directly owned Memory in one exact Context. Its batch
+checkpoint records exact Source-to-child UID mappings. Those changes improve
+mechanical refinement and lineage without turning the operation into a
+semantic claim atomizer; it still does not decide qualifier scope or reference
+repair.
 
 The first `atomize` contract should therefore:
 
