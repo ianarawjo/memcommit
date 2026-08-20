@@ -5,9 +5,9 @@
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ CONTEXTS & MEMORIES ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃› * ▾ practice/source                                                                                                                                                            ^┃
-┃  › [a0a7e105] [r2] If I later ask for polishing, preserve the overall structure and citation-needed markers, and change only wording that causes a problem.                      ┃
-┃  · [825c04b9] [r1] When I ask how a draft reads, assess its organization before editing it.                                                                                      ┃
-┃  · [9d632219] [r1] When I ask to change one expression, leave project-specific terms alone.                                                                                      ┃
+┃  › [817bab09] [r2] If I later ask for polishing, preserve the overall structure and citation-needed markers, and change only wording that causes a problem.                      ┃
+┃  · [6dfeddaa] [r1] When I ask how a draft reads, assess its organization before editing it.                                                                                      ┃
+┃  · [c74e607d] [r1] When I ask to change one expression, leave project-specific terms alone.                                                                                      ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃

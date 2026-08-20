@@ -14,6 +14,7 @@ import memcommit.ops as ops
 import memcommit.rationale as rationale_module
 import memcommit.store as store_module
 from memcommit.cli import app
+from memcommit.context import Memory
 from memcommit.query_provider import QueryProviderError
 from memcommit.rationale_cache import (
     CachedRationaleInference,
@@ -41,6 +42,9 @@ class RationaleProvider:
     def complete(self, prompt, *, operation, output_schema=None):
         assert operation == "rationale inference"
         assert output_schema is not None
+        assert "most plausible functional purpose" in prompt
+        assert "no meaningful rationale is evident" in prompt
+        assert "ordinary local reading" not in prompt
         payload = json.loads(prompt.split(RATIONALE_MARKER, 1)[1])
         self.calls.append(payload)
         candidates = payload["candidates"]
@@ -70,7 +74,7 @@ class RationaleProvider:
             output_schema["properties"]["explanation"]["maxLength"]
             == expected_limit
         )
-        explanation = f"{self.label}: context supports it."
+        explanation = f"{self.label}: useful here."
         assert len(explanation) <= expected_limit
         return json.dumps(
             {
@@ -164,7 +168,7 @@ def test_identical_cli_input_reuses_cache_and_reports_it_in_text_and_json(
     first = invoke("rationale", target.uid)
 
     assert first.exit_code == 0, first.output
-    assert "ORIGINAL: context" in first.output
+    assert "ORIGINAL: useful" in first.output
     assert len(provider.calls) == 1
     assert rationale_inference_path(ctx.uid, target.uid).is_file()
 
@@ -173,13 +177,13 @@ def test_identical_cli_input_reuses_cache_and_reports_it_in_text_and_json(
     structured = invoke("rationale", target.uid, "--json")
 
     assert reused.exit_code == 0, reused.output
-    assert "ORIGINAL: context" in reused.output
+    assert "ORIGINAL: useful" in reused.output
     assert "· cached" in reused.output
     assert structured.exit_code == 0, structured.output
     payload = json.loads(structured.output)
     assert payload["inference_cached"] is True
     assert payload["inference"]["explanation"] == (
-        "ORIGINAL: context supports it."
+        "ORIGINAL: useful here."
     )
     budgets = payload["character_budgets"]
     explanation = payload["inference"]["explanation"]
@@ -201,7 +205,7 @@ def test_refresh_replaces_cache_and_conflicts_with_recorded_only(
     refreshed = invoke("rationale", target.uid, "--refresh")
 
     assert refreshed.exit_code == 0, refreshed.output
-    assert "REFRESHED: context" in refreshed.output
+    assert "REFRESHED: useful" in refreshed.output
     assert "· cached" not in refreshed.output
     assert len(replacement.calls) == 1
 
@@ -218,7 +222,7 @@ def test_refresh_replaces_cache_and_conflicts_with_recorded_only(
     payload = json.loads(reused.output)
     assert payload["inference_cached"] is True
     assert payload["inference"]["explanation"] == (
-        "REFRESHED: context supports it."
+        "REFRESHED: useful here."
     )
     assert incompatible.exit_code == 1
     assert "cannot be combined with --recorded-only" in incompatible.output
@@ -256,7 +260,7 @@ def test_direct_memory_input_changes_invalidate_the_latest_slot(
     result = invoke("rationale", target.uid)
 
     assert result.exit_code == 0, result.output
-    assert "AFTER: context" in result.output
+    assert "AFTER: useful" in result.output
     assert "· cached" not in result.output
     assert len(current_provider.calls) == 1
 
@@ -332,14 +336,14 @@ def test_invalid_cache_is_never_rendered_and_a_fresh_result_repairs_it(
     result = invoke("rationale", target.uid)
 
     assert result.exit_code == 0, result.output
-    assert "REPAIRED: context" in result.output
+    assert "REPAIRED: useful" in result.output
     assert "POISON" not in result.output
     assert len(repair.calls) == 1
 
     _forbid_provider(monkeypatch)
     reused = invoke("rationale", target.uid)
     assert reused.exit_code == 0, reused.output
-    assert "REPAIRED: context" in reused.output
+    assert "REPAIRED: useful" in reused.output
     assert "· cached" in reused.output
 
 
@@ -410,7 +414,7 @@ def test_failed_refresh_preserves_the_previous_cache(
     payload = json.loads(reused.output)
     assert payload["inference_cached"] is True
     assert payload["inference"]["explanation"] == (
-        "PRESERVED: context supports it."
+        "PRESERVED: useful here."
     )
 
 
@@ -464,7 +468,7 @@ def test_tiny_semantic_frame_skips_provider_and_emits_only_status(
     structured = invoke("rationale", target.uid, "--json")
 
     assert result.exit_code == 0, result.output
-    assert "INFERENCE — insufficient evidence" in result.output
+    assert "WHY — insufficient Context" in result.output
     assert "available semantic evidence" not in result.output
     assert structured.exit_code == 0, structured.output
     payload = json.loads(structured.output)
@@ -532,7 +536,7 @@ def test_inference_minimum_boundary_skips_15_but_accepts_16_characters(
             ][0]
             return json.dumps(
                 {
-                    "explanation": "0123456789ABCDEF",
+                    "explanation": "No purpose seen.",
                     "support_ids": [candidate["candidate_id"]],
                 }
             )
@@ -546,7 +550,7 @@ def test_inference_minimum_boundary_skips_15_but_accepts_16_characters(
     assert accepted_payload["inference_status"] == "AVAILABLE"
     assert accepted_payload["character_budgets"]["inference_source"] == 17
     assert accepted_payload["character_budgets"]["inference_limit"] == 16
-    assert accepted_payload["inference"]["explanation"] == "0123456789ABCDEF"
+    assert accepted_payload["inference"]["explanation"] == "No purpose seen."
 
 
 def test_terminal_escaping_cannot_expand_visible_inference_past_its_limit(
@@ -578,8 +582,8 @@ def test_terminal_escaping_cannot_expand_visible_inference_past_its_limit(
     assert result.exit_code == 0, result.output
     assert "\u202e" not in result.output
     lines = result.output.splitlines()
-    inference_index = lines.index("INFERENCE — within Context, not recorded")
-    visible_explanation = lines[inference_index + 2].strip()
+    inference_index = lines.index("WHY — inferred from Context, not recorded")
+    visible_explanation = lines[inference_index + 1].strip()
     assert len(visible_explanation) <= 16
 
 
@@ -686,22 +690,45 @@ def test_long_provenance_projection_is_capped_at_320_characters(
 
     store = MemoryStore()
     ctx = ops.init("rationale-long-provenance")
-    target = ops.add(ctx, "Initial " + ("A" * 240))
+    source = ops.add(ctx, "Initial " + ("A" * 240))
     store.save(
         ctx,
         AutoCheckpoint(command="add", args={}, description="Added long Memory"),
     )
-    for index in range(12):
-        content = f"Revision {index:02d} " + (chr(66 + index) * 240)
-        ops.edit(ctx, target.uid, content)
-        store.save(
-            ctx,
-            AutoCheckpoint(
-                command="edit",
-                args={"uid": target.uid, "content": content},
-                description=f"Long revision {index:02d}",
-            ),
-        )
+    source_position = ctx.ordered_uids().index(source.uid)
+    ctx.remove(source.uid)
+    target = Memory(
+        uid="10000000-0000-4000-8000-000000000001",
+        content="Current " + ("B" * 240),
+    )
+    ctx.add(target, position=source_position)
+    reason = (
+        "This Memory was retained because the reviewed local rule needs one "
+        "stable statement of purpose without repeating the surrounding "
+        "inventory. "
+    ) * 4
+    store.save(
+        ctx,
+        AutoCheckpoint(
+            command="atomize",
+            args={
+                "trace": {
+                    "schema_version": 1,
+                    "operation_id": "long-rationale-operation",
+                    "changes": [
+                        {
+                            "kind": "SPLIT",
+                            "source_uids": [source.uid],
+                            "result_uids": [target.uid],
+                            "reason": reason,
+                            "reason_codes": ["A01_ONE_FOCUS"],
+                        }
+                    ],
+                }
+            },
+            description="Applied a long recorded rationale",
+        ),
+    )
     store.set_current(ctx.name)
     _forbid_provider(monkeypatch)
 
@@ -720,9 +747,11 @@ def test_long_provenance_projection_is_capped_at_320_characters(
     assert budgets["provenance_source"] > 320
     assert budgets["provenance_limit"] == 320
     lines = result.output.splitlines()
-    provenance = lines[lines.index("PROVENANCE") + 1].strip()
+    provenance = lines[lines.index("PROVENANCE — recorded reason") + 1].strip()
     assert len(provenance) <= 320
-    assert "INFERENCE — not requested" in result.output
+    assert provenance.startswith("This Memory was retained")
+    assert "WHY — not requested" in result.output
+    assert "LIMITS" not in result.output
 
 
 def test_cache_publication_failure_keeps_the_valid_inference_available(
@@ -745,9 +774,11 @@ def test_cache_publication_failure_keeps_the_valid_inference_available(
     result = invoke("rationale", target.uid)
 
     assert result.exit_code == 0, result.output
-    assert "UNCACHED: context" in result.output
-    assert "not cached because cache storage was unavailable" in result.output
-    assert len(provider.calls) == 1
+    assert "UNCACHED: useful" in result.output
+    assert "not cached because cache storage was unavailable" not in result.output
+    structured = invoke("rationale", target.uid, "--json")
+    assert "not cached because cache storage was unavailable" in structured.output
+    assert len(provider.calls) == 2
 
 
 def test_legacy_context_identity_disables_cache_without_blocking_inference(
@@ -766,9 +797,11 @@ def test_legacy_context_identity_disables_cache_without_blocking_inference(
     result = invoke("rationale", target.uid)
 
     assert result.exit_code == 0, result.output
-    assert "LEGACY: context" in result.output
-    assert "caching is unavailable for this Context" in result.output
-    assert len(provider.calls) == 1
+    assert "LEGACY: useful" in result.output
+    assert "caching is unavailable for this Context" not in result.output
+    structured = invoke("rationale", target.uid, "--json")
+    assert "caching is unavailable for this Context" in structured.output
+    assert len(provider.calls) == 2
 
 
 def test_cache_path_hashes_arbitrary_memory_uid_and_uses_runtime_store_root(

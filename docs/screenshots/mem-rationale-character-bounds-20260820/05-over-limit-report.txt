@@ -1,17 +1,17 @@
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃Rationale [ff8a5cca] · bounds/over-limit                                                                                                                                         ^┃
+┃Rationale [c43efc89] · bounds/over-limit                                                                                                                                         ^┃
 ┃                                                                                                                                                                                  ┃
 ┃MEMORY                                                                                                                                                                            ┃
 ┃  Target fragment.                                                                                                                                                                ┃
 ┃                                                                                                                                                                                  ┃
-┃PROVENANCE                                                                                                                                                                        ┃
-┃  HISTORY_GAP (UNRECORDED) · ? (earliest origin not…                                                                                                                              ┃
+┃PROVENANCE — no reason recorded                                                                                                                                                   ┃
 ┃                                                                                                                                                                                  ┃
-┃INFERENCE — unavailable                                                                                                                                                           ┃
-┃  bounds/over-limit and readable descendants · 1 Context(s)                                                                                                                       ┃
+┃WHY — unavailable                                                                                                                                                                 ┃
 ┃                                                                                                                                                                                  ┃
-┃LIMITS                                                                                                                                                                            ┃
-┃  - The current Context contains changes that no retained checkpoint explains.                                                                                                    ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃

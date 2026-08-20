@@ -571,10 +571,10 @@ def test_task1_rationale_separates_origin_review_and_context_inference(
     provider = RationaleProvider(
         lambda data: {
             "explanation": (
-                "This is an unfinished instruction about what students "
-                "should be told. The Context distinguishes physical-card "
-                "mechanics from staff-only eligibility, but whether app "
-                "refers to access or notification remains unknown."
+                "This Memory appears intended to preserve a student-access "
+                "instruction, but its rationale is weak: nearby rules limit "
+                "entry to staff and do not establish whether the app is for "
+                "access or notification."
             ),
             "support_ids": [
                 candidate["candidate_id"]
@@ -599,12 +599,14 @@ def test_task1_rationale_separates_origin_review_and_context_inference(
     structured = invoke("rationale", target.uid[:8], "--json")
 
     assert result.exit_code == 0
-    assert "PROVENANCE" in result.output
-    assert "CREATED" in result.output
-    assert "INFERENCE — within Context, not recorded" in result.output
-    assert "staff-only eligibility" in result.output
+    assert "PROVENANCE — no reason recorded" in result.output
+    assert "CREATED" not in result.output
+    assert "WHY — inferred from Context, not recorded" in result.output
+    assert "limit entry to staff" in result.output
     assert "SAVED ANALYSIS" not in result.output
     assert "EVIDENCE USED FOR INFERENCE" not in result.output
+    assert "Context(s)" not in result.output
+    assert "LIMITS" not in result.output
     assert structured.exit_code == 0
     payload = json.loads(structured.output)
     assert payload["origin_events"][0]["source_occurrence"]["ordinal"] == 7
@@ -613,9 +615,6 @@ def test_task1_rationale_separates_origin_review_and_context_inference(
     explanation = payload["inference"]["explanation"]
     assert len(explanation) <= budgets["inference_limit"]
     assert budgets["inference_limit"] < budgets["inference_source"]
-    lines = result.output.splitlines()
-    provenance = lines[lines.index("PROVENANCE") + 1].strip()
-    assert len(provenance) <= budgets["provenance_limit"]
     assert budgets["provenance_limit"] < budgets["provenance_source"]
     assert len(provider.calls) == 1
     assert len(provider.calls[0]["candidates"]) == 50
@@ -722,7 +721,7 @@ def test_rationale_excludes_stale_review_and_uses_no_provider_when_requested(
 
     assert result.exit_code == 0
     assert "The responsible person is unnamed." not in result.output
-    assert "INFERENCE — not requested" in result.output
+    assert "WHY — not requested" in result.output
     assert "Provenance alone does not establish" not in result.output
     assert structured.exit_code == 0
     assert json.loads(structured.output)["stale_analysis"] is True
@@ -757,7 +756,7 @@ def test_rationale_never_opens_query_only_source_or_mutates_authoritative_state(
     monkeypatch.setattr(MemoryStore, "load_query_source", forbidden)
     provider = RationaleProvider(
         lambda data: {
-            "explanation": "Context supports this; details remain open.",
+            "explanation": "This Memory clarifies the visible local rule.",
             "support_ids": [
                 candidate["candidate_id"]
                 for candidate in data["candidates"]
@@ -822,7 +821,7 @@ def test_invalid_context_inference_falls_back_without_rendering_model_text(
 
     assert result.exit_code == 0
     assert "MALICIOUS INVENTION" not in result.output
-    assert "INFERENCE — unavailable" in result.output
+    assert "WHY — unavailable" in result.output
     assert "cited an unknown Memory" not in result.output
     assert structured.exit_code == 0, structured.output
     payload = json.loads(structured.output)

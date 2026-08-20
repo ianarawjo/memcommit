@@ -215,17 +215,24 @@ creation event was found.
 
 The default human Rationale projection is deliberately smaller than its
 evidence model. It shows the selected **MEMORY**, at most one compact
-**PROVENANCE** paragraph derived from Trace's earliest/current lineage and
-retained operation kinds, and at most one **INFERENCE** paragraph explicitly
-marked as contextual and not recorded. With no retained event, hidden Grant
-history, an unrequested provider, insufficient evidence, or provider failure,
-the relevant section keeps only a short status label and frozen scope metadata;
-it does not manufacture a filler explanation. The ordinary report no longer
-repeats recorded origin, transformation reasons, saved review fields, atomize
-attachments, unapplied proposals, provider error prose, or the full
-supporting-Memory bodies as separate sections. Those typed fields remain
-available through `--json`; shortening presentation must not erase evidence or
-reclassify analysis as provenance.
+**PROVENANCE** paragraph containing actual retained operation reasons, and at
+most one contextual **WHY** paragraph explicitly marked as inferred and not
+recorded. Provenance without a retained reason is the status `no reason
+recorded`; a present reason is labeled in the section heading rather than
+prefixed again inside the paragraph. It does not repeat Trace's operation list, endpoint contents, UIDs,
+or positions. WHY asks for the Memory's plausible functional purpose in this
+Context and may directly judge that it appears redundant, obsolete,
+unsupported, placeholder-like, or without a meaningful rationale. It must not
+turn that contextual judgment into author intent or historical causation.
+
+With hidden Grant history, an unrequested provider, insufficient Context, or
+provider failure, the relevant section keeps only a short status label; it does
+not manufacture a filler explanation. The ordinary report has no Context
+scope/count row and no `LIMITS` section. Scope, warnings, budgets, recorded
+origin, saved review fields, atomize attachments, unapplied proposals, provider
+errors, and complete supporting-Memory bodies remain typed fields in `--json`.
+Removing them from the Viewer avoids duplicating the inventory and audit views
+without erasing evidence or reclassifying analysis as provenance.
 
 Both prose sections use NFC-normalized Unicode character budgets rather than
 word counts. Exact duplicate nonempty semantic strings count once, while JSON,
@@ -237,13 +244,17 @@ command does not connect the provider and reports `insufficient evidence`.
 Provenance's source is the retained event kind, command, evidence label,
 reason, and before/after content; its projected paragraph limit is
 `min(320, source characters - 1)`. Retained earliest/current endpoint content
-also contributes because the projection shows that transition. A trace with no
-retained event, or history hidden by a Grant, has a zero provenance budget and
-produces no paragraph. Therefore each explanation is strictly smaller than the
-evidence class it summarizes, and their combined prose is strictly smaller than
-the combined Context-plus-Trace semantic source whenever both are present. JSON exposes the
-source counts, limits, inference status, and any provider error so this boundary
-is testable without lengthening the ordinary report.
+also contributes to the conservative source bound even though the compact
+paragraph now projects only unique recorded reasons. A trace with no retained
+event, or history hidden by a Grant, has a zero provenance budget. A trace with
+events but no reason may have a nonzero potential budget while still emitting
+only `no reason recorded`; the implementation never fills that budget with
+operation or endpoint repetition. Therefore each emitted explanation is
+strictly smaller than the evidence class it summarizes, and their combined
+prose is strictly smaller than the combined Context-plus-Trace semantic source
+whenever both are present. JSON exposes the source counts, limits, inference
+status, scope, warnings, and provider error so this boundary is testable without
+lengthening the ordinary report.
 
 The [180×52 compact Rationale capture](screenshots/mem-rationale-compact-20260820/README.md)
 records target selection, the shortened Viewer, and read-only close

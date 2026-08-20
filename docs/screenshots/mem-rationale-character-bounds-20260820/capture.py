@@ -90,7 +90,7 @@ def _run_minimum() -> None:
             payload = json.loads(prompt.split("RATIONALE PAYLOAD:\n", 1)[1])
             return json.dumps(
                 {
-                    "explanation": "0123456789ABCDEF",
+                    "explanation": "No purpose seen.",
                     "support_ids": [payload["candidates"][0]["candidate_id"]],
                 }
             )
@@ -153,8 +153,8 @@ def _run_oversized_context() -> None:
     before = context.to_dict()
     observed: dict[str, object] = {}
     sentence = (
-        "Large Context evidence is reduced to a bounded nearest-Memory frame, "
-        "while the explanation remains shorter than the semantic source. "
+        "This Memory preserves a stable editing rule that coordinates the "
+        "surrounding constraints without duplicating their details. "
     )
     explanation = (sentence * 8)[:480]
     assert len(explanation) == 480
@@ -190,29 +190,52 @@ def _run_oversized_context() -> None:
 def _run_long_provenance() -> None:
     import memcommit.ops as ops
     from memcommit.commands import rationale
-    from memcommit.context import AutoCheckpoint
+    from memcommit.context import AutoCheckpoint, Memory
     from memcommit.provenance import build_trace
     from memcommit.rationale import build_rationale
     from memcommit.store import MemoryStore
 
     store = MemoryStore()
     context = ops.init("bounds/long-provenance")
-    target = ops.add(context, "Initial " + ("A" * 240))
+    source = ops.add(context, "Initial " + ("A" * 240))
     store.save(
         context,
         AutoCheckpoint(command="add", args={}, description="Added long Memory"),
     )
-    for index in range(12):
-        content = f"Revision {index:02d} " + (chr(66 + index) * 240)
-        ops.edit(context, target.uid, content)
-        store.save(
-            context,
-            AutoCheckpoint(
-                command="edit",
-                args={"uid": target.uid, "content": content},
-                description=f"Long revision {index:02d}",
-            ),
-        )
+    source_position = context.ordered_uids().index(source.uid)
+    context.remove(source.uid)
+    target = Memory(
+        uid="10000000-0000-4000-8000-000000000001",
+        content="Current " + ("B" * 240),
+    )
+    context.add(target, position=source_position)
+    reason = (
+        "This Memory was retained because the reviewed local rule needs one "
+        "stable statement of purpose without repeating the surrounding "
+        "inventory. "
+    ) * 4
+    store.save(
+        context,
+        AutoCheckpoint(
+            command="atomize",
+            args={
+                "trace": {
+                    "schema_version": 1,
+                    "operation_id": "long-rationale-operation",
+                    "changes": [
+                        {
+                            "kind": "SPLIT",
+                            "source_uids": [source.uid],
+                            "result_uids": [target.uid],
+                            "reason": reason,
+                            "reason_codes": ["A01_ONE_FOCUS"],
+                        }
+                    ],
+                }
+            },
+            description="Applied a long recorded rationale",
+        ),
+    )
     store.set_current(context.name)
     before = context.to_dict()
     report = build_rationale(
@@ -223,6 +246,7 @@ def _run_long_provenance() -> None:
     )
     assert report.provenance_source_character_count > 320
     assert report.provenance_character_limit == 320
+    assert report.recorded_reason_events
     rationale.cmd(target.uid, recorded_only=True)
     assert store.load_direct(context.name).to_dict() == before
     print(
@@ -288,11 +312,11 @@ def main() -> None:
             path.unlink()
 
     cases = (
-        ("insufficient", "INFERENCE — insufficient evidence"),
-        ("minimum", "INFERENCE — within Context, not recorded"),
-        ("over-limit", "INFERENCE — unavailable"),
-        ("oversized-context", "INFERENCE — within Context, not recorded"),
-        ("long-provenance", "INFERENCE — not requested"),
+        ("insufficient", "WHY — insufficient Context"),
+        ("minimum", "WHY — inferred from Context, not recorded"),
+        ("over-limit", "WHY — unavailable"),
+        ("oversized-context", "WHY — inferred from Context, not recorded"),
+        ("long-provenance", "WHY — not requested"),
     )
     for index, (scenario, expected) in enumerate(cases, start=1):
         child, recorder = _spawn(scenario)
@@ -326,6 +350,8 @@ def main() -> None:
     assert "OUTPUT 33 REJECTED" in combined
     assert "CANDIDATES 49/105" in combined
     assert "LIMIT 320" in combined
+    assert "LIMITS" not in combined
+    assert "Context(s)" not in combined
 
 
 if __name__ == "__main__":

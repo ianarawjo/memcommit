@@ -1,17 +1,17 @@
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃Rationale [e4ff49ba] · bounds/insufficient                                                                                                                                       ^┃
+┃Rationale [7a57b465] · bounds/insufficient                                                                                                                                       ^┃
 ┃                                                                                                                                                                                  ┃
 ┃MEMORY                                                                                                                                                                            ┃
 ┃  A                                                                                                                                                                               ┃
 ┃                                                                                                                                                                                  ┃
-┃PROVENANCE                                                                                                                                                                        ┃
-┃  HISTORY_GAP (UNRECORDED) ·…                                                                                                                                                     ┃
+┃PROVENANCE — no reason recorded                                                                                                                                                   ┃
 ┃                                                                                                                                                                                  ┃
-┃INFERENCE — insufficient evidence                                                                                                                                                 ┃
-┃  bounds/insufficient and readable descendants · 1 Context(s)                                                                                                                     ┃
+┃WHY — insufficient Context                                                                                                                                                        ┃
 ┃                                                                                                                                                                                  ┃
-┃LIMITS                                                                                                                                                                            ┃
-┃  - The current Context contains changes that no retained checkpoint explains.                                                                                                    ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃

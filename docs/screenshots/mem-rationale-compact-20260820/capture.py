@@ -106,10 +106,10 @@ class _Provider:
             candidate["candidate_id"] for candidate in payload["candidates"]
         ]
         explanation = (
-            "Nearby guidance limits polishing to problematic wording while "
-            "preserving organization, citation markers, and chosen terminology. "
-            "What counts as problematic and whether incidental errors may be "
-            "corrected remain unresolved."
+            "This Memory preserves the controlling rule for later polishing: "
+            "change only problematic wording while protecting structure, "
+            "citation markers, and project terms. It is useful rather than "
+            "redundant because nearby Memories add narrower review constraints."
         )
         explanation_limit = output_schema["properties"]["explanation"][
             "maxLength"
@@ -209,7 +209,9 @@ def main() -> None:
     assert "PTY 180 52" in raw
     assert "MEMORY" in plain
     assert "PROVENANCE" in plain
-    assert "INFERENCE — within Context, not recorded" in plain
+    assert "WHY — inferred from Context, not recorded" in plain
+    assert "LIMITS" not in plain
+    assert "Context(s)" not in plain
     assert "SAVED ANALYSIS" not in plain
     assert "EVIDENCE USED FOR INFERENCE" not in plain
     assert "STORE CONTENT UNCHANGED" in plain

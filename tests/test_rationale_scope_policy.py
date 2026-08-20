@@ -68,8 +68,13 @@ def test_rationale_from_parent_uses_owned_descendant_memories(
         app,
         ["rationale", target.uid[:8], "--context", "advisor"],
     )
+    structured = runner.invoke(
+        app,
+        ["rationale", target.uid[:8], "--context", "advisor", "--json"],
+    )
 
     assert result.exit_code == 0, result.output
+    assert structured.exit_code == 0, structured.output
     assert provider.payload is not None
     candidates = provider.payload["candidates"]
     assert {
@@ -79,7 +84,12 @@ def test_rationale_from_parent_uses_owned_descendant_memories(
         ("advisor", "Reviewers scan diagrams first."),
         ("advisor/style", "Drawing a diagram takes longer."),
     }
-    assert "advisor and readable descendants · 2 Context(s)" in result.output
+    assert "Context(s)" not in result.output
+    assert json.loads(structured.output)["inference_scope"] == {
+        "context_name": "advisor",
+        "context_count": 2,
+        "include_descendants": True,
+    }
 
 
 def test_locally_owned_trace_is_available_independent_of_study_task(

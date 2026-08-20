@@ -1,12 +1,12 @@
 [32mEnsured context hierarchy 'practice/source'.[0m
   Created: practice, practice/source
   Current: practice/source
-[32mAdded [a0a7e105] If I later ask for polishing, preserve the structure and citation-needed markers, and change only wording that causes a problem.[0m
-[32m[1mEdited [a0a7e105] in 'practice/source':[0m
+[32mAdded [817bab09] If I later ask for polishing, preserve the structure and citation-needed markers, and change only wording that causes a problem.[0m
+[32m[1mEdited [817bab09] in 'practice/source':[0m
 [31m  - If I later ask for polishing, preserve the structure and citation-needed markers, and change only wording that causes a problem.[0m
 [32m  + If I later ask for polishing, preserve the overall structure and citation-needed markers, and change only wording that causes a problem.[0m
-[32mAdded [825c04b9] When I ask how a draft reads, assess its organization before editing it.[0m
-[32mAdded [9d632219] When I ask to change one expression, leave project-specific terms alone.[0m
+[32mAdded [6dfeddaa] When I ask how a draft reads, assess its organization before editing it.[0m
+[32mAdded [c74e607d] When I ask to change one expression, leave project-specific terms alone.[0m
 PTY 180 52
 [?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m RATIONALE · SELECT A MEMORY · practice/source[0m
 [0m Roots · practice/source[0m
@@ -15,9 +15,9 @@ PTY 180 52
 [0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
 [0m┌─────────────────────────────────────────────────────────────────────────────| CONTEXTS & MEMORIES |──────────────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│[0;1;7m› * ▾ practice/source[0m                                                                                                                                                            [0;1m^[179C[0m│[0m
-[0m│[0;38;5;189m  · [a0a7e105] [r2] If I later ask for polishing, preserve the overall structure and citation-needed markers, and change only wording that causes a problem.[0m                     [0;48;5;238m [179C[0m│[0m
-[0m│[0;38;5;189m  · [825c04b9] [r1] When I ask how a draft reads, assess its organization before editing it.[0m                                                                                     [0;48;5;238m [179C[0m│[0m
-[0m│[0;38;5;189m  · [9d632219] [r1] When I ask to change one expression, leave project-specific terms alone.[0m                                                                                     [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m  · [817bab09] [r2] If I later ask for polishing, preserve the overall structure and citation-needed markers, and change only wording that causes a problem.[0m                     [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m  · [6dfeddaa] [r1] When I ask how a draft reads, assess its organization before editing it.[0m                                                                                     [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m  · [c74e607d] [r1] When I ask to change one expression, leave project-specific terms alone.[0m                                                                                     [0;48;5;238m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
@@ -64,9 +64,9 @@ PTY 180 52
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
 [0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ CONTEXTS & MEMORIES ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
 [0;38;5;117;1m┃[0m› * ▾ practice/source                                                                                                                                                            [0;1m^[179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1;7m  › [a0a7e105] [r2] If I later ask for polishing, preserve the overall structure and citation-needed markers, and change only wording that causes a problem.[0m                     [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;189m  · [825c04b9] [r1] When I ask how a draft reads, assess its organization before editing it.[0m                                                                                     [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;189m  · [9d632219] [r1] When I ask to change one expression, leave project-specific terms alone.[0m                                                                                     [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1;7m  › [817bab09] [r2] If I later ask for polishing, preserve the overall structure and citation-needed markers, and change only wording that causes a problem.[0m                     [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;189m  · [6dfeddaa] [r1] When I ask how a draft reads, assess its organization before editing it.[0m                                                                                     [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;189m  · [c74e607d] [r1] When I ask to change one expression, leave project-specific terms alone.[0m                                                                                     [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m

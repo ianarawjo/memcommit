@@ -21,10 +21,10 @@ that verifies the Context was unchanged.
 | Report | Evidence condition | Expected result |
 | --- | --- | --- |
 | `01-insufficient-report.png` | 2 source characters | limit 1; provider connection count 0; status only |
-| `03-minimum-report.png` | 17 source characters | dynamic limit 16; an exact 16-character result is accepted |
+| `03-minimum-report.png` | 17 source characters | dynamic limit 16; the exact 16-character judgment `No purpose seen.` is accepted |
 | `05-over-limit-report.png` | 33 source characters | dynamic limit 32; a 33-character result is rejected and not cached |
 | `07-oversized-context-report.png` | 105 candidates exceed the real 1,000,000-character input bound | nearest 49 candidates retained; absolute limit 480; exact 480-character result accepted |
-| `09-long-provenance-report.png` | 13 retained long lineage events | provenance source exceeds 320; projected prose is capped at 320; provider not requested |
+| `09-long-provenance-report.png` | one retained atomize reason longer than 320 characters | provenance source exceeds 320; only the recorded reason is projected and capped at 320; provider not requested |
 
 Each odd-numbered image is the report state. Its following even-numbered image
 is the terminal receipt after `q`, including the observed source/limit or
@@ -32,3 +32,5 @@ candidate counts and `STORE UNCHANGED` verification.
 
 The over-limit provider deliberately returns repeated `P` characters. The
 capture asserts that this unvalidated text never appears in any rendered report.
+Every report also asserts that no human `LIMITS` section or Context-count row is
+rendered; those diagnostics remain available from `--json`.

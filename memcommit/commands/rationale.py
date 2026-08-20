@@ -22,12 +22,6 @@ from memcommit.commands.memory_report_recents import (
     MemoryReportSelectAction,
     choose_memory_report_recent,
 )
-from memcommit.commands.trace_projection import (
-    format_trace_states,
-    trace_operation_rows,
-    trace_row_effect,
-    trace_row_evidence,
-)
 from memcommit.interfaces.tui.viewers.read_only import (
     interactive_report_terminal,
     run_read_only_viewer,
@@ -61,26 +55,6 @@ def _uid(value: str, verbose: bool) -> str:
     return value if verbose else value[:8]
 
 
-def _compact_operation_flow(report: RationaleReport) -> str:
-    """Summarize retained lineage without reproducing Trace's full event log."""
-
-    rows = tuple(reversed(trace_operation_rows(report.trace)))
-    if not rows:
-        return "no retained operations"
-    labels = [trace_row_effect(row) for row in rows]
-    if len(labels) > 5:
-        hidden = len(labels) - 4
-        labels = [*labels[:2], f"+{hidden} operations", *labels[-2:]]
-    evidence = "/".join(
-        dict.fromkeys(
-            item
-            for row in rows
-            for item in trace_row_evidence(row).split("/")
-        )
-    )
-    return " → ".join(labels) + (f" ({evidence})" if evidence else "")
-
-
 def _bounded_summary(value: str, character_limit: int) -> str:
     if character_limit <= 0:
         return ""
@@ -95,23 +69,16 @@ def _bounded_summary(value: str, character_limit: int) -> str:
     return prefix + "…"
 
 
-def _provenance_summary(
-    report: RationaleReport,
-    *,
-    verbose: bool,
-) -> str:
-    earliest = (
-        format_trace_states(report.trace.originals, verbose=verbose)
-        if report.trace.originals
-        else "? (earliest origin not retained)"
-    )
-    current = (
-        format_trace_states(report.trace.current, verbose=verbose)
-        if report.trace.current
-        else "∅ (lineage absent from current Context)"
+def _provenance_summary(report: RationaleReport) -> str:
+    reasons = tuple(
+        dict.fromkeys(
+            event.reason.strip()
+            for event in report.recorded_reason_events
+            if event.reason and event.reason.strip()
+        )
     )
     return _bounded_summary(
-        f"{_compact_operation_flow(report)} · {earliest} → {current}",
+        " / ".join(reasons),
         report.provenance_character_limit,
     )
 
@@ -134,13 +101,11 @@ def render_rationale(
 
     if not report.recorded_evidence_available:
         typer.secho("\nPROVENANCE — hidden by Grant", bold=True)
-    elif not report.trace.events:
-        typer.secho("\nPROVENANCE — none retained", bold=True)
+    elif not report.recorded_reason_events:
+        typer.secho("\nPROVENANCE — no reason recorded", bold=True)
     else:
-        typer.secho("\nPROVENANCE", bold=True)
-        provenance = safe_terminal_text(
-            _provenance_summary(report, verbose=verbose)
-        )
+        typer.secho("\nPROVENANCE — recorded reason", bold=True)
+        provenance = safe_terminal_text(_provenance_summary(report))
         typer.echo(
             "  "
             + _bounded_summary(
@@ -150,26 +115,11 @@ def render_rationale(
         )
 
     inference = report.inference
-    inference_scope = (
-        (
-            f"{display_escape_text(report.inference_scope_name)} "
-            "and readable descendants"
-        )
-        if report.inference_scope_include_descendants
-        else (
-            f"{display_escape_text(report.inference_scope_name)} · "
-            "this Context only"
-        )
-    ) + f" · {report.inference_scope_context_count} Context(s)"
     if inference is not None:
-        typer.secho(
-            "\nINFERENCE — within Context, not recorded",
-            bold=True,
-        )
         cache_label = " · cached" if report.inference_cached else ""
         typer.secho(
-            f"  {inference_scope}{cache_label}",
-            dim=True,
+            "\nWHY — inferred from Context, not recorded" + cache_label,
+            bold=True,
         )
         typer.echo(
             "  "
@@ -179,26 +129,14 @@ def render_rationale(
             )
         )
     elif report.inference_status == "NOT_REQUESTED":
-        typer.secho("\nINFERENCE — not requested", bold=True)
-        typer.secho(f"  {inference_scope}", dim=True)
+        typer.secho("\nWHY — not requested", bold=True)
     elif report.inference_status == "INSUFFICIENT_EVIDENCE":
-        typer.secho("\nINFERENCE — insufficient evidence", bold=True)
-        typer.secho(f"  {inference_scope}", dim=True)
+        typer.secho("\nWHY — insufficient Context", bold=True)
     else:
         typer.secho(
-            "\nINFERENCE — unavailable",
+            "\nWHY — unavailable",
             bold=True,
         )
-        typer.secho(f"  {inference_scope}", dim=True)
-
-    combined_warnings = tuple(dict.fromkeys((*report.trace.warnings, *report.warnings)))
-    if combined_warnings:
-        typer.secho("\nLIMITS", bold=True)
-        for warning in combined_warnings:
-            typer.secho(
-                f"  - {safe_terminal_text(warning)}",
-                fg=typer.colors.YELLOW,
-            )
 
 
 def rationale_report_text(

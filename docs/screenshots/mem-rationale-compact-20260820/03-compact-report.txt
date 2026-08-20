@@ -1,17 +1,17 @@
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃Rationale [a0a7e105] · practice/source                                                                                                                                           ^┃
+┃Rationale [817bab09] · practice/source                                                                                                                                           ^┃
 ┃                                                                                                                                                                                  ┃
 ┃MEMORY                                                                                                                                                                            ┃
 ┃  If I later ask for polishing, preserve the overall structure and citation-needed markers, and change only wording that causes a problem.                                        ┃
 ┃                                                                                                                                                                                  ┃
-┃PROVENANCE                                                                                                                                                                        ┃
-┃  CREATED → EDITED (RECORDED) · [a0a7e105]@1 “If I later ask for polishing, preserve the…” → [a0a7e105]@1 “If I later ask for polishing,                                          ┃
-┃  preserve the…”                                                                                                                                                                  ┃
+┃PROVENANCE — no reason recorded                                                                                                                                                   ┃
 ┃                                                                                                                                                                                  ┃
-┃INFERENCE — within Context, not recorded                                                                                                                                          ┃
-┃  practice/source · this Context only · 1 Context(s)                                                                                                                              ┃
-┃  Nearby guidance limits polishing to problematic wording while preserving organization, citation markers, and chosen terminology. What                                           ┃
-┃  counts as problematic and whether incidental errors may be corrected remain unresolved.                                                                                         ┃
+┃WHY — inferred from Context, not recorded                                                                                                                                         ┃
+┃  This Memory preserves the controlling rule for later polishing: change only problematic wording while protecting structure, citation                                            ┃
+┃  markers, and project terms. It is useful rather than redundant because nearby Memories add narrower review constraints.                                                         ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃

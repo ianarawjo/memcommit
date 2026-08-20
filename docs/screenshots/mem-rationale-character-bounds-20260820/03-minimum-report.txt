@@ -1,18 +1,18 @@
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃Rationale [b7815e68] · bounds/minimum                                                                                                                                            ^┃
+┃Rationale [512e6b9a] · bounds/minimum                                                                                                                                            ^┃
 ┃                                                                                                                                                                                  ┃
 ┃MEMORY                                                                                                                                                                            ┃
 ┃  12345678                                                                                                                                                                        ┃
 ┃                                                                                                                                                                                  ┃
-┃PROVENANCE                                                                                                                                                                        ┃
-┃  HISTORY_GAP (UNRECORDED) · ? (earliest…                                                                                                                                         ┃
+┃PROVENANCE — no reason recorded                                                                                                                                                   ┃
 ┃                                                                                                                                                                                  ┃
-┃INFERENCE — within Context, not recorded                                                                                                                                          ┃
-┃  bounds/minimum and readable descendants · 1 Context(s)                                                                                                                          ┃
-┃  0123456789ABCDEF                                                                                                                                                                ┃
+┃WHY — inferred from Context, not recorded                                                                                                                                         ┃
+┃  No purpose seen.                                                                                                                                                                ┃
 ┃                                                                                                                                                                                  ┃
-┃LIMITS                                                                                                                                                                            ┃
-┃  - The current Context contains changes that no retained checkpoint explains.                                                                                                    ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃

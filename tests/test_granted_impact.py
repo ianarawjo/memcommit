@@ -830,15 +830,31 @@ def test_rationale_local_root_combines_authorized_granted_public_subtree(
         app,
         ["rationale", target.uid[:8], "--context", "task-root"],
     )
+    structured = runner.invoke(
+        app,
+        [
+            "rationale",
+            target.uid[:8],
+            "--context",
+            "task-root",
+            "--json",
+        ],
+    )
 
     assert result.exit_code == 0, result.output + result.stderr
+    assert structured.exit_code == 0, structured.output + structured.stderr
     assert payloads
     candidate_contexts = {
         candidate["context_name"] for candidate in payloads[0]["candidates"]
     }
     assert "task-root/campus-wiki" in candidate_contexts
     assert "task-root/campus-wiki/services" in candidate_contexts
-    assert "task-root and readable descendants · 4 Context(s)" in result.output
+    assert "Context(s)" not in result.output
+    assert json.loads(structured.output)["inference_scope"] == {
+        "context_name": "task-root",
+        "context_count": 4,
+        "include_descendants": True,
+    }
     assert DETAIL_SECRET not in json.dumps(payloads)
 
 
