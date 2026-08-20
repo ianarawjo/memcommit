@@ -15,7 +15,10 @@ from dataclasses import dataclass
 class DistillSemanticConfig:
     """One validated, interface-independent Distill limit snapshot."""
 
-    max_rules: int = 20
+    # Distill must recover the complete supported Rule set. A caller may
+    # install an explicit safety/test ceiling, but the ordinary contract must
+    # not turn an arbitrary round number into a semantic stopping condition.
+    max_rules: int | None = None
     rule_text_limit: int = 4_000
     rationale_limit: int = 4_000
     overview_limit: int = 4_000
@@ -23,7 +26,6 @@ class DistillSemanticConfig:
 
     def __post_init__(self) -> None:
         values = {
-            "max_rules": self.max_rules,
             "rule_text_limit": self.rule_text_limit,
             "rationale_limit": self.rationale_limit,
             "overview_limit": self.overview_limit,
@@ -31,6 +33,12 @@ class DistillSemanticConfig:
         }
         if any(type(value) is not int or value <= 0 for value in values.values()):
             raise ValueError("Distill semantic limits must be positive integers.")
+        if self.max_rules is not None and (
+            type(self.max_rules) is not int or self.max_rules <= 0
+        ):
+            raise ValueError(
+                "Distill max_rules must be a positive integer or None."
+            )
 
 
 DEFAULT_DISTILL_SEMANTIC_CONFIG = DistillSemanticConfig()

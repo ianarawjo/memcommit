@@ -60,8 +60,9 @@ Example. Every provider prompt also quotes the complete café, lost-property,
 and Cloze Example-to-Rule reference pairs. These demonstrate the reduction
 without becoming current evidence: only aliases from the selected Source may
 appear in a Rule's support or boundary fields. Provider contract version 6
-prevents prepared results from the earlier unreferenced prompt or partial form
-audit from replaying under this stricter meaning.
+prevented prepared results from the earlier unreferenced prompt or partial
+form audit from replaying under that stricter meaning. Version 7 removes the
+arbitrary default Rule-count ceiling.
 
 Distill is `WHOLE_FRAME_ONLY`. Relations among any Source propositions can
 change the complete Rule set, so an oversized frame is rejected instead of
@@ -86,6 +87,15 @@ frozen snapshot. Domain values enforce structural validity; they do not
 silently reapply module defaults after a caller injects a different validated
 configuration. Provider credentials, endpoint, model, reasoning, and timeout
 remain provider-infrastructure concerns.
+
+The ordinary configuration has `max_rules=None`: Distill asks for the smallest
+complete set of independently meaningful, evidence-supported Rules and does
+not stop at a fixed count such as 20. An injected configuration may set an
+explicit positive `max_rules` for a constrained integration or test, in which
+case planning, schema, decoding, and prepared-result validation enforce that
+same ceiling. “No Rule-count ceiling” does not remove the provider response
+character bound or per-field text limits; those remain transport and resource
+boundaries rather than semantic instructions to omit a supported Rule.
 
 ## Directional existing-Context publication
 

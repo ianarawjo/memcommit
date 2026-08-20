@@ -29,7 +29,7 @@ from memcommit.summarize import SummaryFrame
 
 
 DISTILL_OPERATION = "distill_context"
-DISTILL_PROVIDER_CONTRACT_VERSION = 6
+DISTILL_PROVIDER_CONTRACT_VERSION = 7
 DISTILL_PAYLOAD_MARKER = "DISTILL CONTEXT PAYLOAD:\n"
 
 
@@ -230,7 +230,7 @@ def validate_distill_analysis(
     if analysis.goal is not None:
         _text(analysis.goal, "Goal", limit=config.rule_text_limit)
     _text(analysis.overview, "overview", limit=config.overview_limit)
-    if len(analysis.rules) > config.max_rules:
+    if config.max_rules is not None and len(analysis.rules) > config.max_rules:
         raise DistillError("Distill returned too many Rules.")
     for rule in analysis.rules:
         _text(rule.content, "Rule content", limit=config.rule_text_limit)
@@ -257,6 +257,35 @@ def _schema(
         "items": {"type": "string", "enum": aliases},
         "maxItems": len(aliases),
     }
+    rules_schema: dict[str, object] = {
+        "type": "array",
+        "items": {
+            "type": "object",
+            "additionalProperties": False,
+            "required": [
+                "content",
+                "rationale",
+                "support_memory_ids",
+                "boundary_memory_ids",
+            ],
+            "properties": {
+                "content": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": config.rule_text_limit,
+                },
+                "rationale": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": config.rationale_limit,
+                },
+                "support_memory_ids": alias_array,
+                "boundary_memory_ids": alias_array,
+            },
+        },
+    }
+    if config.max_rules is not None:
+        rules_schema["maxItems"] = config.max_rules
     return {
         "type": "object",
         "additionalProperties": False,
@@ -267,34 +296,7 @@ def _schema(
                 "minLength": 1,
                 "maxLength": config.overview_limit,
             },
-            "rules": {
-                "type": "array",
-                "maxItems": config.max_rules,
-                "items": {
-                    "type": "object",
-                    "additionalProperties": False,
-                    "required": [
-                        "content",
-                        "rationale",
-                        "support_memory_ids",
-                        "boundary_memory_ids",
-                    ],
-                    "properties": {
-                        "content": {
-                            "type": "string",
-                            "minLength": 1,
-                            "maxLength": config.rule_text_limit,
-                        },
-                        "rationale": {
-                            "type": "string",
-                            "minLength": 1,
-                            "maxLength": config.rationale_limit,
-                        },
-                        "support_memory_ids": alias_array,
-                        "boundary_memory_ids": alias_array,
-                    },
-                },
-            },
+            "rules": rules_schema,
             "outside_memory_ids": alias_array,
         },
     }
@@ -367,7 +369,10 @@ def validate_distill_provider_plan(
             },
             item_count=len(frame.sources),
             output_schema=schema,
-            expected_output_items=config.max_rules,
+            # Zero means that this planner asserts no expected item count. The
+            # response envelope still has a character bound, but Distill has
+            # no default semantic Rule-count ceiling.
+            expected_output_items=config.max_rules or 0,
         ),
     )
     if plan.mode is not ExecutionMode.ONE_SHOT:
@@ -425,6 +430,9 @@ def analyze_distill(
         "notation, do not omit it merely because the behavioral meaning is unchanged. "
         "Completeness across these independent axes is more important than minimizing "
         "the Rule count.\n\n"
+        "Return the complete supported Rule set. There is no default Rule-count "
+        "maximum, so do not stop at an arbitrary round number; remain minimal only "
+        "by excluding duplicates or non-independent consequences.\n\n"
         "Ground every surface-form claim literally in its cited support Memories. A "
         "Rule may say an expression is exact only when every cited support contains "
         "that exact form in the claimed position. Before writing such a Rule, compare "
@@ -484,7 +492,7 @@ def analyze_distill(
     rules_value = decoded["rules"]
     if not isinstance(rules_value, list):
         raise DistillError("The Distill provider returned invalid Rules.")
-    if len(rules_value) > config.max_rules:
+    if config.max_rules is not None and len(rules_value) > config.max_rules:
         raise DistillError("The Distill provider returned too many Rules.")
     by_alias = {source.alias: source.memory_uid for source in frame.sources}
     analysis_uid = str(uuid.uuid4())

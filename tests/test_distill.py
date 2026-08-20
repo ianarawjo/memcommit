@@ -20,6 +20,7 @@ from memcommit.distill import (
     DISTILL_PAYLOAD_MARKER,
     DistillError,
     analyze_distill,
+    distill_execution_policy,
 )
 from memcommit.distill_application import DistillApplyRequest, DistillRequest
 from memcommit.distill_config import DistillSemanticConfig
@@ -351,6 +352,66 @@ def test_distill_uses_one_typed_limit_snapshot():
     analyze_distill(frame, goal=None, provider=provider, config=config)
 
     assert provider.calls[0][1]["properties"]["rules"]["maxItems"] == 1
+    assert distill_execution_policy(config).one_shot_limits.max_output_items == 1
+
+
+def test_distill_default_has_no_rule_count_ceiling():
+    _context, frame = _frame()
+    provider = DistillProvider(
+        {
+            "overview": "Every independent supported invariant is retained.",
+            "rules": [
+                {
+                    "content": f"Independent supported Rule {index}.",
+                    "rationale": "The first Source Memory supplies its evidence.",
+                    "support_memory_ids": ["m000001"],
+                    "boundary_memory_ids": [],
+                }
+                for index in range(1, 22)
+            ],
+            "outside_memory_ids": ["m000002"],
+        }
+    )
+
+    analysis = analyze_distill(frame, goal=None, provider=provider)
+
+    assert len(analysis.rules) == 21
+    assert "maxItems" not in provider.calls[0][1]["properties"]["rules"]
+    assert distill_execution_policy().one_shot_limits.max_output_items is None
+    assert "There is no default Rule-count maximum" in provider.calls[0][0]
+
+
+def test_distill_explicit_rule_ceiling_still_rejects_overflow():
+    _context, frame = _frame()
+    provider = DistillProvider(
+        {
+            "overview": "This response deliberately exceeds the explicit ceiling.",
+            "rules": [
+                {
+                    "content": f"Explicitly bounded Rule {index}.",
+                    "rationale": "The first Source Memory supplies its evidence.",
+                    "support_memory_ids": ["m000001"],
+                    "boundary_memory_ids": [],
+                }
+                for index in range(1, 3)
+            ],
+            "outside_memory_ids": ["m000002"],
+        }
+    )
+
+    with pytest.raises(DistillError, match="too many Rules"):
+        analyze_distill(
+            frame,
+            goal=None,
+            provider=provider,
+            config=DistillSemanticConfig(max_rules=1),
+        )
+
+
+@pytest.mark.parametrize("value", (0, -1, True))
+def test_distill_rule_ceiling_must_be_positive_or_none(value):
+    with pytest.raises(ValueError, match="positive integer or None"):
+        DistillSemanticConfig(max_rules=value)
 
 
 def test_distill_result_limits_follow_the_injected_config():

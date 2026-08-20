@@ -181,8 +181,9 @@ def distill_agent_tool_schema() -> JsonObject:
     return {
         "name": DISTILL_AGENT_TOOL_NAME,
         "description": (
-            "Propose evidence-bound Rules from one Context or bound Ground; "
-            "the Source and Ground remain unchanged."
+            "Propose the complete evidence-bound Rule set, with no default Rule-count "
+            "ceiling, from one Context or bound Ground; the Source and Ground remain "
+            "unchanged."
         ),
         "parameters": {
             "type": "object",

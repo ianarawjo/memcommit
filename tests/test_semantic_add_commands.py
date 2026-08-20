@@ -370,7 +370,9 @@ def test_impact_endpoint_preview_never_adds(
         assert "PROPOSED RULES" in result.output
         assert "IMPACT · DISTILL ADD" not in result.output
     else:
-        assert "ENDPOINTS UNCHANGED" in result.output
+        assert "PROPOSED CASES" in result.output
+        assert "ENDPOINTS UNCHANGED" not in result.output
+        assert "[ADD]" not in result.output
         assert _ElaborateProvider.calls[-1]["number"] == 2
     assert context_record_digest(store.load_direct(source.name)) == before_source
     assert context_record_digest(store.load_direct(target.name)) == before_target
