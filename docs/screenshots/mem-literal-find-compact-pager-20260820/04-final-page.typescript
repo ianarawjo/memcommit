@@ -1,0 +1,58 @@
+[1m[7m%[27m[1m[0m                                                                                                                                                                                    export PS1='(base) KimMunyeong@MacBook-Pro-3 memcommit %% '; export RPS1=''; stty rows 52 cols 180; test "$(stty size)" = '52 180'; clear
+[0m[27m[24m[JMacBook-Pro-3% [K[?2004heexport PS1='(base) KimMunyeong@MacBook-Pro-3 memcommit %% '; export RPS1=''; stty rows 52 cols 180; test "$(stty size)" = '52 180'; clear[?2004l
+[3J[H[2J[1m[7m%[27m[1m[0m                                                                                                                                                                                    [0m[27m[24m[J(base) KimMunyeong@MacBook-Pro-3 memcommit % [K[?2004hmmem find 'construction|entrance' --context task-1/campus-wiki --recursive --regex --ignore-case[?2004l
+[?12l[?25h[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;5;255;1mFIND RESULTS[0m
+[0;38;5;255mPATTERN · construction|entrance · REGEX · IGNORE CASE[0m
+[0;38;5;255mSCOPE · task-1/campus-wiki · DESCENDANTS · FOLLOW EMBEDS[0m
+[0;38;5;255mSTATUS · READ-ONLY · PROVIDER-FREE · SCANNED 300 · MATCHED 64 · OCCURRENCES 71 · SHOWING 1–10 OF 64[0m
+[0m [0m
+[0;38;5;234;48;5;117;1m1 [1cb2aa88] The Main Building third-floor rear entrance may be used for general passage during regular opening hours in both the academic term and recess. [task-1/campus-wiki/bui[179Cl[0m
+[0;38;5;234;48;5;117;1mding-access m1][0m
+[0;38;5;255m2 [a8b11b27] The Main Building main entrance is on the first floor. [task-1/campus-wiki/building-access m2][0m
+[0;38;5;255m3 [62214c26] The Main Building rear entrance on the opposite side of the sloping site is at the third-floor level. [task-1/campus-wiki/building-access m3][0m
+[0;38;5;255m4 [c6b97453] The end of regular opening hours for the Main Building main entrance during the academic term is 10 p.m. [task-1/campus-wiki/building-access m5][0m
+[0;38;5;255m5 [614389e2] The end of regular opening hours for the Main Building main entrance during recess is 10 p.m. [task-1/campus-wiki/building-access m6][0m
+[0;38;5;255m6 [e3929a49] Students familiar with the route to the Central Library expect the third-floor rear entrance to be a connection normally available for passage. [task-1/campus-wiki/bu[179Ci[0m
+[0;38;5;255mlding-access m7][0m
+[0;38;5;255m7 [cb1e0734] The staff-only entrance is a controlled entrance separate from the third-floor rear entrance. [task-1/campus-wiki/building-access m15][0m
+[0;38;5;255m8 [36db4bf8] The accessible route beside the main entrance is an always-available route into the first-floor lobby without using stairs. [task-1/campus-wiki/building-access m16][0m
+[0;38;5;255m9 [804bfc6b] Tour leaders for external groups tend to want to use the same route through the third-floor rear entrance on their next visit that they used on a previous visit. [tas[179Ck[0m
+[0;38;5;255m-1/campus-wiki/building-access m17][0m
+[0;38;5;255m10 [cc2a0d18] The start of regular opening hours for the Main Building main entrance during the academic term is 7 a.m. [task-1/campus-wiki/building-access m18][0m
+
+
+
+
+
+
+[0m [0m
+[0m [0m
+[0;38;5;255m↑/↓ move · ←/→ or PgUp/PgDn page · Home/End boundary · Esc/q close[66D[21A[?7h[0m[?7l[0;38;5;255m1 [1cb2aa88] The Main Building third-floor rear entrance may be used for general passage during regular opening hours in both the academic term and recess. [task-1/campus-wiki/bui[179Cl[0m
+[0;38;5;255mding-access m1][0m
+[0;38;5;234;48;5;117;1m2 [a8b11b27] The Main Building main entrance is on the first floor. [task-1/campus-wiki/building-access m2][107D[?7h[0m[?7l[4A[90C[0;38;5;255m1–20 OF 64[0m
+
+[C[0;38;5;255m1 [3ca6b6b2] The start of re[Cular opening[Chou[Cs fo[C th[2CM[Cin Building main [Cntrance during recess is 8[Ca.m. [task-1/campus-wiki/buil[Cing-access m19][0m[K[0m
+[0;38;5;234;48;5;117;1m12 [4189e656] First-time visitors often expect the Main Building first-floor main entrance to be the default entrance for general visitors. [task-1/campus-wiki/building-access m22[179C][0m
+[0;38;5;255m13 [aee44d0a] Visitors who have difficulty using stairs expect a step-free access route to be near the main entrance. [task-1/campus-wiki/building-access m23][0m
+[0;38;5;255m14 [d[Cf32d9e] Valid staff access eligibility[Cis[Crequired to u[Ce the s[Caff-only entrance.[C[[Cask-1/campus-wiki/bui[Cding-access [C24][0m[K[0m
+[0;38;5;255m15 [2d[2Cd6b9] The Main Building[Cserv[Cce[Cent[Cance is used for prere[Cistered deliv[Cries and facilities work.[C[task-1/campus-wiki/building-access m25][0m[K[0m
+[0;38;5;255m16 [fef275b1] Visitors accomp[Cnied by child[Cen p[Cefer[Cthe stro[Cler-accessible main entranc[C and[Caccessible[Croute to be closely connected. [ta[Ck-1/campus-wiki/building-access m26][0m
+[0;38;5;255m17 [41d5bf0b] Taxi and ride-hail[Cng[Cdrivers of[Cen expect the[CMain Building first-floor main[Cent[Cance to be the default drop-off point[Cunless the passenger specifies a different en[179Ct[0m
+[0;38;5;255mrance. [ta[Ck-1/campus-wiki/building-access m27][0m
+[0;38;5;255m18 [7da885c1] The access information[Cagent can explain [Che diff[Crence between the norma[C uses of[Cthe front[Cand rear entrances. [task-1/c[Cmpu[C-wiki/building-access m28][0m
+[0;38;5;255m19 [efffd1fe] Emergency exits ar[2Cdoors for e[Cergency evacuatio[3Cnd are not regular entrances for general access.[C[task-1/campus-wiki/building-a[Ccess m32][0m[K[0m
+[0;38;5;255m20 [2b2642c9] The[Cautomatic door at the Main Buil[Cing[Cm[Cin[Centrance operates during re[Cular opening h[Cu[Cs. [task-1/campus-wik[C/building-access m33][0m[K[0m
+[0m [0m[K[0m
+[0m [0m[K[11A[?7h[0m[?7l[3A[89C[0;38;5;255m6[2C64[0m
+
+[0;38;5;255m6[3C0a78908e[2CBecause of the sloped t[Crrain, first-time vis[Ctors someti[Ces co[Cfuse the levels of the Main Building's first-floor ma[Cn e[Ctr[Cn[2C and third-floor rear entrance. [task[179C-[0m
+[0;38;5;255m1/campus-wiki/route-changes m287][0m[K[0m
+[0;38;5;255m62[2C5a6b05a2[2CCheck the current[Cnotice for[Cthe de[2Cination [Cn[Cr[Cnce be[Cor[2Cgiving[Cdirecti[Cns.[C[t[Csk-1/campus-wiki/route-changes [C293][0m[K[0m
+[0;38;5;255m63[2C2f6bcec[3CA pe[Ce[2Crian path from the West Gat[C stop to the Main[CBuilding's[Cmain entrance runs through Sol[Cit Plaza. [ta[Ck-1/campus-wiki/route-changes m297][0m
+[0;38;5;234;48;5;117;1m64 [675f922d] There is a step-free route from the shuttle stop in front of the Student Centre to the west entrance of the Central Library. [task-1/campus-wiki/route-changes m298][0m
+[0m [0m[K[0m
+[0m [0m[K[0m
+[0m [0m[K[0m
+[0m [0m[K[0m
+[0m [0m[K[0m
+[0m [0m[K[6A[?7h[0m

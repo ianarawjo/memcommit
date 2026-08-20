@@ -15,12 +15,15 @@ from memcommit.source_projection.model import (
     SourceAccess,
     SourceDisplayFacts,
     SourceForm,
+    SourceReferenceRow,
     SourceReach,
     SourceState,
     context_access_facts,
 )
 from memcommit.source_projection.presentation import (
+    SourceReferenceLayout,
     SourceTokenRole,
+    render_source_reference_row,
     source_annotation_text,
     source_object_label,
     source_display_text,
@@ -48,6 +51,64 @@ def test_source_display_uses_one_axis_order_and_canonical_vocabulary():
     assert source_annotation_text(facts, include_permissions=True) == (
         "READ GRANT · PERMISSIONS READ + DERIVE + SAVE QUERY SESSION · "
         "VIA EMBED · DANGLING · NOT INCLUDED"
+    )
+
+
+def test_source_reference_row_folds_content_and_keeps_owner_alias_separate():
+    row = SourceReferenceRow(
+        number=1,
+        content="First line\n  second\tline",
+        uid="6fad23ab-full-memory-uid",
+        context_name="practice/source",
+        alias="m5",
+    )
+
+    assert render_source_reference_row(row) == (
+        "[1] First line second line — 6fad23ab, practice/source, m5"
+    )
+
+
+def test_source_reference_row_retains_memory_ref_owner_and_source_identity():
+    row = SourceReferenceRow(
+        number=2,
+        content="Referenced content.",
+        uid="owner-ref-uid",
+        context_name="target/context",
+        source_uid="source-memory-uid",
+        source_context_name="source/context",
+    )
+
+    assert render_source_reference_row(row) == (
+        "[2] Referenced content. — owner-re, target/context "
+        "→ source-m, source/context"
+    )
+
+
+def test_source_reference_row_supports_identity_content_location_arrangement():
+    row = SourceReferenceRow(
+        number=1,
+        content="First line\n  second line.",
+        uid="6fad23ab-full-memory-uid",
+        context_name="practice/source",
+        alias="m5",
+    )
+
+    assert render_source_reference_row(
+        row,
+        layout=SourceReferenceLayout.IDENTITY_FIRST,
+    ) == "1 [6fad23ab] First line second line. [practice/source m5]"
+
+
+def test_source_reference_row_marks_optional_content_elision():
+    row = SourceReferenceRow(
+        number=3,
+        content="A deliberately long supporting passage.",
+        uid="memory-uid",
+        context_name="scope",
+    )
+
+    assert render_source_reference_row(row, content_character_limit=16) == (
+        "[3] A deliberately… — memory-u, scope"
     )
 
 

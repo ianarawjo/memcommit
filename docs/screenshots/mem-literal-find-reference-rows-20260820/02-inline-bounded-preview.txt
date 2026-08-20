@@ -1,0 +1,19 @@
+FIND RESULTS                                                                                                                                                                        
+PATTERN · construction|entrance · REGEX · IGNORE CASE                                                                                                                               
+SCOPE · task-1/campus-wiki · DESCENDANTS · FOLLOW EMBEDS                                                                                                                            
+STATUS · READ-ONLY · PROVIDER-FREE · SCANNED 300 · MATCHED 64 · OCCURRENCES 71 · SHOWING 1–10 OF 64                                                                                 
+                                                                                                                                                                                    
+1 [1cb2aa88] The Main Building third-floor rear entrance may be used for general passage during regular opening hours in both the academic term and recess. [task-1/campus-wiki/buil
+ding-access m1]                                                                                                                                                                     
+2 [a8b11b27] The Main Building main entrance is on the first floor. [task-1/campus-wiki/building-access m2]                                                                         
+3 [62214c26] The Main Building rear entrance on the opposite side of the sloping site is at the third-floor level. [task-1/campus-wiki/building-access m3]                          
+4 [c6b97453] The end of regular opening hours for the Main Building main entrance during the academic term is 10 p.m. [task-1/campus-wiki/building-access m5]                       
+5 [614389e2] The end of regular opening hours for the Main Building main entrance during recess is 10 p.m. [task-1/campus-wiki/building-access m6]                                  
+6 [e3929a49] Students familiar with the route to the Central Library expect the third-floor rear entrance to be a connection normally available for passage. [task-1/campus-wiki/bui
+lding-access m7]                                                                                                                                                                    
+7 [cb1e0734] The staff-only entrance is a controlled entrance separate from the third-floor rear entrance. [task-1/campus-wiki/building-access m15]                                 
+8 [36db4bf8] The accessible route beside the main entrance is an always-available route into the first-floor lobby without using stairs. [task-1/campus-wiki/building-access m16]   
+9 [804bfc6b] Tour leaders for external groups tend to want to use the same route through the third-floor rear entrance on their next visit that they used on a previous visit. [task
+-1/campus-wiki/building-access m17]                                                                                                                                                 
+10 [cc2a0d18] The start of regular opening hours for the Main Building main entrance during the academic term is 7 a.m. [task-1/campus-wiki/building-access m18]                    
+54 more matches not shown; rerun with --all to show every result.

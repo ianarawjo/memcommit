@@ -54,6 +54,7 @@
     "eval": [],
     "find": [
       "docs/find-application-boundary-matrix.md",
+      "docs/find-search-compact-scope-design-rationale.md",
       "docs/search-find-replace-design-rationale.md"
     ],
     "find-ambiguities": [
@@ -130,6 +131,7 @@
     "review": [],
     "search": [
       "docs/find-search-application-boundary-matrix.md",
+      "docs/find-search-compact-scope-design-rationale.md",
       "docs/search-find-replace-design-rationale.md"
     ],
     "sever": [

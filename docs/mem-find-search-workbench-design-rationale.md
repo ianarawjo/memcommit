@@ -1,5 +1,15 @@
 # Interactive Find search and scope rationale
 
+> **2026-08-20 presentation update:** This document preserves the semantic
+> Search and materialization decisions made while the operation still used the
+> public name Find. The persistent `TARGETS` tree, separate target-cardinality
+> row, and `SEARCH → TARGETS → SCOPE` topology below are superseded by the
+> shared `SCOPE → SEARCH → RESULTS` form in
+> `find-search-compact-scope-design-rationale.md`. The exact Context field is
+> the fast path; Profile/multiple selection is visible only while Browse is
+> open. Request, authority, background-turn, result-checking, and Save As
+> boundaries remain applicable.
+
 ## Problem
 
 The one-shot `mem find QUERY` contract required a person to know both the query

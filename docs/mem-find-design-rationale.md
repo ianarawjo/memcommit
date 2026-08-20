@@ -262,11 +262,14 @@ The synthesis response has one text and one alias list for each scope. The
 visible sentence must cite at least one `mN`; each alias must belong to its
 own scope. The host then assigns `[1]`, `[2]`, and later numbers by first use,
 places them after the supporting sentence, and prints the actual referenced
-Memory projection below a `References` heading with its Context and local
-identity metadata. Reusing an alias reuses its number, and uncited candidates
-are not reproduced. Generated sentences cannot include numeric citation
-markers or line breaks, and every source-content line is indented beneath its
-host-owned metadata so stored text cannot imitate the reference structure.
+Memory projection below a `References` heading as one logical
+`[N] content — UID prefix, Context alias` row. Reusing an alias reuses its
+number, and uncited candidates are not reproduced. Every row repeats its exact
+Context because one answer may cite different Sources; adjacent rows have no
+blank separator. Generated sentences cannot include numeric citation markers
+or line breaks, and stored content line breaks are folded so content cannot
+imitate a sibling citation or `References` heading. Evidence kind remains in
+the typed model even though the compact terminal row omits it.
 
 The prompt requests exactly three natural sentences rather than a table:
 visible results, same-frame remainder, then other Contexts. A completed scan

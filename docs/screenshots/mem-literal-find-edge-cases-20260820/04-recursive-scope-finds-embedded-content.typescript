@@ -1,0 +1,14 @@
+52 180
+$ mem find construction --context task-1/campus-wiki --recursive --ignore-case
+FIND RESULTS
+PATTERN · construction · LITERAL · IGNORE CASE
+SCOPE · task-1/campus-wiki · DESCENDANTS · FOLLOW EMBEDS
+STATUS · READ-ONLY · PROVIDER-FREE · SCANNED 300 · MATCHED 2 · OCCURRENCES 2
+
+[1] task-1/campus-wiki/temporary-parking · MEMORY · 6a37c02f
+SPANS · 51:63
+Outdoor Parking Lot C is outside the Main Building construction zone.
+
+[2] task-1/campus-wiki/facility-updates · MEMORY · ba35ad87
+SPANS · 36:48
+Do not infer the scope of nonpublic construction.

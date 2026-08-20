@@ -1,0 +1,10 @@
+52 180
+$ mem find Memory --ignore-case
+FIND RESULTS
+PATTERN · Memory · LITERAL · IGNORE CASE
+SCOPE · practice/source · EXACT · EXCLUDE EMBEDS
+STATUS · READ-ONLY · PROVIDER-FREE · SCANNED 17 · MATCHED 1 · OCCURRENCES 3
+
+[1] practice/source · MEMORY · 44de7eff
+SPANS · 47:53, 146:152, 171:177
+For any titlle about interaction with AI agent memory, keep the exact terminology and intended words: use interaction and management and AI agent memory rather than agent memory.

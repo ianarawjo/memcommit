@@ -1,0 +1,8 @@
+52 180                                                                                                                                                                              
+$ mem find '.*' --context task-1/campus-wiki --recursive                                                                                                                            
+FIND RESULTS                                                                                                                                                                        
+PATTERN · .* · LITERAL · CASE SENSITIVE                                                                                                                                             
+SCOPE · task-1/campus-wiki · DESCENDANTS · FOLLOW EMBEDS                                                                                                                            
+STATUS · READ-ONLY · PROVIDER-FREE · SCANNED 300 · MATCHED 0 · OCCURRENCES 0                                                                                                        
+                                                                                                                                                                                    
+(no matching Memories)

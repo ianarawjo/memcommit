@@ -1,4 +1,4 @@
-"""Interactive provider-free Find setup and result Viewer."""
+"""Compact interactive provider-free Find setup and result Viewer."""
 
 from __future__ import annotations
 
@@ -9,23 +9,23 @@ from prompt_toolkit.filters import has_focus
 from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.key_binding.bindings.scroll import scroll_page_down, scroll_page_up
-from prompt_toolkit.layout import FormattedTextControl, Layout, Window
-from prompt_toolkit.layout.dimension import Dimension
+from prompt_toolkit.layout import Dimension, FormattedTextControl, HSplit, Layout, Window
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.widgets import TextArea
 
 from memcommit.clipboard import ClipboardError
-from memcommit.context_targeting.tui.range_selection import ContextRangeSelectionState
-from memcommit.context_targeting.tui.reach import render_context_reach
-from memcommit.context_targeting.tui.selection import render_context_target_mode
+from memcommit.context_targeting.tui.compact_scope import (
+    CompactReadableScopeControl,
+)
 from memcommit.interfaces.cli.find import (
     project_literal_find_match,
     render_literal_find_result,
 )
 from memcommit.interfaces.console.terminal import require_interactive_terminal
 from memcommit.interfaces.console.text import safe_terminal_text
+from memcommit.interfaces.literal_find import render_literal_find_reference_row
 from memcommit.interfaces.tui.components.focus import (
     FocusSurface,
     SurfaceFocusController,
@@ -44,6 +44,7 @@ from memcommit.interfaces.tui.components.horizontal_choice import (
 from memcommit.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
+    focused_control_style,
 )
 from memcommit.interfaces.tui.operations.find.model import (
     LiteralFindTuiOutcome,
@@ -62,37 +63,48 @@ def _choice(*values: tuple[str, str], selected: str) -> HorizontalChoiceState:
     )
 
 
-def _render_match_content(result: LiteralFindResult, selected_index: int):
+def _render_match_content(
+    result: LiteralFindResult,
+    selected_index: int,
+    *,
+    surface_focused: bool,
+):
     if not result.matches:
-        return [("", "(no matching Memories)")]
+        return [
+            (
+                "",
+                (
+                    "(scope contains no searchable Memories)"
+                    if result.scanned_item_count == 0
+                    else "(no matching Memories)"
+                ),
+            )
+        ]
     fragments: list[tuple[str, str]] = []
     for index, match in enumerate(result.matches):
-        source = match.source
-        focused = index == selected_index
-        if focused:
+        active = index == selected_index
+        if active and surface_focused:
             fragments.append(("[SetCursorPosition]", ""))
-        heading_style = (
-            "class:detail-card.focused" if focused else "class:detail-card"
-        )
         fragments.append(
             (
-                heading_style,
-                f"[{index + 1}/{len(result.matches)}] "
-                f"{safe_terminal_text(source.context_name)} · "
-                f"{source.kind.upper()} · {source.item_uid[:8]}\n",
+                (
+                    focused_control_style(
+                        focused=surface_focused,
+                        selected=True,
+                    )
+                    if active
+                    else ""
+                ),
+                safe_terminal_text(
+                    render_literal_find_reference_row(
+                        match,
+                        number=index + 1,
+                    )
+                ),
             )
         )
-        fragments.append(
-            (
-                "class:report-neutral",
-                "SPANS · "
-                + ", ".join(f"{span.start}:{span.end}" for span in match.spans)
-                + "\n",
-            )
-        )
-        fragments.append(("class:memory-object", safe_terminal_text(source.content)))
         if index < len(result.matches) - 1:
-            fragments.append(("", "\n\n"))
+            fragments.append(("", "\n"))
     return fragments
 
 
@@ -120,41 +132,26 @@ def run_literal_find_tui(
     if not callable(execute):
         raise TypeError("Find TUI requires an execution callback.")
 
-    initial_targets = (
-        setup.initial_targets if request is None else request.target_names
-    )
+    initial_targets = setup.initial_targets if request is None else request.target_names
     if any(name not in setup.names for name in initial_targets):
         raise ValueError("Find TUI request targets left the frozen catalog.")
-    target_state = ContextRangeSelectionState.create(
-        setup.names,
-        current_name=setup.current_name,
-        initial_target=initial_targets[0],
-        multiple=True,
-        include_descendants=(False if request is None else request.include_descendants),
-    )
-    target_state.selection.replace(initial_targets)
-    embed_choice = _choice(
-        ("EXCLUDE", "EXCLUDE EMBEDS"),
-        ("FOLLOW", "FOLLOW EMBEDS"),
-        selected=("FOLLOW" if request is not None and request.follow_embeds else "EXCLUDE"),
-    )
+
     mode_choice = _choice(
         ("LITERAL", "LITERAL"),
         ("REGEX", "REGEX"),
-        selected=("LITERAL" if request is None else request.mode),
+        selected="LITERAL" if request is None else request.mode,
     )
     case_choice = _choice(
-        ("SENSITIVE", "CASE SENSITIVE"),
+        ("SENSITIVE", "SENSITIVE"),
         ("IGNORE", "IGNORE CASE"),
-        selected=("IGNORE" if request is not None and request.ignore_case else "SENSITIVE"),
+        selected="IGNORE" if request is not None and request.ignore_case else "SENSITIVE",
     )
-    annotations = dict(setup.annotations)
     result: LiteralFindResult | None = None
     result_index = 0
-    scope_row = 0
+    settings_row = 0
     status = "READY · ENTER A PATTERN"
-
     bindings = KeyBindings()
+
     pattern_area = TextArea(
         text="" if request is None else request.pattern,
         multiline=False,
@@ -164,62 +161,60 @@ def run_literal_find_tui(
         name="literal-find-pattern",
     )
 
-    def clear_result() -> None:
+    def clear_result(message: str = "REQUEST CHANGED · PRESS ENTER TO RUN") -> None:
         nonlocal result, result_index, status
         result = None
         result_index = 0
-        status = "READY · REQUEST CHANGED"
+        status = message
 
+    def set_status(message: str) -> None:
+        nonlocal status
+        status = safe_terminal_text(message).upper()
+
+    scope = CompactReadableScopeControl(
+        setup.names,
+        current_name=setup.current_name,
+        initial_targets=initial_targets,
+        include_descendants=False if request is None else request.include_descendants,
+        follow_embeds=request is not None and request.follow_embeds,
+        annotations=dict(setup.annotations),
+        input_name="literal-find-context",
+        on_change=clear_result,
+        on_status=set_status,
+    )
     pattern_area.buffer.on_text_changed += lambda _buffer: clear_result()
 
-    def render_targets():
-        return target_state.render_rows(
-            focused=app.layout.has_focus(target_control),
-            annotations=annotations,
-        )
-
-    target_control = FormattedTextControl(render_targets, focusable=True)
-    target_window = Window(
-        target_control,
-        wrap_lines=False,
-        right_margins=[ScrollbarMargin(display_arrows=True)],
-    )
-
-    def render_scope():
-        focused = app.layout.has_focus(scope_control)
-        fragments = render_context_target_mode(
-            target_state.target_mode,
-            focused=focused and scope_row == 0,
+    def render_settings():
+        focused = app.layout.has_focus(settings_control)
+        fragments = render_horizontal_choice(
+            mode_choice,
+            title="MATCH",
+            focused=focused and settings_row == 0,
         )
         fragments.append(("", "\n"))
         fragments.extend(
-            render_context_reach(
-                target_state.reach,
-                title="LEXICAL RANGE",
-                focused=focused and scope_row == 1,
+            render_horizontal_choice(
+                case_choice,
+                title="CASE",
+                focused=focused and settings_row == 1,
             )
         )
-        for row, title, choice in (
-            (2, "EMBEDDED CONTEXTS", embed_choice),
-            (3, "MATCH", mode_choice),
-            (4, "CASE", case_choice),
-        ):
-            fragments.append(("", "\n"))
-            fragments.extend(
-                render_horizontal_choice(
-                    choice,
-                    title=title,
-                    focused=focused and scope_row == row,
-                )
-            )
         return fragments
 
-    scope_control = FormattedTextControl(render_scope, focusable=True)
+    settings_control = FormattedTextControl(
+        render_settings,
+        focusable=True,
+        show_cursor=False,
+    )
 
     def render_results():
         if result is None:
             return [("", "Enter a pattern to run provider-free Find.")]
-        return _render_match_content(result, result_index)
+        return _render_match_content(
+            result,
+            result_index,
+            surface_focused=app.layout.has_focus(results_control),
+        )
 
     results_control = FormattedTextControl(render_results, focusable=True)
     results_window = Window(
@@ -232,29 +227,25 @@ def run_literal_find_tui(
     def execute_request(_event=None):
         nonlocal result, result_index, status
         pattern = pattern_area.text
-        targets = target_state.effective_names
         if not pattern:
             status = "PATTERN REQUIRED"
             app.layout.focus(pattern_area)
             return "HANDLED"
-        if not targets:
-            status = "SELECT AT LEAST ONE READABLE CONTEXT"
-            app.layout.focus(target_control)
-            return "HANDLED"
         try:
+            targets, include_descendants = scope.request_scope()
             candidate = LiteralFindRequest(
                 pattern=pattern,
                 target_names=targets,
-                include_descendants=False,
-                # effective_names already projects the visible lexical range;
-                # freezing it prevents an unchecked child from being re-added.
-                follow_embeds=embed_choice.selected_uid == "FOLLOW",
+                include_descendants=include_descendants,
+                follow_embeds=scope.follow_embeds,
                 mode=mode_choice.selected_uid,
                 ignore_case=case_choice.selected_uid == "IGNORE",
             )
             result = execute(candidate)
         except (OSError, RuntimeError, TypeError, ValueError) as error:
             status = safe_terminal_text(str(error)).upper()
+            if "CONTEXT" in status:
+                app.layout.focus(scope.input)
             return "HANDLED"
         result_index = 0
         status = (
@@ -264,28 +255,22 @@ def run_literal_find_tui(
         app.layout.focus(results_control)
         return "HANDLED"
 
-    def move_target(_event, delta: int):
-        return "MOVED" if target_state.move_cursor(delta) else "BOUNDARY"
-
-    def toggle_target(_event):
-        if target_state.toggle_cursor():
-            clear_result()
-        return "HANDLED"
-
-    def enter_target(delta: int) -> None:
-        target_state.enter_from_boundary(delta)
-
-    def move_scope(_event, delta: int):
-        nonlocal scope_row
-        candidate = scope_row + delta
-        if not 0 <= candidate <= 4:
+    def move_settings(_event, delta: int):
+        nonlocal settings_row
+        candidate = settings_row + delta
+        if not 0 <= candidate <= 1:
             return "BOUNDARY"
-        scope_row = candidate
+        settings_row = candidate
         return "MOVED"
 
-    def enter_scope(delta: int) -> None:
-        nonlocal scope_row
-        scope_row = 0 if delta > 0 else 4
+    def enter_settings(delta: int) -> None:
+        nonlocal settings_row
+        settings_row = 0 if delta > 0 else 1
+
+    def focus_pattern(event):
+        event.app.layout.focus(pattern_area)
+        pattern_area.buffer.cursor_position = len(pattern_area.text)
+        return "HANDLED"
 
     def move_results(_event, delta: int):
         nonlocal result_index
@@ -297,65 +282,42 @@ def run_literal_find_tui(
         result_index = candidate
         return "MOVED"
 
-    surfaces = SurfaceFocusController(
-        (
+    def visible_surfaces() -> tuple[FocusSurface, ...]:
+        if scope.browser_open:
+            return (scope.browser_surface(uid_prefix="find-scope"),)
+        return (
+            *scope.normal_surfaces(uid_prefix="find-scope"),
+            FocusSurface(
+                "settings",
+                settings_control,
+                move_vertical=move_settings,
+                activate=focus_pattern,
+                on_vertical_enter=enter_settings,
+            ),
             FocusSurface("pattern", pattern_area, activate=execute_request),
-            FocusSurface(
-                "targets",
-                target_control,
-                move_vertical=move_target,
-                activate=toggle_target,
-                on_vertical_enter=enter_target,
-            ),
-            FocusSurface(
-                "scope",
-                scope_control,
-                move_vertical=move_scope,
-                activate=execute_request,
-                on_vertical_enter=enter_scope,
-            ),
             FocusSurface(
                 "results",
                 results_control,
                 move_vertical=move_results,
             ),
         )
-    )
+
+    surfaces = SurfaceFocusController(visible_surfaces)
     bind_surface_navigation(bindings, surfaces)
+    scope.bind_keybindings(bindings)
 
-    @bindings.add("left", filter=has_focus(target_control), eager=True)
-    def _collapse_target(event) -> None:
-        target_state.collapse_cursor()
+    @bindings.add("left", filter=has_focus(settings_control), eager=True)
+    def _settings_left(event) -> None:
+        _move_setting_choice(-1)
         event.app.invalidate()
 
-    @bindings.add("right", filter=has_focus(target_control), eager=True)
-    def _expand_target(event) -> None:
-        target_state.expand_cursor()
+    @bindings.add("right", filter=has_focus(settings_control), eager=True)
+    def _settings_right(event) -> None:
+        _move_setting_choice(1)
         event.app.invalidate()
 
-    @bindings.add("left", filter=has_focus(scope_control), eager=True)
-    def _scope_left(event) -> None:
-        _move_scope_choice(-1)
-        event.app.invalidate()
-
-    @bindings.add("right", filter=has_focus(scope_control), eager=True)
-    def _scope_right(event) -> None:
-        _move_scope_choice(1)
-        event.app.invalidate()
-
-    def _move_scope_choice(delta: int) -> None:
-        changed = False
-        if scope_row == 0:
-            control_changed, selection_changed = target_state.move_target_mode(delta)
-            changed = control_changed or selection_changed
-        elif scope_row == 1:
-            changed = target_state.move_reach(delta)
-        elif scope_row == 2:
-            changed = embed_choice.move(delta)
-        elif scope_row == 3:
-            changed = mode_choice.move(delta)
-        else:
-            changed = case_choice.move(delta)
+    def _move_setting_choice(delta: int) -> None:
+        changed = (mode_choice if settings_row == 0 else case_choice).move(delta)
         if changed:
             clear_result()
 
@@ -375,7 +337,10 @@ def run_literal_find_tui(
         text = (
             render_literal_find_result(result)
             if whole or not result.matches
-            else project_literal_find_match(result.matches[result_index])
+            else project_literal_find_match(
+                result.matches[result_index],
+                number=result_index + 1,
+            )
         )
         try:
             clipboard_writer(text)
@@ -394,18 +359,28 @@ def run_literal_find_tui(
         copy_result(whole=True)
         event.app.invalidate()
 
+    @bindings.add("tab", filter=has_focus(scope.tree_control), eager=True)
+    @bindings.add("s-tab", filter=has_focus(scope.tree_control), eager=True)
+    @bindings.add("backspace", filter=has_focus(scope.tree_control), eager=True)
+    def _leave_browser(event) -> None:
+        scope.close_browser(event)
+        event.app.invalidate()
+
     @bindings.add("escape", eager=True)
+    def _escape(event) -> None:
+        if not scope.close_browser(event):
+            event.app.exit(result=None if result is None else LiteralFindTuiOutcome(result))
+        event.app.invalidate()
+
     @bindings.add("c-c", eager=True)
     def _close(event) -> None:
-        event.app.exit(
-            result=None if result is None else LiteralFindTuiOutcome(result)
-        )
+        event.app.exit(result=None if result is None else LiteralFindTuiOutcome(result))
 
-    @bindings.add("q", filter=~has_focus(pattern_area), eager=True)
+    writable_focus = has_focus(pattern_area) | has_focus(scope.input)
+
+    @bindings.add("q", filter=~writable_focus, eager=True)
     def _close_q(event) -> None:
-        event.app.exit(
-            result=None if result is None else LiteralFindTuiOutcome(result)
-        )
+        event.app.exit(result=None if result is None else LiteralFindTuiOutcome(result))
 
     header = Window(
         FormattedTextControl(
@@ -413,51 +388,63 @@ def run_literal_find_tui(
                 ("class:report-label", "MEM FIND\n"),
                 (
                     "class:report-neutral",
-                    "READ-ONLY · PROVIDER-FREE · LITERAL OR EXPLICIT REGEX",
+                    "READ-ONLY · PROVIDER-FREE · COMPLETE, UNTRUNCATED ROWS",
                 ),
             ]
         ),
-        height=2,
-    )
-    pattern_frame = build_focused_frame(
-        pattern_area,
-        title=" PATTERN · ENTER TO RUN ",
-        is_focused=lambda: app.layout.has_focus(pattern_area),
-        height=3,
-    )
-    target_frame = build_focused_frame(
-        target_window,
-        title=" CONTEXT · ALL READABLE CONTEXTS ",
-        is_focused=lambda: app.layout.has_focus(target_control),
-        height=Dimension(min=7, preferred=10, max=14),
+        height=Dimension.exact(2),
+        dont_extend_height=True,
     )
     scope_frame = build_focused_frame(
-        Window(scope_control, height=5),
+        scope.container,
         title=" SCOPE ",
-        is_focused=lambda: app.layout.has_focus(scope_control),
-        height=7,
+        is_focused=lambda: any(
+            app.layout.has_focus(control)
+            for control in (
+                scope.input,
+                scope.browse_control,
+                scope.range_control,
+                scope.embed_control,
+                scope.tree_control,
+            )
+        ),
+    )
+    find_frame = build_focused_frame(
+        HSplit(
+            [
+                Window(settings_control, height=Dimension.exact(2), wrap_lines=False),
+                Window(FormattedTextControl(""), height=Dimension.exact(1)),
+                pattern_area,
+            ]
+        ),
+        title=" FIND · ENTER PATTERN TO RUN ",
+        is_focused=lambda: app.layout.has_focus(settings_control)
+        or app.layout.has_focus(pattern_area),
+        height=Dimension.exact(6),
     )
     result_frame = build_focused_frame(
         results_window,
         title=" RESULTS ",
         is_focused=lambda: app.layout.has_focus(results_control),
+        height=Dimension(min=4, preferred=10, max=16),
     )
     status_window = Window(
         FormattedTextControl(lambda: [("class:memcommit.notification", status)]),
-        height=1,
+        height=Dimension.exact(1),
+        dont_extend_height=True,
     )
     footer = Window(
         FormattedTextControl(
-            "Tab/Shift-Tab move · Enter run/select · ←/→ change "
-            "· y focused · Y all · Esc/Q close"
+            "Tab/Shift-Tab move · Enter run/check · ←/→ change · "
+            "y focused · Y all · Esc close"
         ),
-        height=1,
+        height=Dimension.exact(1),
+        dont_extend_height=True,
     )
     root = build_tui_frame(
         TuiRegion(header),
-        TuiRegion(pattern_frame, separator_before=True),
-        TuiRegion(target_frame, separator_before=True),
         TuiRegion(scope_frame, separator_before=True),
+        TuiRegion(find_frame, separator_before=True),
         TuiRegion(result_frame, separator_before=True),
         TuiRegion(status_window),
         TuiRegion(footer),
@@ -465,8 +452,9 @@ def run_literal_find_tui(
     app = Application(
         layout=Layout(root, focused_element=pattern_area),
         key_bindings=bindings,
-        full_screen=True,
-        mouse_support=True,
+        full_screen=False,
+        erase_when_done=True,
+        mouse_support=False,
         style=merge_styles([MEMCOMMIT_TUI_STYLE, SEMANTIC_VIEWER_STYLE]),
         input=app_input,
         output=app_output,

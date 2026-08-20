@@ -12,6 +12,9 @@ import re
 from dataclasses import dataclass
 from typing import Literal, Sequence
 
+from memcommit.source_projection.model import SourceReferenceRow
+from memcommit.source_projection.presentation import render_source_reference_row
+
 
 FIND_ANSWER_SENTENCE_LIMIT = 4_000
 FIND_ANSWER_EVIDENCE_CONTENT_LIMIT = 100_000
@@ -203,7 +206,7 @@ class FindAnswerReferenceDocument:
 
     @property
     def text(self) -> str:
-        references = "\n\n".join(
+        references = "\n".join(
             render_numbered_find_answer_reference(reference)
             for reference in self.references
         )
@@ -215,7 +218,7 @@ class FindAnswerReferenceDocument:
 def render_numbered_find_answer_reference(
     reference: NumberedFindAnswerReference,
 ) -> str:
-    """Render one typed citation block without losing its navigation identity."""
+    """Render one typed citation row without losing its navigation identity."""
 
     if not isinstance(reference, NumberedFindAnswerReference):
         raise FindAnswerReferenceError("Invalid numbered answer reference.")
@@ -295,16 +298,13 @@ def _render_reference(
     number: int,
     evidence: FindAnswerEvidence,
 ) -> str:
-    uid_prefix = evidence.uid[:FIND_ANSWER_UID_PREFIX_LENGTH]
-    # Stored content is indented beneath host-owned metadata so a Memory that
-    # happens to contain ``References`` or ``[7]`` cannot imitate the citation
-    # structure surrounding it.
-    content = "\n".join(
-        f"  {line}"
-        for line in evidence.content.splitlines()
-    )
-    return (
-        f"[{number}] {evidence.alias} · {evidence.kind} · {uid_prefix} · "
-        f"Context: {evidence.context_name}\n"
-        f"{content}"
+    return render_source_reference_row(
+        SourceReferenceRow(
+            number=number,
+            content=evidence.content,
+            uid=evidence.uid,
+            context_name=evidence.context_name,
+            alias=evidence.alias,
+        ),
+        uid_prefix_length=FIND_ANSWER_UID_PREFIX_LENGTH,
     )

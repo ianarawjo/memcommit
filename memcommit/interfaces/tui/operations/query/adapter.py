@@ -196,7 +196,7 @@ def render_query_answer_fragments(
     )
     for index, reference in enumerate(document.references, start=1):
         active = active_stop == index
-        fragments.append(("", "\n" if index == 1 else "\n\n"))
+        fragments.append(("", "\n"))
         if active and focused:
             fragments.append(("[SetCursorPosition]", ""))
         fragments.append(

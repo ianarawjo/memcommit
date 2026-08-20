@@ -59,6 +59,7 @@ def collect_literal_find_sources(
                         context_uid=context.uid,
                         kind="memory",
                         item_uid=item.uid,
+                        source_position=len(sources) + 1,
                         content=item.content,
                     )
                 )
@@ -82,6 +83,7 @@ def collect_literal_find_sources(
                         context_uid=context.uid,
                         kind="memory_ref",
                         item_uid=item.uid,
+                        source_position=len(sources) + 1,
                         content=target.content,
                         source_context_name=item.target_context_name,
                         source_context_uid=item.target_context_uid,

@@ -27,6 +27,7 @@ class _Source:
                     context_uid="context-1",
                     kind="memory",
                     item_uid="memory-1",
+                    source_position=1,
                     content="Alpha needle and another needle.",
                 ),
             )
@@ -103,16 +104,21 @@ def test_find_tui_lowercase_y_copies_focused_and_uppercase_y_copies_all() -> Non
 
     assert isinstance(returned, LiteralFindTuiOutcome)
     assert len(copied) == 2
-    assert copied[0].startswith("alpha · MEMORY · memory-1")
+    assert copied[0].startswith(
+        "1 [memory-1] Alpha needle and another needle. [alpha m1]"
+    )
+    assert "SPANS" not in copied[0]
     assert copied[1].startswith("FIND RESULTS")
+    assert "SPANS" not in copied[1]
 
 
 def test_find_tui_projects_descendants_as_exact_checked_execution_set() -> None:
     requests: list[LiteralFindRequest] = []
     with create_pipe_input() as pipe_input:
-        # Pattern -> targets -> scope; move to lexical range, select descendants,
-        # then Enter runs the exact checked rows visible in the tree.
-        pipe_input.send_text("\t\t\x1b[B\x1b[C\rq")
+        # The compact form starts at Pattern even though Scope is above it.
+        # Shift-Tab reaches Range; Right includes descendants; Tab returns to
+        # Pattern, whose Enter runs the exact visible checked set.
+        pipe_input.send_text("\x1b[Z\x1b[Z\x1b[Z\x1b[C\t\t\t\rq")
         returned = run_literal_find_tui(
             LiteralFindRequest(pattern="needle", target_names=("alpha",)),
             setup=_setup(),

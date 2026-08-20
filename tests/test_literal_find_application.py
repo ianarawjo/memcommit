@@ -2,10 +2,14 @@
 
 from __future__ import annotations
 
+import ast
+from pathlib import Path
+
 import pytest
 
 from memcommit.literal_find_application import (
     FrozenLiteralFindSource,
+    LiteralFindError,
     LiteralFindInputError,
     LiteralFindRequest,
     LiteralFindSourceItem,
@@ -29,6 +33,7 @@ def _memory(content: str, *, uid: str = "memory-1") -> LiteralFindSourceItem:
         context_uid="context-1",
         kind="memory",
         item_uid=uid,
+        source_position=1,
         content=content,
     )
 
@@ -73,6 +78,43 @@ def test_ignore_case_and_regex_are_explicit_independent_modes():
     assert [span.text for span in regex.matches[0].spans] == ["Cafe"]
 
 
+def test_frozen_source_positions_cover_the_complete_searchable_frame():
+    request = LiteralFindRequest(pattern="needle", target_names=("scope",))
+    source = _Source(
+        (
+            _memory("haystack", uid="memory-1"),
+            LiteralFindSourceItem(
+                context_name="scope",
+                context_uid="context-1",
+                kind="memory",
+                item_uid="memory-2",
+                source_position=2,
+                content="needle",
+            ),
+        )
+    )
+
+    result = run_literal_find(request, source_port=source)
+
+    assert result.matches[0].source.source_position == 2
+
+
+def test_frozen_source_rejects_result_relative_positions():
+    with pytest.raises(LiteralFindError, match="cover the frozen frame"):
+        FrozenLiteralFindSource(
+            (
+                LiteralFindSourceItem(
+                    context_name="scope",
+                    context_uid="context-1",
+                    kind="memory",
+                    item_uid="memory-2",
+                    source_position=2,
+                    content="needle",
+                ),
+            )
+        )
+
+
 @pytest.mark.parametrize("pattern", ["", "a" * 2001])
 def test_invalid_pattern_fails_before_source_freeze(pattern):
     source = _Source((_memory("anything"),))
@@ -99,3 +141,39 @@ def test_invalid_or_zero_width_regex_fails_before_source_freeze(pattern):
         run_literal_find(request, source_port=source)
 
     assert source.requests == []
+
+
+def test_literal_find_application_does_not_depend_on_reference_presentation():
+    root = Path(__file__).parents[1]
+
+    def imported_modules(path: Path) -> tuple[str, ...]:
+        tree = ast.parse(path.read_text())
+        modules: list[str] = []
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                modules.extend(alias.name for alias in node.names)
+            elif isinstance(node, ast.ImportFrom) and node.module:
+                modules.append(node.module)
+        return tuple(modules)
+
+    application_imports = imported_modules(
+        root / "memcommit/literal_find_application.py"
+    )
+    projection_imports = imported_modules(root / "memcommit/interfaces/literal_find.py")
+
+    assert not any(
+        name.startswith(("memcommit.interfaces", "memcommit.source_projection"))
+        for name in application_imports
+    )
+    assert "memcommit.literal_find_application" in projection_imports
+    assert "memcommit.source_projection.model" in projection_imports
+    assert not any(
+        name.startswith(
+            (
+                "memcommit.commands",
+                "memcommit.interfaces.cli",
+                "memcommit.interfaces.tui",
+            )
+        )
+        for name in projection_imports
+    )

@@ -14,6 +14,7 @@ from memcommit.commands.find_search_workbench import (
     FindSearchResponse,
     FindSearchResult,
     _find_save_as_available,
+    _find_result_selection_label,
     _results_frame_title,
     project_find_results_clipboard,
     render_find_search_results,
@@ -24,6 +25,9 @@ from memcommit.commands.find_search_workbench import (
 class Terminal80x24(DummyOutput):
     def get_size(self) -> Size:
         return Size(rows=24, columns=80)
+
+
+_SHIFT_TAB = "\x1b[Z"
 
 
 def test_blank_workbench_does_not_search_before_the_person_submits():
@@ -136,9 +140,12 @@ def test_workbench_submits_multiple_targets_and_independent_scope_choices():
         )
 
     with create_pipe_input() as pipe_input:
-        # Search -> Targets; expand task-1; select its child; Scope: exclude
-        # embeds; Results -> Search; submit and close after completion.
-        pipe_input.send_text("\t\x1b[C\x1b[B \t\x1b[B\x1b[B\x1b[D\t\tneedle\r\x03")
+        # Search -> Browse; check the child and close the transient tree. Move
+        # through Range to Embeds, exclude embeds, then return and search.
+        pipe_input.send_text(
+            _SHIFT_TAB * 3
+            + "\r\x1b[B\r\t\t\t\x1b[D/needle\r\x03"
+        )
         result = run_find_search_workbench(
             ("task-1", "task-1/source", "other"),
             current="task-1",
@@ -173,9 +180,11 @@ def test_enter_checks_target_and_stays_in_targets_until_explicit_return():
         return FindSearchResponse(request, "CURRENT", ())
 
     with create_pipe_input() as pipe_input:
-        # Enter checks the child. Slash is then the explicit return to Search;
-        # if Enter had already returned, slash would become part of the query.
-        pipe_input.send_text("\t\x1b[C\x1b[B\r/needle\r\x03")
+        # Enter checks the child and leaves Browse open. Tab explicitly closes
+        # the transient tree; Slash then returns from Browse to Search.
+        pipe_input.send_text(
+            _SHIFT_TAB * 3 + "\r\x1b[B\r\t/needle\r\x03"
+        )
         run_find_search_workbench(
             ("task-1", "task-1/source"),
             current="task-1",
@@ -206,9 +215,11 @@ def test_empty_target_selection_is_staged_but_rejected_when_search_runs():
         return FindSearchResponse(request, "CURRENT", ())
 
     with create_pipe_input() as pipe_input:
-        # Enter a query, clear the only checked target, return to Search, and
-        # submit. The target interaction succeeds; request construction blocks.
-        pipe_input.send_text("needle\t\r/\r\x03")
+        # Enter a query, open Browse, clear the only checked target, close the
+        # tree, and submit. Request construction rejects the staged empty set.
+        pipe_input.send_text(
+            "needle" + _SHIFT_TAB * 3 + "\r\r\t/\r\x03"
+        )
         result = run_find_search_workbench(
             ("task-1",),
             current="task-1",
@@ -226,7 +237,7 @@ def test_empty_target_selection_is_staged_but_rejected_when_search_runs():
     assert result.response is None
 
 
-def test_scope_can_collapse_multiple_targets_to_the_most_recent_choice():
+def test_direct_context_input_collapses_multiple_targets_to_one_exact_choice():
     requests: list[FindSearchRequest] = []
 
     def search(request: FindSearchRequest) -> FindSearchResponse:
@@ -234,11 +245,51 @@ def test_scope_can_collapse_multiple_targets_to_the_most_recent_choice():
         return FindSearchResponse(request, "CURRENT", ())
 
     with create_pipe_input() as pipe_input:
-        # Select child, move to Scope, and change MULTIPLE to SINGLE. The most
-        # recent explicit target remains checked before returning to Search.
-        pipe_input.send_text("\t\x1b[C\x1b[B\r\t\x1b[D/needle\r\x03")
+        # Repeated CLI operands seed a multi-target range. Confirming the exact
+        # direct-input value replaces that richer Browse selection with one.
+        pipe_input.send_text(
+            "needle" + _SHIFT_TAB * 4 + "\r" + "\t" * 4 + "\r\x03"
+        )
         run_find_search_workbench(
             ("task-1", "task-1/source"),
+            current="task-1",
+            initial_target="task-1",
+            initial_targets=("task-1", "task-1/source"),
+            initial_include_descendants=False,
+            initial_follow_embeds=True,
+            limit=5,
+            run_search=search,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert requests == [
+        FindSearchRequest(
+            "needle",
+            ("task-1/source",),
+            include_descendants=False,
+        )
+    ]
+
+
+def test_direct_context_input_accepts_slashes_without_triggering_search_shortcuts():
+    requests: list[FindSearchRequest] = []
+
+    def search(request: FindSearchRequest) -> FindSearchResponse:
+        requests.append(request)
+        return FindSearchResponse(request, "CURRENT", ())
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text(
+            "needle"
+            + _SHIFT_TAB * 4
+            + "\x15task-1/queue\r"
+            + "\t" * 4
+            + "\r\x03"
+        )
+        run_find_search_workbench(
+            ("task-1", "task-1/queue"),
             current="task-1",
             initial_target="task-1",
             initial_include_descendants=False,
@@ -253,7 +304,7 @@ def test_scope_can_collapse_multiple_targets_to_the_most_recent_choice():
     assert requests == [
         FindSearchRequest(
             "needle",
-            ("task-1/source",),
+            ("task-1/queue",),
             include_descendants=False,
         )
     ]
@@ -353,8 +404,10 @@ def test_profile_target_freezes_the_whole_readable_catalog_without_leaking_a_loc
         return FindSearchResponse(request, "CURRENT", ())
 
     with create_pipe_input() as pipe_input:
-        # Down enters the virtual Profile row above the Context namespace.
-        pipe_input.send_text("needle\x1b[B\r/\r\x03")
+        # Browse exposes the virtual Profile row above the Context namespace.
+        pipe_input.send_text(
+            "needle" + _SHIFT_TAB * 3 + "\r\x1b[A\r\t/\r\x03"
+        )
         run_find_search_workbench(
             ("task", "task/source", "other"),
             current="task",
@@ -385,9 +438,8 @@ def test_context_range_can_expand_one_checked_root_to_its_visible_subtree():
         return FindSearchResponse(request, "CURRENT", ())
 
     with create_pipe_input() as pipe_input:
-        # Tab to Targets and Scope, then select INCLUDE DESCENDANTS on the
-        # second Scope row before returning to Search.
-        pipe_input.send_text("needle\t\t\x1b[B\x1b[C/\r\x03")
+        # Range is the second surface above Search; Right includes descendants.
+        pipe_input.send_text("needle" + _SHIFT_TAB * 2 + "\x1b[C/\r\x03")
         run_find_search_workbench(
             ("task", "task/source", "task/source/deep", "other"),
             current="task",
@@ -418,9 +470,11 @@ def test_unchecked_descendant_range_is_not_reintroduced_at_search_time():
         return FindSearchResponse(request, "CURRENT", ())
 
     with create_pipe_input() as pipe_input:
-        # The initial root includes descendants. Expand it, move to task/a,
-        # clear that complete subtree, then search the remaining visible set.
-        pipe_input.send_text("needle\t\x1b[C\x1b[B\r/\r\x03")
+        # The initial root includes descendants. Browse starts expanded; moving
+        # to task/a and clearing it removes that complete visible subtree.
+        pipe_input.send_text(
+            "needle" + _SHIFT_TAB * 3 + "\r\x1b[B\r\t/\r\x03"
+        )
         run_find_search_workbench(
             ("task", "task/a", "task/a/deep", "task/b"),
             current="task",
@@ -443,7 +497,7 @@ def test_unchecked_descendant_range_is_not_reintroduced_at_search_time():
     ]
 
 
-def test_selecting_a_collapsed_parent_checks_its_hidden_descendants():
+def test_selecting_a_parent_checks_its_descendants_in_the_expanded_browser():
     requests: list[FindSearchRequest] = []
 
     def search(request: FindSearchRequest) -> FindSearchResponse:
@@ -451,9 +505,17 @@ def test_selecting_a_collapsed_parent_checks_its_hidden_descendants():
         return FindSearchResponse(request, "CURRENT", ())
 
     with create_pipe_input() as pipe_input:
-        # The initial cursor is the second collapsed root. Select the first root
-        # without expanding it, then remove the initial target and search.
-        pipe_input.send_text("needle\t\x1b[A\r\x1b[B\r/\r\x03")
+        # Browse starts fully expanded. Move from the second root to task, check
+        # its subtree, return to other, remove it, then freeze the visible set.
+        pipe_input.send_text(
+            "needle"
+            + _SHIFT_TAB * 3
+            + "\r"
+            + "\x1b[A" * 4
+            + "\r"
+            + "\x1b[B" * 4
+            + "\r\t/\r\x03"
+        )
         run_find_search_workbench(
             ("task", "task/a", "task/a/deep", "task/b", "other"),
             current="other",
@@ -476,7 +538,7 @@ def test_selecting_a_collapsed_parent_checks_its_hidden_descendants():
     ]
 
 
-def test_vertical_arrows_cross_target_boundaries_and_enter_activates_the_row():
+def test_browser_arrows_move_between_contexts_and_enter_activates_the_row():
     requests: list[FindSearchRequest] = []
 
     def search(request: FindSearchRequest) -> FindSearchResponse:
@@ -484,10 +546,13 @@ def test_vertical_arrows_cross_target_boundaries_and_enter_activates_the_row():
         return FindSearchResponse(request, "CURRENT", ())
 
     with create_pipe_input() as pipe_input:
-        # Search Down enters Profile, then the first and second Context roots;
-        # the fourth Down crosses the lower boundary into Scope. Narrow to
-        # SINGLE, return to the last target, activate it, and run the search.
-        pipe_input.send_text("needle\x1b[B\x1b[B\x1b[B\x1b[B\x1b[D\x1b[A\r/\r\x03")
+        # Open Browse, add second, then remove first; the exact checked set is
+        # frozen when the search runs.
+        pipe_input.send_text(
+            "needle"
+            + _SHIFT_TAB * 3
+            + "\r\x1b[B\r\x1b[A\r\t/\r\x03"
+        )
         run_find_search_workbench(
             ("first", "second"),
             current="first",
@@ -510,7 +575,7 @@ def test_vertical_arrows_cross_target_boundaries_and_enter_activates_the_row():
     ]
 
 
-def test_vertical_arrows_cross_scope_boundary_and_results_enter_returns_to_search():
+def test_embeds_choice_is_independent_and_slash_returns_to_search():
     requests: list[FindSearchRequest] = []
 
     def search(request: FindSearchRequest) -> FindSearchResponse:
@@ -518,12 +583,9 @@ def test_vertical_arrows_cross_scope_boundary_and_results_enter_returns_to_searc
         return FindSearchResponse(request, "CURRENT", ())
 
     with create_pipe_input() as pipe_input:
-        # Search -> Profile -> Context -> first Scope row -> range -> embeds.
-        # Exclude embeds, cross into Results, then Enter returns to Search and
-        # Enter runs it.
-        pipe_input.send_text(
-            "needle\x1b[B\x1b[B\x1b[B\x1b[D" "\x1b[B\x1b[B\x1b[D\x1b[B\r\r\x03"
-        )
+        # Embeds is immediately above Search. Left excludes it; Slash returns
+        # to Search without changing the query and Enter runs it.
+        pipe_input.send_text("needle" + _SHIFT_TAB + "\x1b[D/\r\x03")
         run_find_search_workbench(
             ("task",),
             current="task",
@@ -570,6 +632,26 @@ def test_result_renderer_keeps_related_results_separate_from_primary_matches():
     assert "RELATED RESULTS" in rendered
     assert "Broader search: healthcare" in rendered
     assert "[1 memory memory-o] · RELATED Clinic appointment" in rendered
+
+
+def test_search_selection_row_keeps_complete_content_without_ellipsis():
+    content = "A complete first line.\nA complete second line with its suffix."
+    label = _find_result_selection_label(
+        FindSearchResult(
+            context_name="task/source",
+            kind="memory",
+            uid="memory-one",
+            content=content,
+            relevance="related",
+        ),
+        number=3,
+    )
+
+    assert label == (
+        "3 [memory-o] A complete first line. A complete second line with its "
+        "suffix. [task/source · MEMORY · RELATED]"
+    )
+    assert "…" not in label
 
 
 def test_find_clipboard_projects_focused_result_and_complete_ranked_set():

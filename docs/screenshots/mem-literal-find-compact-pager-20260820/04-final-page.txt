@@ -1,0 +1,28 @@
+(base) KimMunyeong@MacBook-Pro-3 memcommit % mem find 'construction|entrance' --context task-1/campus-wiki --recursive --regex --ignore-case                                        
+FIND RESULTS                                                                                                                                                                        
+PATTERN · construction|entrance · REGEX · IGNORE CASE                                                                                                                               
+SCOPE · task-1/campus-wiki · DESCENDANTS · FOLLOW EMBEDS                                                                                                                            
+STATUS · READ-ONLY · PROVIDER-FREE · SCANNED 300 · MATCHED 64 · OCCURRENCES 71 · SHOWING 61–64 OF 64                                                                                
+                                                                                                                                                                                    
+61 [0a78908e] Because of the sloped terrain, first-time visitors sometimes confuse the levels of the Main Building's first-floor main entrance and third-floor rear entrance. [task-
+1/campus-wiki/route-changes m287]                                                                                                                                                   
+62 [5a6b05a2] Check the current notice for the destination entrance before giving directions. [task-1/campus-wiki/route-changes m293]                                               
+63 [2f6bcece] A pedestrian path from the West Gate stop to the Main Building's main entrance runs through Solbit Plaza. [task-1/campus-wiki/route-changes m297]                     
+64 [675f922d] There is a step-free route from the shuttle stop in front of the Student Centre to the west entrance of the Central Library. [task-1/campus-wiki/route-changes m298]  
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+↑/↓ move · ←/→ or PgUp/PgDn page · Home/End boundary · Esc/q close

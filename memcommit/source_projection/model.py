@@ -44,6 +44,65 @@ class SourceState(str, Enum):
 
 
 @dataclass(frozen=True)
+class SourceReferenceRow:
+    """Operation-neutral facts for one compact, numbered Source row.
+
+    The displayed ordinal is presentation identity, while ``alias`` remains an
+    optional operation-owned identity such as Query's temporary ``m5``.  A
+    MemoryRef keeps both its owning identity and the referenced Source identity
+    so compact output never transfers ownership to the content's origin.
+    """
+
+    number: int
+    content: str
+    uid: str
+    context_name: str
+    alias: str | None = None
+    source_uid: str | None = None
+    source_context_name: str | None = None
+
+    def __post_init__(self) -> None:
+        if (
+            not isinstance(self.number, int)
+            or isinstance(self.number, bool)
+            or self.number < 1
+        ):
+            raise ValueError("Source Reference number must be a positive integer.")
+        if not isinstance(self.content, str) or not self.content.strip():
+            raise ValueError("Source Reference content must be nonblank text.")
+        for label, value in (
+            ("UID", self.uid),
+            ("Context", self.context_name),
+        ):
+            if (
+                not isinstance(value, str)
+                or not value.strip()
+                or any(character in value for character in "\r\n")
+            ):
+                raise ValueError(
+                    f"Source Reference {label} must be nonblank one-line text."
+                )
+        if self.alias is not None and (
+            not isinstance(self.alias, str)
+            or not self.alias.strip()
+            or any(character in self.alias for character in "\r\n")
+        ):
+            raise ValueError(
+                "Source Reference alias must be nonblank one-line text when present."
+            )
+        source_identity = (self.source_uid, self.source_context_name)
+        if any(value is not None for value in source_identity) and not all(
+            isinstance(value, str)
+            and value.strip()
+            and not any(character in value for character in "\r\n")
+            for value in source_identity
+        ):
+            raise ValueError(
+                "Source Reference provenance requires a complete one-line Source identity."
+            )
+
+
+@dataclass(frozen=True)
 class SourceDisplayFacts:
     """Typed source facts rendered by every CLI and TUI surface.
 

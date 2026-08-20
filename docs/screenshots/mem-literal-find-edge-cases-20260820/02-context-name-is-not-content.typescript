@@ -1,0 +1,8 @@
+52 180
+$ mem find task --context task-1/campus-wiki --recursive --ignore-case
+FIND RESULTS
+PATTERN · task · LITERAL · IGNORE CASE
+SCOPE · task-1/campus-wiki · DESCENDANTS · FOLLOW EMBEDS
+STATUS · READ-ONLY · PROVIDER-FREE · SCANNED 300 · MATCHED 0 · OCCURRENCES 0
+
+(no matching Memories)

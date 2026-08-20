@@ -259,13 +259,15 @@ def test_query_answer_focus_moves_by_reference_and_uses_shared_blue_surface():
     assert ("[SetCursorPosition]", "") in first
     assert any(
         style == "class:memcommit.choice.active.focused"
-        and text.startswith("[1] m1 · memory")
+        and text.startswith("[1] First supporting Memory. — 11111111, task/a, m1")
         for style, text in first
     )
     assert any(
-        style == "" and text.startswith("[2] m2 · memory")
+        style == ""
+        and text.startswith("[2] Second supporting Memory. — 22222222, task/b, m2")
         for style, text in first
     )
+    assert all(text != "\n\n" for _style, text in first)
 
     assert focus.move(response, 1) is True
     assert focus.move(response, 1) is False
@@ -276,7 +278,7 @@ def test_query_answer_focus_moves_by_reference_and_uses_shared_blue_surface():
     )
     assert any(
         style == "class:memcommit.choice.active"
-        and text.startswith("[2] m2 · memory")
+        and text.startswith("[2] Second supporting Memory. — 22222222, task/b, m2")
         for style, text in second_unfocused
     )
     assert ("[SetCursorPosition]", "") not in second_unfocused
@@ -316,7 +318,7 @@ def test_query_answer_clipboard_projects_body_reference_and_complete_document():
     focus.move(response, 1)
     reference = project_query_answer_clipboard(response, focus=focus)
     assert reference.text.startswith(
-        "[1] m1 · memory · 11111111 · Context: task/a"
+        "[1] First supporting Memory. — 11111111, task/a, m1"
     )
     assert "First supporting Memory." in reference.text
     assert reference.label == "Reference 1"
@@ -384,9 +386,7 @@ def test_query_answer_y_and_uppercase_y_copy_focused_then_complete_document():
     assert result.status == "CLOSED"
     assert not driver.is_alive()
     assert copied[0] == document.body
-    assert copied[1].startswith(
-        "[1] m1 · memory · 11111111 · Context: task"
-    )
+    assert copied[1].startswith("[1] Supporting Memory. — 11111111, task, m1")
     assert copied[2] == document.text
 
 

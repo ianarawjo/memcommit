@@ -181,13 +181,15 @@ state that the wider check was incomplete.
 The provider never writes citation numbers. After validation, the host assigns
 `[1]`, `[2]`, and later numbers by first citation occurrence, appends them to
 the three sentences, and renders a `References` section below. Each used
-reference includes its temporary alias, local type, UID prefix, owning Context,
-and the complete locally projected content. Repeated citations reuse one
-number, uncited candidates are omitted, and an unknown alias fails closed.
-Generated sentences may not contain host-style numeric markers or line breaks.
-Stored content is indented beneath reference metadata so text such as
-`References` or `[77]` inside a Memory cannot imitate host structure. Terminal
-escaping remains at the shell display boundary.
+reference is one logical `[N] content — UID prefix, Context alias` row. Its
+exact Context is never lifted into a shared heading because adjacent citations
+may come from different Sources. Repeated citations reuse one number, uncited
+candidates are omitted, and an unknown alias fails closed. Generated sentences
+may not contain host-style numeric markers or line breaks. Stored content line
+breaks are folded, so text such as `References` or `[77]` cannot create a new
+host row. The typed evidence retains local type and full identity even though
+the compact row omits type. Terminal escaping remains at the shell display
+boundary.
 
 Query-only items contribute only their displayed public name and `query-only`
 label in every scope and reference. Their concealed source is neither loaded

@@ -1,0 +1,262 @@
+52 180
+$ mem find 'construction|entrance' --context task-1/campus-wiki --recursive --regex --ignore-case
+FIND RESULTS
+PATTERN · construction|entrance · REGEX · IGNORE CASE
+SCOPE · task-1/campus-wiki · DESCENDANTS · FOLLOW EMBEDS
+STATUS · READ-ONLY · PROVIDER-FREE · SCANNED 300 · MATCHED 64 · OCCURRENCES 71
+
+[1] task-1/campus-wiki/building-access · MEMORY · 1cb2aa88
+SPANS · 35:43
+The Main Building third-floor rear entrance may be used for general passage during regular opening hours in both the academic term and recess.
+
+[2] task-1/campus-wiki/building-access · MEMORY · a8b11b27
+SPANS · 23:31
+The Main Building main entrance is on the first floor.
+
+[3] task-1/campus-wiki/building-access · MEMORY · 62214c26
+SPANS · 23:31
+The Main Building rear entrance on the opposite side of the sloping site is at the third-floor level.
+
+[4] task-1/campus-wiki/building-access · MEMORY · c6b97453
+SPANS · 60:68
+The end of regular opening hours for the Main Building main entrance during the academic term is 10 p.m.
+
+[5] task-1/campus-wiki/building-access · MEMORY · 614389e2
+SPANS · 60:68
+The end of regular opening hours for the Main Building main entrance during recess is 10 p.m.
+
+[6] task-1/campus-wiki/building-access · MEMORY · e3929a49
+SPANS · 84:92
+Students familiar with the route to the Central Library expect the third-floor rear entrance to be a connection normally available for passage.
+
+[7] task-1/campus-wiki/building-access · MEMORY · cb1e0734
+SPANS · 15:23, 40:48, 84:92
+The staff-only entrance is a controlled entrance separate from the third-floor rear entrance.
+
+[8] task-1/campus-wiki/building-access · MEMORY · 36db4bf8
+SPANS · 37:45
+The accessible route beside the main entrance is an always-available route into the first-floor lobby without using stairs.
+
+[9] task-1/campus-wiki/building-access · MEMORY · 804bfc6b
+SPANS · 97:105
+Tour leaders for external groups tend to want to use the same route through the third-floor rear entrance on their next visit that they used on a previous visit.
+
+[10] task-1/campus-wiki/building-access · MEMORY · cc2a0d18
+SPANS · 62:70
+The start of regular opening hours for the Main Building main entrance during the academic term is 7 a.m.
+
+[11] task-1/campus-wiki/building-access · MEMORY · 3ca6b6b2
+SPANS · 62:70
+The start of regular opening hours for the Main Building main entrance during recess is 8 a.m.
+
+[12] task-1/campus-wiki/building-access · MEMORY · 4189e656
+SPANS · 68:76, 95:103
+First-time visitors often expect the Main Building first-floor main entrance to be the default entrance for general visitors.
+
+[13] task-1/campus-wiki/building-access · MEMORY · aee44d0a
+SPANS · 94:102
+Visitors who have difficulty using stairs expect a step-free access route to be near the main entrance.
+
+[14] task-1/campus-wiki/building-access · MEMORY · d2f32d9e
+SPANS · 65:73
+Valid staff access eligibility is required to use the staff-only entrance.
+
+[15] task-1/campus-wiki/building-access · MEMORY · 2d97d6b9
+SPANS · 26:34
+The Main Building service entrance is used for preregistered deliveries and facilities work.
+
+[16] task-1/campus-wiki/building-access · MEMORY · fef275b1
+SPANS · 69:77
+Visitors accompanied by children prefer the stroller-accessible main entrance and accessible route to be closely connected.
+
+[17] task-1/campus-wiki/building-access · MEMORY · 41d5bf0b
+SPANS · 78:86, 163:171
+Taxi and ride-hailing drivers often expect the Main Building first-floor main entrance to be the default drop-off point unless the passenger specifies a different entrance.
+
+[18] task-1/campus-wiki/building-access · MEMORY · 7da885c1
+SPANS · 102:110
+The access information agent can explain the difference between the normal uses of the front and rear entrances.
+
+[19] task-1/campus-wiki/building-access · MEMORY · efffd1fe
+SPANS · 71:79
+Emergency exits are doors for emergency evacuation and are not regular entrances for general access.
+
+[20] task-1/campus-wiki/building-access · MEMORY · 2b2642c9
+SPANS · 45:53
+The automatic door at the Main Building main entrance operates during regular opening hours.
+
+[21] task-1/campus-wiki/building-access · MEMORY · e55771f0
+SPANS · 52:60
+Service animals may use the Main Building's general entrances together with their users.
+
+[22] task-1/campus-wiki/building-access · MEMORY · 9374def9
+SPANS · 70:78
+Visitors using strollers may use the accessible route beside the main entrance.
+
+[23] task-1/campus-wiki/building-access · MEMORY · 70fe5986
+SPANS · 83:91
+Group-tour visitors often expect their tour leader to wait in the first-floor main entrance lobby.
+
+[24] task-1/campus-wiki/building-access · MEMORY · 411fa9fb
+SPANS · 76:84
+External workers may confuse the separate check-in procedure at the service entrance with the general visitor procedure.
+
+[25] task-1/campus-wiki/building-access · MEMORY · 430563f2
+SPANS · 15:23, 40:48
+The accessible entrance beside the main entrance has an automatic door.
+
+[26] task-1/campus-wiki/building-access · MEMORY · 2052527b
+SPANS · 30:38
+The vestibule inside the main entrance is between the outside and the lobby.
+
+[27] task-1/campus-wiki/building-access · MEMORY · f3f4e4ff
+SPANS · 45:53
+Registered visitors to public events use the entrance designated in the event information.
+
+[28] task-1/campus-wiki/building-access · MEMORY · e3435ec0
+SPANS · 29:37
+The hours when an event-only entrance is available follow the schedule for that event.
+
+[29] task-1/campus-wiki/building-access · MEMORY · a24cd65b
+SPANS · 77:85
+Student groups expect to be able to meet their party immediately in the main entrance lobby during large visits.
+
+[30] task-1/campus-wiki/building-access · MEMORY · 22dcad33
+SPANS · 22:30
+If an item left at an entrance obstructs passage, report it through the facilities reporting agent.
+
+[31] task-1/campus-wiki/event-relocations · MEMORY · a224b6db
+SPANS · 84:92
+The auditorium in the separate building east of the Main Building does not share an entrance with the Main Building's event facilities.
+
+[32] task-1/campus-wiki/event-relocations · MEMORY · 2a0f0a0e
+SPANS · 108:116
+External visitors who have previously been to an event venue in the Main Building tend to look for the same entrance and floor they used on their previous visit when they visit again.
+
+[33] task-1/campus-wiki/event-relocations · MEMORY · 4bc2268d
+SPANS · 44:52
+External event operators expect the loading entrance and route to the stage to be clearly confirmed by the day before the event.
+
+[34] task-1/campus-wiki/event-relocations · MEMORY · 13211336
+SPANS · 54:62
+Event operators bringing equipment expect the loading entrance and route to the stage to be clearly stated in the reservation confirmation.
+
+[35] task-1/campus-wiki/temporary-parking · MEMORY · 67d07765
+SPANS · 15:23
+The pedestrian entrance to the underground parking garage is open to general pedestrians during operating hours.
+
+[36] task-1/campus-wiki/temporary-parking · MEMORY · 6a37c02f
+SPANS · 51:63
+Outdoor Parking Lot C is outside the Main Building construction zone.
+
+[37] task-1/campus-wiki/temporary-parking · MEMORY · 879b70b3
+SPANS · 98:106
+Visitors who need mobility assistance expect a safe pickup and drop-off point near the accessible entrance.
+
+[38] task-1/campus-wiki/temporary-parking · MEMORY · c89147c1
+SPANS · 90:98
+Visitors with luggage expect to be able to load and unload briefly near the Main Building entrance.
+
+[39] task-1/campus-wiki/temporary-parking · MEMORY · 07101ab9
+SPANS · 98:106
+Staff who need mobility assistance give priority to pickup and drop-off points near an accessible entrance.
+
+[40] task-1/campus-wiki/temporary-parking · MEMORY · 96092024
+SPANS · 89:97
+Instructions for registering visitor vehicles are posted on the sign at the parking area entrance.
+
+[41] task-1/campus-wiki/temporary-parking · MEMORY · b7f4ae20
+SPANS · 66:74
+The pickup and drop-off zone in front of the Main Building's main entrance is not a long-term parking space.
+
+[42] task-1/campus-wiki/temporary-parking · MEMORY · 11d0062b
+SPANS · 86:94
+An accessible pickup and drop-off zone is marked in front of the Main Building's main entrance.
+
+[43] task-1/campus-wiki/shop-updates · MEMORY · 124a8981
+SPANS · 84:92
+The Main Building dining area's menu for the day is posted on the menu board at the entrance.
+
+[44] task-1/campus-wiki/facility-updates · MEMORY · 6620e427
+SPANS · 9:17
+The rear entrance is on the third floor of the Main Building.
+
+[45] task-1/campus-wiki/facility-updates · MEMORY · ba35ad87
+SPANS · 36:48
+Do not infer the scope of nonpublic construction.
+
+[46] task-1/campus-wiki/facility-updates · MEMORY · c6894aba
+SPANS · 9:17
+The main entrance lobby is on the first floor of the Main Building.
+
+[47] task-1/campus-wiki/route-changes · MEMORY · ee271f65
+SPANS · 9:17
+The rear entrance on the third floor of the Main Building connects directly to the pedestrian route leading to the Central Library.
+
+[48] task-1/campus-wiki/route-changes · MEMORY · 8a953afd
+SPANS · 27:35
+With your back to the main entrance, Outdoor Parking Lot A is on the left.
+
+[49] task-1/campus-wiki/route-changes · MEMORY · b54ac954
+SPANS · 27:35
+With your back to the main entrance, the West Complex is on the left.
+
+[50] task-1/campus-wiki/route-changes · MEMORY · 5e23ba3e
+SPANS · 27:35
+With your back to the main entrance, the Humanities Building is on the right.
+
+[51] task-1/campus-wiki/route-changes · MEMORY · 494bc428
+SPANS · 75:83, 96:104
+The route from Outdoor Parking Lot C through the Student Centre accessible entrance to the west entrance of the Central Library does not pass through the Main Building.
+
+[52] task-1/campus-wiki/route-changes · MEMORY · fd111f85
+SPANS · 37:45
+The public campus map shows building entrances and pedestrian paths between buildings.
+
+[53] task-1/campus-wiki/route-changes · MEMORY · d1aaec66
+SPANS · 57:65
+The pedestrian path in front of the Main Building's main entrance has a sign indicating the direction of the accessible route.
+
+[54] task-1/campus-wiki/route-changes · MEMORY · b7802de6
+SPANS · 93:101
+A step-free pedestrian path runs from Outdoor Parking Lot C to the Student Centre accessible entrance.
+
+[55] task-1/campus-wiki/route-changes · MEMORY · 065b33d3
+SPANS · 61:69
+An accessible route runs from the Student Centre to the west entrance of the Central Library.
+
+[56] task-1/campus-wiki/route-changes · MEMORY · 79728c8e
+SPANS · 91:99
+There is an above-ground pedestrian path from the West Complex to the Main Building's main entrance.
+
+[57] task-1/campus-wiki/route-changes · MEMORY · 41f16b3e
+SPANS · 77:85
+The pedestrian path from the Humanities Building to the Main Building's main entrance passes in front of the stairs on the right side of the Main Building.
+
+[58] task-1/campus-wiki/route-changes · MEMORY · 2af1d276
+SPANS · 130:138
+Using the elevator from the first-floor lobby of the Main Building provides step-free access to the level of the third-floor rear entrance.
+
+[59] task-1/campus-wiki/route-changes · MEMORY · 03c25e0f
+SPANS · 49:57
+The elevator closest to the Main Building's main entrance is inside the first-floor lobby.
+
+[60] task-1/campus-wiki/route-changes · MEMORY · c3558237
+SPANS · 49:57
+Solbit Plaza is between the Main Building's main entrance and the West Complex.
+
+[61] task-1/campus-wiki/route-changes · MEMORY · 0a78908e
+SPANS · 120:128, 150:158
+Because of the sloped terrain, first-time visitors sometimes confuse the levels of the Main Building's first-floor main entrance and third-floor rear entrance.
+
+[62] task-1/campus-wiki/route-changes · MEMORY · 5a6b05a2
+SPANS · 45:53
+Check the current notice for the destination entrance before giving directions.
+
+[63] task-1/campus-wiki/route-changes · MEMORY · 2f6bcece
+SPANS · 70:78
+A pedestrian path from the West Gate stop to the Main Building's main entrance runs through Solbit Plaza.
+
+[64] task-1/campus-wiki/route-changes · MEMORY · 675f922d
+SPANS · 92:100
+There is a step-free route from the shuttle stop in front of the Student Centre to the west entrance of the Central Library.

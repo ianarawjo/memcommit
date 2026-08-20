@@ -10,6 +10,7 @@ from memcommit.source_projection.model import (
     SourceAccess,
     SourceDisplayFacts,
     SourceForm,
+    SourceReferenceRow,
     SourceReach,
     SourceState,
 )
@@ -25,6 +26,13 @@ class SourceTokenRole(str, Enum):
     FORM = "FORM"
     STATE = "STATE"
     NOTE = "NOTE"
+
+
+class SourceReferenceLayout(str, Enum):
+    """Supported arrangements of the same typed Source Reference facts."""
+
+    CONTENT_FIRST = "CONTENT_FIRST"
+    IDENTITY_FIRST = "IDENTITY_FIRST"
 
 
 @dataclass(frozen=True)
@@ -76,6 +84,65 @@ _STATE_LABELS = {
     SourceState.NOT_INCLUDED: "NOT INCLUDED",
 }
 _STATE_ORDER = {state: index for index, state in enumerate(SourceState)}
+
+
+def render_source_reference_row(
+    row: SourceReferenceRow,
+    *,
+    uid_prefix_length: int = 8,
+    content_character_limit: int | None = None,
+    layout: SourceReferenceLayout = SourceReferenceLayout.CONTENT_FIRST,
+) -> str:
+    """Render one self-contained Source row without operation-specific parsing."""
+
+    if not isinstance(row, SourceReferenceRow):
+        raise TypeError("Source Reference rendering requires a SourceReferenceRow.")
+    if (
+        not isinstance(uid_prefix_length, int)
+        or isinstance(uid_prefix_length, bool)
+        or uid_prefix_length < 1
+    ):
+        raise ValueError("Source Reference UID prefix length must be positive.")
+    if content_character_limit is not None and (
+        not isinstance(content_character_limit, int)
+        or isinstance(content_character_limit, bool)
+        or content_character_limit < 2
+    ):
+        raise ValueError(
+            "Source Reference content limit must be at least two characters."
+        )
+    if not isinstance(layout, SourceReferenceLayout):
+        raise TypeError("Source Reference layout must be a SourceReferenceLayout.")
+    # One logical row keeps stored line breaks from imitating a sibling ordinal
+    # or provenance suffix. Terminal control escaping remains adapter-owned.
+    content = " ".join(row.content.split())
+    if content_character_limit is not None and len(content) > content_character_limit:
+        content = content[: content_character_limit - 1].rstrip() + "…"
+    owner = f"{row.uid[:uid_prefix_length]}, {row.context_name}"
+    if row.alias is not None:
+        owner += f", {row.alias}"
+    provenance = ""
+    if row.source_uid is not None:
+        provenance = (
+            f" → {row.source_uid[:uid_prefix_length]}, "
+            f"{row.source_context_name}"
+        )
+    if layout is SourceReferenceLayout.IDENTITY_FIRST:
+        location = row.context_name
+        if row.alias is not None:
+            location += f" {row.alias}"
+        location_separator = " " if content[-1] in ".,;:!?" else ", "
+        source = ""
+        if row.source_uid is not None:
+            source = (
+                f" → [{row.source_uid[:uid_prefix_length]}]"
+                f" [{row.source_context_name}]"
+            )
+        return (
+            f"{row.number} [{row.uid[:uid_prefix_length]}] "
+            f"{content}{location_separator}[{location}]{source}"
+        )
+    return f"[{row.number}] {content} — {owner}{provenance}"
 
 
 def source_display_tokens(

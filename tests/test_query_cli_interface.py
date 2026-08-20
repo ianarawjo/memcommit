@@ -6,6 +6,11 @@ import ast
 from pathlib import Path
 from types import SimpleNamespace
 
+from memcommit.find_answer_references import (
+    FindAnswerEvidence,
+    FindAnswerSentence,
+    build_find_answer_reference_document,
+)
 from memcommit.interfaces.cli.query import (
     render_granted_query_response,
     render_ordinary_query_response,
@@ -68,6 +73,36 @@ def test_query_plain_renderers_preserve_typed_answer_modes(capsys):
 
     assert capsys.readouterr().out == (
         "SUMMARY\n  (no grounded answer found)\nanswer�text\n"
+    )
+
+
+def test_grounded_query_plain_renderer_uses_self_contained_reference_rows(capsys):
+    request = OrdinaryQueryRequest("What?", ("left", "right"))
+    document = build_find_answer_reference_document(
+        (
+            FindAnswerEvidence(
+                "m1", "left/source", "memory", "11111111-left", "Left fact."
+            ),
+            FindAnswerEvidence(
+                "m2", "right/source", "artifact", "22222222-right", "Right fact."
+            ),
+        ),
+        (
+            FindAnswerSentence("Combined answer.", ("m1", "m2")),
+            FindAnswerSentence("No second claim."),
+            FindAnswerSentence("No third claim."),
+        ),
+    )
+
+    render_ordinary_query_response(
+        OrdinaryQueryResponse(request, document.text, True, document)
+    )
+
+    assert capsys.readouterr().out == (
+        "Combined answer. [1] [2] No second claim. No third claim.\n\n"
+        "References\n"
+        "[1] Left fact. — 11111111, left/source, m1\n"
+        "[2] Right fact. — 22222222, right/source, m2\n"
     )
 
 

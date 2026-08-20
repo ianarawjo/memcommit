@@ -240,6 +240,12 @@ conversation.
   Context, preceding keys or text, visible state, and whether that step mutated
   durable state. A later behavior change must refresh the affected snapshots
   and log entries so the recorded process continues to match the implementation.
+- Whenever a task creates or refreshes terminal captures, render the complete
+  newly created or updated ordered image set directly in the current
+  conversation before reporting completion. Use absolute local Markdown image
+  paths so the images are visible in the conversation. A README, interaction
+  log, file link, or textual description is supplementary evidence and must
+  never substitute for showing the captures to the user in the conversation.
 - When the user asks for screenshots, snapshots, or captures of a terminal UI,
   run the reproduction in a color-capable PTY. Explicitly remove `NO_COLOR`
   from the capture process and set a capable terminal such as

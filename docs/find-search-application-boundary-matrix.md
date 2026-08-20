@@ -47,7 +47,7 @@ imports the application owner directly.
 
 | Boundary | Application contract | Runtime implementation | Interface responsibility | Invariant |
 | --- | --- | --- | --- | --- |
-| Request | `FindSearchRequest` | CLI and workbench adapters construct it | Resolve controls and argv into exact public target names and explicit reach booleans | At least one distinct target, nonblank query, and limit 1–20 |
+| Request | `FindSearchRequest` | CLI and workbench adapters construct it | Resolve argv or the shared compact Scope's exact direct input/transient Browse state into exact public target names and explicit reach booleans | At least one distinct target, nonblank query, and limit 1–20 |
 | Current source | `FrozenFindCurrentSource` | `MemoryStoreFindSearchSourcePort.freeze_current` | None after request construction | Readable roots and candidates are frozen before provider construction |
 | Temporal source | `FrozenFindHistorySource` | `MemoryStoreFindSearchSourcePort.freeze_history` | None after request construction | Granted READ views fail before provider construction because their authority history is not disclosed |
 | Provider | `FindSearchProviderFactory` | Injected configured provider factory | CLI may project typed progress; TUI owns its background indicator | Construction occurs only after source freezing; query-only content is never opened |
@@ -105,7 +105,11 @@ reviewed FindSearchResponse + checked rows + mode + destination
 | Receipt | `FindMaterializationResult` plus automatic `search` checkpoint | Context, checkpoint, and item identities must match the reviewed plan; the checkpoint retains query, mode, and source/output identities |
 | Failure | Store rollback | A stale source, revoked authority, destination collision, or write failure publishes no partial Context or checkpoint |
 
-The TUI owns selection and Save Location presentation only. Once its `TO DO`
+The TUI owns selection and Save Location presentation only. Its setup order is
+`SCOPE → SEARCH → RESULTS`: an exact readable Context is the direct fast path,
+while Profile/multiple selection reveals the complete frozen tree only while
+Browse is open. Search rows use `N [UID] complete content [Context · kind]`
+with physical wrapping but no application-authored elision. Once its `TO DO`
 row returns a materialization intent, the command adapter maps it to the typed
 request and calls the runtime. It does not resolve source Memories, evaluate
 Grant permissions, construct output items, or write a Context itself. The old

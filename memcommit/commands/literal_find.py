@@ -20,7 +20,10 @@ from memcommit.context_targeting.presets import (
     resolve_context_traversal,
     resolve_scope_preset,
 )
-from memcommit.interfaces.cli.find import render_literal_find_result
+from memcommit.interfaces.cli.find import (
+    DEFAULT_LITERAL_FIND_PREVIEW_MATCHES,
+    render_literal_find_result,
+)
 from memcommit.interfaces.console import (
     ConsoleMode,
     ConsoleModeError,
@@ -30,6 +33,7 @@ from memcommit.interfaces.console import (
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.interfaces.tui.operations.find import (
     LiteralFindTuiSetup,
+    run_compact_literal_find_result,
     run_literal_find_tui,
 )
 from memcommit.literal_find_application import (
@@ -48,9 +52,7 @@ def cmd(
         Optional[str],
         typer.Argument(
             show_default=False,
-            help=(
-                "Exact text pattern; omit in a terminal to open interactive Find"
-            ),
+            help=("Exact text pattern; omit in a terminal to open interactive Find"),
         ),
     ] = None,
     context_name: Annotated[
@@ -103,13 +105,20 @@ def cmd(
         bool,
         typer.Option("--copy", help="Copy the complete plain result after execution"),
     ] = False,
+    show_all: Annotated[
+        bool,
+        typer.Option("--all", help="Print every matching row instead of the preview"),
+    ] = False,
     plain: Annotated[
         bool,
-        typer.Option("--plain", help="Print the result instead of opening the TUI"),
+        typer.Option(
+            "--plain",
+            help="Print the result (the default when PATTERN is supplied)",
+        ),
     ] = False,
     tui: Annotated[
         bool,
-        typer.Option("--tui", help="Require the interactive Find workbench"),
+        typer.Option("--tui", help="Require the compact interactive Find form"),
     ] = False,
 ) -> None:
     """Find exact text spans without a provider, cache, session, or mutation."""
@@ -177,8 +186,12 @@ def cmd(
         def execute(next_request: LiteralFindRequest) -> LiteralFindResult:
             return execute_literal_find(next_request, catalog=catalog)
 
+        # A supplied pattern is already an executable request, so never send it
+        # through full-screen setup implicitly. Short/static results stay
+        # inline; a longer AUTO TTY result may use only the compact pager below.
+        # --tui remains the explicit escape hatch for reviewing setup controls.
         if mode is ConsoleMode.TUI or (
-            mode is ConsoleMode.AUTO and terminal.is_interactive()
+            mode is ConsoleMode.AUTO and request is None and terminal.is_interactive()
         ):
             names = tuple(catalog.list_context_names())
             current = snapshot.current_name
@@ -203,7 +216,27 @@ def cmd(
         else:
             assert request is not None
             result = execute(request)
-            typer.echo(render_literal_find_result(result))
+            if (
+                mode is ConsoleMode.AUTO
+                and terminal.is_interactive()
+                and not show_all
+                and len(result.matches) > DEFAULT_LITERAL_FIND_PREVIEW_MATCHES
+            ):
+                # A completed one-shot request stays in the primary terminal
+                # flow. Only its bounded rows become interactive; setup and
+                # result semantics remain outside the shared pager shell.
+                run_compact_literal_find_result(result)
+            else:
+                typer.echo(
+                    render_literal_find_result(
+                        result,
+                        match_limit=(
+                            None
+                            if show_all
+                            else DEFAULT_LITERAL_FIND_PREVIEW_MATCHES
+                        ),
+                    )
+                )
 
         if result is None:
             typer.echo("Find closed.")

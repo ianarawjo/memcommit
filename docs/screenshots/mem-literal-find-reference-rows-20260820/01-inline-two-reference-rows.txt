@@ -1,0 +1,7 @@
+FIND RESULTS                                                                                                                                                                        
+PATTERN · construction · LITERAL · IGNORE CASE                                                                                                                                      
+SCOPE · task-1/campus-wiki · DESCENDANTS · FOLLOW EMBEDS                                                                                                                            
+STATUS · READ-ONLY · PROVIDER-FREE · SCANNED 300 · MATCHED 2 · OCCURRENCES 2                                                                                                        
+                                                                                                                                                                                    
+1 [6a37c02f] Outdoor Parking Lot C is outside the Main Building construction zone. [task-1/campus-wiki/temporary-parking m106]                                                      
+2 [ba35ad87] Do not infer the scope of nonpublic construction. [task-1/campus-wiki/facility-updates m228]

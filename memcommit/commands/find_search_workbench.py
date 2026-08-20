@@ -29,12 +29,8 @@ from prompt_toolkit.widgets import Frame, TextArea
 
 from memcommit.commands.background_turn import BackgroundExecutorTurn
 from memcommit.commands.command_progress import busy_suffix
-from memcommit.context_targeting.tui.range_selection import (
-    ContextRangeSelectionState,
-)
-from memcommit.context_targeting.tui.reach import render_context_reach
-from memcommit.context_targeting.tui.selection import (
-    render_context_target_mode,
+from memcommit.context_targeting.tui.compact_scope import (
+    CompactReadableScopeControl,
 )
 from memcommit.commands.horizontal_choice import (
     HorizontalChoiceOption,
@@ -116,6 +112,26 @@ def _find_result_kind_label(result: "FindSearchResult") -> str:
 
 def _find_result_annotation(result: "FindSearchResult") -> str:
     return "RELATED" if result.relevance == "related" else ""
+
+
+def _find_result_selection_label(
+    result: "FindSearchResult",
+    *,
+    number: int,
+    context_annotation: SourceDisplayValue | None = None,
+) -> str:
+    """Project one complete selectable Search result as one logical row."""
+
+    location = [result.context_name]
+    annotation = source_display_text(context_annotation)
+    if annotation:
+        location.append(annotation)
+    location.append(_find_result_kind_label(result).upper())
+    related = _find_result_annotation(result)
+    if related:
+        location.append(related)
+    content = " ".join(result.content.split())
+    return f"{number} [{result.uid[:8]}] {content} [{' · '.join(location)}]"
 
 
 def _has_granted_materialization_source(
@@ -270,24 +286,6 @@ def project_find_results_clipboard(
     )
 
 
-def _scope_summary(
-    *,
-    explicit_count: int,
-    effective_count: int,
-    profile_selected: bool,
-    include_descendants: bool,
-    follow_embeds: bool,
-) -> str:
-    targets = (
-        f"PROFILE · {effective_count} CONTEXTS"
-        if profile_selected
-        else f"ROOTS {explicit_count} · CONTEXTS {effective_count}"
-    )
-    reach = "INCLUDE DESCENDANTS" if include_descendants else "THIS CONTEXT ONLY"
-    embeds = "FOLLOW EMBEDS" if follow_embeds else "EXCLUDE EMBEDS"
-    return f"{targets} · {reach} · {embeds}"
-
-
 def _results_frame_title(turn: BackgroundExecutorTurn[FindSearchResponse]) -> str:
     if turn.busy:
         return f"RESULTS · SEARCHING {busy_suffix(turn.frame)}"
@@ -371,26 +369,6 @@ def run_find_search_workbench(
     if any(not isinstance(name, str) or not name for name in local_catalog):
         raise ValueError("Find local Context names must be nonblank text.")
 
-    target_state = ContextRangeSelectionState.create(
-        catalog,
-        current_name=current,
-        initial_target=initial_target,
-        # Multiple remains the initial mode so the existing fast path—Tab to
-        # Targets and check peers—does not acquire a setup detour.
-        multiple=True,
-        include_descendants=initial_include_descendants,
-    )
-    # Repeated CLI --context values seed the same checked-root state that a
-    # person can construct in the TUI.  Reach expansion remains a separate
-    # control, so these are roots rather than an already-expanded hidden set.
-    target_state.selection.replace(staged_initial_targets)
-    embed_choice = HorizontalChoiceState(
-        (
-            HorizontalChoiceOption("EXCLUDE", "EXCLUDE"),
-            HorizontalChoiceOption("FOLLOW", "FOLLOW"),
-        ),
-        selected_uid="FOLLOW" if initial_follow_embeds else "EXCLUDE",
-    )
     materialize_choice = HorizontalChoiceState(
         (
             HorizontalChoiceOption(
@@ -406,13 +384,35 @@ def run_find_search_workbench(
         ),
         selected_uid="COPY",
     )
-    scope_row = {"value": 0}
     response: FindSearchResponse | None = None
     result_selection: FlatMultiSelectionState | None = None
     status = {"value": "READY · ENTER A QUERY"}
     copy_receipt: PlainTextClipboardReceipt | None = None
     background_turn: BackgroundExecutorTurn[FindSearchResponse] = (
         BackgroundExecutorTurn()
+    )
+
+    def scope_changed(message: str) -> None:
+        nonlocal copy_receipt, response, result_selection
+        response = None
+        result_selection = None
+        copy_receipt = None
+        status["value"] = message
+
+    def scope_status(message: str) -> None:
+        status["value"] = safe_terminal_text(message).upper()
+
+    scope = CompactReadableScopeControl(
+        catalog,
+        current_name=current,
+        initial_targets=staged_initial_targets,
+        include_descendants=initial_include_descendants,
+        follow_embeds=initial_follow_embeds,
+        annotations=labels,
+        input_name="find-search-context",
+        on_change=scope_changed,
+        on_status=scope_status,
+        locked=lambda: background_turn.busy,
     )
 
     bindings = KeyBindings()
@@ -448,59 +448,6 @@ def run_find_search_workbench(
 
     save_location.input.buffer.on_text_changed += save_location_changed
 
-    def request_target_scope() -> tuple[tuple[str, ...], bool]:
-        # PROFILE and subtree selection are process-local presentation concepts.
-        # Freeze the exact visible checked set so a separately unchecked branch
-        # cannot be silently reintroduced by loader-side descendant expansion.
-        return target_state.effective_names, False
-
-    def render_targets() -> list[tuple[str, str]]:
-        return target_state.render_rows(
-            focused=app.layout.has_focus(target_control),
-            annotations=labels,
-        )
-
-    target_control = FormattedTextControl(
-        render_targets,
-        focusable=True,
-        show_cursor=False,
-    )
-    target_window = Window(
-        target_control,
-        wrap_lines=False,
-        right_margins=[ScrollbarMargin(display_arrows=True)],
-    )
-
-    def render_scope() -> list[tuple[str, str]]:
-        focused = app.layout.has_focus(scope_control)
-        fragments = render_context_target_mode(
-            target_state.target_mode,
-            focused=focused and scope_row["value"] == 0,
-        )
-        fragments.append(("", "\n"))
-        fragments.extend(
-            render_context_reach(
-                target_state.reach,
-                title="CONTEXT RANGE",
-                focused=focused and scope_row["value"] == 1,
-            )
-        )
-        fragments.append(("", "\n"))
-        fragments.extend(
-            render_horizontal_choice(
-                embed_choice,
-                title="EMBEDDED CONTEXTS",
-                focused=focused and scope_row["value"] == 2,
-            )
-        )
-        return fragments
-
-    scope_control = FormattedTextControl(
-        render_scope,
-        focusable=True,
-        show_cursor=False,
-    )
-
     def render_results() -> list[tuple[str, str]]:
         if response is None or result_selection is None:
             return [("", "Enter a query to search the selected scope.")]
@@ -526,6 +473,7 @@ def run_find_search_workbench(
                 result_selection,
                 focused=app.layout.has_focus(results_control),
                 content_width=width,
+                numbered=False,
             )
         )
         return fragments
@@ -577,35 +525,22 @@ def run_find_search_workbench(
     )
 
     def render_header() -> str:
-        summary = _scope_summary(
-            explicit_count=len(target_state.explicit_context_names),
-            effective_count=len(target_state.effective_names),
-            profile_selected=target_state.profile_selected,
-            include_descendants=target_state.reach.include_descendants,
-            follow_embeds=embed_choice.selected_uid == "FOLLOW",
-        )
         mode = response.mode if response is not None else "AUTO FROM QUERY"
-        return f" MEM SEARCH · INTERACTIVE · {mode}\n {summary}"
+        return f" MEM SEARCH · INTERACTIVE · {mode}\n {scope.summary()}"
 
     header = Window(
         FormattedTextControl(render_header),
         height=Dimension.exact(2),
         dont_extend_height=True,
     )
+    scope_frame = Frame(
+        scope.container,
+        title="SCOPE",
+    )
     search_frame = Frame(
         search_area,
         title="SEARCH · ENTER TO RUN",
         height=Dimension.exact(3),
-    )
-    target_frame = Frame(
-        target_window,
-        title="TARGETS · PROFILE/CONTEXT · * CURRENT · ENTER/SPACE TO SELECT",
-        height=Dimension.exact(5),
-    )
-    scope_frame = Frame(
-        Window(scope_control, height=Dimension.exact(3), wrap_lines=False),
-        title="SCOPE",
-        height=Dimension.exact(5),
     )
     results_frame = Frame(
         results_window,
@@ -672,9 +607,8 @@ def run_find_search_workbench(
     )
     root = build_tui_frame(
         TuiRegion(header),
-        TuiRegion(search_frame),
-        TuiRegion(target_frame),
         TuiRegion(scope_frame),
+        TuiRegion(search_frame),
         TuiRegion(results_frame),
         TuiRegion(save_as_panel),
         TuiRegion(footer),
@@ -694,12 +628,17 @@ def run_find_search_workbench(
         is_focused=lambda: app.layout.has_focus(search_area),
     )
     bind_focused_frame_style(
-        target_frame,
-        is_focused=lambda: app.layout.has_focus(target_control),
-    )
-    bind_focused_frame_style(
         scope_frame,
-        is_focused=lambda: app.layout.has_focus(scope_control),
+        is_focused=lambda: any(
+            app.layout.has_focus(control)
+            for control in (
+                scope.input,
+                scope.browse_control,
+                scope.range_control,
+                scope.embed_control,
+                scope.tree_control,
+            )
+        ),
     )
     bind_focused_frame_style(
         results_frame,
@@ -734,88 +673,6 @@ def run_find_search_workbench(
 
     def _enter_search(_delta: int) -> None:
         search_area.buffer.cursor_position = len(search_area.text)
-
-    def _move_target(_event, delta: int) -> SurfaceMoveResult:
-        return "MOVED" if target_state.move_cursor(delta) else "BOUNDARY"
-
-    def _enter_target(delta: int) -> None:
-        target_state.enter_from_boundary(delta)
-
-    @bindings.add("right", filter=has_focus(target_control), eager=True)
-    def _target_right(event) -> None:
-        target_state.expand_cursor()
-        event.app.invalidate()
-
-    @bindings.add("left", filter=has_focus(target_control), eager=True)
-    def _target_left(event) -> None:
-        target_state.collapse_cursor()
-        event.app.invalidate()
-
-    @bindings.add("a", filter=has_focus(target_control), eager=True)
-    @bindings.add("A", filter=has_focus(target_control), eager=True)
-    def _target_expand_all(event) -> None:
-        target_state.toggle_expand_all()
-        event.app.invalidate()
-
-    @bindings.add(" ", filter=has_focus(target_control), eager=True)
-    def _toggle_target(event) -> SurfaceActionResult:
-        if background_turn.busy:
-            status["value"] = "Wait for the current search before changing scope."
-        else:
-            try:
-                changed = target_state.toggle_cursor()
-            except ValueError as error:
-                status["value"] = str(error)
-            else:
-                if changed:
-                    clear_results("TARGETS CHANGED · PRESS ENTER TO SEARCH")
-                else:
-                    status["value"] = "TARGET ALREADY SELECTED"
-        event.app.invalidate()
-        return "HANDLED"
-
-    def _move_scope_vertical(_event, delta: int) -> SurfaceMoveResult:
-        previous = scope_row["value"]
-        scope_row["value"] = max(0, min(previous + delta, 2))
-        return "MOVED" if scope_row["value"] != previous else "BOUNDARY"
-
-    def _enter_scope(delta: int) -> None:
-        scope_row["value"] = 0 if delta > 0 else 2
-
-    def move_scope(delta: int) -> None:
-        if background_turn.busy:
-            status["value"] = "Wait for the current search before changing scope."
-            return
-        row = scope_row["value"]
-        if row == 0:
-            control_changed, targets_changed = target_state.move_target_mode(delta)
-            if not control_changed:
-                return
-            if targets_changed:
-                clear_results("TARGETS CHANGED · PRESS ENTER TO SEARCH")
-            else:
-                status["value"] = (
-                    "MULTIPLE TARGET SELECTION"
-                    if target_state.target_mode.multiple
-                    else "SINGLE TARGET SELECTION"
-                )
-            return
-        if row == 1:
-            if target_state.move_reach(delta):
-                clear_results("CONTEXT RANGE CHANGED · PRESS ENTER TO SEARCH")
-            return
-        if embed_choice.move(delta):
-            clear_results("SCOPE CHANGED · PRESS ENTER TO SEARCH")
-
-    @bindings.add("right", filter=has_focus(scope_control), eager=True)
-    def _scope_right(event) -> None:
-        move_scope(1)
-        event.app.invalidate()
-
-    @bindings.add("left", filter=has_focus(scope_control), eager=True)
-    def _scope_left(event) -> None:
-        move_scope(-1)
-        event.app.invalidate()
 
     def _move_results(_event, delta: int) -> SurfaceMoveResult:
         nonlocal copy_receipt
@@ -863,17 +720,25 @@ def run_find_search_workbench(
         if save_location.tree_control is not None
         else Condition(lambda: False)
     )
+    scope_focus = (
+        has_focus(scope.input)
+        | has_focus(scope.browse_control)
+        | has_focus(scope.range_control)
+        | has_focus(scope.embed_control)
+        | has_focus(scope.tree_control)
+    )
     search_return_focus = (
-        has_focus(scope_control)
+        scope_focus
         | has_focus(results_control)
         | has_focus(materialize_control)
         | has_focus(todo_control)
         | tree_focus
     )
-    non_search_focus = has_focus(target_control) | search_return_focus
+    non_search_focus = search_return_focus
+    read_non_search_focus = non_search_focus & ~has_focus(scope.input)
     bind_session_help(
         bindings,
-        filter=non_search_focus,
+        filter=read_non_search_focus,
         app_input=app_input,
         app_output=app_output,
         study_surface="find-search",
@@ -884,7 +749,7 @@ def run_find_search_workbench(
         search_area.buffer.cursor_position = len(search_area.text)
         return "HANDLED"
 
-    @bindings.add("/", filter=non_search_focus, eager=True)
+    @bindings.add("/", filter=read_non_search_focus, eager=True)
     def _focus_search_shortcut(event) -> None:
         _focus_search(event)
         event.app.invalidate()
@@ -895,12 +760,12 @@ def run_find_search_workbench(
             status["value"] = "A Search is already running."
             return "HANDLED"
         try:
-            request_targets, request_descendants = request_target_scope()
+            request_targets, request_descendants = scope.request_scope()
             request = FindSearchRequest(
                 query=search_area.text.strip(),
                 target_names=request_targets,
                 include_descendants=request_descendants,
-                follow_embeds=embed_choice.selected_uid == "FOLLOW",
+                follow_embeds=scope.follow_embeds,
                 limit=limit,
             )
         except ValueError as error:
@@ -924,25 +789,11 @@ def run_find_search_workbench(
                     tuple(
                         SelectionOption(
                             str(index),
-                            (
-                                f"{result.context_name}"
-                                + (
-                                    " · "
-                                    + source_display_text(
-                                        labels.get(result.context_name)
-                                    )
-                                    if labels.get(result.context_name)
-                                    else ""
-                                )
-                                + f" · [{_find_result_kind_label(result)} "
-                                f"{result.uid[:8]}]"
-                                + (
-                                    f" · {_find_result_annotation(result)}"
-                                    if _find_result_annotation(result)
-                                    else ""
-                                )
+                            _find_result_selection_label(
+                                result,
+                                number=index + 1,
+                                context_annotation=labels.get(result.context_name),
                             ),
-                            result.content,
                         )
                         for index, result in enumerate(response.results)
                     ),
@@ -971,8 +822,6 @@ def run_find_search_workbench(
 
         def fail(error: Exception) -> None:
             detail = " ".join(safe_terminal_text(str(error)).split())
-            if len(detail) > 240:
-                detail = detail[:239].rstrip() + "…"
             status["value"] = f"SEARCH FAILED · {type(error).__name__}: {detail}"
 
         def return_to_surface() -> None:
@@ -1188,27 +1037,16 @@ def run_find_search_workbench(
         event.app.invalidate()
 
     def visible_surfaces() -> tuple[FocusSurface, ...]:
+        if scope.browser_open:
+            return (scope.browser_surface(uid_prefix="search-scope"),)
         surfaces = [
+            *scope.normal_surfaces(uid_prefix="search-scope"),
             FocusSurface(
                 "search",
                 search_area,
                 move_vertical=_move_search,
                 activate=_search,
                 on_vertical_enter=_enter_search,
-            ),
-            FocusSurface(
-                "targets",
-                target_control,
-                move_vertical=_move_target,
-                activate=_toggle_target,
-                on_vertical_enter=_enter_target,
-            ),
-            FocusSurface(
-                "scope",
-                scope_control,
-                move_vertical=_move_scope_vertical,
-                activate=_focus_search,
-                on_vertical_enter=_enter_scope,
             ),
             FocusSurface(
                 "results",
@@ -1245,6 +1083,14 @@ def run_find_search_workbench(
 
     surface_focus = SurfaceFocusController(visible_surfaces)
     bind_surface_navigation(bindings, surface_focus)
+    scope.bind_keybindings(bindings)
+
+    @bindings.add("tab", filter=has_focus(scope.tree_control), eager=True)
+    @bindings.add("s-tab", filter=has_focus(scope.tree_control), eager=True)
+    @bindings.add("backspace", filter=has_focus(scope.tree_control), eager=True)
+    def _leave_scope_browser(event) -> None:
+        scope.close_browser(event)
+        event.app.invalidate()
 
     def close(event) -> None:
         if background_turn.request_close():
@@ -1253,7 +1099,13 @@ def run_find_search_workbench(
             return
         event.app.exit(result=FindSearchWorkbenchResult("CLOSED", response))
 
-    @bindings.add("backspace", filter=non_search_focus & ~tree_focus, eager=True)
+    @bindings.add(
+        "backspace",
+        filter=(
+            read_non_search_focus & ~tree_focus & ~has_focus(scope.tree_control)
+        ),
+        eager=True,
+    )
     def _back_to_search(event) -> None:
         event.app.layout.focus(search_area)
         search_area.buffer.cursor_position = len(search_area.text)
@@ -1273,9 +1125,16 @@ def run_find_search_workbench(
 
     @bindings.add("escape", eager=True)
     def _escape(event) -> None:
-        dispatch_tui_back(event, _return_to_search, close=close)
+        if not scope.close_browser(event):
+            dispatch_tui_back(event, _return_to_search, close=close)
+        event.app.invalidate()
 
-    @bind_case_insensitive_key(bindings, "q", filter=non_search_focus, eager=True)
+    @bind_case_insensitive_key(
+        bindings,
+        "q",
+        filter=read_non_search_focus,
+        eager=True,
+    )
     def _close_from_read_surface(event) -> None:
         close(event)
 

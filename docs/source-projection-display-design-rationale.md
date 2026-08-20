@@ -40,6 +40,57 @@ describe the target Memory's incidental state and could be mistaken for an
 answer citation or another semantic link. `query view` names an opaque query
 route; it does not imply that ordinary Memory content was opened.
 
+## Compact Reference rows
+
+Query answers and provider-free Find results share one typed Source projection
+without sharing their application models. The common renderer supports two
+explicit arrangements over the same facts:
+
+```text
+Query: [N] content — UID prefix, Context[, alias][ → Source UID prefix, Source Context]
+Find:  N [UID prefix] content, [Context mX][ → [Source UID prefix] [Source Context]]
+```
+
+When complete content already ends in sentence punctuation, Find does not add
+a second comma before the location bracket; the stored punctuation remains
+unchanged.
+
+`SourceReferenceRow` owns only display facts: a positive ordinal, content,
+owner UID and Context, an optional operation-supplied alias, and optional
+complete MemoryRef Source provenance. `render_source_reference_row` folds
+stored whitespace into one logical row and owns both arrangements and their
+punctuation. It does not assign citation numbers, invent aliases, search, rank,
+limit a result set, or interpret exact match spans.
+
+This separation is deliberate. Query assigns `[N]` by first citation use while
+its `mN`/`cN`/`xN` alias identifies a position in a frozen evidence frame, so
+`[1] ... , m5` is valid. Literal Find assigns the leading ordinal by stable
+match order and `mX` by position in the complete frozen searchable corpus.
+Those numbers therefore need not agree: the first match may correctly end in
+`m5` when four earlier searchable Memories did not match. A Find MemoryRef
+displays the pointer owner's UID and Context first, followed by `→` and the
+referenced Source identity; compact output must not make the content's Source
+look like the owning item.
+
+The base row is logical rather than width-truncating and never silently drops
+content. A caller may request a bounded content preview; the renderer then
+marks the omission with `…` before the complete provenance suffix.
+Provider-free Find deliberately does not request that option: plain output,
+compact paging, the explicit workbench, clipboard output, and machine
+projections all retain complete folded content. A terminal may wrap a long
+logical Source row onto multiple physical lines. Find's ten-row page size
+remains a separate operation-owned policy over a complete typed result.
+The operation-neutral `paged_result` shell owns only focused index, discrete
+page range, `SHOWING a–b OF total`, navigation, and primary-screen close
+mechanics; it never owns Source identity or matching. Query's used-citation
+set, Find's complete span set, `--all`, and clipboard scope remain outside both
+shared presentation components.
+
+Reusing Query's `FindAnswerEvidence` directly in literal Find was rejected.
+That would impose Query's alias grammar and evidence kinds on a provider-free
+exact-text operation, and would make a presentation refactor capable of
+changing either operation's semantic result contract.
+
 ## Presentation invariants
 
 - All plain CLI and prompt-toolkit labels derive from the same typed facts.
@@ -49,11 +100,15 @@ route; it does not imply that ordinary Memory content was opened.
   and state remain annotations rather than being inserted into that identity
   label. Detail headings and operation frame titles may use title or heading
   case without changing the compact object-name policy.
-- Context and report text remain neutral.  Memory bodies remain lavender,
+- Context and report text remain neutral. Standalone Memory bodies remain
+  lavender; compact Source Reference rows remain neutral like Query citations,
   compact reference-form tokens remain purple, and availability states use the
-  warning color.  A selected or focused control's common blue treatment
+  warning color. A selected or focused control's common blue treatment
   overrides token colors so one row never appears to have two keyboard owners.
 - Terminal escaping occurs after semantic tokenization.
+- Compact Reference row content is folded before adapter-owned terminal
+  escaping; untrusted content cannot create a sibling ordinal or provenance
+  line, while terminal controls remain the displaying adapter's boundary.
 - Narrow Memory previews wrap their content after the complete source label;
   provenance labels are not shortened independently into ambiguous text.
 - Raw string annotations remain a compatibility input for callers not yet

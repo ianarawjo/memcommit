@@ -44,6 +44,38 @@ Find creates no Context, checkpoint, semantic cache, visible session, or
 provider request. Its typed result may be handed to another reviewed operation,
 but presentation alone never mutates or materializes a result.
 
+A supplied pattern is a complete one-shot request. Up to ten matches therefore
+print directly and return to the shell. When an automatic TTY route has more
+than ten matches, the same completed result opens a primary-screen compact
+pager rather than the setup workbench or alternate screen. It shows one stable
+ten-row page, reports an exact range such as `SHOWING 1–10 OF 64`, moves the
+focused row with Up/Down, moves discrete pages with Left/Right or
+PageUp/PageDown, reaches the result boundaries with Home/End, and leaves the
+last inspected page in terminal history when Escape or `q` closes it.
+
+The application result remains complete. `--plain` preserves a bounded static
+projection for scripts or explicit noninteractive output, and pipes are always
+plain; `--all` prints every row. Every human Source Reference row folds stored
+whitespace but retains the complete Memory content and provenance; terminal
+width may wrap one logical row onto multiple physical lines, but Find never
+inserts an ellipsis or discards a content suffix. `--copy` and TUI whole-result
+copy likewise retain every row and its complete content, so display paging
+never changes execution or machine-facing span data. Operand-free `mem find`
+and explicit `--tui` use a primary-screen compact `SCOPE → FIND → RESULTS`
+form rather than an alternate full-screen setup. The exact Context field is
+always visible; the complete Profile/multiple tree is rendered only while
+Browse is open. See `find-search-compact-scope-design-rationale.md`.
+
+Find and ordinary Query share the neutral `SourceReferenceRow` facts and its
+two explicit arrangements, not one evidence model. Query retains its
+content-first citation row. Find uses `N [UID] content, [Context mX]`: `N` is
+stable match order while `mX` is the Memory-shaped item's position in the
+complete frozen searchable corpus, so nonmatching earlier items are not erased
+from the visible location identity. Find also owns complete spans, MemoryRef
+provenance, and the ten-row page policy. Query owns first-use citation numbering
+and its own temporary evidence aliases. Raw `start:end` spans remain in Find's
+typed result and Replace planning but are omitted from the default human row.
+
 ## Deterministic Replace
 
 Replace is a plan/review/Apply operation over directly owned ordinary Memories.

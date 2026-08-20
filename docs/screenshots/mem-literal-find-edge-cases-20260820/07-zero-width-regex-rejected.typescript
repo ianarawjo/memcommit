@@ -1,0 +1,3 @@
+52 180
+$ mem find '^|' --regex
+[31mFind error: Find regular expressions must consume at least one character.[0m

@@ -922,8 +922,8 @@ def test_find_help_explains_the_bare_route_and_default_scope():
     assert result.exit_code == 0, result.output
     assert "[QUERY]" in result.output
     assert "interactive search" in result.output
-    assert "Profile-wide or Context" in result.output
-    assert "targets, Context range" in result.output
+    assert "compact exact-Context Scope" in result.output
+    assert "Browse-only Profile/multiple selection" in result.output
     assert "lexical descendants" in result.output
     assert "embedded Contexts" in result.output
     assert "--descendants" in result.output
@@ -1252,8 +1252,11 @@ def test_general_parking_question_gets_a_grounded_answer_without_a_command(
     assert "References" in answer_text
     assert visible.content in answer_text
     assert supplemental.content in answer_text
-    assert f"[1] m1 · memory · {visible.uid[:8]}" in answer_text
-    assert f"[2] c1 · memory · {supplemental.uid[:8]}" in answer_text
+    assert f"[1] {visible.content} — {visible.uid[:8]}, {ctx.name}, m1" in answer_text
+    assert (
+        f"[2] {supplemental.content} — {supplemental.uid[:8]}, {ctx.name}, c1"
+        in answer_text
+    )
     assert provider.operations == ["search turn", "search answer"]
 
 
@@ -1344,9 +1347,9 @@ def test_explicit_other_context_answer_collects_and_references_outside_memory(
     answer_text = updated.messages[-1].text
     assert "closure. [1]" in answer_text
     assert "August 28. [2]" in answer_text
-    assert f"[1] m1 · memory · {visible.uid[:8]} · Context: task-1" in answer_text
+    assert f"[1] {visible.content} — {visible.uid[:8]}, task-1, m1" in answer_text
     assert (
-        f"[2] x1 · memory · {outside.uid[:8]} · " "Context: facilities-calendar"
+        f"[2] {outside.content} — {outside.uid[:8]}, facilities-calendar, x1"
     ) in answer_text
     assert outside.content in answer_text
     assert provider.operations == ["search turn", "search answer"]

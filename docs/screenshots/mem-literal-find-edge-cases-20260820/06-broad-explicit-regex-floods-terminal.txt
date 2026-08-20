@@ -1,0 +1,51 @@
+[52] task-1/campus-wiki/route-changes · MEMORY · fd111f85                                                                                                                           
+SPANS · 37:45                                                                                                                                                                       
+The public campus map shows building entrances and pedestrian paths between buildings.                                                                                              
+                                                                                                                                                                                    
+[53] task-1/campus-wiki/route-changes · MEMORY · d1aaec66                                                                                                                           
+SPANS · 57:65                                                                                                                                                                       
+The pedestrian path in front of the Main Building's main entrance has a sign indicating the direction of the accessible route.                                                      
+                                                                                                                                                                                    
+[54] task-1/campus-wiki/route-changes · MEMORY · b7802de6                                                                                                                           
+SPANS · 93:101                                                                                                                                                                      
+A step-free pedestrian path runs from Outdoor Parking Lot C to the Student Centre accessible entrance.                                                                              
+                                                                                                                                                                                    
+[55] task-1/campus-wiki/route-changes · MEMORY · 065b33d3                                                                                                                           
+SPANS · 61:69                                                                                                                                                                       
+An accessible route runs from the Student Centre to the west entrance of the Central Library.                                                                                       
+                                                                                                                                                                                    
+[56] task-1/campus-wiki/route-changes · MEMORY · 79728c8e                                                                                                                           
+SPANS · 91:99                                                                                                                                                                       
+There is an above-ground pedestrian path from the West Complex to the Main Building's main entrance.                                                                                
+                                                                                                                                                                                    
+[57] task-1/campus-wiki/route-changes · MEMORY · 41f16b3e                                                                                                                           
+SPANS · 77:85                                                                                                                                                                       
+The pedestrian path from the Humanities Building to the Main Building's main entrance passes in front of the stairs on the right side of the Main Building.                         
+                                                                                                                                                                                    
+[58] task-1/campus-wiki/route-changes · MEMORY · 2af1d276                                                                                                                           
+SPANS · 130:138                                                                                                                                                                     
+Using the elevator from the first-floor lobby of the Main Building provides step-free access to the level of the third-floor rear entrance.                                         
+                                                                                                                                                                                    
+[59] task-1/campus-wiki/route-changes · MEMORY · 03c25e0f                                                                                                                           
+SPANS · 49:57                                                                                                                                                                       
+The elevator closest to the Main Building's main entrance is inside the first-floor lobby.                                                                                          
+                                                                                                                                                                                    
+[60] task-1/campus-wiki/route-changes · MEMORY · c3558237                                                                                                                           
+SPANS · 49:57                                                                                                                                                                       
+Solbit Plaza is between the Main Building's main entrance and the West Complex.                                                                                                     
+                                                                                                                                                                                    
+[61] task-1/campus-wiki/route-changes · MEMORY · 0a78908e                                                                                                                           
+SPANS · 120:128, 150:158                                                                                                                                                            
+Because of the sloped terrain, first-time visitors sometimes confuse the levels of the Main Building's first-floor main entrance and third-floor rear entrance.                     
+                                                                                                                                                                                    
+[62] task-1/campus-wiki/route-changes · MEMORY · 5a6b05a2                                                                                                                           
+SPANS · 45:53                                                                                                                                                                       
+Check the current notice for the destination entrance before giving directions.                                                                                                     
+                                                                                                                                                                                    
+[63] task-1/campus-wiki/route-changes · MEMORY · 2f6bcece                                                                                                                           
+SPANS · 70:78                                                                                                                                                                       
+A pedestrian path from the West Gate stop to the Main Building's main entrance runs through Solbit Plaza.                                                                           
+                                                                                                                                                                                    
+[64] task-1/campus-wiki/route-changes · MEMORY · 675f922d                                                                                                                           
+SPANS · 92:100                                                                                                                                                                      
+There is a step-free route from the shuttle stop in front of the Student Centre to the west entrance of the Central Library.

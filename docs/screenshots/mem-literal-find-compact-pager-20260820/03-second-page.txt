@@ -1,0 +1,28 @@
+(base) KimMunyeong@MacBook-Pro-3 memcommit % mem find 'construction|entrance' --context task-1/campus-wiki --recursive --regex --ignore-case                                        
+FIND RESULTS                                                                                                                                                                        
+PATTERN · construction|entrance · REGEX · IGNORE CASE                                                                                                                               
+SCOPE · task-1/campus-wiki · DESCENDANTS · FOLLOW EMBEDS                                                                                                                            
+STATUS · READ-ONLY · PROVIDER-FREE · SCANNED 300 · MATCHED 64 · OCCURRENCES 71 · SHOWING 11–20 OF 64                                                                                
+                                                                                                                                                                                    
+11 [3ca6b6b2] The start of regular opening hours for the Main Building main entrance during recess is 8 a.m. [task-1/campus-wiki/building-access m19]                               
+12 [4189e656] First-time visitors often expect the Main Building first-floor main entrance to be the default entrance for general visitors. [task-1/campus-wiki/building-access m22]
+13 [aee44d0a] Visitors who have difficulty using stairs expect a step-free access route to be near the main entrance. [task-1/campus-wiki/building-access m23]                      
+14 [d2f32d9e] Valid staff access eligibility is required to use the staff-only entrance. [task-1/campus-wiki/building-access m24]                                                   
+15 [2d97d6b9] The Main Building service entrance is used for preregistered deliveries and facilities work. [task-1/campus-wiki/building-access m25]                                 
+16 [fef275b1] Visitors accompanied by children prefer the stroller-accessible main entrance and accessible route to be closely connected. [task-1/campus-wiki/building-access m26]  
+17 [41d5bf0b] Taxi and ride-hailing drivers often expect the Main Building first-floor main entrance to be the default drop-off point unless the passenger specifies a different ent
+rance. [task-1/campus-wiki/building-access m27]                                                                                                                                     
+18 [7da885c1] The access information agent can explain the difference between the normal uses of the front and rear entrances. [task-1/campus-wiki/building-access m28]             
+19 [efffd1fe] Emergency exits are doors for emergency evacuation and are not regular entrances for general access. [task-1/campus-wiki/building-access m32]                         
+20 [2b2642c9] The automatic door at the Main Building main entrance operates during regular opening hours. [task-1/campus-wiki/building-access m33]                                 
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+↑/↓ move · ←/→ or PgUp/PgDn page · Home/End boundary · Esc/q close

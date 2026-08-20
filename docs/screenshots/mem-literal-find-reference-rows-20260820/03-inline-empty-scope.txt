@@ -1,0 +1,6 @@
+FIND RESULTS                                                                                                                                                                        
+PATTERN · construction · LITERAL · IGNORE CASE                                                                                                                                      
+SCOPE · task-1/campus-wiki · EXACT · EXCLUDE EMBEDS                                                                                                                                 
+STATUS · READ-ONLY · PROVIDER-FREE · SCANNED 0 · MATCHED 0 · OCCURRENCES 0                                                                                                          
+                                                                                                                                                                                    
+(scope contains no searchable Memories)

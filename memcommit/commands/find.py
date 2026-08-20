@@ -1179,9 +1179,9 @@ def cmd(
             show_default=False,
             help=(
                 "Natural-language query; omit in a terminal to open the "
-                "interactive search with Profile-wide or Context targets, "
-                "Context range, embedded-Context scope, and checked-result "
-                "COPY/REFERENCE Save As"
+                "interactive search with compact exact-Context Scope, "
+                "Browse-only Profile/multiple selection, independent range "
+                "and Embed choices, and checked-result COPY/REFERENCE Save As"
             ),
         ),
     ] = None,

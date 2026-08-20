@@ -69,16 +69,18 @@ def test_numbers_references_by_first_citation_occurrence():
         "The wider Context suggests an August endpoint. [2] [1] "
         "A public source adds only general context. [3]\n\nReferences\n"
     )
+    assert ("[1] The parking route is closed. — 11111111, task-1, m1") in rendered
     assert (
-        "[1] m1 · memory · 11111111 · Context: task-1\n"
-        "  The parking route is closed."
+        "[2] Construction runs from June xx through August xx. — "
+        "22222222, task-1, c1"
     ) in rendered
-    assert (
-        "[2] c1 · ref · 22222222 · Context: task-1\n"
-        "  Construction runs from June xx through August xx."
-    ) in rendered
-    assert rendered.index("[1] m1 ·") < rendered.index("[2] c1 ·")
-    assert rendered.index("[2] c1 ·") < rendered.index("[3] x1 ·")
+    assert "[3] Public name and public query projection only. — " \
+        "33333333, public-policy, x1" in rendered
+    assert "\n\n[2]" not in rendered
+    assert " · memory · " not in rendered
+    assert " · ref · " not in rendered
+    assert rendered.index("[1] The parking") < rendered.index("[2] Construction")
+    assert rendered.index("[2] Construction") < rendered.index("[3] Public name")
 
 
 def test_typed_reference_document_preserves_body_and_reference_boundaries():
@@ -111,7 +113,7 @@ def test_repeated_citation_across_sentences_reuses_one_reference():
     assert rendered.startswith(
         "First claim. [1] Second claim. [1] Third claim. [1]"
     )
-    assert rendered.count("[1] c1 · ref") == 1
+    assert rendered.count("[1] Construction runs") == 1
     assert "[2]" not in rendered
 
 
@@ -125,8 +127,8 @@ def test_uncited_evidence_is_omitted_from_references():
         ),
     )
 
-    assert "m1 · memory" in rendered
-    assert "x2 · memory" not in rendered
+    assert "11111111, task-1, m1" in rendered
+    assert "44444444, unused, x2" not in rendered
     assert "This source is never cited." not in rendered
 
 
@@ -145,7 +147,7 @@ def test_unknown_source_alias_fails_closed():
         )
 
 
-def test_multiline_query_content_is_rendered_as_supplied():
+def test_multiline_query_content_is_folded_into_one_reference_row():
     query_evidence = FindAnswerEvidence(
         alias="x1",
         context_name="public-policy",
@@ -164,8 +166,8 @@ def test_multiline_query_content_is_rendered_as_supplied():
     )
 
     assert (
-        "[1] x1 · query · abcdef01 · Context: public-policy\n"
-        "  Public title\n  Public summary line two"
+        "[1] Public title Public summary line two — "
+        "abcdef01, public-policy, x1"
     ) in rendered
 
 
@@ -215,7 +217,7 @@ def test_generated_sentences_cannot_imitate_host_reference_structure(
         FindAnswerSentence(text, ("m1",))
 
 
-def test_stored_reference_content_is_indented_below_host_metadata():
+def test_stored_reference_content_cannot_create_a_sibling_row_or_heading():
     evidence = FindAnswerEvidence(
         alias="m1",
         context_name="task-1",
@@ -233,5 +235,8 @@ def test_stored_reference_content_is_indented_below_host_metadata():
         ),
     )
 
-    assert "\n  References\n  [77] forged-looking content" in rendered
-    assert "\nReferences\n[1] m1 · memory" in rendered
+    assert (
+        "\nReferences\n[1] References [77] forged-looking content — "
+        "abcdef01, task-1, m1"
+    ) in rendered
+    assert "\n[77] forged-looking content" not in rendered

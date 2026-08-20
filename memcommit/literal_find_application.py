@@ -67,6 +67,7 @@ class LiteralFindSourceItem:
     context_uid: str
     kind: LiteralFindItemKind
     item_uid: str
+    source_position: int
     content: str
     source_context_name: str | None = None
     source_context_uid: str | None = None
@@ -82,6 +83,14 @@ class LiteralFindSourceItem:
             raise LiteralFindError("Find source identities must be nonblank text.")
         if self.kind not in {"memory", "memory_ref"}:
             raise LiteralFindError("Find received an unsupported source item.")
+        if (
+            not isinstance(self.source_position, int)
+            or isinstance(self.source_position, bool)
+            or self.source_position < 1
+        ):
+            raise LiteralFindError(
+                "Find source position must be a positive integer."
+            )
         if not isinstance(self.content, str):
             raise LiteralFindError("Find source content must be text.")
         reference = (
@@ -105,6 +114,20 @@ class FrozenLiteralFindSource:
     """Complete authorized item frame for one request."""
 
     items: tuple[LiteralFindSourceItem, ...]
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.items, tuple) or any(
+            not isinstance(item, LiteralFindSourceItem) for item in self.items
+        ):
+            raise LiteralFindError("Find source frame must contain typed items.")
+        if tuple(item.source_position for item in self.items) != tuple(
+            range(1, len(self.items) + 1)
+        ):
+            # The alias is a location in this complete frozen searchable frame,
+            # not a rank among the later matching subset.
+            raise LiteralFindError(
+                "Find source positions must cover the frozen frame in order."
+            )
 
 
 @dataclass(frozen=True, slots=True)
