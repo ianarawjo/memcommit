@@ -497,9 +497,22 @@ def elaborate_impact_presentation(
     """Project the exact unverified Memories Elaborate would add."""
 
     analysis = result.analysis
+    target_context = analysis.target_context
+
+    def target_used(refs: tuple[str, ...]) -> tuple[str, ...]:
+        if target_context is None:
+            return ()
+        return ("TARGET USED · " + (", ".join(refs) or "NONE"),)
+
     proposals = (
         tuple(
-            (item.uid, "RULE", item.content, item.rationale, ())
+            (
+                item.uid,
+                "RULE",
+                item.content,
+                item.rationale,
+                target_used(item.target_context_refs),
+            )
             for item in analysis.rules
         )
         if analysis.mode is ElaborateMode.GOAL_TO_RULES
@@ -516,6 +529,7 @@ def elaborate_impact_presentation(
                         for check in item.rule_checks
                     ),
                     f"EXPECTED · {item.expected or '(open)'}",
+                    *target_used(item.target_context_refs),
                 ),
             )
             for item in analysis.cases
@@ -571,6 +585,10 @@ def elaborate_impact_presentation(
             ResolutionMetric("INPUTS", str(len(analysis.inputs))),
             ResolutionMetric("PROPOSALS", str(len(proposals))),
             ResolutionMetric("DIRECTION", direction),
+            ResolutionMetric(
+                "TARGET AMBIENT",
+                str(len(target_context.items) if target_context is not None else 0),
+            ),
         ),
         context_locations=(
             ResolutionContextLocation("SOURCE", display_source),
@@ -579,6 +597,26 @@ def elaborate_impact_presentation(
         overview=analysis.overview,
         overview_sections=(
             ResolutionOverviewSection("assessment", "ASSESSMENT", analysis.overview),
+            *(
+                (
+                    ResolutionOverviewSection(
+                        "target-ambient",
+                        "TARGET AMBIENT",
+                        "\n".join(
+                            (
+                                f"{item.alias} · MEMORY · {item.context_name} · "
+                                f"{item.content}"
+                                if item.kind == "MEMORY"
+                                else f"{item.alias} · QUERY ONLY · "
+                                f"{item.context_name} · NAME ONLY"
+                            )
+                            for item in target_context.items
+                        ),
+                    ),
+                )
+                if target_context is not None
+                else ()
+            ),
         ),
         list_label=(
             "PROPOSED RULES" if rules_direction else "UNVERIFIED PROPOSALS"

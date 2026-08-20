@@ -72,6 +72,7 @@ class ElaborateRuleProposal:
     uid: str
     content: str
     rationale: str
+    target_context_refs: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -88,6 +89,16 @@ class ElaborateCaseProposal:
     rationale: str
     case_role: str
     rule_checks: tuple[ElaborateRuleCheckProposal, ...]
+    target_context_refs: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
+class ElaborateTargetContextItemProposal:
+    alias: str
+    kind: str
+    context_name: str
+    memory_uid: str | None
+    content: str | None
 
 
 @dataclass(frozen=True)
@@ -100,6 +111,8 @@ class ElaborateProposal:
     cases: tuple[ElaborateCaseProposal, ...]
     origin: str
     verification: str = "UNVERIFIED"
+    target_context_name: str | None = None
+    target_context_items: tuple[ElaborateTargetContextItemProposal, ...] = ()
 
 
 __all__ = [
@@ -110,6 +123,7 @@ __all__ = [
     "ElaborateProposal",
     "ElaborateRuleCheckProposal",
     "ElaborateRuleProposal",
+    "ElaborateTargetContextItemProposal",
     "FitJudgmentResult",
     "FitPropositionInput",
 ]

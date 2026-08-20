@@ -64,18 +64,27 @@ def _prepare_store(root: Path, operation: str):
     store_module.STORE_DIR = root
     store = MemoryStore()
     data = _fixture()
+    cafe = next(
+        family
+        for family in data["reference_families"]
+        if family["id"] == "cafe-order"
+    )
     source_name = f"calibration/cafe/{'examples' if operation == 'distill' else 'rules'}"
     target_name = f"calibration/cafe/{'distilled-rules' if operation == 'distill' else 'generated-examples'}"
-    values = data[
-        "shared_example_memories"
+    values = cafe[
+        "example_memories"
         if operation == "distill"
-        else "shared_rule_memories"
+        else "rule_memories"
     ]
     assert isinstance(values, list) and all(isinstance(value, str) for value in values)
     source = ops.init(source_name)
     target = ops.init(target_name)
     for value in values:
         ops.add(source, value)
+    if operation == "elaborate":
+        # Existing destination content is a distinct run-specific ambient
+        # example; the seven source Rules remain the complete Rule evidence.
+        ops.add(target, cafe["example_memories"][0])
     store.create_context(source)
     store.create_context(target)
     store.set_current(target.name)

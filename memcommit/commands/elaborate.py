@@ -226,6 +226,7 @@ def cmd(
                         target_name=ordinary_target,
                         provider_factory=connect_semantic_provider,
                         source=ordinary_source,
+                        will_apply=True,
                     )
                     result = prepared.result
                 progress.update("proposal ready", step=1)

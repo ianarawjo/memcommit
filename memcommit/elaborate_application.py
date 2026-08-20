@@ -10,6 +10,7 @@ from memcommit.elaborate import (
     ElaborateAnalysis,
     ElaborateError,
     ElaborateProvider,
+    ElaborateTargetContext,
     normalize_elaborate_inputs,
     normalize_elaborate_number,
     analyze_elaborate,
@@ -79,6 +80,7 @@ def run_elaborate(
     provider_session_factory: ElaborateProviderSessionFactory,
     config: ElaborateSemanticConfig = DEFAULT_ELABORATE_SEMANTIC_CONFIG,
     prepared_lookup: ElaboratePreparedLookup | None = None,
+    target_context: ElaborateTargetContext | None = None,
 ) -> ElaborateResult:
     """Run the same bounded use case for every public adapter."""
 
@@ -101,7 +103,7 @@ def run_elaborate(
     )
     analysis = (
         prepared_lookup(normalized, config)
-        if prepared_lookup is not None
+        if prepared_lookup is not None and target_context is None
         else None
     )
     origin: Literal["LIVE", "PREPARED_EXACT"] = "PREPARED_EXACT"
@@ -110,6 +112,7 @@ def run_elaborate(
         validate_elaborate_provider_plan(
             mode=mode,
             inputs=inputs,
+            target_context=target_context,
             number=number,
             config=config,
         )
@@ -118,12 +121,14 @@ def run_elaborate(
                 goal=normalized.goal,
                 rules=normalized.rules,
                 provider=provider,
+                target_context=target_context,
                 number=number,
                 config=config,
             )
     elif (
         analysis.mode is not mode
         or analysis.inputs != inputs
+        or analysis.target_context != target_context
         or analysis.number != number
     ):
         raise ElaborateError(

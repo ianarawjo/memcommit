@@ -5,7 +5,7 @@ from __future__ import annotations
 from contextlib import contextmanager
 from typing import Iterator, Protocol
 
-from memcommit.elaborate import ElaborateProvider
+from memcommit.elaborate import ElaborateProvider, ElaborateTargetContext
 from memcommit.elaborate_application import (
     ElaboratePreparedLookup,
     ElaborateRequest,
@@ -29,6 +29,7 @@ def execute_elaborate(
     provider_factory: ElaborateProviderFactory,
     config: ElaborateSemanticConfig = DEFAULT_ELABORATE_SEMANTIC_CONFIG,
     prepared_lookup: ElaboratePreparedLookup | None = None,
+    target_context: ElaborateTargetContext | None = None,
 ) -> ElaborateResult:
     """Execute without importing CLI, TUI, Ground, or storage adapters."""
 
@@ -41,6 +42,7 @@ def execute_elaborate(
         provider_session_factory=provider_session,
         config=config,
         prepared_lookup=prepared_lookup,
+        target_context=target_context,
     )
 
 

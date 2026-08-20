@@ -7,9 +7,19 @@ import hashlib
 import json
 from typing import Literal, Protocol
 
-from memcommit.elaborate import ElaborateError, ElaborateProvider
+from memcommit.elaborate import (
+    ElaborateError,
+    ElaborateProvider,
+    ElaborateTargetContext,
+    ElaborateTargetContextItem,
+)
 from memcommit.elaborate_application import ElaborateRequest, ElaborateResult
 from memcommit.elaborate_runtime import execute_elaborate
+from memcommit.elaborate_target_context import (
+    FrozenElaborateTargetContext,
+    authorized_frozen_elaborate_target,
+    freeze_elaborate_target_context,
+)
 from memcommit.ground import GroundSession, is_bound_ground_schema
 from memcommit.ground_workspace import GroundWorkspace
 from memcommit.ground_workspace_runtime import (
@@ -20,6 +30,7 @@ from memcommit.ground_workspace_projection import (
     GroundWorkspaceProjectionError,
     project_ordinary_memories,
 )
+from memcommit.semantic_add_runtime import freeze_semantic_add_target
 from memcommit.store import MemoryStore, ground_session_record_digest
 
 
@@ -41,6 +52,7 @@ class FrozenGroundElaborate:
     ground_digest: str
     direction: GroundElaborateDirection
     request: ElaborateRequest
+    target_context: FrozenElaborateTargetContext | ElaborateTargetContext | None = None
 
 
 @dataclass(frozen=True)
@@ -75,6 +87,38 @@ def _request_from_ground(
     return ElaborateRequest(rules=active_rules, number=number)
 
 
+def _legacy_target_context(
+    session: GroundSession,
+    *,
+    direction: GroundElaborateDirection,
+) -> ElaborateTargetContext | None:
+    """Project only the legacy destination lane, never the whole Ground."""
+
+    kind = "RULE" if direction == "GOAL_TO_RULES" else "CASE"
+    lane = "rules" if kind == "RULE" else "examples"
+    target_name = f"ground:{session.contract_name}/{lane}"
+    items = tuple(
+        item
+        for item in session.items
+        if item.kind == kind and item.status in {"PROPOSED", "ACCEPTED"}
+    )
+    if not items:
+        return None
+    return ElaborateTargetContext(
+        context_name=target_name,
+        items=tuple(
+            ElaborateTargetContextItem(
+                alias=f"t{index}",
+                kind="MEMORY",
+                context_name=target_name,
+                memory_uid=item.uid,
+                content=item.content,
+            )
+            for index, item in enumerate(items, 1)
+        ),
+    )
+
+
 def freeze_ground_elaborate(
     store: MemoryStore,
     *,
@@ -91,6 +135,13 @@ def freeze_ground_elaborate(
             direction=direction,
             number=number,
         )
+        target_lane = (
+            workspace.rules if direction == "GOAL_TO_RULES" else workspace.examples
+        )
+        target_context = freeze_elaborate_target_context(
+            store,
+            target=freeze_semantic_add_target(store, target_lane.name),
+        )
         return FrozenGroundElaborate(
             ground_name=workspace.name,
             ground_uid=workspace.uid,
@@ -98,6 +149,7 @@ def freeze_ground_elaborate(
             ground_digest=digest,
             direction=direction,
             request=request,
+            target_context=target_context,
         )
 
     session = store.load_ground_session(ground_name)
@@ -115,6 +167,7 @@ def freeze_ground_elaborate(
         ground_digest=ground_session_record_digest(session),
         direction=direction,
         request=request,
+        target_context=_legacy_target_context(session, direction=direction),
     )
 
 
@@ -199,10 +252,17 @@ def execute_ground_elaborate(
                 "The consumed Ground workspace Memories changed before "
                 "Elaborate began."
             )
-        result = execute_elaborate(
-            frozen.request,
-            provider_factory=provider_factory,
-        )
+        target_context = frozen.target_context
+        if not isinstance(target_context, FrozenElaborateTargetContext):
+            raise ElaborateError("Ground workspace Elaborate Target is invalid.")
+        with authorized_frozen_elaborate_target(store, target_context):
+            result = execute_elaborate(
+                frozen.request,
+                provider_factory=provider_factory,
+                target_context=(
+                    target_context.semantic if target_context.semantic.items else None
+                ),
+            )
         after_workspace = load_ground_workspace(store, frozen.ground_name)
         after_request, after_digest = _request_from_ground_workspace(
             after_workspace,
@@ -236,6 +296,11 @@ def execute_ground_elaborate(
     result = execute_elaborate(
         frozen.request,
         provider_factory=provider_factory,
+        target_context=(
+            frozen.target_context
+            if isinstance(frozen.target_context, ElaborateTargetContext)
+            else None
+        ),
     )
     after = store.load_ground_session(frozen.ground_name)
     if (

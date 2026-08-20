@@ -27,7 +27,7 @@ from memcommit.interfaces.agent.contract import (
 )
 
 
-ELABORATE_AGENT_CONTRACT_VERSION = 2
+ELABORATE_AGENT_CONTRACT_VERSION = 3
 ELABORATE_AGENT_TOOL_NAME = "memcommit_elaborate"
 ElaborateAgentKind = Literal[
     "goal_to_rules",
@@ -111,13 +111,29 @@ def _number_value(value: object, *, maximum: int) -> int | None:
 
 
 def _serialize(result: ElaborateProposal) -> JsonObject:
+    target_items: list[JsonObject] = []
+    for item in result.target_context_items:
+        record: JsonObject = {
+            "target_id": item.alias,
+            "kind": item.kind,
+            "context": item.context_name,
+        }
+        if item.kind == "MEMORY":
+            record["memory_uid"] = item.memory_uid
+            record["content"] = item.content
+        target_items.append(record)
     return {
         "analysis_uid": result.analysis_uid,
         "mode": result.mode,
         "inputs": list(result.inputs),
         "overview": result.overview,
         "rules": [
-            {"uid": item.uid, "content": item.content, "rationale": item.rationale}
+            {
+                "uid": item.uid,
+                "content": item.content,
+                "rationale": item.rationale,
+                "target_context_refs": list(item.target_context_refs),
+            }
             for item in result.rules
         ],
         "cases": [
@@ -134,11 +150,20 @@ def _serialize(result: ElaborateProposal) -> JsonObject:
                     }
                     for check in item.rule_checks
                 ],
+                "target_context_refs": list(item.target_context_refs),
             }
             for item in result.cases
         ],
         "origin": result.origin,
         "verification": result.verification,
+        "target_context": (
+            None
+            if result.target_context_name is None
+            else {
+                "name": result.target_context_name,
+                "items": target_items,
+            }
+        ),
         "effect": "NONE",
     }
 

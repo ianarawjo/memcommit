@@ -18,6 +18,7 @@ from memcommit.api.semantic import (
     ElaborateProposal,
     ElaborateRuleCheckProposal,
     ElaborateRuleProposal,
+    ElaborateTargetContextItemProposal,
 )
 
 
@@ -100,6 +101,7 @@ def project_elaborate(result) -> ElaborateProposal:
                 uid=rule.uid,
                 content=rule.content,
                 rationale=rule.rationale,
+                target_context_refs=rule.target_context_refs,
             )
             for rule in analysis.rules
         ),
@@ -117,10 +119,30 @@ def project_elaborate(result) -> ElaborateProposal:
                     )
                     for check in case.rule_checks
                 ),
+                target_context_refs=case.target_context_refs,
             )
             for case in analysis.cases
         ),
         origin=result.origin,
+        target_context_name=(
+            analysis.target_context.context_name
+            if analysis.target_context is not None
+            else None
+        ),
+        target_context_items=(
+            tuple(
+                ElaborateTargetContextItemProposal(
+                    alias=item.alias,
+                    kind=item.kind,
+                    context_name=item.context_name,
+                    memory_uid=item.memory_uid,
+                    content=item.content,
+                )
+                for item in analysis.target_context.items
+            )
+            if analysis.target_context is not None
+            else ()
+        ),
     )
 
 

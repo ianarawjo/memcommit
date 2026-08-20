@@ -39,6 +39,11 @@ class _ElaborateProvider:
         assert operation == ELABORATE_OPERATION
         payload = json.loads(prompt.split(ELABORATE_PAYLOAD_MARKER, 1)[1])
         type(self).calls.append(payload)
+        target_refs = (
+            {"target_context_refs": []}
+            if "target_context" in payload
+            else {}
+        )
         if payload["mode"] == "GOAL_TO_RULES":
             return json.dumps(
                 {
@@ -47,6 +52,7 @@ class _ElaborateProvider:
                         {
                             "content": "Confirm the selected ticker before acting.",
                             "rationale": "This operationalizes the stated Goal.",
+                            **target_refs,
                         }
                     ],
                 }
@@ -67,6 +73,7 @@ class _ElaborateProvider:
                             }
                             for index, _rule in enumerate(payload["inputs"], 1)
                         ],
+                        **target_refs,
                     },
                     {
                         "proposition": "The user mentions AAPL without confirming it.",
@@ -80,6 +87,7 @@ class _ElaborateProvider:
                             }
                             for index, _rule in enumerate(payload["inputs"], 1)
                         ],
+                        **target_refs,
                     },
                 ],
             }

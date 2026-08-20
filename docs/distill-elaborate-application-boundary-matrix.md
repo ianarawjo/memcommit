@@ -4,22 +4,22 @@ Last reviewed: 2026-08-20.
 
 | Concern | Distill | Elaborate | Evidence state |
 | --- | --- | --- | --- |
-| Meaning | Case/Example Context propositions → evidence-linked generative Rules, including common language, tone, expression, and notation; optional Goal focuses relevance | Goal → at least one suggested Rule, or Rules → at least one suggested Case | `VERIFIED` in café and Cloze domain tests |
+| Meaning | Case/Example Context propositions → evidence-linked generative Rules, including common language, tone, expression, and notation; optional Goal focuses relevance | Goal → at least one suggested Rule, or Rules → at least one suggested Case | `VERIFIED` against quoted café, lost-property, and Cloze reference families |
 | Typed application entry | `run_distill(DistillRequest, ...)` | `run_elaborate(ElaborateRequest, ...)` | `VERIFIED` source-level absence of command/terminal imports; fresh-process package isolation is tracked separately by `IMPORT-01` |
-| Production runtime | exact local Source port, pre-provider existing-Target freeze, atomic generated-Memory Add, and lazy provider factory | exact ordinary Context Source/Target freeze, inline Target freeze, atomic generated-Memory Add, and lazy provider factory | `VERIFIED` focused tests |
+| Production runtime | exact local Source port, pre-provider existing-Target freeze, atomic generated-Memory Add, and lazy provider factory | exact ordinary Context Source/Target freeze; recursive exact-Target ambient projection; atomic generated-Memory Add; lazy provider factory | `VERIFIED` focused tests |
 | Directional endpoints | omitted `--from`/`--to` fill from one Current snapshot; Source may equal Target | same four-way endpoint matrix; inline input has only a Target | `VERIFIED` CLI matrix and same-Context pre-image tests |
-| Ground adapter | physical Goal plus ordinary `/examples` and `/contexts` subtree Memories; legacy Goal + `WORKING_CANDIDATES` remains transitional | physical exact Goal or directly owned Rules; legacy Ground Goal/Rules remains transitional | `VERIFIED` operation-local pre/post input tests; unrelated physical lane edits do not invalidate a safe request |
-| Provider planning | complete Source frame, `WHOLE_FRAME_ONLY` | complete input tuple, `WHOLE_FRAME_ONLY`; nonempty proposal set by default or exactly `--n N` (`-n`/`--number`) within the directional bound | `VERIFIED` strict default and exact-count schema bounds, mismatch rejection, empty-response, and oversized-miss tests; provider construction remains zero before pre-call rejection |
-| Prepared reuse | exact Source frame + Goal + config only | exact direction + normalized input tuple + optional exact number + config only | `VERIFIED` injectable port; no persisted artifact |
+| Ground adapter | physical Goal plus ordinary `/examples` and `/contexts` subtree Memories; legacy Goal + `WORKING_CANDIDATES` remains transitional | physical exact Goal or directly owned Rules; existing `/rules` or `/examples` destination lane is ambient; legacy Ground projects its corresponding Rule/Case lane | `VERIFIED` destination-lane and unrelated-lane tests |
+| Provider planning | complete Source frame plus all three quoted reference families, `WHOLE_FRAME_ONLY` | complete input tuple, all three quoted reference families, and exact Target ambient frame in both modes, `WHOLE_FRAME_ONLY`; nonempty proposal set by default or exactly `--n N` (`-n`/`--number`) within the directional bound | `VERIFIED` prompt quotation, Target budget inclusion, strict default and exact-count schema bounds, mismatch rejection, empty-response, and oversized-miss tests |
+| Prepared reuse | exact Source frame + Goal + config only | exact direction + normalized input tuple + optional exact number + Target ambient frame + config only | `VERIFIED` injectable port; no persisted artifact |
 | Projection reuse | rejected; changing any proposition can change the complete Rule set | rejected; proposal set is defined over the complete input | intentional `N/A` |
 | Configuration | one `DistillSemanticConfig` snapshot validates request, schema, live and prepared output | one `ElaborateSemanticConfig` snapshot validates request, schema, live and prepared output | `VERIFIED` nondefault-limit tests |
 | Session | process-local exact proposal; Impact does not persist it | process-local exact proposal; Impact does not persist it | intentional `N/A`; no durable session |
 | Publication | default standalone → existing Target, all Rules or none; legacy require-new Apply remains compatible | default standalone → existing Target, all proposals or none | `VERIFIED` endpoint, checkpoint, target/source drift, and no-partial-publication tests |
-| Authority | standalone local Source; physical typed Ground inputs fail before provider until authority-aware projection exists | inline or exact directly owned Ground Memories; typed Goal/Rule input fails before provider | fail-closed boundary tested; no silent typed-item omission |
-| Plain CLI | default Add renderer plus receipt; explicit Impact is read-only | default Add renderer plus receipt; `--n` (`-n`/`--number`) means an exact Rule or Case count and explicit Impact is read-only | `VERIFIED` |
+| Authority | standalone local Source; physical typed Ground inputs fail before provider until authority-aware projection exists | Source remains exact ordinary input; Target local embeds are exact; QUERY-only is name-only; granted proposal context requires `READ + EMBED + DERIVE + COMBINE`, while direct Add also requires `EXPORT + SAVE_ANALYSIS` before provider connection | `VERIFIED` local cycle/dedup, name-only query, grant proposal/Add success and denial, and ambient-drift tests |
+| Plain CLI | default Add renderer shows up to 20 exact added Memories, then exact Review and Undo routes; explicit Impact is read-only | same human-first added-Memory preview and exact Review/Undo routes; `--n` (`-n`/`--number`) means an exact Rule or Case count and explicit Impact is read-only | `VERIFIED` |
 | TUI | Impact owns interactive preview; the hidden legacy/Ground read-only adapter retains its Viewer | Impact owns preview; only the Ground read-only adapter retains its result Viewer | `VERIFIED` in component tests; refreshed Add/Impact PTY evidence is recorded separately |
 | Public Python | typed proposal; exact in-process Distill Apply; Ground projections | typed unverified proposal; Ground projections; optional exact number in both directions | `VERIFIED` focused tests |
-| Agent/MCP | proposal only, `effect: NONE` | proposal only, optional exact number, `effect: NONE`, `verification: UNVERIFIED` | intentional first-slice boundary; CLI mutation does not silently broaden callable authority |
+| Agent/MCP | proposal only, `effect: NONE` | proposal only, optional exact number, typed Target ambient/use trace, `effect: NONE`, `verification: UNVERIFIED` | agent contract v3; CLI mutation does not silently broaden callable authority |
 | Clipboard | focused `y`, whole document `Y` | focused `y`, whole document `Y` | `VERIFIED` |
 
 ## Verification evidence
@@ -66,8 +66,13 @@ propositions therefore remain hypotheses rather than fabricated evidence.
 
 Standalone Distill and Elaborate are direct semantic Adds. They freeze,
 decode, decide the complete generated set, append atomically, and return a
-compact receipt; they do not render the proposal Viewer before reporting
-success. Their full overview, rationale, support/provenance, verification
-state, and result identities are stored in the same application checkpoint and
-are available through `mem review distill|elaborate --receipt UID`. Explicit
-Impact and the Ground-owned proposal variants remain read-only exceptions.
+human-first completion summary; they do not render the proposal Viewer before
+reporting success. The summary pairs each result Memory's short UID with its
+complete single-line content for sets of up to 20, then reports the remaining
+count instead of flooding the terminal. Separate `RECEIPT` and `CHECKPOINT`
+rows are omitted because the exact checkpoint UID already remains in the
+copyable `mem review distill|elaborate --receipt UID` command; `mem undo`
+remains adjacent as the recovery route. Full overview, rationale,
+support/provenance, verification state, and every result identity remain in
+that checkpoint. Explicit Impact and the Ground-owned proposal variants remain
+read-only exceptions.

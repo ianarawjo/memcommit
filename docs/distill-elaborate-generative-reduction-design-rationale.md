@@ -70,18 +70,17 @@ or combine equivalent invariants differently. The required property is
 semantic family preservation: reviewed anchors remain recoverable and every
 Elaborated Example visibly implements the full input frame.
 
-## Café calibration artifact
+## Quoted three-family reference corpus
 
 `memcommit/eval/fixtures/distill_elaborate.json` is the authored calibration
-source. It contains actual, complete Korean Memory texts rather than labels
-such as “three Examples” or “seven Rules.” Each operation has one regression
-case with:
+and prompt-reference source. It stores complete Rule and Example Memory texts
+for three unrelated families:
 
-- the exact input Memory set;
-- a known-wrong `x>` equivalent captured from the former contract; and
-- the reviewed `->` equivalent.
+- English café orders with one constrained adjustment and clarification;
+- English lost-property reports with successful and unsuccessful branches; and
+- language-mixed Cloze entries with exact labels and wrapper notation.
 
-The Distill case maps three café Example Memories to seven reviewed Rule
+The Distill case maps three English café Example Memories to seven reviewed Rule
 Memories covering viewpoint/order, opening actor, base attributes, one scoped
 adjustment, barista subject transition, two-option clarification plus customer
 selection, and final confirmation before preparation. The Elaborate case maps
@@ -92,6 +91,52 @@ Exact prose is the deterministic decoder fixture, not the live-provider quality
 oracle. Live evaluation checks semantic anchors and complete Rule coverage.
 This distinction permits equivalent wording without accepting the former
 three-Rule behavioral subset as complete.
+
+Every production provider prompt quotes all three complete bidirectional
+families. Distill reads each pair as `Example Memories -> Rule Memories`.
+Rules-to-Cases Elaborate reads the same pairs in reverse. Goal-to-Rules
+Elaborate uses the Rule sides as examples of independently reviewable,
+generative Rule form and the paired Examples as a demonstration of why those
+Rules are operational. The reference block is therefore present in every
+Distill and Elaborate provider call rather than existing only in tests.
+
+Prompt reference and execution evidence remain distinct. The authored
+reference families have no current-run Memory aliases. Distill may populate
+`support_memory_ids` and `boundary_memory_ids` only from the explicitly
+selected Source; Elaborate `rule_checks` refer only to its current input
+Rules. This permits literal few-shot quotation without fabricating provenance
+or treating the café, lost-property, or Cloze corpus as evidence about an
+unrelated current Context. The complete reference block is included in
+whole-frame input budgeting.
+
+## Existing Target as Elaborate ambient context
+
+The packaged three-family corpus and an existing command Target serve different
+roles. The corpus is fixed method calibration quoted in every turn. An exact
+Elaborate Target is run-specific ambient context: it can teach the next Rule or
+Example the destination's already established terminology and form, but it is
+not another Goal or Rule and cannot satisfy a current `rule_checks` obligation.
+Every proposal separately reports the Target aliases it materially used.
+
+Only the exact Target graph is eligible. Profile-wide automatic injection was
+rejected because unrelated readable Contexts would change generation, consume
+the one-shot budget, and cross downstream authority boundaries without a
+selection. Direct Memories and local embeds are frozen recursively with cycle
+and logical-Memory deduplication. QUERY-only routes contribute a public name
+only. Granted embedded content additionally requires effective `READ`, `EMBED`,
+`DERIVE`, and `COMBINE`; a revocation, narrower override, identity replacement,
+or content drift fails closed. Direct Add additionally requires `EXPORT` and
+`SAVE_ANALYSIS` before provider connection, while read-only Impact and Ground
+proposal routes do not claim those retention capabilities. If Source and
+Target are the same Context, the direct Source Memories are not repeated in
+the ambient role.
+
+This behavior is intentionally asymmetric with Distill for now. Distill still
+asks what the selected Example Source supports. Existing destination Rules may
+later guide novelty or reconciliation, but suppressing a supported Rule merely
+because a similar Target Rule exists would combine reduction with Dedun. That
+separate decision is deferred and recorded rather than being introduced as a
+hidden side effect of this Elaborate change.
 
 ## Typed Elaborate coverage
 
@@ -105,14 +150,17 @@ observable content in the proposition according to the provider instruction.
 This is structural coverage, not independent truth verification. A provider
 can still make a mistaken semantic claim, so Cases remain `SUGGESTED` and
 `UNVERIFIED`; the calibration fixture and configured-provider trial supply the
-review evidence. Provider contract version 3 prevents prepared version-2
+review evidence. Provider contract version 4 prevents prepared version-3
+results without the quoted reference corpus from replaying and also preserves
+the earlier barrier against version-2
 single-Rule Cases from replaying under the joint-coverage meaning. The public
 agent contract advances to version 2 because its Case projection now contains
 `rule_checks` rather than one scalar source index.
 
 ## Configured-provider observation
 
-Against the reviewed seven café Rules, the first configured-provider run after
+Against the then-Korean reviewed seven café Rules, the first
+configured-provider run after
 the contract change returned three Cases (`FIT`, `BOUNDARY`, and `CONTRAST`).
 Every Case was a complete Korean Memory and contained seven ordered Rule checks.
 All three began with `한 고객이`, moved to `바리스타는`, supplied a concrete
@@ -120,7 +168,7 @@ base order, changed one attribute after a two-option clarification, preserved
 the remaining attributes, and ended with confirmation before preparation.
 
 After the mandatory surface-form audit was added, a configured-provider run
-over the three reviewed café Examples returned eight Rules. The provider
+over the then-Korean three reviewed café Examples returned eight Rules. The provider
 recovered the behavioral sequence and separately recovered Korean language,
 past-tense third-person indirect narration, the exact
 `한 고객이 → 바리스타는 → 고객은 → 바리스타는` actor sequence, the
@@ -151,17 +199,37 @@ zero Target Memories with no checkpoint.
   decompositions can split or combine anchors without semantic loss.
 - Making Elaborate its own verifier was rejected. Rule checks expose coverage;
   reviewed fixtures and later judgment establish quality.
-- Goal-to-Rules Elaborate, Distill authority, whole-frame planning, target
-  freezing, Add atomicity, and unverified storage status are intentional
-  non-goals of this semantic revision and remain unchanged.
+- Allowing reference Memories to appear as current evidence was rejected
+  because a demonstration cannot establish a Rule about the selected Source.
+- Injecting all readable Profile Contexts into Elaborate was rejected; only the
+  exact frozen Target is destination context.
+- Treating Target ambient Memories as current Rules was rejected; Source inputs
+  remain authoritative and Target use has its own typed trace.
+- Distill authority, target freezing, Add atomicity, and unverified storage
+  status remain unchanged.
 
-The café corpus is consumed calibration, not an independent holdout. A future
-campaign should add unrelated domains before claiming broad generalization.
+The three-family corpus is consumed calibration, not an independent holdout.
+A future campaign still needs independent domains before claiming broad
+generalization.
+
+## Lost-property procedural calibration
+
+The lost-property family prevents the café demonstration from being the only
+procedural pattern. Three English Examples preserve exact sentence openings,
+neutral third-person past-tense narration, a log-and-item check, and a
+conditional terminal outcome. Two Examples verify a concealed detail before
+returning an item; one records contact details after no match. Its Rules
+therefore demonstrate that Distill may recover a shared conditional branch
+rather than incorrectly requiring every Example to end in the same outcome,
+and that Elaborate can instantiate one valid branch while complying with the
+complete conditional Rule set.
 
 ## Cloze surface-form calibration
 
-The same fixture contains a compact, unrelated Cloze family. Each complete
-Memory has `EXAMPLE`, `CLOZE`, and `뜻 설명` sections. The first two sections
+The same fixture contains a compact, unrelated Cloze family. Unlike the English
+café family, it intentionally remains language-mixed because that surface form
+is the calibration target. Each complete Memory has `EXAMPLE`, `CLOZE`, and
+`뜻 설명` sections. The first two sections
 are English, the explanation is Korean, and the only Example-to-Cloze change is
 one `{{c1::...}}` wrapper. Verb, adjective, and noun targets prevent an
 accidental majority pattern from becoming a false part-of-speech Rule.

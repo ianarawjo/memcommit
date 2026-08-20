@@ -56,9 +56,12 @@ conditioned form only when the Source itself supports that condition; hidden
 linguistic causes are not inferred. A majority pattern is not universal.
 Support and boundary aliases remain disjoint, and a mechanical consequence is
 not duplicated as a second Rule unless it independently constrains a new
-Example. Provider contract
-version 5 prevents prepared results from the earlier partial form audit from
-replaying under this stricter meaning.
+Example. Every provider prompt also quotes the complete café, lost-property,
+and Cloze Example-to-Rule reference pairs. These demonstrate the reduction
+without becoming current evidence: only aliases from the selected Source may
+appear in a Rule's support or boundary fields. Provider contract version 6
+prevents prepared results from the earlier unreferenced prompt or partial form
+audit from replaying under this stricter meaning.
 
 Distill is `WHOLE_FRAME_ONLY`. Relations among any Source propositions can
 change the complete Rule set, so an oversized frame is rejected instead of

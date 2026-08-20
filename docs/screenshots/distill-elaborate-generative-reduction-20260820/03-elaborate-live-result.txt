@@ -3,48 +3,48 @@
 ┃ CONTEXT LOCATIONS                                                                                                                                                                ┃
 ┃   SOURCE · calibration/cafe/rules                                                                                                                                                ┃
 ┃   TARGET · calibration/cafe/generated-examples · EXISTING · UNCHANGED                                                                                                            ┃
-┃ PROPOSAL · READ-ONLY · UNVERIFIED · 7 INPUTS · 3 PROPOSALS · RULES → CASES DIRECTION                                                                                             ┃
+┃ PROPOSAL · READ-ONLY · UNVERIFIED · 7 INPUTS · 3 PROPOSALS · RULES → CASES DIRECTION · 1 TARGET AMBIENT                                                                          ┃
 ┃                                                                                                                                                                                  ┃
 ┃ WHAT MEM UNDERSTOOD                                                                                                                                                              ┃
 ┃ ASSESSMENT                                                                                                                                                                       ┃
-┃ 카페 주문 규칙 전체를 공동으로 충족하도록 구성한, 검증되지 않은 긍정 예시 기억 3건이다. 각 사례는 조정 방법이 여러 가지인 상황에서 바리스타가 두 가지 구체적 대안을 질문하고 고  ┃
-┃객이 하나를 선택하는 흐름을 보여준다.                                                                                                                                             ┃
+┃ Three suggested, unverified cafe-order Example Memories jointly instantiate all seven Rules, including a boundary case where the customer selects complete removal and a contras ┃
+┃t case where the barista resolves an ambiguous relative adjustment through two concrete options.                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃ TARGET AMBIENT                                                                                                                                                                   ┃
+┃ t1 · MEMORY · calibration/cafe/generated-examples · A customer ordered a medium iced vanilla latte with whole milk and two pumps of vanilla syrup, asking to keep the size, temp ┃
+┃erature, and milk unchanged but make it less sweet. The barista asked whether to reduce the syrup to one pump or remove it entirely. The customer chose one pump. The barista con ┃
+┃firmed a medium iced vanilla latte with whole milk and one pump of vanilla syrup, with the size, temperature, and milk unchanged, then prepared the drink.                        ┃
 ┃                                                                                                                                                                                  ┃
 ┃ UNVERIFIED PROPOSALS · 3                                                                                                                                                         ┃
-┃ CASE · FIT 1 · 한 고객이 카페에서 기본 음료로 중간 크기, 따뜻한 온도, 일반 우유, 바닐라 시럽 2펌프가 정해진 카페라테를 주문했다. 고객은 다른 속성은 그대로 유지하면서 바닐라 맛  ┃
-┃만 상대적으로 덜 달게 조정해달라고 요청했다. 바리스타는 바닐라 시럽을 1펌프로 줄일지, 무설탕 바닐라 시럽 2펌프로 바꿀지 확인했고, 고객은 바닐라 시럽을 1펌프로 줄이는 방법을 선택 ┃
-┃했다. 바리스타는 중간 크기, 따뜻한 온도, 일반 우유는 유지하고 바닐라 시럽만 2펌프에서 1펌프로 변경한 카페라테가 맞는지 최종 확인한 뒤 음료를 준비했다.                            ┃
-┃ [CHANGE] 단맛을 줄이는 두 가지 구현 방식 가운데 고객이 하나를 고르는 전형적인 공동 확인 절차를 짧고 순차적인 제삼자 서술로 보여주는 FIT 사례다.                                  ┃
+┃ CASE · FIT 1 · A customer ordered a small hot cappuccino with oat milk and a double shot, asking to keep the size, temperature, milk, and shots unchanged but make it less foamy ┃
+┃. The barista asked whether to leave a thin layer of foam or remove the foam entirely. The customer chose a thin layer of foam. The barista confirmed a small hot cappuccino with ┃
+┃ oat milk, a double shot, and a thin layer of foam, with the size, temperature, milk, and shots unchanged, then prepared the drink.                                               ┃
+┃ [CHANGE] This is a straightforward positive fit that varies the drink and adjusted attribute while retaining the destination context's established cafe-order narrative form.    ┃
 ┃                                                                                                                                                                                  ┃
-┃ CASE · BOUNDARY 2 · 한 고객이 카페에서 기본 음료로 큰 크기, 아이스 온도, 오트밀크, 추가 샷 1개가 정해진 카푸치노를 주문했다. 고객은 다른 속성은 그대로 유지하면서 커피 맛만 상대 ┃
-┃적으로 연하게 조정해달라고 요청했다. 바리스타는 추가 샷 1개를 빼서 기본 샷 수로 만들지, 디카페인 샷 1개로 교체할지 확인했고, 고객은 추가 샷을 빼는 방법을 선택했다. 바리스타는 큰 ┃
-┃ 크기, 아이스 온도, 오트밀크는 유지하고 추가 샷만 1개에서 없음으로 변경한 카푸치노가 맞는지 최종 확인한 뒤 음료를 준비했다.                                                       ┃
-┃ [CHANGE] ‘연하게’라는 상대적 요청을 임의 해석하지 않고 두 구현 대안으로 좁힌 뒤 기존 속성을 보존하는 결정 경계를 강조하는 BOUNDARY 사례다.                                       ┃
+┃ CASE · BOUNDARY 2 · A customer ordered a large iced matcha latte with almond milk and three pumps of vanilla syrup, asking to keep the size, temperature, milk, and ice unchange ┃
+┃d but make it less sweet. The barista asked whether to reduce the vanilla syrup to one pump or remove it entirely. The customer chose to remove the vanilla syrup entirely. The b ┃
+┃arista confirmed a large iced matcha latte with almond milk and no vanilla syrup, with the size, temperature, milk, and ice unchanged, then prepared the drink.                   ┃
+┃ [CHANGE] This boundary example demonstrates that a relative request such as reduced sweetness may validly resolve to complete removal when that concrete option is offered and s ┃
+┃elected.                                                                                                                                                                          ┃
 ┃                                                                                                                                                                                  ┃
-┃ CASE · CONTRAST 3 · 한 고객이 카페에서 기본 음료로 작은 크기, 따뜻한 온도, 저지방 우유, 헤이즐넛 시럽 1펌프가 정해진 카페모카를 주문했다. 고객은 다른 속성은 그대로 유지하면서   ┃
-┃음료 온도만 상대적으로 덜 뜨겁게 조정해달라고 요청했다. 바리스타는 우유를 60도로 데울지, 완성된 음료에 실온 우유를 소량 더할지 확인했고, 고객은 우유를 60도로 데우는 방법을 선택  ┃
-┃했다. 바리스타는 온도만 따뜻한 상태에서 우유를 60도로 데우는 방식으로 변경하고 작은 크기, 저지방 우유, 헤이즐넛 시럽 1펌프는 유지한 카페모카가 맞는지 최종 확인한 뒤 음료를 준비  ┃
-┃했다.                                                                                                                                                                             ┃
-┃ [CHANGE] 바리스타가 곧바로 임의의 저온 제조법을 적용할 수 있다는 유혹과 달리 반드시 두 대안을 확인하고 선택을 받는 준수 처리를 드러내는 CONTRAST 사례다.                         ┃
+┃ CASE · CONTRAST 3 · A customer ordered a medium hot Americano with an extra shot and no syrup, asking to keep the size, temperature, shots, and no-syrup condition unchanged but ┃
+┃ make it less intense. The barista asked whether to add two ounces of hot water or leave one inch of room for the customer to dilute it. The customer chose two ounces of hot wat ┃
+┃er. The barista confirmed a medium hot Americano with an extra shot, no syrup, and two additional ounces of hot water, with the size, temperature, shots, and no-syrup condition  ┃
+┃unchanged, then prepared the drink.                                                                                                                                               ┃
+┃ [CHANGE] This contrast example exposes the tempting but disallowed shortcut of interpreting `less intense` unilaterally; the proposition instead has the barista present two con ┃
+┃crete implementations and records the customer's decision.                                                                                                                        ┃
 ┃                                                                                                                                                                                  ┃
 ┃ IMPACT · ELABORATE ADD · ENDPOINTS UNCHANGED                                                                                                                                     ┃
 ┃ These unverified Memories would be added to the existing Target. Neither Source nor Target has been changed.                                                                     ┃
-┃ Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                      ┃
-┃       ▸ + [ADD] [a6289e9b] 한 고객이 카페에서 기본 음료로 중간 크기, 따뜻한 온도, 일반 우유, 바닐라 시럽 2펌프가 정해진 카페라테를 주문했다. 고객은 다른 속성은 그대로           ┃
-┃                            유지하면서 바닐라 맛만 상대적으로 덜 달게 조정해달라고 요청했다. 바리스타는 바닐라 시럽을 1펌프로 줄일지, 무설탕 바닐라 시럽 2펌프로 바꿀지 확인했고, ┃
-┃                            고객은 바닐라 시럽을 1펌프로 줄이는 방법을 선택했다. 바리스타는 중간 크기, 따뜻한 온도, 일반 우유는 유지하고 바닐라 시럽만 2펌프에서 1펌프로 변경한   ┃
-┃                            카페라테가 맞는지 최종 확인한 뒤 음료를 준비했다.                                                                                                     ┃
-┃       ▸ + [ADD] [a654fe23] 한 고객이 카페에서 기본 음료로 큰 크기, 아이스 온도, 오트밀크, 추가 샷 1개가 정해진 카푸치노를 주문했다. 고객은 다른 속성은 그대로 유지하면서 커피    ┃
-┃                            맛만 상대적으로 연하게 조정해달라고 요청했다. 바리스타는 추가 샷 1개를 빼서 기본 샷 수로 만들지, 디카페인 샷 1개로 교체할지 확인했고, 고객은 추가     ┃
-┃                            샷을 빼는 방법을 선택했다. 바리스타는 큰 크기, 아이스 온도, 오트밀크는 유지하고 추가 샷만 1개에서 없음으로 변경한 카푸치노가 맞는지 최종 확인한 뒤   v┃
+┃ Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                     v┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 ┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
 │› REPORT         Complete Elaborate report                                                                                                                                       ^│
-│  CASE · FIT     한 고객이 카페에서 기본 음료로 중간 크기, 따뜻한 온도, 일반 우유, 바닐라 시럽 2펌프가 정해진 카페라테를 주문했다. 고객은 다른 속성은 그대로 유지하면서 바닐라    │
-│                 맛만 상대적으로 덜 달게 조정해달라고 요청했다. 바리스타는 바닐라 시럽을 1펌프로 줄일지, 무설탕 바닐라 시럽 2펌프로 바꿀지 확인했고, 고객은 바닐라 시럽을 1펌프로 │
-│                 줄이는 방법을 선택했다. 바리스타는 중간 크기, 따뜻한 온도, 일반 우유는 유지하고 바닐라 시럽만 2펌프에서 1펌프로 변경한 카페라테가 맞는지 최종 확인한 뒤 음료를   │
-│                 준비했다.                                                                                                                                                        │
-│  CASE · BOUNDARY 한 고객이 카페에서 기본 음료로 큰 크기, 아이스 온도, 오트밀크, 추가 샷 1개가 정해진 카푸치노를 주문했다. 고객은 다른 속성은 그대로 유지하면서 커피 맛만        v│
+│  CASE · FIT     A customer ordered a small hot cappuccino with oat milk and a double shot, asking to keep the size, temperature, milk, and shots unchanged but make it less      │
+│                 foamy. The barista asked whether to leave a thin layer of foam or remove the foam entirely. The customer chose a thin layer of foam. The barista confirmed a     │
+│                 small hot cappuccino with oat milk, a double shot, and a thin layer of foam, with the size, temperature, milk, and shots unchanged, then prepared the drink.     │
+│  CASE · BOUNDARY A customer ordered a large iced matcha latte with almond milk and three pumps of vanilla syrup, asking to keep the size, temperature, milk, and ice unchanged   │
+│                  but make it less sweet. The barista asked whether to reduce the vanilla syrup to one pump or remove it entirely. The customer chose to remove the vanilla syrupv│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
 │[ READ ONLY ]  No action available · This saved session can only be inspected.                                                                                                    │

@@ -8,6 +8,11 @@ import re
 
 from memcommit.context import Context, Memory
 from memcommit.distill import DISTILL_PAYLOAD_MARKER, analyze_distill
+from memcommit.distill_elaborate_reference import (
+    REFERENCE_EXAMPLES_MARKER,
+    REFERENCE_FAMILY_IDS,
+    load_distill_elaborate_reference_families,
+)
 from memcommit.elaborate import ELABORATE_PAYLOAD_MARKER
 from memcommit.elaborate_application import ElaborateRequest
 from memcommit.elaborate_runtime import execute_elaborate
@@ -25,6 +30,14 @@ FIXTURE_PATH = (
 
 def _fixture() -> dict[str, object]:
     return json.loads(FIXTURE_PATH.read_text(encoding="utf-8"))
+
+
+def _family(family_id: str) -> dict[str, object]:
+    return next(
+        family
+        for family in _fixture()["reference_families"]
+        if family["id"] == family_id
+    )
 
 
 def _cafe_frame(example_memories: list[str]):
@@ -59,27 +72,39 @@ def _cloze_frame(example_memories: list[str]):
 
 def test_cafe_fixture_contains_actual_known_wrong_and_reviewed_io() -> None:
     fixture = _fixture()
+    cafe = _family("cafe-order")
 
-    assert fixture["schema_version"] == 1
-    assert fixture["ruleset_version"] == 2
-    assert len(fixture["shared_example_memories"]) == 3
-    assert len(fixture["shared_rule_memories"]) == 7
+    assert fixture["schema_version"] == 2
+    assert fixture["ruleset_version"] == 3
+    assert fixture["prompt_reference"] is True
+    assert tuple(
+        family["id"] for family in fixture["reference_families"]
+    ) == REFERENCE_FAMILY_IDS
+    assert len(cafe["example_memories"]) == 3
+    assert len(cafe["rule_memories"]) == 7
     assert fixture["distill_cases"][0]["known_wrong_rules"]
     assert fixture["elaborate_cases"][0]["known_wrong_cases"]
-    assert fixture["distill_cases"][0]["expected_rule_memory_indexes"] == list(
-        range(1, 8)
-    )
-    assert fixture["elaborate_cases"][0]["required_rule_indexes_per_example"] == list(
-        range(1, 8)
+    english_cafe_texts = [
+        *fixture["operation_rules"].values(),
+        *cafe["rule_memories"],
+        *cafe["example_memories"],
+        *fixture["distill_cases"][0]["known_wrong_rules"],
+        fixture["distill_cases"][0]["known_wrong_reason"],
+        fixture["elaborate_cases"][0]["known_wrong_cases"][0]["proposition"],
+        fixture["elaborate_cases"][0]["known_wrong_reason"],
+    ]
+    assert all(text.isascii() for text in english_cafe_texts)
+    assert all(
+        example.startswith("A customer")
+        for example in cafe["example_memories"]
     )
 
 
 def test_cloze_surface_form_fixture_is_a_literal_three_part_transformation() -> None:
-    cloze = _fixture()["surface_form_calibrations"]["cloze"]
+    cloze = _family("cloze")
 
     assert len(cloze["rule_memories"]) == 4
     assert len(cloze["example_memories"]) == 3
-    assert cloze["known_wrong_rules"]
     for memory in cloze["example_memories"]:
         example_section, cloze_section, meaning_section = memory.split("\n\n")
         example = example_section.removeprefix("EXAMPLE\n")
@@ -94,7 +119,7 @@ def test_cloze_surface_form_fixture_is_a_literal_three_part_transformation() -> 
 
 
 def test_distill_cloze_fixture_requires_shared_language_tone_and_notation_rules() -> None:
-    cloze = _fixture()["surface_form_calibrations"]["cloze"]
+    cloze = _family("cloze")
     examples = cloze["example_memories"]
     expected_rules = cloze["rule_memories"]
 
@@ -145,9 +170,9 @@ def test_distill_cloze_fixture_requires_shared_language_tone_and_notation_rules(
 
 
 def test_distill_cafe_fixture_recovers_behavior_and_generative_form_rules() -> None:
-    fixture = _fixture()
-    examples = fixture["shared_example_memories"]
-    expected_rules = fixture["shared_rule_memories"]
+    cafe = _family("cafe-order")
+    examples = cafe["example_memories"]
+    expected_rules = cafe["rule_memories"]
 
     class ReviewedDistillProvider:
         prompt = ""
@@ -186,9 +211,9 @@ def test_distill_cafe_fixture_recovers_behavior_and_generative_form_rules() -> N
 
 
 def test_elaborate_cafe_fixture_requires_every_rule_in_every_example() -> None:
-    fixture = _fixture()
-    rules = fixture["shared_rule_memories"]
-    examples = fixture["shared_example_memories"]
+    cafe = _family("cafe-order")
+    rules = cafe["rule_memories"]
+    examples = cafe["example_memories"]
 
     class ReviewedElaborateProvider:
         prompt = ""
@@ -239,3 +264,119 @@ def test_elaborate_cafe_fixture_requires_every_rule_in_every_example() -> None:
     assert "stored proposition must still show the Rule-compliant handling" in (
         ReviewedElaborateProvider.prompt
     )
+
+
+def test_packaged_reference_loader_exposes_three_complete_prompt_families() -> None:
+    families = load_distill_elaborate_reference_families()
+
+    assert tuple(family.family_id for family in families) == REFERENCE_FAMILY_IDS
+    assert all(len(family.example_memories) == 3 for family in families)
+    assert [len(family.rule_memories) for family in families] == [7, 6, 4]
+    lost_property = families[1]
+    assert all(
+        example.startswith("A visitor reported a lost")
+        for example in lost_property.example_memories
+    )
+    assert any(
+        example.startswith("No matching item was found", example.rfind(". ") + 2)
+        for example in lost_property.example_memories
+    )
+
+
+def test_every_distill_and_elaborate_prompt_quotes_all_reference_families() -> None:
+    cafe = _family("cafe-order")
+
+    class PromptCapturingDistillProvider:
+        prompt = ""
+
+        def complete(self, prompt, *, operation, output_schema=None):
+            type(self).prompt = prompt
+            payload = json.loads(prompt.split(DISTILL_PAYLOAD_MARKER, 1)[1])
+            aliases = [item["memory_id"] for item in payload["source"]["memories"]]
+            return json.dumps(
+                {
+                    "overview": "One reference-aware Rule.",
+                    "rules": [
+                        {
+                            "content": "Preserve the demonstrated family structure.",
+                            "rationale": "The current Source supports this Rule.",
+                            "support_memory_ids": aliases,
+                            "boundary_memory_ids": [],
+                        }
+                    ],
+                    "outside_memory_ids": [],
+                }
+            )
+
+    analyze_distill(
+        _cafe_frame(cafe["example_memories"]),
+        goal=None,
+        provider=PromptCapturingDistillProvider(),
+    )
+    distill_prompt = PromptCapturingDistillProvider.prompt
+    assert REFERENCE_EXAMPLES_MARKER in distill_prompt
+    for family in load_distill_elaborate_reference_families():
+        assert family.family_id in distill_prompt
+        assert all(text in distill_prompt for text in family.rule_memories)
+        assert all(
+            json.dumps(text, ensure_ascii=False)[1:-1] in distill_prompt
+            for text in family.example_memories
+        )
+
+    class PromptCapturingElaborateProvider:
+        prompts: list[str] = []
+
+        def complete(self, prompt, *, operation, output_schema=None):
+            type(self).prompts.append(prompt)
+            payload = json.loads(prompt.split(ELABORATE_PAYLOAD_MARKER, 1)[1])
+            if payload["mode"] == "GOAL_TO_RULES":
+                return json.dumps(
+                    {
+                        "overview": "One reference-shaped Rule.",
+                        "rules": [
+                            {
+                                "content": "Preserve one reviewable invariant.",
+                                "rationale": "The Goal becomes operational.",
+                            }
+                        ],
+                    }
+                )
+            return json.dumps(
+                {
+                    "overview": "One joint Example.",
+                    "cases": [
+                        {
+                            "proposition": cafe["example_memories"][0],
+                            "expected": "The complete Rule set remains visible.",
+                            "rationale": "The proposition jointly follows every Rule.",
+                            "case_role": "FIT",
+                            "rule_checks": [
+                                {
+                                    "source_rule_index": index,
+                                    "evidence": f"Rule {index} is visible.",
+                                }
+                                for index, _rule in enumerate(payload["inputs"], 1)
+                            ],
+                        }
+                    ],
+                }
+            )
+
+    execute_elaborate(
+        ElaborateRequest(rules=tuple(cafe["rule_memories"])),
+        provider_factory=PromptCapturingElaborateProvider,
+    )
+    execute_elaborate(
+        ElaborateRequest(goal="Make one reusable procedure reviewable."),
+        provider_factory=PromptCapturingElaborateProvider,
+    )
+    assert len(PromptCapturingElaborateProvider.prompts) == 2
+    for prompt in PromptCapturingElaborateProvider.prompts:
+        assert REFERENCE_EXAMPLES_MARKER in prompt
+        for family in load_distill_elaborate_reference_families():
+            assert family.family_id in prompt
+            assert all(text in prompt for text in family.rule_memories)
+            assert all(
+                json.dumps(text, ensure_ascii=False)[1:-1] in prompt
+                for text in family.example_memories
+            )

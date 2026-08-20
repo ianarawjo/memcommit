@@ -26,6 +26,27 @@ def elaborate_result_lines(result: ElaborateResult) -> tuple[str, ...]:
         "WHAT MEM UNDERSTOOD",
         safe_terminal_text(analysis.overview),
     ]
+    if analysis.target_context is not None:
+        lines.extend(
+            (
+                "",
+                "TARGET AMBIENT · "
+                f"{safe_terminal_text(analysis.target_context.context_name)} · "
+                f"{len(analysis.target_context.items)} ITEMS",
+            )
+        )
+        for item in analysis.target_context.items:
+            if item.kind == "MEMORY":
+                lines.append(
+                    f"{item.alias} · MEMORY · "
+                    f"{safe_terminal_text(item.context_name)} · "
+                    f"{safe_terminal_text(item.content or '')}"
+                )
+            else:
+                lines.append(
+                    f"{item.alias} · QUERY ONLY · "
+                    f"{safe_terminal_text(item.context_name)} · NAME ONLY"
+                )
     if analysis.mode is ElaborateMode.GOAL_TO_RULES:
         lines.extend(("", f"PROPOSED RULES · {len(analysis.rules)}"))
         for index, rule in enumerate(analysis.rules, 1):
@@ -38,6 +59,11 @@ def elaborate_result_lines(result: ElaborateResult) -> tuple[str, ...]:
                     )
                 )
             )
+            if analysis.target_context is not None:
+                lines.append(
+                    "   TARGET USED · "
+                    + (", ".join(rule.target_context_refs) or "NONE")
+                )
     else:
         lines.extend(("", f"PROPOSED CASES · {len(analysis.cases)}"))
         for index, case in enumerate(analysis.cases, 1):
@@ -54,6 +80,14 @@ def elaborate_result_lines(result: ElaborateResult) -> tuple[str, ...]:
                     ),
                     f"   EXPECTED · {safe_terminal_text(case.expected or '(open)')}",
                     f"   WHY · {safe_terminal_text(case.rationale)}",
+                    *(
+                        (
+                            "   TARGET USED · "
+                            + (", ".join(case.target_context_refs) or "NONE"),
+                        )
+                        if analysis.target_context is not None
+                        else ()
+                    ),
                 )
             )
     lines.extend(("", "PROPOSALS · SUGGESTED · UNVERIFIED"))

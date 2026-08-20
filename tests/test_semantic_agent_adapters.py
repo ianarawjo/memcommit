@@ -99,7 +99,7 @@ def test_default_registry_and_mcp_expose_read_only_semantic_tools(isolated_store
     elaborate = registry.invoke(
         ELABORATE_AGENT_TOOL_NAME,
         {
-            "version": ELABORATE_AGENT_CONTRACT_VERSION,
+            "version": 3,
             "kind": "goal_to_rules",
             "goal": "Confirm before acting.",
             "number": 1,
@@ -159,7 +159,7 @@ def test_semantic_agent_rejects_unknown_fields_before_provider(tmp_path):
     result = registry.invoke(
         ELABORATE_AGENT_TOOL_NAME,
         {
-            "version": 2,
+            "version": 3,
             "kind": "goal_to_rules",
             "goal": "A Goal",
             "save": True,
@@ -186,7 +186,7 @@ def test_semantic_agent_ground_routes_preserve_context_error_category(
     elaborate = registry.invoke(
         ELABORATE_AGENT_TOOL_NAME,
         {
-            "version": 2,
+            "version": 3,
             "kind": "ground_goal_to_rules",
             "ground_name": "missing-ground",
         },

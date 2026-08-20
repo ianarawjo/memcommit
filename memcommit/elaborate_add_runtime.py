@@ -12,6 +12,13 @@ from memcommit.elaborate_runtime import (
     ElaborateProviderFactory,
     execute_elaborate,
 )
+from memcommit.elaborate_target_context import (
+    FrozenElaborateTargetContext,
+    GRANTED_ELABORATE_ADD_PERMISSIONS,
+    GRANTED_ELABORATE_AMBIENT_PERMISSIONS,
+    authorized_frozen_elaborate_target,
+    freeze_elaborate_target_context,
+)
 from memcommit.semantic_add_runtime import (
     FrozenSemanticAddTarget,
     SemanticAddReceipt,
@@ -33,6 +40,7 @@ class FrozenElaborateSource:
     context_digest: str
     role: ElaborateContextRole
     request: ElaborateRequest
+    memory_uids: tuple[str, ...]
 
 
 @dataclass(frozen=True)
@@ -41,6 +49,7 @@ class PreparedElaborateAdd:
 
     result: ElaborateResult
     target: FrozenSemanticAddTarget
+    target_context: FrozenElaborateTargetContext
     source: FrozenElaborateSource | None = None
 
 
@@ -84,6 +93,7 @@ def freeze_elaborate_context_source(
         context_digest=context_record_digest(context),
         role=role,
         request=request,
+        memory_uids=tuple(item.uid for item in memories),
     )
 
 
@@ -109,18 +119,48 @@ def prepare_elaborate_add(
     target_name: str,
     provider_factory: ElaborateProviderFactory,
     source: FrozenElaborateSource | None = None,
+    will_apply: bool = False,
 ) -> PreparedElaborateAdd:
     """Freeze Target before inference and return one non-mutating exact plan."""
 
     if source is not None and source.request != request:
         raise ElaborateError("Elaborate Source does not match its request.")
     target = freeze_semantic_add_target(store, target_name)
+    excluded_root_memory_uids = (
+        source.memory_uids
+        if source is not None and source.context_uid == target.context_uid
+        else ()
+    )
+    target_context = freeze_elaborate_target_context(
+        store,
+        target=target,
+        excluded_root_memory_uids=excluded_root_memory_uids,
+        required_granted_permissions=(
+            GRANTED_ELABORATE_ADD_PERMISSIONS
+            if will_apply
+            else GRANTED_ELABORATE_AMBIENT_PERMISSIONS
+        ),
+    )
     if source is not None:
         _revalidate_source(store, source)
-    result = execute_elaborate(request, provider_factory=provider_factory)
-    if source is not None:
-        _revalidate_source(store, source)
-    return PreparedElaborateAdd(result=result, target=target, source=source)
+    with authorized_frozen_elaborate_target(store, target_context):
+        if source is not None:
+            _revalidate_source(store, source)
+        result = execute_elaborate(
+            request,
+            provider_factory=provider_factory,
+            target_context=(
+                target_context.semantic if target_context.semantic.items else None
+            ),
+        )
+        if source is not None:
+            _revalidate_source(store, source)
+    return PreparedElaborateAdd(
+        result=result,
+        target=target,
+        target_context=target_context,
+        source=source,
+    )
 
 
 def apply_prepared_elaborate_add(
@@ -150,6 +190,7 @@ def apply_prepared_elaborate_add(
                 "proposal_uid": item.uid,
                 "content": item.content,
                 "rationale": item.rationale,
+                "target_context_refs": list(item.target_context_refs),
             }
             for item in analysis.rules
         ]
@@ -168,35 +209,52 @@ def apply_prepared_elaborate_add(
                     }
                     for check in item.rule_checks
                 ],
+                "target_context_refs": list(item.target_context_refs),
             }
             for item in analysis.cases
         ]
     )
-    return append_semantic_memories(
-        store=store,
-        operation="elaborate",
-        source_name=source.context_name if source is not None else None,
-        target=prepared.target,
-        contents=contents,
-        source_bindings=source_bindings,
-        operation_args={
-            "version": 1,
-            "analysis_uid": analysis.uid,
-            "analysis_digest": analysis.digest,
-            "mode": analysis.mode.value,
-            "number": analysis.number,
-            "verification": "UNVERIFIED",
-            "origin": prepared.result.origin,
-            "overview": analysis.overview,
-            "inputs": list(analysis.inputs),
-            "proposals": proposal_records,
-        },
-        description=(
-            f"Added {len(contents)} Elaborate "
-            f"{'Rules' if analysis.mode is ElaborateMode.GOAL_TO_RULES else 'Cases'} "
-            f"to '{prepared.target.context_name}'"
-        ),
+    ambient_bindings = tuple(
+        (item.context_name, item.context_uid, item.context_digest)
+        for item in prepared.target_context.local_contexts
     )
+    all_source_bindings = tuple(
+        dict.fromkeys((*source_bindings, *ambient_bindings))
+    )
+    with authorized_frozen_elaborate_target(
+        store,
+        prepared.target_context,
+        revalidate_after=False,
+        required_granted_permissions=GRANTED_ELABORATE_ADD_PERMISSIONS,
+    ):
+        return append_semantic_memories(
+            store=store,
+            operation="elaborate",
+            source_name=source.context_name if source is not None else None,
+            target=prepared.target,
+            contents=contents,
+            source_bindings=all_source_bindings,
+            operation_args={
+                "version": 2,
+                "analysis_uid": analysis.uid,
+                "analysis_digest": analysis.digest,
+                "mode": analysis.mode.value,
+                "number": analysis.number,
+                "verification": "UNVERIFIED",
+                "origin": prepared.result.origin,
+                "overview": analysis.overview,
+                "inputs": list(analysis.inputs),
+                "target_ambient": analysis.target_context.prompt_record()
+                if analysis.target_context is not None
+                else None,
+                "proposals": proposal_records,
+            },
+            description=(
+                f"Added {len(contents)} Elaborate "
+                f"{'Rules' if analysis.mode is ElaborateMode.GOAL_TO_RULES else 'Cases'} "
+                f"to '{prepared.target.context_name}'"
+            ),
+        )
 
 
 __all__ = [

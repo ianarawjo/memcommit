@@ -41,24 +41,34 @@ one-turn request. The provider instruction, decoder, typed analysis validator,
 prepared-result check, and atomic publication count all share this exact
 request value. A count mismatch publishes nothing.
 
-Every Case is linked to one source Rule index and classified as `FIT`,
-`BOUNDARY`, or `CONTRAST`. Structural domain validation and active-config
-validation are separate so an injected configuration is applied consistently
-to live and prepared output.
+Every Case is classified as `FIT`, `BOUNDARY`, or `CONTRAST` and carries one
+ordered `rule_checks` entry for every current input Rule. Every stored
+proposition must jointly comply with the complete Rule set; a contrast may
+appear in the rationale but is not stored as a violating Example. Structural
+domain validation and active-config validation are separate so an injected
+configuration is applied consistently to live and prepared output.
+
+Every provider prompt quotes the complete café, lost-property, and Cloze
+Rule/Example reference pairs. Rules-to-Cases reads them in the generative
+direction. Goal-to-Rules uses their Rule sides as examples of independently
+reviewable Rule form and their paired Example sides as the reason those Rules
+are operational. The references are present in both directions but never
+become current input Rules: `rule_checks` still range exactly over the
+request's Rule tuple. Provider contract version 4 prevented an unreferenced
+prompt result from replaying; version 5 introduced typed Target ambient
+context, and version 6 distinguishes an exact requested proposal number from
+the default bounded range.
 
 The nonempty-output invariant is enforced independently by the Provider
 instruction, JSON Schema `minItems`, strict decoder, and typed analysis. This
 redundancy is intentional: a Provider or prepared lookup cannot turn an empty
 array into a successful Elaborate result. The Provider contract version was
 advanced when this invariant replaced the earlier zero-proposal behavior.
-Provider contract version 4 additionally distinguishes an exact-number
-request from the default bounded range so an older prepared result cannot
-silently satisfy a different generation instruction.
 
 An injectable exact prepared lookup may avoid provider construction only when
-the normalized direction, complete input tuple, and exact-number request match.
-There is no persisted
-Elaborate cache artifact yet and no subset/projection reuse claim.
+the normalized direction, complete input tuple, exact-number request, and
+Target ambient frame match. There is no persisted Elaborate cache artifact yet
+and no subset/projection reuse claim.
 
 ## Standalone Add and endpoint contract
 
@@ -80,8 +90,8 @@ exactly one direct Memory and generates Rules. This role belongs to the
 invocation, not to the Context name: `goals`, `rules`, and other naming
 conventions carry no hidden semantics. Inline `--goal` or repeatable `--rule`
 remains available and uses Current or `--to` as its existing Target.
-`--n`/`-n`/`--number` has the same exact meaning for inline input, Context
-input, and both Ground directions.
+`--n`/`-n`/`--number` has the same exact meaning for inline input, Context input, and
+both Ground directions.
 
 Source and Target may be the same Context. The command freezes their common
 pre-image before provider construction, so a provider turn cannot consume the
@@ -89,6 +99,53 @@ Memories that it generates. A later invocation naturally sees earlier output;
 the operation does not maintain a hidden exclusion set across runs. Separate
 Source bindings and the Target digest remain locked through the atomic write.
 If either exact input changes, no generated Memory is published.
+
+### Exact Target ambient context
+
+Elaborate also treats content already present in its exact existing Target as
+ambient destination context. This is narrower than an automatic Profile-wide
+read. The selected Goal or Rule tuple remains the generative Source, while the
+Target frame helps new proposals preserve the destination's established
+terminology, presentation form, distinctions, and useful variation. The three
+packaged café, lost-property, and Cloze families still demonstrate how the
+operation works; Target ambient items instead describe where this particular
+result would live.
+
+The Target graph is frozen before provider construction. Direct ordinary
+Memories and live local Context or Memory embeds are followed recursively.
+Cycles terminate by Context identity and the same logical Memory is transmitted
+once. A dangling or identity-replaced local embed fails before provider
+connection rather than becoming a silently incomplete destination frame.
+QUERY-only entries contribute only their public Context name; no hidden
+content or source identity enters the semantic payload. A persisted granted
+Embed contributes content only while `READ`, `EMBED`, `DERIVE`, and `COMBINE`
+are all effective. Its Grant binding and authority Context digest are frozen,
+held through the provider turn, and revalidated before publication. A
+proposal-only Impact or Ground run stops at that boundary. Direct Add also
+requires `EXPORT` because the derived result leaves the granted resource and
+`SAVE_ANALYSIS` because the durable receipt retains the reviewed analysis;
+both are checked before provider connection and again at publication.
+
+When Source and Target are the same Context, directly consumed Source Memory
+UIDs are excluded from the ambient frame. Source meaning therefore wins and
+the same string is not sent twice under two semantic roles; safe embedded and
+query-name context can still remain ambient. An unrelated Context, readable or
+otherwise, is never pulled in merely because it exists in the Profile.
+
+Provider output includes `target_context_refs` for every proposal. These
+aliases report exactly which ambient items the provider says it materially
+used, may be empty, and are locally restricted to the frozen Target aliases.
+They do not replace `rule_checks` and do not turn Target Memories into Rule
+evidence. The typed analysis, plain and TUI details, public proposal, agent
+projection, digest, and version-2 Add receipt retain this trace. Any root,
+embedded, referenced, or granted ambient pre-image drift rejects the proposal
+or Add without partially appending generated Memories.
+
+Distill intentionally does not receive destination ambient content in this
+change. Distill remains a reduction over its selected Source evidence. A later
+Distill design may use existing destination Rules for novelty or reconciliation,
+but duplicate removal belongs to an explicit reconciliation/Dedun boundary and
+must not silently change what the current Source supports.
 
 `mem impact elaborate` runs the same preparation path and displays the exact
 would-add set while leaving both endpoints unchanged. Generated propositions
@@ -101,7 +158,7 @@ Goal-to-Rules catalogs use `[N] CONTENT — SUGGESTED · UNVERIFIED`. The status
 suffix stays adjacent to every proposal, while its rationale remains available
 in the Rule detail instead of consuming a second default catalog row. This
 compact form applies only to Rule catalogs; Rules-to-Cases retains its distinct
-role, expected-result, and Source-Rule fields.
+role, expected-result, and complete Rule-coverage fields.
 
 The renderer folds stored whitespace into one logical row but never truncates
 or paraphrases Rule content. A terminal may visually wrap a long row at its
@@ -118,7 +175,7 @@ that Rule catalog; rationale remains available in detail and copy, and exact
 endpoint immutability remains visible in the Context-location header and
 close-time digest verification. Rules-to-Cases keeps its separate proposal and
 Impact projections because the compact Rule-only catalog contract does not
-apply to Case role, expected-result, and Source-Rule fields.
+apply to Case role, expected-result, and complete Rule-coverage fields.
 
 ## Ground route
 
@@ -126,7 +183,11 @@ Ground CLI accepts one exact saved Ground and either `--from-goal` or
 `--from-rules`, plus the same optional exact `--number`. It calls the same
 `run_elaborate` application function. The
 Ground adapter freezes and revalidates the exact Ground UID, revision, and
-record digest before and after the provider call. Active Ground Rules are
+record digest before and after the provider call. A physical Ground uses
+`/rules` as Goal-to-Rules destination ambient context and `/examples` as
+Rules-to-Cases destination ambient context; other lanes are not included.
+The legacy record projects its active Rule or Case destination lane under the
+same typed ambient contract. Active Ground Rules are
 `PROPOSED` or `ACCEPTED` Rules; rejected/deferred material is not silently
 reused. Ground Elaborate remains proposal-only until its non-Context workspace
 records can participate in the same exact source-lock publication boundary.
@@ -143,6 +204,9 @@ exact Ground projections. Versioned agent and MCP tools expose all four input
 forms and the same optional exact number, and return
 `verification: UNVERIFIED` and `effect: NONE`; this first Add
 slice does not silently broaden those callable adapters into mutations.
+Agent contract version 3 adds the name-only/content-safe Target ambient frame
+and per-proposal Target references; standalone public calls without a Target
+continue to return no ambient frame.
 
 Elaborate currently opens directly on its result Viewer rather than providing
 an input-composer TUI. That is intentional for this slice: CLI, Python, or

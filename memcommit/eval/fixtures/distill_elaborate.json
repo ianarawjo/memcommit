@@ -1,72 +1,94 @@
 {
-  "schema_version": 1,
-  "ruleset_version": 2,
+  "schema_version": 2,
+  "ruleset_version": 3,
   "corpus_role": "CONSUMED_CALIBRATION",
   "independent_holdout": false,
+  "prompt_reference": true,
   "operation_rules": {
-    "distill": "여러 Example Memory에서 반복되는 행동 원칙뿐 아니라 역할, 사건, 순서, 관계, 판단 경계, 언어, 어투, 시점, 정확한 표현, 라벨, 표기법과 새로운 동종 Example을 만드는 데 필요한 형식을 Rule Memory로 환원하고, 사례별 고유 값만 일반화한다.",
-    "elaborate": "여러 Rule Memory를 입력받으면 각 Rule을 따로 설명하지 않고, 생성하는 모든 Example Memory 안에서 전체 Rule 집합을 함께 구현하며, 고정 구조는 유지하고 정당한 사례별 값만 달리한다."
+    "distill": "Reduce recurring behavior, roles, events, sequence, relations, judgment boundaries, language, tone, viewpoint, exact expressions, labels, notation, and other generative form across Example Memories into Rule Memories, generalizing only instance-specific values.",
+    "elaborate": "Given a Goal or multiple Rule Memories, generate concrete Rule or Example Memories that preserve the demonstrated relationship between reusable constraints and complete family members."
   },
-  "shared_rule_memories": [
-    "각 카페 주문 사례는 제삼자 시점의 짧은 서술로 작성하며, 고객의 주문부터 바리스타의 최종 확인까지 사건이 발생한 순서대로 제시한다.",
-    "각 사례는 ‘한 고객이’로 시작하여 고객이 카페에서 음료를 주문하는 상황임을 먼저 밝힌다.",
-    "고객은 구체적인 기본 음료를 선택하고, 크기, 온도, 우유, 시럽 또는 샷처럼 이미 정해진 주문 속성을 함께 제시한다.",
-    "고객은 기본 주문에서 한 가지 속성만 상대적으로 조정해달라고 요청하고, 요청하지 않은 나머지 속성은 그대로 유지해달라고 한다.",
-    "고객의 요청 다음에는 ‘바리스타는’을 주어로 사용하여 바리스타가 주문을 처리하는 행동을 제시한다.",
-    "요청된 조정을 구현하는 방법이 여러 가지라면, 바리스타는 한 가지 방법을 임의로 선택하지 않고 두 가지 구체적인 대안을 포함한 확인 질문을 하며, 고객은 그중 하나를 선택한다.",
-    "고객이 조정 방법을 선택하면, 바리스타는 변경할 속성과 유지할 기존 속성을 모두 포함해 최종 주문을 확인한 뒤 음료를 준비한다."
-  ],
-  "shared_example_memories": [
-    "한 고객이 전유와 바닐라 시럽 두 펌프가 들어간 미디엄 아이스 바닐라 라테를 주문하면서 크기와 온도와 우유는 그대로 두고 덜 달게 해달라고 요청했다. 바리스타는 시럽을 한 펌프로 줄일지 완전히 뺄지 물었고, 고객은 한 펌프를 선택했다. 바리스타는 전유와 바닐라 시럽 한 펌프가 들어간 미디엄 아이스 바닐라 라테이며 크기와 온도와 우유는 그대로라고 확인한 뒤 음료를 준비했다.",
-    "한 고객이 전유와 더블 샷이 들어간 스몰 핫 카푸치노를 주문하면서 다른 조건은 그대로 두고 거품을 줄여달라고 요청했다. 바리스타는 거품을 얇게 남길지 완전히 없앨지 물었고, 고객은 얇게 남기는 쪽을 선택했다. 바리스타는 전유와 더블 샷과 얇은 거품이 들어간 스몰 핫 카푸치노이며 나머지 조건은 그대로라고 확인한 뒤 음료를 준비했다.",
-    "한 고객이 시럽을 넣지 않은 라지 아이스 콜드브루를 주문하면서 크기와 얼음과 무시럽 조건은 그대로 두고 맛을 더 진하게 해달라고 요청했다. 바리스타는 에스프레소 샷을 추가할지 물의 양을 줄일지 물었고, 고객은 에스프레소 샷 추가를 선택했다. 바리스타는 에스프레소 샷을 추가한 라지 아이스 콜드브루이며 얼음의 양과 무시럽 조건은 그대로라고 확인한 뒤 음료를 준비했다."
-  ],
-  "surface_form_calibrations": {
-    "cloze": {
+  "reference_families": [
+    {
+      "id": "cafe-order",
       "rule_memories": [
-        "각 항목은 `EXAMPLE`, `CLOZE`, `뜻 설명` 라벨을 이 순서로 한 번씩 사용하며, 앞의 두 섹션에는 영어 문장을 두고 마지막 섹션에는 한국어 설명을 둔다.",
-        "`CLOZE`는 `EXAMPLE` 문장을 그대로 복사한 뒤 목표 표현 하나만 제자리에서 `{{c1::목표 표현}}`으로 감싸며, 나머지 단어, 순서, 대소문자와 문장부호는 바꾸지 않는다.",
-        "목표 표현은 동사, 형용사, 명사처럼 서로 다른 문법 역할과 문장 위치에 놓일 수 있으므로 하나의 품사나 위치로 제한하지 않는다.",
-        "`뜻 설명`은 정확한 목표 표현을 Cloze 표기 없이 그대로 반복하고 그 뒤에 Source에서 관찰되는 한국어 조사 `은` 또는 `는`을 붙여 시작하며, 그 표현이 EXAMPLE의 문맥에서 나타내는 의미만 한국어 평서체로 설명한 뒤 `뜻이다.`로 끝낸다."
+        "Write each cafe-order Example as exactly four chronological sentences in a short third-person, past-tense narrative.",
+        "Begin the first sentence exactly with `A customer`, establish that the customer is ordering a concrete base drink at a cafe, and state already selected attributes such as size, temperature, milk, syrup, shots, ice, or foam.",
+        "In the first sentence, have the customer request a relative adjustment to exactly one attribute while explicitly preserving every unspecified attribute.",
+        "Begin the second sentence exactly with `The barista` and, instead of choosing arbitrarily, ask the customer to choose between exactly two concrete implementations of the requested adjustment.",
+        "Begin the third sentence exactly with `The customer` and record the customer's selection of one offered implementation.",
+        "Begin the fourth sentence exactly with `The barista`, restate both the selected change and the preserved existing attributes, and confirm the final order.",
+        "End the fourth sentence exactly with `then prepared the drink.`"
+      ],
+      "example_memories": [
+        "A customer ordered a medium iced vanilla latte with whole milk and two pumps of vanilla syrup, asking to keep the size, temperature, and milk unchanged but make it less sweet. The barista asked whether to reduce the syrup to one pump or remove it entirely. The customer chose one pump. The barista confirmed a medium iced vanilla latte with whole milk and one pump of vanilla syrup, with the size, temperature, and milk unchanged, then prepared the drink.",
+        "A customer ordered a small hot cappuccino with whole milk and a double shot, asking to keep the other conditions unchanged but use less foam. The barista asked whether to leave a thin layer of foam or remove it entirely. The customer chose a thin layer. The barista confirmed a small hot cappuccino with whole milk, a double shot, and a thin layer of foam, with the other conditions unchanged, then prepared the drink.",
+        "A customer ordered a large iced cold brew with no syrup, asking to keep the size, ice, and no-syrup condition unchanged but make the flavor stronger. The barista asked whether to add an espresso shot or use less water. The customer chose an added espresso shot. The barista confirmed a large iced cold brew with an added espresso shot, with the amount of ice and no-syrup condition unchanged, then prepared the drink."
+      ]
+    },
+    {
+      "id": "lost-property",
+      "rule_memories": [
+        "Write each lost-property Example as exactly three chronological sentences in a neutral third-person, past-tense service narrative.",
+        "Begin the first sentence exactly with `A visitor reported a lost`, identify the item and service point, and include both a visible distinguishing feature and the place where the item was last seen.",
+        "Begin the second sentence exactly with `The attendant` and check both the lost-property log and matching items before deciding the next step.",
+        "Do not return an apparent match from the initial description alone; when a matching item exists, ask the visitor to identify a concealed detail before returning it.",
+        "Use the final sentence to complete the applicable outcome: after a successful concealed-detail check, record the return and hand over the item; when no item matches, record contact details and promise notification if the item arrives.",
+        "For a successful match, begin the final sentence exactly with `The visitor`; for an unsuccessful search, begin it exactly with `No matching item was found`."
+      ],
+      "example_memories": [
+        "A visitor reported a lost black umbrella at the museum information desk and described its wooden handle and the gallery where it was last seen. The attendant checked the lost-property log and matching items, then asked the visitor to identify a concealed detail. The visitor identified initials inside the strap, so the attendant recorded the return and handed over the umbrella.",
+        "A visitor reported a lost blue wallet at the library service desk and described its silver zipper and the reading room where it was last seen. The attendant checked the lost-property log and matching items, then asked the visitor to identify a concealed detail. The visitor identified a green transit card inside, so the attendant recorded the return and handed over the wallet.",
+        "A visitor reported a lost red scarf at the theater reception desk and described its striped edge and the lobby where it was last seen. The attendant checked the lost-property log and matching items, but found no matching item. No matching item was found, so the attendant recorded the visitor's contact details and said the visitor would be notified if the scarf arrived."
+      ]
+    },
+    {
+      "id": "cloze",
+      "rule_memories": [
+        "Use the labels `EXAMPLE`, `CLOZE`, and `뜻 설명` exactly once and in that order; put an English sentence in each of the first two sections and a Korean explanation in the final section.",
+        "Create `CLOZE` by copying the `EXAMPLE` sentence exactly and wrapping exactly one target expression in place as `{{c1::target expression}}`, without changing any other word, order, capitalization, or punctuation.",
+        "Allow target expressions to occupy different grammatical roles and sentence positions, including verbs, adjectives, and nouns, rather than restricting them to one part of speech or position.",
+        "Begin `뜻 설명` with the exact unwrapped target expression followed by an observed Korean particle, `은` or `는`; explain only its contextual meaning in Korean declarative prose and end exactly with `뜻이다.`"
       ],
       "example_memories": [
         "EXAMPLE\nI postponed the meeting until Friday.\n\nCLOZE\nI {{c1::postponed}} the meeting until Friday.\n\n뜻 설명\npostponed는 예정된 회의를 금요일까지 미뤘다는 뜻이다.",
         "EXAMPLE\nThe glass vase is fragile.\n\nCLOZE\nThe glass vase is {{c1::fragile}}.\n\n뜻 설명\nfragile은 유리 꽃병이 쉽게 깨질 수 있다는 뜻이다.",
         "EXAMPLE\nThe hikers found shelter before the storm.\n\nCLOZE\nThe hikers found {{c1::shelter}} before the storm.\n\n뜻 설명\nshelter는 폭풍을 피할 수 있는 안전한 장소라는 뜻이다."
-      ],
-      "known_wrong_rules": [
-        "뜻 설명은 정확한 target 뒤에 항상 `는`을 붙인다.",
-        "EXAMPLE과 CLOZE는 같은 주어를 사용한다."
-      ],
-      "known_wrong_reason": "첫 Rule은 실제 `fragile은`을 무시해 문자 근거와 충돌하고, 둘째 Rule은 문장 전체를 보존한다는 Rule의 기계적 결과를 독립 생성 규칙으로 중복한다."
+      ]
     }
-  },
+  ],
   "distill_cases": [
     {
       "id": "cafe-examples-to-generative-rules",
-      "input_example_memory_indexes": [1, 2, 3],
+      "family_id": "cafe-order",
       "known_wrong_rules": [
-        "고객이 음료를 ‘덜 달게’, ‘거품을 줄여서’, ‘더 진하게’처럼 여러 방식으로 구현할 수 있는 정성적 변경을 요청하면, 준비 전에 가능한 구체적 변경안을 제시하고 고객의 선택을 확인해야 한다.",
-        "고객이 일부 속성만 변경하고 나머지는 그대로 유지해 달라고 하면, 선택된 변경만 적용하고 크기·온도·우유·얼음·시럽 여부 등 유지 대상으로 지정된 조건을 보존해야 한다.",
-        "음료를 준비하기 전에 선택된 변경 사항과 유지되는 주요 조건을 포함한 최종 주문을 고객에게 다시 확인해야 한다."
+        "When a customer requests a qualitative change such as making a drink less sweet, using less foam, or making the flavor stronger, present concrete implementations before preparation and confirm the customer's choice.",
+        "When the customer asks to change some attributes and leave the rest unchanged, apply only the selected change and preserve designated conditions such as size, temperature, milk, ice, and syrup status.",
+        "Before preparing the drink, reconfirm the final order, including the selected change and the major conditions that remain unchanged."
       ],
-      "known_wrong_reason": "행동 규칙은 회수하지만 반복되는 제삼자 시점, ‘한 고객이’와 ‘바리스타는’의 역할 구조, 기본 주문 속성과 시간순 서술을 누락한다.",
-      "expected_rule_memory_indexes": [1, 2, 3, 4, 5, 6, 7]
+      "known_wrong_reason": "These recover behavioral rules but omit the recurring third-person viewpoint, exact actor openings, base-order attributes, sentence count, and chronological form."
+    },
+    {
+      "id": "cloze-examples-to-generative-rules",
+      "family_id": "cloze",
+      "known_wrong_rules": [
+        "Always append `는` immediately after the exact target in `뜻 설명`.",
+        "Use the same subject in `EXAMPLE` and `CLOZE`."
+      ],
+      "known_wrong_reason": "The first Rule contradicts the literal `fragile은` support; the second redundantly states a mechanical consequence of copying the complete sentence."
     }
   ],
   "elaborate_cases": [
     {
       "id": "cafe-rules-to-joint-examples",
-      "input_rule_memory_indexes": [1, 2, 3, 4, 5, 6, 7],
+      "family_id": "cafe-order",
       "known_wrong_cases": [
         {
-          "proposition": "한 고객이 따뜻한 아메리카노의 온도만 조금 낮춰달라고 요청하자 바리스타가 확인 질문 없이 바로 음료를 준비한다.",
-          "source_rule_index": 6
+          "proposition": "A customer asks for a hot Americano at a slightly lower temperature, and the barista prepares it immediately without asking a clarifying question.",
+          "source_rule_index": 4
         }
       ],
-      "known_wrong_reason": "한 Case를 한 Rule에만 연결하고 Rule을 위반하는 CONTRAST proposition을 저장 가능한 Example처럼 제안한다.",
-      "expected_example_memory_indexes": [1, 2, 3],
-      "required_rule_indexes_per_example": [1, 2, 3, 4, 5, 6, 7]
+      "known_wrong_reason": "This links one Case to only one Rule and proposes a Rule-violating CONTRAST proposition as if it were a storable Example."
     }
   ]
 }

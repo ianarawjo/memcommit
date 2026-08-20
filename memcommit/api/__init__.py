@@ -161,6 +161,7 @@ __all__ = [
     "ElaborateProposal",
     "ElaborateRuleCheckProposal",
     "ElaborateRuleProposal",
+    "ElaborateTargetContextItemProposal",
     "FitJudgmentResult",
     "FitPropositionInput",
     "ForgetApplyResult",
@@ -359,6 +360,10 @@ _LAZY_EXPORTS = {
         "ElaborateRuleCheckProposal",
     ),
     "ElaborateRuleProposal": ("memcommit.api.semantic", "ElaborateRuleProposal"),
+    "ElaborateTargetContextItemProposal": (
+        "memcommit.api.semantic",
+        "ElaborateTargetContextItemProposal",
+    ),
     "FitJudgmentResult": ("memcommit.api.semantic", "FitJudgmentResult"),
     "FitPropositionInput": ("memcommit.api.semantic", "FitPropositionInput"),
     "ForgetApplyResult": ("memcommit.api.forget", "ForgetApplyResult"),
