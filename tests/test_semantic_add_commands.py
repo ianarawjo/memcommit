@@ -165,6 +165,38 @@ def test_elaborate_endpoint_matrix_adds_atomically(
     assert len(_ElaborateProvider.calls[0]["inputs"]) == 1
 
 
+def test_mem_elaborate_number_is_an_exact_cli_and_checkpoint_contract(
+    isolated_store,
+    monkeypatch,
+) -> None:
+    store = MemoryStore()
+    target = _create(store, "number/target", "Existing destination language.")
+    store.set_current(target.name)
+    _ElaborateProvider.calls = []
+    monkeypatch.setattr(
+        elaborate_command,
+        "connect_semantic_provider",
+        _ElaborateProvider,
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "elaborate",
+            "--goal",
+            "Confirm a ticker before acting.",
+            "--n",
+            "1",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert "EFFECTS · ADD 1 MEMORIES" in result.output
+    assert _ElaborateProvider.calls[0]["number"] == 1
+    checkpoint = store.list_checkpoints(target.name)[0]
+    assert checkpoint["args"]["elaborate"]["number"] == 1
+
+
 def test_elaborate_context_role_is_explicit_and_not_name_based(
     isolated_store,
     monkeypatch,
@@ -284,7 +316,15 @@ def test_impact_endpoint_preview_never_adds(
 
     result = runner.invoke(
         app,
-        ["impact", operation, "--from", source.name, "--to", target.name],
+        [
+            "impact",
+            operation,
+            "--from",
+            source.name,
+            "--to",
+            target.name,
+            *(["--number", "2"] if operation == "elaborate" else []),
+        ],
     )
 
     assert result.exit_code == 0, result.output
@@ -295,6 +335,7 @@ def test_impact_endpoint_preview_never_adds(
         assert "IMPACT · DISTILL ADD" not in result.output
     else:
         assert "ENDPOINTS UNCHANGED" in result.output
+        assert _ElaborateProvider.calls[-1]["number"] == 2
     assert context_record_digest(store.load_direct(source.name)) == before_source
     assert context_record_digest(store.load_direct(target.name)) == before_target
     assert store.list_checkpoints(target.name) == []

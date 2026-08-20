@@ -11,6 +11,7 @@ from memcommit.elaborate import ELABORATE_PAYLOAD_MARKER
 from memcommit.fit_judgment import FIT_JUDGMENT_PAYLOAD_MARKER
 from memcommit.interfaces.agent import (
     DISTILL_AGENT_TOOL_NAME,
+    ELABORATE_AGENT_CONTRACT_VERSION,
     ELABORATE_AGENT_TOOL_NAME,
     FIT_AGENT_TOOL_NAME,
     build_default_agent_tool_registry,
@@ -98,9 +99,10 @@ def test_default_registry_and_mcp_expose_read_only_semantic_tools(isolated_store
     elaborate = registry.invoke(
         ELABORATE_AGENT_TOOL_NAME,
         {
-            "version": 2,
+            "version": ELABORATE_AGENT_CONTRACT_VERSION,
             "kind": "goal_to_rules",
             "goal": "Confirm before acting.",
+            "number": 1,
         },
     )
     fit = registry.invoke(
@@ -119,6 +121,7 @@ def test_default_registry_and_mcp_expose_read_only_semantic_tools(isolated_store
     assert distill["result"]["effect"] == "NONE"
     assert elaborate["ok"] is True
     assert elaborate["result"]["verification"] == "UNVERIFIED"
+    assert len(elaborate["result"]["rules"]) == 1
     assert fit["ok"] is True
     assert fit["result"]["verdict"] == "YES"
     assert fit["result"]["effect"] == "NONE"
@@ -126,6 +129,27 @@ def test_default_registry_and_mcp_expose_read_only_semantic_tools(isolated_store
     assert ELABORATE_AGENT_TOOL_NAME in mcp_names
     assert FIT_AGENT_TOOL_NAME in mcp_names
     assert not store.context_exists("agent/rules")
+
+
+def test_semantic_agent_elaborate_accepts_an_exact_number(isolated_store):
+    client = MemCommitClient(
+        root=isolated_store,
+        semantic_provider_factory=AgentSemanticProvider,
+    )
+    registry = build_default_agent_tool_registry(client)
+
+    result = registry.invoke(
+        ELABORATE_AGENT_TOOL_NAME,
+        {
+            "version": ELABORATE_AGENT_CONTRACT_VERSION,
+            "kind": "goal_to_rules",
+            "goal": "Confirm before acting.",
+            "number": 1,
+        },
+    )
+
+    assert result["ok"] is True
+    assert len(result["result"]["rules"]) == 1
 
 
 def test_semantic_agent_rejects_unknown_fields_before_provider(tmp_path):

@@ -641,18 +641,25 @@ class MemCommitClient:
         *,
         goal: str | None = None,
         rules: Sequence[str] | None = None,
+        number: int | None = None,
     ) -> ElaborateProposal:
         """Propose unverified Rules from a Goal or Cases from Rules."""
 
         from memcommit.api._operations.elaborate import elaborate
 
-        return elaborate(self._runtime, goal=goal, rules=rules)
+        return elaborate(
+            self._runtime,
+            goal=goal,
+            rules=rules,
+            number=number,
+        )
 
     def elaborate_ground(
         self,
         ground_name: str,
         *,
         direction: str,
+        number: int | None = None,
     ) -> ElaborateProposal:
         """Project one exact Ground Goal or Rule set through Elaborate."""
 
@@ -662,6 +669,7 @@ class MemCommitClient:
             self._runtime,
             ground_name,
             direction=direction,
+            number=number,
         )
 
     def start_meld(

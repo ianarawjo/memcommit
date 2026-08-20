@@ -55,13 +55,14 @@ def _request_from_ground(
     session: GroundSession,
     *,
     direction: GroundElaborateDirection,
+    number: int | None = None,
 ) -> ElaborateRequest:
     if not is_bound_ground_schema(session.schema_version):
         raise ElaborateError("Ground Elaborate requires a bound Ground.")
     if session.status != "OPEN":
         raise ElaborateError("Ground Elaborate requires an open Ground.")
     if direction == "GOAL_TO_RULES":
-        return ElaborateRequest(goal=session.goal)
+        return ElaborateRequest(goal=session.goal, number=number)
     if direction != "RULES_TO_CASES":
         raise ElaborateError("Ground Elaborate direction is invalid.")
     active_rules = tuple(
@@ -71,7 +72,7 @@ def _request_from_ground(
     )
     if not active_rules:
         raise ElaborateError("The Ground contains no active Rules to elaborate.")
-    return ElaborateRequest(rules=active_rules)
+    return ElaborateRequest(rules=active_rules, number=number)
 
 
 def freeze_ground_elaborate(
@@ -79,6 +80,7 @@ def freeze_ground_elaborate(
     *,
     ground_name: str,
     direction: GroundElaborateDirection,
+    number: int | None = None,
 ) -> FrozenGroundElaborate:
     """Freeze the exact Ground input before semantic infrastructure opens."""
 
@@ -87,6 +89,7 @@ def freeze_ground_elaborate(
         request, digest = _request_from_ground_workspace(
             workspace,
             direction=direction,
+            number=number,
         )
         return FrozenGroundElaborate(
             ground_name=workspace.name,
@@ -100,7 +103,11 @@ def freeze_ground_elaborate(
     session = store.load_ground_session(ground_name)
     if session is None:
         raise ElaborateError(f"Ground '{ground_name}' was not found.")
-    request = _request_from_ground(session, direction=direction)
+    request = _request_from_ground(
+        session,
+        direction=direction,
+        number=number,
+    )
     return FrozenGroundElaborate(
         ground_name=session.contract_name,
         ground_uid=session.uid,
@@ -115,6 +122,7 @@ def _request_from_ground_workspace(
     workspace: GroundWorkspace,
     *,
     direction: GroundElaborateDirection,
+    number: int | None = None,
 ) -> tuple[ElaborateRequest, str]:
     if direction == "GOAL_TO_RULES":
         try:
@@ -128,7 +136,7 @@ def _request_from_ground_workspace(
             raise ElaborateError(
                 "Ground workspace Elaborate requires exactly one Goal Memory."
             )
-        request = ElaborateRequest(goal=memories[0].content)
+        request = ElaborateRequest(goal=memories[0].content, number=number)
     elif direction == "RULES_TO_CASES":
         try:
             memories = project_ordinary_memories(
@@ -141,7 +149,10 @@ def _request_from_ground_workspace(
             raise ElaborateError(
                 "The Ground workspace contains no Rule Memories to elaborate."
             )
-        request = ElaborateRequest(rules=tuple(item.content for item in memories))
+        request = ElaborateRequest(
+            rules=tuple(item.content for item in memories),
+            number=number,
+        )
     else:
         raise ElaborateError("Ground Elaborate direction is invalid.")
     digest = hashlib.sha256(
@@ -177,6 +188,7 @@ def execute_ground_elaborate(
         before_request, before_digest = _request_from_ground_workspace(
             before_workspace,
             direction=frozen.direction,
+            number=frozen.request.number,
         )
         if (
             before_workspace.uid != frozen.ground_uid
@@ -195,6 +207,7 @@ def execute_ground_elaborate(
         after_request, after_digest = _request_from_ground_workspace(
             after_workspace,
             direction=frozen.direction,
+            number=frozen.request.number,
         )
         if (
             after_workspace.uid != frozen.ground_uid
@@ -212,7 +225,12 @@ def execute_ground_elaborate(
         or before.uid != frozen.ground_uid
         or before.revision != frozen.ground_revision
         or ground_session_record_digest(before) != frozen.ground_digest
-        or _request_from_ground(before, direction=frozen.direction) != frozen.request
+        or _request_from_ground(
+            before,
+            direction=frozen.direction,
+            number=frozen.request.number,
+        )
+        != frozen.request
     ):
         raise ElaborateError("The Ground changed before Elaborate began.")
     result = execute_elaborate(

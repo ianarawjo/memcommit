@@ -122,6 +122,53 @@ class ElaborateProvider:
         )
 
 
+class ExactNumberProvider:
+    def __init__(self):
+        self.calls: list[tuple[dict[str, object], dict[str, object], str]] = []
+
+    def complete(self, prompt, *, operation, output_schema=None):
+        assert operation == ELABORATE_OPERATION
+        assert output_schema is not None
+        payload = json.loads(prompt.split(ELABORATE_PAYLOAD_MARKER, 1)[1])
+        number = payload["number"]
+        self.calls.append((payload, output_schema, prompt))
+        if payload["mode"] == "GOAL_TO_RULES":
+            return json.dumps(
+                {
+                    "overview": f"Exactly {number} Rule proposals.",
+                    "rules": [
+                        {
+                            "content": f"Operational Rule {index}.",
+                            "rationale": f"Distinct rationale {index}.",
+                        }
+                        for index in range(1, number + 1)
+                    ],
+                }
+            )
+        roles = ("FIT", "BOUNDARY", "CONTRAST")
+        return json.dumps(
+            {
+                "overview": f"Exactly {number} Case proposals.",
+                "cases": [
+                    {
+                        "proposition": f"Complete compliant Case {index}.",
+                        "expected": f"Expected outcome {index}.",
+                        "rationale": f"Distinct rationale {index}.",
+                        "case_role": roles[(index - 1) % len(roles)],
+                        "rule_checks": [
+                            {
+                                "source_rule_index": rule_index,
+                                "evidence": f"Case {index} checks Rule {rule_index}.",
+                            }
+                            for rule_index, _rule in enumerate(payload["inputs"], 1)
+                        ],
+                    }
+                    for index in range(1, number + 1)
+                ],
+            }
+        )
+
+
 def test_goal_elaborates_to_bounded_unverified_rule_proposals() -> None:
     provider = ElaborateProvider()
 
@@ -137,6 +184,7 @@ def test_goal_elaborates_to_bounded_unverified_rule_proposals() -> None:
     assert provider.calls[0][1]["properties"]["rules"]["maxItems"] == 4
     assert "Propose at least one and at most 4" in provider.calls[0][0]
     assert "not a reason to return an empty set" in provider.calls[0][0]
+    assert result.analysis.number is None
 
 
 def test_rules_elaborate_to_diverse_unverified_case_propositions() -> None:
@@ -160,6 +208,78 @@ def test_rules_elaborate_to_diverse_unverified_case_propositions() -> None:
     assert "Propose at least one and at most 3" in provider.calls[0][0]
     assert "complete input Rule set together" in provider.calls[0][0]
     assert "not a reason to return an empty set" in provider.calls[0][0]
+    assert result.analysis.number is None
+
+
+@pytest.mark.parametrize(
+    ("elaborate_request", "field", "number"),
+    (
+        (ElaborateRequest(goal="Make this Goal operational.", number=3), "rules", 3),
+        (
+            ElaborateRequest(
+                rules=("Keep every result reviewable.",),
+                number=3,
+            ),
+            "cases",
+            3,
+        ),
+    ),
+)
+def test_elaborate_number_requires_exactly_n_proposals(
+    elaborate_request,
+    field,
+    number,
+) -> None:
+    provider = ExactNumberProvider()
+
+    result = execute_elaborate(
+        elaborate_request,
+        provider_factory=lambda: provider,
+    )
+
+    proposals = getattr(result.analysis, field)
+    payload, schema, prompt = provider.calls[0]
+    proposal_schema = schema["properties"][field]
+    assert len(proposals) == number
+    assert result.analysis.number == number
+    assert payload["number"] == number
+    assert proposal_schema["minItems"] == proposal_schema["maxItems"] == number
+    assert f"Propose exactly {number}" in prompt
+
+
+def test_elaborate_number_rejects_a_provider_count_mismatch() -> None:
+    provider = ElaborateProvider()
+
+    with pytest.raises(ElaborateError, match="invalid Rules"):
+        execute_elaborate(
+            ElaborateRequest(goal="Make this Goal operational.", number=2),
+            provider_factory=lambda: provider,
+        )
+
+    assert len(provider.calls) == 1
+
+
+@pytest.mark.parametrize(
+    "elaborate_request",
+    (
+        ElaborateRequest(goal="One Goal.", number=5),
+        ElaborateRequest(rules=("One Rule.",), number=4),
+    ),
+)
+def test_elaborate_number_rejects_the_direction_bound_before_provider(
+    elaborate_request,
+) -> None:
+    provider_constructions = 0
+
+    def provider_factory():
+        nonlocal provider_constructions
+        provider_constructions += 1
+        return ExactNumberProvider()
+
+    with pytest.raises(ElaborateError, match="number must be between"):
+        execute_elaborate(elaborate_request, provider_factory=provider_factory)
+
+    assert provider_constructions == 0
 
 
 def test_rules_elaborate_rejects_partial_or_reordered_rule_coverage() -> None:
@@ -222,6 +342,8 @@ def test_elaborate_request_requires_exactly_one_direction() -> None:
         ElaborateRequest()
     with pytest.raises(ElaborateError):
         ElaborateRequest(goal="One Goal", rules=("One Rule",))
+    with pytest.raises(ElaborateError, match="positive integer"):
+        ElaborateRequest(goal="One Goal", number=0)
 
 
 def test_elaborate_exact_prepared_lookup_avoids_provider() -> None:
@@ -262,6 +384,23 @@ def test_elaborate_rejects_nonexact_prepared_result() -> None:
     with pytest.raises(ElaborateError, match="does not exactly match"):
         execute_elaborate(
             ElaborateRequest(goal="Confirm a different action."),
+            provider_factory=lambda: (_ for _ in ()).throw(
+                AssertionError("a nonexact prepared result must fail closed")
+            ),
+            prepared_lookup=lambda _request, _config: live.analysis,
+        )
+
+
+def test_elaborate_prepared_result_must_match_the_exact_number() -> None:
+    provider = ExactNumberProvider()
+    live = execute_elaborate(
+        ElaborateRequest(goal="Confirm before acting.", number=1),
+        provider_factory=lambda: provider,
+    )
+
+    with pytest.raises(ElaborateError, match="does not exactly match"):
+        execute_elaborate(
+            ElaborateRequest(goal="Confirm before acting.", number=2),
             provider_factory=lambda: (_ for _ in ()).throw(
                 AssertionError("a nonexact prepared result must fail closed")
             ),
@@ -430,6 +569,28 @@ def test_ground_and_standalone_use_the_same_elaborate_application(isolated_store
     )
     assert store.load_ground_session(session.contract_name) == session
     assert all(store.list_checkpoints(context.name) == [] for context in contexts)
+
+
+def test_ground_elaborate_preserves_the_exact_number(isolated_store):
+    store = MemoryStore()
+    session, _contexts = _bound_ground(store)
+    provider = ExactNumberProvider()
+    frozen = freeze_ground_elaborate(
+        store,
+        ground_name=session.contract_name,
+        direction="GOAL_TO_RULES",
+        number=2,
+    )
+
+    result = execute_ground_elaborate(
+        frozen,
+        store=store,
+        provider_factory=lambda: provider,
+    )
+
+    assert frozen.request.number == 2
+    assert result.elaborate.analysis.number == 2
+    assert len(result.elaborate.analysis.rules) == 2
 
 
 def test_ground_rules_use_the_same_rules_to_cases_application(isolated_store):

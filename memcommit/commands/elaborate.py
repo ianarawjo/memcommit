@@ -12,6 +12,7 @@ from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.elaborate import ElaborateError
 from memcommit.elaborate_application import ElaborateRequest, ElaborateResult
+from memcommit.elaborate_config import DEFAULT_ELABORATE_SEMANTIC_CONFIG
 from memcommit.elaborate_add_runtime import (
     FrozenElaborateSource,
     PreparedElaborateAdd,
@@ -81,6 +82,21 @@ def cmd(
             help="Interpret Context Source Memories as rules (default) or one goal",
         ),
     ] = "rules",
+    number: Annotated[
+        Optional[int],
+        typer.Option(
+            "--number",
+            "--n",
+            "-n",
+            min=1,
+            help=(
+                "Exact proposals to generate (Goal to Rules: "
+                f"1-{DEFAULT_ELABORATE_SEMANTIC_CONFIG.max_rule_proposals}; "
+                "Rules to Cases: "
+                f"1-{DEFAULT_ELABORATE_SEMANTIC_CONFIG.max_case_proposals})"
+            ),
+        ),
+    ] = None,
     ground: Annotated[
         Optional[str],
         typer.Option(
@@ -146,6 +162,7 @@ def cmd(
                 ground_store,
                 ground_name=ground,
                 direction="GOAL_TO_RULES" if from_goal else "RULES_TO_CASES",
+                number=number,
             )
             request = frozen_ground.request
         else:
@@ -161,7 +178,11 @@ def cmd(
                     )
                 if as_role != "rules":
                     raise ElaborateError("--as applies only to a Context Source.")
-                request = ElaborateRequest(goal=goal, rules=tuple(rule or ()))
+                request = ElaborateRequest(
+                    goal=goal,
+                    rules=tuple(rule or ()),
+                    number=number,
+                )
                 ordinary_target = resolve_semantic_add_target(
                     target_locator=target_name,
                     current=snapshot.current_name,
@@ -178,6 +199,7 @@ def cmd(
                     ordinary_store,
                     context_name=endpoints.source_name,
                     role=as_role,
+                    number=number,
                 )
                 request = ordinary_source.request
                 ordinary_target = endpoints.target_name

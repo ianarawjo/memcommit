@@ -11,6 +11,7 @@ from memcommit.elaborate import (
     ElaborateError,
     ElaborateProvider,
     normalize_elaborate_inputs,
+    normalize_elaborate_number,
     analyze_elaborate,
     validate_elaborate_analysis,
     validate_elaborate_provider_plan,
@@ -27,6 +28,7 @@ class ElaborateRequest:
 
     goal: str | None = None
     rules: tuple[str, ...] = ()
+    number: int | None = None
 
     def __post_init__(self) -> None:
         if self.goal is not None and (
@@ -41,6 +43,10 @@ class ElaborateRequest:
             raise ElaborateError("Elaborate accepts either one Goal or Rules, not both.")
         if self.goal is None and not self.rules:
             raise ElaborateError("Elaborate requires one Goal or at least one Rule.")
+        if self.number is not None and (
+            type(self.number) is not int or self.number <= 0
+        ):
+            raise ElaborateError("Elaborate number must be a positive integer.")
 
 
 @dataclass(frozen=True)
@@ -83,9 +89,15 @@ def run_elaborate(
         rules=request.rules,
         config=config,
     )
+    number = normalize_elaborate_number(
+        mode=mode,
+        number=request.number,
+        config=config,
+    )
     normalized = ElaborateRequest(
         goal=inputs[0] if mode.value == "GOAL_TO_RULES" else None,
         rules=inputs if mode.value == "RULES_TO_CASES" else (),
+        number=number,
     )
     analysis = (
         prepared_lookup(normalized, config)
@@ -95,15 +107,25 @@ def run_elaborate(
     origin: Literal["LIVE", "PREPARED_EXACT"] = "PREPARED_EXACT"
     if analysis is None:
         origin = "LIVE"
-        validate_elaborate_provider_plan(mode=mode, inputs=inputs, config=config)
+        validate_elaborate_provider_plan(
+            mode=mode,
+            inputs=inputs,
+            number=number,
+            config=config,
+        )
         with provider_session_factory() as provider:
             analysis = analyze_elaborate(
                 goal=normalized.goal,
                 rules=normalized.rules,
                 provider=provider,
+                number=number,
                 config=config,
             )
-    elif analysis.mode is not mode or analysis.inputs != inputs:
+    elif (
+        analysis.mode is not mode
+        or analysis.inputs != inputs
+        or analysis.number != number
+    ):
         raise ElaborateError(
             "The prepared Elaborate analysis does not exactly match the request."
         )

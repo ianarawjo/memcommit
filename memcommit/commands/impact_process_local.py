@@ -35,6 +35,7 @@ from memcommit.elaborate_add_runtime import (
     prepare_elaborate_add,
 )
 from memcommit.elaborate_application import ElaborateRequest, ElaborateResult
+from memcommit.elaborate_config import DEFAULT_ELABORATE_SEMANTIC_CONFIG
 from memcommit.fit_judgment import FitJudgmentError
 from memcommit.forget_application import (
     ForgetAnalysisRequest,
@@ -624,6 +625,21 @@ def elaborate_cmd(
         str,
         typer.Option("--as", help="Interpret Context Source as rules or one goal"),
     ] = "rules",
+    number: Annotated[
+        Optional[int],
+        typer.Option(
+            "--number",
+            "--n",
+            "-n",
+            min=1,
+            help=(
+                "Exact proposals to generate (Goal to Rules: "
+                f"1-{DEFAULT_ELABORATE_SEMANTIC_CONFIG.max_rule_proposals}; "
+                "Rules to Cases: "
+                f"1-{DEFAULT_ELABORATE_SEMANTIC_CONFIG.max_case_proposals})"
+            ),
+        ),
+    ] = None,
 ) -> None:
     """Inspect the Memories Elaborate would add without saving them."""
 
@@ -639,7 +655,11 @@ def elaborate_cmd(
                 )
             if as_role != "rules":
                 raise ElaborateError("--as applies only to a Context Source.")
-            request = ElaborateRequest(goal=goal, rules=tuple(rule or ()))
+            request = ElaborateRequest(
+                goal=goal,
+                rules=tuple(rule or ()),
+                number=number,
+            )
             resolved_source = None
             resolved_target = resolve_semantic_add_target(
                 target_locator=target_name,
@@ -657,6 +677,7 @@ def elaborate_cmd(
                 store,
                 context_name=endpoints.source_name,
                 role=as_role,
+                number=number,
             )
             request = frozen_source.request
             resolved_source = endpoints.source_name

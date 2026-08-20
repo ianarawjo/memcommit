@@ -24,6 +24,7 @@ def elaborate(
     *,
     goal: str | None = None,
     rules: Sequence[str] | None = None,
+    number: int | None = None,
 ) -> ElaborateProposal:
     """Propose unverified Rules from a Goal or Cases from Rules."""
 
@@ -33,6 +34,7 @@ def elaborate(
         request = ElaborateRequest(
             goal=goal,
             rules=tuple(rules or ()),
+            number=number,
         )
     except (ElaborateError, TypeError, ValueError) as error:
         raise_public(SemanticInputError, error)

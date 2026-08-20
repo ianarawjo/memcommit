@@ -14,15 +14,19 @@ All outputs are `[Suggested] [Unverified]`. A Goal is intent rather than
 evidence, and generated Cases are not real-world observations. Each direction
 must nevertheless return at least one candidate. Elaborate exists to make an
 abstract or underspecified idea concrete enough to inspect and correct, so a
-sparse input is not a valid reason to return an empty result. The provider need
-not pad to the configured maximum; proposals beyond the required first one
-should add a distinct Rule hypothesis or Case role.
+sparse input is not a valid reason to return an empty result. When no exact
+number is requested, the provider need not pad to the configured maximum;
+proposals beyond the required first one should add a distinct Rule hypothesis
+or Case role. `--n N` (also `-n` and `--number`) deliberately changes that
+contract: the provider must return exactly `N` distinct proposals or the
+complete operation fails.
 
 ## Shared application contract
 
 `ElaborateRequest` accepts exactly one direction: one nonempty Goal or one or
-more distinct nonempty Rules. `ElaborateSemanticConfig` owns proposal counts,
-text, rationale, overview, and response limits. One complete request is
+more distinct nonempty Rules, plus an optional exact proposal number.
+`ElaborateSemanticConfig` owns the safe directional maxima, text, rationale,
+overview, and response limits. One complete request is
 `WHOLE_FRAME_ONLY`; hidden batching could duplicate, omit, or distort the
 requested proposal set. Input normalization occurs before prepared lookup; on
 an exact prepared miss, the one-turn budget is validated before provider
@@ -30,7 +34,14 @@ construction.
 
 Provider output uses a strict direction-specific schema. Goal input returns
 one to four Rules by default. Rule input returns one to three Cases by default,
-each linked to one source Rule index and classified as `FIT`,
+while `--number` fixes both JSON Schema bounds to the same requested value.
+The supported exact range is therefore 1–4 for Goal-to-Rules and 1–3 for
+Rules-to-Cases; the directional bounds continue to prevent an unbounded
+one-turn request. The provider instruction, decoder, typed analysis validator,
+prepared-result check, and atomic publication count all share this exact
+request value. A count mismatch publishes nothing.
+
+Every Case is linked to one source Rule index and classified as `FIT`,
 `BOUNDARY`, or `CONTRAST`. Structural domain validation and active-config
 validation are separate so an injected configuration is applied consistently
 to live and prepared output.
@@ -40,9 +51,13 @@ instruction, JSON Schema `minItems`, strict decoder, and typed analysis. This
 redundancy is intentional: a Provider or prepared lookup cannot turn an empty
 array into a successful Elaborate result. The Provider contract version was
 advanced when this invariant replaced the earlier zero-proposal behavior.
+Provider contract version 4 additionally distinguishes an exact-number
+request from the default bounded range so an older prepared result cannot
+silently satisfy a different generation instruction.
 
 An injectable exact prepared lookup may avoid provider construction only when
-the normalized direction and complete input tuple match. There is no persisted
+the normalized direction, complete input tuple, and exact-number request match.
+There is no persisted
 Elaborate cache artifact yet and no subset/projection reuse claim.
 
 ## Standalone Add and endpoint contract
@@ -65,6 +80,8 @@ exactly one direct Memory and generates Rules. This role belongs to the
 invocation, not to the Context name: `goals`, `rules`, and other naming
 conventions carry no hidden semantics. Inline `--goal` or repeatable `--rule`
 remains available and uses Current or `--to` as its existing Target.
+`--n`/`-n`/`--number` has the same exact meaning for inline input, Context
+input, and both Ground directions.
 
 Source and Target may be the same Context. The command freezes their common
 pre-image before provider construction, so a provider turn cannot consume the
@@ -106,7 +123,8 @@ apply to Case role, expected-result, and Source-Rule fields.
 ## Ground route
 
 Ground CLI accepts one exact saved Ground and either `--from-goal` or
-`--from-rules`. It calls the same `run_elaborate` application function. The
+`--from-rules`, plus the same optional exact `--number`. It calls the same
+`run_elaborate` application function. The
 Ground adapter freezes and revalidates the exact Ground UID, revision, and
 record digest before and after the provider call. Active Ground Rules are
 `PROPOSED` or `ACCEPTED` Rules; rejected/deferred material is not silently
@@ -122,7 +140,8 @@ a TTY. The explicit semantic TUI Viewer and plain CLI project the same typed res
 uses shared neutral report chrome and deterministic focused/whole-document
 `y`/`Y` copy. The public Python client exposes the same two directions plus
 exact Ground projections. Versioned agent and MCP tools expose all four input
-forms and return `verification: UNVERIFIED` and `effect: NONE`; this first Add
+forms and the same optional exact number, and return
+`verification: UNVERIFIED` and `effect: NONE`; this first Add
 slice does not silently broaden those callable adapters into mutations.
 
 Elaborate currently opens directly on its result Viewer rather than providing

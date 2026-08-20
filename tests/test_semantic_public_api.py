@@ -132,13 +132,18 @@ def test_public_elaborate_uses_one_typed_entry_for_both_directions(isolated_stor
         semantic_provider_factory=SemanticProvider,
     )
 
-    goal = client.elaborate(goal="Confirm before acting.")
-    rules = client.elaborate(rules=("Confirm the option before acting.",))
+    goal = client.elaborate(goal="Confirm before acting.", number=1)
+    rules = client.elaborate(
+        rules=("Confirm the option before acting.",),
+        number=1,
+    )
 
     assert isinstance(goal, ElaborateProposal)
     assert goal.mode == "GOAL_TO_RULES"
     assert goal.verification == "UNVERIFIED"
+    assert len(goal.rules) == 1
     assert rules.mode == "RULES_TO_CASES"
+    assert len(rules.cases) == 1
     assert rules.cases[0].case_role == "FIT"
 
 

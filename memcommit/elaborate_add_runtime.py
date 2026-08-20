@@ -49,6 +49,7 @@ def freeze_elaborate_context_source(
     *,
     context_name: str,
     role: ElaborateContextRole,
+    number: int | None = None,
 ) -> FrozenElaborateSource:
     """Interpret ordinary direct Memories by invocation role, never by name."""
 
@@ -67,13 +68,16 @@ def freeze_elaborate_context_source(
             raise ElaborateError(
                 "Elaborate --as goal requires exactly one direct Source Memory."
             )
-        request = ElaborateRequest(goal=memories[0].content)
+        request = ElaborateRequest(goal=memories[0].content, number=number)
     else:
         if not memories:
             raise ElaborateError(
                 "Elaborate requires at least one direct Source Memory."
             )
-        request = ElaborateRequest(rules=tuple(item.content for item in memories))
+        request = ElaborateRequest(
+            rules=tuple(item.content for item in memories),
+            number=number,
+        )
     return FrozenElaborateSource(
         context_name=context.name,
         context_uid=context.uid,
@@ -180,6 +184,7 @@ def apply_prepared_elaborate_add(
             "analysis_uid": analysis.uid,
             "analysis_digest": analysis.digest,
             "mode": analysis.mode.value,
+            "number": analysis.number,
             "verification": "UNVERIFIED",
             "origin": prepared.result.origin,
             "overview": analysis.overview,
