@@ -15,12 +15,12 @@ $ mem impact distill --from capture/distill-source --to capture/distill-target
 [0;38;2;139;213;255;1m┃[0;38;2;202;211;245m [1] When generating a synthetic ticker, remove a leading article, discard legal-form suffixes, preserve meaningful numeric tokens, and keep the exact security-class qualifier b[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0;38;2;202;211;245mefore applying the reviewed mapping; this final qualification remains part of the complete Rule and must remain visible without shortening the Rule. — SUPPORT 1 · BOUNDARY 1[0m    [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
-[0;38;2;139;213;255;1m┃[0m IMPACT · DISTILL ADD · ENDPOINTS UNCHANGED                                                                                                                                      [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
-[0;38;2;139;213;255;1m┃[0m These Rules would be added to the existing Target Context. Neither Source nor Target has been changed.                                                                          [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
-[0;38;2;139;213;255;1m┃[0m Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                     [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
-[0;38;2;139;213;255;1m┃[0;38;2;138;173;244;1m       ▸ + [ADD] [0;38;2;202;211;245m[5ecabd3c] When generating a synthetic ticker, remove a leading article, discard legal-form suffixes, preserve meaningful numeric tokens, and keep the exact[0m    [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
-[0;38;2;139;213;255;1m┃[0;38;2;202;211;245m                            security-class qualifier before applying the reviewed mapping; this final qualification remains part of the complete Rule and must remain visible[0m    [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
-[0;38;2;139;213;255;1m┃[0;38;2;202;211;245m                            without shortening the Rule.[0m                                                                                                                         [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
@@ -61,16 +61,16 @@ $ mem impact distill --from capture/distill-source --to capture/distill-target
 [C[0m           [0m
 [C[0;38;2;139;213;255;1m OPERATION DETAIL[0m                                         [0m
 [C[0;38;2;255;255;255;1m EVIDENCE BOUNDARY[0m
-[C[0m SUPPORT · 1e797d43[0m
-[C[0mBOUNDARY · dd1b2e78                                                                                                                                                              [0m
+[C[0m SUPPORT · aa00dc9f[0m
+[C[0mBOUNDARY · 733ac160                                                                                                                                                              [0m
 [C[0m                                                                                                                                                                             [0m
 
-[C[0m                                           [0m
-[C[0m                                                                                                       [0m
-[C[0m                                                            [0m
-[C[0m                                                                                                                                                                             [0m
-[C[0m                                                                                                                                                                             [0m
-[C[0m                                                        [0m
+
+
+
+
+
+
 
 
 

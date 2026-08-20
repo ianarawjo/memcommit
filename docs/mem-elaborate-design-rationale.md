@@ -94,6 +94,15 @@ here because the omitted tail may carry the condition that distinguishes an
 unverified suggestion from a broader claim. Focused and whole-proposal copy
 retain the full rationale even though the default catalog keeps it in detail.
 
+For Goal-to-Rules, `PROPOSED RULES` is also the single default report location
+for generated Memories. The read-only Impact route hides the generic
+`IMPACT`/`[ADD]` effect ledger and Results block because they merely restate
+that Rule catalog; rationale remains available in detail and copy, and exact
+endpoint immutability remains visible in the Context-location header and
+close-time digest verification. Rules-to-Cases keeps its separate proposal and
+Impact projections because the compact Rule-only catalog contract does not
+apply to Case role, expected-result, and Source-Rule fields.
+
 ## Ground route
 
 Ground CLI accepts one exact saved Ground and either `--from-goal` or

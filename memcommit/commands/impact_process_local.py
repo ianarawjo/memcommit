@@ -334,6 +334,10 @@ def distill_impact_presentation(
         empty_message="No evidence-supported Rules were proposed.",
         results_label="PROPOSED RESULT MEMORIES",
         results=results,
+        # The Rule catalog is the proposal itself. Repeating the same Memories
+        # below as an effect ledger obscures the content without adding a
+        # distinct decision or mutation boundary.
+        show_results=False,
     )
     return ImpactSessionPresentation(
         view=view,
@@ -353,6 +357,7 @@ def distill_impact_presentation(
             ),
         ),
         handoff_available=False,
+        show_impact_ledger=False,
     )
 
 
@@ -570,11 +575,14 @@ def elaborate_impact_presentation(
         overview_sections=(
             ResolutionOverviewSection("assessment", "ASSESSMENT", analysis.overview),
         ),
-        list_label="UNVERIFIED PROPOSALS",
+        list_label=(
+            "PROPOSED RULES" if rules_direction else "UNVERIFIED PROPOSALS"
+        ),
         items=items,
         empty_message="No Elaborate proposals were returned.",
         results_label="PROPOSED ADD MEMORIES",
         results=results,
+        show_results=not rules_direction,
     )
     return ImpactSessionPresentation(
         view=view,
@@ -587,6 +595,7 @@ def elaborate_impact_presentation(
             ),
         ),
         handoff_available=False,
+        show_impact_ledger=not rules_direction,
     )
 
 

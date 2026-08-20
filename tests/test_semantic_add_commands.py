@@ -272,7 +272,11 @@ def test_impact_endpoint_preview_never_adds(
     assert result.exit_code == 0, result.output
     assert f"SOURCE · {source.name}" in result.output
     assert f"TARGET · {target.name} · EXISTING · UNCHANGED" in result.output
-    assert "ENDPOINTS UNCHANGED" in result.output
+    if operation == "distill":
+        assert "PROPOSED RULES" in result.output
+        assert "IMPACT · DISTILL ADD" not in result.output
+    else:
+        assert "ENDPOINTS UNCHANGED" in result.output
     assert context_record_digest(store.load_direct(source.name)) == before_source
     assert context_record_digest(store.load_direct(target.name)) == before_target
     assert store.list_checkpoints(target.name) == []

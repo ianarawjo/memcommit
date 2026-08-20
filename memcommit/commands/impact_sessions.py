@@ -32,6 +32,13 @@ class ImpactSessionPresentation:
     controller: ImpactController
     report_text: str = ""
     handoff_available: bool = True
+    show_impact_ledger: bool = True
+
+    @property
+    def visible_impact_controller(self) -> ImpactController | None:
+        """Return the effect ledger only when it adds a distinct reading."""
+
+        return self.controller if self.show_impact_ledger else None
 
 
 def update_impact_presentation(
@@ -170,13 +177,13 @@ def render_impact_session_snapshot(
             presentation.view,
             presentation.report_text,
             read_only=True,
-            impact_controller=presentation.controller,
+            impact_controller=presentation.visible_impact_controller,
         )
     else:
         fragments = resolution_report_fragments(
             presentation.view,
             read_only=True,
-            impact_controller=presentation.controller,
+            impact_controller=presentation.visible_impact_controller,
         )
     rendered = "".join(
         text for style, text in fragments if style != "[SetCursorPosition]"
@@ -212,7 +219,7 @@ def run_impact_session_workbench(
             if presentation.handoff_available
             else None
         ),
-        impact_controller=presentation.controller,
+        impact_controller=presentation.visible_impact_controller,
     )
     if action.kind == "HANDOFF" and presentation.handoff_available:
         return True

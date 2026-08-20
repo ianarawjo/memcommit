@@ -188,11 +188,7 @@ def _capture(operation: str, root: Path, number: int) -> None:
         child.expect("IMPACT .* " + operation.upper())
         _BASE._settle(child, seconds=0.25)
         _BASE._snapshot(recorder, f"{number:02d}-{operation}-impact-entry")
-        child.expect(
-            "PROPOSED RULES"
-            if operation == "distill"
-            else "UNVERIFIED PROPOSALS"
-        )
+        child.expect("PROPOSED RULES")
         child.expect("without shortening the Rule")
         _BASE._settle(child, seconds=0.45)
         _BASE._snapshot(recorder, f"{number + 1:02d}-{operation}-complete-rule-row")
@@ -233,6 +229,10 @@ def main() -> None:
             raise RuntimeError(f"Complete Rule tail is absent from {path.name}.")
         if "Rule.…" in text or "Rule…" in text:
             raise RuntimeError(f"Rule content was shortened in {path.name}.")
+        if "IMPACT · DISTILL ADD" in text or "IMPACT · ELABORATE ADD" in text:
+            raise RuntimeError(f"Duplicate Impact ledger remains in {path.name}.")
+        if "[ADD]" in text:
+            raise RuntimeError(f"Duplicate Add row remains in {path.name}.")
 
 
 if __name__ == "__main__":

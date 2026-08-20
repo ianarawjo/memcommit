@@ -110,6 +110,15 @@ the semantic boundary that makes an evidence-derived Rule safe. Focused Rule
 copy and whole-proposal copy retain the full rationale and exact evidence UID
 detail even though the default catalog projects only evidence counts.
 
+The `PROPOSED RULES` catalog is the single default report location for these
+generated Memories. The read-only Impact route therefore suppresses its
+generic `IMPACT`/`[ADD]` effect ledger and Results block for Distill: both
+would repeat the same complete Rules without introducing another decision.
+This is a presentation boundary, not a loss of proposal data. Rule detail and
+copy still contain rationale and evidence, while the Context-location header
+and close-time digest checks continue to prove that Source and Target were not
+changed. Mutation-oriented operations retain their distinct Impact ledgers.
+
 ## Interfaces and interaction
 
 Direct standalone Add is line-oriented by default and rejects `--tui`; the

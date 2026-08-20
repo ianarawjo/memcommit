@@ -67,6 +67,25 @@ class _LongElaborateProvider:
         )
 
 
+class _CaseElaborateProvider:
+    def complete(self, prompt, *, operation, output_schema=None):
+        assert operation == ELABORATE_OPERATION
+        return json.dumps(
+            {
+                "overview": "One boundary Case probes the supplied Rule.",
+                "cases": [
+                    {
+                        "proposition": "A preferred share class remains explicit.",
+                        "expected": "Keep the class qualifier.",
+                        "rationale": "The class can identify another security.",
+                        "case_role": "BOUNDARY",
+                        "source_rule_index": 1,
+                    }
+                ],
+            }
+        )
+
+
 def _distill_result(isolated_store):
     store = MemoryStore()
     source = ops.init("compact-rules/source")
@@ -110,6 +129,11 @@ def test_distill_impact_rule_row_is_compact_without_losing_detail(
 
     assert row == f"[1] {LONG_RULE} — SUPPORT 1 · BOUNDARY 1"
     assert "…" not in row
+    assert rendered.count(LONG_RULE) == 1
+    assert "IMPACT · DISTILL ADD" not in rendered
+    assert "[ADD]" not in rendered
+    assert presentation.view.show_results is False
+    assert presentation.show_impact_ledger is False
     assert presentation.view.items[0].summary == (
         "The full rationale remains in Rule detail."
     )
@@ -138,9 +162,34 @@ def test_elaborate_rule_rows_keep_complete_unverified_content() -> None:
         if line.strip().startswith("[1] ")
     ) == expected
     assert "…" not in expected
+    assert impact.count(LONG_RULE) == 1
+    assert "PROPOSED RULES · 1" in impact
+    assert "IMPACT · ELABORATE ADD" not in impact
+    assert "[ADD]" not in impact
+    assert presentation.view.show_results is False
+    assert presentation.show_impact_ledger is False
     assert presentation.view.items[0].summary == (
         "The full unverified rationale remains in detail."
     )
     complete_copy = project_elaborate_clipboard(result, whole_document=True).text
     assert "PROPOSAL DETAILS" in complete_copy
     assert "WHY ·" in complete_copy
+
+
+def test_elaborate_case_impact_keeps_its_distinct_effect_projection() -> None:
+    result = execute_elaborate(
+        ElaborateRequest(rules=("Preserve an exact security class.",)),
+        provider_factory=_CaseElaborateProvider,
+    )
+    presentation = elaborate_impact_presentation(
+        result,
+        source_name="compact-rules/rules",
+        target_name="compact-rules/target",
+    )
+    rendered = render_impact_session_snapshot(presentation)
+
+    assert presentation.view.list_label == "UNVERIFIED PROPOSALS"
+    assert presentation.view.show_results is True
+    assert presentation.show_impact_ledger is True
+    assert "IMPACT · ELABORATE ADD · ENDPOINTS UNCHANGED" in rendered
+    assert "[ADD]" in rendered

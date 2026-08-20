@@ -9,16 +9,16 @@
 ┃ ASSESSMENT                                                                                                                                                                       ┃
 ┃ One complete unverified Rule elaborates the Goal.                                                                                                                                ┃
 ┃                                                                                                                                                                                  ┃
-┃ UNVERIFIED PROPOSALS · 1                                                                                                                                                         ┃
+┃ PROPOSED RULES · 1                                                                                                                                                               ┃
 ┃ [1] When generating a synthetic ticker, remove a leading article, discard legal-form suffixes, preserve meaningful numeric tokens, and keep the exact security-class qualifier b ┃
 ┃efore applying the reviewed mapping; this final qualification remains part of the complete Rule and must remain visible without shortening the Rule. — SUGGESTED · UNVERIFIED     ┃
 ┃                                                                                                                                                                                  ┃
-┃ IMPACT · ELABORATE ADD · ENDPOINTS UNCHANGED                                                                                                                                     ┃
-┃ These unverified Memories would be added to the existing Target. Neither Source nor Target has been changed.                                                                     ┃
-┃ Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                      ┃
-┃       ▸ + [ADD] [54d162c3] When generating a synthetic ticker, remove a leading article, discard legal-form suffixes, preserve meaningful numeric tokens, and keep the exact     ┃
-┃                            security-class qualifier before applying the reviewed mapping; this final qualification remains part of the complete Rule and must remain visible     ┃
-┃                            without shortening the Rule.                                                                                                                          ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
