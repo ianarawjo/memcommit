@@ -70,8 +70,15 @@ from memcommit.commands.provider import app as provider_app
 from memcommit.commands.root_group import MemCommandGroup
 from memcommit.help_catalog import operation_summary
 
+_HELP_CONTEXT_SETTINGS = {
+    # Click child Contexts inherit this root setting, so aliases and nested
+    # subcommands keep the same help spellings without command-local options.
+    "help_option_names": ["-h", "--help"],
+}
+
 app = typer.Typer(
     cls=MemCommandGroup,
+    context_settings=_HELP_CONTEXT_SETTINGS,
     no_args_is_help=True,
     help="mem — a git-like memory store",
 )
