@@ -7,44 +7,44 @@
 ┃                                                                                                                                                                                  ┃
 ┃ WHAT MEM UNDERSTOOD                                                                                                                                                              ┃
 ┃ ASSESSMENT                                                                                                                                                                       ┃
-┃ Three suggested, unverified cafe-order Example Memories jointly instantiate all seven Rules while varying the drink, adjusted attribute, and decision point.                     ┃
+┃ Three suggested, unverified cafe-order Example Memories jointly instantiate all seven rules, with fit, boundary, and contrast-oriented variation.                                ┃
 ┃                                                                                                                                                                                  ┃
-┃ TARGET AMBIENT                                                                                                                                                                   ┃
-┃ t1 · MEMORY · calibration/cafe/generated-examples · A customer ordered a medium iced vanilla latte with whole milk and two pumps of vanilla syrup, asking to keep the size, temp ┃
-┃erature, and milk unchanged but make it less sweet. The barista asked whether to reduce the syrup to one pump or remove it entirely. The customer chose one pump. The barista con ┃
-┃firmed a medium iced vanilla latte with whole milk and one pump of vanilla syrup, with the size, temperature, and milk unchanged, then prepared the drink.                        ┃
+┃ PROPOSED CASES · 3                                                                                                                                                               ┃
+┃ [1] A customer ordered a small hot cappuccino with whole milk and a double shot, asking to keep the size, temperature, milk, and shots unchanged but use less foam. The barista  ┃
+┃asked whether to leave a thin layer of foam or remove the foam entirely. The customer chose a thin layer of foam. The barista confirmed a small hot cappuccino with whole milk, a ┃
+┃ double shot, and a thin layer of foam, with the size, temperature, milk, and shots unchanged, then prepared the drink. — ALL 7 RULES · UNVERIFIED                                ┃
 ┃                                                                                                                                                                                  ┃
-┃ UNVERIFIED PROPOSALS · 3                                                                                                                                                         ┃
-┃ CASE · FIT 1 · A customer ordered a small hot cappuccino with whole milk and a double shot at a cafe, asking to keep the size, temperature, milk, and shots unchanged but make i ┃
-┃t less foamy. The barista asked whether to leave a thin layer of foam or remove the foam entirely. The customer chose a thin layer of foam. The barista confirmed a small hot cap ┃
-┃puccino with whole milk, a double shot, and a thin layer of foam, with the size, temperature, milk, and shots unchanged, then prepared the drink.                                 ┃
-┃ FIT: a straightforward complete instantiation that adjusts only foam after the customer chooses between two concrete options.                                                    ┃
+┃ [2] A customer ordered a large iced cold brew with regular ice and no syrup, asking to keep the size, temperature, ice, and no-syrup condition unchanged but make the coffee fla ┃
+┃vor stronger. The barista asked whether to add one espresso shot or use a double-strength cold-brew concentrate. The customer chose one added espresso shot. The barista confirme ┃
+┃d a large iced cold brew with one added espresso shot, regular ice, and no syrup, with the size, temperature, ice, and no-syrup condition unchanged, then prepared the drink. — A ┃
+┃LL 7 RULES · UNVERIFIED                                                                                                                                                           ┃
 ┃                                                                                                                                                                                  ┃
-┃ CASE · BOUNDARY 2 · A customer ordered a large iced cold brew with light ice and no syrup at a cafe, asking to keep the size, temperature, ice, and no-syrup condition unchanged ┃
-┃ but make it stronger. The barista asked whether to add one espresso shot or add two espresso shots. The customer chose one espresso shot. The barista confirmed a large iced col ┃
-┃d brew with one espresso shot, with the size, temperature, light ice, and no-syrup condition unchanged, then prepared the drink.                                                  ┃
-┃ BOUNDARY: the relative request `stronger` is resolved at the decision boundary by choosing between two precise shot quantities while every existing attribute remains fixed.     ┃
+┃ [3] A customer ordered a medium hot mocha with oat milk, three pumps of chocolate syrup, and a single shot, asking to keep the size, temperature, milk, syrup, and shots unchang ┃
+┃ed but make the drink less hot. The barista asked whether to serve it warm at 55 degrees Celsius or extra warm at 60 degrees Celsius. The customer chose warm at 55 degrees Celsi ┃
+┃us. The barista confirmed a medium warm mocha at 55 degrees Celsius with oat milk, three pumps of chocolate syrup, and a single shot, with the size, milk, syrup, and shots uncha ┃
+┃nged, then prepared the drink. — ALL 7 RULES · UNVERIFIED                                                                                                                         ┃
 ┃                                                                                                                                                                                  ┃
-┃ CASE · CONTRAST 3 · A customer ordered a medium hot mocha with oat milk and three pumps of chocolate syrup at a cafe, asking to keep the size, temperature, milk, and drink type ┃
-┃ unchanged but make it less sweet. The barista asked whether to reduce the chocolate syrup to two pumps or reduce it to one pump. The customer chose two pumps of chocolate syrup ┃
-┃. The barista confirmed a medium hot mocha with oat milk and two pumps of chocolate syrup, with the size, temperature, milk, and drink type unchanged, then prepared the drink.   ┃
-┃ CONTRAST: although the barista could be tempted to interpret `less sweet` arbitrarily, the proposition shows the compliant handling—offering exactly two concrete reductions and ┃
-┃ using the customer's selection.                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
-┃ IMPACT · ELABORATE ADD · ENDPOINTS UNCHANGED                                                                                                                                     ┃
-┃ These unverified Memories would be added to the existing Target. Neither Source nor Target has been changed.                                                                     ┃
-┃ Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                      ┃
-┃       ▸ + [ADD] [fb41e281] A customer ordered a small hot cappuccino with whole milk and a double shot at a cafe, asking to keep the size, temperature, milk, and shots          ┃
-┃                            unchanged but make it less foamy. The barista asked whether to leave a thin layer of foam or remove the foam entirely. The customer chose a thin      ┃
-┃                            layer of foam. The barista confirmed a small hot cappuccino with whole milk, a double shot, and a thin layer of foam, with the size, temperature,    v┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 ┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
 │› REPORT         Complete Elaborate report                                                                                                                                       ^│
-│  CASE · FIT     A customer ordered a small hot cappuccino with whole milk and a double shot at a cafe, asking to keep the size, temperature, milk, and shots unchanged but make  │
-│                 it less foamy. The barista asked whether to leave a thin layer of foam or remove the foam entirely. The customer chose a thin layer of foam. The barista         │
-│                 confirmed a small hot cappuccino with whole milk, a double shot, and a thin layer of foam, with the size, temperature, milk, and shots unchanged, then prepared  │
-│                 the drink.                                                                                                                                                       │
-│  CASE · BOUNDARY A customer ordered a large iced cold brew with light ice and no syrup at a cafe, asking to keep the size, temperature, ice, and no-syrup condition unchanged   v│
+│  CASE · FIT     A customer ordered a small hot cappuccino with whole milk and a double shot, asking to keep the size, temperature, milk, and shots unchanged but use less foam.  │
+│                 The barista asked whether to leave a thin layer of foam or remove the foam entirely. The customer chose a thin layer of foam. The barista confirmed a small hot  │
+│                 cappuccino with whole milk, a double shot, and a thin layer of foam, with the size, temperature, milk, and shots unchanged, then prepared the drink.             │
+│  CASE · BOUNDARY A customer ordered a large iced cold brew with regular ice and no syrup, asking to keep the size, temperature, ice, and no-syrup condition unchanged but make   │
+│                  the coffee flavor stronger. The barista asked whether to add one espresso shot or use a double-strength cold-brew concentrate. The customer chose one added     │
+│                  espresso shot. The barista confirmed a large iced cold brew with one added espresso shot, regular ice, and no syrup, with the size, temperature, ice, and       │
+│                  no-syrup condition unchanged, then prepared the drink.                                                                                                         v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
 │[ READ ONLY ]  No action available · This saved session can only be inspected.                                                                                                    │

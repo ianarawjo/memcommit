@@ -35,8 +35,8 @@ python docs/screenshots/distill-elaborate-generative-reduction-20260820/capture.
 |---|---|---|---|
 | `01-distill-live-result.png` | `mem impact distill --from calibration/cafe/examples --to calibration/cafe/distilled-rules --direct` | Three complete Examples produce evidence-bound proposed Rules | None |
 | `02-distill-read-only-verification.png` | `Q` | Source and Target digests remain unchanged; Target has no checkpoint | None |
-| `03-elaborate-live-result.png` | `mem impact elaborate --from calibration/cafe/rules --to calibration/cafe/generated-examples --as rules` | The omitted number defaults to exactly three suggested, unverified Example proposals without a false `CHANGE` badge while one existing Target Example is shown as ambient context | None |
-| `04-elaborate-first-proposal-detail.png` | `Tab`, Down Arrow, `Enter` on the first proposed Case | One `RULE COVERAGE · ALL 7` block exposes every Rule check, expected result, and exact Target ambient alias without repeated `PROPOSAL DETAIL` headings | None |
+| `03-elaborate-live-result.png` | `mem impact elaborate --from calibration/cafe/rules --to calibration/cafe/generated-examples --as rules` | The omitted number defaults to exactly three suggested, unverified Examples in one compact proposal catalog; the header retains the Target ambient count while the repeated ambient body and `[ADD]` ledger stay off the default canvas | None |
+| `04-elaborate-first-proposal-detail.png` | `Tab`, Down Arrow, `Enter` on the first proposed Case | One compact `RULE COVERAGE · ALL 7` boundary retains the expected result and exact Target alias without replaying seven provider-authored check explanations | None |
 | `05-elaborate-read-only-verification.png` | `Q` | Seven Source Rules and one pre-existing Target Example remain unchanged; Target has no checkpoint | None |
 
 The refreshed capture uses the English café family as the current Source. The

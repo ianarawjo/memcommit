@@ -511,6 +511,16 @@ def elaborate_impact_presentation(
         if heading.startswith("TARGET USED · "):
             heading, _separator, target_refs = heading.partition(" · ")
             body = [target_refs]
+        elif heading.startswith("RULE COVERAGE · "):
+            # The typed result retains every provider Rule check. The Impact
+            # detail only needs the exhaustive-coverage boundary and the
+            # actionable result; replaying one model explanation per Rule made
+            # the proposal harder to inspect without strengthening it.
+            body = [
+                line
+                for line in body
+                if line.startswith(("EXPECTED · ", "TARGET USED · "))
+            ]
         return (
             ResolutionDetailBlock(
                 heading=heading,
@@ -561,7 +571,11 @@ def elaborate_impact_presentation(
             role="OPTIONAL_REVIEW",
             obligation="NONE",
             response_state="NOT_APPLICABLE",
-            compact_row_suffix=("SUGGESTED · UNVERIFIED" if rules_direction else None),
+            compact_row_suffix=(
+                "SUGGESTED · UNVERIFIED"
+                if rules_direction
+                else f"ALL {len(analysis.inputs)} RULES · UNVERIFIED"
+            ),
             blocks=proposal_blocks(detail),
             show_summary_priority=False,
         )
@@ -607,35 +621,16 @@ def elaborate_impact_presentation(
         overview=analysis.overview,
         overview_sections=(
             ResolutionOverviewSection("assessment", "ASSESSMENT", analysis.overview),
-            *(
-                (
-                    ResolutionOverviewSection(
-                        "target-ambient",
-                        "TARGET AMBIENT",
-                        "\n".join(
-                            (
-                                f"{item.alias} · MEMORY · {item.context_name} · "
-                                f"{item.content}"
-                                if item.kind == "MEMORY"
-                                else f"{item.alias} · QUERY ONLY · "
-                                f"{item.context_name} · NAME ONLY"
-                            )
-                            for item in target_context.items
-                        ),
-                    ),
-                )
-                if target_context is not None
-                else ()
-            ),
         ),
-        list_label=(
-            "PROPOSED RULES" if rules_direction else "UNVERIFIED PROPOSALS"
-        ),
+        list_label=("PROPOSED RULES" if rules_direction else "PROPOSED CASES"),
         items=items,
         empty_message="No Elaborate proposals were returned.",
         results_label="PROPOSED ADD MEMORIES",
         results=results,
-        show_results=not rules_direction,
+        # The proposal catalog already contains the exact Memories. Repeating
+        # them in a generic effect ledger does not add a separate decision or
+        # mutation boundary in either derivation direction.
+        show_results=False,
     )
     return ImpactSessionPresentation(
         view=view,
@@ -648,7 +643,7 @@ def elaborate_impact_presentation(
             ),
         ),
         handoff_available=False,
-        show_impact_ledger=not rules_direction,
+        show_impact_ledger=False,
     )
 
 

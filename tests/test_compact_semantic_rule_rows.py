@@ -11,7 +11,12 @@ from memcommit.commands.impact_sessions import render_impact_session_snapshot
 from memcommit.distill import DISTILL_OPERATION, DISTILL_PAYLOAD_MARKER
 from memcommit.distill_application import DistillRequest
 from memcommit.distill_runtime import execute_distill
-from memcommit.elaborate import ELABORATE_OPERATION
+from memcommit.elaborate import (
+    ELABORATE_OPERATION,
+    ELABORATE_PAYLOAD_MARKER,
+    ElaborateTargetContext,
+    ElaborateTargetContextItem,
+)
 from memcommit.elaborate_application import ElaborateRequest
 from memcommit.elaborate_runtime import execute_elaborate
 from memcommit.interfaces.cli.distill import distill_result_text
@@ -70,6 +75,13 @@ class _LongElaborateProvider:
 class _CaseElaborateProvider:
     def complete(self, prompt, *, operation, output_schema=None):
         assert operation == ELABORATE_OPERATION
+        payload = json.loads(prompt.split(ELABORATE_PAYLOAD_MARKER, 1)[1])
+        target = payload.get("target_context")
+        target_refs = (
+            [item["target_id"] for item in target["items"]]
+            if isinstance(target, dict)
+            else None
+        )
         return json.dumps(
             {
                 "overview": "One boundary Case probes the supplied Rule.",
@@ -85,6 +97,11 @@ class _CaseElaborateProvider:
                                 "evidence": "The qualifier remains explicit.",
                             }
                         ],
+                        **(
+                            {"target_context_refs": target_refs}
+                            if target_refs is not None
+                            else {}
+                        ),
                     }
                 ],
             }
@@ -181,13 +198,25 @@ def test_elaborate_rule_rows_keep_complete_unverified_content() -> None:
     assert "WHY ·" in complete_copy
 
 
-def test_elaborate_case_impact_keeps_its_distinct_effect_projection() -> None:
+def test_elaborate_case_impact_uses_one_compact_proposal_catalog() -> None:
     result = execute_elaborate(
         ElaborateRequest(
             rules=("Preserve an exact security class.",),
             number=1,
         ),
         provider_factory=_CaseElaborateProvider,
+        target_context=ElaborateTargetContext(
+            context_name="compact-rules/target",
+            items=(
+                ElaborateTargetContextItem(
+                    alias="t1",
+                    kind="MEMORY",
+                    context_name="compact-rules/target",
+                    memory_uid="ambient-memory",
+                    content="This complete ambient Memory stays off the default canvas.",
+                ),
+            ),
+        ),
     )
     presentation = elaborate_impact_presentation(
         result,
@@ -196,11 +225,22 @@ def test_elaborate_case_impact_keeps_its_distinct_effect_projection() -> None:
     )
     rendered = render_impact_session_snapshot(presentation)
 
-    assert presentation.view.list_label == "UNVERIFIED PROPOSALS"
-    assert presentation.view.show_results is True
-    assert presentation.show_impact_ledger is True
-    assert "IMPACT · ELABORATE ADD · ENDPOINTS UNCHANGED" in rendered
-    assert "[ADD]" in rendered
+    case = result.analysis.cases[0]
+    expected = f"[1] {case.proposition} — ALL 1 RULES · UNVERIFIED"
+
+    assert presentation.view.list_label == "PROPOSED CASES"
+    assert next(
+        line.strip()
+        for line in rendered.splitlines()
+        if line.strip().startswith("[1] ")
+    ) == expected
+    assert rendered.count(case.proposition) == 1
+    assert "1 TARGET AMBIENT" in rendered
+    assert "This complete ambient Memory stays off the default canvas." not in rendered
+    assert presentation.view.show_results is False
+    assert presentation.show_impact_ledger is False
+    assert "IMPACT · ELABORATE ADD · ENDPOINTS UNCHANGED" not in rendered
+    assert "[ADD]" not in rendered
     assert "[CHANGE]" not in rendered
     assert "PROPOSAL DETAIL" not in rendered
     assert presentation.view.items[0].priority == "SUGGESTED"
@@ -209,6 +249,11 @@ def test_elaborate_case_impact_keeps_its_distinct_effect_projection() -> None:
     assert len(presentation.view.items[0].blocks) == 1
     assert presentation.view.items[0].blocks[0].heading == "RULE COVERAGE · ALL 1"
     assert presentation.view.items[0].blocks[0].text == (
-        "RULE 1 · The qualifier remains explicit.\n"
-        "EXPECTED · Keep the class qualifier."
+        "EXPECTED · Keep the class qualifier.\nTARGET USED · t1"
+    )
+    assert presentation.view.results[0].rules == (
+        "RULE COVERAGE · ALL 1",
+        "RULE 1 · The qualifier remains explicit.",
+        "EXPECTED · Keep the class qualifier.",
+        "TARGET USED · t1",
     )
