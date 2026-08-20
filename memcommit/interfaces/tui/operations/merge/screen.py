@@ -80,10 +80,12 @@ def merge_exact_command_review(
             "mem",
             "merge",
             source_name,
+            "--into",
+            target_name,
             "--recursive" if recursive else "--direct",
         ),
         effects=(
-            f"Merge {scope} into frozen current Target '{target_name}'.",
+            f"Merge {scope} into selected Target '{target_name}'.",
             target_effect,
             "Classify every Source item as NEW, UNCHANGED, or required CONFLICT.",
             "Resolve conflicts only by keeping Target or taking Source.",

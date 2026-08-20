@@ -1,0 +1,8 @@
+Merged 'source' into 'target-selected': added 1 memory; checkpoint recorded.                                                                                                        
+COMMAND EXIT · 0                                                                                                                                                                    
+                                                                                                                                                                                    
+SELECTED VERIFICATION                                                                                                                                                               
+CURRENT POINTER · target-current                                                                                                                                                    
+CURRENT TARGET · []                                                                                                                                                                 
+SELECTED TARGET · ['source-only addition']                                                                                                                                          
+CHECKPOINTS · CURRENT 0 · SELECTED 1

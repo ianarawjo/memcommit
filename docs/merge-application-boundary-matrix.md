@@ -5,8 +5,8 @@
 The conflict-aware direct and path-aligned recursive Merge contracts are
 implemented and verified through one terminal-independent typed
 Application/Runtime boundary. The public CLI exposes explicit `--direct` and
-`--recursive` reach plus complete per-item or bulk deterministic decisions.
-Bare `mem merge` opens the Source/current-Target setup. A decision-free local
+`--recursive` reach, optional `--into TARGET`, and complete per-item or bulk
+deterministic decisions. Bare `mem merge` opens the Source/Target setup. A decision-free local
 plan applies immediately through the normal checkpointed application boundary;
 a decision-free granted-authority plan retains final review, and a
 conflict-bearing plan opens the shared Resolution workbench. Every path applies
@@ -14,7 +14,7 @@ the same frozen typed plan.
 
 ## Motivating distinction
 
-`mem merge SOURCE` remains deterministic, provider-free, and distinct from a
+`mem merge SOURCE [--into TARGET]` remains deterministic, provider-free, and distinct from a
 Git-style three-way merge or semantic reconciliation. It now classifies every
 frozen Source item as `NEW`, `UNCHANGED`, or required `CONFLICT`. Conflicts are
 limited to exact structural choices: keep the Target member or take the Source
@@ -29,7 +29,7 @@ application boundary.
 
 | Concern | Current owner | Frozen behavior |
 | --- | --- | --- |
-| CLI input | `commands.merge` | One existing Source locator; the command-start current Context is the Target. |
+| CLI input | `commands.merge` | One existing Source locator and optional `--into` Target locator; omitting Target uses the command-start current Context. |
 | Locator meaning | `MemoryStoreMergePort` and authority access | Source and Target are resolved from one captured current-name snapshot. |
 | Authority | Grant-aware access and derived-transfer policy | Source requires `READ`; Target additions require `CREATE`; `TAKE SOURCE` replacement also requires `UPDATE`; cross-domain transfer enforces its derived permissions. |
 | Write protection | Store policy frozen during planning and revalidated during persistence | A protected Target Memory or Context removes `TAKE SOURCE` before the decision UI; a protected Context blocks unconditional additions before review; concurrent policy changes still fail closed at Store save. |
@@ -51,7 +51,7 @@ application boundary.
 | `MemoryStoreMergePort` | Infrastructure/runtime | Capture current once; resolve authority; project cross-Profile input; freeze Source/Target digests; revalidate and checkpoint atomically. |
 | `execute_merge` | Internal Python runtime | Invoke the same use case with no stdout, stderr, prompt-toolkit, or provider dependency. |
 | `render_merge_plain` | Plain CLI adapter | Preserve the historical direct success sentence and explicitly report recursive Context/checkpoint totals. |
-| Merge endpoint setup | Interactive adapter | Select a readable Source and one coupled direct/recursive shape while keeping the command-start current Target explicit and fixed. Returns only a typed request. |
+| Merge endpoint setup | Interactive adapter | Select a readable Source, a local or CREATE-authorized Target, and one coupled direct/recursive shape from separate frozen catalogs. The command-start current Context is only the initial Target. Either endpoint may temporarily select the same row; Continue rejects that completed draft. Returns only a typed request. |
 | Merge frozen-plan review | Interactive adapter | Project a decision-free granted-authority plan and apply only that exact plan after explicit approval. Local decision-free plans skip this duplicate approval because the complete command checkpoint supports Undo/Redo. |
 | Shared deterministic Resolution workbench | Interactive adapter | For conflict-bearing plans only, compose Viewer, conditional Responses, Items, To Do, exact individual/bulk review, y/Y clipboard, and a visible receipt without importing `commands.*`. |
 | `commands.merge.cmd` | Typer composition boundary | Parse argv or route a bare TTY invocation, compose Store runtime, translate expected failures to CLI exits, and invoke the presenter. |
@@ -69,8 +69,9 @@ The implementation preserves and verifies all of the following:
 - non-propagation of Source deletion and lexical descendants;
 - idempotent repeated execution with one checkpoint per successful command;
 - required reference/placement conflicts without partial mutation;
-- same-Context rejection, relative-locator behavior, Source freshness, and
-  Target compare-and-set;
+- same-Context rejection at reviewed-result and runtime boundaries rather than
+  by hiding the Target in the Source picker; relative-locator behavior, Source
+  freshness, and Target compare-and-set;
 - Grant permissions and cross-Profile Memory-only projection; and
 - existing exit status and plain terminal wording.
 
@@ -102,10 +103,10 @@ CREATE-authorized descendants but cannot create a missing authority Context.
 The internal `execute_merge()` callable verifies local matching,
 Source-only creation, Target-only preservation, complete-relative-path
 alignment, granted recursive Source projection, membership freshness, and
-exception rollback. `mem merge SOURCE --recursive` exposes that behavior
-non-interactively. Bare `mem merge` starts with Source focused, exposes direct
-and recursive as coupled operation shapes, and keeps the command-start Target
-visible as a fixed B endpoint. Continuing from setup does not mutate state:
+exception rollback. `mem merge SOURCE --into TARGET --recursive` exposes that
+behavior non-interactively. Bare `mem merge` starts with Source focused,
+exposes direct and recursive as coupled operation shapes, and starts selectable
+Target B at the command-start current Context. Continuing from setup does not mutate state:
 `prepare_merge()` first freezes the complete plan, and a second screen shows
 every Context mapping, creation decision, addition identity, and checkpoint
 count. Only Enter on that exact frozen-plan review invokes `run_merge()` with
@@ -115,10 +116,12 @@ instead of attempting a full-screen UI.
 ## Interface verification
 
 The focused automated gate covers direct and recursive typed results,
-recursive CLI path creation, conflicting reach flags, non-TTY routing,
-readable Source selection, coupled reach traversal, setup-only continuation,
-complete frozen-plan projection, exact-plan application, cancellation,
-authority, freshness, rollback, checkpoints, and operation-unit Undo/Redo.
+explicit `--into` without a current Context, recursive CLI path creation,
+conflicting reach flags, non-TTY routing, independently frozen readable Source
+and CREATE-authorized Target catalogs, selectable Target return, coupled reach
+traversal, setup-only continuation, complete frozen-plan projection, exact-plan
+application, cancellation, authority, freshness, rollback, checkpoints, and
+operation-unit Undo/Redo.
 The earlier decision-free terminal evidence is recorded under
 `docs/screenshots/mem-merge-recursive-tui-20260814/` at 180×52 with color ANSI
 verified. It demonstrates typed Help, direct root-only mutation, recursive
@@ -135,6 +138,12 @@ cancellation, stale-plan rejection with no partial Target publication, and a
 verified no-op receipt/checkpoint. It also records a protected Memory exposing
 only `KEEP TARGET` and a protected Context rejecting an unconditional addition
 before review.
+
+The selectable-Target evidence under
+`docs/screenshots/mem-merge-target-selection-20260820/` records the initial
+current Target, alternate B selection, decision-free application to that
+selected Target without switching global current, and same-endpoint rejection
+with no partial state.
 
 An isolated Study Task 1 application-policy replay additionally exercised 11
 direct additions, a verified no-op, one content conflict, exact `TAKE SOURCE`,

@@ -38,10 +38,10 @@ def test_describe_returns_one_complete_stable_contract(tmp_path):
     assert operation == {
         "name": "merge",
         "summary": (
-            "Add Source-only items to the current Target, leave exact matches "
+            "Add Source-only items to a selected Target, leave exact matches "
             "unchanged, and choose Source or Target for stored-item conflicts."
         ),
-        "flow": "Source Context -> current Target Context",
+        "flow": "Source Context -> selected Target Context",
         "execution": "DETERMINISTIC",
         "effect": (
             "Changes Target only after every required conflict has KEEP TARGET "
@@ -50,11 +50,11 @@ def test_describe_returns_one_complete_stable_contract(tmp_path):
         "range": "Exact roots or matching lexical descendants by complete relative path",
         "best_for": (
             "Appending Source-only items or bringing a copied or branched "
-            "Context back into the current Context without semantic synthesis."
+            "Context into a selected Target Context without semantic synthesis."
         ),
         "use_when": (
             "Appending Source-only items or bringing a copied or branched "
-            "Context back into the current Context without semantic synthesis."
+            "Context into a selected Target Context without semantic synthesis."
         ),
         "maturity": None,
         "details": [

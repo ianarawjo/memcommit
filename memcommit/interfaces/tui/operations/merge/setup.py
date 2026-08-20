@@ -16,7 +16,7 @@ from memcommit.merge_application import MergeReach, MergeRequest
 
 
 def merge_endpoint_setup_spec(setup: MergeTuiSetup) -> EndpointSetupSpec:
-    """Project frozen Merge authority into the common role-based setup."""
+    """Project frozen Merge catalogs into the common role-based setup."""
 
     if not isinstance(setup, MergeTuiSetup):
         raise TypeError("Merge endpoint setup requires a MergeTuiSetup.")
@@ -53,13 +53,13 @@ def merge_endpoint_setup_spec(setup: MergeTuiSetup) -> EndpointSetupSpec:
             ),
             EndpointSetupRole(
                 "B",
-                "B · CURRENT TARGET",
-                (setup.target_context,),
-                frozenset({setup.target_context}),
+                "B · TARGET · CREATE AUTHORITY",
+                setup.target_names,
+                setup.target_selectable_names,
                 setup.target_context,
-                current_context=setup.target_context,
-                fixed=True,
-                height=2,
+                current_context=setup.current_context,
+                annotations=setup.target_annotations,
+                height=min(10, max(4, len(setup.target_names))),
             ),
         ),
         action_label="CLASSIFY · APPLY IF NO DECISION IS REQUIRED",

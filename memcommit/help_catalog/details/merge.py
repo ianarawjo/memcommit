@@ -21,7 +21,7 @@ MERGE_DETAILS = (
         options=(
             OperationComparisonOption(
                 label="SOURCE ONLY",
-                guidance="Add the Source item to the current Target.",
+                guidance="Add the Source item to the selected Target.",
             ),
             OperationComparisonOption(
                 label="EXACT MATCH",

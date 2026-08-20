@@ -1,4 +1,4 @@
-"""Compose a readable Merge Source picker without opening Memory content."""
+"""Compose Merge Source and Target pickers without opening Memory content."""
 
 from __future__ import annotations
 
@@ -14,12 +14,13 @@ def build_merge_tui_setup(
     port: MemoryStoreMergePort,
     *,
     initial_recursive: bool,
+    requested_target: str | None = None,
 ) -> MergeTuiSetup:
-    """Freeze local and READ-granted public names for one TUI launch."""
+    """Freeze readable Sources and CREATE-authorized Targets for one launch."""
 
     target = resolve_context_access(
         port.store,
-        None,
+        requested_target,
         current_name=port.current_context_name,
         required_permission="CREATE",
     )
@@ -36,28 +37,60 @@ def build_merge_tui_setup(
         required_permission="READ",
     )
     navigation = freeze_profile_context_navigation(port.store, orientation)
-    names = tuple(
+    source_names = tuple(
         sorted(
             (*navigation.local_names, *navigation.selectable_virtual_names),
             key=str.casefold,
         )
     )
-    selectable = set(names) - {target.display_name}
-    if not selectable:
-        raise ValueError(
-            "Interactive Merge requires a readable Source distinct from its Target."
-        )
-    selected = sorted(selectable, key=str.casefold)[0]
+    source_selectable = set(source_names)
+    # Target selection has a narrower authority contract than Source
+    # selection. Resolve each visible Grant row for CREATE now so a READ-only
+    # Source can never be mistaken for a writable Target by the shared picker.
+    target_selectable = set(navigation.local_names)
+    for name in navigation.virtual_names:
+        try:
+            access = resolve_context_access(
+                port.store,
+                name,
+                current_name=port.current_context_name,
+                required_permission="CREATE",
+            )
+        except (FileNotFoundError, OSError, RuntimeError, ValueError):
+            continue
+        target_selectable.add(access.display_name)
+    # The explicitly resolved initial Target is authoritative even when its
+    # public Grant row was reached through a non-local command-start snapshot.
+    target_selectable.add(target.display_name)
+    target_names = tuple(sorted(target_selectable, key=str.casefold))
+    # Keep the initial draft executable when an alternate exists, but do not
+    # turn Source/Target distinctness into a disabled picker row. The reviewed
+    # endpoint result and runtime own that semantic rejection.
+    selected = next(
+        (
+            name
+            for name in sorted(source_selectable, key=str.casefold)
+            if name != target.display_name
+        ),
+        target.display_name,
+    )
     return MergeTuiSetup(
-        names=names,
-        selectable_names=frozenset(selectable),
+        names=source_names,
+        selectable_names=frozenset(source_selectable),
         selected_source=selected,
+        target_names=target_names,
+        target_selectable_names=frozenset(target_selectable),
         target_context=target.display_name,
         initial_recursive=initial_recursive,
         current_context=port.current_context_name,
         annotations=tuple(
             (name, navigation.virtual_annotations[name])
-            for name in names
+            for name in source_names
+            if name in navigation.virtual_annotations
+        ),
+        target_annotations=tuple(
+            (name, navigation.virtual_annotations[name])
+            for name in target_names
             if name in navigation.virtual_annotations
         ),
     )

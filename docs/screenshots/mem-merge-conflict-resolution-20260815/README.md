@@ -1,5 +1,11 @@
 # Conflict-aware Merge terminal evidence
 
+> Historical presentation evidence: selectable Target B and the compact
+> conflict topology now appear under `../mem-merge-target-selection-20260820/`
+> and `../mem-merge-compact-conflict-resolution-20260820/`. The frozen-case,
+> exact-decision, atomicity, and recovery boundaries recorded here remain
+> applicable.
+
 ## Capture contract
 
 - Capture command: `python docs/screenshots/mem-merge-conflict-resolution-20260815/capture.py`

@@ -1,0 +1,2 @@
+Merged 'source' into 'target-selected': added 1 memory; checkpoint recorded.                                                                                                        
+COMMAND EXIT · 0

@@ -31,8 +31,10 @@ def test_setup_discloses_conditional_auto_apply() -> None:
     spec = merge_endpoint_setup_spec(
         MergeTuiSetup(
             names=("source", "target"),
-            selectable_names=frozenset({"source"}),
+            selectable_names=frozenset({"source", "target"}),
             selected_source="source",
+            target_names=("source", "target"),
+            target_selectable_names=frozenset({"source", "target"}),
             target_context="target",
             initial_recursive=False,
             current_context="target",
@@ -111,7 +113,7 @@ def _invoke_bare_merge(monkeypatch, plan: FrozenMergePlan) -> tuple[object, list
     monkeypatch.setattr(
         merge_command,
         "build_merge_tui_setup",
-        lambda _port, *, initial_recursive: object(),
+        lambda _port, *, initial_recursive, requested_target: object(),
     )
     monkeypatch.setattr(
         merge_command,

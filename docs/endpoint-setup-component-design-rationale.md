@@ -37,11 +37,14 @@ toggles:
 - `RECURSIVE · A/** → B/**` means path alignment by one complete relative-path
   rule.
 
-Source A is selected from the frozen readable catalog. Target B is the
-command-start current Context and is rendered as a fixed endpoint. The
-setup draft is converted to a typed `MergeRequest`, then `prepare_merge()`
-freezes the actual Context mappings and additions before a separate review can
-offer durable Apply.
+Source A is selected from the frozen readable catalog. Target B starts at the
+command-start current Context, or an explicit `--into` operand, but remains
+selectable from the separately frozen local and CREATE-authorized Target
+catalog. Freezing the catalog prevents namespace and Grant drift while the
+person chooses; it does not freeze the checked Target value. The setup draft is
+converted to a typed `MergeRequest`, then `prepare_merge()` freezes the chosen
+Context mappings and additions before a separate review can offer durable
+Apply.
 
 The review begins in the shared semantic Viewer and exposes every frozen
 Source/Target mapping, whether its Target exists or will be created, the
@@ -94,5 +97,7 @@ directly.
   markers now have separate interface component modules. Endpoint Setup and
   the interface-owned Resolution Session import those owners directly;
   `commands.tui_primitives` is an import-only compatibility facade.
-- A fixed Merge Target avoids inventing a TUI-only command. Selectable targets
-  require a separately supported public `--into TARGET` contract.
+- Merge exposes the same selectable Target through public `--into TARGET`.
+  Omitting it preserves the command-start current-Target default, while every
+  exact TUI review includes `--into` so the reviewed action remains directly
+  reproducible outside the TUI.

@@ -171,14 +171,14 @@ def test_merge_help_distinguishes_structural_selection_from_meld_synthesis():
     overview = [(row.label, row.value) for row in composed.overview]
 
     assert composed.operation.summary == (
-        "Add Source-only items to the current Target, leave exact matches "
+        "Add Source-only items to a selected Target, leave exact matches "
         "unchanged, and choose Source or Target for stored-item conflicts."
     )
     assert ("EXECUTION", "DETERMINISTIC") in overview
     assert (
         "BEST FOR",
         "Appending Source-only items or bringing a copied or branched Context "
-        "back into the current Context without semantic synthesis.",
+        "into a selected Target Context without semantic synthesis.",
     ) in overview
 
     [boundary] = composed.operation.details

@@ -375,9 +375,9 @@ _OPERATIONS = (
     ),
     _operation(
         "merge",
-        "Add Source-only items to the current Target, leave exact matches "
+        "Add Source-only items to a selected Target, leave exact matches "
         "unchanged, and choose Source or Target for stored-item conflicts.",
-        "Source Context -> current Target Context",
+        "Source Context -> selected Target Context",
         ExecutionKind.DETERMINISTIC,
         "Changes Target only after every required conflict has KEEP TARGET or TAKE SOURCE; Source stays unchanged",
         "Exact roots or matching lexical descendants by complete relative path",

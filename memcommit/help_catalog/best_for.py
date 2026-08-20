@@ -104,7 +104,7 @@ BEST_FOR_BY_OPERATION = {
     ),
     "merge": (
         "Appending Source-only items or bringing a copied or branched Context "
-        "back into the current Context without semantic synthesis."
+        "into a selected Target Context without semantic synthesis."
     ),
     "profile": "Managing separate users, environments, or Memory stores.",
     "provider": (

@@ -584,7 +584,9 @@ COMMAND_FORMS = {
         "mem meld --from [incoming_context] (current Context is baseline)",
     ),
     "merge": (
-        "mem merge (choose a readable Source and direct or descendant reach in a TTY)",
+        "mem merge (choose a readable Source, CREATE-authorized Target, and reach in a TTY)",
+        "mem merge [source_context] --into [target_context] --direct (explicit exact roots)",
+        "mem merge [source_context] --into [target_context] --recursive (explicit path-aligned subtrees)",
         "mem merge [source_context] --direct (exact Source root into current Context; default)",
         "mem merge [source_context] --recursive (path-aligned descendants into current Context)",
         "mem merge [source_context] --keep-target-all (resolve every structural conflict by retaining Target)",

@@ -20,11 +20,13 @@ from memcommit.interfaces.tui.operations.merge import (
     merge_exact_command_review,
     merge_endpoint_setup_spec,
     merge_plan_exact_command_review,
+    merge_resolution_exact_review,
     merge_resolution_spec,
     project_merge_plan,
     run_merge_conflict_review,
     run_merge_plan_review,
 )
+from memcommit.interfaces.tui.workbenches.resolution import ResolutionOutcome
 from memcommit.merge_application import (
     FrozenMergePlan,
     MergeAddition,
@@ -52,8 +54,10 @@ runner = CliRunner(mix_stderr=False)
 def _setup(*, recursive: bool = False) -> MergeTuiSetup:
     return MergeTuiSetup(
         names=("source", "target"),
-        selectable_names=frozenset({"source"}),
+        selectable_names=frozenset({"source", "target"}),
         selected_source="source",
+        target_names=("source", "target", "target-b"),
+        target_selectable_names=frozenset({"source", "target", "target-b"}),
         target_context="target",
         initial_recursive=recursive,
         current_context="target",
@@ -276,6 +280,23 @@ def test_merge_resolution_spec_has_no_custom_choice() -> None:
     ]
 
 
+def test_conflict_review_exact_command_names_the_selected_target() -> None:
+    review = merge_resolution_exact_review(
+        _conflict_plan(),
+        ResolutionOutcome((("merge-conflict:test", "KEEP_TARGET"),)),
+    )
+
+    assert review.argv[:7] == (
+        "mem",
+        "merge",
+        "source",
+        "--into",
+        "target",
+        "--direct",
+        "--resolve",
+    )
+
+
 def test_store_backed_frozen_plan_is_read_only_until_review_apply(
     isolated_store,
 ) -> None:
@@ -316,7 +337,14 @@ def test_store_backed_frozen_plan_is_read_only_until_review_apply(
 def test_frozen_plan_exact_review_names_actual_counts() -> None:
     review = merge_plan_exact_command_review(_plan())
 
-    assert review.argv == ("mem", "merge", "source", "--direct")
+    assert review.argv == (
+        "mem",
+        "merge",
+        "source",
+        "--into",
+        "target",
+        "--direct",
+    )
     assert any("1 Context mapping" in effect for effect in review.effects)
     assert any("1 checkpoint" in effect for effect in review.effects)
 
@@ -343,19 +371,27 @@ def test_plan_review_failure_stays_visible_then_exits_without_receipt() -> None:
     assert applied == [plan]
 
 
-def test_exact_review_names_recursive_path_and_frozen_target() -> None:
+def test_exact_review_names_recursive_path_and_selected_target() -> None:
     review = merge_exact_command_review(
         "source",
         "target",
         recursive=True,
     )
 
-    assert review.argv == ("mem", "merge", "source", "--recursive")
+    assert review.argv == (
+        "mem",
+        "merge",
+        "source",
+        "--into",
+        "target",
+        "--recursive",
+    )
     assert any("complete relative path" in effect for effect in review.effects)
     assert any("Target subtree 'target'" in effect for effect in review.effects)
+    assert any("selected Target 'target'" in effect for effect in review.effects)
 
 
-def test_meld_style_setup_projects_coupled_reach_and_frozen_target() -> None:
+def test_meld_style_setup_projects_coupled_reach_and_selectable_target() -> None:
     spec = merge_endpoint_setup_spec(_setup())
 
     assert tuple(mode.uid for mode in spec.modes) == ("DIRECT", "DESCENDANTS")
@@ -363,14 +399,42 @@ def test_meld_style_setup_projects_coupled_reach_and_frozen_target() -> None:
     assert spec.roles[0].fixed is False
     assert spec.roles[1].uid == "B"
     assert spec.roles[1].selected_name == "target"
-    assert spec.roles[1].fixed is True
+    assert spec.roles[1].fixed is False
+    assert spec.roles[1].selectable_names == frozenset(
+        {"source", "target", "target-b"}
+    )
+    assert spec.roles[0].selectable_names == frozenset({"source", "target"})
+
+
+def test_merge_same_source_and_target_is_rejected_at_continue_not_picker() -> None:
+    setup = MergeTuiSetup(
+        names=("target",),
+        selectable_names=frozenset({"target"}),
+        selected_source="target",
+        target_names=("target",),
+        target_selectable_names=frozenset({"target"}),
+        target_context="target",
+        current_context="target",
+    )
+    with create_pipe_input() as pipe_input:
+        # MODE -> Source -> Target -> Continue. Both rows remain selectable, while
+        # Continue owns the invalid same-Context result and keeps the TUI open.
+        pipe_input.send_text("\t\t\t\rq")
+        request = choose_merge_setup(
+            setup,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert request is None
 
 
 def test_meld_style_setup_returns_typed_recursive_request() -> None:
     with create_pipe_input() as pipe_input:
         # A multi-shape setup starts on MODE. Right selects recursive, then
-        # Source and Continue are the next two visible focus surfaces.
-        pipe_input.send_text("\x1b[C\t\t\r")
+        # Source, Target, and Continue are the next visible focus surfaces.
+        pipe_input.send_text("\x1b[C\t\t\t\r")
         request = choose_merge_setup(
             _setup(),
             app_input=pipe_input,
@@ -382,6 +446,25 @@ def test_meld_style_setup_returns_typed_recursive_request() -> None:
         source_locator="source",
         target_locator="target",
         reach=MergeReach.DESCENDANTS,
+    )
+
+
+def test_meld_style_setup_returns_the_selected_target() -> None:
+    with create_pipe_input() as pipe_input:
+        # MODE -> Source -> Target. Move from target to target-b, select it,
+        # then continue with the reviewed draft.
+        pipe_input.send_text("\t\t\x1b[B\r\t\r")
+        request = choose_merge_setup(
+            _setup(),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert request == MergeRequest(
+        source_locator="source",
+        target_locator="target-b",
+        reach=MergeReach.DIRECT,
     )
 
 
@@ -398,7 +481,9 @@ def test_meld_style_setup_cancel_returns_no_request() -> None:
     assert request is None
 
 
-def test_tui_setup_freezes_local_source_and_current_target(isolated_store) -> None:
+def test_tui_setup_freezes_source_and_target_catalogs_with_current_default(
+    isolated_store,
+) -> None:
     store = MemoryStore()
     store.create_context(ops.init("source"))
     store.create_context(ops.init("target"))
@@ -410,8 +495,10 @@ def test_tui_setup_freezes_local_source_and_current_target(isolated_store) -> No
     )
 
     assert setup.names == ("source", "target")
-    assert setup.selectable_names == frozenset({"source"})
+    assert setup.selectable_names == frozenset({"source", "target"})
     assert setup.selected_source == "source"
+    assert setup.target_names == ("source", "target")
+    assert setup.target_selectable_names == frozenset({"source", "target"})
     assert setup.target_context == "target"
     assert setup.current_context == "target"
     assert setup.initial_recursive is True
@@ -431,6 +518,7 @@ def test_tui_setup_uses_profile_readable_breadth_without_query_only_routes(
         observed.append(selected_access.display_name)
         return SimpleNamespace(
             local_names=("local-source", "other-local", "target"),
+            virtual_names=("granted/query-only", "granted/readable"),
             selectable_virtual_names=frozenset({"granted/readable"}),
             virtual_annotations={
                 "granted/readable": "READ GRANT",
@@ -457,10 +545,82 @@ def test_tui_setup_uses_profile_readable_breadth_without_query_only_routes(
         "target",
     )
     assert setup.selectable_names == frozenset(
-        {"granted/readable", "local-source", "other-local"}
+        {"granted/readable", "local-source", "other-local", "target"}
     )
     assert setup.annotations == (("granted/readable", "READ GRANT"),)
+    assert setup.target_names == ("local-source", "other-local", "target")
+    assert setup.target_selectable_names == frozenset(
+        {"local-source", "other-local", "target"}
+    )
+    assert setup.target_annotations == ()
     assert "granted/query-only" not in setup.names
+
+
+def test_tui_target_catalog_includes_only_create_authorized_grants(
+    isolated_store,
+    monkeypatch,
+) -> None:
+    store = MemoryStore()
+    for name in ("source", "target"):
+        store.create_context(ops.init(name))
+    store.set_current("target")
+    real_resolve = merge_tui_adapter.resolve_context_access
+
+    def resolve(store, operand, *, current_name, required_permission):
+        if operand == "granted/create":
+            assert required_permission == "CREATE"
+            return SimpleNamespace(display_name=operand)
+        if operand == "granted/read":
+            raise RuntimeError("READ-only Grant")
+        return real_resolve(
+            store,
+            operand,
+            current_name=current_name,
+            required_permission=required_permission,
+        )
+
+    monkeypatch.setattr(merge_tui_adapter, "resolve_context_access", resolve)
+    monkeypatch.setattr(
+        merge_tui_adapter,
+        "freeze_profile_context_navigation",
+        lambda _store, _selected: SimpleNamespace(
+            local_names=("source", "target"),
+            virtual_names=("granted/create", "granted/read"),
+            selectable_virtual_names=frozenset({"granted/read"}),
+            virtual_annotations={
+                "granted/create": "CREATE GRANT",
+                "granted/read": "READ GRANT",
+            },
+        ),
+    )
+
+    setup = build_merge_tui_setup(
+        MemoryStoreMergePort.capture(store),
+        initial_recursive=False,
+    )
+
+    assert setup.names == ("granted/read", "source", "target")
+    assert setup.target_names == ("granted/create", "source", "target")
+    assert setup.target_annotations == (("granted/create", "CREATE GRANT"),)
+
+
+def test_tui_setup_uses_an_explicit_target_without_switching_current(
+    isolated_store,
+) -> None:
+    store = MemoryStore()
+    for name in ("source", "target", "target-b"):
+        store.create_context(ops.init(name))
+    store.set_current("target")
+
+    setup = build_merge_tui_setup(
+        MemoryStoreMergePort.capture(store),
+        initial_recursive=False,
+        requested_target="target-b",
+    )
+
+    assert setup.target_context == "target-b"
+    assert setup.current_context == "target"
+    assert store.current_context_name() == "target"
 
 
 def test_cli_recursive_merge_creates_path_aligned_target_descendant(
@@ -498,6 +658,22 @@ def test_cli_recursive_root_only_receipt_uses_singular_counts(isolated_store) ->
     assert result.exit_code == 0, result.output
     assert "1 Context, 0 created" in result.output
     assert "1 checkpoint." in result.output
+
+
+def test_cli_merge_into_explicit_target_without_a_current_context(
+    isolated_store,
+) -> None:
+    store = MemoryStore()
+    source = ops.init("source")
+    addition = ops.add(source, "explicit target fact")
+    store.create_context(source)
+    store.create_context(ops.init("target"))
+
+    result = runner.invoke(app, ["merge", "source", "--into", "target"])
+
+    assert result.exit_code == 0, result.output + result.stderr
+    assert addition.uid in store.load_direct("target").memories
+    assert store.current_context_name() is None
 
 
 def test_cli_rejects_conflicting_reach_flags(isolated_store) -> None:

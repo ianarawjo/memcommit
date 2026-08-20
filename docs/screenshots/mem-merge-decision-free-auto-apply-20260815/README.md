@@ -1,5 +1,10 @@
 # Merge decision-free auto-apply capture log
 
+> Historical setup presentation: this set predates selectable Target B. Its
+> decision-free application, checkpoint, failure, Undo, and Redo boundaries
+> remain current. See `../mem-merge-target-selection-20260820/` for the current
+> Source/Target setup and exact `--into` review.
+
 This ordered set verifies that bare interactive Merge follows the common
 ownership-aware application policy. A conflict-free local frozen plan skips
 duplicate plan review, but still crosses the normal application boundary and

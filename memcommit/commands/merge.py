@@ -39,9 +39,19 @@ def cmd(
         Optional[str],
         typer.Argument(
             help=(
-                "Readable Source Context to structurally merge into the frozen "
-                "current Target; omit in a TTY to choose it interactively"
+                "Readable Source Context to structurally merge into the selected "
+                "Target; omit in a TTY to choose both endpoints interactively"
             )
+        ),
+    ] = None,
+    into: Annotated[
+        Optional[str],
+        typer.Option(
+            "--into",
+            help=(
+                "Existing CREATE-authorized Target Context; defaults to the "
+                "command-start current Context"
+            ),
         ),
     ] = None,
     direct: Annotated[
@@ -111,9 +121,9 @@ def cmd(
         raise typer.Exit(2)
     store = MemoryStore()
     current = store.current_context_name()
-    if not current:
+    if not current and into is None:
         typer.secho(
-            "No current context. Run 'mem init <name>' first.",
+            "No current Target. Pass --into TARGET or run 'mem init <name>' first.",
             fg=typer.colors.RED,
             err=True,
         )
@@ -129,6 +139,7 @@ def cmd(
             setup = build_merge_tui_setup(
                 port,
                 initial_recursive=recursive,
+                requested_target=into,
             )
             request = choose_merge_setup(setup)
             if request is None:
@@ -175,6 +186,7 @@ def cmd(
         else:
             request = MergeRequest(
                 source_locator=source,
+                target_locator=into,
                 reach=(MergeReach.DESCENDANTS if recursive else MergeReach.DIRECT),
             )
             plan = prepare_merge(request, port=port)

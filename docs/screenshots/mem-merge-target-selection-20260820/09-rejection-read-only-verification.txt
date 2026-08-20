@@ -1,0 +1,7 @@
+Merge cancelled — no changes made.                                                                                                                                                  
+COMMAND EXIT · 0                                                                                                                                                                    
+SAME-ENDPOINT VERIFICATION                                                                                                                                                          
+CURRENT POINTER · target-current                                                                                                                                                    
+CURRENT TARGET · []                                                                                                                                                                 
+SELECTED TARGET · []                                                                                                                                                                
+CHECKPOINTS · CURRENT 0 · SELECTED 0
