@@ -18,8 +18,8 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
 SUPPORT_PATH = (
     CAPTURE_DIR.parent / "mem-embed-placement-20260813" / "capture.py"
 )
-EXPECTED_PROFILE = "study-20260813T135528Z-d61e7a16"
-EXPECTED_CURRENT = "task-1/participant"
+EXPECTED_PROFILE = "study-20260819T175451Z-5ce5d722"
+EXPECTED_CURRENT = "practice/source"
 TARGET = "task-1/participant/construction-updates/route-changes"
 
 if str(REPOSITORY_ROOT) not in sys.path:
@@ -82,6 +82,8 @@ def _child() -> None:
     print(f"CAPTURE PTY · {columns}x{rows}", flush=True)
     print(f"PROFILE · {registry.active.name} · PARTICIPANT", flush=True)
     print(f"CURRENT CONTEXT · {store.current_context_name()}", flush=True)
+    target = store.load_direct(TARGET)
+    print(f"CAPTURE TARGET ANCHOR = {target.ordered_uids()[-2]}", flush=True)
     app(prog_name="mem", args=["embed"], standalone_mode=False)
     after = _store_snapshot(root)
 
@@ -119,33 +121,27 @@ def _capture(environment: dict[str, str]) -> bytes:
     SUPPORT._wait_for(child, raw, b"MEM EMBED")
     SUPPORT._render_snapshot("01-participant-entry", bytes(raw))
 
-    # Keep the initial Child `practice`. In the target tree, expand the current
-    # `task-1/participant`, expand `construction-updates`, choose its
-    # `route-changes` Memory leaf, and retain the explicit LAST default while
-    # the real direct-Memory order reloads.
-    child.send(b"\t\x1b[C\x1b[B\x1b[C\x1b[B\x1b[B\x1b[B\x1b[B\r")
+    # Reach the always-editable exact command without changing selections.
+    child.send(b"\t\t\t\t")
     SUPPORT._settle(child, raw)
-    SUPPORT._render_snapshot("02-participant-target", bytes(raw))
+    SUPPORT._render_snapshot("02-participant-editable-command", bytes(raw))
 
-    # Entering Position anchors the scrollable order at the retained LAST
-    # default even when a long real Memory sequence does not fit at once.
-    child.send(b"\t")
+    child.send(b"\x15mem embed practice --into")
     SUPPORT._settle(child, raw)
-    SUPPORT._render_snapshot("03-participant-position-default", bytes(raw))
+    SUPPORT._render_snapshot("03-participant-invalid-command-red", bytes(raw))
 
-    # Hover two gaps above LAST. Hover must not rewrite the retained gap or
-    # exact command.
-    child.send(b"\x1b[A\x1b[A")
+    anchor_match = re.search(rb"CAPTURE TARGET ANCHOR = ([0-9a-f-]+)", raw)
+    if anchor_match is None:
+        raise RuntimeError("Participant capture did not expose its frozen anchor.")
+    command_remainder = (
+        b" "
+        + TARGET.encode()
+        + b" --before "
+        + anchor_match.group(1)[:7]
+    )
+    child.send(command_remainder)
     SUPPORT._settle(child, raw)
-    SUPPORT._render_snapshot("04-participant-gap-hover", bytes(raw))
-
-    child.send(b"\r")
-    SUPPORT._settle(child, raw)
-    SUPPORT._render_snapshot("05-participant-gap-staged", bytes(raw))
-
-    child.send(b"\t")
-    SUPPORT._settle(child, raw)
-    SUPPORT._render_snapshot("06-participant-exact-command", bytes(raw))
+    SUPPORT._render_snapshot("04-participant-live-synced-controls", bytes(raw))
 
     child.send(b"\x1b")
     SUPPORT._wait_for(child, raw, b"STORE BYTE DIGEST UNCHANGED \xc2\xb7 YES")
@@ -153,7 +149,7 @@ def _capture(environment: dict[str, str]) -> bytes:
     while child.isalive() and time.monotonic() < deadline:
         SUPPORT._drain(child, raw)
     SUPPORT._settle(child, raw)
-    SUPPORT._render_snapshot("07-participant-cancelled-verified", bytes(raw))
+    SUPPORT._render_snapshot("05-participant-cancelled-verified", bytes(raw))
     child.close()
     return bytes(raw)
 
@@ -182,6 +178,11 @@ def main() -> None:
         raise RuntimeError("Capture child did not verify the 180x52 PTY.")
     if b"STORE BYTE DIGEST UNCHANGED \xc2\xb7 YES" not in stream:
         raise RuntimeError("Participant Profile changed during the capture.")
+    if not (
+        re.search(rb"38(?:;|:)2(?:;|:)237(?:;|:)135(?:;|:)150", stream)
+        or b"38;5;210" in stream
+    ):
+        raise RuntimeError("Invalid participant command did not render a red box.")
 
 
 if __name__ == "__main__":

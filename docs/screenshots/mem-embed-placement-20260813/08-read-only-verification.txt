@@ -1,17 +1,17 @@
-Embedded 'examples' into 'archive' between [6d273e33] and [46b998fd].                                                                                                               
+Embedded 'archive' into 'guide' after [ccc00614] at the end.                                                                                                                        
 CAPTURE PAUSE · press Enter for read-only verification                                                                                                                              
                                                                                                                                                                                     
-CAPTURE VERIFICATION COMMAND · mem show --context archive                                                                                                                           
-Context: archive                                                                                                                                                                    
-  Memories 3  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 1                                                                                                            
+CAPTURE VERIFICATION COMMAND · mem show --context guide                                                                                                                             
+Context: guide                                                                                                                                                                      
+  Memories 1  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 1                                                                                                            
                                                                                                                                                                                     
 Items (in context order):                                                                                                                                                           
-  [memory 6d273e33] Opening orientation for the guide.                                                                                                                              
-  [context 8c0293ce] examples  VIA EMBED                                                                                                                                            
-  [memory 46b998fd] Detailed operating notes follow the examples.                                                                                                                   
-  [memory 5be6107d] Closing verification for the guide.                                                                                                                             
-ORDER · 6d273e33-e997-4281-839b-d8989f9fc55f → 8c0293ce-ba03-413d-98a4-47b6336d2990 → 46b998fd-fbb8-4100-b3f9-0cde3ef2a4f4 → 5be6107d-7614-4132-8fcf-cf4ae466dba8                   
+  [memory ccc00614] The current Context is only the initial Into suggestion.                                                                                                        
+  [context cce9ef1c] archive  VIA EMBED                                                                                                                                             
+ORDER · ccc00614-cc79-4cc3-83b6-6059fb7796aa → cce9ef1c-a0ee-4c01-98f7-4dd2bc74d82c                                                                                                 
 CURRENT CONTEXT · guide                                                                                                                                                             
+                                                                                                                                                                                    
+                                                                                                                                                                                    
                                                                                                                                                                                     
                                                                                                                                                                                     
                                                                                                                                                                                     

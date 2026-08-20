@@ -174,6 +174,15 @@ class DirectItemGapState:
         self.selected_position = self.cursor_position
         return changed
 
+    def select_position(self, position: int) -> bool:
+        """Stage one exact position from a peer command-form control."""
+
+        direct_item_gap(self.rows, position)
+        changed = self.selected_position != position
+        self.cursor_position = position
+        self.selected_position = position
+        return changed
+
     def replace_rows(self, rows: Sequence[DirectItemPlacementRow]) -> None:
         """Reset a newly chosen Context to its explicit append gap."""
 

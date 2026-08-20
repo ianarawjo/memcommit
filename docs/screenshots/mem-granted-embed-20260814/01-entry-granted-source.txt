@@ -1,17 +1,27 @@
- MEM EMBED · CHILD → INTO                                                                                                                                                           
- CHOOSE TWO LOCAL CONTEXTS AND ONE DIRECT-ITEM INSERTION GAP                                                                                                                        
-┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ CHILD · EMBED THIS CONTEXT ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃› ✓   ▸ advisor  READ GRANT · PERMISSIONS READ + EMBED · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED                                                                              ^┃
-┃  ·   · archive                                                                                                                                                                   ┃
-┃  · * · guide                                                                                                                                                                     ┃
-┃                                                                                                                                                                                 v┃
+ MEM EMBED · LIVE LINK → INTO                                                                                                                                                       
+ CHOOSE ONE CHILD CONTEXT AND ONE DIRECT-ITEM INSERTION GAP                                                                                                                         
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ LINK TYPE ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃› LINK TYPE · [ CONTEXT ]  [ MEMORY ] · ←/→ SELECT                                                                                                                                ┃
+┃  MEANING · Keep one Child Context live inside the Target.                                                                                                                        ┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌──────────────────────────────────────────────────────────────────────────| CHILD · EMBED THIS CONTEXT |──────────────────────────────────────────────────────────────────────────┐
+│› ✓   ▸ GRANT advisor  READ · EMBED                                                                                                                                              ^│
+│  ·   · archive                                                                                                                                                                   │
+│  · * · guide                                                                                                                                                                     │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌────────────────────────────────────────────────────────────────────| INTO + POSITION · CHANGE THIS CONTEXT |─────────────────────────────────────────────────────────────────────┐
 │  ·   · archive                                                                                                                                                                  ^│
 │› ✓ * ▾ guide                                                                                                                                                                     │
-│  · [memory ec35b830] Opening proposal note.                                                                                                                                      │
-│  · [memory ffcfdc92] Closing proposal note.                                                                                                                                      │
+│  · [memory c812021d] Opening proposal note.                                                                                                                                      │
+│  · [memory 865f21d9] Closing proposal note.                                                                                                                                      │
 │    ✓ ───────── LAST · DEFAULT · 3/3 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
@@ -35,18 +45,8 @@
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-┌────────────────────────────────────────────────────────────────────────────| TO DO · EXACT COMMAND |─────────────────────────────────────────────────────────────────────────────┐
-│PROPOSED COMMAND · NOT RUN                                                                                                                                                        │
-│  mem embed advisor --into guide --after ffcfdc92-f853-4771-af87-c74d4915dc8d                                                                                                     │
-│                                                                                                                                                                                  │
-│EFFECTS · ONE COMMAND                                                                                                                                                             │
-│  Only Context 'guide' is changed.                                                                                                                                                │
-│  Context 'advisor' keeps its identity and ownership; the target stores a live Context reference.                                                                                 │
-│  Insert at gap 3/3, after [ffcfdc92] at the end.                                                                                                                                 │
-│                                                                                                                                                                                  │
-│Approval applies only to the exact command shown above.                                                                                                                           │
-│                                                                                                                                                                                  │
-│[ PRESS ENTER TO EMBED AT THE REVIEWED GAP ]                                                                                                                                      │
-│                                                                                                                                                                                  │
+┌──────────────────────────────────────────────────────────────────────────────| COMMAND · RUNNABLE |──────────────────────────────────────────────────────────────────────────────┐
+│› mem embed advisor --into guide --after 865f21d                                                                                                                                  │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
- ↑/↓ move · ←/→ tree · Enter/Space choose Context · Tab next frame · Esc cancel                                                                                                     
+                                                                                                                                                                                    
+ ←/→ choose Memory or Context · Tab continue · Esc cancel                                                                                                                           

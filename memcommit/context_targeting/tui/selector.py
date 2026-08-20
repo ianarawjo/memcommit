@@ -21,7 +21,11 @@ from memcommit.context_targeting.tui.rendering import (
     render_context_tree_rows,
 )
 from memcommit.context_targeting.tui.selection import ContextSelectionState
-from memcommit.context_targeting.tui.tree import ContextTreeState, build_context_tree
+from memcommit.context_targeting.tui.tree import (
+    ContextTreeState,
+    build_context_tree,
+    context_ancestors,
+)
 from memcommit.context_targeting.tui.tree import ContextTreeRow
 from memcommit.selection.tui import tree_choice_marker, tree_choice_styles
 from memcommit.source_projection.model import SourceDisplayFacts, SourceState
@@ -183,3 +187,17 @@ class ContextSelectorControl:
         if group is None:
             return self.selection.choose(name)
         return self.selection.toggle_group(group, anchor_name=name)
+
+    def select_name(self, name: str) -> bool:
+        """Stage one exact catalog name and reveal its lexical tree row.
+
+        Command-form synchronization uses the same checked-selection state as
+        keyboard interaction.  Revealing ancestors is presentation-only and
+        does not widen the selected or authorized namespace.
+        """
+
+        if name not in self.selectable:
+            raise ValueError("That Context is unavailable for this role.")
+        self.tree.expanded.update(context_ancestors(self.tree.tree, name))
+        self.tree.selected_name = name
+        return self.selection.replace((name,))

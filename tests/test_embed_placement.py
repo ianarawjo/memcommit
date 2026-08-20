@@ -15,12 +15,19 @@ from memcommit.interfaces.tui.components.direct_item_placement import (
     direct_item_placement_rows,
     render_direct_item_tree_fragments,
 )
-from memcommit.embed_application import EmbedPlacement, run_embed
+from memcommit.embed_application import (
+    EmbedPlacement,
+    EmbedRequest,
+    FrozenMemoryEmbedPlan,
+    MemoryEmbedRequest,
+    run_embed,
+)
 from memcommit.embed_runtime import MemoryStoreEmbedPort
 from memcommit.interfaces.cli import embed as embed_command
 from memcommit.interfaces.tui.operations.embed import (
     choose_embed_setup,
     embed_exact_command_review,
+    parse_embed_command_argv,
 )
 from memcommit.context import Context, Memory
 from memcommit.context_targeting.tui.tree import ContextTreeRow
@@ -94,6 +101,30 @@ def test_gap_state_keeps_hover_separate_from_the_staged_separator() -> None:
     )
     assert state.selected_gap.previous_uid == first.uid
     assert state.selected_gap.next_uid == second.uid
+
+
+def test_editable_embed_command_parser_preserves_context_and_memory_modes() -> None:
+    assert parse_embed_command_argv(
+        ("mem", "embed", "examples", "--into", "guide", "--after", "abc1234")
+    ) == EmbedRequest("examples", "guide", after="abc1234")
+    assert parse_embed_command_argv(
+        (
+            "mem",
+            "embed",
+            "def5678",
+            "--from",
+            "examples",
+            "--into",
+            "guide",
+            "--before",
+            "abc1234",
+        )
+    ) == MemoryEmbedRequest(
+        "def5678",
+        "examples",
+        "guide",
+        before="abc1234",
+    )
 
 
 def test_gap_state_defaults_to_the_explicit_last_choice() -> None:
@@ -387,6 +418,68 @@ def test_embed_setup_stages_the_gap_between_two_memories(isolated_store) -> None
         "--before",
         second.uid,
     )
+    assert embed_exact_command_review(
+        receipt.child_name,
+        receipt.into_name,
+        DirectItemGap(
+            position=receipt.placement.position,
+            previous_uid=receipt.placement.previous_uid,
+            next_uid=receipt.placement.next_uid,
+        ),
+        item_count=receipt.item_count,
+        placement_selector=second.uid[:7],
+    ).argv[-1] == second.uid[:7]
+
+
+def test_embed_proposed_command_updates_the_visible_gap_before_freeze(
+    isolated_store,
+) -> None:
+    store, child, parent, first, second = _ordered_store()
+    command = (
+        f"mem embed {child.name} --into {parent.name} --before {second.uid[:7]}"
+    )
+    with create_pipe_input() as pipe_input:
+        # Reach the always-editable command, replace it, and approve once. Each
+        # complete valid buffer change already synchronized the checked gap.
+        pipe_input.send_text("\t\t\t\t\x15" + command + "\r")
+        receipt = choose_embed_setup(
+            MemoryStoreEmbedPort.capture(store),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert receipt is not None
+    assert receipt.child_name == child.name
+    assert receipt.into_name == parent.name
+    assert receipt.placement.position == 1
+    assert receipt.placement.previous_uid == first.uid
+    assert receipt.placement.next_uid == second.uid
+
+
+def test_embed_proposed_command_can_switch_the_visible_link_type_to_memory(
+    isolated_store,
+) -> None:
+    store, child, parent, _first, second = _ordered_store()
+    memory_uid = store.load_direct(child.name).ordered_uids()[0]
+    command = (
+        f"mem embed {memory_uid[:7]} --from {child.name} "
+        f"--into {parent.name} --before {second.uid[:7]}"
+    )
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\t\t\t\t\x15" + command + "\r")
+        receipt = choose_embed_setup(
+            MemoryStoreEmbedPort.capture(store),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert isinstance(receipt, FrozenMemoryEmbedPlan)
+    assert receipt.source_name == child.name
+    assert receipt.memory_uid == memory_uid
+    assert receipt.into_name == parent.name
+    assert receipt.placement.next_uid == second.uid
 
 
 def test_embed_enter_applies_only_the_returned_frozen_plan_once(

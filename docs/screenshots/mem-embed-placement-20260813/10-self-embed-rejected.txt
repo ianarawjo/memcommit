@@ -13,8 +13,18 @@
 │  ·   · archive                                                                                                                                                                  ^│
 │  ·   · examples                                                                                                                                                                  │
 │  ✓ * ▾ guide                                                                                                                                                                     │
-│  · [memory 0849ec29] The current Context is only the initial Into suggestion.                                                                                                    │
+│  · [memory e5eac7a1] The current Context is only the initial Into suggestion.                                                                                                    │
 │  › ✓ ───────── LAST · DEFAULT · 2/2 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
@@ -35,18 +45,8 @@
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ TO DO · EXACT COMMAND ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃PROPOSED COMMAND · NOT RUN                                                                                                                                                        ┃
-┃  mem embed guide --into guide --after 0849ec29-cb29-4384-827d-fb7bbfaec47d                                                                                                       ┃
-┃                                                                                                                                                                                  ┃
-┃EFFECTS · ONE COMMAND                                                                                                                                                             ┃
-┃  Only Context 'guide' is changed.                                                                                                                                                ┃
-┃  Context 'guide' keeps its identity and ownership; the target stores a live Context reference.                                                                                   ┃
-┃  Insert at gap 2/2, after [0849ec29] at the end.                                                                                                                                 ┃
-┃                                                                                                                                                                                  ┃
-┃Approval applies only to the exact command shown above.                                                                                                                           ┃
-┃                                                                                                                                                                                  ┃
-┃[ PRESS ENTER TO EMBED AT THE REVIEWED GAP ]                                                                                                                                      ┃
-┃                                                                                                                                                                                  ┃
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ COMMAND · INVALID ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃› mem embed guide --into guide --after e5eac7a                                                                                                                                    ┃
+┃ Embed Child and Target must be distinct.                                                                                                                                         ┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
- Cannot embed a context into itself.                                                                                                                                                
+ INVALID COMMAND · FIX THE RED EDITABLE FIELD                                                                                                                                       

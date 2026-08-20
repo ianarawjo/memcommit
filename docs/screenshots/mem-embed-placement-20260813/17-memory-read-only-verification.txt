@@ -1,4 +1,4 @@
-Embedded Memory [e5b8c237] from 'archive' as [07e6542b] in 'guide' after [f7046b8c] at the end.                                                                                     
+Embedded Memory [97c9838a] from 'archive' as [79b47a23] in 'guide' after [b93acbbb] at the end.                                                                                     
 CAPTURE PAUSE · press Enter for read-only verification                                                                                                                              
                                                                                                                                                                                     
 CAPTURE VERIFICATION COMMAND · mem show --context guide                                                                                                                             
@@ -6,10 +6,10 @@ Context: guide
   Memories 1  |  Memory Refs 1  |  Query Views 0  |  Embedded Contexts 0                                                                                                            
                                                                                                                                                                                     
 Items (in context order):                                                                                                                                                           
-  [memory f7046b8c] The current Context is only the initial Into suggestion.                                                                                                        
-  [embedded memory 07e6542b] archive#e5b8c237  READ ONLY                                                                                                                            
+  [memory b93acbbb] The current Context is only the initial Into suggestion.                                                                                                        
+  [embedded memory 79b47a23] archive#97c9838a  READ ONLY                                                                                                                            
            Opening orientation for the guide.                                                                                                                                       
-ORDER · f7046b8c-ae21-4c58-8165-5791bfec8649 → 07e6542b-ff40-4727-98bf-b6a4a16bb2da                                                                                                 
+ORDER · b93acbbb-f080-4344-9882-f7c9194497b2 → 79b47a23-3c88-4995-b6b2-863e58a9fb2a                                                                                                 
 CURRENT CONTEXT · guide                                                                                                                                                             
                                                                                                                                                                                     
                                                                                                                                                                                     

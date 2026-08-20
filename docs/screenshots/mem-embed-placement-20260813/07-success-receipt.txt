@@ -1,4 +1,4 @@
-Embedded 'examples' into 'archive' between [6d273e33] and [46b998fd].                                                                                                               
+Embedded 'archive' into 'guide' after [ccc00614] at the end.                                                                                                                        
 CAPTURE PAUSE · press Enter for read-only verification                                                                                                                              
                                                                                                                                                                                     
                                                                                                                                                                                     

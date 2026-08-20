@@ -13,8 +13,18 @@
 │  ·   · archive                                                                                                                                                                  ^│
 │  ·   · examples                                                                                                                                                                  │
 │› ✓ * ▾ guide                                                                                                                                                                     │
-│  · [memory 3ec7b412] The current Context is only the initial Into suggestion.                                                                                                    │
+│  · [memory ccc00614] The current Context is only the initial Into suggestion.                                                                                                    │
 │    ✓ ───────── LAST · DEFAULT · 2/2 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
@@ -35,18 +45,8 @@
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-┌────────────────────────────────────────────────────────────────────────────| TO DO · EXACT COMMAND |─────────────────────────────────────────────────────────────────────────────┐
-│PROPOSED COMMAND · NOT RUN                                                                                                                                                        │
-│  mem embed examples --into guide --after 3ec7b412-59f4-46d9-bdc2-319991dc45de                                                                                                    │
-│                                                                                                                                                                                  │
-│EFFECTS · ONE COMMAND                                                                                                                                                             │
-│  Only Context 'guide' is changed.                                                                                                                                                │
-│  Context 'examples' keeps its identity and ownership; the target stores a live Context reference.                                                                                │
-│  Insert at gap 2/2, after [3ec7b412] at the end.                                                                                                                                 │
-│                                                                                                                                                                                  │
-│Approval applies only to the exact command shown above.                                                                                                                           │
-│                                                                                                                                                                                  │
-│[ PRESS ENTER TO EMBED AT THE REVIEWED GAP ]                                                                                                                                      │
-│                                                                                                                                                                                  │
+┌──────────────────────────────────────────────────────────────────────────────| COMMAND · RUNNABLE |──────────────────────────────────────────────────────────────────────────────┐
+│› mem embed examples --into guide --after ccc0061                                                                                                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                                                                                                                                                                    
  ↑/↓ move · ←/→ tree · Enter/Space choose Context · Tab next frame · Esc cancel                                                                                                     

@@ -6,6 +6,16 @@ from memcommit.interfaces.tui.components.exact_command_review.model import (
 from memcommit.interfaces.tui.components.exact_command_review.interaction import (
     bind_exact_command_approval,
 )
+from memcommit.interfaces.tui.components.exact_command_review.form import (
+    ExactCommandDraft,
+    ExactCommandForm,
+    ExactCommandFormField,
+    resolve_displayed_command_value,
+    shortest_unique_identifier_prefix,
+)
+from memcommit.interfaces.tui.components.exact_command_review.editor import (
+    EditableExactCommandControl,
+)
 from memcommit.interfaces.tui.components.exact_command_review.rendering import (
     format_exact_command,
     render_exact_command_blocks,
@@ -14,8 +24,14 @@ from memcommit.interfaces.tui.components.exact_command_review.rendering import (
 
 __all__ = [
     "ExactCommandReview",
+    "EditableExactCommandControl",
+    "ExactCommandDraft",
+    "ExactCommandForm",
+    "ExactCommandFormField",
     "bind_exact_command_approval",
     "format_exact_command",
     "render_exact_command_blocks",
     "render_exact_command_review",
+    "resolve_displayed_command_value",
+    "shortest_unique_identifier_prefix",
 ]

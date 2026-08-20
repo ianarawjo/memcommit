@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Callable, Sequence
 
+import memcommit.ops as ops
 from prompt_toolkit.application import Application, get_app
 from prompt_toolkit.filters import Condition
 from prompt_toolkit.input import Input
@@ -25,21 +26,23 @@ from memcommit.interfaces.tui.components.direct_item_placement import (
     direct_item_placement_rows,
 )
 from memcommit.interfaces.tui.components.exact_command_review import (
+    EditableExactCommandControl,
+    ExactCommandDraft,
+    ExactCommandForm,
+    ExactCommandFormField,
     ExactCommandReview,
-    render_exact_command_review,
+    resolve_displayed_command_value,
+    shortest_unique_identifier_prefix,
 )
 from memcommit.context_targeting.tui.selector import (
     ContextSelectorControl,
-    ContextSelectorRowProjection,
     ContextSelectorView,
 )
-from memcommit.context_targeting.tui.memory_selection import (
-    DirectMemorySelectionState,
+from memcommit.context_targeting.tui.direct_memory_selector import (
+    DirectMemorySelectorControl,
+    DirectMemorySelectorView,
 )
-from memcommit.context_targeting.tui.picker import (
-    ContextMemoryPreviewController,
-    ContextMemoryRow,
-)
+from memcommit.context_targeting.tui.picker import ContextMemoryRow
 from memcommit.interfaces.console.terminal import require_interactive_terminal
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.interfaces.tui.components.focus import (
@@ -63,41 +66,123 @@ from memcommit.interfaces.tui.core.keybindings import dispatch_tui_back
 from memcommit.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
-    focused_control_style,
 )
 from memcommit.context import Context
 from memcommit.embed_application import (
     EmbedPlacement,
+    EmbedRequest,
     FrozenEmbedPlan,
     FrozenMemoryEmbedPlan,
+    MemoryEmbedRequest,
+    validate_embed_request,
+    validate_memory_embed_request,
 )
 from memcommit.interfaces.tui.operations.embed.model import EmbedTuiSetup
 
 
-def _placement_argv(gap: DirectItemGap) -> tuple[str, ...]:
+EMBED_COMMAND_FORM = ExactCommandForm(
+    command=("mem", "embed"),
+    usage=(
+        "mem embed ITEM [--from SOURCE] --into TARGET "
+        "[--before ITEM | --after ITEM]"
+    ),
+    fields=(
+        ExactCommandFormField(
+            "ITEM",
+            "Child Context, or a Source Memory UID/prefix when --from is present",
+        ),
+        ExactCommandFormField(
+            "--from SOURCE",
+            "select Memory link mode and its directly owning Source Context",
+        ),
+        ExactCommandFormField(
+            "--into TARGET",
+            "choose the one local Context whose direct order may change",
+        ),
+        ExactCommandFormField(
+            "--before ITEM | --after ITEM",
+            "choose one adjacent direct-item gap; omit to append",
+        ),
+    ),
+)
+
+
+def parse_embed_command_argv(
+    argv: Sequence[str],
+) -> EmbedRequest | MemoryEmbedRequest:
+    """Parse the editable Embed subset without invoking a nested CLI."""
+
+    values = tuple(argv)
+    if values[:2] != ("mem", "embed"):
+        raise ValueError("Editable Embed commands must start with 'mem embed'.")
+    operands: list[str] = []
+    options: dict[str, str] = {}
+    index = 2
+    known = {"--from", "--into", "--before", "--after"}
+    while index < len(values):
+        value = values[index]
+        if value.startswith("--"):
+            if value not in known:
+                raise ValueError(f"Unknown Embed flag '{value}'.")
+            if value in options:
+                raise ValueError(f"Embed flag '{value}' may be supplied only once.")
+            if index + 1 >= len(values) or values[index + 1].startswith("--"):
+                raise ValueError(f"Embed flag '{value}' requires one value.")
+            options[value] = values[index + 1]
+            index += 2
+            continue
+        operands.append(value)
+        index += 1
+    if len(operands) != 1:
+        raise ValueError("Editable Embed commands require exactly one ITEM operand.")
+    if "--into" not in options:
+        raise ValueError("Editable Embed commands require --into TARGET.")
+    if "--before" in options and "--after" in options:
+        raise ValueError("Pass only one of --before or --after.")
+    if "--from" in options:
+        return validate_memory_embed_request(
+            MemoryEmbedRequest(
+                memory_selector=operands[0],
+                source_locator=options["--from"],
+                into_locator=options["--into"],
+                before=options.get("--before"),
+                after=options.get("--after"),
+            )
+        )
+    return validate_embed_request(
+        EmbedRequest(
+            child_locator=operands[0],
+            into_locator=options["--into"],
+            before=options.get("--before"),
+            after=options.get("--after"),
+        )
+    )
+
+
+def _placement_argv(
+    gap: DirectItemGap,
+    *,
+    selector: str | None = None,
+) -> tuple[str, ...]:
     """Represent every nonempty selected gap with one stable adjacent UID."""
 
     if gap.next_uid is not None:
-        return ("--before", gap.next_uid)
+        return ("--before", selector or gap.next_uid)
     if gap.previous_uid is not None:
-        return ("--after", gap.previous_uid)
+        return ("--after", selector or gap.previous_uid)
     return ()
 
 
 def _gap_effect(gap: DirectItemGap, item_count: int) -> str:
     if gap.previous_uid is not None and gap.next_uid is not None:
-        location = (
-            f"between [{gap.previous_uid[:8]}] and [{gap.next_uid[:8]}]"
-        )
+        location = f"between [{gap.previous_uid[:8]}] and [{gap.next_uid[:8]}]"
     elif gap.next_uid is not None:
         location = f"before [{gap.next_uid[:8]}] at the start"
     elif gap.previous_uid is not None:
         location = f"after [{gap.previous_uid[:8]}] at the end"
     else:
         location = "as the only direct item"
-    return (
-        f"Insert at gap {gap.position + 1}/{item_count + 1}, {location}."
-    )
+    return f"Insert at gap {gap.position + 1}/{item_count + 1}, {location}."
 
 
 def embed_exact_command_review(
@@ -106,6 +191,7 @@ def embed_exact_command_review(
     gap: DirectItemGap,
     *,
     item_count: int,
+    placement_selector: str | None = None,
 ) -> ExactCommandReview:
     """Build the exact command and complete one-Context mutation boundary."""
 
@@ -116,7 +202,7 @@ def embed_exact_command_review(
             child_name,
             "--into",
             into_name,
-            *_placement_argv(gap),
+            *_placement_argv(gap, selector=placement_selector),
         ),
         effects=(
             f"Only Context '{into_name}' is changed.",
@@ -136,6 +222,8 @@ def memory_embed_exact_command_review(
     gap: DirectItemGap,
     *,
     item_count: int,
+    memory_selector: str | None = None,
+    placement_selector: str | None = None,
 ) -> ExactCommandReview:
     """Build the exact live-Memory command and its mutation boundary."""
 
@@ -143,12 +231,12 @@ def memory_embed_exact_command_review(
         argv=(
             "mem",
             "embed",
-            memory_uid,
+            memory_selector or memory_uid,
             "--from",
             source_name,
             "--into",
             into_name,
-            *_placement_argv(gap),
+            *_placement_argv(gap, selector=placement_selector),
         ),
         effects=(
             f"Only Context '{into_name}' is changed.",
@@ -218,45 +306,22 @@ def run_embed_tui(
         ),
         height=selector_height,
     )
-    initial_memory_source = next(
-        (name for name in memory_source_names if name != initial_into),
-        memory_source_names[0],
+    # Source selection is process-local review state, not execution authority.
+    # Start beside the current Target so its Memories are immediately visible;
+    # the exact action boundary remains responsible for rejecting a self-link.
+    initial_memory_source = (
+        initial_into if initial_into in memory_source_names else memory_source_names[0]
     )
-    memory_source_selector = ContextSelectorControl(
-        ContextSelectorView(
+    memory_source_selector = DirectMemorySelectorControl(
+        DirectMemorySelectorView(
             names=memory_source_names,
-            selected=(initial_memory_source,),
+            selected_context=initial_memory_source,
             label="SOURCE MEMORY · DIRECTLY OWNED",
             current_context=current,
         ),
+        memory_loader=memory_loader,
         height=min(6, max(3, len(memory_source_names))),
     )
-    memory_preview = ContextMemoryPreviewController(
-        memory_source_selector.tree,
-        memory_loader,
-    )
-    memory_selection = DirectMemorySelectionState()
-
-    def project_memory_source(row, focused) -> ContextSelectorRowProjection:
-        width = max(1, get_app().output.get_size().columns - 8)
-        memory_focused = (
-            memory_preview.memory_focused
-            and memory_preview.memory_anchor is not None
-            and memory_preview.memory_anchor[0] == row.name
-        )
-        return ContextSelectorRowProjection(
-            branch=memory_preview.branch_for(row),
-            nested_fragments=memory_preview.render_nested(
-                row,
-                wrap_width=width,
-                selectable_memories=True,
-                selected_memory=memory_selection.selected,
-            ),
-            show_context_cursor=not (focused and memory_focused),
-        )
-
-    memory_source_selector.row_projector = project_memory_source
-    memory_preview.toggle_selected_memories()
     mode = HorizontalChoiceState(
         (
             HorizontalChoiceOption(
@@ -313,58 +378,142 @@ def run_embed_tui(
         return into_selector.selection.selected_name
 
     def selected_memory_target():
-        target = memory_selection.selected
+        target = memory_source_selector.selected
         if target is None:
             raise ValueError("Select one directly owned Source Memory first.")
         return target
 
+    def command_gap_selector(gap: DirectItemGap) -> str | None:
+        anchor = gap.next_uid or gap.previous_uid
+        if anchor is None:
+            return None
+        return shortest_unique_identifier_prefix(
+            anchor,
+            tuple(row.uid for row in placement.state.rows),
+            minimum=7,
+        )
+
+    def command_memory_selector(context_name: str, memory_uid: str) -> str:
+        rows = memory_source_selector.preview.memory_cache.get(context_name, ())
+        candidates = tuple(
+            row.selector for row in rows if row.selector is not None
+        )
+        return shortest_unique_identifier_prefix(
+            memory_uid,
+            candidates,
+            minimum=7,
+        )
+
     def selected_review() -> ExactCommandReview:
+        gap = placement.state.selected_gap
+        gap_selector = command_gap_selector(gap)
         if mode.selected_uid == "MEMORY":
             target = selected_memory_target()
             return memory_embed_exact_command_review(
                 target.context_name,
                 target.memory_uid,
                 selected_into_name(),
-                placement.state.selected_gap,
+                gap,
                 item_count=len(placement.state.rows),
+                memory_selector=command_memory_selector(
+                    target.context_name,
+                    target.memory_uid,
+                ),
+                placement_selector=gap_selector,
             )
         return embed_exact_command_review(
             selected_child_name(),
             selected_into_name(),
-            placement.state.selected_gap,
+            gap,
             item_count=len(placement.state.rows),
+            placement_selector=gap_selector,
         )
 
-    def render_todo() -> list[tuple[str, str]]:
-        focused = get_app().layout.has_focus(todo_control)
-        try:
-            review_text = render_exact_command_review(selected_review())
-            action = "[ PRESS ENTER TO EMBED AT THE REVIEWED GAP ]"
-        except ValueError as error:
-            review_text = f"INCOMPLETE · {display_escape_text(str(error))}"
-            action = "[ SELECT A DIRECT SOURCE MEMORY FIRST ]"
-        fragments: list[tuple[str, str]] = [
-            ("", review_text),
-            ("", "\n\n"),
-            ("[SetCursorPosition]", "") if focused else ("", ""),
-            (
-                focused_control_style(focused=focused),
-                action,
-            ),
-        ]
-        return fragments
+    def parsed_gap_position(
+        target: Context,
+        request: EmbedRequest | MemoryEmbedRequest,
+    ) -> int:
+        if request.before is not None and request.after is not None:
+            raise ValueError("Pass only one of --before or --after.")
+        ordered_uids = target.ordered_uids()
+        if request.before is None and request.after is None:
+            return len(ordered_uids)
+        selector = request.before or request.after
+        assert selector is not None
+        anchor = ops.resolve(target, selector)
+        return ordered_uids.index(anchor.uid) + (1 if request.after else 0)
 
-    todo_control = FormattedTextControl(
-        render_todo,
-        focusable=True,
-        show_cursor=False,
+    def apply_command_argv(argv: tuple[str, ...]) -> None:
+        """Validate the whole edited form before changing any checked value."""
+
+        request = parse_embed_command_argv(argv)
+        into_name = resolve_displayed_command_value(
+            request.into_locator,
+            into_names,
+            label="--into Target",
+        )
+        target = inspect_context(into_name)
+        rows = direct_item_placement_rows(target)
+        position = parsed_gap_position(target, request)
+        memory_target = None
+        if isinstance(request, MemoryEmbedRequest):
+            source_name = resolve_displayed_command_value(
+                request.source_locator,
+                memory_source_names,
+                label="--from Source",
+            )
+            memory_target = memory_source_selector.resolve_target(
+                source_name,
+                request.memory_selector,
+            )
+        else:
+            child_name = resolve_displayed_command_value(
+                request.child_locator,
+                tuple(
+                    name
+                    for name in child_names
+                    if name in setup.child_selectable_names
+                ),
+                label="Child ITEM",
+            )
+            if child_name == into_name:
+                raise ValueError("Embed Child and Target must be distinct.")
+
+        # All parsing, catalog checks, read-only loading, and anchor resolution
+        # finish before these process-local controls move together.
+        if memory_target is not None:
+            mode.choose("MEMORY")
+            memory_source_selector.select_target(memory_target)
+        else:
+            assert isinstance(request, EmbedRequest)
+            mode.choose("CONTEXT")
+            child_selector.select_name(child_name)
+        into_selector.select_name(into_name)
+        target_snapshot["value"] = target
+        placement.replace_context(into_name, rows)
+        placement.state.select_position(position)
+        status["value"] = ""
+
+    command_control = EditableExactCommandControl.create(
+        ExactCommandDraft(
+            review=selected_review,
+            apply_argv=apply_command_argv,
+            form=EMBED_COMMAND_FORM,
+        ),
+        action_label="PRESS ENTER TO EMBED AT THE REVIEWED GAP",
+        incomplete_action="FIX THE RED COMMAND BEFORE APPLY",
+        input_name="embed-proposed-command",
     )
+    todo_control = command_control.input
     todo_frame = build_focused_frame(
-        Window(todo_control, wrap_lines=True),
-        title="TO DO · EXACT COMMAND",
-        is_focused=lambda: get_app().layout.has_focus(todo_control),
-        height=Dimension(min=10, max=14),
+        command_control.body,
+        title=lambda: command_control.frame_title,
+        is_focused=command_control.is_focused,
+        height=Dimension(min=3, max=4),
     )
+    # Command validity, rather than focus, is the only color signal in this
+    # deliberately compact approval box.
+    todo_frame.container.style = command_control.frame_style
     into_position_frame = build_focused_frame(
         Window(
             into_selector.control,
@@ -391,12 +540,16 @@ def run_embed_tui(
     )
 
     def render_footer() -> str:
+        # Execution-boundary failures must remain visible while the exact
+        # command owns focus; otherwise a reviewed self-link looks inert even
+        # though the final freeze correctly rejected it.
         if status["value"]:
             return f" {display_escape_text(status['value'])}"
-        if (
-            get_app().layout.has_focus(into_selector.control)
-            and placement.editing
-        ):
+        if get_app().layout.has_focus(todo_control):
+            if not command_control.valid:
+                return " Enter blocked · Esc cancel"
+            return " Enter run · Esc cancel"
+        if get_app().layout.has_focus(into_selector.control) and placement.editing:
             return (
                 " ↑/↓ move one position line · Enter/Space stage · "
                 "Tab review · Esc back to Context"
@@ -406,8 +559,6 @@ def run_embed_tui(
                 " ↑/↓ move in Context tree · "
                 "Enter/Space choose target · Tab edit position · Esc cancel"
             )
-        if get_app().layout.has_focus(todo_control):
-            return " Enter apply exact command · ↑ position · Esc cancel"
         if get_app().layout.has_focus(mode_control):
             return " ←/→ choose Memory or Context · Tab continue · Esc cancel"
         if get_app().layout.has_focus(memory_source_selector.control):
@@ -445,30 +596,20 @@ def run_embed_tui(
             status["value"] = str(error)
         else:
             status["value"] = ""
+            command_control.sync_from_review()
         return "HANDLED"
 
     def move_memory_source(_event, delta: int) -> SurfaceMoveResult:
-        return "MOVED" if memory_preview.move(delta) else "BOUNDARY"
+        return "MOVED" if memory_source_selector.move(delta) else "BOUNDARY"
 
     def choose_memory_source(_event) -> SurfaceActionResult:
         try:
-            if not memory_preview.memory_focused:
-                name = memory_source_selector.tree.selected_name
-                memory_source_selector.selection.choose(name)
-                memory_selection.clear_unless_context(name)
-                memory_preview.toggle_selected_memories()
-            else:
-                target = memory_preview.focused_target()
-                if target is None:
-                    raise ValueError(
-                        "Only a directly owned ordinary Memory can be embedded."
-                    )
-                memory_selection.choose(target)
-                memory_source_selector.selection.choose(target.context_name)
+            memory_source_selector.choose_cursor()
         except (OSError, RuntimeError, TypeError, ValueError) as error:
             status["value"] = str(error)
         else:
             status["value"] = ""
+            command_control.sync_from_review()
         return "HANDLED"
 
     def choose_into(_event) -> SurfaceActionResult:
@@ -486,6 +627,7 @@ def run_embed_tui(
             status["value"] = str(error)
         else:
             status["value"] = ""
+            command_control.sync_from_review()
         return "HANDLED"
 
     def begin_position() -> None:
@@ -512,6 +654,7 @@ def run_embed_tui(
             return choose_into(event)
         placement.state.choose_cursor()
         status["value"] = ""
+        command_control.sync_from_review()
         return "HANDLED"
 
     def enter_into(delta: int) -> None:
@@ -523,6 +666,9 @@ def run_embed_tui(
         enter_selector(into_selector, delta)
 
     def finish(event) -> SurfaceActionResult:
+        if not command_control.validate_current(event.app):
+            status["value"] = "INVALID COMMAND · FIX THE RED EDITABLE FIELD"
+            return "HANDLED"
         try:
             target = target_snapshot["value"]
             if target.name != selected_into_name():
@@ -542,16 +688,22 @@ def run_embed_tui(
                     target.name,
                     requested_placement,
                 )
+                frozen_gap = DirectItemGap(
+                    position=frozen.placement.position,
+                    previous_uid=frozen.placement.previous_uid,
+                    next_uid=frozen.placement.next_uid,
+                )
                 rebuilt_review = memory_embed_exact_command_review(
                     frozen.source_name,
                     frozen.memory_uid,
                     frozen.into_name,
-                    DirectItemGap(
-                        position=frozen.placement.position,
-                        previous_uid=frozen.placement.previous_uid,
-                        next_uid=frozen.placement.next_uid,
-                    ),
+                    frozen_gap,
                     item_count=frozen.item_count,
+                    memory_selector=command_memory_selector(
+                        frozen.source_name,
+                        frozen.memory_uid,
+                    ),
+                    placement_selector=command_gap_selector(frozen_gap),
                 )
             else:
                 frozen = freeze_exact_gap(
@@ -559,15 +711,17 @@ def run_embed_tui(
                     target.name,
                     requested_placement,
                 )
+                frozen_gap = DirectItemGap(
+                    position=frozen.placement.position,
+                    previous_uid=frozen.placement.previous_uid,
+                    next_uid=frozen.placement.next_uid,
+                )
                 rebuilt_review = embed_exact_command_review(
                     frozen.child_name,
                     frozen.into_name,
-                    DirectItemGap(
-                        position=frozen.placement.position,
-                        previous_uid=frozen.placement.previous_uid,
-                        next_uid=frozen.placement.next_uid,
-                    ),
+                    frozen_gap,
                     item_count=frozen.item_count,
+                    placement_selector=command_gap_selector(frozen_gap),
                 )
             if rebuilt_review != expected_review:
                 raise RuntimeError(
@@ -576,10 +730,11 @@ def run_embed_tui(
         except (FileNotFoundError, OSError, RuntimeError, ValueError) as error:
             status["value"] = str(error)
             return "HANDLED"
-        event.app.exit(
-            result=frozen
-        )
+        event.app.exit(result=frozen)
         return "HANDLED"
+
+    def activate_command(event) -> SurfaceActionResult:
+        return finish(event)
 
     def visible_surfaces() -> tuple[FocusSurface, ...]:
         source = (
@@ -590,9 +745,7 @@ def run_embed_tui(
                     child_selector, delta
                 ),
                 activate=choose_child,
-                on_vertical_enter=lambda delta: enter_selector(
-                    child_selector, delta
-                ),
+                on_vertical_enter=lambda delta: enter_selector(child_selector, delta),
             )
             if mode.selected_uid == "CONTEXT"
             else FocusSurface(
@@ -619,9 +772,9 @@ def run_embed_tui(
             ),
             FocusSurface(
                 "TO_DO",
-                todo_control,
+                command_control.active_control,
                 move_vertical=lambda _event, _delta: "BOUNDARY",
-                activate=finish,
+                activate=activate_command,
             ),
         )
 
@@ -661,10 +814,10 @@ def run_embed_tui(
     )
     selector_focus = Condition(
         lambda: get_app().layout.has_focus(child_selector.control)
-        or (
-            get_app().layout.has_focus(into_selector.control)
-            and not placement.editing
-        )
+        or (get_app().layout.has_focus(into_selector.control) and not placement.editing)
+    )
+    command_input_focus = Condition(
+        lambda: get_app().layout.has_focus(command_control.input)
     )
 
     def focused_selector() -> ContextSelectorControl:
@@ -678,28 +831,30 @@ def run_embed_tui(
     def _previous_mode(event) -> None:
         mode.move(-1)
         status["value"] = ""
+        command_control.sync_from_review()
         event.app.invalidate()
 
     @bindings.add("right", filter=mode_focus, eager=True)
     def _next_mode(event) -> None:
         mode.move(1)
         status["value"] = ""
+        command_control.sync_from_review()
         event.app.invalidate()
 
     @bindings.add("left", filter=memory_source_focus, eager=True)
     def _collapse_memory_source(event) -> None:
-        memory_preview.collapse_selected()
+        memory_source_selector.collapse()
         event.app.invalidate()
 
     @bindings.add("right", filter=memory_source_focus, eager=True)
     def _expand_memory_source(event) -> None:
-        memory_preview.expand_selected()
+        memory_source_selector.expand()
         event.app.invalidate()
 
     @bindings.add("a", filter=memory_source_focus, eager=True)
     @bindings.add("A", filter=memory_source_focus, eager=True)
     def _toggle_all_memory_sources(event) -> None:
-        memory_preview.toggle_expand_all()
+        memory_source_selector.toggle_expand_all()
         event.app.invalidate()
 
     @bindings.add("left", filter=selector_focus, eager=True)
@@ -718,7 +873,7 @@ def run_embed_tui(
         focused_selector().toggle_expand_all()
         event.app.invalidate()
 
-    @bindings.add(" ", eager=True)
+    @bindings.add(" ", filter=~command_input_focus, eager=True)
     def _activate_with_space(event) -> None:
         if surfaces.active_supports(event.app, "activate"):
             surfaces.activate(event)
@@ -728,12 +883,17 @@ def run_embed_tui(
         event.app.exit(result=None)
 
     @bindings.add("escape", eager=True)
-    @bindings.add("backspace", eager=True)
     def _cancel(event) -> None:
-        if (
-            get_app().layout.has_focus(into_selector.control)
-            and placement.editing
-        ):
+        if get_app().layout.has_focus(into_selector.control) and placement.editing:
+            placement.end()
+            into_selector.tree.selected_name = selected_into_name()
+            event.app.invalidate()
+            return
+        dispatch_tui_back(event, close=close)
+
+    @bindings.add("backspace", filter=~command_input_focus, eager=True)
+    def _back(event) -> None:
+        if get_app().layout.has_focus(into_selector.control) and placement.editing:
             placement.end()
             into_selector.tree.selected_name = selected_into_name()
             event.app.invalidate()
@@ -759,9 +919,7 @@ def run_embed_tui(
         TuiRegion(todo_frame),
         TuiRegion(footer),
     )
-    app: Application[
-        FrozenEmbedPlan | FrozenMemoryEmbedPlan | None
-    ] = Application(
+    app: Application[FrozenEmbedPlan | FrozenMemoryEmbedPlan | None] = Application(
         layout=Layout(root, focused_element=mode_control),
         key_bindings=bindings,
         full_screen=True,

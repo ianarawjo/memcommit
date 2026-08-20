@@ -119,6 +119,8 @@ def _child(directory: Path) -> None:
     input()
     print("CAPTURE VERIFICATION COMMAND · mem ls -R guide")
     app(prog_name="mem", args=["ls", "-R", "guide"], standalone_mode=False)
+    print("CAPTURE LINK PAUSE · press Enter for raw link verification", flush=True)
+    input()
     raw = store.load_direct(guide.name).to_dict()["memories"][advisor.uid]
     print(f"LINK TYPE · {raw['type']}")
     print(f"LINK GRANT · {str(raw['grant_uid'])[:8]}")
@@ -149,7 +151,7 @@ def _capture(environment: dict[str, str]) -> bytes:
         base._wait_for(child, raw, b"MEM EMBED")
         base._render_snapshot("01-entry-granted-source", bytes(raw))
 
-        child.send(b"\x1b[C\x1b[B\r")
+        child.send(b"\t\x1b[C\x1b[B\r")
         base._settle(child, raw)
         base._render_snapshot("02-query-override-blocked", bytes(raw))
 
@@ -174,11 +176,9 @@ def _capture(environment: dict[str, str]) -> bytes:
         base._render_snapshot("07-success-receipt", bytes(raw))
 
         child.send(b"\r")
-        base._wait_for(child, raw, "List · guide".encode())
-        child.send(b"AM")
-        base._settle(child, raw)
+        base._wait_for(child, raw, b"CAPTURE LINK PAUSE")
         base._render_snapshot("08-read-only-verification", bytes(raw))
-        child.send(b"q")
+        child.send(b"\r")
         base._wait_for(child, raw, b"CURRENT CONTEXT")
         base._render_snapshot("09-link-receipt", bytes(raw))
         child.close()

@@ -11,10 +11,10 @@
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ INTO + POSITION · CHANGE THIS CONTEXT ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃  ✓   ▾ archive                                                                                                                                                                  ^┃
-┃  · [memory 6d273e33] Opening orientation for the guide.                                                                                                                          ┃
+┃  · [memory c765388e] Opening orientation for the guide.                                                                                                                          ┃
 ┃  › ✓ ───────── POSITION · 2/4 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── ┃
-┃  · [memory 46b998fd] Detailed operating notes follow the examples.                                                                                                               ┃
-┃  · [memory 5be6107d] Closing verification for the guide.                                                                                                                         ┃
+┃  · [memory 0e9c0b2a] Detailed operating notes follow the examples.                                                                                                               ┃
+┃  · [memory 713f907b] Closing verification for the guide.                                                                                                                         ┃
 ┃  ·   · examples                                                                                                                                                                  ┃
 ┃  · * · guide                                                                                                                                                                     ┃
 ┃                                                                                                                                                                                  ┃
@@ -33,20 +33,20 @@
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                 v┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-┌────────────────────────────────────────────────────────────────────────────| TO DO · EXACT COMMAND |─────────────────────────────────────────────────────────────────────────────┐
-│PROPOSED COMMAND · NOT RUN                                                                                                                                                        │
-│  mem embed examples --into archive --before 46b998fd-fbb8-4100-b3f9-0cde3ef2a4f4                                                                                                 │
-│                                                                                                                                                                                  │
-│EFFECTS · ONE COMMAND                                                                                                                                                             │
-│  Only Context 'archive' is changed.                                                                                                                                              │
-│  Context 'examples' keeps its identity and ownership; the target stores a live Context reference.                                                                                │
-│  Insert at gap 2/4, between [6d273e33] and [46b998fd].                                                                                                                           │
-│                                                                                                                                                                                  │
-│Approval applies only to the exact command shown above.                                                                                                                           │
-│                                                                                                                                                                                  │
-│[ PRESS ENTER TO EMBED AT THE REVIEWED GAP ]                                                                                                                                      │
-│                                                                                                                                                                                  │
+┌──────────────────────────────────────────────────────────────────────────────| COMMAND · RUNNABLE |──────────────────────────────────────────────────────────────────────────────┐
+│› mem embed examples --into archive --before 0e9c0b2                                                                                                                              │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                                                                                                                                                                    
  ↑/↓ move one position line · Enter/Space stage · Tab review · Esc back to Context                                                                                                  

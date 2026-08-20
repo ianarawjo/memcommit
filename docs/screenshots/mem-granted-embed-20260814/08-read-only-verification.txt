@@ -1,16 +1,27 @@
- List · guide                                                                                                                                                                       
- Roots · archive · guide · advisor                                                                                                                                                  
-────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-    ▾ archive                                                                                                                                                                      ^
-  · [memory 1ab5395d] Owned archive remains a second local Child option.                                                                                                            
-› * ▾ guide                                                                                                                                                                         
-  · [memory ec35b830] Opening proposal note.                                                                                                                                        
-  · [context fb1f6317] VIA EMBED · advisor                                                                                                                                          
-  · [memory ffcfdc92] Closing proposal note.                                                                                                                                        
-    ▾ advisor  READ GRANT · PERMISSIONS READ + EMBED · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED                                                                                   
-  · [memory 8515633e] Use evidence from the live advisor Context.                                                                                                                   
-  · [query view 8c6e0aad] advisor/private                                                                                                                                           
-      · advisor/private  QUERY GRANT · PERMISSIONS QUERY · ANALYSIS RATIONALE BLOCKED + TRACE BLOCKED                                                                               
+Embedded 'advisor' into 'guide' between [c812021d] and [865f21d9].                                                                                                                  
+CAPTURE PAUSE · press Enter for read-only verification                                                                                                                              
+                                                                                                                                                                                    
+CAPTURE VERIFICATION COMMAND · mem ls -R guide                                                                                                                                      
+Context: guide                                                                                                                                                                      
+  3 items                                                                                                                                                                           
+                                                                                                                                                                                    
+  [context 5adf93a4] advisor  VIA EMBED                                                                                                                                             
+    [query view bc3ffd06] advisor/private                                                                                                                                           
+    [memory 24be5482] Use evidence from the live advisor Context.                                                                                                                   
+  [memory c812021d] Opening proposal note.                                                                                                                                          
+  [memory 865f21d9] Closing proposal note.                                                                                                                                          
+Authority views:                                                                                                                                                                    
+  advisor/ · from advisor-authority · grant fa1af872 revision 1                                                                                                                     
+    Permissions: READ + EMBED                                                                                                                                                       
+    Analysis: RATIONALE SUBTREE + TRACE BLOCKED                                                                                                                                     
+    Source boundary: DERIVE blocked · COMBINE blocked · EXPORT blocked                                                                                                              
+    Target/artifact boundary: ACCEPT_DERIVED blocked · SAVE_BOUND_ANALYSIS blocked · SAVE_ANALYSIS blocked                                                                          
+  advisor/private/ · from advisor-authority · grant bc3ffd06 revision 1                                                                                                             
+    Permissions: QUERY                                                                                                                                                              
+    Analysis: RATIONALE BLOCKED + TRACE BLOCKED                                                                                                                                     
+    Source boundary: DERIVE blocked · COMBINE blocked · EXPORT blocked                                                                                                              
+    Target/artifact boundary: ACCEPT_DERIVED blocked · SAVE_BOUND_ANALYSIS blocked · SAVE_ANALYSIS blocked                                                                          
+CAPTURE LINK PAUSE · press Enter for raw link verification                                                                                                                          
                                                                                                                                                                                     
                                                                                                                                                                                     
                                                                                                                                                                                     
@@ -39,14 +50,3 @@
                                                                                                                                                                                     
                                                                                                                                                                                     
                                                                                                                                                                                     
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                   v
-────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
- ↑↓ move  ←→ expand  A restore tree  m hide items here  M hide all items  y copy Context  Y copy visible branch  Enter open/collapse  q close · 3/10 · 3 selectable                 

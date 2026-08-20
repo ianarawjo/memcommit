@@ -1,202 +1,0 @@
-CAPTURE PTY · 180x52
-PROFILE · study-20260813T135528Z-d61e7a16 · PARTICIPANT
-CURRENT CONTEXT · task-1/participant
-[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM EMBED · CHILD → INTO[0m
-[0m CHOOSE TWO LOCAL CONTEXTS AND ONE DIRECT-ITEM INSERTION GAP[0m
-[0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ CHILD · EMBED THIS CONTEXT ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
-[0;38;5;117;1m┃[0;1;7m› ✓   ▸ [0;38;5;234;48;5;117;1mpractice[0m                                                                                                                                                                 [0;1m^[179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m  ·   ▸ task-1                                                                                                                                                                   [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m  ·   ▸ task-2                                                                                                                                                                   [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m  ·   ▸ task-3                                                                                                                                                                   [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
-[0m┌────────────────────────────────────────────────────────────────────| INTO + POSITION · CHANGE THIS CONTEXT |─────────────────────────────────────────────────────────────────────[179C┐[0m
-[0m│  ·   ▸ practice                                                                                                                                                                 [0;1m^[179C[0m│[0m
-[0m│  ·   ▾ task-1                                                                                                                                                                   [0;48;5;238m [179C[0m│[0m
-[0m│  ·     · task-1/description                                                                                                                                                     [0;48;5;238m [179C[0m│[0m
-[0m│› ✓ *   ▾ [0;38;5;234;48;5;117mtask-1/participant[0m                                                                                                                                                     [0;48;5;238m [179C[0m│[0m
-[0m│      ✓ ───────── [0;38;5;234;48;5;117mFIRST = LAST · DEFAULT · 1/1[0m ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0;48;5;238m [179C[0m│[0m
-[0m│  ·   ▸ task-2                                                                                                                                                                   [0;48;5;238m [179C[0m│[0m
-[0m│  ·   ▸ task-3                                                                                                                                                                   [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
-[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
-[0m┌────────────────────────────────────────────────────────────────────────────| TO DO · EXACT COMMAND |─────────────────────────────────────────────────────────────────────────────[179C┐[0m
-[0m│PROPOSED COMMAND · NOT RUN                                                                                                                                                        [179C│[0m
-[0m│  mem embed practice --into task-1/participant                                                                                                                                    [179C│[0m
-[0m│                                                                                                                                                                                  [179C│[0m
-[0m│EFFECTS · ONE COMMAND                                                                                                                                                             [179C│[0m
-[0m│  Only Context 'task-1/participant' is changed.                                                                                                                                   [179C│[0m
-[0m│  Context 'practice' keeps its identity and ownership; the target stores a live Context reference.                                                                                [179C│[0m
-[0m│  Insert at gap 1/1, as the only direct item.                                                                                                                                     [179C│[0m
-[0m│                                                                                                                                                                                  [179C│[0m
-[0m│Approval applies only to the exact command shown above.                                                                                                                           [179C│[0m
-[0m│                                                                                                                                                                                  [179C│[0m
-[0m│[ PRESS ENTER TO EMBED AT THE REVIEWED GAP ]                                                                                                                                      [179C│[0m
-[0m│                                                                                                                                                                                  [179C│[0m
-[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
-[0m ↑/↓ move · ←/→ tree · Enter/Space choose Context · Tab next frame · Esc cancel[79D[48A[C[0m[?25l[A[0m┌──────────────────────────────────────────────────────────────────────────| CHILD · EMBED THIS CONTEXT |──────────────────────────────────────────────────────────────────────────[179C┐[0m
-[0m│› ✓   ▸ [0;38;5;234;48;5;117mpractice[0m                                                                                                                                                                 [0;1m^[179C[0m│[0m
-[0m│  ·   ▸ task-1                                                                                                                                                                   [0;48;5;238m [179C[0m│[0m
-[0m│  ·   ▸ task-2                                                                                                                                                                   [0;48;5;238m [179C[0m│[0m
-[0m│  ·   ▸ task-3                                                                                                                                                                   [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
-[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
-[0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ INTO + POSITION · CHANGE THIS CONTEXT ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
-[0;38;5;117;1m┃[0m  ·   ▸ practice                                                                                                                                                                 [0;1m^[179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m  ·   ▾ task-1                                                                                                                                                                   [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m  ·     · task-1/description                                                                                                                                                     [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m  · *   ▾ task-1/participant                                                                                                                                                     [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m  ·       ▾ task-1/participant/construction-updates                                                                                                                              [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m  ·         · task-1/participant/construction-updates/building-access                                                                                                            [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m  ·         · task-1/participant/construction-updates/event-relocations                                                                                                          [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m  ·         · task-1/participant/construction-updates/facility-updates                                                                                                           [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1;7m› ✓         ▾ [0;38;5;234;48;5;117;1mtask-1/participant/construction-updates/route-changes[0m                                                                                                              [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;189m        · [memory 8017409a] Add campus-wiki/route-changes: The indoor route that passed through the first through third floors of the Main Building to the Central Library cannot[0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;189m                            be used during the construction period.[0m                                                                                                              [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;189m        · [memory dbb3c40c] Add campus-wiki/route-changes: The route from the third-floor rear entrance to the Central Library is closed during the construction period.[0m         [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;189m        · [memory 2d20c61d] Add campus-wiki/route-changes: The Outdoor Parking Lot A–Main Building–Central Library route is closed during the construction period.[0m               [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;189m        · [memory a8bb36e1] Modify campus-wiki/route-changes: A student who prefers the air-conditioned indoor route through the Main Building in summer may experience[0m          [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;189m                            substantial heat and travel burden when redirected to an outdoor alternative route during the construction period.[0m                                   [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;189m        · [memory 8276ab56] Add campus-wiki/route-changes: When providing directions to the accessible restroom in the Student Centre during the construction period, instruct[0m   [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;189m                            users to take the accessible route to the left as viewed from the Main Building.[0m                                                                     [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;189m        · [memory 9af0f95c] Add campus-wiki/route-changes: During the construction period, the designated alternative accessible route to the Central Library is Outdoor Parking[0m [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;189m                            Lot C–Student Centre accessible entrance–Central Library west entrance.[0m                                                                              [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;189m        · [memory fd27f19b] Add campus-wiki/route-changes: During the construction period, the Central Library west entrance is designated as the official alternative entrance[0m  [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;189m                            for the closed connecting route through the Main Building.[0m                                                                                           [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;189m        · [memory 638f272f] Modify campus-wiki/route-changes: During the construction period, the route guidance agent may exclude from comparison candidates closed routes that[0m [0;48;5;248m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;189m                            pass through the first through third floors of the Main Building, the third-floor rear entrance, or Outdoor Parking Lot A.[0m                           [0;48;5;248m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;189m        · [memory ba9d70f9] Modify campus-wiki/route-changes: If the indoor shortcut through the Main Building is closed during the construction period, a mobility-support[0m      [0;48;5;248m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;189m                            companion may reconfirm the distance and slope of the alternative accessible route before accompanying the user.[0m                                     [0;1mv[179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
-
-
-[47C[0m/construction-updates/route-changes --after ba9d70f9-02c4-56d9-ac23-f2a532c22488[0m
-
-
-[35C[0m/construction-updates/route-changes' is changed.[0m
-
-[18C[0m0/10, aft[Cr [ba9[C70f9][Ca[C the end.[0m
-
-
-
-
-
-
-[10C[0min Con[Cext[Ctree · Enter/Space cho[Cse target ·[CTab edit position · Esc cancel[32A[85D[0m[?25l[8A[6C[0m▾[Ctask-1  [0m
-[7C[0m [C· task-1/description[0m
-[5C[0m*[3C▾[8Cparticipant[0m
-[5C[0m [3C [C▾ task-1/part[Ccipant/construction-updates[0m
-[11C[0m [C· task-1/part[Ccipant/construction-updates/building-access[0m
-[55C[0mevent-relo[Cations[0m
-[55C[0mfacility-updates [0m
-[3C[0m✓[9C▾[C[0;38;5;234;48;5;117mtask-1/participant/construction-updates/route-changes[0m   [0m
-[C[0;38;5;189m        · [memory 8017409a] Add campus-wiki/route-changes: The indoor route that passed through the first through third floors of the Main Building to the Central Library cannot[0m
-[9C[0;38;5;189m [C       [C         [Cbe used during the construction p[Cr[Co[C.[0m                                                                                                              [0m
-[9C[0;38;5;189m·[C[memory[Cdbb3c40c][CAdd campus-wiki/route-changes: Th[C r[Cute from the third-floor rear entrance to the Central Library is closed during the construction period.[0m
-[19C[0;38;5;189m2d20[C61d[37COutdoor Parking Lot A–Main[CBuildi[Cg–Central[CLibrary [Coute is closed during the construction period.[0m      [0m
-[19C[0;38;5;189ma8bb3[Ce1[2CMo[Cify campus-wiki/route-changes: A s[Cudent who prefers the air-conditioned indoor route through the Main Building i[C summer may experience[0m
-[9C[0;38;5;189m [C       [C         [Csubstantial heat and travel burden when redirected to an outdoor alternative route[Cduring the construct[Con period.[0m                         [0m
-[9C[0;38;5;189m·[C[memory[C8276ab56][CAdd c[Cmpus-wiki/route-changes: When providing direc[Cions[Cto the accessible restroom in the Stude[Ct Cen[Cre during the construction period, instruct[0m
-[9C[0;38;5;189m [C       [C         [Cusers to take the accessibl[C rout[C to the left as viewed[Cfrom the Main Building.[0m                                                                  [0m
-[9C[0;38;5;189m·[C[memory[C9af0f95c][CAdd campus-wiki/route-chang[Cs: During[5Cconstruct[Con peri[Cd, the designated alternative accessible route to the Central Library is Outdoor Parking[0m
-[9C[0;38;5;189m [C       [C         [CLot[CC–St[Cdent Centre a[Ccessible entrance–Central Library west entrance.[0m                                                                             [0m
-[9C[0;38;5;189m·[C[memory[Cfd27f19b][CAdd[Ccamp[Cs-wiki/route-[Changes: During the construction period, the Central Library west entrance is designated as the official alternative entrance[0m
-[9C[0;38;5;189m [C       [C         [Cfor[Cthe closed connecting route through the Main Bu[Clding.[0m                                                                                         [0m
-[9C[0;38;5;189m·[C[memory[C638f272f][CM[Cdify campus-wiki/route-chang[Cs: During the co[Cstruct[Con period, the route guidance agent may exclude from comparison candidates closed routes that[0m
-[9C[0;38;5;189m [C       [C         [Cpass through the fi[Cst through third floors of the Main Build[Cng[6Cthird-floor r[Car [3Crance, or Outdo[Cr[CParking Lot A.[0m                          [0m
-[9C[0;38;5;189m·[C[memory[Cba9d70f9][CModify campus-wiki/[Coute-changes: If[Cthe ind[Cor shortcut through the Main Bui[Cding is closed during[Cthe c[Cnstruction period, a mobility-support[0m
-[9C[0;38;5;189m [C       [C         [Cc[Cmpanion may reconfirm the distance[Cand[Cslope of the alternative accessible route[Cbefore accompa[Cying the user.[0m                               [0m
-[C[0;1;7m        › ✓ ───────── [0;38;5;234;48;5;117;1mLAST · DEFAULT · 10/10[0;1;7m ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-[10C[0mo[Ce position line[C· Enter/Space stage · Tab[Creview · Esc back to Context[0m[K[16A[81D[0m[?25l[4A[0;1;7m        › · ───────── POSITION · 8/10 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
-[9C[0;38;5;189m·[C[memory[C638f272f][CModify campus-wiki/[Coute-changes: During the construction per[Cod[6Croute guidanc[C ag[3C may exclude fr[Cm[Ccomparison candidates closed routes that[0m
-[9C[0;38;5;189m [C       [C         [Cpass through the fi[Cst through third[Cfloors [Cf the Main Building, the third-f[Coor rear entrance, or[COutdo[Cr Parking Lot A.[0m                     [0m
-[9C[0;38;5;189m·[C[memory[Cba9d70f9][CM[Cdify campus-wiki/route-changes: If[Cthe[Cindoor shortcut through the Main Building[Cis closed duri[Cg the construction period, a mobility-support[0m
-[C[0;38;5;189m                            companion may reconfirm the distance and slope of the alternative accessible route before accompanying the user.[0m                                     [4A[177D[0m[?25l[10C[0;1;7m✓[11C[0;38;5;234;48;5;117;1mPOSITION · 8/10[0m
-
-
-
-
-
-
-
-[85C[0mbefo[Ce 638f272f-9fbd-5[C1f-bfd8-b016184[2C065[0m
-
-
-
-
-[17C[0m8/10, betw[Cen [fd2[Cf1[Cb] and [638f272f].[13A[56D[0m[?25l[21A[0m┌────────────────────────────────────────────────────────────────────| INTO + POSITION · CHANGE THIS CONTEXT |─────────────────────────────────────────────────────────────────────[179C┐[0m
-[0m│  ·   ▾ task-1                                                                                                                                                                   [0;1m^[179C[0m│[0m
-[0m│  ·     · task-1/description                                                                                                                                                     [0;48;5;238m [179C[0m│[0m
-[0m│  · *   ▾ task-1/participant                                                                                                                                                     [0;48;5;238m [179C[0m│[0m
-[0m│  ·       ▾ task-1/participant/construction-updates                                                                                                                              [0;48;5;238m [179C[0m│[0m
-[0m│  ·         · task-1/participant/construction-updates/building-access                                                                                                            [0;48;5;238m [179C[0m│[0m
-[0m│  ·         · task-1/participant/construction-updates/event-relocations                                                                                                          [0;48;5;238m [179C[0m│[0m
-[0m│  ·         · task-1/participant/construction-updates/facility-updates                                                                                                           [0;48;5;238m [179C[0m│[0m
-[0m│  ✓         ▾ [0;38;5;234;48;5;117mtask-1/participant/construction-updates/route-changes[0m                                                                                                              [0;48;5;238m [179C[0m│[0m
-[0m│[0;38;5;189m        · [memory 8017409a] Add campus-wiki/route-changes: The indoor route that passed through the first through third floors of the Main Building to the Central Library cannot[0;48;5;238m [179C[0m│[0m
-[0m│[0;38;5;189m                            be used during the construction period.[0m                                                                                                              [0;48;5;238m [179C[0m│[0m
-[0m│[0;38;5;189m        · [memory dbb3c40c] Add campus-wiki/route-changes: The route from the third-floor rear entrance to the Central Library is closed during the construction period.[0m         [0;48;5;238m [179C[0m│[0m
-[0m│[0;38;5;189m        · [memory 2d20c61d] Add campus-wiki/route-changes: The Outdoor Parking Lot A–Main Building–Central Library route is closed during the construction period.[0m               [0;48;5;238m [179C[0m│[0m
-[0m│[0;38;5;189m        · [memory a8bb36e1] Modify campus-wiki/route-changes: A student who prefers the air-conditioned indoor route through the Main Building in summer may experience[0m          [0;48;5;238m [179C[0m│[0m
-[0m│[0;38;5;189m                            substantial heat and travel burden when redirected to an outdoor alternative route during the construction period.[0m                                   [0;48;5;238m [179C[0m│[0m
-[0m│[0;38;5;189m        · [memory 8276ab56] Add campus-wiki/route-changes: When providing directions to the accessible restroom in the Student Centre during the construction period, instruct[0m   [0;48;5;238m [179C[0m│[0m
-[0m│[0;38;5;189m                            users to take the accessible route to the left as viewed from the Main Building.[0m                                                                     [0;48;5;238m [179C[0m│[0m
-[0m│[0;38;5;189m        · [memory 9af0f95c] Add campus-wiki/route-changes: During the construction period, the designated alternative accessible route to the Central Library is Outdoor Parking[0m [0;48;5;238m [179C[0m│[0m
-[0m│[0;38;5;189m                            Lot C–Student Centre accessible entrance–Central Library west entrance.[0m                                                                              [0;48;5;238m [179C[0m│[0m
-[0m│[0;38;5;189m        · [memory fd27f19b] Add campus-wiki/route-changes: During the construction period, the Central Library west entrance is designated as the official alternative entrance[0m  [0;48;5;238m [179C[0m│[0m
-[0m│[0;38;5;189m                            for the closed connecting route through the Main Building.[0m                                                                                           [0;48;5;238m [179C[0m│[0m
-[0m│        › ✓ ───────── [0;38;5;234;48;5;117mPOSITION · 8/10[0m ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0;48;5;238m [179C[0m│[0m
-[0m│[0;38;5;189m        · [memory 638f272f] Modify campus-wiki/route-changes: During the construction period, the route guidance agent may exclude from comparison candidates closed routes that[0m [0;48;5;248m [179C[0m│[0m
-[0m│[0;38;5;189m                            pass through the first through third floors of the Main Building, the third-floor rear entrance, or Outdoor Parking Lot A.[0m                           [0;48;5;248m [179C[0m│[0m
-[0m│[0;38;5;189m        · [memory ba9d70f9] Modify campus-wiki/route-changes: If the indoor shortcut through the Main Building is closed during the construction period, a mobility-support[0m      [0;48;5;248m [179C[0m│[0m
-[0m│[0;38;5;189m                            companion may reconfirm the distance and slope of the alternative accessible route before accompanying the user.[0m                                     [0;1mv[179C[0m│[0m
-[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
-[0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ TO DO · EXACT COMMAND ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
-[0;38;5;117;1m┃[0mPROPOSED COMMAND · NOT RUN                                                                                                                                                        [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m  mem embed practice --into task-1/participant/construction-updates/route-changes --before 638f272f-9fbd-5d1f-bfd8-b01618424065                                                   [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m                                                                                                                                                                                  [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0mEFFECTS · ONE COMMAND                                                                                                                                                             [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m  Only Context 'task-1/participant/construction-updates/route-changes' is changed.                                                                                                [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m  Context 'practice' keeps its identity and ownership; the target stores a live Context reference.                                                                                [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m  Insert at gap 8/10, between [fd27f19b] and [638f272f].                                                                                                                          [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m                                                                                                                                                                                  [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0mApproval applies only to the exact command shown above.                                                                                                                           [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m                                                                                                                                                                                  [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1m[ PRESS ENTER TO EMBED AT THE REVIEWED GAP ][0m                                                                                                                                      [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m                                                                                                                                                                                  [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
-[C[0mEnter apply exact c[Cmmand · ↑ position ·[CEsc cancel[0m[K[3A[51D[0m

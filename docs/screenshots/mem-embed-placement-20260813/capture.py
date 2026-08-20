@@ -77,7 +77,7 @@ def _child(store_root: Path, *, mode: str) -> None:
     if mode in {"apply", "memory"}:
         print("CAPTURE PAUSE · press Enter for read-only verification", flush=True)
         input()
-        verification_name = archive.name if mode == "apply" else guide.name
+        verification_name = guide.name
         print(
             "CAPTURE VERIFICATION COMMAND · mem show --context "
             f"{verification_name}"
@@ -204,6 +204,12 @@ def _render_snapshot(name: str, raw: bytes) -> None:
                 draw.text((x, y - 1), character.data, font=font, fill=fg)
                 if character.bold:
                     draw.text((x + 1, y - 1), character.data, font=font, fill=fg)
+                if character.underscore:
+                    draw.line(
+                        (x, y + cell_height - 3, x + cell_width - 1, y + cell_height - 3),
+                        fill=fg,
+                        width=1,
+                    )
     image.save(CAPTURE_DIR / f"{name}.png")
 
 
@@ -247,6 +253,14 @@ def _capture_apply(environment: dict[str, str]) -> bytes:
         _settle(child, raw)
         _render_snapshot("06-exact-command", bytes(raw))
 
+        child.send(b"\x15mem embed archive --into")
+        _settle(child, raw)
+        _render_snapshot("06a-command-invalid-live", bytes(raw))
+
+        child.send(b"\x15mem embed archive --into guide")
+        _settle(child, raw)
+        _render_snapshot("06b-command-live-synced", bytes(raw))
+
         child.send(b"\r")
         _wait_for(child, raw, b"CAPTURE PAUSE")
         _render_snapshot("07-success-receipt", bytes(raw))
@@ -284,6 +298,61 @@ def _capture_invalid(environment: dict[str, str]) -> bytes:
     return bytes(raw)
 
 
+def _capture_invalid_command(environment: dict[str, str]) -> bytes:
+    raw = bytearray()
+    with tempfile.TemporaryDirectory(
+        prefix="memcommit-embed-command-invalid-"
+    ) as directory:
+        child = _spawn(environment, directory, mode="command-invalid")
+        _wait_for(child, raw, b"MEM EMBED")
+        child.send(b"\t\t\t\t\x15mem embed examples --into missing\r")
+        _settle(child, raw, delay=0.5)
+        _render_snapshot("10a-command-edit-rejected", bytes(raw))
+        child.send(b"\x1b")
+        _wait_for(child, raw, b"ALL CONTEXTS UNCHANGED")
+        child.close()
+    return bytes(raw)
+
+
+def _capture_memory_self_link(environment: dict[str, str]) -> bytes:
+    raw = bytearray()
+    with tempfile.TemporaryDirectory(
+        prefix="memcommit-memory-embed-self-link-"
+    ) as directory:
+        child = _spawn(environment, directory, mode="memory-self-link")
+        _wait_for(child, raw, b"MEM EMBED")
+
+        child.send(b"\x1b[C")
+        _settle(child, raw)
+        _render_snapshot("10b-memory-current-source", bytes(raw))
+
+        child.send(b"\t\x1b[B\r")
+        _settle(child, raw)
+        _render_snapshot("10c-same-context-memory-selected", bytes(raw))
+
+        child.send(b"\t")
+        _settle(child, raw)
+        _render_snapshot("10d-same-context-target", bytes(raw))
+
+        child.send(b"\t")
+        _settle(child, raw)
+        _render_snapshot("10e-same-context-position", bytes(raw))
+
+        child.send(b"\t")
+        _settle(child, raw)
+        _render_snapshot("10f-same-context-exact-command", bytes(raw))
+
+        child.send(b"\r")
+        _wait_for(child, raw, b"must be distinct")
+        _render_snapshot("10g-same-context-action-rejected", bytes(raw))
+
+        child.send(b"\x1b")
+        _wait_for(child, raw, b"ALL CONTEXTS UNCHANGED")
+        _render_snapshot("10h-same-context-read-only-verification", bytes(raw))
+        child.close()
+    return bytes(raw)
+
+
 def _capture_memory(environment: dict[str, str]) -> bytes:
     raw = bytearray()
     with tempfile.TemporaryDirectory(prefix="memcommit-memory-embed-") as directory:
@@ -294,7 +363,7 @@ def _capture_memory(environment: dict[str, str]) -> bytes:
         _settle(child, raw)
         _render_snapshot("11-memory-mode", bytes(raw))
 
-        child.send(b"\t\x1b[B\r")
+        child.send(b"\t\x1b[A\x1b[A\r\x1b[B\r")
         _settle(child, raw)
         _render_snapshot("12-memory-selected", bytes(raw))
 
@@ -328,7 +397,14 @@ def main() -> None:
     parser.add_argument("--child")
     parser.add_argument(
         "--mode",
-        choices=("apply", "memory", "cancel", "invalid"),
+        choices=(
+            "apply",
+            "memory",
+            "memory-self-link",
+            "cancel",
+            "invalid",
+            "command-invalid",
+        ),
         default="apply",
     )
     arguments = parser.parse_args()
@@ -346,12 +422,19 @@ def main() -> None:
         _capture_memory(environment),
         _capture_cancel(environment),
         _capture_invalid(environment),
+        _capture_invalid_command(environment),
+        _capture_memory_self_link(environment),
     )
     combined = b"".join(streams)
     if b"\x1b[" not in combined or not re.search(rb"\x1b\[[0-9;]*38;", combined):
         raise RuntimeError("Capture did not preserve expected ANSI color styles.")
     if any(b"CAPTURE PTY \xc2\xb7 180x52" not in stream for stream in streams):
         raise RuntimeError("Capture child did not verify the 180x52 PTY.")
+    if not (
+        re.search(rb"38(?:;|:)2(?:;|:)237(?:;|:)135(?:;|:)150", combined)
+        or b"38;5;210" in combined
+    ):
+        raise RuntimeError("Invalid command capture did not render a red box.")
 
 
 if __name__ == "__main__":

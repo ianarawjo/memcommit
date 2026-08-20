@@ -90,14 +90,18 @@ end, or only-item relationship.
 2. conditional `CHILD · EMBED THIS CONTEXT` or
    `SOURCE MEMORY · DIRECTLY OWNED`
 3. `INTO + POSITION · CHANGE THIS CONTEXT`
-4. `TO DO · EXACT COMMAND`
+4. compact `COMMAND · RUNNABLE` or `COMMAND · INVALID`
 
 The current local Context is the initial `INTO` choice because it is the only
 Context mutated by Embed. Context mode initially selects the first authorized
 Child distinct from that target. Memory mode composes the shared Context tree,
 lazy direct-item previews, and retained direct-Memory selection; read-only
 references, query views, and embedded Context rows remain visible but cannot
-be selected as a directly owned Source Memory.
+be selected as a directly owned Source Memory. It initially opens the current
+Target as the Memory Source, matching Reference, so those direct Memories are
+immediately inspectable and selectable. Source and Target may remain equal in
+the process-local picker and editable command; the exact action rejects that
+self-link before returning a frozen plan or publishing durable state.
 
 `INTO` is not followed by an unrelated operation-specific picker. Its frame
 reuses the checked Context tree and the direct-item preview renderer used by
@@ -122,11 +126,23 @@ reference treatment. This is an ordering view, so it does not open embedded
 Context content or query-only material.
 
 The final frame shows one exact CLI command. A middle or initial gap is encoded
-with the next full UID through `--before`; an ending gap is encoded with the
-previous full UID through `--after`; the only gap in an empty Context needs no
-anchor. The effect block states that only the Into Context changes, that the
-Child Context or Source Memory retains identity and ownership, and which exact
-neighbor gap is used.
+with the next UID prefix through `--before`; an ending gap is encoded with the
+previous UID prefix through `--after`; the only gap in an empty Context needs
+no anchor. Prefixes start at seven characters and expand only if the frozen
+direct-item catalog contains a collision. The adjacent typed review still
+records that only the Into Context changes, that the Child Context or Source
+Memory retains identity and ownership, and which exact neighbor gap is used;
+the compact box does not repeat that prose.
+
+The proposed command is always a one-line input below the setup controls. Its
+small frame is blue and titled `COMMAND · RUNNABLE` when valid, or red and
+titled `COMMAND · INVALID` with one short reason when invalid. It has no
+underline, fill, effects block, usage, flag list, or explanatory heading.
+Every complete valid buffer change updates Link Type, Source/Child, Into, and
+Position together before Enter; incomplete or invalid text changes no checked
+value. Retained changes in those upper controls immediately rebuild the
+command below. A single Enter on a runnable synchronized field freezes the
+plan. Escape cancels, and Backspace remains ordinary text deletion.
 
 ## Safety and concurrency invariants
 
@@ -155,7 +171,10 @@ neighbor gap is used.
 `memcommit.interfaces.tui.components.direct_item_placement` owns the
 operation-neutral row projection, gap model, separate hover/selection state,
 and single moving-line renderer. The neighboring exact-command receipt is a
-separate component. The common `ContextSelectorControl` exposes a narrow
+separate component whose form/draft/editor mechanics are shared under
+`interfaces.tui.components.exact_command_review`; Embed owns the argv grammar
+and its all-or-none mapping back to controls. The common
+`ContextSelectorControl` exposes a narrow
 nested-row projection hook so Embed can compose the order under the selected
 Context without cloning Context-tree navigation. Embed owns which object is
 inserted, its exact command, authority, validation, checkpoint, and success
@@ -164,8 +183,10 @@ component without inheriting Embed semantics.
 
 The component projects only the target's frozen direct-item sequence. It does
 not import a command adapter or gain storage, authority, or apply behavior.
-Older command screens still have legacy placement/review helpers; migrating
-those callers is a separate rollout and Embed does not reach through them.
+Older command screens still have legacy placement/review helpers. The common
+editable-command component is available to them, but migrating a frozen-plan
+review requires an operation-owned replan contract; Embed does not reach
+through those screens or reinterpret their approval boundary.
 
 ## Alternatives and intentional non-goals
 

@@ -226,6 +226,49 @@ def test_memory_embed_rejects_a_self_link_before_publication(isolated_store):
     assert store.load_direct(context.name).ordered_uids() == [memory.uid]
 
 
+def test_interactive_embed_selects_current_context_memory_before_action_rejects_it(
+    isolated_store,
+):
+    store = MemoryStore()
+    peer = ops.init("peer")
+    target = ops.init("target")
+    memory = ops.add(target, "owned by the current Target")
+    store.save(peer)
+    store.save(target)
+    store.set_current(target.name)
+    port = MemoryStoreEmbedPort.capture(store)
+    attempts: list[tuple[str, str, str]] = []
+    freeze_memory_exact_gap = port.freeze_memory_exact_gap
+
+    def record_attempt(source_name, memory_selector, into_name, placement):
+        attempts.append((source_name, memory_selector, into_name))
+        return freeze_memory_exact_gap(
+            source_name,
+            memory_selector,
+            into_name,
+            placement,
+        )
+
+    port.freeze_memory_exact_gap = record_attempt  # type: ignore[method-assign]
+
+    with create_pipe_input() as pipe_input:
+        # Memory mode opens the current Target's direct Memories. Selection and
+        # command synchronization retain that same Source/Target pair; only the
+        # exact action rejects it, after which Escape closes without publication.
+        pipe_input.send_text("\x1b[C\t\x1b[B\r\t\t\t\r\x1b")
+        plan = choose_embed_setup(
+            port,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert plan is None
+    assert attempts == [(target.name, memory.uid, target.name)]
+    assert store.load_direct(target.name).ordered_uids() == [memory.uid]
+    assert store.list_checkpoints(target.name) == []
+
+
 def test_interactive_embed_returns_exact_frozen_memory_plan(isolated_store):
     store = MemoryStore()
     source = ops.init("source")
@@ -238,8 +281,9 @@ def test_interactive_embed_returns_exact_frozen_memory_plan(isolated_store):
     port = MemoryStoreEmbedPort.capture(store)
 
     with create_pipe_input() as pipe_input:
-        # Memory mode → Source row → direct Memory → Target → position → review.
-        pipe_input.send_text("\x1b[C\t\x1b[B\r\t\t\t\r")
+        # Memory mode starts at current Target. Move to the peer Source, open
+        # its direct items, choose the Memory, then review the Target position.
+        pipe_input.send_text("\x1b[C\t\x1b[A\r\x1b[B\r\t\t\t\r")
         plan = choose_embed_setup(
             port,
             app_input=pipe_input,

@@ -1,4 +1,4 @@
-Embedded Memory [e5b8c237] from 'archive' as [07e6542b] in 'guide' after [f7046b8c] at the end.                                                                                     
+Embedded Memory [97c9838a] from 'archive' as [79b47a23] in 'guide' after [b93acbbb] at the end.                                                                                     
 CAPTURE PAUSE · press Enter for read-only verification                                                                                                                              
                                                                                                                                                                                     
                                                                                                                                                                                     

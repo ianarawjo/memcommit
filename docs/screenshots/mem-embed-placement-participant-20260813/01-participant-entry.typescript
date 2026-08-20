@@ -1,55 +1,56 @@
 CAPTURE PTY · 180x52
-PROFILE · study-20260813T135528Z-d61e7a16 · PARTICIPANT
-CURRENT CONTEXT · task-1/participant
-[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM EMBED · CHILD → INTO[0m
-[0m CHOOSE TWO LOCAL CONTEXTS AND ONE DIRECT-ITEM INSERTION GAP[0m
-[0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ CHILD · EMBED THIS CONTEXT ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
-[0;38;5;117;1m┃[0;1;7m› ✓   ▸ [0;38;5;234;48;5;117;1mpractice[0m                                                                                                                                                                 [0;1m^[179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m  ·   ▸ task-1                                                                                                                                                                   [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m  ·   ▸ task-2                                                                                                                                                                   [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m  ·   ▸ task-3                                                                                                                                                                   [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;5;117;1m┃[0m
+PROFILE · study-20260819T175451Z-5ce5d722 · PARTICIPANT
+CURRENT CONTEXT · practice/source
+CAPTURE TARGET ANCHOR = 638f272f-9fbd-5d1f-bfd8-b01618424065
+[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM EMBED · LIVE LINK → INTO[0m
+[0m CHOOSE ONE CHILD CONTEXT AND ONE DIRECT-ITEM INSERTION GAP[0m
+[0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ LINK TYPE ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;5;117;1m┃[0m› LINK TYPE · [0;38;5;234;48;5;117;1m[ CONTEXT ][0m  [ MEMORY ] · ←/→ SELECT                                                                                                                                [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  MEANING · Keep one Child Context live inside the Target.                                                                                                                        [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
-[0m┌────────────────────────────────────────────────────────────────────| INTO + POSITION · CHANGE THIS CONTEXT |─────────────────────────────────────────────────────────────────────[179C┐[0m
-[0m│  ·   ▸ practice                                                                                                                                                                 [0;1m^[179C[0m│[0m
-[0m│  ·   ▾ task-1                                                                                                                                                                   [0;48;5;238m [179C[0m│[0m
-[0m│  ·     · task-1/description                                                                                                                                                     [0;48;5;238m [179C[0m│[0m
-[0m│› ✓ *   ▾ [0;38;5;234;48;5;117mtask-1/participant[0m                                                                                                                                                     [0;48;5;238m [179C[0m│[0m
-[0m│      ✓ ───────── [0;38;5;234;48;5;117mFIRST = LAST · DEFAULT · 1/1[0m ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0;48;5;238m [179C[0m│[0m
+[0m┌──────────────────────────────────────────────────────────────────────────| CHILD · EMBED THIS CONTEXT |──────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│› ✓   ▸ [0;38;5;234;48;5;117mpractice[0m                                                                                                                                                                 [0;1m^[179C[0m│[0m
+[0m│  ·   ▸ task-1                                                                                                                                                                   [0;48;5;238m [179C[0m│[0m
 [0m│  ·   ▸ task-2                                                                                                                                                                   [0;48;5;238m [179C[0m│[0m
 [0m│  ·   ▸ task-3                                                                                                                                                                   [0;48;5;238m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
-[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
-[0m┌────────────────────────────────────────────────────────────────────────────| TO DO · EXACT COMMAND |─────────────────────────────────────────────────────────────────────────────[179C┐[0m
-[0m│PROPOSED COMMAND · NOT RUN                                                                                                                                                        [179C│[0m
-[0m│  mem embed practice --into task-1/participant                                                                                                                                    [179C│[0m
-[0m│                                                                                                                                                                                  [179C│[0m
-[0m│EFFECTS · ONE COMMAND                                                                                                                                                             [179C│[0m
-[0m│  Only Context 'task-1/participant' is changed.                                                                                                                                   [179C│[0m
-[0m│  Context 'practice' keeps its identity and ownership; the target stores a live Context reference.                                                                                [179C│[0m
-[0m│  Insert at gap 1/1, as the only direct item.                                                                                                                                     [179C│[0m
-[0m│                                                                                                                                                                                  [179C│[0m
-[0m│Approval applies only to the exact command shown above.                                                                                                                           [179C│[0m
-[0m│                                                                                                                                                                                  [179C│[0m
-[0m│[ PRESS ENTER TO EMBED AT THE REVIEWED GAP ]                                                                                                                                      [179C│[0m
-[0m│                                                                                                                                                                                  [179C│[0m
+[0m┌────────────────────────────────────────────────────────────────────| INTO + POSITION · CHANGE THIS CONTEXT |─────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│  ·   ▾ practice                                                                                                                                                                 [0;1m^[179C[0m│[0m
+[0m│  ·     · practice/1                                                                                                                                                             [0;48;5;238m [179C[0m│[0m
+[0m│  ·     · practice/2                                                                                                                                                             [0;48;5;238m [179C[0m│[0m
+[0m│  ·     · practice/3                                                                                                                                                             [0;48;5;238m [179C[0m│[0m
+[0m│  ·     · practice/description                                                                                                                                                   [0;48;5;238m [179C[0m│[0m
+[0m│› ✓ *   ▾ [0;38;5;234;48;5;117mpractice/source[0m                                                                                                                                                        [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m    · [memory f3ef224d] When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.[0m  [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m    · [memory e50c293a] If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem.[0m                 [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m    · [memory 2092eddb] When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected.[0m               [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m    · [memory 6edd422f] When material is absorbed into two parts, use distribute, not divide.[0m                                                                                    [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m    · [memory 6fad23ab] If a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once.[0m          [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m    · [memory 6cc4b8a3] When the draft has to fit a shorter fixed limit, aim to cut around 20–30% from redundant or unnecessary material.[0m                                        [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m    · [memory 7ebe67fb] But don't shorten sentences so aggressively that a claim sounds more categorical; keep enough wording to preserve its original strength and conditions.[0m  [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m    · [memory b976766e] If the next idea is merely related and does not broaden the scope, don't use More broadly; use In relation to this or another accurate connector without [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m                        adding a new claim merely to make two paragraphs connect.[0m                                                                                                [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m    · [memory 44de7eff] For any titlle about interaction with AI agent memory, keep the exact terminology and intended words: use interaction and management and AI agent memory [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m                        rather than agent memory.[0m                                                                                                                                [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m    · [memory 5809062f] By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization [0m      [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m                        default.[0m                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m    · [memory 250b715a] Always keep for whenever it is part of the intended wording.[0m                                                                                             [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m    · [memory 94c3ce98] If titles of works use quotation marks in some places and italics in others, make them consistently italic throughout the document by default; an [0m       [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m                        explicitly named style guide may override only this work-title format.[0m                                                                                   [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m    · [memory 96300a95] When I say that content looks wrong, find accurate information before proposing a correction by reading the original paper, book, or guide, not only an [0m [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m                        abstract or a short snippet.[0m                                                                                                                             [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m    · [memory 826c9d24] Before adding or reusing citations and refferences, verify that each source exists and supports the exact claim after reviewing the complete source.[0m     [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m    · [memory 97c71f13] Don't invent quotations or evidence.[0m                                                                                                                     [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m    · [memory f0622189] Don't overstate an author's contribution or a paper's status.[0m                                                                                            [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m    · [memory 1f6dc657] If I asked only for review, report a verification problem first instead of silently rewriting the draft.[0m                                                 [0;48;5;238m [179C[0m│[0m
+[0m│      ✓ ───────── [0;38;5;234;48;5;117mLAST · DEFAULT · 18/18[0m ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0;48;5;238m [179C[0m│[0m
+[0m│  ·   ▸ task-1                                                                                                                                                                   [0;48;5;238m [179C[0m│[0m
+[0m│  ·   ▸ task-2                                                                                                                                                                   [0;1mv[179C[0m│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
-[0m ↑/↓ move · ←/→ tree · Enter/Space choose Context · Tab next frame · Esc cancel[79D[48A[C[0m
+[0;38;5;117m┌──────────────────────────────────────────────────────────────────────────────| COMMAND · RUNNABLE |──────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0;38;5;117m│[0;38;5;231m› mem embed practice --into practice/source --after 1f6dc65                                                                                                                       [179C[0;38;5;117m│[0m
+[0;38;5;117m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0;38;5;117m                                                                                                                                                                                   [179C [0m
+[0m ←/→ choose Memory or Context · Tab continue · Esc cancel[57D[48A[C[0m
