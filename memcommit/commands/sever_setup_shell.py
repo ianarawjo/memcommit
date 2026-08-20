@@ -22,6 +22,7 @@ from memcommit.context_targeting.tui.reach import (
     ContextReachState,
     render_context_reach,
 )
+from memcommit.context_naming import validate_portable_context_name
 from memcommit.context_targeting.tui.range_selection import (
     project_checked_context_names,
 )
@@ -290,7 +291,7 @@ def choose_sever_setup(
     criteria_frame = context_frame("CRITERIA", criteria_control)
 
     def validate_output_name(candidate: str) -> None:
-        validate_context_name(candidate)
+        validate_portable_context_name(candidate)
         if candidate in catalog:
             raise ValueError("Output must be a new Context name.")
 

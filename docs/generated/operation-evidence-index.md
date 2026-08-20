@@ -44,7 +44,7 @@ only from `docs/operation-evidence-index.json`.
 | `log` | `UNREVIEWED` | [`command-attempt-ledger-design-rationale.md`](../command-attempt-ledger-design-rationale.md) | — |
 | `meld` | `CLOSED` | [`meld-application-boundary-matrix.md`](../meld-application-boundary-matrix.md)<br>[`meld-session-lifecycle-design-rationale.md`](../meld-session-lifecycle-design-rationale.md) | CLI, TUI, Python, and agent routes share typed Start, Restart, saved-turn, cache/provider, CAS, and Apply lifecycles with exact/equivalent/projected reuse and one reviewed-session version contract. |
 | `merge` | `CLOSED` | [`merge-application-boundary-matrix.md`](../merge-application-boundary-matrix.md) | Direct and recursive Merge planning, review, application, and presentation use the same frozen typed plan and runtime. |
-| `profile` | `UNREVIEWED` | — | — |
+| `profile` | `UNREVIEWED` | [`context-name-portability-design-rationale.md`](../context-name-portability-design-rationale.md) | — |
 | `provider` | `UNREVIEWED` | — | — |
 | `pwd` | `CLOSED` | [`mem-pwd-design-rationale.md`](../mem-pwd-design-rationale.md) | The only current route is a typed terminal-independent current-Context read with a one-line CLI presenter. |
 | `query` | `CLOSED` | [`query-callable-boundary-matrix.md`](../query-callable-boundary-matrix.md)<br>[`query-answer-application-boundary-matrix.md`](../query-answer-application-boundary-matrix.md)<br>[`query-reference-application-boundary-matrix.md`](../query-reference-application-boundary-matrix.md) | Ordinary, granted, and query-only families plus CLI, TUI, public, and agent projections have a verified operation package. |

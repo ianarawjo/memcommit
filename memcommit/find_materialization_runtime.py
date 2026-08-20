@@ -13,6 +13,7 @@ from memcommit.authority.access import (
     authorized_context_operation,
 )
 from memcommit.context import AutoCheckpoint, Context, Memory
+from memcommit.context_naming import validate_portable_context_name
 from memcommit.derived_policy import (
     authorize_analysis_save,
     authorize_combination,
@@ -27,7 +28,7 @@ from memcommit.find_materialization_application import (
     FrozenFindMaterialization,
     run_find_materialization,
 )
-from memcommit.store import MemoryStore, context_record_digest, validate_context_name
+from memcommit.store import MemoryStore, context_record_digest
 
 
 class FindMaterializationCatalog(Protocol):
@@ -184,7 +185,7 @@ class MemoryStoreFindMaterializationPort(FindMaterializationPort):
         self,
         request: FindMaterializationRequest,
     ) -> FrozenFindMaterialization:
-        validate_context_name(request.destination_name)
+        validate_portable_context_name(request.destination_name)
         self._store.assert_context_creatable(request.destination_name)
         sources = _resolve_sources(
             self._catalog,

@@ -93,7 +93,7 @@ from memcommit.ground import (
     validate_ground_contract_name,
     validate_ground_goal,
 )
-from memcommit.store import validate_context_name
+from memcommit.context_naming import validate_portable_context_name
 
 
 INITIAL_QUESTION = (
@@ -621,7 +621,7 @@ def render_ground_location_pane(
 
     if ground_name is None:
         return "NOT SET · Enter/L to choose with the Context tree"
-    name = validate_context_name(ground_name)
+    name = validate_portable_context_name(ground_name)
     label = {
         "UNSET": "NOT SET",
         "SUGGESTED": "SUGGESTED · REVIEW REQUIRED",
@@ -645,7 +645,7 @@ def render_ground_workspace_pane(ground_name: str | None) -> str:
                 "No physical Context, manifest, or checkpoint exists.",
             )
         )
-    name = validate_context_name(ground_name)
+    name = validate_portable_context_name(ground_name)
     return "\n".join(
         (
             f"SAVE LOCATION · {safe_terminal_text(name)} · NOT CREATED",
@@ -921,7 +921,7 @@ def _freeze_proposal(
     if expected_ground_name is None:
         ground_name = validate_ground_contract_name(proposed_ground_name)
     else:
-        ground_name = validate_context_name(expected_ground_name)
+        ground_name = validate_portable_context_name(expected_ground_name)
         if proposed_ground_name != ground_name:
             raise ValueError(
                 "Chat response changed the exact Ground Save Location."
@@ -1008,7 +1008,7 @@ def _freeze_new_context_suggestions(
     result: list[GroundShellNewContextSuggestion] = []
     for candidate in raw:
         try:
-            context_name = validate_context_name(
+            context_name = validate_portable_context_name(
                 _command_text(
                     _field(candidate, "context_name"),
                     "new Context suggestion name",
@@ -1191,7 +1191,7 @@ def run_ground_shell(
     current_context_name: str | None = None,
     context_catalog_count: int = 0,
     context_catalog_names: Sequence[str] = (),
-    validate_new_context: Callable[[str], str] = validate_context_name,
+    validate_new_context: Callable[[str], str] = validate_portable_context_name,
     choose_save_location: Callable[[str | None], str | None] | None = None,
     app_input: Input | None = None,
     app_output: Output | None = None,
@@ -1208,7 +1208,7 @@ def run_ground_shell(
         )
 
     fixed_ground_name = (
-        validate_context_name(ground_name)
+        validate_portable_context_name(ground_name)
         if ground_name is not None
         else None
     )
@@ -3013,7 +3013,7 @@ def run_ground_shell(
                 status_message["value"] = "Save Location change cancelled."
                 application.invalidate()
                 return
-            exact_name = validate_context_name(result)
+            exact_name = validate_portable_context_name(result)
             planned_ground_name["value"] = exact_name
             location_source["value"] = "SELECTED"
             if pending["value"] is not None:

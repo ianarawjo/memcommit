@@ -30,6 +30,7 @@ from memcommit.commands.sever_sessions import (
     reload_selected_sever_session,
 )
 from memcommit.context_targeting.catalog import freeze_granted_context_navigation
+from memcommit.context_naming import validate_portable_context_name
 from memcommit.context_targeting.tui.picker import context_memory_rows
 from memcommit.commands.sever_setup_shell import choose_sever_setup
 from memcommit.interfaces.console.text import (
@@ -394,7 +395,7 @@ def _run_workbench(
         session = snapshot.session
 
         def validate_destination(name: str) -> None:
-            validate_context_name(name)
+            validate_portable_context_name(name)
             if name != session.output_name and store.context_exists(name):
                 raise ValueError(f"Output Context '{name}' already exists.")
 

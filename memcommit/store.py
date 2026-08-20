@@ -24,6 +24,10 @@ from pathlib import Path
 from typing import Callable, Iterable, Iterator, Optional
 
 from memcommit.context import AutoCheckpoint, Checkpoint, Context, Memory
+from memcommit.context_naming import (
+    RESERVED_CONTEXT_SEGMENTS,
+    validate_portable_context_name,
+)
 from memcommit.context_lifecycle import (
     ContextLifecycleEvent,
     PREVIOUS_CHECKPOINT_NONE,
@@ -97,7 +101,6 @@ ATOMIZE_GROUNDING_SESSIONS_DIR = _ActiveStorePath("atomize-groundings")
 ATOMIZE_GROUNDING_HISTORY_DIR = _ActiveStorePath("atomize-grounding-history")
 GROUND_SESSIONS_DIR = _ActiveStorePath("ground-sessions")
 MELD_SESSIONS_DIR = _ActiveStorePath("meld-sessions")
-RESERVED_CONTEXT_SEGMENTS = frozenset({"context.json", "checkpoints"})
 _NO_UPDATE_SESSION_EXPECTATION = object()
 _NO_CURRENT_CONTEXT_EXPECTATION = object()
 
@@ -3544,7 +3547,7 @@ class MemoryStore:
 
     def assert_context_creatable(self, name: str) -> None:
         """Fail before expensive work when a new Context cannot use this name."""
-        _context_name_parts(name)
+        validate_portable_context_name(name)
         if self.context_exists(name):
             raise FileExistsError(f"Context '{name}' already exists.")
         self._assert_context_storage_available(name)
@@ -3694,7 +3697,7 @@ class MemoryStore:
         records: dict[str, dict[str, object]],
     ) -> None:
         validate_context_name(old_name)
-        validate_context_name(new_name)
+        validate_portable_context_name(new_name)
         if old_name == new_name:
             raise ValueError(
                 f"source and destination Context namespaces are the same: '{old_name}'."
@@ -4271,8 +4274,11 @@ class MemoryStore:
         new_name: str,
     ) -> ContextRenamePlan:
         """Return one exact, read-only namespace migration preview."""
+        # The Source may be a legacy name that exists precisely so this
+        # migration can retire it. Only the new canonical locator must satisfy
+        # the portable creation contract.
         validate_context_name(old_name)
-        validate_context_name(new_name)
+        validate_portable_context_name(new_name)
         with self._context_graph_lock(exclusive=True):
             records, _ = self._read_context_graph_for_rename()
             lock_names = self._rename_lock_names(records, old_name, new_name)
@@ -4529,7 +4535,7 @@ class MemoryStore:
         if not isinstance(plan, ContextRenamePlan):
             raise TypeError("Expected a ContextRenamePlan.")
         validate_context_name(plan.old_name)
-        validate_context_name(plan.new_name)
+        validate_portable_context_name(plan.new_name)
         with self._context_graph_lock(exclusive=True):
             records, _ = self._read_context_graph_for_rename()
             lock_names = self._rename_lock_names(
@@ -4981,12 +4987,14 @@ class MemoryStore:
         if type(include_descendants) is not bool:
             raise ValueError("Branch descendant scope must be a boolean.")
         _context_name_parts(source_root)
-        _context_name_parts(target_root)
+        validate_portable_context_name(target_root)
         if source_root == target_root:
             raise ValueError("A Branch must have a new Context root name.")
 
         source_names = tuple(binding.source_name for binding in records)
         target_names = tuple(binding.target.name for binding in records)
+        for target_name in target_names:
+            validate_portable_context_name(target_name)
         if (
             len(source_names) != len(set(source_names))
             or len(target_names) != len(set(target_names))
@@ -5235,7 +5243,7 @@ class MemoryStore:
             raise TypeError("Expected Context records.")
         names = tuple(context.name for context, _ in records)
         for name in names:
-            _context_name_parts(name)
+            validate_portable_context_name(name)
         if len(names) != len(set(names)):
             raise ValueError("Context batch contains duplicate names.")
         if make_current is not None and make_current not in names:
@@ -5318,6 +5326,11 @@ class MemoryStore:
                 f"Refusing to write context '{ctx.name}' through a symbolic link."
             )
         context_preexisting = self.context_exists(ctx.name)
+        if not context_preexisting:
+            # Existing non-portable records remain writable until an explicit
+            # identity-preserving migration moves them. A newly published
+            # identity must never reintroduce shell-dependent spelling.
+            validate_portable_context_name(ctx.name)
         if require_new and context_preexisting:
             raise FileExistsError(f"Context '{ctx.name}' already exists.")
         current_record: dict[str, object] | None = None
@@ -5467,7 +5480,7 @@ class MemoryStore:
         are generated when omitted and may be supplied as canonical UUIDs by a
         deterministic fixture builder.
         """
-        _context_name_parts(name)
+        validate_portable_context_name(name)
         canonical_language = "en"
         try:
             raw_entries = tuple(entries)

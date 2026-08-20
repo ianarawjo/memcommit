@@ -27,6 +27,7 @@ import uuid
 from typing import Iterator
 
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.context_naming import validate_portable_context_name
 from memcommit.context_targeting.model import ContextScope
 from memcommit.context_targeting.resolution import expand_lexical_context_names
 from memcommit.profile_config import (
@@ -1977,6 +1978,10 @@ def create_authority_grant(
     """Create one exact cross-Profile Context view under the registry lock."""
 
     canonical_permissions = canonical_grant_permissions(permissions)
+    # Existing legacy Grants remain readable, but a new Grant must not publish
+    # or attach another shell-dependent Context locator.
+    validate_portable_context_name(resource_name)
+    validate_portable_context_name(attachment_name)
     with _registry_lock():
         registry = load_profile_registry()
         authority = registry.by_name(authority_name)
@@ -1997,9 +2002,11 @@ def create_authority_grant(
             resource_name,
             recursive=recursive,
         )
+        for binding in scope:
+            validate_portable_context_name(binding.name)
         attachment = _assert_grantee_attachment(grantee, attachment_name)
         public = public_name or resource_name
-        public = validate_grant_resource_name(public)
+        public = validate_portable_context_name(public)
         _assert_public_view_available(
             registry,
             grantee=grantee,
@@ -2082,6 +2089,8 @@ def update_authority_grant(
                 existing.resource_name,
                 recursive=recursive,
             )
+            for binding in scope:
+                validate_portable_context_name(binding.name)
         replacement = AuthorityGrant(
             uid=existing.uid,
             revision=existing.revision + 1,

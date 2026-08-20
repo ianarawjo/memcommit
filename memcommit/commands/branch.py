@@ -4,6 +4,7 @@ import typer
 
 import memcommit.ops as ops
 from memcommit.commands.branch_dialog import choose_branch_creation
+from memcommit.context_naming import validate_portable_context_name
 from memcommit.context_targeting.tui.picker import context_memory_rows
 from memcommit.interfaces.console.text import (
     display_escape_text,
@@ -22,7 +23,6 @@ from memcommit.store import (
     MemoryStore,
     checkpoint_history_digest,
     context_record_digest,
-    validate_context_name,
 )
 
 
@@ -145,7 +145,7 @@ def cmd(
         )
         raise typer.Exit(1)
     try:
-        validate_context_name(name)
+        validate_portable_context_name(name)
         if store.context_exists(name):
             raise FileExistsError(f"Context '{name}' already exists.")
         source_names = expand_lexical_context_names(

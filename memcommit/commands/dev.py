@@ -158,14 +158,15 @@ def dev_fake(
     store = MemoryStore()
     try:
         expected_current = store.current_context_name()
-    except (OSError, ValueError) as e:
-        typer.secho(f"Error: {e}", fg=typer.colors.RED, err=True)
-        raise typer.Exit(1)
-    if store.context_exists(context_name):
+        store.assert_context_creatable(context_name)
+    except FileExistsError:
         typer.secho(
             f"Error: context '{context_name}' already exists.",
             fg=typer.colors.RED, err=True,
         )
+        raise typer.Exit(1)
+    except (OSError, ValueError) as e:
+        typer.secho(f"Error: {e}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
 
     typer.secho(f"Asking {model!r} for fake memories about: {prompt!r} …", dim=True)

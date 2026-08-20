@@ -6,6 +6,7 @@ from dataclasses import dataclass
 
 import memcommit.ops as ops
 from memcommit.context import AutoCheckpoint
+from memcommit.context_naming import validate_portable_context_name
 from memcommit.context_init_application import (
     ContextInitError,
     ContextInitPlan,
@@ -14,7 +15,7 @@ from memcommit.context_init_application import (
     CreatedContext,
     run_context_init,
 )
-from memcommit.store import MemoryStore, validate_context_name
+from memcommit.store import MemoryStore
 
 
 @dataclass(frozen=True)
@@ -41,7 +42,7 @@ class MemoryStoreContextInitPort:
         self._store = store
 
     def apply(self, plan: ContextInitPlan) -> tuple[CreatedContext, ...]:
-        validate_context_name(plan.request.name)
+        validate_portable_context_name(plan.request.name)
         if plan.require_all_new and self._store.context_exists(plan.request.name):
             raise ContextInitError(
                 f"context '{plan.request.name}' already exists."

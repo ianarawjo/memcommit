@@ -99,6 +99,10 @@ classification, and stale generated output.
 
 ## Context namespace migration
 
+- [`context-name-portability-design-rationale.md`](context-name-portability-design-rationale.md)
+  defines the quote-independent portable grammar for new Context identities,
+  legacy read/write compatibility, Grant and query-only boundaries, and the
+  preview-first `mem profile migrate-context` rollout.
 - [`mem-write-protection-design-rationale.md`](mem-write-protection-design-rationale.md)
   defines bare current-Context lock/unlock, frozen recursive Context sets,
   direct-Memory locks, the active Profile's upper read-only policy, shared

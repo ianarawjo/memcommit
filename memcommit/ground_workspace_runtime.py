@@ -5,6 +5,7 @@ from __future__ import annotations
 import uuid
 
 from memcommit.context import AutoCheckpoint, Context
+from memcommit.context_naming import validate_portable_context_name
 from memcommit.ground_workspace import (
     GROUND_WORKSPACE_LANES,
     GroundWorkspace,
@@ -39,7 +40,7 @@ class MemoryStoreGroundWorkspaceCreationPort(GroundWorkspaceCreationPort):
 
     def create(self, workspace: GroundWorkspace) -> GroundWorkspace:
         for context in workspace.all_contexts:
-            validate_context_name(context.name)
+            validate_portable_context_name(context.name)
         context_membership = [
             {"uid": context.uid, "name": context.name}
             for context in workspace.all_contexts

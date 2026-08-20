@@ -27,6 +27,7 @@ from memcommit.context_targeting.tui.reach import (
     ContextReachState,
     render_context_reach,
 )
+from memcommit.context_naming import validate_portable_context_name
 from memcommit.context_targeting.tui.range_selection import (
     project_checked_context_names,
 )
@@ -546,7 +547,7 @@ def choose_session_endpoints(
             )
         if role.allow_new:
             def validate_new_name(candidate: str, *, role_spec=role) -> None:
-                validate_context_name(candidate)
+                validate_portable_context_name(candidate)
                 if candidate in catalog_set:
                     if role_spec.new_parent_locator:
                         raise ValueError(
@@ -657,7 +658,7 @@ def choose_session_endpoints(
             if role.new_name_suggester is None:
                 continue
             candidate = role.new_name_suggester(selected_names)
-            validate_context_name(candidate)
+            validate_portable_context_name(candidate)
             if candidate in catalog_set:
                 raise ValueError(
                     f"Suggested {role_title(role.uid)} Context already exists."
@@ -834,7 +835,7 @@ def choose_session_endpoints(
                     raise ValueError(
                         f"{role_title(uid)} new Context name must be nonempty."
                     )
-                validate_context_name(name)
+                validate_portable_context_name(name)
                 if name in catalog_set:
                     if role.new_parent_locator:
                         raise ValueError(

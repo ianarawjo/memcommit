@@ -28,6 +28,7 @@ from memcommit.comparison_execution import (
 from memcommit.comparison_provider import analyze_comparison
 from memcommit.comparison_store import load_comparison_analysis
 from memcommit.context import AutoCheckpoint, Context, Memory
+from memcommit.context_naming import validate_portable_context_name
 from memcommit.context_targeting.loading import load_context_scope
 from memcommit.granted_comparison_store import (
     granted_artifact_contexts,
@@ -112,7 +113,6 @@ from memcommit.store import (
     MemoryStore,
     _write_json_atomic,
     context_record_digest,
-    validate_context_name,
 )
 from memcommit.study_prewarm.meld_resolution import (
     find_installed_meld_resolution_branch,
@@ -1485,7 +1485,7 @@ class MemoryStoreMeldDestinationPort(MeldDestinationPort):
 
     def relocate(self, request: MeldDestinationRequest) -> MeldSessionSnapshot:
         destination = request.destination_name
-        validate_context_name(destination)
+        validate_portable_context_name(destination)
         session = request.snapshot.session
         descendants = tuple(
             name

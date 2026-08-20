@@ -28,7 +28,8 @@ from memcommit.profiles import (
     import_baseline_profile,
     inspect_store,
 )
-from memcommit.store import MemoryStore, validate_context_name
+from memcommit.store import MemoryStore
+from memcommit.context_naming import validate_portable_context_name
 
 
 @dataclass(frozen=True)
@@ -169,11 +170,11 @@ def _context_name_mapping(
     source_root: str,
     target_root: str,
 ) -> dict[str, str]:
-    validate_context_name(target_root)
+    validate_portable_context_name(target_root)
     mapping: dict[str, str] = {}
     for source_name in source_names:
         suffix = source_name[len(source_root) :]
-        target_name = validate_context_name(target_root + suffix)
+        target_name = validate_portable_context_name(target_root + suffix)
         mapping[source_name] = target_name
     if len(set(mapping.values())) != len(mapping):
         raise ProfileError("Context import produced duplicate destination names.")

@@ -945,7 +945,12 @@ def test_checkpoint_artifact_is_not_listed_as_nested_context(isolated_store):
         / "context.json"
     )
     fake_context_file.write_text(
-        json.dumps(ops.init("construction-updates/main/checkpoints").to_dict())
+        json.dumps(
+            Context(
+                uid="fake-checkpoint-context",
+                name="construction-updates/main/checkpoints",
+            ).to_dict()
+        )
     )
 
     assert store.list_context_names() == [

@@ -17,6 +17,7 @@ from memcommit.authority.access import (
 )
 from memcommit.command_attempts import annotate_sever_attempt
 from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef, QueryContextRef
+from memcommit.context_naming import validate_portable_context_name
 from memcommit.context_targeting.model import ContextScope
 from memcommit.context_targeting.resolution import expand_lexical_context_names
 from memcommit.derived_policy import (
@@ -61,7 +62,7 @@ from memcommit.sever_application import (
 )
 from memcommit.sever_provider import SeverProviderError
 from memcommit.sever_store import SeverSessionStore
-from memcommit.store import MemoryStore, context_record_digest, validate_context_name
+from memcommit.store import MemoryStore, context_record_digest
 from memcommit.study_prewarm.sever import find_installed_projectable_sever_prewarm
 from memcommit.update import GrantedUpdateTarget
 
@@ -110,7 +111,7 @@ class MemoryStoreSeverDestinationPort:
     store: MemoryStore
 
     def validate(self, output_name: str, *, current_output_name: str) -> None:
-        validate_context_name(output_name)
+        validate_portable_context_name(output_name)
         if output_name != current_output_name and self.store.context_exists(output_name):
             raise SeverApplicationError(
                 f"Output Context '{output_name}' already exists."
@@ -253,7 +254,7 @@ class MemoryStoreSeverInputPort:
             raise SeverApplicationError(
                 "Source and Criteria Contexts must be distinct."
             )
-        validate_context_name(request.output_name)
+        validate_portable_context_name(request.output_name)
         if self._store.context_exists(request.output_name):
             raise SeverApplicationError(
                 f"Output Context '{request.output_name}' already exists."

@@ -26,6 +26,7 @@ from collections.abc import Mapping, Sequence
 from typing import TYPE_CHECKING, Callable
 
 from memcommit.context import Context, Information, Memory, MemoryRef, QueryContextRef
+from memcommit.context_naming import validate_portable_context_name
 
 if TYPE_CHECKING:
     from memcommit.atomize import (
@@ -56,7 +57,10 @@ if TYPE_CHECKING:
 
 def init(name: str) -> Context:
     """Create a new, empty Context. Does not persist — caller must store.save(ctx)."""
-    return Context(uid=str(uuid.uuid4()), name=name)
+    return Context(
+        uid=str(uuid.uuid4()),
+        name=validate_portable_context_name(name),
+    )
 
 
 def add(ctx: Context, content: str) -> Memory:
@@ -367,7 +371,10 @@ def branch(ctx: Context, new_name: str) -> Context:
     here. Embedded Context references are carried over as-is (live-reference semantics
     are preserved; the sub-contexts themselves are not cloned).
     """
-    new_ctx = Context(uid=str(uuid.uuid4()), name=new_name)
+    new_ctx = Context(
+        uid=str(uuid.uuid4()),
+        name=validate_portable_context_name(new_name),
+    )
     for info in ctx.iter_items():
         if isinstance(info, Memory):
             new_ctx.add(Memory(uid=info.uid, content=info.content))
@@ -413,6 +420,8 @@ def branch_subtree(
     target_names = {
         source.name: new_root + source.name[len(source_root) :] for source in sources
     }
+    for target_name in target_names.values():
+        validate_portable_context_name(target_name)
     if len(set(target_names.values())) != len(sources):
         raise ValueError("A subtree branch produced duplicate target names.")
 

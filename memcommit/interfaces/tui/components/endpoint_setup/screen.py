@@ -24,6 +24,7 @@ from memcommit.context_targeting.tui.reach import (
     ContextReachState,
     render_context_reach,
 )
+from memcommit.context_naming import validate_portable_context_name
 from memcommit.context_targeting.tui.selector import (
     ContextSelectorControl,
     ContextSelectorView,
@@ -187,7 +188,7 @@ def run_endpoint_setup(
             names=role.names,
             operation_validator=role.new_name_validator,
         ) -> None:
-            validate_context_name(candidate)
+            validate_portable_context_name(candidate)
             if candidate in names:
                 raise ValueError(
                     "That Context already exists; choose its available tree row."

@@ -21,6 +21,7 @@ from memcommit.commands.exact_name_dialog import choose_exact_name
 from memcommit.commands.flat_selection_dialog import choose_flat_option
 from memcommit.commands.tui_primitives import ExactNameFieldView
 from memcommit.context import Memory, MemoryRef
+from memcommit.context_naming import validate_portable_context_name
 from memcommit.context_targeting.tui.name_editor import (
     ContextNameView,
     choose_context_name,
@@ -40,7 +41,7 @@ from memcommit.resource_import import (
     plan_memory_import,
 )
 from memcommit.selection import SelectionOption
-from memcommit.store import MemoryStore, validate_context_name
+from memcommit.store import MemoryStore
 
 
 ImportKind = Literal["PROFILE", "CONTEXT", "MEMORY"]
@@ -227,7 +228,7 @@ def _fresh_context_root(
     ):
         suffix += 1
         candidate = f"{stem}-import" if suffix == 2 else f"{stem}-import-{suffix}"
-    return validate_context_name(candidate)
+    return validate_portable_context_name(candidate)
 
 
 def _context_target_validator(
@@ -239,7 +240,7 @@ def _context_target_validator(
     occupied = set(destination_names)
 
     def validate(value: str) -> None:
-        target_root = validate_context_name(value)
+        target_root = validate_portable_context_name(value)
         collisions = tuple(
             name
             for name in _mapped_context_names(

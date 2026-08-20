@@ -2,6 +2,7 @@
 
 import json
 import subprocess
+import uuid
 
 import pytest
 from typer.testing import CliRunner
@@ -1603,7 +1604,7 @@ def test_query_ref_hint_shell_quotes_untrusted_names(
     monkeypatch,
 ):
     store = MemoryStore()
-    parent = ops.init("parent$(unsafe)")
+    parent = Context(uid=str(uuid.uuid4()), name="parent$(unsafe)")
     parent.add(
         QueryContextRef(
             uid="query-ref",
@@ -1612,7 +1613,14 @@ def test_query_ref_hint_shell_quotes_untrusted_names(
             provider="codex_chatgpt",
         )
     )
-    store.save(parent)
+    # Preserve coverage for a pre-portability locator. New Context creation
+    # rejects shell metacharacters, but legacy records still need safe hints.
+    record = store.contexts_dir / parent.name / "context.json"
+    record.parent.mkdir(parents=True, exist_ok=True)
+    record.write_text(
+        json.dumps(parent.to_dict(), ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
     store.set_current(parent.name)
     monkeypatch.setattr(
         "memcommit.commands.find.connect_codex_chatgpt_provider",

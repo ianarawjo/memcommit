@@ -98,6 +98,7 @@ from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import (
     ProfileError,
 )
+from memcommit.context_naming import validate_portable_context_name
 from memcommit.resolution_workbench import ResolutionNavigation
 from memcommit.store import (
     ConcurrentContextUpdateError,
@@ -883,7 +884,7 @@ def _run_interactive(
     while session.state not in {"APPLIED", "KEPT_REVIEW_ONLY"}:
 
         def validate_destination(name: str) -> None:
-            validate_context_name(name)
+            validate_portable_context_name(name)
             if name == session.target.context_name:
                 return
             descendants = tuple(

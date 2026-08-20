@@ -14,9 +14,15 @@ store.rename_contexts(plan)
 
 It is no longer exposed as `mem rename`. That public command now renames a
 Profile display name, with `mem profile rename` retained as its explicit
-equivalent. Direct Context rename was removed because rename belongs beside
-the selected Profile in its picker, while Context namespace relocation is a
-specialized graph migration rather than a routine picker action.
+equivalent. Routine direct Context rename was removed because rename belongs
+beside the selected Profile in its picker, while Context namespace relocation
+is a specialized graph migration rather than a routine picker action. The
+narrow `mem profile migrate-context` compatibility route exposes this same
+plan only when a nonportable legacy source is moved to a portable destination;
+it previews by default and accepts `--apply` only with the exact Profile UID
+and graph digest printed by the preview. The naming policy and rollout
+boundary are specified in
+[`context-name-portability-design-rationale.md`](context-name-portability-design-rationale.md).
 
 The motivating Task 1 case is migration from provisional fixture names such as
 `construction-updates` to participant-scoped names such as
@@ -31,12 +37,15 @@ semantically coherent.
 
 ## Internal plan contract
 
-Both store operands are canonical slash-delimited Context names supplied by
-the owning internal operation. Relative CLI locators are not accepted or
-resolved at this layer. The caller must build and freeze a read-only plan,
-retain any operation-specific review or authority boundary, and apply exactly
-that plan. The store never relaxes name, collision, integrity, identity,
-freshness, or rollback checks.
+The source operand is a canonical slash-delimited Context name supplied by the
+owning operation and may use the historical storage grammar so legacy data can
+be migrated. The requested destination root uses the portable new-identity
+grammar. A descendant can retain a nonportable suffix during a top-down
+compatibility rollout and is reported for a following migration. Relative CLI
+locators are not accepted or resolved at this layer. The caller must build and
+freeze a read-only plan, retain any operation-specific review or authority
+boundary, and apply exactly that plan. The store never relaxes collision,
+integrity, identity, freshness, or rollback checks.
 
 The operation requires an ordinary Context at the exact `OLD` name. It renames
 that Context and every stored ordinary Context whose canonical name begins

@@ -1,5 +1,6 @@
 import typer
 
+from memcommit.context_naming import is_portable_context_name
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
@@ -31,7 +32,7 @@ def _current_marker(current: bool) -> str:
 
 
 def _owned_context_line(name: str, *, current: bool) -> str:
-    return (
+    line = (
         _current_marker(current)
         + _OWNED_PREFIX
         + _context_name(
@@ -39,6 +40,9 @@ def _owned_context_line(name: str, *, current: bool) -> str:
             current=current,
         )
     )
+    if not is_portable_context_name(name):
+        line += "  LEGACY NAME · MIGRATION REQUIRED"
+    return line
 
 
 def _granted_context_line(
@@ -54,7 +58,7 @@ def _granted_context_line(
         fg=SOURCE_CAPABILITY_RGB,
         bold=True,
     )
-    return (
+    line = (
         _current_marker(current)
         + ownership
         + _context_name(name, current=current)
@@ -63,6 +67,9 @@ def _granted_context_line(
         + " · FROM "
         + display_escape_text(authority_profile)
     )
+    if not is_portable_context_name(name):
+        line += "  LEGACY GRANT NAME · RECREATE REQUIRED"
+    return line
 
 
 def cmd() -> None:

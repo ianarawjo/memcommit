@@ -128,6 +128,7 @@ from memcommit.ground_turn_dialogue import (
 from memcommit.fit_runtime import execute_and_save_ground_fit
 from memcommit.fit_store import FitStore
 from memcommit.query_provider import connect_codex_chatgpt_provider
+from memcommit.context_naming import validate_portable_context_name
 from memcommit.store import (
     ConcurrentGroundUpdateError,
     MemoryStore,
@@ -246,7 +247,7 @@ def _validate_ground_workspace_save_location(
 ) -> str:
     """Validate one exact require-new root without creating Store records."""
 
-    canonical = validate_context_name(name)
+    canonical = validate_portable_context_name(name)
     if len(canonical) > GROUND_DIALOGUE_NAME_LIMIT:
         raise ValueError(
             "Ground Save Location is too long for one dialogue turn."
