@@ -1,74 +1,92 @@
-# Meld-created symmetric result Context
+# Explicit Meld roles and Result Context
 
 ## Problem
 
-Symmetric Meld previously used the active Context as its empty result. A person
-had to create that Context, switch to it, and only then repeat both peer names.
-The active global pointer was incidental to the operation and made the common
-Compare-to-Meld handoff longer and easier to misroute.
+The former two-operand form was symmetric but hid its Result in the current
+Context:
+
+```bash
+mem meld LEFT_PEER RIGHT_PEER
+```
+
+That made the same visible `A B` shape look directional while actually meaning
+`A + B → current`. A person also had to create and switch to an empty Result
+before running it. The error that all three Contexts must be distinct exposed
+the hidden operand only after parsing, so it explained an internal invariant
+rather than the command the person thought they had entered.
 
 ## Command contract
 
+Directional Meld is the primitive positional form:
+
 ```bash
-mem meld LEFT_PEER RIGHT_PEER --to RESULT_CONTEXT
+mem meld INCOMING                         # INCOMING → current BASELINE
+mem meld INCOMING BASELINE                # INCOMING → BASELINE
 ```
 
-`LEFT_PEER` and `RIGHT_PEER` remain equal-authority existing Context locators.
-`RESULT_CONTEXT` is a new ordinary Context identifier, not an existing-Context
-locator. The command creates an empty local result, binds the symmetric Meld
-session to it, and leaves the active Context unchanged.
+Symmetric Meld is the explicit three-frame application:
 
-`--to` is deliberately distinct from directional `--into`:
+```bash
+mem meld PEER_A PEER_B RESULT_C           # PEER_A + PEER_B → RESULT_C
+mem meld PEER_A PEER_B --to RESULT_C      # equivalent explicit alias
+```
 
-- `--into BASELINE` treats an existing baseline as authoritative and may
-  update it after acceptance.
-- `--to RESULT_CONTEXT` creates a separate result without making either peer
-  authoritative.
+`--into BASELINE` and `--from INCOMING` remain directional aliases. The old
+hidden-current symmetric meaning of `mem meld A B` is intentionally removed;
+that exact form now always means `A → B`. Parsing never inspects whether `B`
+is empty to choose a mode.
 
-The two options cannot be combined.
+Existing source operands use the shared existing-Context locator resolver.
+`RESULT_C` is an exact ordinary Context name because it may not exist yet; it
+is never reinterpreted relative to a later current-Context value.
+
+## Result adoption boundary
+
+An explicit symmetric Result has one of three valid states:
+
+- absent: Meld creates it atomically with the initial saved session;
+- present, local, empty, and session-free: Meld adopts it as the Result;
+- present with the exact compatible saved Meld session: Meld resumes it.
+
+A populated Result, a granted Result, or a Result with an unrelated or
+incompatible session is rejected. Meld never overwrites existing content and
+never chooses a hidden Result from the current Context. Creating or adopting a
+Result does not switch the current Context.
 
 ## Invariants
 
-- Both peer sources must exist and be distinct from each other and the result.
-- The command must obtain an exact fresh ordered Compare analysis matching
-  both sources and scope flags. It reuses a durable basis when available and
-  otherwise creates and saves one before publishing the result.
-- The result name must not already identify a Context. `--to` never adopts or
-  overwrites an existing Context.
-- The result is empty until an explicitly accepted Meld proposal is applied.
-- Context creation and initial Meld-session publication share one command
-  boundary. A session-write failure rolls back the exact unpublished Context.
-- Creating the result does not change the active Context pointer.
-- Granted peers retain the same combination, derivation, export, and result
-  retention checks as the existing symmetric Meld path.
+- Directional INCOMING and BASELINE must resolve to different Contexts.
+- Symmetric PEER A, PEER B, and RESULT C must all be distinct.
+- Both symmetric peers must exist and retain equal authority.
+- The command obtains an exact fresh ordered Compare analysis matching both
+  peers and scope flags before publishing a new Result and session.
+- A provider or Compare failure before publication leaves a new Result absent.
+- The Result remains empty until an explicitly accepted proposal is applied.
+- Context creation and initial session publication share one atomic boundary.
+- Granted peers retain the normal combination, derivation, export, and result
+  retention checks.
 
-## Alternative considered
+## Alternatives considered
 
-Automatically running `mem init RESULT_CONTEXT`, switching globally, and then
-invoking the old symmetric command would reproduce the visible outcome but
-would expose intermediate global state and leave an empty Context if the Meld
-preconditions failed. Hidden switching also would not change the active
-Profile that owns analysis and result artifacts. Keeping basis preparation and
-result creation inside Meld makes the intended three-frame operation explicit
-and allows a Compare/provider/retention failure before target publication.
+Keeping `mem meld A B` symmetric and adding only a better error would still
+leave `B` looking like a destination while the real Result remained hidden.
+Overloading `A B` by checking whether `B` was empty would make command meaning
+depend on mutable storage state. Requiring `--from` and `--to` everywhere would
+be explicit but would make the common directional primitive less direct.
 
-## Compatibility boundary
-
-The existing `mem meld LEFT_PEER RIGHT_PEER` form continues to use the active
-empty Context and resumes its target-bound session. `--to` is a creation form;
-later work on its result uses the established target-bound Meld session rather
-than silently reusing an unrelated pre-existing Context name.
+The selected arity makes the authority shape visible before execution:
+one or two operands are directional; three operands are symmetric.
 
 ## Compare handoff
 
-The default durable Compare report ends with the portable next action:
+A durable Compare report can offer either symmetric spelling while preserving
+the displayed peer order:
 
 ```bash
-mem meld LEFT_PEER RIGHT_PEER --to RESULT_CONTEXT
+mem meld PEER_A PEER_B RESULT_C
 ```
 
-The report preserves the exact displayed peer order and leaves
-`RESULT_CONTEXT` as an explicit naming placeholder because Compare has no
-authority to choose a durable ordinary Context name for the person. An
-unsaved Compare omits this handoff because Meld cannot consume a non-durable
-analysis as its exact basis.
+Compare leaves `RESULT_C` as an explicit naming placeholder because it has no
+authority to choose a durable ordinary Context name for the person. An unsaved
+Compare omits the handoff because Meld cannot consume a non-durable analysis as
+its exact basis.

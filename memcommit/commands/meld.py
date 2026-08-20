@@ -139,17 +139,16 @@ def _symmetric_comparison_wait_context_view(
 def _session_command(session: MeldSession) -> str:
     """Return one explicit, portable command prefix for this saved meld."""
     left, right = session.frames
-    parts = ["mem", "meld", left.context_name]
+    parts = ["mem", "meld", left.context_name, right.context_name]
     if left.include_descendants:
         parts.append("--left-descendants")
     if session.mode == "DIRECTIONAL":
-        parts.extend(("--into", right.context_name))
         if right.include_descendants:
             parts.append("--right-descendants")
     else:
-        parts.append(right.context_name)
         if right.include_descendants:
             parts.append("--right-descendants")
+        parts.extend(("--to", session.target.context_name))
     return shlex.join(parts)
 
 
@@ -1214,7 +1213,7 @@ def _start_new_meld_from_picker(store: MemoryStore) -> None:
     cmd(
         left=left,
         right=right,
-        to=receipt.target_name if receipt.create_target else None,
+        to=receipt.target_name,
         left_descendants=receipt.left_descendants,
         right_descendants=receipt.right_descendants,
     )
@@ -1225,9 +1224,8 @@ def cmd(
         Optional[str],
         typer.Argument(
             help=(
-                "First PEER source, or INCOMING in the canonical "
-                "INCOMING --into BASELINE form; omit with --into to use the "
-                "current Context, and omit positional Contexts with --from"
+                "Directional INCOMING A, or symmetric PEER A when RESULT/--to "
+                "is supplied"
             )
         ),
     ] = None,
@@ -1235,8 +1233,16 @@ def cmd(
         Optional[str],
         typer.Argument(
             help=(
-                "Second PEER source; directional forms use --into BASELINE "
-                "or --from INCOMING instead"
+                "Directional BASELINE B, or symmetric PEER B when RESULT/--to "
+                "is supplied"
+            )
+        ),
+    ] = None,
+    result: Annotated[
+        Optional[str],
+        typer.Argument(
+            help=(
+                "Symmetric RESULT C; equivalent to --to and created when absent"
             )
         ),
     ] = None,
@@ -1245,8 +1251,7 @@ def cmd(
         typer.Option(
             "--into",
             help=(
-                "Canonical directional form: use authoritative BASELINE as "
-                "the target for positional or current INCOMING"
+                "Explicit directional BASELINE alias for 'mem meld INCOMING BASELINE'"
             ),
         ),
     ] = None,
@@ -1255,8 +1260,8 @@ def cmd(
         typer.Option(
             "--to",
             help=(
-                "Create a new empty RESULT Context for a symmetric "
-                "LEFT RIGHT meld without switching Contexts"
+                "Symmetric RESULT C alias for the third positional Context; "
+                "created when absent"
             ),
         ),
     ] = None,
@@ -1265,9 +1270,8 @@ def cmd(
         typer.Option(
             "--from",
             help=(
-                "Convenience form: meld INCOMING into the current "
-                "authoritative BASELINE; normalized to INCOMING --into "
-                "BASELINE"
+                "Directional INCOMING alias for 'mem meld INCOMING' when the "
+                "current Context supplies BASELINE"
             ),
         ),
     ] = None,
@@ -1407,7 +1411,7 @@ def cmd(
         ),
     ] = None,
 ) -> None:
-    """Meld peers, or directionally update an authoritative BASELINE."""
+    """Meld INCOMING into BASELINE; add RESULT/--to for symmetric peers."""
     scope_flags_supplied = (
         direct
         or recursive
@@ -1484,15 +1488,25 @@ def cmd(
             err=True,
         )
         raise typer.Exit(2)
-    if to is not None and (into is not None or from_ is not None):
+    if result is not None and to is not None:
         typer.secho(
-            "Meld error: --to creates a symmetric result and cannot be "
-            "combined with directional --into or --from.",
+            "Meld error: supply symmetric RESULT C either positionally or with "
+            "--to, not both.",
             fg=typer.colors.RED,
             err=True,
         )
         raise typer.Exit(2)
-    if from_ is not None and (left is not None or right is not None):
+    if (to is not None or result is not None) and (
+        into is not None or from_ is not None
+    ):
+        typer.secho(
+            "Meld error: symmetric RESULT C/--to cannot be combined with "
+            "directional --into or --from.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+    if from_ is not None and any(value is not None for value in (left, right, result)):
         typer.secho(
             "Meld error: --from supplies INCOMING and cannot be combined "
             "with positional Contexts.",
@@ -1504,6 +1518,7 @@ def cmd(
     browse_by_default = (
         left is None
         and right is None
+        and result is None
         and into is None
         and to is None
         and from_ is None
@@ -1539,6 +1554,7 @@ def cmd(
             return
         current_name = store.current_context_name()
         create_target = False
+        explicit_result = result if result is not None else to
         if from_ is not None:
             if not current_name:
                 raise MeldCommandError(
@@ -1555,40 +1571,12 @@ def cmd(
             )
             right_name = current_name
             target_name = right_name
-            start_command = shlex.join(["mem", "meld", left_name, "--into", right_name])
-        elif into is None:
-            if left is None or right is None:
+            start_command = shlex.join(["mem", "meld", left_name, right_name])
+        elif into is not None:
+            if right is not None or result is not None:
                 raise MeldCommandError(
-                    "Symmetric meld requires LEFT and RIGHT Contexts. For a "
-                    "directional meld, use 'mem meld --into BASELINE' or "
-                    "'mem meld INCOMING --into BASELINE'; when the current "
-                    "Context is BASELINE, use 'mem meld --from INCOMING'."
-                )
-            if to is None and not current_name:
-                raise MeldCommandError(
-                    "No current target Context. Run 'mem init TARGET' first."
-                )
-            requested_mode = "SYMMETRIC"
-            left_name = resolve_context_locator(left, current=current_name)
-            right_name = resolve_context_locator(right, current=current_name)
-            if to is None:
-                assert current_name is not None
-                target_name = current_name
-                start_command = "mem meld LEFT RIGHT"
-            else:
-                # A result name creates a new identity, so it deliberately does
-                # not pass through the existing-Context locator resolver.
-                target_name = to
-                create_target = True
-                start_command = shlex.join(
-                    ["mem", "meld", left_name, right_name, "--to", target_name]
-                )
-        else:
-            if right is not None:
-                raise MeldCommandError(
-                    "Directional meld accepts at most one positional INCOMING "
-                    "Context. Use 'mem meld INCOMING --into BASELINE', or omit "
-                    "INCOMING to use the current Context."
+                    "Directional --into accepts at most one positional INCOMING "
+                    "Context. Use 'mem meld INCOMING BASELINE' instead."
                 )
             requested_mode = "DIRECTIONAL"
             if left is None:
@@ -1608,7 +1596,47 @@ def cmd(
                 current=current_name,
             )
             target_name = right_name
-            start_command = shlex.join(["mem", "meld", left_name, "--into", right_name])
+            start_command = shlex.join(["mem", "meld", left_name, right_name])
+        elif explicit_result is not None:
+            if left is None or right is None:
+                raise MeldCommandError(
+                    "Symmetric Meld requires PEER A and PEER B before RESULT C. "
+                    "Use 'mem meld PEER_A PEER_B --to RESULT_C' or "
+                    "'mem meld PEER_A PEER_B RESULT_C'."
+                )
+            requested_mode = "SYMMETRIC"
+            left_name = resolve_context_locator(left, current=current_name)
+            right_name = resolve_context_locator(right, current=current_name)
+            # RESULT C can be created, so its exact name deliberately does not
+            # pass through the existing-Context locator resolver. Existing
+            # empty or exactly session-bound results retain that same name.
+            target_name = explicit_result
+            start_command = shlex.join(
+                ["mem", "meld", left_name, right_name, "--to", target_name]
+            )
+        elif left is not None and right is not None:
+            requested_mode = "DIRECTIONAL"
+            left_name = resolve_context_locator(left, current=current_name)
+            right_name = resolve_context_locator(right, current=current_name)
+            target_name = right_name
+            start_command = shlex.join(["mem", "meld", left_name, right_name])
+        elif left is not None:
+            if not current_name:
+                raise MeldCommandError(
+                    "'mem meld INCOMING' uses the current Context as BASELINE, "
+                    "but no current Context is available. Supply "
+                    "'mem meld INCOMING BASELINE'."
+                )
+            requested_mode = "DIRECTIONAL"
+            left_name = resolve_context_locator(left, current=current_name)
+            right_name = current_name
+            target_name = right_name
+            start_command = shlex.join(["mem", "meld", left_name])
+        else:
+            raise MeldCommandError(
+                "Starting Meld requires INCOMING, INCOMING BASELINE, or "
+                "PEER_A PEER_B RESULT_C Contexts."
+            )
 
         if requested_mode == "DIRECTIONAL":
             if incoming_memory is not None and left_descendants:
@@ -1619,10 +1647,9 @@ def cmd(
                 raise MeldCommandError(
                     "--baseline-memory cannot be combined with --right-descendants."
                 )
-            start_parts = ["mem", "meld", left_name]
+            start_parts = ["mem", "meld", left_name, right_name]
             if left_descendants:
                 start_parts.append("--left-descendants")
-            start_parts.extend(("--into", right_name))
             if right_descendants:
                 start_parts.append("--right-descendants")
             if incoming_memory is not None:
@@ -1640,14 +1667,14 @@ def cmd(
             start_parts.append(right_name)
             if right_descendants:
                 start_parts.append("--right-descendants")
-            if create_target:
-                start_parts.extend(("--to", target_name))
+            start_parts.extend(("--to", target_name))
         start_command = shlex.join(start_parts)
 
         if left_name == right_name:
             if requested_mode == "DIRECTIONAL":
                 raise MeldCommandError(
-                    "INCOMING and BASELINE must be distinct Contexts."
+                    "Directional Meld requires different INCOMING and BASELINE "
+                    f"Contexts; both resolved to '{left_name}'."
                 )
             raise MeldCommandError("The two PEER source Contexts must be distinct.")
         if requested_mode == "SYMMETRIC" and target_name in {
@@ -1655,7 +1682,8 @@ def cmd(
             right_name,
         }:
             raise MeldCommandError(
-                "The two PEER sources and active target must be distinct Contexts."
+                "Symmetric Meld requires PEER A, PEER B, and RESULT C to be "
+                f"distinct; RESULT '{target_name}' is also a PEER source."
             )
         left_access: ContextAccess | None = None
         right_access: ContextAccess | None = None
@@ -1683,13 +1711,9 @@ def cmd(
                 retention=retention,
             )
 
+        if requested_mode == "SYMMETRIC" and not store.context_exists(target_name):
+            create_target = True
         if create_target:
-            if store.context_exists(target_name):
-                raise MeldCommandError(
-                    f"RESULT Context '{target_name}' already exists. Choose "
-                    "a new name; --to never adopts or overwrites an existing "
-                    "Context."
-                )
             # The runtime allocates and publishes the real Context atomically
             # with its session. This placeholder carries only the reviewed name
             # through the CLI's provider-free Compare prerequisite flow.

@@ -78,18 +78,19 @@ def _reopen_argv(session: MeldSession) -> tuple[str, ...]:
             "mem",
             "meld",
             left.context_name,
-            *left_scope,
-            "--into",
             right.context_name,
+            *left_scope,
             *right_scope,
         )
     return (
         "mem",
         "meld",
         left.context_name,
-        *left_scope,
         right.context_name,
+        *left_scope,
         *right_scope,
+        "--to",
+        session.target.context_name,
     )
 
 

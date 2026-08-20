@@ -1,0 +1,33 @@
+MEM MELD · DIRECTIONAL
+INCOMING grammar/two/incoming → BASELINE / TARGET grammar/two/baseline
+SCOPE · A SELECTED GRAPH ONLY · B SELECTED GRAPH ONLY
+State: AWAITING_REPLY · Round: 1
+
+WHAT MEM UNDERSTOOD
+Incoming evidence narrows the baseline review window; the baseline remains authoritative until Apply.
+
+RELATIONS · 1  ISSUES · 1  RESULTS · 0
+
+ACCOUNTING
+  Source coverage: 0/2
+  Relation coverage: 0/1
+  Final Memories: 0 · PRESERVE 0 · COALESCE 0 · SYNTHESIZE 0 · USER_ADD 0
+  Open issues: REQUIRED 1 · HELPFUL 0
+  Cross-relation results: 0
+  ? R1. CONFLICT · The incoming review window is narrower.
+
+ISSUES
+›  1. [REQUIRED] Review window correction
+      WHY · Directional authority permits a baseline change only after explicit review.
+      ↳ 1. Use the narrower window
+      ↳ 2. Keep the baseline window
+
+PROPOSED BASELINE CHANGES
+  (none until required issues are grounded)
+
+Resolve one: mem meld grammar/two/incoming grammar/two/baseline --issue N --comment TEXT
+Guide all:  mem meld grammar/two/incoming grammar/two/baseline --comment TEXT
+Preserve:   mem meld grammar/two/incoming grammar/two/baseline --preserve-all
+Defer:      mem meld grammar/two/incoming grammar/two/baseline --defer-all
+
+CAPTURE PAUSE · TWO-OPERAND CLOSED

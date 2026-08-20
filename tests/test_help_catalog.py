@@ -147,12 +147,12 @@ def test_meld_help_distinguishes_symmetric_and_directional_modes():
     overview = [(row.label, row.value) for row in composed.overview]
 
     assert composed.operation.summary == (
-        "Semantically reconcile two Contexts, either into a separate Result or "
-        "by incorporating proposed changes into an existing Target Context."
+        "Semantically incorporate an incoming Context into an authoritative "
+        "baseline, or derive a separate Result from two equal peers."
     )
     assert (
         "FLOW",
-        "PEER A + PEER B -> RESULT; INCOMING -> EXISTING TARGET",
+        "INCOMING -> BASELINE; PEER A + PEER B -> RESULT",
     ) in overview
     assert (
         "EFFECT",

@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ MEM MELD · DIRECTIONAL                                                                                                                                                          ^┃
+┃ CONTEXT LOCATIONS                                                                                                                                                                ┃
+┃   INCOMING · grammar/two/incoming                                                                                                                                                ┃
+┃   BASELINE / TARGET · grammar/two/baseline                                                                                                                                       ┃
+┃ AWAITING_REPLY · DIRECTIONAL MODE · 1 RELATIONS · 1 required + 0 helpful ISSUES · 0 CHANGES · 0/2 SOURCE COVERAGE                                                                ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT MEM UNDERSTOOD                                                                                                                                                              ┃
+┃ UNDERSTOOD                                                                                                                                                                       ┃
+┃ Incoming evidence narrows the baseline review window; the baseline remains authoritative until Apply.                                                                            ┃
+┃                                                                                                                                                                                  ┃
+┃ ACCOUNTING                                                                                                                                                                       ┃
+┃ Source coverage · 0/2                                                                                                                                                            ┃
+┃Relation coverage · 0/1                                                                                                                                                           ┃
+┃Final Memories · 0 (PRESERVE 0 · COALESCE 0 · SYNTHESIZE 0 · USER_ADD 0)                                                                                                          ┃
+┃Open issues · REQUIRED 1 · HELPFUL 0                                                                                                                                              ┃
+┃Cross-relation results · 0                                                                                                                                                        ┃
+┃                                                                                                                                                                                  ┃
+┃ ISSUES · 1                                                                                                                                                                       ┃
+┃ CONFLICT 1 · Review window correction                                                                                                                                            ┃
+┃ [REQUIRED] Directional authority permits a baseline change only after explicit review.                                                                                           ┃
+┃ QUESTION · Should the incoming narrower window replace the baseline?                                                                                                             ┃
+┃                                                                                                                                                                                  ┃
+┃ PROPOSED BASELINE CHANGES · 0                                                                                                                                                    ┃
+┃  (none)                                                                                                                                                                          ┃
+┃ IMPACT · DIRECTIONAL MELD                                                                                                                                                        ┃
+┃ These are the exact proposed baseline effects of this directional Meld, not an equal-authority Compare.                                                                          ┃
+┃ Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                      ┃
+┃       ▸ Δ [CONFLICT] [cae2bfee] PROPOSED RESULT                                                                                                                                  ┃
+┃                                 No target Memory is proposed for these relations yet.                                                                                            ┃
+┃ RESOLVE                                                                                                                                                                          ┃
+┃ Enter to open the first unresolved item.                                                                                                                                         ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› REPORT         Complete Meld report                                                                                                                                            ^│
+│  CONFLICT       Review window correction                                                                                                                                         │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ RESOLVE ]  Resolve 1 required conflict · Enter to open the first unresolved item.                                                                                               │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close G comment all  P preserve all  D defer  A review & apply  H Help  y/Y copy  Q

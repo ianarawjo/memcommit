@@ -365,9 +365,9 @@ _OPERATIONS = (
     ),
     _operation(
         "meld",
-        "Semantically reconcile two Contexts, either into a separate Result or "
-        "by incorporating proposed changes into an existing Target Context.",
-        "PEER A + PEER B -> RESULT; INCOMING -> EXISTING TARGET",
+        "Semantically incorporate an incoming Context into an authoritative "
+        "baseline, or derive a separate Result from two equal peers.",
+        "INCOMING -> BASELINE; PEER A + PEER B -> RESULT",
         ExecutionKind.SEMANTIC,
         "Symmetric mode requires a distinct empty Result; directional mode "
         "changes only the existing Target after reviewed Apply",

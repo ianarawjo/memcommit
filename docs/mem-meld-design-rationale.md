@@ -7,22 +7,23 @@ modes. The canonical user-facing commands and terminology are maintained in
 [`mem-meld-usage.md`](mem-meld-usage.md). This rationale explains why those
 entry points differ; it is not a second command manual.
 
-Two public Context-to-Context paths now exist as bounded research prototypes:
+Two public Context-to-Context paths now exist as bounded research prototypes.
+Directional Meld is the positional primitive; symmetric Meld makes its third
+Result frame explicit:
 
 ```text
-# Symmetric: two peers produce the current empty result
-mem init RESULT
-mem meld LEFT_PEER RIGHT_PEER
+# Directional: incoming enters an existing authoritative baseline
+mem meld INCOMING                  # current Context is BASELINE
+mem meld INCOMING BASELINE
 
-# Symmetric: create the result without switching Contexts
-mem meld LEFT_PEER RIGHT_PEER --to NEW_RESULT
-
-# Directional: current or explicit incoming enters an existing baseline
-mem meld --into BASELINE
+# Directional compatibility aliases
 mem meld INCOMING --into BASELINE
-
-# Directional convenience: explicit incoming enters the current baseline
+mem meld --into BASELINE           # current Context is INCOMING
 mem meld --from INCOMING
+
+# Symmetric: two peers produce an explicit result
+mem meld LEFT_PEER RIGHT_PEER RESULT
+mem meld LEFT_PEER RIGHT_PEER --to RESULT
 ```
 
 Both save a resumable relation ledger and workbench, accept issue-scoped or
@@ -429,7 +430,7 @@ authority policy, provider contract, and session.
 
 | Mode | Inputs | Authority contract | Target | Representative case | Current status |
 | --- | --- | --- | --- | --- | --- |
-| **Directional** | Prepared incoming evidence and an existing baseline, each optionally widened to explicit lexical descendants | The baseline is preserved except where accepted incoming evidence explicitly extends or corrects it; every changed Memory retains an exact B owner | The baseline scope's next state | A physical-card clarification changes student guidance; a parking correction updates an existing closure Memory | Implemented both as atomize's ephemeral issue projection and as public Context-to-Context `mem meld [INCOMING] --into BASELINE`; `mem meld --from INCOMING` is equivalent when the baseline is current |
+| **Directional** | Prepared incoming evidence and an existing baseline, each optionally widened to explicit lexical descendants | The baseline is preserved except where accepted incoming evidence explicitly extends or corrects it; every changed Memory retains an exact B owner | The baseline scope's next state | A physical-card clarification changes student guidance; a parking correction updates an existing closure Memory | Implemented both as atomize's ephemeral issue projection and as public Context-to-Context `mem meld INCOMING BASELINE`; omitting BASELINE or using `--from INCOMING` uses the current baseline |
 | **Symmetric** | Two independent Context frames, each optionally including its readable lexical descendants, treated as peers | Neither source wins by default; source-specific scope and unresolved differences remain visible | A distinct new result Context | Two co-advisors' proposal-writing policies | Reuses or prepares an exact saved ordered Compare basis |
 
 `atomic` and `batch` are not additional modes. The semantic call always
@@ -463,22 +464,22 @@ and detail.
 
 Public `mem meld` accepts two bounded direct-Memory Context frames under one of
 two explicit authority contracts. For Task 2, both sources have the `PEER`
-role and the active empty Context is the result target:
+role and a third positional operand names the result target:
 
 ```text
-mem init jingyue/proposal-writing-policy
-mem meld ian/proposal-writing-policy damien/proposal-writing-policy
+mem meld ian/proposal-writing-policy damien/proposal-writing-policy \
+  jingyue/proposal-writing-policy
 ```
 
 For recurring intake, the first frame is read-only `INCOMING`, the second is
 the authoritative `BASELINE`, and that same baseline is the mutation target:
 
 ```text
-# current Context supplies INCOMING
-mem meld --into campus/wiki
+# current Context supplies BASELINE
+mem meld construction-updates
 
 # or name both roles explicitly
-mem meld construction-updates --into campus/wiki
+mem meld construction-updates campus/wiki
 ```
 
 The baseline may already contain Memories. Its exact bound snapshot is
@@ -489,7 +490,7 @@ The incoming Context is never mutated.
 current Context is the baseline. It resolves `INCOMING` against the one current
 Context snapshot captured at command start, then immediately uses the same
 ordered frame pair, target-bound storage key, and provider contract as
-`mem meld INCOMING --into BASELINE`. Durable guidance and receipts therefore
+`mem meld INCOMING BASELINE`. Durable guidance and receipts therefore
 remain location-independent. Combining `--from` with `--into` or positional
 Contexts is rejected instead of inventing a third authority contract.
 
@@ -521,8 +522,8 @@ Initial Context-to-Context analysis is intentionally bounded:
 - read direct owned Memories only;
 - keep both peer sources read-only in symmetric mode and keep `INCOMING`
   read-only in directional mode;
-- require the active target to differ from both sources and be empty for the
-  first symmetric implementation;
+- require the explicit symmetric Result to differ from both sources and remain
+  empty until Apply;
 - require directional `INCOMING` and `BASELINE` to be distinct while binding
   the baseline as both source frame and target;
 - bind source and target Context UIDs, names, complete direct-record digests,
@@ -534,29 +535,27 @@ Initial Context-to-Context analysis is intentionally bounded:
   explicitly in version 1 rather than silently omitting them or treating their
   targets as direct evidence.
 
-### Why directional uses `--into`, not `--to`
+### Why arity carries the primary authority shape
 
-The option names reserve different semantic shapes:
+The positional forms expose the complete role graph:
 
 ```text
-mem meld [INCOMING] --into BASELINE
-mem meld LEFT_PEER RIGHT_PEER --to RESULT_CONTEXT  # future
+mem meld INCOMING BASELINE
+mem meld LEFT_PEER RIGHT_PEER RESULT_CONTEXT
 ```
 
-`--into` says that one existing Context is both the authoritative baseline and
-the only possible mutation target. It therefore communicates an asymmetric
-authority relation, not merely a destination path. When `INCOMING` is omitted,
-the current Context supplies that role; spelling it explicitly does not change
-the contract. `--from` reverses only which role is omitted at the CLI boundary:
-the current Context supplies `BASELINE`, and the operation is normalized back
-to the same `INCOMING --into BASELINE` route.
+Two operands always mean asymmetric `INCOMING → BASELINE`; storage state never
+changes that parse. A third operand adds a distinct symmetric Result, so the
+derived `PEER A + PEER B → RESULT C` shape cannot hide the current Context as
+an input. One operand uses the current Context only as the omitted directional
+BASELINE.
 
-`--to` is deliberately left unused for now. Its future symmetric meaning is a
-distinct result Context selected explicitly rather than through the current
-Context. Neither peer would become authoritative or mutable. Making `--to` an
-alias for `--into` would collapse the difference between “revise this
-baseline” and “write a peer result there,” leaving no unambiguous syntax for
-the latter.
+`--into BASELINE` remains an explicit directional alias because the existing
+Context is authoritative and is the only possible mutation target. `--to RESULT`
+remains an explicit symmetric alias because neither peer becomes
+authoritative or mutable. `--from INCOMING` reverses only which directional
+role is omitted at the CLI boundary. Saved commands normalize to positional
+`INCOMING BASELINE` or `PEER_A PEER_B --to RESULT` forms.
 
 Context operands follow the shared existing-Context locator contract. Bare
 names are canonical global names. Only `.`, `..`, `./...`, and `../...` opt
@@ -564,7 +563,9 @@ into lexical lookup relative to the slash-delimited current Context name; they
 do not inspect shell directories or embedding relations. The command captures
 the current name once and resolves all relative operands against that same
 snapshot before it binds identities, checks equality, or opens a session.
-The shared safety and compatibility rationale is recorded in
+Symmetric Result operands are the exception: because the Result may be new,
+they are exact names rather than existing-Context locators. The shared source
+locator safety and compatibility rationale is recorded in
 [`context-locator-design-rationale.md`](context-locator-design-rationale.md).
 
 Relations should be represented as groups of source aliases, not as a
@@ -1511,32 +1512,34 @@ mem atomize --context CONTEXT --reply TEXT
 mem atomize --context CONTEXT --accept-grounding
 
 # Implemented Context-to-Context symmetric meld
-mem init RESULT_CONTEXT
-mem meld PEER_A PEER_B
-mem meld PEER_A PEER_B --issue N --choice N --comment TEXT
-mem meld PEER_A PEER_B --comment WHOLE_SET_GUIDANCE
-mem meld PEER_A PEER_B --preserve-all
-mem meld PEER_A PEER_B --defer-all
-mem meld PEER_A PEER_B --expand ISSUE
-mem meld PEER_A PEER_B --restart
-mem meld PEER_A PEER_B --accept
+mem meld PEER_A PEER_B RESULT_CONTEXT
+mem meld PEER_A PEER_B --to RESULT_CONTEXT
+mem meld PEER_A PEER_B RESULT_CONTEXT --issue N --choice N --comment TEXT
+mem meld PEER_A PEER_B RESULT_CONTEXT --comment WHOLE_SET_GUIDANCE
+mem meld PEER_A PEER_B RESULT_CONTEXT --preserve-all
+mem meld PEER_A PEER_B RESULT_CONTEXT --defer-all
+mem meld PEER_A PEER_B RESULT_CONTEXT --expand ISSUE
+mem meld PEER_A PEER_B RESULT_CONTEXT --restart
+mem meld PEER_A PEER_B RESULT_CONTEXT --accept
 
 # Implemented Context-to-Context directional meld
+mem meld INCOMING_CONTEXT  # current Context is BASELINE_CONTEXT
+mem meld INCOMING_CONTEXT BASELINE_CONTEXT
 mem meld --into BASELINE_CONTEXT
 mem meld INCOMING_CONTEXT --into BASELINE_CONTEXT
 mem meld --from INCOMING_CONTEXT  # current Context is BASELINE_CONTEXT
-mem meld INCOMING_CONTEXT --into BASELINE_CONTEXT --issue N --choice N --comment TEXT
-mem meld INCOMING_CONTEXT --into BASELINE_CONTEXT --comment WHOLE_SET_GUIDANCE
-mem meld INCOMING_CONTEXT --into BASELINE_CONTEXT --preserve-all
-mem meld INCOMING_CONTEXT --into BASELINE_CONTEXT --defer-all
-mem meld INCOMING_CONTEXT --into BASELINE_CONTEXT --expand ISSUE
-mem meld INCOMING_CONTEXT --into BASELINE_CONTEXT --restart
-mem meld INCOMING_CONTEXT --into BASELINE_CONTEXT --accept
+mem meld INCOMING_CONTEXT BASELINE_CONTEXT --issue N --choice N --comment TEXT
+mem meld INCOMING_CONTEXT BASELINE_CONTEXT --comment WHOLE_SET_GUIDANCE
+mem meld INCOMING_CONTEXT BASELINE_CONTEXT --preserve-all
+mem meld INCOMING_CONTEXT BASELINE_CONTEXT --defer-all
+mem meld INCOMING_CONTEXT BASELINE_CONTEXT --expand ISSUE
+mem meld INCOMING_CONTEXT BASELINE_CONTEXT --restart
+mem meld INCOMING_CONTEXT BASELINE_CONTEXT --accept
 ```
 
 The plain symmetric or directional command opens the arrow-key workbench in a
 terminal and prints a complete snapshot outside a TTY. Omitting the
-directional incoming operand uses the current Context; naming it explicitly
+directional baseline operand uses the current Context; naming it explicitly
 creates the same role binding. Repeating the same resolved command resumes
 without a provider call. An issue choice/comment, an unscoped `--comment`, and
 `--preserve-all` each cause one new aggregate semantic call. `--expand`,
@@ -1555,9 +1558,8 @@ analysis leaves the previous session intact.
 Directional acceptance applies only material `EDIT` and `ADD` operations to
 the baseline and creates one checkpoint. A ready zero-operation assessment
 also creates one checkpoint that records the resolved no-change decision.
-Neither case mutates the incoming Context. `--to` remains deliberately absent:
-it is reserved for a future explicit destination of a symmetric meld rather
-than accepted as an alias for the authority-bearing `--into`.
+Neither case mutates the incoming Context. `--to` is deliberately symmetric
+and cannot alias the authority-bearing directional `--into`.
 
 An eventual `mem ingest --paste` may orchestrate raw intake, atomization, and a
 directional meld. Import owns the run manifest and resumability; it must call

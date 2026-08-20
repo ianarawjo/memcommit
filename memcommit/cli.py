@@ -174,12 +174,11 @@ app.command(
 app.command(
     "meld",
     help=operation_summary("meld"),
-    # Keep the concise catalog summary canonical while preserving one
-    # searchable, unwrapped statement of the directional CLI contract.
     epilog=(
-        "Combine two Contexts and resolve their differences. Directional "
-        "--from is normalized to INCOMING --into BASELINE; --into uses the "
-        "authoritative BASELINE."
+        "Positional forms: 'mem meld INCOMING' uses the current BASELINE; "
+        "'mem meld INCOMING BASELINE' is directional; and "
+        "'mem meld PEER_A PEER_B RESULT_C' is symmetric. --into, --from, "
+        "and --to remain explicit aliases."
     ),
 )(meld.cmd)
 app.command(

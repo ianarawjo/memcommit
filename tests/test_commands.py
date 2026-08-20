@@ -407,28 +407,27 @@ class TestHelp:
 
         assert meld.exit_code == 0
         meld_help = " ".join(meld.output.split())
-        assert "Combine two Contexts and resolve their differences" in meld_help
+        assert "incorporate an incoming Context" in meld_help
         assert "separate Result" in meld_help
-        assert "authoritative BASELINE" in meld_help
+        assert "mem meld INCOMING BASELINE" in meld_help
+        assert "mem meld PEER_A PEER_B RESULT_C" in meld_help
         assert "--atomic" not in meld_help
         assert "--into" in meld_help
 
         forms = help_inventory.COMMAND_FORMS["meld"]
         assert "mem meld (enter the interactive Meld session launcher)" in forms
         assert (
-            "mem meld [context1] [context2] "
-            "(symmetric into current empty Context)"
+            "mem meld [incoming_context] [baseline_context] (directional)"
         ) in forms
         assert (
-            "mem meld [incoming_context] --into [baseline_context] (directional)"
-            in forms
+            "mem meld [peer_a] [peer_b] [result_context] (symmetric Result)" in forms
         )
         assert (
-            "mem meld team/draft-a team/draft-b --to team/merged-draft "
+            "mem meld team/draft-a team/draft-b team/merged-draft "
             "(example: symmetric Result)"
         ) in forms
         assert (
-            "mem meld team/proposed-changes --into team/current-policy "
+            "mem meld team/proposed-changes team/current-policy "
             "(example: directional Baseline)"
         ) in forms
         assert (
@@ -443,7 +442,7 @@ class TestHelp:
             form for form in forms if "--to [result_context]" in form
         )
         assert help_inventory._selectable_form_line(result_form) == (
-            "mem meld [context1] [context2] --to [result_context]"
+            "mem meld [peer_a] [peer_b] --to [result_context]"
         )
 
     def test_forms_name_editable_values_by_semantic_role(self):

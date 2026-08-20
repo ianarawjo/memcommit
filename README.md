@@ -402,14 +402,13 @@ The implemented meld workflows have different entry points:
 - one-issue directional grounding, informally called atomic meld:
   `mem atomize --context CONTEXT --evaluate ISSUE`;
 - directional Context intake into an authoritative baseline:
-  `mem meld --into BASELINE` when the current Context is incoming, or
-  `mem meld INCOMING --into BASELINE` when both roles are explicit. When the
-  current Context is the baseline, `mem meld --from INCOMING` is equivalent
-  convenience grammar;
+  `mem meld INCOMING` when the current Context is the baseline, or
+  `mem meld INCOMING BASELINE` when both roles are explicit. The `--into` and
+  `--from` forms remain directional aliases;
 - symmetric combination of two equal-authority Contexts:
-  create an empty result Context, then run `mem meld LEFT_PEER RIGHT_PEER`.
+  `mem meld LEFT_PEER RIGHT_PEER RESULT_CONTEXT`, with `--to RESULT_CONTEXT`
+  as an equivalent alias.
 
 See [`docs/mem-meld-usage.md`](docs/mem-meld-usage.md) for the canonical
 commands, interactive controls, acceptance boundaries, and the deliberate
-distinction between directional `--into` and the reserved future symmetric
-`--to` destination.
+distinction between a directional baseline and an explicit symmetric Result.

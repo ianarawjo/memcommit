@@ -69,7 +69,6 @@ def test_meld_catalog_is_recently_modified_and_grouped_by_target(
         "mem",
         "meld",
         "catalog/newer/incoming",
-        "--into",
         "catalog/newer/baseline",
     )
 
@@ -98,14 +97,43 @@ def test_directional_meld_catalog_preserves_both_descendant_ranges(
         "mem",
         "meld",
         "catalog/scoped/incoming",
-        "--left-descendants",
-        "--into",
         "catalog/scoped/baseline",
+        "--left-descendants",
         "--right-descendants",
     )
     assert _session_command(session) == (
-        "mem meld catalog/scoped/incoming --left-descendants "
-        "--into catalog/scoped/baseline --right-descendants"
+        "mem meld catalog/scoped/incoming catalog/scoped/baseline "
+        "--left-descendants --right-descendants"
+    )
+
+
+def test_symmetric_meld_catalog_reopens_with_explicit_result(
+    isolated_store,
+) -> None:
+    store = MemoryStore()
+    left = ops.init("catalog/symmetric/left")
+    right = ops.init("catalog/symmetric/right")
+    target = ops.init("catalog/symmetric/result")
+    ops.add(left, "Left peer knowledge.")
+    ops.add(right, "Right peer knowledge.")
+    for context in (left, right, target):
+        store.save(context)
+    session = MeldSession.create_symmetric(left, right, target)
+    store.save_meld_session(session, expected_session_digest=None)
+
+    entry = list_meld_session_catalog(store)[0]
+
+    assert entry.reopen_argv == (
+        "mem",
+        "meld",
+        left.name,
+        right.name,
+        "--to",
+        target.name,
+    )
+    assert _session_command(session) == (
+        "mem meld catalog/symmetric/left catalog/symmetric/right "
+        "--to catalog/symmetric/result"
     )
 
 

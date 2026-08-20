@@ -582,6 +582,7 @@ def test_symmetric_meld_reuses_scoped_compare_descendants(isolated_store):
             "meld",
             left.name,
             right.name,
+            target.name,
             "-r",
             "--preserve-all",
         ],
@@ -593,6 +594,7 @@ def test_symmetric_meld_reuses_scoped_compare_descendants(isolated_store):
             "meld",
             left.name,
             right.name,
+            target.name,
             "-r",
             "--accept",
         ],
@@ -1812,7 +1814,7 @@ def test_context_meld_one_shot_reply_resume_and_provider_free_apply(
 
     initial = runner.invoke(
         app,
-        ["meld", left.name, right.name],
+        ["meld", left.name, right.name, target.name],
     )
     assert initial.exit_code == 0, initial.output
     assert len(provider.payloads) == 0
@@ -1846,7 +1848,7 @@ def test_context_meld_one_shot_reply_resume_and_provider_free_apply(
         for option in issue.options
     ] == [option.uid for issue in comparison.issues for option in issue.options]
 
-    resumed = runner.invoke(app, ["meld", left.name, right.name])
+    resumed = runner.invoke(app, ["meld", left.name, right.name, target.name])
     assert resumed.exit_code == 0, resumed.output
     assert len(provider.payloads) == 0
     assert "Resumed without calling the semantic provider" in resumed.output
@@ -1857,6 +1859,7 @@ def test_context_meld_one_shot_reply_resume_and_provider_free_apply(
             "meld",
             left.name,
             right.name,
+            target.name,
             "--issue",
             "1",
             "--choice",
@@ -1891,7 +1894,7 @@ def test_context_meld_one_shot_reply_resume_and_provider_free_apply(
 
     applied = runner.invoke(
         app,
-        ["meld", left.name, right.name, "--accept"],
+        ["meld", left.name, right.name, target.name, "--accept"],
     )
     assert applied.exit_code == 0, applied.output
     assert len(provider.payloads) == 1
@@ -1925,7 +1928,7 @@ def test_context_meld_one_shot_reply_resume_and_provider_free_apply(
 
     second_accept = runner.invoke(
         app,
-        ["meld", left.name, right.name, "--accept"],
+        ["meld", left.name, right.name, target.name, "--accept"],
     )
     assert second_accept.exit_code == 0
     assert "no duplicate checkpoint" in second_accept.output
@@ -1942,13 +1945,17 @@ def test_undo_and_redo_restore_meld_application_state_as_one_operation(
     provider = Task2Provider()
     _patch_provider(monkeypatch, provider)
 
-    assert runner.invoke(app, ["meld", left.name, right.name]).exit_code == 0
+    assert (
+        runner.invoke(app, ["meld", left.name, right.name, target.name]).exit_code
+        == 0
+    )
     grounded = runner.invoke(
         app,
         [
             "meld",
             left.name,
             right.name,
+            target.name,
             "--issue",
             "1",
             "--choice",
@@ -1958,7 +1965,10 @@ def test_undo_and_redo_restore_meld_application_state_as_one_operation(
         ],
     )
     assert grounded.exit_code == 0, grounded.output
-    applied = runner.invoke(app, ["meld", left.name, right.name, "--accept"])
+    applied = runner.invoke(
+        app,
+        ["meld", left.name, right.name, target.name, "--accept"],
+    )
     assert applied.exit_code == 0, applied.output
     applied_session = store.load_meld_session(target.uid)
     assert applied_session.state == "APPLIED"
@@ -2011,7 +2021,7 @@ def test_symmetric_meld_creates_missing_compare_without_switching_current(
     )
     current_before = store.current_context_name()
 
-    result = runner.invoke(app, ["meld", left.name, right.name])
+    result = runner.invoke(app, ["meld", left.name, right.name, target.name])
 
     assert result.exit_code == 0, result.output
     assert len(provider.payloads) == 1
@@ -2047,7 +2057,7 @@ def test_symmetric_meld_refreshes_stale_compare(
     )
     store.save(changed)
 
-    stale = runner.invoke(app, ["meld", left.name, right.name])
+    stale = runner.invoke(app, ["meld", left.name, right.name, target.name])
 
     assert stale.exit_code == 0, stale.output
     assert len(provider.payloads) == 1
@@ -2073,7 +2083,7 @@ def test_symmetric_meld_creates_exact_order_when_only_reverse_exists(
         lambda: provider,
     )
 
-    result = runner.invoke(app, ["meld", left.name, right.name])
+    result = runner.invoke(app, ["meld", left.name, right.name, target.name])
 
     assert result.exit_code == 0, result.output
     assert len(provider.payloads) == 1
@@ -2174,9 +2184,7 @@ def test_directional_meld_from_uses_current_baseline_and_canonical_session(
     assert (
         "INCOMING test/update/from → BASELINE / TARGET test/update/to"
     ) in shorthand.output
-    assert (
-        "mem meld test/update/from --into test/update/to --accept" in shorthand.output
-    )
+    assert "mem meld test/update/from test/update/to --accept" in shorthand.output
     first_session = store.load_meld_session(baseline.uid)
     assert first_session is not None
     assert [frame.context_name for frame in first_session.frames] == [
@@ -2591,18 +2599,14 @@ def test_zero_change_directional_meld_recovers_checkpoint_after_receipt_failure(
     assert len(provider.payloads) == 1
 
 
-def test_directional_meld_grammar_help_and_to_boundary(
+def test_meld_positional_grammar_and_explicit_alias_boundaries(
     isolated_store,
     monkeypatch,
 ):
     store = MemoryStore()
     incoming, baseline, _, _ = _directional_contexts(store)
-
-    class UnexpectedProvider:
-        def complete(self, *args, **kwargs):
-            raise AssertionError("Invalid meld grammar called the provider.")
-
-    _patch_provider(monkeypatch, UnexpectedProvider())
+    provider = DirectionalProvider()
+    _patch_provider(monkeypatch, provider)
 
     help_result = runner.invoke(app, ["meld", "--help"])
     assert help_result.exit_code == 0, help_result.output
@@ -2610,15 +2614,16 @@ def test_directional_meld_grammar_help_and_to_boundary(
     assert "--from" in help_result.output
     assert "--to" in help_result.output
     normalized_help = " ".join(help_result.output.replace("│", " ").split())
-    assert "authoritative BASELINE" in normalized_help
-    assert "normalized to INCOMING" in normalized_help
+    assert "[LEFT] [RIGHT] [RESULT]" in normalized_help
+    assert "mem meld INCOMING BASELINE" in normalized_help
+    assert "mem meld PEER_A PEER_B RESULT_C" in normalized_help
 
     missing_peers = runner.invoke(
         app,
         ["meld", "--to", baseline.name],
     )
     assert missing_peers.exit_code == 1
-    assert "requires LEFT and RIGHT Contexts" in missing_peers.output
+    assert "requires PEER A and PEER B before RESULT C" in missing_peers.output
 
     too_many = runner.invoke(
         app,
@@ -2627,21 +2632,29 @@ def test_directional_meld_grammar_help_and_to_boundary(
     assert too_many.exit_code == 1
     assert "accepts at most one positional INCOMING" in too_many.output
 
-    missing_peer = runner.invoke(app, ["meld", incoming.name])
-    assert missing_peer.exit_code == 1
-    assert "requires LEFT and RIGHT Contexts" in missing_peer.output
+    store.set_current(baseline.name)
+    one_operand = runner.invoke(app, ["meld", incoming.name])
+    assert one_operand.exit_code == 0, one_operand.output
+    assert f"INCOMING {incoming.name} → BASELINE / TARGET {baseline.name}" in (
+        one_operand.output
+    )
+    assert len(provider.payloads) == 1
+
+    two_operands = runner.invoke(app, ["meld", incoming.name, baseline.name])
+    assert two_operands.exit_code == 0, two_operands.output
+    assert len(provider.payloads) == 1
 
     same_context = runner.invoke(
         app,
-        ["meld", incoming.name, "--into", incoming.name],
+        ["meld", incoming.name, incoming.name],
     )
     assert same_context.exit_code == 1
-    assert "distinct" in same_context.output
+    assert "both resolved" in same_context.output
     assert "INCOMING" in same_context.output
     assert "BASELINE" in same_context.output
 
 
-def test_symmetric_meld_to_creates_empty_result_without_switching(
+def test_symmetric_meld_third_operand_creates_empty_result_without_switching(
     isolated_store,
 ):
     store = MemoryStore()
@@ -2650,7 +2663,7 @@ def test_symmetric_meld_to_creates_empty_result_without_switching(
 
     result = runner.invoke(
         app,
-        ["meld", left.name, right.name, "--to", result_name],
+        ["meld", left.name, right.name, result_name],
     )
 
     assert result.exit_code == 0, result.output
@@ -2710,20 +2723,47 @@ def test_symmetric_meld_to_creates_missing_basis_and_result_without_switching(
     assert session.comparison_seed.analysis.uid == analysis.uid
 
 
-def test_symmetric_meld_to_never_adopts_existing_or_leaves_failed_target(
+def test_symmetric_meld_explicit_result_adopts_only_empty_or_exact_session(
+    isolated_store,
+):
+    store = MemoryStore()
+    left, right, existing = _task2_contexts(store)
+
+    adopted = runner.invoke(
+        app,
+        ["meld", left.name, right.name, existing.name],
+    )
+    assert adopted.exit_code == 0, adopted.output
+    session = store.load_meld_session(existing.uid)
+    assert session is not None
+    assert session.mode == "SYMMETRIC"
+    assert session.target.context_name == existing.name
+
+    resumed = runner.invoke(
+        app,
+        ["meld", left.name, right.name, "--to", existing.name],
+    )
+    assert resumed.exit_code == 0, resumed.output
+    assert store.load_meld_session(existing.uid).uid == session.uid
+
+    populated = ops.init("task-2/participant/populated-result")
+    ops.add(populated, "Existing unrelated result content.")
+    store.save(populated)
+    occupied = runner.invoke(
+        app,
+        ["meld", left.name, right.name, populated.name],
+    )
+    assert occupied.exit_code == 1
+    assert "Result must remain empty" in occupied.output
+    assert store.load_meld_session(populated.uid) is None
+
+
+def test_symmetric_meld_failed_basis_leaves_new_result_absent(
     isolated_store,
     monkeypatch,
 ):
     store = MemoryStore()
-    left, right, existing = _task2_contexts(store, with_comparison=False)
-
-    occupied = runner.invoke(
-        app,
-        ["meld", left.name, right.name, "--to", existing.name],
-    )
-    assert occupied.exit_code == 1
-    assert "already exists" in occupied.output
-    assert store.load_meld_session(existing.uid) is None
+    left, right, _ = _task2_contexts(store, with_comparison=False)
 
     class FailingCompareProvider:
         def complete(self, *args, **kwargs):
@@ -2773,7 +2813,7 @@ def test_directional_meld_from_rejects_ambiguous_or_missing_baseline(
 
     same_context = runner.invoke(app, ["meld", "--from", "."])
     assert same_context.exit_code == 1
-    assert "INCOMING and BASELINE must be distinct" in same_context.output
+    assert "different INCOMING and BASELINE" in same_context.output
 
     store._write_state({"current": None})
     missing_baseline = runner.invoke(
@@ -2795,7 +2835,7 @@ def test_defer_all_is_provider_free_and_does_not_mutate_target(
     assert (
         runner.invoke(
             app,
-            ["meld", left.name, right.name],
+            ["meld", left.name, right.name, target.name],
         ).exit_code
         == 0
     )
@@ -2803,7 +2843,7 @@ def test_defer_all_is_provider_free_and_does_not_mutate_target(
 
     deferred = runner.invoke(
         app,
-        ["meld", left.name, right.name, "--defer-all"],
+        ["meld", left.name, right.name, target.name, "--defer-all"],
     )
 
     assert deferred.exit_code == 0
@@ -2821,11 +2861,14 @@ def test_deferred_session_restart_creates_exact_ordered_compare_basis(
     left, right, target = _task2_contexts(store)
     provider = Task2Provider()
     _patch_provider(monkeypatch, provider)
-    assert runner.invoke(app, ["meld", left.name, right.name]).exit_code == 0
+    assert (
+        runner.invoke(app, ["meld", left.name, right.name, target.name]).exit_code
+        == 0
+    )
     assert (
         runner.invoke(
             app,
-            ["meld", left.name, right.name, "--defer-all"],
+            ["meld", left.name, right.name, target.name, "--defer-all"],
         ).exit_code
         == 0
     )
@@ -2836,7 +2879,7 @@ def test_deferred_session_restart_creates_exact_ordered_compare_basis(
     _patch_provider(monkeypatch, compare_provider)
     restarted = runner.invoke(
         app,
-        ["meld", right.name, left.name, "--restart"],
+        ["meld", right.name, left.name, target.name, "--restart"],
     )
 
     assert restarted.exit_code == 0, restarted.output
@@ -2860,12 +2903,15 @@ def test_symmetric_session_resumes_with_peer_arguments_reversed(
     monkeypatch,
 ):
     store = MemoryStore()
-    left, right, _ = _task2_contexts(store)
+    left, right, target = _task2_contexts(store)
     provider = Task2Provider()
     _patch_provider(monkeypatch, provider)
-    assert runner.invoke(app, ["meld", left.name, right.name]).exit_code == 0
+    assert (
+        runner.invoke(app, ["meld", left.name, right.name, target.name]).exit_code
+        == 0
+    )
 
-    resumed = runner.invoke(app, ["meld", right.name, left.name])
+    resumed = runner.invoke(app, ["meld", right.name, left.name, target.name])
 
     assert resumed.exit_code == 0, resumed.output
     assert "Resumed without calling the semantic provider" in resumed.output
@@ -2877,14 +2923,17 @@ def test_revision_flags_require_a_semantic_comment_or_choice(
     monkeypatch,
 ):
     store = MemoryStore()
-    left, right, _ = _task2_contexts(store)
+    left, right, target = _task2_contexts(store)
     provider = Task2Provider()
     _patch_provider(monkeypatch, provider)
-    assert runner.invoke(app, ["meld", left.name, right.name]).exit_code == 0
+    assert (
+        runner.invoke(app, ["meld", left.name, right.name, target.name]).exit_code
+        == 0
+    )
 
     result = runner.invoke(
         app,
-        ["meld", left.name, right.name, "--revision", "correct"],
+        ["meld", left.name, right.name, target.name, "--revision", "correct"],
     )
 
     assert result.exit_code == 2
@@ -2967,7 +3016,7 @@ def test_v3_preserve_all_materializes_provider_free_and_remains_non_applying(
     assert (
         runner.invoke(
             app,
-            ["meld", left.name, right.name],
+            ["meld", left.name, right.name, target.name],
         ).exit_code
         == 0
     )
@@ -2975,7 +3024,7 @@ def test_v3_preserve_all_materializes_provider_free_and_remains_non_applying(
 
     result = runner.invoke(
         app,
-        ["meld", left.name, right.name, "--preserve-all"],
+        ["meld", left.name, right.name, target.name, "--preserve-all"],
     )
 
     assert result.exit_code == 0, result.output
@@ -3113,7 +3162,10 @@ def test_source_change_during_provider_call_is_rejected_before_session_save(
 
     provider = MutatingProvider()
     _patch_provider(monkeypatch, provider)
-    initial = runner.invoke(app, ["meld", left.name, right.name])
+    initial = runner.invoke(
+        app,
+        ["meld", left.name, right.name, target.name],
+    )
     assert initial.exit_code == 0, initial.output
     saved_before = store.load_meld_session(target.uid)
     assert saved_before is not None
@@ -3125,6 +3177,7 @@ def test_source_change_during_provider_call_is_rejected_before_session_save(
             "meld",
             left.name,
             right.name,
+            target.name,
             "--issue",
             "1",
             "--choice",
@@ -3151,7 +3204,10 @@ def test_source_is_rechecked_under_lock_at_the_target_mutation_boundary(
     left, right, target = _task2_contexts(store)
     provider = Task2Provider()
     _patch_provider(monkeypatch, provider)
-    assert runner.invoke(app, ["meld", left.name, right.name]).exit_code == 0
+    assert (
+        runner.invoke(app, ["meld", left.name, right.name, target.name]).exit_code
+        == 0
+    )
     assert (
         runner.invoke(
             app,
@@ -3159,6 +3215,7 @@ def test_source_is_rechecked_under_lock_at_the_target_mutation_boundary(
                 "meld",
                 left.name,
                 right.name,
+                target.name,
                 "--issue",
                 "1",
                 "--choice",
@@ -3186,7 +3243,7 @@ def test_source_is_rechecked_under_lock_at_the_target_mutation_boundary(
     monkeypatch.setattr(MemoryStore, "save_meld_target", mutate_then_save)
     applied = runner.invoke(
         app,
-        ["meld", left.name, right.name, "--accept"],
+        ["meld", left.name, right.name, target.name, "--accept"],
     )
 
     assert applied.exit_code == 1
@@ -3203,7 +3260,10 @@ def test_accept_recovers_checkpoint_after_receipt_save_failure(
     left, right, target = _task2_contexts(store)
     provider = Task2Provider()
     _patch_provider(monkeypatch, provider)
-    assert runner.invoke(app, ["meld", left.name, right.name]).exit_code == 0
+    assert (
+        runner.invoke(app, ["meld", left.name, right.name, target.name]).exit_code
+        == 0
+    )
     assert (
         runner.invoke(
             app,
@@ -3211,6 +3271,7 @@ def test_accept_recovers_checkpoint_after_receipt_save_failure(
                 "meld",
                 left.name,
                 right.name,
+                target.name,
                 "--issue",
                 "1",
                 "--choice",
@@ -3237,7 +3298,7 @@ def test_accept_recovers_checkpoint_after_receipt_save_failure(
     )
     interrupted = runner.invoke(
         app,
-        ["meld", left.name, right.name, "--accept"],
+        ["meld", left.name, right.name, target.name, "--accept"],
     )
     assert interrupted.exit_code == 1
     assert len(store.list_checkpoints(target.name)) == 1
@@ -3248,7 +3309,7 @@ def test_accept_recovers_checkpoint_after_receipt_save_failure(
 
     recovered = runner.invoke(
         app,
-        ["meld", left.name, right.name, "--accept"],
+        ["meld", left.name, right.name, target.name, "--accept"],
     )
 
     assert recovered.exit_code == 0, recovered.output
@@ -3265,7 +3326,10 @@ def test_applied_accept_rejects_a_target_that_no_longer_matches_receipt(
     left, right, target = _task2_contexts(store)
     provider = Task2Provider()
     _patch_provider(monkeypatch, provider)
-    assert runner.invoke(app, ["meld", left.name, right.name]).exit_code == 0
+    assert (
+        runner.invoke(app, ["meld", left.name, right.name, target.name]).exit_code
+        == 0
+    )
     assert (
         runner.invoke(
             app,
@@ -3273,6 +3337,7 @@ def test_applied_accept_rejects_a_target_that_no_longer_matches_receipt(
                 "meld",
                 left.name,
                 right.name,
+                target.name,
                 "--issue",
                 "1",
                 "--choice",
@@ -3286,7 +3351,7 @@ def test_applied_accept_rejects_a_target_that_no_longer_matches_receipt(
     assert (
         runner.invoke(
             app,
-            ["meld", left.name, right.name, "--accept"],
+            ["meld", left.name, right.name, target.name, "--accept"],
         ).exit_code
         == 0
     )
@@ -3302,7 +3367,7 @@ def test_applied_accept_rejects_a_target_that_no_longer_matches_receipt(
 
     repeated = runner.invoke(
         app,
-        ["meld", left.name, right.name, "--accept"],
+        ["meld", left.name, right.name, target.name, "--accept"],
     )
 
     assert repeated.exit_code == 1

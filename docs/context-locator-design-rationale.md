@@ -8,7 +8,9 @@ The first shared rollout is implemented in:
 mem switch LOCATOR
 mem compare --to LOCATOR
 mem compare --from LOCATOR --to LOCATOR
+mem meld LOCATOR
 mem meld LOCATOR LOCATOR
+mem meld LOCATOR LOCATOR RESULT_NAME
 mem meld [LOCATOR] --into LOCATOR
 mem meld --from LOCATOR
 mem impact [--from LOCATOR] [--to LOCATOR]
@@ -39,6 +41,11 @@ These commands use `memcommit.context_locator.resolve_context_locator` for
 their existing-Context operands, normally through the command-entry
 `ContextOperandSnapshot` that freezes one active-Context base for the complete
 invocation.
+
+`RESULT_NAME` in the three-operand Meld form is deliberately not an
+existing-Context locator: the symmetric Result may be created, so it remains
+an exact ordinary Context identifier. Only the two peer operands use this
+resolver.
 
 ## Motivation
 

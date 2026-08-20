@@ -1684,7 +1684,10 @@ def test_granted_compare_is_retained_and_seeds_local_symmetric_meld(
     assert meld_artifact is not None
     assert meld_artifact.retention == "RETAINED"
 
-    melded = runner.invoke(app, ["meld", source.name, wiki.name])
+    melded = runner.invoke(
+        app,
+        ["meld", source.name, wiki.name, target.name],
+    )
 
     assert melded.exit_code == 0, melded.output + melded.stderr
     assert "MEM MELD · SYMMETRIC" in melded.output
@@ -1693,7 +1696,10 @@ def test_granted_compare_is_retained_and_seeds_local_symmetric_meld(
     assert active.load_meld_session(target.uid) is not None
 
     delete_authority_grant(_grant.uid)
-    resumed = runner.invoke(app, ["meld", source.name, wiki.name])
+    resumed = runner.invoke(
+        app,
+        ["meld", source.name, wiki.name, target.name],
+    )
 
     assert resumed.exit_code == 0, resumed.output + resumed.stderr
     assert "MEM MELD · SYMMETRIC" in resumed.output

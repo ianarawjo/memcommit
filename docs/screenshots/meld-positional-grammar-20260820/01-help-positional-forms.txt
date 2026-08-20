@@ -1,0 +1,43 @@
+$ mem meld --help
+
+ Usage: mem meld [OPTIONS] [LEFT] [RIGHT] [RESULT]
+
+ Semantically incorporate an incoming Context into an authoritative baseline, or derive a separate Result from two equal peers.
+
+╭─ Arguments ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│   left        [LEFT]    Directional INCOMING A, or symmetric PEER A when RESULT/--to is supplied [default: None]                                                                 │
+│   right       [RIGHT]   Directional BASELINE B, or symmetric PEER B when RESULT/--to is supplied [default: None]                                                                 │
+│   result      [RESULT]  Symmetric RESULT C; equivalent to --to and created when absent [default: None]                                                                           │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --into                                   TEXT                  Explicit directional BASELINE alias for 'mem meld INCOMING BASELINE' [default: None]                              │
+│ --to                                     TEXT                  Symmetric RESULT C alias for the third positional Context; created when absent [default: None]                    │
+│ --from                                   TEXT                  Directional INCOMING alias for 'mem meld INCOMING' when the current Context supplies BASELINE [default: None]     │
+│ --issue                                  TEXT                  Issue number or unique uid prefix for this comment [default: None]                                                │
+│ --choice                                 INTEGER RANGE [x>=1]  Choose one displayed reading for --issue [default: None]                                                          │
+│ --comment                                TEXT                  Explain one issue or guide all remaining relations [default: None]                                                │
+│ --preserve-all                                                 Ask to retain every remaining source distinction                                                                  │
+│ --defer-all                                                    Close as review-only without applying the target                                                                  │
+│ --accept                                                       Apply the exact ready proposal without another model call                                                         │
+│ --restart                                                      Replace the saved review session after rechecking its bound Contexts                                              │
+│ --revision                               TEXT                  How the comment relates to prior dialogue [default: None]                                                         │
+│ --revises-turn                           TEXT                  Prior turn uid for a correction or retraction [default: None]                                                     │
+│ --expand                                 TEXT                  Render one issue's complete options provider-free [default: None]                                                 │
+│ --sessions                                                     Enter the interactive Meld session launcher                                                                       │
+│ --direct             -d                                        Use only the selected LEFT/INCOMING and RIGHT/BASELINE roots                                                      │
+│ --recursive          -r                                        Include descendants under both Meld roots                                                                         │
+│ --left-descendants       --left-only                           Include all readable descendants under PEER or INCOMING A [default: left-only]                                    │
+│ --right-descendants      --right-only                          Include readable descendants under PEER B, or writable owner Contexts under directional BASELINE B                │
+│                                                                [default: right-only]                                                                                             │
+│ --incoming-memory                        UID_OR_PREFIX         In directional Meld, select one INCOMING Memory while its neighbors remain non-actionable context [default: None] │
+│ --baseline-memory                        UID_OR_PREFIX         In directional Meld, restrict mutation to one BASELINE Memory while its neighbors remain non-actionable context   │
+│                                                                [default: None]                                                                                                   │
+│ --help               -h                                        Show this message and exit.                                                                                       │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+ Positional forms: 'mem meld INCOMING' uses the current BASELINE; 'mem meld INCOMING BASELINE' is directional; and 'mem meld PEER_A PEER_B RESULT_C' is symmetric. --into, --from,
+ and --to remain explicit aliases.
+
+
+
+CAPTURE PAUSE · HELP COMPLETE

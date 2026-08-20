@@ -9,8 +9,8 @@ associated tests together whenever hands-on testing changes the workflow.
 | User-facing term | Technical contract | Command | Status |
 |---|---|---|---|
 | **Atomic meld** *(informal shorthand)* | An issue-scoped directional meld embedded in atomize grounding | `mem atomize --evaluate ISSUE` | Implemented |
-| **Symmetric Context meld** | Two equal-authority Contexts combined into the current empty result Context | `mem meld LEFT_PEER RIGHT_PEER` | Implemented |
-| **Directional Context meld** | A read-only incoming Context melded into an authoritative baseline Context | Canonical: `mem meld [INCOMING] --into BASELINE`; current baseline convenience: `mem meld --from INCOMING` | Implemented |
+| **Directional Context meld** | A read-only incoming Context melded into an authoritative baseline Context | `mem meld INCOMING BASELINE`; omit `BASELINE` to use the current Context | Implemented |
+| **Symmetric Context meld** | Two equal-authority Contexts combined into an explicit Result Context | `mem meld PEER_A PEER_B RESULT_C`; `--to RESULT_C` is an alias | Implemented |
 
 “Atomic” identifies the issue where review begins. It does **not** promise
 that only one Memory can change. A clarification may require several
@@ -61,9 +61,9 @@ session or a bound Context changed while the picker was open, reopening fails
 and the list must be opened again. Browsing, cancellation, and provider-free
 snapshot rendering create no Context, checkpoint, or replacement session.
 
-Explicit forms such as `mem meld LEFT RIGHT`,
-`mem meld INCOMING --into BASELINE`, and its current-baseline convenience
-`mem meld --from INCOMING` retain their existing create-or-resume behavior.
+Explicit forms such as `mem meld INCOMING BASELINE`,
+`mem meld PEER_A PEER_B RESULT_C`, and their `--into`, `--from`, and `--to`
+aliases retain target-bound create-or-resume behavior.
 `--sessions` cannot be combined with Context operands or semantic, terminal,
 restart, or expansion actions.
 
@@ -159,24 +159,24 @@ Directional meld gives the two Contexts different roles:
 - `BASELINE` is the authoritative existing Context and the only mutation
   target.
 
-When the current Context is the incoming source, it can be omitted:
+The smallest form names INCOMING and uses the current Context as BASELINE:
 
 ```bash
-mem switch test/update/from
-mem meld --into ../to
+mem switch test/update/to
+mem meld ../from
 ```
 
-Here `../to` is resolved lexically from the current Context name
-`test/update/from`, so the exact operation is:
+Here `../from` is resolved lexically from the current Context name
+`test/update/to`, so the exact portable operation is:
 
 ```bash
-mem meld test/update/from --into test/update/to
+mem meld test/update/from test/update/to
 ```
 
-The explicit form is useful when the incoming Context is not current:
+Name both roles when the baseline is not current:
 
 ```bash
-mem meld INCOMING --into BASELINE
+mem meld INCOMING BASELINE
 ```
 
 When the Context currently being viewed is the baseline, `--from` supplies
@@ -189,9 +189,13 @@ mem meld --from ../advisor2
 
 This is convenience grammar for the same directional operation, not another
 Meld mode. The example is normalized to the portable route
-`mem meld task2/advisor2 --into task2/advisor1`; saved-session identity,
+`mem meld task2/advisor2 task2/advisor1`; saved-session identity,
 follow-up guidance, and application receipts use that canonical spelling.
 `--from` cannot be combined with `--into` or positional Contexts.
+
+`mem meld INCOMING --into BASELINE` remains an explicit alias. Likewise,
+`mem meld --into BASELINE` uses the current Context as INCOMING for
+compatibility. Positional `INCOMING BASELINE` is the canonical portable form.
 
 Bare names such as `campus/wiki` remain global Context names. Only `.`, `..`,
 `./...`, and `../...` opt into current-relative lookup. They describe the
@@ -220,7 +224,7 @@ authority-specific Directional issues and materialization over it:
 ```bash
 mem switch INCOMING
 mem compare --to BASELINE
-mem meld INCOMING --into BASELINE
+mem meld INCOMING BASELINE
 ```
 
 A present but stale Compare must be refreshed; it is not silently ignored. If
@@ -234,18 +238,18 @@ be comparison-backed.
 The shared issue and whole-set actions use the directional command prefix:
 
 ```bash
-mem meld INCOMING --into BASELINE \
+mem meld INCOMING BASELINE \
   --issue 1 \
   --choice 2 \
   --comment "Only vehicle access is closed; keep the stairwell open."
 
-mem meld INCOMING --into BASELINE \
+mem meld INCOMING BASELINE \
   --comment "Apply this scope to every related parking-access rule."
 
-mem meld INCOMING --into BASELINE --expand 1
-mem meld INCOMING --into BASELINE --preserve-all
-mem meld INCOMING --into BASELINE --defer-all
-mem meld INCOMING --into BASELINE --accept
+mem meld INCOMING BASELINE --expand 1
+mem meld INCOMING BASELINE --preserve-all
+mem meld INCOMING BASELINE --defer-all
+mem meld INCOMING BASELINE --accept
 ```
 
 `--preserve-all` respects the authority direction: it keeps the baseline
@@ -280,7 +284,7 @@ Use `--restart` only when intentionally replacing the baseline's saved meld
 session after its bound Contexts have been rechecked:
 
 ```bash
-mem meld INCOMING --into BASELINE --restart
+mem meld INCOMING BASELINE --restart
 ```
 
 Symmetric Context-to-Context Meld retains the direct-owned-Memory boundary.
@@ -290,29 +294,30 @@ applies accepted changes to that owner rather than flattening them into the
 root. Memory references remain unsupported. Query-only routes are never
 dereferenced or treated as ordinary Meld evidence or target owners.
 
-### Why `--into` is not `--to`
+### Why `--into` and `--to` remain distinct
 
 `--into` communicates authority and mutation: incoming evidence is considered
 against an existing baseline, and explicit acceptance may create that
 baseline's next state. It is intentionally not an alias for `--to`.
 
-`--to` is reserved for a different future shape:
+`--to` names the third frame of the symmetric shape:
 
 ```text
 mem meld LEFT_PEER RIGHT_PEER --to RESULT_CONTEXT
 ```
 
-That form would name a distinct result for a symmetric meld and would not make
+That form names a distinct result for a symmetric meld and does not make
 either peer authoritative. Reusing `--to` for directional mutation now would
-make those two contracts indistinguishable. Omitting `--to` retains the
-compatibility form in which the current empty Context is the result target.
+make those two contracts indistinguishable. The equivalent positional form is
+`mem meld LEFT_PEER RIGHT_PEER RESULT_CONTEXT`; there is no hidden current
+Result.
 
 ## Symmetric Context meld: combine two equal-authority Contexts
 
 ### 1. Start with explicit sources and a result
 
 ```bash
-mem meld LEFT_PEER RIGHT_PEER --to RESULT_CONTEXT
+mem meld LEFT_PEER RIGHT_PEER RESULT_CONTEXT
 ```
 
 Meld freezes the exact `LEFT_PEER → RIGHT_PEER` order and descendant flags.
@@ -328,14 +333,11 @@ form; it also leaves the current Context unchanged:
 mem compare --from LEFT_PEER --to RIGHT_PEER
 ```
 
-### 2. Compatibility form with an existing current result
-
-An existing empty current Context can still supply the result:
-
-```bash
-mem init RESULT_CONTEXT
-mem meld LEFT_PEER RIGHT_PEER
-```
+`--to RESULT_CONTEXT` is an equivalent explicit alias. If the Result is
+absent, Meld creates it atomically with the session. If it already exists, it
+must be a local empty Context with no session or own the exact compatible saved
+Meld session. A populated or unrelated Result is rejected. Neither form
+switches the current Context.
 
 The first invocation reuses or prepares the exact Compare overview, relation
 ledger, and grounding candidates. It preserves their frame, relation, issue,
@@ -366,22 +368,24 @@ The same operations are available explicitly:
 
 ```bash
 mem meld LEFT_PEER RIGHT_PEER \
+  RESULT_CONTEXT \
   --issue 1 \
   --choice 2 \
   --comment "Keep both rules, but state their separate scopes."
 
 mem meld LEFT_PEER RIGHT_PEER \
+  RESULT_CONTEXT \
   --comment "Preserve every source-supported exception."
 
-mem meld LEFT_PEER RIGHT_PEER --expand 1
-mem meld LEFT_PEER RIGHT_PEER --preserve-all
-mem meld LEFT_PEER RIGHT_PEER --defer-all
-mem meld LEFT_PEER RIGHT_PEER --accept
+mem meld LEFT_PEER RIGHT_PEER RESULT_CONTEXT --expand 1
+mem meld LEFT_PEER RIGHT_PEER RESULT_CONTEXT --preserve-all
+mem meld LEFT_PEER RIGHT_PEER RESULT_CONTEXT --defer-all
+mem meld LEFT_PEER RIGHT_PEER RESULT_CONTEXT --accept
 ```
 
 `--expand`, resume, defer, and acceptance are provider-free. Issue comments,
 whole-set comments, and preserve-all create semantic turns. `--accept` applies
-the ready result to the current empty target without mutating either peer.
+the ready result to the explicit Result without mutating either peer.
 When Compare reports no grounding candidates, use a whole-set comment or
 `--preserve-all` to request the first reviewable target materialization; a
 resolved Compare ledger alone is not write authority.
@@ -390,7 +394,7 @@ Use `--restart` only when intentionally replacing the saved review session
 after rechecking that the target is still empty:
 
 ```bash
-mem meld LEFT_PEER RIGHT_PEER --restart
+mem meld LEFT_PEER RIGHT_PEER RESULT_CONTEXT --restart
 ```
 
 ## Deliberate boundary
@@ -404,15 +408,17 @@ one saved atomize issue + clarification
 → issue-scoped directional meld ("atomic meld" shorthand)
 
 one read-only incoming Context + one authoritative baseline
-→ mem meld [INCOMING] --into BASELINE
+→ mem meld INCOMING BASELINE
+→ or mem meld INCOMING while BASELINE is current
 → or mem meld --from INCOMING while BASELINE is current
 → Context-wide directional meld
 
 two equal-authority Contexts + empty result Context
-→ mem meld LEFT_PEER RIGHT_PEER
+→ mem meld LEFT_PEER RIGHT_PEER RESULT_CONTEXT
+→ or mem meld LEFT_PEER RIGHT_PEER --to RESULT_CONTEXT
 → Context-wide symmetric meld
 ```
 
-“Atomic” remains a scope shorthand, not `mem meld --atomic`; canonical `--into`
-and its current-baseline `--from` convenience remain directional; and the
-unimplemented `--to` remains reserved for a distinct symmetric result Context.
+“Atomic” remains a scope shorthand, not `mem meld --atomic`. One or two
+positional Contexts are directional; a third positional Context or `--to`
+makes the distinct symmetric Result explicit.

@@ -1,0 +1,51 @@
+State: AWAITING_REPLY · Round: 1
+
+WHAT MEM UNDERSTOOD
+Both peers describe a review policy, but their supported review windows differ.
+
+RELATIONS · 1  ISSUES · 1  RESULTS · 0
+
+ACCOUNTING
+  Source coverage: 0/2
+  Relation coverage: 0/1
+  Final Memories: 0 · PRESERVE 0 · COALESCE 0 · SYNTHESIZE 0 · USER_ADD 0
+  Open issues: REQUIRED 1 · HELPFUL 0
+  Cross-relation results: 0
+  ? R1. CONFLICT · The supported review windows differ.
+
+ISSUES
+›  1. [REQUIRED] Review window
+      WHY · Choosing one peer by order would invent authority.
+      ↳ 1. Retain both windows
+      ↳ 2. Keep scoped alternatives
+
+PROPOSED TARGET MEMORIES
+  (none until required issues are grounded)
+
+Resolve one: mem meld grammar/three/peer-a grammar/three/peer-b --to grammar/three/result-c --issue N --comment TEXT
+Guide all:  mem meld grammar/three/peer-a grammar/three/peer-b --to grammar/three/result-c --comment TEXT
+Preserve:   mem meld grammar/three/peer-a grammar/three/peer-b --to grammar/three/result-c --preserve-all
+Defer:      mem meld grammar/three/peer-a grammar/three/peer-b --to grammar/three/result-c --defer-all
+
+CAPTURE PAUSE · THREE-OPERAND CLOSED
+
+$ mem status
+On context: grammar/one/current-baseline
+
+Inventory · Memories 1
+
+Memory preview · first 1 of 1:
+  [122c7c62] Use the broad default review window.
+
+$ mem show --context grammar/three/result-c
+Context: grammar/three/result-c
+  Memories 0  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+
+  (no items)
+
+READ-ONLY GRAMMAR CHECK
+  PTY · 180 columns × 52 rows
+  CURRENT · grammar/one/current-baseline · UNCHANGED
+  grammar/one/current-baseline · DIRECTIONAL · AWAITING_REPLY · 1 MEMORY
+  grammar/two/baseline · DIRECTIONAL · AWAITING_REPLY · 1 MEMORY
+  grammar/three/result-c · SYMMETRIC · AWAITING_REPLY · 0 MEMORY
