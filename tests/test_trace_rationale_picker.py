@@ -46,13 +46,6 @@ def _target_selection(
     )
 
 
-def _select_current_context(monkeypatch, operation: str) -> None:
-    monkeypatch.setattr(
-        f"memcommit.commands.{operation}.choose_memory_report_context",
-        lambda names, *, current, operation, **kwargs: current,
-    )
-
-
 def test_candidate_catalog_lists_current_then_historical_once(isolated_store):
     assert invoke("init", "notes").exit_code == 0
     assert invoke("add", "kept").exit_code == 0
@@ -84,8 +77,6 @@ def test_bare_trace_runs_existing_report_for_picker_uid(
     target = _direct_memories(store)[0]
     assert invoke("remove", target.uid).exit_code == 0
     observed: dict[str, object] = {}
-
-    _select_current_context(monkeypatch, "trace")
 
     def select(
         items,
@@ -124,7 +115,6 @@ def test_bare_recorded_rationale_selects_before_any_provider_call(
     assert invoke("init", "notes").exit_code == 0
     assert invoke("add", "portable note").exit_code == 0
     target = _direct_memories(MemoryStore())[0]
-    _select_current_context(monkeypatch, "rationale")
     monkeypatch.setattr(
         "memcommit.commands.rationale.choose_memory_report_target",
         lambda items, *, context_name, operation, initial_include_descendants, **kwargs: (
@@ -141,7 +131,7 @@ def test_bare_recorded_rationale_selects_before_any_provider_call(
     result = invoke("rationale", "--recorded-only")
 
     assert result.exit_code == 0, result.output
-    assert "Rationale for" in result.output
+    assert "Rationale [" in result.output
     assert "portable note" in result.output
     assert "this Context only" in result.output
 
@@ -158,8 +148,6 @@ def test_trace_descendant_range_opens_the_selected_owner_history(
     assert invoke("edit", target.uid, "current child wording").exit_code == 0
     assert invoke("switch", "notes").exit_code == 0
     observed: dict[str, object] = {}
-    _select_current_context(monkeypatch, "trace")
-
     def select(
         items,
         *,
@@ -202,8 +190,6 @@ def test_rationale_picker_groups_memories_under_their_public_context(
     child_target = _direct_memories(MemoryStore())[0]
     assert invoke("switch", "notes").exit_code == 0
     observed: dict[str, object] = {}
-    _select_current_context(monkeypatch, "rationale")
-
     def select(
         items,
         *,
@@ -262,7 +248,7 @@ def test_interactive_rationale_report_uses_common_viewer(
 
     assert result.exit_code == 0, result.output
     assert observed["title"] == "RATIONALE REPORT"
-    assert "Rationale for" in observed["text"]
+    assert "Rationale [" in observed["text"]
     assert "portable note" in observed["text"]
 
 
@@ -294,8 +280,6 @@ def test_interactive_trace_routes_bare_and_explicit_targets_to_history_explorer(
         "memcommit.commands.trace.choose_memory_report_recent",
         lambda store, *, operation: MemoryReportSelectAction(),
     )
-    _select_current_context(monkeypatch, "trace")
-
     bare = invoke("trace")
     explicit = invoke("trace", target.uid)
 
@@ -388,11 +372,6 @@ def test_bare_rationale_cancel_never_connects_provider(
 ):
     assert invoke("init", "notes").exit_code == 0
     assert invoke("add", "portable note").exit_code == 0
-    locations = iter(("notes", None))
-    monkeypatch.setattr(
-        "memcommit.commands.rationale.choose_memory_report_context",
-        lambda *args, **kwargs: next(locations),
-    )
     monkeypatch.setattr(
         "memcommit.commands.rationale.choose_memory_report_target",
         lambda items, *, context_name, operation, initial_include_descendants, **kwargs: None,
@@ -432,7 +411,7 @@ def test_bare_commands_require_tty_instead_of_auto_selecting(
     assert "requires a terminal" in rationale.output
 
 
-def test_bare_commands_open_empty_context_browser_before_cancelling(
+def test_bare_commands_open_empty_current_memory_tree_before_cancelling(
     isolated_store,
     monkeypatch,
 ):
@@ -444,19 +423,33 @@ def test_bare_commands_open_empty_context_browser_before_cancelling(
         ),
     )
 
-    observed: list[tuple[str, tuple[str, ...], str | None]] = []
+    observed: list[tuple[str, str, tuple[str, ...], tuple[object, ...]]] = []
 
-    def cancel_location(names, *, current, operation, **kwargs):
-        observed.append((operation, tuple(names), current))
+    def cancel_target(
+        items,
+        *,
+        context_name,
+        operation,
+        catalog_context_names,
+        **kwargs,
+    ):
+        observed.append(
+            (
+                operation,
+                context_name,
+                tuple(catalog_context_names),
+                tuple(items),
+            )
+        )
         return None
 
     monkeypatch.setattr(
-        "memcommit.commands.trace.choose_memory_report_context",
-        cancel_location,
+        "memcommit.commands.trace.choose_memory_report_target",
+        cancel_target,
     )
     monkeypatch.setattr(
-        "memcommit.commands.rationale.choose_memory_report_context",
-        cancel_location,
+        "memcommit.commands.rationale.choose_memory_report_target",
+        cancel_target,
     )
 
     trace = invoke("trace")
@@ -467,12 +460,12 @@ def test_bare_commands_open_empty_context_browser_before_cancelling(
     assert "Trace cancelled." in trace.output
     assert "Rationale cancelled." in rationale.output
     assert observed == [
-        ("trace", ("empty",), "empty"),
-        ("rationale", ("empty",), "empty"),
+        ("trace", "empty", ("empty",), ()),
+        ("rationale", "empty", ("empty",), ()),
     ]
 
 
-def test_bare_trace_leaves_empty_current_and_selects_another_context(
+def test_bare_trace_does_not_browse_away_from_empty_current_context(
     isolated_store,
     monkeypatch,
 ):
@@ -480,40 +473,29 @@ def test_bare_trace_leaves_empty_current_and_selects_another_context(
     assert invoke("init", "notes").exit_code == 0
     assert invoke("add", "trace me").exit_code == 0
     store = MemoryStore()
-    target = _direct_memories(store)[0]
     assert invoke("switch", "empty").exit_code == 0
     observed: dict[str, object] = {}
 
-    def select_context(names, *, current, operation, **kwargs):
-        observed["locations"] = tuple(names)
-        observed["current"] = current
-        return "notes"
+    def cancel_target(items, *, context_name, catalog_context_names, **kwargs):
+        observed["root"] = context_name
+        observed["catalog"] = tuple(catalog_context_names)
+        observed["items"] = tuple(items)
+        return None
 
     monkeypatch.setattr(
-        "memcommit.commands.trace.choose_memory_report_context",
-        select_context,
-    )
-    monkeypatch.setattr(
         "memcommit.commands.trace.choose_memory_report_target",
-        lambda items, *, context_name, **kwargs: _target_selection(
-            context_name,
-            context_name,
-            target.uid,
-        ),
+        cancel_target,
     )
 
     result = invoke("trace")
 
     assert result.exit_code == 0, result.output
-    assert observed == {
-        "locations": ("empty", "notes"),
-        "current": "empty",
-    }
-    assert "trace me" in result.output
+    assert observed == {"root": "empty", "catalog": ("empty",), "items": ()}
+    assert "Trace cancelled." in result.output
     assert store.current_context_name() == "empty"
 
 
-def test_bare_rationale_leaves_empty_current_and_selects_another_context(
+def test_bare_rationale_does_not_browse_away_from_empty_current_context(
     isolated_store,
     monkeypatch,
 ):
@@ -521,26 +503,18 @@ def test_bare_rationale_leaves_empty_current_and_selects_another_context(
     assert invoke("init", "notes").exit_code == 0
     assert invoke("add", "explain me").exit_code == 0
     store = MemoryStore()
-    target = _direct_memories(store)[0]
     assert invoke("switch", "empty").exit_code == 0
     observed: dict[str, object] = {}
 
-    def select_context(names, *, current, operation, **kwargs):
-        observed["locations"] = tuple(names)
-        observed["current"] = current
-        return "notes"
+    def cancel_target(items, *, context_name, catalog_context_names, **kwargs):
+        observed["root"] = context_name
+        observed["catalog"] = tuple(catalog_context_names)
+        observed["items"] = tuple(items)
+        return None
 
     monkeypatch.setattr(
-        "memcommit.commands.rationale.choose_memory_report_context",
-        select_context,
-    )
-    monkeypatch.setattr(
         "memcommit.commands.rationale.choose_memory_report_target",
-        lambda items, *, context_name, **kwargs: _target_selection(
-            context_name,
-            context_name,
-            target.uid,
-        ),
+        cancel_target,
     )
     monkeypatch.setattr(
         "memcommit.commands.rationale.connect_codex_chatgpt_provider",
@@ -552,11 +526,8 @@ def test_bare_rationale_leaves_empty_current_and_selects_another_context(
     result = invoke("rationale", "--recorded-only")
 
     assert result.exit_code == 0, result.output
-    assert observed == {
-        "locations": ("empty", "notes"),
-        "current": "empty",
-    }
-    assert "explain me" in result.output
+    assert observed == {"root": "empty", "catalog": ("empty",), "items": ()}
+    assert "Rationale cancelled." in result.output
     assert store.current_context_name() == "empty"
 
 
@@ -584,7 +555,7 @@ def test_explicit_selectors_bypass_picker(isolated_store, monkeypatch):
     assert rationale.exit_code == 0, rationale.output
 
 
-def test_explicit_context_bypasses_recents_and_profile_location(
+def test_explicit_context_bypasses_recents_and_uses_exact_picker_root(
     isolated_store,
     monkeypatch,
 ):
@@ -600,15 +571,7 @@ def test_explicit_context_bypasses_recents_and_profile_location(
         unexpected,
     )
     monkeypatch.setattr(
-        "memcommit.commands.trace.choose_memory_report_context",
-        unexpected,
-    )
-    monkeypatch.setattr(
         "memcommit.commands.rationale.choose_memory_report_recent",
-        unexpected,
-    )
-    monkeypatch.setattr(
-        "memcommit.commands.rationale.choose_memory_report_context",
         unexpected,
     )
     observed_roots: dict[str, str] = {}
@@ -676,8 +639,12 @@ def test_command_help_marks_memory_selector_as_optional():
     assert rationale.exit_code == 0
     assert "[SELECTOR]" in trace.output
     assert "[SELECTOR]" in rationale.output
-    assert "browse local Contexts" in " ".join(trace.output.split())
-    assert "browse readable Contexts" in " ".join(rationale.output.split())
+    assert "select from the current Context" in " ".join(trace.output.split())
+    assert "select from the current readable Context" in " ".join(
+        rationale.output.split()
+    )
+    assert "descendants" in trace.output
+    assert "descendants" in rationale.output
 
 
 def test_candidate_catalog_never_opens_refs_or_query_only_sources(

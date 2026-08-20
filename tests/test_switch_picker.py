@@ -29,6 +29,7 @@ from memcommit.commands.context_picker import (
 )
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.context_targeting.catalog import grant_navigation_annotation
+from memcommit.context_targeting.tui.picker import ContextPickerActionReceipt
 from memcommit.source_projection.model import SourceForm, SourceReach, SourceState
 from memcommit.store import MemoryStore
 
@@ -89,6 +90,33 @@ def test_picker_preselects_current_and_accepts_enter():
         )
 
     assert selected == "beta"
+
+
+def test_picker_can_reject_a_context_in_place_without_selecting_it():
+    rejected: list[str] = []
+
+    def reject_context(context_name: str):
+        rejected.append(context_name)
+        return ContextPickerActionReceipt(
+            label="CONTEXT NOT SELECTABLE",
+            detail="Select an exact Memory row.",
+            label_style="class:memcommit.error",
+        )
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\rq")
+        selected = choose_context(
+            ("alpha",),
+            current="alpha",
+            browse_only=True,
+            context_accept_handler=reject_context,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected is None
+    assert rejected == ["alpha"]
 
 
 def test_picker_moves_with_arrows_and_clamps_at_boundaries():

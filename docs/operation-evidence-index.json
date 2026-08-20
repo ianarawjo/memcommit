@@ -99,7 +99,8 @@
       "docs/query-reference-application-boundary-matrix.md"
     ],
     "rationale": [
-      "docs/read-report-lifecycle-design-rationale.md"
+      "docs/read-report-lifecycle-design-rationale.md",
+      "docs/mem-trace-rationale-design-rationale.md"
     ],
     "redo": [],
     "reference": [
@@ -142,7 +143,8 @@
       "docs/switch-application-boundary-matrix.md"
     ],
     "trace": [
-      "docs/read-report-lifecycle-design-rationale.md"
+      "docs/read-report-lifecycle-design-rationale.md",
+      "docs/mem-trace-rationale-design-rationale.md"
     ],
     "translate": [],
     "undo": [],

@@ -19,6 +19,7 @@ COLUMNS = 180
 ROWS = 52
 RIGHT = "\x1b[C"
 DOWN = "\x1b[B"
+SHIFT_TAB = "\x1b[Z"
 
 _BASE_PATH = (
     ROOT / "docs/screenshots/context-endpoint-memory-preview-20260810/capture.py"
@@ -62,9 +63,8 @@ def _prepare_fixture() -> str:
 
     # Invoke the same command functions directly so this focused capture does
     # not depend on unrelated CLI-module imports elsewhere in the prototype.
-    init.cmd("empty-current", parents=False)
+    init.cmd("other-empty", parents=False)
     init.cmd("notes", parents=False)
-    init.cmd("notes/child", parents=False)
     add.cmd(
         "First wording",
         input_source=None,
@@ -96,7 +96,14 @@ def _prepare_fixture() -> str:
         if isinstance(item, Memory) and item.content == "Retained historical wording"
     )
     delete.cmd(historical.uid, context_name=None, force=False)
-    switch.cmd("empty-current")
+    init.cmd("notes/child", parents=False)
+    add.cmd(
+        "Descendant wording visible only after range expansion",
+        input_source=None,
+        paste=False,
+        context_name=None,
+    )
+    switch.cmd("notes")
     return historical.uid
 
 
@@ -118,7 +125,7 @@ def _run_child(operation: str) -> None:
             raise ValueError(f"Unknown operation: {operation}")
         print(
             f"{operation.upper()} CLOSED · SELECTED [{memory_uid[:8]}] · "
-            "CURRENT empty-current · READ ONLY · STORE CONTENT UNCHANGED"
+            "CURRENT notes · READ ONLY · STORE CONTENT UNCHANGED"
         )
 
 
@@ -158,26 +165,21 @@ def _snapshot(recorder: io.StringIO, stem: str) -> None:
 def _capture(operation: str, start: int) -> int:
     child, recorder = _spawn(operation)
     try:
-        child.expect(f"{operation.upper()} · SELECT A CONTEXT")
-        _BASE._settle(child)
-        _snapshot(recorder, f"{start:02d}-{operation}-context-entry")
-
-        child.send(DOWN)
-        _BASE._settle(child)
-        _snapshot(recorder, f"{start + 1:02d}-{operation}-context-target")
-
-        child.send("\r")
         child.expect(f"{operation.upper()} · SELECT A MEMORY · notes")
         _BASE._settle(child)
-        _snapshot(recorder, f"{start + 2:02d}-{operation}-exact-entry")
+        _snapshot(recorder, f"{start:02d}-{operation}-current-memories-entry")
 
-        child.send(RIGHT)
+        child.send("\t\r")
         _BASE._settle(child)
-        _snapshot(recorder, f"{start + 3:02d}-{operation}-descendants")
+        _snapshot(recorder, f"{start + 1:02d}-{operation}-context-rejected")
 
-        child.send("\t" + DOWN + DOWN + DOWN)
+        child.send(SHIFT_TAB + RIGHT)
         _BASE._settle(child)
-        _snapshot(recorder, f"{start + 4:02d}-{operation}-memory-focused")
+        _snapshot(recorder, f"{start + 2:02d}-{operation}-descendants")
+
+        child.send("\t" + DOWN + DOWN)
+        _BASE._settle(child)
+        _snapshot(recorder, f"{start + 3:02d}-{operation}-memory-focused")
 
         child.send("\r")
         if operation == "trace":
@@ -185,27 +187,30 @@ def _capture(operation: str, start: int) -> int:
         else:
             child.expect("RATIONALE REPORT")
         _BASE._settle(child)
-        _snapshot(recorder, f"{start + 5:02d}-{operation}-result")
+        _snapshot(recorder, f"{start + 4:02d}-{operation}-result")
 
         child.send("q")
         child.expect(f"{operation.upper()} CLOSED")
         child.expect(pexpect.EOF)
-        _snapshot(recorder, f"{start + 6:02d}-{operation}-verification")
+        _snapshot(recorder, f"{start + 5:02d}-{operation}-verification")
     finally:
         if child.isalive():
             child.close(force=True)
-    return start + 7
+    return start + 6
 
 
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
+    for pattern in ("*.png", "*.txt", "*.typescript"):
+        for path in OUT.glob(pattern):
+            path.unlink()
     next_index = _capture("trace", 1)
     _capture("rationale", next_index)
     raw = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript"))
     plain = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.txt"))
-    assert re.search(r"\[[0-9a-f]{8}\]\[r3\]", raw.casefold())
+    assert re.search(r"\[[0-9a-f]{8}\]\s*\[r3\]", raw.casefold())
     assert re.search(
-        r"\[historical\]\[[0-9a-f]{8}\]\[r2\]",
+        r"\[historical\]\s*\[[0-9a-f]{8}\]\s*\[r2\]",
         plain.casefold(),
     )
     assert re.search(
@@ -213,15 +218,26 @@ def main() -> None:
         raw,
     )
     assert re.search(
-        r"\x1b\[[0-9;]*7m\s+› " r"\[historical\]\[[0-9a-f]{8}\]\[r2\]",
+        r"\x1b\[[0-9;]*7m\s+› "
+        r"\[historical\]\s*\[[0-9a-f]{8}\]\s*\[r2\]",
         raw.casefold(),
     )
     assert "[current" not in raw.casefold()
-    assert "empty-current" in raw
-    assert "SELECT A CONTEXT" in raw
+    assert "CURRENT notes" in raw
+    assert "SELECT A CONTEXT" not in raw
     assert "SELECT A MEMORY" in raw
     assert "INCLUDE DESCENDANTS" in raw
     assert "CONTEXTS & MEMORIES" in raw
+    assert plain.count("CONTEXT NOT SELECTABLE") >= 2
+    assert plain.count("Select an exact Memory row") >= 2
+    for index, operation in ((2, "trace"), (8, "rationale")):
+        rejection_raw = (
+            OUT / f"{index:02d}-{operation}-context-rejected.typescript"
+        ).read_text(encoding="utf-8")
+        assert re.search(
+            r"\x1b\[[0-9;]*38;5;210(?:;1)?m\s*CONTEXT NOT SELECTABLE",
+            rejection_raw,
+        )
     assert "┏" in raw and "┗" in raw
     assert "38;" in raw
     assert any(

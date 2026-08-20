@@ -16,7 +16,6 @@ from memcommit.commands.memory_history import (
 )
 from memcommit.commands.memory_picker import (
     ScopedMemoryPickerItem,
-    choose_memory_report_context,
     choose_memory_report_target,
 )
 from memcommit.commands.memory_report_recents import (
@@ -326,8 +325,8 @@ def cmd(
         typer.Argument(
             help=(
                 "UID (or unambiguous prefix) of a current or historical "
-                "direct Memory; omit in a terminal to browse local Contexts "
-                "and select a Memory"
+                "direct Memory; omit in a terminal to select from the current "
+                "Context or its descendants"
             )
         ),
     ] = None,
@@ -337,8 +336,8 @@ def cmd(
             "--context",
             "-c",
             help=(
-                "Start Memory selection in this Context instead of the "
-                "local Context browser"
+                "Start Memory selection in this Context instead of the current "
+                "Context"
             ),
         ),
     ] = None,
@@ -385,63 +384,45 @@ def cmd(
                 "No current context. Pass --context or run 'mem init <name>' first."
             )
         if selector is None:
-            location_cursor = name
-            while True:
-                # Explicit relative locators were resolved against the command's
-                # frozen current snapshot above.  Keep that canonical result for
-                # every subsequent load and selector identity.
-                picker_root = name
-                if not explicit_context:
-                    picker_root = choose_memory_report_context(
-                        tuple(store.list_context_names()),
-                        current=location_cursor,
-                        operation="trace",
-                    )
-                    if picker_root is None:
-                        typer.echo("Trace cancelled.")
-                        return
-                    location_cursor = picker_root
-                history_scope = load_retained_history_scope(
-                    store,
-                    context_locator=picker_root,
-                    current_name=context_snapshot.current_name,
-                    # Freeze every descendant before the shared RANGE control
-                    # narrows or broadens what can actually be selected.
-                    include_descendants=True,
-                )
-                catalog_names = tuple(item.display_name for item in history_scope)
-                candidate_items = tuple(
-                    ScopedMemoryPickerItem(
-                        context_name=context.display_name,
-                        uid=candidate.uid,
-                        content=candidate.content,
-                        status=candidate.status,
-                        catalog_context_names=catalog_names,
-                        change_count=candidate.change_count,
-                    )
-                    for context in history_scope
-                    for candidate in collect_trace_candidates(
-                        store,
-                        context.context,
-                    )
-                )
-                selected = choose_memory_report_target(
-                    candidate_items,
-                    context_name=picker_root,
-                    operation="trace",
+            # The current or explicit Context is already the useful default.
+            # Freeze its descendants for the range control, but do not force a
+            # second location decision before the person can see its Memories.
+            history_scope = load_retained_history_scope(
+                store,
+                context_locator=name,
+                current_name=context_snapshot.current_name,
+                # Freeze every descendant before the shared RANGE control
+                # narrows or broadens what can actually be selected.
+                include_descendants=True,
+            )
+            catalog_names = tuple(item.display_name for item in history_scope)
+            candidate_items = tuple(
+                ScopedMemoryPickerItem(
+                    context_name=context.display_name,
+                    uid=candidate.uid,
+                    content=candidate.content,
+                    status=candidate.status,
                     catalog_context_names=catalog_names,
-                    initial_include_descendants=False,
+                    change_count=candidate.change_count,
                 )
-                if selected is None:
-                    if not explicit_context:
-                        # An empty or unwanted location returns to the same
-                        # Profile-wide Context selector used by Log.
-                        continue
-                    typer.echo("Trace cancelled.")
-                    return
-                selector = selected.memory_uid
-                context_name = selected.owner_context_name
-                break
+                for context in history_scope
+                for candidate in collect_trace_candidates(
+                    store,
+                    context.context,
+                )
+            )
+            selected = choose_memory_report_target(
+                candidate_items,
+                context_name=name,
+                operation="trace",
+                catalog_context_names=catalog_names,
+                initial_include_descendants=False,
+            )
+            if selected is None:
+                typer.echo("Trace cancelled.")
+                return
+            selector = selected.memory_uid
+            context_name = selected.owner_context_name
             # The pickers are read-only, but another process may have changed
             # the Context while they were open. Re-read before resolving the
             # exact UID so the report never mixes old live state with new history.

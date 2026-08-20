@@ -158,6 +158,15 @@ class ContextMemoryRow:
     details: tuple[ContextMemoryDetail, ...] = ()
 
 
+@dataclass(frozen=True)
+class ContextPickerActionReceipt:
+    """One in-place action projected through the picker footer."""
+
+    label: str
+    detail: str
+    label_style: str = "class:memcommit.notification"
+
+
 def context_memory_rows(context: Context) -> tuple[ContextMemoryRow, ...]:
     """Project every direct Context item as one picker row.
 
@@ -975,6 +984,9 @@ def choose_context(
     descendant_scope_names: AbstractSet[str] = frozenset(),
     selectable_memories: bool = False,
     nested_selection_factory: (Callable[[str, str], _NestedSelectionT] | None) = None,
+    context_accept_handler: (
+        Callable[[str], ContextPickerActionReceipt] | None
+    ) = None,
     memory_scope_root: str | None = None,
     memory_reach_state: ContextReachState | None = None,
 ) -> str | ContextSubtreeSelection | ContextMemorySelection | _NestedSelectionT | None:
@@ -1022,6 +1034,8 @@ def choose_context(
         raise ValueError(
             "Nested rows cannot return both Memory and operation selections."
         )
+    if context_accept_handler is not None and not callable(context_accept_handler):
+        raise ValueError("A Context action handler must be callable.")
     if (memory_scope_root is None) != (memory_reach_state is None):
         raise ValueError(
             "A scoped Memory picker requires both its root and reach state."
@@ -1108,6 +1122,7 @@ def choose_context(
     memory_cache: dict[str, tuple[ContextMemoryRow, ...]] = {}
     memory_anchor: tuple[str, int] | None = None
     copy_status: PlainTextClipboardReceipt | None = None
+    action_status: ContextPickerActionReceipt | None = None
     navigation_accelerator = NavigationAccelerator()
     nested_items_selectable = (
         selectable_memories or nested_selection_factory is not None
@@ -1130,7 +1145,8 @@ def choose_context(
         )
 
     def clear_copy_status() -> None:
-        nonlocal copy_status
+        nonlocal action_status, copy_status
+        action_status = None
         copy_status = None
 
     def load_visible_memories() -> None:
@@ -1336,6 +1352,7 @@ def choose_context(
     def copy_focused(event, *, visible_branch: bool) -> None:
         nonlocal copy_status
         navigation_accelerator.reset()
+        clear_copy_status()
         try:
             projection = project_context_picker_clipboard(
                 state.visible_rows(),
@@ -1388,6 +1405,7 @@ def choose_context(
 
     @bindings.add("enter", filter=unframed_tree_focus)
     def _accept_context(event) -> None:
+        nonlocal action_status
         navigation_accelerator.reset()
         clear_copy_status()
         if memory_anchor is not None:
@@ -1414,6 +1432,15 @@ def choose_context(
             event.app.invalidate()
             return
         name = state.selected_name
+        if context_accept_handler is not None:
+            # Consumers decide why a Context row is not executable; the shared
+            # picker owns only the safe in-place receipt mechanics.
+            receipt = context_accept_handler(name)
+            if not isinstance(receipt, ContextPickerActionReceipt):
+                raise TypeError("A Context action must return a picker receipt.")
+            action_status = receipt
+            event.app.invalidate()
+            return
         if name in subtree_names and name not in tree.materialized_names:
             # A catalog-only parent has no exact history of its own. Enter can
             # therefore open the frozen changed descendants without competing
@@ -1582,6 +1609,8 @@ def choose_context(
                 if nested_items_selectable and memory.selector is not None
                 else "Enter preview only"
             )
+        elif context_accept_handler is not None:
+            enter_action = "Enter unavailable"
         elif name in tree.materialized_names:
             enter_action = (
                 "Enter open/collapse"
@@ -1605,13 +1634,29 @@ def choose_context(
             else "y copy Context  Y copy visible branch  "
         )
         close_action = "q close" if browse_only else "q cancel"
+        catalog_label = (
+            "Contexts" if context_accept_handler is not None else "selectable"
+        )
         normal_footer = (
             _CONTEXT_NAVIGATION_HINT
             + f"{expansion_action}  {memory_action}{copy_action}"
             + f"{enter_action}  {close_action}"
             f" · {navigation_index + 1}/{len(units)}"
-            f" · {len(tree.materialized_names)} selectable"
+            f" · {len(tree.materialized_names)} {catalog_label}"
         )
+        if action_status is not None:
+            return [
+                (
+                    action_status.label_style,
+                    " " + display_escape_text(action_status.label),
+                ),
+                (
+                    "",
+                    " · "
+                    + display_escape_text(action_status.detail)
+                    + f"  {close_action}",
+                ),
+            ]
         if copy_status is None:
             return normal_footer
         return [

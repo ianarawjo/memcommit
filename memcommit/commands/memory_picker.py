@@ -5,7 +5,7 @@ from __future__ import annotations
 import sys
 from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Literal, Mapping, Protocol, runtime_checkable
+from typing import Literal, Protocol, runtime_checkable
 
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
@@ -14,6 +14,7 @@ from memcommit.context_targeting.tui.picker import (
     ContextMemoryBadge,
     ContextMemoryRow,
     ContextMemorySelection,
+    ContextPickerActionReceipt,
     choose_context,
 )
 from memcommit.context_targeting.tui.reach import ContextReachState
@@ -23,7 +24,6 @@ from memcommit.interfaces.console.text import (
 from memcommit.interfaces.tui.core.text_layout import (
     elide_terminal_text,
 )
-from memcommit.source_projection.presentation import SourceDisplayValue
 
 
 MemoryPickerOperation = Literal["trace", "rationale"]
@@ -59,6 +59,16 @@ class MemoryReportTargetSelection:
     owner_context_name: str
     memory_uid: str
     include_descendants: bool
+
+
+def _reject_context_target(_context_name: str) -> ContextPickerActionReceipt:
+    """Explain the report picker's exact-Memory target boundary in place."""
+
+    return ContextPickerActionReceipt(
+        label="CONTEXT NOT SELECTABLE",
+        detail="Select an exact Memory row; use Left/Right to browse Contexts.",
+        label_style="class:memcommit.error",
+    )
 
 
 def _preview(value: str, limit: int = 100) -> str:
@@ -169,10 +179,10 @@ def _choose_memory_selection(
     owner_names = tuple(
         dict.fromkeys(getattr(item, "context_name", context_name) for item in options)
     )
-    # A location-first report flow may deliberately open an empty Context.
-    # Keep its frozen structural rows even when no Memory exists anywhere in
-    # that range; candidate absence is presentation state, not permission to
-    # bypass the selector and strand the person in the current Context.
+    # A current-root report flow may deliberately open an empty Context. Keep
+    # its frozen structural rows even when no Memory exists anywhere in that
+    # range; candidate absence is presentation state, not permission to bypass
+    # the exact/subtree control.
     names = tuple(dict.fromkeys((*explicit_catalog, *item_catalog_names, *owner_names)))
     if (
         any(not isinstance(name, str) or not name for name in names)
@@ -225,6 +235,7 @@ def _choose_memory_selection(
         initially_show_memories=True,
         browse_only=True,
         selectable_memories=True,
+        context_accept_handler=_reject_context_target,
         app_input=app_input,
         app_output=app_output,
         require_tty=require_tty,
@@ -274,47 +285,6 @@ def choose_memory_report_target(
         memory_uid=memory.selector,
         include_descendants=include_descendants,
     )
-
-
-def choose_memory_report_context(
-    names: Sequence[str],
-    *,
-    current: str | None,
-    operation: MemoryPickerOperation,
-    virtual_names: Sequence[str] = (),
-    virtual_annotations: Mapping[str, SourceDisplayValue] | None = None,
-    app_input: Input | None = None,
-    app_output: Output | None = None,
-    require_tty: bool = True,
-) -> str | None:
-    """Choose a report root before opening its exact/subtree Memory range.
-
-    This is the Memory-report counterpart of Log's location-first browser.
-    Empty Contexts remain ordinary selectable locations so a bare command can
-    leave an empty current Context without changing global current state.
-    """
-
-    selected = choose_context(
-        names,
-        current=current,
-        virtual_names=virtual_names,
-        selectable_virtual_names=frozenset(virtual_names),
-        virtual_annotations=virtual_annotations,
-        title=(
-            f"{operation.upper()} · SELECT A CONTEXT · "
-            + ("PROFILE" if operation == "rationale" else "LOCAL CONTEXTS")
-        ),
-        accept_label="open Memories",
-        initially_expand_selected=True,
-        app_input=app_input,
-        app_output=app_output,
-        require_tty=require_tty,
-    )
-    if selected is None:
-        return None
-    if not isinstance(selected, str):
-        raise ValueError("Memory report location did not return a Context.")
-    return selected
 
 
 def choose_memory(
