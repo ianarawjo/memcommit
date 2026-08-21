@@ -68,3 +68,21 @@ class DirectMemoryTarget:
             raise ValueError(
                 "A direct Memory target requires a Context name and exact uid."
             )
+
+
+@dataclass(frozen=True)
+class DirectMemoryLocator:
+    """One Memory selector with an optional explicitly named direct owner."""
+
+    memory_selector: str
+    context_locator: str | None = None
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.memory_selector, str) or not self.memory_selector:
+            raise ValueError("A direct Memory locator requires a nonempty selector.")
+        if self.context_locator is not None and (
+            not isinstance(self.context_locator, str) or not self.context_locator
+        ):
+            raise ValueError(
+                "A qualified direct Memory locator requires a nonempty Context."
+            )

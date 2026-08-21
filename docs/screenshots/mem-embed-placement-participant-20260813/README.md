@@ -44,8 +44,8 @@ cancelled command attempt.
 | Image | Input since preceding image | Visible state | Durable mutation |
 | --- | --- | --- | --- |
 | `01-participant-entry.png` | Launch `mem embed` | The real local Context tree opens with current `practice/source` as Into and local `practice` as the initial Child | None |
-| `02-participant-editable-command.png` | `Tab`×4 | The small blue `COMMAND · RUNNABLE` box contains only the initial canonical command with a collision-safe short selector | None |
-| `03-participant-invalid-command-red.png` | `Ctrl-U`, then type incomplete `mem embed practice --into` | The compact box turns red with one short reason, Enter is blocked, and the real upper checked Target and gap remain unchanged | None |
+| `02-participant-editable-command.png` | `Tab`×4 | The small blue `COMMAND · RUNNABLE` box keeps `mem embed` fixed and exposes only the canonical arguments with a collision-safe short selector | None |
+| `03-participant-invalid-command-red.png` | `Ctrl-U`, then type incomplete `practice --into` arguments | `Ctrl-U` cannot erase the fixed `mem embed` prompt; the box turns red, Enter is blocked, and the real upper checked Target and gap remain unchanged | None |
 | `04-participant-live-synced-controls.png` | Continue typing the exact Target and `--before PREFIX`; no Enter | As soon as the command becomes valid against the frozen real catalog, the box returns to blue, the target's direct Memories appear, and its requested gap is checked | None |
 | `05-participant-cancelled-verified.png` | `Escape` | Cancellation receipt, unchanged full-store byte digest, unchanged `practice/source` current Context, and actual `mem show` direct order | None |
 

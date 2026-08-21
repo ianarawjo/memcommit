@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import shlex
 from dataclasses import dataclass, field
 
 from prompt_toolkit.application import get_app
@@ -23,6 +24,7 @@ class EditableExactCommandControl:
     draft: ExactCommandDraft
     action_label: str
     incomplete_action: str
+    command_prefix: str
     review_control: FormattedTextControl
     input: TextArea
     body: HSplit
@@ -46,6 +48,7 @@ class EditableExactCommandControl:
                 raise ValueError(f"{label} must be nonempty text.")
 
         holder: dict[str, EditableExactCommandControl] = {}
+        command_prefix = shlex.join(draft.form.command)
         review_control = FormattedTextControl(
             lambda: holder["value"]._render_error(),
             focusable=False,
@@ -53,7 +56,9 @@ class EditableExactCommandControl:
         )
         input_area = TextArea(
             multiline=False,
-            prompt="› ",
+            # The operation is presentation, not buffer content: destructive
+            # editing keys can revise arguments without changing what runs.
+            prompt=f"› {command_prefix} ",
             focusable=True,
             focus_on_click=True,
             wrap_lines=False,
@@ -77,6 +82,7 @@ class EditableExactCommandControl:
             draft=draft,
             action_label=action_label,
             incomplete_action=incomplete_action,
+            command_prefix=command_prefix,
             review_control=review_control,
             input=input_area,
             body=body,
@@ -115,7 +121,7 @@ class EditableExactCommandControl:
     def _on_text_changed(self, _buffer) -> None:
         if self._changing_buffer:
             return
-        self.draft.synchronize(self.input.text)
+        self.draft.synchronize(self.command_line())
         try:
             get_app().invalidate()
         except RuntimeError:
@@ -138,6 +144,23 @@ class EditableExactCommandControl:
         finally:
             self._changing_buffer = False
 
+    def command_line(self) -> str:
+        """Return the fixed operation plus the currently editable arguments."""
+
+        if not self.input.text:
+            return self.command_prefix
+        return f"{self.command_prefix} {self.input.text}"
+
+    def _editable_arguments(self, line: str) -> str:
+        if line == self.command_prefix:
+            return ""
+        marker = self.command_prefix + " "
+        if not line.startswith(marker):
+            raise RuntimeError(
+                "Reviewed command does not match its fixed operation prefix."
+            )
+        return line[len(marker) :]
+
     def sync_from_review(self, app=None) -> bool:
         """Project a changed upper form into the editable command field."""
 
@@ -145,7 +168,7 @@ class EditableExactCommandControl:
             line = self.draft.accept_review()
         except (KeyError, OSError, RuntimeError, TypeError, ValueError) as error:
             line = self.draft.reject_review(error)
-        self._replace_text(line)
+        self._replace_text(self._editable_arguments(line))
         if app is not None:
             app.invalidate()
         return self.draft.valid
@@ -153,7 +176,7 @@ class EditableExactCommandControl:
     def validate_current(self, app=None) -> bool:
         """Revalidate the visible line before the operation-owned approval."""
 
-        valid = self.draft.synchronize(self.input.text)
+        valid = self.draft.synchronize(self.command_line())
         if app is not None:
             app.invalidate()
         return valid

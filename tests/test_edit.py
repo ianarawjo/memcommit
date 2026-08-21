@@ -1,15 +1,34 @@
 """Deterministic direct-Memory editing contracts."""
 
+import shlex
+
 import pytest
+from prompt_toolkit.input.defaults import create_pipe_input
+from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.context import Context, Memory
+from memcommit.context_targeting.tui.picker import ContextMemoryRow
+from memcommit.edit_application import EditRequest, FrozenEditPlan
+from memcommit.interfaces.tui.components.exact_command_review import (
+    format_exact_command,
+)
+from memcommit.interfaces.tui.operations.edit import (
+    EditTuiSetup,
+    parse_edit_command_argv,
+    run_edit_tui,
+)
+from memcommit.interfaces.tui.operations.edit.screen import (
+    edit_exact_command_review,
+)
 from memcommit.store import MemoryStore
 
 
 runner = CliRunner()
+TUI_MEMORY_UID = "abcd1234-0000-0000-0000-000000000000"
+TUI_OTHER_MEMORY_UID = "ef567890-0000-0000-0000-000000000000"
 
 
 def invoke(*args: str):
@@ -20,6 +39,26 @@ def current_memory() -> Memory:
     item = next(iter(MemoryStore().load_current().iter_items()))
     assert isinstance(item, Memory)
     return item
+
+
+def _tui_memory_rows(name: str):
+    if name == "source":
+        return (
+            ContextMemoryRow(
+                "abcd1234",
+                "old content",
+                selector=TUI_MEMORY_UID,
+            ),
+        )
+    if name == "other":
+        return (
+            ContextMemoryRow(
+                "ef567890",
+                "other old content",
+                selector=TUI_OTHER_MEMORY_UID,
+            ),
+        )
+    return ()
 
 
 def test_ops_edit_preserves_uid_and_explicit_order():
@@ -81,6 +120,216 @@ def test_cli_edit_replaces_content_and_renders_before_after(isolated_store):
     assert stored.content == "new content"
 
 
+def test_bare_selector_finds_one_direct_memory_in_another_local_context(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = ops.init("practice/3")
+    memory = ops.add(source, "source content")
+    current = ops.init("practice/4")
+    store.save(source)
+    store.save(current)
+    store.set_current(current.name)
+
+    result = invoke("edit", memory.uid[:8], "edited through profile search")
+
+    assert result.exit_code == 0, result.output
+    assert f"Edited [{memory.uid[:8]}] in 'practice/3'" in result.output
+    assert store.current_context_name() == "practice/4"
+    assert store.load_direct("practice/3").memories[memory.uid].content == (
+        "edited through profile search"
+    )
+
+
+def test_context_qualified_selector_resolves_canonical_and_relative_owner(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = ops.init("practice/3")
+    first = ops.add(source, "first")
+    second = ops.add(source, "second")
+    current = ops.init("practice/4")
+    store.save(source)
+    store.save(current)
+    store.set_current(current.name)
+
+    canonical = invoke("edit", f"practice/3:{first.uid[:8]}", "canonical")
+    relative = invoke("edit", f"../3:{second.uid[:8]}", "relative")
+
+    assert canonical.exit_code == 0, canonical.output
+    assert relative.exit_code == 0, relative.output
+    reloaded = store.load_direct("practice/3")
+    assert reloaded.memories[first.uid].content == "canonical"
+    assert reloaded.memories[second.uid].content == "relative"
+    assert store.current_context_name() == "practice/4"
+
+
+def test_profile_search_requires_context_qualified_locator_when_uid_is_duplicated(
+    isolated_store,
+):
+    store = MemoryStore()
+    shared_uid = "aaaaaaaa-0000-0000-0000-000000000000"
+    for name in ("branch/a", "branch/b"):
+        context = ops.init(name)
+        context.add(Memory(uid=shared_uid, content=name))
+        store.save(context)
+    store.set_current("branch/a")
+
+    result = invoke("edit", shared_uid[:8], "replacement")
+
+    assert result.exit_code == 1
+    assert "multiple local matches" in result.output
+    assert f"branch/a:{shared_uid}" in result.output
+    assert f"branch/b:{shared_uid}" in result.output
+    assert store.load_direct("branch/a").memories[shared_uid].content == "branch/a"
+    assert store.load_direct("branch/b").memories[shared_uid].content == "branch/b"
+
+
+def test_qualified_selector_cannot_be_combined_with_context_option(isolated_store):
+    store = MemoryStore()
+    context = ops.init("notes")
+    memory = ops.add(context, "before")
+    store.save(context)
+    store.set_current(context.name)
+
+    result = invoke(
+        "edit",
+        f"notes:{memory.uid[:8]}",
+        "after",
+        "--context",
+        "notes",
+    )
+
+    assert result.exit_code == 1
+    assert "either CONTEXT:UID or an explicit Context option" in result.output
+    assert store.load_direct("notes").memories[memory.uid].content == "before"
+
+
+def test_bare_cli_edit_enters_and_can_cancel_interactive_setup(
+    isolated_store,
+    monkeypatch,
+):
+    import memcommit.commands.edit as edit_command
+
+    monkeypatch.setattr(edit_command, "is_interactive_terminal", lambda: True)
+    monkeypatch.setattr(
+        edit_command, "choose_edit_setup", lambda *_args, **_kwargs: None
+    )
+
+    result = invoke("edit")
+
+    assert result.exit_code == 0
+    assert "Edit cancelled" in result.output
+
+
+def test_edit_tui_prefills_selected_memory_and_freezes_replacement() -> None:
+    requests: list[EditRequest] = []
+
+    def prepare(request: EditRequest) -> FrozenEditPlan:
+        requests.append(request)
+        return FrozenEditPlan(
+            request=request,
+            context_name="source",
+            context_uid="context-uid",
+            context_digest="context-digest",
+            memory_uid=TUI_MEMORY_UID,
+            original_content="old content",
+            token=object(),
+        )
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[B\r\t\x15new content\t\r")
+        result = run_edit_tui(
+            EditTuiSetup(
+                names=("source",),
+                selectable_names=frozenset({"source"}),
+                selected_context="source",
+                current_context="source",
+            ),
+            memory_loader=_tui_memory_rows,
+            content_loader=lambda _target: "old content",
+            prepare=prepare,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result is not None
+    assert requests == [EditRequest(TUI_MEMORY_UID, "new content", "source")]
+
+
+def test_edit_review_projects_only_the_exact_proposed_command() -> None:
+    request = EditRequest(
+        TUI_MEMORY_UID,
+        "new content\nwith a second line",
+        "source",
+    )
+
+    rendered = format_exact_command(edit_exact_command_review(request))
+
+    assert rendered == (
+        "mem edit abcd1234-0000-0000-0000-000000000000 "
+        "'new content\\nwith a second line' --context source"
+    )
+    assert "EFFECTS" not in rendered
+    assert "Approval applies" not in rendered
+    assert "TO DO" not in rendered
+
+
+def test_edit_command_parser_round_trips_multiline_and_literal_escapes() -> None:
+    request = EditRequest(
+        TUI_MEMORY_UID,
+        "--context\nactual tab\tand literal \\n plus bidi \u202e",
+        "source",
+    )
+    line = format_exact_command(edit_exact_command_review(request))
+
+    assert parse_edit_command_argv(tuple(shlex.split(line))) == request
+
+
+def test_edit_proposed_command_updates_memory_and_content_before_freeze() -> None:
+    requests: list[EditRequest] = []
+    content = "from command\nsecond line"
+    command = format_exact_command(
+        edit_exact_command_review(
+            EditRequest(TUI_OTHER_MEMORY_UID, content, "other")
+        )
+    )
+    arguments = command.removeprefix("mem edit ")
+
+    def prepare(request: EditRequest) -> FrozenEditPlan:
+        requests.append(request)
+        return FrozenEditPlan(
+            request=request,
+            context_name="other",
+            context_uid="other-context-uid",
+            context_digest="other-context-digest",
+            memory_uid=TUI_OTHER_MEMORY_UID,
+            original_content="other old content",
+            token=object(),
+        )
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\t\t\x15" + arguments + "\r")
+        result = run_edit_tui(
+            EditTuiSetup(
+                names=("source", "other"),
+                selectable_names=frozenset({"source", "other"}),
+                selected_context="source",
+                current_context="source",
+            ),
+            memory_loader=_tui_memory_rows,
+            content_loader=lambda _target: "unused",
+            prepare=prepare,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result is not None
+    assert requests == [EditRequest(TUI_OTHER_MEMORY_UID, content, "other")]
+
+
 def test_cli_edit_creates_one_post_edit_checkpoint(isolated_store):
     invoke("init", "notes")
     invoke("add", "old content")
@@ -99,9 +348,29 @@ def test_cli_edit_creates_one_post_edit_checkpoint(isolated_store):
         "uid": memory.uid,
         "content": "new content",
     }
-    assert (
-        checkpoint["snapshot"]["memories"][memory.uid]["content"]
-        == "new content"
+    assert checkpoint["snapshot"]["memories"][memory.uid]["content"] == "new content"
+
+
+def test_exact_edit_rejects_drift_after_interactive_freeze(isolated_store):
+    from memcommit.edit_application import EditRequest, run_edit
+    from memcommit.edit_runtime import MemoryStoreEditPort
+
+    invoke("init", "notes")
+    invoke("add", "old content")
+    store = MemoryStore()
+    memory = current_memory()
+    port = MemoryStoreEditPort.capture(store)
+    request = EditRequest(memory.uid[:8], "reviewed replacement")
+    plan = port.freeze(request)
+
+    changed = store.load_direct("notes")
+    ops.edit(changed, memory.uid, "concurrent replacement")
+    store.save(changed)
+
+    with pytest.raises(RuntimeError, match="changed while Edit was open"):
+        run_edit(request, port=port, frozen_plan=plan)
+    assert store.load_direct("notes").memories[memory.uid].content == (
+        "concurrent replacement"
     )
 
 
@@ -170,7 +439,7 @@ def test_memory_reference_cannot_be_edited(isolated_store):
     result = invoke("edit", reference.uid[:8], "mutated through reference")
 
     assert result.exit_code == 1
-    assert "not a Memory directly owned" in result.output
+    assert "No directly owned Memory" in result.output
     assert len(store.list_checkpoints("parent")) == checkpoint_count
     source = store.load("source").memories[source_memory.uid]
     assert isinstance(source, Memory)
@@ -197,7 +466,7 @@ def test_ambiguous_prefix_and_missing_memory_do_not_mutate(isolated_store):
     missing = invoke("edit", "bbbb", "replacement")
 
     assert ambiguous.exit_code == 1
-    assert "Ambiguous prefix" in ambiguous.output
+    assert "multiple local matches" in ambiguous.output
     assert missing.exit_code == 1
     assert "No directly owned Memory with uid starting" in missing.output
     reloaded = store.load("notes")
@@ -206,98 +475,20 @@ def test_ambiguous_prefix_and_missing_memory_do_not_mutate(isolated_store):
     assert store.list_checkpoints("notes") == []
 
 
-def test_bare_selector_searches_local_contexts_when_absent_from_current(
-    isolated_store,
-):
+def test_edit_without_current_context_searches_local_owners(isolated_store):
     store = MemoryStore()
-    owner = Context(uid="owner-context", name="practice/3")
-    memory = Memory(uid="ca562047-owner-memory", content="before")
-    owner.add(memory)
-    current = Context(uid="current-context", name="practice/4")
-    store.save(owner)
-    store.save(current)
-    store.set_current(current.name)
+    context = ops.init("notes")
+    memory = ops.add(context, "before")
+    store.save(context)
 
     result = invoke("edit", memory.uid[:8], "after")
 
-    assert result.exit_code == 0
-    assert f"Edited [{memory.uid[:8]}] in 'practice/3'" in result.output
-    assert store.current_context_name() == "practice/4"
-    assert store.load("practice/3").memories[memory.uid].content == "after"
+    assert result.exit_code == 0, result.output
+    assert store.current_context_name() is None
+    assert store.load_direct("notes").memories[memory.uid].content == "after"
 
 
-@pytest.mark.parametrize(
-    "locator",
-    ("practice/3#ca562047", "../3#ca562047"),
-)
-def test_qualified_selector_accepts_canonical_or_relative_context_locator(
-    isolated_store,
-    locator,
-):
-    store = MemoryStore()
-    owner = Context(uid="owner-context", name="practice/3")
-    memory = Memory(uid="ca562047-owner-memory", content="before")
-    owner.add(memory)
-    store.save(owner)
-    store.save(Context(uid="current-context", name="practice/4"))
-    store.set_current("practice/4")
-
-    result = invoke("edit", locator, "after")
-
-    assert result.exit_code == 0
-    assert store.load("practice/3").memories[memory.uid].content == "after"
-    assert store.current_context_name() == "practice/4"
-
-
-def test_cross_context_search_requires_qualifier_when_uid_is_ambiguous(
-    isolated_store,
-):
-    store = MemoryStore()
-    duplicate_uid = "ca562047-duplicate-memory"
-    for name in ("branch/a", "branch/b"):
-        context = Context(uid=f"context-{name}", name=name)
-        context.add(Memory(uid=duplicate_uid, content=name))
-        store.save(context)
-    store.save(Context(uid="current-context", name="branch/current"))
-    store.set_current("branch/current")
-
-    result = invoke("edit", "ca562047", "after")
-
-    assert result.exit_code == 1
-    assert "Ambiguous Memory selector" in result.output
-    assert "branch/a#ca562047" in result.output
-    assert "branch/b#ca562047" in result.output
-    assert store.load("branch/a").memories[duplicate_uid].content == "branch/a"
-    assert store.load("branch/b").memories[duplicate_uid].content == "branch/b"
-
-
-def test_qualified_selector_cannot_be_combined_with_context_option(isolated_store):
-    result = invoke(
-        "edit",
-        "practice/3#ca562047",
-        "replacement",
-        "--context",
-        "practice/3",
-    )
-
-    assert result.exit_code == 1
-    assert "cannot be combined with --context" in result.output
-
-
-def test_edit_can_search_local_owner_without_current_context(isolated_store):
-    store = MemoryStore()
-    owner = Context(uid="owner-context", name="notes")
-    memory = Memory(uid="abcd1234-owner-memory", content="before")
-    owner.add(memory)
-    store.save(owner)
-
-    result = invoke("edit", memory.uid[:8], "replacement")
-
-    assert result.exit_code == 0
-    assert store.load("notes").memories[memory.uid].content == "replacement"
-
-
-def test_edit_reports_missing_local_owner_without_current_context(isolated_store):
+def test_edit_fails_without_current_or_matching_local_context(isolated_store):
     result = invoke("edit", "abcd1234", "replacement")
 
     assert result.exit_code == 1

@@ -435,13 +435,13 @@ def test_embed_proposed_command_updates_the_visible_gap_before_freeze(
     isolated_store,
 ) -> None:
     store, child, parent, first, second = _ordered_store()
-    command = (
-        f"mem embed {child.name} --into {parent.name} --before {second.uid[:7]}"
+    arguments = (
+        f"{child.name} --into {parent.name} --before {second.uid[:7]}"
     )
     with create_pipe_input() as pipe_input:
         # Reach the always-editable command, replace it, and approve once. Each
         # complete valid buffer change already synchronized the checked gap.
-        pipe_input.send_text("\t\t\t\t\x15" + command + "\r")
+        pipe_input.send_text("\t\t\t\t\x15" + arguments + "\r")
         receipt = choose_embed_setup(
             MemoryStoreEmbedPort.capture(store),
             app_input=pipe_input,
@@ -462,12 +462,12 @@ def test_embed_proposed_command_can_switch_the_visible_link_type_to_memory(
 ) -> None:
     store, child, parent, _first, second = _ordered_store()
     memory_uid = store.load_direct(child.name).ordered_uids()[0]
-    command = (
-        f"mem embed {memory_uid[:7]} --from {child.name} "
+    arguments = (
+        f"{memory_uid[:7]} --from {child.name} "
         f"--into {parent.name} --before {second.uid[:7]}"
     )
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\t\t\t\t\x15" + command + "\r")
+        pipe_input.send_text("\t\t\t\t\x15" + arguments + "\r")
         receipt = choose_embed_setup(
             MemoryStoreEmbedPort.capture(store),
             app_input=pipe_input,

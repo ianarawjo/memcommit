@@ -8,6 +8,7 @@ from typer.testing import CliRunner
 from memcommit.cli import app
 from memcommit.context_targeting.memory_focus import (
     MemoryFocusError,
+    is_memory_uid_selector,
     resolve_memory_focus,
 )
 
@@ -18,6 +19,22 @@ class Candidate:
 
 
 runner = CliRunner()
+
+
+@pytest.mark.parametrize(
+    ("value", "expected"),
+    (
+        ("deadbeef", True),
+        ("DEADBEEF", True),
+        ("deadbeef-1234", True),
+        ("deadbee", False),
+        ("deadbeef0", False),
+        ("release-1", False),
+        ("12345678-1234-4234-8234-123456789abc", True),
+    ),
+)
+def test_public_memory_uid_selector_shape(value: str, expected: bool) -> None:
+    assert is_memory_uid_selector(value) is expected
 
 
 def test_no_selector_preserves_the_complete_actionable_frame() -> None:

@@ -70,6 +70,7 @@ from memcommit.interfaces.tui.components.scrollable_pane import (
 )
 from memcommit.interfaces.console.text import (
     display_escape_text,
+    restore_display_escape_text,
     safe_terminal_text,
 )
 
@@ -840,3 +841,13 @@ def test_exact_command_receipt_escapes_layout_and_bidi_spoofing():
     assert r"\u202e" in command
     assert r"\\tail" in command
     assert display_escape_text("한글\n\u202e") == r"한글\n\u202e"
+
+
+def test_terminal_display_escape_round_trips_arbitrary_command_text():
+    raw = "line one\nline two\tliteral \\n and bidi \u202e"
+
+    assert restore_display_escape_text(display_escape_text(raw)) == raw
+    with pytest.raises(ValueError, match="canonical"):
+        restore_display_escape_text(r"line\x0a")
+    with pytest.raises(ValueError, match="unsupported"):
+        restore_display_escape_text(r"line\q")

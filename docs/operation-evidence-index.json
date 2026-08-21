@@ -54,7 +54,7 @@
       "docs/execution-receipt-review-lifecycle-design-rationale.md"
     ],
     "edit": [
-      "docs/edit-cross-context-locator-design-rationale.md"
+      "docs/edit-application-boundary-matrix.md"
     ],
     "elaborate": [
       "docs/distill-elaborate-generative-reduction-design-rationale.md",

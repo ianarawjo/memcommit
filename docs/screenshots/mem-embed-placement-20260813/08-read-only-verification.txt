@@ -1,4 +1,4 @@
-Embedded 'archive' into 'guide' after [ccc00614] at the end.                                                                                                                        
+Embedded 'archive' into 'guide' after [77312399] at the end.                                                                                                                        
 CAPTURE PAUSE · press Enter for read-only verification                                                                                                                              
                                                                                                                                                                                     
 CAPTURE VERIFICATION COMMAND · mem show --context guide                                                                                                                             
@@ -6,9 +6,9 @@ Context: guide
   Memories 1  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 1                                                                                                            
                                                                                                                                                                                     
 Items (in context order):                                                                                                                                                           
-  [memory ccc00614] The current Context is only the initial Into suggestion.                                                                                                        
-  [context cce9ef1c] archive  VIA EMBED                                                                                                                                             
-ORDER · ccc00614-cc79-4cc3-83b6-6059fb7796aa → cce9ef1c-a0ee-4c01-98f7-4dd2bc74d82c                                                                                                 
+  [memory 77312399] The current Context is only the initial Into suggestion.                                                                                                        
+  [context 8ff2d670] archive  VIA EMBED                                                                                                                                             
+ORDER · 77312399-2107-44d9-9d5c-a80c90bdacbb → 8ff2d670-ab39-44e3-b945-2b2b44aef1fb                                                                                                 
 CURRENT CONTEXT · guide                                                                                                                                                             
                                                                                                                                                                                     
                                                                                                                                                                                     

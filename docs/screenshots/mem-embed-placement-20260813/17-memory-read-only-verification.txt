@@ -1,4 +1,4 @@
-Embedded Memory [97c9838a] from 'archive' as [79b47a23] in 'guide' after [b93acbbb] at the end.                                                                                     
+Embedded Memory [ea62d28d] from 'archive' as [cb4b18cf] in 'guide' after [870a9f5b] at the end.                                                                                     
 CAPTURE PAUSE · press Enter for read-only verification                                                                                                                              
                                                                                                                                                                                     
 CAPTURE VERIFICATION COMMAND · mem show --context guide                                                                                                                             
@@ -6,10 +6,10 @@ Context: guide
   Memories 1  |  Memory Refs 1  |  Query Views 0  |  Embedded Contexts 0                                                                                                            
                                                                                                                                                                                     
 Items (in context order):                                                                                                                                                           
-  [memory b93acbbb] The current Context is only the initial Into suggestion.                                                                                                        
-  [embedded memory 79b47a23] archive#97c9838a  READ ONLY                                                                                                                            
+  [memory 870a9f5b] The current Context is only the initial Into suggestion.                                                                                                        
+  [embedded cb4b18cf] [archive][memory ea62d28d]  READ ONLY                                                                                                                         
            Opening orientation for the guide.                                                                                                                                       
-ORDER · b93acbbb-f080-4344-9882-f7c9194497b2 → 79b47a23-3c88-4995-b6b2-863e58a9fb2a                                                                                                 
+ORDER · 870a9f5b-39a3-43bd-b705-7533c503028f → cb4b18cf-7040-47c8-986d-339e64b699d3                                                                                                 
 CURRENT CONTEXT · guide                                                                                                                                                             
                                                                                                                                                                                     
                                                                                                                                                                                     

@@ -13,7 +13,7 @@
 │  ·   · archive                                                                                                                                                                  ^│
 │  ·   · examples                                                                                                                                                                  │
 │› ✓ * ▾ guide                                                                                                                                                                     │
-│  · [memory ccc00614] The current Context is only the initial Into suggestion.                                                                                                    │
+│  · [memory 77312399] The current Context is only the initial Into suggestion.                                                                                                    │
 │    ✓ ───────── LAST · DEFAULT · 2/2 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │

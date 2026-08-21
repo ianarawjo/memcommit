@@ -126,7 +126,7 @@ def _capture(environment: dict[str, str]) -> bytes:
     SUPPORT._settle(child, raw)
     SUPPORT._render_snapshot("02-participant-editable-command", bytes(raw))
 
-    child.send(b"\x15mem embed practice --into")
+    child.send(b"\x15practice --into")
     SUPPORT._settle(child, raw)
     SUPPORT._render_snapshot("03-participant-invalid-command-red", bytes(raw))
 

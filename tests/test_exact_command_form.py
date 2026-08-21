@@ -89,27 +89,36 @@ def test_editable_command_is_always_visible_and_syncs_in_both_directions() -> No
         input_name="sample-proposed-command",
     )
 
-    assert control.input.text == "mem sample before --into one"
+    assert control.command_prefix == "mem sample"
+    assert control.input.text == "before --into one"
+    assert control.command_line() == "mem sample before --into one"
     assert control.frame_title == "COMMAND · RUNNABLE"
     assert control.frame_style() == "class:memcommit.focused"
-    control.input.text = "mem sample changed --into two"
+    control.input.text = "changed --into two"
     assert state == {"value": "changed", "target": "two"}
     assert control.valid
 
     state.update(value="upper", target="three")
     assert control.sync_from_review()
-    assert control.input.text == "mem sample upper --into three"
+    assert control.input.text == "upper --into three"
+    assert control.command_line() == "mem sample upper --into three"
 
 
 def test_editable_command_box_turns_red_while_live_input_is_invalid() -> None:
     applied = []
+
+    def apply_argv(argv: tuple[str, ...]) -> None:
+        if len(argv) != 5 or argv[3] != "--into":
+            raise ValueError("Complete VALUE and --into TARGET are required.")
+        applied.append(argv)
+
     control = EditableExactCommandControl.create(
         ExactCommandDraft(
             review=lambda: ExactCommandReview(
                 ("mem", "sample", "value", "--into", "target"),
                 ("No durable action has run.",),
             ),
-            apply_argv=lambda argv: applied.append(argv),
+            apply_argv=apply_argv,
             form=_form(),
         ),
         action_label="APPLY SAMPLE",
@@ -121,11 +130,13 @@ def test_editable_command_box_turns_red_while_live_input_is_invalid() -> None:
 
     assert not control.valid
     assert applied == []
+    assert control.command_prefix == "mem sample"
+    assert control.command_line() == "mem sample mem delete target"
     assert control.frame_title == "COMMAND · INVALID"
     assert control.frame_style() == "class:impact.remove"
     assert "bg:" not in control._input_style()
     assert "underline" not in control._input_style()
-    assert "edits only 'mem sample'" in control.draft.error
+    assert "Complete VALUE and --into TARGET" in control.draft.error
 
 
 def test_identifier_prefix_uses_seven_characters_until_a_collision_requires_more() -> None:

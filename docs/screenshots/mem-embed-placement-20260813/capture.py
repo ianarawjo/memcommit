@@ -253,11 +253,11 @@ def _capture_apply(environment: dict[str, str]) -> bytes:
         _settle(child, raw)
         _render_snapshot("06-exact-command", bytes(raw))
 
-        child.send(b"\x15mem embed archive --into")
+        child.send(b"\x15archive --into")
         _settle(child, raw)
         _render_snapshot("06a-command-invalid-live", bytes(raw))
 
-        child.send(b"\x15mem embed archive --into guide")
+        child.send(b"\x15archive --into guide")
         _settle(child, raw)
         _render_snapshot("06b-command-live-synced", bytes(raw))
 
@@ -305,7 +305,7 @@ def _capture_invalid_command(environment: dict[str, str]) -> bytes:
     ) as directory:
         child = _spawn(environment, directory, mode="command-invalid")
         _wait_for(child, raw, b"MEM EMBED")
-        child.send(b"\t\t\t\t\x15mem embed examples --into missing\r")
+        child.send(b"\t\t\t\t\x15examples --into missing\r")
         _settle(child, raw, delay=0.5)
         _render_snapshot("10a-command-edit-rejected", bytes(raw))
         child.send(b"\x1b")
@@ -435,6 +435,16 @@ def main() -> None:
         or b"38;5;210" in combined
     ):
         raise RuntimeError("Invalid command capture did not render a red box.")
+    invalid_text = (CAPTURE_DIR / "06a-command-invalid-live.txt").read_text(
+        encoding="utf-8"
+    )
+    if "mem embed archive --into" not in invalid_text:
+        raise RuntimeError("Ctrl-U removed or duplicated the fixed Embed prefix.")
+    valid_text = (CAPTURE_DIR / "06b-command-live-synced.txt").read_text(
+        encoding="utf-8"
+    )
+    if "mem embed archive --into guide" not in valid_text:
+        raise RuntimeError("Valid Embed arguments did not retain the fixed prefix.")
 
 
 if __name__ == "__main__":

@@ -19,7 +19,7 @@ change instead.
 | Context/Memory request, frozen plan, exact gap, durable result | `memcommit.embed_application` | Tagged typed values contain no Typer, prompt-toolkit, Store, or provider dependency. |
 | Relative locator snapshot, direct loads, validation, CAS, source lock, checkpoint | `memcommit.embed_runtime` | Source and Into resolve from one current-Context snapshot; apply publishes all or nothing. |
 | Argument grammar and plain success/error rendering | `memcommit.interfaces.cli.embed` | `--from` explicitly selects Memory Embed; its absence selects Context Embed. |
-| Link-type, Source, target/gap, and exact-command review | `memcommit.interfaces.tui.operations.embed` | Context mode reuses the shared Context selector; Memory mode composes the shared direct-Memory picker; both return a frozen plan without saving a Store themselves. |
+| Link-type, Source, target/gap, and exact-command review | `memcommit.interfaces.tui.operations.embed` | Context mode reuses the shared Context selector; Memory mode composes the shared direct-Memory picker; both return a frozen plan without saving a Store themselves. The shared editor fixes `mem embed` outside its writable argument buffer. |
 | Stable Python projection | `memcommit.api._operations.embed`, `memcommit.api.client` | `embed_memory` and `embed_context` expose different DTOs and never parse terminal text. |
 | Agent and MCP projection | `memcommit.interfaces.agent.embed`, registry projection | The versioned `memory`/`context` tag prevents operand-shape inference; MCP mechanically projects the same frozen tool contract. |
 | Live relationship mutation | `memcommit.ops` | Domain validation and in-memory insertion stay reusable below the runtime; Memory and Context links remain distinct durable types. |

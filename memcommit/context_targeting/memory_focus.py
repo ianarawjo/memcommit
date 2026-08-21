@@ -21,6 +21,30 @@ class MemoryIdentity(Protocol):
 MemoryValue = TypeVar("MemoryValue", bound=MemoryIdentity)
 
 
+_CANONICAL_UUID_SHAPE = "00000000-0000-0000-0000-000000000000"
+
+
+def is_memory_uid_selector(value: object) -> bool:
+    """Return whether text has the unambiguous public UUID-prefix shape.
+
+    Automatic operand classification starts at the eight-character prefix
+    shown by the CLI. Shorter prefixes remain available behind explicit
+    operation options, where their Memory role is already known.
+    """
+
+    if not isinstance(value, str) or not 8 <= len(value) <= 36:
+        return False
+    folded = value.casefold()
+    for index, character in enumerate(folded):
+        expected = _CANONICAL_UUID_SHAPE[index]
+        if expected == "-":
+            if character != "-":
+                return False
+        elif character not in "0123456789abcdef":
+            return False
+    return True
+
+
 class MemoryFocusError(ValueError):
     """One Memory selector did not identify an exact member of its frame."""
 

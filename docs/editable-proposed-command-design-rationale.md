@@ -28,9 +28,9 @@ operation-neutral pieces beside the existing immutable review and renderer:
 - `ExactCommandForm` and `ExactCommandFormField` describe one operation prefix
   and its operation-owned grammar metadata.
 - `ExactCommandDraft` owns shell-like one-line parsing and live validity.
-- `EditableExactCommandControl` owns the always-visible writable field,
-  bidirectional synchronization hooks, compact validity-colored frame, and
-  writable-input protection.
+- `EditableExactCommandControl` owns the always-visible writable field, fixed
+  operation prompt, bidirectional argument synchronization hooks, compact
+  validity-colored frame, and writable-input protection.
 
 The component does not know a Typer command, Context, Memory, provider, Store,
 plan, or Apply action. Each operation supplies a parser/adapter that validates
@@ -41,6 +41,14 @@ immediately; every incomplete or invalid intermediate buffer turns the command
 box red and leaves the preceding checked state intact. After synchronization, the
 ordinary review factory rebuilds argv and effects from those controls; the raw
 draft is never dispatched to a shell.
+
+The form's operation prefix, such as `mem edit` or `mem embed`, is rendered as
+a fixed `TextArea` prompt outside the writable buffer. Only the arguments are
+editable. `Ctrl-U`, Backspace, selection deletion, and pasted text therefore
+cannot remove or replace the operation being reviewed. Validation still
+reconstructs and parses the complete command, so the fixed prompt is a UI
+boundary rather than a weaker substitute for form-prefix validation.
+
 Catalog adapters accept the terminal-safe escaped spelling already produced by
 the exact-command renderer and map it back to one unambiguous raw identity, so
 opening and saving an unchanged command cannot require rendering unsafe text.
@@ -50,7 +58,9 @@ The compact title says `COMMAND · RUNNABLE` when the synchronized command can
 be approved and `COMMAND · INVALID` otherwise. In Embed, the same field is also
 the final approval surface, so one Enter on a runnable line freezes the exact
 plan. Enter is blocked while the box is red. Escape cancels the
-operation, and Backspace remains normal text deletion.
+operation. Backspace remains normal text deletion inside the argument buffer;
+it and other destructive editing keys cannot change the fixed operation
+prefix.
 
 The reverse direction is immediate as well. A retained change to Link Type,
 Source/Child, Target, or Position rebuilds the canonical command in the field.
@@ -59,7 +69,7 @@ upper choice is temporarily incomplete—for example, Memory mode before a
 direct Memory is checked—the red box shows an editable command seed until the
 upper form becomes complete.
 
-## First vertical use: Embed
+## Vertical uses: Embed and Edit
 
 Embed exposes the complete editable form because every supported explicit
 operand maps to an existing visible setup control:
@@ -86,6 +96,13 @@ finish before mode, Source, Target, and gap selections move together. The
 normal Embed freeze then revalidates canonical identities, full UIDs, digests,
 authority, and the exact gap before any mutation.
 
+Edit adopts the same component for
+`mem edit MEMORY_SELECTOR CONTENT --context CONTEXT`. Upper direct-Memory and
+multiline-content changes rebuild the editable arguments, while a complete
+valid argument edit updates both controls atomically. Its fixed `mem edit`
+prompt prevents the final approval surface from being repurposed as Delete or
+another operation.
+
 ## Short identifier display
 
 Only fields whose CLI grammar already accepts UID prefixes opt into
@@ -101,8 +118,8 @@ complete effects even though the compact command box does not repeat them.
 
 ## Rollout boundary
 
-This change makes the model reusable across TUI operations but deliberately
-enables bidirectional editing only for Embed first. A setup flow may adopt it
+This change makes the model reusable across TUI operations and enables
+bidirectional argument editing for Embed and Edit. A setup flow may adopt it
 when its complete explicit argv can be mapped back into visible process-local
 controls without provider work, hidden persistence, or semantic loss.
 
@@ -115,12 +132,16 @@ visual chrome is not permission to weaken those boundaries.
 
 ## Evidence
 
-Pure tests cover form-prefix isolation, shell quoting, immediate all-or-none
-updates, reverse canonical projection, red invalid-box styling, and collision-safe
-seven-character prefixes. Embed tests cover Context and Memory grammar plus
-command-to-gap synchronization before freeze. The ordered
+Pure tests cover immutable operation-prefix isolation, shell quoting,
+immediate all-or-none updates, reverse canonical projection, red invalid-box
+styling, and collision-safe seven-character prefixes. Embed tests cover Context
+and Memory grammar plus command-to-gap synchronization before freeze. The ordered
 `180x52` color-PTY record under
 [`screenshots/mem-embed-placement-20260813/`](screenshots/mem-embed-placement-20260813/README.md)
 captures the compact blue runnable box, a red incomplete command box,
 upper controls changing before Enter, invalid-command rejection, final
 approval, success, and read-only durable verification.
+The ordered Edit record under
+[`screenshots/direct-memory-selector-actions-20260820/`](screenshots/direct-memory-selector-actions-20260820/edit-interaction-log.md)
+additionally captures an attempted cross-operation argument paste while the
+fixed `mem edit` prompt remains intact, followed by a valid bidirectional edit.
