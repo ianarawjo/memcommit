@@ -3,11 +3,11 @@
 ## Status
 
 `VERIFIED` for the internal application and APPLY-01 boundary, reviewed
-2026-08-15.
+2026-08-21.
 
 Sever is the second operation slice used to test the target application
 architecture after Summarize. Its semantic analysis, private saved-session
-lifecycle, execution-decision revisions, and require-new Apply now have typed,
+lifecycle, execution-decision revisions, and self-/other-save Apply have typed,
 terminal-independent entry points. Existing CLI setup, saved-session launching,
 and Resolution presentation remain interface adapters and have not yet been
 presented as a stable Python API.
@@ -49,7 +49,8 @@ SeverSessionSnapshot(session, opaque CAS token)
         |
         v
 run_sever_session_apply
-  | exact interrupted-Apply recovery, or require-new output + checkpoint
+  | exact interrupted-Apply recovery
+  | SELF-SAVE Source CAS or OTHER-SAVE require-new output + checkpoint
   | APPLIED-session CAS save
   | exact compensation if that save fails
         |
@@ -68,11 +69,11 @@ SeverPersistedApplyResult
 | Decision result | `SeverAnalysisResult` | strict provider decoder or fresh prepared ledger | Resolution Workbench renders outstanding choices | The ledger covers every Source Memory exactly once and creates no Result Context |
 | Session lifecycle | `SeverSessionRepository`, `SeverSessionSnapshot` | `MemoryStoreSeverSessionRepository` | launchers and `--resume` open a snapshot; interfaces never calculate a record digest | Create, load, and replace share one opaque optimistic-CAS contract |
 | Decision revision | `SeverDecisionRequest` | repository replace under the snapshot token | scripted choices and TUI responses submit the same exact candidate UID and selection | stale revisions fail before they can overwrite a newer decision; custom content is valid only for `CUSTOM` |
-| Destination revision | `SeverDestinationRequest`, `SeverDestinationPort` | live Store name validation plus repository CAS | the Save Location editor supplies only the proposed exact name | an existing or invalid output cannot alter the decisions, and changing a name does not rerun analysis |
+| Destination revision | `SeverDestinationRequest`, `SeverDestinationPort` | live Store name validation plus repository CAS | the Save Location editor supplies only the proposed exact name | the exact ordinary local direct Source selects self-save; a fresh name selects other-save; every other existing or invalid output fails without rerunning analysis |
 | Apply input | `SeverPersistedApplyRequest` | `MemoryStoreSeverOutputPort` plus the session repository | CLI `--accept` and TUI Accept call the same persisted use case | the current token is reloaded before any output effect; local frames and granted identity/revision/content are fresh at the Result commit point |
-| Apply result | `SeverPersistedApplyResult` | require-new Context, checkpoint, APPLIED-session replacement, and exact compensation | interfaces receive the resulting snapshot | Source and Criteria bindings, candidates, output name, and grounded summary cannot change during Apply; a synchronous receipt failure publishes neither side |
-| Interrupted Apply | same persisted request | exact Context/checkpoint recovery in `MemoryStoreSeverOutputPort` | retry uses the ordinary Apply path | only a Result whose digest and sole Sever checkpoint match the accepted session is adopted; an unrelated occupant remains a collision |
-| Idempotence | `run_sever_session_apply` | output and repository ports are skipped for an already APPLIED snapshot | reopening an applied session remains read-only | a repeated application call creates neither a second Context nor a second session revision; recovered prior creation reports `created=False` |
+| Apply result | `SeverPersistedApplyResult` | Source CAS or require-new Context, checkpoint, APPLIED-session replacement, and exact compensation | interfaces receive the resulting snapshot | Source and Criteria bindings, candidates, save mode, output name, and grounded summary cannot change during Apply; a synchronous receipt failure publishes neither side |
+| Interrupted Apply | same persisted request | exact Context/checkpoint recovery in `MemoryStoreSeverOutputPort` | retry uses the ordinary Apply path | only a self-save post-image or other-save Result whose digest and Sever checkpoint match the accepted session is adopted; unrelated state is never overwritten |
+| Idempotence | `run_sever_session_apply` | output and repository ports are skipped for an already APPLIED snapshot | reopening an applied session remains read-only | a repeated application call creates no second mutation or session revision; exact interrupted recovery reports `created=False` |
 | Presentation | none | none | command wait, plain renderer, setup TUI, Resolution Workbench | `sever_application` imports no Typer, prompt-toolkit, TUI, or `commands.*` module |
 
 ## Dependency direction
@@ -95,7 +96,7 @@ imports the runtime owner directly rather than reaching through the command.
 ## Safety and compatibility invariants
 
 - Analysis completes locator, READ/Grant, COMBINE, derived-transfer, retained-
-  analysis, require-new-name, and complete-frame checks before cache lookup or
+  analysis, save-location, and complete-frame checks before cache lookup or
   provider construction.
 - Query-only routes never disclose hidden content. Live `MemoryRef` values fail
   rather than being copied into a retained frame.
@@ -107,22 +108,24 @@ imports the runtime owner directly rather than reaching through the command.
 - Apply reloads the durable snapshot before output creation. A stale REVIEWING
   or stale APPLIED snapshot fails before materialization; the final CAS catches
   a race that occurs after Result creation.
-- Apply creates a new local ordinary Context and checkpoint. It never updates,
-  deletes, or checkpoints the Source.
+- Self-save updates one exact ordinary local Source root, preserving Context and
+  retained Memory UIDs. Other-save creates a new local ordinary Context and
+  leaves Source unchanged. Recursive and granted-Source self-save fail before
+  provider construction.
 - Local contributing Context digests remain the Store materializer's CAS set.
   Granted inputs revalidate the exact frozen Profile, Grant, permissions,
   public/resource mapping, and projected frame before and after creation while
   the registry is frozen. A stale/revoked Grant or changed authority Context
   fails without a partial Result.
-- An all-KEEP review is not a Source no-op: it creates the reviewed derived
-  Result and checkpoint while leaving Source byte-for-byte unchanged.
+- An all-KEEP review still records the reviewed application checkpoint in its
+  selected save mode.
 - If session receipt persistence raises, the adapter re-reads it before acting.
   A late committed receipt is success; an unchanged REVIEWING session triggers
-  deletion of only the exact untouched Result and sole checkpoint; an
-  indeterminate or concurrently changed state fails closed without deletion.
-- Existing Sever session schema, candidate UIDs, deterministic Result Memory
-  UIDs, checkpoint payload, Undo/Redo contract, CLI text, TUI topology, and
-  saved-session compatibility are unchanged.
+  deletion of only the exact untouched other-save Result or restoration of the
+  exact self-save pre-image; an indeterminate or changed state fails closed.
+- Existing Sever session schema remains readable. Checkpoints now state
+  `SELF_SAVE` or `OTHER_SAVE`; Undo/Redo restores the Context and session halves
+  together in either mode.
 
 ## Verification evidence
 
@@ -137,30 +140,29 @@ The focused boundary and compatibility run currently covers:
 - AST-level application independence from commands, Typer, and prompt-toolkit;
 - runtime independence from Typer and prompt-toolkit;
 - real-Store analysis with no terminal output or premature Result creation;
-- real-Store Apply, checkpoint creation, exact result content, and byte-for-byte
-  Source preservation;
+- real-Store self-save and other-save Apply, checkpoint creation, exact result
+  content, Context/Memory identity preservation, and Source preservation in
+  other-save;
 - missing Source failure before provider construction;
 - real-Store session CAS, destination validation, persisted Apply, and repeat-
   Apply idempotence without terminal output;
 - existing CLI, TUI setup, authority, exact Study prewarm, review, Apply,
   Undo/Redo, and application-report behavior.
 - local Source and Criteria freshness, Apply-time output-name races, all-KEEP
-  materialization, synchronous session-save compensation, and late-success
+  materialization, self-/other-save synchronous compensation, and late-success
   detection;
 - granted Source and Criteria success, authority-content changes, Grant
   revision and revocation, plus a change injected between the two Apply checks;
-- exact interrupted-Apply recovery without a second Result identity.
+- exact interrupted-Apply recovery without a second mutation or Result identity;
+- self-save provider-precondition rejection for recursive and granted Sources;
+- self-save and other-save Undo/Redo with the saved session restored atomically.
 
 The focused lifecycle, review-policy, restoration, local/granted boundary, and
-compatibility run passed 90 tests. The ordered 180×52 true-color replay under
-`docs/screenshots/sever-apply-boundaries-20260815/` records analysis pending,
-the all-KEEP application receipt, read-only verification, Undo, Redo,
-synchronous compensation, and interrupted-Apply recovery. The work changes no
-TUI topology or key contract.
-
-An expanded 368-test run across Sever, authority, command attempts/wait,
-Context scope, Impact/session/restoration, Study installation, write
-protection, and Context-operand consumers passed in full.
+compatibility tests pass. The ordered 180×52 true-color replay under
+`docs/screenshots/context-positional-grammar-20260821/` records Help, default
+self-save, UID preservation, and explicit other-save. The older
+`sever-apply-boundaries-20260815` set remains evidence for other-save
+compensation and interrupted recovery.
 
 ## Remaining boundaries and non-goals
 
@@ -185,22 +187,23 @@ protection, and Context-operand consumers passed in full.
 
 | Case | Expected effect | Verification |
 | --- | --- | --- |
-| Local Source and Criteria current | New Result + one checkpoint; Source unchanged | real Store and PTY receipt |
-| Granted Source current | Same local Result behavior; no authority mutation | real Grant fixture |
-| Granted Criteria current | Same local Result behavior; no authority mutation | real Grant fixture |
-| All candidates KEEP | New derived Result + checkpoint, not no-op | real Store and PTY receipt |
-| Local Source or Criteria changes after review | Fail before Result | parameterized CAS tests |
-| Granted authority content changes after review | Fail before Result | Source/Criteria role tests |
+| Direct local Source and Criteria current; RESULT omitted/equal | Source Context UID retained; reviewed removals and transformations applied under retained Memory UIDs; one checkpoint | real Store and PTY receipt |
+| Local Source and Criteria current; distinct fresh RESULT | New Result + one checkpoint; Source unchanged | real Store and PTY receipt |
+| Granted Source current | OTHER-SAVE retains the same local Result behavior; SELF-SAVE fails before provider; no authority mutation | real Grant fixture |
+| Granted Criteria current | The selected SELF-SAVE or OTHER-SAVE Source behavior; no Criteria-authority mutation | real Grant fixture |
+| All candidates KEEP | SELF-SAVE retains Source identity/content and records the reviewed application; OTHER-SAVE publishes the complete derived Result | real Store and PTY receipt |
+| Local Source or Criteria changes after review | Fail before Source update or new Result | parameterized CAS tests |
+| Granted authority content changes after review | Fail before Source update or new Result | Source/Criteria role tests |
 | Grant revised or revoked | Fail before Result | control-plane tests |
 | Granted content changes during Result creation | Exact Result compensated; session REVIEWING | injected between-check test |
 | Output name claimed after review | Existing owner untouched; session REVIEWING | require-new race test |
-| Session receipt save fails before commit | Exact new Result/checkpoint compensated | pure port + real Store + PTY |
+| Session receipt save fails before commit | SELF-SAVE restores the exact Source preimage; OTHER-SAVE removes the exact new Result/checkpoint | pure port + real Store + PTY |
 | Session receipt commits then reports failure | Re-read as success; no compensation | pure port test |
-| Process stops after exact Result/checkpoint | Retry adopts same UID and saves receipt | real Store + PTY recovery |
+| Process stops after exact Source update or Result/checkpoint | Retry adopts the exact application and saves the missing receipt | real Store + PTY recovery |
 | Existing output is not the exact interrupted Result | Normal name collision; never adopted | require-new collision test |
 | Already APPLIED retry | No new Context, checkpoint, or revision | persisted idempotence test |
 | Close/cancel before Accept | REVIEWING session retained; no Result | workbench CLOSE test |
-| Undo then Redo | Whole Result and matching receipt removed/restored as one unit | command tests + PTY |
+| Undo then Redo | SELF-SAVE Source state or whole OTHER-SAVE Result and matching receipt restored as one unit | command tests + PTY |
 
 ## 2026-08-20 execution-receipt migration
 

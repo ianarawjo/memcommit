@@ -455,11 +455,10 @@ def test_conflict_review_exact_command_names_the_selected_target() -> None:
         ResolutionOutcome((("merge-conflict:test", "KEEP_TARGET"),)),
     )
 
-    assert review.argv[:7] == (
+    assert review.argv[:6] == (
         "mem",
         "merge",
         "source",
-        "--into",
         "target",
         "--direct",
         "--resolve",
@@ -570,7 +569,6 @@ def test_frozen_plan_exact_review_names_actual_counts() -> None:
         "mem",
         "merge",
         "source",
-        "--into",
         "target",
         "--direct",
     )
@@ -611,7 +609,6 @@ def test_exact_review_names_recursive_path_and_selected_target() -> None:
         "mem",
         "merge",
         "source",
-        "--into",
         "target",
         "--recursive",
     )
@@ -902,6 +899,28 @@ def test_cli_merge_into_explicit_target_without_a_current_context(
     assert result.exit_code == 0, result.output + result.stderr
     assert addition.uid in store.load_direct("target").memories
     assert store.current_context_name() is None
+
+
+def test_cli_merge_accepts_a_positional_target_and_rejects_a_duplicate_alias(
+    isolated_store,
+) -> None:
+    store = MemoryStore()
+    source = ops.init("source")
+    addition = ops.add(source, "positional target fact")
+    store.create_context(source)
+    store.create_context(ops.init("target"))
+
+    result = runner.invoke(app, ["merge", "source", "target"])
+    duplicate = runner.invoke(
+        app,
+        ["merge", "source", "target", "--into", "other"],
+    )
+
+    assert result.exit_code == 0, result.output + result.stderr
+    assert addition.uid in store.load_direct("target").memories
+    assert store.current_context_name() is None
+    assert duplicate.exit_code == 2
+    assert "supply Target either positionally or with --into" in duplicate.stderr
 
 
 def test_cli_rejects_conflicting_reach_flags(isolated_store) -> None:

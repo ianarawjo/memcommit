@@ -27,6 +27,7 @@ from memcommit.commands import (
     find_ambiguities,
     find_conflicts,
     find_duplicates,
+    find_exact_duplicates,
     fit,
     forget,
     ground,
@@ -154,6 +155,11 @@ app.command(
 app.command(
     "compare",
     help=operation_summary("compare"),
+    epilog=(
+        "Positional forms: 'mem compare PEER' uses the current REFERENCE; "
+        "'mem compare REFERENCE PEER' names both peers. --from and --to "
+        "remain compatibility aliases."
+    ),
 )(compare.cmd)
 
 # --- Navigation ---
@@ -172,6 +178,10 @@ app.command(
 app.command(
     "merge",
     help=operation_summary("merge"),
+    epilog=(
+        "Positional form: 'mem merge SOURCE TARGET'. Omitting TARGET uses the "
+        "command-start current Context; --into remains a compatibility alias."
+    ),
 )(merge.cmd)
 app.command(
     "meld",
@@ -217,6 +227,10 @@ app.command(
 app.command(
     "atomize",
     help=operation_summary("atomize"),
+    epilog=(
+        "Positional form: 'mem atomize [CONTEXT]'. Omitting CONTEXT uses the "
+        "current Context; --context remains a compatibility alias."
+    ),
 )(atomize.cmd)
 app.command(
     "distill",
@@ -245,6 +259,10 @@ app.command(
 app.command(
     "dedun",
     help=operation_summary("dedun"),
+    epilog=(
+        "Positional form: 'mem dedun [CONTEXT]'. Omitting CONTEXT uses the "
+        "current Context; --context remains a compatibility alias."
+    ),
 )(dedun.cmd)
 # The exact-review spelling remains executable for old receipts; ordinary
 # discovery and applying intent stay under the canonical Dedun operation.
@@ -298,21 +316,42 @@ app.command(
 app.command(
     "find-redundancies",
     help=operation_summary("find-redundancies"),
+    epilog=(
+        "Positional form: 'mem find-redundancies [CONTEXT]'. Omitting CONTEXT "
+        "uses the current Context; --context remains a compatibility alias."
+    ),
 )(find_duplicates.cmd)
-# Preserve the former semantic-finder spelling without presenting it as a
-# second operation. Exact byte-identical removal belongs to `mem dedup`.
-app.command("find-duplicates", hidden=True)(find_duplicates.cmd)
+app.command(
+    "find-duplicates",
+    help=operation_summary("find-duplicates"),
+    epilog=(
+        "Positional form: 'mem find-duplicates [CONTEXT]'. Omitting CONTEXT "
+        "uses the current Context; --context remains a compatibility alias."
+    ),
+)(find_exact_duplicates.cmd)
 app.command(
     "find-ambiguities",
     help=operation_summary("find-ambiguities"),
+    epilog=(
+        "Positional form: 'mem find-ambiguities [CONTEXT]'. Omitting CONTEXT "
+        "uses the current Context; --context remains a compatibility alias."
+    ),
 )(find_ambiguities.cmd)
 app.command(
     "find-conflicts",
     help=operation_summary("find-conflicts"),
+    epilog=(
+        "Positional form: 'mem find-conflicts [CONTEXT]'. Omitting CONTEXT "
+        "uses the current Context; --context remains a compatibility alias."
+    ),
 )(find_conflicts.cmd)
 app.command(
     "audit",
     help=operation_summary("audit"),
+    epilog=(
+        "Positional form: 'mem audit [CONTEXT]'. Omitting CONTEXT uses the "
+        "current Context; --context remains a compatibility alias."
+    ),
 )(audit.cmd)
 app.command(
     "review",
@@ -321,6 +360,12 @@ app.command(
 app.command(
     "sever",
     help=operation_summary("sever"),
+    epilog=(
+        "Positional form: 'mem sever SOURCE CRITERIA [RESULT]'. Omitting "
+        "RESULT self-saves into SOURCE; an explicit fresh RESULT saves "
+        "elsewhere. --source, "
+        "--criteria/--against, and --save-as remain compatibility aliases."
+    ),
 )(sever.cmd)
 app.command(
     "share",
@@ -333,6 +378,11 @@ app.command(
 app.command(
     "update",
     help=operation_summary("update"),
+    epilog=(
+        "Positional form: 'mem update SOURCE TARGET'. Zero operands opens "
+        "saved Update work; one-sided current-filled routes remain available "
+        "through --from or --to."
+    ),
 )(update.cmd)
 
 # --- Sub-apps ---

@@ -143,9 +143,9 @@ def test_add_has_one_structured_copy_or_link_comparison():
     assert "Memory UID or Context name" in comparison.explanation
     assert [option.label for option in comparison.options] == [
         "INDEPENDENT WORK",
-        "EXACT MEMORY VERSION",
+        "EXACT MEMORY OR CONTEXT",
         "LIVE MEMORY",
-        "EXISTING CONTEXT",
+        "LIVE CONTEXT",
     ]
     assert "mem reference" in comparison.options[1].guidance
     assert "mem embed" in comparison.options[2].guidance
@@ -705,10 +705,10 @@ def test_expanded_add_explains_literal_content_and_copy_or_link_routes():
     assert "copy the Memory content and add it" in rendered
     assert "directly." in rendered
     assert (
-        "- EXACT MEMORY VERSION · Use mem reference to retain an immutable" in rendered
+        "- EXACT MEMORY OR CONTEXT · Use mem reference to retain an immutable" in rendered
     )
-    assert "- LIVE MEMORY · Use mem embed MEMORY --from SOURCE" in rendered
-    assert "- EXISTING CONTEXT · Use mem embed." in rendered
+    assert "- LIVE MEMORY · Use mem embed SOURCE:MEMORY" in rendered
+    assert "- LIVE CONTEXT · Use mem embed." in rendered
     assert "parent stores" in rendered
     assert "only the Context identity" in rendered
     assert "* EXISTING MEMORY" not in rendered

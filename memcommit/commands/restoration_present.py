@@ -9,8 +9,13 @@ from typing import Any
 import typer
 
 from memcommit.command_history import CommandRestoreResult, ContextCommandUnit
+from memcommit.interfaces.console.identity import collision_safe_uid_prefixes
 from memcommit.interfaces.console.text import (
     display_escape_text,
+)
+from memcommit.interfaces.console.theme import (
+    SemanticColorRole,
+    semantic_color_rgb,
 )
 from memcommit.context import Checkpoint
 from memcommit.source_projection.model import SourceForm
@@ -244,6 +249,32 @@ def _with_context(command: str, context_name: str | None) -> str:
     return f"{command} --context {_command_arg(context_name)}"
 
 
+def _compact_direct_item_selector(
+    unit: ContextCommandUnit,
+    selector: str,
+) -> str:
+    """Project a retained selector against its frozen single-Context scope.
+
+    Direct Memory mutation receipts can stay compact without consulting live
+    state: their command unit retains the relevant pre/post images. Multi-owner
+    commands and legacy records without that exact catalog keep the persisted
+    operand in full because a guessed eight-character scope would be unsafe.
+    """
+
+    if len(unit.changes) != 1:
+        return selector
+    frozen_uids: list[str] = []
+    change = unit.changes[0]
+    for snapshot in (change.before, change.after):
+        items, _order = _snapshot_items(snapshot)
+        frozen_uids.extend(items)
+    catalog = tuple(dict.fromkeys(frozen_uids))
+    matches = [uid for uid in catalog if uid.startswith(selector)]
+    if len(matches) != 1:
+        return selector
+    return collision_safe_uid_prefixes(catalog)[matches[0]]
+
+
 def _meld_command(args: Mapping[str, object]) -> str | None:
     left = args.get("left")
     right = args.get("right")
@@ -313,11 +344,10 @@ def _sever_command(args: Mapping[str, object]) -> str | None:
         if record.get("criteria_scope") == "INCLUDE_DESCENDANTS"
         else "--criteria-root-only"
     )
-    return (
-        f"mem sever --source {_command_arg(source)} "
-        f"--criteria {_command_arg(criteria)} --save-as {_command_arg(output)} "
-        f"{source_scope} {criteria_scope} --accept"
-    )
+    command = f"mem sever {_command_arg(source)} {_command_arg(criteria)}"
+    if output != source:
+        command += f" {_command_arg(output)}"
+    return f"{command} {source_scope} {criteria_scope} --accept"
 
 
 def _translate_command(args: Mapping[str, object]) -> str | None:
@@ -388,17 +418,20 @@ def _restored_command(unit: ContextCommandUnit) -> str:
         if isinstance(args.get("uid"), str) and isinstance(
             args.get("content"), str
         ):
+            selector = _compact_direct_item_selector(unit, args["uid"])
             return _with_context(
-                f"mem edit {_command_arg(args['uid'])} "
+                f"mem edit {_command_arg(selector)} "
                 "<CONTENT>",
                 operand_context,
             )
     if unit.command == "remove" and isinstance(args.get("uid"), str):
+        selector = _compact_direct_item_selector(unit, args["uid"])
         return _with_context(
-            f"mem remove {_command_arg(args['uid'])}", operand_context
+            f"mem remove {_command_arg(selector)}", operand_context
         )
     if unit.command == "chunk" and isinstance(args.get("uid"), str):
-        command = f"mem chunk {_command_arg(args['uid'])}"
+        selector = _compact_direct_item_selector(unit, args["uid"])
+        command = f"mem chunk {_command_arg(selector)}"
         if isinstance(args.get("method"), str):
             command += f" --method {_command_arg(args['method'])}"
         if isinstance(args.get("break_on"), str):
@@ -424,7 +457,7 @@ def _restored_command(unit: ContextCommandUnit) -> str:
     if unit.command == "clear":
         target = args.get("context") or context_name
         if isinstance(target, str):
-            return f"mem clear {_command_arg(target)} --force"
+            return f"mem clear {_command_arg(target)}"
     if unit.command == "embed" and isinstance(args.get("child"), str) and isinstance(
         args.get("into"), str
     ):
@@ -541,8 +574,10 @@ def _render_action_detail(description: str | None) -> None:
         )
 
 
-def _compact_restore_effect(result: CommandRestoreResult) -> str:
-    """Summarize one restoration without repeating restored Memory content."""
+def _compact_restore_effect(
+    result: CommandRestoreResult,
+) -> tuple[tuple[str, str | tuple[int, int, int] | None], ...]:
+    """Summarize one restoration as semantic, independently styled parts."""
 
     changes: list[_ItemChange] = []
     reordered_contexts = 0
@@ -566,35 +601,56 @@ def _compact_restore_effect(result: CommandRestoreResult) -> str:
         for change in changes
         if _change_item_kind(change) == "Memory"
     ]
-    parts = [f"Affected Memories: {len(memory_changes)}"]
+    parts: list[tuple[str, str | tuple[int, int, int] | None]] = [
+        (f"Affected Memories: {len(memory_changes)}", None)
+    ]
     markers = {"added": "+", "edited": "~", "removed": "-"}
+    colors = {
+        "added": semantic_color_rgb(SemanticColorRole.ADD),
+        "edited": semantic_color_rgb(SemanticColorRole.EDIT),
+        "removed": semantic_color_rgb(SemanticColorRole.REMOVE),
+    }
     for kind in ("added", "edited", "removed"):
         count = sum(change.kind == kind for change in memory_changes)
         if count:
-            parts.append(f"{markers[kind]} {count} {kind}")
+            parts.append((f"{markers[kind]} {count} {kind}", colors[kind]))
 
     other_changes = [change for change in changes if change not in memory_changes]
     if other_changes:
-        parts.append("Other: " + _impact_summary(other_changes, False))
+        parts.append(("Other: " + _impact_summary(other_changes, False), None))
     if reordered_contexts:
         parts.append(
-            f"~ order restored in {reordered_contexts} "
-            f"{'Context' if reordered_contexts == 1 else 'Contexts'}"
+            (
+                f"~ order restored in {reordered_contexts} "
+                f"{'Context' if reordered_contexts == 1 else 'Contexts'}",
+                semantic_color_rgb(SemanticColorRole.HISTORY),
+            )
         )
-    return " · ".join(parts)
+    return tuple(parts)
 
 
 def render_command_restore_receipt(result: CommandRestoreResult) -> None:
     """Report one global Undo or Redo as a compact one-line receipt."""
     direction = result.direction
     past = "Undid" if direction == "undo" else "Redid"
-    typer.echo(
-        f"{past} command: "
-        + _restored_command(result.unit)
-        + f" · Affected Contexts: {len(result.unit.changes)}"
-        + " · "
-        + _compact_restore_effect(result)
+    direction_role = (
+        SemanticColorRole.UNDO
+        if direction == "undo"
+        else SemanticColorRole.REDO
     )
+    fragments = [
+        typer.style(
+            f"{past} command: ",
+            fg=semantic_color_rgb(direction_role),
+            bold=True,
+        ),
+        _restored_command(result.unit),
+        f" · Affected Contexts: {len(result.unit.changes)}",
+    ]
+    for text, color in _compact_restore_effect(result):
+        fragments.append(" · ")
+        fragments.append(typer.style(text, fg=color) if color else text)
+    typer.echo("".join(fragments))
 
 
 def render_revert_receipt(
@@ -608,7 +664,7 @@ def render_revert_receipt(
     typer.secho(
         "Reverted Context: "
         + _short(context_name, limit=_MAX_CONTENT_CODEPOINTS),
-        fg=typer.colors.GREEN,
+        fg=semantic_color_rgb(SemanticColorRole.UNDO),
         bold=True,
     )
     typer.echo(

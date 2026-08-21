@@ -1,0 +1,4 @@
+Referenced recursive Context snapshot 'a-source' (3 Contexts) as [611544dc] in 'target'.                                                                                            
+CONTEXT VERIFICATION GATE · PRESS V                                                                                                                                                 
+v                                                                                                                                                                                   
+CONTEXT SNAPSHOT VERIFIED · SOURCES DELETED · CONTEXTS 3 · CONTENTS ('Root snapshot fact.', 'Embedded Context fact.', 'Lexical descendant fact.')

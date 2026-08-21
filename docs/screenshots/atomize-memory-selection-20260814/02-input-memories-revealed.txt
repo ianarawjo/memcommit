@@ -2,8 +2,8 @@
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ A · INPUT ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃› ✓  ▾ study/source                                                                                                                                                              ^┃
-┃    · [memory f1a4679b] The library entrance moves north on Monday and closes at 18:00.                                                                                           ┃
-┃    · [memory a1d23789] The help desk keeps its existing weekend schedule.                                                                                                        ┃
+┃    · [memory c837cb12] The library entrance moves north on Monday and closes at 18:00.                                                                                           ┃
+┃    · [memory f8a5f22f] The help desk keeps its existing weekend schedule.                                                                                                        ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
@@ -49,4 +49,4 @@
 ┌────────────────────────────────────────────────────────────────────────────────────| APPLY |─────────────────────────────────────────────────────────────────────────────────────┐
 │[ PRESS ENTER TO APPLY ]                                                                                                                                                          │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
- ↑/↓ move · ←/→ tree · Enter/Space choose Context · m Memory here · M all · Tab pane · Q cancel
+ m THIS Context: hide items · M EVERY Context: show items · ↑/↓ move · ←/→ tree · Enter/Space choose Context · Tab pane · Q cancel

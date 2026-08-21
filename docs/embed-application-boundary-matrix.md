@@ -18,7 +18,7 @@ change instead.
 | --- | --- | --- |
 | Context/Memory request, frozen plan, exact gap, durable result | `memcommit.embed_application` | Tagged typed values contain no Typer, prompt-toolkit, Store, or provider dependency. |
 | Relative locator snapshot, direct loads, validation, CAS, source lock, checkpoint | `memcommit.embed_runtime` | Source and Into resolve from one current-Context snapshot; apply publishes all or nothing. |
-| Argument grammar and plain success/error rendering | `memcommit.interfaces.cli.embed` | `--from` explicitly selects Memory Embed; its absence selects Context Embed. If that Context operand is instead a direct Memory selector in the command-start current Context, the CLI reports the Memory type and exact corrected `--from` command without silently switching modes. |
+| Argument grammar and plain success/error rendering | `memcommit.interfaces.cli.embed` | `CONTEXT:UID` explicitly names one Memory owner; a bare public UID/prefix selects Memory mode and must have exactly one ordinary local direct owner. `--from` remains a mutually exclusive compatibility spelling. Other operands select Context Embed. Omitted `--into` binds the command-start current Context and is copied into the typed request before planning. |
 | Link-type, Source, target/gap, and exact-command review | `memcommit.interfaces.tui.operations.embed` | Context mode reuses the shared Context selector; Memory mode composes the shared direct-Memory picker; both return a frozen plan without saving a Store themselves. The shared editor fixes `mem embed` outside its writable argument buffer. |
 | Stable Python projection | `memcommit.api._operations.embed`, `memcommit.api.client` | `embed_memory` and `embed_context` expose different DTOs and never parse terminal text. |
 | Agent and MCP projection | `memcommit.interfaces.agent.embed`, registry projection | The versioned `memory`/`context` tag prevents operand-shape inference; MCP mechanically projects the same frozen tool contract. |
@@ -32,6 +32,18 @@ the chosen gap. Memory Embed additionally freezes the direct Source Memory UID,
 content, and content digest. The Context interactive adapter returns its same
 `FrozenEmbedPlan`; explicit CLI, Python, and agent routes prepare the matching
 typed plan through the same runtime.
+For the CLI convenience form, the adapter captures current state once and
+copies that canonical name into the request when `--into` is omitted. The
+application and callable contracts therefore continue to receive an explicit
+Target and do not consult mutable global current state during planning.
+
+Before constructing a Memory request, the CLI resolves the shared direct-Memory
+locator. A qualified `CONTEXT:UID` searches only that canonical direct owner. A
+bare UID searches one strict complete snapshot of ordinary local direct frames,
+without preferring the current Context, and succeeds only for one match. An
+ambiguous result lists every canonical `CONTEXT:FULL_UID` candidate and mutates
+nothing. MemoryRef, snapshots, embedded bodies, Grants, and query routes do not
+enter that ownership catalog.
 
 Apply reloads both Contexts, verifies identity and digest equality, resolves
 the frozen neighbors again, and mutates only after every check succeeds.

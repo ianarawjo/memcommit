@@ -21,7 +21,9 @@ from memcommit.update import (
     UpdateSession,
     count_operations,
     required_grant_permissions,
+    update_session_record_digest,
 )
+from memcommit.interactive_command_review import update_turn_command_review
 from memcommit.update_resolution_adapter import (
     UpdateResolutionWorkbenchAdapter,
 )
@@ -136,7 +138,7 @@ def review_update_application(
             global_strategies=(
                 ResolutionGlobalStrategy(
                     "Revise from comments",
-                    "CUSTOM",
+                    "SUBMIT_ALL",
                     "Revise the complete Update proposal from saved comments.",
                 ),
             ),
@@ -147,6 +149,20 @@ def review_update_application(
                     "These exact target changes are staged. Apply remains a separate "
                     "explicit action."
                 ),
+            ),
+            turn_command_review=lambda action: (
+                update_turn_command_review(
+                    source_name=current.source_name,
+                    target_name=current.target_name,
+                    source_descendants=current.source_include_descendants,
+                    target_descendants=current.target_include_descendants,
+                    source_memory_uid=current.source_memory_uid,
+                    target_memory_uid=current.target_memory_uid,
+                    comment=action.comment,
+                    expected_session=update_session_record_digest(current),
+                )
+                if action.kind == "SUBMIT_ALL"
+                else None
             ),
         )
         if action.kind == "ACCEPT":

@@ -29,24 +29,24 @@
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ ANSWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃[1] m1 · memory · 11111111 · Context: task-1/campus-wiki/building-access                                                                                                         ^┃
-┃  The main entrance normally closes at 10 p.m.                                                                                                                                    ┃
+┃Access changes from 10 p.m. to 5 p.m. during construction. [1] [2]                                                                                                               ^┃
 ┃                                                                                                                                                                                  ┃
-┃[2] m2 · memory · 22222222 · Context: task-1/participant/construction-updates/building-access                                                                                     ┃
-┃  During construction, general access ends at 5 p.m.                                                                                                                              ┃
+┃Parking moves to Lot C, while hall viewing and reservations stop. [3] [4] [5] [6]                                                                                                 ┃
 ┃                                                                                                                                                                                  ┃
-┃[3] m3 · memory · 33333333 · Context: task-1/campus-wiki/temporary-parking                                                                                                        ┃
-┃  The underground garage normally accepts general vehicles.                                                                                                                       ┃
+┃The reviewed comparison reports no unresolved issue; this is bounded to that corpus. [7]                                                                                          ┃
 ┃                                                                                                                                                                                  ┃
-┃[4] m4 · memory · 44444444 · Context: task-1/participant/construction-updates/temporary-parking                                                                                   ┃
-┃  During construction, use Outdoor Parking Lot C instead.                                                                                                                         ┃
+┃References                                                                                                                                                                        ┃
+┃[1] The main entrance normally closes at 10 p.m. — 11111111, task-1/campus-wiki/building-access m1                                                                                ┃
+┃[2] During construction, general access ends at 5 p.m. — 22222222, task-1/participant/construction-updates/building-access m2                                                     ┃
+┃[3] The underground garage normally accepts general vehicles. — 33333333, task-1/campus-wiki/temporary-parking m3                                                                 ┃
+┃[4] During construction, use Outdoor Parking Lot C instead. — 44444444, task-1/participant/construction-updates/temporary-parking m4                                              ┃
+┃[5] The tenth-floor hall normally remains open during recess. — 55555555, task-1/campus-wiki/event-relocations m5                                                                 ┃
+┃[6] During construction, viewing and new reservations stop. — 66666666, task-1/participant/construction-updates/event-relocations m6                                              ┃
+┃[7] Compare issues: 0. Every reviewed relation is resolved. — 77777777, task-1/participant m7                                                                                     ┃
 ┃                                                                                                                                                                                  ┃
-┃[5] m5 · memory · 55555555 · Context: task-1/campus-wiki/event-relocations                                                                                                        ┃
-┃  The tenth-floor hall normally remains open during recess.                                                                                                                       ┃
 ┃                                                                                                                                                                                  ┃
-┃[6] m6 · memory · 66666666 · Context: task-1/participant/construction-updates/event-relocations                                                                                   ┃
-┃  During construction, viewing and new reservations stop.                                                                                                                         ┃
 ┃                                                                                                                                                                                  ┃
-┃[7] m7 · artifact · 77777777 · Context: task-1/participant                                                                                                                       v┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
  QUERY COMPLETE · SOURCE AND SCOPE FROZEN · ↑/↓ answer/References · y copy focused · Y copy complete answer · Tab switch · Esc question

@@ -70,8 +70,10 @@ def test_update_cli_exposes_common_and_role_specific_scope_controls() -> None:
     assert {"-d", "--direct", "-r", "--recursive"} <= spellings
     assert {
         "--source-descendants",
+        "--source-root-only",
         "--source-only",
         "--target-descendants",
+        "--target-root-only",
         "--target-only",
     } <= spellings
 

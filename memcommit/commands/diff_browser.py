@@ -36,9 +36,9 @@ from memcommit.history_display import (
     HistoryDisplayRow,
     checkpoint_command_identity,
     checkpoint_inherited_from,
-    history_action_style,
     project_history_display_rows,
 )
+from memcommit.interfaces.tui.core.theme import semantic_action_style
 from memcommit.store import (
     MemoryStore,
     checkpoint_history_digest,
@@ -223,7 +223,9 @@ def _context_rows_from_history(
                 f"{row.timestamp} · {row.summary}",
                 style="report-neutral",
                 selector=row.checkpoint_uid,
-                label_style=history_action_style(row.command),
+                label_style=(
+                    semantic_action_style(row.command).removeprefix("class:") or None
+                ),
                 badges=tuple(badges),
                 section_label=section_label,
                 detail_title=f"{row.command.upper()} · {row.summary}",
@@ -290,7 +292,9 @@ def _update_operation_rows(
             "update",
             f"{operation_count} Memory changes",
             style="report-neutral",
-            label_style=history_action_style("update"),
+            label_style=(
+                semantic_action_style("update").removeprefix("class:") or None
+            ),
             badges=(ContextMemoryBadge(f"CHECKPOINT {checkpoint_badge}"),),
             section_label=f"DIRECT COMMANDS · {name}",
             detail_title=f"UPDATE · {operation_count} Memory changes",
@@ -307,7 +311,9 @@ def _update_operation_rows(
                 "undo",
                 "restored the retained Update operation",
                 style="report-neutral",
-                label_style=history_action_style("undo"),
+                label_style=(
+                    semantic_action_style("undo").removeprefix("class:") or None
+                ),
                 section_label=f"DIRECT COMMANDS · {name}",
             ),
         )

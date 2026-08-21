@@ -1,13 +1,12 @@
  Browse Contexts                                                                                                                                                                    
  Roots · practice · task-1 · task-2 · task-3                                                                                                                                        
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-    ▾ practice                                                                                                                                                                     ^
+  * ▾ practice                                                                                                                                                                     ^
       ▸ practice/description                                                                                                                                                        
-      ▸ practice/output                                                                                                                                                             
       ▸ practice/source                                                                                                                                                             
-    ▾ task-1                                                                                                                                                                        
+›   ▾ task-1                                                                                                                                                                        
       ▸ task-1/description                                                                                                                                                          
-  *   ▾ task-1/participant                                                                                                                                                          
+      ▾ task-1/participant                                                                                                                                                          
         ▾ task-1/participant/construction-updates                                                                                                                                   
           ▸ task-1/participant/construction-updates/building-access                                                                                                                 
           ▸ task-1/participant/construction-updates/event-relocations                                                                                                               
@@ -15,38 +14,39 @@
           ▸ task-1/participant/construction-updates/route-changes                                                                                                                   
           ▸ task-1/participant/construction-updates/shop-updates                                                                                                                    
           ▸ task-1/participant/construction-updates/temporary-parking                                                                                                               
-›     ▾ task-1/campus-wiki  READ GRANT · PERMISSIONS CREATE + READ + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · A 
-        NALYSIS RATIONALE SUBTREE + TRACE BLOCKED                                                                                                                                   
-        ▸ task-1/campus-wiki/building-access  READ GRANT · PERMISSIONS CREATE + READ + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + 
-           SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED                                                                                                               
-        ▸ task-1/campus-wiki/event-relocations  READ GRANT · PERMISSIONS CREATE + READ + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS 
-           + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED                                                                                                             
-        ▸ task-1/campus-wiki/facility-updates  READ GRANT · PERMISSIONS CREATE + READ + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS  
-          + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED                                                                                                              
-        ▸ task-1/campus-wiki/route-changes  READ GRANT · PERMISSIONS CREATE + READ + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + S 
-          AVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED                                                                                                                 
-        ▸ task-1/campus-wiki/shop-updates  READ GRANT · PERMISSIONS CREATE + READ + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + SA 
-          VE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED                                                                                                                  
-        ▸ task-1/campus-wiki/temporary-parking  READ GRANT · PERMISSIONS CREATE + READ + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS 
-           + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED                                                                                                             
+      ▾ task-1/campus-wiki  READ GRANT · PERMISSIONS CREATE + READ + EMBED + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + SAVE_ANAL 
+        YSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED                                                                                                                           
+        ▸ task-1/campus-wiki/building-access  READ GRANT · PERMISSIONS CREATE + READ + EMBED + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_AN 
+          ALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED                                                                                                       
+        · task-1/campus-wiki/construction-details  QUERY GRANT · PERMISSIONS QUERY + SAVE QUERY SESSION · ANALYSIS RATIONALE BLOCKED + TRACE BLOCKED                                
+        ▸ task-1/campus-wiki/event-relocations  READ GRANT · PERMISSIONS CREATE + READ + EMBED + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ 
+          ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED                                                                                                     
+        ▸ task-1/campus-wiki/facility-updates  READ GRANT · PERMISSIONS CREATE + READ + EMBED + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_A 
+          NALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED                                                                                                      
+        ▸ task-1/campus-wiki/route-changes  READ GRANT · PERMISSIONS CREATE + READ + EMBED + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANAL 
+          YSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED                                                                                                         
+        ▸ task-1/campus-wiki/shop-updates  READ GRANT · PERMISSIONS CREATE + READ + EMBED + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALY 
+          SIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED                                                                                                          
+        ▸ task-1/campus-wiki/temporary-parking  READ GRANT · PERMISSIONS CREATE + READ + EMBED + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ 
+          ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED                                                                                                     
     ▾ task-2                                                                                                                                                                        
       ▸ task-2/description                                                                                                                                                          
       ▾ task-2/participant                                                                                                                                                          
         ▸ task-2/participant/proposal-workspace                                                                                                                                     
-      ▾ task-2/advisor1  READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED               
-        ▸ task-2/advisor1/budget  READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED      
-        ▸ task-2/advisor1/claim-evidence  READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOC 
+      ▾ task-2/advisor1  READ GRANT · PERMISSIONS READ + EMBED + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED       
+        ▸ task-2/advisor1/budget  READ GRANT · PERMISSIONS READ + EMBED + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOC 
           KED                                                                                                                                                                       
-        ▸ task-2/advisor1/compensation  READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKE 
-          D                                                                                                                                                                         
-        ▸ task-2/advisor1/emphasis  READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED    
-        ▸ task-2/advisor1/ethics  READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED      
-        ▸ task-2/advisor1/evaluation  READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED  
-        ▸ task-2/advisor1/expression  READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED  
-        ▸ task-2/advisor1/feasibility  READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED 
-        ▸ task-2/advisor1/methods  READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED     
-        ▸ task-2/advisor1/reproducibility  READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLO 
-          CKED                                                                                                                                                                      
-        ▸ task-2/advisor1/review  READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED     v
+        ▸ task-2/advisor1/claim-evidence  READ GRANT · PERMISSIONS READ + EMBED + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TR 
+          ACE BLOCKED                                                                                                                                                               
+        ▸ task-2/advisor1/compensation  READ GRANT · PERMISSIONS READ + EMBED + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRAC 
+          E BLOCKED                                                                                                                                                                 
+        ▸ task-2/advisor1/emphasis  READ GRANT · PERMISSIONS READ + EMBED + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BL 
+          OCKED                                                                                                                                                                     
+        ▸ task-2/advisor1/ethics  READ GRANT · PERMISSIONS READ + EMBED + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOC 
+          KED                                                                                                                                                                       
+        ▸ task-2/advisor1/evaluation  READ GRANT · PERMISSIONS READ + EMBED + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE  
+          BLOCKED                                                                                                                                                                   
+        ▸ task-2/advisor1/expression  READ GRANT · PERMISSIONS READ + EMBED + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE  
+          BLOCKED                                                                                                                                                                  v
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
- ↑↓ move  ←→ expand  A restore tree  m show Memories here  M show all Memories  Enter open/collapse  q close · 15/109 · 109 selectable
+ ↑↓ move  ←→ expand  A restore tree  m THIS Context: show items · M EVERY Context: show items  y copy Context  Y copy visible branch  Enter open/collapse  q close · 4/112 · 108 sel

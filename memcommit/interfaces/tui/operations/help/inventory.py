@@ -72,6 +72,7 @@ from memcommit.interfaces.tui.operations.help.localization import (
     HelpLanguage,
     category_description,
     common_key_description,
+    common_locator_description,
     core_concept_description,
     operation_copy,
     validate_translation_coverage,
@@ -93,7 +94,6 @@ COMMAND_ANNOTATIONS = {
 # checkout do not belong here because they route to more than one operation.
 COMMAND_DISPLAY_ALIASES = {
     "delete": ("remove",),
-    "find-redundancies": ("find-duplicates",),
     "list": ("ls",),
 }
 
@@ -158,21 +158,61 @@ HELP_CORE_CONCEPT_STYLES = {
     "MEMORY": "class:memory-object bold",
 }
 
+HELP_COMMON_LOCATORS = (
+    (
+        "NAME",
+        "A bare existing Context name is canonical and global, never relative.",
+    ),
+    (
+        ".",
+        "The current Context captured once when the command starts.",
+    ),
+    (
+        "..",
+        "The parent of that captured current Context.",
+    ),
+    (
+        "./CHILD",
+        "A child path relative to that captured current Context.",
+    ),
+    (
+        "../PATH",
+        "A path relative to the parent of that captured current Context.",
+    ),
+    (
+        "UID",
+        "A full UID or accepted prefix. In supported direct-Memory operations, "
+        "scan ordinary local Contexts; exactly one direct owner must match, or "
+        "ambiguity stops and lists qualified candidates.",
+    ),
+    (
+        "CONTEXT:UID",
+        "In supported direct-Memory operations, : separates the direct owner "
+        "Context from its Memory UID or prefix; the Context may be relative, "
+        "as in ../3:ca562047.",
+    ),
+)
+
 HELP_COMMON_KEYS = (
-    ("↑/↓", "Move or scroll within the focused surface."),
+    ("↑/↓", "Move by row or Form; hold to accelerate through long lists."),
     (
         "←/→",
-        "Change a horizontal choice, expand, or go back according to focus.",
+        "Change Language or View, or expand and collapse command Forms.",
     ),
-    ("Tab / Shift-Tab", "Move focus between visible surfaces."),
-    ("Enter", "Open, select, or submit the focused action."),
+    ("PgUp / PgDn", "Jump 10 rows backward or forward in the scrolling Help list."),
+    ("Home / End", "Move to the first Help row or the final command."),
+    (
+        "Tab / Shift-Tab",
+        "Move focus across Language, View, and visible operation groups.",
+    ),
+    ("Enter", "Open command Forms, then select or inspect the focused Form."),
     (
         "H",
-        "Open or hide Help from a session's read-only navigation surface.",
+        "Open full command help, or hide Help while exploring from a waiting session.",
     ),
     (
-        "Esc / Backspace",
-        "Go back one layer; Backspace edits text in writable fields.",
+        "Esc / Q / Ctrl-C",
+        "Close Help, cancel selection, or return to the waiting session.",
     ),
 )
 
@@ -240,6 +280,7 @@ HELP_CATEGORY_GROUPS = (
         "CHECK, COMPARE & REVIEW",
         (
             "compare",
+            "find-duplicates",
             "find-redundancies",
             "find-ambiguities",
             "find-conflicts",
@@ -364,9 +405,12 @@ COMMAND_FORMS = {
         "mem add --paste --context [context] (paste into an explicit Context)",
     ),
     "audit": (
-        "mem audit (choose one Context, run Duplicate + Ambiguity + Conflict, save, and review)",
-        "mem audit --context [context] (run and save all three finders for one exact Context)",
+        "mem audit (audit the current Context and save a reviewable receipt)",
+        "mem audit [context] (run and save all checks for one explicit Context)",
+        "mem audit --select (choose one Context, run all checks, and save)",
+        "mem audit --context [context] (compatibility alias for an exact Context)",
         "mem audit --context [context] --against [rules_context] (add the shared Conformance check)",
+        "mem audit --context [context] --rule [rules_context] (role-named Rules alias)",
         "mem audit --context [context] --snapshot (save and print the combined report)",
     ),
     "check-conformance": (
@@ -374,6 +418,10 @@ COMMAND_FORMS = {
         "mem check-conformance --ground [ground] (replay Rules without exposing expected outputs)",
         "mem check-conformance [target_context] --against [rules_context] (check Context adherence)",
         "mem check-conformance --against [rules_context] (use the current Context as Target)",
+        "mem check-conformance --rule [rules_context] --example [example_context] (role-named Contexts)",
+        "mem check-conformance --rule [rules_context] --case [case_context] (Case alias for Example)",
+        "mem check-conformance --from [rules_context] --to [subject_context] (generic directional aliases)",
+        "mem check-conformance --example [example_context] (use the current Context as Rules)",
     ),
     "fit": (
         "mem fit (show the required two-proposition input error)",
@@ -395,12 +443,14 @@ COMMAND_FORMS = {
         "mem dedup [context] (remove exact duplicates from one explicit Context)",
     ),
     "dedun": (
-        "mem dedun (find, decide, and atomically resolve semantic redundancies)",
-        "mem dedun --context [context] (analyze one explicit Context)",
+        "mem dedun (immediately resolve exact plus semantic DUN groups in the current Context)",
+        "mem dedun [context] (immediately resolve one explicit Context)",
+        "mem dedun --context [context] (compatibility alias)",
     ),
     "atomize": (
         "mem atomize (atomize the current Context now; inspect the saved analysis with mem review)",
-        "mem atomize --context [context] (enter that Context's interactive Atomize session)",
+        "mem atomize [context] (atomize one explicit Context now)",
+        "mem atomize --context [context] (compatibility alias)",
         "mem atomize --sessions (enter the interactive Atomize session launcher)",
         'mem atomize --evaluate "[issue]" (directional atomic review)',
     ),
@@ -435,11 +485,12 @@ COMMAND_FORMS = {
     "compare": (
         "mem compare (enter the interactive Compare session launcher)",
         "mem compare --sessions (enter the interactive Compare session launcher)",
-        "mem compare --to [context2] (current Context is context1)",
-        "mem compare --from [context1] --to [context2] (explicit Contexts)",
-        "mem compare --from [context1] --to [context2] -r (both readable subtrees)",
-        "mem compare --from [context1] --to [context2] -r --compared-root-only (Reference subtree, compared root)",
-        "mem compare --from [context1] --to [context2] --reference-descendants --compared-descendants (include each readable subtree)",
+        "mem compare [peer] (current Context is the reference)",
+        "mem compare [reference] [peer] (explicit Contexts)",
+        "mem compare [reference] [peer] -r (both readable subtrees)",
+        "mem compare [reference] [peer] -r --compared-root-only (Reference subtree, compared root)",
+        "mem compare [reference] [peer] --reference-descendants --compared-descendants (include each readable subtree)",
+        "mem compare --from [reference] --to [peer] (compatibility aliases)",
     ),
     "config": (
         "mem config show (show global configuration)",
@@ -482,10 +533,10 @@ COMMAND_FORMS = {
         "(use the exact active Ground Rules through the same application)",
     ),
     "edit": (
-        'mem edit [memory_selector] "[new_content]" (replace one direct Memory)',
+        'mem edit [UID_or_CONTEXT:UID] "[new_content]" (replace one direct Memory)',
         "mem edit (choose one direct Memory and review its replacement interactively)",
         "mem edit --input [batch_file] (batch mode: UID<TAB>CONTENT records)",
-        'mem edit [memory_selector] "[new_content]" --context [context] (explicit Context)',
+        'mem edit [UID] "[new_content]" --context [context] (compatibility explicit Context)',
         "mem edit --input [batch_file] --context [context] (batch-edit an explicit Context)",
     ),
     "replace": (
@@ -498,10 +549,12 @@ COMMAND_FORMS = {
     ),
     "embed": (
         "mem embed (choose Context or Memory link, target, and insertion gap interactively)",
+        "mem embed [UID] (unique direct local owner; Target defaults to current Context)",
+        "mem embed [source_context]:[UID] --into [target_context] (explicit live Memory link)",
         "mem embed [child_context] --into [target_context] (append)",
         "mem embed [child_context] --into [target_context] --before [item]",
         "mem embed [child_context] --into [target_context] --after [item]",
-        "mem embed [memory_selector] --from [source_context] --into [target_context] (live Memory link)",
+        "mem embed [UID] --from [source_context] --into [target_context] (compatibility live Memory link)",
         "mem embed [memory_selector] --from [source_context] --into [target_context] --before [item]",
         "mem embed [memory_selector] --from [source_context] --into [target_context] --after [item]",
     ),
@@ -531,19 +584,30 @@ COMMAND_FORMS = {
     ),
     "find-ambiguities": (
         "mem find-ambiguities (current Context; no changes)",
-        "mem find-ambiguities --context [context] (explicit Context; no changes)",
+        "mem find-ambiguities [context] (explicit Context; no changes)",
+        "mem find-ambiguities --context [context] (compatibility alias)",
+        "mem find-ambiguities --select (interactive readable target selection)",
     ),
     "find-conflicts": (
         "mem find-conflicts (current Context; no changes)",
-        "mem find-conflicts --context [context] (explicit Context; no changes)",
+        "mem find-conflicts [context] (explicit Context; no changes)",
+        "mem find-conflicts --context [context] (compatibility alias)",
+        "mem find-conflicts --select (interactive readable target selection)",
+    ),
+    "find-duplicates": (
+        "mem find-duplicates (report exact duplicates in the current Context)",
+        "mem find-duplicates [context] (report exact duplicates in one explicit Context)",
+        "mem find-duplicates --context [context] (compatibility alias)",
     ),
     "find-redundancies": (
-        "mem find-redundancies (inspect semantic redundancy without changing Sources)",
-        "mem find-redundancies --context [context] (one-shot semantic redundancy report)",
+        "mem find-redundancies (report DUP + semantic DUN in the current Context)",
+        "mem find-redundancies [context] (one-shot complete redundancy report)",
+        "mem find-redundancies --context [context] (compatibility alias)",
     ),
     "forget": (
         "mem forget (enter interactive instruction and direct-Source setup)",
         'mem forget "[instruction]" (decide and atomically apply selective forgetting)',
+        'mem forget "[instruction]" --context [context] (explicit direct Source)',
     ),
     "ground": (
         "mem ground (enter the interactive Ground session)",
@@ -555,7 +619,8 @@ COMMAND_FORMS = {
     "help": ("mem help (enter the interactive command browser)",),
     "impact": (
         "mem impact atomize (preview atomization of the current Context)",
-        "mem impact atomize --context [context] (preview atomization of one Context)",
+        "mem impact atomize [context] (preview atomization of one Context)",
+        "mem impact atomize --context [context] (compatibility alias)",
         'mem impact forget "[instruction]" (preview complete in-place decisions; Source unchanged)',
         'mem impact forget "[instruction]" --context [context] (preview one exact direct Source)',
         "mem impact distill --from [source] --to [target] (preview Distill Add; endpoints unchanged)",
@@ -567,6 +632,7 @@ COMMAND_FORMS = {
         "mem impact sever (inspect a saved Sever Impact; APPLY? opens its Apply flow)",
         "mem impact sever --session [uid] (inspect an exact saved Sever Impact; APPLY? opens its Apply flow)",
         "mem impact update (inspect the saved Update Impact; APPLY? opens its Apply flow)",
+        "mem impact update [source_context] [target_context] (new directional preview)",
         "mem impact update --session [uid] (inspect the exact saved Update Impact; APPLY? opens its Apply flow)",
         "mem impact --from [source_context] --to [target_context] (directional preview)",
         "mem impact -r --from [source_context] --to [target_context] (recursive endpoints)",
@@ -643,10 +709,11 @@ COMMAND_FORMS = {
     ),
     "merge": (
         "mem merge (choose a readable Source, CREATE-authorized Target, and reach in a TTY)",
-        "mem merge [source_context] --into [target_context] --direct (explicit exact roots)",
-        "mem merge [source_context] --into [target_context] --recursive (explicit path-aligned subtrees)",
+        "mem merge [source_context] [target_context] --direct (explicit exact roots)",
+        "mem merge [source_context] [target_context] --recursive (explicit path-aligned subtrees)",
         "mem merge [source_context] --direct (exact Source root into current Context; default)",
         "mem merge [source_context] --recursive (path-aligned descendants into current Context)",
+        "mem merge [source_context] --into [target_context] (compatibility alias)",
         "mem merge [source_context] --keep-target-all (resolve every structural conflict by retaining Target)",
         "mem merge [source_context] --take-source-all (resolve every structural conflict with exact Source values)",
         "mem merge [source_context] --resolve [conflict_id]=keep-target (repeat one exact frozen decision per conflict)",
@@ -701,8 +768,13 @@ COMMAND_FORMS = {
         "mem rationale [memory_selector] --context [context] (explicit Context and Memory)",
     ),
     "reference": (
-        "mem reference [memory_selector] --from [source_context] (snapshot into current Context)",
-        "mem reference [memory_selector] --from [source_context] --into [target_context] (immutable snapshot)",
+        "mem reference (choose a Context or Memory snapshot and Target interactively)",
+        "mem reference [UID] (unique direct local owner; Target defaults to current Context)",
+        "mem reference [source_context]:[UID] --into [target_context] (explicit immutable Memory snapshot)",
+        "mem reference [source_context] --direct (direct Context snapshot into current Context)",
+        "mem reference [source_context] --into [target_context] --recursive (snapshot descendants and local embeds)",
+        "mem reference [UID] --from [source_context] (compatibility snapshot into current Context)",
+        "mem reference [UID] --from [source_context] --into [target_context] (compatibility immutable snapshot)",
     ),
     "rename": (
         "mem rename [new_name] (rename the active Profile)",
@@ -734,10 +806,12 @@ COMMAND_FORMS = {
     "sever": (
         "mem sever (enter the interactive Sever session launcher)",
         "mem sever --sessions (enter the interactive Sever session launcher)",
-        "mem sever --source [source_context] --criteria [criteria_context] --save-as [result_context]",
-        "mem sever -r --source [source_context] --criteria [criteria_context] --save-as [result_context]",
-        "mem sever -r --source [source_context] --criteria [criteria_context] --source-root-only --save-as [result_context]",
-        "mem sever --criteria [criteria_context] --save-as [result_context] (current Context is source)",
+        "mem sever [source_context] [criteria_context] (self-save into Source)",
+        "mem sever [source_context] [criteria_context] [fresh_result_context] (save elsewhere; Source unchanged)",
+        "mem sever [source_context] [criteria_context] [result_context] -r",
+        "mem sever [source_context] [criteria_context] [result_context] -r --source-root-only",
+        "mem sever --source [source] --criteria [criteria] --save-as [result] (compatibility aliases)",
+        "mem sever --criteria [criteria_context] (current Context is Source and self-save target)",
         "mem sever --resume [uid] (open an exact saved Sever session)",
     ),
     "share": (
@@ -809,7 +883,8 @@ COMMAND_FORMS = {
     ),
     "update": (
         "mem update (enter the interactive Update session launcher)",
-        "mem update --from [source_context] --to [target_context] (explicit direction)",
+        "mem update [source_context] [target_context] (explicit direction)",
+        "mem update --from [source_context] --to [target_context] (compatibility aliases)",
         "mem update -r --from [source_context] --to [target_context] (both subtrees)",
         "mem update -r --from [source_context] --to [target_context] --target-root-only (Source subtree, target root)",
         "mem update --from [source_context] --source-descendants --to [target_context] --target-descendants (include both readable subtrees)",
@@ -1581,6 +1656,17 @@ def _help_information_box_fragments(
         selectable=True,
         label_styles=HELP_CORE_CONCEPT_STYLES,
     )
+    border("COMMON LOCATORS", middle=True)
+    rows(
+        tuple(
+            (
+                locator,
+                common_locator_description(language, locator, description),
+            )
+            for locator, description in HELP_COMMON_LOCATORS
+        ),
+        selectable=False,
+    )
     border("COMMON KEYS", middle=True)
     rows(
         tuple(
@@ -1799,7 +1885,9 @@ def run_help_selector(
         target_index = (
             0
             if group_index is None and direction > 0
-            else group_index + direction if group_index is not None else -1
+            else group_index + direction
+            if group_index is not None
+            else -1
         )
         if 0 <= target_index < len(groups):
             focus_group(groups[target_index])
@@ -2490,10 +2578,14 @@ def cmd(
                 request,
                 operations=catalog_operations,
             )
-            if active_profile_is_study() and find_study_help_copy_match(
-                plan.request,
-                authored_study_help_fields(plan.operations),
-            ) is not None:
+            if (
+                active_profile_is_study()
+                and find_study_help_copy_match(
+                    plan.request,
+                    authored_study_help_fields(plan.operations),
+                )
+                is not None
+            ):
                 typer.secho(
                     "Help error: Study lookup requires original task wording; "
                     "the request exactly matches at least 50% of one Help "
@@ -2521,9 +2613,7 @@ def cmd(
             )
             raise typer.Exit(1) from error
         entries_by_name = {entry.name: entry for entry in entries}
-        matched_entries = [
-            entries_by_name[operation.name] for operation in operations
-        ]
+        matched_entries = [entries_by_name[operation.name] for operation in operations]
         typer.echo(
             render_help_lookup_entries(
                 matched_entries,

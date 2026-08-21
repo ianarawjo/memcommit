@@ -371,44 +371,47 @@ def test_clean_copy_keeps_reference_meaning_without_object_ids(
     )
 
 
-def test_list_places_colored_relationship_and_source_identity_before_content(
+def test_list_places_memory_source_identity_before_content_for_embed_and_reference(
     isolated_store,
 ):
     invoke("init", "practice/3")
-    invoke("add", "Write each proposition exactly.")
+    invoke("add", "Write each proposition in the exact three-token pattern.")
     store = MemoryStore()
     source = store.load_current()
-    source_memory_uid = next(iter(source.memories))
+    source_uid = next(iter(source.memories))
     invoke("init", "practice/4")
     invoke(
         "embed",
-        source_memory_uid[:8],
+        source_uid[:8],
         "--from",
         "practice/3",
         "--into",
         "practice/4",
     )
-    invoke("reference", source_memory_uid[:8], "--from", "practice/3")
-    target = store.load("practice/4")
-    embedded, reference = list(target.iter_items())
+    invoke("reference", source_uid[:8], "--from", "practice/3")
+    target = store.load_current()
+    embedded, reference = tuple(target.iter_items())
 
-    result = runner.invoke(app, ["list", "practice/4"], color=True)
+    result = invoke("list")
 
-    assert result.exit_code == 0
-    plain = click.unstyle(result.stdout)
-    assert plain == (
-        "Context: practice/4\n"
-        "  2 items\n"
-        "\n"
-        f"  [embedded {embedded.uid[:8]}] "
-        f"[practice/3][memory {source_memory_uid[:8]}] "
-        "Write each proposition exactly.  READ ONLY\n"
-        f"  [reference {reference.uid[:8]}] "
-        f"[practice/3][memory {source_memory_uid[:8]}] "
-        "Write each proposition exactly.  READ ONLY\n"
+    assert result.exit_code == 0, result.output
+    assert (
+        f"[embedded {embedded.uid[:8]}] [practice/3][memory {source_uid[:8]}] "
+        "Write each proposition in the exact three-token pattern.  READ ONLY"
+        in result.stdout
     )
-    assert "\x1b[38;2;238;212;159membedded\x1b[0m" in result.stdout
-    assert "\x1b[38;2;198;160;246mreference\x1b[0m" in result.stdout
+    assert (
+        f"[reference {reference.uid[:8]}] [practice/3][memory {source_uid[:8]}] "
+        "Write each proposition in the exact three-token pattern.  READ ONLY"
+        in result.stdout
+    )
+    assert "practice/3#" not in result.stdout
+
+    colored = runner.invoke(app, ["list"], color=True)
+    assert colored.exit_code == 0, colored.output
+    assert "\x1b[38;2;238;212;159membedded\x1b[0m" in colored.stdout
+    assert "\x1b[38;2;198;160;246mreference\x1b[0m" in colored.stdout
+    assert click.unstyle(colored.stdout) == result.stdout
 
 
 def test_clean_copy_keeps_user_authored_bracket_text_literal(

@@ -1,7 +1,7 @@
 [32mInitialized context 'alpha'.[0m
-[32mAdded [b14df4e9] Alpha evidence Memory.[0m
+[32mAdded [dda1fcdf] Alpha evidence Memory.[0m
 [32mInitialized context 'beta'.[0m
-[32mAdded [4a19a654] Beta evidence Memory.[0m
+[32mAdded [5fa4cdbe] Beta evidence Memory.[0m
 CAPTURE PTY · 180x52
 CURRENT BEFORE · beta
 [?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m Select a Context[0m
@@ -55,8 +55,8 @@ CURRENT BEFORE · beta
 [179C[0;48;5;238m [0m
 [0m                                                                                                                                                                                   [179C[0;1mv[0m
 [0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
-[0m ↑↓ move  ←→ expand  A expand all  m show items here  M show all items  y copy Context  Y copy visible branch  Enter switch  q cancel · 2/2 · 2 selectable[154D[47A[0m[?25l[4C[0;1;7m▾[0m
-[0;38;5;189m  · [memory 4a19a654] Beta evidence Memory.[0m
+[0m ↑↓ move  ←→ expand  A expand all  m THIS Context: show items · M EVERY Context: show items  y copy Context  Y copy visible branch  Enter switch  q cancel · 2/2 · 2 selectable[175D[47A[0m[?25l[4C[0;1;7m▾[0m
+[0;38;5;189m  · [memory 5fa4cdbe] Beta evidence Memory.[0m
 
 
 
@@ -102,4 +102,4 @@ CURRENT BEFORE · beta
 
 
 
-[37C[0mhide[97C3[47A[139D[0m
+[51C[0mhide[104C3[47A[160D[0m

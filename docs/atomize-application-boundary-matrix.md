@@ -88,7 +88,8 @@ pair publication, exact reanalysis pair-CAS, and synchronous restoration path. T
 - An all-preserved analysis is a deliberate recorded completion: it creates an
   Atomize checkpoint and terminal receipt even though Context Memory bytes do
   not change. This differs from Update's zero-operation receipt-only no-op and
-  from Sever's all-KEEP require-new Result.
+  from Sever SELF-SAVE's reviewed in-place completion and Sever OTHER-SAVE's
+  all-KEEP require-new Result.
 - In-place splitting is blocked when an inbound `MemoryRef` targets a source
   that would disappear. Save-as leaves the source identity intact and therefore
   permits the same reference.
@@ -119,7 +120,7 @@ pair publication, exact reanalysis pair-CAS, and synchronous restoration path. T
 | --- | --- | --- | --- |
 | Preview or workbench open | Analysis/workbench artifacts only; no Context checkpoint | existing preview, workbench, and Study-prewarm tests | typed analysis result must remain non-applying |
 | Ordinary exact-Context command | compatible complete analysis is created/reused and immediately applied in place; no launcher or workbench is opened | bare and explicit-Context execution tests | freeze exact name, complete scope, and in-place Output before ordinary Apply |
-| Compact direct receipt | split/child/keep counts and unresolved-judgment count hand off to exact post-application Review; no Memory body is reprinted | compact receipt and applied Review tests | presentation must not truncate durable evidence, imply findings were resolved, or turn evidence into a post-success Viewer |
+| Compact direct receipt | split/child/keep counts and unresolved-judgment count hand off to exact post-application Review; a first-use prepared hit also states `ANALYSIS · EXACT PREWARM · PROVIDER NOT CALLED`; no Memory body is reprinted | compact receipt, prepared auto-Apply, and applied Review tests | presentation must not truncate durable evidence, hide prepared provenance, imply findings were resolved, or turn evidence into a post-success Viewer |
 | Applied Review reopen | complete analysis remains read-only and provider-free despite the post-split Context digest; each item title pairs source UID with its content preview | direct receipt/review and adapter tests | accept only exact terminal receipt/checkpoint evidence; reject response edits |
 | Close/cancel before final action | Saved review may remain; no Context effect | shared Resolution CLOSE and workbench persistence tests | application port must never be called |
 | Local current analysis, one or more splits | one in-place Context checkpoint, complete SPLIT/KEEP/PRESERVE trace | `test_saved_atomize_analysis_applies_once_with_recorded_lineage` | consume exact analysis and workbench revision |
@@ -160,7 +161,8 @@ The Study Atomize prewarm is a hidden declared artifact, not a pre-created user
 session. Initialization validates and installs only its hidden entry receipt.
 The first explicit matching Atomize invocation materializes the prepared
 analysis through the ordinary production slot and creates a blank run-local
-workbench. A mismatch, stale Source, configuration mismatch, or failed
+workbench. A mismatch, stale Source, lower/incomparable cached provider
+quality, or failed
 workbench publication must not expose a partial visible session or connect a
 provider under the guise of a hit.
 

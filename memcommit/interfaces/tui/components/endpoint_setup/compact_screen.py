@@ -37,6 +37,7 @@ from memcommit.interfaces.console.text import (
     safe_terminal_text,
 )
 from memcommit.interfaces.console.terminal import require_interactive_terminal
+from memcommit.exact_command_review import ExactCommandReview
 from memcommit.interfaces.tui.components.endpoint_setup.memory_focus import (
     EndpointMemoryFocusController,
     MemoryProjectionLoader,
@@ -50,6 +51,9 @@ from memcommit.interfaces.tui.components.endpoint_setup.model import (
 from memcommit.interfaces.tui.components.exact_name import (
     ExactNameFieldView,
     ExactNameInputControl,
+)
+from memcommit.interfaces.tui.components.exact_command_review.rendering import (
+    format_exact_command,
 )
 from memcommit.interfaces.tui.components.focus import (
     FocusSurface,
@@ -73,6 +77,7 @@ from memcommit.source_projection.presentation import source_display_text
 
 
 DraftValidator = Callable[[EndpointSetupDraft], str | None]
+CommandReviewBuilder = Callable[[EndpointSetupDraft], ExactCommandReview]
 
 
 def run_compact_endpoint_setup(
@@ -80,6 +85,7 @@ def run_compact_endpoint_setup(
     *,
     memory_loader: MemoryProjectionLoader | None,
     validate_draft: DraftValidator | None = None,
+    command_review: CommandReviewBuilder | None = None,
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
@@ -262,6 +268,13 @@ def run_compact_endpoint_setup(
                 )
             )
         return EndpointSetupDraft(selected_mode_uid(), tuple(values))
+
+    def checked_draft() -> EndpointSetupDraft:
+        draft = make_draft()
+        message = validate_draft(draft) if validate_draft is not None else None
+        if message:
+            raise ValueError(message)
+        return draft
 
     mode_control: FormattedTextControl
 
@@ -492,6 +505,21 @@ def run_compact_endpoint_setup(
 
     def render_action() -> StyleAndTextTuples:
         focused = get_app().layout.has_focus(action_control)
+        if command_review is not None:
+            try:
+                review = command_review(checked_draft())
+            except (OSError, TypeError, ValueError) as error:
+                return [
+                    ("class:error", " COMMAND · INVALID\n"),
+                    ("class:error", f" {safe_terminal_text(str(error))}"),
+                ]
+            return [
+                (
+                    focused_control_style(focused=focused, selected=focused),
+                    " COMMAND · RUNNABLE · ENTER TO START\n",
+                ),
+                ("class:report-neutral", f" {format_exact_command(review)}"),
+            ]
         return [
             (
                 focused_control_style(focused=focused, selected=focused),
@@ -506,8 +534,9 @@ def run_compact_endpoint_setup(
     )
     action_line = Window(
         action_control,
-        height=Dimension.exact(1),
+        height=Dimension.exact(2 if command_review is not None else 1),
         dont_extend_height=True,
+        wrap_lines=False,
     )
 
     catalog_detail_containers = []
@@ -784,10 +813,12 @@ def run_compact_endpoint_setup(
 
     def finish(event) -> SurfaceActionResult:
         try:
-            draft = make_draft()
-            message = validate_draft(draft) if validate_draft is not None else None
-            if message:
-                raise ValueError(message)
+            draft = checked_draft()
+            # Rebuild at approval instead of trusting the last paint.  The
+            # typed draft remains the execution input; argv is its reviewable
+            # public identity and is never recursively shell-dispatched.
+            if command_review is not None:
+                command_review(draft)
         except (OSError, TypeError, ValueError) as error:
             status["value"] = str(error)
             return "HANDLED"
@@ -990,7 +1021,11 @@ def run_compact_endpoint_setup(
                 return " ↑/↓ Memory · Enter choose · Esc close details"
             return " Enter open Memory choices · Tab next · Esc cancel"
         if get_app().layout.has_focus(action_control):
-            return " Enter start Meld · ↑ previous · Esc cancel"
+            return (
+                " Enter run exact START command · ↑ previous · Esc cancel"
+                if command_review is not None
+                else f" Enter {safe_terminal_text(spec.action_label)} · ↑ previous · Esc cancel"
+            )
         return " Tab next · Esc cancel"
 
     footer_control.text = render_footer

@@ -11,7 +11,10 @@ import memcommit.ops as ops
 from memcommit.api import MemCommitClient, SemanticConflictError
 from memcommit.cli import app
 from memcommit.interfaces.agent.quality_find import QualityFindAgentAdapter
-from memcommit.interfaces.agent.resolve import ResolveAgentAdapter
+from memcommit.interfaces.agent.resolve import (
+    RESOLVE_AGENT_CONTRACT_VERSION,
+    ResolveAgentAdapter,
+)
 from memcommit.store import MemoryStore
 
 
@@ -131,6 +134,42 @@ def test_public_handoff_staleness_fails_before_a_second_provider_connection(
     assert factory.calls == 1
 
 
+def test_public_find_redundancies_includes_exact_dup_without_provider(
+    isolated_store,
+):
+    store = MemoryStore()
+    context = ops.init("quality/exact-inclusive")
+    first = ops.add(context, "same")
+    second = ops.add(context, "same")
+    store.create_context(context)
+    store.set_current(context.name)
+    client = MemCommitClient(
+        root=isolated_store,
+        semantic_provider_factory=lambda: (_ for _ in ()).throw(
+            AssertionError("an exact-only DUN frame must not connect a provider")
+        ),
+    )
+
+    found = client.find_redundancies((context.name,))
+
+    assert found.kind == "redundancies"
+    assert found.memory_count == 2
+    assert len(found.evidence) == 1
+    assert found.evidence[0].classification == "EXACT"
+    assert found.evidence[0].memory_uids == (first.uid, second.uid)
+
+    agent_result = QualityFindAgentAdapter(client).invoke(
+        {
+            "version": 1,
+            "kind": "redundancies",
+            "context_names": [context.name],
+        }
+    )
+    agent_evidence = agent_result["result"]["evidence"][0]
+    assert agent_evidence["contract"] == "redundancy-evidence-v2"
+    assert agent_evidence["classification"] == "EXACT"
+
+
 def test_agent_finder_output_enters_resolve_without_adapter_reconstruction(
     isolated_store,
 ):
@@ -148,10 +187,10 @@ def test_agent_finder_output_enters_resolve_without_adapter_reconstruction(
             "context_names": [context.name],
         }
     )
-    handoff = found["result"]["findings"][0]
+    handoff = found["result"]["evidence"][0]
     resolved = ResolveAgentAdapter(client).invoke(
         {
-            "version": 1,
+            "version": RESOLVE_AGENT_CONTRACT_VERSION,
             "kind": "analyze",
             "finding_handoff": handoff,
         }
@@ -177,12 +216,12 @@ def test_agent_resolve_rejects_tampered_handoff_identity(isolated_store):
             "context_names": [context.name],
         }
     )
-    handoff = found["result"]["findings"][0]
+    handoff = found["result"]["evidence"][0]
     handoff["reason"] = "Tampered after finder output."
 
     resolved = ResolveAgentAdapter(client).invoke(
         {
-            "version": 1,
+            "version": RESOLVE_AGENT_CONTRACT_VERSION,
             "kind": "analyze",
             "finding_handoff": handoff,
         }

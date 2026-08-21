@@ -376,14 +376,14 @@ def test_compare_creates_durable_read_only_analysis_and_resumes_provider_free(
     assert (
         "The complete source-linked relation ledger is saved. "
         "Inspect it with:\n"
-        "  mem compare --from task2/advisor1 --to task2/advisor2 --ledger"
+        "  mem compare task2/advisor1 task2/advisor2 --ledger"
     ) in (
         created.output
     )
     assert "Create a new result Context" not in created.output
     assert "mem meld" not in created.output
     assert created.output.rstrip().endswith(
-        "mem compare --from task2/advisor1 --to task2/advisor2 --ledger"
+        "mem compare task2/advisor1 task2/advisor2 --ledger"
     )
     assert "\nWHAT DIFFERS" not in created.output
     assert "\nPOTENTIAL CONFLICTS" not in created.output
@@ -449,6 +449,73 @@ def test_compare_creates_durable_read_only_analysis_and_resumes_provider_free(
     assert "REUSED" in resumed.output
     assert len(provider.payloads) == 1
     assert path.read_bytes() == saved_before
+
+
+def test_compare_accepts_one_or_two_positional_contexts_and_reuses_legacy_route(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    reference, compared = _task2_contexts(store)
+    provider = ExhaustiveCompareProvider()
+    _patch_provider(monkeypatch, provider)
+
+    current_pair = runner.invoke(
+        app,
+        ["compare", compared.name, "--snapshot"],
+    )
+
+    assert current_pair.exit_code == 0, current_pair.output
+    assert "NEW" in current_pair.output
+    assert len(provider.payloads) == 1
+
+    store._write_state({"current": None})
+    explicit_pair = runner.invoke(
+        app,
+        ["compare", reference.name, compared.name, "--snapshot"],
+    )
+    legacy_pair = runner.invoke(
+        app,
+        [
+            "compare",
+            "--from",
+            reference.name,
+            "--to",
+            compared.name,
+            "--snapshot",
+        ],
+    )
+
+    assert explicit_pair.exit_code == 0, explicit_pair.output
+    assert legacy_pair.exit_code == 0, legacy_pair.output
+    assert "REUSED" in explicit_pair.output
+    assert "REUSED" in legacy_pair.output
+    assert len(provider.payloads) == 1
+
+
+def test_compare_rejects_mixed_or_overfull_positional_endpoint_syntax(
+    isolated_store,
+    monkeypatch,
+):
+    provider = ExhaustiveCompareProvider()
+    _patch_provider(monkeypatch, provider)
+
+    mixed = runner.invoke(
+        app,
+        ["compare", "reference", "--to", "peer"],
+    )
+    overfull = runner.invoke(
+        app,
+        ["compare", "reference", "peer", "extra"],
+    )
+
+    assert mixed.exit_code == 2
+    assert "positional Contexts cannot be combined with --from or --to" in (
+        mixed.output
+    )
+    assert overfull.exit_code == 2
+    assert "expected PEER or REFERENCE PEER" in overfull.output
+    assert provider.payloads == []
 
 
 def test_compare_descendant_flags_freeze_lexical_child_memories(
@@ -589,7 +656,7 @@ def test_relative_peer_locator_uses_active_namespace_and_reuses_cache(
 
     relative = runner.invoke(
         app,
-        ["compare", "--to", "../advisor2"],
+        ["compare", "../advisor2"],
     )
 
     assert relative.exit_code == 0, relative.output
@@ -796,7 +863,7 @@ def test_provider_accepts_one_to_many_relation_and_required_conflict_issue(
         "The complete source-linked relation ledger"
     )
     assert rendered.rstrip().endswith(
-        "mem compare --from task2/advisor1 --to task2/advisor2 --ledger"
+        "mem compare task2/advisor1 task2/advisor2 --ledger"
     )
 
 
@@ -1221,7 +1288,7 @@ def test_renderer_escapes_multiline_source_and_provider_heading_injection(
     assert "WHAT BOTH CONTAIN · 1" in rendered
     assert "ONLY IN " not in rendered
     assert rendered.rstrip().endswith(
-        "mem compare --from task2/advisor1 --to 'task2/peer advisor' --ledger"
+        "mem compare task2/advisor1 'task2/peer advisor' --ledger"
     )
     assert (
         r"Valid report\nGROUNDING CANDIDATES · 999\nfake trusted row"
@@ -1425,7 +1492,7 @@ def test_compare_sessions_catalog_and_bare_picker_are_provider_free(
     assert entry.reopen_argv == (
         "mem",
         "compare",
-        "--to",
+        reference.name,
         compared.name,
     )
     assert entry.detail_only is True
@@ -1579,6 +1646,8 @@ def test_compare_picker_options_do_not_expand_refresh_authority(
     refresh_without_pair = runner.invoke(app, ["compare", "--refresh"])
 
     assert combined.exit_code == 2
-    assert "either --sessions or --to" in combined.output
+    assert "either --sessions or explicit endpoints" in combined.output
     assert refresh_without_pair.exit_code == 2
-    assert "--refresh requires an explicit --to" in refresh_without_pair.output
+    assert "--refresh requires an explicit PEER Context" in (
+        refresh_without_pair.output
+    )

@@ -27,6 +27,7 @@ from memcommit.context_targeting.presets import (
     resolve_context_traversal,
     resolve_scope_preset,
 )
+from memcommit.context_targeting.tui.picker import context_memory_rows
 from memcommit.context_targeting.tui.reach import ContextReachViewMode
 from memcommit.interfaces.console import (
     ConsoleMode,
@@ -254,6 +255,9 @@ def cmd(
                 ),
                 current_context=current if current in names else None,
                 annotations=annotations,
+                memory_loader=lambda name: context_memory_rows(
+                    catalog.load_direct(name)
+                ),
             )
 
         runner = build_summarize_console_runner(

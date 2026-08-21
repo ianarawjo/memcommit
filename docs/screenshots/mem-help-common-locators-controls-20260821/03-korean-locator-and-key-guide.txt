@@ -1,0 +1,52 @@
+ mem help · command inventory                                                                                                                                                       
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ HELP LANGUAGE ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃› LANGUAGE · [   EN ]  [   FR ]  [   ZH ]  [ ✓ KO ]  [   MN ] · ←/→ TO SELECT                                                                                                     ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌ CORE CONCEPTS ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐^
+│ MEMORY      Context 안에 저장되며, Memory를 다루는 operation에서 독립적으로 선택·검토·변경하는 기본 기록 단위입니다.                                                            │ 
+│ CONTEXT     Memory를 담고 하위 Context를 계층적으로 정리하는 이름 있는 작업 공간입니다. task-1/participant처럼 이름의 /로 계층을 나타내며, descendant 범위를 지원하는           │ 
+│             operation에서는 한 Context와 그 하위 Context들을 하나의 subtree로 함께 다룰 수 있습니다. Context를 명시하지 않은 command는 current Context를 사용합니다.            │ 
+│ PROFILE     Context들을 담는 격리된 소유권 및 저장 경계이며, 서로 다른 Profile에 같은 Context name이 존재할 수 있습니다.                                                        │ 
+│ OPERATION   정해진 입력과 동작에 따라 선택한 Memory 또는 Context를 읽고 분석하거나 변경하는 재사용 가능한 작업입니다.                                                           │ 
+│ GRANT       주고받을 수 있는 권한 관계로, Grant가 유효한 동안 직접 소유하지 않은 사람이 Context와 Memory를 읽거나 query하고 허가된 operation을 실행할 수 있게 합니다.           │ 
+│ SESSION     분석 또는 검토 workflow를 다시 열고 이어가기 위한 저장 기록입니다. Context 변경 여부는 별도의 Apply 결과와 checkpoint history에서 확인합니다.                       │ 
+│ CHECKPOINT  적용된 operation마다 생성되어 영향을 받은 Context별로 기록되는 복구 가능한 history 경계입니다.                                                                      │ 
+├ COMMON LOCATORS ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤ 
+│ NAME         기존 Context의 bare name은 canonical global name이며 상대 이름이 아닙니다.                                                                                         │ 
+│ .            command 시작 시 한 번 캡처한 current Context입니다.                                                                                                                │ 
+│ ..           캡처한 current Context의 상위 Context입니다.                                                                                                                       │ 
+│ ./CHILD      캡처한 current Context를 기준으로 한 하위 경로입니다.                                                                                                              │ 
+│ ../PATH      캡처한 current Context의 상위를 기준으로 한 상대 경로입니다.                                                                                                       │ 
+│ UID          전체 UID 또는 허용되는 prefix입니다. direct-Memory locator를 지원하는 operation에서 일반 local Context의 직접 소유자를 스캔합니다. 정확히 하나만 일치해야 하며,    │ 
+│              중복이면 중단하고 qualified 후보를 나열합니다.                                                                                                                     │ 
+│ CONTEXT:UID  direct-Memory locator를 지원하는 operation에서 :는 직접 소유 Context와 Memory UID 또는 prefix를 구분합니다. ../3:ca562047처럼 Context 부분에 상대 경로를 쓸 수     │ 
+│              있습니다.                                                                                                                                                          │ 
+├ COMMON KEYS ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤ 
+│ ↑/↓               행 또는 Form 단위로 이동하며, 긴 목록에서는 길게 눌러 가속합니다.                                                                                             │ 
+│ ←/→               Language나 View를 바꾸거나 command Forms를 펼치고 접습니다.                                                                                                   │ 
+│ PgUp / PgDn       스크롤되는 Help 목록에서 앞이나 뒤로 10행 이동합니다.                                                                                                         │ 
+│ Home / End        첫 Help 행이나 마지막 command로 이동합니다.                                                                                                                   │ 
+│ Tab / Shift-Tab   Language, View, 보이는 operation 그룹 사이에서 포커스를 이동합니다.                                                                                           │ 
+│ Enter             command Forms를 연 뒤 포커스된 Form을 선택하거나 살펴봅니다.                                                                                                  │ 
+│ H                 전체 command help를 열거나 대기 중인 session에서 탐색할 때 Help를 숨깁니다.                                                                                   │ 
+│ Esc / Q / Ctrl-C  Help를 닫고 선택을 취소하거나 대기 중인 session으로 돌아갑니다.                                                                                               │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+OPERATIONS                                                                                                                                                                          
+┌ BROWSE & NAVIGATE ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ NO LLM · 현재 위치와 사용할 수 있는 Context를 확인하고 Context namespace를 이동합니다.                                                                                          │ 
+│ ▸ mem status ─┬ 현재 Context의 inventory, 처음 다섯 개의 직접 Memory, 관계 및 최신 checkpoint를 보여줍니다.                                                                     │ 
+│               └ WHEN · 현재 Context에 무엇이 있고 어떻게 연결되며 최근 어떤 operation이 적용됐는지 파악할 때.                                                                   │ 
+│ ▸ mem pwd ─┬ 내용을 불러오지 않고 현재 canonical Context 이름을 출력합니다.                                                                                                     │ 
+│            └ WHEN · script나 terminal에서 활성 Context를 확인할 때.                                                                                                             │ 
+│ ▸ mem contexts ─┬ 전환하지 않고 로컬 Context와 읽을 수 있는 Profile 간 Context view를 탐색합니다.                                                                               │ 
+│                 └ WHEN · 현재 Profile에서 사용할 수 있는 모든 Context를 살펴볼 때.                                                                                              │ 
+│ ▸ mem list ─┬ Context의 직접 항목—Memory, Memory reference, query view, embedded Context—과 읽을 수 있는 하위 Context를 나열합니다. -r은 descendant 및 embedded Context         │ 
+│     (ls)    │ 항목까지 재귀적으로 포함하며 ls는 짧은 alias입니다.                                                                                                               │ 
+│             └ WHEN · Context의 구조와 직접 내용을 살펴볼 때.                                                                                                                    │ 
+│ ▸ mem show ─┬ Memory, reference, embedded Context 또는 현재/지정 Context의 직접 내용을 보여줍니다.                                                                              │v
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+ LANGUAGE: ←/→ choose · ↓ view · Tab next · Q cancel

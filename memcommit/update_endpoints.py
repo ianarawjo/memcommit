@@ -14,6 +14,32 @@ class UpdateEndpoints:
     target_name: str
 
 
+def choose_update_endpoint_operands(
+    operands: list[str] | tuple[str, ...] | None,
+    *,
+    source_option: str | None,
+    target_option: str | None,
+) -> tuple[str | None, str | None]:
+    """Normalize the positional pair and legacy directional options.
+
+    One positional endpoint would leave its role ambiguous.  The established
+    one-sided current-filled forms therefore remain available only through
+    their role-named ``--from`` and ``--to`` options.
+    """
+    positional = tuple(operands or ())
+    if len(positional) not in {0, 2}:
+        raise ValueError(
+            "expected either no positional Contexts or exactly SOURCE TARGET."
+        )
+    if positional and (source_option is not None or target_option is not None):
+        raise ValueError(
+            "positional Contexts cannot be combined with --from or --to."
+        )
+    if positional:
+        return positional[0], positional[1]
+    return source_option, target_option
+
+
 def resolve_update_endpoints(
     *,
     source_locator: str | None,

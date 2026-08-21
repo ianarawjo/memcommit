@@ -277,17 +277,13 @@ def _rationale_artifacts(
                         ),
                         content=_json_projection(
                             {
-                                "best_supported_reading": (
-                                    inference.best_supported_reading
-                                ),
-                                "contextual_flow": inference.contextual_flow,
+                                "explanation": inference.explanation,
                                 "support_memory_uids": (
                                     inference.support_memory_uids
                                 ),
-                                "unresolved": inference.unresolved,
                             }
                         ),
-                        summary=_single_line(inference.best_supported_reading),
+                        summary=_single_line(inference.explanation),
                     ),
                 )
             )

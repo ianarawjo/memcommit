@@ -1,0 +1,7 @@
+$ mem fit "The main entrance closes from five until ten." "The main entrance stays open until ten."
+PTY · 180×52
+MEM FIT · 1/1 · JUDGING THE COMPLETE PROPOSITION SET . · 0sMEM FIT · 1/1 · JUDGMENT COMPLETE . · 0s                                                           FIT · [38;2;237;135;150m[1mNO[0m · [PROPOSITION p1] The main entrance closes from five until ten. ↔ [PROPOSITION p2] The main entrance stays open until ten.
+RELATION SIDES · p1 ↔ p2
+PROVIDER CALLS · 1
+DURABLE WRITES · 0
+CAPTURE GATE · PRESS V

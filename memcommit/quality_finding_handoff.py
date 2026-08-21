@@ -29,6 +29,7 @@ from memcommit.quality_find_workbench import (
     QualityFindWorkbenchSession,
 )
 from memcommit.resolve_application import (
+    ResolveFitTarget,
     ResolveRequest,
     ResolveSourcePrecondition,
 )
@@ -111,7 +112,10 @@ class QualityFindingReviewDraft:
             raise QualityFindingHandoffError(
                 "Quality finding draft option identity is invalid."
             )
-        if not isinstance(self.text, str) or len(self.text) > REVIEW_RESPONSE_CHAR_LIMIT:
+        if (
+            not isinstance(self.text, str)
+            or len(self.text) > REVIEW_RESPONSE_CHAR_LIMIT
+        ):
             raise QualityFindingHandoffError(
                 "Quality finding draft response is invalid."
             )
@@ -184,21 +188,19 @@ class QualityFindingHandoff:
             raise QualityFindingHandoffError(
                 "Quality finding handoff identity and explanation are incomplete."
             )
-        if (
-            len(self.source_frame_digest) != 64
-            or any(
-                character not in "0123456789abcdef"
-                for character in self.source_frame_digest
-            )
+        if len(self.source_frame_digest) != 64 or any(
+            character not in "0123456789abcdef"
+            for character in self.source_frame_digest
         ):
-            raise QualityFindingHandoffError(
-                "Quality finding frame digest is invalid."
-            )
+            raise QualityFindingHandoffError("Quality finding frame digest is invalid.")
         if (
             not self.sources
-            or any(not isinstance(source, QualityFindingSource) for source in self.sources)
+            or any(
+                not isinstance(source, QualityFindingSource) for source in self.sources
+            )
             or len({source.context_uid for source in self.sources}) != len(self.sources)
-            or len({source.display_name for source in self.sources}) != len(self.sources)
+            or len({source.display_name for source in self.sources})
+            != len(self.sources)
         ):
             raise QualityFindingHandoffError(
                 "Quality finding handoff requires distinct source Contexts."
@@ -207,7 +209,9 @@ class QualityFindingHandoff:
             not self.memory_uids
             or len(self.memory_uids) != len(self.memory_context_names)
             or len(set(self.memory_uids)) != len(self.memory_uids)
-            or any(not isinstance(value, str) or not value for value in self.memory_uids)
+            or any(
+                not isinstance(value, str) or not value for value in self.memory_uids
+            )
             or any(
                 not isinstance(value, str) or not value
                 for value in self.memory_context_names
@@ -333,8 +337,10 @@ def _exact_dict(
     keys: set[str],
     label: str,
 ) -> Mapping[str, object]:
-    if not isinstance(value, Mapping) or set(value) != keys or any(
-        not isinstance(key, str) for key in value
+    if (
+        not isinstance(value, Mapping)
+        or set(value) != keys
+        or any(not isinstance(key, str) for key in value)
     ):
         raise QualityFindingHandoffError(f"Invalid {label}.")
     return value
@@ -381,7 +387,9 @@ def _require_current_source(source: QualityFindSourceFrame) -> None:
         )
 
 
-def _source_bindings(source: QualityFindSourceFrame) -> tuple[QualityFindingSource, ...]:
+def _source_bindings(
+    source: QualityFindSourceFrame,
+) -> tuple[QualityFindingSource, ...]:
     return tuple(
         QualityFindingSource(
             context_uid=context.uid,
@@ -578,9 +586,10 @@ def quality_finding_handoff(
 def conflict_handoff_to_resolve_request(
     handoff: QualityFindingHandoff,
     *,
-    allow_create: bool = False,
+    allow_create: bool = True,
     allow_delete: bool = False,
     guidance: str = "",
+    target_fit: ResolveFitTarget = "MAY",
 ) -> ResolveRequest:
     """Enter Resolve only for one conflict from one exact direct Context.
 
@@ -592,18 +601,15 @@ def conflict_handoff_to_resolve_request(
     if not isinstance(handoff, QualityFindingHandoff):
         raise TypeError("Conflict-to-Resolve conversion requires a typed handoff.")
     if handoff.kind != "CONFLICT" or handoff.route != "RESOLVE":
-        raise QualityFindingHandoffError(
-            "Only a conflict finding can enter Resolve."
-        )
+        raise QualityFindingHandoffError("Only a conflict finding can enter Resolve.")
     if len(handoff.sources) != 1:
         raise QualityFindingHandoffError(
             "Resolve v1 requires a conflict found in one exact Context; "
             "cross-Context findings need a separate reconciliation operation."
         )
     source = handoff.sources[0]
-    if (
-        len(handoff.memory_uids) != 2
-        or any(name != source.display_name for name in handoff.memory_context_names)
+    if len(handoff.memory_uids) != 2 or any(
+        name != source.display_name for name in handoff.memory_context_names
     ):
         raise QualityFindingHandoffError(
             "Resolve v1 requires both conflicting Memories to be directly owned "
@@ -615,6 +621,7 @@ def conflict_handoff_to_resolve_request(
         allow_create=allow_create,
         allow_delete=allow_delete,
         guidance=guidance,
+        target_fit=target_fit,
         source_precondition=ResolveSourcePrecondition(
             context_uid=source.context_uid,
             display_name=source.display_name,

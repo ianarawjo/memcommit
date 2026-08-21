@@ -50,8 +50,50 @@ PTY 180 52
 [0m┌──────────────────────────────────────────────────────────────| OUTPUT CONTEXT NAME · EDIT DIRECTLY · NOT CREATED |───────────────────────────────────────────────────────────────[179C┐[0m
 [0m│› alpha/severed                                                                                                                                                                   [179C│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
-[0m SOURCE: ↑/↓ move · ←/→ collapse/expand · Enter/Space choose · top ↑ enters scope · A expand all · m Memory here · M all · Tab/Shift-Tab pane · F continue · Q cancel[165D[45A[C[0m[?25l[6C[0;1;7m▾[0m
+[0m SOURCE: m THIS Context: show items · M EVERY Context: show items · ↑/↓ move · ←/→ collapse/expand · Enter/Space choose · top ↑ enters scope · A expand all · Tab/Shift-Tab pane · [179CF[45A[C[0m[?25l[6C[0;1;7m▾[0m
 [C[0;38;5;189m  · [memory aaaaaaaa] Alpha keeps the participant's exact source statement visible before execution.[0m
 [C[0;38;5;189m  · [memory bbbbbbbb] A second Alpha Memory proves Up and Down traverse individual preview rows.[0m
-[C[0m  ·   ▸ beta[3A[12D[0m[?25l[0m› ✓ * ▾ [0;38;5;234;48;5;117malpha[0m
+[C[0m  ·   ▸ beta[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[25C[0mhide[45A[28D[0m[?25l[0m› ✓ * ▾ [0;38;5;234;48;5;117malpha[0m
 [C[0;1;7m  · [memory aaaaaaaa] Alpha keeps the participant's exact source statement visible before execution.[100D[0m

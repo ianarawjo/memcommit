@@ -1,0 +1,10 @@
+pprintf 'LIVE COLOR PTY · '; stty size; printf 'CURRENT CONTEXT · '; mem pwd[?2004l
+LIVE COLOR PTY · 52 180
+CURRENT CONTEXT · practice/2
+[1m[7m%[27m[1m[0m                                                                                                                                                                                    [0m[27m[24m[JKimMunyeong@MacBook-Pro-3 memcommit % [K[?2004hmmem show[?2004l
+[1mContext: practice/2[0m
+  Memories 1  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+[1m
+Items (in context order):[0m
+  [memory b925d6bf] [2mdfadfadfadfasf[0m
+[1m[7m%[27m[1m[0m                                                                                                                                                                                    [0m[27m[24m[JKimMunyeong@MacBook-Pro-3 memcommit % [K[?2004h

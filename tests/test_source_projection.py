@@ -4,11 +4,6 @@ from memcommit.commands.find_search_workbench import (
     FindSearchResult,
     _has_granted_materialization_source,
 )
-from memcommit.interfaces.console.theme import (
-    SemanticColorRole,
-    semantic_source_role,
-)
-from memcommit.source_projection.console import styled_source_relationship_label
 from memcommit.context_targeting.catalog import (
     grant_navigation_annotation,
     grant_navigation_capability_labels,
@@ -18,6 +13,12 @@ from memcommit.context_targeting.tui.rendering import (
     render_context_tree_rows,
 )
 from memcommit.context_targeting.tui.tree import ContextTreeState, build_context_tree
+from memcommit.interfaces.console.theme import (
+    SemanticColorRole,
+    semantic_color_rgb,
+    semantic_source_role,
+)
+from memcommit.source_projection.console import styled_source_relationship_label
 from memcommit.source_projection.model import (
     SourceAccess,
     SourceDisplayFacts,
@@ -62,7 +63,7 @@ def test_source_display_uses_one_axis_order_and_canonical_vocabulary():
     )
 
 
-def test_source_relationship_labels_share_embed_and_reference_semantics():
+def test_relationship_labels_and_colors_distinguish_live_embed_from_snapshot():
     embedded = SourceDisplayFacts(form=SourceForm.MEMORY_EMBED)
     reference = SourceDisplayFacts(form=SourceForm.MEMORY_REFERENCE)
 
@@ -72,8 +73,14 @@ def test_source_relationship_labels_share_embed_and_reference_semantics():
     assert semantic_source_role(reference) is SemanticColorRole.REFERENCE
     assert click.unstyle(styled_source_relationship_label(embedded)) == "embedded"
     assert click.unstyle(styled_source_relationship_label(reference)) == "reference"
-    assert "38;2;238;212;159" in styled_source_relationship_label(embedded)
-    assert "38;2;198;160;246" in styled_source_relationship_label(reference)
+    assert (
+        f"\x1b[38;2;{';'.join(map(str, semantic_color_rgb(SemanticColorRole.EMBED)))}m"
+        in styled_source_relationship_label(embedded)
+    )
+    assert (
+        f"\x1b[38;2;{';'.join(map(str, semantic_color_rgb(SemanticColorRole.REFERENCE)))}m"
+        in styled_source_relationship_label(reference)
+    )
 
 def test_source_reference_row_folds_content_and_keeps_owner_alias_separate():
     row = SourceReferenceRow(

@@ -44,6 +44,15 @@ def cmd(
             )
         ),
     ] = None,
+    target: Annotated[
+        Optional[str],
+        typer.Argument(
+            help=(
+                "Existing CREATE-authorized Target Context; equivalent to "
+                "--into and defaults to the command-start current Context"
+            )
+        ),
+    ] = None,
     into: Annotated[
         Optional[str],
         typer.Option(
@@ -98,6 +107,13 @@ def cmd(
         ),
     ] = False,
 ) -> None:
+    if target is not None and into is not None:
+        typer.secho(
+            "Error: supply Target either positionally or with --into, not both.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
     if direct and recursive:
         typer.secho(
             "Error: choose either --direct or --recursive, not both.",
@@ -121,9 +137,10 @@ def cmd(
         raise typer.Exit(2)
     store = MemoryStore()
     current = store.current_context_name()
-    if not current and into is None:
+    requested_target = target if target is not None else into
+    if not current and requested_target is None:
         typer.secho(
-            "No current Target. Pass --into TARGET or run 'mem init <name>' first.",
+            "No current Target. Pass TARGET/--into or run 'mem init <name>' first.",
             fg=typer.colors.RED,
             err=True,
         )
@@ -139,7 +156,7 @@ def cmd(
             setup = build_merge_tui_setup(
                 port,
                 initial_recursive=recursive,
-                requested_target=into,
+                requested_target=requested_target,
             )
             request = choose_merge_setup(setup)
             if request is None:
@@ -186,7 +203,7 @@ def cmd(
         else:
             request = MergeRequest(
                 source_locator=source,
-                target_locator=into,
+                target_locator=requested_target,
                 reach=(MergeReach.DESCENDANTS if recursive else MergeReach.DIRECT),
             )
             plan = prepare_merge(request, port=port)

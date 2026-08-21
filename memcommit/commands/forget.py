@@ -223,6 +223,14 @@ def cmd(
             ),
         ),
     ] = None,
+    context_name: Annotated[
+        Optional[str],
+        typer.Option(
+            "--context",
+            "-c",
+            help="Direct Source Context (defaults to current)",
+        ),
+    ] = None,
 ) -> None:
     if info is None and not _interactive_terminal():
         typer.secho(
@@ -234,13 +242,13 @@ def cmd(
         raise typer.Exit(1)
 
     active_store = MemoryStore()
-    source_locator: str | None = None
+    source_locator: str | None = context_name
     try:
         context_snapshot = ContextOperandSnapshot.capture(active_store)
         if info is None:
             access = resolve_context_access(
                 active_store,
-                None,
+                context_name,
                 current_name=context_snapshot.current_name,
                 required_permission="READ",
             )

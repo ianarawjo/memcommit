@@ -74,6 +74,32 @@ Each Rule receives exactly one `CONFORMS`, `VIOLATES`,
 Every Target Memory must be cited by at least one Rule judgment or explicitly
 placed outside the judgments. Absence of evidence is not conformance.
 
+The command exposes the same two Context roles through three equivalent
+vocabularies:
+
+```text
+mem check-conformance TARGET --against RULES
+mem check-conformance --rule RULES --example TARGET
+mem check-conformance --rule RULES --case TARGET
+mem check-conformance --from RULES --to TARGET
+```
+
+`Example` is the canonical Ground-v3 term for a concrete proposition; `Case`
+remains an accepted user-facing alias because exact input/output replay and
+older Ground material use that vocabulary. `--from` always names the Rules
+Context and `--to` the Context being judged. If exactly one option-qualified
+role is omitted, the command-start current Context supplies it, matching the
+shared endpoint convention. The legacy positional Target does not by itself
+infer a Rules Context, so an accidentally incomplete old command remains an
+error.
+
+Aliases are one semantic slot rather than independent inputs. Repeating a
+Rules alias or a Subject alias, or combining the positional Target with a
+Subject alias, fails before Context loading or provider connection. This avoids
+order-dependent last-value-wins behavior and preserves one command-start
+locator snapshot for both resolved names. `--ground` remains a separate bundled
+Rules-plus-Examples route and cannot be combined with any Context endpoint.
+
 The provider also returns the exact counterexample subset for every
 `VIOLATES` or `PARTIALLY_CONFORMS` judgment. A violating judgment's cited
 evidence is entirely nonconforming; a partial judgment has both conforming and
@@ -101,7 +127,8 @@ scope and retained-analysis authority contracts before rollout.
 ## Audit composition and compatibility
 
 Normal `mem audit --context TARGET` retains its existing three independent
-quality checks. Supplying `--against RULES` adds the same Context Conformance
+quality checks. Supplying `--against RULES` or its role-named `--rule RULES`
+alias adds the same Context Conformance
 report as an optional fourth saved section:
 
 ```text

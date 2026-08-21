@@ -7,7 +7,7 @@
 ┃ │ Reference: task-2/advisor1 (layout only; no authority)                                                                                                                       │ ┃
 ┃ │ Compared: task-2/advisor2                                                                                                                                                    │ ┃
 ┃ │ SCOPE · REFERENCE SELECTED + ALL DESCENDANTS · COMPARED SELECTED GRAPH ONLY                                                                                                  │ ┃
-┃ │ Analysis: 8fce03ad · REUSED                                                                                                                                                  │ ┃
+┃ │ Analysis: 62606324 · REUSED                                                                                                                                                  │ ┃
 ┃ │ METRICS · MEMORIES 1 + 1 · RELATIONS 1 · POTENTIAL CONFLICTS 1                                                                                                               │ ┃
 ┃ │ EQUIVALENT 0 · COMPATIBLE 0 · SCOPED 0 · CONFLICT 1 · DISTINCT 0 · UNCLEAR 0                                                                                                 │ ┃
 ┃ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ ┃
@@ -49,4 +49,4 @@
 ┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
 │[ RESOLVE ]  Resolve 1 required conflict · Enter to open the first unresolved item.                                                                                               │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
- ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close G comment all  P preserve all  D defer  A review & apply  H Help  Q close
+ ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close G comment all  P preserve all  D defer  A review & apply  H Help  y/Y copy  Q

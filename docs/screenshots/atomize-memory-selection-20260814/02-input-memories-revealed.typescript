@@ -51,6 +51,52 @@ PTY 180 52
 [0m┌────────────────────────────────────────────────────────────────────────────────────| APPLY |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│[ PRESS ENTER TO APPLY ]                                                                                                                                                          [179C│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
-[0m ↑/↓ move · ←/→ tree · Enter/Space choose Context · m Memory here · M all · Tab pane · Q cancel[95D[48A[C[0m[?25l[5C[0;1;7m▾[0m
-[C[0;38;2;202;211;245m    · [memory f1a4679b] The library entrance moves north on Monday and closes at 18:00.[0m
-[C[0;38;2;202;211;245m    · [memory a1d23789] The help desk keeps its existing weekend schedule.[2A[74D[0m
+[0m m THIS Context: show items · M EVERY Context: show items · ↑/↓ move · ←/→ tree · Enter/Space choose Context · Tab pane · Q cancel[130D[48A[C[0m[?25l[5C[0;1;7m▾[0m
+[C[0;38;2;202;211;245m    · [memory c837cb12] The library entrance moves north on Monday and closes at 18:00.[0m
+[C[0;38;2;202;211;245m    · [memory f8a5f22f] The help desk keeps its existing weekend schedule.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[17C[0mhide[48A[20D[0m

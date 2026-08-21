@@ -6,10 +6,19 @@ import typer
 
 from memcommit.dedup_application import DedupReceipt, FrozenDedupPlan
 from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.console.theme import (
+    SemanticColorRole,
+    semantic_color_rgb,
+)
 
 
 def _line(label: str, value: str) -> None:
     typer.echo(f"{label} · {display_escape_text(value)}")
+
+
+def _semantic_line(label: str, value: str, role: SemanticColorRole) -> None:
+    typer.secho(label, fg=semantic_color_rgb(role), bold=True, nl=False)
+    typer.echo(" · " + display_escape_text(value))
 
 
 def render_dedup_plan_plain(plan: FrozenDedupPlan) -> None:
@@ -26,10 +35,11 @@ def render_dedup_plan_plain(plan: FrozenDedupPlan) -> None:
                 if member.uid == component.recommended_survivor_uid
                 else "MEMBER"
             )
-            _line(
-                marker,
-                f"[{member.uid}] #{member.ordinal} · {member.content}",
-            )
+            value = f"[{member.uid}] #{member.ordinal} · {member.content}"
+            if marker == "RECOMMENDED SURVIVOR":
+                _semantic_line(marker, value, SemanticColorRole.ADD)
+            else:
+                _line(marker, value)
         for evidence in component.evidence:
             _line(
                 "EVIDENCE",
@@ -49,8 +59,16 @@ def render_dedup_receipt(receipt: DedupReceipt) -> None:
     _line("CONTEXT", receipt.context_name)
     _line("REVISION", receipt.revision)
     _line("COMPONENTS", str(len(receipt.selections)))
-    _line("SURVIVORS", ", ".join(receipt.survivor_uids))
-    _line("ABSORBED", ", ".join(receipt.absorbed_uids))
+    _semantic_line(
+        "SURVIVORS",
+        ", ".join(receipt.survivor_uids),
+        SemanticColorRole.ADD,
+    )
+    _semantic_line(
+        "ABSORBED",
+        ", ".join(receipt.absorbed_uids),
+        SemanticColorRole.REMOVE,
+    )
     _line("RECEIPT", receipt.checkpoint_uid)
     _line("CHECKPOINT", receipt.checkpoint_uid)
     _line("REVIEW", f"mem review dedun --receipt {receipt.checkpoint_uid}")

@@ -1,5 +1,5 @@
  MEM IMPORT · PROFILE · FINAL APPROVAL                                                                                                                                              
- Nothing has been imported. A applies only the command below.                                                                                                                       
+ Nothing has been applied. Enter applies only the command below.                                                                                                                    
 ┌─────────────────────────────────────────────────────────────────────| EXACT COMMAND · REVIEW BEFORE APPLY |──────────────────────────────────────────────────────────────────────┐
 │PROPOSED COMMAND · NOT RUN                                                                                                                                                       ^│
 │  mem import profile source-profile-import --from-profile source-profile                                                                                                          │
@@ -49,4 +49,4 @@
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
- ↑/↓ scroll · A apply exact command · Esc/Q cancel                                                                                                                                  
+ ↑/↓ scroll · Enter apply exact command · A also works · Esc/Q cancel                                                                                                               

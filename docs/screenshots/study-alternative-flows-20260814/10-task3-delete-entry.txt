@@ -49,4 +49,4 @@
         · [context 1f913bb6] VIA EMBED · task-3/local/personal-memory/2025/05                                                                                                       
         · [context 870f7336] VIA EMBED · task-3/local/personal-memory/2025/06                                                                                                      v
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
- ↑↓ move  ←→ expand  A expand all  m hide items here  M hide all items  y copy Context  Y copy visible branch  Enter delete  q cancel · 21/57 · 67 selectable
+ ↑↓ move  ←→ expand  A expand all  m THIS Context: hide items · M EVERY Context: hide items  y copy Context  Y copy visible branch  Enter delete  q cancel · 21/57 · 67 selectable

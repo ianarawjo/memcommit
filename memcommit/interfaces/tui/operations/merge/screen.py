@@ -80,7 +80,6 @@ def merge_exact_command_review(
             "mem",
             "merge",
             source_name,
-            "--into",
             target_name,
             "--recursive" if recursive else "--direct",
         ),

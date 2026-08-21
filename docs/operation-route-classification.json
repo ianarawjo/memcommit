@@ -18,6 +18,7 @@
       "atomize": {
         "evidence": [
           "docs/atomize-application-boundary-matrix.md",
+          "docs/context-locator-design-rationale.md",
           "docs/execution-receipt-review-lifecycle-design-rationale.md"
         ],
         "reason": "Analysis, saved review, reanalysis, both Apply directions, recovery, and public projection are verified as one structural lifecycle."
@@ -25,7 +26,9 @@
       "compare": {
         "evidence": [
           "docs/compare-application-boundary-matrix.md",
-          "docs/compare-session-lifecycle-design-rationale.md"
+          "docs/compare-session-lifecycle-design-rationale.md",
+          "docs/context-locator-design-rationale.md",
+          "docs/mem-compare-design-rationale.md"
         ],
         "reason": "CLI, TUI, Python, agent, and MCP routes share one targetless Run, exact Open, and version-bound Refresh lifecycle with production cache ordering and no Context Apply."
       },
@@ -48,6 +51,7 @@
       "embed": {
         "evidence": [
           "docs/embed-application-boundary-matrix.md",
+          "docs/mem-embed-placement-design-rationale.md",
           "docs/memory-reference-embed-semantics-design-rationale.md"
         ],
         "reason": "Context and Memory live-link CLI/TUI, Python, agent, and MCP routes share typed placement, Source freeze, CAS Apply, and checkpoint contracts through one terminal-independent operation boundary."
@@ -62,12 +66,14 @@
       },
       "fit": {
         "evidence": [
-          "docs/fit-application-boundary-matrix.md"
+          "docs/fit-application-boundary-matrix.md",
+          "docs/context-name-portability-design-rationale.md"
         ],
-        "reason": "General and Ground Fit routes share typed application/runtime execution and independent plain and TUI projections."
+        "reason": "General and Ground Fit routes share typed application/runtime execution and one terminal-independent compact receipt projection; standalone Fit has no TUI route."
       },
       "forget": {
         "evidence": [
+          "docs/context-locator-design-rationale.md",
           "docs/forget-application-boundary-matrix.md",
           "docs/forget-public-python-api-design-rationale.md",
           "docs/forget-agent-adapter-design-rationale.md",
@@ -85,13 +91,15 @@
       },
       "init": {
         "evidence": [
-          "docs/context-init-application-boundary-matrix.md"
+          "docs/context-init-application-boundary-matrix.md",
+          "docs/context-name-portability-design-rationale.md"
         ],
         "reason": "Ordinary Context initialization has one typed terminal-free transaction and independent exact-name CLI/TUI presenters; Study initialization remains a separate operation."
       },
       "merge": {
         "evidence": [
           "docs/merge-application-boundary-matrix.md",
+          "docs/context-locator-design-rationale.md",
           "docs/execution-receipt-review-lifecycle-design-rationale.md"
         ],
         "reason": "Direct and recursive Merge planning, review, application, and presentation use the same frozen typed plan and runtime."
@@ -100,6 +108,7 @@
         "evidence": [
           "docs/meld-application-boundary-matrix.md",
           "docs/meld-session-lifecycle-design-rationale.md",
+          "docs/interactive-semantic-command-boundary-design-rationale.md",
           "docs/execution-receipt-review-lifecycle-design-rationale.md"
         ],
         "reason": "CLI, TUI, Python, and agent routes share typed Start, Restart, saved-turn, cache/provider, CAS, and Apply lifecycles with exact/equivalent/projected reuse and one reviewed-session version contract."
@@ -134,6 +143,7 @@
       },
       "resolve": {
         "evidence": [
+          "docs/resolve-application-boundary-matrix.md",
           "docs/resolve-fit-repair-design-rationale.md",
           "docs/execution-receipt-review-lifecycle-design-rationale.md",
           "docs/resolution-lifecycle-design-rationale.md"
@@ -142,6 +152,7 @@
       },
       "dedun": {
         "evidence": [
+          "docs/context-locator-design-rationale.md",
           "docs/dedun-callable-boundary-matrix.md",
           "docs/dedun-design-rationale.md",
           "docs/execution-receipt-review-lifecycle-design-rationale.md",
@@ -149,7 +160,7 @@
           "docs/quality-finding-handoff-design-rationale.md",
           "docs/resolution-lifecycle-design-rationale.md"
         ],
-        "reason": "Dedun reuses the closed read-only redundancy analysis, then alone exposes evidence confirmation, survivor review, Grant revalidation, reference blocking, and one checkpointed exact Apply across CLI, Python, agent, and MCP routes."
+        "reason": "Dedun reuses the closed exact-plus-semantic DUN analysis, applies the deterministic earliest-UID survivor in direct CLI execution, and shares Grant revalidation, reference blocking, exact replay, and one checkpointed Apply across CLI, Python, agent, and MCP routes."
       },
       "dedup": {
         "evidence": [
@@ -158,21 +169,40 @@
         ],
         "reason": "The direct CLI and public Python routes enter one provider-free exact-content application boundary that retains first-in-Context UIDs and removes later byte-identical copies in one checkpoint."
       },
+      "find-duplicates": {
+        "evidence": [
+          "docs/context-locator-design-rationale.md",
+          "docs/find-duplicates-callable-boundary-matrix.md",
+          "docs/dedup-design-rationale.md"
+        ],
+        "reason": "The direct CLI and public Python routes share one provider-free exact-group analysis and publish a complete typed read-only report without mutation or checkpoint creation."
+      },
       "find-redundancies": {
         "evidence": [
+          "docs/context-locator-design-rationale.md",
           "docs/find-redundancies-callable-boundary-matrix.md",
           "docs/memory-quality-finders-design-rationale.md",
           "docs/quality-finding-handoff-design-rationale.md",
           "docs/read-report-lifecycle-design-rationale.md"
         ],
-        "reason": "Canonical and compatibility CLI spellings, public Python, agent, and MCP routes share one frozen readable-frame semantic redundancy analysis and typed read-only report; only the separate Dedun adapter installs the confirmed-evidence Apply handoff."
+        "reason": "CLI, public Python, agent, and MCP routes share one frozen readable-frame exact-plus-semantic DUN analysis and typed read-only report; only the separate Dedun adapter enters the survivor and Apply boundary."
       },
       "sever": {
         "evidence": [
           "docs/sever-application-boundary-matrix.md",
-          "docs/execution-receipt-review-lifecycle-design-rationale.md"
+          "docs/application-flow-design-rationale.md",
+          "docs/context-locator-design-rationale.md",
+          "docs/context-name-portability-design-rationale.md",
+          "docs/interactive-semantic-command-boundary-design-rationale.md",
+          "docs/execution-receipt-review-lifecycle-design-rationale.md",
+          "docs/mem-sever-design-rationale.md",
+          "docs/ownership-aware-application-review-design-rationale.md",
+          "docs/semantic-resolution-workbench-design-rationale.md",
+          "docs/session-endpoint-setup-design-rationale.md",
+          "docs/study-semantic-prewarm-registry-design-rationale.md",
+          "docs/terminal-ui-integration-design-rationale.md"
         ],
-        "reason": "Analysis, cache reuse, saved-session review, destination revision, and Apply execute through typed application/runtime boundaries."
+        "reason": "Analysis, cache reuse, saved-session review, save-location revision, and both self-save and other-save Apply execute through typed application/runtime boundaries."
       },
       "show": {
         "evidence": [
@@ -197,7 +227,9 @@
       },
       "switch": {
         "evidence": [
-          "docs/switch-application-boundary-matrix.md"
+          "docs/switch-application-boundary-matrix.md",
+          "docs/context-listing-design-rationale.md",
+          "docs/mem-switch-picker-design-rationale.md"
         ],
         "reason": "Explicit CLI, interactive picker, and checkout-compatible selection share one typed global/relative locator, READ authorization, target validation, and current-pointer CAS boundary."
       }
@@ -213,7 +245,9 @@
       },
       "update": {
         "evidence": [
+          "docs/context-locator-design-rationale.md",
           "docs/update-application-boundary-matrix.md",
+          "docs/interactive-semantic-command-boundary-design-rationale.md",
           "docs/execution-receipt-review-lifecycle-design-rationale.md"
         ],
         "reason": "Apply policy and recovery are verified, but the remaining Update routes have not been traced into one complete reviewed application boundary."

@@ -14,7 +14,8 @@ import json
 from typing import Iterable
 
 from memcommit.interfaces.console.text import safe_terminal_text
-from memcommit.review_report import ReviewReportController
+from memcommit.interfaces.console.theme import SemanticColorRole
+from memcommit.review_report import ReviewReportController, ReviewTextFragment
 from memcommit.store import MemoryStore
 
 
@@ -180,36 +181,85 @@ def _elaborate_lines(payload: dict[str, object]) -> list[str]:
     return lines
 
 
-def _dedun_lines(payload: dict[str, object]) -> list[str]:
-    lines: list[str] = []
+def _dedun_fragments(payload: dict[str, object]) -> tuple[ReviewTextFragment, ...]:
+    """Project typed cleanup tokens without reparsing rendered Review text."""
+
+    fragments: list[ReviewTextFragment] = []
+
+    def line(*parts: ReviewTextFragment) -> None:
+        if fragments:
+            fragments.append(ReviewTextFragment("\n"))
+        fragments.extend(parts)
+
     components = payload.get("components")
     if isinstance(components, list):
-        lines.append(f"RESOLVED GROUPS · {len(components)}")
+        line(ReviewTextFragment(f"RESOLVED GROUPS · {len(components)}"))
         for index, component in enumerate(components, 1):
             if not isinstance(component, dict):
                 continue
-            lines.append(
-                f"{index}. SURVIVOR · [{_line(str(component.get('survivor_uid', ''))[:8])}]"
-            )
+            survivor_uid = str(component.get("survivor_uid", ""))
             members = component.get("members")
+            survivor: dict[str, object] | None = None
+            if isinstance(members, list):
+                survivor = next(
+                    (
+                        member
+                        for member in members
+                        if isinstance(member, dict)
+                        and str(member.get("uid", "")) == survivor_uid
+                    ),
+                    None,
+                )
+                if survivor is None:
+                    survivor = next(
+                        (
+                            member
+                            for member in members
+                            if isinstance(member, dict) and member.get("selected")
+                        ),
+                        None,
+                    )
+            survivor_content = (
+                _line(survivor.get("content", "")) if survivor is not None else ""
+            )
+            survivor_suffix = f" {survivor_content}" if survivor_content else ""
+            line(
+                ReviewTextFragment(f"{index}. "),
+                ReviewTextFragment(
+                    "SURVIVOR",
+                    SemanticColorRole.ADD,
+                    bold=True,
+                ),
+                ReviewTextFragment(
+                    f" · [{_line(survivor_uid[:8])}]" + survivor_suffix
+                ),
+            )
             if isinstance(members, list):
                 for member in members:
-                    if isinstance(member, dict):
-                        lines.append(
-                            "   "
-                            + ("KEEP" if member.get("selected") else "ABSORB")
-                            + f" · [{_line(str(member.get('uid', ''))[:8])}] "
-                            + _line(member.get("content", ""))
+                    if isinstance(member, dict) and member is not survivor:
+                        line(
+                            ReviewTextFragment("   "),
+                            ReviewTextFragment(
+                                "ABSORB",
+                                SemanticColorRole.REMOVE,
+                                bold=True,
+                            ),
+                            ReviewTextFragment(
+                                f" · [{_line(str(member.get('uid', ''))[:8])}] "
+                                + _line(member.get("content", ""))
+                            ),
                         )
             evidence = component.get("evidence")
             if isinstance(evidence, list):
                 for item in evidence:
                     if isinstance(item, dict):
-                        lines.append(
-                            f"   EVIDENCE · {_line(item.get('relation', ''))} · "
-                            f"{_line(item.get('reason', ''))}"
+                        line(
+                            ReviewTextFragment(
+                                f"   EVIDENCE · {_line(item.get('relation', ''))} · "
+                                f"{_line(item.get('reason', ''))}"
+                            )
                         )
-    return lines
+    return tuple(fragments)
 
 
 def applied_checkpoint_review_controller(
@@ -230,14 +280,25 @@ def applied_checkpoint_review_controller(
     ]
     if record.description:
         lines.append(f"OUTCOME · {_line(record.description)}")
+    report_fragments: tuple[ReviewTextFragment, ...] = ()
     if record.operation == "distill":
         lines.extend(("", *_distill_lines(payload)))
     elif record.operation == "elaborate":
         lines.extend(("", *_elaborate_lines(payload)))
     elif record.operation == "dedun":
-        lines.extend(("", *_dedun_lines(payload)))
+        dedun_fragments = _dedun_fragments(payload)
+        prefix = "\n".join(lines).rstrip()
+        report_fragments = (
+            ReviewTextFragment(prefix + ("\n\n" if dedun_fragments else "")),
+            *dedun_fragments,
+        )
     else:
         lines.extend(("", *_effect_lines(payload)))
+    report_text = (
+        "".join(fragment.text for fragment in report_fragments)
+        if report_fragments
+        else "\n".join(lines).rstrip()
+    )
     return ReviewReportController.from_text(
         operation=record.operation,
         artifact_uid=record.checkpoint_uid,
@@ -245,7 +306,8 @@ def applied_checkpoint_review_controller(
         kind="READ_ONLY",
         title=title,
         summary=summary,
-        report_text="\n".join(lines).rstrip(),
+        report_text=report_text,
+        report_fragments=report_fragments,
     )
 
 

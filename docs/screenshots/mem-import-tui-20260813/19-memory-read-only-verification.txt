@@ -36,7 +36,7 @@
                                                                                                                                                                                     
                                                                                                                                                                                     
 Imported Memory [20000000] into Context 'destination'.                                                                                                                              
-Stable root Memory.                                                                                                                                                                 
+Stable child Memory.                                                                                                                                                                
 Source and active Profile selection unchanged.                                                                                                                                      
 CAPTURE PAUSE · press Enter for read-only verification                                                                                                                              
                                                                                                                                                                                     
@@ -46,7 +46,7 @@ Context: destination
   2 items                                                                                                                                                                           
                                                                                                                                                                                     
   [memory 40000000] Local destination Memory.                                                                                                                                       
-  [memory 20000000] Stable root Memory.                                                                                                                                             
+  [memory 20000000] Stable child Memory.                                                                                                                                            
 CURRENT CONTEXT · destination                                                                                                                                                       
 READ-ONLY VERIFICATION COMPLETE                                                                                                                                                     
                                                                                                                                                                                     

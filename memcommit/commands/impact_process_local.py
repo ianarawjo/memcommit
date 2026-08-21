@@ -269,7 +269,8 @@ def distill_impact_presentation(
                 ResolutionDetailBlock(
                     heading="EVIDENCE BOUNDARY",
                     text=(
-                        "SUPPORT · " + ", ".join(uid[:8] for uid in rule.support_memory_uids)
+                        "SUPPORT · "
+                        + ", ".join(uid[:8] for uid in rule.support_memory_uids)
                         + (
                             "\nBOUNDARY · "
                             + ", ".join(uid[:8] for uid in rule.boundary_memory_uids)
@@ -766,9 +767,7 @@ def _resolve_change(effect) -> MemoryChange:
         before=effect.old_content,
         after=effect.new_content,
         reason=effect.reason,
-        rules=tuple(
-            f"SOURCE MEMORY · {uid[:8]}" for uid in effect.source_memory_uids
-        ),
+        rules=tuple(f"SOURCE MEMORY · {uid[:8]}" for uid in effect.source_memory_uids),
     )
 
 
@@ -807,9 +806,13 @@ def _resolve_candidate_view(
         operation="resolve",
         artifact_uid=analysis.frame.context_uid,
         revision=analysis.frame.revision,
-        title="MEM RESOLVE · VERIFIED FIT REPAIR",
+        title="MEM RESOLVE · AUTOMATIC INTERPRETATION PLAN",
         route=f"SOURCE {analysis.frame.display_name} → SAME SOURCE",
-        status="VERIFIED CANDIDATE · READ-ONLY",
+        status=(
+            "GROUNDED PLAN · READ-ONLY"
+            if candidate.grounded
+            else "ASSUMED WORKING VIEW · READ-ONLY"
+        ),
         metrics=(
             ResolutionMetric("EFFECTS", str(len(candidate.effects))),
             ResolutionMetric("FIT", candidate.fit.verdict),
@@ -824,9 +827,22 @@ def _resolve_candidate_view(
         ),
         overview=candidate.summary,
         overview_sections=(
+            *(
+                ResolutionOverviewSection(
+                    f"issue-{position}",
+                    f"ISSUE · {issue.kind}",
+                    issue.selected_interpretation
+                    + (
+                        "\nASSUMPTIONS · " + "; ".join(issue.assumptions)
+                        if issue.assumptions
+                        else ""
+                    ),
+                )
+                for position, issue in enumerate(candidate.issues, 1)
+            ),
             ResolutionOverviewSection(
                 "candidate",
-                "CANDIDATE",
+                "AUTOMATIC PLAN",
                 candidate.summary,
             ),
             ResolutionOverviewSection(
@@ -843,67 +859,12 @@ def _resolve_candidate_view(
     )
 
 
-def _resolve_choice_view(analysis: ResolveAnalysis) -> ResolutionWorkbenchView:
-    items = tuple(
-        ResolutionItem(
-            uid=candidate.uid,
-            kind="RESOLVE CANDIDATE",
-            status="ALTERNATIVE",
-            priority="ALTERNATIVE",
-            title=candidate.uid,
-            summary=candidate.summary,
-            role="OPTIONAL_REVIEW",
-            obligation="NONE",
-            response_state="NOT_APPLICABLE",
-            blocks=(
-                ResolutionDetailBlock(
-                    heading="VERIFIED EFFECTS",
-                    text="\n".join(
-                        f"{effect.kind} · {effect.memory_uid[:8]} · {effect.reason}"
-                        for effect in candidate.effects
-                    ),
-                ),
-            ),
-        )
-        for candidate in analysis.candidates
-    )
-    return ResolutionWorkbenchView(
-        operation="resolve",
-        artifact_uid=analysis.frame.context_uid,
-        revision=analysis.frame.revision,
-        title="MEM RESOLVE · CANDIDATE CHOICE",
-        route=f"SOURCE {analysis.frame.display_name} → SAME SOURCE",
-        status="CHOICE REQUIRED · READ-ONLY",
-        metrics=(
-            ResolutionMetric("CANDIDATES", str(len(analysis.candidates))),
-            ResolutionMetric("SOURCE", str(len(analysis.frame.memories))),
-        ),
-        context_locations=(
-            ResolutionContextLocation("SOURCE", analysis.frame.display_name),
-        ),
-        overview=analysis.question,
-        overview_sections=(
-            ResolutionOverviewSection(
-                "choice",
-                "CHOICE REQUIRED",
-                analysis.question,
-            ),
-        ),
-        list_label="VERIFIED ALTERNATIVES",
-        items=items,
-        empty_message="No verified candidates.",
-        results_label="NO EXACT EFFECT SET SELECTED",
-        results=(),
-        show_results=False,
-    )
-
-
 def resolve_impact_presentation(
     analysis: ResolveAnalysis,
     *,
     candidate_uid: str | None,
 ) -> ImpactSessionPresentation:
-    """Project either one exact candidate or the unresolved candidate catalog."""
+    """Project the automatic Resolve plan or a terminal read-only outcome."""
 
     candidate: ResolveCandidate | None = None
     if candidate_uid is not None:
@@ -915,7 +876,7 @@ def resolve_impact_presentation(
                 f"No verified Resolve candidate has exact id '{candidate_uid}'."
             )
         candidate = matches[0]
-    elif analysis.status == "PROPOSAL":
+    elif analysis.status in {"PROPOSAL", "ASSUMED"}:
         candidate = analysis.candidates[0]
 
     if candidate is not None:
@@ -928,32 +889,19 @@ def resolve_impact_presentation(
                 revision=view.revision,
                 title="IMPACT · RESOLVE · SAME SOURCE",
                 summary=(
-                    "These are the exact effects of one independently Fit-verified "
-                    "candidate. This Impact view cannot apply them."
+                    "These are the exact effects of one automatic, independently "
+                    "Fit-verified interpretation plan. This Impact view cannot "
+                    "apply them."
                 ),
                 changes=tuple(_resolve_change(effect) for effect in candidate.effects),
             ),
             handoff_available=False,
         )
 
-    if analysis.status == "CHOICE":
-        view = _resolve_choice_view(analysis)
-        return ImpactSessionPresentation(
-            view=view,
-            controller=ImpactController.from_resolution(
-                view,
-                title="IMPACT · RESOLVE CANDIDATE SET",
-                summary=(
-                    "These are mutually exclusive verified alternatives, not one "
-                    "combined effect set. Rerun with --candidate FULL_ID for an "
-                    "exact diff."
-                ),
-            ),
-            handoff_available=False,
-        )
-
     detail = analysis.question or (
-        analysis.initial_fit.reason if analysis.initial_fit is not None else analysis.status
+        analysis.initial_fit.reason
+        if analysis.initial_fit is not None
+        else analysis.status
     )
     view = ResolutionWorkbenchView(
         operation="resolve",
@@ -970,9 +918,7 @@ def resolve_impact_presentation(
             ResolutionContextLocation("SOURCE", analysis.frame.display_name),
         ),
         overview=detail,
-        overview_sections=(
-            ResolutionOverviewSection("status", "ASSESSMENT", detail),
-        ),
+        overview_sections=(ResolutionOverviewSection("status", "ASSESSMENT", detail),),
         list_label="EXACT EFFECTS",
         items=(),
         empty_message="No Resolve effects are available.",
@@ -1010,8 +956,11 @@ def resolve_cmd(
     ] = None,
     allow_create: Annotated[
         bool,
-        typer.Option("--allow-create", help="Permit CREATE candidates"),
-    ] = False,
+        typer.Option(
+            "--allow-create/--no-create",
+            help="Include information-preserving CREATE in the automatic plan",
+        ),
+    ] = True,
     allow_delete: Annotated[
         bool,
         typer.Option("--allow-delete", help="Permit grounded DELETE candidates"),
@@ -1020,6 +969,13 @@ def resolve_cmd(
         Optional[str],
         typer.Option("--guidance", help="Grounding available to candidate generation"),
     ] = None,
+    yes: Annotated[
+        bool,
+        typer.Option(
+            "--yes",
+            help="Require an exact YES resolution whose post-image also Fits as YES",
+        ),
+    ] = False,
     finding_handoff: Annotated[
         Optional[str],
         typer.Option(
@@ -1031,7 +987,7 @@ def resolve_cmd(
         Optional[str],
         typer.Option(
             "--candidate",
-            help="Exact full id of the verified candidate to project as a diff",
+            help="Exact full id of the verified automatic plan to project as a diff",
         ),
     ] = None,
 ) -> None:
@@ -1051,6 +1007,7 @@ def resolve_cmd(
                 allow_create=allow_create,
                 allow_delete=allow_delete,
                 guidance=guidance or "",
+                target_fit="YES" if yes else "MAY",
             )
         else:
             request = ResolveRequest(
@@ -1059,6 +1016,7 @@ def resolve_cmd(
                 allow_create=allow_create,
                 allow_delete=allow_delete,
                 guidance=guidance or "",
+                target_fit="YES" if yes else "MAY",
             )
         port = MemoryStoreResolvePort(store, current_name=snapshot.current_name)
         with CommandProgress(

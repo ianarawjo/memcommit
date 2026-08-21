@@ -74,7 +74,7 @@ CAPTURE PTY · 52x180
 [3C[0;38;5;146m.[0m
 
 
-[4C[0;38;5;146m.[10A[4D[0m[?12l[?25h[?25l[A[62C[0m| CONTEXTS · SWITCH B[COWSER[3CREAD-O[CLY · * CURRENT |[0m
+[4C[0;38;5;146m.[10A[4D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[A[62C[0m| CONTEXTS · SWITCH B[COWSER[3CREAD-O[CLY · * CURRENT |[0m
 [C[0;38;5;231m Roots · capture/local · public/query-guidance · public/readable-guidance[0m                                                                                                        [0;1m^[0m
 [C[0m                                                                                                                                                                                 [0;48;5;238m [0m
 [C[0m  * ▸ capture/local                                                                                                                                                              [0;48;5;238m [0m
@@ -124,7 +124,7 @@ CAPTURE PTY · 52x180
 [C[0m                                                                                                                                                                                 [0;48;5;238m [0m
 [C[0m                                                                                                                                                                                 [0;1mv[0m
 
-[5C[0mback · R/r[Crepo[Ct · ↑/↓[Cmove · ←/→[Cexpand · E[Cter browse · A/a[Call ·[Cm Memories h[Cre[C· M all Memories · Q/q close · read-only[46A[129D[0m[?25l[5A[28C[0m.[0m
+[5C[0mback · R/r[Crepo[Ct · m[CTHIS Context: show items[C· M EVERY Context: show it[Cms[C· ↑/↓[Cmov[C · ←/→ expand · Enter browse · A/a all · Q/q close · read-only[46A[153D[0m[?25l[5A[28C[0m.[0m
 
 
 
@@ -184,7 +184,7 @@ CAPTURE PTY · 52x180
 [C[0m                                                                                                                                                                                 [0;48;5;238m [0m
 [C[0m                                                                                                                                                                                 [0;1mv[0m
 
-[5C[0mContexts ·[CR/r [Ceport ·[C↑/↓ scroll[C· PgUp/PgD[C page · Home/End[C· Q/q[Crequest clos[C ·[Cread-only[0m[K[49A[98D[0m[?12l[?25h[?25l[2A[28C[0m… · 1s[0m[K[0m
+[5C[0mContexts ·[CR/r [Ceport[C· ↑/↓ scroll · PgUp/PgDn[Cpage · Home/End · Q/q requ[Cst[Cclose[C· r[Cad-only[0m[K[49A[98D[0m[?12l[?25h[?25l[2A[28C[0m… · 1s[0m[K[0m
 
 
 

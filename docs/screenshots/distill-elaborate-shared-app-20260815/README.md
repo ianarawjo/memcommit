@@ -11,7 +11,7 @@ The set can be reproduced from the repository root with
 
 | Capture | Exact command / preceding input | Visible state | Durable mutation |
 | --- | --- | --- | --- |
-| `01-distill-context-entry` | `mem distill capture/cases --goal "Confirm before acting." --save-as capture/rules --tui` | Context selector is the initial focus | none |
+| `01-distill-context-entry` | `mem distill capture/cases --goal "Confirm before acting." --save-as capture/rules --tui` | Context selector is the initial focus; `m THIS Context` and `M EVERY Context` direct-item controls are visible | none |
 | `02-distill-descendants-selected` | `Shift-Tab`, `Right` | descendants range selected; no ambiguous BOTH option | none |
 | `03-distill-run-ready` | `Tab` ×2 | explicit Run action focused | none |
 | `04-distill-reviewed-result` | `S` | one evidence-linked Rule; Goal marked relevance-only | none |
@@ -21,7 +21,7 @@ The set can be reproduced from the repository root with
 | `08-distill-cancel-before-provider` | fresh command, `q` | provider calls 0; Source unchanged | none |
 | `09-distill-apply-and-show-verification` | `mem distill capture/cases --save-as capture/rules --apply --plain`, then `mem show --context capture/rules` | creation receipt plus read-only Result inspection | one new Result Context and one Distill checkpoint; Source unchanged |
 | `10-ground-distill-frozen-source` | `mem distill --ground capture-ground --tui` | exact bound candidate Context and reach are visible but locked; Run owns initial focus | none |
-| `10-ground-distill-reviewed-result` | `Shift-Tab`, `Right`, `S` | retarget keys cannot broaden the caller-frozen Source; exact proposal shown | none |
+| `10-ground-distill-reviewed-result` | `Shift-Tab`, `Right`, `S` | frozen Source direct items can be opened read-only; the caller-frozen request cannot be retargeted or broadened; exact proposal shown | none |
 | `10-ground-distill-read-only-verification` | `q` | Ground record and all bound Context bytes unchanged; no Apply offered | none |
 | `11-elaborate-goal-result` | `mem elaborate --goal "Confirm before acting." --tui` | Goal → suggested unverified Rule | none |
 | `11-elaborate-goal-focused-copied` | `Down` ×3, `y` | focused suggested Rule copied | none |

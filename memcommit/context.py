@@ -365,10 +365,25 @@ class Context:
                 memories[uid] = info.to_dict()
                 order.append(uid)
             elif isinstance(info, Context):
+                # Import lazily to keep the core Context model independent of
+                # the snapshot package implementation. A Context Reference is
+                # a Context subclass for read traversal but has its own durable
+                # self-contained record and must be classified before a live
+                # Context placement.
+                from memcommit.context_snapshot import ContextSnapshotRef
+
                 memories[uid] = (
-                    info._granted_link.to_dict()
-                    if info._granted_link is not None
-                    else {"type": "context_ref", "uid": info.uid, "name": info.name}
+                    info.to_dict()
+                    if isinstance(info, ContextSnapshotRef)
+                    else (
+                        info._granted_link.to_dict()
+                        if info._granted_link is not None
+                        else {
+                            "type": "context_ref",
+                            "uid": info.uid,
+                            "name": info.name,
+                        }
+                    )
                 )
                 order.append(uid)
         return {
@@ -446,6 +461,10 @@ class Context:
                     nested = None
                 if nested is not None:
                     ctx.add(nested)
+            elif item["type"] == "context_snapshot_ref":
+                from memcommit.context_snapshot import ContextSnapshotRef
+
+                ctx.add(ContextSnapshotRef.from_dict(item))
             elif item["type"] == "granted_context_ref":
                 link = GrantedContextLink.from_dict(item)
                 # Direct reads retain an opaque, serializable placeholder.

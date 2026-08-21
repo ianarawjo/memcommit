@@ -382,12 +382,11 @@ def test_cli_grounding_dialogue_resumes_then_applies_once_with_provenance(
         staff.uid[:8]: "<STAFF>",
     }
 
-    # Bare Atomize now applies the current Context immediately. Grounding is
-    # an explicit advanced review route, so name the Context when opening its
-    # existing workbench before starting the dialogue.
+    # Ordinary Atomize applies immediately. Grounding is an explicit advanced
+    # route, so use an Output plan to open the existing workbench first.
     workbench_screen = runner.invoke(
         app,
-        ["atomize", "--context", ctx.name],
+        ["atomize", "--context", ctx.name, "--output", ctx.name],
     )
 
     assert workbench_screen.exit_code == 0, workbench_screen.output

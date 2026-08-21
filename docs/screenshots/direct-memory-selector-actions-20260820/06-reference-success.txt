@@ -1,0 +1,2 @@
+Referenced snapshot [a77741b8] from 'source' as [9567dee8] in 'target'.                                                                                                             
+REFERENCE VERIFICATION GATE · PRESS V

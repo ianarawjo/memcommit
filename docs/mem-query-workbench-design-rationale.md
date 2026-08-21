@@ -53,16 +53,26 @@ inside Question or Session Name. Closing while a provider turn is in flight
 retains the existing deferred-close boundary.
 
 An ordinary grounded answer retains a typed citation document alongside its
-unchanged CLI string. `ANSWER` treats the neutral answer body and each used
-Reference as one linear Up/Down sequence. Moving onto a Reference anchors that
-block in the viewport and gives the complete metadata-and-excerpt block the
-shared blue focused-control background; leaving Answer retains the blue
-selection without bold focus. This structure comes from the citation renderer
-and is never reconstructed by parsing `References` out of finished text.
+CLI string. `ANSWER` treats the neutral answer body and each used Reference as
+one linear Up/Down sequence. Moving onto a Reference anchors that row in the
+viewport and gives the complete content-and-provenance row the shared blue
+focused-control background; leaving Answer retains the blue selection without
+bold focus. This structure comes from the citation renderer and is never
+reconstructed by parsing `References` out of finished text.
+
+Each used Reference is one logical row in the stable form
+`[N] CONTENT — UID_PREFIX, CONTEXT ALIAS`. Content precedes provenance, every
+row repeats its exact canonical Context because one answer may cite different
+Sources, and adjacent References have no blank separator. Stored line breaks
+are folded to spaces so content cannot create a sibling citation or a second
+`References` heading. The typed evidence still retains its kind, full UID,
+Context, alias, and bounded locally projected content; the compact terminal
+row omits kind because UID plus canonical Context identifies the cited object,
+while the alias preserves the frozen provider-evidence mapping.
 
 While `ANSWER` owns focus, lowercase `y` copies exactly that typed focus unit:
-the answer body at stop zero or the complete numbered metadata-and-excerpt
-block for the active Reference. Uppercase `Y` copies the complete typed answer
+the answer body at stop zero or the complete numbered content-and-provenance
+row for the active Reference. Uppercase `Y` copies the complete typed answer
 document in body-then-References order. A granted answer, granted catalog, or
 saved transcript has no finer typed stop, so `y` copies that displayed document
 and `Y` produces the same complete document. Clipboard projection runs before
@@ -101,8 +111,8 @@ tests, and capture tools moved to the direct operation runtime:
 - `OrdinaryQueryRequest` freezes question, exact public Context names,
   descendant policy, and embed policy. It has no top-k evidence limit.
 - `FindAnswerReferenceDocument` retains the rendered answer body and numbered
-  used References while its `text` property preserves the established CLI
-  output byte-for-byte.
+  used References while its `text` property owns the exact compact CLI
+  projection.
 - `GrantedQueryRequest` freezes a public control-plane grant target, question or
   catalog mode, language, optional opaque Memory handle, session name, and
   federation policy.

@@ -61,6 +61,11 @@ from memcommit.study_prewarm.registry import (
     load_registry,
     payload_digest,
 )
+from memcommit.study_prewarm.quality import (
+    SemanticIdentity,
+    highest_quality_candidates,
+    prewarm_quality_satisfies,
+)
 from memcommit.study_prewarm.scope_equivalence import (
     transparent_context_scope_matches,
     transparent_scope_evidence_matches,
@@ -775,11 +780,15 @@ def install_declared_directional_meld_prewarms(
         declared += 1
         artifact = load_artifact(store.store_dir, entry)
         prepared, description = _validate_artifact(artifact, entry_key=entry.key)
-        if (
+        cached_identity = (
             artifact.get("provider"),
             artifact.get("model"),
             artifact.get("reasoning"),
-        ) != configured:
+        )
+        if not prewarm_quality_satisfies(
+            cached_identity,  # type: ignore[arg-type]
+            configured,
+        ):
             skipped += 1
             continue
         _validate_description(store, description)
@@ -814,17 +823,21 @@ def find_installed_equivalent_directional_comparison(
         return None
     profile_registry = registry_snapshot or load_profile_registry()
     configured = _configured_semantic_identity()
-    matches: list[EquivalentComparePrewarmMatch] = []
+    matches: list[tuple[SemanticIdentity, EquivalentComparePrewarmMatch]] = []
     for entry in registry.entries:
         if not entry.enabled or entry.operation != "MELD_DIRECTIONAL":
             continue
         artifact = load_artifact(store.store_dir, entry)
         prepared, description = _validate_artifact(artifact, entry_key=entry.key)
-        if (
+        cached_identity = (
             artifact.get("provider"),
             artifact.get("model"),
             artifact.get("reasoning"),
-        ) != configured:
+        )
+        if not prewarm_quality_satisfies(
+            cached_identity,  # type: ignore[arg-type]
+            configured,
+        ):
             continue
         try:
             _validate_description(store, description)
@@ -871,17 +884,21 @@ def find_installed_equivalent_directional_comparison(
             continue
         if rebound is not None:
             matches.append(
-                EquivalentComparePrewarmMatch(
-                    entry_key=entry.key,
-                    analysis=rebound,
-                    prepared_context_names=(
-                        old_analysis.frames[0].context_name,
-                        old_analysis.frames[1].context_name,
+                (
+                    cached_identity,  # type: ignore[arg-type]
+                    EquivalentComparePrewarmMatch(
+                        entry_key=entry.key,
+                        analysis=rebound,
+                        prepared_context_names=(
+                            old_analysis.frames[0].context_name,
+                            old_analysis.frames[1].context_name,
+                        ),
+                        origin=origin,
                     ),
-                    origin=origin,
                 )
             )
-    return matches[0] if len(matches) == 1 else None
+    selected = highest_quality_candidates(matches)
+    return selected[0] if len(selected) == 1 else None
 
 
 def find_installed_directional_meld_prewarm(
@@ -897,17 +914,21 @@ def find_installed_directional_meld_prewarm(
         return None
     profile_registry = registry_snapshot or load_profile_registry()
     configured = _configured_semantic_identity()
-    matches: list[DirectionalMeldPrewarmMatch] = []
+    matches: list[tuple[SemanticIdentity, DirectionalMeldPrewarmMatch]] = []
     for entry in registry.entries:
         if not entry.enabled or entry.operation != "MELD_DIRECTIONAL":
             continue
         artifact = load_artifact(store.store_dir, entry)
         prepared, description = _validate_artifact(artifact, entry_key=entry.key)
-        if (
+        cached_identity = (
             artifact.get("provider"),
             artifact.get("model"),
             artifact.get("reasoning"),
-        ) != configured:
+        )
+        if not prewarm_quality_satisfies(
+            cached_identity,  # type: ignore[arg-type]
+            configured,
+        ):
             continue
         try:
             _validate_description(store, description)
@@ -954,23 +975,26 @@ def find_installed_directional_meld_prewarm(
                 continue
         try:
             matches.append(
-                DirectionalMeldPrewarmMatch(
-                    entry_key=entry.key,
-                    session=(
-                        projected
-                        if projected is not None
-                        else _rebind_prepared_session(
-                            prepared,
-                            current=current,
-                            equivalent_scope=equivalent,
-                        )
-                    ),
-                    origin=(
-                        "EXACT_PREWARM"
-                        if exact
-                        else "EQUIVALENT_SCOPE_PREWARM"
-                        if equivalent
-                        else "PROJECTED_PREWARM"
+                (
+                    cached_identity,  # type: ignore[arg-type]
+                    DirectionalMeldPrewarmMatch(
+                        entry_key=entry.key,
+                        session=(
+                            projected
+                            if projected is not None
+                            else _rebind_prepared_session(
+                                prepared,
+                                current=current,
+                                equivalent_scope=equivalent,
+                            )
+                        ),
+                        origin=(
+                            "EXACT_PREWARM"
+                            if exact
+                            else "EQUIVALENT_SCOPE_PREWARM"
+                            if equivalent
+                            else "PROJECTED_PREWARM"
+                        ),
                     ),
                 )
             )
@@ -978,11 +1002,12 @@ def find_installed_directional_meld_prewarm(
             raise StudyPrewarmRegistryError(
                 "Directional Meld prewarm could not be rebound."
             ) from error
-    if len(matches) > 1:
+    selected = highest_quality_candidates(matches)
+    if len(selected) > 1:
         raise StudyPrewarmRegistryError(
             "Multiple Directional Meld prewarms match the same frozen request."
         )
-    return matches[0] if matches else None
+    return selected[0] if selected else None
 
 
 def find_installed_exact_directional_meld_prewarm(

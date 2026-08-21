@@ -11,9 +11,10 @@ name input, creation planning, checkpoint policy, Store execution, and console
 rendering all lived in `commands/init.py`.
 
 This extraction moves the use case behind one typed application request and
-result while preserving that Store transaction. It does not change the
-ordinary Context schema, checkpoint schema, name grammar, CLI text, or terminal
-name editor.
+result while preserving that Store transaction. A later shared naming update
+reserves complete root names that have the public Memory UUID/prefix-selector
+shape; it changes neither the ordinary Context schema nor checkpoint schema,
+and existing legacy names remain readable.
 
 ## Call path
 
@@ -54,7 +55,7 @@ typed data; it is not yet a stable public Python API.
 | Parent-prefix expansion | `context_init_application.py` | Ordered lexical prefixes end at the requested leaf. No embedded-Context relation is created. |
 | Require-new versus reuse policy | `context_init_application.py` | Exact mode requires the sole Context to be new; `--parents` may reuse any valid existing prefix, including the leaf. |
 | Initial checkpoint arguments and descriptions | `context_init_application.py` | Exact mode records `name`; parent mode additionally records `parents` and `requested_name` for every created prefix. |
-| Context construction and name validation | `context_init_runtime.py` | Production uses the existing in-memory `ops.init` factory and ordinary Store name validator. |
+| Context construction and name validation | `context_init_runtime.py` over `context_naming.py` | Production uses the existing in-memory `ops.init` factory and the shared new-identity validator, including the UUID-selector reservation. |
 | Locks, symlink checks, atomic batch rollback, and current CAS | `MemoryStore.create_missing_contexts` | All names remain locked through creation, rollback, and the final state write. |
 
 ## Durable invariants
@@ -70,6 +71,9 @@ typed data; it is not yet a stable public Python API.
    and description as before extraction.
 6. Application and runtime execution write no stdout or stderr. Presentation
    is an adapter concern.
+7. A new complete root name cannot have the eight-or-more-character canonical
+   UUID-prefix shape accepted by automatic Memory operands. Nested names retain
+   their slash distinction; existing legacy roots are not deleted or hidden.
 
 ## Verified evidence
 
@@ -98,13 +102,15 @@ The test set proves:
 - current-CAS failure with complete new-batch rollback;
 - TUI request construction and cancellation without storage execution; and
 - unchanged CLI success, error, cancellation, and initial-checkpoint behavior.
+- UID-shaped root rejection before publication, followed by successful
+  slash-qualified creation and read-only verification in an isolated Store.
 
 The TUI still delegates to the same shared `ContextNameView` and
 `choose_context_name` implementation with the same label, `NOT CREATED` state,
-detail, suggestion, validator, catalog, and current marker. No visible or
-interaction-semantic TUI change was introduced, so the prior flow remains the
-visual contract and no replacement screenshot set was generated for this
-structural extraction.
+detail, suggestion, validator, catalog, and current marker. The later naming
+rule adds one visible validation branch without changing those mechanics;
+`docs/screenshots/context-init-uid-name-reservation-20260820` records entry,
+rejection, corrected input, success, and read-only verification at `180×52`.
 
 ## Study initialization is a separate operation
 
@@ -124,9 +130,9 @@ of one command.
 - The callable is internal and requires an explicitly supplied `MemoryStore`;
   store-root ownership and public error/version contracts remain undecided.
 - A machine-readable or agent adapter has not been added.
-- New-Context name validation remains a pure function physically owned by the
-  Store module. It stays in the runtime adapter until a broader Context-domain
-  extraction proves a better common owner.
+- New-Context name validation is a pure function in the shared Context naming
+  module and remains invoked by the runtime adapter and Store publication
+  boundaries.
 - Ordinary Init has no provider or cache boundary. Sever or another semantic
   durable operation is still needed to validate those axes.
 - Study initialization owns Profile-pair creation, hidden prepared receipts,

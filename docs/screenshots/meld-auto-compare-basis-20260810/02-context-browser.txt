@@ -1,4 +1,4 @@
- MEM MELD · 2/2 · ANALYZING ORDERED SOURCE RELATIONS . · 1s
+ MEM MELD · 2/2 · ANALYZING MELD TURN . · 1s
 ┌──────────────────────────────────────────────────────────────| CONTEXTS · SWITCH BROWSER · READ-ONLY · * CURRENT |───────────────────────────────────────────────────────────────┐
 │ Roots · task-2/advisor1 · task-2/advisor2 · task-3/local/personal-memory                                                                                                        ^│
 │                                                                                                                                                                                  │
@@ -49,4 +49,4 @@
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
- C/c back · I/i inputs · R/r report · H/h/? Help · ↑/↓ move · ←/→ expand · Enter browse · A/a all · m Memories here · M all Memories · Q/q close · read-only
+ C/c back · I/i inputs · R/r report · H/h/? Help · m THIS Context: show items · M EVERY Context: show items · ↑/↓ move · ←/→ expand · Enter browse · A/a all · Q/q close · read-only

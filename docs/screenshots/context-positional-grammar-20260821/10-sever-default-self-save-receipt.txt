@@ -1,0 +1,11 @@
+PTY 180 52                                                                                                                                                                          
+$ mem sever capture/sever/source capture/sever/criteria                                                                                                                             
+SEVER APPLIED · capture/sever/source → capture/sever/source                                                                                                                         
+SAVE MODE · SELF-SAVE                                                                                                                                                               
+DECISIONS · KEEP 1 · FORGET 0                                                                                                                                                       
+SOURCE · UPDATED                                                                                                                                                                    
+RECEIPT · bc31248f-2344-4b99-b4f7-22a4a33afa42                                                                                                                                      
+CHECKPOINT · 7c5db7d8-bfd3-45a5-b801-ae4adc494eba                                                                                                                                   
+REVIEW · mem review sever --session bc31248f-2344-4b99-b4f7-22a4a33afa42                                                                                                            
+RECOVERY · mem undo                                                                                                                                                                 
+SEVER RECEIPT PAUSE

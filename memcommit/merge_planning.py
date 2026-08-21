@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from typing import Mapping
 
 from memcommit.context import Context, Information, Memory, MemoryRef, QueryContextRef
+from memcommit.context_snapshot import ContextSnapshotRef
 from memcommit.merge_application import (
     MergeAddition,
     MergeConflict,
@@ -77,6 +78,8 @@ def copy_merge_item(item: Information) -> Information:
     if isinstance(item, Memory):
         return Memory(uid=item.uid, content=item.content)
     if isinstance(item, (MemoryRef, QueryContextRef)):
+        return item.copy()
+    if isinstance(item, ContextSnapshotRef):
         return item.copy()
     if isinstance(item, Context):
         # A Context item is a placement pointer. Copy only that pointer here;

@@ -21,6 +21,11 @@ from memcommit.understanding import (
     normalize_understanding_text,
 )
 from memcommit.study_prewarm.installations import declared_artifact_available
+from memcommit.study_prewarm.quality import (
+    SemanticIdentity,
+    compatible_cached_identities,
+    highest_quality_candidates,
+)
 from memcommit.study_prewarm.registry import (
     StudyPrewarmRegistryError,
     load_artifact,
@@ -271,44 +276,50 @@ def find_declared_summarize_prewarm(
     task = _task_root(frame.context_name)
     if registry is None or task is None or not frame.sources:
         return None
-    provider, model, reasoning = _configured_semantic_identity()
-    if model is None:
+    requested_identity = _configured_semantic_identity()
+    if requested_identity[1] is None:
         return None
-    key = summarize_prewarm_key(
-        task=task,
-        frame=frame,
-        provider=provider,
-        model=model,
-        reasoning=reasoning,
-    )
-    matches = [
-        entry
-        for entry in registry.entries
-        if entry.enabled
-        and entry.operation == "SUMMARIZE"
-        and entry.task == task
-        and entry.key == key
-    ]
-    if len(matches) > 1:
+    candidate_keys: dict[str, SemanticIdentity] = {}
+    for cached_identity in compatible_cached_identities(requested_identity):
+        provider, model, reasoning = cached_identity
+        assert model is not None
+        candidate_keys[
+            summarize_prewarm_key(
+                task=task,
+                frame=frame,
+                provider=provider,
+                model=model,
+                reasoning=reasoning,
+            )
+        ] = cached_identity
+    candidates: list[tuple[SemanticIdentity, UnderstandingSummary]] = []
+    for entry in registry.entries:
+        if (
+            not entry.enabled
+            or entry.operation != "SUMMARIZE"
+            or entry.task != task
+            or entry.key not in candidate_keys
+        ):
+            continue
+        artifact = load_artifact(store.store_dir, entry)
+        understanding = _validate_artifact(
+            artifact,
+            entry_key=entry.key,
+            entry_task=entry.task,
+        )
+        if not declared_artifact_available(
+            store,
+            entry=entry,
+            evidence={
+                "frame_digest": frame.digest,
+                "understanding_digest": str(artifact["understanding_digest"]),
+            },
+        ):
+            continue
+        candidates.append((candidate_keys[entry.key], understanding))
+    selected = highest_quality_candidates(candidates)
+    if len(selected) > 1:
         raise StudyPrewarmRegistryError(
             "Multiple declared Summarize prewarms match the exact frame."
         )
-    if not matches:
-        return None
-    entry = matches[0]
-    artifact = load_artifact(store.store_dir, entry)
-    understanding = _validate_artifact(
-        artifact,
-        entry_key=entry.key,
-        entry_task=entry.task,
-    )
-    if not declared_artifact_available(
-        store,
-        entry=entry,
-        evidence={
-            "frame_digest": frame.digest,
-            "understanding_digest": str(artifact["understanding_digest"]),
-        },
-    ):
-        return None
-    return understanding
+    return selected[0] if selected else None

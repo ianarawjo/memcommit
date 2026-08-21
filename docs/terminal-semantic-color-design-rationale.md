@@ -29,10 +29,10 @@ The stable role mapping is:
 | Semantic role | Visible examples | Foreground |
 | --- | --- | --- |
 | CREATE | `create`, `init`, `branch`, `CREATED` | blue `#8aadf4` |
-| ADD | `add`, `ADD`, `ADDED` | blue `#8aadf4` |
+| ADD | `add`, `ADD`, `ADDED`, `SURVIVOR(S)` | blue `#8aadf4` |
 | EMBED | `embed`, `VIA EMBED`, embedded Context kind | yellow `#eed49f` |
 | EDIT | `edit`, `replace`, `EDITED` | green `#a6da95` |
-| REMOVE | `remove`, `delete`, `clear`, `REMOVED` | red `#ed8796` |
+| REMOVE | `remove`, `delete`, `clear`, `REMOVED`, `ABSORB(ED)` | red `#ed8796` |
 | UNDO | `undo`, `revert`, `RESTORED` | peach `#f5a97f` |
 | REDO | `redo` | lavender `#b7bdf8` |
 | HISTORY | manual checkpoint and historical-version kind | brown `#c9ad93` |
@@ -40,6 +40,9 @@ The stable role mapping is:
 | NAVIGATION_GRANT | Switch Context-category `GRANT` marker | green `#a6da95` |
 | CAPABILITY | READ/QUERY/EDIT capability cluster | teal `#8bd5ca` |
 | REFERENCE | durable Reference kind | mauve `#c6a0f6` |
+| JUDGMENT_YES | semantic judgment `YES` | green `#a6da95` |
+| JUDGMENT_MAY | semantic judgment `MAY` | yellow `#eed49f` |
+| JUDGMENT_NO | semantic judgment `NO` | red `#ed8796` |
 
 CREATE and ADD deliberately share a constructive family. Their explicit text
 continues to distinguish lifecycle creation from adding one direct item. A new
@@ -53,18 +56,40 @@ typed child effects carry ADD, EDIT, or REMOVE colors. This avoids presenting a
 mixed Update as an edit merely because EDIT happened to be its historical
 default color.
 
+Fit judgments use separate `JUDGMENT_YES`, `JUDGMENT_MAY`, and `JUDGMENT_NO`
+roles even though their hues intentionally reuse green, yellow, and red.
+Compatibility is not an EDIT, EMBED, or REMOVE action, so the shared
+classifier preserves that distinction instead of borrowing an action role.
+Only the exact `YES`, `MAY`, or `NO` token is colored. `FIT`, punctuation,
+operand labels, Ground and Context names, counts, relation marks, and Memory
+bodies remain neutral. `STALE` and legacy `N/A` remain explicit neutral text
+until their meanings receive separately reviewed semantic roles.
+
+Read-only Duplicate and Redundancy cleanup maps use the same child-disposition
+rule without implying execution. `SURVIVOR` is ADD blue because that existing
+member remains in the proposed resulting set; `ABSORB` is REMOVE red because
+that member would leave it. Only those two tokens are colored. Find
+Redundancies keeps the adjacent `PROPOSED · NOT APPLIED` boundary; provider-free
+Find Duplicates keeps its read-only/non-applying boundary in the command footer
+so a two-member exact group can remain exactly two self-contained member rows.
+The colors classify result-set membership, not a completed storage mutation.
+Applied Dedun Review preserves those roles as typed report fragments, so both
+the immediate Find projections and the later checkpoint snapshot color the
+same shortest tokens without parsing report text. Legacy plain Dedun plans and
+receipts likewise color `RECOMMENDED SURVIVOR`/`SURVIVORS` as ADD and
+`ABSORBED` as REMOVE; surrounding UIDs, counts, and evidence remain neutral.
+
 Only the shortest trusted semantic token is tinted. Timestamps, UIDs,
 descriptions, report chrome, explanatory prose, and Memory bodies remain
 neutral or retain the Memory-object lavender. A focused History row uses the
 common focus treatment across the complete row; focus therefore overrides its
 unfocused action color instead of presenting two active visual states.
 
-Typed Source relationships use the same rule. A live Memory link classifies
-`embedded` as EMBED yellow, while an immutable snapshot classifies `reference`
-as REFERENCE mauve. The classifier consumes `SourceDisplayFacts`/`SourceForm`,
-not rendered prose. List and Show tint only that noun; link UID, Source Context,
-Source Memory UID, content, and `READ ONLY`/`DANGLING` remain textual evidence
-with their ordinary styles.
+Typed Source relationship rows use the same rule. List and Show classify
+`MEMORY_EMBED`/legacy live `MEMORY_REF` as EMBED and immutable Memory or Context
+Reference forms as REFERENCE before rendering. Only the relationship noun is
+colored; the relationship UID, `[Context][memory UID]` Source identity, content,
+and `READ ONLY` state are not inferred from or absorbed into that color.
 
 Grant ownership and available capability are independent roles. Source
 projection in operation workbenches and static authority reports keeps the
@@ -82,10 +107,15 @@ EDIT permission.
 
 ## Plain and interactive adapters
 
-`mem log` retains identical line structure in terminals and pipes. Typer may
+`mem log` and Fit retain identical line structure in terminals and pipes. Typer may
 emit semantic foreground escapes for a color-capable terminal, but stripping
 ANSI yields the same report as `--plain`. The presence of color never opens a
 picker or changes the selected Context.
+
+The Fit CLI consumes typed receipt segments, so its adapter styles the
+judgment field without reparsing report prose. A color-capable TTY shows
+`YES`, `MAY`, and `NO` through the shared judgment roles; `--plain`, a pipe,
+or `NO_COLOR` emits the exact same receipt with no ANSI styling.
 
 The shared History picker colors only the unfocused command column. Checkpoint,
 restore, and saved-Update details color action and child-effect tokens through
@@ -119,18 +149,19 @@ same markers, labels, ordering, bounds, and omitted-operation count.
 - Reusing red/green alone for undo and redo was rejected because restoration
   direction is not intrinsically destructive or successful. Their temporal
   roles use peach and lavender, while actual restored effects remain explicit.
-- Parsing rendered strings such as `UPDATE · EDIT` was rejected because wording
+- Parsing rendered strings such as `UPDATE · EDIT` or `FIT · NO` was rejected because wording
   and localization would then control semantics. Adapters receive typed command
-  or effect labels and resolve only registered aliases.
+  or effect labels and resolve only registered aliases. Source rows likewise
+  classify `SourceDisplayFacts` rather than parsing `embedded` or `reference`.
 - Putting palette constants in the TUI theme was rejected because the static
   CLI would either depend on prompt-toolkit or duplicate the values.
 
 ## Boundaries and limitations
 
-This contract covers semantic action, history, Grant/capability, and Reference
-colors. It does not migrate every legacy success, error, loading, analysis, or
-provider-status color in one change. Those roles may join the common palette
-later only after their meanings are classified.
+This contract covers semantic action, judgment, history, Grant/capability, and
+Reference colors. It does not migrate every legacy success, error, loading,
+analysis, or provider-status color in one change. Those roles may join the
+common palette later only after their meanings are classified.
 
 Color is presentation evidence, not operation evidence. It cannot authorize a
 command, prove a checkpoint disposition, alter history reconstruction, or

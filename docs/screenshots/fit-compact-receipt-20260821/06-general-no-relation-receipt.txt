@@ -1,0 +1,7 @@
+$ mem fit "The main entrance closes from five until ten." "The main entrance stays open until ten."                                                                                 
+PTY · 180×52                                                                                                                                                                        
+FIT · NO · [PROPOSITION p1] The main entrance closes from five until ten. ↔ [PROPOSITION p2] The main entrance stays open until ten.                                                
+RELATION SIDES · p1 ↔ p2                                                                                                                                                            
+PROVIDER CALLS · 1                                                                                                                                                                  
+DURABLE WRITES · 0                                                                                                                                                                  
+CAPTURE GATE · PRESS V

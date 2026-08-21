@@ -19,9 +19,12 @@ INCLUDE DESCENDANTS
 The equivalent explicit spelling defaults to compatibility behavior:
 
 ```bash
-mem branch NEW --source-only
+mem branch NEW --source-root-only
 mem branch NEW --source-descendants
 ```
+
+`--source-only` remains accepted as a compatibility alias for the canonical
+`--source-root-only` spelling.
 
 ## Exact Branch compatibility
 

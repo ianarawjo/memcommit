@@ -20,6 +20,7 @@ from memcommit.interfaces.tui.operations.meld.model import (
     MeldEndpointSelection,
     MeldTuiSetup,
 )
+from memcommit.interactive_command_review import meld_start_command_review
 
 
 def meld_endpoint_setup_spec(
@@ -138,6 +139,7 @@ def choose_meld_endpoint_setup(
         ),
         memory_loader=memory_loader,
         validate_draft=lambda value: _validate_meld_draft(value),
+        command_review=lambda value: _meld_start_review(value),
         app_input=app_input,
         app_output=app_output,
         require_tty=require_tty,
@@ -153,6 +155,22 @@ def choose_meld_endpoint_setup(
         right_name=right.context_name,
         target_name=target.context_name if target is not None else None,
         create_target=target.create if target is not None else False,
+        left_descendants=left.include_descendants,
+        right_descendants=right.include_descendants,
+        left_memory_uid=left.memory_uid,
+        right_memory_uid=right.memory_uid,
+    )
+
+
+def _meld_start_review(draft):
+    left = draft.value("A")
+    right = draft.value("B")
+    target = draft.value("C") if draft.mode_uid == "SYMMETRIC" else None
+    return meld_start_command_review(
+        mode=draft.mode_uid,
+        left_name=left.context_name,
+        right_name=right.context_name,
+        target_name=target.context_name if target is not None else None,
         left_descendants=left.include_descendants,
         right_descendants=right.include_descendants,
         left_memory_uid=left.memory_uid,

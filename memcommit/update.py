@@ -994,6 +994,14 @@ class UpdateSession:
         )
 
 
+def update_session_record_digest(session: UpdateSession) -> str:
+    """Hash the complete saved Update revision used by one semantic turn."""
+
+    if not isinstance(session, UpdateSession):
+        raise TypeError("Update session digest requires an UpdateSession.")
+    return _sha256_json(session.to_dict())
+
+
 @dataclass(frozen=True)
 class SourceCandidate:
     candidate_id: str

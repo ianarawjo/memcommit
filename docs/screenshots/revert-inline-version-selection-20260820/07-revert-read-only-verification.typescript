@@ -1,0 +1,8 @@
+52 180
+READ-ONLY REVERT VERIFICATION
+PTY 180 52
+Context: revert/versions
+Memories: ['Version one remains after the reviewed Revert.']
+Selected checkpoint retained: True
+Newer checkpoint discarded: True
+Current pointer unchanged: True

@@ -6,13 +6,25 @@ For the fixed user-study tutorial only, `init-study` may validate a declared
 exact `AtomizeAnalysisSession` and install a hidden entry-key receipt. It does
 not write the Context-bound production slot or create a workbench. Eligibility
 binds the complete direct Source ledger, tutorial-description digest, semantic
-ruleset, provider contract, model, and reasoning effort. The first explicit
+ruleset, provider contract, and exact provider/model/reasoning provenance. The
+first explicit
 matching Atomize command installs the prepared analysis through the ordinary
 boundary and creates a blank run-local workbench. It imports no review
 responses, grounding state, application state, or checkpoints. The CLI
-discloses the origin as `EXACT PREWARM`; explicit refresh and any changed input
-retain the ordinary live path. This keeps latency preparation separate from
-both participant history and mutation authority.
+discloses a first-use auto-Apply as
+`ANALYSIS · EXACT PREWARM · PROVIDER NOT CALLED`; advanced preview routes
+retain the `EXACT PREWARM · CURRENT` origin. Explicit refresh and any changed input
+retain the ordinary live path. Within the shared Study cache-quality contract,
+an exact or component-wise higher cached Codex identity may satisfy the
+configured request; lower and incomparable identities miss. This keeps
+latency preparation separate from both participant history and mutation
+authority.
+
+When a current Study description also reconstructs an older compatible
+description digest, the current-exact digest wins before provider-quality
+ranking. This prevents two same-quality historical artifacts from becoming an
+arbitrary registry-order choice while preserving the narrowly enumerated
+legacy migration path.
 
 An exact Memory selection may reuse that prewarm only when its actionable UID
 set is extensionally identical to the prepared analysis. This covers the Study
@@ -348,6 +360,18 @@ attention budget. This is a readability target rather than a semantic
 invariant or truncation rule. Each overview section cites one or more source
 Memory identities.
 The snapshot keeps those citations collapsed; the saved analysis retains them.
+For a nonempty candidate frame, the flat strict provider schema requires at
+least one source ID even when the section text is empty. This is the safe
+schema-level approximation of the intended conditional—nonempty prose must
+have evidence—because the aggregate provider contract deliberately avoids a
+union schema. The local decoder still accepts a legacy empty-text/empty-source
+section, but it never accepts nonempty ungrounded prose. This asymmetry keeps
+older saved analyses readable without allowing a schema-valid live response
+to fail only after the provider call. The same strict-schema boundary cannot
+declare `uniqueItems`; repeated overview aliases are therefore collapsed in
+first-seen order because citations have set semantics. Unknown aliases still
+fail closed, and coverage-bearing Atomize items and quality issues retain
+their stricter duplicate validation.
 All three overview sections follow the natural-language report contract in
 [`semantic-result-workbench-design-rationale.md`](semantic-result-workbench-design-rationale.md):
 one short English paragraph in complete sentences, with no bullets, numbered

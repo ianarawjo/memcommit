@@ -1,0 +1,12 @@
+PTY 180 52                                                                                                                                                                          
+$ mem find-duplicates                                                                                                                                                               
+Context: quality/exact-route                                                                                                                                                        
+  2 direct memories, 1 exact duplicate group(s), 1 later duplicate Memory item(s)                                                                                                   
+                                                                                                                                                                                    
+  DUP / EXACT  1/1                                                                                                                                                                  
+    SURVIVOR  [memory 20000000-0000-4000-8000-00000000021]  a is apple                                                                                                              
+    ABSORB    [memory 20000000-0000-4000-8000-00000000022]  a is apple                                                                                                              
+                                                                                                                                                                                    
+  Read-only report. Apply exact cleanup with mem dedup.                                                                                                                             
+COMMAND EXIT · 0                                                                                                                                                                    
+READY FOR FIND REDUNDANCIES

@@ -250,6 +250,25 @@ def test_deterministic_workbench_must_exactly_project_the_frozen_case():
         )
 
 
+def test_viewer_free_workbench_requires_visible_compact_context():
+    case = ResolutionCase(
+        binding=ResolutionBinding("merge", "artifact", "revision"),
+        requirements=(ResolutionRequirement("one", ("KEEP",)),),
+    )
+    spec = _workbench_spec(case)
+
+    with pytest.raises(ValueError, match="requires visible compact context"):
+        ResolutionWorkbenchSpec(
+            case=case,
+            title=spec.title,
+            subtitle=spec.subtitle,
+            report=spec.report,
+            items=spec.items,
+            exact_review=spec.exact_review,
+            show_viewer=False,
+        )
+
+
 def test_deterministic_workbench_revalidates_item_and_bulk_outcomes():
     case = ResolutionCase(
         binding=ResolutionBinding("merge", "artifact", "revision"),

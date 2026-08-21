@@ -24,6 +24,36 @@ results. Empty frames remain deterministic and have no artifact. The registry
 never runs a provider, and additions, edits, cross-task inputs, ambiguous origins,
 or unsupported transformations retain the ordinary live path.
 
+### Cache-quality compatibility
+
+Provider identity in an artifact key remains exact provenance: a result made
+with `gpt-5.6-sol` at reasoning `medium` continues to say exactly that. First
+use now asks a separate question: whether that cached identity is at least as
+capable as the provider identity configured for the current request. An exact
+identity or a component-wise higher identity may hit; a lower or incomparable
+identity misses and leaves the ordinary live path unchanged.
+
+The ordering is deliberately closed and conservative. It applies only within
+`codex_chatgpt`, uses `luna < terra < sol` for the reviewed 5.6 model family,
+and uses `none < minimal < low < medium < high < xhigh < max` for reasoning.
+Both model and reasoning must be greater than or equal to the request. A
+higher model paired with lower reasoning, a different provider, an unknown
+cross-model comparison, or a `None` provider-default comparison is
+incomparable. Exact unknown identities remain usable. Operation-owned evidence
+specificity is applied first—for example, Atomize prefers the artifact whose
+description digest is current-exact over a legacy-compatible reconstruction.
+Within the same evidence class, a unique artifact that dominates the others
+is selected; equal-quality duplicates or cross-axis maxima remain ambiguous
+and fail closed instead of depending on registry order.
+
+This changes cache eligibility, not artifact identity or execution authority.
+Task, operation, frozen evidence, description, prompt/provider contract,
+ruleset, output binding, receipt, review, Apply, CAS, checkpoint, Undo, and
+Redo boundaries remain exact and operation-owned. The configured identity
+still controls every live miss and explicit refresh. In particular, the
+prepared Sol-medium Study bundle may satisfy a Sol-none participant request,
+while a medium artifact cannot satisfy a high request.
+
 ## Implemented first slice and measured boundary
 
 `memcommit.study_prewarm` now gives the editable Study baseline one strict,
@@ -76,8 +106,9 @@ The production resolver permits only two current Contexts that descend from
 opposite sides of one declared same-task parent artifact. Every requested
 Memory must keep the parent's durable UID and exact content. Deletion and
 lexical descendant selection can hit; an addition, edit, cross-task request,
-same-parent-side pair, ambiguous parent, task-description drift, provider
-configuration drift, or `--refresh` takes the ordinary live path. One actual
+same-parent-side pair, ambiguous parent, task-description drift, an
+insufficient or incomparable provider identity, or `--refresh` takes the
+ordinary live path. One actual
 `advisor1/style 13` versus `advisor2/style 13` command projected five relation
 groups in `0.46` wall-clock seconds including process startup, with zero
 provider calls and complete `26/26` primary-ledger coverage.
@@ -100,7 +131,7 @@ participant turn. `memcommit.eval.study_atomize_registry` publishes an already
 validated `AtomizeAnalysisSession` into the baseline registry. A new Study run
 checks the exact `practice/source` direct-Memory ledger, the complete
 `practice/description` digest, Atomize ruleset and prompt/decoder contract,
-and configured provider, model, and reasoning effort. It then installs the
+and prepared provider, model, and reasoning provenance. It then installs the
 analysis into Atomize's existing production analysis slot and creates a fresh
 run-local workbench with `practice/source-atomized` as the not-yet-created
 Output.
@@ -109,7 +140,8 @@ The portable unit contains semantic analysis only. Review responses,
 grounding dialogue, application state, and checkpoints are not copied. The
 foreground command visibly reports `EXACT PREWARM · CURRENT` and reopens with
 zero provider calls. Editing either the Source or tutorial instruction fails
-the setup binding, while a provider configuration mismatch is counted as an
+the setup binding. A cached identity that satisfies the configured quality
+request is eligible; a lower or incomparable identity is counted as an
 explicit skip so the ordinary live route remains available. `--refresh`
 continues to be a deliberate live provider call and overwrites the exact slot
 only through Atomize's existing validation and rollback boundary.
@@ -188,8 +220,8 @@ is rebound; a deletion-only subset filters an action only when all of its
 Source references, owner, and any edited/removed Target Memory survive. Empty
 Source or Target selections therefore produce a valid zero-action projection
 instead of connecting a provider. Reversing endpoints, additions, edits,
-cross-task inputs, task-description drift, provider-contract drift, model or
-reasoning drift still miss. Review and application continue through Update's
+cross-task inputs, task-description drift, provider-contract drift, or an
+insufficient/incomparable provider identity still miss. Review and application continue through Update's
 ordinary authority, CAS, checkpoint, Undo, and Redo boundaries.
 
 ### Task 1 symmetric Meld transfer
@@ -331,7 +363,8 @@ operation-relevant row to remain byte-identical and in the same order. Empty
 wrappers and siblings do not count as evidence. A different descendant flag
 also does not matter when it materializes the same ledger. Owner identity,
 Memory identity, content, ordering, direction, task description, provider
-contract, model, reasoning, authority, and schema remain checked.
+contract, cached provider provenance and quality compatibility, authority, and
+schema remain checked.
 
 `PROJECTED_PREWARM` remains an operation-owned Update or Directional Meld
 policy only. It requires the current ledger to be a deletion-only ordered
@@ -345,7 +378,8 @@ from this parent-to-child rule. Compare and symmetric Meld also no longer use
 it; every declared pair needs an actually executed exact Compare artifact.
 
 Additions, edits, reversed direction, unrelated copied identities, ambiguous
-origins, stale installation receipts, configuration drift, and `--refresh`
+origins, stale installation receipts, insufficient or incomparable cached
+provider quality, and `--refresh`
 remain misses. Atomize has no subset route under its current direct-Context
 operand, and Forget has no declared Study cache. Earlier ordered 180×52 PTY
 evidence for the first equal-root rollout remains under
@@ -356,7 +390,7 @@ evidence for the first equal-root rollout remains under
 Sever's prewarm unit is the ordinary request itself: one complete frozen Source
 frame and one complete frozen Criteria frame sent together in one provider
 turn. Lookup requires an exact binding, scope flags, output name, task
-description, configuration, and evidence match. A parent result is never
+description, compatible cached-provider quality, and evidence match. A parent result is never
 projected to a child, and independently executed child cells are never composed
 into a parent judgment.
 
@@ -429,10 +463,10 @@ that question is qualitative data collection rather than a gate on the action.
 
 | Operation | Prewarm unit | Reuse or projection | Live path | Boundary |
 | --- | --- | --- | --- | --- |
-| Compare | Exact ordered pair, descendant-scope pair, task description, ruleset, model, and reasoning setting | Rebind only byte-identical complete evidence; each declared named pair has its own ordinary Compare result | A missing exact pair, additions, edits, same-side, cross-task, ambiguous, and refreshed requests run complete two-frame calls | `WHAT MEM UNDERSTOOD` comes from the provider turn for that exact pair |
+| Compare | Exact ordered pair, descendant-scope pair, task description, ruleset, and cached provider provenance | Rebind only byte-identical complete evidence from an identity that satisfies the configured quality request; each declared named pair has its own ordinary Compare result | A missing exact pair, additions, edits, same-side, cross-task, ambiguous, insufficient/incomparable quality, and refreshed requests run complete two-frame calls | `WHAT MEM UNDERSTOOD` comes from the provider turn for that exact pair |
 | Meld | Exact Compare basis plus direction, destination, source revisions, and any already-fixed study instruction | Symmetric Meld requires an exact Compare pair; Directional Meld retains its separate action-ledger policy | A new response, reverse direction, edit-dependent missing owner, or changed evidence requires a new semantic turn | Compare relations alone do not authorize target content; Meld coverage and ownership remain authoritative |
-| Update | Exact ordered Source and Target frames plus operation criteria and revisions | Equal evidence rebinds; unchanged subsets retain only fully supported owner-routed actions, including valid zero-action results | Additions, edits, changed direction, task description, or configuration run live | Update uses its own action ledger, never symmetric Compare identity |
-| Sever | One exact ordinary request over the complete frozen Source frame and complete frozen Criteria frame | Rebind only the same exact whole request; no parent projection or child composition | Any scope, evidence, output, task description, or configuration change requires one ordinary whole-frame call | Source remains unchanged and the reviewed result is require-new derived material |
+| Update | Exact ordered Source and Target frames plus operation criteria and revisions | Equal evidence rebinds; unchanged subsets retain only fully supported owner-routed actions, including valid zero-action results; cached quality must satisfy the request | Additions, edits, changed direction, task description, or insufficient/incomparable quality run live | Update uses its own action ledger, never symmetric Compare identity |
+| Sever | One exact ordinary request over the complete frozen Source frame, complete frozen Criteria frame, and save location | Rebind only the same exact whole request from compatible cached quality; no parent projection or child composition | Any scope, evidence, save mode/output, task description, or insufficient/incomparable quality requires one ordinary whole-frame call | Self-save updates one exact local Source root; other-save preserves Source and creates require-new derived material |
 | Forget | No participant-path prewarm in the current study | None | Every instruction uses the complete live whole-frame path | Per-Memory calls are not equivalent to interpreting the Context together, and a bounded selector cache would bias which user-grounded requests appear fast |
 | Atomize or Impact | Exact Source revision and operation contract | Exact unchanged result can be reopened | Changed Source or instruction runs live | Cached analysis does not itself authorize mutation |
 | Refine | Exact Memory or bounded frame, instruction, and revision | Exact unchanged proposal can be reopened | New wording instructions normally run live | Meaning preservation and authority must be revalidated |
@@ -647,8 +681,11 @@ does not demonstrate that fresh semantic computation met the 30-second target.
 Presentation-only changes do not invalidate semantic artifacts. A projection
 algorithm change invalidates projected derivatives but not their exact parent
 analysis. Changed Memory content or membership, Context identity, semantic
-instruction, task description, prompt contract, relation ruleset, model, or
-reasoning setting invalidates the corresponding exact semantic artifact.
+instruction, task description, prompt contract, or relation ruleset
+invalidates the corresponding semantic artifact. Provider/model/reasoning
+remain exact provenance in the key; a current configuration change invalidates
+eligibility only when the recorded identity is lower or incomparable under the
+closed quality order above.
 
 ## Repeated whole-frame and partial-frame quality campaign
 
@@ -727,7 +764,7 @@ generated prose is scored as claim-level meaning and provenance.
 | Update | Complete Source disposition; unique target actions; valid owner and authority; action-set overlap; applied target digest; atomic rollback | Unsupported add/edit/delete, missed required change, preservation of unaffected target content, and whether the applied Context satisfies the update request |
 | Symmetric Meld | Both-source provenance coverage; new-target-only materialization; duplicate-claim rate; apply/undo/redo identity | Information loss, unsupported synthesis, unresolved contradiction, redundancy, and whether neither peer was treated as the hidden winner |
 | Directional Meld | Incoming read-only; baseline-only owner changes; `EDIT`/`ADD` contract; action and applied-state overlap | Whether baseline authority was preserved, useful incoming evidence was incorporated, and unrelated baseline claims survived |
-| Sever | Exactly one KEEP/TRANSFORM/DROP decision per Source Memory; Source unchanged; nonempty transforms; retained-set and action-vector agreement | Over-disclosure, over-removal, unsupported abstraction, transform fidelity, and usefulness for the stated Criteria |
+| Sever | Exactly one KEEP/TRANSFORM/DROP decision per Source Memory; SELF-SAVE preserves Source/retained-Memory identity while applying the reviewed dispositions; OTHER-SAVE leaves Source unchanged; nonempty transforms; retained-set and action-vector agreement | Over-disclosure, over-removal, unsupported abstraction, transform fidelity, and usefulness for the stated Criteria |
 | Atomize | Source proposition coverage; atom count; duplicate atoms; no empty atoms; reconstruction trace | Atomicity, omitted qualification, invented fact, and whether the atoms collectively preserve the original meaning |
 | Refine | Required style-constraint checks; no new named entity or unsupported factual unit; exact Source and instruction identity | Bidirectional meaning preservation, grammatical or stylistic improvement, and whether qualification and formality remain appropriate |
 | Impact | Predicted changed owners, counts, and before/after digests versus the actual applied operation; omitted or false impact rows | Whether the report exposes the consequences a participant needs before acceptance |
@@ -771,11 +808,11 @@ earlier all-pairs graph sidecars.
 | --- | --- | --- |
 | Registry and lookup | Persist one immutable content-addressed baseline bundle. `init-study` pins its digest and baseline UID; participant operations materialize only requested run-local state. Lookup is an optimization decision, never operation authorization. | Two runs share one bundle but have separate local sessions; a changed baseline creates a new digest; stale/tampered artifacts fail closed; copied legacy registries remain readable. |
 | Compare | Store one ordinary Compare artifact per declared named pair; no participant-facing parent projection. The frozen current matrix contains 718 pairs. | Exact hit, truthful pair-specific report, no provider on hit, missing pair live call, add/edit/config miss, and no partial publication. Generate and publish every matrix row before claiming complete coverage. |
-| Update | **Task 1 equal-frame reuse and unchanged-subset projection implemented.** Store an ordered Source-to-Target action proposal keyed by both complete evidence ledgers, task description, provider identity, and operation contract; regenerate run-local authority bindings during setup. Retain only actions with complete surviving support and owner routing. | All `224/224` active Task 1 locator/descendant combinations hit without a provider: `6` equal and `218` projected, including `134` valid zero-action projections. Additions, edits, cross-task inputs, reversal, and configuration drift remain live misses. |
+| Update | **Task 1 equal-frame reuse and unchanged-subset projection implemented.** Store an ordered Source-to-Target action proposal keyed by both complete evidence ledgers, task description, provider identity, and operation contract; regenerate run-local authority bindings during setup. Retain only actions with complete surviving support and owner routing. | All `224/224` active Task 1 locator/descendant combinations hit without a provider: `6` equal and `218` projected, including `134` valid zero-action projections. Additions, edits, cross-task inputs, reversal, and insufficient/incomparable cached quality remain live misses. |
 | Symmetric Meld | Require the exact Compare seed for each declared named pair, bind only to a valid empty new C, and keep participant-authored synthesis turns live. | Every prepared pair opens without a provider; an unprepared pair runs the ordinary complete Compare prerequisite. Same-side, cross-task, added, edited, or ambiguous inputs still miss. |
 | Directional Meld | **Task 1 equal-frame reuse and unchanged-subset action projection implemented.** The operation-owned action ledger preserves direction, complete Source support, baseline identity, and writable owner routing independently of the projected Compare prerequisite. | All `182/182` executable active Task 1 products hit without a provider; the other `42` raw products have an empty Source or baseline and are outside Meld's request domain. Participant comments and fresh-partial semantic comparison remain separate work. |
 | Forget live quality corpus | Keep Forget out of the participant prewarm registry. Run the frozen pilot utterance families through the complete one-turn whole-frame contract for latency, contract validity, and result-quality evidence. | Exactly-once KEEP/TRANSFORM/DROP coverage, exact KEEP, valid transforms and drops, repeated-run agreement, blind review, no partial publication, and no Source mutation before explicit acceptance. |
-| Sever | Store each supported ordinary whole-frame Source × Criteria request as one exact artifact. The current intended full personal-memory × full guardrails request needs one real provider execution; any additional named request needs its own whole-frame execution unless its complete binding is evidence-identical. | Exact hit creates a fresh participant-local review without a provider; scope, evidence, description, output, or configuration drift makes one live whole-frame call; no projection, cell composition, or partial publication. |
+| Sever | Store each supported ordinary whole-frame Source × Criteria request as one exact artifact. The current intended full personal-memory × full guardrails request needs one real provider execution; any additional named request needs its own whole-frame execution unless its complete binding is evidence-identical. | Compatible-quality hit creates a fresh participant-local review without a provider; scope, evidence, description, output, or insufficient/incomparable quality makes one live whole-frame call; no projection, cell composition, or partial publication. |
 | Tutorial Atomize | **Implemented.** Store only the exact frozen practice Source and instruction analysis in Atomize's existing durable slot; create fresh run-local review state. | Exact reopen without provider, Source or instruction change miss, complete source provenance, configuration skip, atomic installation rollback, and no mutation before its existing review boundary. |
 | Refine | Store only frozen exact Memory, instruction, revision, and style-contract tuples that the protocol actually exposes. Participant-authored wording remains live. | Exact reopen, instruction or Source miss, bidirectional meaning review, required style checks, no unsupported factual unit, and unchanged Source until acceptance. |
 | Impact | Key a prepared report by the exact proposal and Source/Target revision digests, or recompute it deterministically when the proposal already contains the full typed diff. | Predicted-versus-applied owner, action, count, and digest agreement; exact reopen; proposal change miss; review before mutation; and read-only post-apply verification. |

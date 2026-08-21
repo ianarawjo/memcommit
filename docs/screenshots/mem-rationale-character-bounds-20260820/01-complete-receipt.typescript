@@ -1,0 +1,9 @@
+PTY 180 52
+MEM RATIONALE · 1/2 · CONNECTING PROVIDER . · 0sMEM RATIONALE · 2/2 · SYNTHESIZING COMPLETE PROVENANCE . · 0s                                                             [1mRationale [039aa0c8] · rationale/origin[0m
+[1m
+MEMORY[0m
+  Um...
+[1m
+PROVENANCE[0m
+  “Um...” began as a hesitation between a minimal-change instruction and its “distribute, not divide” example. Sentence chunking made it a standalone Memory; undo removed it, redo restored it, and remove later deleted it.
+SCENARIO complete RECEIPT · LIMIT 40 WORDS · PRESS V TO VERIFY

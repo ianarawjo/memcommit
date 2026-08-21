@@ -5688,3 +5688,99 @@ def semantic_status(
         elif record["label_distribution"] is not None:
             _render_label_distribution(record["label_distribution"])
         _render_stage_timing(record["stage_completion_seconds"])
+
+
+@semantic_app.command("check")
+def semantic_check(
+    run_id: Annotated[
+        str,
+        typer.Argument(help="Run ID of the ledger entry to validate."),
+    ],
+    ledger_dir: Annotated[
+        Path,
+        typer.Option(
+            "--ledger-dir",
+            file_okay=False,
+            dir_okay=True,
+            help="Profile-independent semantic evaluation ledger",
+        ),
+    ] = DEFAULT_SEMANTIC_EVAL_LEDGER,
+) -> None:
+    """Validate one retained semantic campaign by run ID."""
+    try:
+        records = _read_run_records(ledger_dir)
+    except (OSError, SemanticCampaignError, _RunRecordError) as error:
+        typer.secho(
+            "Semantic eval check error: " + _redacted_error(error),
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
+
+    selected = [record for record in records if record["run_id"] == run_id]
+    if not selected:
+        typer.secho(
+            "Semantic eval check error: run_id not found: " + display_escape_text(run_id),
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
+    record = sorted(selected, key=lambda value: str(value["started_at"]))[-1]
+
+    passed = (
+        record["status"] == "COMPLETED"
+        and record["cases_failed"] == 0
+        and record["attempts_total"] >= record["cases_total"]
+    )
+    header = (
+        ("PASS" if passed else "FAIL")
+        if record["status"] == "COMPLETED"
+        else record["status"]
+    )
+    typer.secho(
+        "Semantic eval check · "
+        + display_escape_text(header)
+        + " · "
+        + display_escape_text(str(record["operation"]))
+        + " · "
+        + display_escape_text(str(record["provider"]))
+        + ":"
+        + display_escape_text(str(record["model"]))
+        + _condition_suffix(record),
+        bold=True,
+    )
+    typer.echo(
+        "  run_id " + display_escape_text(str(record["run_id"]))
+        + " · pipeline " + display_escape_text(str(record["pipeline_id"]))
+        + " v" + str(record["pipeline_version"])
+    )
+    typer.echo(
+        "  cases "
+        + str(record["cases_passed"])
+        + "/"
+        + str(record["cases_total"])
+        + " passed, "
+        + str(record["cases_failed"])
+        + " failed"
+        + " · attempts exact "
+        + str(record["attempts_exact"])
+        + "/"
+        + str(record["attempts_total"])
+    )
+    if isinstance(record.get("fixture_digest"), str):
+        typer.echo(
+            "  fixture "
+            + display_escape_text(str(record["fixture_digest"])[:12])
+            + " · ledger "
+            + display_escape_text(str(record["source"]))
+        )
+    if record["failure_counts"]:
+        typer.echo(
+            "  failures "
+            + ", ".join(
+                f"{display_escape_text(name)}={count}"
+                for name, count in sorted(record["failure_counts"].items())
+            )
+        )
+    if not passed:
+        raise typer.Exit(1)

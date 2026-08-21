@@ -17,6 +17,7 @@ from memcommit.context import (
     MemoryRef,
     QueryContextRef,
 )
+from memcommit.context_snapshot import ContextSnapshotRef
 from memcommit.context_targeting.presets import (
     ContextScopePreset,
     resolve_scope_preset,
@@ -46,6 +47,7 @@ from memcommit.source_projection.model import (
     SourceState,
 )
 from memcommit.source_projection.console import (
+    styled_source_object_label,
     styled_source_relationship_label,
 )
 from memcommit.source_projection.presentation import (
@@ -195,10 +197,35 @@ def _snapshot_item(
     ancestors: frozenset[str],
 ) -> dict[str, object]:
     """Freeze one persisted item without opening query-only source content."""
+    if isinstance(item, ContextSnapshotRef):
+        cycle = recursive and item.uid in ancestors
+        return {
+            "kind": "context_snapshot_ref",
+            "uid": item.uid,
+            "name": item.target_context_name,
+            "source_uid": item.target_context_uid,
+            "scope": "RECURSIVE" if item.include_descendants else "DIRECT",
+            "cycle": cycle,
+            "children": (
+                _snapshot_visible_items(
+                    item,
+                    store=store,
+                    context_names=(),
+                    recursive=True,
+                    ancestors=ancestors | {item.uid},
+                )
+                if recursive and not cycle
+                else None
+            ),
+        }
     if isinstance(item, Context):
         return _snapshot_context_entry(
             item,
-            kind="context",
+            kind=(
+                "namespace_context"
+                if getattr(item, "_snapshot_relation", None) == "DESCENDANT"
+                else "context"
+            ),
             store=store,
             context_names=context_names,
             recursive=recursive,
@@ -247,7 +274,7 @@ def _snapshot_visible_items(
     embedded_contexts = {
         item.name: item
         for item in direct_items
-        if isinstance(item, Context)
+        if isinstance(item, Context) and not isinstance(item, ContextSnapshotRef)
     }
     listed_embed_uids: set[str] = set()
     child_items: list[dict[str, object]] = []
@@ -375,7 +402,12 @@ def _group_snapshot_items(
     memories: list[dict[str, object]] = []
     for item in items:
         kind = _require_string(item, "kind")
-        if kind in {"context", "namespace_context", "query_context_ref"}:
+        if kind in {
+            "context",
+            "context_snapshot_ref",
+            "namespace_context",
+            "query_context_ref",
+        }:
             contexts.append(item)
         elif kind in {"memory", "memory_ref", "memory_snapshot_ref"}:
             memories.append(item)
@@ -399,8 +431,20 @@ def _render_snapshot_item(
     prefix = " " * indent
     kind = _require_string(item, "kind")
     uid = _require_string(item, "uid")
-    if kind in {"context", "namespace_context"}:
-        expected = {"kind", "uid", "name", "cycle", "children"}
+    if kind in {"context", "context_snapshot_ref", "namespace_context"}:
+        expected = (
+            {
+                "kind",
+                "uid",
+                "name",
+                "source_uid",
+                "scope",
+                "cycle",
+                "children",
+            }
+            if kind == "context_snapshot_ref"
+            else {"kind", "uid", "name", "cycle", "children"}
+        )
         if set(item) != expected:
             raise _snapshot_error()
         name = _require_string(item, "name")
@@ -417,18 +461,39 @@ def _render_snapshot_item(
             children = _require_items(children_value)
         if cycle and children is not None:
             raise _snapshot_error()
-        context_facts = SourceDisplayFacts(
-            reach=(
-                SourceReach.VIA_EMBED
-                if kind == "context"
-                else SourceReach.DESCENDANT
-            ),
-            states=(SourceState.CYCLE,) if cycle else (),
-        )
+        if kind == "context_snapshot_ref":
+            _require_string(item, "source_uid")
+            scope = _require_string(item, "scope")
+            if scope not in {"DIRECT", "RECURSIVE"}:
+                raise _snapshot_error()
+            context_facts = SourceDisplayFacts(
+                form=SourceForm.CONTEXT_REFERENCE,
+                states=(
+                    *((SourceState.CYCLE,) if cycle else ()),
+                    SourceState.READ_ONLY,
+                ),
+            )
+        else:
+            scope = None
+            context_facts = SourceDisplayFacts(
+                reach=(
+                    SourceReach.VIA_EMBED
+                    if kind == "context"
+                    else SourceReach.DESCENDANT
+                ),
+                states=(SourceState.CYCLE,) if cycle else (),
+            )
         context_annotation = source_annotation_text(context_facts)
+        if scope is not None:
+            context_annotation = f"{context_annotation} · {scope}"
+        relationship_label = (
+            styled_source_object_label(context_facts)
+            if style_relationships
+            else source_object_label(context_facts)
+        )
         if with_ids:
             lines.append(
-                f"{prefix}[{source_object_label(context_facts)} {uid[:8]}] "
+                f"{prefix}[{relationship_label} {uid[:8]}] "
                 f"{name}"
                 + (f"  {context_annotation}" if context_annotation else "")
             )
@@ -497,7 +562,8 @@ def _render_snapshot_item(
                 ),
                 states=(SourceState.DANGLING,),
             )
-            reference_label = (
+            reference_label = source_object_label(reference_facts)
+            relationship_label = (
                 styled_source_relationship_label(reference_facts)
                 if style_relationships
                 else source_relationship_label(reference_facts)
@@ -505,9 +571,9 @@ def _render_snapshot_item(
             annotation = source_annotation_text(reference_facts)
             if with_ids:
                 lines.append(
-                    f"{prefix}[{reference_label} {uid[:8]}] "
-                    f"[{target_context_name}]"
-                    f"[memory {target_memory_uid[:8]}]  {annotation}"
+                    f"{prefix}[{relationship_label} {uid[:8]}] "
+                    f"[{target_context_name}][memory {target_memory_uid[:8]}]  "
+                    f"{annotation}"
                 )
             else:
                 lines.append(
@@ -522,7 +588,8 @@ def _render_snapshot_item(
                 ),
                 states=(SourceState.READ_ONLY,),
             )
-            reference_label = (
+            reference_label = source_object_label(reference_facts)
+            relationship_label = (
                 styled_source_relationship_label(reference_facts)
                 if style_relationships
                 else source_relationship_label(reference_facts)
@@ -530,9 +597,8 @@ def _render_snapshot_item(
             annotation = source_annotation_text(reference_facts)
             if with_ids:
                 lines.append(
-                    f"{prefix}[{reference_label} {uid[:8]}] "
-                    f"[{target_context_name}]"
-                    f"[memory {target_memory_uid[:8]}] "
+                    f"{prefix}[{relationship_label} {uid[:8]}] "
+                    f"[{target_context_name}][memory {target_memory_uid[:8]}] "
                     f"{_one_line(content)}  {annotation}"
                 )
             else:
@@ -983,6 +1049,7 @@ def cmd(
                 snapshot, copied_with_ids = _restore_granted_list_receipt(
                     payload.selection
                 )
+                replay_with_ids = copied_with_ids
                 replay_text = _render_snapshot(
                     snapshot,
                     with_ids=copied_with_ids,
@@ -993,7 +1060,6 @@ def cmd(
                         "The granted list receipt and system clipboard disagree."
                     )
                 staged_text = replay_text
-                replay_with_ids = copied_with_ids
             else:
                 snapshot = payload.selection
                 annotated_text = _render_snapshot(

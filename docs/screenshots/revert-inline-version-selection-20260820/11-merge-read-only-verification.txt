@@ -1,0 +1,8 @@
+52 180                                                                                                                                                                              
+READ-ONLY MERGE REJECTION VERIFICATION                                                                                                                                              
+PTY 180 52                                                                                                                                                                          
+merge/source: ['Source Memory remains unchanged.']                                                                                                                                  
+merge/source checkpoints: 0                                                                                                                                                         
+merge/target: ['Target Memory remains unchanged.']                                                                                                                                  
+merge/target checkpoints: 0                                                                                                                                                         
+Current Context: merge/target

@@ -431,19 +431,12 @@ def test_explicit_granted_rationale_picker_keeps_readable_descendants(
         "choose_memory_report_target",
         select_memory,
     )
-    monkeypatch.setattr(
-        rationale_command,
-        "run_read_only_viewer",
-        lambda body, *, title: observed.update(viewer=(title, body)),
-    )
-
     result = runner.invoke(app, ["rationale", "--context", "campus-wiki"])
 
     assert result.exit_code == 0, result.output + result.stderr
     assert observed["scope"] == ("campus-wiki", "campus-wiki/public")
-    assert observed["viewer"][0] == "RATIONALE REPORT"
-    assert "PROVENANCE — hidden by Grant" in observed["viewer"][1]
-    assert "APPARENT PURPOSE" not in observed["viewer"][1]
+    assert "PROVENANCE — hidden by Grant" in result.output
+    assert "APPARENT PURPOSE" not in result.output
     assert MemoryStore().current_context_name() == "task-root"
 
 

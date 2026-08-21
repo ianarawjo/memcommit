@@ -57,7 +57,7 @@ _OPERATIONS = (
     _operation(
         "audit",
         "Run Duplicate, Ambiguity, and Conflict checks plus optional Rule "
-        "Conformance, then review the combined saved result.",
+        "Conformance, save the result, and print its Review receipt.",
         "Context + Rules? -> saved Audit report",
         ExecutionKind.SEMANTIC,
         "No Context content changes",
@@ -226,10 +226,10 @@ _OPERATIONS = (
         "fit",
         "Judge whether a defined set of Memories or other propositions is jointly "
         "compatible under ordinary interpretation, returning YES, MAY, or NO.",
-        "Propositions + optional background -> YES / MAY / NO; Ground + bound Contexts -> complete Fit receipt",
+        "Auto-typed text, Memory UID, or readable Context operands + optional background -> YES / MAY / NO; Ground + bound Contexts -> complete Fit receipt",
         ExecutionKind.SEMANTIC,
         "Read-only; changes no Context, Ground, Rule, Goal, or Memory",
-        "One complete frozen frame; Ground checks Context, vertical, peer, and Rule–Example relations",
+        "One complete frozen proposition frame from auto-typed or explicit literals, direct Memory selectors, or readable direct Contexts; Ground checks Context, vertical, peer, and Rule–Example relations",
     ),
     _operation(
         "resolve",
@@ -251,12 +251,12 @@ _OPERATIONS = (
     ),
     _operation(
         "dedun",
-        "Find and resolve semantic redundancies (dun), retaining one unchanged "
-        "existing Memory in each operation-decided group.",
-        "Direct Context Memories -> semantic groups -> survivor decisions -> exact Apply -> receipt",
+        "Immediately resolve exact plus semantic redundancies (dun), retaining "
+        "the first existing Memory in each complete DUN group.",
+        "Direct Context Memories -> exact and semantic groups -> deterministic survivor -> atomic Apply -> receipt",
         ExecutionKind.SEMANTIC,
-        "The invocation expresses Apply intent; required survivor decisions precede one checkpoint",
-        "One reviewed direct Context group per Apply; inbound references block version 1 Apply",
+        "The invocation expresses Apply intent and publishes at most one checkpoint",
+        "One exact direct Context; inbound references block version 1 Apply",
     ),
     _operation(
         "find-ambiguities",
@@ -275,12 +275,20 @@ _OPERATIONS = (
         "One exact direct Context",
     ),
     _operation(
+        "find-duplicates",
+        "Report byte-identical duplicate direct Memories without changing the Context.",
+        "Direct Context Memories -> exact DUP groups",
+        ExecutionKind.DETERMINISTIC,
+        "Read-only; no provider connection and no Context changes",
+        "One exact direct Context",
+    ),
+    _operation(
         "find-redundancies",
-        "Report semantically redundant direct Memories without changing any Source Context.",
-        "Readable Context frame -> semantic redundancy evidence report",
+        "Report exact and semantically redundant direct Memories without changing any Source Context.",
+        "Direct Context Memories -> DUP + semantic DUN evidence report",
         ExecutionKind.SEMANTIC,
-        "Read-only; reviewer responses remain process-local",
-        "One or more readable Contexts as one frozen direct-Memory frame; lexical descendants optional",
+        "Read-only; explicit --select can open process-local multi-target review",
+        "One exact direct Context by default; explicit --select enables readable multi-target scope",
     ),
     _operation(
         "forget",
@@ -331,7 +339,7 @@ _OPERATIONS = (
         "New Context name -> Context",
         ExecutionKind.DETERMINISTIC,
         "Creates a Context and switches to it",
-        "One fresh exact name; optional lexical parents",
+        "One fresh exact portable non-UID-shaped name; optional lexical parents",
     ),
     _operation(
         "init-study",
@@ -431,9 +439,9 @@ _OPERATIONS = (
     ),
     _operation(
         "rationale",
-        "Show one Memory with its recorded provenance.",
-        "Memory provenance -> rationale",
-        ExecutionKind.DETERMINISTIC,
+        "Explain where one Memory came from and how it changed over time.",
+        "Retained Trace + calibrated examples -> natural provenance receipt",
+        ExecutionKind.SEMANTIC,
         "Read-only",
         "One current or historical Memory",
     ),
@@ -446,11 +454,11 @@ _OPERATIONS = (
     ),
     _operation(
         "reference",
-        "Copy one direct Source Memory version into a Target as an immutable read-only snapshot.",
-        "Source Memory version -> Target snapshot",
+        "Copy one Source Memory version or direct/recursive Context scope into a Target as an immutable read-only snapshot.",
+        "Source Memory or Context scope -> Target snapshot",
         ExecutionKind.DETERMINISTIC,
         "Adds a self-contained snapshot to the Target; the Source stays unchanged",
-        "One direct local Source Memory and one exact local Target",
+        "One direct local Source Memory or local Context scope and one exact local Target",
     ),
     _operation(
         "rename",
@@ -480,12 +488,12 @@ _OPERATIONS = (
     ),
     _operation(
         "sever",
-        "Create a Result by selecting, transforming, or excluding Source Memories "
+        "Save a Result by selecting, transforming, or excluding Source Memories "
         "according to a Criteria Context.",
-        "Source Context + Criteria Context -> new Result Context",
+        "Source Context + Criteria Context -> self-save Source or other-save Result",
         ExecutionKind.SEMANTIC,
-        "Creates one decided Result and receipt; Source remains unchanged",
-        "Source exact or descendants; Criteria exact scoped frame",
+        "Updates Source by default, or creates an explicit new Result; records a receipt",
+        "Source exact for self-save or exact/descendants for other-save; Criteria scoped frame",
     ),
     _operation(
         "share",

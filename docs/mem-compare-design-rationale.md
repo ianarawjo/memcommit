@@ -7,18 +7,23 @@ The first bounded Compare slice is implemented as:
 ```text
 mem compare
 mem compare --sessions
+mem compare PEER
+mem compare REFERENCE PEER
+mem compare ../PEER
+mem compare REFERENCE PEER --refresh
+mem compare REFERENCE PEER --snapshot
+mem compare REFERENCE PEER --ledger
 mem compare --to PEER
 mem compare --from REFERENCE --to PEER
-mem compare --to ../PEER
-mem compare --to PEER --refresh
-mem compare --to PEER --snapshot
-mem compare --to PEER --ledger
 ```
 
 Bare `mem compare` and `mem compare --sessions` open the shared saved-work
 picker. This is compatible with the earlier command because omitting `--to`
 previously produced only a missing-option error; it did not mean “start a new
-comparison.” Explicit `--to` behavior is unchanged. `--refresh` still requires
+comparison.” One positional operand is the peer and retains the active Context
+as reference; two positional operands explicitly name reference and peer.
+`--from` and `--to` remain compatibility aliases, but positional endpoints and
+endpoint options cannot be mixed in one invocation. `--refresh` still requires
 an explicit peer and is rejected on the picker route.
 
 The picker presents Compare as a **saved read-only analysis**, not as a chat,
@@ -45,11 +50,11 @@ deleted, replaced, stale, or older-ruleset selection fails with an explicit
 refresh instruction instead of silently entering the normal `--to` path.
 
 The shared picker currently requires an argv-shaped presentation field. The
-Compare adapter displays `mem compare --to COMPARED` as a route hint and states
-that it requires the displayed reference Context to be current; the picker
-does not execute it. The frozen analysis UID is the authority for the selected
-render. A public UID route and multiple historical revisions of one ordered
-pair are outside this first selector slice.
+Compare adapter displays `mem compare REFERENCE COMPARED`, including both
+canonical endpoints so the route remains stable if the active Context changes;
+the picker does not execute it. The frozen analysis UID is the authority for
+the selected render. A public UID route and multiple historical revisions of
+one ordered pair are outside this first selector slice.
 
 The picker includes both ordinary comparison slots and authorized retained or
 grant-bound comparison artifacts. Otherwise a participant could successfully
@@ -57,22 +62,40 @@ save a granted Compare result but have no route back to it from bare
 `mem compare`. Reopening revalidates the artifact according to its retention
 mode and never broadens its source grant.
 
-The active Context is the display reference and `--to` names the compared
-Context when `--from` is omitted. When both `--from REFERENCE` and `--to PEER`
-are supplied as canonical names, Compare does not require any current Context
-and never changes one that exists. A current snapshot is needed only for an
-omitted reference or an explicitly relative locator. The shared New setup may
-select both A and B without switching the active Context; it invokes the same
-explicit endpoint contract. Both sources have equal
+The active Context is the display reference when one positional `PEER` or only
+`--to PEER` is supplied. Two positional Contexts are `REFERENCE PEER`; the
+legacy equivalent is `--from REFERENCE --to PEER`. A fully explicit canonical
+pair does not require any current Context and never changes one that exists. A
+current snapshot is needed only for an omitted reference or an explicitly
+relative locator. The shared New setup may select both A and B without
+switching the active Context; it invokes the same explicit endpoint contract.
+Both sources have equal
 authority. `REFERENCE` controls layout and navigation only; it is not a
 baseline and does not win a disagreement.
 
-`--from` and `--to` are existing-Context locators. A canonical name remains
-global, while an explicit `.` or `..` spelling is resolved lexically against
-the same active-Context snapshot captured at command start. The resolved
-canonical names are used for loading, frames, cache identity, and output, so
-relative and canonical spellings reuse the same durable analysis. The shared
-contract and its
+### Why Compare has asymmetric positional arity
+
+Compare is the strongest positional-operand case because it is read-only and
+its two Contexts have equal authority. Zero operands opens saved work, one
+operand unambiguously preserves the established current-reference behavior,
+and two operands fully specify the pair. Endpoint options remain aliases for
+existing scripts; rejecting mixed syntax prevents one Context from acquiring
+two competing role declarations.
+
+The wider command audit is now implemented as a shared grammar rather than a
+list of future candidates. Unary Context operations use zero operands for the
+current Context and one for an explicit Context. Directional Update requires
+an explicit positional pair, while Forget keeps `--context` because its sole
+position belongs to the natural-language instruction. The complete table,
+including named Impact routes and compatibility aliases, is maintained in
+[`context-locator-design-rationale.md`](context-locator-design-rationale.md#cli-operand-grammar).
+
+Both positional endpoints and their `--from`/`--to` aliases are
+existing-Context locators. A canonical name remains global, while an explicit
+`.` or `..` spelling is resolved lexically against the same active-Context
+snapshot captured at command start. The resolved canonical names are used for
+loading, frames, cache identity, and output, so relative and canonical
+spellings reuse the same durable analysis. The shared contract and its
 non-goals are recorded in
 [`context-locator-design-rationale.md`](context-locator-design-rationale.md).
 
@@ -417,11 +440,10 @@ explanatory prose. The footer separates the final report text from the next
 shell prompt without relying on arbitrary extra blank lines; it is not another
 semantic result section.
 
-The footer uses the canonical compared Context name, not the raw relative
-locator, and display-escapes terminal controls after POSIX shell quoting.
-Running it immediately reuses the current Reference. If current state later
-changes, the person must first switch back to the Reference named in the
-header; Compare has no stateless `--from` operand.
+The footer uses both canonical Context names, not raw relative locators, and
+display-escapes terminal controls after POSIX shell quoting. It therefore
+remains stateless and preserves the reviewed orientation even if current state
+later changes.
 
 `--ledger` renders every validated relation, its exact source snapshots, and
 its explanation without another provider call. The exhaustive ledger remains

@@ -170,17 +170,17 @@ PTY 180 52
 [C[0mThe reviewed comparison reports no unresolved issue; this is bounded to that corpus. [7][0m
 
 [C[0mReferences[0m
-[C[0m[1] m1 · memory · 11111111 · Context: task-1/campus-wiki/building-access[0m
-[C[0m  The main entrance normally closes at 10 p.m.[0m
+[C[0m[1] The main entrance normally closes at 10 p.m. — 11111111, task-1/campus-wiki/building-access m1[0m
+[C[0m[2] During construction, general access ends at 5 p.m. — 22222222, task-1/participant/construction-updates/building-access m2[0m
+[C[0m[3] The underground garage normally accepts general vehicles. — 33333333, task-1/campus-wiki/temporary-parking m3[0m
+[C[0m[4] During construction, use Outdoor Parking Lot C instead. — 44444444, task-1/participant/construction-updates/temporary-parking m4[0m
+[C[0m[5] The tenth-floor hall normally remains open during recess. — 55555555, task-1/campus-wiki/event-relocations m5[0m
+[C[0m[6] During construction, viewing and new reservations stop. — 66666666, task-1/participant/construction-updates/event-relocations m6[0m
+[C[0m[7] Compare issues: 0. Every reviewed relation is resolved. — 77777777, task-1/participant m7[0m
 
-[C[0m[2] m2 · memory · 22222222 · Context: task-1/participant/construction-updates/building-access[0m
-[C[0m  During construction, general access ends at 5 p.m.[0m
-[178C[0;48;5;238m [0m
-[C[0m[3] m3 · memory · 33333333 · Context: task-1/campus-wiki/temporary-parking[103C[0;48;5;248m [0m
-[C[0m  The underground garage normally accepts general vehicles.[118C[0;48;5;248m [0m
-[178C[0;48;5;248m [0m
-[C[0m[4] m4 · memory · 44444444 · Context: task-1/participant/construction-updates/temporary-parking[82C[0;48;5;248m [0m
-[C[0m  During construction, use Outdoor Parking Lot C instead.[120C[0;48;5;248m [0m
+
+
+
 
 
 [6C[0m COMPLETE · SOURCE AND[CSCOPE FROZEN · ↑/↓ an[Cwer/Refer[Cnces · y copy focused · Y copy complete answer · Tab switch · Esc question[20A[134D[0m[?25l[0m
@@ -190,24 +190,11 @@ PTY 180 52
 
 
 
-[C[0;38;5;234;48;5;117;1m[1] m1 · memory · 11111111 · Context: task-1/campus-wiki/building-access[0m
-[C[0;38;5;234;48;5;117;1m  The main entrance normally closes at 10 p.m.[A[46D[0m[?25l[7A[0m[1] m1[C· memory · 11[C11111 · Context:[Ctask-1/[Campus-wiki/building-access[0m
-[C[0m  The main entrance normally closes at 10 p.m.[131C[0;48;5;248m [0m
-[C[0m                                                                                 [96C[0;48;5;248m [0m
-[C[0m[2] m2 · memory · 22222222 · Context: task-1/participant/construction-updates/building-access[84C[0;48;5;248m [0m
-[C[0m  Du[Cing construction, general access [Cnds at[C5 p.m.                                    [89C[0;48;5;248m [0m
+[C[0;38;5;234;48;5;117;1m[1] The main entrance normally closes at 10 p.m. — 11111111, task-1/campus-wiki/building-access m1[98D[0m[?25l[0m[1] The main entrance normally closes at 10 p.m. — 11111111, task-1/campus-wiki/building-access m1[0m
 
-[C[0m[3] m3 · memory · 33333333 · Context: task-1/campus-wiki/temporary-parking[0m
-[C[0m  The underground garage normally accepts general vehicles.             [0m
-[C[0m                                              [0m
-[C[0m[4] m4 · memory · 44444444 · Context: task-1/participant/construction-updates/temporary-parking[0m
-[C[0m  During[Cconstruction, use[COutdoor Parking Lot C [Cnstead.                                    [0m
-[C[0m                                                    [0m
-[C[0m[5] m5 · memory · 55555555 · Context: task-1/campus-wiki/event-relocations[103C[0;48;5;238m [0m
-[C[0m  The tenth-floor[Chall normally r[Cmains open during recess.               [103C[0;48;5;238m [0m
-[C[0m                                                           [118C[0;48;5;238m [0m
-[C[0m[6] m6 · memory · 66666666 · Context: task-1/participant/construction-updates/event-relocations[82C[0;48;5;238m [0m
-[C[0m  During[Cconstruction, viewing and new reservations stop.                                      [82C[0;48;5;238m [0m
-[C[0m                                                         [0m
-[C[0;38;5;234;48;5;117;1m[7] m7 · artifact · 77777777 · Context: task-1/participant[58D[0m[49A[J[0m[?7h[?1049l[?2004lONE-SHOT VERIFICATION · CALLS 1 · ALL 7 ALIASES EXPOSED True · gpt-5.6-sol / none
+
+
+
+
+[C[0;38;5;234;48;5;117;1m[7] Compare issues: 0. Every reviewed relation is resolved. — 77777777, task-1/participant m7[93D[0m[44A[J[0m[?7h[?1049l[?2004lONE-SHOT VERIFICATION · CALLS 1 · ALL 7 ALIASES EXPOSED True · gpt-5.6-sol / none
 QUERY CLOSED · READ ONLY · NO SESSION SAVE · NO SOURCE MUTATION

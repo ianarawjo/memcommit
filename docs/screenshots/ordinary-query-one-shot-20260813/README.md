@@ -29,12 +29,14 @@ temporary aliases, and the host renders real numbered References.
 | `01-entry-and-frozen-scope.png` | Launch | Blank Question; checked `task-1` subtree, descendant range, and embed policy are visible; no provider call | None |
 | `02-question-entered.png` | Type comparison/conflict question | Writable question contains both-side and conflict requirements | None |
 | `03-one-shot-querying.png` | `Enter` | Answer reports `QUERYING`; the request and complete corpus are frozen | None |
-| `04-answer-with-host-citations.png` | Wait for the single completion | Three answer blocks show host-created `[1]` through `[7]`; References are separate typed blocks | None |
-| `05-first-reference-focused.png` | `Down` | Reference 1 owns the shared blue focused-control background | None |
-| `06-aggregate-reference-focused.png` | `Down` × 6 | Reference 7, the aggregate conflict assessment, is independently focused | None |
+| `04-answer-with-host-citations.png` | Wait for the single completion | Three answer blocks show host-created `[1]` through `[7]`; each Reference is one compact content-first row with its own Context | None |
+| `05-first-reference-focused.png` | `Down` | Compact Reference row 1 owns the shared blue focused-control background | None |
+| `06-aggregate-reference-focused.png` | `Down` × 6 | Compact Reference row 7, the aggregate conflict assessment, is independently focused | None |
 | `07-read-only-verification.png` | `Ctrl-C` | Receipt confirms one call, all seven aliases exposed, Sol/none policy, no session save, and no Source mutation | None |
 
 The deterministic capture is UI evidence, not the deployment quality result.
+Its Reference rows use `[N] content — UID prefix, Context alias` without blank
+separators, so distinct Sources remain self-contained without two-line headers.
 The separate real same-question run used `mem query --context task-1 ...`,
 completed in about 22.8 seconds, produced six answer blocks and 66 used
 References, cited baseline and construction-update Memories, and bounded its

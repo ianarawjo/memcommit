@@ -1,4 +1,4 @@
-"""Detailed Help boundary for semantic Dedun."""
+"""Detailed Help boundary for complete exact-plus-semantic Dedun."""
 
 from memcommit.help_catalog.model import (
     DetailDiscovery,

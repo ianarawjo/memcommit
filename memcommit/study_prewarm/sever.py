@@ -40,6 +40,11 @@ from memcommit.study_prewarm.registry import (
     load_registry,
     payload_digest,
 )
+from memcommit.study_prewarm.quality import (
+    SemanticIdentity,
+    highest_quality_candidates,
+    prewarm_quality_satisfies,
+)
 SEVER_ARTIFACT_KIND = "STUDY_SEVER_EXACT_PREWARM"
 SEVER_ARTIFACT_SCHEMA_VERSION = 1
 TASK = "task-3"
@@ -440,11 +445,15 @@ def install_declared_sever_prewarms(
         declared += 1
         artifact = load_artifact(store.store_dir, entry)
         prepared, description = _validate_artifact(artifact, entry_key=entry.key)
-        if (
+        cached_identity = (
             artifact.get("provider"),
             artifact.get("model"),
             artifact.get("reasoning"),
-        ) != provider_identity:
+        )
+        if not prewarm_quality_satisfies(
+            cached_identity,  # type: ignore[arg-type]
+            provider_identity,
+        ):
             skipped += 1
             continue
         _validate_description(store, description)
@@ -503,19 +512,22 @@ def find_installed_exact_sever_prewarm(
     if registry is None:
         return None
     provider_identity = _configured_semantic_identity()
-    matches: list[SeverSession] = []
+    matches: list[tuple[SemanticIdentity, SeverSession]] = []
     for entry in registry.entries:
         if not entry.enabled or entry.operation != "SEVER":
             continue
         artifact = load_artifact(store.store_dir, entry)
         prepared, description = _validate_artifact(artifact, entry_key=entry.key)
+        cached_identity = (
+            artifact.get("provider"),
+            artifact.get("model"),
+            artifact.get("reasoning"),
+        )
         if (
-            (
-                artifact.get("provider"),
-                artifact.get("model"),
-                artifact.get("reasoning"),
+            not prewarm_quality_satisfies(
+                cached_identity,  # type: ignore[arg-type]
+                provider_identity,
             )
-            != provider_identity
             or prepared.output_name != output_name
         ):
             continue
@@ -536,12 +548,18 @@ def find_installed_exact_sever_prewarm(
             prepared.source, source
         ) or not _semantic_binding_matches(prepared.criteria, criteria):
             continue
-        matches.append(_fresh_review(prepared, source=source, criteria=criteria))
-    if len(matches) > 1:
+        matches.append(
+            (
+                cached_identity,  # type: ignore[arg-type]
+                _fresh_review(prepared, source=source, criteria=criteria),
+            )
+        )
+    selected = highest_quality_candidates(matches)
+    if len(selected) > 1:
         raise StudyPrewarmRegistryError(
             "Multiple declared Sever prewarms match the same frozen request."
         )
-    return matches[0] if matches else None
+    return selected[0] if selected else None
 
 
 def find_installed_projectable_sever_prewarm(

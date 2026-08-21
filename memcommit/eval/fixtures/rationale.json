@@ -1,0 +1,288 @@
+{
+  "command": "rationale",
+  "schema_version": 1,
+  "ruleset_version": "rationale-natural-provenance-v1",
+  "description": "Exact natural-language provenance rules and production calibration cases. Every case is prompt-visible and a regression contract; known-wrong narratives mark adjacent factual and presentation failures.",
+  "rules": [
+    {
+      "id": "R01_COMPLETE_RETAINED_LINEAGE",
+      "title": "Read the complete retained lineage",
+      "invariant": "Use the complete frozen Trace component in chronological order; do not reduce provenance to the latest event or latest recorded reason."
+    },
+    {
+      "id": "R02_ORIGIN_CONTEXT",
+      "title": "Explain the origin context",
+      "invariant": "When a selected Memory was derived from a larger Memory, state the selected content's meaningful role or placement within that source and preserve the specific nearby context needed to understand why the fragment existed."
+    },
+    {
+      "id": "R03_DERIVATION_MECHANISM",
+      "title": "Name how the standalone Memory arose",
+      "invariant": "State the recorded operation and material method that produced the selected Memory, such as sentence chunking, without replacing it with a generic created label."
+    },
+    {
+      "id": "R04_CHRONOLOGICAL_LIFECYCLE",
+      "title": "Narrate disappearance and return",
+      "invariant": "Preserve every selected-Memory presence, content, or position transition needed to explain when it disappeared, returned, changed, or was finally removed."
+    },
+    {
+      "id": "R05_SELECTED_MEMORY_BOUNDARY",
+      "title": "Keep sibling activity out",
+      "invariant": "A component event that changes only a parent, child, or sibling Memory is context, not a lifecycle transition of the selected Memory, and must not be narrated as though it happened to the selected Memory."
+    },
+    {
+      "id": "R06_NATURAL_NARRATIVE",
+      "title": "Write prose, not an event log",
+      "invariant": "Synthesize one chronological natural-language paragraph; do not expose raw event labels, arrows, checkpoint identifiers, timestamps, transition counts, or a command inventory."
+    },
+    {
+      "id": "R07_COMPACT_COMPLETE",
+      "title": "Compress without truncating facts",
+      "invariant": "Use one or two complete sentences within the requested character, UTF-8 byte, or whitespace-delimited word limit. Merge repeated subjects and paired undo/redo clauses, but retain origin context, derivation mechanism, and final lifecycle state; never mechanically clip a generated sentence."
+    },
+    {
+      "id": "R08_NO_INVENTED_INTENT",
+      "title": "Do not invent intent",
+      "invariant": "A directly supported textual role such as a hesitation may be described from wording and placement, but do not claim that the author intended a placeholder, judged content useless, or had another unrecorded motive."
+    },
+    {
+      "id": "R09_EXPLICIT_HISTORY_BOUNDARY",
+      "title": "Keep unavailable provenance explicit",
+      "invariant": "Return no narrative when retained history is absent or hidden by a Grant; never fill either condition from current content or outside knowledge."
+    }
+  ],
+  "cases": [
+    {
+      "id": "um-sentence-chunk-lifecycle",
+      "description": "A hesitation inside one longer instruction becomes a standalone sentence chunk, disappears under undo, returns under redo, and is later removed while sibling atomize events remain outside its lifecycle.",
+      "input": {
+        "selected_memory_id": "selected",
+        "history_available": true,
+        "originals": [
+          {
+            "id": "parent",
+            "content": "When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts.",
+            "position": 2
+          }
+        ],
+        "current": [],
+        "events": [
+          {
+            "kind": "SPLIT",
+            "command": "chunk",
+            "description": "Chunked 3 Memory(s) into 8 Memories (method=sentences)",
+            "reason": "Context structural split using method 'sentences'.",
+            "before": [
+              {
+                "id": "parent",
+                "content": "When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts.",
+                "position": 2
+              }
+            ],
+            "after": [
+              {
+                "id": "preceding",
+                "content": "When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected.",
+                "position": 2
+              },
+              {
+                "id": "selected",
+                "content": "Um...",
+                "position": 3
+              },
+              {
+                "id": "following",
+                "content": "for example, use distribute, not divide, when material is absorbed into two parts.",
+                "position": 4
+              }
+            ]
+          },
+          {
+            "kind": "RESTORED",
+            "command": "undo",
+            "description": "Undo command 'mem chunk'",
+            "reason": null,
+            "before": [
+              {"id": "preceding", "content": "When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected.", "position": 2},
+              {"id": "selected", "content": "Um...", "position": 3},
+              {"id": "following", "content": "for example, use distribute, not divide, when material is absorbed into two parts.", "position": 4}
+            ],
+            "after": [
+              {"id": "parent", "content": "When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts.", "position": 2}
+            ]
+          },
+          {
+            "kind": "RESTORED",
+            "command": "redo",
+            "description": "Redo command 'mem chunk'",
+            "reason": null,
+            "before": [
+              {"id": "parent", "content": "When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts.", "position": 2}
+            ],
+            "after": [
+              {"id": "preceding", "content": "When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected.", "position": 2},
+              {"id": "selected", "content": "Um...", "position": 3},
+              {"id": "following", "content": "for example, use distribute, not divide, when material is absorbed into two parts.", "position": 4}
+            ]
+          },
+          {
+            "kind": "REMOVED",
+            "command": "remove",
+            "description": "Removed memory: Um...",
+            "reason": null,
+            "before": [
+              {"id": "selected", "content": "Um...", "position": 3}
+            ],
+            "after": []
+          },
+          {
+            "kind": "ATOMIZE_KEEP",
+            "command": "atomize",
+            "description": "Preserved the preceding sibling Memory",
+            "reason": "The condition and inclusive example jointly define one minimal-change instruction.",
+            "before": [
+              {"id": "preceding", "content": "When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected.", "position": 2}
+            ],
+            "after": [
+              {"id": "preceding", "content": "When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected.", "position": 3}
+            ]
+          },
+          {
+            "kind": "ATOMIZE_PRESERVED",
+            "command": "atomize",
+            "description": "Preserved the following sibling Memory",
+            "reason": "The example's scope could not be decided safely.",
+            "before": [
+              {"id": "following", "content": "for example, use distribute, not divide, when material is absorbed into two parts.", "position": 3}
+            ],
+            "after": [
+              {"id": "following", "content": "for example, use distribute, not divide, when material is absorbed into two parts.", "position": 4}
+            ]
+          }
+        ],
+        "limit": 40,
+        "unit": "words"
+      },
+      "expected": {
+        "status": "AVAILABLE",
+        "provenance": "“Um...” began as a hesitation between a minimal-change instruction and its “distribute, not divide” example. Sentence chunking made it a standalone Memory; undo removed it, redo restored it, and remove later deleted it.",
+        "rule_ids": [
+          "R01_COMPLETE_RETAINED_LINEAGE",
+          "R02_ORIGIN_CONTEXT",
+          "R03_DERIVATION_MECHANISM",
+          "R04_CHRONOLOGICAL_LIFECYCLE",
+          "R05_SELECTED_MEMORY_BOUNDARY",
+          "R06_NATURAL_NARRATIVE",
+          "R07_COMPACT_COMPLETE",
+          "R08_NO_INVENTED_INTENT"
+        ]
+      },
+      "known_wrong": [
+        {
+          "provenance": "CREATED via chunk → REMOVED via undo → RESTORED via redo → REMOVED via remove",
+          "violates": ["R02_ORIGIN_CONTEXT", "R03_DERIVATION_MECHANISM", "R06_NATURAL_NARRATIVE"],
+          "reason": "The event chain omits the parent instruction and example, and exposes internal labels instead of explaining the provenance."
+        },
+        {
+          "provenance": "Context structural split using method 'sentences'.",
+          "violates": ["R01_COMPLETE_RETAINED_LINEAGE", "R02_ORIGIN_CONTEXT", "R04_CHRONOLOGICAL_LIFECYCLE"],
+          "reason": "The latest recorded reason neither explains the fragment's source context nor its later disappearance and return."
+        },
+        {
+          "provenance": "The author deliberately inserted a disposable placeholder, which was removed because it was useless.",
+          "violates": ["R08_NO_INVENTED_INTENT"],
+          "reason": "The Trace supports a hesitation's wording and placement but records neither placeholder intent nor a usefulness judgment."
+        },
+        {
+          "provenance": "After removal, the Memory was preserved by Atomize.",
+          "violates": ["R05_SELECTED_MEMORY_BOUNDARY"],
+          "reason": "The later Atomize events contain only the preceding and following sibling UIDs."
+        }
+      ]
+    },
+    {
+      "id": "direct-add-remove-undo",
+      "description": "A directly added Memory is removed and restored when that removal is undone.",
+      "input": {
+        "selected_memory_id": "selected",
+        "history_available": true,
+        "originals": [],
+        "current": [
+          {"id": "selected", "content": "Keep the selected terminology.", "position": 0}
+        ],
+        "events": [
+          {
+            "kind": "CREATED",
+            "command": "add",
+            "description": "Added one Memory",
+            "reason": null,
+            "before": [],
+            "after": [
+              {"id": "selected", "content": "Keep the selected terminology.", "position": 0}
+            ]
+          },
+          {
+            "kind": "REMOVED",
+            "command": "remove",
+            "description": "Removed one Memory",
+            "reason": null,
+            "before": [
+              {"id": "selected", "content": "Keep the selected terminology.", "position": 0}
+            ],
+            "after": []
+          },
+          {
+            "kind": "RESTORED",
+            "command": "undo",
+            "description": "Undid the remove command",
+            "reason": null,
+            "before": [],
+            "after": [
+              {"id": "selected", "content": "Keep the selected terminology.", "position": 0}
+            ]
+          }
+        ],
+        "limit": 24,
+        "unit": "words"
+      },
+      "expected": {
+        "status": "AVAILABLE",
+        "provenance": "This Memory was added directly, later removed, and restored when that removal was undone.",
+        "rule_ids": ["R01_COMPLETE_RETAINED_LINEAGE", "R04_CHRONOLOGICAL_LIFECYCLE", "R06_NATURAL_NARRATIVE", "R07_COMPACT_COMPLETE"]
+      },
+      "known_wrong": [
+        {
+          "provenance": "This Memory currently exists.",
+          "violates": ["R01_COMPLETE_RETAINED_LINEAGE", "R04_CHRONOLOGICAL_LIFECYCLE"],
+          "reason": "The endpoint alone hides both the removal and its undo."
+        }
+      ]
+    },
+    {
+      "id": "grant-hidden-history",
+      "description": "Readable content received through a Grant does not expose retained owner history to Rationale.",
+      "input": {
+        "selected_memory_id": "selected",
+        "history_available": false,
+        "originals": [],
+        "current": [
+          {"id": "selected", "content": "A readable granted Memory.", "position": 0}
+        ],
+        "events": [],
+        "limit": 40,
+        "unit": "words"
+      },
+      "expected": {
+        "status": "HIDDEN",
+        "provenance": "",
+        "rule_ids": ["R09_EXPLICIT_HISTORY_BOUNDARY"]
+      },
+      "known_wrong": [
+        {
+          "provenance": "This Memory was probably added by its owner as a durable reference.",
+          "violates": ["R08_NO_INVENTED_INTENT", "R09_EXPLICIT_HISTORY_BOUNDARY"],
+          "reason": "Readable content does not authorize owner-history inference."
+        }
+      ]
+    }
+  ]
+}

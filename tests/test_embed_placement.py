@@ -303,14 +303,14 @@ def test_cli_embed_can_choose_the_explicit_first_gap(isolated_store) -> None:
     assert f"before [{first.uid[:8]}] at the start" in result.output
 
 
-def test_cli_embed_defaults_to_the_last_gap_without_an_anchor(
+def test_cli_embed_defaults_to_current_target_and_last_gap(
     isolated_store,
 ) -> None:
     store, child, parent, first, second = _ordered_store()
 
     result = runner.invoke(
         app,
-        ["embed", child.name, "--into", parent.name],
+        ["embed", child.name],
     )
 
     assert result.exit_code == 0, result.output + result.stderr
@@ -320,6 +320,18 @@ def test_cli_embed_defaults_to_the_last_gap_without_an_anchor(
         child.uid,
     ]
     assert f"after [{second.uid[:8]}] at the end" in result.output
+
+
+def test_cli_embed_without_into_requires_a_current_context(isolated_store) -> None:
+    store = MemoryStore()
+    child = ops.init("embed/child")
+    store.save(child)
+
+    result = runner.invoke(app, ["embed", child.name])
+
+    assert result.exit_code == 1
+    assert "no current Context" in result.stderr
+    assert "Pass --into" in result.stderr
 
 
 def test_cli_embed_inserts_after_one_direct_memory(isolated_store) -> None:
@@ -376,8 +388,9 @@ def test_flagless_embed_requires_a_terminal(isolated_store) -> None:
     result = runner.invoke(app, ["embed"])
 
     assert result.exit_code == 1
-    assert "an item and --into are required outside a terminal" in result.stderr
-    assert "MEMORY --from SOURCE" in result.stderr
+    assert "an item is required outside a terminal" in result.stderr
+    assert "mem embed MEMORY" in result.stderr
+    assert "mem embed CONTEXT:MEMORY" in result.stderr
 
 
 def test_embed_setup_stages_the_gap_between_two_memories(isolated_store) -> None:

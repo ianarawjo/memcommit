@@ -147,10 +147,13 @@ render once. Explicit `--tui` mode first freezes the Profile-wide readable
 Context catalog. The
 three-way range control appears above the Context picker and offers `BOTH`,
 `THIS CONTEXT ONLY`, and `INCLUDE DESCENDANTS`. The Context picker owns initial
-focus. Before a result exists, the Summary frame itself contains the explicit
-Run action, so one forward focus move from Context reaches execution. An
-operand-free `--tui` flow starts on `BOTH`; explicit `-d` and `-r` retain their
-individual initial selections.
+focus and the same lazy direct-item preview as Distill: lowercase `m` affects
+only the focused Context and uppercase `M` affects every Context in the frozen
+readable catalog. These rows are inspection-only and do not change the staged
+Context or reach. Before a result exists, the Summary frame itself contains the
+explicit Run action, so one forward focus move from Context reaches execution.
+An operand-free `--tui` flow starts on `BOTH`; explicit `-d` and `-r` retain
+their individual initial selections.
 Only the explicit Summarize action constructs and executes requests;
 cancellation executes nothing. `BOTH` performs the direct request first and the
 recursive request second, then publishes the pair only after both succeed.

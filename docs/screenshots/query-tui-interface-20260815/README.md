@@ -31,8 +31,8 @@ failure boundary, and read-only verification.
 | `02-query-question-entered.png` | Type `What changed during construction?` | Lowercase input remains ordinary text | None |
 | `03-query-answer-body-focused.png` | `Enter` | Frozen Query completes; Answer body is the first typed focus stop | None |
 | `04-query-answer-body-copied.png` | `y` | Footer confirms only the Answer body was copied | None |
-| `05-query-reference-focused.png` | `Down` | Reference 1 owns the shared blue focus; the prior receipt clears | None |
-| `06-query-reference-copied.png` | `y` | Footer confirms the complete focused Reference block was copied | None |
+| `05-query-reference-focused.png` | `Down` | Compact Reference row 1 owns the shared blue focus; its own Context remains visible and the prior receipt clears | None |
+| `06-query-reference-copied.png` | `y` | Footer confirms the complete one-line focused Reference row was copied | None |
 | `07-query-complete-answer-copied.png` | `Y` | Footer confirms the body-plus-References document was copied | None |
 | `08-query-read-only-verification.png` | `Ctrl-C` | Three distinct payloads are printed; no session or Source changed | None |
 | `09-query-copy-failed.png` | Launch failure Query, type question, `Enter`, `y` | Adapter failure stays in Answer as `COPY FAILED` | None |
@@ -41,3 +41,5 @@ failure boundary, and read-only verification.
 The complete copy comes from the typed `FindAnswerReferenceDocument`, not from
 reparsing rendered terminal text. It therefore excludes viewport wrapping,
 focus styles, and any mutation-oriented structured clipboard stage.
+Each Reference payload is `[N] content — UID prefix, Context alias`; adjacent
+rows do not share or inherit a Source heading.

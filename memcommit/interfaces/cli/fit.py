@@ -5,16 +5,57 @@ from __future__ import annotations
 import typer
 
 from memcommit.fit_application import FitPropositionsResult, FitResult
-from memcommit.interfaces.fit import fit_result_text, proposition_fit_result_text
+from memcommit.interfaces.console.theme import (
+    semantic_color_rgb,
+    semantic_judgment_role,
+)
+from memcommit.interfaces.fit import (
+    FitReceiptLine,
+    fit_receipt_lines,
+    proposition_fit_receipt_lines,
+)
 
 
-def render_proposition_fit_plain(result: FitPropositionsResult) -> None:
-    """Print one stable YES/MAY/NO general Fit judgment."""
+def _render_receipt_line(
+    line: FitReceiptLine,
+    *,
+    color: bool | None = None,
+) -> None:
+    """Style only the trusted judgment token in one typed receipt line."""
 
-    typer.echo(proposition_fit_result_text(result))
+    typer.echo(line.before_judgment, nl=False)
+    if line.judgment is not None:
+        role = semantic_judgment_role(line.judgment)
+        if role is None:
+            typer.echo(line.judgment, nl=False)
+        else:
+            typer.secho(
+                line.judgment,
+                fg=semantic_color_rgb(role),
+                bold=True,
+                nl=False,
+                color=color,
+            )
+    typer.echo(line.after_judgment)
 
 
-def render_fit_plain(result: FitResult) -> None:
-    """Print Fit's stable one-line non-interactive result."""
+def render_proposition_fit_plain(
+    result: FitPropositionsResult,
+    *,
+    color: bool | None = None,
+) -> None:
+    """Print one stable general Fit receipt."""
 
-    typer.echo(fit_result_text(result))
+    for line in proposition_fit_receipt_lines(result):
+        _render_receipt_line(line, color=color)
+
+
+def render_fit_plain(
+    result: FitResult,
+    *,
+    color: bool | None = None,
+) -> None:
+    """Print Fit's compact summary and current issue relationship blocks."""
+
+    for line in fit_receipt_lines(result):
+        _render_receipt_line(line, color=color)

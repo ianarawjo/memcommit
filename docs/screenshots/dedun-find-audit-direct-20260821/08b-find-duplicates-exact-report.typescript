@@ -1,0 +1,12 @@
+PTY 180 52
+Context: quality/direct-find-exact
+  3 direct memories, 1 exact duplicate group(s), 1 later duplicate Memory item(s)
+
+[1m  DUP / EXACT  1/1[0m
+    [38;2;138;173;244m[1mSURVIVOR[0m  [memory 30000000]  Badge access is required.
+    [38;2;237;135;150m[1mABSORB[0m    [memory 30000001]  Badge access is required.
+
+  Read-only report. Apply exact cleanup with mem dedup.
+COMMAND EXIT · 0
+VERIFICATION · CONTEXT quality/direct-find-exact · MEMORIES 3 · CHECKPOINT COMMANDS [] · CURRENT quality/direct-find-exact · PROVIDER []
+FIND EXACT REPORT READY

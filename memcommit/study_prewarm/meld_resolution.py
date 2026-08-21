@@ -29,6 +29,11 @@ from memcommit.study_prewarm.installations import (
     declared_artifact_available,
     record_declared_installation,
 )
+from memcommit.study_prewarm.quality import (
+    SemanticIdentity,
+    highest_quality_candidates,
+    prewarm_quality_satisfies,
+)
 from memcommit.study_prewarm.registry import (
     StudyPrewarmRegistryError,
     load_artifact,
@@ -90,6 +95,19 @@ def _configured_identity(
     sentinel = "0" * 64
     meld_resolution_cache_key(sentinel, value)
     return value
+
+
+def _quality_identity(value: dict[str, object]) -> SemanticIdentity:
+    provider = value.get("provider")
+    model = value.get("model")
+    reasoning = value.get("reasoning_effort")
+    if (
+        not isinstance(provider, str)
+        or (model is not None and not isinstance(model, str))
+        or (reasoning is not None and not isinstance(reasoning, str))
+    ):
+        raise StudyPrewarmRegistryError("Meld resolution provider is invalid.")
+    return provider, model, reasoning
 
 
 def _pending_copy(session: MeldSession) -> MeldSession:
@@ -392,6 +410,7 @@ def install_declared_meld_resolution_prewarms(
     if not any(item == profile for item in registry_snapshot.profiles):
         raise StudyPrewarmRegistryError("Study Profile identity changed.")
     current_config = configured_meld_cache_identity()
+    requested_identity = _quality_identity(current_config)
     declared = skipped = branch_count = 0
     installed: list[str] = []
     for entry in registry.entries:
@@ -404,7 +423,10 @@ def install_declared_meld_resolution_prewarms(
             entry_key=entry.key,
             entry_task=entry.task,
         )
-        if configured != current_config:
+        if not prewarm_quality_satisfies(
+            _quality_identity(configured),
+            requested_identity,
+        ):
             skipped += 1
             continue
         _validate_description(store, description)
@@ -428,15 +450,17 @@ def install_declared_meld_resolution_prewarms(
 def find_installed_meld_resolution_branch(
     *,
     store: MemoryStore,
-    branch_key: str,
+    branch_key: str | None = None,
+    request_digest: str | None = None,
 ) -> MeldResolutionBranch | None:
-    """Find one declared exact branch installed for this Study Profile."""
+    """Find one exact request whose prepared quality satisfies this run."""
 
     registry = load_registry(store.store_dir)
-    if registry is None:
+    if registry is None or (branch_key is None and request_digest is None):
         return None
     current_config = configured_meld_cache_identity()
-    matches: list[MeldResolutionBranch] = []
+    requested_identity = _quality_identity(current_config)
+    matches: list[tuple[SemanticIdentity, MeldResolutionBranch]] = []
     for entry in registry.entries:
         if not entry.enabled or entry.operation != MELD_RESOLUTION_OPERATION:
             continue
@@ -446,7 +470,11 @@ def find_installed_meld_resolution_branch(
             entry_key=entry.key,
             entry_task=entry.task,
         )
-        if configured != current_config:
+        cached_identity = _quality_identity(configured)
+        if not prewarm_quality_satisfies(
+            cached_identity,
+            requested_identity,
+        ):
             continue
         try:
             _validate_description(store, description)
@@ -458,9 +486,18 @@ def find_installed_meld_resolution_branch(
             evidence=_installation_evidence(description, branches),
         ):
             continue
-        matches.extend(branch for branch in branches if branch.key == branch_key)
-    if len(matches) > 1:
+        matches.extend(
+            (cached_identity, branch)
+            for branch in branches
+            if (
+                branch.request_digest == request_digest
+                if request_digest is not None
+                else branch.key == branch_key
+            )
+        )
+    selected = highest_quality_candidates(matches)
+    if len(selected) > 1:
         raise StudyPrewarmRegistryError(
             "Multiple declared Meld branches match the same exact request."
         )
-    return matches[0] if matches else None
+    return selected[0] if selected else None

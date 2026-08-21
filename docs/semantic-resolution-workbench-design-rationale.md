@@ -91,8 +91,9 @@ warning-like yellow treatment.
 Operation labels such as EDIT, KEEP, or SUMMARIZE do not influence hunk
 calculation and the renderer never infers semantic equivalence. Consequently,
 Update continues to reject an exact no-op EDIT before presentation, while
-Sever may intentionally show `= KEEP` because unchanged inclusion in a newly
-created Result is an operation-owned decision.
+Sever may intentionally show `= KEEP` because retaining that Memory in the
+reviewed self-saved Source or other-saved Result is an operation-owned
+decision.
 
 Interactive Resolution rendering derives its content width from the current
 terminal on every projection. Viewer report rows, nested option boxes, seeded
@@ -437,18 +438,18 @@ candidate selection semantics, exact output, durable session digest, and final
 local application. Sharing the workbench does not make the setup screen or the
 saved-session listing common, and it does not relax Sever's rule that reviewed
 output is never transmitted by the Sever operation.
-The embedded Sever Impact is the exact proposed local Result and is explicitly
-labelled `SOURCE UNCHANGED`; Apply creates a new Context without editing the
-Source.
+The embedded Sever Impact is the exact proposed local Result and identifies
+`SELF-SAVE` or `OTHER-SAVE`. Self-save removes or edits reviewed Memories in
+the exact Source root; other-save creates a new Context without editing Source.
 It compares every Source Memory with its reviewed Result representation. KEEP
 renders one equality line; redaction, summary, reframe, and custom wording
 render a two-sided transition; FORGET renders only the Source-side `-` line.
-The directional location makes clear that FORGET omits material from Result
-while Source remains unchanged.
+In self-save, FORGET removes the Source Memory. In other-save, FORGET omits it
+from Result while Source remains unchanged.
 
 ### Save location before Apply
 
-Operations that create a distinct new local Result may supply one
+Operations that select a self- or other-save Result may supply one
 operation-owned `SAVE LOCATION` value to the common workbench. The shell
 renders it as a compact conditional frame between `ITEMS` and `TO DO`, outside
 the report Viewer, and returns one exact `CHANGE_DESTINATION` action from the

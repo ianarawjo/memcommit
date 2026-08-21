@@ -286,6 +286,44 @@ conversation.
   downscaling it to fit a compact preview. Never silently publish a no-color or
   reduced-size capture as evidence of the intended UI semantics.
 
+### Shared terminal semantic palette
+
+- Treat `memcommit.interfaces.console.theme` as the sole authored source of
+  semantic terminal colors shared by line-oriented CLI output and
+  prompt-toolkit TUI styles. A console or TUI adapter may own escape/style
+  mechanics, but must not restate a semantic hex value, RGB tuple, or parallel
+  operation-color table.
+- Classify visible command and effect labels through `SemanticColorRole` and
+  `semantic_action_role`. Keep CREATE/INIT and ADD blue, EMBED yellow, EDIT
+  green, REMOVE/DELETE red, UNDO/REVERT peach, REDO lavender, retained history
+  brown, source-ownership GRANT identity neutral white, available
+  access/capabilities teal, the Switch Context-category GRANT marker green,
+  and References mauve. Add aliases and narrow presentation roles to the
+  shared classifier instead of parsing rendered report text or adding
+  command-local color constants.
+- A mixed semantic command such as Update, Meld, or Atomize has no inferred
+  single action color. Keep the command label neutral and color its typed child
+  ADD, EDIT, or REMOVE effects. Styling must not imply a disposition that the
+  operation model does not prove.
+- Color only the shortest trusted semantic token: command/action, effect,
+  Grant ownership, capability cluster, or Reference kind. Keep timestamps,
+  UIDs, descriptions, report chrome, explanatory prose, and Memory bodies on
+  their existing neutral or Memory-object styles. Keyboard focus temporarily
+  overrides semantic foregrounds so one control never appears doubly focused.
+- Preserve text as the complete information channel. `--plain`, piped output,
+  `NO_COLOR`, screenshots converted to text, and terminals without true color
+  must retain the same labels, ordering, symbols, and safety boundaries. Tests
+  must cover both semantic role selection and ANSI-free text equivalence.
+- Keep the palette, adapters, tests, and
+  `docs/terminal-semantic-color-design-rationale.md` consistent whenever a
+  semantic role or alias changes. Do not repurpose an established role merely
+  to make an unrelated status visually distinct.
+- Preserve the Switch Context picker's narrow categorical contract: color only
+  `GRANT`, `VIA EMBED`, and `QUERY ONLY`; leave its public name and compact
+  capability summary neutral. This navigation category is
+  `NAVIGATION_GRANT`, not the source-projection `GRANT` ownership role used by
+  operation workbenches and static authority reports.
+
 ### Shared terminal interaction mechanics
 
 - Before adding operation-specific TUI state, rendering, focus traversal,

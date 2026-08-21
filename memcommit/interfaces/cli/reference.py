@@ -1,4 +1,4 @@
-"""CLI adapter for immutable Memory snapshot References."""
+"""CLI composition for immutable Memory or Context References."""
 
 from __future__ import annotations
 
@@ -6,13 +6,48 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.context_targeting.loading import (
+    resolve_local_direct_memory_locator,
+)
+from memcommit.context_targeting.presets import (
+    ContextScopePreset,
+    resolve_scope_preset,
+)
+from memcommit.context_targeting.resolution import (
+    is_direct_memory_locator_operand,
+)
 from memcommit.interfaces.console.text import display_escape_text
-from memcommit.reference_application import ReferenceRequest, ReferenceResult
-from memcommit.reference_runtime import execute_reference
+from memcommit.interfaces.console.terminal import is_interactive_terminal
+from memcommit.interfaces.tui.operations.reference import choose_reference_setup
+from memcommit.reference_application import (
+    ContextReferenceRequest,
+    ContextReferenceResult,
+    FrozenContextReferencePlan,
+    FrozenReferencePlan,
+    ReferenceRequest,
+    ReferenceResult,
+    run_context_reference,
+    run_reference,
+)
+from memcommit.reference_runtime import MemoryStoreReferencePort
 from memcommit.store import MemoryStore
 
 
-def render_reference_plain(result: ReferenceResult) -> None:
+def render_reference_plain(
+    result: ReferenceResult | ContextReferenceResult,
+) -> None:
+    if isinstance(result, ContextReferenceResult):
+        scope = "recursive" if result.include_descendants else "direct"
+        typer.secho(
+            f"Referenced {scope} Context snapshot "
+            f"'{display_escape_text(result.source_name)}' "
+            f"({result.context_count} Context"
+            f"{'s' if result.context_count != 1 else ''}) as "
+            f"[{result.reference_uid[:8]}] in "
+            f"'{display_escape_text(result.into_name)}'.",
+            fg=typer.colors.GREEN,
+        )
+        return
     typer.secho(
         f"Referenced snapshot [{result.memory_uid[:8]}] from "
         f"'{display_escape_text(result.source_name)}' as "
@@ -23,30 +58,168 @@ def render_reference_plain(result: ReferenceResult) -> None:
 
 
 def cmd(
-    selector: Annotated[
-        str,
-        typer.Argument(help="UID (or unambiguous prefix) of the Source Memory"),
-    ],
+    item: Annotated[
+        Optional[str],
+        typer.Argument(
+            help=(
+                "Source Context, unique local Memory UID/prefix, or CONTEXT:UID; "
+                "omit all operands in a terminal for interactive setup"
+            ),
+        ),
+    ] = None,
     source_name: Annotated[
-        str,
-        typer.Option("--from", help="Context that directly owns the Source Memory"),
-    ],
+        Optional[str],
+        typer.Option(
+            "--from",
+            metavar="SOURCE_CONTEXT",
+            help="Compatibility Source Context for an explicit Memory selector",
+        ),
+    ] = None,
     into: Annotated[
         Optional[str],
         typer.Option(
             "--into",
+            metavar="TARGET_CONTEXT",
             help="Local Context to retain the snapshot (defaults to current)",
         ),
     ] = None,
+    direct: Annotated[
+        bool,
+        typer.Option(
+            "-d",
+            "--direct",
+            help="Snapshot only the selected Context's direct frame",
+        ),
+    ] = False,
+    recursive: Annotated[
+        bool,
+        typer.Option(
+            "-r",
+            "--recursive",
+            help="Snapshot descendants and local embedded Contexts",
+        ),
+    ] = False,
 ) -> None:
     try:
-        result = execute_reference(
-            ReferenceRequest(
-                memory_selector=selector,
-                source_locator=source_name,
+        scope = resolve_scope_preset(
+            direct=direct,
+            recursive=recursive,
+            default=ContextScopePreset.DIRECT,
+        )
+    except (TypeError, ValueError) as error:
+        typer.secho(
+            f"Error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+    store = MemoryStore()
+    port = MemoryStoreReferencePort.capture(store)
+    frozen_plan: FrozenReferencePlan | FrozenContextReferencePlan | None = None
+    if item is None:
+        if source_name is not None or into is not None or direct or recursive:
+            typer.secho(
+                "Error: run 'mem reference' with no operands for interactive "
+                "setup, or pass a Context or Memory item.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(2)
+        if not is_interactive_terminal():
+            typer.secho(
+                "Error: provide a Source Context, MEMORY, or CONTEXT:MEMORY "
+                "outside a terminal; run bare 'mem reference' in a terminal "
+                "for interactive setup.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        try:
+            frozen_plan = choose_reference_setup(port)
+        except (
+            FileNotFoundError,
+            OSError,
+            RuntimeError,
+            TypeError,
+            ValueError,
+        ) as error:
+            typer.secho(
+                f"Error: {display_escape_text(str(error))}",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        if frozen_plan is None:
+            typer.echo("Reference cancelled — no Context was changed.")
+            return
+        request = frozen_plan.request
+    else:
+        try:
+            memory_mode = is_direct_memory_locator_operand(
+                item,
+                explicit_context=source_name,
+            )
+            if memory_mode:
+                if direct or recursive:
+                    typer.secho(
+                        "Error: --direct/-d and --recursive/-r apply only to a "
+                        "Context Reference; Memory Reference is always one exact "
+                        "Memory.",
+                        fg=typer.colors.RED,
+                        err=True,
+                    )
+                    raise typer.Exit(2)
+                memory_target = resolve_local_direct_memory_locator(
+                    store,
+                    item,
+                    current=port.current_context_name,
+                    explicit_context=source_name,
+                )
+            else:
+                memory_target = None
+        except (FileNotFoundError, OSError, TypeError, ValueError) as error:
+            typer.secho(
+                f"Error: {display_escape_text(str(error))}",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+
+        if memory_target is not None:
+            request = ReferenceRequest(
+                memory_selector=memory_target.memory_uid,
+                source_locator=memory_target.context_name,
                 into_locator=into,
-            ),
-            store=MemoryStore(),
+            )
+        else:
+            recursive_scope = scope is ContextScopePreset.RECURSIVE
+            request = ContextReferenceRequest(
+                source_locator=item,
+                into_locator=into,
+                include_descendants=recursive_scope,
+                follow_embeds=recursive_scope,
+            )
+    try:
+        result = (
+            run_context_reference(
+                request,
+                port=port,
+                frozen_plan=(
+                    frozen_plan
+                    if isinstance(frozen_plan, FrozenContextReferencePlan)
+                    else None
+                ),
+            )
+            if isinstance(request, ContextReferenceRequest)
+            else run_reference(
+                request,
+                port=port,
+                frozen_plan=(
+                    frozen_plan
+                    if isinstance(frozen_plan, FrozenReferencePlan)
+                    else None
+                ),
+            )
         )
     except (
         FileNotFoundError,

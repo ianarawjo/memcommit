@@ -2,13 +2,16 @@
 
 from __future__ import annotations
 
-import shlex
 from typing import Annotated, Optional
 
 import typer
 
-import memcommit.ops as ops
-from memcommit.context import Memory
+from memcommit.context_targeting.loading import (
+    resolve_local_direct_memory_locator,
+)
+from memcommit.context_targeting.resolution import (
+    is_direct_memory_locator_operand,
+)
 from memcommit.embed_application import (
     EmbedPlacement,
     EmbedRequest,
@@ -28,42 +31,6 @@ from memcommit.store import MemoryStore
 
 def _interactive_terminal() -> bool:
     return is_interactive_terminal()
-
-
-def _memory_embed_source_guidance(
-    port: MemoryStoreEmbedPort,
-    *,
-    selector: str,
-    into_locator: str,
-) -> str | None:
-    """Explain an omitted ``--from`` only when the current item is a Memory."""
-
-    current_name = port.current_context_name
-    if current_name is None or not port.store.context_exists(current_name):
-        return None
-    try:
-        item = ops.resolve(port.store.load_direct(current_name), selector)
-    except (KeyError, OSError, ValueError):
-        return None
-    if not isinstance(item, Memory):
-        return None
-    command = " ".join(
-        shlex.quote(part)
-        for part in (
-            "mem",
-            "embed",
-            selector,
-            "--from",
-            current_name,
-            "--into",
-            into_locator,
-        )
-    )
-    return (
-        f"{selector!r} identifies Memory [{item.uid[:8]}] in current Context "
-        f"{current_name!r}. Memory Embed requires an explicit Source Context; "
-        f"run: {command}"
-    )
 
 
 def _gap_description(placement: EmbedPlacement) -> str:
@@ -105,7 +72,7 @@ def cmd(
         Optional[str],
         typer.Argument(
             help=(
-                "Context name to embed, or Source Memory UID/prefix with --from; "
+                "Context, unique local Memory UID/prefix, or CONTEXT:UID; "
                 "omit with all options in a terminal for interactive setup"
             )
         ),
@@ -114,12 +81,15 @@ def cmd(
         Optional[str],
         typer.Option(
             "--from",
-            help="Direct Source Context; its presence selects Memory Embed",
+            help="Compatibility Source Context for an explicit Memory selector",
         ),
     ] = None,
     into: Annotated[
         Optional[str],
-        typer.Option("--into", help="Target Context whose direct order changes"),
+        typer.Option(
+            "--into",
+            help="Target Context whose direct order changes (defaults to current)",
+        ),
     ] = None,
     before: Annotated[
         Optional[str],
@@ -156,16 +126,16 @@ def cmd(
         ):
             typer.secho(
                 "Error: run 'mem embed' with no operands for interactive setup, "
-                "or pass an item together with --into.",
+                "or pass an item for the non-interactive form.",
                 fg=typer.colors.RED,
                 err=True,
             )
             raise typer.Exit(2)
         if not _interactive_terminal():
             typer.secho(
-                "Error: an item and --into are required outside a terminal; "
-                "for example: mem embed CHILD --into CONTEXT, or mem embed "
-                "MEMORY --from SOURCE --into CONTEXT.",
+                "Error: an item is required outside a terminal; for example: "
+                "mem embed CHILD, mem embed MEMORY, or mem embed CONTEXT:MEMORY. "
+                "Pass --into to override the current Target Context.",
                 fg=typer.colors.RED,
                 err=True,
             )
@@ -184,29 +154,46 @@ def cmd(
             return
         request = frozen_plan.request
     else:
-        if into is None:
+        target_locator = into or port.current_context_name
+        if target_locator is None:
             typer.secho(
-                "Error: --into is required when an item is supplied.",
+                "Error: no current Context. Pass --into or initialize a Context first.",
                 fg=typer.colors.RED,
                 err=True,
             )
-            raise typer.Exit(2)
-        request = (
-            MemoryEmbedRequest(
-                memory_selector=a,
-                source_locator=source_name,
-                into_locator=into,
-                before=before,
-                after=after,
+            raise typer.Exit(1)
+        try:
+            if is_direct_memory_locator_operand(
+                a,
+                explicit_context=source_name,
+            ):
+                memory_target = resolve_local_direct_memory_locator(
+                    port.store,
+                    a,
+                    current=port.current_context_name,
+                    explicit_context=source_name,
+                )
+                request = MemoryEmbedRequest(
+                    memory_selector=memory_target.memory_uid,
+                    source_locator=memory_target.context_name,
+                    into_locator=target_locator,
+                    before=before,
+                    after=after,
+                )
+            else:
+                request = EmbedRequest(
+                    child_locator=a,
+                    into_locator=target_locator,
+                    before=before,
+                    after=after,
+                )
+        except (FileNotFoundError, OSError, TypeError, ValueError) as error:
+            typer.secho(
+                f"Error: {display_escape_text(str(error))}",
+                fg=typer.colors.RED,
+                err=True,
             )
-            if source_name is not None
-            else EmbedRequest(
-                child_locator=a,
-                into_locator=into,
-                before=before,
-                after=after,
-            )
-        )
+            raise typer.Exit(1)
 
     try:
         if isinstance(request, MemoryEmbedRequest):
@@ -233,23 +220,6 @@ def cmd(
         TypeError,
         ValueError,
     ) as error:
-        if (
-            isinstance(request, EmbedRequest)
-            and isinstance(error, FileNotFoundError)
-            and str(error) == f"Context {request.child_locator!r} does not exist."
-        ):
-            guidance = _memory_embed_source_guidance(
-                port,
-                selector=request.child_locator,
-                into_locator=request.into_locator,
-            )
-            if guidance is not None:
-                typer.secho(
-                    f"Error: {display_escape_text(guidance)}",
-                    fg=typer.colors.RED,
-                    err=True,
-                )
-                raise typer.Exit(2)
         typer.secho(
             f"Error: {display_escape_text(str(error))}",
             fg=typer.colors.RED,

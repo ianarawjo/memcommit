@@ -1,0 +1,9 @@
+PTY 180 52                                                                                                                                                                          
+Rationale [3139e3fe] · rationale/origin                                                                                                                                             
+                                                                                                                                                                                    
+MEMORY                                                                                                                                                                              
+  Um...                                                                                                                                                                             
+                                                                                                                                                                                    
+PROVENANCE                                                                                                                                                                          
+  “Um...” came from between an instruction and its example. Sentence chunking isolated it; undo removed it, redo restored it, and remove deleted it.                                
+SCENARIO characters RECEIPT · LIMIT 150 CHARACTERS · PRESS V TO VERIFY

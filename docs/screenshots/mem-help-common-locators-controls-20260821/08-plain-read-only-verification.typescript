@@ -1,0 +1,4 @@
+52 180
+[0m[1m[31medit [0m             - Directly replace the content of one or more Memories selected by UID or prefix.
+[0m[1m[31membed [0m            - Place a live link to one Memory or Context inside a local Target while retaining Source ownership.
+[0m[1m[31mreference [0m        - Copy one Source Memory version or direct/recursive Context scope into a Target as an immutable read-only snapshot.

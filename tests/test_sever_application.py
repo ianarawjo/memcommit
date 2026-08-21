@@ -834,6 +834,91 @@ def test_real_store_apply_rolls_back_result_when_session_receipt_save_fails(
     assert SeverSessionStore(store).load(analysis.session.uid) == analysis.session
 
 
+def test_real_store_destination_change_selects_self_save_but_rejects_other_existing(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = ops.init("destination/source")
+    ops.add(source, "Keep only the access requirement.")
+    criteria = ops.init("destination/criteria")
+    ops.add(criteria, "Minimize unrelated personal detail.")
+    store.create_context(source)
+    store.create_context(criteria)
+    analysis = execute_sever_analysis(
+        SeverAnalysisRequest(
+            source_locator=source.name,
+            criteria_locator=criteria.name,
+            output_name="destination/result",
+            source_include_descendants=False,
+        ),
+        store=store,
+        provider_factory=_Provider,
+    )
+    started = execute_sever_session_start(analysis, store=store)
+
+    self_save = execute_sever_session_destination_change(
+        SeverDestinationRequest(
+            snapshot=started.snapshot,
+            output_name=source.name,
+        ),
+        store=store,
+    )
+
+    assert self_save.session.save_mode == "SELF_SAVE"
+    with pytest.raises(SeverApplicationError, match="already exists"):
+        execute_sever_session_destination_change(
+            SeverDestinationRequest(
+                snapshot=self_save,
+                output_name=criteria.name,
+            ),
+            store=store,
+        )
+
+
+def test_real_store_self_save_rolls_back_source_when_session_receipt_save_fails(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = ops.init("rollback-self/source")
+    ops.add(source, "Keep only the access requirement.")
+    criteria = ops.init("rollback-self/criteria")
+    ops.add(criteria, "Minimize unrelated personal detail.")
+    store.create_context(source)
+    store.create_context(criteria)
+    original = store.load_direct(source.name).to_dict()
+    analysis = execute_sever_analysis(
+        SeverAnalysisRequest(
+            source_locator=source.name,
+            criteria_locator=criteria.name,
+            output_name=source.name,
+            source_include_descendants=False,
+        ),
+        store=store,
+        provider_factory=_Provider,
+    )
+    started = execute_sever_session_start(analysis, store=store)
+
+    def fail_replace(self, session, *, expected_version):
+        raise RuntimeError("self-save receipt write failed")
+
+    monkeypatch.setattr(
+        sever_runtime.MemoryStoreSeverSessionRepository,
+        "replace",
+        fail_replace,
+    )
+
+    with pytest.raises(RuntimeError, match="self-save receipt write failed"):
+        execute_sever_session_apply(
+            SeverPersistedApplyRequest(snapshot=started.snapshot),
+            store=store,
+        )
+
+    assert store.load_direct(source.name).to_dict() == original
+    assert store.list_checkpoints(source.name) == []
+    assert SeverSessionStore(store).load(analysis.session.uid) == analysis.session
+
+
 def test_real_store_recovers_exact_result_left_before_session_receipt(
     isolated_store,
 ):
@@ -872,6 +957,46 @@ def test_real_store_recovers_exact_result_left_before_session_receipt(
     assert store.load_direct("recovery/result").uid == (
         orphaned_application.output_context_uid
     )
+
+
+def test_real_store_recovers_exact_self_save_left_before_session_receipt(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = ops.init("recovery-self/source")
+    source_memory = ops.add(source, "Keep only the access requirement.")
+    criteria = ops.init("recovery-self/criteria")
+    ops.add(criteria, "Minimize unrelated personal detail.")
+    store.create_context(source)
+    store.create_context(criteria)
+    analysis = execute_sever_analysis(
+        SeverAnalysisRequest(
+            source_locator=source.name,
+            criteria_locator=criteria.name,
+            output_name=source.name,
+            source_include_descendants=False,
+        ),
+        store=store,
+        provider_factory=_Provider,
+    )
+    started = execute_sever_session_start(analysis, store=store)
+    orphaned = execute_sever_apply(
+        SeverApplyRequest(started.snapshot.session),
+        store=store,
+    )
+    orphaned_application = orphaned.session.application
+    assert orphaned_application is not None
+
+    recovered = execute_sever_session_apply(
+        SeverPersistedApplyRequest(snapshot=started.snapshot),
+        store=store,
+    )
+
+    assert recovered.created is False
+    assert recovered.snapshot.session.application == orphaned_application
+    self_saved = store.load_direct(source.name)
+    assert self_saved.uid == source.uid
+    assert tuple(self_saved.memories) == (source_memory.uid,)
 
 
 def test_real_store_all_keep_review_still_creates_result_and_checkpoint(

@@ -335,9 +335,7 @@ def test_checkpoint_rows_do_not_infer_creation_origin_from_oldest_entry():
     )
 
     assert rows[0].label == "created"
-    assert [badge.text for badge in rows[0].badges] == [
-        "CHECKPOINT plain-cr"
-    ]
+    assert [badge.text for badge in rows[0].badges] == ["CHECKPOINT plain-cr"]
 
 
 def test_revert_version_rows_keep_every_exact_checkpoint_selectable():
@@ -465,9 +463,7 @@ def test_restore_row_labels_checkpoint_receipt_and_source_without_uid_aliases():
 
 
 def test_checkpoint_identity_reuses_merge_command_unit_contract():
-    merge_args = {
-        "merge_tree": {"version": 2, "operation_uid": "merge-operation-uid"}
-    }
+    merge_args = {"merge_tree": {"version": 2, "operation_uid": "merge-operation-uid"}}
 
     assert diff_browser._checkpoint_operation_identity(
         {"uid": "checkpoint-a", "command": "merge", "args": merge_args}

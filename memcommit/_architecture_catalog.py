@@ -110,7 +110,10 @@ def _literal_all(tree: ast.Module) -> tuple[str, ...] | None:
         if not isinstance(node, (ast.Assign, ast.AnnAssign)):
             continue
         targets = node.targets if isinstance(node, ast.Assign) else [node.target]
-        if not any(isinstance(target, ast.Name) and target.id == "__all__" for target in targets):
+        if not any(
+            isinstance(target, ast.Name) and target.id == "__all__"
+            for target in targets
+        ):
             continue
         value = node.value
         if isinstance(value, (ast.List, ast.Tuple, ast.Set)) and all(
@@ -362,7 +365,9 @@ class _CallVisitor(ast.NodeVisitor):
     def _caller(self) -> str:
         if not self.stack:
             return f"{self.source.name}:<module>"
-        return f"{self.source.name}:{_qualified_name(self.stack[:-1], self.stack[-1][0])}"
+        return (
+            f"{self.source.name}:{_qualified_name(self.stack[:-1], self.stack[-1][0])}"
+        )
 
     def _resolve(self, node: ast.AST) -> str | None:
         if isinstance(node, ast.Name):
@@ -476,7 +481,9 @@ def _callables(modules: tuple[_SourceModule, ...]) -> tuple[CallableRecord, ...]
             )
         )
     return tuple(
-        sorted(result, key=lambda value: (value.module, value.line, value.qualified_name))
+        sorted(
+            result, key=lambda value: (value.module, value.line, value.qualified_name)
+        )
     )
 
 
@@ -510,9 +517,7 @@ def _expression_target(
         return ast.unparse(node)
     root, *attributes = parts
     if root in symbol_aliases:
-        return symbol_aliases[root] + (
-            "." + ".".join(attributes) if attributes else ""
-        )
+        return symbol_aliases[root] + ("." + ".".join(attributes) if attributes else "")
     if root in module_aliases:
         combined = [*module_aliases[root].split("."), *attributes]
         for split in range(len(combined), 0, -1):
@@ -600,12 +605,17 @@ def _client_methods(repository: Path) -> dict[str, set[str]]:
 
 _OPERATION_DISCOVERY_TOKENS = {
     "checkout": ("checkout", "branch", "switch"),
-    # Semantic Dedun retains version-1 finder, Consolidate, and Dedup module
+    # Complete Dedun retains legacy finder, Consolidate, and Dedup module
     # names while exact Dedup owns explicit exact_dedup modules. Keeping the
     # mapping authored prevents the evidence ledger from conflating the routes.
     "dedun": ("dedun", "consolidate", "find_duplicates", "dedup"),
     "dedup": ("exact_dedup",),
     "eval": ("eval", "semantic_eval"),
+    "find-duplicates": (
+        "find_exact_duplicates",
+        "exact_duplicates",
+        "exact_dedup",
+    ),
     "find-redundancies": (
         "find_redundancies",
         "find_duplicates",
@@ -642,14 +652,18 @@ def _operation_package_matches(module: str, tokens: tuple[str, ...]) -> bool:
 def _matrix_matches(path: Path, operation: str, tokens: tuple[str, ...]) -> bool:
     stem = path.stem.replace("-", "_")
     canonical = operation.replace("-", "_")
-    if operation == "find" and stem.startswith("find_redundancies_"):
-        # Literal Find owns the deliberately joint Find/Search matrix, but the
-        # longer quality-finder name is a separate canonical Help operation.
+    if operation != "find-duplicates" and stem.startswith("find_duplicates_"):
+        # The semantic implementation retains a duplicate-named module, but
+        # operation evidence follows the independent public command identity.
+        return False
+    if operation != "find-redundancies" and stem.startswith("find_redundancies_"):
+        # Literal Find and exact Find Duplicates must not absorb the broader
+        # quality-finder evidence merely because their names share a prefix.
         return False
     if stem == canonical or stem.startswith(canonical + "_"):
         return True
     if operation == "dedun":
-        # Its implementation modules retain version-1 aliases, but evidence
+        # Its implementation modules retain compatibility names, but evidence
         # files are authored under canonical operation names and must not
         # cross-link with exact Dedup.
         return False
@@ -697,8 +711,10 @@ def _operation_classifications(
                     raise ValueError(f"{path}: invalid {state} evidence record")
                 evidence = evidence_record.get("evidence")
                 reason = evidence_record.get("reason")
-                if not isinstance(evidence, list) or not evidence or not all(
-                    isinstance(item, str) for item in evidence
+                if (
+                    not isinstance(evidence, list)
+                    or not evidence
+                    or not all(isinstance(item, str) for item in evidence)
                 ):
                     raise ValueError(f"{path}: {state}/{name} requires evidence paths")
                 if not isinstance(reason, str) or not reason.strip():
@@ -746,10 +762,7 @@ def _operation_routes(
                 module
                 for module in module_names
                 if (
-                    (
-                        module.count(".") == 1
-                        and _module_owner_matches(module, tokens)
-                    )
+                    (module.count(".") == 1 and _module_owner_matches(module, tokens))
                     or _operation_package_matches(module, tokens)
                 )
                 and (
@@ -901,7 +914,9 @@ def render_summary_json(snapshot: CatalogSnapshot) -> str:
 
     summary = {
         "callable_count": len(snapshot.callables),
-        "callable_kinds": dict(sorted(Counter(item.kind for item in snapshot.callables).items())),
+        "callable_kinds": dict(
+            sorted(Counter(item.kind for item in snapshot.callables).items())
+        ),
         "module_count": len(snapshot.source_modules),
         "operation_count": len(snapshot.operations),
         "operation_observed_shapes": dict(

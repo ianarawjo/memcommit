@@ -47,6 +47,7 @@ from memcommit.ground_distill import (
     freeze_ground_distill,
 )
 from memcommit.interfaces.cli.distill import distill_result_text
+from memcommit.interfaces.cli.semantic_add import render_applied_memory_preview
 from memcommit.interfaces.console import (
     ConsoleModeError,
     SystemTerminalCapabilities,
@@ -251,13 +252,14 @@ def cmd(
                 bold=True,
             )
             typer.echo(f"EFFECTS · ADD {receipt.count} RULES")
-            typer.echo(f"RECEIPT · {receipt.checkpoint_uid}")
-            typer.echo(f"CHECKPOINT · {receipt.checkpoint_uid}")
-            typer.echo(
-                "REVIEW · mem review distill --receipt "
-                f"{receipt.checkpoint_uid}"
+            render_applied_memory_preview(
+                receipt.memory_uids,
+                tuple(rule.content for rule in prepared.result.analysis.rules),
             )
-            typer.echo("RECOVERY · mem undo")
+            typer.echo(
+                f"REVIEW · mem review distill --receipt {receipt.checkpoint_uid}"
+            )
+            typer.echo("UNDO · mem undo")
             return
         frozen_ground: FrozenGroundDistill | FrozenGroundWorkspaceDistill | None = (
             freeze_ground_distill(store, ground_name=ground)
@@ -415,13 +417,14 @@ def cmd(
             )
             typer.echo(f"EFFECTS · ADD {len(receipt.result_memory_uids)} RULES")
             typer.echo("SOURCE · UNCHANGED")
-            typer.echo(f"RECEIPT · {receipt.checkpoint_uid}")
-            typer.echo(f"CHECKPOINT · {receipt.checkpoint_uid}")
-            typer.echo(
-                "REVIEW · mem review distill --receipt "
-                f"{receipt.checkpoint_uid}"
+            render_applied_memory_preview(
+                receipt.result_memory_uids,
+                tuple(rule.content for rule in result.analysis.rules),
             )
-            typer.echo("RECOVERY · mem undo")
+            typer.echo(
+                f"REVIEW · mem review distill --receipt {receipt.checkpoint_uid}"
+            )
+            typer.echo("UNDO · mem undo")
         elif save_as is not None:
             typer.echo(
                 f"RESULT · {display_escape_text(save_as)} · NOT CREATED · "

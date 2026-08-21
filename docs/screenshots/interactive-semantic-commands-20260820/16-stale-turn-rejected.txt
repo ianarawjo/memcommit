@@ -1,0 +1,6 @@
+PTY · 180 columns × 52 rows                                                                                                                                                         
+$ mem update --from capture/source --to capture/target --comment Use a narrower claim. --expect-session 0000000000000000000000000000000000000000000000000000000000000000            
+Update error: The staged Update session changed after this command was reviewed. Reopen it and rebuild the turn command.                                                            
+STALE TURN RECEIPT · REJECTED BEFORE PROVIDER                                                                                                                                       
+SAVED SESSION UNCHANGED · True                                                                                                                                                      
+TARGET CONTEXT UNCHANGED · CHECKPOINTS 0

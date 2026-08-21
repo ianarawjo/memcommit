@@ -1,0 +1,17 @@
+LIVE COLOR PTY · 52 180
+CURRENT CONTEXT · notes
+
+$ mem log
+[1mLog for 'notes':[0m
+
+[1mDIRECT COMMANDS · notes[0m
+  [38;2;201;173;147m[1m[checkpoint][0m [CHECKPOINT bbc4f0a6]  2026-08-20 08:12 · reviewed semantic palette
+  [38;2;238;212;159m[1m[embed][0m [CHECKPOINT 9a54b175]  2026-08-20 08:12 · child notes/embedded · into notes
+  [38;2;183;189;248m[1m[redo][0m [CHECKPOINT 07cb0648] [38;2;201;173;147m[1m[RECEIPT 98944d80][0m [1m[SOURCE remove 7e4b65b4][0m  2026-08-20 08:12 · reapplied mem remove
+  [38;2;245;169;127m[1m[undo][0m [CHECKPOINT f3af8de0] [38;2;201;173;147m[1m[RECEIPT 0faf40e2][0m [1m[SOURCE remove 7e4b65b4][0m  2026-08-20 08:12 · restored mem remove
+  [38;2;237;135;150m[1m[remove][0m [CHECKPOINT 7e4b65b4] [38;2;202;211;245m[MEMORY bf491819][0m  2026-08-20 08:12 · removed "Review the colored static Log contract."
+  [38;2;166;218;149m[1m[edit][0m [CHECKPOINT f98b53d4] [38;2;202;211;245m[MEMORY bf491819][0m  2026-08-20 08:12 · content changed · Memory identity preserved
+  [38;2;138;173;244m[1m[add][0m [CHECKPOINT 3bdd2364] [38;2;202;211;245m[MEMORY bf491819][0m  2026-08-20 08:12 · created "Review the static Log contract."
+  [38;2;138;173;244m[1m[init][0m [CHECKPOINT b8bed86d] [CONTEXT 4b400d33]  2026-08-20 08:12 · baseline for CONTEXT notes · not counted as a command
+
+LOG COMPLETE · NO INTERACTIVE UI · CURRENT UNCHANGED · notes

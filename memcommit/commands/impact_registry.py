@@ -19,6 +19,7 @@ class ImpactLifecycle(str, Enum):
 
     PREPARE_PROCESS_LOCAL = "PREPARE_PROCESS_LOCAL"
     PREPARE_DURABLE = "PREPARE_DURABLE"
+    PREPARE_OR_OPEN = "PREPARE_OR_OPEN"
     OPEN_SAVED = "OPEN_SAVED"
 
 
@@ -161,8 +162,8 @@ IMPACT_ROUTES = ImpactRouteRegistry(
         ),
         ImpactRoute(
             "update",
-            ImpactLifecycle.OPEN_SAVED,
-            "Inspect one saved Update plan.",
+            ImpactLifecycle.PREPARE_OR_OPEN,
+            "Preview a directional Update or inspect one saved Update plan.",
         ),
     ),
     deferred=(

@@ -49,4 +49,4 @@
                                                                                                                                                                                     
                                                                                                                                                                                    v
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
- ↑↓ move  ←→ expand  A expand all  m hide Memories here  M hide all Memories  y copy Context  Y copy visible branch  Enter select  q cancel · 2/8 · 9 selectable
+ ↑↓ move  ←→ expand  A expand all  m THIS Context: hide items · M EVERY Context: hide items  y copy Context  Y copy visible branch  Enter select  q cancel · 2/8 · 9 selectable

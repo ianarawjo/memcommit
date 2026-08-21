@@ -155,7 +155,7 @@ def test_conflict_handoff_requires_explicit_delete_guidance():
         allow_delete=True,
         guidance="The obsolete schedule may be retired.",
     )
-    assert request.requested_effects == ("UPDATE", "DELETE")
+    assert request.requested_effects == ("UPDATE", "CREATE", "DELETE")
 
 
 def test_cross_context_conflict_does_not_silently_enter_resolve_v1():

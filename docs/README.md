@@ -115,6 +115,9 @@ classification, and stale generated output.
   defines canonical names, explicit relative existing-Context locators, the
   one-current-snapshot rule, and the rollout boundary between lookup operands
   and newly declared names.
+- [`context-listing-design-rationale.md`](context-listing-design-rationale.md)
+  separates terminal-independent `list` and `contexts` reports from bare
+  Switch's interactive Profile navigation.
 - [`mem-embed-placement-design-rationale.md`](mem-embed-placement-design-rationale.md)
   defines explicit before/after direct-item anchors, the flagless Child/Into/gap
   form, exact-command review, and neighbor-bound concurrency checks.

@@ -1,4 +1,5 @@
 """Location-first checkpoint projection for saved Update Diff inspection."""
+
 from __future__ import annotations
 
 import json
@@ -55,8 +56,7 @@ def test_location_annotation_groups_memory_operations_under_update_action():
 
     assert annotations == {
         "target/building-access": (
-            "update · 1 change · 1 EDIT · 0 ADD · 0 REMOVE · "
-            "NOT CHECKPOINTED"
+            "update · 1 change · 1 EDIT · 0 ADD · 0 REMOVE · NOT CHECKPOINTED"
         )
     }
 
@@ -112,6 +112,7 @@ def test_checkpoint_detail_keeps_update_action_and_red_then_green_transition():
 
     assert "ACTION      update" in rendered
     assert "UPDATE · EDIT Memory" in rendered
+    assert ("class:semantic.edit", "EDIT") in fragments
     assert rendered.index(" - Use the blue entrance.") < rendered.index(
         " + Use the green entrance."
     )

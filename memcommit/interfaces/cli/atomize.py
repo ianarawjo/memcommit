@@ -47,6 +47,7 @@ def render_atomize_apply_result(
     created: bool,
     unresolved_at_apply_count: int,
     recovered_application: bool = False,
+    exact_prewarm: bool = False,
 ) -> None:
     """Render one typed application result without owning its execution."""
 
@@ -59,6 +60,8 @@ def render_atomize_apply_result(
         f"EFFECTS · SPLIT {result.split_count} · "
         f"CHILDREN {result.child_count} · KEEP {result.preserved_count}"
     )
+    if exact_prewarm:
+        typer.echo("ANALYSIS · EXACT PREWARM · PROVIDER NOT CALLED")
     if unresolved_at_apply_count:
         typer.secho(
             f"JUDGMENTS · {unresolved_at_apply_count} unresolved "

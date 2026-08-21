@@ -31,8 +31,8 @@ Surface. It also records the shared nonfatal clipboard-failure boundary.
 | `02-query-question-entered.png` | Type `What changed during construction?` | The question contains lowercase characters normally; no copy binding fires in input | None |
 | `03-query-answer-body-focused.png` | `Enter` | Frozen Query completes; Answer body is the first typed focus stop | None |
 | `04-query-answer-body-copied.png` | `y` | Footer confirms only the Answer body was copied | None |
-| `05-query-reference-focused.png` | `Down` | Reference 1 owns the shared blue focus; prior receipt clears | None |
-| `06-query-reference-copied.png` | `y` | Footer confirms the complete focused Reference block was copied | None |
+| `05-query-reference-focused.png` | `Down` | Compact Reference row 1 owns the shared blue focus with its exact Context visible; prior receipt clears | None |
+| `06-query-reference-copied.png` | `y` | Footer confirms the complete one-line focused Reference row was copied | None |
 | `07-query-complete-answer-copied.png` | `Y` | Footer confirms the complete body-plus-References document was copied | None |
 | `08-query-read-only-verification.png` | `Ctrl-C` | Three distinct payloads are printed; no session or Source was changed | None |
 | `09-query-copy-failed.png` | Launch failure Query, type question, `Enter`, `y` | Simulated adapter failure stays in Answer as `COPY FAILED` | None |
@@ -50,3 +50,5 @@ Query's complete copy comes from its typed `FindAnswerReferenceDocument`, not
 from reparsing rendered terminal text. Find's complete copy uses its stable
 grouped renderer over the frozen response. Neither includes viewport wrapping,
 focus styles, checkboxes, or a structured mutation clipboard stage.
+Query repeats provenance in every compact `[N] content — UID prefix, Context
+alias` row because consecutive References may come from different Sources.

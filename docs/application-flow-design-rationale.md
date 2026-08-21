@@ -156,8 +156,11 @@ inside the existing operation dispatcher.
   authority checks, CAS, rollback, checkpoint, and receipt implementations.
 - Undo and Redo continue to consume Update checkpoint receipts; the shared
   flow neither implements nor weakens recovery.
-- Sever keeps its Source unchanged, require-new output rule, result checkpoint,
-  saved-session CAS, exact compensation, and interrupted-Apply recovery.
+- Sever keeps its `SELF-SAVE` versus `OTHER-SAVE` location rule: self-save
+  updates one exact local Source identity, while other-save keeps Source
+  unchanged and publishes a require-new Result. Both routes retain their
+  checkpoint, saved-session CAS, exact compensation, and interrupted-Apply
+  recovery boundaries.
 - Meld keeps all four application transactions distinct, including its
   granted-source lock recursion and owner-aware rollback boundaries.
 - No visible TUI state or keyboard path changes in these extractions, so the

@@ -1,12 +1,11 @@
  mem help · command inventory                                                                       
+┌────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────┐
+│  LANGUAGE · [ ✓ EN ]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
 │  VIEW · [   BY KIND ]  [ ✓ A–Z ] · ←/→ TO SELECT                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
-┏ A–Z ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓^
-┃ ▾ mem add                Add one or more Memories to the current or explicit Context.           ┃ 
-┃                          USE WHEN: Adding one or more facts, instructions, or notes directly to ┃ 
-┃                                    a Context.                                                   ┃ 
-┃   FLOW      · Text or file -> Context Memories                                                  ┃ 
+┃   FLOW      · Text or file -> Context Memories                                                  ┃^
 ┃   EXECUTION · DETERMINISTIC                                                                     ┃ 
 ┃   EFFECT    · Changes the selected Context                                                      ┃ 
 ┃   RANGE     · One exact target Context                                                          ┃ 
@@ -15,16 +14,17 @@
 ┃   Context name does not copy that object; it creates a new Memory containing that text.         ┃ 
 ┃   - INDEPENDENT WORK · Branch the containing Context and merge it later, or copy the Memory     ┃ 
 ┃     content and add it directly.                                                                ┃ 
-┃   - EXACT MEMORY VERSION · Use mem reference to retain an immutable snapshot of the reviewed    ┃ 
-┃     Source Memory.                                                                              ┃ 
+┃   - EXACT MEMORY OR CONTEXT · Use mem reference to retain an immutable snapshot of one reviewed ┃ 
+┃     Source Memory or a direct/recursive Context scope. Run it bare interactively to choose the  ┃ 
+┃     unit.                                                                                       ┃ 
 ┃   - LIVE MEMORY · Use mem embed MEMORY --from SOURCE to follow the Source Memory's current      ┃ 
 ┃     content.                                                                                    ┃ 
-┃   - EXISTING CONTEXT · Use mem embed. The parent stores only the Context identity; the child    ┃ 
+┃   - LIVE CONTEXT · Use mem embed. The parent stores only the Context identity; the child        ┃ 
 ┃     Memories remain in the child, although recursive operations may traverse them.              ┃ 
-┃   FORM 1 · mem add "[memory]" (add one Memory to the current Context)                           ┃ 
+┃   FORM 1 · mem add "[memory_content]" (add one Memory to the current Context)                   ┃ 
 ┃   FORM 2 · mem add (open the interactive multi-Memory editor)                                   ┃ 
-┃   FORM 3 · mem add --memory "[memory]" --memory "[memory]" (add an explicit batch)              ┃ 
-┃   FORM 4 · mem add --input [file] (add one Memory per non-empty line)                           ┃ 
-┃   FORM 5 · mem add --paste (paste one or more Memories)                                         ┃v
+┃   FORM 3 · mem add --memory "[memory_content]" --memory "[memory_content]" (add an explicit     ┃ 
+┃            batch)                                                                               ┃ 
+┃   FORM 4 · mem add --input [file] (add one Memory per non-empty line)                           ┃v
 ─────────────────────────────────────────────────────────────────────────────────────────────────── 
  ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab surface  H ful

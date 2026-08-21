@@ -1,14 +1,14 @@
  REVERT · task-1/recovery                                                                                                                                                           
 ┌────────────────────────────────────────────────────────────────────────────────────| VIEWER |────────────────────────────────────────────────────────────────────────────────────┐
-│ TARGET      fb133aa1-6bee-4534-ae9b-d03115a5f0f8                                                                                                                                ^│
+│ TARGET      507bb5a7-8a46-456f-813e-ea384ccd5007                                                                                                                                ^│
 │ RECORDED BY init                                                                                                                                                                 │
 │ DESCRIPTION Initialized recovery Context before applying atomize                                                                                                                 │
 │                                                                                                                                                                                  │
 │ RESTORE IMPACT                                                                                                                                                                   │
-│ 1. REVERT · REMOVE [be6eb0ee]                                                                                                                                                    │
+│ 1. REVERT · REMOVE [ac88e1ce]                                                                                                                                                    │
 │ - Keep this first recovery Memory.                                                                                                                                               │
 │                                                                                                                                                                                  │
-│ 2. REVERT · REMOVE [382a7456]                                                                                                                                                    │
+│ 2. REVERT · REMOVE [fe7b4dab]                                                                                                                                                    │
 │ - Remove this newer recovery Memory.                                                                                                                                             │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
@@ -35,9 +35,9 @@
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
-│   2026-08-13 15:16  add      52a207ce  Added newer recovery Memory                                                                                                              ^│
-│   2026-08-13 15:16  atomize  43b9b166  Applied atomize to create first recovery Memory                                                                                           │
-│›✓ 2026-08-13 15:16  init     fb133aa1  Initialized recovery Context before applying atomize                                                                                      │
+│   2026-08-17 10:40  add      a0cfcbbd  Added newer recovery Memory                                                                                                              ^│
+│   2026-08-17 10:40  atomize  17383bd1  Applied atomize to create first recovery Memory                                                                                           │
+│›✓ 2026-08-17 10:40  init     507bb5a7  Initialized recovery Context before applying atomize                                                                                      │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                 v│
@@ -47,6 +47,6 @@
 ┃  MEANING · Preserve every currently visible checkpoint after restoration.                                                                                                        ┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 ┌────────────────────────────────────────────────────────────────────────────────────| APPLY |─────────────────────────────────────────────────────────────────────────────────────┐
-│[ REVERT TO fb133aa1 · KEEP ALL CHECKPOINTS ]                                                                                                                                     │
+│[ REVERT TO 507bb5a7 · KEEP ALL CHECKPOINTS ]                                                                                                                                     │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
  FOCUS HISTORY · ←/→ select  Enter apply  Esc/Backspace items  Tab switch  q cancel  ·  3/3

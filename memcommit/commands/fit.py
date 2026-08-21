@@ -6,24 +6,25 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.bootstrap import (
-    build_fit_console_runner,
-    build_proposition_fit_console_runner,
-)
-from memcommit.clipboard import write_system_clipboard
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.fit import FitError, FitReport
 from memcommit.fit_application import (
+    FitMemorySourceRequest,
     FitPropositionsRequest,
     FitRequest,
     FitResult,
+    FitStoredSourcesRequest,
 )
 from memcommit.fit_judgment import FitJudgmentError, FitProposition
-from memcommit.fit_runtime import run_fit_with_store, run_proposition_fit
-from memcommit.interfaces.console import (
-    ConsoleModeError,
-    SystemTerminalCapabilities,
-    resolve_console_mode,
+from memcommit.fit_runtime import (
+    FitSourceError,
+    run_fit_with_store,
+    run_proposition_fit,
+    run_stored_source_fit,
+)
+from memcommit.interfaces.cli.fit import (
+    render_fit_plain,
+    render_proposition_fit_plain,
 )
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.interfaces.fit import fit_result_text
@@ -39,11 +40,33 @@ def render_fit(report: FitReport, *, current: bool = True) -> str:
     return fit_result_text(FitResult(report, current))
 
 
+def _memory_source_operand(value: str) -> FitMemorySourceRequest:
+    """Parse the CLI's optional ``CONTEXT:UID`` direct-Memory spelling."""
+
+    text = value.strip()
+    if not text:
+        raise FitSourceError("A Fit Memory selector must be nonblank.")
+    if ":" not in text:
+        return FitMemorySourceRequest(selector=text)
+    context_locator, selector = text.rsplit(":", 1)
+    if not context_locator or not selector:
+        raise FitSourceError(
+            "Fit --memory expects UID_OR_PREFIX or CONTEXT:UID_OR_PREFIX."
+        )
+    return FitMemorySourceRequest(
+        selector=selector,
+        context_locator=context_locator,
+    )
+
+
 def cmd(
     propositions: Annotated[
         Optional[list[str]],
         typer.Argument(
-            help="Two or more complete proposition texts judged together"
+            help=(
+                "Auto operand: readable Context, Memory UID/prefix, or literal "
+                "proposition; use text:VALUE to force literal text"
+            )
         ),
     ] = None,
     background: Annotated[
@@ -51,6 +74,29 @@ def cmd(
         typer.Option(
             "--background",
             help="Repeatable frozen background proposition used as Context K",
+        ),
+    ] = None,
+    memory_sources: Annotated[
+        Optional[list[str]],
+        typer.Option(
+            "--memory",
+            metavar="[CONTEXT:]UID_OR_PREFIX",
+            help=(
+                "Repeatable direct Memory source; an unqualified selector uses "
+                "the command-start current Context"
+            ),
+        ),
+    ] = None,
+    context_sources: Annotated[
+        Optional[list[str]],
+        typer.Option(
+            "--context",
+            "-c",
+            metavar="CONTEXT",
+            help=(
+                "Repeatable readable Context whose direct ordinary Memories "
+                "join the proposition set"
+            ),
         ),
     ] = None,
     ground_name: Annotated[
@@ -74,28 +120,28 @@ def cmd(
         bool,
         typer.Option(
             "--plain",
-            help="Print one compact Fit result instead of opening the Viewer",
-        ),
-    ] = False,
-    tui: Annotated[
-        bool,
-        typer.Option(
-            "--tui",
-            help="Require the compact interactive Fit Viewer",
+            hidden=True,
+            help="Print the same compact Fit receipt without terminal color",
         ),
     ] = False,
 ) -> None:
     """Judge whether every supplied proposition can jointly hold."""
 
     try:
-        mode = resolve_console_mode(plain=plain, tui=tui)
-
         raw_propositions = tuple(propositions or ())
         raw_background = tuple(background or ())
+        raw_memory_sources = tuple(memory_sources or ())
+        raw_context_sources = tuple(context_sources or ())
         if ground_name is not None:
-            if raw_propositions or raw_background:
+            if (
+                raw_propositions
+                or raw_background
+                or raw_memory_sources
+                or raw_context_sources
+            ):
                 raise FitError(
-                    "Choose proposition operands or --ground, not both."
+                    "Choose proposition operands or --ground, not both; "
+                    "Memory/Context sources count as proposition operands."
                 )
 
             def execute_ground(request: FitRequest) -> FitResult:
@@ -117,51 +163,67 @@ def cmd(
                     progress.update("receipt saved", step=1)
                 return result
 
-            runner = build_fit_console_runner(
-                execute=execute_ground,
-                clipboard_writer=write_system_clipboard,
-                terminal=SystemTerminalCapabilities(),
-            )
-            runner.run(
-                FitRequest(ground_name=ground_name, receipt_uid=receipt),
-                mode=mode,
+            render_fit_plain(
+                execute_ground(
+                    FitRequest(ground_name=ground_name, receipt_uid=receipt)
+                ),
+                color=False if plain else None,
             )
             return
 
         if receipt is not None:
             raise FitError("--receipt requires the explicit --ground adapter.")
-        request = FitPropositionsRequest(
-            propositions=tuple(
-                FitProposition(f"p{index}", content, "PROPOSITION")
-                for index, content in enumerate(raw_propositions, 1)
-            ),
-            background=tuple(
-                FitProposition(f"k{index}", content, "PROPOSITION")
-                for index, content in enumerate(raw_background, 1)
-            ),
+        background_propositions = tuple(
+            FitProposition(f"k{index}", content, "PROPOSITION")
+            for index, content in enumerate(raw_background, 1)
         )
 
-        def execute_propositions(next_request: FitPropositionsRequest):
+        general_request: FitPropositionsRequest | FitStoredSourcesRequest
+        if raw_propositions or raw_memory_sources or raw_context_sources:
+            general_request = FitStoredSourcesRequest(
+                propositions=(),
+                background=background_propositions,
+                auto_operands=raw_propositions,
+                memory_sources=tuple(
+                    _memory_source_operand(value) for value in raw_memory_sources
+                ),
+                context_locators=raw_context_sources,
+            )
+        else:
+            general_request = FitPropositionsRequest(
+                propositions=(),
+                background=background_propositions,
+            )
+
+        def execute_propositions(
+            next_request: FitPropositionsRequest | FitStoredSourcesRequest,
+        ):
             with CommandProgress(
                 "FIT", "judging the complete proposition set", total=1
             ) as progress:
-                result = run_proposition_fit(
-                    next_request,
-                    provider_factory=connect_semantic_provider,
+                result = (
+                    run_stored_source_fit(
+                        next_request,
+                        store=MemoryStore(create=False),
+                        provider_factory=connect_semantic_provider,
+                    )
+                    if isinstance(next_request, FitStoredSourcesRequest)
+                    else run_proposition_fit(
+                        next_request,
+                        provider_factory=connect_semantic_provider,
+                    )
                 )
                 progress.update("judgment complete", step=1)
             return result
 
-        runner = build_proposition_fit_console_runner(
-            execute=execute_propositions,
-            clipboard_writer=write_system_clipboard,
-            terminal=SystemTerminalCapabilities(),
+        render_proposition_fit_plain(
+            execute_propositions(general_request),
+            color=False if plain else None,
         )
-        runner.run(request, mode=mode)
     except (
         FitError,
         FitJudgmentError,
-        ConsoleModeError,
+        FitSourceError,
         FileNotFoundError,
         OSError,
         ProfileConfigError,

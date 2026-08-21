@@ -1,0 +1,26 @@
+PTY 180 52                                                                                                                                                                          
+PTY 180 52                                                                                                                                                                          
+$ mem merge -h                                                                                                                                                                      
+                                                                                                                                                                                    
+ Usage: mem merge [OPTIONS] [SOURCE] [TARGET]                                                                                                                                       
+                                                                                                                                                                                    
+ Add Source-only items to a selected Target, leave exact matches unchanged, and choose Source or Target for stored-item conflicts.                                                  
+                                                                                                                                                                                    
+╭─ Arguments ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│   source      [SOURCE]  Readable Source Context to structurally merge into the selected Target; omit in a TTY to choose both endpoints interactively [default: None]             │
+│   target      [TARGET]  Existing CREATE-authorized Target Context; equivalent to --into and defaults to the command-start current Context [default: None]                        │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --into                     TEXT  Existing CREATE-authorized Target Context; defaults to the command-start current Context [default: None]                                        │
+│ --direct           -d            Merge direct items from the exact Source root only (default)                                                                                    │
+│ --recursive        -r            Merge matching lexical descendants by complete relative path, creating Source-only Target paths                                                 │
+│ --resolve                  TEXT  Resolve one frozen conflict as ID=keep-target or ID=take-source; repeat for every conflict [default: None]                                      │
+│ --keep-target-all                Resolve every deterministic conflict by keeping Target                                                                                          │
+│ --take-source-all                Resolve every deterministic conflict by taking Source                                                                                           │
+│ --help             -h            Show this message and exit.                                                                                                                     │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                    
+ Positional form: 'mem merge SOURCE TARGET'. Omitting TARGET uses the command-start current Context; --into remains a compatibility alias.                                          
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+HELP EXIT · 0

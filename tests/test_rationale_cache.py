@@ -1,10 +1,9 @@
-"""Provenance-only ``mem rationale`` and legacy-cache compatibility tests."""
+"""Semantic-provenance ``mem rationale`` and legacy-cache compatibility tests."""
 
 from __future__ import annotations
 
 import hashlib
 import json
-from types import SimpleNamespace
 import uuid
 
 from typer.testing import CliRunner
@@ -13,7 +12,6 @@ import memcommit.ops as ops
 import memcommit.rationale as rationale_module
 import memcommit.store as store_module
 from memcommit.cli import app
-from memcommit.commands.rationale import _provenance_summary
 from memcommit.context import AutoCheckpoint, Memory
 from memcommit.rationale_cache import (
     CachedRationaleInference,
@@ -77,7 +75,8 @@ def test_cli_is_provenance_only_and_never_reads_or_writes_inference_cache(
 
     assert result.exit_code == 0, result.output
     assert structured.exit_code == 0, structured.output
-    assert "PROVENANCE — no reason recorded" in result.output
+    assert "PROVENANCE\n" in result.output
+    assert "retained" in result.output
     assert "APPARENT PURPOSE" not in result.output
     assert "LEGACY APPARENT" not in result.output
     payload = json.loads(structured.output)
@@ -101,29 +100,7 @@ def test_inference_options_are_removed_from_rationale_help(isolated_store):
     assert refresh.exit_code == 2
 
 
-def test_provenance_projection_uses_only_the_latest_recorded_reason():
-    report = SimpleNamespace(
-        recorded_reason_events=(
-            SimpleNamespace(
-                reason="초기에는 다듬기 요청을 문서 전체 재작성으로 처리했다."
-            ),
-            SimpleNamespace(
-                reason=(
-                    "다듬기 요청이 전체 재작성으로 번지지 않도록\n "
-                    "구조와 인용 표시를 보존하고   명시된 표현만 수정한다."
-                )
-            ),
-        ),
-        provenance_character_limit=160,
-    )
-
-    assert _provenance_summary(report) == (
-        "다듬기 요청이 전체 재작성으로 번지지 않도록 구조와 인용 표시를 "
-        "보존하고 명시된 표현만 수정한다."
-    )
-
-
-def test_long_provenance_projection_is_capped_at_160_characters(
+def test_natural_provenance_projection_uses_the_requested_word_limit(
     isolated_store,
     monkeypatch,
 ):
@@ -179,24 +156,31 @@ def test_long_provenance_projection_is_capped_at_160_characters(
     store.set_current(context.name)
     _forbid_legacy_cache(monkeypatch)
 
-    result = invoke("rationale", target.uid)
-    structured = invoke("rationale", target.uid, "--json")
+    result = invoke("rationale", target.uid, "--limit", "4", "--unit", "words")
+    structured = invoke(
+        "rationale",
+        target.uid,
+        "--limit",
+        "4",
+        "--unit",
+        "words",
+        "--json",
+    )
 
     assert result.exit_code == 0, result.output
     assert structured.exit_code == 0, structured.output
     payload = json.loads(structured.output)
-    budgets = payload["character_budgets"]
-    assert budgets["provenance_source"] > 160
-    assert budgets["provenance_limit"] == 160
+    projection = payload["provenance_projection"]
+    assert projection["unit"] == "words"
+    assert projection["limit"] == 4
+    assert projection["length"] <= 4
+    assert projection["ruleset_version"] == "rationale-natural-provenance-v1"
     lines = result.output.splitlines()
-    heading = "PROVENANCE — latest recorded reason"
+    heading = "PROVENANCE"
     provenance = lines[lines.index(heading) + 1].strip()
-    assert len(provenance) <= 160
-    assert provenance == (
-        "초기 검토에서는 요청 범위가 모호해 문서 전체가 다시 작성될 가능성이 있었다. "
-        "그래서 구조와 인용 표시를 보존하고 명시적으로 지적된 표현만 수정한다는 "
-        "경계를 남겼다.…"
-    )
+    assert len(provenance.split()) <= 4
+    assert provenance == "Recorded provenance."
+    assert reason not in result.output
     assert "APPARENT PURPOSE" not in result.output
 
 

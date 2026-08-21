@@ -16,13 +16,15 @@ lexical descendant reach and embedded-Context traversal. The exact key binds:
 - direct/recursive traversal flags;
 - the complete frozen frame digest and ordered Context/Memory identities;
 - Summarize provider-contract version; and
-- configured provider, model, and reasoning effort.
+- exact provider, model, and reasoning provenance for the prepared result.
 
-An edit, addition, scope change, configuration change, missing entry, or
-authority failure is a miss. The runtime never projects a parent summary down,
-combines child summaries upward, or treats equal-looking prose as evidence
-equivalence. It revalidates the source frame and every Grant binding before
-returning either a prepared or live result.
+An edit, addition, scope change, missing entry, lower/incomparable cached
+provider identity, or authority failure is a miss. An exact or component-wise
+higher compatible Codex identity may satisfy the configured request under the
+shared Study cache-quality contract. The runtime never projects a parent
+summary down, combines child summaries upward, or treats equal-looking prose
+as evidence equivalence. It revalidates the source frame and every Grant
+binding before returning either a prepared or live result.
 
 ## Ownership and materialization
 

@@ -1,0 +1,52 @@
+ REVERT · SELECT A CONTEXT                                                                                                                                                          
+ Roots · revert/versions                                                                                                                                                            
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+› * ▾ revert/versions  1 direct · 0 inherited · 0 descendant commands                                                                                                              ^
+  DIRECT COMMANDS · revert/versions                                                                                                                                                 
+  · [update] [CHECKPOINT ba5e65d2] [COMMAND repeated] 2026-08-20 08:06 · Version two · repeated Update identity                                                                     
+  · [update] [CHECKPOINT 890e5d51] [COMMAND repeated] 2026-08-20 08:06 · Version one · repeated Update identity                                                                     
+  · [created] [CHECKPOINT 2e727957] [CONTEXT f2c6ba20] 2026-08-20 08:06 · baseline for CONTEXT revert/versions · not counted as a command                                           
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ ↑↓ move  ←→ expand  A expand all  m THIS Context: hide items · M EVERY Context: show items  y copy Context  Y copy visible branch  Enter open checkpoints  q cancel · 1/4 · 1 selec

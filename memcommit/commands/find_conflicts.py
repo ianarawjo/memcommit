@@ -10,7 +10,10 @@ import memcommit.ops as ops
 from memcommit.commands.conflict_resolve_handoff import (
     run_conflict_resolve_handoff,
 )
-from memcommit.commands.context_operand import ContextOperandSnapshot
+from memcommit.commands.context_operand import (
+    ContextOperandSnapshot,
+    choose_context_operand,
+)
 from memcommit.authority.access import GrantedReadStore, resolve_context_access
 from memcommit.commands.findings_render import (
     render_heading,
@@ -56,6 +59,13 @@ _CONFLICT_COLORS = {
 
 
 def cmd(
+    context_operand: Annotated[
+        Optional[str],
+        typer.Argument(
+            metavar="CONTEXT",
+            help="Context to inspect (defaults to current)",
+        ),
+    ] = None,
     context_name: Annotated[
         Optional[str],
         typer.Option(
@@ -71,14 +81,44 @@ def cmd(
             help="Print one canonical JSON handoff per finding",
         ),
     ] = False,
+    select_targets: Annotated[
+        bool,
+        typer.Option(
+            "--select",
+            help="Choose readable Context targets and lexical reach interactively",
+        ),
+    ] = False,
 ) -> None:
     """Report conflicting Memory pairs; never reconcile or checkpoint them."""
+    try:
+        context_name = choose_context_operand(
+            context_operand,
+            option=context_name,
+        )
+    except ValueError as error:
+        typer.secho(
+            "Find conflicts error: " + display_escape_text(str(error)),
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
     store = MemoryStore(create=False)
-    if (
-        context_name is None
-        and not handoff_json
-        and interactive_quality_find_available()
-    ):
+    if select_targets:
+        if context_name is not None or handoff_json:
+            typer.secho(
+                "Find conflicts error: --select cannot be combined with "
+                "an explicit Context or --handoff-json.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        if not interactive_quality_find_available():
+            typer.secho(
+                "Find conflicts error: --select requires an interactive terminal.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
         try:
             context_snapshot = ContextOperandSnapshot.capture(store)
             completed = run_interactive_quality_find(

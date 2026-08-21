@@ -30,6 +30,7 @@ from memcommit.quality_find_workbench import (
     quality_find_resolution_view,
 )
 from memcommit.read_report import ReadReportRecent, ReadReportTarget
+from memcommit.responses.resolution import response_target_from_item
 from memcommit.store import MemoryStore
 
 
@@ -252,8 +253,7 @@ def test_interactive_orchestration_replays_recent_target_without_saved_session(
         current_name=root.name,
         kind="duplicates",
         analyze=lambda source: (
-            observed.append(source)
-            or DuplicateReport(memory_count=2, findings=())
+            observed.append(source) or DuplicateReport(memory_count=2, findings=())
         ),
     )
 
@@ -312,8 +312,7 @@ def test_profile_recent_reexpands_the_current_frozen_readable_catalog(
         current_name=original.name,
         kind="duplicates",
         analyze=lambda source: (
-            observed.append(source)
-            or DuplicateReport(memory_count=2, findings=())
+            observed.append(source) or DuplicateReport(memory_count=2, findings=())
         ),
     )
 
@@ -474,8 +473,8 @@ def test_duplicate_projection_reviews_emitted_links_without_choosing_survivor():
         "REJECT LINK",
         "DEFER",
     ]
-    assert item.kind == "REDUNDANCY"
-    assert "redundancy evidence" in item.question
+    assert item.kind == "SEMANTIC DUN"
+    assert "semantic-DUN evidence" in item.question
     assert all("survivor" not in option.text.casefold() for option in item.options)
 
 
@@ -509,6 +508,44 @@ def test_shared_redundancy_report_projects_caller_owned_operation_identity():
         "FIND REDUNDANCIES",
         "MEM FIND REDUNDANCIES",
     )
+
+
+def test_redundancy_view_includes_exact_dup_inside_complete_dun_report():
+    ctx, first, second = _context()
+    session = create_quality_find_workbench(
+        "duplicates",
+        ctx,
+        DuplicateReport(
+            memory_count=2,
+            findings=(
+                DuplicateFinding(
+                    left=first,
+                    right=second,
+                    relation="EXACT",
+                    reason="Stored content is identical.",
+                ),
+            ),
+        ),
+    )
+
+    view = quality_find_resolution_view(
+        session,
+        ctx,
+        operation_label="FIND REDUNDANCIES",
+    )
+
+    assert len(view.items) == 1
+    assert view.items[0].kind == "DUP / EXACT"
+    assert view.items[0].options == ()
+    assert view.items[0].response_state == "NOT_APPLICABLE"
+    assert view.items[0].effective_obligation == "NONE"
+    assert view.status.endswith("0/0 ANSWERED")
+    assert response_target_from_item(view, view.items[0], read_only=False) is None
+    assert ("DUP / EXACT", "1") in {
+        (metric.label, metric.value) for metric in view.metrics
+    }
+    assert "DUN = DUP / EXACT + SEMANTIC DUN" in view.overview
+    assert "1 DUP / EXACT link" in view.overview
 
 
 def test_process_local_workbench_fails_closed_when_context_changes():
@@ -599,17 +636,9 @@ def test_conflict_workbench_hands_off_the_selected_typed_finding():
     [
         ("find_ambiguities", "find-ambiguities", "ambiguities", None, False),
         ("find_conflicts", "find-conflicts", "conflicts", None, False),
-        (
-            "find_duplicates",
-            "find-redundancies",
-            "duplicates",
-            "find-redundancies",
-            False,
-        ),
-        ("find_duplicates", "dedun", "duplicates", "dedun", True),
     ],
 )
-def test_flagless_tty_commands_route_to_the_shared_quality_workbench(
+def test_explicit_select_commands_route_to_the_shared_quality_workbench(
     isolated_store,
     monkeypatch,
     module_name,
@@ -644,7 +673,56 @@ def test_flagless_tty_commands_route_to_the_shared_quality_workbench(
         ),
     )
 
-    result = runner.invoke(app, [command_name])
+    result = runner.invoke(app, [command_name, "--select"])
 
     assert result.exit_code == 0, result.output
     assert observed == [(ctx.name, kind, operation_name, has_handoff)]
+
+
+def test_find_redundancies_has_no_initial_selector_route(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    ctx, _first, _second = _context()
+    store.create_context(ctx)
+    store.set_current(ctx.name)
+    observed: list[str] = []
+    monkeypatch.setattr(
+        "memcommit.commands.find_duplicates.ops.find_redundancies",
+        lambda source, *_args, **_kwargs: (
+            observed.append(source.name)
+            or DuplicateReport(memory_count=2, findings=())
+        ),
+    )
+
+    result = runner.invoke(app, ["find-redundancies"])
+    select_result = runner.invoke(app, ["find-redundancies", "--select"])
+
+    assert result.exit_code == 0, result.output
+    assert observed == [ctx.name]
+    assert "0 findings" in result.output
+    assert select_result.exit_code == 2
+    assert "No such option: --select" in select_result.output
+
+
+def test_repeated_dedun_bypasses_report_recents_and_target_setup(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    ctx, _first, _second = _context()
+    store.create_context(ctx)
+    store.set_current(ctx.name)
+    monkeypatch.setattr(
+        "memcommit.commands.find_duplicates.ops.find_redundancies",
+        lambda *_args, **_kwargs: DuplicateReport(memory_count=2, findings=()),
+    )
+
+    first = runner.invoke(app, ["dedun"])
+    second = runner.invoke(app, ["dedun"])
+
+    assert first.exit_code == 0, first.output
+    assert second.exit_code == 0, second.output
+    assert first.output == second.output
+    assert "No redundancies" in second.output

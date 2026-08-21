@@ -565,8 +565,8 @@ def test_task1_rationale_keeps_structured_evidence_but_renders_only_provenance(
     structured = invoke("rationale", target.uid[:8], "--json")
 
     assert result.exit_code == 0
-    assert "PROVENANCE — no reason recorded" in result.output
-    assert "CREATED" not in result.output
+    assert "PROVENANCE\n" in result.output
+    assert "retained" in result.output
     assert "APPARENT PURPOSE" not in result.output
     assert "SAVED ANALYSIS" not in result.output
     assert "EVIDENCE USED FOR INFERENCE" not in result.output

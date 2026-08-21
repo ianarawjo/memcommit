@@ -96,6 +96,12 @@ mem impact --from A
 
 # Both explicit: A → B, independent of current Context
 mem impact --from A --to B
+
+# Canonical named preview with the same explicit pair
+mem impact update A B
+
+# Direct Apply route with the same explicit pair
+mem update A B
 ```
 
 ### Reusable Impact and the TTY Apply boundary
@@ -223,9 +229,11 @@ mem impact meld [--session UID]
 mem impact sever [--session UID]
 ```
 
-These forms inspect an already-saved operation artifact; opening the Impact
-ledger never creates a new plan, requests a semantic response, or changes a
-Context. In a TTY, Meld and Sever select from their frozen session catalogs and
+With no endpoints, these forms inspect an already-saved operation artifact;
+opening the Impact ledger never creates a new plan, requests a semantic
+response, or changes a Context. `mem impact update SOURCE TARGET` instead
+enters the same new directional preview as the root `--from`/`--to` alias. In a
+TTY, Meld and Sever select from their frozen session catalogs and
 reload the selected artifact before projection. Outside a TTY, a sole saved
 artifact opens directly, while multiple artifacts require `--session UID`.
 Update retains its existing singleton receipt but accepts `--session` as an
@@ -253,7 +261,8 @@ Help text, and the way each route obtains its artifact:
 |---|---|---|
 | `PREPARE_DURABLE` | `atomize` | Prepare or reopen the operation-owned durable analysis, then project it read-only. |
 | `PREPARE_PROCESS_LOCAL` | `forget`, `distill`, `resolve` | Run the owning application analysis and project its process-local result without inventing persistence. |
-| `OPEN_SAVED` | `meld`, `sever`, `update` | Reload an existing operation-owned artifact before projection. |
+| `PREPARE_OR_OPEN` | `update` | Prepare a new directional preview when endpoints are supplied, or reload saved Update Impact when they are omitted. |
+| `OPEN_SAVED` | `meld`, `sever` | Reload an existing operation-owned artifact before projection. |
 
 This registry is deliberately not a universal semantic-operation interface.
 It does not own provider construction, authority, cache identity, review state,
@@ -287,11 +296,14 @@ deferred while its command split and reviewed candidate adapter stabilize. It
 is semantically eligible, but Impact must not infer a proposal contract from an
 in-progress command refactor.
 
-`mem update` accepts the same three forms. `--from` and `--to` are therefore
-composable endpoint selectors, not mutually exclusive modes. At least one must
-be supplied. If an omitted endpoint has no current Context, the command fails
-and asks for that endpoint explicitly. Source and target must resolve to
-different canonical ordinary Context names.
+`mem update` and `mem impact update` additionally accept the canonical
+positional pair `SOURCE TARGET`. Zero operands retain each command's saved-work
+route. Exactly one positional operand is rejected because it does not identify
+its directional role. `--from` and `--to` remain composable compatibility
+selectors and preserve the useful one-sided forms: if one is omitted, current
+supplies that endpoint. If an omitted endpoint has no current Context, the
+command fails and asks for that endpoint explicitly. Source and target must
+resolve to different canonical ordinary Context names.
 
 ### Optional descendant scopes
 
@@ -330,19 +342,21 @@ as a checked one even when the two graphs happen to be momentarily identical.
 Planning and saved-session inspection forms are mutually exclusive:
 
 ```text
-mem impact [--from A] [--to B] directional update preview
+mem impact update A B   canonical directional update preview
+mem impact [--from A] [--to B] compatibility directional preview
 mem impact atomize      unary atomization preview
 mem impact forget       process-local in-place Forget preview
 mem impact distill      process-local fresh-Result preview
 mem impact resolve      process-local verified repair preview
-mem impact update       saved Update effect inspection
+mem impact update       saved Update effect inspection (no endpoints)
 mem impact meld         saved Meld effect inspection
 mem impact sever        saved Sever effect inspection
 ```
 
-Supplying a named operation together with directional `--from` or `--to`, or
-supplying no directional endpoint and no operation, is a usage error. Typer
-subcommands give each named route an operation-specific option grammar:
+Supplying root directional options together with a named operation, or
+supplying no directional endpoint and no operation, is a usage error. The
+named Update route owns its own equivalent endpoint grammar. Typer subcommands
+give every other named route an operation-specific option grammar:
 `--all`, `--with-review`, and `--refresh` belong only to Atomize; `--session`
 belongs only to saved Update, Meld, or Sever inspection; and Forget, Distill,
 and Resolve expose only the operands accepted by their prepare adapters.

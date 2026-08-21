@@ -1096,7 +1096,7 @@ def test_ground_memory_projects_compact_fit_marks() -> None:
 
     assert "c1  ·  The rear entrance closes" in not_run
     assert "c1  ✓  The rear entrance closes" in current
-    assert "c1  !  The rear entrance closes" in issue
+    assert "c1  ?  The rear entrance closes" in issue
     assert "c1  ◷  The rear entrance closes" in stale
     assert "FIT RECEIPT" not in current
     assert "FIT WHY" not in current
@@ -1502,7 +1502,7 @@ def test_named_ground_memory_detail_exposes_full_fit_judgment():
         fit_receipt=fit_receipt_for(session, status="UNDERDETERMINED"),
     )
 
-    assert "FIT · !" in rendered
+    assert "FIT · ?" in rendered
     assert "FIT JUDGMENT · UNDERDETERMINED" in rendered
     assert "The Rule reproduces the reviewed expected result." in rendered
 

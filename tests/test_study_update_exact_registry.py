@@ -221,7 +221,7 @@ def test_exact_update_registry_rejects_changed_source_before_publication(
     assert store.load_impact_plan() is None
 
 
-def test_update_registry_configuration_mismatch_is_a_clean_skip(
+def test_update_registry_higher_quality_cache_installs_for_lower_request(
     isolated_store, tmp_path, monkeypatch
 ):
     store, profile, registry, _prepared = _fixture(
@@ -236,8 +236,8 @@ def test_update_registry_configuration_mismatch_is_a_clean_skip(
     )
 
     assert result.declared == 1
-    assert result.installed == 0
-    assert result.skipped_configuration == 1
+    assert result.installed == 1
+    assert result.skipped_configuration == 0
     assert store.load_impact_plan() is None
 
 

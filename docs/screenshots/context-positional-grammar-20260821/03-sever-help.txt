@@ -1,0 +1,35 @@
+PTY 180 52                                                                                                                                                                          
+PTY 180 52                                                                                                                                                                          
+$ mem sever -h                                                                                                                                                                      
+                                                                                                                                                                                    
+ Usage: mem sever [OPTIONS] [CONTEXTS]...                                                                                                                                           
+                                                                                                                                                                                    
+ Save a Result by selecting, transforming, or excluding Source Memories according to a Criteria Context.                                                                            
+                                                                                                                                                                                    
+╭─ Arguments ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│   contexts      [CONTEXTS]...  SOURCE and CRITERIA Contexts, plus an optional RESULT; omit RESULT to self-save or name a new Context to save elsewhere [default: None]           │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --source                                                            TEXT    Compatibility alias for the existing Source Context [default: None]                                  │
+│ --criteria,--against                                                TEXT    Compatibility alias for one readable Criteria root Context [default: None]                           │
+│ --save-as                                                           TEXT    Save to SOURCE for self-save or to a fresh Context for other-save; omission self-saves               │
+│                                                                             [default: None]                                                                                      │
+│ --direct                -d                                                  Use only the selected Source and Criteria roots                                                      │
+│ --recursive             -r                                                  Include descendants under both Source and Criteria roots                                             │
+│ --source-descendants        --source-root-only,--source-only                Include the Source root's readable descendant Contexts [default: source-root-only]                   │
+│ --criteria-descendants      --criteria-root-only,--criteria-only            Include the Criteria root's readable descendant Contexts [default: criteria-root-only]               │
+│ --resume                                                            TEXT    Enter one exact saved Sever session by UID [default: None]                                           │
+│ --candidate                                                         TEXT    Candidate uid or unique prefix for a scripted decision [default: None]                               │
+│ --choice                                                            TEXT    recommended, as-written, forget, or custom [default: None]                                           │
+│ --comment                                                           TEXT    Exact custom result content when --choice custom [default: None]                                     │
+│ --expect-session                                                    SHA256  Require the exact saved Sever revision reviewed for this decision [default: None]                    │
+│ --accept                                                                    Apply the reviewed self-save or other-save Result                                                    │
+│ --sessions                                                                  Enter the interactive Sever session launcher                                                         │
+│ --help                  -h                                                  Show this message and exit.                                                                          │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                    
+ Positional form: 'mem sever SOURCE CRITERIA [RESULT]'. Omitting RESULT self-saves into SOURCE; an explicit fresh RESULT saves elsewhere. --source, --criteria/--against, and       
+ --save-as remain compatibility aliases.                                                                                                                                            
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+HELP EXIT · 0

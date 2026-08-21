@@ -1,30 +1,30 @@
  mem help · command inventory                                                                       
+┌────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────┐
+│  LANGUAGE · [ ✓ EN ]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────┐
 │  VIEW · [   BY KIND ]  [ ✓ A–Z ] · ←/→ TO SELECT                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
-┏ A–Z ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓^
-┃ ▸ mem add                Add one or more Memories to the current or explicit Context.           ┃ 
-┃                          USE WHEN: Adding one or more facts, instructions, or notes directly to ┃ 
-┃                                    a Context.                                                   ┃ 
-┃ ▸ mem atomize            Split composite Memories for review; --evaluate performs an            ┃ 
-┃                          issue-scoped directional meld.                                         ┃ 
-┃                          USE WHEN: Separating a composite Memory into independently reviewable  ┃ 
-┃                                    requirements.                                                ┃ 
-┃ ▸ mem audit              Run Duplicate, Ambiguity, and Conflict checks plus optional Rule       ┃ 
-┃                          Conformance, then review one saved report.                             ┃ 
-┃                          USE WHEN: Performing a combined quality review before revising a       ┃ 
-┃                                    Context.                                                     ┃ 
-┃ ▸ mem branch             Copy a Context or subtree into a new branch and switch to it.          ┃ 
-┃                          USE WHEN: Editing a Context or subtree independently while preserving  ┃ 
-┃                                    the original.                                                ┃ 
-┃ ▸ mem check-conformance  Check Ground examples or one Context against explicit Rules.           ┃ 
-┃                          USE WHEN: Checking a Context or saved Ground against explicit Rules.   ┃ 
-┃ ▸ mem checkout           Switch Contexts using Git-style syntax; with -b, create and switch to  ┃ 
-┃                          a new Context branch.                                                  ┃ 
-┃                          USE WHEN: Using a Git-like workflow to switch or create a branch.      ┃ 
-┃ ▸ mem checkpoint         Save the current Context as a manual recovery point for Diff or        ┃ 
-┃                          Revert.                                                                ┃ 
-┃                          USE WHEN: Creating a recovery point before risky work.                 ┃ 
-┃ ▸ mem chunk              Mechanically split one direct Memory at header, paragraph, or          ┃v
+┃ ▸ mem atomize ─┬ Immediately atomize the current Context into independently reviewable Memories ┃^
+┃                │ and save the full analysis for Review.                                         ┃ 
+┃                └ WHEN · Untangling requirements or claims that were written together so each    ┃ 
+┃                         can be reviewed and revised independently.                              ┃ 
+┃ ▸ mem audit ─┬ Run Duplicate, Ambiguity, and Conflict checks plus optional Rule Conformance,    ┃ 
+┃              │ then review the combined saved result.                                           ┃ 
+┃              └ WHEN · Performing a combined quality review before revising a Context.           ┃ 
+┃ ▸ mem branch ─┬ Copy a Context or subtree into a new branch and switch to it.                   ┃ 
+┃               └ WHEN · Editing a Context or subtree independently while preserving the          ┃ 
+┃                        original.                                                                ┃ 
+┃ ▸ mem check- ──────┬ Check one Context or saved Ground Examples against explicit Rules or       ┃ 
+┃     conformance    │ condition propositions and report conformance issues.                      ┃ 
+┃                    └ WHEN · Verifying whether existing Memories or Examples satisfy stated      ┃ 
+┃                             Rules or condition propositions.                                    ┃ 
+┃ ▸ mem checkout ─┬ Switch Contexts using Git-style syntax; with -b, create and switch to a new   ┃ 
+┃                 │ Context branch.                                                               ┃ 
+┃                 └ WHEN · Using a Git-like workflow to switch or create a branch.                ┃ 
+┃ ▸ mem checkpoint ─┬ Save the current Context as a manual recovery point for Diff or Revert.     ┃ 
+┃                   └ WHEN · Creating a recovery point before risky work.                         ┃ 
+┃ ▸ mem chunk ─┬ Mechanically split all splittable direct Memories in one Context, or one         ┃ 
+┃              │ selected Memory, at configured sentence, clause, structural, literal, or size    ┃v
 ─────────────────────────────────────────────────────────────────────────────────────────────────── 
  ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab surface  H full help

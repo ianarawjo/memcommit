@@ -2,10 +2,10 @@
  Roots · source/root                                                                                                                                                                
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 › * ▾ source/root                                                                                                                                                                  ^
-  · [memory 20000000] Stable root Memory.                                                                                                                                           
+  · [unavailable] Memory preview changed                                                                                                                                            
       ▾ source/root/child                                                                                                                                                           
     · [memory 20000000] Stable child Memory.                                                                                                                                        
-    · [memory ref 30000000] READ ONLY · Stable root Memory.                                                                                                                         
+    · [embedded memory 30000000] READ ONLY · Stable root Memory.                                                                                                                    
                                                                                                                                                                                     
                                                                                                                                                                                     
                                                                                                                                                                                     
@@ -49,4 +49,4 @@
                                                                                                                                                                                     
                                                                                                                                                                                    v
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
- ↑↓ move  ←→ expand  A expand all  m hide Memories here  M hide all Memories  y copy Context  Y copy visible branch  Enter choose source  q cancel · 1/5 · 2 selectable             
+ ↑↓ move  ←→ expand  A expand all  m THIS Context: hide items · M EVERY Context: hide items  y copy Context  Y copy visible branch  Enter choose source  q cancel · 1/5 · 2 selectab

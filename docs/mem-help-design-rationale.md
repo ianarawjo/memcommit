@@ -155,12 +155,13 @@ prompt-toolkit selector:
   Category names and their complete execution-basis descriptions are bold so
   each box establishes a visible semantic boundary before its operation rows;
   the surrounding border remains ordinary chrome when the box is not focused.
-  Before those categories, one neutral `CORE CONCEPTS` and
-  `COMMON KEYS` information box explains Memory, Context, Profile, Operation,
-  Grant, Session, and Checkpoint plus the shared navigation grammar. Memory,
-  Context, and Profile are defined relationally: Profiles isolate Context
-  stores; Memories are independently selectable records stored inside a
-  Context; and Contexts contain Memories while `/` expresses child hierarchy.
+  Before those categories, one neutral information box contains `CORE
+  CONCEPTS`, `COMMON LOCATORS`, and `COMMON KEYS`. It explains Memory, Context,
+  Profile, Operation, Grant, Session, and Checkpoint, then makes the shared
+  object-location and navigation grammars discoverable. Memory, Context, and
+  Profile are defined relationally: Profiles isolate Context stores; Memories
+  are independently selectable records stored inside a Context; and Contexts
+  contain Memories while `/` expresses child hierarchy.
   The primer explains that operations which support descendant scope may treat
   one Context and its descendants as a subtree, without implying that every
   operation expands descendants automatically.
@@ -172,11 +173,25 @@ prompt-toolkit selector:
   `A–Z` omits this primer entirely and begins with its lexical command box.
   Grant prose describes selectively given or received permission without
   implying ownership, and Checkpoint prose identifies both its per-operation
-  creation and per-affected-Context recording boundary. The Backspace hint
-  concisely states the writable-field exception without repeating a read-only
-  qualifier in the heading or navigation action. Operation-specific footers
-  remain authoritative for keys that are not common enough to appear in this
-  primer.
+  creation and per-affected-Context recording boundary. `COMMON LOCATORS`
+  distinguishes canonical global bare Context names from `.`, `..`, `./...`,
+  and `../...` relative forms, all resolved against one command-start current
+  snapshot. It separately explains bare direct-Memory UID discovery and the
+  `CONTEXT:UID` owner separator, where UID may be a full identifier or accepted
+  prefix, including a relative owner example. This is a
+  discovery contract, not a promise that every operation accepts a direct-
+  Memory locator; the row explicitly limits that syntax to supporting
+  operations. Bare UID ambiguity stops rather than selecting a current or
+  first owner, and the operation reports qualified candidates.
+
+  `COMMON KEYS` mirrors the bindings of the Help browser itself: arrows move,
+  choose, expand, and collapse; holding vertical arrows accelerates; PageUp and
+  PageDown jump ten rows; Home and End reach the first Help row and final
+  command; Tab traverses Language, View, and operation groups; Enter opens or
+  selects Forms; H opens full command help or hides an Explore overlay; and
+  Escape, Q, or Ctrl-C closes the browser. Backspace is deliberately omitted
+  because this Help browser does not bind it. Operation-specific footers remain
+  authoritative for focus-sensitive wording and modes outside this browser.
   The `MEMORY` type label uses the shared bold light-lavender Memory token,
   making the primer a compact legend for Memory-object text elsewhere in the
   TUI.
@@ -193,7 +208,8 @@ prompt-toolkit selector:
   traverses the reverse path. A focused concept supplies a cursor anchor and
   the common blue row/frame treatment so scrolling can keep it visible, but
   Enter, Left, Right, and full-command Help deliberately perform no action.
-  Common Keys remains reference prose rather than five additional focus stops.
+  Common Locators and Common Keys remain reference prose rather than additional
+  focus stops.
   A neutral `OPERATIONS` heading separates this primer from the category boxes
   in both discovery views. The heading makes the list's object explicit without
   adding another nested frame or focus stop.
@@ -224,8 +240,8 @@ prompt-toolkit selector:
   when valid input can be mistaken for object lookup or adjacent operations are
   otherwise easy to confuse. The first such comparison, `add`'s `COPY OR
   LINK`, makes its literal-content boundary explicit and distinguishes
-  independent work, an immutable Memory Reference, a live Memory Embed, and an
-  embedded Context. The Help
+  independent work, immutable Memory or Context References, and live Memory
+  or Context Embeds. The Help
   catalog owns that decision meaning so Python, agent, MCP, and terminal callers
   reach the same conclusion; the terminal adapter owns only layout and CLI
   forms. Terminal alternatives use literal `-` markers so rendering does not
@@ -254,12 +270,10 @@ prompt-toolkit selector:
   its canonical label, as in `list (ls)` and `delete (remove)`, while remaining
   directly executable. `remove` is therefore not a second deletion operation:
   both spellings reach the same callback and the canonical Delete contract.
-  The same rule makes `find-redundancies (find-duplicates)` one read-only
-  semantic-quality operation: the plural redundancy spelling is canonical and
-  visible, while the older duplicate spelling remains executable but hidden.
-  The alias does not become a second Help operation or evidence-ledger row.
-  There is no singular `find-redundancy` route. Syntax-first root Help displays
-  only the canonical command.
+  `find-duplicates` and `find-redundancies` remain separate direct, one-Context read-only
+  operations: the former reports provider-free exact DUP groups, while the
+  latter reports complete exact-plus-semantic DUN evidence. There is no
+  singular `find-redundancy` route.
   `A–Z` has no semantic categories, so its complete visible-operation
   projection occupies one `A–Z` box.
   Because that projection owns only one box, the box fills any spare list
@@ -458,8 +472,9 @@ subcommands. Parser-valid spellings whose callback deliberately returns a
 usage error, such as bare `mem impact`, are not advertised as meaningful Forms.
 Bare `mem query` now appears because a terminal opens its interactive Question
 and Source workbench; outside a terminal it still requires an explicit
-selector. Bare Edit likewise exposes its direct-Memory setup flow, while its
-non-TTY route retains explicit operands. Group help alone is
+selector. Bare Reference exposes an explicit Context/Memory snapshot-unit
+setup and Edit exposes its direct-Memory setup, while their non-TTY routes
+retain explicit operands. Group help alone is
 also not treated as an operation, while
 groups with real bare callbacks (`lock`, `unlock`, and `profile`) expose them.
 
@@ -576,8 +591,8 @@ fixture. In study-owned session Help, a language change is recorded only as a
 content-free `HELP LANGUAGE <code>` TUI action so language exposure can be
 accounted for without altering the task data.
 
-The localized learning layer covers Core Concept definitions, common-key
-guidance, category descriptions, and every operation's collapsed
+The localized learning layer covers Core Concept definitions, common-locator
+and common-key guidance, category descriptions, and every operation's collapsed
 `DESCRIPTION` and `USE WHEN` prose. Command names, flags, Forms, and the
   canonical nouns `Memory`, `Context`, `Profile`, `Operation`, `Grant`,
   `Session`, and `Checkpoint` stay English so translated guidance continues to

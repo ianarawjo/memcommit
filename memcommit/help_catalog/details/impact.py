@@ -23,14 +23,15 @@ IMPACT_DETAILS = (
                 label="OPERATION-SPECIFIC",
                 guidance=(
                     "Use mem impact OPERATION to prepare Atomize, Forget, Distill, "
-                    "or Resolve effects, or inspect a saved Meld, Sever, or Update "
-                    "Impact."
+                    "Resolve, or directional Update effects, or inspect a saved "
+                    "Meld, Sever, or Update Impact."
                 ),
             ),
             OperationComparisonOption(
                 label="DIRECTIONAL UPDATE",
                 guidance=(
-                    "Omit OPERATION and provide --from or --to; the omitted endpoint "
+                    "Use mem impact update SOURCE TARGET, or retain the root "
+                    "--from or --to compatibility form; a missing option endpoint "
                     "is the current Context."
                 ),
             ),

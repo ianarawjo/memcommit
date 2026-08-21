@@ -30,16 +30,17 @@ Audit needs only the capability intersection:
 
 ## Decision
 
-Use Audit as the second real operation adapter.  Its adapter freezes the
+Use Audit's explicit `--select` route as the second real operation adapter.
+Flagless Audit now uses the command-start current Context directly. The adapter freezes the
 readable public-name catalog, the selected current public name, and Grant-aware
 annotations into one `EndpointSetupSpec`.  The setup returns only the selected
 public Context name.  The Audit command remains responsible for resolving the
 exact `ContextAccess`, checking retained-analysis authority, loading the frozen
 Source, connecting the provider, and saving the Audit session.
 
-The common setup performs no Context load, provider call, or durable mutation.
+The explicit common setup performs no Context load, provider call, or durable mutation.
 It represents only process-local selection.  Cancellation returns no Source.
-The operation still audits one direct Context; adopting the shared component
+The operation still audits one direct Context; making setup opt-in and adopting the shared component
 does not add descendant or Profile-wide execution.
 
 ## Why not migrate the legacy semantic operations yet

@@ -25,7 +25,12 @@ from memcommit.api.atomize import (
     AtomizeStructuralApplyResult,
 )
 from memcommit.api.compare import ComparisonResult
-from memcommit.api.dedup import DedunApplyResult, DedunPlanResult, ExactDedupResult
+from memcommit.api.dedup import (
+    DedunApplyResult,
+    DedunPlanResult,
+    ExactDedupResult,
+    ExactDuplicateFindResult,
+)
 from memcommit.api.embed import EmbeddedContextResult, EmbeddedMemoryResult
 from memcommit.api.forget import (
     ForgetApplyResult,
@@ -51,7 +56,7 @@ from memcommit.api.query import (
     QueryProviderConfig,
     ReferenceQueryResult,
 )
-from memcommit.api.reference import MemoryReferenceResult
+from memcommit.api.reference import ContextReferenceResult, MemoryReferenceResult
 from memcommit.api.replace import ReplaceApplyReceipt, ReplacePlanResult
 from memcommit.api.quality_find import QualityFindResult
 from memcommit.api.resolve import ResolveAnalysisResult, ResolveApplyResult
@@ -421,12 +426,13 @@ class MemCommitClient:
         context_name: str | None = None,
         *,
         memory_selectors: Sequence[str] = (),
-        allow_create: bool = False,
+        allow_create: bool = True,
         allow_delete: bool = False,
         guidance: str = "",
+        target_fit: str = "MAY",
         expected_revision: str | None = None,
     ) -> ResolveAnalysisResult:
-        """Propose grounded, independently Fit-verified Context repairs."""
+        """Return one automatic grounded or assumed full-frame interpretation plan."""
 
         from memcommit.api._operations.resolve import resolve_context
 
@@ -437,6 +443,7 @@ class MemCommitClient:
             allow_create=allow_create,
             allow_delete=allow_delete,
             guidance=guidance,
+            target_fit=target_fit,
             expected_revision=expected_revision,
         )
 
@@ -444,7 +451,7 @@ class MemCommitClient:
         self,
         context_names: Sequence[str] = (),
     ) -> QualityFindResult:
-        """Find semantic redundancy evidence in one readable Context frame."""
+        """Find complete exact-DUP plus semantic-DUN evidence."""
 
         from memcommit.api._operations.quality_find import find_quality
 
@@ -452,11 +459,13 @@ class MemCommitClient:
 
     def find_duplicates(
         self,
-        context_names: Sequence[str] = (),
-    ) -> QualityFindResult:
-        """Compatibility alias for :meth:`find_redundancies`."""
+        context_name: str | None = None,
+    ) -> ExactDuplicateFindResult:
+        """Find exact direct-Memory duplicate groups without mutation."""
 
-        return self.find_redundancies(context_names)
+        from memcommit.api._operations.exact_duplicates import find_duplicates_exact
+
+        return find_duplicates_exact(self._runtime, context_name)
 
     def find_ambiguities(
         self,
@@ -482,9 +491,10 @@ class MemCommitClient:
         self,
         handoff: QualityFindingHandoff,
         *,
-        allow_create: bool = False,
+        allow_create: bool = True,
         allow_delete: bool = False,
         guidance: str = "",
+        target_fit: str = "MAY",
         expected_revision: str | None = None,
     ) -> ResolveAnalysisResult:
         """Resolve one exact finder receipt after fresh source and authority checks."""
@@ -497,6 +507,7 @@ class MemCommitClient:
             allow_create=allow_create,
             allow_delete=allow_delete,
             guidance=guidance,
+            target_fit=target_fit,
             expected_revision=expected_revision,
         )
 
@@ -529,7 +540,7 @@ class MemCommitClient:
         *,
         expected_revision: str | None = None,
     ) -> DedunPlanResult:
-        """Plan survivor choices from confirmed semantic redundancy evidence."""
+        """Plan survivor choices from typed exact-plus-semantic DUN evidence."""
 
         from memcommit.api._operations.dedup import plan_dedun
 
@@ -1049,6 +1060,24 @@ class MemCommitClient:
             memory_selector,
             source_context=source_context,
             into_context=into_context,
+        )
+
+    def reference_context(
+        self,
+        source_context: str,
+        *,
+        into_context: str | None = None,
+        recursive: bool = False,
+    ) -> ContextReferenceResult:
+        """Retain one immutable direct or recursive Source Context snapshot."""
+
+        from memcommit.api._operations.reference import reference_context
+
+        return reference_context(
+            self._runtime,
+            source_context,
+            into_context=into_context,
+            recursive=recursive,
         )
 
     def embed_memory(

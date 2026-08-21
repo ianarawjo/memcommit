@@ -41,6 +41,8 @@ from memcommit.interfaces.agent.quality_find import (
     QualityFindAgentAdapter,
     quality_find_agent_tool_schema,
     quality_finding_handoff_agent_schema,
+    redundancy_evidence_agent_schema,
+    semantic_redundancy_evidence_agent_schema,
 )
 from memcommit.interfaces.agent.distill import (
     DISTILL_AGENT_CONTRACT_VERSION,
@@ -249,6 +251,8 @@ __all__ = [
     "reference_agent_tool_schema",
     "quality_find_agent_tool_schema",
     "quality_finding_handoff_agent_schema",
+    "redundancy_evidence_agent_schema",
+    "semantic_redundancy_evidence_agent_schema",
     "resolve_agent_tool_schema",
     "show_agent_tool_schema",
     "search_agent_tool_schema",

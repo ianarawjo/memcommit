@@ -1,14 +1,30 @@
  List · task-2/advisor1                                                                                                                                                             
- Roots · practice · practice-atomize · task-1 · task-2 · task-3                                                                                                                     
+ Roots · practice · task-1 · task-2 · task-3                                                                                                                                        
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
     ▸ practice                                                                                                                                                                     ^
-    ▸ practice-atomize                                                                                                                                                              
     ▸ task-1                                                                                                                                                                        
     ▾ task-2                                                                                                                                                                        
       ▸ task-2/description                                                                                                                                                          
       ▸ task-2/participant                                                                                                                                                          
-› *   ▾ task-2/advisor1  READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED               
-        ▾ task-2/advisor1/budget  READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED      
+› *   ▾ task-2/advisor1  READ GRANT · PERMISSIONS READ + EMBED + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED       
+    · [context 0ff7abfd] VIA EMBED · task-2/advisor1/structure                                                                                                                      
+    · [context 6f253a9e] VIA EMBED · task-2/advisor1/emphasis                                                                                                                       
+    · [context a759f597] VIA EMBED · task-2/advisor1/style                                                                                                                          
+    · [context b0c4b50c] VIA EMBED · task-2/advisor1/claim-evidence                                                                                                                 
+    · [context 39a6f298] VIA EMBED · task-2/advisor1/expression                                                                                                                     
+    · [context 7699c7c5] VIA EMBED · task-2/advisor1/terminology                                                                                                                    
+    · [context d2f78b99] VIA EMBED · task-2/advisor1/methods                                                                                                                        
+    · [context 30568e2f] VIA EMBED · task-2/advisor1/evaluation                                                                                                                     
+    · [context 5cdea05f] VIA EMBED · task-2/advisor1/ethics                                                                                                                         
+    · [context 6db29abe] VIA EMBED · task-2/advisor1/scope                                                                                                                          
+    · [context cd6c1fab] VIA EMBED · task-2/advisor1/safety                                                                                                                         
+    · [context 52db6b06] VIA EMBED · task-2/advisor1/feasibility                                                                                                                    
+    · [context 7d293f75] VIA EMBED · task-2/advisor1/reproducibility                                                                                                                
+    · [context d6d3ee9e] VIA EMBED · task-2/advisor1/budget                                                                                                                         
+    · [context 7ba75d6b] VIA EMBED · task-2/advisor1/compensation                                                                                                                   
+    · [context 57ec8c37] VIA EMBED · task-2/advisor1/review                                                                                                                         
+        ▾ task-2/advisor1/budget  READ GRANT · PERMISSIONS READ + EMBED + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOC 
+          KED                                                                                                                                                                       
       · [memory 05e0261e] Keep the total, major cost categories, and one-line estimate basis in the main text so the resource argument can be understood without leaving the        
                           proposal.                                                                                                                                                 
       · [memory 1083e9b3] Place each major cost beside the activity or deliverable it enables in the main text.                                                                     
@@ -17,8 +33,8 @@
       · [memory 2f5f9039] Update the cost sentence whenever the related activity changes so the narrative and requested amount cannot drift apart.                                  
       · [memory f7a16d08] Accept a denser main-text paragraph when the estimate basis is essential to deciding whether the request is proportionate.                                
       · [memory 2ca1d5a1] The user tends to revise the work plan but forget a detached budget table unless the key amount is repeated beside the activity.                          
-        ▾ task-2/advisor1/claim-evidence  READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOC 
-                   KED                                                                                                                                                              
+        ▾ task-2/advisor1/claim-evidence  READ GRANT · PERMISSIONS READ + EMBED + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TR 
+                   ACE BLOCKED                                                                                                                                                      
       · [memory 06f6c673] Attach adjacent evidence or citations to verifiable claims about user behavior or technology effects.                                                     
       · [memory 58991ce7] Distinguish between results observed in the pilot and expectations to be confirmed in the main user study using different expressions.                    
       · [memory f5adf029] Do not use verbs that imply proving causation if the design does not support causal inference.                                                            
@@ -30,23 +46,7 @@
       · [memory 9939e9e8] Identify which design judgment—retain, modify, or discard—each piece of evidence from formative evaluation supports.                                      
       · [memory 41060e8e] Results from controlled formative studies do not directly prove effects in actual long-term use.                                                          
       · [memory ec54ce10] The user can have an explanation approved as a conceptual contribution only if it is falsifiable with observable data.                                    
-        ▾ task-2/advisor1/compensation  READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKE 
-                   D                                                                                                                                                                
-      · [memory 0ae46268] Calculate user study compensation budgets based on estimated participation burden, combining session time and preparation effort.                         
-      · [memory bdda6e22] Compensate for required travel time in face-to-face user studies as well.                                                                                 
-      · [memory f49b1d0a] Compensate for the actual time participants spent in sessions, regardless of research modality.                                                           
-      · [memory 1f4d05e4] Leave cash payment as an available compensation method for face-to-face studies.                                                                          
-      · [memory abcba764] If compensation equity is explained, do not require finalizing the payment method at the proposal stage.                                                  
-      · [memory c6a28f37] Apply the same base hourly rate to face-to-face and remote studies if task burden is equal.                                                               
-      · [memory 874de649] Participants judge compensation fairness based on the total burden, combining session time with required travel and preparation time.                     
-      · [memory 529559f5] Account in compensation for the burden of rescheduling iterations and returning for multiple formative evaluation sessions.                               
-      · [memory c8be56ee] Compensate participants for time already invested even if a session is terminated early due to prototype errors.                                          
-      · [memory bdac8cf8] The author of this proposal tends to exclude preparation burden between sessions when calculating compensation for iterative studies.                     
-        ▾ task-2/advisor1/emphasis  READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED    
-      · [memory 4a1de8df] Do not exceed two primary HCI contributions.                                                                                                              
-      · [memory b5b6a901] Name each design or empirical contribution and present it in a single sentence.                                                                           
-      · [memory e89de514] In studies recruiting community participants, emphasize the time burden associated with participation.                                                    
-      · [memory f7025cbb] In studies recruiting community participants, emphasize the travel burden associated with participation.                                                  
-      · [memory a42891a1] HCI reviewers find it difficult to identify primary contributions when named design or empirical contributions exceed two.                               v
+        ▾ task-2/advisor1/compensation  READ GRANT · PERMISSIONS READ + EMBED + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRAC 
+                   E BLOCKED                                                                                                                                                       v
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
- ↑↓ move  ←→ expand  A expand all  m hide Memories here  M show all Memories  Enter open/collapse  q close · 7/176 · 109 selectable
+ ↑↓ move  ←→ expand  A expand all  m THIS Context: hide items · M EVERY Context: show items  y copy Context  Y copy visible branch  Enter open/collapse  q close · 6/191 · 108 selec

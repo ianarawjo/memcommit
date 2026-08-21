@@ -1,4 +1,4 @@
- MEM MELD · 2/2 · ANALYZING ORDERED SOURCE RELATIONS … · 1s
+ MEM MELD · 2/2 · ANALYZING MELD TURN … · 1s
 ┌──────────────────────────────────────────────────────────────────────| MELD CONFIRMED INPUTS · READ-ONLY |───────────────────────────────────────────────────────────────────────┐
 │MEM COMPARE · FROZEN INPUT · RESULT PENDING                                                                                                                                      ^│
 │                                                                                                                                                                                  │

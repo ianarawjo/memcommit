@@ -17,8 +17,8 @@ from memcommit.source_projection.model import SourceAccess, SourceDisplayFacts
 def test_three_pane_setup_stacks_roles_and_supplies_a_default_output() -> None:
     with create_pipe_input() as pipe_input:
         # Both trees begin on current. Confirm Source, move Criteria to the
-        # other root, confirm it, then submit the prefilled Output field.
-        pipe_input.send_text("\r\x1b[B\r\r")
+        # other root, confirm it, then review and approve the START command.
+        pipe_input.send_text("\r\x1b[B\r\r\r")
         result = choose_sever_setup(
             ("personal-memory", "public-guidance"),
             current="personal-memory",
@@ -40,7 +40,7 @@ def test_query_only_row_is_visible_but_cannot_be_selected_as_criteria() -> None:
         # query-only child, and verify Enter cannot select it. Collapse back,
         # move to public guidance, select it, then submit the default Output.
         pipe_input.send_text(
-            "\r\x1b[B\x1b[C\x1b[C\r\x1b[D\x1b[D\x1b[B\r\r"
+            "\r\x1b[B\x1b[C\x1b[C\r\x1b[D\x1b[D\x1b[B\r\r\r"
         )
         result = choose_sever_setup(
             ("personal-memory",),
@@ -71,7 +71,7 @@ def test_output_pane_rejects_an_existing_context_name() -> None:
         # The first name submission remains in the editor because it already
         # exists. Ctrl-U replaces it with a fresh exact name.
         pipe_input.send_text(
-            "\r\x1b[B\r\x15personal-memory\r\x15healthcare-draft\r"
+            "\r\x1b[B\r\x15personal-memory\r\x15healthcare-draft\r\r"
         )
         result = choose_sever_setup(
             ("personal-memory", "public-guidance"),
@@ -85,13 +85,36 @@ def test_output_pane_rejects_an_existing_context_name() -> None:
     assert result.output_name == "healthcare-draft"
 
 
+def test_output_pane_accepts_source_as_an_exact_self_save_location() -> None:
+    with create_pipe_input() as pipe_input:
+        # Source must first be narrowed to THIS CONTEXT ONLY. Select the other
+        # row as Criteria, then replace the suggested fresh name with Source.
+        pipe_input.send_text(
+            "\x1b[A\x1b[D\x1b[B\r\x1b[B\r"
+            "\x15personal-memory\r\r"
+        )
+        result = choose_sever_setup(
+            ("personal-memory", "public-guidance"),
+            current="personal-memory",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result is not None
+    assert result.source_name == "personal-memory"
+    assert not result.source_descendants
+    assert result.criteria_name == "public-guidance"
+    assert result.output_name == "personal-memory"
+
+
 def test_each_context_pane_has_an_independent_descendant_scope_toggle() -> None:
     with create_pipe_input() as pipe_input:
         # Up from the first Context enters Scope; Left chooses exact-only and
         # Down returns to the tree. Repeat independently in Criteria.
         pipe_input.send_text(
             "\x1b[A\x1b[D\x1b[B\r"
-            "\x1b[A\x1b[D\x1b[B\x1b[B\r\r"
+            "\x1b[A\x1b[D\x1b[B\x1b[B\r\r\r"
         )
         result = choose_sever_setup(
             ("personal-memory", "public-guidance"),
@@ -128,7 +151,7 @@ def test_left_and_right_reuse_switch_tree_navigation_for_nested_criteria() -> No
     with create_pipe_input() as pipe_input:
         # Confirm Source, move to the collapsed criteria namespace, expand it,
         # enter its child, select that exact Context, and submit Output.
-        pipe_input.send_text("\r\x1b[B\x1b[C\x1b[C\r\r")
+        pipe_input.send_text("\r\x1b[B\x1b[C\x1b[C\r\r\r")
         result = choose_sever_setup(
             ("personal-memory", "criteria/nested"),
             current="personal-memory",

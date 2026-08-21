@@ -1,0 +1,9 @@
+$ mem fit ea2b21ac fit/current --plain                                                                                                                                              
+PTY · 180×52                                                                                                                                                                        
+Fit error: Fit Source Memory 'ea2b21ac' in 'fit/current' overlaps another selected source.                                                                                          
+EXIT · 1                                                                                                                                                                            
+OVERLAP FAILURE · READ-ONLY VERIFICATION                                                                                                                                            
+  CURRENT UNCHANGED · True                                                                                                                                                          
+  PROVIDER CALLS · 0                                                                                                                                                                
+  FIT RECEIPTS · 0                                                                                                                                                                  
+CAPTURE GATE · PRESS V

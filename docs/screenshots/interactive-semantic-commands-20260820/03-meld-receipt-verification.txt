@@ -1,0 +1,5 @@
+PTY · 180 columns × 52 rows                                                                                                                                                         
+                                                                                                                                                                                    
+START RECEIPT · MELD · MeldEndpointSelection(mode='symmetric', left_name='capture/incoming', right_name='capture/baseline', target_name='capture/result', create_target=True, left_d
+escendants=False, right_descendants=False, left_memory_uid=None, right_memory_uid=None)                                                                                             
+DURABLE STATE · UNCHANGED · PROVIDER CALLS 0

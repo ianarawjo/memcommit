@@ -1,4 +1,4 @@
-"""Public immutable Memory Reference assembly."""
+"""Public immutable Memory or Context Reference assembly."""
 
 from __future__ import annotations
 
@@ -11,12 +11,13 @@ from memcommit.api.errors import (
     ReferenceInputError,
     ReferenceStorageError,
 )
-from memcommit.api.reference import MemoryReferenceResult
+from memcommit.api.reference import ContextReferenceResult, MemoryReferenceResult
 from memcommit.reference_application import (
+    ContextReferenceRequest,
     ReferenceError as ApplicationReferenceError,
     ReferenceRequest,
 )
-from memcommit.reference_runtime import execute_reference
+from memcommit.reference_runtime import execute_context_reference, execute_reference
 from memcommit.store import ConcurrentContextUpdateError
 
 
@@ -61,4 +62,50 @@ def reference_memory(
     )
 
 
-__all__ = ["reference_memory"]
+def reference_context(
+    runtime: ClientRuntime,
+    source_context: str,
+    *,
+    into_context: str | None = None,
+    recursive: bool = False,
+) -> ContextReferenceResult:
+    """Retain one immutable direct or recursive Context snapshot."""
+
+    try:
+        result = execute_context_reference(
+            ContextReferenceRequest(
+                source_locator=source_context,
+                into_locator=into_context,
+                include_descendants=recursive,
+                follow_embeds=recursive,
+            ),
+            store=runtime.store,
+        )
+    except FileNotFoundError as error:
+        raise_public(ReferenceContextError, error)
+    except ConcurrentContextUpdateError as error:
+        raise_public(ReferenceConflictError, error)
+    except OSError as error:
+        raise_public(ReferenceStorageError, error)
+    except (ApplicationReferenceError, KeyError, TypeError, ValueError) as error:
+        raise_public(ReferenceInputError, error)
+    except RuntimeError as error:
+        raise_public(ReferenceConflictError, error)
+    except Exception as error:
+        raise_public(ReferenceExecutionError, error)
+
+    return ContextReferenceResult(
+        reference_uid=result.reference_uid,
+        source_name=result.source_name,
+        source_uid=result.source_uid,
+        snapshot_content_sha256=result.snapshot_content_sha256,
+        include_descendants=result.include_descendants,
+        follow_embeds=result.follow_embeds,
+        context_count=result.context_count,
+        into_name=result.into_name,
+        into_uid=result.into_uid,
+        checkpoint_uid=result.checkpoint_uid,
+    )
+
+
+__all__ = ["reference_context", "reference_memory"]

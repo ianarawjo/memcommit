@@ -49,4 +49,4 @@
                                                                                                                                                                                     
                                                                                                                                                                                    v
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
- ↑↓ move  ←→ expand  A expand all  m hide Memories here  M hide all Memories  y/Y copy Memory  Enter preview only  q cancel · 4/8 · 9 selectable
+ ↑↓ move  ←→ expand  A expand all  m THIS Context: hide items · M EVERY Context: hide items  y/Y copy item  Enter preview only  q cancel · 4/8 · 9 selectable

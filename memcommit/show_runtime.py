@@ -12,6 +12,7 @@ from memcommit.authority.access import (
     resolve_context_access,
 )
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.context_snapshot import ContextSnapshotRef
 from memcommit.context_locator import resolve_context_locator
 from memcommit.profile_config import ProfileRegistry
 from memcommit.profiles import (
@@ -93,7 +94,14 @@ def _snapshot_context(
                 )
             )
         elif isinstance(item, Context):
-            row_facts = explicit or SourceDisplayFacts(reach=SourceReach.VIA_EMBED)
+            row_facts = explicit or (
+                SourceDisplayFacts(
+                    form=SourceForm.CONTEXT_REFERENCE,
+                    states=(SourceState.READ_ONLY,),
+                )
+                if isinstance(item, ContextSnapshotRef)
+                else SourceDisplayFacts(reach=SourceReach.VIA_EMBED)
+            )
             items.append(
                 ShowEmbeddedContext(
                     uid=item.uid,
@@ -101,10 +109,15 @@ def _snapshot_context(
                     source=row_facts,
                     # Only an explicit attached-Grant annotation follows a
                     # selected projected row into its Context header. Ordinary
-                    # embeds retain the established unannotated child header.
+                    # embeds retain the established unannotated child header;
+                    # an immutable Context Reference keeps its typed form.
                     context=_snapshot_context(
                         item,
-                        context_facts=explicit,
+                        context_facts=(
+                            row_facts
+                            if isinstance(item, ContextSnapshotRef)
+                            else explicit
+                        ),
                     ),
                 )
             )

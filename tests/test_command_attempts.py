@@ -213,6 +213,33 @@ def test_operation_log_lists_prior_attempt_without_listing_itself(
     assert records[1].outcome == "NO_CHANGE"
 
 
+def test_cancelled_edit_is_qualified_without_a_completed_label(
+    isolated_store,
+    monkeypatch,
+):
+    import memcommit.commands.edit as edit_command
+
+    _enable_attempt_log(monkeypatch)
+    assert runner.invoke(app, ["init", "working"]).exit_code == 0
+    monkeypatch.setattr(edit_command, "is_interactive_terminal", lambda: True)
+    monkeypatch.setattr(
+        edit_command,
+        "choose_edit_setup",
+        lambda *_args, **_kwargs: None,
+    )
+
+    cancelled = runner.invoke(app, ["edit"])
+    shown = runner.invoke(app, ["log", "--operations"])
+
+    assert cancelled.exit_code == 0
+    attempt = CommandAttemptLedger(isolated_store).list()[1]
+    assert attempt.operation == "edit"
+    assert attempt.status == "COMPLETED"
+    assert attempt.outcome == "CANCELLED"
+    assert "CANCELLED" in shown.output
+    assert "COMPLETED" not in shown.output
+
+
 def test_chunk_without_splittable_memory_records_no_change_not_a_checkpoint(
     isolated_store,
     monkeypatch,

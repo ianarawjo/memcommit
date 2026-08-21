@@ -4,7 +4,7 @@
 │  RANGE · [ THIS CONTEXT ONLY ]  [ INCLUDE DESCENDANTS ] · ←/→ SELECT                                                                                                             │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌─────────────────────────────────────────────────────────────────| CONTEXT · ALL READABLE CONTEXTS · * CURRENT |──────────────────────────────────────────────────────────────────┐
-│› ✓ * · capture/cases                                                                                                                                                            ^│
+│› ✓ * ▸ capture/cases                                                                                                                                                            ^│
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
@@ -20,8 +20,8 @@
 ┃                                                                                                                                                                                  ┃
 ┃ RULE 1                                                                                                                                                                           ┃
 ┃ Act only after the person explicitly confirms the selected option.                                                                                                               ┃
-┃ SUPPORT · 3516dd72                                                                                                                                                               ┃
-┃ BOUNDARY · 0803ea39                                                                                                                                                              ┃
+┃ SUPPORT · ef77de4b                                                                                                                                                               ┃
+┃ BOUNDARY · a694d250                                                                                                                                                              ┃
 ┃ WHY · The confirmed Case supports action and the mention-only Case bounds it.                                                                                                    ┃
 ┃                                                                                                                                                                                  ┃
 ┃ OUTSIDE PROPOSED RULES · 0 Memories                                                                                                                                              ┃

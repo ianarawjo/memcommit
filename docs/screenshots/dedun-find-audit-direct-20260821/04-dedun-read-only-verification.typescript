@@ -1,0 +1,82 @@
+PTY 180 52
+MEM DEDUN · 1/1 · ANALYZING DIRECT MEMORIES . · 0sMEM DEDUN · 1/1 · ANALYZING DIRECT MEMORIES .. · 0sMEM DEDUN · 1/1 · ANALYZING DIRECT MEMORIES … · 0s                                                   [32mDedun 'quality/direct-dedun': absorbed 1 redundant Memory item(s); kept 1 original UID(s).[0m
+DUN COMPOSITION · 1 evidence link = 0 DUP / EXACT links + 1 SEMANTIC DUN link
+Checkpoint [089a0f1d] · review: mem review dedun --receipt 089a0f1d-9a11-4ee4-a7e4-d4e928434b67 · recovery: mem undo
+COMMAND EXIT · 0
+VERIFICATION · CONTEXT quality/direct-dedun · MEMORIES 2 · CHECKPOINT COMMANDS ['dedun'] · CURRENT quality/direct-dedun · PROVIDER ['find_duplicates']
+DEDUN RECEIPT READY
+
+MEM REVIEW · DEDUN
+Completed operation evidence. This Review is read-only and cannot change or apply the recorded result.
+
+STATUS · APPLIED · RECEIPT 089a0f1d-9a11-4ee4-a7e4-d4e928434b67
+CONTEXT · quality/direct-dedun
+COMPLETED · 2026-08-21T12:00:08.068373
+OUTCOME · Resolved 1 redundancy group(s); absorbed 1 Memory item(s)
+
+RESOLVED GROUPS · 1
+1. [38;2;138;173;244m[1mSURVIVOR[0m · [20000000] The parking garage is unavailable after 10 p.m.
+   [38;2;237;135;150m[1mABSORB[0m · [20000001] Do not enter the parking garage after 22:00.
+   EVIDENCE · SEMANTIC_EQUIVALENT · Both Memories prohibit garage access after the same 10 p.m. boundary.
+REVIEW EXIT · 0
+VERIFICATION · CONTEXT quality/direct-dedun · MEMORIES 2 · CHECKPOINT COMMANDS ['dedun'] · CURRENT quality/direct-dedun · PROVIDER ['find_duplicates']
+DEDUN REVIEW READY
+
+[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;5;117;1m┃ ╭─ RESOLVED GROUPS · 1 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮[0;1m^[179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231m │ 1. SURVIVOR · [20000000] The parking garage is unavailable after 10 p.m.                                                                                                     │[0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231m │    ABSORB · [20000001] Do not enter the parking garage after 22:00.                                                                                                          │[0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231m │    EVIDENCE · SEMANTIC_EQUIVALENT · Both Memories prohibit garage access after the same 10 p.m. boundary.                                                                    │[0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231m │                                                                                                                                                                              │[0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231m │ REVIEW RESPONSES · 0                                                                                                                                                         │[0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231m │   (none)                                                                                                                                                                     │[0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231m ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯[0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[0;1m› REPORT         Complete Dedun report[0m                                                                                                                                           [0;1m^[179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[ READ ONLY ]  No action available · This saved session can only be inspected.                                                                                                    [179C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m READ ONLY · REVIEW REPORT · READ ONLY · ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter inspect  Esc/Backspace close H Help  y/Y copy  Q close[169D[51A[0m[J[0m[?7h[?1049l[?2004lINTERACTIVE REVIEW EXIT · 0
+VERIFICATION · CONTEXT quality/direct-dedun · MEMORIES 2 · CHECKPOINT COMMANDS ['dedun'] · CURRENT quality/direct-dedun · PROVIDER ['find_duplicates']
+DEDUN INTERACTIVE REVIEW CLOSED
+
+[2J[HPTY 180 52
+VERIFICATION · CONTEXT quality/direct-dedun · MEMORIES 2 · CHECKPOINT COMMANDS ['dedun'] · CURRENT quality/direct-dedun · PROVIDER ['find_duplicates']
+DEDUN VERIFICATION READY

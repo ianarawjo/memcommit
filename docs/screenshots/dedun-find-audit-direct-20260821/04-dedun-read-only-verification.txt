@@ -1,0 +1,3 @@
+PTY 180 52                                                                                                                                                                          
+VERIFICATION · CONTEXT quality/direct-dedun · MEMORIES 2 · CHECKPOINT COMMANDS ['dedun'] · CURRENT quality/direct-dedun · PROVIDER ['find_duplicates']                              
+DEDUN VERIFICATION READY

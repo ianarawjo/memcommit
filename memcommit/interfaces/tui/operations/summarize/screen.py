@@ -87,6 +87,7 @@ def run_summarize_tui(
                 document=(
                     None if outcome is None else project_summarize_outcome(outcome)
                 ),
+                memory_loader=setup.memory_loader,
             ),
             clipboard_projector=(None if outcome is None else project_clipboard),
             clipboard_writer=clipboard_writer,

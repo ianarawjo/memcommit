@@ -79,9 +79,8 @@ class MemoryStoreDedupPort:
 
     def _access(self, request: DedupRequest) -> ContextAccess:
         source = request.source
-        if (
-            not self.allow_grants
-            and not self.active_store.context_exists(source.display_name)
+        if not self.allow_grants and not self.active_store.context_exists(
+            source.display_name
         ):
             raise FileNotFoundError(f"Context '{source.display_name}' not found.")
         return resolve_context_access(
@@ -111,7 +110,10 @@ class MemoryStoreDedupPort:
         self._require_grant_permissions(access)
         source = request.source
         context = access.store.load_direct(access.context_name)
-        if context.uid != source.context_uid or access.display_name != source.display_name:
+        if (
+            context.uid != source.context_uid
+            or access.display_name != source.display_name
+        ):
             raise DedupConflictError(
                 "The confirmed duplicate Source identity changed. Run the finder again."
             )
@@ -298,8 +300,8 @@ class MemoryStoreDedupPort:
                             **grant_checkpoint_args(access),
                         },
                         description=(
-                            f"Resolved {len(plan.components)} semantic redundancy "
-                            f"group(s); absorbed {len(absorbed_uids)} Memory item(s)"
+                            f"Resolved {len(plan.components)} redundancy group(s); "
+                            f"absorbed {len(absorbed_uids)} Memory item(s)"
                         ),
                     ),
                     expected_context_digest=plan.context_digest,

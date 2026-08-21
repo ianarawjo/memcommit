@@ -1,19 +1,10 @@
-# `mem rationale` provenance-only boundary captures
+# `mem rationale` complete-narrative length-unit captures
 
-This evidence set runs four actual provenance-only Rationale paths with Korean
-Memory content in isolated stores. Each report is captured from a `180×52`
-color PTY and followed by a close receipt verifying zero provider calls, no
-legacy inference-cache access, and unchanged Context content.
-
-The directory name is retained from the earlier character-bound experiment so
-existing study links remain valid; its contents now record the provenance-only
-replacement contract.
-
-All four reports use one scoped-polishing example family: preserve the existing
-structure and citation markers, and limit a polishing request to explicitly
-named wording. The cases vary whether a reason was retained, whether unrelated
-Context content is enormous, and whether the reason exceeds the compact bound.
-These are persisted provenance fixtures rather than provider prompt examples.
+This ordered set records complete natural-language provenance under the default
+word bound and explicit character, UTF-8 byte, and tighter word bounds. Each
+provider response is composed to fit its requested unit; no sentence is clipped
+after generation. The retained directory name preserves existing evidence
+links.
 
 ## Reproduction frame
 
@@ -21,25 +12,22 @@ These are persisted provenance fixtures rather than provider prompt examples.
 - Working directory: `/Users/KimMunyeong/Github/memcommit`
 - PTY: `180` columns × `52` rows, verified inside every child
 - Environment: `TERM=xterm-256color`, `COLORTERM=truecolor`, `NO_COLOR` unset
-- Renderer: real cumulative PTY ANSI streams replayed through `pyte` at the
-  full `1832×1124` Menlo canvas with Apple SD Gothic Neo supplying only Hangul
-  glyphs
-- Durable boundary: every scenario uses a temporary isolated store; Rationale
-  performs no provider or cache operation and leaves Context content unchanged
+- Fixture: the motivating longer instruction → sentence Chunk → Undo → Redo →
+  Remove Trace for `Um...`
+- Durable boundary: every scenario uses an isolated temporary store; Rationale
+  performs exactly one production-shaped provider turn, performs no cache
+  operation, and leaves Context content unchanged
 
-## Scenarios and expected boundaries
+## Ordered scenarios
 
-| Report | Evidence condition | Expected result |
-| --- | --- | --- |
-| `01-no-reason-report.png` | the polishing boundary has no retained operation reason | `PROVENANCE — no reason recorded`; no filler explanation |
-| `03-recorded-reason-report.png` | one compact reason records why polishing must not become a full rewrite | only that latest recorded Korean reason is projected |
-| `05-oversized-context-report.png` | the same polishing Memory sits beside 105 Korean Memories exceeding 1,000,000 semantic characters | target provenance still opens without contextual analysis, provider, or cache |
-| `07-long-reason-report.png` | one coherent retained Korean reason exceeds 160 characters | the latest reason is projected at the 160-character cap, ending at a complete sentence rather than repeated filler |
+| Images | Invocation bound | Visible result | Durable mutation |
+| --- | --- | --- | --- |
+| `01`–`02` | default `40 words` | exact 33-word canonical provenance, then store verification | None |
+| `03`–`04` | `--limit 150 --unit characters` | a complete 146-character origin-and-lifecycle narrative | None |
+| `05`–`06` | `--limit 150 --unit bytes` | a complete 137-byte ASCII-quoted narrative | None |
+| `07`–`08` | `--limit 24 --unit words` | a complete 21-word compressed narrative | None |
 
-Each odd-numbered image is the report state. Its following even-numbered image
-is the terminal receipt after `q`, including `PROVIDER CALLS 0`,
-`CACHE UNTOUCHED`, and `STORE UNCHANGED`.
-
-Every report asserts that APPARENT PURPOSE, a human `LIMITS` section, and a
-Context-count row are absent. The application chrome remains English; Korean
-here verifies the language of actual Memory and provenance data.
+Each odd-numbered image is the direct terminal receipt. Its following image is
+the capture harness's read-only verification. None opens `RATIONALE REPORT`
+Viewer chrome; every scenario asserts exactly one provider call, an untouched
+legacy cache, and unchanged Context content.

@@ -34,7 +34,7 @@ from memcommit.quality_finding_handoff import (
     QualityFindingHandoffError,
 )
 from memcommit.semantic_redundancy_evidence import (
-    semantic_redundancy_evidence_from_json,
+    redundancy_evidence_from_json,
 )
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
 
@@ -90,7 +90,7 @@ def cmd(
         mode = resolve_console_mode(plain=plain, tui=tui)
         if not evidence:
             raise DedupError(
-                "Dedun requires semantic redundancy evidence from its review."
+                "Dedun requires exact or semantic redundancy evidence from its review."
             )
         if apply_now:
             if not survivors or expected_revision is None:
@@ -108,7 +108,7 @@ def cmd(
                 "Dedun --survivor and --expected-revision require --apply."
             )
         request = DedupRequest(
-            tuple(semantic_redundancy_evidence_from_json(item) for item in evidence)
+            tuple(redundancy_evidence_from_json(item) for item in evidence)
         )
         store = MemoryStore(create=False)
         try:

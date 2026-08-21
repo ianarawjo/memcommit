@@ -21,8 +21,30 @@ def _line(label: str, value: str, *, color: str | None = None) -> None:
 
 def _candidate(candidate: ResolveCandidate, index: int) -> None:
     typer.echo()
-    typer.secho(f"CANDIDATE {index} · {candidate.uid}", bold=True)
+    typer.secho(f"AUTOMATIC PLAN {index} · {candidate.uid}", bold=True)
     _line("SUMMARY", candidate.summary)
+    _line("CLASSIFICATION", candidate.classification)
+    _line("RESOLUTION", candidate.resolution_level)
+    _line("RULES", ", ".join(candidate.rule_ids))
+    _line("GROUNDING", "GROUNDED" if candidate.grounded else "ASSUMED")
+    for issue in candidate.issues:
+        typer.secho(
+            f"  ISSUE · {issue.uid} · {issue.kind}",
+            fg=typer.colors.CYAN,
+            bold=True,
+        )
+        _line(
+            "    MEMBERS",
+            ", ".join(uid[:8] for uid in issue.memory_uids),
+        )
+        _line("    INTERPRETATION", issue.selected_interpretation)
+        _line(
+            "    BASIS",
+            ", ".join(uid[:8] for uid in issue.basis_memory_uids),
+        )
+        for assumption in issue.assumptions:
+            _line("    ASSUMPTION", assumption, color=typer.colors.YELLOW)
+        _line("    WHY", issue.reason)
     _line(
         "MINIMUM COST",
         (
@@ -52,8 +74,20 @@ def _candidate(candidate: ResolveCandidate, index: int) -> None:
             "    SOURCES",
             ", ".join(uid[:8] for uid in effect.source_memory_uids),
         )
-    _line("VERIFIED", candidate.verification_reason, color=typer.colors.GREEN)
-    _line("FIT", f"YES · {candidate.fit.reason}", color=typer.colors.GREEN)
+    _line(
+        "VERIFIED" if candidate.grounded else "WORKING VIEW",
+        candidate.verification_reason,
+        color=typer.colors.GREEN if candidate.grounded else typer.colors.YELLOW,
+    )
+    _line(
+        "FIT",
+        f"{candidate.fit.verdict} · {candidate.fit.reason}",
+        color=(
+            typer.colors.GREEN
+            if candidate.fit.verdict == "YES"
+            else typer.colors.YELLOW
+        ),
+    )
 
 
 def render_resolve_plain(analysis: ResolveAnalysis) -> None:
@@ -63,6 +97,7 @@ def render_resolve_plain(analysis: ResolveAnalysis) -> None:
     _line("CONTEXT", analysis.frame.display_name)
     _line("REVISION", analysis.frame.revision)
     _line("STATUS", analysis.status)
+    _line("TARGET FIT", analysis.frame.request.target_fit)
     _line("REQUESTED EFFECTS", ", ".join(analysis.frame.request.requested_effects))
     _line(
         "ALLOWED EFFECTS",
@@ -83,7 +118,7 @@ def render_resolve_plain(analysis: ResolveAnalysis) -> None:
         _line("QUESTION", analysis.question)
     for index, candidate in enumerate(analysis.candidates, 1):
         _candidate(candidate, index)
-    if analysis.candidates:
+    if analysis.status == "PROPOSAL" and analysis.candidates:
         typer.echo()
         typer.echo(
             "APPLY · rerun with --candidate <full-id> --expected-revision "
@@ -92,6 +127,12 @@ def render_resolve_plain(analysis: ResolveAnalysis) -> None:
         typer.echo(
             "The candidate id hashes the exact effect post-image; regeneration "
             "fails closed if that candidate is unavailable."
+        )
+    elif analysis.status == "ASSUMED":
+        typer.echo()
+        typer.echo(
+            "PROCESS-LOCAL · this reasonable interpretation may inform the next "
+            "agent turn but cannot be applied to durable Memories."
         )
 
 

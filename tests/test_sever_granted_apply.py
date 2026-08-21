@@ -160,6 +160,32 @@ def test_granted_input_apply_succeeds_while_exact_snapshot_is_current(
     ]
 
 
+def test_granted_source_self_save_fails_at_input_boundary(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, _authority, _input, _grant, _started = _granted_review(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+        granted_role="source",
+    )
+
+    with pytest.raises(
+        SeverApplicationError,
+        match="Self-save requires an ordinary local Source",
+    ):
+        MemoryStoreSeverInputPort.capture(active).freeze(
+            SeverAnalysisRequest(
+                source_locator="granted-input",
+                criteria_locator="local-input",
+                output_name="granted-input",
+                source_include_descendants=False,
+            )
+        )
+
+
 @pytest.mark.parametrize("granted_role", ("source", "criteria"))
 def test_granted_input_content_change_rejects_apply_without_partial_result(
     isolated_store,

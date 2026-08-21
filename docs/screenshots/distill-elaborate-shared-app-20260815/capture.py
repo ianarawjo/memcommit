@@ -414,8 +414,9 @@ def _capture_ground_distill(root: Path) -> None:
         child.expect("SOURCE FROZEN BY CALLER")
         settle(child)
         _snapshot(recorder, "10-ground-distill-frozen-source")
-        # These keys would retarget ordinary Distill. The locked branch keeps
-        # the run action and exact request unchanged.
+        # Shift-Tab enters the now-inspectable frozen Source and Right opens
+        # its read-only direct-item layer. S still submits the exact request;
+        # neither key can retarget or broaden Ground Distill.
         child.send(SHIFT_TAB + RIGHT + "s")
         child.expect("SOURCE UNCHANGED")
         settle(child)

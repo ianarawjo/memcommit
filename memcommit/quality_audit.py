@@ -32,7 +32,7 @@ from memcommit.findings import (
     QUALITY_RULESET_VERSIONS,
     find_ambiguities,
     find_conflicts,
-    find_duplicates,
+    find_redundancies,
 )
 from memcommit.provider_types import CompletionRun, ProviderIdentity
 from memcommit.quality_find_workbench import (
@@ -826,7 +826,7 @@ def run_quality_audit(
         ],
         ...,
     ] = (
-        ("duplicates", find_duplicates),
+        ("duplicates", find_redundancies),
         ("ambiguities", find_ambiguities),
         ("conflicts", find_conflicts),
     )
@@ -908,8 +908,8 @@ def quality_audit_resolution_view(
             "summary",
             "AUDIT SUMMARY",
             (
-                "All quality finders completed over the same frozen direct "
-                f"Context frame. Reported {total} total "
+                "All quality finders completed over the same saved direct "
+                f"Context snapshot. Reported {total} total "
                 f"{'finding' if total == 1 else 'findings'}."
                 + (
                     " Conformance evaluated the same Source against "
@@ -922,10 +922,11 @@ def quality_audit_resolution_view(
         ResolutionOverviewSection("checks", "CHECKS", checks_text),
         ResolutionOverviewSection(
             "scope",
-            "FROZEN SOURCE",
+            "AUDITED SOURCE",
             (
                 f"{session.source.context_name} · {len(session.source.memories)} direct "
-                "Memories. Descendants and embedded Contexts were not analyzed."
+                "Memories as captured when this Audit ran. Descendants and "
+                "embedded Contexts were not analyzed."
             ),
         ),
         ResolutionOverviewSection("provenance", "PROVENANCE", provenance_text),
@@ -972,7 +973,7 @@ def quality_audit_resolution_view(
         status=f"SAVED · {check_total}/{check_total} CHECKS · {session.answered_count}/{total} ANSWERED",
         metrics=tuple(metrics),
         context_locations=(
-            ResolutionContextLocation("FROZEN SOURCE", session.source.context_name),
+            ResolutionContextLocation("AUDITED SOURCE", session.source.context_name),
         ),
         overview=resolution_overview_text(sections),
         overview_sections=sections,

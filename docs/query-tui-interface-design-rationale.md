@@ -1,6 +1,6 @@
 # Query TUI interface-ownership rationale
 
-Last verified: 2026-08-15.
+Last verified: 2026-08-20.
 
 ## Problem
 
@@ -46,6 +46,9 @@ binder, and isolated screen tests may supply a deterministic fake.
   answer.
 - Answer body and Reference focus, scrolling, `y` focused copy, `Y` complete
   copy, nonfatal clipboard failure, and read-only exit behavior are unchanged.
+- Each Reference focus stop now presents and copies one compact logical row in
+  `[N] content — UID prefix, Context alias` order. The Context remains inside
+  every row because adjacent References may identify different Sources.
 - The command still owns Store/catalog composition and error handling; this
   slice does not move the overloaded CLI selector grammar.
 
@@ -56,8 +59,9 @@ the production command to import the interface owner, and prove compatibility
 exports are object-identical and implementation-free. Query workbench and
 shared-component regressions cover the same direct calls through the new path.
 
-The ordered `docs/screenshots/query-tui-interface-20260815/` 180×52 PTY trace
-was generated through the new Query screen. It records entry, question input,
-answer-body and Reference focus, focused and complete copy, adapter failure,
-close, and read-only verification. The path move itself introduces no new
-visible state.
+The refreshed ordered `docs/screenshots/query-tui-interface-20260815/` 180×52
+PTY trace was generated through the Query screen. It records entry, question
+input, compact answer-body and Reference focus, focused and complete copy,
+adapter failure, close, and read-only verification. The ownership move itself
+introduced no new state; the later compact-row presentation changed only the
+typed Reference projection.

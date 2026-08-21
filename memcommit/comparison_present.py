@@ -236,9 +236,20 @@ def render_comparison(
 
     if not ledger:
         if analysis.reports is None:
+            refresh_command = display_escape_text(
+                shlex.join(
+                    [
+                        "mem",
+                        "compare",
+                        reference.context_name,
+                        compared.context_name,
+                        "--refresh",
+                    ]
+                )
+            )
             raise ComparisonError(
                 "This saved comparison predates compact reports. "
-                "Run 'mem compare --refresh --to NAME' to update it."
+                f"Run '{refresh_command}' to update it."
             )
         report_sections = [
             (
@@ -284,9 +295,7 @@ def render_comparison(
         compare_argv = [
             "mem",
             "compare",
-            "--from",
             reference.context_name,
-            "--to",
             compared.context_name,
         ]
         if analysis.include_descendants[0]:

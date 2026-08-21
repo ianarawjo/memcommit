@@ -319,7 +319,7 @@ def test_directional_meld_description_edit_is_a_clean_exact_miss(
     )
 
 
-def test_directional_meld_configuration_mismatch_skips_installation(
+def test_directional_meld_higher_quality_cache_installs_for_lower_request(
     isolated_store, tmp_path, monkeypatch
 ):
     store, profile, registry, _prepared, _comparison = _fixture(
@@ -334,8 +334,8 @@ def test_directional_meld_configuration_mismatch_skips_installation(
     )
 
     assert result.declared == 1
-    assert result.installed == 0
-    assert result.skipped_configuration == 1
+    assert result.installed == 1
+    assert result.skipped_configuration == 0
 
 
 def test_directional_meld_empty_parent_scope_is_provider_free(

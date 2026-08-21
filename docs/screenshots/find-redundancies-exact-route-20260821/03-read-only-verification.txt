@@ -1,0 +1,30 @@
+PTY 180 52                                                                                                                                                                          
+$ mem find-duplicates                                                                                                                                                               
+Context: quality/exact-route                                                                                                                                                        
+  2 direct memories, 1 exact duplicate group(s), 1 later duplicate Memory item(s)                                                                                                   
+                                                                                                                                                                                    
+  DUP / EXACT  1/1                                                                                                                                                                  
+    SURVIVOR  [memory 20000000-0000-4000-8000-00000000021]  a is apple                                                                                                              
+    ABSORB    [memory 20000000-0000-4000-8000-00000000022]  a is apple                                                                                                              
+                                                                                                                                                                                    
+  Read-only report. Apply exact cleanup with mem dedup.                                                                                                                             
+COMMAND EXIT · 0                                                                                                                                                                    
+READY FOR FIND REDUNDANCIES                                                                                                                                                         
+                                                                                                                                                                                    
+$ mem find-redundancies                                                                                                                                                             
+Context: quality/exact-route                                                                                                                                                        
+  2 direct memories, 1 finding                                                                                                                                                      
+                                                                                                                                                                                    
+  DUN = DUP / EXACT + SEMANTIC DUN                                                                                                                                                  
+    EVIDENCE  1 link = 1 DUP / EXACT link + 0 SEMANTIC DUN links                                                                                                                    
+    CLEANUP   1 connected group · 1 redundant Memory                                                                                                                                
+                                                                                                                                                                                    
+  DUN GROUP  1/1 · 2 Memories · DUP / EXACT                                                                                                                                         
+    CLEANUP MAP · PROPOSED · NOT APPLIED                                                                                                                                            
+    SURVIVOR  [memory 20000000-0000-4000-8000-00000000021]  a is apple                                                                                                              
+    ABSORB    [memory 20000000-0000-4000-8000-00000000022]  a is apple                                                                                                              
+    EVIDENCE 1 · EXACT · Stored content is identical.                                                                                                                               
+COMMAND EXIT · 0                                                                                                                                                                    
+READY FOR VERIFICATION                                                                                                                                                              
+                                                                                                                                                                                    
+READ-ONLY VERIFICATION · MEMORIES 2 · CHECKPOINTS 0 · CURRENT quality/exact-route · PROVIDER CALLS 0

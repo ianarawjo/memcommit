@@ -30,6 +30,7 @@ from memcommit.resolve_application import (
     ResolveReceipt,
     ResolveRequest,
 )
+from memcommit.resolve_rules import RESOLVE_RULESET_VERSION
 from memcommit.store import MemoryStore, context_record_digest
 
 
@@ -51,6 +52,7 @@ def _revision(
 ) -> str:
     payload = {
         "contract": RESOLVE_CONTRACT_VERSION,
+        "ruleset": RESOLVE_RULESET_VERSION,
         "context": {
             "uid": context_uid,
             "name": context_name,
@@ -60,6 +62,7 @@ def _revision(
         "actionable_uids": list(actionable_uids),
         "requested_effects": list(request.requested_effects),
         "guidance": request.guidance,
+        "target_fit": request.target_fit,
     }
     return hashlib.sha256(
         json.dumps(
@@ -79,7 +82,9 @@ def _select_actionable(
         return tuple(memory.uid for memory in memories)
     selected: list[str] = []
     for selector in selectors:
-        matches = tuple(memory for memory in memories if memory.uid.startswith(selector))
+        matches = tuple(
+            memory for memory in memories if memory.uid.startswith(selector)
+        )
         if not matches:
             raise ResolveError(
                 f"No direct Memory has a uid starting with '{selector}'."
@@ -185,9 +190,7 @@ class MemoryStoreResolvePort:
             denied = tuple(
                 effect for effect in requested if effect not in grant_permissions
             )
-            missing_authority = (
-                () if "DERIVE" in grant_permissions else ("DERIVE",)
-            )
+            missing_authority = () if "DERIVE" in grant_permissions else ("DERIVE",)
             binding = freeze_granted_context_binding(access)
         digest = context_record_digest(authority)
         return FrozenResolveFrame(
@@ -266,11 +269,7 @@ class MemoryStoreResolvePort:
         return (
             "READ",
             "DERIVE",
-            *(
-                effect
-                for effect in _EFFECT_PERMISSION_ORDER
-                if effect in effects
-            ),
+            *(effect for effect in _EFFECT_PERMISSION_ORDER if effect in effects),
         )
 
     @staticmethod
@@ -302,7 +301,9 @@ class MemoryStoreResolvePort:
             candidate, ResolveCandidate
         ):
             raise TypeError("Resolve Apply requires a frozen frame and candidate.")
-        if any(effect.kind not in frame.allowed_effects for effect in candidate.effects):
+        if any(
+            effect.kind not in frame.allowed_effects for effect in candidate.effects
+        ):
             raise ResolveAuthorityError(
                 "Resolve candidate exceeds its frozen effect capabilities."
             )
@@ -317,9 +318,7 @@ class MemoryStoreResolvePort:
         access = self._revalidated_access(frame)
         required_permissions = self._required_permissions(candidate)
         deleted_uids = {
-            effect.memory_uid
-            for effect in candidate.effects
-            if effect.kind == "DELETE"
+            effect.memory_uid for effect in candidate.effects if effect.kind == "DELETE"
         }
         with authorized_context_mutation(
             access,
@@ -385,9 +384,14 @@ class MemoryStoreResolvePort:
                         command="resolve",
                         args={
                             "contract": RESOLVE_CONTRACT_VERSION,
+                            "ruleset": RESOLVE_RULESET_VERSION,
                             "revision": frame.revision,
+                            "target_fit": frame.request.target_fit,
                             "candidate_uid": candidate.uid,
                             "candidate_summary": candidate.summary,
+                            "classification": candidate.classification,
+                            "resolution_level": candidate.resolution_level,
+                            "rule_ids": list(candidate.rule_ids),
                             "grounded": candidate.grounded,
                             "verification_reason": candidate.verification_reason,
                             "issues": [

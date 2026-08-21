@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from collections.abc import Callable, Sequence
+from dataclasses import dataclass, field
 
+from memcommit.context_targeting.tui.picker import ContextMemoryRow
 from memcommit.context_targeting.tui.reach import ContextReachViewMode
 from memcommit.source_projection.presentation import SourceDisplayValue
 
@@ -18,6 +20,11 @@ class DistillTuiSetup:
     current_context: str | None = None
     annotations: tuple[tuple[str, SourceDisplayValue], ...] = ()
     source_locked: bool = False
+    memory_loader: Callable[[str], Sequence[ContextMemoryRow]] | None = field(
+        default=None,
+        repr=False,
+        compare=False,
+    )
 
     def __post_init__(self) -> None:
         if (
@@ -34,6 +41,8 @@ class DistillTuiSetup:
             raise ValueError("The current Context is outside the Distill catalog.")
         if type(self.source_locked) is not bool:
             raise ValueError("Distill TUI source_locked must be boolean.")
+        if self.memory_loader is not None and not callable(self.memory_loader):
+            raise ValueError("Distill TUI Memory loader must be callable.")
         if self.source_locked and self.names != (self.selected_context,):
             raise ValueError("Locked Distill requires only its frozen Source Context.")
 

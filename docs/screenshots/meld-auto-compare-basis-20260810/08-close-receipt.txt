@@ -1,7 +1,7 @@
 MEM MELD · SYMMETRIC
 task-2/advisor1 + task-2/advisor2 → task-2/participant/proposal-workspace2
 SCOPE · A SELECTED + ALL DESCENDANTS · B SELECTED GRAPH ONLY
-Compare: 8fce03ad · IMPORTED
+Compare: 62606324 · IMPORTED
 State: AWAITING_REPLY · Round: 1
 
 WHAT MEM UNDERSTOOD

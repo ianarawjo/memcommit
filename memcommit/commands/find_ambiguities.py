@@ -7,7 +7,10 @@ from typing import Annotated, Optional
 import typer
 
 import memcommit.ops as ops
-from memcommit.commands.context_operand import ContextOperandSnapshot
+from memcommit.commands.context_operand import (
+    ContextOperandSnapshot,
+    choose_context_operand,
+)
 from memcommit.authority.access import GrantedReadStore, resolve_context_access
 from memcommit.commands.findings_render import (
     render_heading,
@@ -44,6 +47,13 @@ _CLARIFICATION_COLORS = {
 
 
 def cmd(
+    context_operand: Annotated[
+        Optional[str],
+        typer.Argument(
+            metavar="CONTEXT",
+            help="Context to inspect (defaults to current)",
+        ),
+    ] = None,
     context_name: Annotated[
         Optional[str],
         typer.Option(
@@ -52,10 +62,44 @@ def cmd(
             help="Context to inspect (defaults to current)",
         ),
     ] = None,
+    select_targets: Annotated[
+        bool,
+        typer.Option(
+            "--select",
+            help="Choose readable Context targets and lexical reach interactively",
+        ),
+    ] = False,
 ) -> None:
     """Report per-Memory ambiguity; never edit or checkpoint the Context."""
+    try:
+        context_name = choose_context_operand(
+            context_operand,
+            option=context_name,
+        )
+    except ValueError as error:
+        typer.secho(
+            "Find ambiguities error: " + display_escape_text(str(error)),
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
     store = MemoryStore(create=False)
-    if context_name is None and interactive_quality_find_available():
+    if select_targets:
+        if context_name is not None:
+            typer.secho(
+                "Find ambiguities error: --select cannot be combined with an "
+                "explicit Context.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        if not interactive_quality_find_available():
+            typer.secho(
+                "Find ambiguities error: --select requires an interactive terminal.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
         try:
             context_snapshot = ContextOperandSnapshot.capture(store)
             completed = run_interactive_quality_find(

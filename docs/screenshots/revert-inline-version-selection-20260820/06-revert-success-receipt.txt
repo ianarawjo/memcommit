@@ -1,0 +1,9 @@
+Reverted Context: revert/versions                                                                                                                                                   
+Restored state recorded by: mem update                                                                                                                                              
+Action detail: Version one · repeated Update identity                                                                                                                               
+Affected Context: revert/versions                                                                                                                                                   
+Affected content: 1 Memory edited                                                                                                                                                   
+  ~ [b43f8f05] Memory: "Version two is removed by the reviewed Revert." → "Version one remains after the reviewed Revert."                                                          
+Restored checkpoint: [890e5d51] (2026-08-20 08:06)                                                                                                                                  
+Undo command: mem undo                                                                                                                                                              
+Exact recovery checkpoint: mem revert a4c4567d

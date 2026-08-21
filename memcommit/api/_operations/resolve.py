@@ -21,6 +21,7 @@ from memcommit.api.resolve import (
     ResolveApplyResult,
     ResolveCandidateResult,
     ResolveEffectResult,
+    ResolveIssueResult,
 )
 from memcommit.fit_judgment import FitJudgmentError
 from memcommit.context_locator import resolve_context_locator
@@ -36,6 +37,7 @@ from memcommit.resolve_application import (
     ResolveAuthorityError,
     ResolveConflictError,
     ResolveError,
+    ResolveFitTarget,
     ResolveRequest,
     apply_resolve as apply_core_resolve,
     run_resolve,
@@ -93,6 +95,7 @@ def _public(analysis: ResolveAnalysis) -> ResolveAnalysisResult:
             analysis.initial_fit.reason if analysis.initial_fit is not None else None
         ),
         question=analysis.question,
+        target_fit=analysis.frame.request.target_fit,
         requested_effects=tuple(analysis.frame.request.requested_effects),
         allowed_effects=tuple(analysis.frame.allowed_effects),
         denied_effects=tuple(analysis.frame.denied_effects),
@@ -100,6 +103,21 @@ def _public(analysis: ResolveAnalysis) -> ResolveAnalysisResult:
             ResolveCandidateResult(
                 uid=candidate.uid,
                 summary=candidate.summary,
+                classification=candidate.classification,
+                resolution_level=candidate.resolution_level,
+                rule_ids=candidate.rule_ids,
+                issues=tuple(
+                    ResolveIssueResult(
+                        uid=issue.uid,
+                        kind=issue.kind,
+                        memory_uids=issue.memory_uids,
+                        selected_interpretation=issue.selected_interpretation,
+                        basis_memory_uids=issue.basis_memory_uids,
+                        assumptions=issue.assumptions,
+                        reason=issue.reason,
+                    )
+                    for issue in candidate.issues
+                ),
                 effects=tuple(
                     ResolveEffectResult(
                         kind=effect.kind,
@@ -111,7 +129,9 @@ def _public(analysis: ResolveAnalysis) -> ResolveAnalysisResult:
                     )
                     for effect in candidate.effects
                 ),
+                grounded=candidate.grounded,
                 verification_reason=candidate.verification_reason,
+                fit_verdict=candidate.fit.verdict,
                 fit_reason=candidate.fit.reason,
                 deletes=candidate.cost.deletes,
                 creates=candidate.cost.creates,
@@ -129,12 +149,13 @@ def resolve_context(
     context_name: str | None = None,
     *,
     memory_selectors: Sequence[str] = (),
-    allow_create: bool = False,
+    allow_create: bool = True,
     allow_delete: bool = False,
     guidance: str = "",
+    target_fit: ResolveFitTarget = "MAY",
     expected_revision: str | None = None,
 ) -> ResolveAnalysisResult:
-    """Generate and independently verify minimum Fit-repair candidates."""
+    """Generate and verify one automatic full-frame interpretation plan."""
 
     try:
         if isinstance(memory_selectors, (str, bytes)):
@@ -145,6 +166,7 @@ def resolve_context(
             allow_create=allow_create,
             allow_delete=allow_delete,
             guidance=guidance,
+            target_fit=target_fit,
         )
     except (ResolveError, TypeError, ValueError) as error:
         raise_public(SemanticInputError, error)
@@ -155,9 +177,10 @@ def resolve_conflict_finding(
     runtime: ClientRuntime,
     handoff: QualityFindingHandoff,
     *,
-    allow_create: bool = False,
+    allow_create: bool = True,
     allow_delete: bool = False,
     guidance: str = "",
+    target_fit: ResolveFitTarget = "MAY",
     expected_revision: str | None = None,
 ) -> ResolveAnalysisResult:
     """Resolve one exact conflict receipt through the normal fresh authority frame."""
@@ -168,6 +191,7 @@ def resolve_conflict_finding(
             allow_create=allow_create,
             allow_delete=allow_delete,
             guidance=guidance,
+            target_fit=target_fit,
         )
     except (QualityFindingHandoffError, ResolveError, TypeError, ValueError) as error:
         raise_public(SemanticInputError, error)
@@ -194,6 +218,7 @@ def _run_request(
                 allow_create=request.allow_create,
                 allow_delete=request.allow_delete,
                 guidance=request.guidance,
+                target_fit=request.target_fit,
                 source_precondition=request.source_precondition,
             )
         except (ResolveError, TypeError, ValueError) as error:

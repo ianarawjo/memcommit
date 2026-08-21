@@ -27,6 +27,10 @@ from prompt_toolkit.widgets import Frame
 from prompt_toolkit.utils import get_cwidth
 
 from memcommit.application_review_policy import DecisionFreeBehavior
+from memcommit.exact_command_review import ExactCommandReview
+from memcommit.interfaces.tui.components.exact_command_review.rendering import (
+    format_exact_command,
+)
 from memcommit.interfaces.tui.components.exact_name import (
     ExactNameFieldView,
     ExactNameInputControl,
@@ -1967,6 +1971,7 @@ def resolution_seeded_report_fragments(
     view: ResolutionWorkbenchView,
     report_text: str,
     *,
+    report_fragments: tuple[tuple[str, str], ...] | None = None,
     strategies: tuple[ResolutionGlobalStrategy, ...] = (),
     drafts: dict[str, ResponseDraft] | None = None,
     report_item_badges: tuple[str, ...] = (),
@@ -1979,6 +1984,12 @@ def resolution_seeded_report_fragments(
     content_width: int = 76,
 ) -> list[tuple[str, str]]:
     """Render Compare and Meld report sections as nested Viewer cards."""
+    if report_fragments is not None and "".join(
+        text for _style, text in report_fragments
+    ) != report_text:
+        raise ValueError(
+            "Seeded report fragments must preserve the exact plain report text."
+        )
     lines = _seeded_report_lines(
         view,
         report_text,
@@ -1990,7 +2001,19 @@ def resolution_seeded_report_fragments(
     )
     sections = _seeded_report_sections(lines)
     if not sections:
-        return [("", safe_terminal_text("\n".join(lines)))]
+        seeded_text = "\n".join(lines)
+        if report_fragments is not None and (
+            seeded_text == report_text or seeded_text.startswith(report_text + "\n")
+        ):
+            styled = [
+                (style, safe_terminal_text(text))
+                for style, text in report_fragments
+            ]
+            suffix = seeded_text[len(report_text) :]
+            if suffix:
+                styled.append(("", safe_terminal_text(suffix)))
+            return styled
+        return [("", safe_terminal_text(seeded_text))]
     focused_section = max(0, min(focused_section, len(sections) - 1))
     draft_values = drafts or {}
     fragments: list[tuple[str, str]] = []
@@ -2253,6 +2276,7 @@ def resolution_review_fragments(
     focused_section: int = 0,
     content_width: int = 76,
     review_title: str = "APPLY CONFIRMATION",
+    command_review: ExactCommandReview | None = None,
 ) -> list[tuple[str, str]]:
     """Render the exact Apply confirmation without performing its action."""
 
@@ -2261,7 +2285,7 @@ def resolution_review_fragments(
         "INCORPORATE AND APPLY",
         "RESOLVE ALL",
     }
-    section_count = 3 if show_policy else 2
+    section_count = 2 + int(show_policy) + int(command_review is not None)
     focused_section = max(0, min(focused_section, section_count - 1))
     fragments: list[tuple[str, str]] = []
     answered = 0
@@ -2365,6 +2389,31 @@ def resolution_review_fragments(
         fragments.append(("", "\n"))
         action_section = 2
 
+    if command_review is not None:
+        command_box = boxed_lines(
+            "COMMAND · RUNNABLE",
+            "\n".join(
+                (
+                    format_exact_command(command_review),
+                    "",
+                    *command_review.effects,
+                )
+            ),
+            width=max(24, content_width - 1),
+        )
+        command_fragments = [
+            ("class:detail-card", f" {line}\n") for line in command_box
+        ]
+        fragments.extend(
+            semantic_viewer_block_fragments(
+                command_fragments,
+                active=focused_section == action_section,
+                anchor="end",
+            )
+        )
+        fragments.append(("", "\n"))
+        action_section += 1
+
     return_note = (
         "Esc/Backspace returns without applying."
         if "APPLY" in action.kind
@@ -2406,6 +2455,7 @@ def run_resolution_workbench_shell(
     split_viewer_items: bool = False,
     global_strategies: tuple[ResolutionGlobalStrategy, ...] = (),
     split_report_text: str | None = None,
+    split_report_fragments: tuple[tuple[str, str], ...] | None = None,
     split_report_item_badges: tuple[str, ...] = (),
     split_report_conflicts_remaining: int | None = None,
     review_and_apply: bool = False,
@@ -2416,6 +2466,9 @@ def run_resolution_workbench_shell(
     item_handoff: SessionTodoView | None = None,
     impact_controller: ImpactController | None = None,
     destination: ResolutionDestination | None = None,
+    turn_command_review: (
+        Callable[[ResolutionWorkbenchAction], ExactCommandReview | None] | None
+    ) = None,
 ) -> ResolutionWorkbenchAction:
     """Collect one UID-bound semantic or close action; never call a provider.
 
@@ -2429,6 +2482,8 @@ def run_resolution_workbench_shell(
             terminal_label,
             snapshot_hint=snapshot_hint,
         )
+    if split_report_fragments is not None and split_report_text is None:
+        raise ValueError("Styled split reports require matching plain report text.")
     if decision_free_behavior is None:
         # Keep legacy callers on their published final-review topology while
         # each operation adopts the ownership-aware policy explicitly.
@@ -2644,6 +2699,8 @@ def run_resolution_workbench_shell(
                 "INCORPORATE AND APPLY",
             }:
                 entries.append(("POLICY", "REVIEW:POLICY", None))
+            if final_command_review["value"] is not None:
+                entries.append(("COMMAND", "REVIEW:COMMAND", None))
             entries.append(("ACTION", "REVIEW:ACTION", None))
             return _stable_sections(tuple(entries))
         return item_sections()
@@ -2801,6 +2858,7 @@ def run_resolution_workbench_shell(
                     viewer_section_index(),
                     content_width=pane_content_width(),
                     review_title=final_review_title["value"],
+                    command_review=final_command_review["value"],
                 ),
                 focused=session_navigation.pane == "viewer",
             )
@@ -2810,6 +2868,7 @@ def run_resolution_workbench_shell(
                     resolution_seeded_report_fragments(
                         active_view,
                         split_report_text,
+                        report_fragments=split_report_fragments,
                         strategies=global_strategies,
                         drafts=local_drafts,
                         report_item_badges=split_report_item_badges,
@@ -2859,6 +2918,7 @@ def run_resolution_workbench_shell(
     viewer_content = {"kind": "REPORT"}
     final_review_title = {"value": "APPLY CONFIRMATION"}
     final_review_origin: dict[str, _FinalReviewOrigin | None] = {"value": None}
+    final_command_review: dict[str, ExactCommandReview | None] = {"value": None}
     impact_reason_expanded: dict[str, str | None] = {"uid": None}
     navigation_accelerator = NavigationAccelerator()
     other_direction = {"focused": False}
@@ -3502,6 +3562,7 @@ def run_resolution_workbench_shell(
 
         origin = final_review_origin["value"]
         final_review_origin["value"] = None
+        final_command_review["value"] = None
         if origin is None:
             # Compatibility fallback for navigation state created before this
             # shell began tracking review entry. The report action is the
@@ -3572,6 +3633,12 @@ def run_resolution_workbench_shell(
             if todo.kind == "REVIEW AND APPLY"
             else todo.kind
         )
+        proposed_action = final_review_action(active_view, open_custom=False)
+        final_command_review["value"] = (
+            turn_command_review(proposed_action)
+            if turn_command_review is not None and proposed_action is not None
+            else None
+        )
         if viewer_content["kind"] != "REVIEW":
             # This is a temporary confirmation layer. Preserve the exact
             # semantic stop and visible frame so both Enter on its summary and
@@ -3604,6 +3671,8 @@ def run_resolution_workbench_shell(
 
     def final_review_action(
         active_view: ResolutionWorkbenchView,
+        *,
+        open_custom: bool = True,
     ) -> ResolutionWorkbenchAction | None:
         final_action = review_action()
         if final_action.kind in {"APPLY", "APPLY AS IS"}:
@@ -3618,7 +3687,8 @@ def run_resolution_workbench_shell(
         if final_action.kind == "RESOLVE ALL":
             selected_strategy = global_strategies[strategy["index"]]
             if selected_strategy.action_kind == "CUSTOM":
-                open_global_input(clear=True)
+                if open_custom:
+                    open_global_input(clear=True)
                 return None
             return semantic_action(
                 selected_strategy.action_kind,
@@ -3626,6 +3696,22 @@ def run_resolution_workbench_shell(
             )
         set_status("No final action is available.")
         return None
+
+    def approved_final_review_action(
+        active_view: ResolutionWorkbenchView,
+    ) -> ResolutionWorkbenchAction | None:
+        """Rebuild the final action and its command before returning either."""
+
+        action = final_review_action(active_view)
+        if action is None or turn_command_review is None:
+            return action
+        rebuilt = turn_command_review(action)
+        if rebuilt != final_command_review["value"]:
+            set_status(
+                "The semantic turn changed after review. Reopen the final review."
+            )
+            return None
+        return action
 
     def submit(event) -> None:
         active_view = current_view()
@@ -3905,7 +3991,7 @@ def run_resolution_workbench_shell(
                 elif section.kind != "ACTION":
                     set_status("Move to the final action and press Enter.")
                 else:
-                    action = final_review_action(active_view)
+                    action = approved_final_review_action(active_view)
                     if action is not None:
                         record_study_action(
                             "APPROVAL_ACCEPTED",
@@ -3915,7 +4001,7 @@ def run_resolution_workbench_shell(
                         event.app.exit(result=action)
                         return
             elif kind == "TODO" and viewer_content["kind"] == "REVIEW":
-                action = final_review_action(active_view)
+                action = approved_final_review_action(active_view)
                 if action is not None:
                     record_study_action(
                         "APPROVAL_ACCEPTED",

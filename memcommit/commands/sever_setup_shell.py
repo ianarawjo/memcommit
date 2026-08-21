@@ -37,6 +37,7 @@ from memcommit.context_targeting.tui.picker import (
     CONTEXT_PICKER_STYLE,
     ContextMemoryPreviewController,
     ContextMemoryRow,
+    memory_visibility_key_hint,
 )
 from memcommit.source_projection.model import SourceDisplayFacts, SourceState
 from memcommit.source_projection.presentation import (
@@ -57,10 +58,13 @@ from memcommit.interfaces.tui.core.keybindings import (
 from memcommit.interfaces.tui.components.frame import (
     bind_focused_frame_style,
 )
+from memcommit.interfaces.tui.components.exact_command_review.rendering import (
+    format_exact_command,
+)
+from memcommit.interactive_command_review import sever_start_command_review
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
-from memcommit.store import validate_context_name
 
 
 _Role = Literal["SOURCE", "CRITERIA"]
@@ -123,7 +127,7 @@ def choose_sever_setup(
     app_output: Output | None = None,
     require_tty: bool = True,
 ) -> SeverSetupReceipt | None:
-    """Select Source, one Criteria, and a fresh Output in one full-screen TUI."""
+    """Select Source, one Criteria, and a save location in one full-screen TUI."""
 
     local = tuple(local_names)
     virtual = tuple(virtual_names)
@@ -151,8 +155,8 @@ def choose_sever_setup(
         ) from error
     if require_tty and (not sys.stdin.isatty() or not sys.stdout.isatty()):
         raise ValueError(
-            "Interactive Sever setup requires a TTY. Pass --source, --criteria, "
-            "and --save-as outside a terminal."
+            "Interactive Sever setup requires a TTY. Pass SOURCE and CRITERIA "
+            "outside a terminal; add RESULT only to save elsewhere."
         )
 
     tree = build_context_tree(catalog, materialized_names=selectable)
@@ -292,14 +296,22 @@ def choose_sever_setup(
 
     def validate_output_name(candidate: str) -> None:
         validate_portable_context_name(candidate)
+        if candidate == selections["SOURCE"].selected_name:
+            if scope_choice["SOURCE"].include_descendants:
+                raise ValueError(
+                    "Self-save requires THIS CONTEXT ONLY for Source."
+                )
+            return
         if candidate in catalog:
-            raise ValueError("Output must be a new Context name.")
+            raise ValueError(
+                "Other-save requires a new Context name; only Source may already exist."
+            )
 
     output_field = ExactNameFieldControl.create(
         ExactNameFieldView(
             value=default_output,
-            label="OUTPUT CONTEXT NAME · EDIT DIRECTLY",
-            state="NOT CREATED",
+            label="SAVE LOCATION · SOURCE OR NEW CONTEXT",
+            state="SELF-SAVE OR OTHER-SAVE",
             validate=validate_output_name,
             value_label="Output Context name",
         ),
@@ -307,6 +319,54 @@ def choose_sever_setup(
     )
     output_editor = output_field.input
     output_frame = output_field.frame
+
+    def current_receipt() -> SeverSetupReceipt:
+        if selections["SOURCE"].selected_name == selections["CRITERIA"].selected_name:
+            raise ValueError("Source and Criteria must be distinct.")
+        return SeverSetupReceipt(
+            source_name=selections["SOURCE"].selected_name,
+            criteria_name=selections["CRITERIA"].selected_name,
+            output_name=output_field.validate_candidate(),
+            source_descendants=scope_choice["SOURCE"].include_descendants,
+            criteria_descendants=scope_choice["CRITERIA"].include_descendants,
+        )
+
+    command_control: FormattedTextControl
+
+    def render_command() -> list[tuple[str, str]]:
+        focused = app.layout.has_focus(command_control)
+        try:
+            receipt = current_receipt()
+            review = sever_start_command_review(
+                source_name=receipt.source_name,
+                criteria_name=receipt.criteria_name,
+                output_name=receipt.output_name,
+                source_descendants=receipt.source_descendants,
+                criteria_descendants=receipt.criteria_descendants,
+            )
+        except (TypeError, ValueError) as error:
+            return [
+                ("class:error", " COMMAND · INVALID\n"),
+                ("class:error", f" {display_escape_text(str(error))}"),
+            ]
+        return [
+            (
+                "class:focused-control" if focused else "class:report-label",
+                " COMMAND · RUNNABLE · ENTER TO START\n",
+            ),
+            ("class:report-neutral", f" {format_exact_command(review)}"),
+        ]
+
+    command_control = FormattedTextControl(
+        render_command,
+        focusable=True,
+        show_cursor=False,
+    )
+    command_frame = Frame(
+        Window(command_control, wrap_lines=False),
+        title="START COMMAND · SETUP ONLY",
+        height=Dimension.exact(4),
+    )
 
     bind_focused_frame_style(
         source_frame,
@@ -316,14 +376,24 @@ def choose_sever_setup(
         criteria_frame,
         is_focused=lambda: app.layout.has_focus(criteria_control),
     )
+    bind_focused_frame_style(
+        command_frame,
+        is_focused=lambda: app.layout.has_focus(command_control),
+    )
     def render_header() -> str:
+        self_save = (
+            output_editor.text.strip() == selections["SOURCE"].selected_name
+        )
         return (
-            " MEM SEVER · SETUP · SOURCE UNCHANGED\n "
+            " MEM SEVER · SETUP · "
+            + ("SELF-SAVE" if self_save else "OTHER-SAVE · SOURCE UNCHANGED")
+            + "\n "
             f"SOURCE {display_escape_text(selections['SOURCE'].selected_name)} "
             f"({'SUBTREE' if scope_choice['SOURCE'].include_descendants else 'THIS ONLY'}) × "
             f"CRITERIA {display_escape_text(selections['CRITERIA'].selected_name)} "
             f"({'SUBTREE' if scope_choice['CRITERIA'].include_descendants else 'THIS ONLY'}) → "
-            f"OUTPUT {display_escape_text(output_editor.text.strip())}"
+            f"{'SELF-SAVE' if self_save else 'OTHER-SAVE'} "
+            f"{display_escape_text(output_editor.text.strip())}"
         )
 
     tree_focus = Condition(
@@ -336,9 +406,11 @@ def choose_sever_setup(
             return f" {display_escape_text(error_message['value'])}"
         if app.layout.has_focus(output_editor):
             return (
-                " OUTPUT: edit directly · Enter continue · Tab/Shift-Tab pane · "
+                " OUTPUT: edit directly · Enter review command · Tab/Shift-Tab pane · "
                 "Ctrl-C cancel"
             )
+        if app.layout.has_focus(command_control):
+            return " COMMAND: Enter start exact command · Shift-Tab back · Esc cancel"
         role = "SOURCE" if app.layout.has_focus(source_control) else "CRITERIA"
         if scope_focused[role]:
             return (
@@ -348,11 +420,15 @@ def choose_sever_setup(
         expansion_action = (
             "A restore tree" if tree_state[role].all_expanded else "A expand all"
         )
+        memory_hint = (
+            memory_visibility_key_hint(memory_previews[role].tree) + " · "
+            if role in memory_previews
+            else ""
+        )
         return (
-            f" {role}: ↑/↓ move · ←/→ collapse/expand · Enter/Space choose · "
-            f"top ↑ enters scope · {expansion_action} · "
-            + ("m Memory here · M all · " if memory_loader is not None else "")
-            + "Tab/Shift-Tab pane · "
+            f" {role}: {memory_hint}"
+            "↑/↓ move · ←/→ collapse/expand · Enter/Space choose · "
+            f"top ↑ enters scope · {expansion_action} · " + "Tab/Shift-Tab pane · "
             "F continue · Q cancel"
         )
 
@@ -373,6 +449,7 @@ def choose_sever_setup(
             source_frame,
             criteria_frame,
             output_frame,
+            command_frame,
             footer,
         ]
     )
@@ -385,7 +462,7 @@ def choose_sever_setup(
         output=app_output,
         style=merge_styles([MEMCOMMIT_TUI_STYLE, CONTEXT_PICKER_STYLE]),
     )
-    controls = (source_control, criteria_control, output_editor)
+    controls = (source_control, criteria_control, output_editor, command_control)
 
     def active_role() -> _Role:
         return "SOURCE" if app.layout.has_focus(source_control) else "CRITERIA"
@@ -535,27 +612,28 @@ def choose_sever_setup(
         event.app.invalidate()
 
     def finish(event) -> None:
-        if selections["SOURCE"].selected_name == selections["CRITERIA"].selected_name:
-            error_message["value"] = "Source and Criteria must be distinct."
-            app.layout.focus(criteria_control)
-            event.app.invalidate()
-            return
         try:
-            candidate = output_field.validate_candidate()
-        except ValueError as error:
+            receipt = current_receipt()
+            # Rebuild the public argv at approval while returning the typed
+            # receipt. The shell is never recursively invoked from this TUI.
+            sever_start_command_review(
+                source_name=receipt.source_name,
+                criteria_name=receipt.criteria_name,
+                output_name=receipt.output_name,
+                source_descendants=receipt.source_descendants,
+                criteria_descendants=receipt.criteria_descendants,
+            )
+        except (TypeError, ValueError) as error:
             error_message["value"] = str(error)
-            app.layout.focus(output_editor)
+            app.layout.focus(
+                criteria_control
+                if selections["SOURCE"].selected_name
+                == selections["CRITERIA"].selected_name
+                else output_editor
+            )
             event.app.invalidate()
             return
-        event.app.exit(
-            result=SeverSetupReceipt(
-                source_name=selections["SOURCE"].selected_name,
-                criteria_name=selections["CRITERIA"].selected_name,
-                output_name=candidate,
-                source_descendants=(scope_choice["SOURCE"].include_descendants),
-                criteria_descendants=(scope_choice["CRITERIA"].include_descendants),
-            )
-        )
+        event.app.exit(result=receipt)
 
     def refresh_suggested_output() -> None:
         """Follow Source/Criteria until the person edits the proposed name."""
@@ -574,10 +652,24 @@ def choose_sever_setup(
     @bindings.add("f", filter=tree_focus, eager=True)
     @bindings.add("F", filter=tree_focus, eager=True)
     def _finish_from_tree(event) -> None:
-        finish(event)
+        app.layout.focus(command_control)
+        error_message["value"] = ""
+        event.app.invalidate()
 
     @bindings.add("enter", filter=has_focus(output_editor), eager=True)
     def _finish_from_output(event) -> None:
+        try:
+            current_receipt()
+        except (TypeError, ValueError) as error:
+            error_message["value"] = str(error)
+            event.app.invalidate()
+            return
+        app.layout.focus(command_control)
+        error_message["value"] = ""
+        event.app.invalidate()
+
+    @bindings.add("enter", filter=has_focus(command_control), eager=True)
+    def _finish_from_command(event) -> None:
         finish(event)
 
     @bind_case_insensitive_key(bindings, "q", filter=tree_focus, eager=True)

@@ -51,7 +51,7 @@ PTY 180 52
 [179C[0;48;2;68;68;68m [0m
 [0m                                                                                                                                                                                   [179C[0;1mv[0m
 [0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
-[0m ↑↓ move  ←→ expand  A expand all  m show Memories here  M show all Memories  y copy Context  Y copy visible branch  Enter open checkpoints  q cancel · 1/2 · 2 selectable[170D[48A[0m[3A[J[0m[?7h[?1049l[?2004l[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m REVERT · task-1/participant[0m
+[0m ↑↓ move  ←→ expand  A expand all  m THIS Context: show items · M EVERY Context: show items  y copy Context  Y copy visible branch  Enter open checkpoints  q cancel · 1/2 · 2 sele[179Cc[48A[0m[3A[J[0m[?7h[?1049l[?2004l[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m REVERT · task-1/participant[0m
 [0m┌────────────────────────────────────────────────────────────────────────────────────| VIEWER |────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│ No history item is available.                                                                                                                                                   [0;1m^[179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
@@ -153,10 +153,10 @@ PTY 180 52
 [179C[0;48;2;68;68;68m [0m
 [0m                                                                                                                                                                                   [179C[0;1mv[0m
 [0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
-[0m ↑↓ move  ←→ expand  A expand all  m show Memories here  M show all Memories  y copy Context  Y copy visible branch  Enter open checkpoints  q cancel · 1/2 · 2 selectable[170D[48A[0m[?25l[0m  * ▸ task-1/participant  [0;38;2;244;245;247m0 direct · 0 descendant operations[0m
+[0m ↑↓ move  ←→ expand  A expand all  m THIS Context: show items · M EVERY Context: show items  y copy Context  Y copy visible branch  Enter open checkpoints  q cancel · 1/2 · 2 sele[179Cc[48A[0m[?25l[0m  * ▸ task-1/participant  [0;38;2;244;245;247m0 direct · 0 descendant operations[0m
 [0;1;7m›   ▾ task-1/recovery  2 direct · 0 descendant operations[0m
-[0;38;2;244;245;247m  · [add] 2026-08-13 15:16 · 52a207ce · Added newer recovery Memory[0m
-[0;38;2;244;245;247m  · [created] [atomize] 2026-08-13 15:16 · fb133aa1 · Initialized recovery Context before applying atomize[0m
+[0;38;2;244;245;247m  · [add] 2026-08-17 10:40 · a0cfcbbd · Added newer recovery Memory[0m
+[0;38;2;244;245;247m  · [created] [atomize] 2026-08-17 10:40 · 507bb5a7 · Initialized recovery Context before applying atomize[0m
 
 
 
@@ -201,9 +201,9 @@ PTY 180 52
 
 
 
-[37C[0mhide[111C2[C4[47A[155D[0m[4A[J[0m[?7h[?1049l[?2004l[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m REVERT · task-1/recovery[0m
+[51C[0mhide[112C2[C4[47A[170D[0m[4A[J[0m[?7h[?1049l[?2004l[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m REVERT · task-1/recovery[0m
 [0m┌────────────────────────────────────────────────────────────────────────────────────| VIEWER |────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
-[0m│[0;38;2;244;245;247;1m TARGET      [0;38;2;244;245;247m52a207ce-2123-4739-83ce-7a8d19b8cb98[0m                                                                                                                                [0;1m^[179C[0m│[0m
+[0m│[0;38;2;244;245;247;1m TARGET      [0;38;2;244;245;247ma0cfcbbd-6e75-48a5-a0e2-f87ae982446f[0m                                                                                                                                [0;1m^[179C[0m│[0m
 [0m│[0;38;2;244;245;247;1m RECORDED BY add[0m                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
 [0m│[0;38;2;244;245;247;1m DESCRIPTION [0;38;2;244;245;247mAdded newer recovery Memory[0m                                                                                                                                         [0;48;2;68;68;68m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
@@ -238,9 +238,9 @@ PTY 180 52
 [0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
 [0;38;2;139;213;255;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ ITEMS ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
-[0;38;2;139;213;255;1m┃[0;1;7m›  2026-08-13 15:16  add      52a207ce  Added newer recovery Memory[0m                                                                                                              [0;1m^[179C[0;38;2;139;213;255;1m┃[0m
-[0;38;2;139;213;255;1m┃[0m   2026-08-13 15:16  atomize  43b9b166  Applied atomize to create first recovery Memory                                                                                          [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
-[0;38;2;139;213;255;1m┃[0m   2026-08-13 15:16  init     fb133aa1  Initialized recovery Context before applying atomize                                                                                     [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;1;7m›  2026-08-17 10:40  add      a0cfcbbd  Added newer recovery Memory[0m                                                                                                              [0;1m^[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m   2026-08-17 10:40  atomize  17383bd1  Applied atomize to create first recovery Memory                                                                                          [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m   2026-08-17 10:40  init     507bb5a7  Initialized recovery Context before applying atomize                                                                                     [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;2;139;213;255;1m┃[0m
@@ -252,15 +252,15 @@ PTY 180 52
 [0m┌────────────────────────────────────────────────────────────────────────────────────| APPLY |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│[ SELECT A CHECKPOINT FIRST ]                                                                                                                                                     [179C│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
-[0m FOCUS ITEMS · ↑/↓ move  Enter select exact UID  Tab switch  Esc/Backspace back  q cancel  ·  1/3[97D[14A[C[0m[?25l[35A[13C[0;38;2;244;245;247mfb133aa1[C6bee[2C5[C4[Cae9b[Cd031[C5a5f0f[0m
+[0m FOCUS ITEMS · ↑/↓ move  Enter select exact UID  Tab switch  Esc/Backspace back  q cancel  ·  1/3[97D[14A[C[0m[?25l[35A[13C[0;38;2;244;245;247m5[C7bb5a7[C8a46[2C56f[C813e[Cea384ccd5007[0m
 [14C[0;38;2;244;245;247;1minit[0m [0m
 [14C[0;38;2;244;245;247mInitializ[Cd[10CContext before applying atomize[0m [0m
 
 
-[C[0;38;2;244;245;247;1m 1. REVERT · REMOVE [be6eb0ee][0m [0m
+[C[0;38;2;244;245;247;1m 1. REVERT · REMOVE [ac88e1ce][0m [0m
 [C[0;38;2;255;255;255m - [0;38;2;237;135;150;4mKeep this first recovery Memory.[0m [0m
 [C[0m [0m
-[C[0;38;2;244;245;247;1m 2. REVERT · REMOVE [382a7456][0m [0m
+[C[0;38;2;244;245;247;1m 2. REVERT · REMOVE [fe7b4dab][0m [0m
 [C[0;38;2;255;255;255m - [0;38;2;237;135;150;4mRemove this newer recovery Memory.[0m [0m
 [C[0m [0m
 [C[0m [0m
@@ -287,9 +287,9 @@ PTY 180 52
 
 
 
-[C[0m   2026-08-13 15:16  add      52a207ce  Added newer recovery Memory[0m
+[C[0m   2026-08-17 10:40  add      a0cfcbbd  Added newer recovery Memory[0m
 
-[C[0;1;7m›  2026-08-13 15:16  init     fb133aa1  Initialized recovery Context before applying atomize[0m
+[C[0;1;7m›  2026-08-17 10:40  init     507bb5a7  Initialized recovery Context before applying atomize[0m
 
 
 
@@ -302,9 +302,9 @@ PTY 180 52
 
 
 [94C[0m3[12A[94D[0m[?25l[3A[0m┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
-[0m│   2026-08-13 15:16  add      52a207ce  Added newer recovery Memory                                                                                                              [0;1m^[179C[0m│[0m
-[0m│   2026-08-13 15:16  atomize  43b9b166  Applied atomize to create first recovery Memory                                                                                          [0;48;2;68;68;68m [179C[0m│[0m
-[0m│[0;1;7m›✓ 2026-08-13 15:16  init     fb133aa1  Initialized recovery Context before applying atomize[0m                                                                                     [0;48;2;68;68;68m [179C[0m│[0m
+[0m│   2026-08-17 10:40  add      a0cfcbbd  Added newer recovery Memory                                                                                                              [0;1m^[179C[0m│[0m
+[0m│   2026-08-17 10:40  atomize  17383bd1  Applied atomize to create first recovery Memory                                                                                          [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;1;7m›✓ 2026-08-17 10:40  init     507bb5a7  Initialized recovery Context before applying atomize[0m                                                                                     [0;48;2;68;68;68m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
@@ -314,7 +314,7 @@ PTY 180 52
 [0;38;2;139;213;255;1m┃[0m  MEANING · Remove newer visible checkpoints after restoration; the recovery checkpoint retains undo metadata.                                                                    [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
 
-[3C[0mR[CV[CR[2CTO fb133aa1 · DI[CCARD NEWER CHECKPOINTS ][0m
+[3C[0mR[CV[CR[2CTO 507bb5a7 · DI[CCARD NEWER CHECKPOINTS ][0m
 
 [7C[0mHISTORY[C· ←/→ s[Clect  Ent[Cr apply  Esc/Backspace items  Tab switch [Cq [Cancel  ·  3/3[0m[K[6A[90D[0m[?25l[22C[0m[   DISCARD NEWER ][2C[0;38;2;139;213;255;1m[[0;38;2;16;36;47;48;2;139;213;255;1m ✓ KEEP ALL [0;38;2;139;213;255;1m][0m
 [13C[0mPreserve every curr[Cntly vis[Cble[Ccheckpoin[C af[Cer restorati[Cn.                                    [0m

@@ -26,14 +26,14 @@ from memcommit.interfaces.agent.contract import (
     text_value,
 )
 from memcommit.interfaces.agent.quality_find import (
-    semantic_redundancy_evidence_agent_schema,
+    redundancy_evidence_agent_schema,
 )
 from memcommit.quality_finding_handoff import (
     QualityFindingHandoff,
     QualityFindingHandoffError,
 )
 from memcommit.semantic_redundancy_evidence import (
-    semantic_redundancy_evidence_from_dict,
+    redundancy_evidence_from_dict,
 )
 
 
@@ -46,7 +46,7 @@ def _handoffs(value: object) -> tuple[QualityFindingHandoff, ...]:
     if not isinstance(value, list) or not value:
         raise AgentRequestError("evidence must be a nonempty array.")
     try:
-        handoffs = tuple(semantic_redundancy_evidence_from_dict(item) for item in value)
+        handoffs = tuple(redundancy_evidence_from_dict(item) for item in value)
     except (QualityFindingHandoffError, TypeError, ValueError) as error:
         raise AgentRequestError(str(error)) from error
     return handoffs
@@ -79,7 +79,9 @@ def _survivors(value: object) -> dict[str, str]:
 
 def _parse_request(
     payload: object,
-) -> tuple[DedupAgentKind, tuple[QualityFindingHandoff, ...], dict[str, str] | None, str | None]:
+) -> tuple[
+    DedupAgentKind, tuple[QualityFindingHandoff, ...], dict[str, str] | None, str | None
+]:
     value = object_value(payload, label="Dedun request")
     version = value.get("version")
     if (
@@ -255,7 +257,7 @@ def dedup_agent_tool_schema() -> JsonObject:
     return {
         "name": DEDUP_AGENT_TOOL_NAME,
         "description": (
-            "Plan groups from confirmed semantic redundancy evidence, "
+            "Plan groups from confirmed exact or semantic redundancy evidence, "
             "or revalidate and atomically apply one exact existing-survivor choice "
             "per group. Dedun never rewrites Memory content."
         ),
@@ -269,7 +271,7 @@ def dedup_agent_tool_schema() -> JsonObject:
                 "evidence": {
                     "type": "array",
                     "minItems": 1,
-                    "items": semantic_redundancy_evidence_agent_schema(),
+                    "items": redundancy_evidence_agent_schema(),
                 },
                 "survivors": {
                     "type": "array",

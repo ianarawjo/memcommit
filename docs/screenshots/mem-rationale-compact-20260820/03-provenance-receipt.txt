@@ -1,0 +1,9 @@
+Rationale [d519877c] · rationale/origin                                                                                                                                             
+                                                                                                                                                                                    
+MEMORY                                                                                                                                                                              
+  Um...                                                                                                                                                                             
+                                                                                                                                                                                    
+PROVENANCE                                                                                                                                                                          
+  “Um...” began as a hesitation between a minimal-change instruction and its “distribute, not divide” example. Sentence chunking made it a standalone Memory; undo removed it, redo 
+restored it, and remove later deleted it.                                                                                                                                           
+RATIONALE RECEIPT COMPLETE · TARGET [d519877c] · NATURAL ORIGIN + LIFECYCLE VISIBLE · PRESS V TO VERIFY

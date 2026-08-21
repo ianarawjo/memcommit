@@ -253,13 +253,18 @@ def test_audit_report_keeps_three_sections_and_type_specific_items():
     ]
     assert [metric.value for metric in view.metrics] == ["2", "1", "1", "1"]
     assert [item.kind for item in view.items] == [
-        "DUPLICATE",
+        "SEMANTIC DUN",
         "AMBIGUITY",
         "CONFLICT",
     ]
     assert "DUPLICATES · COMPLETE · 1 finding" in view.overview
     assert "AMBIGUITIES · COMPLETE · 1 finding" in view.overview
     assert "CONFLICTS · COMPLETE · 1 finding" in view.overview
+    assert "AUDITED SOURCE" in view.overview
+    assert "FROZEN SOURCE" not in view.overview
+    assert [location.role for location in view.context_locations] == [
+        "AUDITED SOURCE"
+    ]
     assert "not proof" in view.overview
 
 
@@ -368,7 +373,7 @@ def test_audit_command_runs_all_three_and_saves_before_snapshot(
 
     result = runner.invoke(
         app,
-        ["audit", "--context", ctx.name, "--snapshot"],
+        ["audit", ctx.name, "--snapshot"],
     )
 
     assert result.exit_code == 0
@@ -381,3 +386,40 @@ def test_audit_command_runs_all_three_and_saves_before_snapshot(
     assert len(saved) == 1
     assert saved[0].source.context_name == ctx.name
     assert "SAVED · 3/3 CHECKS" in result.stdout
+
+
+def test_flagless_audit_uses_current_context_and_prints_saved_session_receipt(
+    isolated_store,
+    monkeypatch,
+):
+    ctx, _first, _second = _context()
+    store = MemoryStore()
+    store.create_context(ctx)
+    store.set_current(ctx.name)
+    EmptyAuditProvider.calls = []
+    monkeypatch.setattr(
+        "memcommit.commands.audit.connect_codex_chatgpt_provider",
+        EmptyAuditProvider,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.audit.choose_audit_setup",
+        lambda *_args, **_kwargs: pytest.fail(
+            "flagless Audit must not open Source setup"
+        ),
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.audit.run_quality_audit_review",
+        lambda *_args, **_kwargs: pytest.fail(
+            "Audit execution must not open Review automatically"
+        ),
+    )
+
+    result = runner.invoke(app, ["audit"])
+
+    assert result.exit_code == 0, result.output
+    assert "Audit saved: 0 finding(s) across 3 quality checks." in result.output
+    assert "mem review audit --session" in result.output
+    assert "Source unchanged. No checkpoint created." in result.output
+    saved = QualityAuditStore(store).list()
+    assert len(saved) == 1
+    assert saved[0].source.context_name == ctx.name

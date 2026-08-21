@@ -20,11 +20,28 @@ class ResolveEffectResult:
 
 
 @dataclass(frozen=True)
+class ResolveIssueResult:
+    uid: str
+    kind: str
+    memory_uids: tuple[str, ...]
+    selected_interpretation: str
+    basis_memory_uids: tuple[str, ...]
+    assumptions: tuple[str, ...]
+    reason: str
+
+
+@dataclass(frozen=True)
 class ResolveCandidateResult:
     uid: str
     summary: str
+    classification: str
+    resolution_level: str
+    rule_ids: tuple[str, ...]
+    issues: tuple[ResolveIssueResult, ...]
     effects: tuple[ResolveEffectResult, ...]
+    grounded: bool
     verification_reason: str
+    fit_verdict: str
     fit_reason: str
     deletes: int
     creates: int
@@ -41,6 +58,7 @@ class ResolveAnalysisResult:
     initial_fit: str | None
     initial_fit_reason: str | None
     question: str
+    target_fit: str
     requested_effects: tuple[str, ...]
     allowed_effects: tuple[str, ...]
     denied_effects: tuple[str, ...]
@@ -65,4 +83,5 @@ __all__ = [
     "ResolveApplyResult",
     "ResolveCandidateResult",
     "ResolveEffectResult",
+    "ResolveIssueResult",
 ]

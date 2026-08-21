@@ -49,4 +49,4 @@
 ┌──────────────────────────────────────────────────────────────| OUTPUT CONTEXT NAME · EDIT DIRECTLY · NOT CREATED |───────────────────────────────────────────────────────────────┐
 │› alpha/severed                                                                                                                                                                   │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
- SOURCE: ↑/↓ move · ←/→ collapse/expand · Enter/Space choose · top ↑ enters scope · A expand all · m Memory here · M all · Tab/Shift-Tab pane · F continue · Q cancel
+ SOURCE: m THIS Context: hide items · M EVERY Context: hide items · ↑/↓ move · ←/→ collapse/expand · Enter/Space choose · top ↑ enters scope · A expand all · Tab/Shift-Tab pane · F

@@ -61,10 +61,11 @@ class StatusQueryView:
 
 @dataclass(frozen=True, slots=True)
 class StatusEmbeddedContext:
-    """One direct embedded-Context relationship."""
+    """One direct live Embed or immutable Context Reference relationship."""
 
     uid: str
     name: str
+    snapshot: bool = False
 
 
 @dataclass(frozen=True, slots=True)

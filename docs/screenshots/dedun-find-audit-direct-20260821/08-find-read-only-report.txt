@@ -1,0 +1,16 @@
+PTY 180 52                                                                                                                                                                          
+Context: quality/direct-find                                                                                                                                                        
+  3 direct memories, 1 finding                                                                                                                                                      
+                                                                                                                                                                                    
+  DUN = DUP / EXACT + SEMANTIC DUN                                                                                                                                                  
+    EVIDENCE  1 link = 0 DUP / EXACT links + 1 SEMANTIC DUN link                                                                                                                    
+    CLEANUP   1 connected group · 1 redundant Memory                                                                                                                                
+                                                                                                                                                                                    
+  DUN GROUP  1/1 · 2 Memories · SEMANTIC DUN                                                                                                                                        
+    CLEANUP MAP · PROPOSED · NOT APPLIED                                                                                                                                            
+    SURVIVOR  [memory 20000000]  The parking garage is unavailable after 10 p.m.                                                                                                    
+    ABSORB    [memory 20000001]  Do not enter the parking garage after 22:00.                                                                                                       
+    EVIDENCE 1 · SEMANTIC_EQUIVALENT · Both Memories prohibit garage access after the same 10 p.m. boundary.                                                                        
+COMMAND EXIT · 0                                                                                                                                                                    
+VERIFICATION · CONTEXT quality/direct-find · MEMORIES 3 · CHECKPOINT COMMANDS [] · CURRENT quality/direct-find · PROVIDER ['find_duplicates']                                       
+FIND REPORT READY

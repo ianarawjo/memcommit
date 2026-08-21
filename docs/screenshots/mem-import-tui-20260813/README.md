@@ -57,7 +57,7 @@ full native canvas size and 20 raw PTY streams containing 256-color sequences.
 | `12-context-success-receipt.png` | `A` | Receipt lists `source/root` and `source/root/child`, reports two direct Memories, and confirms unchanged Profile selection | Two new Contexts and their import checkpoints created atomically; first mutation in this branch |
 | `13-context-read-only-verification.png` | `Enter` at capture-only pause | The direct `mem list source/root --direct` renderer shows the child embed and root Memory; current remains `destination` | None after Apply |
 | `14-memory-kind-selected.png` | Separate launch, then `Down`, `Down` | Common resource selector checks `MEMORY` | None |
-| `15-memory-source-choice.png` | `Enter`, `Enter`, `Down` | Shared source tree focuses directly owned root Memory `[20000000]`; the Memory reference remains visibly read-only and unselectable | None |
+| `15-memory-source-choice.png` | `Enter`, `Enter`, `Down` ×3 | Shared source tree passes the unavailable root preview, enters the child row, and focuses directly owned child Memory `[20000000]`; the Memory reference remains visibly read-only and unselectable | None |
 | `16-memory-destination-context.png` | `Enter` | Shared destination tree focuses current ordinary Context `destination` and previews its local Memory | None |
 | `17-memory-exact-approval.png` | `Enter` | Frozen command names the full Memory UID, canonical Source Context, exact target Context, and destination Profile `authoring` | None |
 | `18-memory-success-receipt.png` | `A` | Receipt confirms UID/content-preserving append into `destination` and unchanged Profile selection | One Memory append and automatic checkpoint; first mutation in this branch |
@@ -67,4 +67,3 @@ full native canvas size and 20 raw PTY streams containing 256-color sequences.
 The capture-only pause after each success receipt exists solely to preserve the
 receipt and subsequent read-only verification as separate ordered states. It
 does not alter the product interaction or persistence boundary.
-

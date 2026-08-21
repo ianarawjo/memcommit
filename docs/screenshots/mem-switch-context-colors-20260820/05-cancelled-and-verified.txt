@@ -1,0 +1,52 @@
+Switch cancelled.                                                                                                                                                                   
+SWITCH CONTEXT COLOR VERIFICATION · READ-ONLY                                                                                                                                       
+COMPLETE PROFILE BYTES UNCHANGED · YES                                                                                                                                              
+CURRENT CONTEXT · workspace                                                                                                                                                         
+REFERENCE UID · 5b210589                                                                                                                                                            
+EMBEDDED UID · a5f00b19                                                                                                                                                             
+VERIFICATION COMMAND · mem show --context workspace                                                                                                                                 
+Context: workspace                                                                                                                                                                  
+  Memories 0  |  Memory Refs 0  |  Query Views 1  |  Embedded Contexts 2                                                                                                            
+                                                                                                                                                                                    
+Items (in context order):                                                                                                                                                           
+  [query view 5b210589] reference/private-source                                                                                                                                    
+  [context a5f00b19] workspace/embedded-source  VIA EMBED                                                                                                                           
+  [context 1290f0bb] granted/shared-source  READ GRANT                                                                                                                              
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    

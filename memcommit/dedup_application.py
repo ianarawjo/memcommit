@@ -1,8 +1,8 @@
-"""Operation-owned contracts for applying confirmed semantic redundancy.
+"""Operation-owned contracts for applying complete DUN redundancy.
 
-Dedun consumes confirmed semantic evidence, keeps one existing Memory per
-connected group, and removes the other existing UIDs after exact whole-set
-review. It never authors canonical replacement text.
+Dedun consumes deterministic exact-DUP and semantic-DUN evidence, keeps one
+existing Memory per connected group, and removes the other existing UIDs after
+exact whole-set review. It never authors canonical replacement text.
 """
 
 from __future__ import annotations
@@ -28,14 +28,14 @@ if TYPE_CHECKING:
     from memcommit.update import GrantedUpdateTarget
 
 
-DEDUP_CONTRACT_VERSION = "semantic-dedun-v1"
+DEDUP_CONTRACT_VERSION = "dedun-v2"
 DEDUP_ELIGIBLE_RELATIONS = frozenset(
-    {"SURFACE_EQUIVALENT", "SEMANTIC_EQUIVALENT"}
+    {"EXACT", "SURFACE_EQUIVALENT", "SEMANTIC_EQUIVALENT"}
 )
 
 
 class DedupError(RuntimeError):
-    """A semantic Dedun request, frozen plan, decision, or Apply is invalid."""
+    """A Dedun request, frozen plan, decision, or Apply is invalid."""
 
 
 class DedupAuthorityError(DedupError):
@@ -48,30 +48,27 @@ class DedupConflictError(DedupError):
 
 @dataclass(frozen=True)
 class DedupRequest:
-    """One or more confirmed redundancy edges from the same semantic frame."""
+    """One or more typed redundancy edges from the same complete DUN frame."""
 
     handoffs: tuple[QualityFindingHandoff, ...]
 
     def __post_init__(self) -> None:
         if not self.handoffs or any(
-            not isinstance(handoff, QualityFindingHandoff)
-            for handoff in self.handoffs
+            not isinstance(handoff, QualityFindingHandoff) for handoff in self.handoffs
         ):
             raise DedupError(
-                "Dedun requires at least one typed semantic redundancy evidence item."
+                "Dedun requires at least one typed redundancy evidence item."
             )
         first = self.handoffs[0]
         if len(first.sources) != 1:
-            raise DedupError(
-                "Dedun v1 requires evidence from one exact direct Context."
-            )
+            raise DedupError("Dedun requires evidence from one exact direct Context.")
         source = first.sources[0]
         seen_edges: set[frozenset[str]] = set()
         seen_findings: set[str] = set()
         for handoff in self.handoffs:
             if handoff.kind != "DUPLICATE" or handoff.route != "DEDUP":
                 raise DedupError(
-                    "Dedun accepts only positive semantic redundancy evidence."
+                    "Dedun accepts only positive exact or semantic redundancy evidence."
                 )
             if (
                 len(handoff.sources) != 1
@@ -81,9 +78,8 @@ class DedupRequest:
                 raise DedupError(
                     "All Dedun evidence must share one exact frozen Source frame."
                 )
-            if (
-                len(handoff.memory_uids) != 2
-                or any(name != source.display_name for name in handoff.memory_context_names)
+            if len(handoff.memory_uids) != 2 or any(
+                name != source.display_name for name in handoff.memory_context_names
             ):
                 raise DedupError(
                     "Each Dedun evidence item must name two directly owned Memories."
@@ -98,9 +94,7 @@ class DedupRequest:
                 or edge in seen_edges
                 or handoff.finding_uid in seen_findings
             ):
-                raise DedupError(
-                    "Dedun evidence repeats or contains an invalid pair."
-                )
+                raise DedupError("Dedun evidence repeats or contains an invalid pair.")
             seen_edges.add(edge)
             seen_findings.add(handoff.finding_uid)
 
@@ -277,8 +271,7 @@ def validate_dedup_selections(
     except ResolutionValidationError as error:
         if error.code == "UNRESOLVED_REQUIRED":
             raise DedupError(
-                "Dedun has unresolved redundancy groups: "
-                + ", ".join(error.item_uids)
+                "Dedun has unresolved redundancy groups: " + ", ".join(error.item_uids)
             ) from error
         if error.code == "UNKNOWN_ITEM":
             raise DedupError(

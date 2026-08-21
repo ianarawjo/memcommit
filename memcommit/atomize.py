@@ -1943,7 +1943,13 @@ def _output_schema(
         tuple(candidate_ids),
         limit=ATOMIZE_OVERVIEW_CHAR_LIMIT,
         empty=True,
-        require_sources=False,
+        # Structured output cannot express "one source iff text is nonempty"
+        # with the flat strict schema accepted by the provider. Requiring one
+        # source for every populated candidate frame is the safe side of that
+        # conditional: a schema-valid nonempty overview can no longer be
+        # rejected later as ungrounded. The decoder remains permissive for an
+        # older genuinely empty section with no citations.
+        require_sources=True,
     )
     quality_issue = {
         "type": "object",
@@ -2329,6 +2335,20 @@ def _parse_overview(
         for candidate_id, candidate in candidate_by_id.items()
     }
 
+    def deduplicate_source_ids(raw: object) -> object:
+        """Normalize harmless duplicate citations unsupported by the schema."""
+
+        if not isinstance(raw, dict):
+            return raw
+        source_ids = raw.get("source_ids")
+        if not isinstance(source_ids, list) or any(
+            not isinstance(candidate_id, str) for candidate_id in source_ids
+        ):
+            return raw
+        normalized = dict(raw)
+        normalized["source_ids"] = list(dict.fromkeys(source_ids))
+        return normalized
+
     def parse_understood(raw: object) -> UnderstandingSummary:
         try:
             if (
@@ -2338,7 +2358,7 @@ def _parse_overview(
             ):
                 return UnderstandingSummary(text="")
             return parse_source_linked_understanding(
-                raw,
+                deduplicate_source_ids(raw),
                 source_uid_by_id=source_uid_by_id,
                 limit=ATOMIZE_OVERVIEW_CHAR_LIMIT,
             )
@@ -2361,12 +2381,15 @@ def _parse_overview(
                 or candidate_id not in candidate_by_id
                 for candidate_id in source_ids
             )
-            or len(set(source_ids)) != len(source_ids)
         ):
             raise AtomizeImpactError(
                 "Codex atomize impact returned an invalid source-linked "
                 "overview."
             )
+        # The provider's strict schema cannot use uniqueItems. Overview
+        # citations have set semantics, so repeated aliases do not weaken the
+        # evidence boundary and are retained once in first-seen order.
+        source_ids = list(dict.fromkeys(source_ids))
         text = raw_text.strip()
         if text and (
             len(text.splitlines()) != 1

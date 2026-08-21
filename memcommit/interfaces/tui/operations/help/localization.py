@@ -202,8 +202,8 @@ _FR = {
         "Réappliquer une commande annulée par erreur.",
     ),
     "reference": _copy(
-        "Copier une version directe de Source Memory dans un Target sous forme de snapshot immuable en lecture seule.",
-        "Conserver une version exacte de Memory même si sa Source change ou disparaît ensuite.",
+        "Copier une version directe de Source Memory ou une portée de Context directe/récursive dans un Target sous forme de snapshot immuable en lecture seule.",
+        "Conserver une preuve exacte de Memory ou de Context même si sa Source change ou disparaît ensuite.",
     ),
     "rename": _copy(
         "Renommer le Profile géré courant ou indiqué sans déplacer ni réécrire son store ; mem profile rename est l’équivalent explicite.",
@@ -450,8 +450,8 @@ _ZH = {
         "重新执行最近一次被撤销的已记录 Context 命令。", "重新应用被意外撤销的命令时。"
     ),
     "reference": _copy(
-        "将一个直接 Source Memory 版本复制到 Target，作为不可变的只读 snapshot。",
-        "即使 Source 后续改变或消失，也要保留某个精确 Memory 版本时。",
+        "将一个直接 Source Memory 版本或直接/递归 Context 范围复制到 Target，作为不可变的只读 snapshot。",
+        "即使 Source 后续改变或消失，也要保留精确的 Memory 或 Context 依据时。",
     ),
     "rename": _copy(
         "重命名当前或指定的受管 Profile，而不移动或重写其 store；mem profile rename 是显式等价形式。",
@@ -700,8 +700,8 @@ _KO = {
         "실수로 undo한 command를 다시 적용할 때.",
     ),
     "reference": _copy(
-        "하나의 직접 Source Memory 버전을 변경 불가능한 read-only snapshot으로 Target에 복사합니다.",
-        "Source가 나중에 변경되거나 사라져도 정확한 Memory 버전 하나를 유지할 때.",
+        "직접 Source Memory 버전 또는 직접/재귀 Context 범위를 변경 불가능한 read-only snapshot으로 Target에 복사합니다.",
+        "Source가 나중에 변경되거나 사라져도 정확한 Memory 또는 Context 근거를 유지할 때.",
     ),
     "rename": _copy(
         "store를 이동하거나 다시 쓰지 않고 현재 또는 지정한 managed Profile의 이름을 바꿉니다. mem profile rename은 명시적인 동일 기능입니다.",
@@ -951,8 +951,8 @@ _MN = {
         "Санамсаргүй undo хийсэн command-г дахин хэрэглэх үед.",
     ),
     "reference": _copy(
-        "Нэг шууд Source Memory хувилбарыг өөрчлөгдөшгүй read-only snapshot болгон Target руу хуулна.",
-        "Source дараа нь өөрчлөгдөх эсвэл алга болсон ч нэг яг Memory хувилбарыг хадгалах үед.",
+        "Нэг шууд Source Memory хувилбар эсвэл шууд/рекурс Context хүрээг өөрчлөгдөшгүй read-only snapshot болгон Target руу хуулна.",
+        "Source дараа нь өөрчлөгдөх эсвэл алга болсон ч яг Memory эсвэл Context нотолгоог хадгалах үед.",
     ),
     "rename": _copy(
         "Store-г зөөх эсвэл дахин бичихгүйгээр одоогийн эсвэл заасан managed Profile-н нэрийг солино; mem profile rename нь илэрхий ижил хэлбэр.",
@@ -1057,12 +1057,68 @@ _EXACT_DEDUP_TRANSLATIONS = {
         "Semantic inference ашиглахгүйгээр яг ижил агуулгын хуулбарыг цэвэрлэх үед.",
     ),
 }
+_EXACT_FIND_DUPLICATES_TRANSLATIONS = {
+    "FR": _copy(
+        "Signaler les groupes de Memories directes dont le contenu est identique octet pour octet, sans modifier le Context.",
+        "Inspecter les copies exactes avant un éventuel Dedup sans inférence sémantique.",
+    ),
+    "ZH": _copy(
+        "报告内容逐字节相同的直接 Memory 组；不修改 Context。",
+        "在可能执行 Dedup 前，无需语义推理即可检查完全相同的副本。",
+    ),
+    "KO": _copy(
+        "바이트 단위로 내용이 같은 직접 Memory 그룹을 보고하며 Context는 변경하지 않습니다.",
+        "의미 추론 없이 정확한 복사본을 확인한 뒤 Dedup 여부를 정할 때.",
+    ),
+    "MN": _copy(
+        "Байт бүрээрээ ижил direct Memory бүлгүүдийг Context-г өөрчлөхгүйгээр тайлагнана.",
+        "Semantic inference-гүйгээр яг ижил хуулбаруудыг Dedup-н өмнө шалгах үед.",
+    ),
+}
+_INCLUSIVE_FIND_REDUNDANCIES_TRANSLATIONS = {
+    "FR": _copy(
+        "Signaler les redondances directes exactes et sémantiques sans modifier aucun Context Source.",
+        "Inspecter ensemble DUP exact et DUN sémantique avant nettoyage.",
+    ),
+    "ZH": _copy(
+        "报告直接 Memory 中的精确与语义冗余；不修改任何 Source Context。",
+        "在清理前一并检查精确 DUP 与语义 DUN。",
+    ),
+    "KO": _copy(
+        "직접 Memory의 정확 중복과 의미 중복을 함께 보고하며 Source Context는 변경하지 않습니다.",
+        "정리 전에 정확한 DUP과 의미론적 DUN을 함께 확인할 때.",
+    ),
+    "MN": _copy(
+        "Direct Memory-н яг ижил болон semantic redundancy-г Source Context-г өөрчлөхгүйгээр хамтад нь тайлагнана.",
+        "Цэвэрлэгээний өмнө exact DUP ба semantic DUN-г хамтад нь шалгах үед.",
+    ),
+}
+_INCLUSIVE_DEDUN_TRANSLATIONS = {
+    "FR": _copy(
+        "Résoudre immédiatement les groupes DUN exacts et sémantiques, en conservant le premier UID existant de chaque groupe connecté.",
+        "Nettoyer ensemble les DUP exacts et les DUN sémantiques en un seul point de contrôle.",
+    ),
+    "ZH": _copy(
+        "立即处理精确与语义 DUN 组，并保留每个连通组中最先存在的 UID。",
+        "在一个检查点中一并清理精确 DUP 与语义 DUN。",
+    ),
+    "KO": _copy(
+        "정확한 DUP과 의미론적 DUN 그룹을 즉시 정리하고 각 연결 그룹에서 가장 먼저 저장된 UID를 유지합니다.",
+        "정확 중복과 의미 중복을 하나의 체크포인트로 함께 정리할 때.",
+    ),
+    "MN": _copy(
+        "Exact DUP болон semantic DUN бүлгүүдийг шууд цэвэрлэж, холбогдсон бүлэг бүрийн эхний UID-г хадгална.",
+        "Exact DUP ба semantic DUN-г нэг checkpoint-д хамтад нь цэвэрлэх үед.",
+    ),
+}
 for _language in ("FR", "ZH", "KO", "MN"):
     _translations = OPERATION_TRANSLATIONS[_language]
-    _translations["dedun"] = _translations["dedup"]
+    _translations["dedun"] = _INCLUSIVE_DEDUN_TRANSLATIONS[_language]
     _translations["dedup"] = _EXACT_DEDUP_TRANSLATIONS[_language]
-    _translations["find-redundancies"] = _translations["find-duplicates"]
-    _translations.pop("find-duplicates")
+    _translations["find-duplicates"] = _EXACT_FIND_DUPLICATES_TRANSLATIONS[_language]
+    _translations["find-redundancies"] = _INCLUSIVE_FIND_REDUNDANCIES_TRANSLATIONS[
+        _language
+    ]
 
 
 _CATEGORY_DESCRIPTIONS = {
@@ -1159,38 +1215,85 @@ _CORE_CONCEPT_DESCRIPTIONS = {
     },
 }
 
-_COMMON_KEY_DESCRIPTIONS = {
+_COMMON_LOCATOR_DESCRIPTIONS = {
     "FR": {
-        "↑/↓": "Déplacer ou faire défiler dans la surface active.",
-        "←/→": "Modifier un choix horizontal, développer ou revenir selon le focus.",
-        "Tab / Shift-Tab": "Déplacer le focus entre les surfaces visibles.",
-        "Enter": "Ouvrir, sélectionner ou soumettre l’action active.",
-        "H": "Ouvrir ou masquer Help depuis la navigation en lecture seule d’une session.",
-        "Esc / Backspace": "Revenir d’un niveau ; Backspace modifie le texte dans les champs éditables.",
+        "NAME": "Un nom nu de Context existant est canonique et global, jamais relatif.",
+        ".": "Le Context courant capturé une seule fois au démarrage de la command.",
+        "..": "Le parent de ce Context courant capturé.",
+        "./CHILD": "Un chemin enfant relatif à ce Context courant capturé.",
+        "../PATH": "Un chemin relatif au parent de ce Context courant capturé.",
+        "UID": "Un UID complet ou un préfixe accepté. Dans les operations direct-Memory compatibles, recherche les propriétaires directs dans les Contexts locaux ordinaires ; il faut exactement une correspondance, sinon l’ambiguïté arrête l’action et affiche les candidats qualifiés.",
+        "CONTEXT:UID": "Dans les operations direct-Memory compatibles, : sépare le Context propriétaire direct de l’UID ou du préfixe de sa Memory ; le Context peut être relatif, comme dans ../3:ca562047.",
     },
     "ZH": {
-        "↑/↓": "在当前聚焦区域中移动或滚动。",
-        "←/→": "根据焦点更改横向选择、展开或返回。",
-        "Tab / Shift-Tab": "在可见区域之间移动焦点。",
-        "Enter": "打开、选择或提交当前操作。",
-        "H": "从 session 的只读导航区域打开或隐藏 Help。",
-        "Esc / Backspace": "返回一层；在可写字段中 Backspace 用于删除文本。",
+        "NAME": "现有 Context 的裸名称是规范的全局名称，绝不是相对名称。",
+        ".": "command 启动时只捕获一次的当前 Context。",
+        "..": "该已捕获当前 Context 的父级。",
+        "./CHILD": "相对于该已捕获当前 Context 的子路径。",
+        "../PATH": "相对于该已捕获当前 Context 父级的路径。",
+        "UID": "完整 UID 或可接受的前缀。在支持 direct-Memory 的 operation 中扫描普通本地 Context 的直接所有者；必须恰好匹配一个，否则因歧义而停止并列出限定候选项。",
+        "CONTEXT:UID": "在支持 direct-Memory 的 operation 中，: 分隔直接所有者 Context 与其 Memory UID 或前缀；Context 可以是相对路径，例如 ../3:ca562047。",
     },
     "KO": {
-        "↑/↓": "포커스된 영역 안에서 이동하거나 스크롤합니다.",
-        "←/→": "포커스에 따라 가로 선택을 바꾸거나 펼치거나 뒤로 갑니다.",
-        "Tab / Shift-Tab": "보이는 영역 사이에서 포커스를 이동합니다.",
-        "Enter": "포커스된 동작을 열고 선택하거나 제출합니다.",
-        "H": "session의 read-only 탐색 영역에서 Help를 열거나 숨깁니다.",
-        "Esc / Backspace": "한 단계 뒤로 갑니다. 쓰기 가능한 필드에서는 Backspace가 텍스트를 지웁니다.",
+        "NAME": "기존 Context의 bare name은 canonical global name이며 상대 이름이 아닙니다.",
+        ".": "command 시작 시 한 번 캡처한 current Context입니다.",
+        "..": "캡처한 current Context의 상위 Context입니다.",
+        "./CHILD": "캡처한 current Context를 기준으로 한 하위 경로입니다.",
+        "../PATH": "캡처한 current Context의 상위를 기준으로 한 상대 경로입니다.",
+        "UID": "전체 UID 또는 허용되는 prefix입니다. direct-Memory locator를 지원하는 operation에서 일반 local Context의 직접 소유자를 스캔합니다. 정확히 하나만 일치해야 하며, 중복이면 중단하고 qualified 후보를 나열합니다.",
+        "CONTEXT:UID": "direct-Memory locator를 지원하는 operation에서 :는 직접 소유 Context와 Memory UID 또는 prefix를 구분합니다. ../3:ca562047처럼 Context 부분에 상대 경로를 쓸 수 있습니다.",
     },
     "MN": {
-        "↑/↓": "Фокустай хэсэг дотор шилжих эсвэл гүйлгэнэ.",
-        "←/→": "Фокусаас хамаарч хэвтээ сонголт солих, дэлгэх эсвэл буцна.",
-        "Tab / Shift-Tab": "Харагдах хэсгүүдийн хооронд фокус шилжүүлнэ.",
-        "Enter": "Фокустай үйлдлийг нээх, сонгох эсвэл илгээнэ.",
-        "H": "Session-н read-only navigation хэсгээс Help-г нээх эсвэл нууна.",
-        "Esc / Backspace": "Нэг түвшин буцна; бичих талбарт Backspace текст устгана.",
+        "NAME": "Одоо байгаа Context-н дан нэр нь canonical global name бөгөөд хэзээ ч relative биш.",
+        ".": "Command эхлэхэд нэг удаа авсан current Context.",
+        "..": "Тэр авсан current Context-н эцэг Context.",
+        "./CHILD": "Тэр авсан current Context-д харьцуулсан хүүхэд зам.",
+        "../PATH": "Тэр авсан current Context-н эцэгт харьцуулсан зам.",
+        "UID": "Бүтэн UID эсвэл зөвшөөрөгдсөн prefix. Direct-Memory locator дэмждэг operation-д энгийн local Context-уудын шууд эзэмшигчийг хайна; яг нэг тохирол шаардана, ambiguity гарвал зогсоож qualified candidate-уудыг жагсаана.",
+        "CONTEXT:UID": "Direct-Memory locator дэмждэг operation-д : нь шууд эзэмшигч Context болон түүний Memory UID эсвэл prefix-г тусгаарлана; Context нь ../3:ca562047 шиг relative байж болно.",
+    },
+}
+
+_COMMON_KEY_DESCRIPTIONS = {
+    "FR": {
+        "↑/↓": "Se déplacer par ligne ou Form ; maintenir la touche pour accélérer dans les longues listes.",
+        "←/→": "Changer Language ou View, ou développer et réduire les Forms de command.",
+        "PgUp / PgDn": "Sauter de 10 lignes en arrière ou en avant dans la liste Help défilante.",
+        "Home / End": "Atteindre la première ligne Help ou la dernière command.",
+        "Tab / Shift-Tab": "Déplacer le focus entre Language, View et les groupes d’operations visibles.",
+        "Enter": "Ouvrir les Forms de command, puis sélectionner ou inspecter la Form active.",
+        "H": "Ouvrir l’aide complète de la command, ou masquer Help lors de l’exploration depuis une session en attente.",
+        "Esc / Q / Ctrl-C": "Fermer Help, annuler la sélection ou revenir à la session en attente.",
+    },
+    "ZH": {
+        "↑/↓": "按行或 Form 移动；在长列表中按住可加速。",
+        "←/→": "更改 Language 或 View，或展开和折叠 command Forms。",
+        "PgUp / PgDn": "在滚动的 Help 列表中向前或向后跳转 10 行。",
+        "Home / End": "移动到第一条 Help 行或最后一个 command。",
+        "Tab / Shift-Tab": "在 Language、View 和可见 operation 分组之间移动焦点。",
+        "Enter": "打开 command Forms，然后选择或查看当前 Form。",
+        "H": "打开完整 command help；从等待中的 session 探索时则隐藏 Help。",
+        "Esc / Q / Ctrl-C": "关闭 Help、取消选择或返回等待中的 session。",
+    },
+    "KO": {
+        "↑/↓": "행 또는 Form 단위로 이동하며, 긴 목록에서는 길게 눌러 가속합니다.",
+        "←/→": "Language나 View를 바꾸거나 command Forms를 펼치고 접습니다.",
+        "PgUp / PgDn": "스크롤되는 Help 목록에서 앞이나 뒤로 10행 이동합니다.",
+        "Home / End": "첫 Help 행이나 마지막 command로 이동합니다.",
+        "Tab / Shift-Tab": "Language, View, 보이는 operation 그룹 사이에서 포커스를 이동합니다.",
+        "Enter": "command Forms를 연 뒤 포커스된 Form을 선택하거나 살펴봅니다.",
+        "H": "전체 command help를 열거나 대기 중인 session에서 탐색할 때 Help를 숨깁니다.",
+        "Esc / Q / Ctrl-C": "Help를 닫고 선택을 취소하거나 대기 중인 session으로 돌아갑니다.",
+    },
+    "MN": {
+        "↑/↓": "Мөр эсвэл Form-оор шилжинэ; урт жагсаалтад удаан дарж хурдасгана.",
+        "←/→": "Language эсвэл View-г солино, эсвэл command Forms-г дэлгэж хураана.",
+        "PgUp / PgDn": "Гүйлгэх Help жагсаалтад 10 мөрөөр урагш эсвэл хойш үсэрнэ.",
+        "Home / End": "Help-н эхний мөр эсвэл сүүлийн command руу шилжинэ.",
+        "Tab / Shift-Tab": "Language, View болон харагдах operation бүлгүүдийн хооронд фокус шилжүүлнэ.",
+        "Enter": "Command Forms-г нээгээд фокустай Form-г сонгох эсвэл шалгана.",
+        "H": "Command-н бүтэн help-г нээх, эсвэл хүлээж буй session-с судлах үед Help-г нууна.",
+        "Esc / Q / Ctrl-C": "Help-г хаах, сонголтыг цуцлах эсвэл хүлээж буй session рүү буцна.",
     },
 }
 
@@ -1248,12 +1351,25 @@ def common_key_description(
     return _COMMON_KEY_DESCRIPTIONS[language][key]
 
 
+def common_locator_description(
+    language: HelpLanguage,
+    locator: str,
+    english: str,
+) -> str:
+    """Translate locator guidance while retaining the exact locator spelling."""
+
+    if language == "EN":
+        return english
+    return _COMMON_LOCATOR_DESCRIPTIONS[language][locator]
+
+
 def validate_translation_coverage(operation_names: set[str]) -> None:
     """Fail closed when any non-English inventory drifts from the catalog."""
 
     category_names = set(_CATEGORY_DESCRIPTIONS["FR"])
     concept_names = set(_CORE_CONCEPT_DESCRIPTIONS["FR"])
     key_names = set(_COMMON_KEY_DESCRIPTIONS["FR"])
+    locator_names = set(_COMMON_LOCATOR_DESCRIPTIONS["FR"])
     for language in HELP_LANGUAGES:
         if language == "EN":
             continue
@@ -1276,6 +1392,8 @@ def validate_translation_coverage(operation_names: set[str]) -> None:
             raise ValueError(f"Help {language} concept translation coverage mismatch.")
         if set(_COMMON_KEY_DESCRIPTIONS[language]) != key_names:
             raise ValueError(f"Help {language} key translation coverage mismatch.")
+        if set(_COMMON_LOCATOR_DESCRIPTIONS[language]) != locator_names:
+            raise ValueError(f"Help {language} locator translation coverage mismatch.")
 
 
 __all__ = [
@@ -1284,6 +1402,7 @@ __all__ = [
     "LocalizedOperationCopy",
     "category_description",
     "common_key_description",
+    "common_locator_description",
     "core_concept_description",
     "operation_copy",
     "validate_translation_coverage",

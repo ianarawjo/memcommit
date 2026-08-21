@@ -3,8 +3,8 @@
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   * ▸ task-1/participant  0 direct · 0 descendant operations                                                                                                                       ^
 ›   ▾ task-1/recovery  2 direct · 0 descendant operations                                                                                                                           
-  · [add] 2026-08-13 15:16 · 52a207ce · Added newer recovery Memory                                                                                                                 
-  · [created] [atomize] 2026-08-13 15:16 · fb133aa1 · Initialized recovery Context before applying atomize                                                                          
+  · [add] 2026-08-17 10:40 · a0cfcbbd · Added newer recovery Memory                                                                                                                 
+  · [created] [atomize] 2026-08-17 10:40 · 507bb5a7 · Initialized recovery Context before applying atomize                                                                          
                                                                                                                                                                                     
                                                                                                                                                                                     
                                                                                                                                                                                     
@@ -49,4 +49,4 @@
                                                                                                                                                                                     
                                                                                                                                                                                    v
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
- ↑↓ move  ←→ expand  A expand all  m hide Memories here  M show all Memories  y copy Context  Y copy visible branch  Enter open checkpoints  q cancel · 2/4 · 2 selectable
+ ↑↓ move  ←→ expand  A expand all  m THIS Context: hide items · M EVERY Context: show items  y copy Context  Y copy visible branch  Enter open checkpoints  q cancel · 2/4 · 2 selec

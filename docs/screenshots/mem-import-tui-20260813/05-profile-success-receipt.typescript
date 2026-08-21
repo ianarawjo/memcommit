@@ -220,7 +220,7 @@ The source and active Profile were not changed.
 [0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
 [0m Edit the exact destination Profile name · Ctrl-U clear · Enter continue · Esc cancel[85D[0m
 [J[?7h[0m[?12l[?25h[?2004l[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;5;231;1m MEM IMPORT · PROFILE · FINAL APPROVAL[0m
-[0;38;5;231m Nothing has been imported. A applies only the command below.[0m
+[0;38;5;231m Nothing has been applied. Enter applies only the command below.[0m
 [0m┌─────────────────────────────────────────────────────────────────────| EXACT COMMAND · REVIEW BEFORE APPLY |──────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│[0;38;5;231mPROPOSED COMMAND · NOT RUN                                                                                                                                                       [0;1m^[179C[0m│[0m
 [0m│[0;38;5;231m  mem import profile source-profile-import --from-profile source-profile                                                                                                         [0;38;5;231;48;5;238m [179C[0m│[0m
@@ -270,13 +270,13 @@ The source and active Profile were not changed.
 [0m│[0;38;5;231m                                                                                                                                                                                 [0;38;5;231;48;5;238m [179C[0m│[0m
 [0m│[0;38;5;231m                                                                                                                                                                                 [0;1mv[179C[0m│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
-[0m ↑/↓ scroll · A apply exact command · Esc/Q cancel[50D[48A[C[0m[?12l[?25h[?25l[3A[0m[J[0;38;5;231;1m MEM IMPORT · PROFILE · FINAL APPROVAL[0m
-[0;38;5;231m Nothing has been imported. A applies only the command below.[0m
+[0m ↑/↓ scroll · Enter apply exact command · A also works · Esc/Q cancel[69D[48A[C[0m[?12l[?25h[?25l[3A[0m[J[0;38;5;231;1m MEM IMPORT · PROFILE · FINAL APPROVAL[0m
+[0;38;5;231m Nothing has been applied. Enter applies only the command below.[0m
 [0m┌─────────────────────────────────────────────────────────────────────| EXACT COMMAND · REVIEW BEFORE APPLY |──────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│[0;38;5;231mPROPOSED COMMAND · NOT RUN                                                                                                                                                        [179C[0m│[0m
 [0m│[0;38;5;231m  mem import profile source-profile-import --from-profile source-profile                                                                                                          [179C[0m│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
-[0m ↑/↓ scroll · A apply exact command · Esc/Q cancel[0m
+[0m ↑/↓ scroll · Enter apply exact command · A also works · Esc/Q cancel[0m
 
 
 

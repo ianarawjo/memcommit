@@ -55,6 +55,7 @@ def test_help_names_every_supported_impact_operation():
     assert IMPACT_ROUTES.route("forget").lifecycle is ImpactLifecycle.PREPARE_PROCESS_LOCAL
     assert IMPACT_ROUTES.route("distill").lifecycle is ImpactLifecycle.PREPARE_PROCESS_LOCAL
     assert IMPACT_ROUTES.route("resolve").lifecycle is ImpactLifecycle.PREPARE_PROCESS_LOCAL
+    assert IMPACT_ROUTES.route("update").lifecycle is ImpactLifecycle.PREPARE_OR_OPEN
     assert {route.name for route in IMPACT_ROUTES.deferred} == {"dedun"}
     assert {operation.name for operation in IMPACT_ROUTES.excluded} == {
         "ground",

@@ -16,9 +16,12 @@ readable and writable until the person runs an explicit compatibility
 migration. This is a staged naming-policy change, not an eager store-format
 break.
 
-UIDs are unaffected. Canonical UUID values already contain only hexadecimal
-digits and hyphens, so quoting a UID is optional and does not change the value
-received by the CLI.
+Canonical UUID values already contain only hexadecimal digits and hyphens, so
+quoting a UID is optional and does not change the value received by the CLI.
+That quote-independent spelling also means a root Context named like a UUID or
+one of the eight-or-more-character UID prefixes displayed by the CLI would be
+ambiguous in an automatically typed operand. New Context identities reserve
+that complete-root spelling for Memory selectors.
 
 ## Portable name contract
 
@@ -37,7 +40,13 @@ Slash is the only namespace separator. Empty segments, leading or trailing
 slashes, whitespace, Unicode letters, shell expansion characters, control
 characters, and a leading `-`, `.`, or `_` segment character are rejected for
 new identities. Representative accepted names are `team`, `team/project`,
-`Team_29/project-v2`, and `release.2026`.
+`Team_29/project-v2`, and `release.2026`. A complete name must additionally not
+match the public Memory UID-selector shape: at least the first eight
+hexadecimal characters of a canonical hyphenated UUID. Thus `deadbeef` is not
+a new Context name, while `team/deadbeef` remains unambiguous and valid because
+the slash types the complete operand as a Context locator. If `--parents`
+would create `deadbeef` as its own parent Context, validation rejects the
+complete batch before publication.
 
 The contract deliberately uses an ASCII subset. Broader Unicode names could
 be made safe with normalization and shell-aware display, but would still vary
@@ -57,7 +66,8 @@ The portable rule applies to:
 
 - `init`, branch destinations, Ground workspace Save Locations, and missing
   Context batches;
-- Find, Distill, Sever, Meld, and other require-new result destinations;
+- Find, Distill, explicit Sever OTHER-SAVE, Meld new-Result, and other
+  require-new result destinations;
 - ordinary Context and Memory import destinations;
 - new query-only source identifiers; and
 - new Grant resource, attachment, public, and recursively frozen binding
@@ -88,6 +98,12 @@ may not add one. A visible granted legacy name is labelled
 This asymmetry is intentional: rejecting legacy reads would strand data, while
 allowing new writes would make the migration boundary permanent and
 unmeasurable.
+
+The same compatibility boundary applies to an existing UUID-shaped root
+Context. It remains listable and readable and can be selected through an
+explicit Context operand such as `--context`; automatic Fit operands reserve
+that spelling for Memory lookup. Migration to a descriptive non-UID name is
+the route to automatic positional selection.
 
 ## Compatibility migration command
 
@@ -144,6 +160,10 @@ owning import or study setup route rather than being silently converted.
   cross-filesystem ambiguity.
 - **Strip quotes inside `mem`:** rejected because a real quote character may
   be data and normal shells remove syntactic quotes before starting `mem`.
+- **Let an existing UUID-shaped Context outrank a Memory selector:** rejected
+  because the meaning of a bare UID would then depend on unrelated namespace
+  occupancy. Explicit legacy Context selection preserves access without
+  weakening the new unambiguous operand grammar.
 - **Reject all legacy names immediately:** rejected because it would make
   existing stores, checkpoints, references, and Grants inaccessible before a
   safe migration could run.

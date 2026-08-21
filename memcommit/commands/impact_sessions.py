@@ -129,17 +129,18 @@ def meld_impact_presentation(session: MeldSession) -> ImpactSessionPresentation:
 
 
 def sever_impact_presentation(session: SeverSession) -> ImpactSessionPresentation:
-    """Project one saved Sever result while keeping Source explicitly unchanged."""
+    """Project one saved Sever result with its exact save mode."""
 
     view = SeverResolutionWorkbenchAdapter(session).view()
-    summary = (
-        "This is the exact local result recorded as materialized. The Source "
-        "Context remained unchanged."
+    self_save = session.save_mode == "SELF_SAVE"
+    summary = "This is the exact local result " + (
+        "recorded as saved. "
         if session.state == "APPLIED"
-        else (
-            "This is the exact local result that Apply would materialize. The "
-            "Source Context remains unchanged."
-        )
+        else "that Apply would save. "
+    ) + (
+        "It replaces the Source Context."
+        if self_save
+        else "The Source Context remains unchanged."
     )
     return ImpactSessionPresentation(
         view=view,
@@ -147,7 +148,11 @@ def sever_impact_presentation(session: SeverSession) -> ImpactSessionPresentatio
             operation=view.operation,
             artifact_uid=view.artifact_uid,
             revision=view.revision,
-            title="IMPACT · LOCAL SEVER RESULT · SOURCE UNCHANGED",
+            title=(
+                "IMPACT · SEVER SELF-SAVE · SOURCE WILL BE REPLACED"
+                if self_save
+                else "IMPACT · SEVER OTHER-SAVE · SOURCE UNCHANGED"
+            ),
             summary=summary,
             changes=sever_memory_changes(session),
         ),

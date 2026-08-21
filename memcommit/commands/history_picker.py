@@ -39,8 +39,8 @@ from memcommit.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
     focused_control_style,
+    semantic_action_style,
 )
-from memcommit.history_display import history_action_style
 from memcommit.interfaces.tui.core.keybindings import (
     bind_case_insensitive_key,
 )
@@ -289,7 +289,8 @@ def _render_entry_fragments(
     return [
         (focused_style, prefix),
         (
-            focused_style or f"class:{history_action_style(entry.command)}",
+            focused_style
+            or semantic_action_style(entry.command, fallback="class:report-neutral"),
             command,
         ),
         (focused_style, suffix + description),
@@ -581,6 +582,7 @@ def choose_history(
         wrap_lines=False,
         right_margins=[ScrollbarMargin(display_arrows=True)],
     )
+
     detail_pane = build_scrollable_formatted_text_pane(
         "VIEWER",
         render_detail(),
@@ -835,6 +837,7 @@ def choose_history(
     if history_policy is not None:
         body.extend((policy_frame, apply_frame))
     body.append(footer)
+
     app: Application[HistorySelectionReceipt | HistoryBackNavigation | None] = (
         Application(
             layout=Layout(

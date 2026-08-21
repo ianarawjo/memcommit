@@ -9,6 +9,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
 from memcommit.command_attempts import (
+    CommandAttemptError,
     CommandAttemptLedger,
     annotate_read_report_attempt,
     begin_command_attempt,
@@ -58,6 +59,53 @@ def test_context_report_metadata_contains_only_locator_and_range(isolated_store)
     assert "report body" not in encoded
     assert "provider" not in encoded
     assert "memory content" not in encoded
+
+
+def test_find_duplicates_attempt_records_its_independent_exact_report_identity(
+    isolated_store,
+):
+    store = MemoryStore()
+    target = ReadReportTarget(
+        operation="find-duplicates",
+        context_names=("notes",),
+        target_names=("notes",),
+        selection_mode="SINGLE",
+        ranges=("DIRECT",),
+    )
+    active = begin_command_attempt(
+        store_dir=store.store_dir,
+        operation="find-duplicates",
+        stdin_tty=False,
+        stdout_tty=False,
+    )
+
+    annotate_read_report_attempt(target)
+    finish_command_attempt(active, status="COMPLETED")
+
+    record = CommandAttemptLedger(isolated_store).load(active.record.uid)
+    assert record.operation == "find-duplicates"
+    assert record.details == {"read_report": target.to_metadata()}
+
+
+def test_find_duplicates_attempt_rejects_redundancy_report_metadata(isolated_store):
+    store = MemoryStore()
+    target = ReadReportTarget(
+        operation="find-redundancies",
+        context_names=("notes",),
+        target_names=("notes",),
+        selection_mode="SINGLE",
+        ranges=("DIRECT",),
+    )
+    active = begin_command_attempt(
+        store_dir=store.store_dir,
+        operation="find-duplicates",
+        stdin_tty=False,
+        stdout_tty=False,
+    )
+
+    with pytest.raises(CommandAttemptError, match="does not match"):
+        annotate_read_report_attempt(target)
+    finish_command_attempt(active, status="FAILED", failure_kind="contract")
 
 
 def test_shared_recents_deduplicate_targets_and_keep_operations_separate(

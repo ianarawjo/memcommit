@@ -504,7 +504,11 @@ def _duplicate_item(
     context_name_by_uid: dict[str, str],
 ) -> ResolutionItem:
     item_uid = _pair_item_uid("duplicate", finding.left, finding.right)
-    state, text, selected = _response_state(session, item_uid)
+    exact = finding.relation == "EXACT"
+    if exact:
+        state, text, selected = "NOT_APPLICABLE", "", None
+    else:
+        state, text, selected = _response_state(session, item_uid)
     sources = (
         _source(
             finding.left,
@@ -519,37 +523,45 @@ def _duplicate_item(
             ordinal_by_uid=ordinal_by_uid,
         ),
     )
-    options = tuple(
-        ResolutionOption(f"{item_uid}:{uid}", label, description)
-        for uid, label, description in (
-            (
-                "confirm",
-                "CONFIRM LINK",
-                "Retain this pair as positive redundancy evidence.",
-            ),
-            (
-                "reject",
-                "REJECT LINK",
-                "Reject this evidence link; keep the two Memories distinct.",
-            ),
-            (
-                "defer",
-                "DEFER",
-                "Leave this redundancy evidence link undecided.",
-            ),
+    options = (
+        ()
+        if exact
+        else tuple(
+            ResolutionOption(f"{item_uid}:{uid}", label, description)
+            for uid, label, description in (
+                (
+                    "confirm",
+                    "CONFIRM LINK",
+                    "Retain this pair as positive semantic-DUN evidence.",
+                ),
+                (
+                    "reject",
+                    "REJECT LINK",
+                    "Reject this semantic evidence link; keep the two Memories distinct.",
+                ),
+                (
+                    "defer",
+                    "DEFER",
+                    "Leave this semantic-DUN evidence link undecided.",
+                ),
+            )
         )
     )
     return ResolutionItem(
         uid=item_uid,
-        kind="REDUNDANCY",
+        kind="DUP / EXACT" if exact else "SEMANTIC DUN",
         status=state,
         priority=finding.relation,
         title=f"{_preview(finding.left.content)} ↔ {_preview(finding.right.content)}",
         summary=finding.reason,
-        obligation="OPTIONAL",
+        obligation="NONE" if exact else "OPTIONAL",
         response_state=state,
         response_text=text,
-        question="Should this emitted redundancy evidence link be retained?",
+        question=(
+            ""
+            if exact
+            else "Should this emitted semantic-DUN evidence link be retained?"
+        ),
         options=options,
         selected_option_uid=selected,
         issue_presentation=ResolutionIssuePresentation(
@@ -558,7 +570,11 @@ def _duplicate_item(
                     group_heading="",
                     sources_heading="SOURCE MEMORIES",
                     classification=finding.relation,
-                    reason_heading="WHY THESE MEMORIES ARE REDUNDANT",
+                    reason_heading=(
+                        "WHY THESE MEMORIES ARE EXACT DUPLICATES"
+                        if exact
+                        else "WHY THESE MEMORIES ARE SEMANTICALLY REDUNDANT"
+                    ),
                     reason=finding.reason,
                     sources=sources,
                 ),
@@ -630,6 +646,7 @@ def quality_find_resolution_view(
         finding_label = "redundancy"
 
     report = session.report
+    reviewable_count = sum(item.effective_obligation != "NONE" for item in items)
     metrics = [
         ResolutionMetric("CONTEXTS", str(len(session.source.contexts))),
         ResolutionMetric("SOURCE MEMORIES", str(report.memory_count)),
@@ -638,6 +655,16 @@ def quality_find_resolution_view(
     ]
     if isinstance(report, ConflictReport):
         metrics.insert(2, ResolutionMetric("PAIRS", str(report.pair_count)))
+    elif isinstance(report, DuplicateReport):
+        metrics[2:2] = [
+            ResolutionMetric("DUN GROUPS", str(report.group_count)),
+            ResolutionMetric("DUN EVIDENCE", str(report.redundancy_count)),
+            ResolutionMetric("DUP / EXACT", str(report.exact_duplicate_count)),
+            ResolutionMetric(
+                "SEMANTIC DUN",
+                str(report.semantic_redundancy_count),
+            ),
+        ]
     reach = (
         "INCLUDE DESCENDANTS"
         if session.source.include_descendants
@@ -647,6 +674,28 @@ def quality_find_resolution_view(
         "PROFILE"
         if session.source.profile_selected
         else f"{session.source.selection_mode} TARGET SELECTION"
+    )
+    dun_composition = (
+        (
+            f" DUN = DUP / EXACT + SEMANTIC DUN: {report.redundancy_count} "
+            f"evidence {'link' if report.redundancy_count == 1 else 'links'} = "
+            f"{report.exact_duplicate_count} "
+            f"DUP / EXACT {'link' if report.exact_duplicate_count == 1 else 'links'} "
+            f"+ {report.semantic_redundancy_count} SEMANTIC DUN "
+            f"{'link' if report.semantic_redundancy_count == 1 else 'links'}, "
+            f"forming {report.group_count} connected cleanup "
+            f"{'group' if report.group_count == 1 else 'groups'}."
+        )
+        if isinstance(report, DuplicateReport)
+        else ""
+    )
+    findings_summary = (
+        f"Reported {len(items)} DUN evidence {'link' if len(items) == 1 else 'links'}."
+        if isinstance(report, DuplicateReport)
+        else (
+            f"Reported {len(items)} actionable {finding_label} "
+            f"{'finding' if len(items) == 1 else 'findings'}."
+        )
     )
     sections = (
         ResolutionOverviewSection(
@@ -663,10 +712,7 @@ def quality_find_resolution_view(
         ResolutionOverviewSection(
             "findings",
             "FINDINGS",
-            (
-                f"Reported {len(items)} actionable {finding_label} "
-                f"{'finding' if len(items) == 1 else 'findings'}."
-            ),
+            findings_summary + dun_composition,
         ),
         ResolutionOverviewSection(
             "boundary",
@@ -697,7 +743,9 @@ def quality_find_resolution_view(
         revision=session.context_digest,
         title=f"MEM {operation_label}",
         route=session.source.route,
-        status=f"PROCESS LOCAL · {session.answered_count}/{len(items)} ANSWERED",
+        status=(
+            f"PROCESS LOCAL · {session.answered_count}/{reviewable_count} ANSWERED"
+        ),
         metrics=tuple(metrics),
         context_locations=tuple(
             ResolutionContextLocation(
@@ -710,9 +758,15 @@ def quality_find_resolution_view(
         ),
         overview=resolution_overview_text(sections),
         overview_sections=sections,
-        list_label="ACTIONABLE FINDINGS",
+        list_label=(
+            "DUN EVIDENCE" if session.kind == "duplicates" else "ACTIONABLE FINDINGS"
+        ),
         items=items,
-        empty_message=f"No actionable {finding_label} findings in this analysis.",
+        empty_message=(
+            "No redundancy evidence in this analysis."
+            if session.kind == "duplicates"
+            else f"No actionable {finding_label} findings in this analysis."
+        ),
         results_label="EXACT RESULTS",
         results=(),
         capabilities=(frozenset({"SUBMIT_ITEM"}) if items else frozenset()),

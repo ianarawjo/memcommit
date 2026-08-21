@@ -5,28 +5,32 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import click
 import pytest
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
 from memcommit.cli import app
-from memcommit.context import MemoryRef, QueryContextRef
+from memcommit.context import Memory, MemoryRef, QueryContextRef
 from memcommit.findings import (
     FindingsError,
     collect_direct_memories,
     enumerate_pairs,
     find_ambiguities,
     find_conflicts,
-    find_duplicates,
+    find_redundancies as find_duplicates,
+)
+from memcommit.interfaces.console.identity import collision_safe_uid_prefixes
+from memcommit.interfaces.console.theme import (
+    SemanticColorRole,
+    semantic_color_rgb,
 )
 from memcommit.store import MemoryStore
 
 
 runner = CliRunner()
 PAYLOAD_MARKER = "QUALITY FIND PAYLOAD:\n"
-FIXTURE_DIR = (
-    Path(__file__).parents[1] / "memcommit" / "eval" / "fixtures"
-)
+FIXTURE_DIR = Path(__file__).parents[1] / "memcommit" / "eval" / "fixtures"
 
 
 class PayloadProvider:
@@ -49,8 +53,7 @@ class ForbiddenProvider:
 
 def _pair_id_for_contents(payload: dict, left: str, right: str) -> str:
     contents = {
-        memory["candidate_id"]: memory["content"]
-        for memory in payload["memories"]
+        memory["candidate_id"]: memory["content"] for memory in payload["memories"]
     }
     for pair in payload["pairs"]:
         pair_contents = {
@@ -176,9 +179,14 @@ def test_find_duplicates_scans_representatives_without_pair_targets(
 
     assert report.memory_count == 6
     assert [finding.relation for finding in report.findings] == [
+        "EXACT",
         "SURFACE_EQUIVALENT",
         "SEMANTIC_EQUIVALENT",
     ]
+    assert report.redundancy_count == 3
+    assert report.exact_duplicate_count == 1
+    assert report.semantic_redundancy_count == 2
+    assert report.group_count == 3
     assert (
         report.findings[-1].left.content,
         report.findings[-1].right.content,
@@ -200,13 +208,53 @@ def test_find_duplicates_scans_representatives_without_pair_targets(
     assert schema["properties"]["findings"]["maxItems"] == 2
 
 
+def test_complete_dun_connects_exact_dup_and_semantic_dun_in_one_group():
+    ctx = ops.init("inclusive-dun")
+    first = ops.add(ctx, "The garage is closed.")
+    exact_copy = ops.add(ctx, "The garage is closed.")
+    semantic_copy = ops.add(ctx, "The parking garage is unavailable.")
+
+    def respond(operation, payload):
+        assert operation == "find_duplicates"
+        return {
+            "findings": [
+                {
+                    "candidate_ids": [
+                        _candidate_id_for_content(payload, first.content),
+                        _candidate_id_for_content(payload, semantic_copy.content),
+                    ],
+                    "relation": "SEMANTIC_EQUIVALENT",
+                    "reason": "Both state the same garage closure.",
+                }
+            ]
+        }
+
+    report = find_duplicates(ctx, lambda: PayloadProvider(respond))
+
+    assert [finding.relation for finding in report.findings] == [
+        "EXACT",
+        "SEMANTIC_EQUIVALENT",
+    ]
+    assert report.exact_duplicate_count == 1
+    assert report.semantic_redundancy_count == 1
+    assert report.redundancy_count == 2
+    assert report.group_count == 1
+    assert {
+        memory.uid
+        for finding in report.findings
+        for memory in (finding.left, finding.right)
+    } == {
+        first.uid,
+        exact_copy.uid,
+        semantic_copy.uid,
+    }
+
+
 def test_find_duplicates_keeps_each_stored_memory_indivisible():
     ctx = ops.init("partial-overlap")
     ops.add(ctx, "abc")
     ops.add(ctx, "bcd")
-    provider = PayloadProvider(
-        lambda operation, payload: {"findings": []}
-    )
+    provider = PayloadProvider(lambda operation, payload: {"findings": []})
 
     report = find_duplicates(ctx, lambda: provider)
 
@@ -219,9 +267,9 @@ def test_find_duplicates_keeps_each_stored_memory_indivisible():
     ]
     assert "complete stored content as one indivisible judgment unit" in prompt
     assert "Atomize must first" in prompt
-    assert schema["properties"]["findings"]["items"]["properties"][
-        "relation"
-    ]["enum"] == ["SEMANTIC_EQUIVALENT"]
+    assert schema["properties"]["findings"]["items"]["properties"]["relation"][
+        "enum"
+    ] == ["SEMANTIC_EQUIVALENT"]
 
 
 def test_find_duplicates_avoids_provider_for_one_mechanical_component():
@@ -231,7 +279,9 @@ def test_find_duplicates_avoids_provider_for_one_mechanical_component():
 
     report = find_duplicates(ctx, ForbiddenProvider())
 
-    assert report.findings == ()
+    assert [finding.relation for finding in report.findings] == ["EXACT"]
+    assert report.exact_group_count == 1
+    assert report.exact_duplicate_count == 1
 
 
 def test_mechanical_duplicate_forest_is_linear_and_preserves_relation_tiers():
@@ -241,7 +291,7 @@ def test_mechanical_duplicate_forest_is_linear_and_preserves_relation_tiers():
 
     report = find_duplicates(ctx, ForbiddenProvider())
 
-    assert len(report.findings) == 1
+    assert len(report.findings) == 3
     assert [
         (
             finding.left.content,
@@ -250,7 +300,9 @@ def test_mechanical_duplicate_forest_is_linear_and_preserves_relation_tiers():
         )
         for finding in report.findings
     ] == [
+        ("same", "same", "EXACT"),
         ("same", " same ", "SURFACE_EQUIVALENT"),
+        (" same ", " same ", "EXACT"),
     ]
 
 
@@ -260,18 +312,15 @@ def test_surface_equivalence_collapses_only_horizontal_whitespace():
     ops.add(horizontal, "Access card required.")
     horizontal_report = find_duplicates(horizontal, ForbiddenProvider())
 
-    assert [
-        finding.relation
-        for finding in horizontal_report.findings
-    ] == ["SURFACE_EQUIVALENT"]
+    assert [finding.relation for finding in horizontal_report.findings] == [
+        "SURFACE_EQUIVALENT"
+    ]
 
     for separator in ["\v", "\f", "\x85", "\u2028", "\u2029"]:
         vertical = ops.init(f"vertical-{ord(separator)}")
         ops.add(vertical, f"Access{separator}card required.")
         ops.add(vertical, "Access card required.")
-        provider = PayloadProvider(
-            lambda operation, payload: {"findings": []}
-        )
+        provider = PayloadProvider(lambda operation, payload: {"findings": []})
 
         report = find_duplicates(vertical, lambda: provider)
 
@@ -288,8 +337,7 @@ def test_find_ambiguities_calls_provider_once_and_restores_context_order():
     def respond(operation, payload):
         assert operation == "find_ambiguities"
         ids = {
-            memory["content"]: memory["candidate_id"]
-            for memory in payload["memories"]
+            memory["content"]: memory["candidate_id"] for memory in payload["memories"]
         }
         return {
             "findings": [
@@ -326,10 +374,7 @@ def test_find_ambiguities_calls_provider_once_and_restores_context_order():
     assert provider.calls[0][1] == "find_ambiguities"
     assert len(provider.calls[0][3]["memories"]) == 3
     prompt = provider.calls[0][0]
-    assert (
-        "Write every ordinary reading, reason, and question in English"
-        in prompt
-    )
+    assert "Write every ordinary reading, reason, and question in English" in prompt
     assert "clean SINGLE/NONE and must be omitted" in prompt
     assert "after that time a card is required" in prompt
     assert "Never expose candidate IDs" in prompt
@@ -565,8 +610,7 @@ def test_find_duplicates_canonicalizes_semantic_group_and_emits_linear_evidence(
 
     def respond(operation, payload):
         ids = [
-            _candidate_id_for_content(payload, memory.content)
-            for memory in memories
+            _candidate_id_for_content(payload, memory.content) for memory in memories
         ]
         return {
             "findings": [
@@ -580,13 +624,117 @@ def test_find_duplicates_canonicalizes_semantic_group_and_emits_linear_evidence(
 
     report = find_duplicates(ctx, lambda: PayloadProvider(respond))
 
-    assert [
-        (finding.left, finding.right)
-        for finding in report.findings
-    ] == [
+    assert [(finding.left, finding.right) for finding in report.findings] == [
         (memories[0], memories[1]),
         (memories[0], memories[2]),
     ]
+
+
+def test_cli_redundancy_report_groups_members_once_without_left_right_labels(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    context = ops.init("quality/grouped-report")
+    contents = (
+        "The garage closes at ten.",
+        "Garage access ends at 22:00.",
+        "The parking structure is unavailable after 10 p.m.",
+    )
+    for content in contents:
+        ops.add(context, content)
+    store.save(context)
+    store.set_current(context.name)
+
+    def respond(operation, payload):
+        assert operation == "find_duplicates"
+        return {
+            "findings": [
+                {
+                    "candidate_ids": [
+                        _candidate_id_for_content(payload, content)
+                        for content in contents
+                    ],
+                    "relation": "SEMANTIC_EQUIVALENT",
+                    "reason": "All three express the same garage closing time.",
+                }
+            ]
+        }
+
+    monkeypatch.setattr(
+        "memcommit.commands.find_duplicates.connect_codex_chatgpt_provider",
+        lambda: PayloadProvider(respond),
+    )
+
+    result = runner.invoke(app, ["find-redundancies"], color=True)
+
+    assert result.exit_code == 0, result.output
+    plain = click.unstyle(result.output)
+    assert "DUN GROUP  1/1 · 3 Memories · SEMANTIC DUN" in plain
+    assert "CLEANUP MAP · PROPOSED · NOT APPLIED" in plain
+    assert plain.count("SURVIVOR") == 1
+    assert plain.count("ABSORB") == 2
+    assert "EVIDENCE 1 · SEMANTIC_EQUIVALENT" in plain
+    assert "EVIDENCE 2 · SEMANTIC_EQUIVALENT" in plain
+    assert all(plain.count(content) == 1 for content in contents)
+    assert "FIRST" not in plain
+    assert "LATER" not in plain
+    assert "LEFT" not in plain
+    assert "RIGHT" not in plain
+    assert click.style(
+        "SURVIVOR",
+        fg=semantic_color_rgb(SemanticColorRole.ADD),
+        bold=True,
+    ) in result.output
+    assert click.style(
+        "ABSORB",
+        fg=semantic_color_rgb(SemanticColorRole.REMOVE),
+        bold=True,
+    ) in result.output
+
+
+def test_cli_exact_duplicate_report_keeps_each_disposition_row_self_contained(
+    isolated_store,
+):
+    store = MemoryStore()
+    context = ops.init("quality/exact-cleanup-map")
+    survivor = Memory(
+        "aaaaaaaa-1111-4111-8111-111111111111",
+        "Badge access is required.",
+    )
+    absorbed = Memory(
+        "aaaaaaaa-2222-4222-8222-222222222222",
+        survivor.content,
+    )
+    context.add(survivor)
+    context.add(absorbed)
+    store.save(context)
+    store.set_current(context.name)
+
+    result = runner.invoke(app, ["find-duplicates"], color=True)
+
+    assert result.exit_code == 0, result.output
+    plain = click.unstyle(result.output)
+    prefixes = collision_safe_uid_prefixes((survivor.uid, absorbed.uid))
+    assert "SHARED CONTENT" not in plain
+    assert "CLEANUP MAP" not in plain
+    assert plain.count(survivor.content) == 2
+    assert (
+        f"SURVIVOR  [memory {prefixes[survivor.uid]}]  {survivor.content}" in plain
+    )
+    assert f"ABSORB    [memory {prefixes[absorbed.uid]}]  {absorbed.content}" in plain
+    assert "FIRST" not in plain
+    assert "LATER" not in plain
+    assert click.style(
+        "SURVIVOR",
+        fg=semantic_color_rgb(SemanticColorRole.ADD),
+        bold=True,
+    ) in result.output
+    assert click.style(
+        "ABSORB",
+        fg=semantic_color_rgb(SemanticColorRole.REMOVE),
+        bold=True,
+    ) in result.output
 
 
 def test_cli_finders_are_read_only_and_each_use_one_provider_call(
@@ -603,17 +751,14 @@ def test_cli_finders_are_read_only_and_each_use_one_provider_call(
     context_before = context_path.read_bytes()
     checkpoints_before = store.list_checkpoints(ctx.name)
 
-    provider = PayloadProvider(
-        lambda operation, payload: {"findings": []}
-    )
+    provider = PayloadProvider(lambda operation, payload: {"findings": []})
     for module_name in [
         "find_duplicates",
         "find_ambiguities",
         "find_conflicts",
     ]:
         monkeypatch.setattr(
-            f"memcommit.commands.{module_name}."
-            "connect_codex_chatgpt_provider",
+            f"memcommit.commands.{module_name}.connect_codex_chatgpt_provider",
             lambda: provider,
         )
 
@@ -628,7 +773,7 @@ def test_cli_finders_are_read_only_and_each_use_one_provider_call(
     assert conflict_result.exit_code == 0
     assert "pair" not in redundancy_result.output
     assert "2 direct memories, 0 findings" in redundancy_result.output
-    assert "2 direct memories, 0 findings" in dedun_result.output
+    assert "No redundancies in 'quality'." in dedun_result.output
     assert "no ambiguity findings" in ambiguity_result.output
     assert "no conflict findings" in conflict_result.output
     assert [call[1] for call in provider.calls] == [
@@ -644,9 +789,15 @@ def test_cli_finders_are_read_only_and_each_use_one_provider_call(
 
 @pytest.mark.parametrize(
     "command_name",
-    ["dedun", "find-redundancies", "find-duplicates"],
+    [
+        "dedun",
+        "find-redundancies",
+        "find-duplicates",
+        "find-ambiguities",
+        "find-conflicts",
+    ],
 )
-def test_cli_explicit_context_does_not_switch_current(
+def test_cli_positional_context_does_not_switch_current(
     isolated_store,
     monkeypatch,
     command_name,
@@ -660,20 +811,54 @@ def test_cli_explicit_context_does_not_switch_current(
     store.save(target)
     store.set_current(active.name)
     monkeypatch.setattr(
-        "memcommit.commands.find_duplicates."
-        "connect_codex_chatgpt_provider",
-        lambda: pytest.fail("mechanical duplicates need no provider"),
+        "memcommit.commands.find_duplicates.connect_codex_chatgpt_provider",
+        lambda: PayloadProvider(lambda _operation, _payload: {"findings": []}),
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.find_ambiguities.connect_codex_chatgpt_provider",
+        lambda: PayloadProvider(lambda _operation, _payload: {"findings": []}),
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.find_conflicts.connect_codex_chatgpt_provider",
+        lambda: PayloadProvider(lambda _operation, _payload: {"findings": []}),
     )
 
     result = runner.invoke(
         app,
-        [command_name, "--context", target.name],
+        [command_name, target.name],
     )
 
     assert result.exit_code == 0
-    assert "Context: target" in result.output
-    assert "0 findings" in result.output
-    assert "EXACT" not in result.output
+    if command_name == "dedun":
+        assert "Dedun 'target': absorbed 1 redundant Memory item(s)" in result.output
+        assert "1 DUP / EXACT link" in result.output
+    elif command_name == "find-redundancies":
+        assert "Context: target" in result.output
+        assert "1 finding" in result.output
+        assert "DUN = DUP / EXACT + SEMANTIC DUN" in result.output
+        assert "1 link = 1 DUP / EXACT link + 0 SEMANTIC DUN links" in result.output
+        assert "1 connected group" in result.output
+        assert "DUN GROUP  1/1 · 2 Memories · DUP / EXACT" in result.output
+        assert "CLEANUP MAP · PROPOSED · NOT APPLIED" in result.output
+        assert "SURVIVOR" in result.output
+        assert "ABSORB" in result.output
+        assert "FIRST" not in result.output
+        assert "LATER" not in result.output
+        assert "LEFT" not in result.output
+        assert "RIGHT" not in result.output
+    elif command_name == "find-duplicates":
+        assert "Context: target" in result.output
+        assert "1 exact duplicate group(s)" in result.output
+        assert result.output.count("same") == 2
+        assert "SURVIVOR" in result.output
+        assert "ABSORB" in result.output
+        assert "SHARED CONTENT" not in result.output
+        assert "CLEANUP MAP" not in result.output
+        assert "FIRST" not in result.output
+        assert "LATER" not in result.output
+        assert "Apply exact cleanup with mem dedup" in result.output
+    else:
+        assert "Context: target" in result.output
     assert store.current_context_name() == active.name
 
 
@@ -707,17 +892,14 @@ def test_cli_direct_scope_does_not_open_memory_ref_or_embedded_context_files(
     # unreadable. Query-only sources are never opened by either load path.
     store._context_file(source.name).write_text("{invalid")
     store._context_file(child.name).write_text("{invalid")
-    provider = PayloadProvider(
-        lambda operation, payload: {"findings": []}
-    )
+    provider = PayloadProvider(lambda operation, payload: {"findings": []})
     for module_name in [
         "find_duplicates",
         "find_ambiguities",
         "find_conflicts",
     ]:
         monkeypatch.setattr(
-            f"memcommit.commands.{module_name}."
-            "connect_codex_chatgpt_provider",
+            f"memcommit.commands.{module_name}.connect_codex_chatgpt_provider",
             lambda: provider,
         )
 
@@ -731,19 +913,63 @@ def test_cli_direct_scope_does_not_open_memory_ref_or_embedded_context_files(
     ]
 
     assert [result.exit_code for result in results] == [0, 0, 0]
-    assert all("2 direct memories" in result.output for result in results)
+    assert "No redundancies in 'root'." in results[0].output
+    assert all("2 direct memories" in result.output for result in results[1:])
     assert [call[1] for call in provider.calls] == [
         "find_duplicates",
         "find_ambiguities",
         "find_conflicts",
     ]
     assert all(
-        [
-            item["content"]
-            for item in call[3]["memories"]
-        ] == ["first direct", "second direct"]
+        [item["content"] for item in call[3]["memories"]]
+        == ["first direct", "second direct"]
         for call in provider.calls
     )
+
+
+def test_cli_dedun_immediately_applies_eligible_groups_and_prints_review_receipt(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    ctx = ops.init("dedun/direct")
+    first = ops.add(ctx, "The parking garage is unavailable.")
+    second = ops.add(ctx, "The garage is closed.")
+    unrelated = ops.add(ctx, "The lobby opens at eight.")
+    store.save(ctx)
+    store.set_current(ctx.name)
+
+    def respond(operation, payload):
+        assert operation == "find_duplicates"
+        return {
+            "findings": [
+                {
+                    "candidate_ids": [
+                        _candidate_id_for_content(payload, first.content),
+                        _candidate_id_for_content(payload, second.content),
+                    ],
+                    "relation": "SEMANTIC_EQUIVALENT",
+                    "reason": "Both Memories state the same garage closure.",
+                }
+            ]
+        }
+
+    provider = PayloadProvider(respond)
+    monkeypatch.setattr(
+        "memcommit.commands.find_duplicates.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+
+    result = runner.invoke(app, ["dedun"])
+
+    assert result.exit_code == 0, result.output
+    assert "absorbed 1 redundant Memory item(s)" in result.output
+    assert "mem review dedun --receipt" in result.output
+    current = store.load_direct(ctx.name)
+    assert tuple(current.memories) == (first.uid, unrelated.uid)
+    checkpoint = store.list_checkpoints(ctx.name)[0]
+    assert checkpoint["command"] == "dedun"
+    assert checkpoint["args"]["components"][0]["survivor_uid"] == first.uid
 
 
 def test_conflicts_enumerates_all_pairs_without_count_gate():
@@ -768,9 +994,7 @@ def test_duplicate_scan_does_not_allocate_pair_records(monkeypatch):
             "duplicate discovery allocated a pair record"
         ),
     )
-    provider = PayloadProvider(
-        lambda operation, payload: {"findings": []}
-    )
+    provider = PayloadProvider(lambda operation, payload: {"findings": []})
 
     report = find_duplicates(ctx, lambda: provider)
 
@@ -819,28 +1043,23 @@ def test_ambiguity_fixture_covers_the_complete_three_by_three_matrix():
         for interpretation in ["SINGLE", "DOMINANT", "COMPETING"]
         for clarification in ["NONE", "HELPFUL", "REQUIRED"]
     }
-    assert all(
-        isinstance(case["expected"]["question"], str)
-        for case in data["cases"]
-    )
+    assert all(isinstance(case["expected"]["question"], str) for case in data["cases"])
 
 
 def test_conflict_and_duplicate_fixtures_cover_all_calibration_boundaries():
     conflict = json.loads((FIXTURE_DIR / "conflict.json").read_text())
     duplicates = json.loads((FIXTURE_DIR / "duplicates.json").read_text())
 
-    assert {
-        case["expected"]["conflict"]
-        for case in conflict["cases"]
-    } == {"YES", "MAY", "NO"}
+    assert {case["expected"]["conflict"] for case in conflict["cases"]} == {
+        "YES",
+        "MAY",
+        "NO",
+    }
     assert all(
         set(case["expected"]["scope_dimensions"]) <= {"PLACE"}
         for case in conflict["cases"]
     )
-    assert {
-        case["expected"]["relation"]
-        for case in duplicates["cases"]
-    } == {
+    assert {case["expected"]["relation"] for case in duplicates["cases"]} == {
         "EXACT",
         "SURFACE_EQUIVALENT",
         "SEMANTIC_EQUIVALENT",

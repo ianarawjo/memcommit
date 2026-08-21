@@ -19,6 +19,11 @@ Ground Rule–Example report remains available only through the explicit
 revision behavior, while native proposition Examples obtain their semantic
 judgment from the general Fit core.
 
+Stored Memory and Context operands are source adapters for that same public
+proposition form. They do not introduce a second Context-level Fit meaning:
+each selected direct ordinary Memory contributes its already-stated content as
+one role-typed `MEMORY` proposition, after exact source and authority freezing.
+
 ## Motivating reconstruction
 
 The earlier theory described `fit = YES | MAY | NO` inside one Context. It
@@ -153,12 +158,87 @@ omission, provider-side mutation, or automatic application.
 The general CLI form is:
 
 ```text
+mem fit [UID_OR_PREFIX] [CONTEXT] "[literal proposition]"
+mem fit [CONTEXT:UID_OR_PREFIX] [CONTEXT] text:[forced literal]
 mem fit "[proposition A]" "[proposition B]" ["[proposition C]" ...]
 mem fit "[A]" "[B]" --background "[background K]"
+mem fit --memory [UID_OR_PREFIX] --memory [UID_OR_PREFIX]
+mem fit --memory [CONTEXT:UID_OR_PREFIX] --memory [CONTEXT:UID_OR_PREFIX]
+mem fit --context [CONTEXT A] --context [CONTEXT B]
+mem fit "[A]" --memory [UID_OR_PREFIX] --context [CONTEXT]
 ```
 
 It is read-only and process-local. It creates no Context, Memory, Ground, or
-receipt. Its stable marks are `✓ YES`, `? MAY`, and `! NO`.
+receipt. Standalone output uses an explicit operation-wide grammar:
+`FIT · YES|MAY|NO · operand ↔ operand [↔ operand ...]`. The leading verdict is
+the result of the complete n-ary operation, not the status of its first pair.
+
+Fit always returns a compact terminal receipt; it has no standalone Viewer or
+`--tui` route. Every general result is one logical operator line. Literal
+operands render as `[PROPOSITION pN]`, direct selections as
+`[MEMORY <uid-prefix>]`, and Context-expanded operands as
+`[CONTEXT <public-name>] [MEMORY <uid-prefix>]`, each followed by its exact
+body. `↔` separates operands in the complete Fit frame; it is presentation of
+the n-ary compatibility operator, not an assertion that every pair is
+equivalent. The typed result still retains the reason, material aliases, and
+both required ordinary readings for `MAY` even though the small receipt does
+not expand them. In a color-capable TTY, only the typed `YES`, `MAY`, or `NO`
+token uses its shared judgment role: green, yellow, or red respectively.
+Operation chrome, punctuation, source labels, Context/Ground names, counts,
+and Memory bodies remain neutral. `--plain` remains accepted for compatibility
+and suppresses ANSI without changing the receipt text or preserving a second
+layout mode.
+
+Each positional operand is typed locally before provider construction. The
+reserved `text:` prefix forces the remainder to be literal proposition text.
+Otherwise a canonical UUID-shaped prefix of at least the eight characters
+shown by the CLI is a strict Memory selector, and
+`CONTEXT:UID_OR_PREFIX` is a strict qualified Memory selector. Any exact member
+of the frozen Profile-wide readable Context catalog is a Context source;
+explicit relative locators must also resolve inside that catalog. Every other
+operand is literal proposition text. Shell quotes only keep multiword text in
+one argv item: the shell removes them, so quoted and unquoted copies of the
+same one-word value cannot have different types. A literal that collides with
+a Context name or UID shape therefore uses `text:VALUE`.
+
+`--memory` and `--context` remain repeatable explicit members of the same
+proposition set for scripts, short Memory prefixes, source-looking literal
+diagnostics, and legacy UUID-shaped Context names. They are not background or
+hierarchy controls. An unqualified Memory selector resolves inside the current
+Context captured once at command start. The qualified
+`CONTEXT:UID_OR_PREFIX` form and every Context operand resolve existing Context
+locators against that same snapshot. A Context operand expands only its direct
+ordinary Memories in stored order. It does not follow lexical descendants,
+embedded Contexts, live or snapshot Memory references, or QUERY-only routes.
+Those axes require separate operation review rather than a hidden widening of
+one selected set.
+
+Automatic operands retain their positional order, with a Context expanding its
+direct Memories in place and stored order. Explicit `--memory` values follow
+the positional frame in option order, followed by explicit `--context` values
+in option and stored order. The adapter rejects an empty Context and a missing
+or ambiguous strict Memory prefix. Repeating a Context, repeating a direct
+Memory, or selecting the same stored coordinate directly and through a Context
+preserves each argv occurrence as a distinct operator operand. Equal content
+is compatible rather than an overlap error; digest maps may collapse identical
+coordinates only for revalidation, never from the semantic frame or receipt.
+At least two effective propositions are still required after expansion, and
+repeated operands count because they were explicitly supplied; background does
+not satisfy that minimum. New UUID-selector-shaped root Context names are
+rejected by the common new-identity validator; existing legacy names remain
+available through explicit `--context`.
+
+Every selected Context retains its exact public name, Context UID, and either
+its complete direct-record digest or the content digest of each explicitly
+selected Memory. Those origins support authorization, exact revalidation, and
+the public operand labels; the compact general receipt projects the complete
+frozen operand frame in order. A source change during inference prevents a
+result from being returned. Effectively
+READ-granted inputs additionally require `DERIVE`, and
+`COMBINE` when another ownership domain or caller-supplied literal participates;
+the Grant binding and exact selected content are revalidated before the
+process-local result is exposed. General Fit requires no analysis-retention
+permission because it saves no result.
 
 The compatibility Ground route is explicit:
 
@@ -172,6 +252,22 @@ For native proposition Examples, the adapter maps `YES -> FIT`,
 claim to `NOT_APPLICABLE`; unrelated but compatible propositions are `YES`.
 Legacy exact-output Grounds continue through deterministic conformance replay
 and retain their historic receipt vocabulary for compatibility.
+
+The Ground adapter projects the complete stored analysis as a small receipt:
+one `FIT · YES|MAY|NO|STALE · [GROUND CONTEXT <name>] · <fitted>/<total>` whole-operation
+summary followed only by current non-fitting checks.
+A Rule–Example issue is exactly one line: `! NO · [RULE r1] [MEMORY <uid-prefix>] <content> ↔ [EXAMPLE e3] [MEMORY <uid-prefix>] <content>`.
+It has no alias-only heading, blank separator, or expanded `WHY`; the immutable
+typed receipt retains the reason. The public line spends its space only on
+classification, both Ground roles, both Memory identities, and both exact
+bodies. A coherence issue uses the frozen check participants rather than only
+the provider-selected material subset, so a Context, vertical, or peer
+relation cannot collapse visually to one side; additional material Context
+Memories remain visible as evidence.
+`UNDERDETERMINED` becomes `? MAY`, `CONTRADICTS` becomes `! NO`, and a legacy
+`NOT_APPLICABLE` check becomes `· N/A`. Fitting Example and graph details are
+omitted; they remain counted and retained in the immutable Ground receipt.
+Stale results omit old issue detail rather than presenting it as current.
 
 ## Calibration boundary
 
@@ -197,6 +293,9 @@ before making a stability or generalization claim.
   useful, ethical, authorized, or safe to apply.
 - Goal and Rule adapters must present their already-stated constraint meaning;
   Fit must not silently rewrite an imperative into a more convenient claim.
+- Stored Context expansion is deliberately direct-only. Reference traversal,
+  descendant reach, and interactive source selection remain non-goals until
+  their authority and visible range controls are reviewed explicitly.
 - The consumed calibration locates known boundaries but does not prove provider
   quality; exact contract validation proves coverage and shape, not semantic
   correctness.

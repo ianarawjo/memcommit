@@ -8,10 +8,11 @@ the limits of the ordinary-reading judge, see
 
 ## Decision
 
-The quality-analysis surface consists of three explicit read-only finders and
-one applying semantic-redundancy operation:
+The quality-analysis surface consists of four explicit read-only finders and
+one applying complete-DUN operation:
 
 ```text
+mem find-duplicates
 mem find-redundancies
 mem find-ambiguities
 mem find-conflicts
@@ -19,13 +20,13 @@ mem dedun
 ```
 
 `dedun` is a deliberate product term: `dup` denotes exact stored duplicates,
-while `dun` denotes semantic redundancy. `find-redundancies` owns the frozen
-readable-frame analysis and process-local evidence review and never exposes an
-Apply action. Dedun deliberately reuses that same analysis, then alone exposes
-confirmed evidence to its survivor review and exact Apply boundary. The hidden
-`find-duplicates` spelling is an exact callback alias of
-`find-redundancies`, folded into the canonical Help row for older scripts.
-There is no singular `find-redundancy` command. The existing
+while `dun = dup + semantic dun`. `find-redundancies` owns the frozen
+read-only complete DUN analysis and never exposes an Apply action. Dedun
+deliberately reuses that same analysis and treats the invocation as immediate
+Apply intent, retaining the earliest existing UID in each eligible connected
+group. `find-duplicates` is a separate provider-free exact-DUP report. There is
+no singular
+`find-redundancy` command. The existing
 `mem find <query>` is separate literal text lookup, not a quality or
 relationship judge.
 
@@ -34,9 +35,9 @@ is a separate consumer of an ambiguity report. It persists selected readings
 and one freeform reviewer annotation, but it does not change the finder's
 read-only/mutation contract or apply those annotations to Memories.
 
-## Flagless terminal workbench
+## Direct relation reports and explicit judgment workbench
 
-The explicit Context forms retain the stable one-shot report contract:
+Flagless and explicit Context forms use the stable one-shot report contract:
 
 ```text
 mem find-redundancies --context NAME
@@ -45,9 +46,19 @@ mem find-ambiguities --context NAME
 mem find-conflicts --context NAME
 ```
 
-In a TTY, invoking one of the commands without flags opens a shared setup
-surface instead of immediately analyzing the global current Context. The
-screen contains three top-to-bottom controls:
+In a TTY, invoking a read-only finder without flags immediately analyzes the
+command-start current Context, exactly like its non-TTY route.
+`find-duplicates` and `find-redundancies` are deliberately direct-only relation
+reports: neither command exposes an initial selector or a process-local review
+workbench. The current Context is the implicit exact Source, and a positional
+Context or `--context` compatibility form supplies one other exact Source.
+This preserves the useful distinction between `dup` as a deterministic exact
+scan and `dun` as the complete exact-plus-semantic scan without inserting a
+second approval step before either read-only report.
+
+Ambiguity and Conflict retain an explicit `--select` capability because their
+judgment review can span a deliberately composed readable frame. That screen
+contains three top-to-bottom controls:
 
 1. `TARGETS`, the common `PROFILE` plus readable Context namespace tree;
 2. `SCOPE`, with `SINGLE TARGET` versus `MULTIPLE TARGETS` and `THIS CONTEXT
@@ -76,12 +87,21 @@ choice. Embedded Context edges remain excluded: descendant reach follows the
 public lexical namespace only. The explicit `--context NAME` forms retain
 their original exact, direct, one-Context behavior.
 
-After setup, every effective Context is loaded directly through the same
+Dedun does not expose the multi-target selector because Apply owns
+one exact Context. Its flagless route uses the current Context; `--context`
+selects another exact readable Context. Eligible EXACT, SURFACE_EQUIVALENT,
+and SEMANTIC_EQUIVALENT evidence is grouped; the earliest stored UID survives each
+group, and the operation applies one checkpoint immediately. OVERLAP stays
+unchanged. If no eligible group exists, Dedun prints a no-change receipt and
+creates no checkpoint. Detailed terminal evidence is recovered later through
+the checkpoint-backed `mem review dedun --receipt UID` route.
+
+After Ambiguity or Conflict setup, every effective Context is loaded directly through the same
 frozen readable catalog. Its directly owned Memories are copied into one
 temporary aggregate analysis Context in visible Context order and direct
 Memory order. The finder makes one provider turn over that complete aggregate
-frame: Duplicate and Conflict can therefore report cross-Context relations,
-while Ambiguity interprets each Memory using the same combined local frame.
+frame: Conflict can therefore report cross-Context relations, while Ambiguity
+interprets each Memory using the same combined local frame.
 The provider payload records the original public Context name beside every
 candidate, and the local workbench preserves that owner for each evidence
 source. The temporary aggregate is process-local, has a deterministic frame
@@ -93,25 +113,55 @@ target mode, and lexical reach; every selected Context is listed as a source
 location. The complete report starts focused, followed by the finding Items
 list and To Do. Opening an item uses the shared
 `VIEWER → RESPONSES → ITEMS → TO DO` topology. Ambiguity keeps its proposed
-reading choices, Conflict keeps its exact pair and question, and Duplicate
-adds an operation-owned review disposition for one emitted evidence link.
+reading choices, while Conflict keeps its exact pair and question.
 Responses in this first rollout are process-local review state: they do not
 alter the report, persist a new artifact, imply resolution, or mutate Memory.
-For `find-redundancies`, confirmation remains only a note on the read-only
-report. The Dedun adapter is the sole caller that converts confirmed eligible
-links into a survivor-review handoff; sharing the report does not share Apply
-authority. The individual finder workbenches retain that compatibility boundary. Durable
+Dedun does not consume process-local notes from another finder: its own
+invocation accepts every eligible finding in the newly frozen exact frame and
+enters its deterministic Apply boundary. Sharing the analyzer does not share
+Apply authority. The individual judgment workbenches retain that compatibility
+boundary. Durable
 multi-session retention is instead explicit through `mem audit`, which records
 all three reports, each finder ruleset, and provider/model provenance without
 silently changing a one-shot `find-* --context` invocation into a stored
 artifact. The older ambiguity Review singleton remains independently readable.
 
-This split deliberately reuses two existing component families rather than
-creating a finder-specific full-screen grammar: common Context targeting owns
-setup selection, while the common Resolution Session owns finding inspection
-and response mechanics. The receipt between them is the semantic boundary;
-the setup UI never calls a finder merely because a cursor moved or a Context
-was checked. When more than one effective Context crosses authority domains,
+The one-shot `find-redundancies` report projects the evidence forest as
+connected `DUN GROUP` blocks. Each Memory appears once per group in frozen
+direct order: `SURVIVOR` names the deterministic earliest-UID choice and every
+other member receives its own `ABSORB` row. This is the same cleanup grammar as
+the applied Dedun receipt and naturally extends from two members to any larger
+connected group. The group is explicitly `PROPOSED · NOT APPLIED` because Find
+remains read-only. Typed `EVIDENCE` rows retain every relation and reason.
+Pair-internal `LEFT`/`RIGHT` and order-only `FIRST`/`LATER` labels are not shown:
+the former repeat shared members in multi-edge groups, while the latter hide
+the cleanup disposition the report is meant to preview.
+
+The provider-free exact-Duplicate report uses the same disposition grammar but
+makes every member row self-contained. It prints one `SURVIVOR` row and any
+number of `ABSORB` rows, each with that member's UID and complete content. For a
+two-member exact group this is exactly two rows; it does not add a separate
+shared-content or cleanup-map row. Repeating byte-identical content is
+intentional here: the small repetition removes cross-row lookup and makes every
+kept or removed identity understandable on its own. The earlier generic
+`CONTENT` plus UID-only `FIRST` and `LATER` projection was not losing stored
+data, but made the relationship easy to miss. Compact UIDs are resolved against
+the complete group and expand past eight characters when needed, so two members
+never appear to have the same visible identity.
+
+In both reports only the disposition token is colored. `SURVIVOR` uses the
+shared ADD blue as the member retained in the proposed result, while `ABSORB`
+uses the shared REMOVE red as a member that would leave it. UIDs, Memory bodies,
+evidence, and `PROPOSED · NOT APPLIED` remain neutral, and ANSI-free output keeps
+the identical labels and ordering.
+
+Ambiguity and Conflict deliberately reuse two existing component families
+rather than creating a finder-specific full-screen grammar: common Context
+targeting owns setup selection, while the common Resolution Session owns
+finding inspection and response mechanics. The receipt between them is the
+semantic boundary; the setup UI never calls a finder merely because a cursor
+moved or a Context was checked. The direct Duplicate and Redundancy reports do
+not enter either component. When more than one effective Context crosses authority domains,
 the operation applies the normal `DERIVE`/`COMBINE` Grant boundary before
 loading content or connecting the provider. Local Contexts need no additional
 Grant authority.
@@ -132,31 +182,21 @@ Ambiguity, and Conflict analysis together. It is not a fourth semantic finder
 and it does not merge the three judgments into one provider prompt. Its help
 text names all three finders explicitly.
 
-In a flagless TTY, Audit reuses the common single Context selector and exposes
-one `RUN AUDIT` action. An explicit `--context NAME` skips setup. Both routes
-freeze the same direct-Memory frame, then run the existing finder contracts in
+Audit defaults to the command-start current Context in every environment.
+`--context NAME` selects another exact Context, while explicit `--select`
+opens the common single-Context selector. All routes freeze the same
+direct-Memory frame, then run the existing finder contracts in
 the stable order Duplicate, Ambiguity, Conflict. Each finder retains its own
 operation name, schema, ruleset, provider call, report type, and cardinality.
 The first result is not passed to the second or third. A progress screen may
 show the three host-owned stages, but no partial combined report is published
 if any finder fails.
 
-In an interactive terminal those stages share one cumulative wait surface
-rather than replacing the entire screen at every provider boundary. The
-stable rows are numbered `1. DUPLICATES`, `2. AMBIGUITIES`, and
-`3. CONFLICTS`. A row becomes `COMPLETE` only after that finder's typed report
-has returned and validated; the active row is `RUNNING`, and later rows remain
-`WAITING`. This exposes orchestration order without exposing report content or
-implying a percentage. The completed rows are evidence of host-side stage
-completion, not a partial durable Audit: persistence still occurs only after
-all three reports form one valid snapshot.
-
-Audit uses the shared interactive command-wait shell for this surface. `H` or
-`?` opens the frozen read-only `mem help` inventory while the active finder
-continues in the background; closing Help restores the same cumulative rows.
-Help cannot change the Source, restart a finder, submit another command, or
-observe a partial report. Outside an interactive terminal, the same work
-retains the stable one-line `CommandProgress` behavior.
+Audit reports the stable Duplicate, Ambiguity, Conflict, and optional
+Conformance host stages through the shared transient one-line
+`CommandProgress` renderer. It does not allocate a full-screen progress box or
+publish partial report content. Persistence still occurs only after every
+typed check forms one valid snapshot.
 
 After all three checks validate, Audit creates one new UID-addressed artifact
 under the Profile's private Audit session directory. It never overwrites a
@@ -172,8 +212,8 @@ artifact freezes:
   finder run; and
 - the creation time and immutable Audit UID.
 
-The completed snapshot is saved before the Resolution Workbench receives
-terminal control. A disconnect therefore cannot discard the provider result.
+The completed snapshot is saved before its compact receipt is printed. A
+disconnect therefore cannot discard the provider result.
 Reviewer responses are the only mutable portion of the session and use CAS
 persistence. Every response target is namespaced by its finder kind and must
 still exist in the immutable snapshot; a response save cannot replace or
@@ -191,11 +231,12 @@ Absence of findings is a model-assisted production result, not proof that the
 Source is clean. The complete Viewer is composed from five neutral report
 sections:
 
-1. `AUDIT SUMMARY`, stating that all three checks completed over one frozen
-   frame and giving the total positive finding count;
+1. `AUDIT SUMMARY`, stating that all three checks completed over one saved
+   direct Context snapshot and giving the total positive finding count;
 2. `CHECKS`, listing Duplicate, Ambiguity, and Conflict separately as
    `COMPLETE`, including an explicit zero count;
-3. `FROZEN SOURCE`, recording the exact direct Context boundary;
+3. `AUDITED SOURCE`, recording the exact direct Context snapshot captured when
+   the Audit ran;
 4. `PROVENANCE`, retaining each finder ruleset and provider/model identity; and
 5. `BOUNDARY`, stating the non-proof and non-mutation limits.
 
@@ -211,11 +252,16 @@ than becoming a mandatory reviewer answer; Audit does not conflate the need
 for source clarification with an obligation to submit a response.
 
 Saved Audits appear in the aggregate `mem review` launcher and reopen exactly
-through `mem review audit --session UID`. Review renders the frozen Source and
-never reruns a finder. It does not fail merely because the live Context later
-changes or disappears: the reviewed object is the historical snapshot, not a
-claim about the current Context. Review and Audit never mutate a Context,
-Memory, or checkpoint.
+through `mem review audit --session UID`. Review renders the saved audited
+Source snapshot and never reruns a finder. It does not fail merely because the
+live Context later changes or disappears: the reviewed object is the
+historical snapshot, not a claim about the current Context. Review and Audit
+never mutate a Context, Memory, or checkpoint.
+
+Ordinary `mem audit` does not open Review automatically. It prints the Audit
+session UID and exact Review command. `--snapshot` explicitly prints the full
+new report, and `mem review audit --session UID` owns interactive response
+work. This keeps execution, durable evidence, and later inspection distinct.
 
 ## Units of judgment
 
@@ -223,7 +269,8 @@ The judgments and their public evidence deliberately have different arities:
 
 | Command | Discovery input and result unit | Primary labels |
 |---|---|---|
-| `find-redundancies` / Dedun analysis | whole selected direct-Memory frame; positive evidence links identify unordered Memory pairs | emitted: `SURFACE_EQUIVALENT`, `SEMANTIC_EQUIVALENT`; byte-identical content belongs to `dedup`; rejection boundaries: `OVERLAP`, `UNKNOWN`, `DISTINCT` |
+| `find-duplicates` | one direct Context; exact-content groups | emitted: provider-free `DUP / EXACT` groups |
+| `find-redundancies` / Dedun analysis | whole selected direct-Memory frame; positive evidence links identify unordered Memory pairs | emitted: `EXACT`, `SURFACE_EQUIVALENT`, `SEMANTIC_EQUIVALENT`; rejection boundaries: `OVERLAP`, `UNKNOWN`, `DISTINCT` |
 | `find-ambiguities` | one Memory interpreted inside the complete selected frame | `SINGLE`, `DOMINANT`, `COMPETING` crossed with `NONE`, `HELPFUL`, `REQUIRED` |
 | `find-conflicts` | one unordered pair of Memories | `YES`, `MAY`, `NO` |
 
@@ -357,10 +404,11 @@ MCP or internal-network provider later.
 
 ## Read-only result contract
 
-All three commands:
+The semantic finder commands:
 
-- accept one explicit Context outside a TTY or a frozen Context range in the
-  flagless terminal setup;
+- accept the current or one explicit Context directly; Ambiguity and Conflict
+  additionally accept a frozen readable Context range through explicit
+  `--select`, while Redundancy remains one exact Context;
 - validate model-returned opaque IDs against locally generated candidate IDs;
 - return the affected UID or UID pair, its label, and a concise rationale;
 - include an ordinary reading or a smallest useful clarifying question where
@@ -408,9 +456,9 @@ to the finders, not a fourth quality finder and not behavior silently performed
 by any `find-*` command. The finders can still inspect unatomized intake, but
 their labels apply to the stored Memory boundaries they receive.
 
-`dedup` first removes byte-identical direct Memories without a provider or
-review screen. `dedun` then discovers only positive evidence over differently
-stored wording, validates connected groups, turns confirmed equivalence into a
+`dedup` removes byte-identical direct Memories without a provider or review
+screen. `dedun` instead discovers the complete exact-plus-semantic evidence
+set, validates connected groups, turns confirmed equivalence into a
 stale-safe plan, selects an existing survivor UID, checks inbound references,
 and creates a checkpoint on Apply.
 `OVERLAP` and `UNKNOWN` remain negative golden boundaries and must never flow

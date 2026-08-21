@@ -23,7 +23,10 @@ def cmd(
     name: Annotated[
         Optional[str],
         typer.Argument(
-            help="Unique name for the new Context; omit to use the interactive picker",
+            help=(
+                "Unique portable non-UID-shaped name for the new Context; "
+                "omit to use the interactive picker"
+            ),
         ),
     ] = None,
     parents: Annotated[

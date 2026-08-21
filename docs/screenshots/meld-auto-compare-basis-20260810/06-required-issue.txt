@@ -13,10 +13,10 @@
 ┃ SOURCE CLAIMS                                                                                                                                                                    ┃
 ┃                                                                                                                                                                                  ┃
 ┃ CLAIM 1 · FROM task-2/advisor1                                                                                                                                                   ┃
-┃   [a72a3c98] Pay CAD 20–30 per hour, including travel time.                                                                                                                      ┃
+┃   [23f8ee08] Pay CAD 20–30 per hour, including travel time.                                                                                                                      ┃
 ┃                                                                                                                                                                                  ┃
 ┃ CLAIM 2 · FROM task-2/advisor2                                                                                                                                                   ┃
-┃   [895d1153] Allow cash, e-transfer, or an equivalent-value gift card.                                                                                                           ┃
+┃   [e6080ed5] Allow cash, e-transfer, or an equivalent-value gift card.                                                                                                           ┃
 ┃                                                                                                                                                                                 v┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 ┌──────────────────────────────────────────────────────────────────────────────────| RESPONSES |───────────────────────────────────────────────────────────────────────────────────┐
@@ -49,4 +49,4 @@
 ┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
 │[ RESOLVE ]  Resolve 1 required conflict · Enter to open the first unresolved item.                                                                                               │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
- ↑/↓ section/item  Tab switch  ←/→ option  Enter choose/other  C send/comment  Esc/Backspace report G comment all  P preserve all  D defer  A review & apply  H Help  Q close
+ ↑/↓ section/item  Tab switch  ←/→ option  Enter choose/other  C send/comment  Esc/Backspace report G comment all  P preserve all  D defer  A review & apply  H Help  y/Y copy  Q cl

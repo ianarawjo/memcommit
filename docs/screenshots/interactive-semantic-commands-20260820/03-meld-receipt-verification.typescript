@@ -1,0 +1,17 @@
+PTY · 180 columns × 52 rows
+[?2004h[?1l[?25l[0m[?7l[0m[J[0m NEW MELD · SETUP ONLY · NO PROVIDER, SESSION, RESULT, OR APPLY[0m
+[0m› MODE · [0;38;2;139;213;255;1m[[0;38;2;16;36;47;48;2;139;213;255;1m ✓ SYMMETRIC · CREATE SEPARATE RESULT [0;38;2;139;213;255;1m][0m  [   DIRECTIONAL · UPDATE EXISTING ] · ←/→ TO SELECT[0m
+[0m  FROM › capture/incoming                        [ BROWSE ] [0;38;2;139;213;202;1mCURRENT[0m                           [   INCLUDE DESCENDANTS ][0m
+[0m  WITH › capture/baseline                        [ BROWSE ]                                   [   INCLUDE DESCENDANTS ][0m
+[0m  TO   ›                                         [ BROWSE ] [0;38;2;245;169;127;1mCHOOSE EMPTY OR ENTER NEW NAME[0m
+[0m COMMAND · INVALID[0m
+[0m TO needs a Context name.[0m
+[0m ←/→ mode · ↓ FROM · Tab next · Esc cancel[42D[6A[?7h[0m[?25l[?7l[0m [8C[[0;38;2;16;36;47;48;2;139;213;255m ✓ SYMMETRIC · CREATE SEPARATE RESULT [0m][0m
+
+
+[9C[0mcapture/result [36C[0;38;2;245;169;127;1mNEW · NOT CREATED[0m[K[0m
+[0;38;2;16;36;47;48;2;139;213;255;1m COMMAND · RUNNABLE · ENTER TO START[0m
+[0m mem meld capture/incoming capture/baseline --to capture/result[0m
+[C[0mEnter run exact STAR[C command · ↑ previous · Esc cancel[2A[56D[?7h[0m[5A[J[0m[?7h[?2004l
+START RECEIPT · MELD · MeldEndpointSelection(mode='symmetric', left_name='capture/incoming', right_name='capture/baseline', target_name='capture/result', create_target=True, left_descendants=False, right_descendants=False, left_memory_uid=None, right_memory_uid=None)
+DURABLE STATE · UNCHANGED · PROVIDER CALLS 0

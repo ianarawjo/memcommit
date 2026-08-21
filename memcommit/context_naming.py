@@ -9,6 +9,8 @@ from __future__ import annotations
 
 import re
 
+from memcommit.context_targeting.memory_focus import is_memory_uid_selector
+
 
 _PORTABLE_CONTEXT_SEGMENT = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]*\Z")
 _WINDOWS_RESERVED_SEGMENT_ROOTS = frozenset(
@@ -68,6 +70,15 @@ def validate_portable_context_name(value: object) -> str:
                 f"Invalid context name {value!r}: not portable; segment {part!r} "
                 "uses a reserved Windows device name."
             )
+    # A whole root with this shape is indistinguishable from the public
+    # positional Memory-selector grammar. Nested names retain their slash and
+    # therefore remain typed as Context locators; parent creation validates
+    # each planned root separately.
+    if is_memory_uid_selector(value):
+        raise ValueError(
+            f"Invalid context name {value!r}: not portable; a Context name "
+            "must not have the shape of a Memory UUID or visible UID prefix."
+        )
     return value
 
 

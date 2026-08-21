@@ -32,7 +32,10 @@ from memcommit.commands.command_progress import (
     CommandProgress,
     progressing_provider_factory,
 )
-from memcommit.commands.context_operand import ContextOperandSnapshot
+from memcommit.commands.context_operand import (
+    ContextOperandSnapshot,
+    choose_context_operand,
+)
 from memcommit.authority.access import (
     GrantedReadStore,
     freeze_granted_context_binding,
@@ -85,7 +88,10 @@ from memcommit.review import (
 from memcommit.store import MemoryStore
 from memcommit.study_prewarm.registry import StudyPrewarmRegistryError
 from memcommit.update import UpdateError, plan_update, session_matches
-from memcommit.update_endpoints import resolve_update_endpoints
+from memcommit.update_endpoints import (
+    choose_update_endpoint_operands,
+    resolve_update_endpoints,
+)
 
 
 app = typer.Typer(
@@ -1208,6 +1214,13 @@ def cmd(
 
 
 def atomize_impact_cmd(
+    context_operand: Annotated[
+        Optional[str],
+        typer.Argument(
+            metavar="CONTEXT",
+            help="Context to analyze (defaults to current)",
+        ),
+    ] = None,
     context_name: Annotated[
         Optional[str],
         typer.Option(
@@ -1244,6 +1257,14 @@ def atomize_impact_cmd(
     ] = False,
 ) -> None:
     """Preview one Context's exhaustive Atomize classification and splits."""
+
+    try:
+        context_name = choose_context_operand(
+            context_operand,
+            option=context_name,
+        )
+    except ValueError as error:
+        _usage_error(str(error))
 
     _dispatch_impact(
         operation=ImpactOperation.atomize,
@@ -1282,14 +1303,116 @@ def sever_impact_cmd(
 
 
 def update_impact_cmd(
+    contexts: Annotated[
+        list[str] | None,
+        typer.Argument(
+            metavar="SOURCE TARGET",
+            help="Explicit Source and Target Contexts for a new preview",
+        ),
+    ] = None,
     session_uid: Annotated[
         Optional[str],
         typer.Option("--session", help="Exact saved Update artifact uid"),
     ] = None,
+    source_name: Annotated[
+        Optional[str],
+        typer.Option(
+            "--from",
+            help="Source Context; current supplies Target when --to is omitted",
+        ),
+    ] = None,
+    target_name: Annotated[
+        Optional[str],
+        typer.Option(
+            "--to",
+            help="Target Context; current supplies Source when --from is omitted",
+        ),
+    ] = None,
+    source_memory: Annotated[
+        Optional[str],
+        typer.Option(
+            "--source-memory",
+            metavar="UID_OR_PREFIX",
+            help="Focus one Source Memory",
+        ),
+    ] = None,
+    target_memory: Annotated[
+        Optional[str],
+        typer.Option(
+            "--target-memory",
+            metavar="UID_OR_PREFIX",
+            help="Focus one Target Memory",
+        ),
+    ] = None,
+    direct: Annotated[
+        bool,
+        typer.Option("-d", "--direct", help="Use only explicit endpoint roots"),
+    ] = False,
+    recursive: Annotated[
+        bool,
+        typer.Option(
+            "-r",
+            "--recursive",
+            help="Include descendants under both endpoints",
+        ),
+    ] = False,
+    source_descendants: Annotated[
+        Optional[bool],
+        typer.Option(
+            "--source-descendants/--source-root-only",
+            legacy_root_only_option_alias("source"),
+            help="Refine Source reach",
+        ),
+    ] = None,
+    target_descendants: Annotated[
+        Optional[bool],
+        typer.Option(
+            "--target-descendants/--target-root-only",
+            legacy_root_only_option_alias("target"),
+            help="Refine Target reach",
+        ),
+    ] = None,
 ) -> None:
-    """Inspect one exact saved Update plan."""
+    """Preview a directional Update or inspect one saved Update plan."""
 
-    _saved_impact_cmd(ImpactOperation.update, session_uid)
+    try:
+        source_name, target_name = choose_update_endpoint_operands(
+            contexts,
+            source_option=source_name,
+            target_option=target_name,
+        )
+    except ValueError as error:
+        _usage_error(str(error))
+
+    planning_requested = (
+        source_name is not None
+        or target_name is not None
+        or source_memory is not None
+        or target_memory is not None
+        or direct
+        or recursive
+        or source_descendants is not None
+        or target_descendants is not None
+    )
+    if session_uid is not None and planning_requested:
+        _usage_error(
+            "--session cannot be combined with a new directional Update preview."
+        )
+    if not planning_requested:
+        _saved_impact_cmd(ImpactOperation.update, session_uid)
+        return
+
+    _dispatch_impact(
+        operation=None,
+        source_name=source_name,
+        target_name=target_name,
+        source_memory=source_memory,
+        target_memory=target_memory,
+        direct=direct,
+        recursive=recursive,
+        source_descendants=source_descendants,
+        target_descendants=target_descendants,
+    )
 
 
 # Registry installation is deliberately last: every public named route must

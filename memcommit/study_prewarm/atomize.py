@@ -36,6 +36,11 @@ from memcommit.study_prewarm.installations import (
     declared_installation_matches,
     record_declared_installation,
 )
+from memcommit.study_prewarm.quality import (
+    SemanticIdentity,
+    highest_quality_candidates,
+    prewarm_quality_satisfies,
+)
 from memcommit.study_prewarm.registry import (
     StudyPrewarmRegistryError,
     load_artifact,
@@ -446,18 +451,22 @@ def find_declared_atomize_prewarm(
     registry = load_registry(store.store_dir)
     if registry is None:
         return None
-    provider, model, reasoning = _configured_semantic_identity()
-    matches: list[AtomizePrewarmMatch] = []
+    requested_identity = _configured_semantic_identity()
+    matches: list[tuple[bool, SemanticIdentity, AtomizePrewarmMatch]] = []
     for entry in registry.entries:
         if not entry.enabled or entry.operation != "ATOMIZE":
             continue
         artifact = load_artifact(store.store_dir, entry)
         analysis, description = _validate_artifact(artifact, entry_key=entry.key)
-        if (
+        cached_identity = (
             artifact.get("provider"),
             artifact.get("model"),
             artifact.get("reasoning"),
-        ) != (provider, model, reasoning):
+        )
+        if not prewarm_quality_satisfies(
+            cached_identity,  # type: ignore[arg-type]
+            requested_identity,
+        ):
             continue
         if not declared_artifact_available(
             store,
@@ -469,6 +478,10 @@ def find_declared_atomize_prewarm(
         ):
             continue
         current_description = store.load_direct(description["name"])
+        exact_description = (
+            context_record_digest(current_description)
+            == description["context_digest"]
+        )
         if (
             current_description.uid != description["context_uid"]
             or not _description_matches_prepared_digest(
@@ -485,17 +498,26 @@ def find_declared_atomize_prewarm(
         ):
             continue
         matches.append(
-            AtomizePrewarmMatch(
-                entry_key=entry.key,
-                analysis=analysis,
-                output_context_name="practice/source-atomized",
+            (
+                exact_description,
+                cached_identity,  # type: ignore[arg-type]
+                AtomizePrewarmMatch(
+                    entry_key=entry.key,
+                    analysis=analysis,
+                    output_context_name="practice/source-atomized",
+                ),
             )
         )
-    if len(matches) > 1:
+    exact_matches = [match for match in matches if match[0]]
+    eligible_matches = exact_matches or matches
+    selected = highest_quality_candidates(
+        [(identity, match) for _exact, identity, match in eligible_matches]
+    )
+    if len(selected) > 1:
         raise StudyPrewarmRegistryError(
             "Multiple declared Atomize prewarms match the current Source."
         )
-    return matches[0] if matches else None
+    return selected[0] if selected else None
 
 
 def install_declared_atomize_prewarms(
@@ -519,7 +541,7 @@ def install_declared_atomize_prewarms(
         raise StudyPrewarmRegistryError(
             "Study prewarm registry belongs to a different baseline."
         )
-    provider, model, reasoning = _configured_semantic_identity()
+    requested_identity = _configured_semantic_identity()
     installed = 0
     declared = 0
     skipped = 0
@@ -534,10 +556,14 @@ def install_declared_atomize_prewarms(
             artifact,
             entry_key=entry.key,
         )
-        if (
-            artifact.get("provider") != provider
-            or artifact.get("model") != model
-            or artifact.get("reasoning") != reasoning
+        cached_identity = (
+            artifact.get("provider"),
+            artifact.get("model"),
+            artifact.get("reasoning"),
+        )
+        if not prewarm_quality_satisfies(
+            cached_identity,  # type: ignore[arg-type]
+            requested_identity,
         ):
             skipped += 1
             continue

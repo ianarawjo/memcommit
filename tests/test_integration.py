@@ -395,8 +395,8 @@ class TestClearAndRebuildWorkflow:
         store = MemoryStore()
         assert len(store.load_current().memories) == 3
 
-        # Clear the context (force, no prompt).
-        r = mem("clear", "--force")
+        # Clear is immediate because its command checkpoint supports Undo/Redo.
+        r = mem("clear")
         assert r.exit_code == 0
         assert len(store.load_current().memories) == 0
 

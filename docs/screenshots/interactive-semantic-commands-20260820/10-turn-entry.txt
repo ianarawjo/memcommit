@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ MEM UPDATE                                                                                                                                                                      ^┃
+┃ SOURCE capture/source → TARGET capture/target                                                                                                                                    ┃
+┃ STAGED                                                                                                                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT MEM UNDERSTOOD                                                                                                                                                              ┃
+┃ UNDERSTOOD                                                                                                                                                                       ┃
+┃ Review the exact staged target change. Nothing has been applied.                                                                                                                 ┃
+┃                                                                                                                                                                                  ┃
+┃ PLANNED CHANGES · 1                                                                                                                                                              ┃
+┃ EDIT 1 · capture/target Memory [11111111]                                                                                                                                        ┃
+┃ [CHANGE] The staged wording can be narrowed before Apply.                                                                                                                        ┃
+┃                                                                                                                                                                                  ┃
+┃ APPLICATION · 0                                                                                                                                                                  ┃
+┃  (none)                                                                                                                                                                          ┃
+┃ REVIEW AND APPLY                                                                                                                                                                 ┃
+┃ APPLY is available. Enter to review before anything changes.                                                                                                                     ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› REPORT         Complete Update report                                                                                                                                          ^│
+│  EDIT           capture/target Memory [11111111]                                                                                                                                 │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ REVIEW AND APPLY ]  Review final Update action · APPLY is available. Enter to review before anything changes.                                                                   │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close G comment all  A review & apply  H Help  y/Y copy  Q close

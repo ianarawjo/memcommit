@@ -20,7 +20,7 @@ optional content-free Recent or Select Target
   -> operation-owned Context/Memory/range selection
   -> freeze and authorize the exact source
   -> operation-owned cache/provider/read execution
-  -> read-only Viewer or Resolution-style report
+  -> read-only Viewer, compact receipt, or Resolution-style report
   -> content-free completed-attempt metadata
   -> close without Context mutation
 ```
@@ -68,20 +68,38 @@ Select-Target action. It does not own target trees or result documents:
 - Summarize retains its Context Summary workbench and direct/recursive/Both
   result contract.
 - Trace retains the temporal history explorer and exact Memory lineage.
-- Rationale retains its recorded/inferred evidence document and provider rules.
-- The quality-analysis family retains its multi-target/Profile setup and
-  process-local Resolution report, including typed Resolve and semantic Dedun
-  evidence routes.
+- Rationale retains its whole-Trace, example-calibrated natural-provenance
+  synthesis and compact terminal receipt; its legacy current-purpose inference
+  fields remain JSON compatibility data only.
+- Ambiguity and Conflict retain explicit `--select` multi-target/Profile setup
+  and process-local Resolution reports. Exact Duplicate and complete-DUN
+  Redundancy are direct one-Context reports in both TTY and non-TTY execution;
+  neither exposes an initial selector. Dedun is an applying command rather
+  than a report viewer.
 
-Find Redundancies and Dedun intentionally have distinct report identities even
-though they share one analyzer and presentation model. The finder closes with
-process-local evidence only. Dedun alone installs the confirmed-evidence
-handoff that begins survivor review and exact Apply, so replay identity cannot
-accidentally broaden a read-only invocation into mutation authority.
+Find Redundancies and Dedun intentionally have distinct execution identities
+even though they share one analyzer. The finder closes with read-only evidence.
+Dedun treats invocation as new Apply intent, uses one exact current or explicit
+Context, and writes detailed evidence into the resulting checkpoint. It never
+replays a recent report target, so report navigation cannot broaden into
+mutation authority.
+
+Find Duplicates is likewise an independent read-only operation, not a spelling
+of Find Redundancies. Its attempt and report metadata use `find-duplicates`
+exactly and describe a provider-free exact-DUP frame. Cross-annotation between
+the two operations is rejected so history cannot reopen broader semantic
+analysis under an exact-only label, or vice versa.
 
 This is composition rather than one universal report model. The operations
 share launch and lifecycle identity while preserving different evidence,
 viewer, clipboard, authority, cache, and handoff semantics.
+
+Trace and Rationale interpret their launcher's `Select Target` action as the
+command-start current Context, not as a request for a second Profile-wide
+location picker. Their operation-owned target tree immediately shows that
+Context's Memories with exact reach and keeps `INCLUDE DESCENDANTS` available.
+Another root remains available through explicit `--context`; Recents continue
+to reopen their exact recorded target.
 
 The Profile/Store orientation above the launcher is also operation-neutral.
 Its command adapter matches the frozen Store root against the Profile registry

@@ -1,4 +1,4 @@
-"""Capture the compact Rationale report through a real color PTY."""
+"""Capture calibrated natural-language Rationale through a real color PTY."""
 
 from __future__ import annotations
 
@@ -58,59 +58,72 @@ def _isolate_store(root: Path) -> None:
 
 
 def _prepare_fixture() -> str:
-    import memcommit.ops as ops
-    from memcommit.context import AutoCheckpoint, Memory
+    from typer.testing import CliRunner
+
+    from memcommit.cli import app
+    from memcommit.context import Memory
     from memcommit.store import MemoryStore
 
-    store = MemoryStore()
-    context = ops.init("rationale/korean")
-    source = ops.add(
-        context,
-        "나중에 문장을 다듬어 달라고 하면 구조와 인용 필요 표시는 유지하고, "
-        "문제가 되는 표현만 바꾼다.",
+    runner = CliRunner()
+    assert runner.invoke(app, ["init", "rationale/origin"]).exit_code == 0
+    source_text = (
+        "When I ask to change one expression, leave almost everything else as "
+        "it is, including technical or project-specific terms that I selected. "
+        "Um... for example, use distribute, not divide, when material is "
+        "absorbed into two parts."
     )
-    store.save(
-        context,
-        AutoCheckpoint(command="add", args={}, description="초안 규칙 추가"),
+    assert runner.invoke(app, ["add", source_text]).exit_code == 0
+    parent = next(
+        item
+        for item in MemoryStore().load_current_direct().iter_items()
+        if isinstance(item, Memory)
     )
-    source_position = context.ordered_uids().index(source.uid)
-    context.remove(source.uid)
-    target = Memory(
-        uid="20000000-0000-4000-8000-000000000001",
-        content=(
-            "나중에 문장을 다듬어 달라고 하면 전체 구조와 인용 필요 표시는 "
-            "유지하고, 문제가 되는 표현만 바꾼다."
-        ),
+    chunked = runner.invoke(
+        app,
+        ["chunk", parent.uid, "--method", "sentences"],
+        input="y\n",
     )
-    context.add(target, position=source_position)
-    reason = (
-        "문장 다듬기 요청이 전체 재작성으로 번지지 않도록 구조와 인용 표시를 "
-        "보존하는 검토 원칙을 기록하기 위해 유지했다."
+    assert chunked.exit_code == 0, chunked.output
+    target = next(
+        item
+        for item in MemoryStore().load_current_direct().iter_items()
+        if isinstance(item, Memory) and item.content == "Um..."
     )
-    store.save(
-        context,
-        AutoCheckpoint(
-            command="atomize",
-            args={
-                "trace": {
-                    "schema_version": 1,
-                    "operation_id": "compact-korean-provenance",
-                    "changes": [
-                        {
-                            "kind": "SPLIT",
-                            "source_uids": [source.uid],
-                            "result_uids": [target.uid],
-                            "reason": reason,
-                            "reason_codes": ["A01_ONE_FOCUS"],
-                        }
-                    ],
-                }
-            },
-            description="기록 이유가 있는 검토 원칙 적용",
-        ),
-    )
-    store.set_current(context.name)
+    assert runner.invoke(app, ["undo"]).exit_code == 0
+    assert runner.invoke(app, ["redo"]).exit_code == 0
+    assert runner.invoke(app, ["remove", target.uid]).exit_code == 0
     return target.uid
+
+
+class _CaptureProvider:
+    calls = 0
+
+    def complete(self, prompt, *, operation, output_schema=None):
+        import json
+
+        assert operation == "rationale provenance"
+        assert output_schema is not None
+        payload = json.loads(prompt.split("RATIONALE PAYLOAD:\n", 1)[1])
+        request = payload["request"]
+        assert request["selected_content"] == "Um..."
+        assert "When I ask to change one expression" in (
+            request["originals"][0]["content"]
+        )
+        assert payload["ruleset"]["ruleset_version"] == (
+            "rationale-natural-provenance-v1"
+        )
+        type(self).calls += 1
+        return json.dumps(
+            {
+                "provenance": (
+                    "“Um...” began as a hesitation between a minimal-change "
+                    "instruction and its “distribute, not divide” example. "
+                    "Sentence chunking made it a standalone Memory; undo removed "
+                    "it, redo restored it, and remove later deleted it."
+                )
+            },
+            ensure_ascii=False,
+        )
 
 
 def _run_child() -> None:
@@ -121,14 +134,21 @@ def _run_child() -> None:
         _isolate_store(Path(temp))
         target_uid = _prepare_fixture()
         before = MemoryStore().load_current_direct().to_dict()
-        assert not hasattr(rationale, "connect_codex_chatgpt_provider")
+        _CaptureProvider.calls = 0
+        rationale.connect_semantic_provider = _CaptureProvider
         print("PTY", os.get_terminal_size().columns, os.get_terminal_size().lines)
         rationale.cmd()
+        assert _CaptureProvider.calls == 1
+        print(
+            f"RATIONALE RECEIPT COMPLETE · TARGET [{target_uid[:8]}] · "
+            "NATURAL ORIGIN + LIFECYCLE VISIBLE · PRESS V TO VERIFY"
+        )
+        input()
         after = MemoryStore().load_current_direct().to_dict()
         assert before == after
         print(
-            f"RATIONALE CLOSED · TARGET [{target_uid[:8]}] · "
-            "CURRENT rationale/korean · PROVIDER CALLS 0 · "
+            f"RATIONALE VERIFIED · TARGET [{target_uid[:8]}] · "
+            "CURRENT rationale/origin · PROVIDER CALLS 1 · "
             "CACHE UNTOUCHED · STORE CONTENT UNCHANGED"
         )
 
@@ -174,21 +194,21 @@ def main() -> None:
 
     child, recorder = _spawn()
     try:
-        child.expect("RATIONALE · SELECT A MEMORY · rationale/korean")
+        child.expect("RATIONALE · SELECT A MEMORY · rationale/origin")
         _BASE._settle(child)
         _snapshot(recorder, "01-target-entry")
 
-        child.send("\t" + DOWN)
+        child.send("\t" + (DOWN * 3))
         _BASE._settle(child)
         _snapshot(recorder, "02-target-focused")
 
         child.send("\r")
-        child.expect("RATIONALE REPORT")
+        child.expect("RATIONALE RECEIPT COMPLETE")
         _BASE._settle(child)
-        _snapshot(recorder, "03-compact-report")
+        _snapshot(recorder, "03-provenance-receipt")
 
-        child.send("q")
-        child.expect("RATIONALE CLOSED")
+        child.send("v\r")
+        child.expect("RATIONALE VERIFIED")
         child.expect(pexpect.EOF)
         _snapshot(recorder, "04-read-only-verification")
     finally:
@@ -197,17 +217,28 @@ def main() -> None:
 
     raw = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript"))
     plain = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.txt"))
+    normalized_plain = " ".join(plain.split())
     assert "PTY 180 52" in raw
     assert "MEMORY" in plain
-    assert "PROVENANCE — latest recorded reason" in plain
-    assert "검토 원칙을 기록하기 위해 유지했다" in plain
+    assert "PROVENANCE" in plain
+    assert (
+        "began as a hesitation between a minimal-change instruction" in normalized_plain
+    )
+    assert "Sentence chunking made it a standalone Memory" in normalized_plain
+    assert (
+        "undo removed it, redo restored it, and remove later deleted it"
+        in normalized_plain
+    )
+    assert "Um..." in plain
+    assert "CREATED via" not in plain
+    assert "RATIONALE REPORT" not in plain
     assert "APPARENT PURPOSE" not in plain
     assert "LIMITS" not in plain
     assert "Context(s)" not in plain
     assert "SAVED ANALYSIS" not in plain
     assert "EVIDENCE USED FOR INFERENCE" not in plain
     assert "STORE CONTENT UNCHANGED" in plain
-    assert "PROVIDER CALLS 0" in plain
+    assert "PROVIDER CALLS 1" in plain
     assert "┏" in raw and "┗" in raw
     assert "38;" in raw
     assert any(

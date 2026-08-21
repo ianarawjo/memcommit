@@ -1,0 +1,7 @@
+PTY 180 52                                                                                                                                                                          
+Resolve error: The Resolve Context changed before Apply; nothing was written.                                                                                                       
+COMMAND EXIT · 1                                                                                                                                                                    
+READY FOR VERIFICATION                                                                                                                                                              
+                                                                                                                                                                                    
+STALE VERIFICATION · MEMORIES ['The office opens at 8.', 'The office opens at 9.', 'The weekday opening time is 8 and the weekend opening time is 9.', 'A concurrent schedule note a
+rrived.'] · CHECKPOINTS 0 · COMMANDS []

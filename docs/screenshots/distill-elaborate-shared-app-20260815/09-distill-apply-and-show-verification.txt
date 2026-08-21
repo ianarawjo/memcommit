@@ -10,20 +10,20 @@ The examples support a confirmation Rule while the contrast limits when action i
                                                                                                                                                                                     
 PROPOSED RULES · 1                                                                                                                                                                  
                                                                                                                                                                                     
-1. [f3926335] Act only after the person explicitly confirms the selected option.                                                                                                    
-   SUPPORT · 7f96f3b8                                                                                                                                                               
-   BOUNDARY · b5243ae9                                                                                                                                                              
+1. [fa58fc05] Act only after the person explicitly confirms the selected option.                                                                                                    
+   SUPPORT · e29fb69f                                                                                                                                                               
+   BOUNDARY · 91ebb23e                                                                                                                                                              
    WHY · The confirmed Case supports action and the mention-only Case bounds it.                                                                                                    
                                                                                                                                                                                     
 OUTSIDE PROPOSED RULES · 0 Memories                                                                                                                                                 
 No Result Context or checkpoint has been created.                                                                                                                                   
                                                                                                                                                                                     
 Created Distill Result 'capture/rules' with 1 Rules; Source unchanged.                                                                                                              
-CHECKPOINT · 3ba0c8a4 · RECOVERY · mem undo                                                                                                                                         
+CHECKPOINT · 9477dd8d · RECOVERY · mem undo                                                                                                                                         
 $ mem show --context capture/rules                                                                                                                                                  
 Context: capture/rules                                                                                                                                                              
   Memories 1  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0                                                                                                            
                                                                                                                                                                                     
 Items (in context order):                                                                                                                                                           
-  [memory 05b92acf] Act only after the person explicitly confirms the selected option.                                                                                              
+  [memory a57339f3] Act only after the person explicitly confirms the selected option.                                                                                              
 APPLY + READ-ONLY VERIFICATION · ONE RESULT RULE · ONE DISTILL CHECKPOINT · SOURCE UNCHANGED

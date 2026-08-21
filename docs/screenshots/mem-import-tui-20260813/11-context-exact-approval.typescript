@@ -221,10 +221,10 @@ The source and active Profile were not changed.
 [0m Roots · source/root[0m
 [0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
 [0;1;7m› * ▾ source/root[162C[0;1m^[0m
-[0;38;5;189m  · [memory 20000000] Stable root Memory.[138C[0;48;5;238m [0m
+[0;38;5;189m  · [unavailable] Memory preview changed[139C[0;48;5;238m [0m
 [0m      ▾ source/root/child[154C[0;48;5;238m [0m
 [0;38;5;189m    · [memory 20000000] Stable child Memory.[135C[0;48;5;238m [0m
-[0;38;5;189m    · [memory ref 30000000] [0;38;5;216;1mREAD ONLY[0;38;5;189m · Stable root Memory.[120C[0;48;5;238m [0m
+[0;38;5;189m    · [embedded memory 30000000] [0;38;5;216;1mREAD ONLY[0;38;5;189m · Stable root Memory.[115C[0;48;5;238m [0m
 [179C[0;48;5;238m [0m
 [179C[0;48;5;238m [0m
 [179C[0;48;5;238m [0m
@@ -268,7 +268,7 @@ The source and active Profile were not changed.
 [179C[0;48;5;238m [0m
 [0m                                                                                                                                                                                   [179C[0;1mv[0m
 [0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
-[0m ↑↓ move  ←→ expand  A expand all  m hide Memories here  M hide all Memories  y copy Context  Y copy visible branch  Enter choose source  q cancel · 1/5 · 2 selectable[167D[48A[0m[3A[J[0m[?7h[?1049l[?2004l[6n[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM IMPORT · CONTEXT RANGE[0m
+[0m ↑↓ move  ←→ expand  A expand all  m THIS Context: hide items · M EVERY Context: hide items  y copy Context  Y copy visible branch  Enter choose source  q cancel · 1/5 · 2 selecta[179Cb[48A[0m[3A[J[0m[?7h[?1049l[?2004l[6n[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM IMPORT · CONTEXT RANGE[0m
 [0m Choose whether the reviewed source includes lexical descendants.[0m
 [0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ RANGE · ENTER TO CONTINUE ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
 [0;38;5;117;1m┃[0m› CONTEXT RANGE · [0;38;5;234;48;5;117;1m[ THIS CONTEXT ONLY ][0m  [ INCLUDE DESCENDANTS ] · ←/→ SELECT                                                                                                     [179C[0;38;5;117;1m┃[0m
@@ -303,7 +303,7 @@ The source and active Profile were not changed.
 [0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
 [0m Edit directly · Ctrl-U clear · Up/Tab parent · Enter continue · Esc cancel[75D[0m
 [J[?7h[0m[?12l[?25h[?2004l[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;5;231;1m MEM IMPORT · CONTEXT · FINAL APPROVAL[0m
-[0;38;5;231m Nothing has been imported. A applies only the command below.[0m
+[0;38;5;231m Nothing has been applied. Enter applies only the command below.[0m
 [0m┌─────────────────────────────────────────────────────────────────────| EXACT COMMAND · REVIEW BEFORE APPLY |──────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│[0;38;5;231mPROPOSED COMMAND · NOT RUN                                                                                                                                                       [0;1m^[179C[0m│[0m
 [0m│[0;38;5;231m  mem import context source/root --from-profile source-profile --as source/root --recursive                                                                                      [0;38;5;231;48;5;238m [179C[0m│[0m
@@ -353,4 +353,4 @@ The source and active Profile were not changed.
 [0m│[0;38;5;231m                                                                                                                                                                                 [0;38;5;231;48;5;238m [179C[0m│[0m
 [0m│[0;38;5;231m                                                                                                                                                                                 [0;1mv[179C[0m│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
-[0m ↑/↓ scroll · A apply exact command · Esc/Q cancel[50D[48A[C[0m[?12l[?25h
+[0m ↑/↓ scroll · Enter apply exact command · A also works · Esc/Q cancel[69D[48A[C[0m[?12l[?25h

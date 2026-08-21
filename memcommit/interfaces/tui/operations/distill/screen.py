@@ -86,6 +86,7 @@ def run_distill_tui(
                 document=None if result is None else project_distill_result(result),
                 allow_both=False,
                 targeting_editable=not setup.source_locked,
+                memory_loader=setup.memory_loader,
             ),
             clipboard_projector=None if result is None else clipboard_projector,
             clipboard_writer=clipboard_writer,

@@ -6,16 +6,20 @@ Implemented for both public entry routes:
 
 ```text
 mem embed
-mem embed CHILD --into CONTEXT [--before ITEM | --after ITEM]
-mem embed MEMORY --from SOURCE --into CONTEXT [--before ITEM | --after ITEM]
+mem embed CHILD [--into CONTEXT] [--before ITEM | --after ITEM]
+mem embed MEMORY [--into CONTEXT] [--before ITEM | --after ITEM]
+mem embed SOURCE:MEMORY [--into CONTEXT] [--before ITEM | --after ITEM]
 ```
 
 The flagless form first selects Context or Memory link type. Context mode
 presents owned local Contexts plus visible Grant rows as possible Children;
 Memory mode presents directly owned ordinary Memories from local Contexts.
 Only local owned Contexts can be targets. The explicit forms remain the
-non-interactive and scripting routes, with `--from` as the unambiguous Memory
-discriminator.
+non-interactive and scripting routes. `SOURCE:MEMORY` names an exact owner;
+a bare public UID/prefix searches every ordinary local direct Context and must
+be unique. Existing `MEMORY --from SOURCE` scripts remain supported. Omitting
+`--into` uses the command-start current Context; an explicit `--into` overrides
+it.
 
 The implementation now enters through `memcommit.embed_application`, with
 `memcommit.embed_runtime` owning Store loading, concurrency checks, checkpoint
@@ -58,7 +62,7 @@ The explicit command accepts at most one direct-item anchor:
 ```text
 mem embed examples --into guide --before 7cc52c10
 mem embed examples --into guide --after 191884c4
-mem embed a94c120e --from examples --into guide --before 7cc52c10
+mem embed examples:a94c120e --into guide --before 7cc52c10
 ```
 
 - `--before ITEM` inserts immediately before the direct item resolved by an
@@ -70,8 +74,15 @@ mem embed a94c120e --from examples --into guide --before 7cc52c10
   directly owned Memories. Hidden exclusion of pointer slots would make the
   visible gap differ from the persisted position.
 
-The command resolves `CHILD`, `--from`, and `--into` through one shared
-existing-Context locator snapshot. `--before` and `--after` are direct-item
+The command resolves `CHILD`, a qualified Memory owner, compatibility
+`--from`, and `--into` from one command-start current-Context snapshot. A bare
+Memory UID instead searches one strict snapshot of every ordinary local direct
+frame and succeeds only when exactly one ordinary Memory matches; the current
+Context has no priority. Multiple matches list canonical `CONTEXT:FULL_UID`
+candidates and publish nothing. When `--into` is absent, the adapter copies the
+snapshot's canonical current Context into the typed request before planning; if
+there is no current Context, it fails before loading the Source.
+`--before` and `--after` are direct-item
 selectors, not Context locators, so relative Context syntax is never applied
 to them. Memory Embed requires a directly owned ordinary Source Memory and a
 Source Context distinct from the Target; this prevents a recursive live link

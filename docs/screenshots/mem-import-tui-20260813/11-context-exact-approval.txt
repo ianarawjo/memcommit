@@ -1,5 +1,5 @@
  MEM IMPORT · CONTEXT · FINAL APPROVAL                                                                                                                                              
- Nothing has been imported. A applies only the command below.                                                                                                                       
+ Nothing has been applied. Enter applies only the command below.                                                                                                                    
 ┌─────────────────────────────────────────────────────────────────────| EXACT COMMAND · REVIEW BEFORE APPLY |──────────────────────────────────────────────────────────────────────┐
 │PROPOSED COMMAND · NOT RUN                                                                                                                                                       ^│
 │  mem import context source/root --from-profile source-profile --as source/root --recursive                                                                                       │
@@ -49,4 +49,4 @@
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
- ↑/↓ scroll · A apply exact command · Esc/Q cancel                                                                                                                                  
+ ↑/↓ scroll · Enter apply exact command · A also works · Esc/Q cancel                                                                                                               

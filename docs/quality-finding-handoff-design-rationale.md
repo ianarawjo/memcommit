@@ -13,8 +13,8 @@ The motivating Task 1 flow is a staged pipeline:
 `merge -> dedup -> dedun -> resolve -> audit`
 
 Each stage has a different meaning and must freeze its own source and authority.
-Merge combines frames, Dedup removes exact copies, Dedun decides semantic
-redundancy disposition, Resolve repairs a non-fitting direct-Memory frame, and
+Merge combines frames, Dedup removes exact copies, Dedun applies complete
+exact-plus-semantic redundancy, Resolve repairs a non-fitting direct-Memory frame, and
 Audit checks the resulting state. No stage implicitly performs a later one.
 
 ## Application contract
@@ -33,7 +33,7 @@ The routes are deliberately explicit:
 
 | Finding | Route | Current execution status |
 | --- | --- | --- |
-| Semantic redundancy | internal `DEDUP` compatibility value | Public evidence uses `REDUNDANCY` / `DEDUN` and executes as `mem dedun` |
+| Complete DUN redundancy | internal `DEDUP` compatibility value | Public evidence uses `REDUNDANCY` / `DEDUN` and executes as `mem dedun` |
 | Ambiguity | `CLARIFY` | Typed route only |
 | Conflict | `RESOLVE` | Same-Context conversion implemented |
 
@@ -74,7 +74,8 @@ Every adapter receives the same application-owned handoff:
 
 - Python exposes `find_redundancies`, `find_ambiguities`, and `find_conflicts`
   on `MemCommitClient`, returning `QualityFindResult.handoffs`;
-  `find_duplicates` remains a compatibility name. A conflict is
+  independent `find_duplicates` returns a provider-free
+  `ExactDuplicateFindResult`. A conflict is
   passed unchanged to `resolve_conflict_finding`.
 - CLI `mem find-conflicts --handoff-json` prints one canonical receipt per
   finding. `mem resolve --finding-handoff JSON` decodes that receipt and uses
@@ -95,11 +96,11 @@ synthesize its own digest, target, Memory selector, or guidance.
 - Cross-Context conflicts do not enter Resolve v1. Repairing them requires an
   operation whose post-image and ownership semantics cover multiple Contexts;
   silently shrinking the finder frame to one owner would change the question.
-- Semantic redundancy and ambiguity evidence identifies its receiving
+- Complete DUN redundancy and ambiguity evidence identifies its receiving
   operation but does not pretend that Resolve implements Dedun or Clarify.
 - Find Redundancies does not install a handoff executor. Dedun alone accepts
-  confirmed eligible redundancy evidence and independently revalidates its
-  survivor and Apply boundary.
+  every eligible redundancy finding from its complete frame and independently
+  revalidates the deterministic survivor and Apply boundary.
 - Serialized receipts are transferable but intentionally not durable sessions.
   Callers that retain them own that file or message lifecycle; MemCommit does
   not create a new cache containing finding reasons, questions, or responses.

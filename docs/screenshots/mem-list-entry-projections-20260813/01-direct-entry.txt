@@ -1,19 +1,19 @@
  List · task-1/description                                                                                                                                                          
- Roots · task-1/description                                                                                                                                                         
+ Roots · practice · task-1 · task-2 · task-3                                                                                                                                        
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-› * ▾ task-1/description                                                                                                                                                           ^
-  · [memory 2db26309] Imagine that you are a campus facilities coordinator responsible for maintaining a university organizational wiki used by campus members, visitors, and AI    
-                      agents. The Main Building of the campus is under construction, and you have just finished collecting and verifying all resulting changes in your local work   
-                      memory. This memory contains confirmed event relocations, temporary parking arrangements, updated shop and facility information, and related changes to       
-                      nearby routes and facilities. Using this verified local memory, you must update all affected parts of the organizational wiki and contribute the completed    
-                      update.                                                                                                                                                       
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
+    ▸ practice                                                                                                                                                                     ^
+    ▾ task-1                                                                                                                                                                        
+› *   ▾ task-1/description                                                                                                                                                          
+    · [memory 2db26309] Imagine that you are a campus facilities coordinator responsible for maintaining a university organizational wiki used by campus members, visitors, and AI  
+                        agents. The Main Building of the campus is under construction, and you have just finished collecting and verifying all resulting changes in your local      
+                        work memory. This memory contains confirmed event relocations, temporary parking arrangements, updated shop and facility information, and related changes   
+                        to nearby routes and facilities. Using this verified local memory, you must update all affected parts of the organizational wiki and contribute the         
+                        completed update.                                                                                                                                           
+      ▸ task-1/participant                                                                                                                                                          
+      ▸ task-1/campus-wiki  READ GRANT · PERMISSIONS CREATE + READ + EMBED + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + SAVE_ANAL 
+      YSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED                                                                                                                             
+    ▸ task-2                                                                                                                                                                        
+    ▸ task-3                                                                                                                                                                        
                                                                                                                                                                                     
                                                                                                                                                                                     
                                                                                                                                                                                     
@@ -49,4 +49,4 @@
                                                                                                                                                                                     
                                                                                                                                                                                    v
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
- ↑↓ move  ←→ expand  A expand all  m hide Memories here  M hide all Memories  Enter open/collapse  q close · 1/2 · 1 selectable
+ ↑↓ move  ←→ expand  A expand all  m THIS Context: hide items · M EVERY Context: show items  y copy Context  Y copy visible branch  Enter open/collapse  q close · 3/8 · 108 selecta

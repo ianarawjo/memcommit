@@ -49,4 +49,4 @@
                                                                                                                                                                                     
                                                                                                                                                                                    v
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
- ↑↓ move  ←→ expand  A expand all  m show items here  M show all items  y copy Context  Y copy visible branch  Enter switch  q cancel · 2/2 · 2 selectable                          
+ ↑↓ move  ←→ expand  A expand all  m THIS Context: show items · M EVERY Context: show items  y copy Context  Y copy visible branch  Enter switch  q cancel · 2/2 · 2 selectable     

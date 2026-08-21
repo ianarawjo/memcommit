@@ -59,7 +59,14 @@ def comparison_session_entries(
             revalidate_saved_comparison(store, analysis)
         except (FileNotFoundError, OSError, ValueError):
             status = "STALE"
-        argv = ("mem", "compare", "--to", compared.context_name)
+        # Include both operands so this public route remains stable even when
+        # the process-global current Context changes after picker discovery.
+        argv = (
+            "mem",
+            "compare",
+            reference.context_name,
+            compared.context_name,
+        )
         if ledger:
             argv += ("--ledger",)
         entries.append(

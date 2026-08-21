@@ -1,0 +1,11 @@
+PTY 180 52                                                                                                                                                                          
+Dedun 'quality/direct-dedun': absorbed 1 semantically redundant Memory item(s); kept 1 original UID(s).                                                                             
+Checkpoint [8d22121d] · review: mem review dedun --receipt 8d22121d-3a14-494c-8948-883f7f6dbccc · recovery: mem undo                                                                
+FIRST COMMAND EXIT · 0                                                                                                                                                              
+FIRST COMMAND COMPLETE · PRESS ENTER                                                                                                                                                
+                                                                                                                                                                                    
+No applicable semantic redundancies in 'quality/direct-dedun'.                                                                                                                      
+SECOND COMMAND EXIT · 0                                                                                                                                                             
+SECOND COMMAND COMPLETE · PRESS ENTER                                                                                                                                               
+                                                                                                                                                                                    
+READ-ONLY VERIFICATION · MEMORIES 1 · CHECKPOINTS 1 · DEDUN RECENTS 1 · ANALYSES 2 · CURRENT quality/direct-dedun

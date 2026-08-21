@@ -8,6 +8,11 @@ from typing import Annotated
 
 import typer
 
+from memcommit.interfaces.console.identity import collision_safe_uid_prefixes
+from memcommit.interfaces.console.theme import (
+    SemanticColorRole,
+    semantic_color_rgb,
+)
 from memcommit.store import MemoryStore
 from memcommit.granted_update_application import inspect_granted_update
 from memcommit.memory_diff import (
@@ -43,19 +48,7 @@ def _short_uid_map(session: UpdateSession) -> dict[str, str]:
         for operation in session.operations
         for source in operation.source_refs
     )
-    prefixes: dict[str, str] = {}
-    for uid in uids:
-        if len(uid) <= 8:
-            prefixes[uid] = uid
-            continue
-        width = 8
-        while width < len(uid) and any(
-            other != uid and other.startswith(uid[:width])
-            for other in uids
-        ):
-            width += 1
-        prefixes[uid] = uid[:width]
-    return prefixes
+    return collision_safe_uid_prefixes(uids)
 
 
 def _shown_uid(
@@ -198,21 +191,21 @@ def _render_semantic_operation(
     if isinstance(operation, EditOperation):
         typer.secho(
             f"EDIT  {change.location}  [{shown_uid}]",
-            fg=typer.colors.YELLOW,
+            fg=semantic_color_rgb(SemanticColorRole.EDIT),
             bold=True,
         )
         _render_semantic_change(change)
     elif isinstance(operation, AddOperation):
         typer.secho(
             f"ADD   {change.location}  [new:{shown_uid}]",
-            fg=typer.colors.GREEN,
+            fg=semantic_color_rgb(SemanticColorRole.ADD),
             bold=True,
         )
         _render_semantic_change(change)
     else:
         typer.secho(
             f"REMOVE {change.location}  [{shown_uid}]",
-            fg=typer.colors.RED,
+            fg=semantic_color_rgb(SemanticColorRole.REMOVE),
             bold=True,
         )
         _render_semantic_change(change)

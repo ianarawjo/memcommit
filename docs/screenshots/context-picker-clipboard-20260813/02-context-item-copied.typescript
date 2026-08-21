@@ -50,7 +50,7 @@ PTY 180 52
 [179C[0;48;5;238m [0m
 [0m                                                                                                                                                                                   [179C[0;1mv[0m
 [0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
-[0m ↑↓ move  ←→ expand  A expand all  m hide Memories here  M hide all Memories  y copy Context  Y copy visible branch  Enter select  q cancel · 2/8 · 9 selectable[160D[47A[0m[?25l[0m
+[0m ↑↓ move  ←→ expand  A expand all  m THIS Context: hide items · M EVERY Context: hide items  y copy Context  Y copy visible branch  Enter select  q cancel · 2/8 · 9 selectable[175D[47A[0m[?25l[0m
 
 
 
@@ -97,4 +97,4 @@ PTY 180 52
 
 
 
-[0;38;5;150;1m COPIED · Context task-1[0m  y copy Context [CY c[Cpy visible[Cbranch[C q cancel[0m[K[47A[73D[0m
+[0;38;5;150;1m COPIED · Context task-1[0m  y copy Context [CY copy vis[Cble branch[C q cancel[0m[K[47A[73D[0m

@@ -127,7 +127,8 @@ def test_bare_rationale_selects_provenance_target(
     assert result.exit_code == 0, result.output
     assert "Rationale [" in result.output
     assert "portable note" in result.output
-    assert "PROVENANCE — no reason recorded" in result.output
+    assert "PROVENANCE\n" in result.output
+    assert "retained" in result.output
     assert "APPARENT PURPOSE" not in result.output
 
 
@@ -219,33 +220,29 @@ def test_rationale_picker_groups_memories_under_their_public_context(
             ("notes/child", "child note"),
         ],
     }
-    assert "PROVENANCE — no reason recorded" in result.output
+    assert "PROVENANCE\n" in result.output
+    assert "retained" in result.output
     assert "APPARENT PURPOSE" not in result.output
 
 
-def test_interactive_rationale_report_uses_common_viewer(
+def test_interactive_rationale_returns_terminal_receipt_without_viewer(
     isolated_store,
     monkeypatch,
 ):
     assert invoke("init", "notes").exit_code == 0
     assert invoke("add", "portable note").exit_code == 0
     target = _direct_memories(MemoryStore())[0]
-    observed: dict[str, str] = {}
     monkeypatch.setattr(
         "memcommit.commands.rationale.interactive_report_terminal",
         lambda: True,
-    )
-    monkeypatch.setattr(
-        "memcommit.commands.rationale.run_read_only_viewer",
-        lambda text, *, title: observed.update(text=text, title=title),
     )
 
     result = invoke("rationale", target.uid)
 
     assert result.exit_code == 0, result.output
-    assert observed["title"] == "RATIONALE REPORT"
-    assert "Rationale [" in observed["text"]
-    assert "portable note" in observed["text"]
+    assert "Rationale [" in result.output
+    assert "portable note" in result.output
+    assert "RATIONALE REPORT" not in result.output
 
 
 def test_interactive_trace_routes_bare_and_explicit_targets_to_vertical_viewer(
@@ -329,7 +326,6 @@ def test_bare_rationale_recent_reopens_its_recorded_scope(
     assert invoke("init", "notes").exit_code == 0
     assert invoke("add", "portable note").exit_code == 0
     target = _direct_memories(MemoryStore())[0]
-    viewed: list[str] = []
     monkeypatch.setattr(
         "memcommit.commands.rationale.interactive_report_terminal",
         lambda: True,
@@ -348,16 +344,11 @@ def test_bare_rationale_recent_reopens_its_recorded_scope(
             AssertionError("a recent receipt must bypass fresh selection")
         ),
     )
-    monkeypatch.setattr(
-        "memcommit.commands.rationale.run_read_only_viewer",
-        lambda text, *, title: viewed.append(text),
-    )
-
     result = invoke("rationale")
 
     assert result.exit_code == 0, result.output
-    assert len(viewed) == 1
-    assert "portable note" in viewed[0]
+    assert "portable note" in result.output
+    assert "retained" in result.output
 
 
 def test_bare_rationale_cancel_returns_without_report(

@@ -39,6 +39,7 @@ from memcommit.context_targeting.tui.picker import (
     context_memory_rows,
     context_option_continuation_prefixes,
     context_picker_navigation_units,
+    memory_visibility_key_hint,
     render_context_options,
     render_context_roots,
 )
@@ -993,15 +994,16 @@ def run_command_wait(
             )
             if active_surface["value"] == "CONTEXTS":
                 memory_hint = (
-                    "m Memories here · M all Memories · "
+                    memory_visibility_key_hint(context_tree_state) + " · "
                     if frozen_context_browser is not None
                     and frozen_context_browser.memory_loader is not None
                     else ""
                 )
                 return (
                     f" {context_hint}{input_hint}{report_hint}{help_hint}"
+                    f"{memory_hint}"
                     "↑/↓ move · ←/→ expand · Enter browse · "
-                    f"A/a all · {memory_hint}"
+                    "A/a all · "
                     "Q/q close · read-only"
                 )
             return (

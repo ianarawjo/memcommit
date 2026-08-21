@@ -1,4 +1,4 @@
-"""Versioned agent contract for immutable Memory Reference snapshots."""
+"""Versioned agent contract for immutable Memory or Context snapshots."""
 
 from __future__ import annotations
 
@@ -6,6 +6,7 @@ from collections.abc import Mapping
 from typing import Literal
 
 from memcommit.api import (
+    ContextReferenceResult,
     MemCommitClient,
     MemoryReferenceResult,
     ReferenceConflictError,
@@ -25,12 +26,22 @@ from memcommit.interfaces.agent.contract import (
 )
 
 
-REFERENCE_AGENT_CONTRACT_VERSION = 1
-REFERENCE_AGENT_TOOL_NAME = "memcommit_reference_memory"
-ReferenceAgentKind = Literal["snapshot"]
+REFERENCE_AGENT_CONTRACT_VERSION = 2
+REFERENCE_AGENT_TOOL_NAME = "memcommit_reference"
+ReferenceAgentKind = Literal["memory", "context"]
 
 
-def _parse_request(payload: object) -> dict[str, object]:
+def _boolean(value: object, *, field: str, default: bool = False) -> bool:
+    if value is None:
+        return default
+    if type(value) is not bool:
+        raise AgentRequestError(f"{field} must be a boolean.")
+    return value
+
+
+def _parse_request(
+    payload: object,
+) -> tuple[ReferenceAgentKind, dict[str, object]]:
     value = object_value(payload, label="Reference request")
     version = value.get("version")
     if (
@@ -41,28 +52,61 @@ def _parse_request(payload: object) -> dict[str, object]:
         raise AgentRequestError(
             f"version must be exactly {REFERENCE_AGENT_CONTRACT_VERSION}."
         )
-    if value.get("kind") != "snapshot":
-        raise AgentRequestError("kind must be exactly snapshot.")
-    exact_fields(
-        value,
-        required={"version", "kind", "memory_selector", "source_context"},
-        optional=frozenset({"into_context"}),
-        label="Reference snapshot request",
-    )
-    return {
-        "memory_selector": text_value(
-            value.get("memory_selector"), field="memory_selector"
-        ),
-        "source_context": text_value(
-            value.get("source_context"), field="source_context"
-        ),
-        "into_context": text_value(
-            value.get("into_context"), field="into_context", optional=True
-        ),
-    }
+    kind = value.get("kind")
+    if kind == "memory":
+        exact_fields(
+            value,
+            required={"version", "kind", "memory_selector", "source_context"},
+            optional=frozenset({"into_context"}),
+            label="Memory Reference request",
+        )
+        return "memory", {
+            "memory_selector": text_value(
+                value.get("memory_selector"), field="memory_selector"
+            ),
+            "source_context": text_value(
+                value.get("source_context"), field="source_context"
+            ),
+            "into_context": text_value(
+                value.get("into_context"), field="into_context", optional=True
+            ),
+        }
+    if kind == "context":
+        exact_fields(
+            value,
+            required={"version", "kind", "source_context"},
+            optional=frozenset({"into_context", "recursive"}),
+            label="Context Reference request",
+        )
+        return "context", {
+            "source_context": text_value(
+                value.get("source_context"), field="source_context"
+            ),
+            "into_context": text_value(
+                value.get("into_context"), field="into_context", optional=True
+            ),
+            "recursive": _boolean(value.get("recursive"), field="recursive"),
+        }
+    raise AgentRequestError("kind must be exactly memory or context.")
 
 
-def _serialize(result: MemoryReferenceResult) -> JsonObject:
+def _serialize(
+    result: MemoryReferenceResult | ContextReferenceResult,
+) -> JsonObject:
+    if isinstance(result, ContextReferenceResult):
+        return {
+            "reference_uid": result.reference_uid,
+            "source_name": result.source_name,
+            "source_uid": result.source_uid,
+            "snapshot_content_sha256": result.snapshot_content_sha256,
+            "include_descendants": result.include_descendants,
+            "follow_embeds": result.follow_embeds,
+            "context_count": result.context_count,
+            "into_name": result.into_name,
+            "into_uid": result.into_uid,
+            "checkpoint_uid": result.checkpoint_uid,
+            "mode": "SNAPSHOT",
+        }
     return {
         "reference_uid": result.reference_uid,
         "source_name": result.source_name,
@@ -106,7 +150,7 @@ _PUBLIC_ERRORS: tuple[tuple[type[ReferenceError], str, str, bool], ...] = (
 
 
 class ReferenceAgentAdapter:
-    """Translate one explicit snapshot request to the public facade."""
+    """Translate one explicit snapshot unit to the public facade."""
 
     def __init__(self, client: MemCommitClient) -> None:
         if not isinstance(client, MemCommitClient):
@@ -115,11 +159,13 @@ class ReferenceAgentAdapter:
 
     def invoke(self, payload: object) -> JsonObject:
         kind: ReferenceAgentKind | None = None
-        if isinstance(payload, Mapping) and payload.get("kind") == "snapshot":
-            kind = "snapshot"
+        if isinstance(payload, Mapping) and payload.get("kind") in (
+            "memory",
+            "context",
+        ):
+            kind = payload["kind"]  # type: ignore[assignment]
         try:
-            arguments = _parse_request(payload)
-            kind = "snapshot"
+            kind, arguments = _parse_request(payload)
         except AgentRequestError as error:
             return error_response(
                 version=REFERENCE_AGENT_CONTRACT_VERSION,
@@ -129,7 +175,11 @@ class ReferenceAgentAdapter:
                 retryable=False,
             )
         try:
-            result = self._client.reference_memory(**arguments)  # type: ignore[arg-type]
+            result = (
+                self._client.reference_memory(**arguments)  # type: ignore[arg-type]
+                if kind == "memory"
+                else self._client.reference_context(**arguments)  # type: ignore[arg-type]
+            )
         except ReferenceError as error:
             for error_type, code, message, expose in _PUBLIC_ERRORS:
                 if isinstance(error, error_type):
@@ -164,34 +214,53 @@ class ReferenceAgentAdapter:
 
 
 def reference_agent_tool_schema() -> JsonObject:
-    """Return a fresh strict schema for one immutable Memory snapshot."""
+    """Return a fresh strict tagged union for one immutable snapshot."""
 
     text = {"type": "string", "minLength": 1, "pattern": r".*\S.*"}
     return {
         "name": REFERENCE_AGENT_TOOL_NAME,
         "description": (
-            "Copy one exact Source Memory version into a local Target as an "
-            "immutable snapshot."
+            "Copy one exact Source Memory or direct/recursive Context scope "
+            "into a local Target as an immutable snapshot."
         ),
         "parameters": {
-            "type": "object",
-            "additionalProperties": False,
-            "required": [
-                "version",
-                "kind",
-                "memory_selector",
-                "source_context",
-            ],
-            "properties": {
-                "version": {
-                    "type": "integer",
-                    "const": REFERENCE_AGENT_CONTRACT_VERSION,
+            "oneOf": [
+                {
+                    "type": "object",
+                    "additionalProperties": False,
+                    "required": [
+                        "version",
+                        "kind",
+                        "memory_selector",
+                        "source_context",
+                    ],
+                    "properties": {
+                        "version": {
+                            "type": "integer",
+                            "const": REFERENCE_AGENT_CONTRACT_VERSION,
+                        },
+                        "kind": {"type": "string", "const": "memory"},
+                        "memory_selector": text,
+                        "source_context": text,
+                        "into_context": {**text, "type": ["string", "null"]},
+                    },
                 },
-                "kind": {"type": "string", "const": "snapshot"},
-                "memory_selector": text,
-                "source_context": text,
-                "into_context": {**text, "type": ["string", "null"]},
-            },
+                {
+                    "type": "object",
+                    "additionalProperties": False,
+                    "required": ["version", "kind", "source_context"],
+                    "properties": {
+                        "version": {
+                            "type": "integer",
+                            "const": REFERENCE_AGENT_CONTRACT_VERSION,
+                        },
+                        "kind": {"type": "string", "const": "context"},
+                        "source_context": text,
+                        "into_context": {**text, "type": ["string", "null"]},
+                        "recursive": {"type": "boolean", "default": False},
+                    },
+                },
+            ]
         },
     }
 

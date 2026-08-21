@@ -2,35 +2,55 @@
 
 ## Problem and meaning
 
-`mem sever` creates a new local Context that deliberately forgets selected
-content from an existing Source. It is a content transformation, not a Share
-preparation step. It has no recipient, destination, delivery, consent, or
-transmission semantics. The Source is immutable throughout the operation.
+`mem sever` deliberately forgets or rewrites selected content from an existing
+Source. It is a content transformation, not a Share preparation step. It has
+no recipient, delivery, consent, or transmission semantics. Its save-location
+axis is deliberately named `SELF-SAVE` versus `OTHER-SAVE`; it is not a
+symmetric/directional relation classification.
 
 One pass has three roles:
 
 ```text
 SOURCE ordinary Context × one CRITERIA ordinary Context
-    → new local RESULT Context
+    → SELF-SAVE Source | OTHER-SAVE new local Result
 ```
 
 The whole Source frame and whole Criteria frame use the shared
 [selective-curation batch contract](selective-curation-design-rationale.md).
 Inference is one contextual provider turn, while the returned artifact retains
 exactly one independently reviewable decision per Source Memory. Sever keeps
-its own durable schema, authority checks, and require-new materializer.
+its own durable schema, authority checks, and save-mode-aware materializer.
 
-The explicit form is:
+The positional-first forms are:
 
 ```text
-mem sever --source SOURCE --criteria CRITERIA --save-as RESULT
-# optional: --source-only / --source-descendants
-#           --criteria-only / --criteria-descendants
+mem sever SOURCE CRITERIA
+mem sever SOURCE CRITERIA RESULT
+# optional: --source-root-only / --source-descendants
+#           --criteria-root-only / --criteria-descendants
 ```
 
-`--against` aliases `--criteria`. `--to` is absent because Sever names no
-destination. `mem share` is an independent operation that can separately
-review any eligible ordinary Context.
+With two operands, Sever self-saves: the canonical Source is also the Result.
+An optional third operand equal to that canonical Source is the explicit
+self-save spelling; any distinct third operand selects other-save and must be
+an exact require-new Result name. `--source`, `--criteria`/`--against`, and `--save-as` remain
+compatibility aliases and may fill roles not already supplied positionally.
+`--to` is absent because the Result is a save location, not a receiver.
+`mem share` remains an independent delivery operation.
+
+SOURCE and CRITERIA are existing-Context locators resolved from one captured
+current-name snapshot. Omitted RESULT reuses that frozen canonical Source name;
+an explicit RESULT is compared with that canonical Source and otherwise
+treated as a new identifier, never passed through the existing-Context locator
+resolver. The explicit self-save spelling must therefore use the canonical
+Source name; omission is the relative-locator-safe way to request self-save.
+Supplying one role twice or more than three positional operands fails before
+provider or Store access.
+
+The common `-d/-r` preset applies to both input roles; either canonical
+role-qualified pair can then override one role. The older `--source-only` and
+`--criteria-only` spellings remain input-compatible aliases, while restoration
+output uses the canonical `--*-root-only` form.
 
 ## Semantic contract
 
@@ -58,11 +78,12 @@ emit the legacy Share-oriented terms.
 ## Setup and review
 
 With no operands in a TTY, Sever opens the shared saved-session launcher.
-Starting a new session uses the three-pane Source–Criteria–Result setup. Source
+Starting a new session uses the three-pane Source–Criteria–Save Location setup. Source
 and Criteria reuse the ordinary Context namespace tree and independently select
 `THIS CONTEXT ONLY` or `INCLUDE DESCENDANTS`. Query-only rows remain visible
-but unavailable. Result is a fresh editable Context name and never overwrites
-an existing Context. Its initial suggestion is derived from Source and
+but unavailable. Save Location accepts the selected Source for self-save only
+when Source is `THIS CONTEXT ONLY`; every other existing name is rejected.
+Its initial other-save suggestion is derived from Source and
 Criteria, not from the first local catalog row: Mem finds their deepest shared
 path that is also an ordinary local Context and proposes `ANCESTOR/severed`.
 If they share no local ancestor, it proposes the top-level `severed`; occupied
@@ -75,6 +96,40 @@ readable Contexts. Revealed Memories are read-only viewport stops and cannot
 select their owning Source or Criteria. Query-only rows remain name-only, and
 preview loading neither changes the frozen Sever scope nor starts provider
 analysis.
+
+An explicit local TTY invocation whose provider recommendations already answer
+every required item follows the shared decision-free `AUTO_ACCEPT` policy and
+applies the selected self-save or other-save Result immediately; `mem undo`
+remains its recovery.
+Redirected/non-TTY execution still retains the saved REVIEWING session unless
+`--accept` is supplied, so scripts do not cross an implicit write boundary
+merely because their output is redirected.
+
+Result omission is self-save. Apply preserves the Source Context UID and every
+retained Memory UID, removes reviewed `FORGET` Memories, and updates transformed
+Memories under their existing UID. This makes Sever the selective-removal
+counterpart to Meld's additive target update without borrowing Meld's relation
+mode vocabulary. An explicit distinct Result selects other-save, leaves Source
+unchanged, and publishes a require-new Context. The related self-target audit is:
+
+| Operation shape | Self-target contract | Reason |
+| --- | --- | --- |
+| Forget | Source is the in-place target | The instruction curates that exact writable Source and records its checkpoint. |
+| Atomize | `INPUT=OUTPUT` is supported | Its saved Output plan explicitly distinguishes in-place Apply from require-new Save As. |
+| Translate | Only explicit `--in-place` | The flag chooses bilingual sibling materialization; `--save-as` remains derived output. |
+| Meld existing-target form | The receiving target is updated; incoming must differ | Meld adds or reconciles reviewed content into that existing target. |
+| Compare / structural Merge | The two inputs must differ | A self-comparison or self-union has no second evidence/transfer role. |
+| Meld new-result form | Both peers and Result differ | Equal peers stay read-only while a new combined Result is created. |
+| Distill | Result must be new | Its derived knowledge is published separately. |
+| Sever | Omitted/equal Result self-saves; distinct Result must be new | Save location explicitly chooses Source replacement versus Source preservation. |
+
+These are operation meanings, not parser accidents. Forget still takes a
+process-local instruction, while Sever evaluates a complete frozen Criteria
+Memory frame and retains a per-Memory review session. Self-save is currently
+limited to one ordinary local Source root. `--source-descendants` self-save and
+granted-Source self-save fail before provider construction because they need an
+owner-aware multi-Context or authority-side mutation receipt; other-save keeps
+supporting recursive and granted readable Sources.
 
 The provider turn creates only a retained review session. The shared Resolution
 Workbench then shows:
@@ -115,8 +170,8 @@ view rather than being reanalyzed.
 
 When Impact is present it is the only full per-Memory result list; the report
 does not print the same potentially large list above it. Impact shows the exact
-local Result that Apply would create and explicitly says the Source remains
-unchanged. Compact display labels (`KEEP`, `REDACT`, `SUMMARIZE`, `REFRAME`,
+local Result that Apply would save and identifies whether Source will be
+replaced or remain unchanged. Compact display labels (`KEEP`, `REDACT`, `SUMMARIZE`, `REFRAME`,
 and `FORGET`) keep large lists scannable while persisted/provider decision
 tokens remain unchanged.
 
@@ -182,7 +237,7 @@ uses `KEEP_AS_WRITTEN`, exact Source content, and no criterion citation. This
 is the conservative consequence of deleting a filtering rule; it avoids both
 applying an absent rule and making an ungrounded replacement transformation.
 The fresh review and candidate UIDs, `PROJECTED PREWARM` label, complete
-coverage validation, authority checks, require-new output, and application CAS
+coverage validation, authority checks, exact save location, and application CAS
 remain mandatory.
 
 ## Persistence and application
@@ -202,56 +257,58 @@ adapter alone interprets it as a record digest. CLI and TUI adapters therefore
 cannot bypass CAS by directly saving a session or recomputing its digest.
 
 The workbench shows a compact focusable `SAVE LOCATION` frame between `ITEMS`
-and `TO DO`. Enter opens its shared one-line direct editor. Saving a new exact
-name updates the REVIEWING session under its record-digest CAS, then returns to
-the same workbench; it neither reruns the provider nor creates a Context.
-Existing names and invalid ordinary Context identifiers fail before the session
-changes. Review-only surfaces omit this control.
+and `TO DO`. Enter opens its shared one-line direct editor. Saving an exact name
+updates the REVIEWING session under its record-digest CAS, then returns to the
+same workbench; it neither reruns the provider nor applies a Result. The exact
+Source name selects self-save when that session has one ordinary local direct
+Source. A fresh name selects other-save. Every other existing name and every
+invalid ordinary Context identifier fails before the session changes.
+Review-only surfaces omit this control.
 
-Apply revalidates local contributing Contexts under the output creation lock.
+Apply revalidates local contributing Contexts under the save lock.
 For a granted Source or Criteria it also revalidates the frozen Profile and
 Grant identity, revision, permissions, public/resource mapping, and complete
 projected frame immediately before and after output creation while the Grant
-registry is frozen. It then creates one require-new ordinary Context and records
-a `sever` checkpoint with the session, Source, Criteria, Result, and
-source-to-result mapping. A stale or revoked granted input, including a change
-during creation, leaves no partial Result. Forgotten content and rationale
-remain only in the Sever session. The Source record and its Memories are never
-mutated. Because provider dispositions already give every Source Memory one
+registry is frozen. Other-save creates one require-new ordinary Context.
+Self-save compare-and-sets the exact direct Source digest, preserves its Context
+identity and retained Memory identities, and records edits/removals in that
+Source checkpoint. Both modes record the session, Source, Criteria, save mode,
+Result, and source-to-result mapping. A stale or revoked granted input,
+including a change during save, leaves no partial Result. Forgotten content and
+rationale remain only in the Sever session. Because provider dispositions already give every Source Memory one
 complete treatment, the owning TTY skips the redundant review/approval
-workbench when no user response remains and creates the local Result directly.
-This remains true for granted inputs: the Grant is read-only input, not the
-mutation target. An all-KEEP disposition is still a real Sever result and
-therefore creates the reviewed Result Context and checkpoint; it is not treated
-as a no-op on Source.
+workbench when no user response remains and saves the local Result directly.
+This remains true for granted inputs: a granted Source can contribute to
+other-save but is not yet a self-save mutation target. An all-KEEP disposition
+is still a reviewed Sever application and records a checkpoint in either mode.
 
-Result Context creation and the private APPLIED session receipt are two atomic
-file operations rather than one shared transaction. A synchronous receipt-save
+Context saving and the private APPLIED session receipt are two atomic file
+operations rather than one shared transaction. A synchronous receipt-save
 failure re-reads the session before compensating. If the receipt actually
 committed, Apply reports success; if the session is still the exact REVIEWING
-snapshot, Sever deletes only the untouched Result and sole checkpoint created
-by that attempt. It refuses compensation when either durable side changed.
-After a process interruption in the gap, retrying Apply recovers the receipt
-only when the existing Result digest and its sole Sever checkpoint exactly
-match the accepted session. An unrelated Context at the output name remains a
+snapshot, other-save deletes only the untouched Result and sole checkpoint;
+self-save restores the exact checkpoint pre-image and removes only that
+provisional checkpoint. It refuses compensation when either durable side
+changed. After a process interruption in the gap, retrying Apply recovers the
+receipt only when the live Context, exact Sever checkpoint, pre-image, and
+accepted session match. An unrelated Context at an other-save name remains a
 normal require-new collision.
 
-Command Undo removes that exact Result Context and returns the saved session to
-`REVIEWING`. Because the ordinary Context must be absent while still supporting
-Redo, its record and complete checkpoint directory move to a private command
-archive. Redo fails closed if the output name was reused or the review changed;
-otherwise it restores the same Context UID and application receipt and appends
-a `redo` checkpoint after the retained `sever` and `undo` entries. Session-save
-failure rolls the Context move and provisional checkpoint back together.
+Command Undo returns the saved session to `REVIEWING`. For other-save it removes
+the exact Result through the existing private command archive so Redo can
+restore the same identity and history. For self-save, ordinary checkpoint
+restoration puts the Source pre-image back in place. Redo reapplies the exact
+post-image. In both modes the Context and Sever-session halves are written with
+exception rollback and append the ordinary undo/redo receipts.
 
 `mem review sever` reuses the same evidence and proposed Result with Apply
-removed. It cannot create the Result Context.
+removed. It cannot self-save or create an other-save Result.
 
 ## Alternatives and limitations
 
-- Mutating or deleting Source was rejected: “forget” describes the derived
-  Result's memory boundary, while Source preservation keeps review and recovery
-  possible.
+- Recursive and granted-Source self-save remain deliberate non-goals until an
+  owner-aware multi-Context/grant mutation receipt can preserve the same
+  authority, checkpoint, recovery, and no-partial-publication guarantees.
 - Treating query-only answers as Criteria was rejected because query authority
   does not imply ordinary read, derivation, or retained-analysis authority.
 - Coupling Sever to Share was rejected. Share owns its own source snapshot,

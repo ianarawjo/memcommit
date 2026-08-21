@@ -182,6 +182,22 @@ def test_local_staged_update_auto_accepts_without_decision_rows(monkeypatch):
     assert all(item.effective_obligation == "NONE" for item in view.items)
     assert kwargs["review_and_apply"] is True
     assert kwargs["decision_free_behavior"] == "AUTO_ACCEPT"
+    turn = kwargs["turn_command_review"](
+        ResolutionWorkbenchAction(
+            kind="SUBMIT_ALL",
+            comment="Use a narrower claim.",
+        )
+    )
+    assert turn is not None
+    assert turn.argv[-4:] == (
+        "--comment",
+        "Use a narrower claim.",
+        "--expect-session",
+        update_command.update_session_record_digest(staged),
+    )
+    assert kwargs["turn_command_review"](
+        ResolutionWorkbenchAction(kind="ACCEPT")
+    ) is None
 
 
 def test_granted_source_local_target_update_keeps_local_auto_accept(monkeypatch):
@@ -966,6 +982,52 @@ def test_active_update_compare_and_swap_preserves_concurrent_record(
     assert store.load_staged_update() == staged
 
 
+def test_scripted_update_turn_rejects_a_stale_reviewed_session(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = ops.init("turn/source")
+    ops.add(source, "New verified wording.")
+    target = ops.init("turn/target")
+    ops.add(target, "Old wording.")
+    store.create_context(source)
+    store.create_context(target)
+    staged = plan_update(
+        source,
+        target,
+        lambda: PlanProvider(_one_edit_response),
+        status="staged",
+    )
+    store.save_staged_update(staged, expected_current=None)
+    monkeypatch.setattr(
+        update_command,
+        "connect_codex_chatgpt_provider",
+        lambda: (_ for _ in ()).throw(AssertionError("provider called")),
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "update",
+            "--from",
+            source.name,
+            "--to",
+            target.name,
+            "--comment",
+            "Use a narrower claim.",
+            "--expect-session",
+            "0" * 64,
+        ],
+    )
+
+    assert result.exit_code == 1
+    assert "changed after this command was reviewed" in (
+        result.output + result.stderr
+    )
+    assert store.load_staged_update() == staged
+
+
 def test_resolved_source_ref_content_change_invalidates_session():
     origin = ops.init("origin")
     memory = ops.add(origin, "first version")
@@ -1321,13 +1383,12 @@ def test_impact_then_update_accept_from_with_current_target(
     assert len(provider.calls) == 1
 
 
-def test_cross_spelling_update_reuses_from_only_impact_plan(
+def test_named_impact_and_direct_update_share_positional_endpoint_pair(
     isolated_store,
     monkeypatch,
 ):
     store = MemoryStore()
     _persist_pair(store)
-    store.set_current(TASK1_TARGET)
     provider = PlanProvider(_one_edit_response)
     monkeypatch.setattr(
         "memcommit.commands.impact.connect_codex_chatgpt_provider",
@@ -1338,20 +1399,17 @@ def test_cross_spelling_update_reuses_from_only_impact_plan(
         lambda: provider,
     )
 
-    impact = runner.invoke(app, ["impact", "--from", TASK1_SOURCE])
+    impact = runner.invoke(
+        app,
+        ["impact", "update", TASK1_SOURCE, TASK1_TARGET],
+    )
     impact_session = store.load_impact_plan()
     anchor = ops.init("participant/after-impact")
     store.save(anchor)
     store.set_current(anchor.name)
     update = runner.invoke(
         app,
-        [
-            "update",
-            "--from",
-            TASK1_SOURCE,
-            "--to",
-            TASK1_TARGET,
-        ],
+        ["update", TASK1_SOURCE, TASK1_TARGET],
     )
     applied_session = store.load_staged_update()
 

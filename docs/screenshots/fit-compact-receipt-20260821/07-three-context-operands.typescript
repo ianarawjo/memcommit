@@ -1,0 +1,7 @@
+$ mem fit context-a context-b context-c
+PTY · 180×52
+MEM FIT · 1/1 · JUDGING THE COMPLETE PROPOSITION SET . · 0sMEM FIT · 1/1 · JUDGMENT COMPLETE . · 0s                                                           FIT · [38;2;166;218;149m[1mYES[0m · [CONTEXT context-a] [MEMORY 5548f6c4] Claim from Context A. ↔ [CONTEXT context-b] [MEMORY 07efc4b2] Claim from Context B. ↔ [CONTEXT context-c] [MEMORY bd422af5] Claim from Context C.
+OPERATOR OPERANDS · 3
+PROVIDER CALLS · 1
+FIT RECEIPTS · 0
+CAPTURE GATE · PRESS V

@@ -50,9 +50,9 @@ $ mem meld task-2/advisor1 task-2/advisor2 --left-descendants --to task-2/partic
 [0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
-[0m C/c Contexts · I/i inputs · R/r report · H/h/? Help · ↑/↓ scroll · PgUp/PgDn page · Home/End · Q/q request close · read-only[125D[49A[C[0m[?12l[?25h[?25l[2A[11C[0m2[5CANALYZ[12CS[CURCE RELATIONS . · 0s[0m
+[0m C/c Contexts · I/i inputs · R/r report · H/h/? Help · ↑/↓ scroll · PgUp/PgDn page · Home/End · Q/q request close · read-only[125D[49A[C[0m[?12l[?25h[?25l[2A[11C[0m2[5CANALYZ[4CMELD TURN . · 0s[0m[K[0m
 
-[C[0m[?12l[?25h[?25l[2A[53C[0m. · 0s[0m
+[C[0m[?12l[?25h[?25l[2A[38C[0m. · 0s[0m
 
 
 
@@ -67,7 +67,7 @@ $ mem meld task-2/advisor1 task-2/advisor2 --left-descendants --to task-2/partic
 [3C[0;38;2;165;173;203m.[0m
 
 
-[4C[0;38;2;165;173;203m.[13A[4D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[52C[0m… · 0s[0m[K[0m
+[4C[0;38;2;165;173;203m.[13A[4D[0m[?12l[?25h[?25l[0m[?12l[?25h[?25l[2A[37C[0m… · 0s[0m[K[0m
 
 
 
@@ -132,13 +132,13 @@ $ mem meld task-2/advisor1 task-2/advisor2 --left-descendants --to task-2/partic
 [C[0m                                                                                                                                                                                 [0;48;2;68;68;68m [0m
 [C[0m                                                                                                                                                                                 [0;1mv[0m
 
-[5C[0mback · I/i[Cinputs · R/r[Crepo[Ct · H/h/? Help · ↑/↓[Cmove · ←/→[Cexpand · E[Cter browse · A/a[Call ·[Cm Memories h[Cre[C· M all Memories · Q/q close · read-only[45A[155D[0m[?25l[6A[52C[0m.[3C1[0m
+[5C[0mback · I/i[Cinputs · R/r[Crepo[Ct · H/h/? Help · m[CTHIS Context: show items[C· M EVERY Context: show it[Cms[C· ↑/↓[Cmov[C · ←/→ expand · Enter browse · A/a all · Q/q close · read-onl[179Cy[45A[C[0m[?25l[6A[37C[0m.[3C1[0m
 
 
 
 
 
-[C[0m[?25l[6A[53C[0m. · 1s[0m
+[C[0m[?25l[6A[38C[0m. · 1s[0m
 
 
 
@@ -194,9 +194,9 @@ $ mem meld task-2/advisor1 task-2/advisor2 --left-descendants --to task-2/partic
 [C[0m                                                                                                                                                                                 [0;48;2;68;68;68m [0m
 [C[0m                                                                                                                                                                                 [0;1mv[0m
 
-[5C[0mContexts ·[CI/i back[C· R/[C report[C· H[Ch/? Help[C· ↑/↓ scroll ·[CPgUp/PgDn page[C· Hom[C/End ·[CQ/q[Crequest clo[Ce · read-on[Cy[0m[K[49A[122D[0m[?12l[?25h[?25l[2A[52C[0m… · 1s[0m[K[0m
+[5C[0mContexts ·[CI/i back[C· R/[C report[C· H[Ch/? Help[C·[C↑/↓ scroll · PgUp/PgDn page · Home/End · Q/q request close ·[Cread-only[0m[K[49A[122D[0m[?12l[?25h[?25l[2A[37C[0m… · 1s[0m[K[0m
 
-[C[0m[?12l[?25h[?25l[2A[52C[0m.[3C2[0m
+[C[0m[?12l[?25h[?25l[2A[37C[0m.[3C2[0m
 
 [C[0m[?12l[?25h[?25l[A[70C[0m──────| MELD R[CPORT · BUILDING |─────[0m
 [C[0;38;2;139;213;255;1mMEM MELD · REPORT BUILDING[C[0m                 [0m
@@ -248,7 +248,7 @@ $ mem meld task-2/advisor1 task-2/advisor2 --left-descendants --to task-2/partic
 
 
 
-[20C[0minputs[C· R/[C back[49A[36D[0m[?12l[?25h[?25l[2A[53C[0m. · 2s[0m
+[20C[0minputs[C· R/[C back[49A[36D[0m[?12l[?25h[?25l[2A[38C[0m. · 2s[0m
 
 
 

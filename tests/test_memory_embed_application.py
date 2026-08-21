@@ -152,32 +152,112 @@ def test_cli_memory_embed_uses_from_and_preserves_reviewed_gap(isolated_store):
     assert target.ordered_uids()[2] == after.uid
 
 
-def test_cli_memory_without_from_reports_its_type_and_exact_source(isolated_store):
+def test_cli_memory_embed_defaults_to_current_target(isolated_store):
+    store = MemoryStore()
+    source = ops.init("source")
+    memory = ops.add(source, "source-owned value")
+    target = ops.init("target")
+    store.save(source)
+    store.save(target)
+    store.set_current(target.name)
+
+    result = runner.invoke(
+        app,
+        ["embed", memory.uid[:8], "--from", source.name],
+    )
+
+    assert result.exit_code == 0, result.output
+    link = next(iter(store.load_direct(target.name).iter_items()))
+    assert isinstance(link, MemoryRef)
+    assert link.is_live
+    assert link.target_context_name == source.name
+    assert link.target_memory_uid == memory.uid
+
+
+def test_cli_bare_memory_uid_finds_unique_local_owner_without_from(
+    isolated_store,
+):
     store = MemoryStore()
     source = ops.init("practice/1")
     memory = ops.add(source, "a is apple")
     target = ops.init("practice/4")
     store.save(source)
     store.save(target)
-    store.set_current(source.name)
-    before = store.load_direct(target.name).ordered_uids()
+    store.set_current(target.name)
 
     result = runner.invoke(
         app,
         ["embed", memory.uid[:8], "--into", target.name],
     )
 
-    assert result.exit_code == 2
-    assert (
-        f"{memory.uid[:8]!r} identifies Memory [{memory.uid[:8]}] in current "
-        "Context 'practice/1'"
-    ) in result.stderr
-    assert (
-        f"mem embed {memory.uid[:8]} --from practice/1 --into practice/4"
-        in result.stderr
+    assert result.exit_code == 0, result.output + result.stderr
+    link = next(iter(store.load_direct(target.name).iter_items()))
+    assert isinstance(link, MemoryRef)
+    assert link.target_context_name == source.name
+    assert link.target_memory_uid == memory.uid
+
+
+def test_cli_memory_embed_accepts_canonical_and_relative_qualified_locators(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = ops.init("practice/3")
+    first = ops.add(source, "first")
+    second = ops.add(source, "second")
+    target = ops.init("practice/4")
+    store.save(source)
+    store.save(target)
+    store.set_current(target.name)
+
+    canonical = runner.invoke(app, ["embed", f"practice/3:{first.uid[:8]}"])
+    relative = runner.invoke(app, ["embed", f"../3:{second.uid[:8]}"])
+
+    assert canonical.exit_code == 0, canonical.output + canonical.stderr
+    assert relative.exit_code == 0, relative.output + relative.stderr
+    links = tuple(store.load_direct(target.name).iter_items())
+    assert [item.target_memory_uid for item in links] == [first.uid, second.uid]
+
+
+def test_cli_memory_embed_blocks_duplicate_bare_uid_and_lists_every_owner(
+    isolated_store,
+):
+    store = MemoryStore()
+    shared_uid = "aaaaaaaa-0000-0000-0000-000000000000"
+    source = ops.init("branch/source")
+    source.add(Memory(uid=shared_uid, content="source copy"))
+    target = ops.init("branch/target")
+    target.add(Memory(uid=shared_uid, content="target copy"))
+    store.save(source)
+    store.save(target)
+    store.set_current(target.name)
+    before = store.load_direct(target.name).to_dict()
+
+    result = runner.invoke(app, ["embed", shared_uid[:8]])
+
+    assert result.exit_code == 1
+    assert f"branch/source:{shared_uid}" in result.stderr
+    assert f"branch/target:{shared_uid}" in result.stderr
+    assert "Use one qualified CONTEXT:UID locator" in result.stderr
+    assert store.load_direct(target.name).to_dict() == before
+
+
+def test_cli_memory_embed_rejects_two_source_owner_spellings(isolated_store):
+    store = MemoryStore()
+    source = ops.init("source")
+    memory = ops.add(source, "source value")
+    target = ops.init("target")
+    store.save(source)
+    store.save(target)
+    store.set_current(target.name)
+
+    result = runner.invoke(
+        app,
+        ["embed", f"source:{memory.uid[:8]}", "--from", "source"],
     )
-    assert "Granted view" not in result.stderr
-    assert store.load_direct(target.name).ordered_uids() == before
+
+    assert result.exit_code == 1
+    assert "either CONTEXT:UID or an explicit Context option" in result.stderr
+    assert store.load_direct(target.name).ordered_uids() == []
 
 
 def test_cli_missing_memory_with_from_uses_memory_specific_error(isolated_store):
@@ -201,7 +281,8 @@ def test_cli_missing_memory_with_from_uses_memory_specific_error(isolated_store)
     )
 
     assert result.exit_code == 1
-    assert "Memory 'ca562047' does not exist in Context 'practice/1'" in result.stderr
+    assert "No directly owned Memory" in result.stderr
+    assert "practice/1" in result.stderr
     assert "Granted view" not in result.stderr
     assert store.load_direct(target.name).ordered_uids() == []
 

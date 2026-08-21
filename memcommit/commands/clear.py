@@ -18,8 +18,17 @@ from memcommit.store import MemoryStore
 
 
 def cmd(
-    context_name: Annotated[Optional[str], typer.Argument(help="Context to clear (defaults to current)")] = None,
-    force: Annotated[bool, typer.Option("-f", "--force", help="Skip confirmation prompt")] = False,
+    context_name: Annotated[
+        Optional[str], typer.Argument(help="Context to clear (defaults to current)")
+    ] = None,
+    force: Annotated[
+        bool,
+        typer.Option(
+            "-f",
+            "--force",
+            hidden=True,
+        ),
+    ] = False,
 ) -> None:
     active_store = MemoryStore()
     snapshot = ContextOperandSnapshot.capture(active_store)
@@ -57,9 +66,10 @@ def cmd(
         )
         return
 
-    if not force:
-        typer.echo(f"This will remove all {count} item(s) from '{display_name}'.")
-        typer.confirm("Continue?", abort=True)
+    # ``--force`` remains accepted for scripts written against the former
+    # prompt, but clear itself is checkpointed and immediately Undoable. The
+    # command invocation is therefore the complete approval boundary.
+    del force
 
     ctx.clear()
     try:
@@ -67,15 +77,18 @@ def cmd(
             access,
             required_permissions=("DELETE",),
         ):
-            store.save(ctx, AutoCheckpoint(
-                command="clear",
-                args={
-                    "count": count,
-                    "context": context_name,
-                    **grant_checkpoint_args(access),
-                },
-                description=f"Cleared all {count} item(s) from '{context_name}'",
-            ))
+            store.save(
+                ctx,
+                AutoCheckpoint(
+                    command="clear",
+                    args={
+                        "count": count,
+                        "context": context_name,
+                        **grant_checkpoint_args(access),
+                    },
+                    description=f"Cleared all {count} item(s) from '{context_name}'",
+                ),
+            )
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
         typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)

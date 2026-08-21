@@ -82,11 +82,11 @@ PTY 180 52
 [0;38;5;117;1m┃[0mThe Main Building is under construction. [1] Visitor parking moves to the east garage. [2] Use the verified updates before editing the wiki. [1] [2]                             [0;1m^[179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0mReferences                                                                                                                                                                       [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m[1] m1 · memory · 2db26309 · Context: task-1/description                                                                                                                         [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m  The Main Building is under construction.                                                                                                                                       [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m[1] The Main Building is under construction. — 2db26309, task-1/description m1                                                                                                   [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m[2] Visitor parking moves to the east garage during construction. — 5ab81742, task-1/participant/construction-updates m2                                                         [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m[2] m2 · memory · 5ab81742 · Context: task-1/participant/construction-updates                                                                                                    [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m  Visitor parking moves to the east garage during construction.                                                                                                                  [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
@@ -122,8 +122,8 @@ PTY 180 52
 [0;38;5;150;1m COPIED · answer body[0m · ↑/↓ answer/References ·[Cy copy focus[Cd · Y copy complete answer · Tab switch[C· Esc question[0m[K[20A[114D[0m[?25l[0m
 
 
-[C[0;38;5;234;48;5;117;1m[1] m1 · memory · 2db26309 · Context: task-1/description[0m
-[C[0;38;5;234;48;5;117;1m  The Main Building is under construction.[0m
+[C[0;38;5;234;48;5;117;1m[1] The Main Building is under construction. — 2db26309, task-1/description m1[0m
+
 
 
 
@@ -177,16 +177,12 @@ PTY 180 52
 QUERY CLIPBOARD WRITES 3
 WRITE 1 · PHYSICAL LINES 1 · UTF-8 BYTES 148
   1: The Main Building is under construction. [1] Visitor parking moves to the east garage. [2] Use the verified updates before editing the wiki. [1] [2]
-WRITE 2 · PHYSICAL LINES 2 · UTF-8 BYTES 102
-  1: [1] m1 · memory · 2db26309 · Context: task-1/description
-  2:   The Main Building is under construction.
-WRITE 3 · PHYSICAL LINES 8 · UTF-8 BYTES 409
+WRITE 2 · PHYSICAL LINES 1 · UTF-8 BYTES 80
+  1: [1] The Main Building is under construction. — 2db26309, task-1/description m1
+WRITE 3 · PHYSICAL LINES 5 · UTF-8 BYTES 364
   1: The Main Building is under construction. [1] Visitor parking moves to the east garage. [2] Use the verified updates before editing the wiki. [1] [2]
   2: 
   3: References
-  4: [1] m1 · memory · 2db26309 · Context: task-1/description
-  5:   The Main Building is under construction.
-  6: 
-  7: [2] m2 · memory · 5ab81742 · Context: task-1/participant/construction-updates
-  8:   Visitor parking moves to the east garage during construction.
+  4: [1] The Main Building is under construction. — 2db26309, task-1/description m1
+  5: [2] Visitor parking moves to the east garage during construction. — 5ab81742, task-1/participant/construction-updates m2
 BODY/REFERENCE/DOCUMENT DISTINCT · YES

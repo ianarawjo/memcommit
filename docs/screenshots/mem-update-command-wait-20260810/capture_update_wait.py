@@ -104,6 +104,8 @@ def _child(store_root: Path) -> None:
         standalone_mode=False,
     )
 
+    print("CAPTURE PAUSE · press Enter for read-only verification", flush=True)
+    input()
     staged = store.load_staged_update()
     reloaded_source = store.load_direct(source.name)
     reloaded_target = store.load_direct(target.name)
@@ -148,7 +150,10 @@ def _wait_for(child, raw: bytearray, marker: bytes, *, timeout: float) -> None:
     deadline = time.monotonic() + timeout
     while marker not in raw:
         if time.monotonic() >= deadline:
-            raise RuntimeError(f"Timed out waiting for {marker!r}.")
+            tail = bytes(raw[-8000:]).decode("utf-8", errors="replace")
+            raise RuntimeError(
+                f"Timed out waiting for {marker!r}. Recent PTY stream:\n{tail}"
+            )
         _drain(child, raw)
     time.sleep(0.2)
     while _drain(child, raw, timeout=0.02):
@@ -305,10 +310,11 @@ def _parent() -> None:
         _settle(child, raw)
         _render_snapshot("12-report-restored", bytes(raw))
 
-        _wait_for(child, raw, b"REVIEW AND APPLY", timeout=20)
-        _render_snapshot("13-staged-review", bytes(raw))
+        _wait_for(child, raw, b"CAPTURE PAUSE", timeout=25)
+        _render_snapshot("13-applied-result", bytes(raw))
 
-        child.send(b"\x1b")
+        child.send(b"\r")
+        _wait_for(child, raw, b"TARGET UNCHANGED", timeout=5)
         deadline = time.monotonic() + 5
         while child.isalive() and time.monotonic() < deadline:
             _drain(child, raw)
@@ -317,7 +323,13 @@ def _parent() -> None:
         child.close()
         if child.exitstatus not in {0, None}:
             raise RuntimeError(f"Capture child exited with {child.exitstatus}.")
-        _render_snapshot("14-staged-receipt-verification", bytes(raw))
+        _render_snapshot("14-read-only-verification", bytes(raw))
+
+    for obsolete_stem in ("13-staged-review", "14-staged-receipt-verification"):
+        for suffix in (".png", ".txt", ".typescript"):
+            obsolete = CAPTURE_DIR / f"{obsolete_stem}{suffix}"
+            if obsolete.exists():
+                obsolete.unlink()
 
     if b"\x1b[" not in raw:
         raise RuntimeError("PTY stream did not contain ANSI control sequences.")

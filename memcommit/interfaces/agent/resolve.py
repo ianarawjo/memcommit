@@ -35,8 +35,9 @@ from memcommit.quality_finding_handoff import (
 )
 
 
-RESOLVE_AGENT_CONTRACT_VERSION = 1
+RESOLVE_AGENT_CONTRACT_VERSION = 2
 RESOLVE_AGENT_TOOL_NAME = "memcommit_resolve"
+RESOLVE_AGENT_ANALYSIS_CACHE_LIMIT = 64
 ResolveAgentKind = Literal["analyze", "apply"]
 
 
@@ -78,6 +79,7 @@ def _parse_request(payload: object) -> tuple[ResolveAgentKind, dict[str, object]
         "allow_create",
         "allow_delete",
         "guidance",
+        "target_fit",
         "finding_handoff",
     }
     required = {"version", "kind"}
@@ -98,7 +100,7 @@ def _parse_request(payload: object) -> tuple[ResolveAgentKind, dict[str, object]
         ),
         "memory_selectors": _selectors(value.get("memory_selectors", [])),
         "allow_create": _boolean(
-            value.get("allow_create", False),
+            value.get("allow_create", True),
             field="allow_create",
         ),
         "allow_delete": _boolean(
@@ -110,7 +112,10 @@ def _parse_request(payload: object) -> tuple[ResolveAgentKind, dict[str, object]
             if "guidance" in value
             else ""
         ),
+        "target_fit": value.get("target_fit", "MAY"),
     }
+    if arguments["target_fit"] not in {"MAY", "YES"}:
+        raise AgentRequestError("target_fit must be MAY or YES.")
     if "finding_handoff" in value:
         try:
             handoff = QualityFindingHandoff.from_dict(value["finding_handoff"])
@@ -142,6 +147,7 @@ def _analysis_result(result: ResolveAnalysisResult) -> JsonObject:
         "initial_fit": result.initial_fit,
         "initial_fit_reason": result.initial_fit_reason,
         "question": result.question,
+        "target_fit": result.target_fit,
         "requested_effects": list(result.requested_effects),
         "allowed_effects": list(result.allowed_effects),
         "denied_effects": list(result.denied_effects),
@@ -149,6 +155,22 @@ def _analysis_result(result: ResolveAnalysisResult) -> JsonObject:
             {
                 "uid": candidate.uid,
                 "summary": candidate.summary,
+                "classification": candidate.classification,
+                "resolution_level": candidate.resolution_level,
+                "rule_ids": list(candidate.rule_ids),
+                "grounded": candidate.grounded,
+                "issues": [
+                    {
+                        "uid": issue.uid,
+                        "kind": issue.kind,
+                        "memory_uids": list(issue.memory_uids),
+                        "selected_interpretation": issue.selected_interpretation,
+                        "basis_memory_uids": list(issue.basis_memory_uids),
+                        "assumptions": list(issue.assumptions),
+                        "reason": issue.reason,
+                    }
+                    for issue in candidate.issues
+                ],
                 "cost": {
                     "deletes": candidate.deletes,
                     "creates": candidate.creates,
@@ -156,6 +178,7 @@ def _analysis_result(result: ResolveAnalysisResult) -> JsonObject:
                     "changed_units": candidate.changed_units,
                 },
                 "verification_reason": candidate.verification_reason,
+                "fit_verdict": candidate.fit_verdict,
                 "fit_reason": candidate.fit_reason,
                 "effects": [
                     {
@@ -231,12 +254,60 @@ _PUBLIC_ERRORS: tuple[tuple[type[SemanticError], str, str, bool], ...] = (
 
 
 class ResolveAgentAdapter:
-    """Expose analysis and stateless exact replay through one agent tool."""
+    """Expose analysis and next-turn exact Apply through one agent tool.
+
+    A verified grounded analysis is retained only in this adapter process.  A
+    following Apply can therefore use the exact typed plan the agent already
+    showed instead of asking a nondeterministic provider to reproduce it.
+    Stateless replay remains the fail-closed fallback after process restart.
+    """
 
     def __init__(self, client: MemCommitClient) -> None:
         if not isinstance(client, MemCommitClient):
             raise TypeError("ResolveAgentAdapter requires a MemCommitClient.")
         self._client = client
+        self._analyses: dict[
+            tuple[str, str],
+            tuple[ResolveAnalysisResult, dict[str, object]],
+        ] = {}
+
+    @staticmethod
+    def _matches_cached_request(
+        analysis: ResolveAnalysisResult,
+        analyzed_arguments: dict[str, object],
+        apply_arguments: dict[str, object],
+    ) -> bool:
+        analyzed_context = analyzed_arguments.get("context_name")
+        apply_context = apply_arguments.get("context_name")
+        context_matches = apply_context in {
+            analyzed_context,
+            analysis.context_name,
+        }
+        return context_matches and all(
+            analyzed_arguments.get(field) == apply_arguments.get(field)
+            for field in (
+                "memory_selectors",
+                "allow_create",
+                "allow_delete",
+                "guidance",
+                "target_fit",
+                "finding_handoff",
+            )
+        )
+
+    def _remember(
+        self,
+        analysis: ResolveAnalysisResult,
+        arguments: dict[str, object],
+    ) -> None:
+        for candidate in analysis.candidates:
+            self._analyses[(analysis.revision, candidate.uid)] = (
+                analysis,
+                dict(arguments),
+            )
+        while len(self._analyses) > RESOLVE_AGENT_ANALYSIS_CACHE_LIMIT:
+            # The cache is a short next-turn bridge, not a durable session log.
+            self._analyses.pop(next(iter(self._analyses)))
 
     def invoke(self, payload: object) -> JsonObject:
         kind: ResolveAgentKind | None = None
@@ -258,6 +329,42 @@ class ResolveAgentAdapter:
         try:
             candidate_uid = arguments.pop("candidate_uid", None)
             expected_revision = arguments.pop("expected_revision", None)
+            cached = (
+                self._analyses.get((expected_revision, candidate_uid))
+                if isinstance(expected_revision, str) and isinstance(candidate_uid, str)
+                else None
+            )
+            request_arguments = dict(arguments)
+            if (
+                kind == "apply"
+                and cached is not None
+                and self._matches_cached_request(
+                    cached[0], cached[1], request_arguments
+                )
+            ):
+                cached_candidate = next(
+                    candidate
+                    for candidate in cached[0].candidates
+                    if candidate.uid == candidate_uid
+                )
+                if not cached_candidate.grounded:
+                    raise SemanticInputError(
+                        "An ASSUMED Resolve interpretation is process-local "
+                        "working context and cannot be applied."
+                    )
+                result = _apply_result(
+                    self._client.apply_resolve(
+                        cached[0],
+                        candidate_uid=candidate_uid,
+                    )
+                )
+                self._analyses.pop((expected_revision, candidate_uid), None)
+                return {
+                    "version": RESOLVE_AGENT_CONTRACT_VERSION,
+                    "ok": True,
+                    "kind": kind,
+                    "result": result,
+                }
             finding_handoff = arguments.pop("finding_handoff", None)
             if isinstance(finding_handoff, QualityFindingHandoff):
                 arguments.pop("context_name", None)
@@ -275,12 +382,12 @@ class ResolveAgentAdapter:
                 )
             )
             if kind == "analyze":
+                self._remember(analysis, request_arguments)
                 result = _analysis_result(analysis)
             else:
                 assert isinstance(candidate_uid, str)
                 if not any(
-                    candidate.uid == candidate_uid
-                    for candidate in analysis.candidates
+                    candidate.uid == candidate_uid for candidate in analysis.candidates
                 ):
                     raise SemanticConflictError(
                         "The reviewed Resolve candidate was not regenerated."
@@ -336,16 +443,19 @@ class ResolveAgentAdapter:
 
 
 def resolve_agent_tool_schema() -> JsonObject:
-    """Return the strict Resolve analyze/exact-replay union schema."""
+    """Return the strict Resolve analyze/next-turn-Apply union schema."""
 
     text = {"type": "string", "minLength": 1, "pattern": r".*\S.*"}
     return {
         "name": RESOLVE_AGENT_TOOL_NAME,
         "description": (
-            "Analyze one exact Context for grounded minimum-change Fit repairs, "
-            "or regenerate and apply one reviewed candidate using its exact "
-            "revision and candidate UID. UPDATE is enabled by default; CREATE "
-            "and DELETE require explicit opt-in, and DELETE also requires guidance."
+            "Analyze one complete exact Context for one automatic grounded or "
+            "assumed Issue interpretation plan, "
+            "or apply that exact typed plan on the next turn using its revision "
+            "and candidate UID; a restarted process falls back to fail-closed "
+            "regeneration. UPDATE and CREATE are enabled by default; "
+            "DELETE requires explicit opt-in and grounding guidance. ASSUMED plans "
+            "are process-local and cannot be applied."
         ),
         "parameters": {
             "type": "object",
@@ -359,9 +469,14 @@ def resolve_agent_tool_schema() -> JsonObject:
                 "kind": {"type": "string", "enum": ["analyze", "apply"]},
                 "context_name": {"type": ["string", "null"], "minLength": 1},
                 "memory_selectors": {"type": "array", "items": text},
-                "allow_create": {"type": "boolean", "default": False},
+                "allow_create": {"type": "boolean", "default": True},
                 "allow_delete": {"type": "boolean", "default": False},
                 "guidance": text,
+                "target_fit": {
+                    "type": "string",
+                    "enum": ["MAY", "YES"],
+                    "default": "MAY",
+                },
                 "finding_handoff": quality_finding_handoff_agent_schema(),
                 "candidate_uid": text,
                 "expected_revision": text,

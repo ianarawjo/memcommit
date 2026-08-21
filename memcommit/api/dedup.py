@@ -28,6 +28,19 @@ class ExactDedupResult:
 
 
 @dataclass(frozen=True)
+class ExactDuplicateFindResult:
+    """Read-only exact DUP report for one direct Context."""
+
+    context_name: str
+    memory_count: int
+    groups: tuple[ExactDedupGroupResult, ...]
+
+    @property
+    def duplicate_count(self) -> int:
+        return sum(len(group.absorbed_uids) for group in self.groups)
+
+
+@dataclass(frozen=True)
 class DedunMemberResult:
     uid: str
     content: str
@@ -93,4 +106,5 @@ __all__ = [
     "DedunPlanResult",
     "ExactDedupGroupResult",
     "ExactDedupResult",
+    "ExactDuplicateFindResult",
 ]

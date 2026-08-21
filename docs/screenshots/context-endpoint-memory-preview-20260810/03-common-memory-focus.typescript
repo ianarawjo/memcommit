@@ -50,7 +50,7 @@ PTY 180 52
 [0m┌────────────────────────────────────────────────────────────────────────────────────| APPLY |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│[ PRESS ENTER TO APPLY ]                                                                                                                                                          [179C│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
-[0m ↑/↓ move · ←/→ tree · Enter/Space choose · m Memory here · M all · Tab pane · Q cancel[87D[48A[C[0m[?25l[5C[0;1;7m▾[0m
+[0m m THIS Context: show items · M EVERY Context: show items · ↑/↓ move · ←/→ tree · Enter/Space choose Context · Tab pane · Q cancel[130D[48A[C[0m[?25l[5C[0;1;7m▾[0m
 [C[0;38;5;189m  · [memory aaaaaaaa] Alpha keeps the participant's exact source statement visible before execution.[0m
 [C[0;38;5;189m  · [memory bbbbbbbb] A second Alpha Memory proves Up and Down traverse individual preview rows.[0m
 [C[0m  ·  ▸ beta[0m
@@ -75,5 +75,75 @@ PTY 180 52
 [0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
 [0m┌──────────────────────────────────────────────────────────────────────────────────| B · TARGET |──────────────────────────────────────────────────────────────────────────────────[179C┐[0m
 [C[0m [C·[4Calpha[165C[0;1m^[0m
-[C[0m› ✓  ▸ [0;38;5;234;48;5;117mbeta[25A[11D[0m[?25l[0m› ✓  ▾ [0;38;5;234;48;5;117malpha[0m
-[C[0;1;7m  · [memory aaaaaaaa] Alpha keeps the participant's exact source statement visible before execution.[100D[0m
+[C[0m› ✓  ▸ [0;38;5;234;48;5;117mbeta[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[17C[0mhide[48A[20D[0m[?25l[0m› ✓  ▾ [0;38;5;234;48;5;117malpha[0m
+[C[0;1;7m  · [memory aaaaaaaa] Alpha keeps the participant's exact source statement visible before execution.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[C[0mread-only preview · En[2Cr/Space does[Cn[Ct select · ↑/↓ [Cove[C· Tab pane[C· Q[Ccancel[0m[K[47A[80D[0m

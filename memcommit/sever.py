@@ -20,6 +20,7 @@ SeverDecision = Literal[
     "FORGET",
 ]
 SeverSelection = Literal["RECOMMENDED", "AS_WRITTEN", "FORGET", "CUSTOM"]
+SeverSaveMode = Literal["SELF_SAVE", "OTHER_SAVE"]
 SeverState = Literal["REVIEWING", "APPLIED"]
 
 _DECISIONS = {
@@ -371,6 +372,16 @@ class SeverSession:
     candidates: tuple[SeverCandidate, ...]
     applied_summary: SeverAppliedSummary | None = None
     application: SeverApplication | None = None
+
+    @property
+    def save_mode(self) -> SeverSaveMode:
+        """Classify the reviewed location without inventing relation terminology."""
+
+        return (
+            "SELF_SAVE"
+            if self.output_name == self.source.root_name
+            else "OTHER_SAVE"
+        )
 
     def __post_init__(self) -> None:
         _uuid(self.uid, "session uid")

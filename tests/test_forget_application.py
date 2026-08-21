@@ -85,6 +85,9 @@ def test_explicit_non_tty_forget_advances_decisions_without_a_proposal_prompt(
     monkeypatch,
 ):
     store, context, memory = _forget_source("forget/direct-execution")
+    active = ops.init("forget/active")
+    store.save(active)
+    store.set_current(active.name)
 
     class Provider:
         def complete(self, prompt, *, operation, output_schema=None):
@@ -116,7 +119,15 @@ def test_explicit_non_tty_forget_advances_decisions_without_a_proposal_prompt(
         Provider,
     )
 
-    result = runner.invoke(app, ["forget", "Forget the old service desk."])
+    result = runner.invoke(
+        app,
+        [
+            "forget",
+            "Forget the old service desk.",
+            "--context",
+            context.name,
+        ],
+    )
 
     assert result.exit_code == 0, result.output
     assert "FORGET APPLIED · SOURCE forget/direct-execution" in result.output
@@ -124,6 +135,7 @@ def test_explicit_non_tty_forget_advances_decisions_without_a_proposal_prompt(
     assert "Apply this" not in result.output
     assert "REVIEW · mem review forget --receipt" in result.output
     assert memory.uid not in store.load_direct(context.name).memories
+    assert store.current_context_name() == active.name
 
 
 def test_forget_all_keep_is_a_visible_noop_without_a_checkpoint(

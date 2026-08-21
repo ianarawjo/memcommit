@@ -1,0 +1,4 @@
+Referenced snapshot [a77741b8] from 'source' as [9567dee8] in 'target'.                                                                                                             
+REFERENCE VERIFICATION GATE · PRESS V                                                                                                                                               
+v                                                                                                                                                                                   
+REFERENCE READ-ONLY VERIFICATION · TARGET SNAPSHOTS 1 · CONTENT 'Exact Source wording.' · SOURCE UNCHANGED

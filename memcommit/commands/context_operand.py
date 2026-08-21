@@ -8,6 +8,24 @@ from memcommit.context_locator import resolve_context_locator
 from memcommit.store import MemoryStore
 
 
+def choose_context_operand(
+    positional: str | None,
+    *,
+    option: str | None,
+) -> str | None:
+    """Normalize one optional Context operand and its ``--context`` alias.
+
+    Commands keep their operation-specific validation, loading, and authority
+    boundaries.  This helper owns only the public syntax invariant that one
+    semantic Context role cannot be declared twice.
+    """
+    if positional is not None and option is not None:
+        raise ValueError(
+            "CONTEXT cannot be supplied both positionally and with --context."
+        )
+    return positional if positional is not None else option
+
+
 @dataclass(frozen=True)
 class ContextOperandSnapshot:
     """One frozen active-Context base shared by an entire command invocation.

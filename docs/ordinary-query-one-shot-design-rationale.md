@@ -47,16 +47,29 @@ prose, ambiguous answer/no-answer combinations, and malformed structures.
 After validation, the host walks answer blocks in order. The first use of an
 alias receives `[1]`, the next new alias receives `[2]`, and later reuse keeps
 the original number. The host appends those markers to the corresponding block
-and renders the existing typed Reference objects with local UID prefix,
-Context, kind, and bounded content excerpt. Durable UIDs never enter the model
-prompt. This makes `[1]` work like an actual citation: the prose marker and
-Reference block share one host-validated identity rather than trusting a number
-fabricated in generated text.
+and renders each existing typed Reference object as one logical
+`[N] content — UID prefix, Context, alias` row through the operation-neutral
+Source Reference projection. Different Sources therefore stay
+self-contained without repeating a two-line metadata header, and adjacent rows
+have no blank separator. Stored line breaks are folded so cited content cannot
+create a sibling row or heading. Kind and the full UID remain in the typed
+evidence and public citation projection even though the compact terminal row
+does not display kind. Durable UIDs never enter the model prompt. This makes
+`[1]` work like an actual citation: the prose marker and Reference row share one
+host-validated identity rather than trusting a number fabricated in generated
+text.
+
+Only the row facts and punctuation are shared with literal Find. Query retains
+first-use citation numbering, evidence alias validation, and used-reference
+selection; Find retains match ordering, exact spans, MemoryRef provenance, and
+its own preview policy. Sharing `FindAnswerEvidence` itself was rejected
+because a provider-free exact match has no Query evidence alias or citation
+selection semantics.
 
 ## Boundaries and alternatives
 
-Find is intentionally unchanged. Its result-list semantics still use
-`TOP_K_RERANK`, including staged group-preserving retrieval when required.
+Semantic Search is intentionally unchanged. Its result-list semantics still
+use `TOP_K_RERANK`, including staged group-preserving retrieval when required.
 Query-only authority routes retain their authentication, concealed source,
 grant revalidation, and session boundaries; an explicitly configured non-Codex
 provider is not overridden.

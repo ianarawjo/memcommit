@@ -104,8 +104,9 @@ Compare sessions require a separately redacted artifact schema.
 ## Composite mutation permissions
 
 Mutation authorization follows the concrete item effects, not the command's
-friendly name. `chunk` removes the selected Memory UID and creates replacement
-UIDs, so a granted execution requires both `DELETE` and `CREATE`; `clear`
+friendly name. `chunk` removes one selected Memory UID or every splittable
+direct Memory in its reviewed Context batch and creates replacement UIDs, so a
+granted execution requires both `DELETE` and `CREATE`; `clear`
 requires `DELETE` for its directly owned items. The complete permission set is
 checked again while holding the grant-registry lock through the authority save.
 Failure therefore occurs before the first authority write, and the authority

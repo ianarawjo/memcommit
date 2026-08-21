@@ -50,7 +50,7 @@
 [0m┌────────────────────────────────────────────────────────────────────────────────────| APPLY |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│[ PRESS ENTER TO APPLY ]                                                                                                                                                          [179C│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
-[0m ↑/↓ move · ←/→ tree · Enter/Space choose Context · m Memory here · M all · Tab pane · Q cancel[95D[43A[C[0m[0m› ✓      ▸ [0;38;5;234;48;5;117mtask-2/participant/proposal-workspace[0m
+[0m m THIS Context: show items · M EVERY Context: show items · ↑/↓ move · ←/→ tree · Enter/Space choose Context · Tab pane · Q cancel[130D[43A[C[0m[0m› ✓      ▸ [0;38;5;234;48;5;117mtask-2/participant/proposal-workspace[0m
 
 
 
@@ -93,7 +93,7 @@
 
 
 
-[C[0mRANGE: ←[Cthis Cont[Cxt[Co[Cly · → include descendants[C·[CEnte[C/Spac[2Ctoggle · ↑/↓ move · Tab pan[C · Q cancel[28A[104D[0m[21A[0m┌───────────────────────────────────────────────────────────────────────────────| A · FROM CONTEXT |───────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[C[0mRANGE:[C← this Context only[3C→[Cinclude descendants[C· Enter/Space toggle ·[C↑/↓ move · Tab pane · Q cancel[0m[K[28A[104D[0m[21A[0m┌───────────────────────────────────────────────────────────────────────────────| A · FROM CONTEXT |───────────────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│  ·  ▸ practice                                                                                                                                                                  [0;1m^[179C[0m│[0m
 [0m│  ·  ▸ task-1                                                                                                                                                                    [0;48;5;238m [179C[0m│[0m
 [0m│  ·  ▾ task-2                                                                                                                                                                    [0;48;5;238m [179C[0m│[0m
@@ -142,4 +142,4 @@
 
 
 
-[C[0m↑/↓ move[C· ←/→ tre[C ·[CE[Cter/Space choose parent · m Memory here · M a[Cl[3CTab[Cpan[4CQ cancel[0m[K[20A[93D[0m
+[C[0mm THIS[CContext: show items[3CM[CEVERY Context: show[Citems · ↑/↓ move · ←/→[Ctree · Enter/Space choose parent · Tab pane · Q cancel[20A[128D[0m

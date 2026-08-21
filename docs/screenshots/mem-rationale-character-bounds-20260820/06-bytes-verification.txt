@@ -1,0 +1,11 @@
+PTY 180 52                                                                                                                                                                          
+Rationale [76e2d85e] · rationale/origin                                                                                                                                             
+                                                                                                                                                                                    
+MEMORY                                                                                                                                                                              
+  Um...                                                                                                                                                                             
+                                                                                                                                                                                    
+PROVENANCE                                                                                                                                                                          
+  "Um..." sat between an instruction and example. Sentence chunking isolated it; undo removed it, redo restored it, then remove deleted it.                                         
+SCENARIO bytes RECEIPT · LIMIT 150 BYTES · PRESS V TO VERIFY                                                                                                                        
+v                                                                                                                                                                                   
+SCENARIO bytes VERIFIED · PROVIDER CALLS 1 · CACHE UNTOUCHED · STORE UNCHANGED

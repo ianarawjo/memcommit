@@ -235,6 +235,66 @@ def test_atomize_overview_prompt_requires_short_report_paragraphs() -> None:
             "properties"
         ]["text"]["description"]
     )
+    for section in ("understood", "changed", "unresolved"):
+        assert output_schema["properties"]["overview"]["properties"][section][
+            "properties"
+        ]["source_ids"]["minItems"] == 1
+
+
+def test_atomize_overview_schema_does_not_admit_ungrounded_report_text() -> None:
+    ctx = ops.init("overview/source-contract")
+    ops.add(ctx, "The main entrance closes at 5 p.m.")
+
+    def respond(payload: dict) -> dict[str, object]:
+        response = _aggregate_response(
+            payload,
+            {
+                "items": [
+                    _item(payload["memories"][0]["candidate_id"]),
+                ]
+            },
+        )
+        response["overview"]["changed"] = {
+            "text": "The source is preserved as one atomic Memory.",
+            "source_ids": [],
+        }
+        return response
+
+    with pytest.raises(AtomizeImpactError, match="source-linked overview"):
+        impact_atomize(ctx, lambda: AtomizeProvider(respond))
+
+
+def test_atomize_overview_collapses_duplicate_source_citations() -> None:
+    ctx = ops.init("overview/duplicate-source")
+    source = ops.add(ctx, "The main entrance closes at 5 p.m.")
+    other = ops.add(ctx, "The café remains open.")
+
+    def respond(payload: dict) -> dict[str, object]:
+        candidate_id = payload["memories"][0]["candidate_id"]
+        response = _aggregate_response(
+            payload,
+            {
+                "items": [
+                    _item(candidate_id),
+                    _item(payload["memories"][1]["candidate_id"]),
+                ]
+            },
+        )
+        response["overview"]["understood"]["source_ids"] = [
+            candidate_id,
+            candidate_id,
+        ]
+        response["overview"]["changed"]["source_ids"] = [
+            candidate_id,
+            candidate_id,
+        ]
+        return response
+
+    report = impact_atomize(ctx, lambda: AtomizeProvider(respond))
+
+    assert report.overview.understood.source_uids == (source.uid,)
+    assert report.overview.changed.source_uids == (source.uid,)
+    assert tuple(item.memory.uid for item in report.items) == (source.uid, other.uid)
 
 
 def test_atomize_overview_rejects_a_multiline_navigation_list() -> None:
@@ -736,7 +796,7 @@ def test_cli_all_shows_atomic_items_and_explicit_context_does_not_switch(
 
     result = runner.invoke(
         app,
-        ["impact", "atomize", "--context", "target", "--all"],
+        ["impact", "atomize", "target", "--all"],
     )
 
     assert result.exit_code == 0, result.output
@@ -908,7 +968,7 @@ def test_saved_atomize_analysis_applies_once_with_recorded_lineage(
     applied = runner.invoke(app, ["atomize", "--save"])
 
     assert applied.exit_code == 0, applied.output
-    assert "1 split -> 2 children" in applied.output
+    assert "EFFECTS · SPLIT 1 · CHILDREN 2 · KEEP 2" in applied.output
     current = [
         item
         for item in store.load_direct(ctx.name).iter_items()
@@ -1022,7 +1082,8 @@ def test_planned_atomize_output_is_shared_and_save_materializes_it_once(
         ["atomize", "--context", source.name, "--save"],
     )
     assert applied.exit_code == 0, applied.output
-    assert "Created and atomized 'planned/output'" in applied.output
+    assert "ATOMIZE APPLIED · planned/output" in applied.output
+    assert "CONTEXT · CREATED AND CURRENT · planned/output" in applied.output
     assert store.load_direct(source.name).memories
     output = store.load_direct("planned/output")
     assert store.load_atomize_analysis(output.uid).uid == analysis.uid
@@ -1036,19 +1097,12 @@ def test_planned_atomize_output_is_shared_and_save_materializes_it_once(
     assert entries[0].status == "APPLIED"
     assert "planned/input → planned/output" in entries[0].subtitle
 
-    presented = []
-    with monkeypatch.context() as terminal_review:
-        terminal_review.setattr(
-            "memcommit.commands.atomize.present_atomize_workbench",
-            lambda **kwargs: presented.append(kwargs),
-        )
-        reopened = runner.invoke(
-            app,
-            ["atomize", "--context", source.name],
-        )
+    reopened = runner.invoke(
+        app,
+        ["atomize", "--context", source.name],
+    )
     assert reopened.exit_code == 0, reopened.output
-    assert presented[0]["workflow_actions"] is False
-    assert presented[0]["application_complete"] is True
+    assert "already applied" in reopened.output
 
     repeated = runner.invoke(
         app,
@@ -1298,7 +1352,7 @@ def test_atomize_save_as_retry_completes_receipt_without_duplicate_checkpoint(
     )
 
     assert retried.exit_code == 0, retried.output
-    assert "Recovered the exact prior checkpoint" in retried.output
+    assert "RECOVERY STATUS · prior checkpoint recovered" in retried.output
     assert store.list_checkpoints("retry-output") == first_checkpoints
     workbench = store.load_atomize_workbench(analysis)
     assert workbench is not None
@@ -1855,8 +1909,8 @@ def test_atomize_save_as_is_one_creation_command_with_lifecycle_undo_redo(
     )
 
     assert saved.exit_code == 0, saved.output
-    assert "Created and atomized 'derived/atomized'" in saved.output
-    assert "One Atomize checkpoint created" in saved.output
+    assert "ATOMIZE APPLIED · derived/atomized" in saved.output
+    assert "CONTEXT · CREATED AND CURRENT · derived/atomized" in saved.output
     assert store.current_context_name() == "derived/atomized"
     assert store._context_file(source.name).read_bytes() == source_bytes
     assert store.list_checkpoints(source.name) == source_checkpoints

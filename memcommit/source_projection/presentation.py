@@ -62,6 +62,7 @@ _REACH_LABELS = {
 }
 _OBJECT_LABELS = {
     SourceForm.CONTEXT: "context",
+    SourceForm.CONTEXT_REFERENCE: "context reference",
     SourceForm.MEMORY: "memory",
     SourceForm.MEMORY_EMBED: "embedded memory",
     SourceForm.MEMORY_REFERENCE: "reference",
@@ -70,6 +71,7 @@ _OBJECT_LABELS = {
 }
 _OBJECT_TITLE_LABELS = {
     SourceForm.CONTEXT: "Context",
+    SourceForm.CONTEXT_REFERENCE: "Context Reference",
     SourceForm.MEMORY: "Memory",
     SourceForm.MEMORY_EMBED: "Embedded Memory",
     SourceForm.MEMORY_REFERENCE: "Reference",
@@ -226,7 +228,10 @@ def source_relationship_label(
         raise TypeError("Source relationship labels require a SourceForm value.")
     if form in {SourceForm.MEMORY_EMBED, SourceForm.MEMORY_REF}:
         return "embedded"
-    if form is SourceForm.MEMORY_REFERENCE:
+    if form in {
+        SourceForm.CONTEXT_REFERENCE,
+        SourceForm.MEMORY_REFERENCE,
+    }:
         return "reference"
     return source_object_label(form)
 

@@ -1,0 +1,9 @@
+PTY 180 52
+MEM RATIONALE · 1/2 · CONNECTING PROVIDER . · 0sMEM RATIONALE · 2/2 · SYNTHESIZING COMPLETE PROVENANCE . · 0s                                                             [1mRationale [d881fa8d] · rationale/origin[0m
+[1m
+MEMORY[0m
+  Um...
+[1m
+PROVENANCE[0m
+  “Um...” separated an instruction from its example. Sentence chunking isolated it; undo removed it, redo restored it, and remove deleted it.
+SCENARIO words RECEIPT · LIMIT 24 WORDS · PRESS V TO VERIFY

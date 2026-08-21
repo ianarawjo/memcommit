@@ -6,6 +6,11 @@ from collections.abc import Iterable
 import typer
 
 from memcommit.context import Memory
+from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.console.theme import (
+    SemanticColorRole,
+    semantic_color_rgb,
+)
 
 
 def plural(count: int, singular: str, plural_form: str | None = None) -> str:
@@ -40,6 +45,32 @@ def render_memory(label: str, memory: Memory) -> None:
 def render_reason(reason: str) -> None:
     """Render model rationale as data, not as trusted terminal markup."""
     typer.secho(f"  Reason: {reason}", dim=True)
+
+
+def render_cleanup_member(
+    role: str,
+    uid_prefix: str,
+    *,
+    content: str | None = None,
+) -> None:
+    """Render one proposed cleanup disposition using the shared action palette."""
+
+    if role not in {"SURVIVOR", "ABSORB"}:
+        raise ValueError("Cleanup members require SURVIVOR or ABSORB.")
+    color_role = (
+        SemanticColorRole.ADD if role == "SURVIVOR" else SemanticColorRole.REMOVE
+    )
+    typer.echo("    ", nl=False)
+    typer.secho(
+        role,
+        fg=semantic_color_rgb(color_role),
+        bold=True,
+        nl=False,
+    )
+    suffix = f"  [memory {display_escape_text(uid_prefix)}]"
+    if content is not None:
+        suffix += "  " + display_escape_text(content)
+    typer.echo(" " * (8 - len(role)) + suffix)
 
 
 def render_question(question: str | None) -> None:

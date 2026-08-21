@@ -1,0 +1,5 @@
+COMMAND EXIT · 0                                                                                                                                                                    
+READY FOR VERIFICATION                                                                                                                                                              
+                                                                                                                                                                                    
+ALREADY-FIT VERIFICATION · MEMORIES ['The office opens at 8.', 'The office opens at 9.', 'The weekday opening time is 8 and the weekend opening time is 9.'] · CHECKPOINTS 0 · COMMA
+NDS []

@@ -48,10 +48,11 @@ new ordinary Context name
         └── optional current-state CAS
 ```
 
-`mem contexts` and the no-argument `mem switch` remain two presentations of
-the same navigation catalog.  Saved-session pickers share their terminal
-shell, but each operation retains its own immutable or revision-based
-freshness receipt.
+`mem contexts` prints the readable navigation catalog, while no-argument
+`mem switch` is its interactive state-changing consumer. They may share lower
+catalog construction without sharing a presentation or continuation.
+Saved-session pickers share their terminal shell, but each operation retains
+its own immutable or revision-based freshness receipt.
 
 ## Invariants
 

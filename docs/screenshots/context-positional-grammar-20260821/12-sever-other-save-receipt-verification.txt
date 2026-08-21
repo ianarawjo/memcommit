@@ -1,0 +1,12 @@
+PTY 180 52                                                                                                                                                                          
+$ mem sever capture/sever/source capture/sever/criteria capture/sever/result --accept                                                                                               
+SEVER APPLIED · capture/sever/source → capture/sever/result                                                                                                                         
+SAVE MODE · OTHER-SAVE                                                                                                                                                              
+DECISIONS · KEEP 1 · FORGET 0                                                                                                                                                       
+SOURCE · UNCHANGED                                                                                                                                                                  
+RECEIPT · fd53f085-7593-425f-b290-1243c54b1b60                                                                                                                                      
+CHECKPOINT · c72d91c1-3242-4d21-b248-5d8544f0ccdd                                                                                                                                   
+REVIEW · mem review sever --session fd53f085-7593-425f-b290-1243c54b1b60                                                                                                            
+RECOVERY · mem undo                                                                                                                                                                 
+OTHER-SAVE VERIFICATION · EXIT 0 · CURRENT capture/orientation · SOURCE UID PRESERVED True · MEMORY UID PRESERVED True · SOURCE MEMORIES 1 · SOURCE CHANGED False · OTHER RESULT Tru
+e · CHECKPOINTS 0 · PROVIDER CALLS 1

@@ -1,6 +1,6 @@
 # Ordinary Query answer application-boundary matrix
 
-Last verified: 2026-08-14.
+Last verified: 2026-08-20.
 
 ## Decision
 
@@ -55,7 +55,7 @@ interactive Query workbench -----/          |
 | Semantic preflight | `prepare_ordinary_query_answer` | Complete evidence frame, prompt budget, output schema | Over-budget whole-frame work fails before provider construction; no ranking, truncation, or hidden batching |
 | Provider | Injected `OrdinaryQueryProviderFactory` | Constructed only after freeze and preflight | Exactly one completion sees every frozen candidate once |
 | Answer | `complete_ordinary_query_answer` | Strict answer blocks or one explicit no-answer explanation | Provider cannot forge numeric citations, unknown aliases, or unsourced answer blocks |
-| References | Application | Host-compacted authorized evidence | Host assigns citation numbers and renders typed Reference blocks |
+| References | Application plus neutral Source Reference projection | Host-compacted authorized evidence | Host assigns citation numbers and Query aliases, then maps each used Source to the shared `[N] content — UID prefix, Context, alias` row; the shared renderer never selects evidence or assigns either identity |
 | Result | `OrdinaryQueryResponse` | Exact request, nonblank answer, grounded flag, optional matching reference document | Ungrounded results cannot expose evidence references |
 | Durable effect | None | None | No Context, current pointer, checkpoint, session, transcript, or cache receipt is written |
 
@@ -72,6 +72,11 @@ The extraction preserves the existing ordinary Query contract:
 - grounded and no-answer strings retain their prior formatting;
 - the same whole-frame prompt, schema, decoder, artifact compaction, citation
   numbering, and Reference document are used;
+- every compact Reference remains self-contained when adjacent citations come
+  from different Contexts; stored line breaks are folded and no blank row is
+  inserted between citations;
+- Query's typed citation object and literal Find's typed match remain separate;
+  only their final Source row model and punctuation are shared;
 - the CLI, TUI, tests, and capture tools call the operation runtime directly;
   and
 - the Typer composition root retains the same two visible progress labels

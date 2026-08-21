@@ -1,0 +1,3 @@
+                                                                                                                                                                                    
+START RECEIPT · SEVER · SeverSetupReceipt(source_name='capture/source', criteria_name='capture/criteria', output_name='severed', source_descendants=True, criteria_descendants=True)
+DURABLE STATE · UNCHANGED · PROVIDER CALLS 0

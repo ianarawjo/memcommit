@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 
 from memcommit.api import (
+    ContextReferenceResult,
     EmbeddedContextResult,
     EmbeddedMemoryResult,
     EmbedPlacementResult,
@@ -50,8 +51,8 @@ def test_reference_agent_is_explicit_snapshot_and_calls_public_client_once(
     monkeypatch.setattr(client, "reference_memory", reference_memory)
     response = ReferenceAgentAdapter(client).invoke(
         {
-            "version": 1,
-            "kind": "snapshot",
+            "version": 2,
+            "kind": "memory",
             "memory_selector": "memory",
             "source_context": "source",
             "into_context": "target",
@@ -69,6 +70,51 @@ def test_reference_agent_is_explicit_snapshot_and_calls_public_client_once(
     assert response["result"]["mode"] == "SNAPSHOT"
     assert response["result"]["memory_content_sha256"] == "sha256"
     json.dumps(response)
+
+
+def test_reference_agent_routes_context_snapshot_without_operand_guessing(
+    tmp_path,
+    monkeypatch,
+):
+    client = _client(tmp_path)
+    calls: list[dict[str, object]] = []
+
+    def reference_context(**kwargs):
+        calls.append(kwargs)
+        return ContextReferenceResult(
+            reference_uid="context-reference-uid",
+            source_name="source",
+            source_uid="source-uid",
+            snapshot_content_sha256="snapshot-sha256",
+            include_descendants=True,
+            follow_embeds=True,
+            context_count=3,
+            into_name="target",
+            into_uid="target-uid",
+            checkpoint_uid="checkpoint-uid",
+        )
+
+    monkeypatch.setattr(client, "reference_context", reference_context)
+    response = ReferenceAgentAdapter(client).invoke(
+        {
+            "version": 2,
+            "kind": "context",
+            "source_context": "source",
+            "into_context": "target",
+            "recursive": True,
+        }
+    )
+
+    assert calls == [
+        {
+            "source_context": "source",
+            "into_context": "target",
+            "recursive": True,
+        }
+    ]
+    assert response["ok"] is True
+    assert response["result"]["context_count"] == 3
+    assert response["result"]["follow_embeds"] is True
 
 
 def test_embed_agent_uses_tagged_kind_instead_of_guessing_from_operand(
@@ -139,16 +185,18 @@ def test_agent_schemas_are_fresh_strict_and_expose_distinct_semantics():
     second_embed = embed_agent_tool_schema()
 
     assert first_reference["name"] == REFERENCE_AGENT_TOOL_NAME
-    assert first_reference["parameters"]["additionalProperties"] is False
-    assert first_reference["parameters"]["properties"]["kind"]["const"] == "snapshot"
+    assert [
+        branch["properties"]["kind"]["const"]
+        for branch in first_reference["parameters"]["oneOf"]
+    ] == ["memory", "context"]
     assert first_embed["name"] == EMBED_AGENT_TOOL_NAME
     assert [branch["properties"]["kind"]["const"] for branch in first_embed["parameters"]["oneOf"]] == [
         "memory",
         "context",
     ]
-    first_reference["parameters"]["required"].clear()
+    first_reference["parameters"]["oneOf"].clear()
     first_embed["parameters"]["oneOf"].clear()
-    assert second_reference["parameters"]["required"]
+    assert len(second_reference["parameters"]["oneOf"]) == 2
     assert len(second_embed["parameters"]["oneOf"]) == 2
 
 

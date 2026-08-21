@@ -130,7 +130,6 @@ class TestHelp:
         assert remove_command is not None and remove_command.hidden
         assert help_inventory.COMMAND_DISPLAY_ALIASES == {
             "delete": ("remove",),
-            "find-redundancies": ("find-duplicates",),
             "list": ("ls",),
         }
         assert list_command.callback.__wrapped__ is ls_command.callback.__wrapped__
@@ -152,7 +151,7 @@ class TestHelp:
         assert "\ndelete (remove) " in inventory_result.output
         assert "\nremove " not in inventory_result.output
 
-    def test_help_folds_find_duplicates_into_read_only_find_redundancies(self):
+    def test_help_lists_exact_duplicates_separately_from_redundancies(self):
         root = get_command(app)
         context = click.Context(root)
         try:
@@ -167,29 +166,31 @@ class TestHelp:
         finally:
             context.close()
 
-        assert find_duplicates is not None and find_duplicates.hidden
+        assert find_duplicates is not None and not find_duplicates.hidden
         assert find_redundancies is not None and not find_redundancies.hidden
         assert find_redundancy is None
         assert (
             find_duplicates.callback.__wrapped__
-            is find_redundancies.callback.__wrapped__
+            is not find_redundancies.callback.__wrapped__
         )
-        assert help_inventory.COMMAND_DISPLAY_ALIASES["find-redundancies"] == (
-            "find-duplicates",
-        )
-        assert entry.aliases == ("find-duplicates",)
+        assert "find-redundancies" not in help_inventory.COMMAND_DISPLAY_ALIASES
+        assert entry.aliases == ()
         assert entry.operation_help.name == "find-redundancies"
         assert entry.forms[0].startswith("mem find-redundancies")
+        assert all("--select" not in form for form in entry.forms)
 
         root_result = invoke("--help")
         inventory_result = invoke("help")
+        redundancy_help = invoke("find-redundancies", "--help")
 
         assert root_result.exit_code == 0
-        assert "│ find-duplicates " not in root_result.output
+        assert "│ find-duplicates " in root_result.output
         assert "│ find-redundancies " in root_result.output
         assert inventory_result.exit_code == 0
-        assert "\nfind-redundancies (find-duplicates) " in inventory_result.output
-        assert "\nfind-duplicates " not in inventory_result.output
+        assert redundancy_help.exit_code == 0
+        assert "--select" not in redundancy_help.output
+        assert "\nfind-redundancies " in inventory_result.output
+        assert "\nfind-duplicates " in inventory_result.output
 
     def test_integrate_is_not_a_public_command(self):
         result = invoke("integrate", "new information")
@@ -265,6 +266,7 @@ class TestHelp:
         prose = " ".join(line.strip("│ ") for line in lines)
 
         assert lines[0].startswith("┌ CORE CONCEPTS ")
+        assert any(line.startswith("├ COMMON LOCATORS ") for line in lines)
         assert any(line.startswith("├ COMMON KEYS ") for line in lines)
         assert all(len(line) == 100 for line in lines)
         assert "MEMORY" in rendered
@@ -289,8 +291,17 @@ class TestHelp:
         assert "does not itself mean" not in prose
         assert "created for each applied operation" in prose
         assert "recorded per affected Context" in prose
-        assert "Esc / Backspace" in rendered
-        assert "Q" not in rendered
+        assert "NAME" in rendered
+        assert "canonical and global, never relative" in prose
+        assert "./CHILD" in rendered
+        assert "../PATH" in rendered
+        assert "CONTEXT:UID" in rendered
+        assert ": separates the direct owner" in prose
+        assert "../3:ca562047" in rendered
+        assert "PgUp / PgDn" in rendered
+        assert "Home / End" in rendered
+        assert "Esc / Q / Ctrl-C" in rendered
+        assert "Backspace" not in rendered
         assert (
             help_inventory._help_information_box_fragments(
                 width=100,
@@ -328,6 +339,22 @@ class TestHelp:
                 style == "class:help-guide.border.focused" and "┏" in text
                 for style, text in fragments
             )
+
+    def test_locator_and_key_guidance_is_localized_without_changing_syntax(self):
+        fragments = help_inventory._help_information_box_fragments(
+            width=180,
+            by_kind=True,
+            language="KO",
+        )
+        rendered = "".join(text for _style, text in fragments)
+
+        assert "COMMON LOCATORS" in rendered
+        assert "CONTEXT:UID" in rendered
+        assert "../3:ca562047" in rendered
+        assert "직접 소유 Context와 Memory UID 또는 prefix를 구분" in rendered
+        assert "PgUp / PgDn" in rendered
+        assert "앞이나 뒤로 10행 이동" in rendered
+        assert "Esc / Q / Ctrl-C" in rendered
 
     def test_concepts_join_the_vertical_path_before_the_first_command(self):
         with create_pipe_input() as pipe_input:
@@ -537,7 +564,7 @@ class TestHelp:
             'mem add "[memory_content]"'
         )
         assert help_inventory.COMMAND_FORMS["edit"][0].startswith(
-            'mem edit [memory_selector] "[new_content]"'
+            'mem edit [UID_or_CONTEXT:UID] "[new_content]"'
         )
         assert help_inventory.COMMAND_FORMS["rename"] == (
             "mem rename [new_name] (rename the active Profile)",
@@ -548,6 +575,24 @@ class TestHelp:
             "(explicit equivalent for the active Profile)",
             "mem profile rename [profile_name] [new_name] "
             "(explicit equivalent for a named Profile)",
+        )
+
+    def test_direct_memory_forms_teach_canonical_and_compatibility_locators(self):
+        edit_forms = help_inventory.COMMAND_FORMS["edit"]
+        embed_forms = help_inventory.COMMAND_FORMS["embed"]
+        reference_forms = help_inventory.COMMAND_FORMS["reference"]
+
+        assert any("UID_or_CONTEXT:UID" in form for form in edit_forms)
+        assert any("[source_context]:[UID]" in form for form in embed_forms)
+        assert any("Target defaults to current Context" in form for form in embed_forms)
+        assert any("--from" in form and "compatibility" in form for form in embed_forms)
+        assert any("[source_context]:[UID]" in form for form in reference_forms)
+        assert any(
+            "Target defaults to current Context" in form for form in reference_forms
+        )
+        assert any(
+            "--from" in form and "compatibility" in form
+            for form in reference_forms
         )
 
     def test_forms_include_meaningful_bare_entry_routes(self):
@@ -768,6 +813,52 @@ class TestHelp:
                 require_tty=False,
             )
         assert cancelled is None
+
+    def test_selector_page_keys_match_the_visible_help_guidance(self):
+        with create_pipe_input() as pipe_input:
+            pipe_input.send_text("\x1b[6~\r\r")
+            selected = run_help_selector(
+                self.selector_entries(),
+                app_input=pipe_input,
+                app_output=DummyOutput(),
+                require_tty=False,
+            )
+
+        assert selected is not None
+        assert selected.command_line == "mem gamma"
+
+        with create_pipe_input() as pipe_input:
+            pipe_input.send_text(
+                "\x1b[F\x1b[5~"
+                + "\x1b[B" * len(help_inventory.HELP_CORE_CONCEPTS)
+                + "\r\r"
+            )
+            selected = run_help_selector(
+                self.selector_entries(),
+                app_input=pipe_input,
+                app_output=DummyOutput(),
+                require_tty=False,
+            )
+
+        assert selected is not None
+        assert selected.command_line == "mem alpha"
+
+    def test_selector_home_and_end_match_the_visible_help_guidance(self):
+        with create_pipe_input() as pipe_input:
+            pipe_input.send_text(
+                "\x1b[F\x1b[H"
+                + "\x1b[B" * len(help_inventory.HELP_CORE_CONCEPTS)
+                + "\r\r"
+            )
+            selected = run_help_selector(
+                self.selector_entries(),
+                app_input=pipe_input,
+                app_output=DummyOutput(),
+                require_tty=False,
+            )
+
+        assert selected is not None
+        assert selected.command_line == "mem alpha"
 
     def test_help_selector_uses_shared_focused_frame_for_inventory_view(
         self,
@@ -1777,7 +1868,7 @@ class TestMerge:
         invoke("init", "tgt")
         result = invoke("merge", "src")
         assert result.exit_code == 0
-        assert "added 2 memories" in result.output
+        assert "NEW 2 (2 memories)" in result.output
 
     def test_merge_nothing_new_when_already_merged(self, isolated_store):
         invoke("init", "src")
@@ -1786,7 +1877,8 @@ class TestMerge:
         invoke("merge", "src")
         result = invoke("merge", "src")
         assert result.exit_code == 0
-        assert "nothing new" in result.output
+        assert "NEW 0" in result.output
+        assert "ALREADY PRESENT 1" in result.output
 
     def test_fails_merging_nonexistent_context(self, isolated_store):
         invoke("init", "tgt")
@@ -1835,18 +1927,46 @@ class TestContexts:
 
 
 class TestClear:
-    def test_clear_removes_all_memories(self, isolated_store):
+    def test_clear_removes_all_memories_without_confirmation(self, isolated_store):
         invoke("init", "ctx")
         invoke("add", "gone soon")
-        result = invoke("clear", "--force")
+        result = invoke("clear")
         assert result.exit_code == 0
+        assert "Continue?" not in result.output
+        assert "This will remove" not in result.output
 
         store = MemoryStore()
         ctx = store.load_current()
         assert ctx.memories == {}
 
+    def test_clear_is_one_undoable_and_redoable_command(self, isolated_store):
+        invoke("init", "ctx")
+        invoke("add", "first")
+        invoke("add", "second")
+
+        cleared = invoke("clear")
+        assert cleared.exit_code == 0, cleared.output
+        assert not MemoryStore().load_current().memories
+
+        undone = invoke("undo")
+        assert undone.exit_code == 0, undone.output
+        assert "Undid command: mem clear ctx" in undone.output
+        assert [
+            memory.content for memory in MemoryStore().load_current().memories.values()
+        ] == ["first", "second"]
+
+        redone = invoke("redo")
+        assert redone.exit_code == 0, redone.output
+        assert "Redid command: mem clear ctx" in redone.output
+        assert not MemoryStore().load_current().memories
+
+    def test_clear_help_hides_legacy_force_option(self):
+        result = invoke("clear", "--help")
+        assert result.exit_code == 0
+        assert "--force" not in result.output
+
     def test_clear_fails_with_no_current_context(self, isolated_store):
-        result = invoke("clear", "--force")
+        result = invoke("clear")
         assert result.exit_code == 1
 
 

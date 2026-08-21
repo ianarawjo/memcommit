@@ -5,7 +5,8 @@
 The conflict-aware direct and path-aligned recursive Merge contracts are
 implemented and verified through one terminal-independent typed
 Application/Runtime boundary. The public CLI exposes explicit `--direct` and
-`--recursive` reach, optional `--into TARGET`, and complete per-item or bulk
+`--recursive` reach, positional `SOURCE [TARGET]`, compatibility
+`--into TARGET`, and complete per-item or bulk
 deterministic decisions. Bare `mem merge` opens the Source/Target setup. A decision-free local
 plan applies immediately through the normal checkpointed application boundary;
 a decision-free granted-authority plan retains final review, and a
@@ -16,7 +17,7 @@ Apply visibly ready while allowing row-level or whole-set arrow selection.
 
 ## Motivating distinction
 
-`mem merge SOURCE [--into TARGET]` remains deterministic, provider-free, and distinct from a
+`mem merge SOURCE [TARGET]` remains deterministic, provider-free, and distinct from a
 Git-style three-way merge or semantic reconciliation. It now classifies every
 frozen Source item as `NEW`, `UNCHANGED`, or required `CONFLICT`. Conflicts are
 limited to exact structural choices: keep the Target member or take the Source
@@ -31,7 +32,7 @@ application boundary.
 
 | Concern | Current owner | Frozen behavior |
 | --- | --- | --- |
-| CLI input | `commands.merge` | One existing Source locator and optional `--into` Target locator; omitting Target uses the command-start current Context. |
+| CLI input | `commands.merge` | One existing Source locator and optional positional Target locator; `--into` is a compatibility alias, and omitting Target uses the command-start current Context. Supplying both target spellings fails before Store access. |
 | Locator meaning | `MemoryStoreMergePort` and authority access | Source and Target are resolved from one captured current-name snapshot. |
 | Authority | Grant-aware access and derived-transfer policy | Source requires `READ`; Target additions require `CREATE`; `TAKE SOURCE` replacement also requires `UPDATE`; cross-domain transfer enforces its derived permissions. |
 | Write protection | Store policy frozen during planning and revalidated during persistence | A protected Target Memory or Context removes `TAKE SOURCE` before the decision UI; a protected Context blocks unconditional additions before review; concurrent policy changes still fail closed at Store save. |
@@ -143,7 +144,7 @@ CREATE-authorized descendants but cannot create a missing authority Context.
 The internal `execute_merge()` callable verifies local matching,
 Source-only creation, Target-only preservation, complete-relative-path
 alignment, granted recursive Source projection, membership freshness, and
-exception rollback. `mem merge SOURCE --into TARGET --recursive` exposes that
+exception rollback. `mem merge SOURCE TARGET --recursive` exposes that
 behavior non-interactively. Bare `mem merge` starts with Source focused,
 exposes direct and recursive as coupled operation shapes, and starts selectable
 Target B at the command-start current Context. Continuing from setup does not mutate state:

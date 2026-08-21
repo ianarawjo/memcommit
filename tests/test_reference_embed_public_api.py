@@ -6,6 +6,7 @@ import pytest
 
 import memcommit.ops as ops
 from memcommit.api import (
+    ContextReferenceResult,
     EmbeddedContextResult,
     EmbeddedMemoryResult,
     EmbedInputError,
@@ -14,6 +15,7 @@ from memcommit.api import (
     ReferenceContextError,
 )
 from memcommit.context import Memory, MemoryRef
+from memcommit.context_snapshot import ContextSnapshotRef
 from memcommit.store import MemoryStore
 
 
@@ -78,6 +80,27 @@ def test_public_context_embed_keeps_context_route_distinct(tmp_path):
     embedded = store.load("target").memories[result.child_uid]
     assert embedded.uid == child.uid
     assert embedded.name == result.child_name
+
+
+def test_public_context_reference_is_a_recursive_snapshot(tmp_path):
+    root = tmp_path / "store"
+    store, _source, _memory, _target, _marker, child = _store(root)
+    nested = ops.init("child/nested")
+    ops.add(nested, "nested retained value")
+    store.save(nested)
+
+    result = MemCommitClient(root=root).reference_context(
+        "child",
+        into_context="target",
+        recursive=True,
+    )
+
+    assert isinstance(result, ContextReferenceResult)
+    assert result.source_uid == child.uid
+    assert result.context_count == 2
+    snapshot = store.load("target").memories[result.reference_uid]
+    assert isinstance(snapshot, ContextSnapshotRef)
+    assert snapshot.include_descendants is True
 
 
 def test_public_transfer_errors_are_operation_specific(tmp_path):

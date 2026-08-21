@@ -263,7 +263,7 @@ def test_sever_registry_rejects_changed_source_before_receipt(
     )
 
 
-def test_sever_registry_configuration_mismatch_is_a_clean_skip(
+def test_sever_registry_higher_quality_cache_installs_for_lower_request(
     isolated_store, tmp_path, monkeypatch
 ):
     store, profile, registry, _prepared, source, criteria = _fixture(
@@ -278,8 +278,8 @@ def test_sever_registry_configuration_mismatch_is_a_clean_skip(
     )
 
     assert result.declared == 1
-    assert result.installed == 0
-    assert result.skipped_configuration == 1
+    assert result.installed == 1
+    assert result.skipped_configuration == 0
     assert (
         find_installed_exact_sever_prewarm(
             store=store,
@@ -287,7 +287,7 @@ def test_sever_registry_configuration_mismatch_is_a_clean_skip(
             criteria=criteria,
             output_name=OUTPUT_NAME,
         )
-        is None
+        is not None
     )
 
 

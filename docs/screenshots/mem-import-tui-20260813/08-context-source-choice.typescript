@@ -221,10 +221,10 @@ The source and active Profile were not changed.
 [0m Roots · source/root[0m
 [0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
 [0;1;7m› * ▾ source/root[162C[0;1m^[0m
-[0;38;5;189m  · [memory 20000000] Stable root Memory.[138C[0;48;5;238m [0m
+[0;38;5;189m  · [unavailable] Memory preview changed[139C[0;48;5;238m [0m
 [0m      ▾ source/root/child[154C[0;48;5;238m [0m
 [0;38;5;189m    · [memory 20000000] Stable child Memory.[135C[0;48;5;238m [0m
-[0;38;5;189m    · [memory ref 30000000] [0;38;5;216;1mREAD ONLY[0;38;5;189m · Stable root Memory.[120C[0;48;5;238m [0m
+[0;38;5;189m    · [embedded memory 30000000] [0;38;5;216;1mREAD ONLY[0;38;5;189m · Stable root Memory.[115C[0;48;5;238m [0m
 [179C[0;48;5;238m [0m
 [179C[0;48;5;238m [0m
 [179C[0;48;5;238m [0m
@@ -268,4 +268,4 @@ The source and active Profile were not changed.
 [179C[0;48;5;238m [0m
 [0m                                                                                                                                                                                   [179C[0;1mv[0m
 [0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
-[0m ↑↓ move  ←→ expand  A expand all  m hide Memories here  M hide all Memories  y copy Context  Y copy visible branch  Enter choose source  q cancel · 1/5 · 2 selectable[167D[48A[0m
+[0m ↑↓ move  ←→ expand  A expand all  m THIS Context: hide items · M EVERY Context: hide items  y copy Context  Y copy visible branch  Enter choose source  q cancel · 1/5 · 2 selecta[179Cb[48A[0m

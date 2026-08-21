@@ -1,0 +1,22 @@
+LIVE COLOR PTY · 180 columns × 52 rows
+STORE · isolated disposable Profile
+
+$ mem pwd
+practice/4
+
+$ mem list practice/3
+[1mContext: practice/3[0m
+  4 items
+
+  [memory ca562047] a is apple
+  [memory dbdb4436] b is banana
+  [memory 11111111] c is cherry
+  [memory 22222222] d is date
+
+$ mem list practice/4
+[1mContext: practice/4[0m
+  0 items
+
+  (no items)
+
+PRECONDITION · Source has 4 direct Memories · Target has 0 items

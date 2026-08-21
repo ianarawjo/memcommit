@@ -1,11 +1,8 @@
-v
-
-$ mem compare --from task-2/advisor1 --to task-2/advisor2 --snapshot
 MEM COMPARE · SYMMETRIC PEERS
 Reference: task-2/advisor1 (layout only; no authority)
 Compared:  task-2/advisor2
 SCOPE · REFERENCE SELECTED + ALL DESCENDANTS · COMPARED SELECTED GRAPH ONLY
-Analysis: 8fce03ad · REUSED
+Analysis: 62606324 · REUSED
 METRICS · MEMORIES 1 + 1 · RELATIONS 1 · POTENTIAL CONFLICTS 1
 EQUIVALENT 0 · COMPATIBLE 0 · SCOPED 0 · CONFLICT 1 · DISTINCT 0 · UNCLEAR 0
 
@@ -22,18 +19,21 @@ ce. Keep all supported terms: Retain the hourly rate, travel-time condition, cas
 yment-method guidance as separately scoped proposal rules.
 
 The complete source-linked relation ledger is saved. Inspect it with:
-  mem compare --to task-2/advisor2 --reference-descendants --ledger
+  mem compare --from task-2/advisor1 --to task-2/advisor2 --reference-descendants --ledger
 
 Create a new result Context and review both sources with Meld:
   mem meld task-2/advisor1 task-2/advisor2 --left-descendants --to RESULT_CONTEXT
 
 $ mem status
 On context: task-3/local/personal-memory
-  Memories 1  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0  |  Checkpoints 0
 
-Recent memories:
-  [c34d309d] Task 3 orientation remains active during Task 2 Meld.
+Inventory:
+  Memories 1  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0  |  Grants 0  |  Checkpoints 0
 
+Memory preview · first 1 of 1:
+  [45220c7c] Task 3 orientation remains active during Task 2 Meld.
+
+Recent changes:
   (no checkpoints yet)
 
 $ mem show --context task-2/participant/proposal-workspace2

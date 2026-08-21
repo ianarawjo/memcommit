@@ -1,0 +1,17 @@
+PTY 180 52                                                                                                                                                                          
+RESOLVE APPLIED                                                                                                                                                                     
+CONTEXT · resolve/capture                                                                                                                                                           
+CANDIDATE · resolve-2375a6731ddd3312720ddb1d935c9909c24005f3979db466743f077dc4645a67                                                                                                
+REVISION · 2e2e3a905e97471c818bff079cf867dfb0df18d1f4cc88c72e5e8f31f5881184                                                                                                         
+CREATED · 0                                                                                                                                                                         
+UPDATED · 2                                                                                                                                                                         
+DELETED · 0                                                                                                                                                                         
+RECEIPT · b4e28c4b-6b4b-4406-b0bf-0ddb57770038                                                                                                                                      
+CHECKPOINT · b4e28c4b-6b4b-4406-b0bf-0ddb57770038                                                                                                                                   
+REVIEW · mem review resolve --receipt b4e28c4b-6b4b-4406-b0bf-0ddb57770038                                                                                                          
+RECOVERY · mem undo                                                                                                                                                                 
+COMMAND EXIT · 0                                                                                                                                                                    
+READY FOR VERIFICATION                                                                                                                                                              
+                                                                                                                                                                                    
+APPLY VERIFICATION · MEMORIES ['The office opens at 8 on weekdays.', 'The office opens at 9 on weekends.', 'The weekday opening time is 8 and the weekend opening time is 9.'] · CHE
+CKPOINTS 1 · COMMANDS ['resolve']

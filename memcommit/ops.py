@@ -39,6 +39,7 @@ if TYPE_CHECKING:
         DuplicateReport,
         FindingsProvider,
     )
+    from memcommit.exact_dedup import ExactDuplicateReport
     from memcommit.search import PromptProvider, SearchMatch
     from memcommit.semantic.llm import LLMClient
     from memcommit.semantic.changes import ProposedChange
@@ -253,6 +254,38 @@ def reference_memory(
     return ref
 
 
+def reference_context(
+    snapshot,
+    target: Context,
+):
+    """Add one immutable Context snapshot as a read-only direct item.
+
+    The snapshot is constructed by the operation runtime because its package
+    binds a complete reviewed read scope. This domain boundary owns duplicate
+    and self-reference checks without importing Store or CLI concerns.
+    """
+
+    from memcommit.context_snapshot import ContextSnapshotRef
+
+    if not isinstance(snapshot, ContextSnapshotRef):
+        raise TypeError("Context Reference requires a ContextSnapshotRef.")
+    if snapshot.target_context_uid == target.uid:
+        raise ValueError("Cannot reference a Context into itself.")
+    for item in target.iter_items():
+        if (
+            isinstance(item, ContextSnapshotRef)
+            and item.target_context_uid == snapshot.target_context_uid
+            and item.snapshot_content_sha256
+            == snapshot.snapshot_content_sha256
+        ):
+            raise ValueError(
+                f"Context '{snapshot.target_context_name}' already has this "
+                f"exact snapshot in '{target.name}'."
+            )
+    target.add(snapshot)
+    return snapshot
+
+
 def reference_query_context(
     name: str,
     target_source_uid: str,
@@ -382,10 +415,14 @@ def branch(ctx: Context, new_name: str) -> Context:
         uid=str(uuid.uuid4()),
         name=validate_portable_context_name(new_name),
     )
+    from memcommit.context_snapshot import ContextSnapshotRef
+
     for info in ctx.iter_items():
         if isinstance(info, Memory):
             new_ctx.add(Memory(uid=info.uid, content=info.content))
         elif isinstance(info, (MemoryRef, QueryContextRef)):
+            new_ctx.add(info.copy())
+        elif isinstance(info, ContextSnapshotRef):
             new_ctx.add(info.copy())
         else:
             new_ctx.add(info)
@@ -436,6 +473,8 @@ def branch_subtree(
         source.name: Context(uid=str(uuid.uuid4()), name=target_names[source.name])
         for source in sources
     }
+    from memcommit.context_snapshot import ContextSnapshotRef
+
     for source in sources:
         target = targets[source.name]
         for item in source.iter_items():
@@ -472,6 +511,10 @@ def branch_subtree(
                     )
                 )
             elif isinstance(item, QueryContextRef):
+                target.add(item.copy())
+            elif isinstance(item, ContextSnapshotRef):
+                # A Context Reference is already an immutable value. Branch
+                # preserves its historical Source identity and scope.
                 target.add(item.copy())
             else:
                 internal_context = source_by_name.get(item.name)
@@ -756,10 +799,10 @@ def find_redundancies(
     *,
     context_name_by_uid: "Mapping[str, str] | None" = None,
 ) -> "DuplicateReport":
-    """Find semantically redundant direct Memories without mutating *ctx*."""
-    from memcommit.findings import find_duplicates as _find_duplicates
+    """Find exact DUP and semantic-DUN evidence without mutating *ctx*."""
+    from memcommit.findings import find_redundancies as _find_redundancies
 
-    return _find_duplicates(
+    return _find_redundancies(
         ctx,
         provider_factory,
         context_name_by_uid=context_name_by_uid,
@@ -768,17 +811,11 @@ def find_redundancies(
 
 def find_duplicates(
     ctx: Context,
-    provider_factory: Callable[[], "FindingsProvider"],
-    *,
-    context_name_by_uid: "Mapping[str, str] | None" = None,
-) -> "DuplicateReport":
-    """Compatibility alias for :func:`find_redundancies`."""
+) -> "ExactDuplicateReport":
+    """Find byte-identical direct-Memory groups without provider inference."""
+    from memcommit.exact_dedup import find_exact_duplicates
 
-    return find_redundancies(
-        ctx,
-        provider_factory,
-        context_name_by_uid=context_name_by_uid,
-    )
+    return find_exact_duplicates(ctx)
 
 
 def find_ambiguities(

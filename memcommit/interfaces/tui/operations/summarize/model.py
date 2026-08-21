@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from collections.abc import Callable, Sequence
+from dataclasses import dataclass, field
 
+from memcommit.context_targeting.tui.picker import ContextMemoryRow
 from memcommit.context_targeting.tui.reach import ContextReachViewMode
 from memcommit.source_projection.presentation import SourceDisplayValue
 from memcommit.summarize_application import SummarizeResult
@@ -18,6 +20,11 @@ class SummarizeTuiSetup:
     initial_range_mode: ContextReachViewMode = "BOTH"
     current_context: str | None = None
     annotations: tuple[tuple[str, SourceDisplayValue], ...] = ()
+    memory_loader: Callable[[str], Sequence[ContextMemoryRow]] | None = field(
+        default=None,
+        repr=False,
+        compare=False,
+    )
 
     def __post_init__(self) -> None:
         if (
@@ -32,6 +39,8 @@ class SummarizeTuiSetup:
             raise ValueError("Summarize TUI initial range is invalid.")
         if self.current_context is not None and self.current_context not in self.names:
             raise ValueError("The current Context is outside the readable catalog.")
+        if self.memory_loader is not None and not callable(self.memory_loader):
+            raise ValueError("Summarize TUI Memory loader must be callable.")
         labels = dict(self.annotations)
         if len(labels) != len(self.annotations) or set(labels) - set(self.names):
             raise ValueError("Summarize TUI annotations are outside the catalog.")

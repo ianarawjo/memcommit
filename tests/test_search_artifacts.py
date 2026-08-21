@@ -162,10 +162,11 @@ def test_find_frame_includes_visible_query_meld_and_rationale_sessions(
         memory.uid,
         "c" * 64,
         CachedRationaleInference(
-            best_supported_reading="The merged proposal assigns ownership.",
-            contextual_flow="The ownership rule follows the prior guidance.",
+            explanation=(
+                "The merged proposal assigns ownership by following the prior "
+                "guidance; no material uncertainty remains."
+            ),
             support_memory_uids=(memory.uid,),
-            unresolved=(),
         ),
     )
 

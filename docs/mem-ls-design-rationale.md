@@ -224,31 +224,26 @@ items. A deeper name is not synthesized through a missing intermediate
 Context. Thus `aaa/ab/c` alone does not create a visible `aaa/ab` row. A
 Memory whose content is `aaa` is independent of both Context paths.
 
-## 7. MemoryRef Listing
+## 7. Memory relationship listing
 
-A resolved MemoryRef represents an atomic memory view, so its current target
-content is also used as the human-readable name. Relationship identity and the
-Source owner precede the body so a locator can be copied without scanning past
-arbitrary content. Live links use `embedded`; immutable snapshots use
-`reference`:
+A resolved live Memory Embed and immutable Memory Reference both show Source
+identity before their human-readable content. Their relationship noun makes
+the different time semantics visible:
 
 ```text
-[embedded 12345678] [source-context][memory abcdef12] Current target content.  READ ONLY
-[reference 87654321] [source-context][memory abcdef12] Retained target content.  READ ONLY
+[embedded 12345678] [source-context][memory abcdef12] Current Source content.  READ ONLY
+[reference 87654321] [source-context][memory abcdef12] Retained snapshot content.  READ ONLY
 ```
 
-A dangling reference has no content to use as a name, so the locator is shown
-with an explicit state:
+Only `embedded` is yellow and only `reference` is mauve in a color-capable
+terminal. UIDs, Context, content, and state remain neutral, and stripping ANSI
+produces exactly the same text. A dangling relationship has no content to use
+as a name, so the same leading identities are followed by `DANGLING`.
 
-```text
-[embedded 12345678] [source-context][memory abcdef12]  DANGLING
-```
-
-Only the trusted `embedded` or `reference` relationship noun receives semantic
-color in an interactive terminal. IDs, Source owner, body, and state preserve
-their existing neutral styles, and ANSI stripping leaves the same text.
-
-Detailed reference metadata remains the responsibility of `mem show <ref-uid>`.
+The Source identity is also an executable owner locator for
+`mem edit source-context#abcdef12 CONTENT`; the relationship row's first UID
+remains read-only. Detailed relationship metadata remains the responsibility
+of `mem show <relationship-uid>`.
 
 ## 8. Recursive Listing
 

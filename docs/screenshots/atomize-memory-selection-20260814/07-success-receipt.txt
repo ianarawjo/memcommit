@@ -1,6 +1,6 @@
                                                                                                                                                                                     
 SETUP RECEIPT · EXACT MEMORY TARGET                                                                                                                                                 
   INPUT · study/source                                                                                                                                                              
-  MEMORY UID · f1a4679b-60a4-4756-b17b-8d1dfe09fb91                                                                                                                                 
+  MEMORY UID · c837cb12-fd51-49f3-8a25-96eec7678179                                                                                                                                 
   OUTPUT · study/focused-output · NOT CREATED                                                                                                                                       
 CAPTURE GATE · PRESS V FOR READ-ONLY VERIFICATION

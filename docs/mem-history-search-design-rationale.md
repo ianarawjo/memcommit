@@ -11,7 +11,7 @@ three distinct projections:
 | versioned Memory state | one directly owned Memory's content at a reconstructable state | only through an active checkpoint containing that occurrence |
 | Memory transition | an add, edit, removal, or restoration edge between reconstructable Context states | no; it is an event boundary |
 
-This model is shared by temporal `mem find`, interactive `mem log`, semantic
+This model is shared by temporal `mem find`, static `mem log`, semantic
 checkpoint selection for `mem revert`, and the state comparison used by
 `mem undo`. Sharing the model prevents each command from inventing a different
 meaning for “before,” “after,” “latest,” or “the previous state.”
@@ -180,31 +180,42 @@ mem log --manual
 mem log --plain
 ```
 
-In a TTY, operand-free `mem log` first opens the shared complete Context tree.
-Selecting a location opens the shared history picker for that Context. Its
-Viewer uses the same exact direct-item transition projection as Diff, so a
-checkpoint row can expose affected Memory UIDs and before/after values without
-turning Log into a restore action. Contexts with zero eligible checkpoints
-remain selectable and open an explicit empty history view; only Escape or `q`
-closes it. The declared screen topology is `VIEWER → ITEMS`: Up/Down first
-scrolls wrapped Viewer content or moves the Items cursor, then crosses the real
-Surface boundary without wrapping. Up from the first Item enters the Viewer at
-its lower edge, and Down from the Viewer bottom returns to Items. Enter opens
-the selected entry's detail or returns from Viewer to Items; Escape/Backspace
-follows the same one-level retreat before closing. Closing or inspecting a
-Context or log entry has no write effect.
+`mem log` is a terminal-independent report. With no target it prints the
+current Context's retained checkpoint rows; `--context` prints only the
+resolved explicit Context. It never opens a Context selector or checkpoint
+picker, so the same invocation has the same interaction contract in a TTY,
+through redirection, and in automation. `--manual` filters that fixed report to
+manually created checkpoints, while a natural-language query prints the
+locally resolved checkpoint matches instead of opening the matches in a
+picker.
 
 `--memory` selects the Memory-lineage projection of the same retained Context
 history. It accepts a current or historical direct-Memory UID or unambiguous
-prefix. In a TTY, checkpoint-derived lineage operations use the same
-`ITEMS + VIEWER` workbench as Context Log; outside a TTY or with `--plain`, the
-stable compact lineage is printed. `mem trace MEMORY` is the discoverable
-shorthand for this route. The two commands share retained-history access,
-direct-Memory delta extraction, operation grouping, and TTY projection rather
-than recursively invoking one CLI command from the other.
+prefix and prints the same bounded vertical lineage document as
+`mem trace MEMORY --plain`. Its existing `--limit` option bounds the newest
+visible operations and states the exact older count when anything is omitted.
+Each lineage block begins with the same typed compact History row as ordinary
+Log—action, named UID badges, timestamp, and summary. Direct Add/Remove stop at
+that row because the summary already names their only content-bearing endpoint;
+Edit, restoration, and structural or mixed operations add Trace's forward
+`−`/`+` diff. Direct Edit omits its generic summary so that diff alone explains
+the content change. Compact output does not repeat an effect/evidence suffix; verbose
+Trace expands every diff and exposes provenance as a separate `Lineage:`
+detail. Both adapters consume the same adapter-neutral row segments; this is
+shared presentation structure, not merely two strings that happen to look
+alike. Trace does not add separate `NOW` or `ORIGIN` bands around those rows.
+`mem trace MEMORY` remains the discoverable interactive inspection route in a
+TTY; `--all` is the explicit complete human-readable route, while JSON remains
+complete independently of presentation bounds. The two commands share
+retained-history access, direct-Memory delta extraction, operation grouping,
+and ANSI-free projection rather than recursively invoking one CLI command from
+the other.
 
-Outside a TTY, `mem log` retains plain checkpoint rows. This preserves shell
-redirection and automation and avoids requiring terminal key input.
+`--plain` remains accepted as a compatibility no-op so existing scripts do not
+break merely because static output became the only Log presentation. Detailed
+interactive checkpoint and lineage inspection remains available through
+`mem diff`, `mem trace`, and the reviewed `mem revert` flow; Log itself owns no
+terminal UI.
 
 ### `mem diff`
 
@@ -222,9 +233,9 @@ and opens that exact Context without changing the global current pointer.
 This follows List's requested-scope rule. Showing siblings and unrelated roots
 in gray would still expose Switch navigation inside a command whose subject is
 already known. Removing those rows makes the heading, visible history, and
-keyboard scope agree. Revert deliberately retains its Context tree because
-choosing a restoration target is part of that operation's safety review; Diff
-does not inherit that mutation-oriented selection step.
+keyboard scope agree. Revert now follows the same current-or-explicit target
+rule; its mutation safety review is the exact checkpoint, complete revision
+result, history policy, and final Apply rather than a second Context choice.
 
 The exact route reads the ordinary name catalog only to validate the resolved
 target. It opens checkpoint and Context records for that target alone; it does
@@ -269,34 +280,37 @@ shared existing-Context locator and freezes the active Context base once, so
 relative spellings such as `../participant` cannot change meaning before the
 write.
 
-In a TTY, operand-free Revert first opens the same complete local Context tree
-as Log. The active Context is only the initial cursor; selecting another row
-does not switch global current state. A Context with no checkpoints opens an
-explicit `0/0` history screen and can return to the Context tree rather than
-terminating the command with an error. Revert includes ordinary writable local
-Contexts only: a readable Grant is not mutation authority.
+In a TTY, operand-free Revert captures the command-start current Context once
+and opens that exact Context's History workbench directly. `--context` resolves
+one existing Context against the same snapshot and opens it without switching
+the global current pointer. Siblings and unrelated roots are not alternate
+targets inside this operation. A Context with no checkpoints still opens an
+explicit `0/0` history screen, but closing it ends Revert instead of broadening
+the mutation scope. A readable Grant is not mutation authority.
 
-Expanded Context rows retain concise command badges such as `[undo]` and
-`[atomize]`. A durable `init` receipt is shown separately as the non-counted
-lifecycle boundary `[created]`; when that receipt carries Atomize's exact
-`source_analysis_uid`, it is rendered `[created] [atomize]`. An ordinary init
-shows only `[created]`. A later Atomize checkpoint with the same
-`analysis_uid` is folded into that creation row rather than rendered twice;
-unrelated later Atomize operations remain separate. The correlated Atomize
-still contributes its operation identity to direct/descendant counts, while
-the creation boundary itself does not. The browser never infers creation from
-the oldest retained checkpoint because Revert truncation and inherited
-histories can make that inference false.
+Every retained checkpoint remains an independently selectable exact version.
+Repeated Update or restoration operation identities are not folded, and a
+creation-time Init and Atomize remain separate when they persisted separate
+snapshots. The full checkpoint UID is the process-local selection receipt even
+though Items shows only its compact prefix.
 
-Selecting a nonempty Context opens the common History workbench in restoration
-mode. Viewer shows the exact current-to-target direct-item impact. Enter on an
-Items row checks that exact full checkpoint UID and advances to the `HISTORY`
-frame. The shared checked-choice control stages either `DISCARD NEWER` or
+Viewer uses the shared complete revision renderer described in
+`docs/checkpoint-revision-diff-design-rationale.md`. It shows what the selected
+checkpoint's command changed relative to its own predecessor and the complete
+direct-item result at that revision; it no longer labels a current-to-target
+change list as `RESTORE IMPACT`. Enter on an Items row checks that exact full
+checkpoint UID and advances to the `HISTORY` frame. The shared checked-choice
+control stages either `DISCARD NEWER` or
 `KEEP ALL`; `--keep` initializes the latter but may still be changed before
 approval. Enter advances to a separate `APPLY` frame whose label repeats the
 checkpoint prefix and chosen history policy. Only Enter there returns the
 local receipt and permits the ordinary store restoration path. The selection,
 policy change, and Apply are process-local until that last action.
+
+The ordered `180×52` PTY evidence under
+`docs/screenshots/revert-revision-result-20260821/` records direct current-
+Context entry, complete revision state, exact version staging, policy and Apply
+review, the durable receipt, and read-only post-Revert verification.
 
 A natural-language selector keeps its current- or explicitly selected-Context
 scope and opens the same staged Revert workbench after semantic candidate
@@ -408,9 +422,10 @@ reference changes show pointer metadata without resolving or reading their
 targets. Relative order is compared only among surviving direct items, so an
 insertion or removal does not falsely report every shifted item as reordered.
 
-`mem trace` remains the separate public shorthand for Log's read-only
-Memory-lineage projection. Its projection groups shared receipts into
-newest-first operation rows and links a restoration to its source operation.
+`mem trace` remains the separate public interactive route for Log's read-only
+Memory-lineage data projection. Its projection groups shared receipts into
+newest-first inline diff blocks, links a restoration to its source operation,
+and needs no secondary operation-selection surface after the Memory is known.
 It is not used to choose or authorize Undo/Redo: restoration still requires the
 complete command-unit pre/post frames described above, whereas a Trace
 intentionally contains only the selected lineage's local effect.
@@ -422,6 +437,14 @@ checkpoint metadata, including Update's `--from` and `--to`, so they omit a
 redundant affected-location list. Content-bearing Add/Edit operands and
 Forget instructions and historical Integrate instructions use typed
 placeholders: the action shape remains visible without repeating private text.
+For a direct Memory Edit, Remove, or Chunk operand, the compact terminal
+receipt projects the shortest collision-free prefix of at least eight
+characters from the command unit's frozen single-Context pre/post catalog.
+This projection never consults live current state. A multi-Context unit, a
+legacy record without the relevant catalog, or an operand whose owning scope
+cannot be reconstructed retains its persisted full UID. Exact-command review,
+checkpoint metadata, structured interfaces, and durable identity continue to
+use the full UID; compact prefixes are presentation only.
 The Integrate receipt reconstructs a retired action and is not an executable
 recommendation. Missing legacy operands fail down to
 the recorded command name. Receipts do not repeat restored Memory content,

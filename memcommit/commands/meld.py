@@ -99,7 +99,6 @@ from memcommit.store import (
     ConcurrentContextUpdateError,
     MemoryStore,
     context_record_digest,
-    validate_context_name,
 )
 from memcommit.study_prewarm.registry import StudyPrewarmRegistryError
 
@@ -1296,6 +1295,14 @@ def cmd(
             help="Explain one issue or guide all remaining relations",
         ),
     ] = None,
+    expect_session: Annotated[
+        Optional[str],
+        typer.Option(
+            "--expect-session",
+            metavar="SHA256",
+            help="Require the exact saved Meld revision reviewed for this turn",
+        ),
+    ] = None,
     preserve_all: Annotated[
         bool,
         typer.Option(
@@ -1481,6 +1488,15 @@ def cmd(
             err=True,
         )
         raise typer.Exit(2)
+    if expect_session is not None and not (
+        comment is not None or choice is not None or preserve_all or defer_all
+    ):
+        typer.secho(
+            "Meld error: --expect-session is valid only for a semantic or defer turn.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
     if from_ is not None and into is not None:
         typer.secho(
             "Meld error: --from and --into are alternative directional "
@@ -1536,6 +1552,7 @@ def cmd(
         and baseline_memory is None
         and revision is None
         and not revises_turn
+        and expect_session is None
         and expand is None
         and not scope_flags_supplied
     )
@@ -1973,6 +1990,14 @@ def cmd(
                 "--restart to replace it."
             )
         expected_session_digest = meld_canonical_digest(session.to_dict())
+        if (
+            expect_session is not None
+            and expect_session != expected_session_digest
+        ):
+            raise MeldCommandError(
+                "The saved Meld session changed after this command was reviewed. "
+                "Reopen it and rebuild the turn command."
+            )
         from memcommit.meld_runtime import (
             execute_meld_preservation,
             execute_meld_session_defer,

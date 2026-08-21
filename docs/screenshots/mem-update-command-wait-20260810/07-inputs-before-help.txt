@@ -1,4 +1,4 @@
- MEM UPDATE · 2/2 · PLANNING MEMORY CHANGES . · 3s                                                                                                                                  
+ MEM UPDATE · 2/2 · PLANNING MEMORY CHANGES . · 2s                                                                                                                                  
 ┌─────────────────────────────────────────────────────────────────────| UPDATE CONFIRMED INPUTS · READ-ONLY |──────────────────────────────────────────────────────────────────────┐
 │MEM UPDATE · FROZEN INPUTS · RESULT PENDING                                                                                                                                      ^│
 │                                                                                                                                                                                  │

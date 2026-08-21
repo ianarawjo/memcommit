@@ -1,5 +1,10 @@
 # Typed History UID browser capture log
 
+> Historical evidence for typed checkpoint identities. Bare Revert no longer
+> begins with this Profile-wide Context tree; the current direct-entry and
+> complete revision Viewer are recorded under
+> `docs/screenshots/revert-revision-result-20260821/`.
+
 This ordered evidence set records the Context-history presentation that keeps
 Checkpoint, Memory, Context, restoration Receipt, and restored Source-command
 identities visually distinct. It also verifies that copied Branch lineage is

@@ -1,0 +1,12 @@
+LIVE COLOR PTY · 52 180                                                                                                                                                             
+CURRENT CONTEXT · notes                                                                                                                                                             
+                                                                                                                                                                                    
+$ mem log --context archive                                                                                                                                                         
+Log for 'archive':                                                                                                                                                                  
+                                                                                                                                                                                    
+DIRECT COMMANDS · archive                                                                                                                                                           
+  [checkpoint] [CHECKPOINT 4485eed4]  2026-08-20 08:12 · archive baseline                                                                                                           
+  [add] [CHECKPOINT 30d6b0ce] [MEMORY e272851b]  2026-08-20 08:12 · created "Archived launch note."                                                                                 
+  [init] [CHECKPOINT 1327901b] [CONTEXT c24e06a2]  2026-08-20 08:12 · baseline for CONTEXT archive · not counted as a command                                                       
+                                                                                                                                                                                    
+LOG COMPLETE · NO INTERACTIVE UI · CURRENT UNCHANGED · notes

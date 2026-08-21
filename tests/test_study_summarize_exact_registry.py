@@ -70,7 +70,7 @@ def _install_exact(
     return frame, understanding
 
 
-def test_exact_summarize_materializes_result_without_opening_provider(
+def test_higher_quality_summarize_materializes_without_opening_provider(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -85,6 +85,7 @@ def test_exact_summarize_materializes_result_without_opening_provider(
         context,
         baseline_uid="11111111-1111-4111-8111-111111111111",
     )
+    Config().update({"codex_chatgpt_reasoning_effort": "none"})
 
     def forbidden_provider_session():
         raise AssertionError("exact Summarize prewarm opened the provider")

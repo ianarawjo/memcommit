@@ -1,6 +1,7 @@
 """Human-readable action and impact receipts for Undo and Revert."""
 from __future__ import annotations
 
+import click
 import json
 
 import pytest
@@ -10,6 +11,10 @@ from memcommit.cli import app
 from memcommit.command_history import CommandContextChange, ContextCommandUnit
 from memcommit.commands.restoration_present import _restored_command
 from memcommit.context import AutoCheckpoint, Memory
+from memcommit.interfaces.console.theme import (
+    SemanticColorRole,
+    semantic_color_rgb,
+)
 from memcommit.store import MemoryStore
 
 
@@ -127,6 +132,100 @@ def test_undo_of_revert_names_revert_as_the_action(isolated_store):
     assert f"Undid command: mem revert {init_uid}" in result.output
     assert "Affected Memories: 1 · + 1 added" in result.output
     assert "restore me" not in result.output
+
+
+def test_undo_and_redo_color_success_and_memory_effect_separately(
+    isolated_store,
+):
+    invoke("init", "notes")
+    added = invoke("add", "remove and restore me")
+    memory_uid = added.output.split("[", 1)[1].split("]", 1)[0]
+    full_memory_uid = next(iter(MemoryStore().load_current().memories))
+    invoke("remove", memory_uid)
+
+    undone = runner.invoke(app, ["undo"], color=True)
+
+    assert undone.exit_code == 0, undone.output
+    assert click.style(
+        "Undid command: ",
+        fg=semantic_color_rgb(SemanticColorRole.UNDO),
+        bold=True,
+    ) in undone.output
+    assert click.style(
+        "+ 1 added",
+        fg=semantic_color_rgb(SemanticColorRole.ADD),
+    ) in undone.output
+    assert f"mem remove {full_memory_uid[:8]} --context notes" in click.unstyle(
+        undone.output
+    )
+    assert full_memory_uid not in undone.output
+
+    redone = runner.invoke(app, ["redo"], color=True)
+
+    assert redone.exit_code == 0, redone.output
+    assert click.style(
+        "Redid command: ",
+        fg=semantic_color_rgb(SemanticColorRole.REDO),
+        bold=True,
+    ) in redone.output
+    assert click.style(
+        "- 1 removed",
+        fg=semantic_color_rgb(SemanticColorRole.REMOVE),
+    ) in redone.output
+
+    assert runner.invoke(app, ["undo"]).exit_code == 0
+    store = MemoryStore()
+    context = store.load_current()
+    restored_memory = next(iter(context.memories.values()))
+    context.replace(Memory(restored_memory.uid, "edited after restore"))
+    store.save(
+        context,
+        AutoCheckpoint(
+            command="edit",
+            args={"uid": restored_memory.uid, "content": "edited after restore"},
+            description="Edited restored Memory",
+        ),
+    )
+
+    edit_undone = runner.invoke(app, ["undo"], color=True)
+
+    assert edit_undone.exit_code == 0, edit_undone.output
+    assert click.style(
+        "~ 1 edited",
+        fg=semantic_color_rgb(SemanticColorRole.EDIT),
+    ) in edit_undone.output
+
+
+def test_undo_expands_a_colliding_direct_memory_prefix(isolated_store):
+    invoke("init", "notes")
+    store = MemoryStore()
+    context = store.load_current()
+    first = Memory(
+        "deadbeef-1111-1111-1111-111111111111",
+        "remove this one",
+    )
+    second = Memory(
+        "deadbeef-2222-2222-2222-222222222222",
+        "keep this one",
+    )
+    context.add(first)
+    context.add(second)
+    store.save(
+        context,
+        AutoCheckpoint(
+            command="seed",
+            args={},
+            description="Seed colliding UIDs",
+        ),
+    )
+    removed = runner.invoke(app, ["remove", first.uid])
+    assert removed.exit_code == 0, removed.output
+
+    undone = runner.invoke(app, ["undo"])
+
+    assert undone.exit_code == 0, undone.output
+    assert "mem remove deadbeef-1 --context notes" in undone.output
+    assert first.uid not in undone.output
 
 
 def test_receipt_escapes_content_that_could_forge_a_heading(isolated_store):
@@ -267,7 +366,7 @@ def _command_unit(
         (
             "clear",
             {"context": "work/notes"},
-            "mem clear work/notes --force",
+            "mem clear work/notes",
         ),
         (
             "embed",
@@ -370,8 +469,7 @@ def test_undo_reconstructs_meld_sever_and_translate_commands():
         "mem meld new/facts --into work/notes --accept"
     )
     assert _restored_command(sever) == (
-        "mem sever --source source/all --criteria rules/private "
-        "--save-as result/kept --source-descendants "
+        "mem sever source/all rules/private result/kept --source-descendants "
         "--criteria-root-only --accept"
     )
     assert _restored_command(translate) == (
@@ -396,4 +494,14 @@ def test_undo_uses_public_grant_operand_instead_of_authority_owner():
 
     assert _restored_command(unit) == (
         "mem remove memory-uid --context shared/notes"
+    )
+
+
+def test_undo_keeps_full_uid_when_legacy_scope_cannot_be_reconstructed():
+    full_uid = "b925d6bf-aec7-4de5-a432-7cf627d72628"
+
+    unit = _command_unit("remove", {"uid": full_uid})
+
+    assert _restored_command(unit) == (
+        f"mem remove {full_uid} --context work/notes"
     )

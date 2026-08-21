@@ -1,0 +1,3 @@
+$ mem fit "The lobby closes at five." "Visitors may use the side entrance after five."                                                                                              
+PTY · 180×52                                                                                                                                                                        
+MEM FIT · 1/1 · JUDGING THE COMPLETE PROPOSITION SET . · 0s

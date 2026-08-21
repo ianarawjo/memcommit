@@ -51,10 +51,9 @@ PTY 180 52
 [0m┌────────────────────────────────────────────────────────────────────────────────────| APPLY |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│[ PRESS ENTER TO APPLY ]                                                                                                                                                          [179C│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
-[0m ↑/↓ move · ←/→ tree · Enter/Space choose Context · m Memory here · M all · Tab pane · Q cancel[95D[48A[C[0m[?25l[5C[0;1;7m▾[0m
-[C[0;38;2;202;211;245m    · [memory f1a4679b] The library entrance moves north on Monday and closes at 18:00.[0m
-[C[0;38;2;202;211;245m    · [memory a1d23789] The help desk keeps its existing weekend schedule.[2A[74D[0m[?25l[0m› ✓  ▾ [0;38;2;16;36;47;48;2;139;213;255mstudy/source[0m
-[C[0;1;7m  › · [memory f1a4679b] The library entrance moves north on Monday and closes at 18:00.[0m
+[0m m THIS Context: show items · M EVERY Context: show items · ↑/↓ move · ←/→ tree · Enter/Space choose Context · Tab pane · Q cancel[130D[48A[C[0m[?25l[5C[0;1;7m▾[0m
+[C[0;38;2;202;211;245m    · [memory c837cb12] The library entrance moves north on Monday and closes at 18:00.[0m
+[C[0;38;2;202;211;245m    · [memory f8a5f22f] The help desk keeps its existing weekend schedule.[0m
 
 
 
@@ -100,8 +99,9 @@ PTY 180 52
 
 
 
+[17C[0mhide[48A[20D[0m[?25l[0m› ✓  ▾ [0;38;2;16;36;47;48;2;139;213;255mstudy/source[0m
+[C[0;1;7m  › · [memory c837cb12] The library entrance moves north on Monday and closes at 18:00.[0m
 
-[C[0mEnter/Space select this M[Cmory · ↑/↓ move · Tab pane[C· Q canc[Cl[0m[K[47A[63D[0m[?25l[4C[0;1;7m✓[0m
 
 
 
@@ -147,8 +147,54 @@ PTY 180 52
 
 
 
+[C[0mEnter/Space select th[Cs Memory[C· ↑/↓[Cm[Cve · Tab pane · Q[Ccancel[0m[K[47A[63D[0m[?25l[4C[0;1;7m✓[0m
 
-[C[0mFocused Memory f1a4679b[Cs[Clected[Cin study/source.[0m[K[47A[49D[0m[?25l[A[0;1;7m› ✓  ▸ [0;38;2;16;36;47;48;2;139;213;255;1mstudy/source[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[C[0mFocused Memory c837cb12[Cs[Clected[Cin study/source.[0m[K[47A[49D[0m[?25l[A[0;1;7m› ✓  ▸ [0;38;2;16;36;47;48;2;139;213;255;1mstudy/source[0m
 [C[0m                                                                                       [0m
 [C[0m                                                                          [0m
 
@@ -196,9 +242,9 @@ PTY 180 52
 
 
 
-[16C[0mselection c[2Car[3Cbecause its pr[Cview was hidden.[48A[64D[0m[?25l[0m› ✓  ▾ [0;38;2;16;36;47;48;2;139;213;255mstudy/source[0m
-[C[0;1;7m  › ✓ [memory f1a4679b] The library entrance moves north on Monday and closes at 18:00.[0m
-[C[0;38;2;202;211;245m    · [memory a1d23789] The help desk keeps its existing weekend schedule.[0m
+[16C[0msele[Ction c[2Car[3Cbecause its pr[Cview was hidden.[48A[64D[0m[?25l[0m› ✓  ▾ [0;38;2;16;36;47;48;2;139;213;255mstudy/source[0m
+[C[0;1;7m  › ✓ [memory c837cb12] The library entrance moves north on Monday and closes at 18:00.[0m
+[C[0;38;2;202;211;245m    · [memory f8a5f22f] The help desk keeps its existing weekend schedule.[0m
 
 
 
@@ -244,10 +290,10 @@ PTY 180 52
 
 
 
-[16C[0mf1a4679b se[2Cct[3Cin study/sourc[C.[0m[K[47A[49D[0m[?25l[2A[0m┌──────────────────────────────────────────────────────────────────────────────────| A · INPUT |───────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[16C[0mc837[Cb12 se[2Cct[3Cin study/sourc[C.[0m[K[47A[49D[0m[?25l[2A[0m┌──────────────────────────────────────────────────────────────────────────────────| A · INPUT |───────────────────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│› ✓  ▾ [0;38;2;16;36;47;48;2;139;213;255mstudy/source[0m                                                                                                                                                              [0;1m^[179C[0m│[0m
-[0m│[0;1;7m  › ✓ [memory f1a4679b] The library entrance moves north on Monday and closes at 18:00.[0m                                                                                          [0;48;2;68;68;68m [179C[0m│[0m
-[0m│[0;38;2;202;211;245m    · [memory a1d23789] The help desk keeps its existing weekend schedule.[0m                                                                                                       [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;1;7m  › ✓ [memory c837cb12] The library entrance moves north on Monday and closes at 18:00.[0m                                                                                          [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;202;211;245m    · [memory f8a5f22f] The help desk keeps its existing weekend schedule.[0m                                                                                                       [0;48;2;68;68;68m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m

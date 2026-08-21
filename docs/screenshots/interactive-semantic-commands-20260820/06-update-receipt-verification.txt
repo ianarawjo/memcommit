@@ -1,0 +1,4 @@
+                                                                                                                                                                                    
+START RECEIPT · UPDATE · UpdateEndpointSelection(source_name='capture/source', target_name='capture/target', source_descendants=False, target_descendants=False, source_memory_uid=N
+one, target_memory_uid=None)                                                                                                                                                        
+DURABLE STATE · UNCHANGED · PROVIDER CALLS 0

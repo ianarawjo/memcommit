@@ -1,52 +1,52 @@
  List · task-1/participant/construction-updates                                                                                                                                     
- Roots · task-1/participant/construction-updates                                                                                                                                    
+ Roots · practice · task-1 · task-2 · task-3                                                                                                                                        
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  * ▾ task-1/participant/construction-updates                                                                                                                                      ^
-›     ▾ task-1/participant/construction-updates/building-access  VIA EMBED                                                                                                          
-    · [memory 8b077f2a] Modify campus-wiki/building-access: During the construction period, the third-floor rear entrance cannot be used for general passage.                       
-    · [memory 56c34a24] Modify campus-wiki/building-access: During the construction period, the end time for general access through the main entrance is shortened from 10:00 p.m.  
-                        to 5:00 p.m.                                                                                                                                                
-    · [memory 84a45a62] Modify campus-wiki/building-access: During the construction period, the existing accessible route cannot be used because it is being reconstructed.         
-    · [memory 89e6f853] Add campus-wiki/building-access: The temporary accessible route next to the main entrance can be used throughout the construction period.                   
-    · [memory f9d7eb4e] Modify campus-wiki/building-access: Instruct students authorized to enter after 5:00 p.m. to use a physical NFC student ID card rather than the app.        
-    · [memory f1b7843e] Modify campus-wiki/building-access: During the construction period, instruct staff and construction/facilities personnel to use only the designated staff   
-                        entrance instead of the third-floor rear entrance.                                                                                                          
-    · [memory be002fc9] Modify campus-wiki/building-access: In access guidance during the construction period, the access guidance agent may prioritize the 5:00 p.m. closing of    
-                        the main entrance and the closure of the third-floor rear entrance.                                                                                         
-    · [memory 2d8e8c75] Modify campus-wiki/building-access: A student accustomed to reaching the Central Library through the third-floor rear entrance may expect to be able to     
-                        pass through during the construction period, go as far as the closed rear entrance, and then turn back or search again for an alternative route there.      
-    · [memory 50fb8bfa] Add campus-wiki/building-access: During the construction period, the general accessible route bypasses the existing accessible route under reconstruction   
-                        and leads from the temporary passage next to the main entrance to the first-floor lobby.                                                                    
-    · [memory ebc1d272] Add campus-wiki/building-access: Proactively inform students who are trying to reach the Central Library or who normally use the third-floor rear entrance  
-                        that they cannot use that route during the construction period.                                                                                             
-    · [memory 31f5b67b] Modify campus-wiki/building-access: A leader of an external group tour may expect the route used on a previous visit to remain valid during the             
-                        construction period and lead the visiting group to the closed third-floor rear entrance.                                                                    
-      ▾ task-1/participant/construction-updates/event-relocations  VIA EMBED                                                                                                        
-    · [memory 3fcfa405] Modify campus-wiki/event-relocations: Viewing in the tenth-floor exhibition and event hall is suspended during the construction period.                     
-    · [memory 1754ab18] Modify campus-wiki/event-relocations: Do not accept new reservations for Main Building event venues during the construction period.                         
-    · [memory 686d630d] Add campus-wiki/event-relocations: During the construction period, direct users to the auditorium in the detached east building as an alternative to Main   
-                        Building event venues.                                                                                                                                      
-    · [memory 967fc4ad] Add campus-wiki/event-relocations: During the construction period, direct users to the third-floor multipurpose room in the Engineering Building as an      
-                        alternative to Main Building event venues.                                                                                                                  
-    · [memory 9d4a1560] Add campus-wiki/event-relocations: During the construction period, the auditorium in the detached east building is converted into an alternative event      
-                        space for Main Building events.                                                                                                                             
-    · [memory 2587dbb3] Modify campus-wiki/event-relocations: During the construction period, the event guidance agent may exclude closed Main Building event venues from           
-                        comparison candidates and compare only designated alternative spaces.                                                                                       
-    · [memory eee1213e] Modify campus-wiki/event-relocations: During the construction period, the event guidance agent cannot create or restore reservations for Main Building      
-                        event venues and may provide only the reservation channel for each alternative space.                                                                       
-    · [memory b867c632] Modify campus-wiki/event-relocations: An external visitor who has previously visited a Main Building event venue may expect the entrance and floor from     
-                        the previous visit to remain unchanged and miss guidance about the alternative venue during the construction period.                                        
-    · [memory 9ab36f33] Add campus-wiki/event-relocations: During the construction period, the separate loading entrance of the auditorium in the detached east building is         
-                        converted into the loading point for event equipment relocated from the Main Building.                                                                      
-    · [memory 8bf7a20c] Modify campus-wiki/event-relocations: An external event operator may assume that the existing Main Building loading procedure remains valid during the      
-                        construction period, send equipment to the existing loading entrance, or check the access rules for the alternative venue too late.                         
-      ▾ task-1/participant/construction-updates/facility-updates  VIA EMBED                                                                                                         
-    · [memory 99c29cea] Add campus-wiki/facility-updates: The Main Building undergoes major facility improvement construction during summer break.                                  
-    · [memory 26131bc5] Add campus-wiki/facility-updates: During the construction period, the elevators operate alternately, one at a time.                                         
-    · [memory 5e34a7f5] Add campus-wiki/facility-updates: The visitor services desk suspends in-person operations during the construction period.                                   
-    · [memory f460b6d0] Add campus-wiki/facility-updates: During the construction period, visitor services are replaced by the visitor menu in the integrated campus portal.        
-    · [memory cd0830c7] Add campus-wiki/facility-updates: The general restroom on the first floor of the Main Building cannot be used during the construction period.               
-    · [memory d73ccf7b] Add campus-wiki/facility-updates: The general restroom on the second floor of the Main Building cannot be used during the construction period.              
-    · [memory b9dda61f] Add campus-wiki/facility-updates: The general restroom on the third floor of the Main Building cannot be used during the construction period.              v
+    ▸ practice                                                                                                                                                                     ^
+    ▾ task-1                                                                                                                                                                        
+      ▸ task-1/description                                                                                                                                                          
+      ▾ task-1/participant                                                                                                                                                          
+› *     ▾ task-1/participant/construction-updates                                                                                                                                   
+      · [context 5a66e0ec] VIA EMBED · task-1/participant/construction-updates/building-access                                                                                      
+      · [context f95f7748] VIA EMBED · task-1/participant/construction-updates/event-relocations                                                                                    
+      · [context b392133c] VIA EMBED · task-1/participant/construction-updates/temporary-parking                                                                                    
+      · [context 94dbac4b] VIA EMBED · task-1/participant/construction-updates/shop-updates                                                                                         
+      · [context fe3ca57d] VIA EMBED · task-1/participant/construction-updates/facility-updates                                                                                     
+      · [context 725d4213] VIA EMBED · task-1/participant/construction-updates/route-changes                                                                                        
+          ▾ task-1/participant/construction-updates/building-access                                                                                                                 
+        · [memory 8b077f2a] Modify campus-wiki/building-access: During the construction period, the third-floor rear entrance cannot be used for general passage.                   
+        · [memory 56c34a24] Modify campus-wiki/building-access: During the construction period, the end time for general access through the main entrance is shortened from 10:00   
+                            p.m. to 5:00 p.m.                                                                                                                                       
+        · [memory 84a45a62] Modify campus-wiki/building-access: During the construction period, the existing accessible route cannot be used because it is being reconstructed.     
+        · [memory 89e6f853] Add campus-wiki/building-access: The temporary accessible route next to the main entrance can be used throughout the construction period.               
+        · [memory f9d7eb4e] Modify campus-wiki/building-access: Instruct students authorized to enter after 5:00 p.m. to use a physical NFC student ID card rather than the app.    
+        · [memory f1b7843e] Modify campus-wiki/building-access: During the construction period, instruct staff and construction/facilities personnel to use only the designated     
+                            staff entrance instead of the third-floor rear entrance.                                                                                                
+        · [memory be002fc9] Modify campus-wiki/building-access: In access guidance during the construction period, the access guidance agent may prioritize the 5:00 p.m. closing   
+                            of the main entrance and the closure of the third-floor rear entrance.                                                                                  
+        · [memory 2d8e8c75] Modify campus-wiki/building-access: A student accustomed to reaching the Central Library through the third-floor rear entrance may expect to be able    
+                            to pass through during the construction period, go as far as the closed rear entrance, and then turn back or search again for an alternative route      
+                            there.                                                                                                                                                  
+        · [memory 50fb8bfa] Add campus-wiki/building-access: During the construction period, the general accessible route bypasses the existing accessible route under              
+                            reconstruction and leads from the temporary passage next to the main entrance to the first-floor lobby.                                                 
+        · [memory ebc1d272] Add campus-wiki/building-access: Proactively inform students who are trying to reach the Central Library or who normally use the third-floor rear       
+                            entrance that they cannot use that route during the construction period.                                                                                
+        · [memory 31f5b67b] Modify campus-wiki/building-access: A leader of an external group tour may expect the route used on a previous visit to remain valid during the         
+                            construction period and lead the visiting group to the closed third-floor rear entrance.                                                                
+          ▾ task-1/participant/construction-updates/event-relocations                                                                                                               
+        · [memory 3fcfa405] Modify campus-wiki/event-relocations: Viewing in the tenth-floor exhibition and event hall is suspended during the construction period.                 
+        · [memory 1754ab18] Modify campus-wiki/event-relocations: Do not accept new reservations for Main Building event venues during the construction period.                     
+        · [memory 686d630d] Add campus-wiki/event-relocations: During the construction period, direct users to the auditorium in the detached east building as an alternative to    
+                            Main Building event venues.                                                                                                                             
+        · [memory 967fc4ad] Add campus-wiki/event-relocations: During the construction period, direct users to the third-floor multipurpose room in the Engineering Building as an  
+                            alternative to Main Building event venues.                                                                                                              
+        · [memory 9d4a1560] Add campus-wiki/event-relocations: During the construction period, the auditorium in the detached east building is converted into an alternative event  
+                            space for Main Building events.                                                                                                                         
+        · [memory 2587dbb3] Modify campus-wiki/event-relocations: During the construction period, the event guidance agent may exclude closed Main Building event venues from       
+                            comparison candidates and compare only designated alternative spaces.                                                                                   
+        · [memory eee1213e] Modify campus-wiki/event-relocations: During the construction period, the event guidance agent cannot create or restore reservations for Main Building  
+                            event venues and may provide only the reservation channel for each alternative space.                                                                   
+        · [memory b867c632] Modify campus-wiki/event-relocations: An external visitor who has previously visited a Main Building event venue may expect the entrance and floor      
+                            from the previous visit to remain unchanged and miss guidance about the alternative venue during the construction period.                               
+        · [memory 9ab36f33] Add campus-wiki/event-relocations: During the construction period, the separate loading entrance of the auditorium in the detached east building is    v
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
- ↑↓ move  ←→ expand  A restore tree  m hide Memories here  M hide all Memories  Enter open/collapse  q close · 2/82 · 7 selectable
+ ↑↓ move  ←→ expand  A expand all  m THIS Context: hide items · M EVERY Context: show items  y/Y copy item  Enter preview only  q close · 6/95 · 108 selectable

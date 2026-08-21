@@ -6,6 +6,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, replace
 from typing import Literal
 
+from memcommit.interfaces.console.theme import SemanticColorRole
 from memcommit.resolution_workbench import ResolutionWorkbenchView
 
 
@@ -20,6 +21,23 @@ ReviewReportKind = Literal[
 
 
 @dataclass(frozen=True)
+class ReviewTextFragment:
+    """One trusted semantic token or neutral span in a text-only Review."""
+
+    text: str
+    role: SemanticColorRole | None = None
+    bold: bool = False
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.text, str):
+            raise TypeError("Review text fragments require text.")
+        if self.role is not None and not isinstance(self.role, SemanticColorRole):
+            raise TypeError("Review text fragments require a semantic color role.")
+        if not isinstance(self.bold, bool):
+            raise TypeError("Review text fragment bold state must be boolean.")
+
+
+@dataclass(frozen=True)
 class ReviewReport:
     """One revision-bound report; reviewing it never authorizes application."""
 
@@ -31,6 +49,7 @@ class ReviewReport:
     summary: str
     view: ResolutionWorkbenchView | None = None
     report_text: str = ""
+    report_fragments: tuple[ReviewTextFragment, ...] = ()
 
     def __post_init__(self) -> None:
         for label, value in (
@@ -53,6 +72,17 @@ class ReviewReport:
             raise ValueError("Unsupported Review report kind.")
         if not isinstance(self.report_text, str):
             raise ValueError("Review report text must be text.")
+        if not isinstance(self.report_fragments, tuple) or any(
+            not isinstance(fragment, ReviewTextFragment)
+            for fragment in self.report_fragments
+        ):
+            raise TypeError("Review report fragments must be typed fragments.")
+        if self.report_fragments and "".join(
+            fragment.text for fragment in self.report_fragments
+        ) != self.report_text:
+            raise ValueError(
+                "Review report fragments must preserve the exact plain report text."
+            )
         if self.view is None and not self.report_text.strip():
             raise ValueError("A Review report requires a view or report text.")
         if self.view is not None:
@@ -140,6 +170,7 @@ class ReviewReportController:
         title: str,
         summary: str,
         report_text: str,
+        report_fragments: tuple[ReviewTextFragment, ...] = (),
     ) -> "ReviewReportController":
         return cls(
             lambda: ReviewReport(
@@ -150,5 +181,6 @@ class ReviewReportController:
                 title=title,
                 summary=summary,
                 report_text=report_text,
+                report_fragments=report_fragments,
             )
         )

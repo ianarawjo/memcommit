@@ -1,0 +1,52 @@
+ mem help · command inventory                                                                                                                                                       
+┌────────────────────────────────────────────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────────────────────────────────────────────┐
+│  LANGUAGE · [ ✓ EN ]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                                                                                                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+│ Esc / Q / Ctrl-C  Close Help, cancel selection, or return to the waiting session.                                                                                               │^
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+OPERATIONS                                                                                                                                                                          
+┌ BROWSE & NAVIGATE ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ NO LLM · Inspect the current location and available Contexts, then move through the Context namespace.                                                                          │ 
+│ ▸ mem status ─┬ Show the current Context's inventory, first five direct Memories, relationships, and latest checkpoints.                                                        │ 
+│               └ WHEN · Getting oriented to what the current Context contains, how it is connected, and which operations were recently applied.                                  │ 
+│ ▸ mem pwd ─┬ Print the current canonical Context name without loading its contents.                                                                                             │ 
+│            └ WHEN · Confirming the active Context in a script or terminal.                                                                                                      │ 
+│ ▸ mem contexts ─┬ List local Contexts and readable cross-Profile Context views.                                                                                                 │ 
+│                 └ WHEN · Exploring every Context currently available to the Profile.                                                                                            │ 
+│ ▸ mem list ─┬ List a Context's direct items—Memories, Memory references, query views, and embedded Contexts—and its readable child Contexts. Use -r to recursively include      │ 
+│     (ls)    │ items from descendant and embedded Contexts; ls is the compact alias.                                                                                             │ 
+│             └ WHEN · Inspecting the structure and direct contents of a Context.                                                                                                 │ 
+│ ▸ mem show ─┬ Show a Memory, reference, embedded Context, or the direct contents of a current/explicit Context.                                                                 │ 
+│             └ WHEN · Reading the complete content of a known item or Context.                                                                                                   │ 
+│ ▸ mem switch ─┬ Enter the interactive Context picker, or switch to an explicit Context.                                                                                         │ 
+│               └ WHEN · Moving the working position to another existing Context.                                                                                                 │ 
+│ ▸ mem checkout ─┬ Switch Contexts using Git-style syntax; with -b, create and switch to a new Context branch.                                                                   │ 
+│                 └ WHEN · Using a Git-like workflow to switch or create a branch.                                                                                                │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┏ CREATE, COPY & CONNECT ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃ NO LLM · Create Contexts or Memories, copy or import resources, or connect existing material.                                                                                   ┃ 
+┃ ▸ mem init ─┬ Create a new empty Context and make it the current working Context.                                                                                               ┃ 
+┃             └ WHEN · Starting a separate workspace for a new topic, task, or group of Memories.                                                                                 ┃ 
+┃ ▸ mem add ─┬ Add one or more Memories to the current or explicit Context.                                                                                                       ┃ 
+┃            └ WHEN · Adding one or more facts, instructions, or notes directly to a Context.                                                                                     ┃ 
+┃ ▸ mem branch ─┬ Copy a Context or subtree into a new branch and switch to it.                                                                                                   ┃ 
+┃               └ WHEN · Editing a Context or subtree independently while preserving the original.                                                                                ┃ 
+┃ ▸ mem import ────┬ Import a clean-baseline Profile, Context tree, or Memory by value while preserving resource identity.                                                        ┃ 
+┃     [PARTIAL]    └ WHEN · Bringing externally supplied material into a locally managed store.                                                                                   ┃ 
+┃ ▾ mem reference ─┬ Copy one Source Memory version or direct/recursive Context scope into a Target as an immutable read-only snapshot.                                           ┃ 
+┃                  └ WHEN · Retaining one exact Memory version or Context scope even if its Source later changes or disappears.                                                   ┃ 
+┃   FLOW      · Source Memory or Context scope -> Target snapshot                                                                                                                 ┃ 
+┃   EXECUTION · DETERMINISTIC                                                                                                                                                     ┃ 
+┃   EFFECT    · Adds a self-contained snapshot to the Target; the Source stays unchanged                                                                                          ┃ 
+┃   RANGE     · One direct local Source Memory or local Context scope and one exact local Target                                                                                  ┃ 
+┃   FORM 1 · mem reference (choose a Context or Memory snapshot and Target interactively)                                                                                         ┃ 
+┃   FORM 2 · mem reference [UID] (unique direct local owner; Target defaults to current Context)                                                                                  ┃ 
+┃   FORM 3 · mem reference [source_context]:[UID] --into [target_context] (explicit immutable Memory snapshot)                                                                    ┃ 
+┃   FORM 4 · mem reference [source_context] --direct (direct Context snapshot into current Context)                                                                               ┃v
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter prefill command line  Tab next kind  H full help

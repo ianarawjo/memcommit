@@ -306,7 +306,15 @@ def _item_description(item: Information) -> str:
 
 def _report_removed_item(item: Information) -> None:
     if isinstance(item, Memory):
-        typer.secho(f"Removed [{item.uid[:8]}] {item.content}", fg=typer.colors.GREEN)
+        # Green confirms that the command succeeded; red belongs to the
+        # content that left the Context, matching the CLI diff removal cue.
+        typer.echo(
+            typer.style(
+                f"Removed [{item.uid[:8]}] ",
+                fg=typer.colors.GREEN,
+            )
+            + typer.style(item.content, fg=typer.colors.RED)
+        )
     elif isinstance(item, MemoryRef):
         label = source_object_label(SourceForm.MEMORY_REF)
         typer.secho(

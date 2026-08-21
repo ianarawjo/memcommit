@@ -47,13 +47,11 @@ A no-op prints that no exact duplicates exist and creates no checkpoint.
 
 ## Semantic redundancy finder and Dedun
 
-Different wording that appears interchangeable is not an exact duplicate.
-`mem find-redundancies` owns provider-backed, read-only analysis and evidence
-review. `mem dedun` reuses exactly that analysis, then alone exposes semantic
-evidence confirmation, survivor review, and exact Apply. Both exclude `EXACT`
-rows; Dedun accepts only `SURFACE_EQUIVALENT` or `SEMANTIC_EQUIVALENT`
-evidence. The hidden `find-duplicates` spelling is an exact callback alias of
-the canonical read-only finder and is folded into its Help row. There is no
+Differently stored wording is not an exact duplicate. `mem find-duplicates`
+owns the provider-free, read-only exact-DUP report. `mem find-redundancies`
+owns the complete exact-plus-semantic DUN report, and `mem dedun` reuses that
+analysis before applying the earliest-existing-UID survivor rule to eligible
+`EXACT`, `SURFACE_EQUIVALENT`, and `SEMANTIC_EQUIVALENT` evidence. There is no
 singular `find-redundancy` command. Hidden `consolidate` remains only the exact
 Dedun review replay route.
 

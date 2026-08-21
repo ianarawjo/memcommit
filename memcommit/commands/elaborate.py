@@ -10,7 +10,7 @@ from memcommit.bootstrap import build_elaborate_console_runner
 from memcommit.clipboard import write_system_clipboard
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.context_operand import ContextOperandSnapshot
-from memcommit.elaborate import ElaborateError
+from memcommit.elaborate import ElaborateError, ElaborateMode
 from memcommit.elaborate_application import ElaborateRequest, ElaborateResult
 from memcommit.elaborate_add_runtime import (
     FrozenElaborateSource,
@@ -24,6 +24,7 @@ from memcommit.ground_elaborate import (
     execute_ground_elaborate,
     freeze_ground_elaborate,
 )
+from memcommit.interfaces.cli.semantic_add import render_applied_memory_preview
 from memcommit.interfaces.console import (
     ConsoleMode,
     ConsoleModeError,
@@ -262,13 +263,15 @@ def cmd(
             f"TARGET · {display_escape_text(receipt.target_name)}"
         )
         typer.echo(f"EFFECTS · ADD {receipt.count} MEMORIES")
-        typer.echo(f"RECEIPT · {receipt.checkpoint_uid}")
-        typer.echo(f"CHECKPOINT · {receipt.checkpoint_uid}")
-        typer.echo(
-            "REVIEW · mem review elaborate --receipt "
-            f"{receipt.checkpoint_uid}"
+        analysis = prepared.result.analysis
+        added_contents = (
+            tuple(item.content for item in analysis.rules)
+            if analysis.mode is ElaborateMode.GOAL_TO_RULES
+            else tuple(item.proposition for item in analysis.cases)
         )
-        typer.echo("RECOVERY · mem undo")
+        render_applied_memory_preview(receipt.memory_uids, added_contents)
+        typer.echo(f"REVIEW · mem review elaborate --receipt {receipt.checkpoint_uid}")
+        typer.echo("UNDO · mem undo")
     except (
         ConsoleModeError,
         ElaborateError,

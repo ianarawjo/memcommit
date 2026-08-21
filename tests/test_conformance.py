@@ -431,6 +431,178 @@ def test_check_conformance_cli_runs_the_shared_context_core(
     assert "NO CONTEXT CHANGES" in result.output
 
 
+def _install_context_conformance_cli_fixture(monkeypatch):
+    store = MemoryStore()
+    target = ops.init("ticker/examples")
+    ops.add(target, "North Star Energy → NSE")
+    rules = ops.init("ticker/rules")
+    ops.add(rules, "Use uppercase initials for multiword names.")
+    store.create_context(target)
+    store.create_context(rules)
+    provider = Provider(
+        {
+            "overview": "The example follows the Rule.",
+            "judgments": [
+                {
+                    "rule_id": "r1",
+                    "status": "CONFORMS",
+                    "evidence_memory_ids": ["m000001"],
+                    "nonconforming_memory_ids": [],
+                    "reason": "NSE uses the three initials.",
+                }
+            ],
+            "outside_memory_ids": [],
+        }
+    )
+    monkeypatch.setattr(
+        check_conformance_command,
+        "connect_semantic_provider",
+        lambda: provider,
+    )
+    return store, target, rules, provider
+
+
+@pytest.mark.parametrize(
+    "arguments",
+    [
+        ["--rule", "ticker/rules", "--example", "ticker/examples"],
+        ["--rule", "ticker/rules", "--case", "ticker/examples"],
+        ["--from", "ticker/rules", "--to", "ticker/examples"],
+    ],
+)
+def test_check_conformance_role_and_direction_aliases_share_context_route(
+    isolated_store,
+    monkeypatch,
+    arguments,
+):
+    _store, _target, _rules, provider = _install_context_conformance_cli_fixture(
+        monkeypatch
+    )
+
+    result = CliRunner().invoke(app, ["check-conformance", *arguments])
+
+    assert result.exit_code == 0, result.output
+    assert "CHECK CONFORMANCE · CONTEXT" in result.output
+    assert "SUBJECT · ticker/examples" in result.output
+    assert "RULES · ticker/rules · 1" in result.output
+    assert len(provider.calls) == 1
+
+
+@pytest.mark.parametrize(
+    ("arguments", "current_name"),
+    [
+        (["--rule", "ticker/rules"], "ticker/examples"),
+        (["--from", "ticker/rules"], "ticker/examples"),
+        (["--example", "ticker/examples"], "ticker/rules"),
+        (["--to", "ticker/examples"], "ticker/rules"),
+    ],
+)
+def test_check_conformance_alias_endpoints_fill_from_one_current_snapshot(
+    isolated_store,
+    monkeypatch,
+    arguments,
+    current_name,
+):
+    store, _target, _rules, provider = _install_context_conformance_cli_fixture(
+        monkeypatch
+    )
+    store.set_current(current_name)
+
+    result = CliRunner().invoke(app, ["check-conformance", *arguments])
+
+    assert result.exit_code == 0, result.output
+    assert "SUBJECT · ticker/examples" in result.output
+    assert "RULES · ticker/rules · 1" in result.output
+    assert len(provider.calls) == 1
+
+
+@pytest.mark.parametrize(
+    ("arguments", "message"),
+    [
+        (
+            [
+                "--rule",
+                "ticker/rules",
+                "--from",
+                "ticker/rules",
+                "--example",
+                "ticker/examples",
+            ],
+            "Use only one of --against, --rule, or --from",
+        ),
+        (
+            [
+                "--rule",
+                "ticker/rules",
+                "--case",
+                "ticker/examples",
+                "--to",
+                "ticker/examples",
+            ],
+            "Use only one of --example, --case, or --to",
+        ),
+        (
+            [
+                "ticker/examples",
+                "--rule",
+                "ticker/rules",
+                "--case",
+                "ticker/examples",
+            ],
+            "Target positional operand or --example/--case/--to",
+        ),
+        (
+            ["--ground", "ticker", "--rule", "ticker/rules"],
+            "--ground cannot be combined with Context operands",
+        ),
+    ],
+)
+def test_check_conformance_rejects_conflicting_aliases_before_provider(
+    isolated_store,
+    monkeypatch,
+    arguments,
+    message,
+):
+    _store, _target, _rules, provider = _install_context_conformance_cli_fixture(
+        monkeypatch
+    )
+
+    result = CliRunner().invoke(app, ["check-conformance", *arguments])
+
+    assert result.exit_code == 1
+    assert message in result.output
+    assert provider.calls == []
+
+
+def test_check_conformance_legacy_positional_target_still_requires_rules(
+    isolated_store,
+    monkeypatch,
+):
+    store, _target, _rules, provider = _install_context_conformance_cli_fixture(
+        monkeypatch
+    )
+    store.set_current("ticker/rules")
+
+    result = CliRunner().invoke(
+        app,
+        ["check-conformance", "ticker/examples"],
+    )
+
+    assert result.exit_code == 1
+    assert "requires a Rules or Subject endpoint" in result.output
+    assert provider.calls == []
+
+
+def test_check_conformance_help_exposes_role_and_direction_aliases():
+    result = CliRunner().invoke(app, ["check-conformance", "--help"])
+
+    assert result.exit_code == 0
+    assert "--against,--rule,--from" in result.output
+    assert "--example,--case,--to" in result.output
+    assert "RULES_CONTEXT" in result.output
+    assert "SUBJECT_CONTEXT" in result.output
+
+
 class AuditProvider:
     identity = ProviderIdentity(provider="test", model="audit-conformance-model")
     calls = []
@@ -485,9 +657,11 @@ def test_audit_optionally_embeds_the_same_context_conformance_report():
     assert QualityAuditSession.from_dict(session.to_dict()).conformance == session.conformance
 
 
-def test_audit_cli_against_rules_saves_one_read_only_four_check_report(
+@pytest.mark.parametrize("rules_option", ["--against", "--rule"])
+def test_audit_cli_rules_alias_saves_one_read_only_four_check_report(
     isolated_store,
     monkeypatch,
+    rules_option,
 ):
     store = MemoryStore()
     target = ops.init("ticker/examples")
@@ -512,7 +686,7 @@ def test_audit_cli_against_rules_saves_one_read_only_four_check_report(
             "audit",
             "--context",
             target.name,
-            "--against",
+            rules_option,
             rules.name,
             "--snapshot",
         ],

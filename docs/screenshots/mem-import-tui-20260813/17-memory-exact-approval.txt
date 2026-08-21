@@ -1,8 +1,8 @@
  MEM IMPORT · MEMORY · FINAL APPROVAL                                                                                                                                               
- Nothing has been imported. A applies only the command below.                                                                                                                       
+ Nothing has been applied. Enter applies only the command below.                                                                                                                    
 ┌─────────────────────────────────────────────────────────────────────| EXACT COMMAND · REVIEW BEFORE APPLY |──────────────────────────────────────────────────────────────────────┐
 │PROPOSED COMMAND · NOT RUN                                                                                                                                                       ^│
-│  mem import memory 20000000-0000-4000-8000-000000000001 --from-profile source-profile --context source/root --into destination                                                   │
+│  mem import memory 20000000-0000-4000-8000-000000000002 --from-profile source-profile --context source/root/child --into destination                                             │
 │                                                                                                                                                                                  │
 │EFFECTS · ONE COMMAND                                                                                                                                                             │
 │  Append Memory [20000000] to Context 'destination'.                                                                                                                              │
@@ -49,4 +49,4 @@
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
- ↑/↓ scroll · A apply exact command · Esc/Q cancel                                                                                                                                  
+ ↑/↓ scroll · Enter apply exact command · A also works · Esc/Q cancel                                                                                                               

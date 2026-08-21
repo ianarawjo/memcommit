@@ -78,6 +78,9 @@ def test_migration_shell_receipt_escapes_display_controls_but_round_trips():
         "CON",
         "nul.txt",
         "trailing.",
+        "deadbeef",
+        "DEADBEEF",
+        "12345678-1234-4234-8234-123456789abc",
     ),
 )
 def test_nonportable_names_remain_legacy_valid_but_cannot_be_new_names(name):
@@ -91,7 +94,13 @@ def test_nonportable_names_remain_legacy_valid_but_cannot_be_new_names(name):
 
 @pytest.mark.parametrize(
     "name",
-    ("team", "team/project", "Team_29/project-v2", "release.2026"),
+    (
+        "team",
+        "team/project",
+        "Team_29/project-v2",
+        "release.2026",
+        "team/deadbeef",
+    ),
 )
 def test_portable_names_are_canonical_without_shell_quoting(name):
     assert validate_portable_context_name(name) == name
@@ -106,6 +115,35 @@ def test_new_nonportable_context_is_rejected_without_publishing_storage(
     assert result.exit_code == 1
     assert "not portable" in result.stderr
     assert MemoryStore().list_context_names() == []
+
+
+def test_new_memory_uid_shaped_context_is_rejected_at_creation(isolated_store):
+    result = runner.invoke(app, ["init", "deadbeef"])
+
+    assert result.exit_code == 1
+    assert "Memory UUID or visible UID prefix" in result.stderr
+    assert MemoryStore().list_context_names() == []
+
+
+def test_uid_shaped_parent_batch_is_rejected_without_partial_creation(
+    isolated_store,
+):
+    result = runner.invoke(app, ["init", "deadbeef/child", "--parents"])
+
+    assert result.exit_code == 1
+    assert "Memory UUID or visible UID prefix" in result.stderr
+    assert MemoryStore().list_context_names() == []
+
+
+def test_uid_shaped_legacy_context_remains_readable(isolated_store):
+    store = MemoryStore()
+    legacy = Context(uid=str(uuid.uuid4()), name="deadbeef")
+    memory = ops.add(legacy, "legacy content")
+    _seed_legacy_context(store, legacy)
+
+    loaded = store.load_direct(legacy.name)
+
+    assert loaded.memories[memory.uid].content == "legacy content"
 
 
 def test_existing_legacy_context_remains_readable_and_writable(isolated_store):

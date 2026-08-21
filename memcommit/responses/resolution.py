@@ -22,6 +22,10 @@ def response_target_from_item(
     """Return a common response target for a decision or commentable change."""
 
     presentation = item.issue_presentation
+    if item.response_state == "NOT_APPLICABLE" and not item.commentable:
+        # Evidence-only and already-materialized rows may still have a rich
+        # issue presentation, but that does not make them response targets.
+        return None
     accepts_response = (
         presentation is not None
         or item.commentable

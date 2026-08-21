@@ -6,6 +6,7 @@ import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.layout import to_container
 from prompt_toolkit.output import DummyOutput
+from memcommit.exact_command_review import ExactCommandReview
 
 import memcommit.interfaces.tui.workbenches.resolution.session_shell as resolution_shell_module
 from memcommit.commands.semantic_detail_renderer import (
@@ -1792,6 +1793,79 @@ def test_commentable_change_response_is_included_in_revision_turn():
     assert "Issue change: Response: Remove this proposed change." in (
         action.comment
     )
+
+
+def test_semantic_turn_command_is_built_for_review_and_rebuilt_at_approval():
+    item = replace(
+        _item("change"),
+        role="CHANGE",
+        obligation="NONE",
+        response_state="NOT_APPLICABLE",
+        commentable=True,
+    )
+    view = _view(
+        item,
+        capabilities=frozenset({"SUBMIT_ITEM", "SUBMIT_ALL", "ACCEPT"}),
+        accept_enabled=True,
+    )
+    reviewed = []
+
+    def command(action):
+        reviewed.append(action)
+        return ExactCommandReview(
+            ("mem", "update", "--comment", action.comment, "--expect-session", "rev-1"),
+            ("Replace the staged proposal only.",),
+        )
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text(
+            "\t\x1b[B\r\t\rRemove this proposed change.\r\t\t\r\x1b[F\r"
+        )
+        action = run_resolution_workbench_shell(
+            view,
+            split_viewer_items=True,
+            review_and_apply=True,
+            global_strategies=(
+                ResolutionGlobalStrategy("Revise from comments", "SUBMIT_ALL"),
+            ),
+            turn_command_review=command,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "SUBMIT_ALL"
+    assert reviewed == [action, action]
+
+
+def test_final_apply_remains_commandless_when_operation_callback_excludes_it():
+    view = replace(
+        _view(),
+        capabilities=frozenset({"ACCEPT"}),
+        accept_enabled=True,
+        accept_mode="AS_IS",
+    )
+    reviewed_kinds: list[str] = []
+
+    def command(action):
+        reviewed_kinds.append(action.kind)
+        return None
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[B\r")
+        action = run_resolution_workbench_shell(
+            view,
+            split_viewer_items=True,
+            review_and_apply=True,
+            decision_free_behavior="FINAL_REVIEW",
+            turn_command_review=command,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "ACCEPT"
+    assert reviewed_kinds == ["ACCEPT", "ACCEPT"]
 
 
 def test_impact_arrows_open_only_the_focused_row_and_close_it_idempotently():

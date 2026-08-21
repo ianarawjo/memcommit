@@ -1,0 +1,9 @@
+LIVE COLOR PTY · 180 columns × 52 rows
+STORE · isolated disposable Profile
+
+$ mem embed aaaaaaaa
+[31mError: Memory prefix 'aaaaaaaa' has multiple local matches (2): practice/3:aaaaaaaa-0000-0000-0000-000000000000; practice/4:aaaaaaaa-0000-0000-0000-000000000000. Use one qualified CONTEXT:UID locator.[0m
+
+BLOCKED · both owners displayed
+TARGET RECORD UNCHANGED · YES
+CHECKPOINT COUNT UNCHANGED · YES

@@ -135,7 +135,6 @@ def _argv_for(plan: FrozenMergePlan, outcome: ResolutionOutcome) -> tuple[str, .
         "mem",
         "merge",
         plan.source_name,
-        "--into",
         plan.target_name,
         "--recursive" if plan.request.reach is MergeReach.DESCENDANTS else "--direct",
     ]

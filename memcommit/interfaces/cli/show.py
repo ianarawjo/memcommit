@@ -15,11 +15,11 @@ from memcommit.show_application import (
     ShowQueryView,
     ShowResult,
 )
-from memcommit.source_projection.model import SourceForm
 from memcommit.source_projection.console import (
     styled_source_object_label,
     styled_source_relationship_label,
 )
+from memcommit.source_projection.model import SourceForm
 from memcommit.source_projection.presentation import (
     source_annotation_text,
     source_display_text,
@@ -39,8 +39,12 @@ def _render_memory_ref(
     memory_ref: ShowMemoryReference,
     context_name: str,
 ) -> None:
+    relationship_label = styled_source_object_label(
+        memory_ref.source,
+        title=True,
+    )
     typer.secho(
-        f"{styled_source_object_label(memory_ref.source, title=True)}: "
+        f"{relationship_label}: "
         f"{display_escape_text(memory_ref.uid)}",
         bold=True,
     )
@@ -106,8 +110,9 @@ def _render_context(context: ShowContextSnapshot) -> None:
     for item in context.items:
         annotation = source_annotation_text(item.source)
         if isinstance(item, ShowEmbeddedContext):
+            label = styled_source_relationship_label(item.source)
             typer.echo(
-                f"  [{source_object_label(SourceForm.CONTEXT)} "
+                f"  [{label} "
                 f"{display_escape_text(item.uid[:8])}] "
                 f"{display_escape_text(item.name)}"
                 + (f"  {annotation}" if annotation else "")
@@ -120,8 +125,9 @@ def _render_context(context: ShowContextSnapshot) -> None:
                 + (f"  {annotation}" if annotation else "")
             )
         elif isinstance(item, ShowMemoryReference):
+            label = styled_source_relationship_label(item.source)
             typer.echo(
-                f"  [{styled_source_relationship_label(item.source)} "
+                f"  [{label} "
                 f"{display_escape_text(item.uid[:8])}] "
                 f"[{display_escape_text(item.target_context_name)}]"
                 f"[memory {display_escape_text(item.target_memory_uid[:8])}]"

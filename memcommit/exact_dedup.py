@@ -35,6 +35,18 @@ class ExactDuplicateGroup:
 
 
 @dataclass(frozen=True)
+class ExactDuplicateReport:
+    """Complete provider-free exact-duplicate discovery for one Context."""
+
+    memory_count: int
+    groups: tuple[ExactDuplicateGroup, ...]
+
+    @property
+    def duplicate_count(self) -> int:
+        return sum(len(group.absorbed_uids) for group in self.groups)
+
+
+@dataclass(frozen=True)
 class ExactDedupReceipt:
     """Result of one direct exact-dedup invocation."""
 
@@ -73,6 +85,18 @@ def find_exact_duplicate_groups(context: Context) -> tuple[ExactDuplicateGroup, 
                 )
             )
     return tuple(groups)
+
+
+def find_exact_duplicates(context: Context) -> ExactDuplicateReport:
+    """Return every exact group without provider access or Source mutation."""
+
+    if not isinstance(context, Context):
+        raise TypeError("Find Duplicates requires one Context.")
+    memory_count = sum(1 for item in context.iter_items() if isinstance(item, Memory))
+    return ExactDuplicateReport(
+        memory_count=memory_count,
+        groups=find_exact_duplicate_groups(context),
+    )
 
 
 def _inbound_references(
@@ -129,8 +153,7 @@ def apply_exact_dedup(
             )
             if inbound:
                 locations = ", ".join(
-                    f"{owner}#{reference_uid[:8]}"
-                    for owner, reference_uid in inbound
+                    f"{owner}#{reference_uid[:8]}" for owner, reference_uid in inbound
                 )
                 raise ExactDedupError(
                     "Exact Dedup cannot remove a Memory with an inbound reference: "
@@ -173,6 +196,8 @@ __all__ = [
     "ExactDedupError",
     "ExactDedupReceipt",
     "ExactDuplicateGroup",
+    "ExactDuplicateReport",
     "apply_exact_dedup",
     "find_exact_duplicate_groups",
+    "find_exact_duplicates",
 ]

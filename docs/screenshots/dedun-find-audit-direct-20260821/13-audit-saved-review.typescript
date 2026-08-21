@@ -1,0 +1,37 @@
+PTY 180 52
+MEM AUDIT · 1/3 · FINDING DUPLICATES . · 0sMEM AUDIT · 1/3 · FINDING DUPLICATES . · 0sMEM AUDIT · 1/3 · FINDING DUPLICATES .. · 0sMEM AUDIT · 1/3 · FINDING DUPLICATES … · 0s MEM AUDIT · 2/3 · FINDING AMBIGUITIES . · 1sMEM AUDIT · 2/3 · FINDING AMBIGUITIES .. · 1sMEM AUDIT · 2/3 · FINDING AMBIGUITIES … · 1s MEM AUDIT · 2/3 · FINDING AMBIGUITIES . · 1sMEM AUDIT · 3/3 · FINDING CONFLICTS . · 2s  MEM AUDIT · 3/3 · FINDING CONFLICTS .. · 2sMEM AUDIT · 3/3 · FINDING CONFLICTS … · 2s MEM AUDIT · 3/3 · FINDING CONFLICTS . · 2s                                          [32m[1mAudit saved: 0 finding(s) across 3 quality checks.[0m
+Session [6df4b0c1] · review: mem review audit --session 6df4b0c1-56cd-429e-8e8d-dceecc73639b
+Source unchanged. No checkpoint created.
+COMMAND EXIT · 0
+VERIFICATION · CONTEXT quality/direct-audit · MEMORIES 3 · CHECKPOINT COMMANDS [] · CURRENT quality/direct-audit · PROVIDER ['find_duplicates', 'find_ambiguities', 'find_conflicts']
+AUDIT RECEIPT READY
+
+ MEM AUDIT
+ quality/direct-audit
+ SAVED · 3/3 CHECKS · 0/0 ANSWERED · 3 SOURCE MEMORIES · 0 DUPLICATES · 0 AMBIGUITIES · 0 CONFLICTS
+
+ WHAT MEM UNDERSTOOD
+ AUDIT SUMMARY
+ All quality finders completed over the same saved direct Context snapshot. Reported 0 total findings.
+
+ CHECKS
+ DUPLICATES · COMPLETE · 0 findings
+AMBIGUITIES · COMPLETE · 0 findings
+CONFLICTS · COMPLETE · 0 findings
+
+ AUDITED SOURCE
+ quality/direct-audit · 3 direct Memories as captured when this Audit ran. Descendants and embedded Contexts were not analyzed.
+
+ PROVENANCE
+ DUPLICATES · duplicates-v1-draft · capture:deterministic-quality-receipt
+AMBIGUITIES · ambiguity-v1-draft · capture:deterministic-quality-receipt
+CONFLICTS · conflict-v1-draft · capture:deterministic-quality-receipt
+
+ BOUNDARY
+ This saved Audit is a model-assisted finding record, not proof that the Source is free of quality problems. Review responses do not alter the snapshot, Context, or Memories.
+
+ AUDIT FINDINGS · DUPLICATES → AMBIGUITIES → CONFLICTS
+  All 3 checks completed with no actionable quality findings.
+REVIEW EXIT · 0
+VERIFICATION · CONTEXT quality/direct-audit · MEMORIES 3 · CHECKPOINT COMMANDS [] · CURRENT quality/direct-audit · PROVIDER ['find_duplicates', 'find_ambiguities', 'find_conflicts']
+AUDIT REVIEW READY

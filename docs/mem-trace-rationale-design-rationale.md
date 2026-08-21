@@ -9,9 +9,11 @@ only the current text does not answer two provenance questions:
 1. What retained source occurrence did this Memory come from?
 2. Which recorded operations changed its content or identity?
 
-Rationale intentionally stops at recorded evidence. If no operation retained a
-reason, it says so instead of asking a model to construct a present-day purpose
-that could be mistaken for author intent or historical cause.
+Rationale freezes retained Trace evidence, then asks one bounded semantic turn
+to express that evidence as compact natural-language provenance. The narrative
+must explain the selected content's source context, recorded derivation, and
+later lifecycle without inventing author intent or importing present-day
+purpose. If history is absent or hidden, no provider is connected.
 
 ## Command contract
 
@@ -30,8 +32,10 @@ UID or unambiguous prefix. `mem trace MEMORY` is the public interactive route fo
 compact projection rather than invoking another CLI command. Log always prints
 that projection, while Trace may open its interactive workbench in a TTY.
 Neither command changes Contexts, checkpoints, saved semantic analyses,
-proposals, active state, or provider-derived caches. Rationale has no provider
-turn: its only explanatory prose comes from reasons already retained in Trace.
+proposals, active state, or provider-derived caches. Rationale gives the exact
+whole retained Trace to one provider turn under the versioned natural-provenance
+ruleset and validates one bounded paragraph. Compare's source-row Rationale
+action enters the same ruleset, payload, schema, and decoder.
 
 In an interactive terminal, omitting `MEMORY` first opens the common session
 picker as a Recents launcher. Recent rows are scoped to the current operation,
@@ -136,21 +140,25 @@ an explicit selector. Explicit CLI selectors continue to accept either that
 full UID or an unambiguous prefix; ambiguity is rejected rather than guessed. It
 does not perform per-row semantic inference or open Memory references,
 embedded Contexts, or query-only sources. `mem rationale` has no provider
-connection before or after selection. After the full-screen picker
+connection before target selection and never sends the readable picker catalog.
+After the full-screen picker
 closes, the command reloads the direct Context before reconstructing the report
 so it does not combine a pre-picker live frame with post-picker history.
 The selected row names its recorded-change count before Enter: Trace covers
 the full retained lineage from earliest retained evidence through the current
-Context, while Rationale covers the selected Memory and its recorded reasons.
+Context, while Rationale covers the selected Memory's source context,
+derivation, and compact ordered lifecycle.
 This shared target launcher is the interactive boundary
 for choosing both reach and Memory; it does not silently broaden exact reach.
 
-Rationale renders its complete interactive report inside the common framed,
-wrapped, read-only `VIEWER`, whether its Memory came from Recents, the tree, or
-an explicit operand. Trace instead projects one continuous vertical lineage
-document in that same common read-only Viewer. The selected Memory has already
-fixed the subject, so a second `ITEMS` surface would make the person choose an
-operation merely to reveal evidence that belongs directly in the report. The
+Rationale uses the full-screen target selector only when a target is omitted.
+After selection it restores the ordinary terminal and prints one compact
+receipt; an explicit operand prints the same receipt directly. Its usual
+Memory-plus-lifecycle result does not justify a second Viewer or a close key.
+Trace instead projects one continuous vertical lineage document in the common
+read-only Viewer. The selected Memory has already fixed the subject, so a
+second `ITEMS` surface would make the person choose an operation merely to
+reveal evidence that belongs directly in the report. The
 document renders every visible newest-first operation as the same typed compact
 History row used by Log, followed immediately by its inline `− before` / `+
 after` Memory diff. `NOW` and `ORIGIN` endpoint bands are intentionally omitted:
@@ -159,25 +167,26 @@ carry that state, while the shared `[command] [CHECKPOINT …] [MEMORY …]  tim
 summary` grammar gives the operation the same scan landmarks as Log. Bare,
 recent, and explicit Trace targets all enter this single-surface Viewer in a TTY. `--plain` and
 non-TTY routes print the exact ANSI-free text projection of the same document;
-JSON retains the complete structured report. Both Rationale and Trace move by
-visible wrapped rows through the common cursor-backed read pane, so a hidden
-fixed cursor cannot reset the viewport to its first logical line.
+JSON retains the complete structured Trace and the validated bounded provenance
+projection. Trace moves by visible wrapped rows through the common
+cursor-backed read pane, so a hidden fixed cursor cannot reset the viewport to
+its first logical line.
 Trace sizes that Viewer to the document with a ten-row minimum and a 28-row
 application cap in the ordinary terminal buffer. A short lineage therefore
 does not reserve an empty 52-row canvas; a longer lineage stops growing and
 scrolls inside the same frame. This compactness changes presentation only, not
 the source freeze, operation bound, full plain document, or close behavior.
-Rationale reuses the same target and Trace projection, then projects only its
-compact recorded-reason summary; it does not inherit Trace's owner-history
-authority when the target is granted.
+Rationale reuses the same target and Trace projection, then synthesizes only a
+compact natural-language account grounded in that Trace; it does not inherit
+Trace's owner-history authority when the target is granted.
 
 Outside a TTY, omission fails instead of silently selecting a Context or the
 first Memory;
 automation must pass an explicit UID or prefix. `--json` also requires an
 explicit selector so machine-readable stdout is never preceded by terminal
 selection traffic. Escape, `q`, and Ctrl-C cancel the picker without changing
-the store. In a TTY, even an empty current Context still opens its exact target
-range and offers `INCLUDE DESCENDANTS`; Rationale never connects a provider.
+the store or connecting a provider. In a TTY, even an empty current Context
+still opens its exact target range and offers `INCLUDE DESCENDANTS`.
 
 By default, `mem trace` bounds its human projection to the newest twenty
 lineage-affecting command units. `--limit N` selects another bound up to 200,
@@ -229,8 +238,8 @@ Thus the human-facing scopes remain distinct:
 - `mem revert` restores one reviewed checkpoint;
 - `mem undo` and `mem redo` restore one global command unit;
 - `mem trace` interactively inspects Log's Memory-lineage data projection; and
-- `mem rationale` shows one Memory and the latest recorded reason retained in
-  that lineage.
+- `mem rationale` explains one Memory's retained origin context, derivation,
+  and lifecycle as a compact natural-language receipt.
 
 Trace must not become the execution authority for Undo or Redo. A per-Memory
 lineage can include reconstructed or unrecorded events and cannot prove the
@@ -245,93 +254,80 @@ Context has no checkpoint, the earliest state available to trace is the
 current state itself. The UI shows it only under `CURRENT` and leaves
 `ORIGINAL` unavailable, because it cannot establish when, where, or by whom
 that Memory was created; `mem rationale` therefore reports that no retained
-creation event was found.
+history is available and skips provider connection.
 
 The default human Rationale projection is deliberately smaller than its
-evidence model. It shows the selected **MEMORY** and at most one compact
-**PROVENANCE** paragraph containing the latest nonempty retained operation
-reason. It never joins several historical reasons with generated connective
-prose; older reasons remain available in Trace and JSON.
-Provenance without a retained reason is the status `no reason recorded`; a
-present reason is labeled `latest recorded reason` in the section heading
-rather than prefixed again inside the paragraph. It does not repeat Trace's operation list, endpoint
-contents, UIDs, positions, saved reviews, proposals, or contextual judgments.
-When a Grant withholds authority history, the status is `hidden by Grant`.
+evidence model. It shows the selected **MEMORY** and one **PROVENANCE**
+paragraph. For the motivating `practice/source` trace, the expected receipt is:
 
-Provenance uses an NFC-normalized Unicode character budget rather than a word
-count. Its source is the retained event kind, command, evidence label, reason,
-and before/after content; its projected paragraph limit is
-`min(160, source characters - 1)`. Embedded line breaks and repeated whitespace
-in the retained reason collapse to ordinary spaces. An over-limit reason keeps
-the longest complete sentence prefix that fits when one is available, then
-uses an ellipsis; otherwise it falls back to a word boundary. Retained
-earliest/current endpoint content
-also contributes to the conservative source bound even though the compact
-paragraph projects only the latest recorded reason. A trace with no retained
-event, or history hidden by a Grant, has a zero provenance budget. A trace with
-events but no reason may have a nonzero potential budget while still emitting
-only `no reason recorded`; the implementation never fills that budget with
-operation or endpoint repetition. Therefore emitted prose is strictly smaller
-than the Trace evidence it summarizes. JSON retains typed origin, review, and
-legacy inference fields for compatibility, but provenance-only execution sets
-inference, fallback evidence, and inference character counts to empty or zero.
+```text
+“Um...” began as a hesitation between a minimal-change instruction and its
+“distribute, not divide” example. Sentence chunking made it a standalone
+Memory; undo removed it, redo restored it, and remove later deleted it.
+```
 
-### Provenance example family: scoped polishing
+The whole Trace component enters one provider call. Parent and sibling states
+may establish the origin context, but an event containing only sibling UIDs is
+not narrated as a selected-Memory transition. The prose preserves recorded
+chronology while omitting raw event labels, arrows, transition counts,
+timestamps, checkpoint IDs, and an operation inventory. A textual role such as
+`hesitation` is permitted when the selected wording and its placement support
+it; `placeholder intent`, usefulness judgments, and unrecorded removal reasons
+remain forbidden.
 
-Rationale keeps one coherent Korean example family around a narrowly scoped
-polishing request. These are retained Trace-data fixtures, not provider prompt
-examples; no model receives them and the compact projection never rewrites
-their meaning.
+The ordinary human bound is 40 whitespace-delimited words. `--limit N` changes
+the positive bound up to 100,000 and `--unit characters|bytes|words` chooses the
+measurement. The provider must produce one or two complete sentences within
+that exact bound. The decoder rejects an over-limit or mechanically clipped
+narrative instead of truncating a valid sentence after generation. JSON keeps
+the complete typed Trace and the validated `provenance_projection`, including
+its ruleset version, exact bound, unit, and measured length.
 
-1. **No retained reason.** The Memory is “다듬기 요청에서는 기존 구조와 인용
-   표시를 보존한다.” Rationale reports `no reason recorded` instead of filling
-   the gap.
-2. **One retained reason.** The Memory adds `명시된 표현만 수정한다.` and the
-   operation records “다듬기 요청이 전체 재작성으로 번지지 않도록 변경 범위를
-   명시된 표현으로 제한하기 위해 유지했다.” Rationale shows that reason
-   verbatim after whitespace normalization.
-3. **A later reason supersedes an earlier one in the compact view.** An earlier
-   operation records that polishing meant rewriting the whole document; the
-   later operation records the structure-, citation-, and expression-preserving
-   boundary. The human report shows only the later reason. Trace and JSON retain
-   both, so compactness does not erase history.
-4. **An overlong retained reason.** The operation records a coherent explanation
-   of why the narrower boundary was introduced and how it prevents unwanted
-   deletion or restructuring. Rationale keeps the longest complete prefix below
-   160 characters and appends an ellipsis; it never uses repeated filler text to
-   manufacture the boundary.
+### Versioned natural-provenance rules and exact cases
 
-The same family appears in the compact and character-bound PTY evidence, while
-the million-character Context case varies only the unrelated surrounding frame.
+`memcommit/eval/fixtures/rationale.json` is the sole authored Rationale ruleset.
+`memcommit.rationale_rules` strictly checks its version, named rules, complete
+Trace case shapes, exact expected narratives, linked rule IDs, bounds, and
+known-wrong narratives. `rationale_ruleset_prompt_payload()` then places every
+rule, exact case, and known-wrong boundary into every production Rationale turn,
+matching Resolve's consumed-calibration structure. These are deliberately
+`PROVIDER_VISIBLE`; they are regression or calibration contracts, never
+independent holdout evidence.
+
+The first exact case is the real `c9e05f9a` scenario: the complete longer source
+instruction, the three sentence chunks, Chunk → Undo → Redo → Remove, and two
+later sibling-only Atomize events. Its exact 33-word answer must preserve the
+instruction/example origin context and selected lifecycle while excluding the
+sibling events. A second case covers direct Add → Remove → Undo, and a third
+freezes the Grant-hidden no-provider boundary. `tests/test_rationale_rules.py`
+proves that every authored item enters the production prompt, executes the
+`Um...` case through the production payload/schema/decoder, and rejects raw
+event chains and over-limit prose.
 
 #### `EXAMPLE-01` coverage
 
 These rows apply the shared
-[example contract](operation-example-contract-design-rationale.md) without
-turning the prose family above into an uncheckable claim. `HOST_ONLY` means the
-fixture exercises the real application projection but is never placed in a
-provider prompt.
+[example contract](operation-example-contract-design-rationale.md). The exact
+cases are both executable regressions and consumed production calibration;
+they must not be counted as unseen evaluation evidence.
 
 | Example ID | Boundary | Input form | Output variant | Exposure | Artifact and oracle |
 | --- | --- | --- | --- | --- | --- |
-| `rationale.provenance.no-reason` | frozen Trace → human Rationale document | current Memory with retained events but no reason | `no reason recorded` | `HOST_ONLY` | capture scenario `no-reason`; `test_cli_is_provenance_only_and_never_reads_or_writes_inference_cache` |
-| `rationale.provenance.recorded` | frozen Trace → human Rationale document | current Memory with one retained reason | normalized latest reason | `HOST_ONLY` | capture scenario `recorded-reason`; ordered PTY evidence |
-| `rationale.provenance.latest` | frozen Trace → human Rationale document | two retained, contradictory reasons | only the later reason | `HOST_ONLY` | `test_provenance_projection_uses_only_the_latest_recorded_reason` |
-| `rationale.provenance.long` | frozen Trace → human Rationale document | coherent retained reason over 160 characters | sentence-aware bounded paragraph with ellipsis | `HOST_ONLY` | capture scenario `long-reason`; `test_long_provenance_projection_is_capped_at_160_characters` |
-| `rationale.provenance.oversized-context` | frozen Trace → human Rationale document | no retained reason inside a million-character Context | `no reason recorded`, without contextual inference | `HOST_ONLY` | capture scenario `oversized-context`; ordered PTY evidence |
-
-Rationale has no provider contract, so `PROVIDER_VISIBLE`, decoder-rejection,
-calibration, and holdout rows are intentionally inapplicable. This is an
-operation boundary decision, not an omission inferred from a missing example.
+| `rationale.provenance.um-origin-lifecycle` | whole Trace → semantic prompt/schema/decoder | real split child, parent source, undo/redo/remove, sibling-only events | exact 33-word natural provenance with origin context | `PROVIDER_VISIBLE` | ruleset case `um-sentence-chunk-lifecycle`; production-payload regression |
+| `rationale.provenance.direct-restore` | whole Trace → semantic prompt/schema/decoder | direct Add, Remove, and Undo | compact chronological natural provenance | `PROVIDER_VISIBLE` | ruleset case `direct-add-remove-undo`; public-command integration test |
+| `rationale.provenance.grant-hidden` | readable granted Memory → application receipt | owner history unavailable | `hidden by Grant`, zero provider calls | `HOST_ONLY` | ruleset case `grant-hidden-history`; authority test |
+| `rationale.provenance.decoder-chain-rejection` | provider response → strict decoder | raw event-label arrow chain | rejected as non-narrative | `HOST_ONLY` | `test_provider_output_must_be_complete_narrative_within_the_exact_bound` |
+| `rationale.provenance.decoder-bound-rejection` | provider response → strict decoder | complete-looking paragraph beyond requested unit | rejected without clipping | `HOST_ONLY` | same production-decoder test |
 
 The [180×52 compact Rationale capture](screenshots/mem-rationale-compact-20260820/README.md)
-records target selection, the shortened Viewer, and read-only close
+records target selection, the direct natural-provenance receipt, and read-only store
 verification.
 
-The [provenance-bound edge-case capture](screenshots/mem-rationale-character-bounds-20260820/README.md)
-additionally verifies no recorded reason, a compact recorded reason, and a
-retained reason longer than 160 characters. Every path performs zero provider
-calls, leaves legacy inference caches untouched, and leaves Context content
+The focused capture verifies the 180×52 color selector, one semantic provider
+turn after target confirmation, the compact receipt, and read-only store
+verification. Unit and decoder edge cases are exact text/JSON contracts because
+they do not add a materially distinct full-screen interaction. No path reads or
+writes the legacy contextual-inference cache, and Context content remains
 unchanged.
 
 ## Evidence labels
@@ -557,8 +553,8 @@ encounter records written by an earlier prototype. Keeping compatibility is a
 data-lifecycle boundary, not an invitation to resume inference implicitly.
 
 The retired writer cached only validated provider-created `ContextInference`,
-not the complete `RationaleReport`. Current report construction still rebuilds
-trace events and recorded reasons from live local state on every invocation.
+not the complete `RationaleReport`. Current receipt construction still rebuilds
+trace events from live local state on every invocation.
 
 The active profile keeps one replaceable slot per Context UID and selected
 Memory UID under its own MemoryStore root (the authoring profile uses
@@ -613,10 +609,10 @@ the Grant attachment, still determines picker hierarchy.
 A granted READ view permits the current Memory projection but does not imply
 authority to inspect the source Profile's checkpoints, command receipts, saved
 reviews, or atomize attachments. Granted Rationale therefore labels provenance
-`hidden by Grant`; it does not substitute contextual inference. Because no
-cross-owner content is combined, Rationale needs no `DERIVE` or `COMBINE`
-permission and never connects a provider. Trace remains rejected for a granted
-target.
+`hidden by Grant` and never connects a provider. A locally owned target sends
+only its exact owner Trace component after selection; it does not combine the
+picker's readable catalog or neighboring Contexts, so Rationale needs no
+`COMBINE` permission. Trace remains rejected for a granted target.
 
 Every locally owned ordinary Context may inspect its own retained history,
 including every task namespace in a composed participant Study run. Task names
@@ -645,17 +641,18 @@ This is a tested command-path invariant, not operating-system confidentiality.
   derivation.
 - **Treating preview as history:** rejected because analysis can be stale or
   never applied.
-- **Using a model to fill missing provenance:** rejected because present-day
-  contextual usefulness is neither author intent nor a retained historical
-  cause. Rationale now states `no reason recorded` instead.
+- **Using a model to fill missing provenance:** rejected. The semantic turn may
+  express only retained Trace evidence; absent or Grant-hidden history skips
+  provider connection instead of asking for a plausible origin.
 - **Copying all source checkpoints into save-as:** rejected because the new
   Context needs a clear local baseline, not inherited history with the wrong
   Context identity.
 - **Putting raw source metadata into every Memory:** rejected to keep Memory
   minimal and operation provenance centralized.
-- **Keeping provider inference beside provenance:** rejected because even an
-  explicitly labeled purpose competes with the one historical question this
-  report is meant to answer and spends tokens when no reason can be proved.
+- **Keeping current-purpose inference beside provenance:** rejected because a
+  present-day usefulness judgment competes with the historical question. The
+  active semantic turn is instead constrained to natural-language expression
+  of the complete retained Trace.
 
 ## Remaining limitations
 

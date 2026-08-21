@@ -37,7 +37,6 @@ from memcommit.commands.compare_sessions import (
     revalidate_saved_comparison,
 )
 from memcommit.commands.compare_workbench import run_compare_workbench
-from memcommit.commands.command_progress import progressing_provider_factory
 from memcommit.commands.command_wait import run_command_wait
 from memcommit.commands.compare_setup import choose_compare_setup
 from memcommit.commands.rationale import render_rationale
@@ -59,6 +58,7 @@ from memcommit.profile_config import ProfileConfigError
 from memcommit.provenance import ProvenanceError
 from memcommit.profiles import ProfileError, authority_grant_snapshot_lock
 from memcommit.rationale import RationaleError, build_rationale
+from memcommit.rationale_semantic import synthesize_rationale_provenance
 from memcommit.rationale_scope import (
     load_rationale_scope,
     rationale_trace,
@@ -158,22 +158,19 @@ def _render_selected_rationale(
     )
     target = resolve_rationale_target(scope, memory_uid)
     trace = rationale_trace(scope, target)
-    with progressing_provider_factory(
-        "COMPARE RATIONALE",
-        "inferring rationale",
-        connect_codex_chatgpt_provider,
-    ) as provider_factory:
-        report = build_rationale(
-            scope.access.store,
-            target.owner,
-            trace,
-            provider_factory,
-            cache_inference=not scope.granted,
-            inference_contexts=scope.contexts,
-            inference_scope_name=scope.root_name,
-            recorded_evidence_available=not scope.granted,
-        )
-    render_rationale(report)
+    report = build_rationale(
+        scope.access.store,
+        target.owner,
+        trace,
+        None,
+        recorded_evidence_available=not scope.granted,
+    )
+    projection = synthesize_rationale_provenance(
+        report.trace,
+        provider_factory=connect_codex_chatgpt_provider,
+        history_available=report.recorded_evidence_available,
+    )
+    render_rationale(report, projection)
 
 
 def _present_comparison(
@@ -239,14 +236,48 @@ def _present_comparison(
         typer.echo("Compare view closed.")
 
 
+def _resolve_endpoint_syntax(
+    endpoints: list[str] | None,
+    *,
+    from_: str | None,
+    to: str | None,
+) -> tuple[str | None, str | None]:
+    """Normalize the positional-first endpoint grammar before any store access."""
+
+    positional = tuple(endpoints or ())
+    if len(positional) > 2:
+        raise CompareCommandError(
+            "expected PEER or REFERENCE PEER (at most two positional Contexts)."
+        )
+    if positional and (from_ is not None or to is not None):
+        raise CompareCommandError(
+            "positional Contexts cannot be combined with --from or --to."
+        )
+    if len(positional) == 1:
+        # A single operand preserves the established current-as-reference
+        # behavior. Two operands are required to override that reference.
+        return None, positional[0]
+    if len(positional) == 2:
+        return positional[0], positional[1]
+    return from_, to
+
+
 def cmd(
+    contexts: Annotated[
+        list[str] | None,
+        typer.Argument(
+            help=(
+                "One PEER Context (REFERENCE defaults to current), or explicit "
+                "REFERENCE and PEER Contexts"
+            ),
+        ),
+    ] = None,
     from_: Annotated[
         Optional[str],
         typer.Option(
             "--from",
             help=(
-                "Existing REFERENCE Context locator; defaults to the active "
-                "Context when --to is used alone"
+                "Compatibility alias for an explicit REFERENCE Context locator"
             ),
         ),
     ] = None,
@@ -255,8 +286,8 @@ def cmd(
         typer.Option(
             "--to",
             help=(
-                "Existing PEER Context locator; canonical or explicitly "
-                "relative to the active reference Context"
+                "Compatibility alias for the PEER Context locator; REFERENCE "
+                "defaults to current when --from is omitted"
             ),
         ),
     ] = None,
@@ -343,6 +374,19 @@ def cmd(
     ] = None,
 ) -> None:
     """Compare two equal-authority Contexts, defaulting A to current."""
+    try:
+        from_, to = _resolve_endpoint_syntax(
+            contexts,
+            from_=from_,
+            to=to,
+        )
+    except CompareCommandError as error:
+        typer.secho(
+            f"Compare error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
     scope_flags_supplied = (
         direct
         or recursive
@@ -374,7 +418,7 @@ def cmd(
         or compared_memory is not None
     ):
         typer.secho(
-            "Compare error: use either --sessions or --to/explicit endpoints, not both.",
+            "Compare error: use either --sessions or explicit endpoints, not both.",
             fg=typer.colors.RED,
             err=True,
         )
@@ -388,7 +432,7 @@ def cmd(
         raise typer.Exit(2)
     if to is None and (reference_descendants or compared_descendants):
         typer.secho(
-            "Compare error: descendant scope flags require an explicit --to Context.",
+            "Compare error: descendant scope flags require an explicit PEER Context.",
             fg=typer.colors.RED,
             err=True,
         )
@@ -397,7 +441,7 @@ def cmd(
         reference_memory is not None or compared_memory is not None
     ):
         typer.secho(
-            "Compare error: Memory scope flags require an explicit --to Context.",
+            "Compare error: Memory scope flags require an explicit PEER Context.",
             fg=typer.colors.RED,
             err=True,
         )
@@ -420,7 +464,7 @@ def cmd(
         raise typer.Exit(2)
     if refresh and to is None:
         typer.secho(
-            "Compare error: --refresh requires an explicit --to Context.",
+            "Compare error: --refresh requires an explicit PEER Context.",
             fg=typer.colors.RED,
             err=True,
         )

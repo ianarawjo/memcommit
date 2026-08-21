@@ -80,7 +80,7 @@ class SeverPreparedAnalysis:
 
 @dataclass(frozen=True)
 class SeverApplyRequest:
-    """The exact reviewed session requested for require-new materialization."""
+    """The exact reviewed session requested for self- or other-save Apply."""
 
     session: SeverSession
 
@@ -125,7 +125,7 @@ class SeverDecisionRequest:
 
 @dataclass(frozen=True)
 class SeverDestinationRequest:
-    """Rebind an unapplied review to one validated require-new destination."""
+    """Rebind an unapplied review to one validated save location."""
 
     snapshot: SeverSessionSnapshot
     output_name: str
@@ -175,7 +175,7 @@ SeverProgressObserver = Callable[[SeverAnalysisProgress], None]
 
 
 class SeverOutputPort(Protocol):
-    """Materialize one reviewed session through a require-new output boundary."""
+    """Materialize one reviewed session through its exact save-location boundary."""
 
     def recover_materialization(self, session: SeverSession) -> SeverSession | None:
         """Recover an exact pre-existing Result whose receipt was not saved."""
@@ -206,7 +206,7 @@ class SeverSessionRepository(Protocol):
 
 
 class SeverDestinationPort(Protocol):
-    """Validate one local require-new output name against current runtime state."""
+    """Validate one local self- or other-save location against runtime state."""
 
     def validate(self, output_name: str, *, current_output_name: str) -> None:
         """Fail unless the proposed destination remains safe for this review."""
@@ -356,7 +356,7 @@ class SeverSessionApplicationFlowPort:
     revisions before final acceptance. Consequently this adapter's decision
     phase is intentionally an identity handoff: the command owns the visible
     decision loop, while this port preserves the exact accepted CAS snapshot for
-    the existing require-new materialization transaction.
+    the selected self- or other-save materialization transaction.
     """
 
     repository: SeverSessionRepository
@@ -374,7 +374,7 @@ class SeverSessionApplicationFlowPort:
         self,
         decided: SeverSessionSnapshot,
     ) -> SeverPersistedApplyResult:
-        """Create the Result and commit its session receipt as one outcome."""
+        """Save the Result and commit its session receipt as one outcome."""
 
         current = self.repository.load(decided.session.uid)
         if current != decided:

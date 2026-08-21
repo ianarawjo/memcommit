@@ -1,11 +1,10 @@
-"""Evidence-backed rationale for one Memory.
+"""Structured evidence backing the public Rationale provenance receipt.
 
-Rationale deliberately separates durable operation facts, saved semantic
-analysis, and a new best-effort judgment within the current direct Context.
-The full direct Context is the interpretation frame; relative order and nearby
-Memories are cues inside that frame, not the boundary of the analysis.  Such
-an inference may make a fragment understandable, but it is never presented as
-the historical cause of that Memory.
+The public command gathers its durable Trace here, then gives that complete
+frozen Trace to ``rationale_semantic`` for calibrated natural-language
+synthesis.  This module still reads older saved analyses and retains the
+optional current-purpose inference types for JSON/cache compatibility with
+earlier prototypes; that distinct inference is not the public provenance turn.
 """
 from __future__ import annotations
 

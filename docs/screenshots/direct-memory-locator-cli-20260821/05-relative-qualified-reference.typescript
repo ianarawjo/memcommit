@@ -1,0 +1,7 @@
+LIVE COLOR PTY · 180 columns × 52 rows
+STORE · isolated disposable Profile
+
+$ mem reference ../3:22222222
+[32mReferenced snapshot [22222222] from 'practice/3' as [939604fe] in 'practice/4'.[0m
+
+VERIFIED · relative owner resolved from practice/4 to practice/3

@@ -1,4 +1,9 @@
-# Find Redundancies read-only boundary and Dedun handoff
+# Historical Find Redundancies and Dedun handoff
+
+> Historical evidence: this set records the pre-2026-08-21 flagless setup and
+> process-local Dedun handoff. Current direct execution is recorded under
+> `docs/screenshots/dedun-find-audit-direct-20260821/`; the reviewed survivor
+> route remains available only through the hidden exact compatibility replay.
 
 This ordered set records the canonical flagless `mem find-redundancies` path
 and the one behavior deliberately reserved for `mem dedun`. Both commands run

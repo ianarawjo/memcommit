@@ -1,5 +1,10 @@
 # Current-scoped full-screen Diff capture log
 
+> Historical evidence for the current-scoped entry and large-change scrolling
+> boundary. The checkpoint detail content is refreshed under
+> `docs/screenshots/revert-revision-result-20260821/`, where Diff and Revert
+> share the complete revision-result renderer.
+
 This ordered evidence set records bare `mem diff` opening the current
 Context's checkpoint transitions directly in the shared full-screen History
 session. It also records an explicit Context operand without switching the

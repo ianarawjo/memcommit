@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-import re
 import uuid
 
 import pytest
@@ -23,6 +22,7 @@ from memcommit.api import (
 )
 from memcommit.context import Memory, MemoryRef
 from memcommit.interfaces.agent import (
+    RESOLVE_AGENT_CONTRACT_VERSION,
     RESOLVE_AGENT_TOOL_NAME,
     build_default_agent_tool_registry,
 )
@@ -49,6 +49,7 @@ from memcommit.resolve_application import (
     run_resolve,
 )
 from memcommit.resolve_runtime import MemoryStoreResolvePort
+from memcommit.resolve_rules import resolve_ruleset_prompt_payload
 from memcommit.resolve_semantic import ProviderResolveSemanticPort
 from memcommit.review import direct_context_digest
 from memcommit.store import MemoryStore
@@ -56,6 +57,7 @@ from memcommit.store import MemoryStore
 
 FIT_MARKER = "FIT PROPOSITION PAYLOAD:\n"
 VERIFY_MARKER = "VERIFY PAYLOAD:\n"
+RESOLVE_MARKER = "RESOLVE PAYLOAD:\n"
 QUALITY_FIND_MARKER = "QUALITY FIND PAYLOAD:\n"
 runner = CliRunner(mix_stderr=False)
 
@@ -107,12 +109,26 @@ class ResolveFixtureProvider:
             )
         return {"overview": "Complete Fit coverage.", "judgments": judgments}
 
+    @staticmethod
+    def _issues(*, assumptions: list[str] | None = None) -> list[dict[str, object]]:
+        return [
+            {
+                "issue_id": "schedule-scope",
+                "kind": "TEMPORAL",
+                "memory_ids": ["m1", "m2"],
+                "selected_interpretation": (
+                    "The two opening times apply to different day scopes."
+                ),
+                "basis_ids": ["m1", "m2"],
+                "assumptions": assumptions or [],
+                "reason": "Explicit day scope makes the complete schedule coherent.",
+            }
+        ]
+
     def complete(self, prompt: str, *, operation: str, output_schema=None) -> str:
         self.operations.append(operation)
         if operation == "fit_propositions":
-            return json.dumps(
-                self._fit(prompt, initial_verdict=self.initial_verdict)
-            )
+            return json.dumps(self._fit(prompt, initial_verdict=self.initial_verdict))
         if operation == "resolve_candidates":
             if self.effect_kind == "DELETE":
                 effect = {
@@ -144,6 +160,10 @@ class ResolveFixtureProvider:
                     "candidates": [
                         {
                             "summary": "Separate the weekday and weekend scopes.",
+                            "classification": "EXACT_GROUNDING",
+                            "resolution_level": "YES",
+                            "rule_ids": ["R04_EXACT_GROUNDING"],
+                            "issues": self._issues(),
                             "effects": [effect],
                         }
                     ],
@@ -193,6 +213,43 @@ class ResolveFindingFixtureProvider(ResolveFixtureProvider):
         )
 
 
+class ResolvePostMayProvider(ResolveFixtureProvider):
+    def complete(self, prompt: str, *, operation: str, output_schema=None) -> str:
+        if operation == "resolve_candidates":
+            result = json.loads(
+                super().complete(
+                    prompt,
+                    operation=operation,
+                    output_schema=output_schema,
+                )
+            )
+            candidate = result["candidates"][0]
+            candidate["classification"] = "SAFE_ALTERNATIVE"
+            candidate["resolution_level"] = "MAY"
+            candidate["rule_ids"] = ["R05_SAFE_ALTERNATIVE"]
+            return json.dumps(result)
+        if operation != "fit_propositions":
+            return super().complete(
+                prompt,
+                operation=operation,
+                output_schema=output_schema,
+            )
+        self.operations.append(operation)
+        result = self._fit(prompt, initial_verdict="NO")
+        for judgment in result["judgments"]:
+            if judgment["question_id"] == "resolve-initial":
+                continue
+            aliases = judgment["considered_proposition_ids"]
+            judgment.update(
+                verdict="MAY",
+                reason="The exact applicability remains an explicit alternative.",
+                material_proposition_ids=aliases,
+                consistent_reading="Either recorded alternative may apply.",
+                inconsistent_reading="The applicable alternative remains unknown.",
+            )
+        return json.dumps(result)
+
+
 class ResolveChoiceProvider(ResolveFixtureProvider):
     def complete(self, prompt: str, *, operation: str, output_schema=None) -> str:
         if operation != "resolve_candidates":
@@ -204,22 +261,14 @@ class ResolveChoiceProvider(ResolveFixtureProvider):
         self.operations.append(operation)
         return json.dumps(
             {
-                "question": "Choose whether to revise or add explicit scope.",
+                "question": "Use the automatic information-preserving plan?",
                 "candidates": [
                     {
-                        "summary": "Revise the second schedule.",
-                        "effects": [
-                            {
-                                "kind": "UPDATE",
-                                "target_id": "m2",
-                                "new_content": "The office opens at 9 on weekends.",
-                                "source_ids": ["m1", "m2"],
-                                "reason": "The weekend scope preserves both claims.",
-                            }
-                        ],
-                    },
-                    {
                         "summary": "Add a shared schedule qualification.",
+                        "classification": "MINIMUM_REPAIR",
+                        "resolution_level": "YES",
+                        "rule_ids": ["R01_WHOLE_FRAME"],
+                        "issues": self._issues(),
                         "effects": [
                             {
                                 "kind": "CREATE",
@@ -250,6 +299,10 @@ class ResolveIntegratedEffectsProvider(ResolveFixtureProvider):
                 "candidates": [
                     {
                         "summary": "Integrate the schedules through primitive effects.",
+                        "classification": "EXACT_GROUNDING",
+                        "resolution_level": "YES",
+                        "rule_ids": ["R04_EXACT_GROUNDING"],
+                        "issues": self._issues(),
                         "effects": [
                             {
                                 "kind": "UPDATE",
@@ -276,6 +329,252 @@ class ResolveIntegratedEffectsProvider(ResolveFixtureProvider):
                     }
                 ],
             }
+        )
+
+
+class ResolveAssumptionProvider(ResolveFixtureProvider):
+    def complete(self, prompt: str, *, operation: str, output_schema=None) -> str:
+        if operation == "resolve_candidates":
+            self.operations.append(operation)
+            return json.dumps(
+                {
+                    "question": "Continue with the most ordinary working reading?",
+                    "candidates": [
+                        {
+                            "summary": "Treat the second time as a weekend schedule.",
+                            "classification": "MINIMUM_REPAIR",
+                            "resolution_level": "MAY",
+                            "rule_ids": ["R06_NO_INVENTED_DISCRIMINATOR"],
+                            "issues": self._issues(
+                                assumptions=[
+                                    "The 9 o'clock schedule applies on weekends."
+                                ]
+                            ),
+                            "effects": [
+                                {
+                                    "kind": "UPDATE",
+                                    "target_id": "m2",
+                                    "new_content": (
+                                        "The office opens at 9 on weekends."
+                                    ),
+                                    "source_ids": ["m1", "m2"],
+                                    "reason": (
+                                        "This is the selected working interpretation."
+                                    ),
+                                }
+                            ],
+                        }
+                    ],
+                }
+            )
+        if operation == "resolve_candidate_verification":
+            self.operations.append(operation)
+            payload = json.loads(prompt.split(VERIFY_MARKER, 1)[1])
+            return json.dumps(
+                {
+                    "reviews": [
+                        {
+                            "candidate_id": candidate["candidate_id"],
+                            "grounded": False,
+                            "preserves_information": True,
+                            "delete_justified": True,
+                            "reason": (
+                                "The weekend scope is reasonable but not stated."
+                            ),
+                        }
+                        for candidate in payload["candidates"]
+                    ]
+                }
+            )
+        return super().complete(
+            prompt,
+            operation=operation,
+            output_schema=output_schema,
+        )
+
+
+class ResolveFrameRecordingProvider(ResolveFixtureProvider):
+    def __init__(self) -> None:
+        super().__init__()
+        self.exposures: list[tuple[str, tuple[str, ...]]] = []
+        self.rulesets: list[tuple[str, object]] = []
+        self.schemas: list[tuple[str, object]] = []
+
+    def complete(self, prompt: str, *, operation: str, output_schema=None) -> str:
+        self.schemas.append((operation, output_schema))
+        if operation == "fit_propositions":
+            payload = json.loads(prompt.split(FIT_MARKER, 1)[1])
+            aliases = tuple(
+                proposition["proposition_id"]
+                for proposition in payload["questions"][0]["propositions"]
+            )
+        elif operation == "resolve_candidates":
+            payload = json.loads(prompt.split(RESOLVE_MARKER, 1)[1])
+            aliases = tuple(memory["memory_id"] for memory in payload["memories"])
+            self.rulesets.append((operation, payload["ruleset"]))
+        elif operation == "resolve_candidate_verification":
+            payload = json.loads(prompt.split(VERIFY_MARKER, 1)[1])
+            aliases = tuple(
+                memory["memory_id"] for memory in payload["original_memories"]
+            )
+            self.rulesets.append((operation, payload["ruleset"]))
+        else:  # pragma: no cover - fixture guards the operation catalog.
+            aliases = ()
+        self.exposures.append((operation, aliases))
+        return super().complete(
+            prompt,
+            operation=operation,
+            output_schema=output_schema,
+        )
+
+
+class ResolveNoPlanProvider(ResolveFixtureProvider):
+    def complete(self, prompt: str, *, operation: str, output_schema=None) -> str:
+        if operation == "resolve_candidates":
+            self.operations.append(operation)
+            return json.dumps(
+                {
+                    "question": "Which opening time has the narrower scope?",
+                    "candidates": [],
+                }
+            )
+        return super().complete(
+            prompt,
+            operation=operation,
+            output_schema=output_schema,
+        )
+
+
+class ResolveUngroundedWithoutAssumptionProvider(ResolveFixtureProvider):
+    def complete(self, prompt: str, *, operation: str, output_schema=None) -> str:
+        if operation == "resolve_candidate_verification":
+            self.operations.append(operation)
+            payload = json.loads(prompt.split(VERIFY_MARKER, 1)[1])
+            return json.dumps(
+                {
+                    "reviews": [
+                        {
+                            "candidate_id": candidate["candidate_id"],
+                            "grounded": False,
+                            "preserves_information": True,
+                            "delete_justified": True,
+                            "reason": "The proposed weekend scope is not supplied.",
+                        }
+                        for candidate in payload["candidates"]
+                    ]
+                }
+            )
+        return super().complete(
+            prompt,
+            operation=operation,
+            output_schema=output_schema,
+        )
+
+
+class ResolveDeleteAssumptionProvider(ResolveAssumptionProvider):
+    def complete(self, prompt: str, *, operation: str, output_schema=None) -> str:
+        if operation == "resolve_candidates":
+            self.operations.append(operation)
+            return json.dumps(
+                {
+                    "question": "Is the 9 o'clock statement obsolete?",
+                    "candidates": [
+                        {
+                            "summary": "Retire the presumed obsolete statement.",
+                            "classification": "MINIMUM_REPAIR",
+                            "resolution_level": "MAY",
+                            "rule_ids": ["R10_NO_DELETE_FOR_FIT"],
+                            "issues": self._issues(
+                                assumptions=["The 9 o'clock statement is obsolete."]
+                            ),
+                            "effects": [
+                                {
+                                    "kind": "DELETE",
+                                    "target_id": "m2",
+                                    "new_content": "",
+                                    "source_ids": ["m2"],
+                                    "reason": "The working interpretation retires it.",
+                                }
+                            ],
+                        }
+                    ],
+                }
+            )
+        return super().complete(
+            prompt,
+            operation=operation,
+            output_schema=output_schema,
+        )
+
+
+class ResolveOutsideIssueProvider(ResolveFixtureProvider):
+    def complete(self, prompt: str, *, operation: str, output_schema=None) -> str:
+        if operation == "resolve_candidates":
+            self.operations.append(operation)
+            issue = self._issues()[0]
+            issue["memory_ids"] = ["m1"]
+            return json.dumps(
+                {
+                    "question": "Use the scoped schedule?",
+                    "candidates": [
+                        {
+                            "summary": "Scope the second schedule.",
+                            "classification": "EXACT_GROUNDING",
+                            "resolution_level": "YES",
+                            "rule_ids": ["R04_EXACT_GROUNDING"],
+                            "issues": [issue],
+                            "effects": [
+                                {
+                                    "kind": "UPDATE",
+                                    "target_id": "m2",
+                                    "new_content": (
+                                        "The office opens at 9 on weekends."
+                                    ),
+                                    "source_ids": ["m1", "m2"],
+                                    "reason": "The weekend scope separates the times.",
+                                }
+                            ],
+                        }
+                    ],
+                }
+            )
+        return super().complete(
+            prompt,
+            operation=operation,
+            output_schema=output_schema,
+        )
+
+
+class ResolveMultiplePlanProvider(ResolveFixtureProvider):
+    def complete(self, prompt: str, *, operation: str, output_schema=None) -> str:
+        if operation == "resolve_candidates":
+            self.operations.append(operation)
+            plan = {
+                "summary": "Scope the second schedule.",
+                "classification": "EXACT_GROUNDING",
+                "resolution_level": "YES",
+                "rule_ids": ["R04_EXACT_GROUNDING"],
+                "issues": self._issues(),
+                "effects": [
+                    {
+                        "kind": "UPDATE",
+                        "target_id": "m2",
+                        "new_content": "The office opens at 9 on weekends.",
+                        "source_ids": ["m1", "m2"],
+                        "reason": "The weekend scope separates the times.",
+                    }
+                ],
+            }
+            return json.dumps(
+                {
+                    "question": "Use one automatic plan?",
+                    "candidates": [plan, plan],
+                }
+            )
+        return super().complete(
+            prompt,
+            operation=operation,
+            output_schema=output_schema,
         )
 
 
@@ -342,6 +641,8 @@ def test_resolve_generates_verifies_and_applies_one_exact_update(isolated_store)
     checkpoints = store.list_checkpoints("resolve/test")
     assert checkpoints[0]["command"] == "resolve"
     assert checkpoints[0]["args"]["candidate_uid"] == receipt.candidate_uid
+    assert checkpoints[0]["args"]["issues"][0]["uid"] == "schedule-scope"
+    assert checkpoints[0]["args"]["issues"][0]["assumptions"] == []
 
 
 def test_resolve_already_fit_stops_after_independent_initial_fit(isolated_store):
@@ -354,6 +655,166 @@ def test_resolve_already_fit_stops_after_independent_initial_fit(isolated_store)
     assert analysis.status == "ALREADY_FIT"
     assert not analysis.candidates
     assert provider.operations == ["fit_propositions"]
+
+
+def test_resolve_every_semantic_turn_reads_the_complete_frozen_frame(
+    isolated_store,
+):
+    store = MemoryStore()
+    _context(store, third=True)
+    provider = ResolveFrameRecordingProvider()
+
+    analysis, _port = _run(store, provider, ResolveRequest("resolve/test"))
+
+    assert analysis.status == "PROPOSAL"
+    assert provider.exposures == [
+        ("fit_propositions", ("m1", "m2", "m3")),
+        ("resolve_candidates", ("m1", "m2", "m3")),
+        ("resolve_candidate_verification", ("m1", "m2", "m3")),
+        ("fit_propositions", ("m1", "m2", "m3")),
+    ]
+    exact_ruleset = resolve_ruleset_prompt_payload()
+    assert provider.rulesets == [
+        ("resolve_candidates", exact_ruleset),
+        ("resolve_candidate_verification", exact_ruleset),
+    ]
+    generation_schema = dict(provider.schemas)["resolve_candidates"]
+    assert "uniqueItems" not in json.dumps(generation_schema)
+
+
+def test_default_resolve_accepts_independently_verified_post_fit_may(isolated_store):
+    store = MemoryStore()
+    _context(store)
+    provider = ResolvePostMayProvider()
+
+    analysis, port = _run(store, provider, ResolveRequest("resolve/test"))
+
+    assert analysis.status == "PROPOSAL"
+    assert analysis.frame.request.target_fit == "MAY"
+    assert analysis.candidates[0].resolution_level == "MAY"
+    assert analysis.candidates[0].fit.verdict == "MAY"
+    receipt = apply_resolve(
+        analysis,
+        analysis.candidates[0].uid,
+        frame_port=port,
+    )
+    assert receipt.updated_uids
+    assert len(store.list_checkpoints("resolve/test")) == 1
+
+
+def test_strict_yes_target_rejects_a_post_fit_may_plan(isolated_store):
+    store = MemoryStore()
+    _context(store)
+
+    analysis, _port = _run(
+        store,
+        ResolvePostMayProvider(),
+        ResolveRequest("resolve/test", target_fit="YES"),
+    )
+
+    assert analysis.status == "NEEDS_INPUT"
+    assert analysis.frame.request.target_fit == "YES"
+    assert not analysis.candidates
+
+
+def test_resolve_assumption_is_a_read_only_working_interpretation(isolated_store):
+    store = MemoryStore()
+    _context(store)
+    before = store.load_direct("resolve/test").to_dict()
+
+    analysis, port = _run(
+        store,
+        ResolveAssumptionProvider(),
+        ResolveRequest("resolve/test"),
+    )
+
+    assert analysis.status == "ASSUMED"
+    assert len(analysis.candidates) == 1
+    candidate = analysis.candidates[0]
+    assert candidate.grounded is False
+    assert candidate.issues[0].assumptions == (
+        "The 9 o'clock schedule applies on weekends.",
+    )
+    with pytest.raises(ResolveError, match="process-local"):
+        apply_resolve(analysis, candidate.uid, frame_port=port)
+    assert store.load_direct("resolve/test").to_dict() == before
+    assert store.list_checkpoints("resolve/test") == []
+
+
+def test_resolve_no_reasonable_interpretation_requests_input(isolated_store):
+    store = MemoryStore()
+    _context(store)
+    provider = ResolveNoPlanProvider()
+
+    analysis, _port = _run(store, provider, ResolveRequest("resolve/test"))
+
+    assert analysis.status == "NEEDS_INPUT"
+    assert not analysis.candidates
+    assert provider.operations == ["fit_propositions", "resolve_candidates"]
+
+
+def test_resolve_ungrounded_plan_without_named_assumption_is_rejected(
+    isolated_store,
+):
+    store = MemoryStore()
+    _context(store)
+    provider = ResolveUngroundedWithoutAssumptionProvider()
+
+    analysis, _port = _run(store, provider, ResolveRequest("resolve/test"))
+
+    assert analysis.status == "NEEDS_INPUT"
+    assert not analysis.candidates
+    assert provider.operations == [
+        "fit_propositions",
+        "resolve_candidates",
+        "resolve_candidate_verification",
+    ]
+
+
+def test_resolve_never_carries_an_assumed_delete_forward(isolated_store):
+    store = MemoryStore()
+    _context(store)
+    before = store.load_direct("resolve/test").to_dict()
+    provider = ResolveDeleteAssumptionProvider()
+
+    analysis, _port = _run(
+        store,
+        provider,
+        ResolveRequest(
+            "resolve/test",
+            allow_delete=True,
+            guidance="Deletion is allowed only if obsolescence is grounded.",
+        ),
+    )
+
+    assert analysis.status == "NEEDS_INPUT"
+    assert not analysis.candidates
+    assert store.load_direct("resolve/test").to_dict() == before
+    assert store.list_checkpoints("resolve/test") == []
+
+
+def test_resolve_rejects_an_edit_outside_its_reported_issue(isolated_store):
+    store = MemoryStore()
+    _context(store)
+
+    with pytest.raises(ResolveError, match="outside its reported Issues"):
+        _run(
+            store,
+            ResolveOutsideIssueProvider(),
+            ResolveRequest("resolve/test"),
+        )
+
+
+def test_resolve_rejects_multiple_model_authored_plans(isolated_store):
+    store = MemoryStore()
+    _context(store)
+
+    with pytest.raises(ResolveError, match="invalid candidate list"):
+        _run(
+            store,
+            ResolveMultiplePlanProvider(),
+            ResolveRequest("resolve/test"),
+        )
 
 
 def test_resolve_expected_revision_fails_before_provider_connection(isolated_store):
@@ -473,13 +934,13 @@ def test_resolve_delete_blocks_an_inbound_memory_reference(isolated_store):
     assert second.uid in store.load_direct("resolve/test").memories
 
 
-def test_resolve_create_is_opt_in(isolated_store):
+def test_resolve_create_is_an_ordinary_information_preserving_effect(isolated_store):
     store = MemoryStore()
     _context(store)
     analysis, port = _run(
         store,
         ResolveFixtureProvider(effect_kind="CREATE"),
-        ResolveRequest("resolve/test", allow_create=True),
+        ResolveRequest("resolve/test"),
     )
 
     receipt = apply_resolve(
@@ -494,7 +955,13 @@ def test_resolve_create_is_opt_in(isolated_store):
     assert "weekdays" in created.content
 
 
-def test_resolve_keeps_incomparable_minimum_effect_shapes_as_a_choice(
+def test_resolve_create_can_be_explicitly_disabled() -> None:
+    assert ResolveRequest("resolve/test", allow_create=False).requested_effects == (
+        "UPDATE",
+    )
+
+
+def test_resolve_returns_one_automatic_information_preserving_plan(
     isolated_store,
 ):
     store = MemoryStore()
@@ -503,15 +970,13 @@ def test_resolve_keeps_incomparable_minimum_effect_shapes_as_a_choice(
     analysis, _port = _run(
         store,
         ResolveChoiceProvider(),
-        ResolveRequest("resolve/test", allow_create=True),
+        ResolveRequest("resolve/test"),
     )
 
-    assert analysis.status == "CHOICE"
-    assert len(analysis.candidates) == 2
-    assert {candidate.effects[0].kind for candidate in analysis.candidates} == {
-        "UPDATE",
-        "CREATE",
-    }
+    assert analysis.status == "PROPOSAL"
+    assert len(analysis.candidates) == 1
+    assert analysis.candidates[0].effects[0].kind == "CREATE"
+    assert analysis.candidates[0].issues[0].uid == "schedule-scope"
 
 
 def test_resolve_integration_is_an_atomic_combination_of_primitive_effects(
@@ -548,7 +1013,7 @@ def test_resolve_integration_is_an_atomic_combination_of_primitive_effects(
     assert len(store.list_checkpoints("resolve/test")) == before_checkpoints + 1
 
 
-def test_resolve_tui_projects_verified_effects_and_applies_selected_candidate(
+def test_resolve_tui_projects_and_applies_the_preselected_automatic_plan(
     isolated_store,
 ):
     store = MemoryStore()
@@ -567,9 +1032,9 @@ def test_resolve_tui_projects_verified_effects_and_applies_selected_candidate(
     applied: list[str] = []
 
     with create_pipe_input() as pipe_input:
-        # Viewer -> Items; open the required plan; Responses selects the first
-        # verified candidate; To Do opens exact review, applies, then closes.
-        pipe_input.send_text("\t\r\t\r\t\t\r\r\r")
+        # The semantic plan is already selected: Viewer -> Items -> To Do,
+        # then exact review, Apply, and close. No interpretation choice occurs.
+        pipe_input.send_text("\t\t\r\r\r")
         receipt = run_resolve_tui(
             analysis,
             apply_candidate=lambda candidate_uid: (
@@ -634,28 +1099,77 @@ def test_resolve_tui_already_fit_is_read_only(isolated_store):
     assert store.list_checkpoints("resolve/test") == []
 
 
-def test_resolve_plain_cli_replays_exact_candidate_before_apply(
+def test_resolve_tui_assumed_interpretation_is_read_only(isolated_store):
+    store = MemoryStore()
+    _context(store)
+    analysis, _port = _run(
+        store,
+        ResolveAssumptionProvider(),
+        ResolveRequest("resolve/test"),
+    )
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("q")
+        receipt = run_resolve_tui(
+            analysis,
+            apply_candidate=lambda _candidate_uid: pytest.fail(
+                "an assumed Resolve interpretation must not expose Apply"
+            ),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert receipt is None
+    assert store.list_checkpoints("resolve/test") == []
+
+
+def test_resolve_plain_cli_automatically_applies_one_grounded_plan(
     isolated_store,
     monkeypatch,
 ):
     store = MemoryStore()
     _context(store)
-    providers = [ResolveFixtureProvider(), ResolveFixtureProvider()]
+    provider = ResolveFixtureProvider()
     monkeypatch.setattr(
         resolve_command,
         "connect_semantic_provider",
-        lambda: providers.pop(0),
+        lambda: provider,
     )
 
-    preview = runner.invoke(
+    result = runner.invoke(
         app,
         ["resolve", "--context", "resolve/test", "--plain"],
     )
 
-    assert preview.exit_code == 0, preview.output
-    candidate = re.search(r"CANDIDATE 1 · (resolve-[0-9a-f]+)", preview.stdout)
-    revision = re.search(r"REVISION · ([0-9a-f]{64})", preview.stdout)
-    assert candidate is not None and revision is not None
+    assert result.exit_code == 0, result.output
+    assert "RESOLVE APPLIED" in result.stdout
+    assert "UPDATED · 1" in result.stdout
+    assert len(store.list_checkpoints("resolve/test")) == 1
+    assert provider.operations == [
+        "fit_propositions",
+        "resolve_candidates",
+        "resolve_candidate_verification",
+        "fit_propositions",
+    ]
+
+
+def test_resolve_plain_cli_can_replay_an_external_exact_plan(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    _context(store)
+    analysis, _port = _run(
+        store,
+        ResolveFixtureProvider(),
+        ResolveRequest("resolve/test"),
+    )
+    monkeypatch.setattr(
+        resolve_command,
+        "connect_semantic_provider",
+        ResolveFixtureProvider,
+    )
 
     applied = runner.invoke(
         app,
@@ -664,9 +1178,9 @@ def test_resolve_plain_cli_replays_exact_candidate_before_apply(
             "--context",
             "resolve/test",
             "--candidate",
-            candidate.group(1),
+            analysis.candidates[0].uid,
             "--expected-revision",
-            revision.group(1),
+            analysis.frame.revision,
             "--apply",
             "--plain",
         ],
@@ -675,6 +1189,7 @@ def test_resolve_plain_cli_replays_exact_candidate_before_apply(
     assert applied.exit_code == 0, applied.output
     assert "RESOLVE APPLIED" in applied.stdout
     assert "UPDATED · 1" in applied.stdout
+    assert len(store.list_checkpoints("resolve/test")) == 1
 
 
 def test_public_resolve_returns_typed_analysis_and_exact_apply(isolated_store):
@@ -693,7 +1208,12 @@ def test_public_resolve_returns_typed_analysis_and_exact_apply(isolated_store):
 
     assert isinstance(analysis, ResolveAnalysisResult)
     assert analysis.status == "PROPOSAL"
-    assert analysis.requested_effects == ("UPDATE",)
+    assert analysis.target_fit == "MAY"
+    assert analysis.requested_effects == ("UPDATE", "CREATE")
+    assert analysis.candidates[0].grounded is True
+    assert analysis.candidates[0].resolution_level == "YES"
+    assert analysis.candidates[0].fit_verdict == "YES"
+    assert analysis.candidates[0].issues[0].kind == "TEMPORAL"
     assert isinstance(receipt, ResolveApplyResult)
     assert receipt.updated_uids == (analysis.candidates[0].effects[0].memory_uid,)
     assert (
@@ -723,17 +1243,18 @@ def test_public_resolve_uses_one_current_snapshot_for_relative_context(
     assert analysis.context_name == "resolve"
 
 
-def test_resolve_agent_analyzes_then_replays_exact_candidate(isolated_store):
+def test_resolve_agent_analyzes_then_applies_the_cached_exact_plan(isolated_store):
     store = MemoryStore()
     _context(store)
+    provider = ResolveFixtureProvider()
     registry = build_default_agent_tool_registry(
         MemCommitClient(
             root=isolated_store,
-            semantic_provider_factory=ResolveFixtureProvider,
+            semantic_provider_factory=lambda: provider,
         )
     )
     request = {
-        "version": 1,
+        "version": RESOLVE_AGENT_CONTRACT_VERSION,
         "kind": "analyze",
         "context_name": "resolve/test",
     }
@@ -741,6 +1262,7 @@ def test_resolve_agent_analyzes_then_replays_exact_candidate(isolated_store):
     preview = registry.invoke(RESOLVE_AGENT_TOOL_NAME, request)
     candidate_uid = preview["result"]["candidates"][0]["uid"]
     revision = preview["result"]["revision"]
+    operations_after_analysis = tuple(provider.operations)
     receipt = registry.invoke(
         RESOLVE_AGENT_TOOL_NAME,
         {
@@ -752,10 +1274,57 @@ def test_resolve_agent_analyzes_then_replays_exact_candidate(isolated_store):
     )
 
     assert preview["ok"] is True
+    assert preview["version"] == RESOLVE_AGENT_CONTRACT_VERSION
     assert preview["result"]["effect"] == "NONE"
+    assert preview["result"]["target_fit"] == "MAY"
+    assert preview["result"]["candidates"][0]["grounded"] is True
+    assert preview["result"]["candidates"][0]["fit_verdict"] == "YES"
+    assert preview["result"]["candidates"][0]["issues"][0]["uid"] == ("schedule-scope")
     assert receipt["ok"] is True
+    assert tuple(provider.operations) == operations_after_analysis
     assert receipt["result"]["effect"] == "CHECKPOINT"
     assert receipt["result"]["candidate_uid"] == candidate_uid
+
+
+def test_resolve_agent_carries_assumed_plan_without_replaying_or_applying(
+    isolated_store,
+):
+    store = MemoryStore()
+    _context(store)
+    provider = ResolveAssumptionProvider()
+    registry = build_default_agent_tool_registry(
+        MemCommitClient(
+            root=isolated_store,
+            semantic_provider_factory=lambda: provider,
+        )
+    )
+    request = {
+        "version": RESOLVE_AGENT_CONTRACT_VERSION,
+        "kind": "analyze",
+        "context_name": "resolve/test",
+    }
+
+    preview = registry.invoke(RESOLVE_AGENT_TOOL_NAME, request)
+    operations_after_analysis = tuple(provider.operations)
+    candidate = preview["result"]["candidates"][0]
+    blocked = registry.invoke(
+        RESOLVE_AGENT_TOOL_NAME,
+        {
+            **request,
+            "kind": "apply",
+            "candidate_uid": candidate["uid"],
+            "expected_revision": preview["result"]["revision"],
+        },
+    )
+
+    assert preview["result"]["status"] == "ASSUMED"
+    assert candidate["grounded"] is False
+    assert candidate["issues"][0]["assumptions"]
+    assert blocked["ok"] is False
+    assert blocked["error"]["code"] == "invalid_request"
+    assert "cannot be applied" in blocked["error"]["message"]
+    assert tuple(provider.operations) == operations_after_analysis
+    assert store.list_checkpoints("resolve/test") == []
 
 
 def _granted_resolve_fixture(isolated_store, tmp_path, monkeypatch, permissions):
@@ -823,9 +1392,12 @@ def test_granted_resolve_intersects_requested_and_granted_effects(
     assert analysis.allowed_effects == ("UPDATE",)
     assert analysis.denied_effects == ("CREATE",)
     assert len(receipt.updated_uids) == 1
-    assert authority_store.load_direct("schedule").memories[
-        receipt.updated_uids[0]
-    ].content == "The office opens at 9 on weekends."
+    assert (
+        authority_store.load_direct("schedule")
+        .memories[receipt.updated_uids[0]]
+        .content
+        == "The office opens at 9 on weekends."
+    )
 
 
 def test_granted_finding_handoff_reauthorizes_requested_effects(

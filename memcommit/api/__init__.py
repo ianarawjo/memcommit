@@ -83,6 +83,7 @@ __all__ = [
     "DedunPlanResult",
     "ExactDedupGroupResult",
     "ExactDedupResult",
+    "ExactDuplicateFindResult",
     "GrantedQueryResult",
     "HelpCatalogResult",
     "HelpComparisonOptionResult",
@@ -109,6 +110,7 @@ __all__ = [
     "MeldSessionResult",
     "MeldStorageError",
     "MemoryReferenceResult",
+    "ContextReferenceResult",
     "OrdinaryQueryResult",
     "OperationHelpResult",
     "QueryAuthorityError",
@@ -152,6 +154,7 @@ __all__ = [
     "ResolveApplyResult",
     "ResolveCandidateResult",
     "ResolveEffectResult",
+    "ResolveIssueResult",
     "SearchItemResult",
     "SearchResult",
     "DistillApplyResult",
@@ -218,6 +221,10 @@ _LAZY_EXPORTS = {
     "MemoryReferenceResult": (
         "memcommit.api.reference",
         "MemoryReferenceResult",
+    ),
+    "ContextReferenceResult": (
+        "memcommit.api.reference",
+        "ContextReferenceResult",
     ),
     **{
         name: ("memcommit.api.atomize", name)
@@ -312,6 +319,7 @@ _LAZY_EXPORTS = {
             "DedunPlanResult",
             "ExactDedupGroupResult",
             "ExactDedupResult",
+            "ExactDuplicateFindResult",
         )
     },
     "GrantedQueryResult": ("memcommit.api.query", "GrantedQueryResult"),
@@ -350,6 +358,7 @@ _LAZY_EXPORTS = {
     "ResolveApplyResult": ("memcommit.api.resolve", "ResolveApplyResult"),
     "ResolveCandidateResult": ("memcommit.api.resolve", "ResolveCandidateResult"),
     "ResolveEffectResult": ("memcommit.api.resolve", "ResolveEffectResult"),
+    "ResolveIssueResult": ("memcommit.api.resolve", "ResolveIssueResult"),
     "DistillApplyResult": ("memcommit.api.semantic", "DistillApplyResult"),
     "DistillProposal": ("memcommit.api.semantic", "DistillProposal"),
     "DistillRuleProposal": ("memcommit.api.semantic", "DistillRuleProposal"),

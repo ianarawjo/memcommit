@@ -286,7 +286,7 @@ def _capture_memory(environment: dict[str, str]) -> bytearray:
         _wait_for(child, raw, b"CURRENT PROFILE HIDDEN FROM SOURCE LIST")
         child.send(b"\r")
         _wait_for(child, raw, b"SOURCE MEMORY")
-        child.send(b"\x1b[B")
+        child.send(b"\x1b[B\x1b[B\x1b[B")
         _settle(child, raw)
         _render_snapshot("15-memory-source-choice", bytes(raw))
 

@@ -3,8 +3,9 @@
 These images render the actual color-preserving PTY byte stream produced by the
 real `mem update` Typer command boundary. The run uses a delayed deterministic
 provider so the shared wait can be inspected without an external semantic
-request. The provider still receives Update's real prompt and schema and its
-response passes through the production planner and staged-session save path.
+request. The provider still receives Update's real prompt and schema, and its
+response passes through the production planner and current direct application
+path.
 
 ## Reproduction frame
 
@@ -53,9 +54,10 @@ and the child records the live `os.get_terminal_size()` value in the stream.
 | `10-report-destination.png` | `r` | Report is opened directly from inputs | None |
 | `11-inputs-after-report-repeat.png` | `r` | Repeating the active report key returns to its input origin | None |
 | `12-report-restored.png` | `r` | Report is reopened directly and continues at the worker's current planning stage | None |
-| `13-staged-review.png` | Provider completes | Normal Update Resolution Workbench with one staged EDIT and explicit `REVIEW AND APPLY` | One staged Update receipt saved; Source and Target Contexts unchanged |
-| `14-staged-receipt-verification.png` | `Escape` | Canonical staged report, “no target changes were applied,” staged-receipt presence, and read-only Source/Target verification | No additional mutation; staged receipt remains and both Contexts are byte-semantically unchanged |
+| `13-applied-result.png` | Provider completes | Applied Update report with the exact one-EDIT plan, resulting content, and recovery command | Target Memory changed in the disposable store; Source unchanged |
+| `14-read-only-verification.png` | `Enter` at the capture-only pause | Staged receipt is absent, Source remains unchanged, and Target verification reports the expected applied change | No additional mutation after Apply |
 
-The capture intentionally closes final review rather than approving Apply.
-This verifies that Help and the temporary report do not bypass Update's
-separate review, CAS publication, or target-application boundary.
+The capture-only pause is inserted after the product command returns so the
+applied receipt and subsequent read-only verification remain distinct ordered
+states. Help and temporary report browsing do not restart the provider turn or
+publish a partial result before it completes.

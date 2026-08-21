@@ -6,6 +6,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
 from memcommit.context import Context, Memory
+from memcommit.context_targeting.tui.picker import ContextMemoryRow
 from memcommit.distill import DistillAnalysis, DistilledRule
 from memcommit.distill_application import (
     DistillRequest,
@@ -153,6 +154,64 @@ def test_distill_tui_cancels_before_provider_execution() -> None:
 
     assert returned is None
     assert requests == []
+
+
+def test_distill_tui_lowercase_m_loads_only_the_focused_context() -> None:
+    loaded: list[str] = []
+
+    def load(name: str) -> tuple[ContextMemoryRow, ...]:
+        loaded.append(name)
+        return (ContextMemoryRow(name, f"Memory from {name}"),)
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("mq")
+        returned = run_distill_tui(
+            DistillRequest(context_locator="distill/cases"),
+            setup=DistillTuiSetup(
+                names=("distill/cases", "distill/other"),
+                selected_context="distill/cases",
+                current_context="distill/cases",
+                memory_loader=load,
+            ),
+            execute=lambda _request: (_ for _ in ()).throw(
+                AssertionError("preview must not execute Distill")
+            ),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert returned is None
+    assert loaded == ["distill/cases"]
+
+
+def test_distill_tui_uppercase_m_loads_every_visible_context() -> None:
+    loaded: list[str] = []
+
+    def load(name: str) -> tuple[ContextMemoryRow, ...]:
+        loaded.append(name)
+        return (ContextMemoryRow(name, f"Memory from {name}"),)
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("Mq")
+        returned = run_distill_tui(
+            DistillRequest(context_locator="distill/cases"),
+            setup=DistillTuiSetup(
+                names=("distill/cases", "distill/other"),
+                selected_context="distill/cases",
+                current_context="distill/cases",
+                memory_loader=load,
+            ),
+            execute=lambda _request: (_ for _ in ()).throw(
+                AssertionError("preview must not execute Distill")
+            ),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert returned is None
+    assert loaded == ["distill/cases", "distill/other"]
 
 
 def test_distill_tui_has_no_ambiguous_both_range() -> None:

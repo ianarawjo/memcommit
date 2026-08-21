@@ -1,0 +1,7 @@
+LIVE COLOR PTY · 180 columns × 52 rows                                                                                                                                              
+STORE · isolated disposable Profile                                                                                                                                                 
+                                                                                                                                                                                    
+$ mem reference dbdb4436                                                                                                                                                            
+Referenced snapshot [dbdb4436] from 'practice/3' as [3d6d5bfb] in 'practice/4'.                                                                                                     
+                                                                                                                                                                                    
+VERIFIED · Reference bare UID found practice/3 · Target is practice/4

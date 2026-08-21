@@ -1,4 +1,4 @@
-"""Run semantic redundancy discovery, review, and exact Apply as one operation."""
+"""Run complete exact-plus-semantic DUN discovery and Apply as one operation."""
 
 from __future__ import annotations
 
@@ -7,10 +7,18 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.commands import consolidate, find_duplicates
+from memcommit.commands.context_operand import choose_context_operand
 from memcommit.interfaces.console.text import display_escape_text
 
 
 def cmd(
+    context_operand: Annotated[
+        Optional[str],
+        typer.Argument(
+            metavar="CONTEXT",
+            help="Context to dedun (defaults to current)",
+        ),
+    ] = None,
     context_name: Annotated[
         Optional[str],
         typer.Option(
@@ -48,7 +56,20 @@ def cmd(
         typer.Option("--tui", hidden=True),
     ] = False,
 ) -> None:
-    """Find and resolve semantic redundancies while preserving one existing UID."""
+    """Find and resolve complete DUN groups while preserving one existing UID."""
+
+    try:
+        context_name = choose_context_operand(
+            context_operand,
+            option=context_name,
+        )
+    except ValueError as error:
+        typer.secho(
+            "Dedun error: " + display_escape_text(str(error)),
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
 
     replay_requested = bool(
         evidence

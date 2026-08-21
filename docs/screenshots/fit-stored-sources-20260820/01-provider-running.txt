@@ -1,0 +1,3 @@
+$ mem fit 802d9919 fit/policies --tui                                                                                                                                               
+PTY · 180×52                                                                                                                                                                        
+MEM FIT · 1/1 · JUDGING THE COMPLETE PROPOSITION SET . · 0s

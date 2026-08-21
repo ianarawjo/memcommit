@@ -32,7 +32,7 @@ from memcommit.interfaces.tui.workbenches.resolution import (
     run_resolution_workbench,
 )
 from memcommit.semantic_redundancy_evidence import (
-    semantic_redundancy_evidence_json,
+    redundancy_evidence_json,
 )
 
 
@@ -52,7 +52,7 @@ def _component_detail(component: DedupComponent) -> SemanticViewerDocument:
         fragments.extend(
             [
                 (
-                    "class:impact.keep" if recommended else "class:report-label",
+                    "class:impact.add" if recommended else "class:report-label",
                     f"  {'RECOMMENDED · ' if recommended else ''}"
                     f"#{member.ordinal} · [{safe_terminal_text(member.uid)}]\n",
                 ),
@@ -111,7 +111,7 @@ def _component_compact_context(component: DedupComponent) -> str:
 
 def project_dedup_plan(plan: FrozenDedupPlan) -> SemanticViewerDocument:
     fragments: list[tuple[str, str]] = [
-        ("class:title", "DEDUN · CONFIRMED SEMANTIC REDUNDANCIES\n"),
+        ("class:title", "DEDUN · CONFIRMED REDUNDANCIES\n"),
         (
             "class:report-label",
             f"CONTEXT · {safe_terminal_text(plan.display_name)}\n"
@@ -121,8 +121,8 @@ def project_dedup_plan(plan: FrozenDedupPlan) -> SemanticViewerDocument:
         (
             "class:viewer-body",
             "\nDETERMINISTIC BOUNDARY\n"
-            "Only SURFACE_EQUIVALENT and SEMANTIC_EQUIVALENT evidence "
-            "links are present. Dedun does not rewrite or integrate content.\n",
+            "DUN includes EXACT, SURFACE_EQUIVALENT, and SEMANTIC_EQUIVALENT "
+            "evidence links. Dedun does not rewrite or integrate content.\n",
         ),
     ]
     for index, component in enumerate(plan.components, 1):
@@ -133,7 +133,7 @@ def project_dedup_plan(plan: FrozenDedupPlan) -> SemanticViewerDocument:
                     f"\nCOMPONENT {index} · {len(component.members)} MEMBERS\n",
                 ),
                 (
-                    "class:impact.keep",
+                    "class:impact.add",
                     "RECOMMENDED SURVIVOR · "
                     f"[{safe_terminal_text(component.recommended_survivor_uid)}]\n",
                 ),
@@ -176,7 +176,7 @@ def dedup_exact_review(
     member_count = sum(len(component.members) for component in plan.components)
     argv = ["mem", "dedun"]
     for handoff in plan.request.handoffs:
-        argv.extend(("--evidence", semantic_redundancy_evidence_json(handoff)))
+        argv.extend(("--evidence", redundancy_evidence_json(handoff)))
     for selection in selections:
         argv.extend(
             (
@@ -216,7 +216,7 @@ def dedup_resolution_spec(plan: FrozenDedupPlan) -> ResolutionWorkbenchSpec:
     return ResolutionWorkbenchSpec(
         case=case,
         title="MEM DEDUN · RESOLUTION SESSION",
-        subtitle="SEMANTIC EVIDENCE · EXISTING UID SURVIVOR · EXACT WHOLE-SET APPLY",
+        subtitle="DUN EVIDENCE · EXISTING UID SURVIVOR · EXACT WHOLE-SET APPLY",
         report=project_dedup_plan(plan),
         items=tuple(
             ResolutionItem(

@@ -1,14 +1,14 @@
  List · task-1/description                                                                                                                                                          
- Roots · task-1/description                                                                                                                                                         
+ Roots · practice · task-1 · task-2 · task-3                                                                                                                                        
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-› * ▸ task-1/description                                                                                                                                                           ^
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
-                                                                                                                                                                                    
+    ▸ practice                                                                                                                                                                     ^
+    ▾ task-1                                                                                                                                                                        
+› *   ▸ task-1/description                                                                                                                                                          
+      ▸ task-1/participant                                                                                                                                                          
+      ▸ task-1/campus-wiki  READ GRANT · PERMISSIONS CREATE + READ + EMBED + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + SAVE_ANAL 
+        YSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED                                                                                                                           
+    ▸ task-2                                                                                                                                                                        
+    ▸ task-3                                                                                                                                                                        
                                                                                                                                                                                     
                                                                                                                                                                                     
                                                                                                                                                                                     
@@ -49,4 +49,4 @@
                                                                                                                                                                                     
                                                                                                                                                                                    v
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
- ↑↓ move  ←→ expand  A expand all  m show Memories here  M hide all Memories  Enter open/collapse  q close · 1/1 · 1 selectable
+ ↑↓ move  ←→ expand  A expand all  m THIS Context: show items · M EVERY Context: show items  y copy Context  Y copy visible branch  Enter open/collapse  q close · 3/7 · 108 selecta

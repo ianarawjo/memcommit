@@ -38,8 +38,10 @@ The full Checkpoint UID remains the nested selection receipt; display labels
 never become selectors.
 
 Interactive Diff and Revert use the lifecycle label `created`, expose the
-focus detail, and pass the exact Checkpoint UID through the nested selection
-receipt. Static log compatibility remains outside this presentation change.
+focus detail, and pass the exact Checkpoint UID through the History selection
+receipt. Revert opens the command-start current or explicit Context directly;
+it no longer requires a nested Profile-wide Context/version selection stage.
+Static log compatibility remains outside this presentation change.
 
 ## Direct, inherited, and descendant history
 

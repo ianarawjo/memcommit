@@ -2,62 +2,99 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
+
 from memcommit.fit import FitStatus
 from memcommit.fit_application import (
     FitPropositionsResult,
     FitResult,
 )
-from memcommit.interfaces.console.text import safe_terminal_text
+from memcommit.fit_coherence import FitCoherenceFinding, FitCoherenceReport
+from memcommit.interfaces.console.text import display_escape_text
 
 
-FIT_STATUS_ORDER: tuple[FitStatus, ...] = (
-    "FIT",
-    "CONTRADICTS",
-    "UNDERDETERMINED",
-    "NOT_APPLICABLE",
-)
+@dataclass(frozen=True)
+class FitReceiptLine:
+    """One line whose optional judgment token may receive semantic styling."""
+
+    before_judgment: str
+    judgment: str | None = None
+    after_judgment: str = ""
+
+    @property
+    def text(self) -> str:
+        """Return the ANSI-free public text for this receipt line."""
+
+        return self.before_judgment + (self.judgment or "") + self.after_judgment
 
 
-def proposition_fit_mark(result: FitPropositionsResult) -> str:
-    """Project the stable mark for one general YES/MAY/NO verdict."""
-
-    if not isinstance(result, FitPropositionsResult):
-        raise TypeError("General Fit marks require a typed result.")
-    return {"YES": "✓", "MAY": "?", "NO": "!"}[
-        result.analysis.assessment.verdict
-    ]
-
-
-def proposition_fit_summary_line(result: FitPropositionsResult) -> str:
-    """Return the compact, role-neutral general Fit judgment."""
+def _proposition_fit_receipt_line(
+    result: FitPropositionsResult,
+) -> FitReceiptLine:
+    """Build one typed n-ary operator line for the general Fit frame."""
 
     if not isinstance(result, FitPropositionsResult):
         raise TypeError("General Fit summaries require a typed result.")
-    assessment = result.analysis.assessment
-    return (
-        f"{proposition_fit_mark(result)} {assessment.verdict} · "
-        f"{safe_terminal_text(assessment.reason)}"
+    question = result.analysis.question
+    origin_by_alias = {origin.alias: origin for origin in result.input_origins}
+    background_aliases = {item.alias for item in question.background}
+
+    def operand(proposition) -> str:
+        origin = origin_by_alias.get(proposition.alias)
+        if origin is not None:
+            source = (
+                f"[CONTEXT {display_escape_text(origin.context_name)}] "
+                if origin.kind == "CONTEXT"
+                else ""
+            )
+            label = f"{source}[MEMORY {origin.memory_uid[:8]}]"
+        else:
+            role = (
+                "BACKGROUND"
+                if proposition.alias in background_aliases
+                else proposition.role
+            )
+            label = f"[{role} {display_escape_text(proposition.alias)}]"
+        return f"{label} {display_escape_text(proposition.content)}"
+
+    operands = " ↔ ".join(operand(item) for item in question.all_propositions)
+    return FitReceiptLine(
+        "FIT · ",
+        result.analysis.assessment.verdict,
+        f" · {operands}",
     )
+
+
+def proposition_fit_summary_line(result: FitPropositionsResult) -> str:
+    """Return one n-ary operator line for the complete general Fit frame."""
+
+    return _proposition_fit_receipt_line(result).text
+
+
+def proposition_fit_receipt_lines(
+    result: FitPropositionsResult,
+) -> tuple[FitReceiptLine, ...]:
+    """Return typed segments for one general Fit operator line."""
+
+    if not isinstance(result, FitPropositionsResult):
+        raise TypeError("General Fit presentation requires a typed result.")
+    return (_proposition_fit_receipt_line(result),)
+
+
+def proposition_fit_result_lines(
+    result: FitPropositionsResult,
+) -> tuple[str, ...]:
+    """Project one operator line while retaining detail in the typed result."""
+
+    if not isinstance(result, FitPropositionsResult):
+        raise TypeError("General Fit presentation requires a typed result.")
+    return tuple(line.text for line in proposition_fit_receipt_lines(result))
 
 
 def proposition_fit_result_text(result: FitPropositionsResult) -> str:
     """Return the stable plain projection for one general Fit judgment."""
 
-    return proposition_fit_summary_line(result)
-
-
-def fit_status_counts(result: FitResult) -> tuple[tuple[FitStatus, int], ...]:
-    """Count the stable Fit vocabulary without assigning interface styling."""
-
-    if not isinstance(result, FitResult):
-        raise TypeError("Fit status counts require a typed Fit result.")
-    return tuple(
-        (
-            status,
-            sum(judgment.status == status for judgment in result.report.judgments),
-        )
-        for status in FIT_STATUS_ORDER
-    )
+    return "\n".join(proposition_fit_result_lines(result))
 
 
 def fit_mark(result: FitResult, *, status: FitStatus | None = None) -> str:
@@ -71,8 +108,43 @@ def fit_mark(result: FitResult, *, status: FitStatus | None = None) -> str:
     if not result.current:
         return "◷"
     if status is None:
-        return "✓" if result.report.issue_count == 0 else "!"
-    return "✓" if status == "FIT" else "!"
+        return {
+            "YES": "✓",
+            "MAY": "?",
+            "NO": "!",
+        }[fit_verdict(result)]
+    if status == "FIT":
+        return "✓"
+    return fit_issue_label(status)[0]
+
+
+def fit_verdict(result: FitResult) -> str:
+    """Return the current Ground receipt's compact YES/MAY/NO label."""
+
+    if not isinstance(result, FitResult):
+        raise TypeError("Fit verdicts require a typed Fit result.")
+    if not result.current:
+        return "STALE"
+    statuses = [judgment.status for judgment in result.report.judgments]
+    if result.report.coherence is not None:
+        statuses.extend(finding.status for finding in result.report.coherence.findings)
+    if "CONTRADICTS" in statuses:
+        return "NO"
+    if any(status in {"UNDERDETERMINED", "NOT_APPLICABLE"} for status in statuses):
+        return "MAY"
+    return "YES"
+
+
+def fit_issue_label(status: FitStatus) -> tuple[str, str]:
+    """Translate an internal non-Fit status into Fit's public receipt terms."""
+
+    if status == "UNDERDETERMINED":
+        return "?", "MAY"
+    if status == "CONTRADICTS":
+        return "!", "NO"
+    if status == "NOT_APPLICABLE":
+        return "·", "N/A"
+    raise ValueError("A fitting check has no issue receipt line.")
 
 
 def fit_fraction(result: FitResult) -> str:
@@ -127,33 +199,172 @@ def fit_axis_issue_counts(result: FitResult) -> tuple[tuple[str, int], ...]:
     )
 
 
-def fit_summary_line(result: FitResult) -> str:
-    """Return Fit's stable one-line non-interactive result."""
+def _fit_summary_receipt_line(result: FitResult) -> FitReceiptLine:
+    """Build the typed first line of Fit's compact Ground receipt."""
 
     if not isinstance(result, FitResult):
         raise TypeError("Fit summaries require a typed Fit result.")
-    summary = (
-        f"{fit_mark(result)} "
-        f"{safe_terminal_text(result.report.ground_name)} · "
-        f"{fit_fraction(result)}"
+    verdict = fit_verdict(result)
+    suffix = (
+        f" · [GROUND CONTEXT {display_escape_text(result.report.ground_name)}]"
+        f" · {fit_fraction(result)}"
     )
     axis_counts = fit_axis_issue_counts(result)
     if axis_counts:
-        summary += " · " + " · ".join(
-            f"{axis} {count}" for axis, count in axis_counts
+        suffix += " · " + " · ".join(f"{axis} {count}" for axis, count in axis_counts)
+    return FitReceiptLine("FIT · ", verdict, suffix)
+
+
+def fit_summary_line(result: FitResult) -> str:
+    """Return the stable first line of Fit's compact receipt."""
+
+    return _fit_summary_receipt_line(result).text
+
+
+def _ground_judgment_lines(result: FitResult) -> tuple[FitReceiptLine, ...]:
+    """Show each non-fitting Example and its Rule side in one receipt line."""
+
+    rule_by_uid = {rule.uid: rule for rule in result.report.rules}
+    example_by_uid = {example.uid: example for example in result.report.examples}
+    lines: list[FitReceiptLine] = []
+    for judgment in result.report.judgments:
+        if judgment.status == "FIT":
+            continue
+        mark, label = fit_issue_label(judgment.status)
+        rules = tuple(rule_by_uid[uid] for uid in judgment.rule_uids)
+        example = example_by_uid[judgment.example_uid]
+        rule_side = " + ".join(
+            f"[RULE {display_escape_text(rule.alias)}] "
+            f"[MEMORY {rule.uid[:8]}] {display_escape_text(rule.statement)}"
+            for rule in rules
         )
-    return summary
+        lines.append(
+            FitReceiptLine(
+                f"{mark} ",
+                label,
+                f" · {rule_side} ↔ "
+                f"[EXAMPLE {display_escape_text(example.alias)}] "
+                f"[MEMORY {example.uid[:8]}] "
+                f"{display_escape_text(example.statement)}",
+            )
+        )
+    return tuple(lines)
 
 
-def fit_result_lines(result: FitResult) -> tuple[str, ...]:
-    """Project the intentionally compact plain result from typed Fit fields."""
+def _coherence_participant_label(finding: FitCoherenceFinding) -> str:
+    """Preserve the two semantic sides of a frozen coherence check."""
+
+    subjects = " + ".join(
+        display_escape_text(alias) for alias in finding.subject_aliases
+    )
+    contexts = " + ".join(
+        display_escape_text(alias) for alias in finding.context_aliases
+    )
+    if subjects and contexts:
+        return f"{subjects} ↔ {contexts}"
+    if (
+        finding.relation in {"GOAL_RULES", "GOAL_EXAMPLES"}
+        and len(finding.subject_aliases) >= 2
+    ):
+        return f"{display_escape_text(finding.subject_aliases[0])} ↔ " + " + ".join(
+            display_escape_text(alias) for alias in finding.subject_aliases[1:]
+        )
+    if len(finding.subject_aliases) == 2:
+        return " ↔ ".join(
+            display_escape_text(alias) for alias in finding.subject_aliases
+        )
+    return "SUBJECTS · " + subjects
+
+
+def _coherence_issue_lines(
+    report: FitCoherenceReport,
+    finding: FitCoherenceFinding,
+) -> tuple[FitReceiptLine, ...]:
+    """Project relation participants, material evidence, and reason together."""
+
+    mark, label = fit_issue_label(finding.status)
+    subject_by_alias = {subject.alias: subject for subject in report.subjects}
+    context_by_alias = {context.alias: context for context in report.contexts}
+    memory_by_alias = {
+        memory.alias: memory
+        for context in report.contexts
+        for memory in context.memories
+    }
+    aliases = tuple(
+        dict.fromkeys(
+            (
+                *finding.subject_aliases,
+                *finding.context_aliases,
+                *finding.material_aliases,
+            )
+        )
+    )
+    lines = [
+        FitReceiptLine(
+            f"{mark} ",
+            label,
+            f" · {finding.axis} · {_coherence_participant_label(finding)}",
+        )
+    ]
+    for alias in aliases:
+        if alias in subject_by_alias:
+            subject = subject_by_alias[alias]
+            statement = subject.statement or report.brief
+            lines.append(
+                FitReceiptLine(
+                    f"  {subject.layer} {display_escape_text(alias)} · "
+                    f"{display_escape_text(statement)}"
+                )
+            )
+        elif alias in context_by_alias:
+            context = context_by_alias[alias]
+            lines.append(
+                FitReceiptLine(
+                    f"  CONTEXT {display_escape_text(alias)} · "
+                    f"{display_escape_text(context.name)} · {context.role}"
+                )
+            )
+        else:
+            memory = memory_by_alias[alias]
+            lines.append(
+                FitReceiptLine(
+                    f"  MEMORY {display_escape_text(alias)} · "
+                    f"{display_escape_text(memory.content)}"
+                )
+            )
+    lines.append(FitReceiptLine(f"  WHY · {display_escape_text(finding.reason)}"))
+    return tuple(lines)
+
+
+def fit_receipt_lines(result: FitResult) -> tuple[FitReceiptLine, ...]:
+    """Project typed compact lines without losing the plain-text contract."""
 
     if not isinstance(result, FitResult):
         raise TypeError("Fit presentation requires a typed Fit result.")
-    return (fit_summary_line(result),)
+    lines = [_fit_summary_receipt_line(result)]
+    if not result.current:
+        return tuple(lines)
+
+    lines.extend(_ground_judgment_lines(result))
+
+    coherence = result.report.coherence
+    if coherence is not None:
+        for finding in coherence.findings:
+            if finding.status == "FIT":
+                continue
+            lines.extend(_coherence_issue_lines(coherence, finding))
+    return tuple(lines)
+
+
+def fit_result_lines(result: FitResult) -> tuple[str, ...]:
+    """Project one summary plus current issue relationship blocks."""
+
+    if not isinstance(result, FitResult):
+        raise TypeError("Fit presentation requires a typed Fit result.")
+    return tuple(line.text for line in fit_receipt_lines(result))
 
 
 def fit_result_text(result: FitResult) -> str:
-    """Return Fit's stable one-line plain text."""
+    """Return Fit's stable compact receipt text."""
 
     return "\n".join(fit_result_lines(result))

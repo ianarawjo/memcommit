@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 import uuid
 
 # Transitional dependency: Grant access mechanics still live under commands.
@@ -62,7 +62,7 @@ from memcommit.sever_application import (
 )
 from memcommit.sever_provider import SeverProviderError
 from memcommit.sever_store import SeverSessionStore
-from memcommit.store import MemoryStore, context_record_digest
+from memcommit.store import MemoryStore, _write_json_atomic, context_record_digest
 from memcommit.study_prewarm.sever import find_installed_projectable_sever_prewarm
 from memcommit.update import GrantedUpdateTarget
 
@@ -106,12 +106,21 @@ class MemoryStoreSeverSessionRepository:
 
 @dataclass
 class MemoryStoreSeverDestinationPort:
-    """Validate one local require-new destination against the live Store."""
+    """Validate one local self- or other-save destination against the live Store."""
 
     store: MemoryStore
+    source_name: str
+    self_save_allowed: bool
 
     def validate(self, output_name: str, *, current_output_name: str) -> None:
         validate_portable_context_name(output_name)
+        if output_name == self.source_name:
+            if not self.self_save_allowed:
+                raise SeverApplicationError(
+                    "Self-save requires an ordinary local Source root with "
+                    "Source descendants excluded."
+                )
+            return
         if output_name != current_output_name and self.store.context_exists(output_name):
             raise SeverApplicationError(
                 f"Output Context '{output_name}' already exists."
@@ -255,11 +264,38 @@ class MemoryStoreSeverInputPort:
                 "Source and Criteria Contexts must be distinct."
             )
         validate_portable_context_name(request.output_name)
-        if self._store.context_exists(request.output_name):
+        same_source_name = request.output_name == source_access.display_name
+        if same_source_name and (
+            source_access.is_granted
+            or source_access.store.store_dir != self._store.store_dir
+        ):
+            raise SeverApplicationError(
+                "Self-save requires an ordinary local Source. Save to a fresh "
+                "local Result when Source is granted."
+            )
+        self_save = (
+            same_source_name
+            and not source_access.is_granted
+            and source_access.store.store_dir == self._store.store_dir
+        )
+        if self_save and request.source_include_descendants:
+            # A root-only self-save can preserve one Context's complete direct
+            # structure and Memory identities. Recursive self-save needs an
+            # owner-aware multi-Context receipt; rejecting it prevents a
+            # flattened Result from only partially mutating the Source tree.
+            raise SeverApplicationError(
+                "Self-save requires Source descendants to be excluded. "
+                "Use --source-root-only or save the recursive Result elsewhere."
+            )
+        if self._store.context_exists(request.output_name) and not self_save:
             raise SeverApplicationError(
                 f"Output Context '{request.output_name}' already exists."
             )
-        output_access = _local_output_access(self._store, request.output_name)
+        output_access = (
+            source_access
+            if self_save
+            else _local_output_access(self._store, request.output_name)
+        )
         authorize_combination((source_access, criteria_access))
         authorize_derived_transfer(source_access, output_access)
         authorize_derived_transfer(criteria_access, output_access)
@@ -407,7 +443,7 @@ def _result_uid(session_uid: str, source_uid: str, content: str) -> str:
 
 @dataclass
 class MemoryStoreSeverOutputPort:
-    """Publish a reviewed local Result and its checkpoint under Store CAS."""
+    """Publish a reviewed self- or other-save Result under Store CAS."""
 
     store: MemoryStore
 
@@ -435,18 +471,87 @@ class MemoryStoreSeverOutputPort:
         return output, tuple(result_uids), sources
 
     @staticmethod
+    def _self_save_source_receipt(session: SeverSession) -> tuple[str, str, str]:
+        """Return the one exact direct Source owner allowed for self-save."""
+
+        if (
+            session.save_mode != "SELF_SAVE"
+            or session.source.granted is not None
+            or session.source.include_descendants
+            or len(session.source.contexts) != 1
+        ):
+            raise SeverApplicationError(
+                "Self-save requires one ordinary local Source root with "
+                "Source descendants excluded."
+            )
+        receipt = session.source.contexts[0]
+        if receipt[0] != session.source.root_name:
+            raise SeverApplicationError(
+                "The self-save Source receipt does not identify its root Context."
+            )
+        return receipt
+
+    @classmethod
+    def _self_save_context(
+        cls,
+        session: SeverSession,
+        original: Context,
+    ) -> tuple[Context, tuple[str, ...], list[dict[str, str]]]:
+        """Project reviewed treatments onto the same direct Context identity."""
+
+        source_name, source_uid, source_digest = cls._self_save_source_receipt(session)
+        if (
+            original.name != source_name
+            or original.uid != source_uid
+            or context_record_digest(original) != source_digest
+        ):
+            raise SeverApplicationError(
+                "The self-save Source changed after review. Re-run Sever."
+            )
+        output = Context.from_dict(original.to_dict())
+        retained = {
+            source.uid: (candidate, content)
+            for candidate, source, content in session.results()
+        }
+        result_uids: list[str] = []
+        sources: list[dict[str, str]] = []
+        for candidate in session.candidates:
+            source = session.source_memory(candidate.source_memory_uid)
+            current = output.memories.get(source.uid)
+            if (
+                source.context_name != source_name
+                or not isinstance(current, Memory)
+                or current.content != source.content
+            ):
+                raise SeverApplicationError(
+                    "The self-save Source no longer contains its reviewed Memories."
+                )
+            retained_result = retained.get(source.uid)
+            if retained_result is None:
+                output.remove(source.uid)
+            else:
+                _retained_candidate, content = retained_result
+                output.replace(Memory(uid=source.uid, content=content))
+                result_uids.append(source.uid)
+            sources.append(
+                {
+                    "candidate_uid": candidate.uid,
+                    "source_context": source.context_name,
+                    "source_memory_uid": source.uid,
+                    "selection": candidate.selection,
+                }
+            )
+        return output, tuple(result_uids), sources
+
+    @staticmethod
     def _checkpoint_args(
         session: SeverSession,
         output: Context,
         sources: list[dict[str, str]],
     ) -> dict[str, object]:
-        return {
-            "context_creation": {
-                "version": 1,
-                "context_uid": output.uid,
-                "context_name": output.name,
-            },
+        args: dict[str, object] = {
             "sever": {
+                "save_mode": session.save_mode,
                 "session_uid": session.uid,
                 "session_digest": sever_record_digest(session),
                 "source": session.source.root_name,
@@ -465,6 +570,13 @@ class MemoryStoreSeverOutputPort:
                 "results": sources,
             },
         }
+        if session.save_mode == "OTHER_SAVE":
+            args["context_creation"] = {
+                "version": 1,
+                "context_uid": output.uid,
+                "context_name": output.name,
+            }
+        return args
 
     def recover_materialization(self, session: SeverSession) -> SeverSession | None:
         """Adopt only an untouched Result produced by this exact review.
@@ -477,6 +589,8 @@ class MemoryStoreSeverOutputPort:
 
         if not self.store.context_exists(session.output_name):
             return None
+        if session.save_mode == "SELF_SAVE":
+            return self._recover_self_save(session)
         current = self.store.load_direct(session.output_name)
         expected, result_uids, sources = self._result_context(
             session,
@@ -488,10 +602,23 @@ class MemoryStoreSeverOutputPort:
         if len(checkpoints) != 1:
             return None
         checkpoint = checkpoints[0]
+        expected_args = self._checkpoint_args(session, expected, sources)
+        expected_sever = expected_args.get("sever")
+        legacy_args = (
+            {
+                **expected_args,
+                "sever": {
+                    key: value
+                    for key, value in expected_sever.items()
+                    if key != "save_mode"
+                },
+            }
+            if isinstance(expected_sever, dict)
+            else expected_args
+        )
         if (
             checkpoint.get("command") != "sever"
-            or checkpoint.get("args")
-            != self._checkpoint_args(session, expected, sources)
+            or checkpoint.get("args") not in (expected_args, legacy_args)
             or not isinstance(checkpoint.get("uid"), str)
         ):
             return None
@@ -502,6 +629,45 @@ class MemoryStoreSeverOutputPort:
                 result_memory_uids=result_uids,
             )
         )
+
+    def _recover_self_save(self, session: SeverSession) -> SeverSession | None:
+        """Adopt an exact self-save committed before its session receipt."""
+
+        current = self.store.load_direct(session.output_name)
+        for checkpoint in self.store.list_checkpoints(session.output_name):
+            before = checkpoint.get("command_before")
+            snapshot = checkpoint.get("snapshot")
+            if (
+                checkpoint.get("command") != "sever"
+                or not isinstance(checkpoint.get("uid"), str)
+                or not isinstance(before, dict)
+                or not isinstance(snapshot, dict)
+            ):
+                continue
+            try:
+                original = Context.from_dict(before)
+                expected, result_uids, sources = self._self_save_context(
+                    session,
+                    original,
+                )
+            except (SeverApplicationError, TypeError, ValueError):
+                continue
+            if (
+                checkpoint.get("args")
+                != self._checkpoint_args(session, expected, sources)
+                or context_record_digest(snapshot) != context_record_digest(expected)
+                or current.uid != expected.uid
+                or context_record_digest(current) != context_record_digest(expected)
+            ):
+                continue
+            return session.with_application(
+                SeverApplication(
+                    output_context_uid=current.uid,
+                    checkpoint_uid=checkpoint["uid"],
+                    result_memory_uids=result_uids,
+                )
+            )
+        return None
 
     def materialize(self, session: SeverSession) -> SeverSession:
         granted_bindings = tuple(
@@ -563,6 +729,8 @@ class MemoryStoreSeverOutputPort:
             )
 
     def _materialize_frozen(self, session: SeverSession) -> SeverSession:
+        if session.save_mode == "SELF_SAVE":
+            return self._materialize_self_save(session)
         output, result_uids, sources = self._result_context(
             session,
             output_uid=str(uuid.uuid4()),
@@ -604,14 +772,61 @@ class MemoryStoreSeverOutputPort:
             )
         )
 
+    def _materialize_self_save(self, session: SeverSession) -> SeverSession:
+        """Replace one exact Source root with its reviewed Sever projection."""
+
+        original = self.store.load_direct(session.output_name)
+        output, result_uids, sources = self._self_save_context(session, original)
+        checkpoint_args = self._checkpoint_args(session, output, sources)
+        auto_checkpoint = AutoCheckpoint(
+            command="sever",
+            args=checkpoint_args,
+            description=(
+                f"Self-saved Sever result into '{session.output_name}' under "
+                f"'{session.criteria.root_name}': "
+                f"{len(result_uids)} kept, "
+                f"{len(session.candidates) - len(result_uids)} forgotten"
+            ),
+        )
+        criteria_bindings = (
+            session.criteria.contexts
+            if session.criteria.granted is None
+            else ()
+        )
+        if criteria_bindings:
+            checkpoint = self.store.save_context_with_sources(
+                output,
+                auto_checkpoint,
+                expected_context_digest=context_record_digest(original),
+                source_bindings=criteria_bindings,
+            )
+        else:
+            checkpoint = self.store.save(
+                output,
+                auto_checkpoint,
+                expected_context_digest=context_record_digest(original),
+            )
+        if checkpoint is None:
+            raise SeverApplicationError("Sever self-save produced no checkpoint.")
+        return session.with_application(
+            SeverApplication(
+                output_context_uid=output.uid,
+                checkpoint_uid=checkpoint.uid,
+                result_memory_uids=result_uids,
+            )
+        )
+
     def rollback_materialization(self, applied: SeverSession) -> None:
-        """Remove only the untouched Result named by an uncommitted receipt."""
+        """Compensate only the exact save named by an uncommitted receipt."""
 
         application = applied.application
         if applied.state != "APPLIED" or application is None:
             raise SeverApplicationError(
                 "Only an applied Sever receipt can roll back its Result."
             )
+        if applied.save_mode == "SELF_SAVE":
+            self._rollback_self_save(applied)
+            return
         expected = Context(
             uid=application.output_context_uid,
             name=applied.output_name,
@@ -654,13 +869,85 @@ class MemoryStoreSeverOutputPort:
                             )
                         self.store._delete_locked(applied.output_name)  # noqa: SLF001
 
+    def _rollback_self_save(self, applied: SeverSession) -> None:
+        """Restore the exact Source pre-image after failed session persistence."""
+
+        application = applied.application
+        if application is None:
+            raise SeverApplicationError("Self-save rollback requires an application.")
+        reviewed = replace(
+            applied,
+            revision=applied.revision - 1,
+            state="REVIEWING",
+            application=None,
+        )
+        with self.store._command_write_lock():  # noqa: SLF001
+            with self.store._context_graph_lock(exclusive=False):  # noqa: SLF001
+                with self.store._context_write_lock(applied.output_name):  # noqa: SLF001
+                    with self.store.profile_write_guard():
+                        current = self.store.load_direct(applied.output_name)
+                        checkpoint = next(
+                            (
+                                item
+                                for item in self.store.list_checkpoints(
+                                    applied.output_name
+                                )
+                                if item.get("uid") == application.checkpoint_uid
+                            ),
+                            None,
+                        )
+                        before = (
+                            checkpoint.get("command_before")
+                            if isinstance(checkpoint, dict)
+                            else None
+                        )
+                        snapshot = (
+                            checkpoint.get("snapshot")
+                            if isinstance(checkpoint, dict)
+                            else None
+                        )
+                        if not isinstance(before, dict) or not isinstance(snapshot, dict):
+                            raise SeverApplicationError(
+                                "The self-save checkpoint cannot restore its Source."
+                            )
+                        original = Context.from_dict(before)
+                        expected, result_uids, sources = self._self_save_context(
+                            reviewed,
+                            original,
+                        )
+                        if (
+                            application.result_memory_uids != result_uids
+                            or current.uid != application.output_context_uid
+                            or context_record_digest(current)
+                            != context_record_digest(expected)
+                            or context_record_digest(snapshot)
+                            != context_record_digest(expected)
+                            or checkpoint.get("args")
+                            != self._checkpoint_args(
+                                reviewed,
+                                expected,
+                                sources,
+                            )
+                        ):
+                            raise SeverApplicationError(
+                                "The self-saved Sever Result changed before rollback."
+                            )
+                        _write_json_atomic(
+                            self.store._context_file(applied.output_name),  # noqa: SLF001
+                            before,
+                        )
+                        self.store._remove_checkpoint_uid_locked(  # noqa: SLF001
+                            applied.output_name,
+                            application.checkpoint_uid,
+                        )
+
 
 def execute_sever_apply(
     request: SeverApplyRequest,
     *,
     store: MemoryStore,
 ) -> SeverApplyResult:
-    """Apply one exact review through the production require-new Store port."""
+    """Apply one exact review through the production save-location port."""
 
     return run_sever_apply(
         request,
@@ -712,12 +999,20 @@ def execute_sever_session_destination_change(
     *,
     store: MemoryStore,
 ) -> SeverSessionSnapshot:
-    """Validate and persist one require-new destination revision."""
+    """Validate and persist one self- or other-save destination revision."""
 
+    session = request.snapshot.session
     return run_sever_session_destination_change(
         request,
         repository=MemoryStoreSeverSessionRepository(store),
-        destination_port=MemoryStoreSeverDestinationPort(store),
+        destination_port=MemoryStoreSeverDestinationPort(
+            store,
+            source_name=session.source.root_name,
+            self_save_allowed=(
+                session.source.granted is None
+                and not session.source.include_descendants
+            ),
+        ),
     )
 
 

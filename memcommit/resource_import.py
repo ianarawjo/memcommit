@@ -192,6 +192,8 @@ def _closed_import_contexts(
     reference and avoids silently transferring query-only authority.
     """
 
+    from memcommit.context_snapshot import ContextSnapshotRef
+
     source_by_name = {context.name: context for context in source_contexts}
     imported: list[Context] = []
     for source in source_contexts:
@@ -203,6 +205,10 @@ def _closed_import_contexts(
                     f"Context {source.name!r} contains query-only view "
                     f"{item.name!r}; import its Profile or use an authority grant."
                 )
+            if isinstance(item, ContextSnapshotRef):
+                # A Context snapshot is already a closed retained value. Its
+                # historical Source name is provenance, not a live locator.
+                continue
             if isinstance(item, Context):
                 referenced = source_by_name.get(item.name)
                 if referenced is None or item.name not in mapping:

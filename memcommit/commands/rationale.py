@@ -1,16 +1,14 @@
-"""Show one Memory with its recorded provenance."""
+"""Show one Memory with grounded natural-language provenance."""
 
 from __future__ import annotations
 
 import json
-from contextlib import redirect_stdout
-from io import StringIO
-import textwrap
 from typing import Annotated, Optional
 
 import typer
 
 from memcommit.command_attempts import annotate_memory_report_attempt
+from memcommit.commands.command_progress import progressing_provider_factory
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.memory_picker import (
     ScopedMemoryPickerItem,
@@ -23,7 +21,6 @@ from memcommit.commands.memory_report_recents import (
 )
 from memcommit.interfaces.tui.viewers.read_only import (
     interactive_report_terminal,
-    run_read_only_viewer,
 )
 from memcommit.interfaces.console.text import (
     display_escape_text,
@@ -35,6 +32,19 @@ from memcommit.rationale import (
     RationaleReport,
     build_rationale,
 )
+from memcommit.rationale_rules import (
+    DEFAULT_RATIONALE_PROVENANCE_LIMIT,
+    MAX_RATIONALE_PROVENANCE_LIMIT,
+    RationaleLimitUnit,
+    RationaleNarrativeStatus,
+    RationaleRulesError,
+    validate_rationale_limit,
+)
+from memcommit.rationale_semantic import (
+    RationaleNarrativeProjection,
+    RationaleSynthesisError,
+    synthesize_rationale_provenance,
+)
 from memcommit.rationale_scope import (
     freeze_rationale_profile_catalog,
     load_rationale_scope,
@@ -45,6 +55,7 @@ from memcommit.rationale_scope import (
 )
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
+from memcommit.query_provider import QueryProviderError, connect_semantic_provider
 from memcommit.store import MemoryStore
 
 
@@ -52,48 +63,9 @@ def _uid(value: str, verbose: bool) -> str:
     return value if verbose else value[:8]
 
 
-def _bounded_summary(value: str, character_limit: int) -> str:
-    if character_limit <= 0:
-        return ""
-    if len(value) <= character_limit:
-        return value
-    if character_limit == 1:
-        return "…"
-    prefix = value[: character_limit - 1].rstrip()
-    sentence_boundaries = tuple(
-        index + 1
-        for index, character in enumerate(prefix)
-        if character in ".!?。！？"
-    )
-    minimum_complete_sentence = min(40, max(1, character_limit // 4))
-    if (
-        sentence_boundaries
-        and sentence_boundaries[-1] >= minimum_complete_sentence
-    ):
-        prefix = prefix[: sentence_boundaries[-1]].rstrip()
-    else:
-        word_boundary = prefix.rfind(" ")
-        if word_boundary >= character_limit // 2:
-            prefix = prefix[:word_boundary].rstrip()
-    return prefix + "…"
-
-
-def _provenance_summary(report: RationaleReport) -> str:
-    for event in reversed(report.recorded_reason_events):
-        if event.reason and event.reason.strip():
-            # Rationale is a compact view of the current form, so it shows one
-            # latest retained reason instead of splicing several historical
-            # explanations into prose that no operation actually recorded.
-            reason = " ".join(event.reason.split())
-            return _bounded_summary(
-                reason,
-                report.provenance_character_limit,
-            )
-    return ""
-
-
 def render_rationale(
     report: RationaleReport,
+    projection: RationaleNarrativeProjection,
     *,
     verbose: bool = False,
 ) -> None:
@@ -108,50 +80,13 @@ def render_rationale(
     for line in safe_terminal_text(report.target.content).splitlines() or [""]:
         typer.echo(f"  {line}")
 
-    if not report.recorded_evidence_available:
+    if projection.status is RationaleNarrativeStatus.HIDDEN:
         typer.secho("\nPROVENANCE — hidden by Grant", bold=True)
-    elif not report.recorded_reason_events:
-        typer.secho("\nPROVENANCE — no reason recorded", bold=True)
+    elif projection.status is RationaleNarrativeStatus.EMPTY:
+        typer.secho("\nPROVENANCE — no retained history", bold=True)
     else:
-        typer.secho("\nPROVENANCE — latest recorded reason", bold=True)
-        provenance = safe_terminal_text(_provenance_summary(report))
-        typer.echo(
-            "  "
-            + _bounded_summary(
-                provenance,
-                report.provenance_character_limit,
-            )
-        )
-
-
-def rationale_report_text(
-    report: RationaleReport,
-    *,
-    verbose: bool = False,
-) -> str:
-    """Render once into neutral text for the common read-only Viewer."""
-    output = StringIO()
-    with redirect_stdout(output):
-        render_rationale(report, verbose=verbose)
-    # The shared Viewer hard-wraps at the canvas edge. Keep this compact
-    # prose projection narrower so wrapping occurs between words and remains
-    # legible in both the standard 180-column study viewport and smaller TUIs.
-    lines: list[str] = []
-    for line in output.getvalue().rstrip("\n").splitlines():
-        indentation = line[: len(line) - len(line.lstrip())]
-        content = line[len(indentation) :]
-        lines.extend(
-            textwrap.wrap(
-                content,
-                width=140,
-                initial_indent=indentation,
-                subsequent_indent=indentation,
-                break_long_words=False,
-                break_on_hyphens=False,
-            )
-            or [""]
-        )
-    return "\n".join(lines)
+        typer.secho("\nPROVENANCE", bold=True)
+        typer.echo("  " + safe_terminal_text(projection.text))
 
 
 def cmd(
@@ -184,12 +119,39 @@ def cmd(
             help="Show complete Context, Memory, and checkpoint UIDs",
         ),
     ] = False,
+    limit: Annotated[
+        int,
+        typer.Option(
+            "--limit",
+            "-n",
+            help=(
+                "Maximum complete natural-language provenance length "
+                f"(1-{MAX_RATIONALE_PROVENANCE_LIMIT})"
+            ),
+        ),
+    ] = DEFAULT_RATIONALE_PROVENANCE_LIMIT,
+    unit: Annotated[
+        RationaleLimitUnit,
+        typer.Option(
+            "--unit",
+            "-u",
+            help=(
+                "Measure --limit in Unicode characters, UTF-8 bytes, or "
+                "whitespace-delimited words"
+            ),
+        ),
+    ] = RationaleLimitUnit.WORDS,
     as_json: Annotated[
         bool,
         typer.Option("--json", help="Emit structured rationale evidence as JSON"),
     ] = False,
 ) -> None:
-    """Show the recorded reason for one current or historical Memory."""
+    """Explain where one Memory came from and how it changed over time."""
+    try:
+        unit = validate_rationale_limit(limit, unit)
+    except RationaleRulesError as error:
+        typer.secho(str(error), fg=typer.colors.RED, err=True)
+        raise typer.Exit(1)
     store = MemoryStore(create=False)
     try:
         include_descendants = True
@@ -301,6 +263,18 @@ def cmd(
             None,
             recorded_evidence_available=not target.access.is_granted,
         )
+        with progressing_provider_factory(
+            "RATIONALE",
+            "synthesizing complete provenance",
+            connect_semantic_provider,
+        ) as provider_factory:
+            projection = synthesize_rationale_provenance(
+                report.trace,
+                provider_factory=provider_factory,
+                history_available=report.recorded_evidence_available,
+                limit=limit,
+                unit=unit,
+            )
         annotate_memory_report_attempt(
             operation="rationale",
             context_name=scope.root_name,
@@ -314,6 +288,9 @@ def cmd(
         ValueError,
         ProvenanceError,
         RationaleError,
+        RationaleRulesError,
+        RationaleSynthesisError,
+        QueryProviderError,
         ProfileConfigError,
         ProfileError,
         PermissionError,
@@ -326,18 +303,16 @@ def cmd(
         raise typer.Exit(1)
 
     if as_json:
+        payload = report.to_dict()
+        payload["provenance_projection"] = projection.to_dict()
         typer.echo(
             json.dumps(
-                report.to_dict(),
+                payload,
                 ensure_ascii=False,
                 indent=2,
             )
         )
         return
-    if interactive_report_terminal():
-        run_read_only_viewer(
-            rationale_report_text(report, verbose=verbose),
-            title="RATIONALE REPORT",
-        )
-        return
-    render_rationale(report, verbose=verbose)
+    # Selection is the only full-screen phase. The compact narrative is the
+    # result itself, so it returns as a receipt instead of opening a Viewer.
+    render_rationale(report, projection, verbose=verbose)

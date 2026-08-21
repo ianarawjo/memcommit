@@ -43,20 +43,26 @@ def _capture(executable: str, *, compact: bool) -> None:
     child.send("\x1b[Z\x1b[C\t\x1b[H")
     _BASE._pump(child, seconds=0.8)
     collapsed = _BASE._snapshot(recorder, f"01-{prefix}-collapsed")
-    assert "▸ mem add" in collapsed
+    if compact:
+        # Add remains the first-row cursor, while the compact viewport anchors
+        # its following row so the expansion below receives the full canvas.
+        assert "▸ mem atomize" in collapsed
+    else:
+        assert "▸ mem add" in collapsed
     assert "COPY OR LINK" not in collapsed
 
     child.send("\x1b[C")
     _BASE._pump(child, seconds=0.8)
     expanded = _BASE._snapshot(recorder, f"02-{prefix}-expanded")
-    assert "▾ mem add" in expanded
+    if not compact:
+        assert "▾ mem add" in expanded
     assert "COPY OR LINK" in expanded
     assert "always stored literally as Memory content" in expanded
     assert "Branch the containing Context" in expanded
-    assert "EXACT MEMORY VERSION · Use mem reference" in expanded
+    assert "EXACT MEMORY OR CONTEXT · Use mem reference" in expanded
     assert "LIVE MEMORY · Use mem embed MEMORY" in expanded
-    assert "EXISTING CONTEXT · Use mem embed" in expanded
-    assert "* EXACT MEMORY VERSION" not in expanded
+    assert "LIVE CONTEXT · Use mem embed" in expanded
+    assert "* EXACT MEMORY OR CONTEXT" not in expanded
 
     raw = recorder.getvalue()
     expected_size = "30 100" if compact else "52 180"

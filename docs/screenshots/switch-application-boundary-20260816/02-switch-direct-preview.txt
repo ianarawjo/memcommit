@@ -3,7 +3,7 @@
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
     ▸ alpha                                                                                                                                                                        ^
 › * ▾ beta                                                                                                                                                                          
-  · [memory 4a19a654] Beta evidence Memory.                                                                                                                                         
+  · [memory 5fa4cdbe] Beta evidence Memory.                                                                                                                                         
                                                                                                                                                                                     
                                                                                                                                                                                     
                                                                                                                                                                                     
@@ -49,4 +49,4 @@
                                                                                                                                                                                     
                                                                                                                                                                                    v
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
- ↑↓ move  ←→ expand  A expand all  m hide items here  M show all items  y copy Context  Y copy visible branch  Enter switch  q cancel · 2/3 · 2 selectable                          
+ ↑↓ move  ←→ expand  A expand all  m THIS Context: hide items · M EVERY Context: show items  y copy Context  Y copy visible branch  Enter switch  q cancel · 2/3 · 2 selectable     

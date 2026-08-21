@@ -982,6 +982,39 @@ def test_granted_chunk_and_clear_apply_to_authority_with_effect_permissions(
     assert not authority.load_direct(wiki.name).memories
 
 
+def test_granted_chunk_without_selector_applies_one_context_batch(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, authority, source, wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+        parent_permissions=("READ", "CREATE", "DELETE"),
+    )
+    first = ops.add(wiki, "First sentence. Second sentence.")
+    second = ops.add(wiki, "Third sentence. Fourth sentence.")
+    authority.save(wiki)
+    active.set_current_virtual_context_if(source.name, "campus-wiki")
+
+    result = runner.invoke(app, ["chunk"])
+
+    assert result.exit_code == 0, result.output + result.stderr
+    assert "2 direct Memories / 4 chunks (method=sentences)" in result.output
+    after = authority.load_direct(wiki.name)
+    assert first.uid not in after.memories
+    assert second.uid not in after.memories
+    assert [
+        item.content for item in after.iter_items() if isinstance(item, Memory)
+    ][-4:] == [
+        "First sentence.",
+        "Second sentence.",
+        "Third sentence.",
+        "Fourth sentence.",
+    ]
+
+
 def test_granted_forget_rejects_delete_when_only_update_is_granted(
     isolated_store,
     tmp_path,
@@ -1905,14 +1938,9 @@ def test_switch_to_read_grant_makes_it_current_without_materializing_copy(
     assert "On context: campus-wiki" in status.output
     assert "Access: READ GRANT · PERMISSIONS READ · READ ONLY" in status.output
     assert contexts.exit_code == 0, contexts.output
-    assert (
-        "* campus-wiki  READ GRANT · PERMISSIONS READ · "
-        "ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED · FROM run-granted-memory"
-        in contexts.output
-    )
-    assert "campus-wiki/services  READ GRANT · PERMISSIONS READ" in (
-        contexts.output
-    )
+    assert "* GRANT  campus-wiki  READ · FROM run-granted-memory" in contexts.output
+    assert "GRANT  campus-wiki/services  READ" in contexts.output
+    assert "ANALYSIS" not in contexts.output
     assert profile_current.exit_code == 0, profile_current.output
     assert "Current Context: campus-wiki" in profile_current.output
     assert switched_child.exit_code == 0, switched_child.output

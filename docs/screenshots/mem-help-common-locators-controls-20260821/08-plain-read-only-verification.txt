@@ -1,0 +1,4 @@
+52 180                                                                                                                                                                              
+edit              - Directly replace the content of one or more Memories selected by UID or prefix.                                                                                 
+embed             - Place a live link to one Memory or Context inside a local Target while retaining Source ownership.                                                              
+reference         - Copy one Source Memory version or direct/recursive Context scope into a Target as an immutable read-only snapshot.

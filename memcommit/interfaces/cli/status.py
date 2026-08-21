@@ -131,7 +131,8 @@ def _render_relationships(context: StatusContextResult) -> None:
         )
     for item in context.embedded_contexts:
         typer.echo(
-            f"  EMBEDDED CONTEXT [{display_escape_text(item.uid[:8])}] "
+            f"  {'CONTEXT REFERENCE' if item.snapshot else 'EMBEDDED CONTEXT'} "
+            f"[{display_escape_text(item.uid[:8])}] "
             f"{display_escape_text(item.name)}"
         )
     for grant in context.grants:

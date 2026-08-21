@@ -1,5 +1,11 @@
 # Revert location and history-policy capture log
 
+> Historical pre-change evidence. The current Revert entry and Viewer are
+> refreshed under `docs/screenshots/revert-revision-result-20260821/`: bare
+> Revert now opens the current Context directly and shows a complete revision
+> result instead of `RESTORE IMPACT`. The policy and Apply mechanics recorded
+> here remain background design history, not the current end-to-end screen.
+
 This ordered snapshot set records the location-first Revert flow, its safe
 empty state, the in-TUI `DISCARD NEWER`/`KEEP ALL` choice, exact Apply, and
 read-only verification.

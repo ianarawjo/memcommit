@@ -30,6 +30,12 @@ from memcommit.commands.context_picker import (
 )
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.context_targeting.catalog import grant_navigation_annotation
+from memcommit.context_targeting.tui.picker import (
+    ContextMemoryBadge,
+    ContextMemoryDetail,
+    memory_visibility_key_hint,
+    render_context_memory_detail,
+)
 from memcommit.source_projection.model import SourceForm, SourceReach, SourceState
 from memcommit.store import MemoryStore
 
@@ -76,6 +82,25 @@ def test_public_context_tree_state_can_be_embedded_without_running_an_app():
     state.toggle_expand_all()
     assert not state.all_expanded
     assert state.selected_name == "alpha/child/deep"
+
+
+def test_memory_visibility_hint_makes_local_and_global_scopes_explicit():
+    tree = build_context_tree(("alpha", "beta"))
+    state = ContextTreeState.create(tree, selected="alpha")
+
+    assert memory_visibility_key_hint(state) == (
+        "m THIS Context: show items · M EVERY Context: show items"
+    )
+
+    state.toggle_selected_memories()
+    assert memory_visibility_key_hint(state) == (
+        "m THIS Context: hide items · M EVERY Context: show items"
+    )
+
+    state.toggle_memories()
+    assert memory_visibility_key_hint(state) == (
+        "m THIS Context: hide items · M EVERY Context: hide items"
+    )
 
 
 def test_picker_preselects_current_and_accepts_enter():
@@ -151,6 +176,33 @@ def test_picker_in_place_nested_action_refreshes_without_closing():
     assert selected is None
     assert accepted == ["first-full", "second-full"]
     assert [row.selector for row in rows] == ["third-full"]
+
+
+def test_picker_can_reject_a_context_in_place_without_selecting_it():
+    rejected: list[str] = []
+
+    def reject_context(context_name: str):
+        rejected.append(context_name)
+        return ContextPickerActionReceipt(
+            label="CONTEXT NOT SELECTABLE",
+            detail="Select an exact Memory row.",
+            label_style="class:semantic.error",
+        )
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\rq")
+        selected = choose_context(
+            ("alpha",),
+            current="alpha",
+            browse_only=True,
+            context_accept_handler=reject_context,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected is None
+    assert rejected == ["alpha"]
 
 
 def test_picker_moves_with_arrows_and_clamps_at_boundaries():
@@ -305,32 +357,93 @@ def test_switch_preview_projects_every_direct_item_in_persisted_order():
     ]
     assert rows[1].source is not None
     assert rows[1].source.states == (SourceState.READ_ONLY,)
+    assert rows[2].style == "report-neutral"
+    assert rows[2].object_label_override == "context"
+    assert tuple(
+        token.text for token in rows[2].supplemental_annotations
+    ) == ("QUERY ONLY",)
+    assert rows[2].annotation_style == "context-query-only"
     assert rows[3].source is not None
     assert rows[3].source.reach is SourceReach.VIA_EMBED
+    assert rows[3].style == "report-neutral"
+    assert rows[3].annotation_style == "context-embedded"
 
     tree = build_context_tree((parent.name,))
     state = ContextTreeState.create(tree, selected=parent.name)
-    rendered = "".join(
-        text
-        for _style, text in _render_context_options(
-            state.visible_rows(),
-            selected=parent.name,
-            current=parent.name,
-            memories_by_context={parent.name: rows},
-            visible_memory_contexts={parent.name},
-        )
+    fragments = _render_context_options(
+        state.visible_rows(),
+        selected=parent.name,
+        current=parent.name,
+        memories_by_context={parent.name: rows},
+        visible_memory_contexts={parent.name},
     )
+    rendered = "".join(text for _style, text in fragments)
     assert rendered.index("[memory memory-u]") < rendered.index(
         "[embedded memory referenc]"
     )
     assert rendered.index("[embedded memory referenc]") < rendered.index(
-        "[query view query-ui]"
+        "[context query-ui] QUERY ONLY"
     )
-    assert rendered.index("[query view query-ui]") < rendered.index(
+    assert rendered.index("[context query-ui] QUERY ONLY") < rendered.index(
         "[context embedded]"
     )
     assert "[embedded memory referenc] READ ONLY · owned Memory" in rendered
     assert "[context embedded] VIA EMBED · parent/embedded" in rendered
+    assert any(
+        style == "class:report-neutral" and "[context query-ui]" in text
+        for style, text in fragments
+    )
+    assert ("class:context-query-only", "QUERY ONLY") in fragments
+    assert ("class:report-neutral", "private/query-view") in fragments
+    assert ("class:context-embedded", "VIA EMBED") in fragments
+    assert any(
+        style == "class:report-neutral" and "[context embedded]" in text
+        for style, text in fragments
+    )
+    assert ("class:report-neutral", "parent/embedded") in fragments
+
+
+def test_picker_keeps_grant_identity_neutral_and_colors_capabilities():
+    tree = build_context_tree(
+        ("owned", "public/shared"),
+        materialized_names={"owned"},
+    )
+    fragments = _render_context_options(
+        _visible_context_rows(tree, set()),
+        selected="owned",
+        current="owned",
+        annotations={
+            "public/shared": grant_navigation_annotation(("READ",)),
+        },
+    )
+
+    assert ("class:source-ownership", "GRANT") in fragments
+    assert ("class:report-neutral", "public/shared") in fragments
+    assert ("class:source-capability", "READ") in fragments
+    assert not any(
+        style in {"class:context-embedded", "class:context-query-only"}
+        for style, _text in fragments
+    )
+    focused_fragments = _render_context_options(
+        _visible_context_rows(tree, set()),
+        selected="public/shared",
+        current="owned",
+        annotations={
+            "public/shared": grant_navigation_annotation(("READ",)),
+        },
+    )
+    assert ("class:selected", "GRANT") in focused_fragments
+    assert ("class:selected", "public/shared") in focused_fragments
+    assert ("class:selected", "READ") in focused_fragments
+    assert _CONTEXT_PICKER_STYLE.get_attrs_for_style_str(
+        "class:source-ownership"
+    ).color == "f4f5f7"
+    assert _CONTEXT_PICKER_STYLE.get_attrs_for_style_str(
+        "class:source-capability"
+    ).color == "8bd5ca"
+    assert _CONTEXT_PICKER_STYLE.get_attrs_for_style_str(
+        "class:report-neutral"
+    ).color == "f4f5f7"
 
 
 def test_picker_navigation_interleaves_read_only_memory_viewport_units():
@@ -398,41 +511,50 @@ def test_picker_memory_viewport_anchor_moves_focus_bar_without_selecting():
     assert focused_style.reverse
 
 
-def test_picker_keeps_grant_identity_neutral_and_colors_capabilities():
-    tree = build_context_tree(
-        ("owned", "public/shared"),
-        materialized_names={"owned"},
+def test_picker_renders_typed_history_section_badges_and_focused_detail():
+    history = ContextMemoryRow(
+        "undo",
+        "2026-08-19 14:22 · restored mem remove",
+        style="report-neutral",
+        selector="undo-checkpoint-full",
+        badges=(
+            ContextMemoryBadge("CHECKPOINT undo-che"),
+            ContextMemoryBadge("RECEIPT receipt-", "history-receipt"),
+            ContextMemoryBadge("SOURCE remove remove-c", "history-source"),
+        ),
+        section_label="DIRECT COMMANDS · practice/2",
+        detail_title="UNDO · restored mem remove",
+        details=(
+            ContextMemoryDetail("Checkpoint", "undo-checkpoint-full"),
+            ContextMemoryDetail(
+                "Receipt",
+                "receipt-full-uid",
+                "history-receipt",
+            ),
+        ),
     )
+    tree = build_context_tree(("practice/2",))
     fragments = _render_context_options(
-        _visible_context_rows(tree, set()),
-        selected="owned",
-        current="owned",
-        annotations={
-            "public/shared": grant_navigation_annotation(("READ",)),
-        },
+        _visible_context_rows(tree, {"practice/2"}),
+        selected="practice/2",
+        current="practice/2",
+        memories_by_context={"practice/2": (history,)},
+        visible_memory_contexts={"practice/2"},
+        memory_anchor=("practice/2", 0),
+        selectable_memories=True,
     )
+    rendered = "".join(text for _style, text in fragments)
 
-    assert ("class:source-ownership", "GRANT") in fragments
-    assert ("class:report-neutral", "public/shared") in fragments
-    assert ("class:source-capability", "READ") in fragments
-
-    focused_fragments = _render_context_options(
-        _visible_context_rows(tree, set()),
-        selected="public/shared",
-        current="owned",
-        annotations={
-            "public/shared": grant_navigation_annotation(("READ",)),
-        },
+    assert rendered.index("DIRECT COMMANDS · practice/2") < rendered.index(
+        "[undo] [CHECKPOINT undo-che] [RECEIPT receipt-]"
     )
-    assert ("class:selected", "GRANT") in focused_fragments
-    assert ("class:selected", "public/shared") in focused_fragments
-    assert ("class:selected", "READ") in focused_fragments
-    assert _CONTEXT_PICKER_STYLE.get_attrs_for_style_str(
-        "class:source-ownership"
-    ).color == "f4f5f7"
-    assert _CONTEXT_PICKER_STYLE.get_attrs_for_style_str(
-        "class:source-capability"
-    ).color == "8bd5ca"
+    detail = render_context_memory_detail(history)
+    assert "".join(text for _style, text in detail) == (
+        " SELECTED COMMAND · UNDO · restored mem remove\n"
+        " Checkpoint  undo-checkpoint-full\n"
+        " Receipt     receipt-full-uid"
+    )
+    assert ("class:history-receipt", "receipt-full-uid") in detail
 
 
 def test_picker_selectable_memory_uses_pointer_and_returns_exact_receipt():
@@ -602,7 +724,7 @@ def test_picker_context_clipboard_item_and_visible_branch_are_distinct():
         "selected": "task-1",
         "current": "task-1/participant",
         "annotations": {
-            "task-1/campus-wiki": "READ GRANT · PERMISSIONS READ + EXPORT",
+            "task-1/campus-wiki": grant_navigation_annotation(("READ", "EXPORT")),
         },
         "memories_by_context": memories,
         "visible_memory_contexts": {"task-1/description"},
@@ -623,7 +745,7 @@ def test_picker_context_clipboard_item_and_visible_branch_are_distinct():
         "      ▾ task-1/description",
         "    · [memory 2db26309] A long description that must remain one clipboard line.",
         "  *   ▸ task-1/participant",
-        "      ▸ task-1/campus-wiki  READ GRANT · PERMISSIONS READ + EXPORT",
+        "      ▸ GRANT task-1/campus-wiki  READ + EXPORT",
     ]
     assert "task-1/participant/route-changes" not in branch.text
     assert "task-2" not in branch.text

@@ -213,7 +213,7 @@ def test_explicit_sever_creates_review_session_without_output_or_query_access(
     )
 
     assert result.exit_code == 0, result.output
-    assert "REVIEWING · SOURCE UNCHANGED" in result.output
+    assert "REVIEWING · OTHER-SAVE" in result.output
     assert "query-only Contexts do not grant" not in result.output
     assert "The Source Context is unchanged" in result.output
     assert not store.context_exists("healthcare-draft")
@@ -222,6 +222,219 @@ def test_explicit_sever_creates_review_session_without_output_or_query_access(
     assert sessions[0].criteria.root_name == "local/guardrails"
     assert len(provider.payloads) == 1
     assert set(provider.payloads[0]) == {"source", "criteria", "output_name"}
+
+
+def test_sever_accepts_positional_roles_and_defaults_to_self_save(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    _context(store, "practice", "Namespace marker")
+    _context(store, "practice/source", "Source")
+    _context(store, "practice/criteria", "Criterion")
+    provider = SeverProvider()
+    monkeypatch.setattr(
+        sever_command,
+        "connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+
+    defaulted = runner.invoke(
+        app,
+        ["sever", "practice/source", "practice/criteria"],
+    )
+    applied = runner.invoke(
+        app,
+        [
+            "sever",
+            "practice/source",
+            "practice/criteria",
+            "practice/result",
+            "--accept",
+        ],
+    )
+    mixed_alias = runner.invoke(
+        app,
+        [
+            "sever",
+            "practice/source",
+            "--against",
+            "practice/criteria",
+            "--save-as",
+            "practice/alias-result",
+        ],
+    )
+
+    assert defaulted.exit_code == 0, defaulted.output + defaulted.stderr
+    assert "REVIEWING · SELF-SAVE" in defaulted.output
+    assert "OUTPUT · practice/source · WILL UPDATE SOURCE" in defaulted.output
+    assert store.load_direct("practice/source").memories
+    assert applied.exit_code == 0, applied.output + applied.stderr
+    assert "SEVER APPLIED · practice/source → practice/result" in applied.output
+    assert store.context_exists("practice/result")
+    assert mixed_alias.exit_code == 0, mixed_alias.output + mixed_alias.stderr
+    assert "OUTPUT · practice/alias-result · NOT CREATED" in mixed_alias.output
+    assert len(provider.payloads) == 3
+
+
+def test_sever_rejects_duplicate_or_overfull_positional_roles_before_provider(
+    isolated_store,
+    monkeypatch,
+):
+    provider = SeverProvider()
+    monkeypatch.setattr(
+        sever_command,
+        "connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+
+    duplicate = runner.invoke(
+        app,
+        ["sever", "source", "criteria", "--source", "other"],
+    )
+    overfull = runner.invoke(
+        app,
+        ["sever", "source", "criteria", "result", "extra"],
+    )
+
+    assert duplicate.exit_code == 2
+    assert "SOURCE was supplied both positionally and with --source" in (
+        duplicate.output + duplicate.stderr
+    )
+    assert overfull.exit_code == 2
+    assert "expected at most three positional Contexts" in (
+        overfull.output + overfull.stderr
+    )
+    assert provider.payloads == []
+
+
+def test_sever_self_save_preserves_context_and_memory_identity(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = _context(
+        store,
+        "practice/source",
+        "Source remains intact",
+        "Unnecessary detail",
+    )
+    _context(store, "practice/criteria", "Criterion")
+    provider = SeverProvider()
+    monkeypatch.setattr(
+        sever_command,
+        "connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+    before_uid = source.uid
+    before_memory_uids = tuple(source.memories)
+
+    result = runner.invoke(
+        app,
+        [
+            "sever",
+            "practice/source",
+            "practice/criteria",
+            "practice/source",
+            "--accept",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output + result.stderr
+    assert "SAVE MODE · SELF-SAVE" in result.output
+    assert "SOURCE · UPDATED" in result.output
+    updated = store.load_direct("practice/source")
+    assert updated.uid == before_uid
+    assert tuple(updated.memories) == before_memory_uids[:1]
+    assert updated.memories[before_memory_uids[0]].content == (
+        "Needs step-free access at appointments."
+    )
+    checkpoint = store.list_checkpoints("practice/source")[0]
+    assert checkpoint["args"]["sever"]["save_mode"] == "SELF_SAVE"
+    assert "context_creation" not in checkpoint["args"]
+    assert len(provider.payloads) == 1
+
+
+def test_sever_rejects_recursive_self_save_before_provider(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    _context(store, "practice/source", "Source")
+    _context(store, "practice/source/child", "Child Source")
+    _context(store, "practice/criteria", "Criterion")
+    provider = SeverProvider()
+    monkeypatch.setattr(
+        sever_command,
+        "connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "sever",
+            "practice/source",
+            "practice/criteria",
+            "--source-descendants",
+            "--accept",
+        ],
+    )
+
+    assert result.exit_code == 1
+    assert "Self-save requires Source descendants to be excluded" in (
+        result.output + result.stderr
+    )
+    assert provider.payloads == []
+
+
+def test_scripted_sever_decision_rejects_a_stale_reviewed_session(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    _context(store, "source", "Source")
+    _context(store, "criteria", "Criterion")
+    monkeypatch.setattr(
+        sever_command,
+        "connect_codex_chatgpt_provider",
+        lambda: SeverProvider(),
+    )
+    started = runner.invoke(
+        app,
+        [
+            "sever",
+            "--source",
+            "source",
+            "--criteria",
+            "criteria",
+            "--save-as",
+            "result",
+        ],
+    )
+    assert started.exit_code == 0, started.output
+    before = SeverSessionStore(store).list()[0]
+
+    result = runner.invoke(
+        app,
+        [
+            "sever",
+            "--resume",
+            before.uid,
+            "--candidate",
+            before.candidates[0].uid,
+            "--choice",
+            "recommended",
+            "--expect-session",
+            "0" * 64,
+        ],
+    )
+
+    assert result.exit_code == 1
+    assert "changed after this command was reviewed" in (
+        result.output + result.stderr
+    )
+    assert SeverSessionStore(store).load(before.uid) == before
 
 
 def test_accept_materializes_only_reviewed_result_content(isolated_store, monkeypatch):
@@ -349,6 +562,54 @@ def test_sever_undo_and_redo_restore_output_session_and_checkpoint_log(
     cleared_redo = runner.invoke(app, ["redo"])
     assert cleared_redo.exit_code == 1
     assert "no recorded Context command to redo" in cleared_redo.stderr
+
+
+def test_sever_self_save_undo_and_redo_restore_source_and_session(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = _context(
+        store,
+        "source",
+        "I need a step-free entrance.",
+        "My sibling prefers chocolate snacks.",
+    )
+    _context(store, "criteria", "Share only necessary information.")
+    original = source.to_dict()
+    monkeypatch.setattr(
+        sever_command,
+        "connect_codex_chatgpt_provider",
+        lambda: SeverProvider(),
+    )
+
+    applied = runner.invoke(app, ["sever", "source", "criteria", "--accept"])
+
+    assert applied.exit_code == 0, applied.output
+    self_saved = store.load_direct("source").to_dict()
+    assert self_saved != original
+    applied_session = SeverSessionStore(store).list()[0]
+    application = applied_session.application
+    assert application is not None
+
+    undone = runner.invoke(app, ["undo"])
+
+    assert undone.exit_code == 0, undone.output
+    assert store.load_direct("source").to_dict() == original
+    reviewing = SeverSessionStore(store).load(applied_session.uid)
+    assert reviewing.state == "REVIEWING"
+    assert reviewing.application is None
+
+    redone = runner.invoke(app, ["redo"])
+
+    assert redone.exit_code == 0, redone.output
+    assert store.load_direct("source").to_dict() == self_saved
+    restored = SeverSessionStore(store).load(applied_session.uid)
+    assert restored.state == "APPLIED"
+    assert restored.application == application
+    assert [
+        checkpoint["command"] for checkpoint in store.list_checkpoints("source")
+    ] == ["redo", "undo", "sever"]
 
 
 def test_sever_undo_rolls_back_context_archive_when_session_save_fails(
@@ -601,7 +862,7 @@ def test_sever_requires_exactly_one_criteria_and_new_output(isolated_store):
         ["sever", "--source", "local/personal-memory", "--save-as", "draft"],
     )
     assert missing.exit_code == 1
-    assert "requires --criteria" in missing.stderr
+    assert "requires CRITERIA" in missing.stderr
 
     _context(store, "local/guardrails", "Criterion")
     _context(store, "draft", "Existing")
@@ -637,7 +898,7 @@ def test_resolution_adapter_exposes_source_criteria_output_skeleton(isolated_sto
     view = SeverResolutionWorkbenchAdapter(session).view()
 
     assert view.route == (
-        "SOURCE local/personal-memory × CRITERIA local/guardrails → OUTPUT draft"
+        "SOURCE local/personal-memory × CRITERIA local/guardrails → OTHER-SAVE draft"
     )
     assert view.status == "REVIEWING"
     assert view.accept_enabled
@@ -806,6 +1067,21 @@ def test_sever_routes_its_local_output_to_decision_free_auto_accept(
     assert changed.output_name == "draft"
     assert sessions.load(session.uid).output_name == "draft"
     assert workbench_kwargs[0]["decision_free_behavior"] == "AUTO_ACCEPT"
+    view = SeverResolutionWorkbenchAdapter(session).view()
+    item = view.items[0]
+    turn = workbench_kwargs[0]["turn_command_review"](
+        ResolutionWorkbenchAction(
+            kind="SUBMIT_ITEM",
+            item_uid=item.uid,
+            option_uid=item.options[0].uid,
+        )
+    )
+    assert turn is not None
+    assert turn.argv[-2:] == (
+        "--expect-session",
+        sever_record_digest(session),
+    )
+    assert "--accept" not in turn.argv
 
 
 def test_sever_report_lists_large_result_only_once_when_impact_is_present(
@@ -840,7 +1116,7 @@ def test_sever_report_lists_large_result_only_once_when_impact_is_present(
         )
     )
 
-    assert "LOCAL RESULT DRAFT · SOURCE UNCHANGED" not in report
+    assert "OTHER-SAVE DRAFT · SOURCE UNCHANGED" not in report
     assert report.count("Needs step-free access at appointments.") == 1
     assert "source → result" in report
     assert "- A uniquely identifiable Source Memory" in report
@@ -929,7 +1205,7 @@ def test_saved_sever_catalog_projects_common_picker_rows_and_reloads(
     entry = catalog[0]
     assert entry.picker_entry.kind == "sever"
     assert entry.picker_entry.key == session.uid
-    assert entry.picker_entry.status == "REVIEWING · SOURCE UNCHANGED"
+    assert entry.picker_entry.status == "REVIEWING · OTHER-SAVE"
     assert entry.picker_entry.reopen_argv == (
         "mem",
         "sever",
@@ -1029,7 +1305,7 @@ def test_bare_sever_opens_a_selected_saved_session_without_provider_call(
 
     assert result.exit_code == 0, result.output
     assert f"Session · {session.uid}" in result.output
-    assert "REVIEWING · SOURCE UNCHANGED" in result.output
+    assert "REVIEWING · OTHER-SAVE" in result.output
 
 
 def test_non_tty_sever_sessions_retains_plain_listing(

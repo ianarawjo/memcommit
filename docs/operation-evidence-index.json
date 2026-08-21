@@ -7,14 +7,20 @@
     ],
     "atomize": [
       "docs/atomize-application-boundary-matrix.md",
+      "docs/context-locator-design-rationale.md",
       "docs/execution-receipt-review-lifecycle-design-rationale.md"
     ],
-    "audit": [],
+    "audit": [
+      "docs/context-locator-design-rationale.md",
+      "docs/mem-check-conformance-design-rationale.md"
+    ],
     "branch": [
       "docs/history-uid-presentation-design-rationale.md",
       "docs/mem-branch-design-rationale.md"
     ],
-    "check-conformance": [],
+    "check-conformance": [
+      "docs/mem-check-conformance-design-rationale.md"
+    ],
     "checkout": [
       "docs/switch-application-boundary-matrix.md"
     ],
@@ -22,18 +28,25 @@
     "chunk": [
       "docs/mem-chunk-design-rationale.md"
     ],
-    "clear": [],
+    "clear": [
+      "docs/mem-clear-design-rationale.md"
+    ],
     "compare": [
       "docs/compare-application-boundary-matrix.md",
-      "docs/compare-session-lifecycle-design-rationale.md"
+      "docs/compare-session-lifecycle-design-rationale.md",
+      "docs/context-locator-design-rationale.md",
+      "docs/mem-compare-design-rationale.md"
     ],
     "config": [],
-    "contexts": [],
+    "contexts": [
+      "docs/context-listing-design-rationale.md"
+    ],
     "dedup": [
       "docs/dedup-callable-boundary-matrix.md",
       "docs/dedup-design-rationale.md"
     ],
     "dedun": [
+      "docs/context-locator-design-rationale.md",
       "docs/dedun-callable-boundary-matrix.md",
       "docs/dedun-design-rationale.md",
       "docs/execution-receipt-review-lifecycle-design-rationale.md",
@@ -63,6 +76,7 @@
     ],
     "embed": [
       "docs/embed-application-boundary-matrix.md",
+      "docs/mem-embed-placement-design-rationale.md",
       "docs/memory-reference-embed-semantics-design-rationale.md"
     ],
     "eval": [],
@@ -72,21 +86,31 @@
       "docs/search-find-replace-design-rationale.md"
     ],
     "find-ambiguities": [
+      "docs/context-locator-design-rationale.md",
       "docs/read-report-lifecycle-design-rationale.md"
     ],
     "find-conflicts": [
+      "docs/context-locator-design-rationale.md",
       "docs/read-report-lifecycle-design-rationale.md"
     ],
+  "find-duplicates": [
+    "docs/context-locator-design-rationale.md",
+    "docs/find-duplicates-callable-boundary-matrix.md",
+    "docs/dedup-design-rationale.md"
+  ],
     "find-redundancies": [
+      "docs/context-locator-design-rationale.md",
       "docs/find-redundancies-callable-boundary-matrix.md",
       "docs/memory-quality-finders-design-rationale.md",
       "docs/quality-finding-handoff-design-rationale.md",
       "docs/read-report-lifecycle-design-rationale.md"
     ],
     "fit": [
-      "docs/fit-application-boundary-matrix.md"
+      "docs/fit-application-boundary-matrix.md",
+      "docs/context-name-portability-design-rationale.md"
     ],
     "forget": [
+      "docs/context-locator-design-rationale.md",
       "docs/forget-application-boundary-matrix.md",
       "docs/forget-public-python-api-design-rationale.md",
       "docs/forget-agent-adapter-design-rationale.md",
@@ -101,24 +125,33 @@
       "docs/help-application-design-rationale.md",
       "docs/mem-help-design-rationale.md"
     ],
-    "impact": [],
+    "impact": [
+      "docs/context-locator-design-rationale.md"
+    ],
     "import": [],
     "init": [
-      "docs/context-init-application-boundary-matrix.md"
+      "docs/context-init-application-boundary-matrix.md",
+      "docs/context-name-portability-design-rationale.md"
     ],
     "init-study": [],
-    "list": [],
+    "list": [
+      "docs/context-listing-design-rationale.md",
+      "docs/mem-ls-design-rationale.md"
+    ],
     "lock": [],
     "log": [
-      "docs/command-attempt-ledger-design-rationale.md"
+      "docs/command-attempt-ledger-design-rationale.md",
+      "docs/mem-history-search-design-rationale.md"
     ],
     "meld": [
       "docs/meld-application-boundary-matrix.md",
       "docs/meld-session-lifecycle-design-rationale.md",
+      "docs/interactive-semantic-command-boundary-design-rationale.md",
       "docs/execution-receipt-review-lifecycle-design-rationale.md"
     ],
     "merge": [
       "docs/merge-application-boundary-matrix.md",
+      "docs/context-locator-design-rationale.md",
       "docs/execution-receipt-review-lifecycle-design-rationale.md"
     ],
     "profile": [
@@ -134,7 +167,8 @@
       "docs/query-reference-application-boundary-matrix.md"
     ],
     "rationale": [
-      "docs/read-report-lifecycle-design-rationale.md"
+      "docs/read-report-lifecycle-design-rationale.md",
+      "docs/mem-trace-rationale-design-rationale.md"
     ],
     "redo": [],
     "reference": [
@@ -147,6 +181,7 @@
       "docs/search-find-replace-design-rationale.md"
     ],
     "resolve": [
+      "docs/resolve-application-boundary-matrix.md",
       "docs/resolve-fit-repair-design-rationale.md",
       "docs/execution-receipt-review-lifecycle-design-rationale.md",
       "docs/resolution-lifecycle-design-rationale.md"
@@ -165,7 +200,17 @@
     ],
     "sever": [
       "docs/sever-application-boundary-matrix.md",
-      "docs/execution-receipt-review-lifecycle-design-rationale.md"
+      "docs/application-flow-design-rationale.md",
+      "docs/context-locator-design-rationale.md",
+      "docs/context-name-portability-design-rationale.md",
+      "docs/interactive-semantic-command-boundary-design-rationale.md",
+      "docs/execution-receipt-review-lifecycle-design-rationale.md",
+      "docs/mem-sever-design-rationale.md",
+      "docs/ownership-aware-application-review-design-rationale.md",
+      "docs/semantic-resolution-workbench-design-rationale.md",
+      "docs/session-endpoint-setup-design-rationale.md",
+      "docs/study-semantic-prewarm-registry-design-rationale.md",
+      "docs/terminal-ui-integration-design-rationale.md"
     ],
     "share": [],
     "shell-init": [],
@@ -182,16 +227,21 @@
       "docs/read-report-lifecycle-design-rationale.md"
     ],
     "switch": [
-      "docs/switch-application-boundary-matrix.md"
+      "docs/switch-application-boundary-matrix.md",
+      "docs/context-listing-design-rationale.md",
+      "docs/mem-switch-picker-design-rationale.md"
     ],
     "trace": [
-      "docs/read-report-lifecycle-design-rationale.md"
+      "docs/read-report-lifecycle-design-rationale.md",
+      "docs/mem-trace-rationale-design-rationale.md"
     ],
     "translate": [],
     "undo": [],
     "unlock": [],
     "update": [
+      "docs/context-locator-design-rationale.md",
       "docs/update-application-boundary-matrix.md",
+      "docs/interactive-semantic-command-boundary-design-rationale.md",
       "docs/execution-receipt-review-lifecycle-design-rationale.md"
     ]
   }

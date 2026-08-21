@@ -455,6 +455,17 @@ def _rewrite_context_pointers(
             if previous == "query_context_ref":
                 collisions.add(target_name)
             selector_names[target_name] = "context_ref"
+        elif kind == "context_snapshot_ref":
+            from memcommit.context_snapshot import ContextSnapshotRef
+
+            snapshot = ContextSnapshotRef.from_dict(item)
+            target_name = snapshot.target_context_name
+            previous = selector_names.get(target_name)
+            if previous == "query_context_ref":
+                collisions.add(target_name)
+            # Snapshot provenance is historical evidence, like a Memory
+            # snapshot Source name, and is deliberately not rename-rewritten.
+            selector_names[target_name] = "context_ref"
         elif kind in {"memory_ref", "memory_snapshot_ref"}:
             target = item.get("target_context")
             if not isinstance(target, dict):
@@ -596,6 +607,11 @@ def _rewrite_branched_context_pointers(
             # Branch copies the revocable link as-is. Its authority identity is
             # external to the local subtree UID remapping.
             ordinary_names.add(name)
+        elif kind == "context_snapshot_ref":
+            from memcommit.context_snapshot import ContextSnapshotRef
+
+            snapshot = ContextSnapshotRef.from_dict(item)
+            ordinary_names.add(snapshot.target_context_name)
         elif kind == "memory_ref":
             target_context = item.get("target_context")
             if not isinstance(target_context, dict):
@@ -8289,11 +8305,78 @@ class MemoryStore:
         """Prepare a saved semantic artifact coupled to one Context command."""
         if unit.command == "meld":
             return self._prepare_meld_command_restore(unit, direction)
+        if unit.command == "sever":
+            return self._prepare_sever_command_restore(unit, direction)
         if unit.command == "atomize-grounding":
             return self._prepare_atomize_grounding_command_restore(unit, direction)
         if unit.command == "update":
             return self._prepare_update_command_restore(unit, direction)
         return None
+
+    def _prepare_sever_command_restore(
+        self,
+        unit,
+        direction: str,
+    ) -> tuple[Path, dict[str, object], dict[str, object]] | None:
+        """Prepare the Sever-session half of one self-save restoration."""
+
+        if unit.command != "sever" or len(unit.changes) != 1:
+            return None
+        change = unit.changes[0]
+        if change.before is None or change.after is None:
+            # Other-save creation uses the dedicated lifecycle restoration.
+            return None
+        checkpoint = next(
+            (
+                entry
+                for entry in self.list_checkpoints(change.context_name)
+                if entry.get("uid") == change.checkpoint_uid
+            ),
+            None,
+        )
+        args = checkpoint.get("args") if isinstance(checkpoint, dict) else None
+        record = args.get("sever") if isinstance(args, dict) else None
+        session_uid = record.get("session_uid") if isinstance(record, dict) else None
+        if (
+            not isinstance(session_uid, str)
+            or record.get("save_mode") != "SELF_SAVE"
+            or record.get("source") != change.context_name
+            or record.get("output") != change.context_name
+        ):
+            raise ValueError("Self-save Sever checkpoint has no valid session receipt.")
+        from memcommit.sever import SeverApplication
+        from memcommit.sever_store import SeverSessionStore
+
+        sessions = SeverSessionStore(self)
+        session = sessions.load(session_uid)
+        result_uids = tuple(source.uid for _candidate, source, _content in session.results())
+        application = SeverApplication(
+            output_context_uid=change.context_uid,
+            checkpoint_uid=change.checkpoint_uid,
+            result_memory_uids=result_uids,
+        )
+        if (
+            session.save_mode != "SELF_SAVE"
+            or session.output_name != change.context_name
+            or session.source.root_uid != change.context_uid
+        ):
+            raise ValueError("Self-save Sever session does not match its command.")
+        if direction == "undo":
+            if session.state != "APPLIED" or session.application != application:
+                raise ConcurrentContextUpdateError(
+                    "The self-save Sever session changed before Undo."
+                )
+            restored = session.clear_application(
+                output_context_uid=application.output_context_uid,
+                checkpoint_uid=application.checkpoint_uid,
+            )
+        else:
+            if session.state != "REVIEWING" or session.application is not None:
+                raise ConcurrentContextUpdateError(
+                    "The self-save Sever session changed before Redo."
+                )
+            restored = session.with_application(application)
+        return sessions._path(session.uid), session.to_dict(), restored.to_dict()
 
     def _write_applied_artifact_restore(
         self,
@@ -8313,6 +8396,32 @@ class MemoryStore:
                 from memcommit.update import UpdateSession
 
                 self._save_update_session(path, UpdateSession.from_dict(value))
+            return
+        from memcommit.sever_store import SeverSessionStore
+
+        sever_sessions = SeverSessionStore(self)
+        if path.parent == sever_sessions.directory:
+            uid = path.stem
+            if path != sever_sessions._path(uid):
+                raise ConcurrentContextUpdateError(
+                    "The Sever session restore path is invalid."
+                )
+            with self.profile_write_guard():
+                with sever_sessions._write_lock(uid):
+                    if not path.is_file() or path.is_symlink():
+                        raise ConcurrentContextUpdateError(
+                            "The applied Sever session changed during restoration."
+                        )
+                    with open(path, encoding="utf-8") as file:
+                        current = json.load(
+                            file,
+                            object_pairs_hook=_reject_duplicate_json_keys,
+                        )
+                    if current != expected:
+                        raise ConcurrentContextUpdateError(
+                            "The applied Sever session changed during restoration."
+                        )
+                    _write_json_atomic(path, value)
             return
         with self.profile_write_guard():
             if not path.is_file() or path.is_symlink():

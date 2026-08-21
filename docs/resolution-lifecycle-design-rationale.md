@@ -35,7 +35,7 @@ unresolved stage, but the condition and legal repair differ:
 | Merge | one or more structural collisions have no legal disposition | exact `KEEP_TARGET` or `TAKE_SOURCE` choices |
 | Meld | Source disposition is incomplete or a required issue remains | preservation, coalescing, synthesis, or grounded semantic revision |
 | Fit repair | the complete proposition frame is `MAY` or `NO` | a grounded minimum-change candidate independently verified as `YES` |
-| Dedun | a confirmed semantic redundancy group has no survivor plan | one unchanged existing survivor plus the complete absorbed-UID plan; V1 blocks inbound references rather than migrating them |
+| Dedun | a confirmed exact-plus-semantic DUN group has no survivor plan | one unchanged existing survivor plus the complete absorbed-UID plan; inbound references are blocked rather than migrated |
 | Clarification | one materially ambiguous reading remains ungrounded | an explicit interpretation or scope supplied by evidence or the person |
 
 Calling every operation Fit would erase these distinctions.  Conversely,
@@ -104,6 +104,18 @@ The deterministic workbench spec retains `merge_resolution_case(plan)` and
 rejects any item/choice projection that widens or reorders that case. Its final
 UI outcome is canonically revalidated against the same binding before the
 callback is invoked.
+
+Merge deliberately uses the compact variant of that workbench. Its initial
+surface shows the same two-line `MERGE PLAN` and `CLASSIFICATION` projection as
+the plain conflict route, and opening a conflict shows only its stable ID,
+Source/Target descriptions, reason, allowed decisions, and real choice rows.
+It has no complete-report or conflict-detail Viewer stop: structural Merge
+does not generate editable wording or a semantic proposal. Dedun and Fit
+Resolve retain their evidence Viewers because selecting a survivor or verified
+post-image requires inspecting content that is not represented by a compact
+structural classification. Exact whole-set review, Apply revalidation, and the
+durable receipt remain unchanged and separate from the compact presentation.
+
 No Merge Python or agent surface is added merely by extracting the common
 contract.  If Merge later becomes a public slice, those adapters must call the
 same application entry rather than importing CLI or TUI code.
@@ -155,7 +167,7 @@ The former working name `reconcile` bundled ambiguity clarification and
 conflict repair too broadly.  Quality surfaces instead route by finding type:
 
 ```text
-semantic redundancy -> dedun
+exact or semantic DUN redundancy -> dedun
 ambiguity -> clarify, and Resolve only if joint Fit remains MAY/NO
 conflict  -> Resolve
 ```
@@ -177,11 +189,11 @@ The TUI now carries that same Resolve case rather than constructing an
 unbound candidate menu; this does not make candidate generation deterministic,
 only the already-verified candidate selection and exact Apply handoff.
 
-## Semantic Dedun vertical slice with exact Apply
+## Complete-DUN vertical slice with exact Apply
 
-The compatibility-named `DedupRequest` accepts only typed single-Context
-semantic redundancy evidence whose classification is `SURFACE_EQUIVALENT` or
-`SEMANTIC_EQUIVALENT`; exact stored duplicates belong to `mem dedup`.
+The compatibility-named `DedupRequest` accepts typed single-Context DUN
+evidence whose classification is `EXACT`, `SURFACE_EQUIVALENT`, or
+`SEMANTIC_EQUIVALENT`; `mem dedup` remains the exact-only shortcut.
 The operation creates connected components, projects each component as one
 required Resolution item, and makes its existing member UIDs the only legal
 choices. Context order supplies the deterministic recommendation; it does not
@@ -233,3 +245,11 @@ the same CLI/TUI gate but deliberately has no public or agent adapter yet.
   operation-owned work. Typed conflict receipts and semantic redundancy evidence are implemented,
   but Resolve and Dedun deliberately retain different solvers and mutation
   semantics.
+
+## 2026-08-20 lifecycle clarification
+
+Resolution provides exact judgments inside an execution operation; it is not
+the post-application Review phase. Merge and Dedun may omit Viewer while
+retaining all decision context beside their choices. Resolve automatically
+applies its unique independently verified candidate. Terminal evidence is
+opened later through the operation receipt's `mem review` route.

@@ -807,6 +807,14 @@ def test_mem_distill_applies_the_exact_rendered_proposal(
     assert "EFFECTS · ADD 1 RULES" in result.output
     assert "REVIEW · mem review distill --receipt" in result.output
     assert store.context_exists("distill/cli-rules")
+    output = store.load_direct("distill/cli-rules")
+    added = next(iter(output.iter_items()))
+    assert f"  [memory {added.uid[:8]}] {added.content}" in result.output
+    assert "UNDO · mem undo" in result.output
+    assert not any(
+        line.startswith(("RECEIPT ·", "CHECKPOINT ·", "RECOVERY ·"))
+        for line in result.output.splitlines()
+    )
     assert len(store.load_direct(source.name).order) == 2
 
 

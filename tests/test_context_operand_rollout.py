@@ -2,10 +2,9 @@
 
 from __future__ import annotations
 
-from types import SimpleNamespace
-
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
+import pytest
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
@@ -29,6 +28,7 @@ from memcommit.interfaces.console.text import (
     display_escape_text,
 )
 from memcommit.context import AutoCheckpoint
+from memcommit.findings import AmbiguityReport, ConflictReport, DuplicateReport
 from memcommit.store import MemoryStore
 
 
@@ -82,24 +82,27 @@ def test_read_and_analysis_commands_share_relative_context_operand_boundary(
         lambda *_args, **_kwargs: [],
     )
 
-    def empty_report(context, *_args, **_kwargs):
-        return SimpleNamespace(
-            memory_count=len(context.memories),
-            pair_count=0,
-            findings=[],
-        )
-
     monkeypatch.setattr(
         "memcommit.commands.find_ambiguities.ops.find_ambiguities",
-        empty_report,
+        lambda context, *_args, **_kwargs: AmbiguityReport(
+            memory_count=len(context.memories),
+            findings=(),
+        ),
     )
     monkeypatch.setattr(
         "memcommit.commands.find_duplicates.ops.find_redundancies",
-        empty_report,
+        lambda context, *_args, **_kwargs: DuplicateReport(
+            memory_count=len(context.memories),
+            findings=(),
+        ),
     )
     monkeypatch.setattr(
         "memcommit.commands.find_conflicts.ops.find_conflicts",
-        empty_report,
+        lambda context, *_args, **_kwargs: ConflictReport(
+            memory_count=len(context.memories),
+            pair_count=0,
+            findings=(),
+        ),
     )
 
     invocations = (
@@ -293,3 +296,51 @@ def test_profile_picker_escapes_metadata_but_returns_raw_identity():
 def test_compare_uses_the_shared_injective_display_escaper():
     assert compare_escape is display_escape_text
     assert compare_escape("line\n\x07\u202e") == r"line\n\x07\u202e"
+
+
+@pytest.mark.parametrize(
+    "command",
+    (
+        ("atomize",),
+        ("impact", "atomize"),
+        ("audit",),
+        ("dedun",),
+        ("find-ambiguities",),
+        ("find-duplicates",),
+        ("find-redundancies",),
+        ("find-conflicts",),
+    ),
+)
+def test_unary_context_position_and_option_cannot_compete(
+    isolated_store,
+    command,
+):
+    result = runner.invoke(app, [*command, "one", "--context", "two"])
+
+    assert result.exit_code == 2
+    assert "both positionally and with --context" in result.stderr
+
+
+@pytest.mark.parametrize("command", (("update",), ("impact", "update")))
+def test_directional_positionals_require_the_complete_pair(
+    isolated_store,
+    command,
+):
+    result = runner.invoke(app, [*command, "source-only"])
+
+    assert result.exit_code == 2
+    assert "exactly SOURCE TARGET" in result.stderr
+
+
+@pytest.mark.parametrize("command", (("update",), ("impact", "update")))
+def test_directional_positionals_cannot_mix_with_endpoint_options(
+    isolated_store,
+    command,
+):
+    result = runner.invoke(
+        app,
+        [*command, "source", "target", "--to", "other"],
+    )
+
+    assert result.exit_code == 2
+    assert "cannot be combined with --from or --to" in result.stderr

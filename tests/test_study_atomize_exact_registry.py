@@ -9,6 +9,7 @@ from typer.testing import CliRunner
 
 import memcommit.config as config_module
 import memcommit.ops as ops
+import memcommit.study_prewarm.atomize as atomize_prewarm_module
 from memcommit.atomize import create_atomize_analysis, impact_atomize
 from memcommit.atomize_workflow import open_or_create_atomize_workbench
 from memcommit.cli import app
@@ -186,7 +187,7 @@ def test_exact_atomize_registry_installs_and_reopens_without_provider(
     assert is_installed_atomize_prewarm(store, opened.analysis)
 
 
-def test_exact_atomize_cli_discloses_prewarm_and_zero_provider(
+def test_exact_atomize_cli_auto_applies_and_discloses_zero_provider(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -209,9 +210,8 @@ def test_exact_atomize_cli_discloses_prewarm_and_zero_provider(
     result = runner.invoke(app, ["atomize", "--context", "practice/source"])
 
     assert result.exit_code == 0, result.stderr or result.output
-    assert "EXACT PREWARM · CURRENT" in result.output
-    assert "provider was not called" in result.output
-    assert "practice/source-atomized · NOT CREATED" in result.output
+    assert "ATOMIZE APPLIED · practice/source" in result.output
+    assert "ANALYSIS · EXACT PREWARM · PROVIDER NOT CALLED" in result.output
 
 
 def test_exact_single_memory_focus_reuses_equivalent_atomize_prewarm(
@@ -343,7 +343,7 @@ def test_exact_atomize_installation_rolls_back_partial_workbench_save(
     assert not store._atomize_workbench_path(source.uid).exists()
 
 
-def test_exact_atomize_configuration_miss_is_explicit_skip(
+def test_higher_quality_atomize_cache_installs_for_lower_request(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -360,6 +360,92 @@ def test_exact_atomize_configuration_miss_is_explicit_skip(
     )
 
     assert installed.declared == 1
+    assert installed.installed == 1
+    assert installed.skipped_configuration == 0
+    assert store.load_atomize_analysis(source.uid) is None
+    match = find_declared_atomize_prewarm(store=store, context=source)
+    assert match is not None
+    assert match.analysis.uid == _prepared.uid
+
+
+def test_exact_description_wins_over_legacy_compatible_duplicate(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    store, profile, registry, source, prepared = _fixture(
+        tmp_path, monkeypatch, isolated_store
+    )
+    install_declared_atomize_prewarms(
+        store=store,
+        profile=profile,
+        registry_snapshot=registry,
+    )
+    exact_match = find_declared_atomize_prewarm(store=store, context=source)
+    assert exact_match is not None
+
+    description = store.load_direct("practice/description")
+    memory = next(
+        item for item in description.iter_items() if isinstance(item, Memory)
+    )
+    exact_content = memory.content
+    description.replace(
+        Memory(uid=memory.uid, content="A retained compatible legacy instruction.")
+    )
+    legacy_key, legacy_artifact = build_atomize_prewarm_artifact(
+        task_description=description,
+        analysis=prepared,
+        provider="codex_chatgpt",
+        model="gpt-5.6-sol",
+        reasoning="medium",
+        offline_provider_seconds=1.0,
+    )
+    publish_artifact(
+        isolated_store,
+        baseline_profile_uid=profile.source["baseline_profile_uid"],
+        operation="ATOMIZE",
+        task="tutorial",
+        key=legacy_key,
+        artifact=legacy_artifact,
+    )
+    description.replace(Memory(uid=memory.uid, content=exact_content))
+    store.save(description)
+
+    monkeypatch.setattr(
+        atomize_prewarm_module,
+        "_description_matches_prepared_digest",
+        lambda _description, _digest: True,
+    )
+    installed = install_declared_atomize_prewarms(
+        store=store,
+        profile=profile,
+        registry_snapshot=registry,
+    )
+    match = find_declared_atomize_prewarm(store=store, context=source)
+
+    assert installed.installed == 2
+    assert match is not None
+    assert match.entry_key == exact_match.entry_key
+    assert match.entry_key != legacy_key
+
+
+def test_lower_quality_atomize_cache_is_an_explicit_skip(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    store, profile, registry, source, _prepared = _fixture(
+        tmp_path, monkeypatch, isolated_store
+    )
+    Config().update({"codex_chatgpt_reasoning_effort": "high"})
+
+    installed = install_declared_atomize_prewarms(
+        store=store,
+        profile=profile,
+        registry_snapshot=registry,
+    )
+
+    assert installed.declared == 1
     assert installed.installed == 0
     assert installed.skipped_configuration == 1
-    assert store.load_atomize_analysis(source.uid) is None
+    assert find_declared_atomize_prewarm(store=store, context=source) is None

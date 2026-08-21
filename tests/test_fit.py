@@ -508,7 +508,7 @@ def test_mem_fit_runs_and_reopens_immutable_receipt(
 
     assert result.exit_code == 0, result.output
     assert result.output == (
-        "✓ ticker · 6/6 checks · CONTEXT 0 · VERTICAL 0 · PEER 0\n"
+        "FIT · YES · [GROUND CONTEXT ticker] · 6/6 checks · CONTEXT 0 · VERTICAL 0 · PEER 0\n"
     )
     receipt = FitStore(store).latest_for_ground(session)
     assert receipt is not None
@@ -525,7 +525,7 @@ def test_mem_fit_runs_and_reopens_immutable_receipt(
     )
     assert reopened.exit_code == 0, reopened.output
     assert reopened.output == (
-        "✓ ticker · 6/6 checks · CONTEXT 0 · VERTICAL 0 · PEER 0\n"
+        "FIT · YES · [GROUND CONTEXT ticker] · 6/6 checks · CONTEXT 0 · VERTICAL 0 · PEER 0\n"
     )
 
 
@@ -548,11 +548,13 @@ def test_mem_fit_plain_flag_preserves_one_line_noninteractive_result(
 
     assert result.exit_code == 0, result.output
     assert result.output == (
-        "✓ ticker · 6/6 checks · CONTEXT 0 · VERTICAL 0 · PEER 0\n"
+        "FIT · YES · [GROUND CONTEXT ticker] · 6/6 checks · CONTEXT 0 · VERTICAL 0 · PEER 0\n"
     )
 
 
-def test_mem_fit_forced_tui_fails_before_opening_storage(monkeypatch) -> None:
+def test_mem_fit_has_no_viewer_route_and_fails_before_opening_storage(
+    monkeypatch,
+) -> None:
     def fail_store(*_args, **_kwargs):
         raise AssertionError("Fit must validate the TUI route before storage")
 
@@ -560,8 +562,8 @@ def test_mem_fit_forced_tui_fails_before_opening_storage(monkeypatch) -> None:
 
     result = CliRunner().invoke(app, ["fit", "--ground", "ticker", "--tui"])
 
-    assert result.exit_code == 1
-    assert "Interactive presentation requires a TTY" in result.output
+    assert result.exit_code == 2
+    assert "No such option: --tui" in result.output
 
 
 def _physical_fit_ground(store: MemoryStore) -> None:
@@ -692,5 +694,5 @@ def test_mem_fit_plain_runs_against_physical_ground(monkeypatch, isolated_store)
 
     assert result.exit_code == 0, result.output
     assert result.output == (
-        "✓ physical-fit · 6/6 checks · CONTEXT 0 · VERTICAL 0 · PEER 0\n"
+        "FIT · YES · [GROUND CONTEXT physical-fit] · 6/6 checks · CONTEXT 0 · VERTICAL 0 · PEER 0\n"
     )

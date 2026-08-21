@@ -38,8 +38,8 @@ BEST_FOR_BY_OPERATION = {
         "existing UID."
     ),
     "dedun": (
-        "Removing semantic redundancy while preserving one exact existing "
-        "Memory and its UID in each reviewed group."
+        "Removing exact plus semantic redundancy while preserving one exact "
+        "existing Memory and its UID in each complete DUN group."
     ),
     "diff": "Verifying exactly what a recorded operation changed.",
     "distill": (
@@ -73,8 +73,11 @@ BEST_FOR_BY_OPERATION = {
         "Finding Memories that permit unclear or multiple interpretations."
     ),
     "find-conflicts": "Finding mutually incompatible claims or instructions.",
+    "find-duplicates": (
+        "Inspecting byte-identical direct Memories without applying exact cleanup."
+    ),
     "find-redundancies": (
-        "Inspecting semantic redundancy before deciding whether any cleanup is needed."
+        "Inspecting complete exact and semantic redundancy before cleanup."
     ),
     "fit": (
         "Checking whether a defined set of Memories, Rules, Goals, Examples, "
@@ -122,11 +125,13 @@ BEST_FOR_BY_OPERATION = {
         "Getting a grounded natural-language answer instead of a list of matching "
         "Memories."
     ),
-    "rationale": "Checking a recorded reason for a Memory's current form.",
+    "rationale": (
+        "Understanding the source context and lifecycle of one Memory."
+    ),
     "redo": "Reapplying a command that was undone accidentally.",
     "reference": (
-        "Retaining one exact Memory version even if its Source later changes "
-        "or disappears."
+        "Retaining one exact Memory version or Context scope even if its Source "
+        "later changes or disappears."
     ),
     "replace": (
         "Correcting, renaming, or redacting exact text throughout a known local "

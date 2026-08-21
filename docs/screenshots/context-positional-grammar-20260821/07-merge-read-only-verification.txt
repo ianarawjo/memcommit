@@ -1,0 +1,3 @@
+MERGE RECORDED · 'capture/merge/source' → 'capture/merge/target' · DIRECT · NEW 1 (1 memory) · ALREADY PRESENT 0 · KEPT TARGET 1 · TOOK SOURCE 0 · CREATED CONTEXTS 0 · TARGET CHANG
+ED YES · CHECKPOINTS 1                                                                                                                                                              
+MERGE VERIFICATION · EXIT 0 · CURRENT capture/merge/target · TARGET MEMORIES 3 · CHECKPOINTS 1

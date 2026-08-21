@@ -7,7 +7,8 @@ does not write per-entry hidden receipts. It records one small reference to a
 content-addressed immutable Study bundle: its digest and baseline Profile UID.
 It creates no ordinary Atomize, Compare, Update, Meld, or Sever session.
 
-The first explicit matching command reads only its requested exact artifact,
+The first explicit matching command reads only artifacts eligible for its
+exact evidence and compatible cached quality,
 checks its file digest and operation-owned evidence against the current frozen
 request, revalidates Context and Grant authority, and publishes ordinary state
 through that operation's existing save/CAS boundary. Bare session launchers
@@ -88,9 +89,10 @@ whole-ledger reconciliations. The issue options already present in the frozen
 initial assessment are provider-free local branches, so the bundle does not
 store ten separate semantic outputs for five binary issues and does not
 enumerate 32 vectors. The artifact binds each final outcome to the exact task
-description, provider configuration, branch-set digest, and request-contract
+description, provider provenance, branch-set digest, and request-contract
 version. It publishes no Meld row or selected choice. The first exact complete
-choice vector matches the current provider request, replays the response
+choice vector uses an exact or component-wise higher compatible cached
+identity, replays the response
 through Meld's ordinary decoder and live Context/Grant checks, and copies that
 outcome into the run-local cache. This makes prewarming an acceleration of an
 actual complete participant action, not a preselected answer.
@@ -103,8 +105,10 @@ actual complete participant action, not a preselected answer.
   baseline UID matches the pinned registry.
 - The requested artifact file digest and operation-owned exact evidence are
   revalidated at first use.
-- Provider/model/reasoning drift, description drift, edited or added evidence,
-  lost authority, and ambiguous matching all miss or fail before publication.
+- A lower or incomparable cached provider/model/reasoning identity,
+  description drift, edited or added evidence, lost authority, and ambiguous
+  matching all miss or fail before publication. Artifact provider identity
+  remains exact provenance even when its quality dominates the request.
 - A cache hit does not bypass the operation's authorization, revalidation,
   save, CAS, review, or apply boundary.
 - Compare and Sever do not project. Any projection retained by a different

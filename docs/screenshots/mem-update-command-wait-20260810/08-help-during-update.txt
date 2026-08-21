@@ -1,14 +1,19 @@
  mem help · explore while work continues · MEM UPDATE · 2/2 · PLANNING MEMORY CHANGES . · 3s                                                                                        
+┌────────────────────────────────────────────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────────────────────────────────────────────┐
+│  LANGUAGE · [ ✓ EN ]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                                                                                                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
 │  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌ CORE CONCEPTS ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐^
-│ MEMORY      An atomic unit of information stored in a Context.                                                                                                                  │ 
-│ CONTEXT     A named workspace that organizes Memories and other Contexts.                                                                                                       │ 
-│ PROFILE     An ownership and storage boundary for Contexts.                                                                                                                     │ 
+│ MEMORY      The basic record unit stored inside a Context and independently selected, reviewed, or changed by Memory-level operations.                                          │ 
+│ CONTEXT     A named hierarchical workspace that contains Memories and organizes child Contexts. The / separator expresses hierarchy in names such as task-1/participant;        │ 
+│             operations with descendant scope can treat a Context and its descendant Contexts as one subtree. Commands use the current Context when none is specified.           │ 
+│ PROFILE     An isolated ownership and storage boundary containing Contexts; different Profiles may contain the same Context name.                                               │ 
+│ OPERATION   A reusable action that reads, analyzes, or changes selected Memories or Contexts through defined inputs and behavior.                                               │ 
 │ GRANT       A permission relationship that can be given or received, selectively allowing someone without direct ownership to read or query a Context and its Memories, or run  │ 
 │             permitted operations on them, while the Grant remains valid.                                                                                                        │ 
-│ SESSION     A saved record of an analysis or review workflow that can be reopened and continued; it does not itself mean Context changes were applied.                          │ 
+│ SESSION     Stores an analysis or review workflow so it can be reopened and continued. Apply results and checkpoint history separately show whether Context changes were made.  │ 
 │ CHECKPOINT  A recoverable history boundary created for each applied operation and recorded per affected Context.                                                                │ 
 ├ COMMON KEYS ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤ 
 │ ↑/↓              Move or scroll within the focused surface.                                                                                                                     │ 
@@ -19,34 +24,29 @@
 │ Esc / Backspace  Go back one layer; Backspace edits text in writable fields.                                                                                                    │ 
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
                                                                                                                                                                                     
-┏ CONTEXTS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
-┃ ▸ mem status    Show current Context counts, recent Memories, and checkpoints.                                                                                                  ┃ 
-┃ ▸ mem contexts  List ordinary local Contexts and readable cross-Profile Context views, marking the current Context and each granted permission set.                             ┃ 
-┃ ▸ mem list      Enter the interactive Context browser for the current Context in a TTY, or print child Contexts and direct items.                                               ┃ 
-┃ ▸ mem ls        Enter the interactive Context browser for the current Context in a TTY, or print child Contexts and direct items.                                               ┃ 
-┃ ▸ mem show      Show a Memory, reference, embedded Context, or the direct contents of a current/explicit Context.                                                               ┃ 
-┃ ▸ mem switch    Enter the interactive Context picker, or switch to an explicit Context.                                                                                         ┃ 
-┃ ▸ mem checkout  Alias for switch, including its picker; with -b, alias for branch.                                                                                              ┃ 
-┃ ▸ mem init      Edit a suggested name, or create an explicitly named Context, and switch to it; --parents ensures its hierarchy.                                                ┃ 
-┃ ▸ mem branch    Choose a local Source range and exact fresh target when unnamed, or branch the current Context or subtree to an explicit new name.                              ┃ 
-┃ ▸ mem rename    Rename an ordinary Context namespace and all lexical descendants.                                                                                               ┃ 
-┃ ▸ mem import    Import a clean-baseline Profile, Context tree, or Memory by value while preserving resource identity.                                                           ┃ 
-┃ ▸ mem embed     Add one Context to another as a live nested Context while the source retains its own identity and ownership.                                                    ┃ 
+OPERATIONS                                                                                                                                                                          
+┏ BROWSE & NAVIGATE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃ NO LLM · Inspect the current location and available Contexts, then move through the Context namespace.                                                                          ┃ 
+┃ ▸ mem status ─┬ Show the current Context's inventory, first five direct Memories, relationships, and latest checkpoints.                                                        ┃ 
+┃               └ WHEN · Getting oriented to what the current Context contains, how it is connected, and which operations were recently applied.                                  ┃ 
+┃ ▸ mem pwd ─┬ Print the current canonical Context name without loading its contents.                                                                                             ┃ 
+┃            └ WHEN · Confirming the active Context in a script or terminal.                                                                                                      ┃ 
+┃ ▸ mem contexts ─┬ Browse local Contexts and readable cross-Profile Context views without switching.                                                                             ┃ 
+┃                 └ WHEN · Exploring every Context currently available to the Profile.                                                                                            ┃ 
+┃ ▸ mem list ─┬ List a Context's direct items—Memories, Memory references, query views, and embedded Contexts—and its readable child Contexts. Use -r to recursively include      ┃ 
+┃     (ls)    │ items from descendant and embedded Contexts; ls is the compact alias.                                                                                             ┃ 
+┃             └ WHEN · Inspecting the structure and direct contents of a Context.                                                                                                 ┃ 
+┃ ▸ mem show ─┬ Show a Memory, reference, embedded Context, or the direct contents of a current/explicit Context.                                                                 ┃ 
+┃             └ WHEN · Reading the complete content of a known item or Context.                                                                                                   ┃ 
+┃ ▸ mem switch ─┬ Enter the interactive Context picker, or switch to an explicit Context.                                                                                         ┃ 
+┃               └ WHEN · Moving the working position to another existing Context.                                                                                                 ┃ 
+┃ ▸ mem checkout ─┬ Switch Contexts using Git-style syntax; with -b, create and switch to a new Context branch.                                                                   ┃ 
+┃                 └ WHEN · Using a Git-like workflow to switch or create a branch.                                                                                                ┃ 
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ 
                                                                                                                                                                                     
-┌ MEMORIES ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
-│ ▸ mem add        Add one or more Memories to the current or explicit Context.                                                                                                   │ 
-│ ▸ mem reference  Add a read-only live pointer to a directly owned source Memory; the target stores identity metadata rather than copying its content.                           │ 
-│ ▸ mem edit       Replace direct Memory content by UID or prefix in the current or explicit Context.                                                                             │ 
-│ ▸ mem chunk      Preview and, after confirmation, split one direct current-Context Memory by headers, paragraphs, or sentences.                                                 │ 
-│ ▸ mem forget     Enter interactive instruction and direct-Source setup when no operand is supplied, or analyze one instruction against the current direct Memories; review each │ 
-│                  keep/edit/delete decision and apply only the accepted batch.                                                                                                   │ 
-│ ▸ mem remove     Select a Context or direct item to delete, or name it by locator, name, or UID.                                                                                │ 
-│ ▸ mem delete     Select a Context or direct item to delete, or name it by locator, name, or UID.                                                                                │ 
-│ ▸ mem clear      Remove all direct items from the current or explicit Context after confirmation.                                                                               │ 
-└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
-                                                                                                                                                                                    
-┌ SEARCH & EXPLAIN ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
-│ ▸ mem find              Open interactive search when QUERY is omitted, or search once when QUERY is supplied. The default scope includes each selected Context root, its        │v
-────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
- ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  H hide Help  Q return to waiting                                                                            
+┌ CREATE, COPY & CONNECT ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ NO LLM · Create Contexts or Memories, copy or import resources, or connect existing material.                                                                                   │ 
+│ ▸ mem init ─┬ Create a new empty Context and make it the current working Context.                                                                                               │ 
+│             └ WHEN · Starting a separate workspace for a new topic, task, or group of Memories.                                                                                 │v
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H hide Help  Q return to waiting                                                             

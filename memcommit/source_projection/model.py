@@ -26,6 +26,7 @@ class SourceForm(str, Enum):
     """The durable or virtual shape represented by the displayed row."""
 
     CONTEXT = "CONTEXT"
+    CONTEXT_REFERENCE = "CONTEXT_REFERENCE"
     MEMORY = "MEMORY"
     MEMORY_EMBED = "MEMORY_EMBED"
     MEMORY_REFERENCE = "MEMORY_REFERENCE"

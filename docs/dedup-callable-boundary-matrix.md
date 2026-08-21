@@ -2,19 +2,20 @@
 
 ## Reviewed scope
 
-This matrix covers every currently exposed exact-Dedup route. Missing future
-TUI or agent adapters are not current routes. Semantic redundancy routes are
-reviewed separately under Dedun.
+This matrix covers every currently exposed provider-free exact-Dedup Apply
+route. Missing future TUI or agent adapters are not current routes. Read-only
+exact discovery and complete exact-plus-semantic redundancy are reviewed
+separately under Find Duplicates, Find Redundancies, and Dedun.
 
 | Route | Public input | Application entry | Result/effect |
 | --- | --- | --- | --- |
 | CLI | `mem dedup [CONTEXT]` | shared locator freeze, then `apply_exact_dedup` | short no-op or checkpoint receipt |
 | Public Python | `MemCommitClient.dedup(context_name)` | `api._operations.exact_dedup.dedup_exact`, then `apply_exact_dedup` | typed `ExactDedupResult` |
 
-Both routes converge on `memcommit.exact_dedup_application`, which re-exports
-the terminal-independent exact grouping and Apply boundary. Neither route
-constructs a provider, finding report, TUI, survivor choice, or semantic
-receipt.
+Both routes converge on `memcommit.exact_dedup`; the compatibility
+`memcommit.exact_dedup_application` module re-exports its terminal-independent
+grouping and Apply boundary. Neither applying route constructs a provider,
+TUI, survivor choice, or semantic receipt.
 
 ## Shared behavior evidence
 

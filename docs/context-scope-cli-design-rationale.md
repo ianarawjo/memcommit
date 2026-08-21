@@ -15,7 +15,7 @@ plain CLI route. The presets are input conveniences; cache, receipt, session,
 provider, and Apply code continues to persist the operation's precise typed
 scope fields rather than the spelling of the flag.
 
-Last reviewed: 2026-08-13.
+Last reviewed: 2026-08-20.
 
 ## Motivation
 
@@ -38,18 +38,23 @@ with multiple roles or independent traversal axes.
   TUI controls, as Find does; otherwise a TUI-owned setup rejects the flag
   instead of applying hidden scope. Scope alone does not authorize an
   operation to reinterpret a saved session.
-- A role-qualified flag such as `--target-only` or
-  `--source-descendants` refines that role after the common preset. This makes
-  `mem update -r --target-only` an order-independent request for a recursive
-  Source and exact Target.
+- Every multi-role route exposes the same canonical role pair:
+  `--<role>-descendants/--<role>-root-only`. A role-qualified flag refines
+  that role after the common preset, so `mem update -r --target-root-only` is
+  an order-independent request for a recursive Source and exact Target.
+  Existing `--<role>-only` spellings remain accepted as compatibility aliases
+  for `--<role>-root-only`, but new help, receipts, and replay output use the
+  canonical pair.
 - An independent axis such as `--exclude-embeds` refines only that axis. It
   does not silently change lexical descendant reach.
 - Existing `-R` remains an alias for recursive `mem list`/`mem ls` behavior
   because it is an established Unix-style spelling.
+- Lowercase `-r` is reserved across the public CLI for the recursive scope
+  preset. Elaborate therefore exposes repeatable rules as `--rule` only; a
+  short alias there would make the same token mean unrelated concepts.
 - Commands whose semantic invariant is intentionally direct-only—Atomize,
-  whole-frame Forget, and the semantic-quality operations (`find-redundancies`,
-  `dedun`, `find-ambiguities`, and `find-conflicts`)—do not advertise `-r`;
-  accepting a
+  whole-frame Forget, and the semantic quality operations (`dedun`,
+  `find-ambiguities`, and `find-conflicts`)—do not advertise `-r`; accepting a
   flag must mean the operation can actually execute that scope. The Atomize
   branch of `impact` rejects the common flags even though directional Update
   Impact supports them.
@@ -82,7 +87,7 @@ selected Context record.
 | Command family | `-d` mapping | `-r` mapping | More precise controls |
 | --- | --- | --- | --- |
 | `list` / `ls` | selected Context | existing recursive listing | `-R` remains a compatibility alias |
-| `branch` / `checkout -b` | Source root | Source lexical subtree | `--source-only` / `--source-descendants` |
+| `branch` / `checkout -b` | Source root | Source lexical subtree | `--source-root-only` / `--source-descendants` (`--source-only` is compatible) |
 | `import context` | Source root | Source lexical subtree | presets are rejected for Profile and Memory import |
 | `lock` / `unlock` (current or `context`) | selected Context | frozen lexical namespace | Memory and Profile subcommands have no scope choice |
 | `profile grant create` | resource root | frozen resource subtree | none |
@@ -102,6 +107,11 @@ tests for its default, both presets, explicit overrides, authority boundary,
 and persisted scope. Existing session schemas remain unchanged; adapters map
 the new input spelling to existing fields.
 
+Canonical replay output must not perpetuate compatibility aliases. Restoration
+commands therefore emit `--source-root-only` and `--criteria-root-only` even
+though older copied commands using `--source-only` or `--criteria-only` remain
+valid input.
+
 TUI controls do not execute CLI commands. They map their visible exact/subtree
 and embed choices to the same typed application fields. A TUI default is
 changed only with its required interaction captures and compatibility review;
@@ -118,10 +128,15 @@ adding CLI aliases alone is not evidence that an interactive default changed.
   lexical descendants and embedded Context edges are independent axes.
 - Adding `-r` to direct-only operations was rejected because a recognized flag
   that cannot change the executable frame is misleading.
+- Binding `-d` or `-r` to the nearest positional operand was rejected because
+  option order would change meaning and paired endpoints would become hard to
+  audit. Presets always apply to every input role, then explicit role flags
+  override individual roles. Meld's `--to` names its result location and is
+  not an input-scope role.
 
 ## Remaining limits
 
 Role-qualified short aliases are intentionally not introduced. `-r` applies a
-common broad preset and the existing long role flags express mixed scopes.
+common broad preset and the canonical long role flags express mixed scopes.
 Operation-specific TUI defaults and persisted-session compatibility are
 reviewed separately as their operation slices are migrated.

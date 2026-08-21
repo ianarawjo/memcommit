@@ -13,6 +13,7 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
+import memcommit.config as config_module
 import memcommit.commands.meld as meld_command
 from memcommit.api import MemCommitClient
 from memcommit.commands.endpoint_setup_flows import MeldSetupReceipt
@@ -40,6 +41,7 @@ from memcommit.comparison_store import (
     save_comparison_analysis,
 )
 from memcommit.context import Context, Memory, MemoryRef
+from memcommit.config import Config
 from memcommit.commands.compare import render_comparison
 from memcommit.commands.meld import render_meld_session
 from memcommit.commands.meld_shell import (
@@ -793,6 +795,41 @@ def _patch_provider(monkeypatch, provider):
         "memcommit.commands.meld.connect_codex_chatgpt_provider",
         lambda: provider,
     )
+
+
+def test_scripted_meld_turn_rejects_a_stale_reviewed_session(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    left, right, target = _task2_contexts(store)
+    provider = Task2Provider()
+    _patch_provider(monkeypatch, provider)
+    started = runner.invoke(app, ["meld", left.name, right.name, target.name])
+    assert started.exit_code == 0, started.output
+    before = store.load_meld_session(target.uid)
+    assert before is not None
+
+    result = runner.invoke(
+        app,
+        [
+            "meld",
+            left.name,
+            right.name,
+            target.name,
+            "--issue",
+            "1",
+            "--choice",
+            "1",
+            "--expect-session",
+            "0" * 64,
+        ],
+    )
+
+    assert result.exit_code == 1
+    assert "changed after this command was reviewed" in result.output
+    assert store.load_meld_session(target.uid) == before
+    assert provider.payloads == []
 
 
 class DirectionalProvider:
@@ -4326,8 +4363,17 @@ def test_issue_scoped_meld_turn_does_not_publish_a_semantic_outcome_branch(
 
 def test_declared_study_meld_branch_is_available_in_a_fresh_profile(
     isolated_store,
+    tmp_path,
     monkeypatch,
 ):
+    monkeypatch.setattr(config_module, "CONFIG_FILE", tmp_path / "config.json")
+    Config().update(
+        {
+            "semantic_provider": "codex_chatgpt",
+            "codex_chatgpt_model": "gpt-5.6-sol",
+            "codex_chatgpt_reasoning_effort": "medium",
+        }
+    )
     store = MemoryStore()
     description = ops.init("task-2/description")
     ops.add(description, "Combine both advisors' supported proposal guidance.")
@@ -4404,6 +4450,7 @@ def test_declared_study_meld_branch_is_available_in_a_fresh_profile(
     )
     assert installed.declared == installed.installed == 1
     assert installed.branch_count == 1
+    Config().update({"codex_chatgpt_reasoning_effort": "none"})
 
     # A new Study run has different Meld graph identities and no ad-hoc cache.
     branch_path.unlink()

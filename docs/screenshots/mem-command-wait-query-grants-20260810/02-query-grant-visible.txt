@@ -49,4 +49,4 @@
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
- C/c back · R/r report · ↑/↓ move · ←/→ expand · Enter browse · A/a all · m Memories here · M all Memories · Q/q close · read-only                                                  
+ C/c back · R/r report · m THIS Context: show items · M EVERY Context: show items · ↑/↓ move · ←/→ expand · Enter browse · A/a all · Q/q close · read-only                          

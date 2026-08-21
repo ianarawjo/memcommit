@@ -1,15 +1,15 @@
- RATIONALE · SELECT A MEMORY · rationale/korean                                                                                                                                     
- Roots · rationale/korean                                                                                                                                                           
+ RATIONALE · SELECT A MEMORY · rationale/origin                                                                                                                                     
+ Roots · rationale/origin                                                                                                                                                           
 ┌────────────────────────────────────────────────────────────────────────────────────| RANGE |─────────────────────────────────────────────────────────────────────────────────────┐
 │  [ THIS CONTEXT ONLY ]  [ INCLUDE DESCENDANTS ] · ←/→ SELECT                                                                                                                     │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ CONTEXTS & MEMORIES ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃› * ▾ rationale/korean                                                                                                                                                           ^┃
-┃  › [20000000] [r2] 나중에 문장을 다듬어 달라고 하면 전체 구조와 인용 필요 표시는 유지하고, 문제가 되는 표현만 바꾼다.                                                            ┃
-┃  · [historical] [e55437f8] [r2] 나중에 문장을 다듬어 달라고 하면 구조와 인용 필요 표시는 유지하고, 문제가 되는 표현만 바꾼다.                                                    ┃
-┃                                                                                                                                                                                  ┃
-┃                                                                                                                                                                                  ┃
-┃                                                                                                                                                                                  ┃
+┃› * ▾ rationale/origin                                                                                                                                                           ^┃
+┃  · [2e4ff323] [r5] When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected.                    ┃
+┃  · [77c1d88f] [r5] for example, use distribute, not divide, when material is absorbed into two parts.                                                                            ┃
+┃  › [historical] [d519877c] [r5] Um...                                                                                                                                            ┃
+┃  · [historical] [cec4d614] [r5] When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... ┃
+┃                                 for example, use distribute, not divide, when material is absorbed into two parts.                                                               ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
@@ -49,4 +49,4 @@
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                 v┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
- ↑↓ move  ←→ expand  A restore tree  m THIS Context: hide items · M EVERY Context: hide items  y/Y copy item  Enter open rationale  q close · 2/3 · 1 Contexts
+ ↑↓ move  ←→ expand  A restore tree  m THIS Context: hide items · M EVERY Context: hide items  y/Y copy item  Enter open rationale  q close · 4/5 · 1 Contexts

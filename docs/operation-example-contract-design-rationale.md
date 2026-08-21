@@ -98,8 +98,10 @@ both duplicate examples and miss semantic variants.
 
 The staged rollout is:
 
-1. Normalize the provider-free Rationale scoped-polishing family as the first
-   `EXAMPLE-01` operation set.
+1. Use Rationale's natural-provenance family as the first complete
+   `EXAMPLE-01` operation set: the exact `Um...` parent/split/Undo/Redo/Remove
+   case and direct Add/Remove/Undo are `PROVIDER_VISIBLE`; Grant-hidden and
+   malformed/over-bound decoder cases remain `HOST_ONLY`.
 2. Add the focused example table whenever an operation matrix is reviewed or
    materially changed. Missing rows remain explicit work rather than a
    fabricated complete state.
@@ -123,8 +125,9 @@ boundary reviewable; provider prompts then migrate contract by contract.
 - Provider-visible examples must stay small enough to fit the operation's
   declared prompt budget. Crossing a budget never authorizes silent truncation
   of an example or frozen input.
-- A provider-free operation, such as current Rationale, records provider roles
-  as inapplicable in its focused rationale rather than fabricating LLM
-  examples.
+- A provider-free operation records provider roles as inapplicable in its
+  focused rationale rather than fabricating LLM examples. Rationale is no
+  longer in that class: its exact natural-provenance cases are consumed
+  calibration and must never be reported as holdout evidence.
 - The matrix does not prescribe English-only content. An operation should use
   the language and structure needed to demonstrate its actual contract.

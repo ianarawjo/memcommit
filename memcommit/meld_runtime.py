@@ -1606,6 +1606,7 @@ class MemoryStoreMeldAssessmentPort(MeldAssessmentPort):
                 cached_branch = find_installed_meld_resolution_branch(
                     store=self._store,
                     branch_key=cache_key,
+                    request_digest=request_digest,
                 )
                 from_study_prewarm = cached_branch is not None
         return FrozenMeldAssessment(

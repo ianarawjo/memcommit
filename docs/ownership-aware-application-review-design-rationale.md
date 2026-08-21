@@ -66,7 +66,8 @@ the owning command still performs its normal application path.
 | Meld, local Result/Baseline | Local target | Apply directly once required issues are resolved | `NOT VERIFIED HERE` |
 | Meld, granted Incoming and local Baseline | Local Baseline | Apply directly; granted input remains read-only | `NOT VERIFIED HERE` |
 | Directional Meld, granted Baseline | Authority Baseline | Require final review | `NOT VERIFIED HERE` |
-| Sever with local or granted inputs | New local Output; Sources unchanged | Apply directly; Undo removes/restores the creation receipt | `NOT VERIFIED HERE` |
+| Sever with direct local Source | Same Source for SELF-SAVE or new local Result for OTHER-SAVE | Apply directly; Undo restores the exact Source preimage or removes/restores the creation receipt | `VERIFIED` by the Sever boundary slice |
+| Sever with granted Source | New local Result only; authority Source unchanged | OTHER-SAVE applies directly; SELF-SAVE fails before provider until authority-side mutation receipts exist | `VERIFIED` by the Sever boundary slice |
 | Forget, local Source | Local Source | Apply the complete reviewed provider disposition; recover with operation-unit Undo/Redo | `VERIFIED` policy, CAS, checkpoint, and recovery tests plus PTY replay |
 | Forget, granted Source | Authority Source | Require final review when the reviewed disposition contains a change; an all-KEEP result has boundary `NONE` and completes without a Context checkpoint | `VERIFIED` routing tests and granted change/no-op PTY replay |
 

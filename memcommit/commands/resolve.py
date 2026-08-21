@@ -83,6 +83,13 @@ def cmd(
             help="Grounding instruction or fact available to candidate generation",
         ),
     ] = None,
+    yes: Annotated[
+        bool,
+        typer.Option(
+            "--yes",
+            help="Require an exact YES resolution whose post-image also Fits as YES",
+        ),
+    ] = False,
     finding_handoff: Annotated[
         Optional[str],
         typer.Option(
@@ -157,6 +164,7 @@ def cmd(
                 allow_create=allow_create,
                 allow_delete=allow_delete,
                 guidance=guidance or "",
+                target_fit="YES" if yes else "MAY",
             )
         else:
             request = ResolveRequest(
@@ -165,6 +173,7 @@ def cmd(
                 allow_create=allow_create,
                 allow_delete=allow_delete,
                 guidance=guidance or "",
+                target_fit="YES" if yes else "MAY",
             )
         port = MemoryStoreResolvePort(
             store,

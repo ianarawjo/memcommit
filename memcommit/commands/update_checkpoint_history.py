@@ -1,4 +1,5 @@
 """Project a saved Update as location-owned checkpoint history."""
+
 from __future__ import annotations
 
 from collections import Counter
@@ -17,6 +18,7 @@ from memcommit.commands.history_location_picker import choose_history_location
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
+from memcommit.interfaces.tui.core.theme import semantic_action_style
 from memcommit.memory_diff import memory_diff_lines, update_operation_change
 from memcommit.update import UpdateSession
 
@@ -30,9 +32,7 @@ class UpdateSubtreeCheckpointEntry(HistoryPickerEntry):
 
 def _location_names(session: UpdateSession) -> tuple[str, ...]:
     return tuple(
-        dict.fromkeys(
-            operation.owner_context_name for operation in session.operations
-        )
+        dict.fromkeys(operation.owner_context_name for operation in session.operations)
     )
 
 
@@ -184,20 +184,33 @@ def update_checkpoint_detail_renderer(
                 display_escape_text(entry.timestamp) + "\n",
             ),
             ("class:report-label", " ACTION      "),
-            ("class:report-label", "update\n"),
+            (
+                semantic_action_style("update", fallback="class:report-label"),
+                "update\n",
+            ),
             ("class:report-label", " LOCATION    "),
             ("class:report-neutral", display_escape_text(location) + "\n"),
             ("", "\n"),
         ]
         unit_start_lines: list[int] = []
         for index, operation in enumerate(operations, start=1):
+            treatment = operation.operation.upper()
             unit_start_lines.append(sum(text.count("\n") for _style, text in fragments))
             fragments.extend(
                 [
+                    ("class:report-neutral", f" {index}. "),
+                    ("class:report-label", "UPDATE"),
+                    ("class:report-neutral", " · "),
                     (
-                        "class:report-label",
-                        f" {index}. UPDATE · {operation.operation.upper()} "
-                        f"Memory [{display_escape_text(operation.memory_uid[:8])}]\n",
+                        semantic_action_style(
+                            treatment,
+                            fallback="class:report-label",
+                        ),
+                        treatment,
+                    ),
+                    (
+                        "class:report-neutral",
+                        f" Memory [{display_escape_text(operation.memory_uid[:8])}]\n",
                     ),
                 ]
             )
@@ -209,9 +222,7 @@ def update_checkpoint_detail_renderer(
                     "=": "equal",
                     " ": "equal",
                 }[line.marker]
-                fragments.append(
-                    (f"class:memory-diff.{style_key}", f" {line.marker} ")
-                )
+                fragments.append((f"class:memory-diff.{style_key}", f" {line.marker} "))
                 for span in line.spans:
                     fragments.append(
                         (
@@ -250,9 +261,7 @@ def choose_update_checkpoint_history(session: UpdateSession) -> None:
         annotations=update_location_annotations(session),
         title="DIFF · SELECT A CHANGED CONTEXT",
         catalog_names=tuple(
-            dict.fromkeys(
-                (context.name for context in session.target_contexts)
-            )
+            dict.fromkeys((context.name for context in session.target_contexts))
         ),
     )
     if selected is None:

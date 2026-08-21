@@ -22,7 +22,7 @@ def test_list_returns_all_operations_without_store_or_provider_access(tmp_path):
 
     assert response["ok"] is True
     assert response["kind"] == "list"
-    assert response["result"]["count"] == 63
+    assert response["result"]["count"] == 64
     assert response["result"]["operations"][0]["name"] == "add"
     assert response["result"]["effect"] == "NONE"
     assert not root.exists()
@@ -95,9 +95,9 @@ def test_describe_add_returns_use_when_and_compact_detail_reference(tmp_path):
     )["result"]["detail"]
     assert [option["label"] for option in comparison["options"]] == [
         "INDEPENDENT WORK",
-        "EXACT MEMORY VERSION",
+        "EXACT MEMORY OR CONTEXT",
         "LIVE MEMORY",
-        "EXISTING CONTEXT",
+        "LIVE CONTEXT",
     ]
 
 
@@ -188,7 +188,7 @@ def test_schema_is_json_safe_and_bounds_describe_names_to_the_catalog():
         "not": {"required": ["operation"]}
     }
     assert schema["parameters"]["allOf"][0]["else"] == {"required": ["operation"]}
-    assert len(schema["parameters"]["properties"]["operation"]["enum"]) == 63
+    assert len(schema["parameters"]["properties"]["operation"]["enum"]) == 64
     assert schema["parameters"]["properties"]["detail"]["enum"] == [
         "actions",
         "copy-or-link",

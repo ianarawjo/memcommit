@@ -128,13 +128,13 @@ The audited boundaries are:
 | --- | --- |
 | Compare A/B, Update A/B | Local plus effective READ-granted public Contexts; fixed here |
 | Meld A/B | Already uses the readable public catalog; directional mutation still validates its local-baseline restriction |
-| Sever Source/Criteria | Already projects validated readable Grant rows; Output remains require-new local |
+| Sever Source/Criteria | Already projects validated readable Grant rows; Save Location accepts the exact direct local Source for SELF-SAVE or a fresh local name for OTHER-SAVE |
 | Switch, List, Find | Already expose or resolve the readable public namespace according to each command's read contract |
 | `mem contexts` | Now enumerates the active Profile's complete visible Grant catalog rather than only Grants attached to the current Context |
 | Atomize Input / Output | Intentionally local because the implementation analyzes one directly owned Input and either mutates it or creates one directly owned Output; explicit granted Atomize is not implemented |
 | Share Source | Intentionally local because Share locks and exports a directly owned active-Profile Context; it does not re-export a granted authority frame |
 | Ground Context plan/placement | Intentionally follows Ground's local name-only discovery and separately reviewed binding contract |
-| Meld Result, Sever Output | Intentionally existing-local-or-new and require-new-local respectively; neither is a readable source selector |
+| Meld Result, Sever Save Location | Meld is intentionally existing-local-or-new; Sever is exact selected direct local Source or require-new-local. Neither is a readable source selector. |
 
 The common `ContextTreeState` and `choose_context()` utilities remain
 catalog-neutral. Their callers must supply the namespace authorized for the

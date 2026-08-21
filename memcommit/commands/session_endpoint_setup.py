@@ -49,6 +49,7 @@ from memcommit.context_targeting.tui.picker import (
     CONTEXT_PICKER_STYLE,
     ContextMemoryPreviewController,
     ContextMemoryRow,
+    memory_visibility_key_hint,
 )
 from memcommit.commands.horizontal_choice import (
     HorizontalChoiceOption,
@@ -77,7 +78,6 @@ from memcommit.interfaces.tui.components.focus import (
     SurfaceFocusController,
     focus_in_order,
 )
-from memcommit.store import validate_context_name
 from memcommit.source_projection.model import SourceDisplayFacts, SourceState
 from memcommit.source_projection.presentation import (
     SourceDisplayToken,
@@ -1255,9 +1255,15 @@ def choose_session_endpoints(
                 "↑/↓ move · Tab pane · Q cancel"
             )
         if uid is not None and role_by_uid[uid].new_parent_locator:
+            memory_hint = (
+                memory_visibility_key_hint(memory_previews[uid].tree) + " · "
+                if uid in memory_previews
+                else ""
+            )
             return (
-                " ↑/↓ move · ←/→ tree · Enter/Space choose parent · "
-                + ("m Memory here · M all · " if memory_loader is not None else "")
+                " "
+                + memory_hint
+                + "↑/↓ move · ←/→ tree · Enter/Space choose parent · "
                 + "Tab pane · Q cancel"
             )
         if uid is not None and uid in memory_previews and memory_previews[uid].memory_focused:
@@ -1268,9 +1274,15 @@ def choose_session_endpoints(
                 else "read-only preview · Enter/Space does not select"
             )
             return f" {memory_action} · ↑/↓ move · Tab pane · Q cancel"
+        memory_hint = (
+            memory_visibility_key_hint(memory_previews[uid].tree) + " · "
+            if uid is not None and uid in memory_previews
+            else ""
+        )
         return (
-            " ↑/↓ move · ←/→ tree · Enter/Space choose Context · "
-            + ("m Memory here · M all · " if memory_loader is not None else "")
+            " "
+            + memory_hint
+            + "↑/↓ move · ←/→ tree · Enter/Space choose Context · "
             + "Tab pane · Q cancel"
         )
 

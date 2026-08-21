@@ -50,7 +50,7 @@ PTY 180 52
 [179C[0;48;5;238m [0m
 [0m                                                                                                                                                                                   [179C[0;1mv[0m
 [0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
-[0m ↑↓ move  ←→ expand  A expand all  m hide Memories here  M hide all Memories  y copy Context  Y copy visible branch  Enter select  q cancel · 2/8 · 9 selectable[160D[47A[0m[?25l[0m
+[0m ↑↓ move  ←→ expand  A expand all  m THIS Context: hide items · M EVERY Context: hide items  y copy Context  Y copy visible branch  Enter select  q cancel · 2/8 · 9 selectable[175D[47A[0m[?25l[0m
 
 
 
@@ -97,7 +97,7 @@ PTY 180 52
 
 
 
-[0;38;5;150;1m COPIED · Context task-1[0m  y copy Context [CY c[Cpy visible[Cbranch[C q cancel[0m[K[47A[73D[0m[?25l[0m
+[0;38;5;150;1m COPIED · Context task-1[0m  y copy Context [CY copy vis[Cble branch[C q cancel[0m[K[47A[73D[0m[?25l[0m
 
 
 
@@ -144,7 +144,7 @@ PTY 180 52
 
 
 
-[10C[0;38;5;150;1mvisible[Cbranch task-1 · 4 Contexts · 1 Memory[0m [Cy copy[CContext  Y copy visible branch  q cancel[47A[104D[0m[?25l[0m  * ▾ task-1[0m
+[10C[0;38;5;150;1mvisible[Cbranch task-1 · 4 Contexts · 1 Item[0m  y[Ccopy Context  Y copy visible branch  q cancel[47A[102D[0m[?25l[0m  * ▾ task-1[0m
 [0m›[0m
 [0;1;7m    · [memory 2db26309] Imagine that you are a campus facilities coordinator responsible for maintaining a university organizational wiki used by campus members, visitors, and AI[0m
 [0;1;7m                        agents. The Main Building of the campus is under construction, and you have just finished collecting and verifying all resulting changes in your local[0m
@@ -191,4 +191,4 @@ PTY 180 52
 
 
 
-[0m ↑↓ move  ←→ expand  A expand all  m hide Memories here[2CM[Chide[Call Memories  [C/Y copy Memory [CEnter preview only  q cancel · 4/8 · 9 selectable[45A[144D[0m
+[0m ↑↓ move  ←→ expand  A expand all  m THIS Context: hide items[C· M EVERY Context: hid[2Citems [Cy/Y copy item  Enter preview only  q cancel · 4/8 · 9 selectable[45A[157D[0m

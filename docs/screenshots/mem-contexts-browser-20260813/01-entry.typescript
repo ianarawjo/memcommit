@@ -1,18 +1,14 @@
 LIVE PTY · 52 180
 PRE-BROWSE PROFILE/CURRENT
-Profile: study-20260813T135528Z-d61e7a16
-Store: /Users/KimMunyeong/.mem-profiles/stores/2ab5a8d6-647a-481d-aba2-651f8dd8c3f3
-Contexts 66 owned + 43 granted · Memories 457 owned + 625 granted
-Current Context: task-1/participant
+Profile: study-20260817T034334Z-0bd9d45b
+Store: /Users/KimMunyeong/.mem-profiles/stores/0435d7b1-b69c-4f48-81af-4c4cd83256df
+Contexts 65 owned + 43 granted · Memories 467 owned + 625 granted
+Current Context: practice
 [?12l[?25h[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m Browse Contexts[0m
 [0m Roots · practice · task-1 · task-2 · task-3[0m
 [0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
-[0m    ▸ practice[165C[0;1m^[0m
-[0m    ▾ task-1[167C[0;48;5;238m [0m
-[0m      ▸ task-1/description[153C[0;48;5;238m [0m
-[0;1;7m› *   ▸ task-1/participant[153C[0;48;5;238m [0m
-[0m      ▸ task-1/campus-wiki  [0mREAD GRANT · [0mPERMISSIONS CREATE + READ + UPDATE + DELETE + QUERY + DERIVE + COMBINE + EXPORT + ACCEPT_DERIVED + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · [0;38;5;255mA[179C[0;48;5;238m [0m
-[0m        [0;38;5;255mNALYSIS RATIONALE SUBTREE + TRACE BLOCKED[130C[0;48;5;238m [0m
+[0;1;7m› * ▸ practice[165C[0;1m^[0m
+[0m    ▸ task-1[167C[0;48;5;238m [0m
 [0m    ▸ task-2[167C[0;48;5;238m [0m
 [0m    ▸ task-3[167C[0;48;5;238m [0m
 [179C[0;48;5;238m [0m
@@ -53,6 +49,10 @@ Current Context: task-1/participant
 [179C[0;48;5;238m [0m
 [179C[0;48;5;238m [0m
 [179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
 [0m                                                                                                                                                                                   [179C[0;1mv[0m
 [0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
-[0m ↑↓ move  ←→ expand  A expand all  m show Memories here  M show all Memories  Enter open/collapse  q close · 4/7 · 109 selectable[129D[45A[0m
+[0m ↑↓ move  ←→ expand  A expand all  m THIS Context: show items · M EVERY Context: show items  y copy Context  Y copy visible branch  Enter open/collapse  q close · 1/4 · 108 select[179Ca[48A[0m

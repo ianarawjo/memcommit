@@ -24,8 +24,8 @@ from memcommit.interfaces.agent.contract import (
     text_value,
 )
 from memcommit.semantic_redundancy_evidence import (
-    SEMANTIC_REDUNDANCY_EVIDENCE_VERSION,
-    semantic_redundancy_evidence_dict,
+    REDUNDANCY_EVIDENCE_VERSION,
+    redundancy_evidence_dict,
 )
 
 
@@ -110,7 +110,7 @@ def quality_finding_handoff_agent_schema() -> JsonObject:
     }
 
 
-def semantic_redundancy_evidence_agent_schema() -> JsonObject:
+def redundancy_evidence_agent_schema() -> JsonObject:
     """Return the strict public evidence schema accepted by Dedun."""
 
     schema = deepcopy(quality_finding_handoff_agent_schema())
@@ -118,13 +118,13 @@ def semantic_redundancy_evidence_agent_schema() -> JsonObject:
     assert isinstance(properties, dict)
     properties["contract"] = {
         "type": "string",
-        "const": SEMANTIC_REDUNDANCY_EVIDENCE_VERSION,
+        "const": REDUNDANCY_EVIDENCE_VERSION,
     }
     properties["kind"] = {"type": "string", "const": "REDUNDANCY"}
     properties["route"] = {"type": "string", "const": "DEDUN"}
     properties["classification"] = {
         "type": "string",
-        "enum": ["SURFACE_EQUIVALENT", "SEMANTIC_EQUIVALENT"],
+        "enum": ["EXACT", "SURFACE_EQUIVALENT", "SEMANTIC_EQUIVALENT"],
     }
     return schema
 
@@ -148,9 +148,7 @@ def _parse_request(payload: object) -> tuple[str, tuple[str, ...]]:
         )
     kind = text_value(value["kind"], field="kind")
     if kind not in {"redundancies", "ambiguities", "conflicts"}:
-        raise AgentRequestError(
-            "kind must be redundancies, ambiguities, or conflicts."
-        )
+        raise AgentRequestError("kind must be redundancies, ambiguities, or conflicts.")
     raw_names = value.get("context_names", [])
     if not isinstance(raw_names, list):
         raise AgentRequestError("context_names must be an array.")
@@ -274,7 +272,7 @@ class QualityFindAgentAdapter:
                 "pair_count": result.pair_count,
                 "evidence": [
                     (
-                        semantic_redundancy_evidence_dict(handoff)
+                        redundancy_evidence_dict(handoff)
                         if kind == "redundancies"
                         else handoff.to_dict()
                     )
@@ -291,9 +289,9 @@ def quality_find_agent_tool_schema() -> JsonObject:
     return {
         "name": QUALITY_FIND_AGENT_TOOL_NAME,
         "description": (
-            "Find semantic redundancies, ambiguities, or conflicts in one frozen "
-            "readable Context frame. Returns typed evidence and "
-            "never mutates a Context."
+            "Find complete exact-plus-semantic redundancies, ambiguities, or "
+            "conflicts in one frozen readable Context frame. Returns typed "
+            "evidence and never mutates a Context."
         ),
         "parameters": {
             "type": "object",
@@ -323,5 +321,10 @@ __all__ = [
     "QualityFindAgentAdapter",
     "quality_find_agent_tool_schema",
     "quality_finding_handoff_agent_schema",
+    "redundancy_evidence_agent_schema",
     "semantic_redundancy_evidence_agent_schema",
 ]
+
+
+# Compatibility export for plugins compiled against the v1 semantic-only name.
+semantic_redundancy_evidence_agent_schema = redundancy_evidence_agent_schema

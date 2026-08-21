@@ -1,11 +1,11 @@
  MEM IMPORT · SOURCE MEMORY · source-profile                                                                                                                                        
  Roots · source/root                                                                                                                                                                
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-› * ▾ source/root                                                                                                                                                                  ^
-  › [memory 20000000] Stable root Memory.                                                                                                                                           
-      ▾ source/root/child                                                                                                                                                           
-    · [memory 20000000] Stable child Memory.                                                                                                                                        
-    · [memory ref 30000000] READ ONLY · Stable root Memory.                                                                                                                         
+  * ▾ source/root                                                                                                                                                                  ^
+  · [unavailable] Memory preview changed                                                                                                                                            
+›     ▾ source/root/child                                                                                                                                                           
+    › [memory 20000000] Stable child Memory.                                                                                                                                        
+    · [embedded memory 30000000] READ ONLY · Stable root Memory.                                                                                                                    
                                                                                                                                                                                     
                                                                                                                                                                                     
                                                                                                                                                                                     
@@ -49,4 +49,4 @@
                                                                                                                                                                                     
                                                                                                                                                                                    v
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
- ↑↓ move  ←→ expand  A restore tree  m hide Memories here  M hide all Memories  y/Y copy Memory  Enter choose Memory  q close · 2/5 · 2 selectable                                  
+ ↑↓ move  ←→ expand  A restore tree  m THIS Context: hide items · M EVERY Context: hide items  y/Y copy item  Enter choose Memory  q close · 4/5 · 2 selectable                     

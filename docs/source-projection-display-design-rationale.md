@@ -35,23 +35,26 @@ the redundant `context` noun while retaining any non-default annotations.
 
 This distinction prevents an ordinary object kind from looking like a status
 badge and preserves the established compact `memory`/`context` grammar.
-`memory ref` remains the generic durable pointer name used where time semantics
-are not known. When a typed link row does know them, its compact relationship
-noun is `embedded` for a live Memory link and `reference` for an immutable
-snapshot. `query view` names an opaque query route; it does not imply that
-ordinary Memory content was opened.
+`memory ref` remains the compatibility object name where a consumer has not
+classified the pointer's time semantics. A typed compact relationship row uses
+`embedded` for a live Memory link and `reference` for an immutable snapshot;
+those nouns describe durable behavior, not the target Memory's incidental
+state. `query view` names an opaque query route; it does not imply that ordinary
+Memory content was opened.
 
-List and Show place link and Source identity before optional content:
+List and Show place Memory Source identity before content so a person can scan
+ownership before reading a long body:
 
 ```text
-[embedded LINK_UID] [SOURCE_CONTEXT][memory SOURCE_UID] content  READ ONLY
-[reference LINK_UID] [SOURCE_CONTEXT][memory SOURCE_UID] content  READ ONLY
+[embedded 6bd4bcf0] [practice/3][memory ca562047] current Source text  READ ONLY
+[reference dbdb4436] [practice/3][memory ca562047] retained snapshot text  READ ONLY
 ```
 
-The first UID continues to identify the direct link object. The bracketed
-Context and Memory pair identifies the ordinary Source owner and is a valid
-input to the explicit `CONTEXT#UID` Edit grammar. This ordering does not imply
-write-through: mutation still resolves the Source owner independently.
+The first UID belongs to the read-only relationship row; the second identifies
+the directly owned Source Memory. This order also makes `CONTEXT:UID` available
+as an executable Edit locator without presenting the relationship UID as the
+writable object. The live row may change when its Source changes; the immutable
+row retains its reviewed content.
 
 ## Compact Reference rows
 
@@ -114,11 +117,13 @@ changing either operation's semantic result contract.
   label. Detail headings and operation frame titles may use title or heading
   case without changing the compact object-name policy.
 - Context and report text remain neutral. Standalone Memory bodies remain
-  lavender; compact Source Reference rows remain neutral like Query citations,
-  live `embedded` relationship tokens use shared EMBED yellow, immutable
-  `reference` relationship tokens use shared REFERENCE mauve, and availability
-  states use the warning color. A selected or focused control's common blue treatment
-  overrides token colors so one row never appears to have two keyboard owners.
+  lavender; compact Source Reference rows remain neutral like Query citations.
+  On typed List and Show relationship rows only the trusted `embedded` noun is
+  yellow and only the trusted `reference` noun is mauve; UIDs, Source names,
+  Memory bodies, and annotations stay in their existing styles. Availability
+  states use the warning color. A selected or focused control's common blue
+  treatment overrides token colors so one row never appears to have two
+  keyboard owners.
 - Terminal escaping occurs after semantic tokenization.
 - Compact Reference row content is folded before adapter-owned terminal
   escaping; untrusted content cannot create a sibling ordinal or provenance

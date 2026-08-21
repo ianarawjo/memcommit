@@ -110,6 +110,104 @@ def test_runtime_rejects_target_drift_without_overwriting_it(isolated_store):
     assert reloaded.ordered_uids() == [marker.uid]
 
 
+def test_cli_reference_operand_roles_are_actionable_outside_a_tty(isolated_store):
+    context_route = runner.invoke(app, ["reference", "abcd1234"])
+    misplaced_selector = runner.invoke(
+        app,
+        ["reference", "--from", "abcd1234"],
+    )
+    bare = runner.invoke(app, ["reference"])
+
+    assert context_route.exit_code == 1
+    assert "No directly owned Memory" in context_route.stderr
+    assert misplaced_selector.exit_code == 2
+    assert "pass a Context or Memory item" in misplaced_selector.stderr
+    assert bare.exit_code == 1
+    assert "outside a terminal" in bare.stderr
+
+
+def test_cli_reference_finds_unique_bare_uid_and_qualified_relative_owner(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = ops.init("practice/3")
+    first = ops.add(source, "first snapshot")
+    second = ops.add(source, "second snapshot")
+    target = ops.init("practice/4")
+    store.save(source)
+    store.save(target)
+    store.set_current(target.name)
+
+    bare = runner.invoke(app, ["reference", first.uid[:8]])
+    qualified = runner.invoke(app, ["reference", f"../3:{second.uid[:8]}"])
+
+    assert bare.exit_code == 0, bare.output + bare.stderr
+    assert qualified.exit_code == 0, qualified.output + qualified.stderr
+    snapshots = tuple(store.load_direct(target.name).iter_items())
+    assert [item.target_memory_uid for item in snapshots] == [
+        first.uid,
+        second.uid,
+    ]
+    assert all(isinstance(item, MemoryRef) and item.is_snapshot for item in snapshots)
+
+
+def test_cli_reference_blocks_duplicate_bare_uid_and_lists_every_owner(
+    isolated_store,
+):
+    store = MemoryStore()
+    shared_uid = "aaaaaaaa-0000-0000-0000-000000000000"
+    source = ops.init("branch/source")
+    source.add(Memory(uid=shared_uid, content="source copy"))
+    target = ops.init("branch/target")
+    target.add(Memory(uid=shared_uid, content="target copy"))
+    store.save(source)
+    store.save(target)
+    store.set_current(target.name)
+    before = store.load_direct(target.name).to_dict()
+
+    result = runner.invoke(app, ["reference", shared_uid[:8]])
+
+    assert result.exit_code == 1
+    assert f"branch/source:{shared_uid}" in result.stderr
+    assert f"branch/target:{shared_uid}" in result.stderr
+    assert "Use one qualified CONTEXT:UID locator" in result.stderr
+    assert store.load_direct(target.name).to_dict() == before
+
+
+def test_cli_reference_rejects_two_source_owner_spellings(isolated_store):
+    store = MemoryStore()
+    source = ops.init("source")
+    memory = ops.add(source, "source value")
+    target = ops.init("target")
+    store.save(source)
+    store.save(target)
+    store.set_current(target.name)
+
+    result = runner.invoke(
+        app,
+        ["reference", f"source:{memory.uid[:8]}", "--from", "source"],
+    )
+
+    assert result.exit_code == 1
+    assert "either CONTEXT:UID or an explicit Context option" in result.stderr
+    assert store.load_direct(target.name).ordered_uids() == []
+
+
+def test_bare_cli_reference_enters_and_can_cancel_interactive_setup(
+    isolated_store,
+    monkeypatch,
+):
+    import memcommit.interfaces.cli.reference as reference_cli
+
+    monkeypatch.setattr(reference_cli, "is_interactive_terminal", lambda: True)
+    monkeypatch.setattr(reference_cli, "choose_reference_setup", lambda _port: None)
+
+    result = runner.invoke(app, ["reference"])
+
+    assert result.exit_code == 0
+    assert "Reference cancelled" in result.output
+
+
 def test_cli_reference_persists_snapshot_and_one_checkpoint(isolated_store):
     assert runner.invoke(app, ["init", "source"]).exit_code == 0
     assert runner.invoke(app, ["add", "version one"]).exit_code == 0
@@ -150,10 +248,13 @@ def test_cli_reference_stays_fixed_after_source_change(isolated_store):
     memory = next(iter(source.iter_items()))
     assert isinstance(memory, Memory)
     assert runner.invoke(app, ["init", "target"]).exit_code == 0
-    assert runner.invoke(
-        app,
-        ["reference", memory.uid[:8], "--from", "source"],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["reference", memory.uid[:8], "--from", "source"],
+        ).exit_code
+        == 0
+    )
     reference = next(iter(store.load("target").iter_items()))
     assert isinstance(reference, MemoryRef)
 
@@ -173,10 +274,13 @@ def test_cli_reference_undo_and_redo_restore_the_snapshot(isolated_store):
     memory = next(iter(store.load("source").iter_items()))
     assert isinstance(memory, Memory)
     assert runner.invoke(app, ["init", "target"]).exit_code == 0
-    assert runner.invoke(
-        app,
-        ["reference", memory.uid[:8], "--from", "source"],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["reference", memory.uid[:8], "--from", "source"],
+        ).exit_code
+        == 0
+    )
     snapshot_uid = store.load("target").ordered_uids()[0]
 
     assert runner.invoke(app, ["undo"]).exit_code == 0

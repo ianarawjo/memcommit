@@ -63,9 +63,13 @@ from memcommit.update import (
     plan_update,
     revise_update,
     session_matches,
+    update_session_record_digest,
 )
 from memcommit.update_application_flow import UpdateApplicationFlowPort
-from memcommit.update_endpoints import resolve_update_endpoints
+from memcommit.update_endpoints import (
+    choose_update_endpoint_operands,
+    resolve_update_endpoints,
+)
 
 
 def _interactive_terminal() -> bool:
@@ -375,6 +379,13 @@ def _revise_update_with_wait(
 
 
 def cmd(
+    contexts: Annotated[
+        list[str] | None,
+        typer.Argument(
+            metavar="SOURCE TARGET",
+            help="Explicit Source and Target Contexts",
+        ),
+    ] = None,
     source_name: Annotated[
         Optional[str],
         typer.Option(
@@ -450,7 +461,35 @@ def cmd(
             ),
         ),
     ] = None,
+    comment: Annotated[
+        Optional[str],
+        typer.Option(
+            "--comment",
+            help="Rebuild the staged Update plan from one reviewed semantic turn",
+        ),
+    ] = None,
+    expect_session: Annotated[
+        Optional[str],
+        typer.Option(
+            "--expect-session",
+            metavar="SHA256",
+            help="Require the exact staged Update revision reviewed for this turn",
+        ),
+    ] = None,
 ) -> None:
+    try:
+        source_name, target_name = choose_update_endpoint_operands(
+            contexts,
+            source_option=source_name,
+            target_option=target_name,
+        )
+    except ValueError as error:
+        typer.secho(
+            f"Update error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
     scope_flags_supplied = (
         direct
         or recursive
@@ -474,8 +513,35 @@ def cmd(
             err=True,
         )
         raise typer.Exit(2)
+    if (comment is None) != (expect_session is None):
+        typer.secho(
+            "Update error: --comment and --expect-session must be supplied together.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+    if comment is not None and not comment.strip():
+        typer.secho(
+            "Update error: --comment cannot be empty.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+    if comment is not None and replace_stage:
+        typer.secho(
+            "Update error: a semantic turn cannot replace the staged session boundary.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
     if source_name is None and target_name is None:
-        if source_memory is not None or target_memory is not None or scope_flags_supplied:
+        if (
+            source_memory is not None
+            or target_memory is not None
+            or scope_flags_supplied
+            or comment is not None
+            or expect_session is not None
+        ):
             typer.secho(
                 "Update error: scope flags require --from or --to.",
                 fg=typer.colors.RED,
@@ -673,6 +739,26 @@ def cmd(
                 store,
                 session,
             )
+        if comment is not None:
+            if session is None or session.status != "staged":
+                raise UpdateError(
+                    "A semantic Update turn requires the matching staged session."
+                )
+            if update_session_record_digest(session) != expect_session:
+                raise UpdateError(
+                    "The staged Update session changed after this command was reviewed. "
+                    "Reopen it and rebuild the turn command."
+                )
+            revised = _revise_update_with_wait(
+                session,
+                source,
+                target,
+                comment.strip(),
+            )
+            store.save_staged_update(revised, expected_current=session)
+            render_plan(revised, staged=True)
+            typer.echo("Update semantic turn saved; target changes were not applied.")
+            return
         if session is None:
             if (
                 cached is not None

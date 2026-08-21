@@ -118,12 +118,12 @@ def plan_dedun(
     *,
     expected_revision: str | None = None,
 ) -> DedunPlanResult:
-    """Freeze confirmed semantic redundancy evidence into components."""
+    """Freeze typed exact-plus-semantic redundancy evidence into components."""
 
     try:
         if isinstance(evidence, (str, bytes)):
             raise TypeError(
-                "Dedun evidence must be a sequence of typed semantic receipts."
+                "Dedun evidence must be a sequence of typed redundancy receipts."
             )
         request = DedupRequest(tuple(evidence))
         plan = prepare_dedup(request, port=_port(runtime))

@@ -45,9 +45,8 @@ def _effective_treatment(candidate) -> str:
 def sever_memory_changes(session: SeverSession) -> tuple[MemoryChange, ...]:
     """Compare each Source Memory with its reviewed Result representation.
 
-    The location is directional because Sever never edits or deletes Source.
-    A missing ``after`` value means omission from the new Result Context, not
-    removal from the named Source Context.
+    In self-save, a missing ``after`` removes the Memory from Source. In
+    other-save, it means omission from the new Result while Source is retained.
     """
 
     criteria_by_uid = {memory.uid: memory for memory in session.criteria.memories}
@@ -71,7 +70,11 @@ def sever_memory_changes(session: SeverSession) -> tuple[MemoryChange, ...]:
             MemoryChange(
                 marker=marker,
                 treatment=_TREATMENT_DISPLAY_LABELS[treatment],
-                location=f"{source.context_name} → {session.output_name}",
+                location=(
+                    source.context_name
+                    if session.save_mode == "SELF_SAVE"
+                    else f"{source.context_name} → {session.output_name}"
+                ),
                 memory_uid=source.uid,
                 before=source.content,
                 after=after,
@@ -129,11 +132,17 @@ def _report_items_summary(session: SeverSession) -> str:
             else "The current reviewed choices preserve every Source Memory as written."
         )
     )
+    self_save = session.save_mode == "SELF_SAVE"
     result_boundary = (
-        f"The Result Context {session.output_name} was created in checkpoint "
-        f"[{session.application.checkpoint_uid[:8]}]."
+        (
+            f"The Source Context {session.output_name} was updated in checkpoint "
+            f"[{session.application.checkpoint_uid[:8]}]."
+            if self_save
+            else f"The Result Context {session.output_name} was created in checkpoint "
+            f"[{session.application.checkpoint_uid[:8]}]."
+        )
         if session.state == "APPLIED" and session.application is not None
-        else "The Result Context has not been created."
+        else "The reviewed Result has not been saved."
     )
     return (
         f"All {len(session.source.memories)} Source Memories were evaluated in one "
@@ -142,7 +151,13 @@ def _report_items_summary(session: SeverSession) -> str:
         f"{_named_examples(influential, total=len(criterion_counts))}. Exact Source-to-"
         "Criteria mappings, rationale, and alternatives remain inspectable in "
         "Items; the complete per-Memory outcome appears once in the full result "
-        f"view. The Source is unchanged. {result_boundary}"
+        f"view. "
+        + (
+            "Self-save replaces the Source with that reviewed Result. "
+            if self_save
+            else "Other-save leaves the Source unchanged. "
+        )
+        + result_boundary
     )
 
 
@@ -253,7 +268,11 @@ class SeverResolutionWorkbenchAdapter:
                         if candidate.selection == "CUSTOM"
                         else ""
                     ),
-                    question="Choose what the local result should remember.",
+                    question=(
+                        "Choose what the Source should remember after self-save."
+                        if session.save_mode == "SELF_SAVE"
+                        else "Choose what the other-save Result should remember."
+                    ),
                     options=(
                         ResolutionOption(
                             uid=f"{candidate.uid}:recommended",
@@ -271,7 +290,11 @@ class SeverResolutionWorkbenchAdapter:
                         ResolutionOption(
                             uid=f"{candidate.uid}:forget",
                             label="Forget",
-                            text="Omit this Source Memory from the local result Context.",
+                            text=(
+                                "Remove this Memory from Source."
+                                if session.save_mode == "SELF_SAVE"
+                                else "Omit this Source Memory from the new Result Context."
+                            ),
                         ),
                     ),
                     selected_option_uid=(
@@ -320,13 +343,22 @@ class SeverResolutionWorkbenchAdapter:
                 ),
                 label=_TREATMENT_DISPLAY_LABELS[_effective_treatment(candidate)],
                 text=(
-                    "Forgotten from the local result."
+                    (
+                        "Removed from Source."
+                        if session.save_mode == "SELF_SAVE"
+                        else "Omitted from the new Result."
+                    )
                     if candidate.selection == "FORGET"
                     else candidate.custom_content
                     if candidate.selection == "CUSTOM"
                     else session.source_memory(candidate.source_memory_uid).content
                     if candidate.selection == "AS_WRITTEN"
-                    else candidate.proposed_content or "Forgotten from the local result."
+                    else candidate.proposed_content
+                    or (
+                        "Removed from Source."
+                        if session.save_mode == "SELF_SAVE"
+                        else "Omitted from the new Result."
+                    )
                 ),
                 reason=candidate.rationale,
                 rules=tuple(
@@ -348,7 +380,9 @@ class SeverResolutionWorkbenchAdapter:
             title="MEM SEVER · LOCAL CONTENT REVIEW",
             route=(
                 f"SOURCE {session.source.root_name} × CRITERIA "
-                f"{session.criteria.root_name} → OUTPUT {session.output_name}"
+                f"{session.criteria.root_name} → "
+                f"{'SELF-SAVE' if session.save_mode == 'SELF_SAVE' else 'OTHER-SAVE'} "
+                f"{session.output_name}"
             ),
             status=session.state,
             metrics=(
@@ -362,7 +396,16 @@ class SeverResolutionWorkbenchAdapter:
                 ResolutionContextLocation(
                     "RESULT",
                     session.output_name,
-                    "CREATED" if session.state == "APPLIED" else "NOT CREATED",
+                    (
+                        "SELF-SAVED"
+                        if session.save_mode == "SELF_SAVE"
+                        and session.state == "APPLIED"
+                        else "WILL UPDATE SOURCE"
+                        if session.save_mode == "SELF_SAVE"
+                        else "CREATED"
+                        if session.state == "APPLIED"
+                        else "NOT CREATED"
+                    ),
                 ),
             ),
             overview=overview,
@@ -370,7 +413,11 @@ class SeverResolutionWorkbenchAdapter:
             list_label="SOURCE MEMORIES TO REVIEW",
             items=tuple(items),
             empty_message="No source Memories.",
-            results_label="LOCAL RESULT DRAFT · SOURCE UNCHANGED",
+            results_label=(
+                "SELF-SAVE DRAFT · SOURCE WILL BE REPLACED"
+                if session.save_mode == "SELF_SAVE"
+                else "OTHER-SAVE DRAFT · SOURCE UNCHANGED"
+            ),
             results=results,
             capabilities=(
                 frozenset()

@@ -49,4 +49,4 @@
                                                                                                                                                                                     
                                                                                                                                                                                    v
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
- COPIED · visible branch task-1 · 4 Contexts · 1 Memory  y copy Context  Y copy visible branch  q cancel
+ COPIED · visible branch task-1 · 4 Contexts · 1 Item  y copy Context  Y copy visible branch  q cancel

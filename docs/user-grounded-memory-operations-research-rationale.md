@@ -140,7 +140,7 @@ reviewable.
 | `Refine` | rewrite a stored representation | What bounded improvement preserves the original meaning and authority? |
 | `Update` | replace or supersede stored knowledge | What new evidence changes which existing material, and what must remain untouched? |
 | `Forget` | delete, decay, or suppress memories | What should be removed under this criterion, and what collateral loss would result? |
-| `Sever` | filter, partition, or project a memory store | What derived subset serves this purpose while leaving the Source unchanged? |
+| `Sever` | filter, partition, or project a memory store | What should this Context retain for the Criteria, and should that reviewed result replace the Source or be saved elsewhere? |
 
 This vocabulary remains open to revision by the study. The study is not only
 evaluating whether participants can operate a fixed command set; it also asks

@@ -1,0 +1,15 @@
+Distill cancelled; Source unchanged.                                                                                                                                                
+$ mem show --context capture/cases                                                                                                                                                  
+Context: capture/cases                                                                                                                                                              
+  Memories 2  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0                                                                                                            
+                                                                                                                                                                                    
+Items (in context order):                                                                                                                                                           
+  [memory 3d525ace] A quiet room supported a careful conversation.                                                                                                                  
+  [memory 42577542] A loud room interrupted the same conversation.                                                                                                                  
+$ mem show --context capture/other                                                                                                                                                  
+Context: capture/other                                                                                                                                                              
+  Memories 1  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0                                                                                                            
+                                                                                                                                                                                    
+Items (in context order):                                                                                                                                                           
+  [memory 1676e2e6] This separate Context must appear only after uppercase M.                                                                                                       
+PREVIEW VERIFIED · PROVIDER CALLS 0 · BOTH CONTEXTS UNCHANGED

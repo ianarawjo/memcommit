@@ -107,13 +107,17 @@ def _select_report_session(
 
 def _show_operation_review(controller, *, snapshot: bool) -> None:
     from memcommit.commands.review_report import (
+        echo_review_report_snapshot,
         render_review_report_snapshot,
         run_review_report_shell,
     )
 
     report = controller.report()
     if snapshot or not sys.stdin.isatty() or not sys.stdout.isatty():
-        typer.echo(render_review_report_snapshot(report))
+        if report.report_fragments:
+            echo_review_report_snapshot(report)
+        else:
+            typer.echo(render_review_report_snapshot(report))
         return
     run_review_report_shell(controller, interactive_actions=False)
 

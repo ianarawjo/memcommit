@@ -1,0 +1,8 @@
+$ mem fit context-a context-b context-c
+PTY · 180×52
+MEM FIT · 1/1 · JUDGING THE COMPLETE PROPOSITION SET . · 0sMEM FIT · 1/1 · JUDGMENT COMPLETE . · 0s                                                           FIT · [38;2;166;218;149m[1mYES[0m · [CONTEXT context-a] [MEMORY a1111111] Context A requires one stable public ticker. ↔ [CONTEXT context-b] [MEMORY b2222222] Context B uses AAPL for Apple Inc. ↔ [CONTEXT context-c] [MEMORY c3333333] Context C reserves AXAI for Axiom AI Technologies.
+SOURCE KIND · 3 CONTEXTS · GROUND ABSENT
+READ-ONLY VERIFICATION · True
+PROVIDER CALLS · 1
+FIT RECEIPTS · 0
+CAPTURE GATE · PRESS V

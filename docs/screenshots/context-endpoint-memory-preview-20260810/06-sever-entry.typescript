@@ -50,4 +50,4 @@ PTY 180 52
 [0m┌──────────────────────────────────────────────────────────────| OUTPUT CONTEXT NAME · EDIT DIRECTLY · NOT CREATED |───────────────────────────────────────────────────────────────[179C┐[0m
 [0m│› alpha/severed                                                                                                                                                                   [179C│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
-[0m SOURCE: ↑/↓ move · ←/→ collapse/expand · Enter/Space choose · top ↑ enters scope · A expand all · m Memory here · M all · Tab/Shift-Tab pane · F continue · Q cancel[165D[45A[C[0m
+[0m SOURCE: m THIS Context: show items · M EVERY Context: show items · ↑/↓ move · ←/→ collapse/expand · Enter/Space choose · top ↑ enters scope · A expand all · Tab/Shift-Tab pane · [179CF[45A[C[0m

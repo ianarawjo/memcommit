@@ -102,9 +102,9 @@ def test_mem_update_applies_explicit_removal_and_diff_keeps_provenance(
     result = runner.invoke(app, ["update", "--to", TARGET_NAME])
 
     assert result.exit_code == 0, result.output
-    assert "0 edits, 0 additions, 1 removal" in result.output
-    assert "REMOVE" in result.output
-    assert obsolete.content in result.output
+    assert "EFFECTS · ADD 0 · EDIT 0 · REMOVE 1" in result.output
+    assert "REVIEW · mem review update --session" in result.output
+    assert obsolete.content not in result.output
     updated = store.load_direct(TARGET_NAME)
     assert updated.ordered_uids() == [pointer.uid, preserved.uid]
     assert updated.memories[pointer.uid].name == "campus-wiki"

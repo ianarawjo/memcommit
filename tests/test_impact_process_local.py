@@ -36,6 +36,7 @@ from memcommit.resolve_application import (
     ResolveCost,
     ResolveEffect,
     ResolveFrameMemory,
+    ResolveIssue,
     ResolveRequest,
 )
 from memcommit.summarize import collect_summary_frame
@@ -66,9 +67,7 @@ class _ForgetProvider:
     def complete(self, prompt, *, operation, output_schema=None):
         assert operation == "forget"
         messages = json.loads(prompt.split("FORGET CHAT MESSAGES:\n", 1)[1])
-        payload = json.loads(
-            messages[1]["content"].split("FORGET PAYLOAD:\n", 1)[1]
-        )
+        payload = json.loads(messages[1]["content"].split("FORGET PAYLOAD:\n", 1)[1])
         memories = payload["source"]["memories"]
         return json.dumps(
             {
@@ -91,9 +90,7 @@ class _DistillProvider:
     def complete(self, prompt, *, operation, output_schema=None):
         assert operation == DISTILL_OPERATION
         payload = json.loads(prompt.split(DISTILL_PAYLOAD_MARKER, 1)[1])
-        aliases = [
-            memory["memory_id"] for memory in payload["source"]["memories"]
-        ]
+        aliases = [memory["memory_id"] for memory in payload["source"]["memories"]]
         return json.dumps(
             {
                 "overview": "The evidence supports one bounded preference.",
@@ -146,6 +143,22 @@ class _ResolveProvider:
                     "candidates": [
                         {
                             "summary": "Scope the second schedule.",
+                            "classification": "EXACT_GROUNDING",
+                            "resolution_level": "YES",
+                            "rule_ids": ["R04_EXACT_GROUNDING"],
+                            "issues": [
+                                {
+                                    "issue_id": "schedule-scope",
+                                    "kind": "TEMPORAL",
+                                    "memory_ids": ["m1", "m2"],
+                                    "selected_interpretation": (
+                                        "The schedules apply on different days."
+                                    ),
+                                    "basis_ids": ["m1", "m2"],
+                                    "assumptions": [],
+                                    "reason": "The edit exposes the day scope.",
+                                }
+                            ],
                             "effects": [
                                 {
                                     "kind": "UPDATE",
@@ -225,9 +238,7 @@ def _distill_result() -> DistillResult:
                 uid="00000000-0000-4000-8000-000000000131",
                 content="Prefer a quiet setting when conversation is the purpose.",
                 rationale="The Source example directly supports the condition.",
-                support_memory_uids=(
-                    "00000000-0000-4000-8000-000000000111",
-                ),
+                support_memory_uids=("00000000-0000-4000-8000-000000000111",),
                 boundary_memory_uids=(),
             ),
         ),
@@ -239,7 +250,7 @@ def _distill_result() -> DistillResult:
     )
 
 
-def _resolve_analysis(*, choice: bool = False) -> ResolveAnalysis:
+def _resolve_analysis() -> ResolveAnalysis:
     request = ResolveRequest("impact/resolve")
     frame = FrozenResolveFrame(
         request=request,
@@ -253,13 +264,27 @@ def _resolve_analysis(*, choice: bool = False) -> ResolveAnalysis:
             ResolveFrameMemory("m2", "memory-2", "The office opens at 9."),
         ),
         actionable_uids=("memory-1", "memory-2"),
-        allowed_effects=("UPDATE",),
+        allowed_effects=("UPDATE", "CREATE"),
     )
 
     def candidate(uid: str, target: str, new_content: str) -> ResolveCandidate:
         return ResolveCandidate(
             uid=uid,
             summary="Scope one schedule statement.",
+            classification="EXACT_GROUNDING",
+            resolution_level="YES",
+            rule_ids=("R04_EXACT_GROUNDING",),
+            issues=(
+                ResolveIssue(
+                    uid="schedule-scope",
+                    kind="TEMPORAL",
+                    memory_uids=("memory-1", "memory-2"),
+                    selected_interpretation=("The schedules apply on different days."),
+                    basis_memory_uids=("memory-1", "memory-2"),
+                    assumptions=(),
+                    reason="The edit exposes the day scope.",
+                ),
+            ),
             effects=(
                 ResolveEffect(
                     kind="UPDATE",
@@ -276,6 +301,7 @@ def _resolve_analysis(*, choice: bool = False) -> ResolveAnalysis:
                     reason="The explicit day scope makes the frame compatible.",
                 ),
             ),
+            grounded=True,
             verification_reason="The complete revised frame independently Fits.",
             fit=FitAssessment(
                 question_id=f"verify-{uid}",
@@ -292,20 +318,12 @@ def _resolve_analysis(*, choice: bool = False) -> ResolveAnalysis:
         "memory-2",
         "The office opens at 9 on weekends.",
     )
-    candidates = (
-        first,
-        candidate(
-            "candidate-2",
-            "memory-1",
-            "The office opens at 8 on weekdays.",
-        ),
-    ) if choice else (first,)
     return ResolveAnalysis(
         frame=frame,
-        status="CHOICE" if choice else "PROPOSAL",
+        status="PROPOSAL",
         initial_fit=None,
-        candidates=candidates,
-        question="Choose the authoritative schedule scope.",
+        candidates=(first,),
+        question="Use the automatic schedule interpretation?",
     )
 
 
@@ -358,18 +376,18 @@ def test_resolve_impact_projects_one_exact_verified_candidate_diff() -> None:
     assert "[ APPLY? ]" not in rendered
 
 
-def test_resolve_choice_does_not_flatten_alternatives_into_one_effect_set() -> None:
+def test_resolve_impact_projects_the_automatic_plan_without_a_choice_set() -> None:
     rendered = render_impact_session_snapshot(
         resolve_impact_presentation(
-            _resolve_analysis(choice=True),
+            _resolve_analysis(),
             candidate_uid=None,
         )
     )
 
-    assert "IMPACT · RESOLVE CANDIDATE SET" in rendered
-    assert "mutually exclusive verified alternatives" in rendered
-    assert "candidate-1" in rendered
-    assert "candidate-2" in rendered
+    assert "IMPACT · RESOLVE · SAME SOURCE" in rendered
+    assert "automatic, independently Fit-verified interpretation plan" in rendered
+    assert "candidate-1" not in rendered
+    assert "candidate-2" not in rendered
     assert "[ APPLY? ]" not in rendered
 
 

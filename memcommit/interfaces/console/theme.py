@@ -9,7 +9,11 @@ from __future__ import annotations
 
 from enum import Enum
 
-from memcommit.source_projection.model import SourceDisplayFacts, SourceForm, SourceReach
+from memcommit.source_projection.model import (
+    SourceDisplayFacts,
+    SourceForm,
+    SourceReach,
+)
 
 
 # Palette values are named once here so an operation adapter never owns a raw
@@ -48,6 +52,9 @@ class SemanticColorRole(str, Enum):
     NAVIGATION_GRANT = "navigation-grant"
     CAPABILITY = "capability"
     REFERENCE = "reference"
+    JUDGMENT_YES = "judgment-yes"
+    JUDGMENT_MAY = "judgment-may"
+    JUDGMENT_NO = "judgment-no"
 
 
 SEMANTIC_COLOR_HEX = {
@@ -63,6 +70,9 @@ SEMANTIC_COLOR_HEX = {
     SemanticColorRole.NAVIGATION_GRANT: GREEN_HEX,
     SemanticColorRole.CAPABILITY: TEAL_HEX,
     SemanticColorRole.REFERENCE: MAUVE_HEX,
+    SemanticColorRole.JUDGMENT_YES: GREEN_HEX,
+    SemanticColorRole.JUDGMENT_MAY: YELLOW_HEX,
+    SemanticColorRole.JUDGMENT_NO: RED_HEX,
 }
 
 
@@ -73,6 +83,8 @@ _ACTION_ROLES = {
     "branch": SemanticColorRole.CREATE,
     "add": SemanticColorRole.ADD,
     "added": SemanticColorRole.ADD,
+    "survivor": SemanticColorRole.ADD,
+    "survivors": SemanticColorRole.ADD,
     "embed": SemanticColorRole.EMBED,
     "embedded": SemanticColorRole.EMBED,
     "edit": SemanticColorRole.EDIT,
@@ -83,6 +95,8 @@ _ACTION_ROLES = {
     "delete": SemanticColorRole.REMOVE,
     "deleted": SemanticColorRole.REMOVE,
     "clear": SemanticColorRole.REMOVE,
+    "absorb": SemanticColorRole.REMOVE,
+    "absorbed": SemanticColorRole.REMOVE,
     "undo": SemanticColorRole.UNDO,
     "revert": SemanticColorRole.UNDO,
     "restored": SemanticColorRole.UNDO,
@@ -91,6 +105,12 @@ _ACTION_ROLES = {
     "checkpoint": SemanticColorRole.HISTORY,
     "memory-version": SemanticColorRole.HISTORY,
     "reference": SemanticColorRole.REFERENCE,
+}
+
+_JUDGMENT_ROLES = {
+    "YES": SemanticColorRole.JUDGMENT_YES,
+    "MAY": SemanticColorRole.JUDGMENT_MAY,
+    "NO": SemanticColorRole.JUDGMENT_NO,
 }
 
 
@@ -112,6 +132,14 @@ def semantic_action_role(value: str) -> SemanticColorRole | None:
     return _ACTION_ROLES.get(primary)
 
 
+def semantic_judgment_role(value: str) -> SemanticColorRole | None:
+    """Classify a typed semantic judgment without treating it as an action."""
+
+    if not isinstance(value, str):
+        raise TypeError("Semantic judgment labels must be text.")
+    return _JUDGMENT_ROLES.get(value.strip().upper())
+
+
 def semantic_source_role(
     value: SourceDisplayFacts | SourceForm,
 ) -> SemanticColorRole | None:
@@ -129,7 +157,10 @@ def semantic_source_role(
         )
     if form in {SourceForm.MEMORY_EMBED, SourceForm.MEMORY_REF}:
         return SemanticColorRole.EMBED
-    if form is SourceForm.MEMORY_REFERENCE:
+    if form in {
+        SourceForm.CONTEXT_REFERENCE,
+        SourceForm.MEMORY_REFERENCE,
+    }:
         return SemanticColorRole.REFERENCE
     if reach is SourceReach.VIA_EMBED:
         return SemanticColorRole.EMBED
@@ -153,6 +184,12 @@ def semantic_color_rgb(role: SemanticColorRole) -> tuple[int, int, int]:
     """Return the canonical true-color tuple accepted by Click/Typer."""
 
     return _hex_to_rgb(semantic_color_hex(role))
+
+
+def memory_object_color_rgb() -> tuple[int, int, int]:
+    """Return the shared foreground for one individual Memory object."""
+
+    return _hex_to_rgb(MEMORY_HEX)
 
 
 # Compatibility aliases keep the in-flight compact Context catalog refactor

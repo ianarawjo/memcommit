@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from collections.abc import Callable, Sequence
+from dataclasses import dataclass, field
 
+from memcommit.context_targeting.tui.picker import ContextMemoryRow
 from memcommit.context_targeting.tui.reach import ContextReachViewMode
 from memcommit.interfaces.tui.viewers.semantic import SemanticViewerDocument
 from memcommit.source_projection.presentation import SourceDisplayValue
@@ -24,6 +26,11 @@ class ContextSummaryWorkbenchView:
     document: SemanticViewerDocument | None = None
     allow_both: bool = True
     targeting_editable: bool = True
+    memory_loader: Callable[[str], Sequence[ContextMemoryRow]] | None = field(
+        default=None,
+        repr=False,
+        compare=False,
+    )
 
     def __post_init__(self) -> None:
         if (
@@ -42,6 +49,8 @@ class ContextSummaryWorkbenchView:
             raise ValueError("Context workbench allow_both must be boolean.")
         if type(self.targeting_editable) is not bool:
             raise ValueError("Context workbench targeting_editable must be boolean.")
+        if self.memory_loader is not None and not callable(self.memory_loader):
+            raise ValueError("Context workbench Memory loader must be callable.")
         if not self.allow_both and self.range_mode == "BOTH":
             raise ValueError("This Context workbench requires one reach mode.")
         if not self.targeting_editable and self.names != (self.selected_context,):

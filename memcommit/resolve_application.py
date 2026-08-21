@@ -1,9 +1,10 @@
 """Operation-owned contracts for repairing a non-fitting Memory frame.
 
-Resolution is the semantic condition-to-condition operation: it proposes an
-authorized post-image whose complete proposition frame independently Fits.
+Resolution is the semantic condition-to-condition operation: it selects one
+reasonable Issue interpretation and proposes an authorized post-image whose
+complete proposition frame independently Fits.
 The shared :mod:`memcommit.resolution` package validates exact choices only;
-candidate generation, minimum-change comparison, and Apply remain here.
+automatic planning, assumption boundaries, and Apply remain here.
 """
 
 from __future__ import annotations
@@ -27,14 +28,15 @@ if TYPE_CHECKING:
     from memcommit.update import GrantedUpdateTarget
 
 
-RESOLVE_CONTRACT_VERSION = "resolve-fit-repair-v1"
+RESOLVE_CONTRACT_VERSION = "resolve-exact-rules-v3"
 ResolveEffectKind = Literal["CREATE", "UPDATE", "DELETE"]
+ResolveFitTarget = Literal["MAY", "YES"]
 ResolveStatus = Literal[
     "ALREADY_FIT",
+    "ASSUMED",
     "NEEDS_AUTHORITY",
     "NEEDS_INPUT",
     "PROPOSAL",
-    "CHOICE",
 ]
 
 
@@ -106,16 +108,20 @@ class ResolveSourcePrecondition:
 class ResolveRequest:
     """One direct-Memory Fit repair request.
 
-    UPDATE is always requested. CREATE and DELETE are explicit expansions.
-    DELETE additionally requires nonempty grounding guidance because Fit alone
-    can never justify retiring a proposition.
+    UPDATE and information-preserving CREATE are ordinary Resolve effects.
+    DELETE is an explicit expansion and additionally requires nonempty grounding
+    guidance because Fit alone can never justify retiring a proposition.
     """
 
     context_name: str | None = None
     memory_selectors: tuple[str, ...] = ()
-    allow_create: bool = False
+    # Resolve starts from information preservation: adding one grounded
+    # interpretation or editing existing wording is ordinary, while DELETE
+    # remains the exceptional effect that needs an explicit retirement basis.
+    allow_create: bool = True
     allow_delete: bool = False
     guidance: str = ""
+    target_fit: ResolveFitTarget = "MAY"
     source_precondition: ResolveSourcePrecondition | None = None
 
     def __post_init__(self) -> None:
@@ -129,7 +135,9 @@ class ResolveRequest:
             or any(character in selector for character in "\r\n")
             for selector in self.memory_selectors
         ):
-            raise ResolveError("Resolve Memory selectors must be one-line uid prefixes.")
+            raise ResolveError(
+                "Resolve Memory selectors must be one-line uid prefixes."
+            )
         if len(set(self.memory_selectors)) != len(self.memory_selectors):
             raise ResolveError("Resolve Memory selectors must not repeat.")
         if not isinstance(self.allow_create, bool) or not isinstance(
@@ -138,6 +146,8 @@ class ResolveRequest:
             raise ResolveError("Resolve effect opt-ins must be boolean values.")
         if not isinstance(self.guidance, str):
             raise ResolveError("Resolve guidance must be text.")
+        if self.target_fit not in {"MAY", "YES"}:
+            raise ResolveError("Resolve target Fit must be MAY or YES.")
         if self.source_precondition is not None and not isinstance(
             self.source_precondition,
             ResolveSourcePrecondition,
@@ -276,8 +286,7 @@ class ResolveEffect:
             or not self.source_memory_uids
             or len(set(self.source_memory_uids)) != len(self.source_memory_uids)
             or any(
-                not isinstance(uid, str) or not uid
-                for uid in self.source_memory_uids
+                not isinstance(uid, str) or not uid for uid in self.source_memory_uids
             )
         ):
             raise ResolveError("Resolve effects require distinct source Memory uids.")
@@ -323,9 +332,57 @@ class ResolveEffect:
         }
 
 
+@dataclass(frozen=True)
+class ResolveIssue:
+    """One incompatibility point interpreted inside the complete frame.
+
+    An Issue narrows the mutation focus, never the semantic read boundary.  The
+    provider sees every direct Memory on every turn and must cite exact members
+    and bases from that frozen frame.  ``assumptions`` records a reasonable
+    working interpretation that is not grounded strongly enough for durable
+    Apply.
+    """
+
+    uid: str
+    kind: str
+    memory_uids: tuple[str, ...]
+    selected_interpretation: str
+    basis_memory_uids: tuple[str, ...]
+    assumptions: tuple[str, ...]
+    reason: str
+
+    def __post_init__(self) -> None:
+        if any(
+            not isinstance(value, str) or not value
+            for value in (
+                self.uid,
+                self.kind,
+                self.selected_interpretation,
+                self.reason,
+            )
+        ):
+            raise ResolveError("Resolve Issues require complete text values.")
+        for values, label in (
+            (self.memory_uids, "members"),
+            (self.basis_memory_uids, "basis"),
+        ):
+            if (
+                not isinstance(values, tuple)
+                or not values
+                or len(set(values)) != len(values)
+                or any(not isinstance(value, str) or not value for value in values)
+            ):
+                raise ResolveError(f"Resolve Issue {label} are invalid.")
+        if not isinstance(self.assumptions, tuple) or any(
+            not isinstance(assumption, str) or not assumption.strip()
+            for assumption in self.assumptions
+        ):
+            raise ResolveError("Resolve Issue assumptions are invalid.")
+
+
 @dataclass(frozen=True, order=True)
 class ResolveCost:
-    """A transparent effect vector used for Pareto minimum comparison."""
+    """A transparent diagnostic vector for one automatic interpretation plan."""
 
     deletes: int
     creates: int
@@ -354,11 +411,16 @@ class ResolveCost:
 
 @dataclass(frozen=True)
 class ResolveCandidate:
-    """One grounded, independently Fit-verified minimum-change candidate."""
+    """One grounded or assumed, independently Fit-verified automatic plan."""
 
     uid: str
     summary: str
+    classification: str
+    resolution_level: ResolveFitTarget
+    rule_ids: tuple[str, ...]
+    issues: tuple[ResolveIssue, ...]
     effects: tuple[ResolveEffect, ...]
+    grounded: bool
     verification_reason: str
     fit: FitAssessment
     cost: ResolveCost
@@ -366,20 +428,50 @@ class ResolveCandidate:
     def __post_init__(self) -> None:
         if any(
             not isinstance(value, str) or not value
-            for value in (self.uid, self.summary, self.verification_reason)
+            for value in (
+                self.uid,
+                self.summary,
+                self.classification,
+                self.verification_reason,
+            )
         ):
             raise ResolveError("Resolve candidate requires complete text values.")
+        if self.resolution_level not in {"MAY", "YES"}:
+            raise ResolveError("Resolve candidate level must be MAY or YES.")
+        if (
+            not self.rule_ids
+            or len(self.rule_ids) != len(set(self.rule_ids))
+            or any(
+                not isinstance(rule_id, str) or not rule_id for rule_id in self.rule_ids
+            )
+        ):
+            raise ResolveError("Resolve candidate requires distinct rule IDs.")
+        if (
+            not self.issues
+            or any(not isinstance(issue, ResolveIssue) for issue in self.issues)
+            or len({issue.uid for issue in self.issues}) != len(self.issues)
+        ):
+            raise ResolveError("Resolve candidate requires distinct typed Issues.")
         if not self.effects or any(
             not isinstance(effect, ResolveEffect) for effect in self.effects
         ):
             raise ResolveError("Resolve candidate requires exact effects.")
+        if not isinstance(self.grounded, bool):
+            raise TypeError("Resolve candidate grounded state must be boolean.")
+        if self.grounded and any(issue.assumptions for issue in self.issues):
+            raise ResolveError(
+                "A grounded Resolve candidate cannot retain ungrounded assumptions."
+            )
         targets = tuple(
             (effect.owner_context_uid, effect.memory_uid) for effect in self.effects
         )
         if len(set(targets)) != len(targets):
             raise ResolveError("Resolve candidate targets one Memory more than once.")
-        if not isinstance(self.fit, FitAssessment) or self.fit.verdict != "YES":
-            raise ResolveError("Resolve candidate requires independent Fit YES.")
+        if not isinstance(self.fit, FitAssessment) or self.fit.verdict not in {
+            "MAY",
+            "YES",
+        }:
+            raise ResolveError("Resolve candidate requires independent Fit MAY or YES.")
         if not isinstance(self.cost, ResolveCost):
             raise TypeError("Resolve candidate requires a minimum-change cost.")
 
@@ -399,10 +491,10 @@ class ResolveAnalysis:
             raise TypeError("Resolve analysis requires a frozen frame.")
         if self.status not in {
             "ALREADY_FIT",
+            "ASSUMED",
             "NEEDS_AUTHORITY",
             "NEEDS_INPUT",
             "PROPOSAL",
-            "CHOICE",
         }:
             raise ResolveError("Resolve analysis status is invalid.")
         if self.initial_fit is not None and not isinstance(
@@ -410,17 +502,23 @@ class ResolveAnalysis:
         ):
             raise TypeError("Resolve analysis Fit result is invalid.")
         if any(
-            not isinstance(candidate, ResolveCandidate)
-            for candidate in self.candidates
+            not isinstance(candidate, ResolveCandidate) for candidate in self.candidates
         ) or len({candidate.uid for candidate in self.candidates}) != len(
             self.candidates
         ):
             raise ResolveError("Resolve analysis candidates are invalid.")
-        expected_count = 1 if self.status == "PROPOSAL" else None
-        if expected_count is not None and len(self.candidates) != expected_count:
-            raise ResolveError("Resolve PROPOSAL requires exactly one candidate.")
-        if self.status == "CHOICE" and len(self.candidates) < 2:
-            raise ResolveError("Resolve CHOICE requires multiple candidates.")
+        if self.status == "PROPOSAL" and (
+            len(self.candidates) != 1 or not self.candidates[0].grounded
+        ):
+            raise ResolveError(
+                "Resolve PROPOSAL requires exactly one grounded candidate."
+            )
+        if self.status == "ASSUMED" and (
+            len(self.candidates) != 1 or self.candidates[0].grounded
+        ):
+            raise ResolveError(
+                "Resolve ASSUMED requires one non-grounded working interpretation."
+            )
         if self.status in {"ALREADY_FIT", "NEEDS_AUTHORITY", "NEEDS_INPUT"} and (
             self.candidates
         ):
@@ -470,11 +568,11 @@ class ResolveSemanticPort(Protocol):
         *,
         provider: ResolveProvider,
     ) -> ResolveAnalysis:
-        """Generate, verify, and rank candidates over one frozen frame."""
+        """Generate and verify one automatic plan over one frozen frame."""
 
 
 def resolve_case(analysis: ResolveAnalysis) -> ResolutionCase:
-    """Project verified candidate identities into the common lifecycle."""
+    """Project the automatic plan into the exact-approval lifecycle."""
 
     return ResolutionCase(
         binding=analysis.frame.binding,
@@ -490,12 +588,15 @@ def resolve_case(analysis: ResolveAnalysis) -> ResolutionCase:
 def candidate_digest(
     frame: FrozenResolveFrame,
     effects: tuple[ResolveEffect, ...],
+    *,
+    resolution_level: ResolveFitTarget,
 ) -> str:
     """Bind one stable candidate identity to its exact frame and effects."""
 
     payload = {
         "contract": RESOLVE_CONTRACT_VERSION,
         "revision": frame.revision,
+        "resolution_level": resolution_level,
         "effects": [effect.mutation_value() for effect in effects],
     }
     encoded = json.dumps(
@@ -509,8 +610,7 @@ def candidate_digest(
 
 def _direct_memory_digest(frame: FrozenResolveFrame) -> str:
     payload = [
-        {"uid": memory.uid, "content": memory.content}
-        for memory in frame.memories
+        {"uid": memory.uid, "content": memory.content} for memory in frame.memories
     ]
     encoded = json.dumps(
         payload,
@@ -588,7 +688,11 @@ def apply_resolve(
 
     if not isinstance(analysis, ResolveAnalysis):
         raise TypeError("Resolve Apply requires a typed analysis.")
-    if analysis.status not in {"PROPOSAL", "CHOICE"}:
+    if analysis.status != "PROPOSAL":
+        if analysis.status == "ASSUMED":
+            raise ResolveError(
+                "Resolve working assumptions are process-local and cannot be applied."
+            )
         raise ResolveError("Resolve analysis has no applicable verified candidate.")
     case = resolve_case(analysis)
     try:
@@ -608,11 +712,17 @@ def apply_resolve(
         raise ResolveError(str(error)) from error
     selected_uid = progress.submissions[0].choice_uid
     candidate = next(
-        (candidate for candidate in analysis.candidates if candidate.uid == selected_uid),
+        (
+            candidate
+            for candidate in analysis.candidates
+            if candidate.uid == selected_uid
+        ),
         None,
     )
     if candidate is None:  # pragma: no cover - guarded by the common validator.
         raise ResolveError("Resolve candidate is unavailable.")
+    if not candidate.grounded:  # pragma: no cover - guarded by ResolveAnalysis.
+        raise ResolveError("An ungrounded Resolve interpretation cannot be applied.")
     return frame_port.apply(analysis.frame, candidate)
 
 
@@ -629,6 +739,8 @@ __all__ = [
     "ResolveError",
     "ResolveFrameMemory",
     "ResolveFramePort",
+    "ResolveFitTarget",
+    "ResolveIssue",
     "ResolveProvider",
     "ResolveProviderFactory",
     "ResolveReceipt",

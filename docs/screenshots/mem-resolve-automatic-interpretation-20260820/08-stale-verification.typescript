@@ -1,0 +1,6 @@
+PTY 180 52
+MEM RESOLVE · 1/1 · JUDGING, GENERATING, AND INDEPENDENTLY VERIFYING THE COMPLETE FRAME . · 0sMEM RESOLVE · 1/1 · VERIFIED PROPOSAL READY . · 0s                                                                                              [31mResolve error: The Resolve Context changed before Apply; nothing was written.[0m
+COMMAND EXIT · 1
+READY FOR VERIFICATION
+
+STALE VERIFICATION · MEMORIES ['The office opens at 8.', 'The office opens at 9.', 'The weekday opening time is 8 and the weekend opening time is 9.', 'A concurrent schedule note arrived.'] · CHECKPOINTS 0 · COMMANDS []

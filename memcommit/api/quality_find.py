@@ -9,7 +9,7 @@ from memcommit.quality_finding_handoff import QualityFindingHandoff
 
 @dataclass(frozen=True)
 class QualityFindResult:
-    """One complete finder result with adapter-neutral next-operation receipts."""
+    """One complete finder result with adapter-neutral evidence."""
 
     kind: str
     context_names: tuple[str, ...]
@@ -17,6 +17,12 @@ class QualityFindResult:
     memory_count: int
     pair_count: int | None
     handoffs: tuple[QualityFindingHandoff, ...]
+
+    @property
+    def evidence(self) -> tuple[QualityFindingHandoff, ...]:
+        """Canonical name for findings that can enter a receiving operation."""
+
+        return self.handoffs
 
 
 __all__ = ["QualityFindResult"]

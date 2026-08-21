@@ -50,3 +50,9 @@ The same shared projection also labels directly owned Memories, MemoryRefs, and
 QueryContextRefs as `memory`, `memory ref`, and `query view`. Only the embedded
 Context occurrence receives `VIA EMBED`; the global lexical Context row does
 not.
+
+This set remains tied to the named 2026-08-13 Participant Profile and preserves
+the footer wording recorded in that frozen study environment. The current
+shared controller now spells the same unchanged behavior as `m THIS Context`
+and `M EVERY Context`; the reproducible disposable-Store evidence is in
+[`../distill-memory-preview-20260817/`](../distill-memory-preview-20260817/README.md).

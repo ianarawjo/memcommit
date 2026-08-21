@@ -11,6 +11,7 @@ from memcommit.authority.access import (
     resolve_context_access,
 )
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.context_snapshot import ContextSnapshotRef
 from memcommit.context_targeting.model import ContextScope
 from memcommit.context_targeting.readable_catalog import ReadableContextCatalog
 from memcommit.context_targeting.resolution import expand_lexical_context_names
@@ -135,7 +136,11 @@ class MemoryStoreStatusSource:
                 query_views.append(StatusQueryView(uid=item.uid, name=item.name))
             elif isinstance(item, Context):
                 embedded.append(
-                    StatusEmbeddedContext(uid=item.uid, name=item.name)
+                    StatusEmbeddedContext(
+                        uid=item.uid,
+                        name=item.name,
+                        snapshot=isinstance(item, ContextSnapshotRef),
+                    )
                 )
 
         view = access.view

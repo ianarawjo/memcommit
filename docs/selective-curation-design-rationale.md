@@ -192,3 +192,11 @@ the one instruction criterion, animation, and elapsed seconds, but no invented
 percentage or provider-internal stage. The transient line closes before the
 Resolution Workbench opens. Redirected and non-TTY output retains the stable
 legacy `Consulting ...` line because shared progress is deliberately TTY-only.
+
+## 2026-08-20 lifecycle clarification
+
+The whole-frame semantic invariant is unchanged, but the resulting decisions
+now belong to the Forget/Sever execution invocation. “Resolution Workbench” in
+the historical account means an execution decision surface, not the public
+`mem review` operation. Successful Apply exits to a compact receipt; explicit
+Review is a later read-only projection of terminal evidence.

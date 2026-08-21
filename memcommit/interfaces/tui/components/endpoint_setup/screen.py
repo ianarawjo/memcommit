@@ -64,16 +64,20 @@ from memcommit.interfaces.tui.core.theme import (
     SEMANTIC_VIEWER_STYLE,
     focused_control_style,
 )
+from memcommit.exact_command_review import ExactCommandReview
+from memcommit.interfaces.tui.components.exact_command_review.rendering import (
+    format_exact_command,
+)
 from memcommit.interfaces.tui.components.exact_name import (
     ExactNameFieldControl,
     ExactNameFieldView,
 )
 from memcommit.selection import FlatSelectionState, SelectionOption
 from memcommit.selection.tui import render_vertical_choice_rows
-from memcommit.store import validate_context_name
 
 
 DraftValidator = Callable[[EndpointSetupDraft], str | None]
+CommandReviewBuilder = Callable[[EndpointSetupDraft], ExactCommandReview]
 
 
 def run_endpoint_setup(
@@ -81,6 +85,7 @@ def run_endpoint_setup(
     *,
     memory_loader: MemoryProjectionLoader | None = None,
     validate_draft: DraftValidator | None = None,
+    command_review: CommandReviewBuilder | None = None,
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
@@ -94,6 +99,7 @@ def run_endpoint_setup(
             spec,
             memory_loader=memory_loader,
             validate_draft=validate_draft,
+            command_review=command_review,
             app_input=app_input,
             app_output=app_output,
             require_tty=require_tty,
@@ -339,6 +345,28 @@ def run_endpoint_setup(
             values=tuple(make_value(role_uid) for role_uid in active_role_uids),
         )
 
+    def checked_draft() -> EndpointSetupDraft:
+        draft = make_draft()
+        message = validate_draft(draft) if validate_draft is not None else None
+        if message:
+            raise ValueError(message)
+        return draft
+
+    def render_command() -> list[tuple[str, str]]:
+        if command_review is None:
+            return []
+        try:
+            review = command_review(checked_draft())
+        except (OSError, TypeError, ValueError) as error:
+            return [
+                ("class:error", "COMMAND · INVALID\n"),
+                ("class:error", f"{safe_terminal_text(str(error))}\n\n"),
+            ]
+        return [
+            ("class:report-label", "COMMAND · RUNNABLE\n"),
+            ("class:report-neutral", f"{format_exact_command(review)}\n\n"),
+        ]
+
     def render_action() -> list[tuple[str, str]]:
         mode_uid = selected_mode_uid()
         focused = get_app().layout.has_focus(action_control)
@@ -392,6 +420,7 @@ def run_endpoint_setup(
         fragments.extend(
             [
                 ("", "\n"),
+                *render_command(),
                 ("[SetCursorPosition]", "") if focused else ("", ""),
                 (
                     focused_control_style(focused=focused),
@@ -610,11 +639,10 @@ def run_endpoint_setup(
 
     def finish(event) -> SurfaceActionResult:
         try:
-            draft = make_draft()
-            message = validate_draft(draft) if validate_draft is not None else None
-            if message:
-                raise ValueError(message)
-        except ValueError as error:
+            draft = checked_draft()
+            if command_review is not None:
+                command_review(draft)
+        except (OSError, TypeError, ValueError) as error:
             status["value"] = str(error)
             return "HANDLED"
         event.app.exit(result=draft)

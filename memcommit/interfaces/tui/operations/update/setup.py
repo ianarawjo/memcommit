@@ -18,6 +18,7 @@ from memcommit.interfaces.tui.operations.update.model import (
     UpdateEndpointSelection,
     UpdateTuiSetup,
 )
+from memcommit.interactive_command_review import update_start_command_review
 
 
 def update_endpoint_setup_spec(setup: UpdateTuiSetup) -> EndpointSetupSpec:
@@ -88,6 +89,14 @@ def choose_update_endpoint_setup(
             "A and B must be distinct Contexts."
             if value.value("A").context_name == value.value("B").context_name
             else None
+        ),
+        command_review=lambda value: update_start_command_review(
+            source_name=value.value("A").context_name,
+            target_name=value.value("B").context_name,
+            source_descendants=value.value("A").include_descendants,
+            target_descendants=value.value("B").include_descendants,
+            source_memory_uid=value.value("A").memory_uid,
+            target_memory_uid=value.value("B").memory_uid,
         ),
         app_input=app_input,
         app_output=app_output,

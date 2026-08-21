@@ -48,9 +48,12 @@ def _response(
             {
                 "question_id": "fit",
                 "verdict": verdict,
-                "reason": "The statements can jointly govern." if verdict == "YES" else "Their ordinary readings divide or conflict.",
+                "reason": "The statements can jointly govern."
+                if verdict == "YES"
+                else "Their ordinary readings divide or conflict.",
                 "considered_proposition_ids": considered or ["p1", "p2"],
-                "material_proposition_ids": material or ([] if verdict == "YES" else ["p1", "p2"]),
+                "material_proposition_ids": material
+                or ([] if verdict == "YES" else ["p1", "p2"]),
                 "consistent_reading": consistent,
                 "inconsistent_reading": inconsistent,
             }
@@ -76,11 +79,21 @@ def test_fit_judges_role_neutral_complete_set_with_common_sense_boundary() -> No
     assert "common-sense, and domain-convention prior" in provider.prompt
     assert "prior is not objective truth" in provider.prompt
     assert "if a competent ordinary reader read the complete frame" in provider.prompt
-    assert "practical reading judgment rather than formal theorem proving" in provider.prompt
+    assert (
+        "practical reading judgment rather than formal theorem proving"
+        in provider.prompt
+    )
     assert "Do not test satisfiability over every imaginable world" in provider.prompt
-    assert "Do not invent one scenario merely to save or break the set" in provider.prompt
-    assert "Ambiguity matters to Fit only when ordinary readings split" in provider.prompt
-    assert "Different subjects, scopes, or unrelated propositions are YES" in provider.prompt
+    assert (
+        "Do not invent one scenario merely to save or break the set" in provider.prompt
+    )
+    assert (
+        "Ambiguity matters to Fit only when ordinary readings split" in provider.prompt
+    )
+    assert (
+        "Different subjects, scopes, or unrelated propositions are YES"
+        in provider.prompt
+    )
     assert "Do not omit, rank, retrieve, generate, revise" in provider.prompt
     payload = json.loads(provider.prompt.split(FIT_JUDGMENT_PAYLOAD_MARKER, 1)[1])
     assert [item["role"] for item in payload["questions"][0]["propositions"]] == [
@@ -178,10 +191,15 @@ def test_mem_fit_accepts_two_literal_propositions_and_prints_yes(
     result = CliRunner().invoke(
         app,
         ["fit", "The main entrance closes.", "The staff entrance opens.", "--plain"],
+        color=True,
     )
 
     assert result.exit_code == 0, result.output
-    assert result.output == "✓ YES · The statements can jointly govern.\n"
+    assert "\x1b[" not in result.output
+    assert result.output == (
+        "FIT · YES · [PROPOSITION p1] The main entrance closes. ↔ "
+        "[PROPOSITION p2] The staff entrance opens.\n"
+    )
 
 
 def test_mem_fit_requires_two_operands_and_explicit_ground_mode() -> None:

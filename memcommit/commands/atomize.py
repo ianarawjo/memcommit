@@ -50,6 +50,7 @@ from memcommit.atomize_workbench import (
 )
 from memcommit.interfaces.cli.atomize import render_atomize_apply_result
 from memcommit.interfaces.cli.atomize_grounding import render_grounding_session
+from memcommit.interfaces.console.text import display_escape_text
 from memcommit.interfaces.tui.operations.atomize.adapter import (
     present_atomize_workbench,
 )
@@ -66,7 +67,10 @@ from memcommit.commands.endpoint_setup_flows import choose_atomize_setup
 from memcommit.interfaces.tui.components.operation_launcher.session import (
     SessionNewReceipt,
 )
-from memcommit.commands.context_operand import ContextOperandSnapshot
+from memcommit.commands.context_operand import (
+    ContextOperandSnapshot,
+    choose_context_operand,
+)
 from memcommit.review import (
     atomize_review_declared_frames,
     atomize_review_matches_analysis,
@@ -266,6 +270,13 @@ def _resume_selected_atomize(
 
 
 def cmd(
+    context_operand: Annotated[
+        Optional[str],
+        typer.Argument(
+            metavar="CONTEXT",
+            help="Context to atomize now (defaults to current)",
+        ),
+    ] = None,
     save: Annotated[
         bool,
         typer.Option(
@@ -380,6 +391,18 @@ def cmd(
     ] = False,
 ) -> None:
     """Atomize the current Context or use an explicit advanced route."""
+    try:
+        context_name = choose_context_operand(
+            context_operand,
+            option=context_name,
+        )
+    except ValueError as error:
+        typer.secho(
+            f"Atomize error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
     auto_apply_exact_context = (
         not save
         and save_as is None
@@ -525,6 +548,7 @@ def cmd(
             # for an impossible or already occupied destination.
             store.assert_context_creatable(output_name)
         session = store.load_atomize_analysis(direct_ctx.uid)
+        applied_exact_prewarm = False
 
         grounding = store.load_atomize_grounding_session(direct_ctx.uid)
         if keep_review_only:
@@ -698,6 +722,7 @@ def cmd(
                         provider_factory=provider_factory,
                     )
                 session = opened.analysis
+                applied_exact_prewarm = opened.materialized_prepared
             # This is intentionally set only after the durable analysis pair
             # exists. The ordinary Apply path below still owns freshness,
             # reference, audit, checkpoint, compensation, and retry checks.
@@ -749,6 +774,7 @@ def cmd(
                     provider_factory=provider_factory,
                 )
             session = opened.analysis
+            applied_exact_prewarm = opened.materialized_prepared
             planned_output = opened.workbench.output_context_name or name
             planned_output_applied = atomize_planned_output_was_applied(
                 store,
@@ -784,6 +810,7 @@ def cmd(
                         workbench=opened.workbench,
                     )
                     session = opened.analysis
+                    applied_exact_prewarm = opened.materialized_prepared
                     if action.kind == "INCORPORATE_AND_APPLY":
                         save = True
                         applying = True
@@ -1079,4 +1106,5 @@ def cmd(
         created=created,
         unresolved_at_apply_count=int(application_audit["unresolved_at_apply_count"]),
         recovered_application=recovered_application,
+        exact_prewarm=applied_exact_prewarm,
     )

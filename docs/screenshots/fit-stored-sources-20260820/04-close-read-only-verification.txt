@@ -1,0 +1,17 @@
+VIEWER CLOSED · READ-ONLY VERIFICATION                                                                                                                                              
+$ mem show --context fit/current                                                                                                                                                    
+Context: fit/current                                                                                                                                                                
+  Memories 1  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0                                                                                                            
+                                                                                                                                                                                    
+Items (in context order):                                                                                                                                                           
+  [memory 802d9919] The lobby closes at five.                                                                                                                                       
+$ mem show --context fit/policies                                                                                                                                                   
+Context: fit/policies                                                                                                                                                               
+  Memories 1  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0                                                                                                            
+                                                                                                                                                                                    
+Items (in context order):                                                                                                                                                           
+  [memory d3ef61a4] Visitors may use the side entrance after five.                                                                                                                  
+  CURRENT UNCHANGED · True                                                                                                                                                          
+  POLICIES UNCHANGED · True                                                                                                                                                         
+  FIT RECEIPTS · 0                                                                                                                                                                  
+  PROVIDER CALLS · 1

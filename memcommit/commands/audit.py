@@ -15,7 +15,10 @@ from memcommit.commands.command_wait import (
     CommandWaitProgress,
     run_command_wait,
 )
-from memcommit.commands.context_operand import ContextOperandSnapshot
+from memcommit.commands.context_operand import (
+    ContextOperandSnapshot,
+    choose_context_operand,
+)
 from memcommit.authority.access import (
     GrantedReadStore,
     context_access_display_facts,
@@ -218,21 +221,30 @@ def _interactive_source(store: MemoryStore, *, current_name: str | None):
 
 
 def cmd(
+    context_operand: Annotated[
+        Optional[str],
+        typer.Argument(
+            metavar="CONTEXT",
+            help="Exact readable Context to audit (defaults to current)",
+        ),
+    ] = None,
     context_name: Annotated[
         Optional[str],
         typer.Option(
             "--context",
             "-c",
-            help="Exact readable Context to audit (flagless TTY opens setup)",
+            help="Exact readable Context to audit (defaults to current)",
         ),
     ] = None,
     against: Annotated[
-        Optional[str],
+        Optional[list[str]],
         typer.Option(
             "--against",
+            "--rule",
+            metavar="RULES_CONTEXT",
             help=(
-                "Optional local Rules Context; adds the shared Conformance "
-                "check to this Audit"
+                "Optional local Rules Context; --against and --rule are "
+                "equivalent and add the shared Conformance check"
             ),
         ),
     ] = None,
@@ -240,24 +252,55 @@ def cmd(
         bool,
         typer.Option(
             "--snapshot",
-            help="Print the newly saved Audit instead of opening its review",
+            help="Print the complete newly saved Audit instead of its receipt",
+        ),
+    ] = False,
+    select_source: Annotated[
+        bool,
+        typer.Option(
+            "--select",
+            help="Choose one readable Source Context interactively",
         ),
     ] = False,
 ) -> None:
     """Run quality checks and optional Rule Conformance, then save one Audit."""
 
+    try:
+        context_name = choose_context_operand(
+            context_operand,
+            option=context_name,
+        )
+    except ValueError as error:
+        typer.secho(
+            "Audit error: " + display_escape_text(str(error)),
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
     store = MemoryStore(create=False)
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
+        if select_source and context_name is not None:
+            raise QualityAuditError(
+                "--select cannot be combined with an explicit Context."
+            )
+        if select_source and not _interactive_terminal():
+            raise QualityAuditError("--select requires an interactive terminal.")
         rules_ctx: Context | None = None
-        if against is not None:
-            rules_name = context_snapshot.resolve(against)
+        rules_operands = tuple(against or ())
+        if len(rules_operands) > 1:
+            raise QualityAuditError(
+                "Use only one of --against or --rule; they are aliases for "
+                "the Rules Context."
+            )
+        if rules_operands:
+            rules_name = context_snapshot.resolve(rules_operands[0])
             if not store.context_exists(rules_name):
                 raise ConformanceError(
                     "Audit Conformance currently requires a local Rules Context."
                 )
             rules_ctx = store.load_direct(rules_name)
-        if context_name is None and _interactive_terminal() and not snapshot:
+        if select_source:
             selected = _interactive_source(
                 store,
                 current_name=context_snapshot.current_name,
@@ -301,9 +344,8 @@ def cmd(
             conformance_rules=rules_ctx,
         )
 
-        # Publish the complete three- or four-check snapshot before terminal control.
-        # A PTY disconnect can lose only an unsaved composer draft, never the
-        # provider result the person is about to review.
+        # Publish the complete snapshot before printing its receipt. Review is
+        # a separate command, so a terminal disconnect cannot lose the result.
         QualityAuditStore(store).save(session, expected_digest=None)
     except (
         ConcurrentContextUpdateError,
@@ -325,30 +367,19 @@ def cmd(
         )
         raise typer.Exit(1)
 
-    if snapshot or not _interactive_terminal():
+    if snapshot:
         typer.echo(
             render_resolution_workbench_snapshot(quality_audit_resolution_view(session))
         )
         return
-
-    try:
-        run_quality_audit_review(store, session)
-    except (
-        ConcurrentContextUpdateError,
-        OSError,
-        QualityAuditError,
-        RuntimeError,
-        ValueError,
-    ) as error:
-        typer.secho(
-            "Audit review error: " + display_escape_text(str(error)),
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(1)
     typer.secho(
-        f"Audit saved: {session.answered_count}/{session.finding_count} findings answered.",
+        f"Audit saved: {session.finding_count} finding(s) across "
+        f"{len(session.checks)} quality checks.",
         fg=typer.colors.GREEN,
         bold=True,
     )
-    typer.echo("No Context or Memory changes applied. No checkpoint created.")
+    typer.echo(
+        f"Session [{session.uid[:8]}] · review: "
+        f"mem review audit --session {session.uid}"
+    )
+    typer.echo("Source unchanged. No checkpoint created.")

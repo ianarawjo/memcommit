@@ -5,8 +5,50 @@ The most important fixture is `isolated_store`, which redirects memcommit's
 module-level storage paths to a temporary directory so tests never touch the
 real ~/.mem store.
 """
+
+import json
+
 import pytest
 import memcommit.store as store_module
+
+
+class _RationaleFixtureProvider:
+    """Keep ordinary CLI tests deterministic and subscription-free."""
+
+    def complete(self, prompt, *, operation, output_schema=None):
+        assert operation == "rationale provenance"
+        assert output_schema is not None
+        payload = json.loads(prompt.split("RATIONALE PAYLOAD:\n", 1)[1])
+        request = payload["request"]
+        limit = request["length"]["limit"]
+        unit = request["length"]["unit"]
+        candidates = (
+            "This Memory came from its retained source and follows the recorded lifecycle.",
+            "This Memory follows its retained history.",
+            "Recorded provenance.",
+            "Recorded.",
+            "A",
+        )
+
+        def measure(value):
+            if unit == "characters":
+                return len(value)
+            if unit == "bytes":
+                return len(value.encode("utf-8"))
+            return len(value.split())
+
+        provenance = next(value for value in candidates if measure(value) <= limit)
+        return json.dumps({"provenance": provenance})
+
+
+@pytest.fixture(autouse=True)
+def replace_rationale_subscription_provider(monkeypatch):
+    """No ordinary test may accidentally start a live Rationale provider turn."""
+
+    monkeypatch.setattr(
+        "memcommit.commands.rationale.connect_semantic_provider",
+        _RationaleFixtureProvider,
+    )
 
 
 @pytest.fixture(autouse=True)
@@ -28,9 +70,7 @@ def isolated_store(tmp_path, monkeypatch):
     atomize_analyses_dir = store_dir / "atomize-analyses"
     atomize_workbenches_dir = store_dir / "atomize-workbenches"
     atomize_groundings_dir = store_dir / "atomize-groundings"
-    atomize_grounding_history_dir = (
-        store_dir / "atomize-grounding-history"
-    )
+    atomize_grounding_history_dir = store_dir / "atomize-grounding-history"
     ground_sessions_dir = store_dir / "ground-sessions"
     meld_sessions_dir = store_dir / "meld-sessions"
 

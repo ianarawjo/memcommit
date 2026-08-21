@@ -74,6 +74,41 @@ def _effect_fragments(candidate: ResolveCandidate) -> list[tuple[str, str]]:
     return fragments
 
 
+def _issue_fragments(candidate: ResolveCandidate) -> list[tuple[str, str]]:
+    fragments: list[tuple[str, str]] = []
+    for issue in candidate.issues:
+        fragments.extend(
+            [
+                (
+                    "class:section",
+                    "ISSUE · "
+                    + safe_terminal_text(issue.uid)
+                    + " · "
+                    + safe_terminal_text(issue.kind)
+                    + "\n",
+                ),
+                (
+                    "class:viewer-body",
+                    "MEMBERS · "
+                    + ", ".join(uid[:8] for uid in issue.memory_uids)
+                    + "\nINTERPRETATION · "
+                    + safe_terminal_text(issue.selected_interpretation)
+                    + "\nBASIS · "
+                    + ", ".join(uid[:8] for uid in issue.basis_memory_uids)
+                    + "\n"
+                    + "".join(
+                        "ASSUMPTION · " + safe_terminal_text(value) + "\n"
+                        for value in issue.assumptions
+                    )
+                    + "WHY · "
+                    + safe_terminal_text(issue.reason)
+                    + "\n\n",
+                ),
+            ]
+        )
+    return fragments
+
+
 def project_resolve_analysis(analysis: ResolveAnalysis) -> SemanticViewerDocument:
     """Build one complete read-only report used before and without Apply."""
 
@@ -84,6 +119,7 @@ def project_resolve_analysis(analysis: ResolveAnalysis) -> SemanticViewerDocumen
             f"CONTEXT · {safe_terminal_text(analysis.frame.display_name)}\n"
             f"REVISION · {safe_terminal_text(analysis.frame.revision)}\n"
             f"STATUS · {safe_terminal_text(analysis.status)}\n"
+            f"TARGET FIT · {safe_terminal_text(analysis.frame.request.target_fit)}\n"
             "REQUESTED · "
             + ", ".join(analysis.frame.request.requested_effects)
             + "\nALLOWED · "
@@ -119,23 +155,38 @@ def project_resolve_analysis(analysis: ResolveAnalysis) -> SemanticViewerDocumen
             [
                 (
                     "class:section",
-                    f"\nCANDIDATE {index} · {safe_terminal_text(candidate.uid)}\n",
+                    f"\nAUTOMATIC PLAN {index} · {safe_terminal_text(candidate.uid)}\n",
                 ),
                 (
                     "class:viewer-body",
                     safe_terminal_text(candidate.summary)
+                    + "\nCLASSIFICATION · "
+                    + safe_terminal_text(candidate.classification)
+                    + "\nRESOLUTION · "
+                    + candidate.resolution_level
+                    + "\nRULES · "
+                    + safe_terminal_text(", ".join(candidate.rule_ids))
+                    + "\nGROUNDING · "
+                    + ("GROUNDED" if candidate.grounded else "ASSUMED")
                     + "\nCOST · "
                     f"DELETE {candidate.cost.deletes} · "
                     f"CREATE {candidate.cost.creates} · "
                     f"UPDATE {candidate.cost.updates} · "
                     f"CHANGED UNITS {candidate.cost.changed_units}\n\n",
                 ),
+                *_issue_fragments(candidate),
                 *_effect_fragments(candidate),
                 (
-                    "class:impact.keep",
-                    "GROUNDING VERIFIED · "
+                    "class:impact.keep"
+                    if candidate.grounded
+                    else "class:impact.custom",
+                    (
+                        "GROUNDING VERIFIED · "
+                        if candidate.grounded
+                        else "WORKING VIEW · "
+                    )
                     + safe_terminal_text(candidate.verification_reason)
-                    + "\nFIT YES · "
+                    + f"\nFIT {candidate.fit.verdict} · "
                     + safe_terminal_text(candidate.fit.reason)
                     + "\n",
                 ),
@@ -154,15 +205,26 @@ def project_resolve_analysis(analysis: ResolveAnalysis) -> SemanticViewerDocumen
 
 def _candidate_detail(candidate: ResolveCandidate) -> SemanticViewerDocument:
     fragments: list[tuple[str, str]] = [
-        ("class:title", "VERIFIED RESOLVE CANDIDATE\n"),
+        ("class:title", "VERIFIED AUTOMATIC RESOLVE PLAN\n"),
         ("class:report-label", safe_terminal_text(candidate.uid) + "\n"),
         ("class:viewer-body", safe_terminal_text(candidate.summary) + "\n\n"),
+        (
+            "class:report-label",
+            "CLASSIFICATION · "
+            + safe_terminal_text(candidate.classification)
+            + "\nRESOLUTION · "
+            + candidate.resolution_level
+            + "\nRULES · "
+            + safe_terminal_text(", ".join(candidate.rule_ids))
+            + "\n\n",
+        ),
+        *_issue_fragments(candidate),
         *_effect_fragments(candidate),
         (
             "class:impact.keep",
             "GROUNDING VERIFIED · "
             + safe_terminal_text(candidate.verification_reason)
-            + "\nFIT YES · "
+            + f"\nFIT {candidate.fit.verdict} · "
             + safe_terminal_text(candidate.fit.reason)
             + "\n",
         ),
@@ -186,8 +248,8 @@ def _candidate_argv(
     if analysis.frame.request.memory_selectors:
         argv.extend(analysis.frame.actionable_uids)
     argv.extend(("--context", analysis.frame.display_name))
-    if analysis.frame.request.allow_create:
-        argv.append("--allow-create")
+    if not analysis.frame.request.allow_create:
+        argv.append("--no-create")
     if analysis.frame.request.allow_delete:
         argv.append("--allow-delete")
     if analysis.frame.request.guidance:
@@ -227,7 +289,7 @@ def resolve_candidate_exact_review(
         argv=_candidate_argv(analysis, candidate),
         effects=(
             f"Frozen Context revision · {analysis.frame.revision}.",
-            f"Verified candidate · {candidate.uid}.",
+            f"Verified automatic plan · {candidate.uid}.",
             *effect_lines,
             "The complete post-image independently Fits as YES.",
             "Apply creates one checkpoint; recovery is mem undo.",
@@ -242,12 +304,12 @@ def _spec(analysis: ResolveAnalysis) -> ResolutionWorkbenchSpec:
     return ResolutionWorkbenchSpec(
         case=resolve_case(analysis),
         title="MEM RESOLVE · RESOLUTION SESSION",
-        subtitle="SEMANTIC CANDIDATES · INDEPENDENTLY VERIFIED · EXACT APPLY",
+        subtitle="AUTOMATIC INTERPRETATION · INDEPENDENTLY VERIFIED · EXACT APPLY",
         report=project_resolve_analysis(analysis),
         items=(
             ResolutionItem(
                 uid="resolve-plan",
-                label="Choose one verified minimum-change post-image.",
+                label="Approve the automatically selected plan for exact Apply.",
                 classification="FIT REPAIR",
                 detail=SemanticViewerDocument(
                     tuple(
@@ -259,17 +321,18 @@ def _spec(analysis: ResolveAnalysis) -> ResolutionWorkbenchSpec:
                 choices=tuple(
                     ResolutionChoice(
                         candidate.uid,
-                        f"CANDIDATE {index}",
+                        "AUTOMATIC PLAN",
                         candidate.summary,
                     )
-                    for index, candidate in enumerate(analysis.candidates, 1)
+                    for candidate in analysis.candidates
                 ),
+                default_choice_uid=first.uid,
             ),
         ),
         exact_review=resolve_candidate_exact_review(analysis, first),
-        detail_title="VIEWER · VERIFIED CANDIDATE DETAILS",
-        responses_title="RESPONSES · REQUIRED · VERIFIED CANDIDATES",
-        items_title="ITEMS · REQUIRED RESOLVE PLAN",
+        detail_title="VIEWER · VERIFIED AUTOMATIC PLAN",
+        responses_title="RESPONSES · AUTOMATIC PLAN",
+        items_title="ITEMS · AUTOMATIC RESOLVE PLAN",
     )
 
 
@@ -306,11 +369,11 @@ def run_resolve_tui(
     app_output: Output | None = None,
     require_tty: bool = True,
 ) -> ResolveReceipt | None:
-    """Inspect terminal outcomes or choose and apply one verified candidate."""
+    """Inspect the automatic outcome and optionally approve exact Apply."""
 
     if not isinstance(analysis, ResolveAnalysis):
         raise TypeError("Resolve TUI requires a typed analysis.")
-    if not analysis.candidates:
+    if not analysis.candidates or analysis.status == "ASSUMED":
         run_semantic_viewer(
             project_resolve_analysis(analysis),
             title="RESOLVE · READ-ONLY OUTCOME",

@@ -210,10 +210,22 @@ def test_elaborate_endpoint_matrix_adds_atomically(
     for name, count in before.items():
         expected = count + 3 if name == expected_target else count
         assert len(store.load_direct(name).order) == expected
+    target = store.load_direct(expected_target)
+    for uid in target.ordered_uids()[before[expected_target] :]:
+        memory = target.memories[uid]
+        assert f"  [memory {uid[:8]}] {memory.content}" in result.output
     checkpoint = store.list_checkpoints(expected_target)[0]
     assert checkpoint["command"] == "elaborate"
     assert checkpoint["args"]["elaborate"]["effect"] == "ADD"
     assert len(checkpoint["args"]["elaborate"]["result_memory_uids"]) == 3
+    assert (
+        f"REVIEW · mem review elaborate --receipt {checkpoint['uid']}" in result.output
+    )
+    assert "UNDO · mem undo" in result.output
+    assert not any(
+        line.startswith(("RECEIPT ·", "CHECKPOINT ·", "RECOVERY ·"))
+        for line in result.output.splitlines()
+    )
     assert len(_ElaborateProvider.calls[0]["inputs"]) == 1
 
 
@@ -337,10 +349,20 @@ def test_distill_endpoint_matrix_adds_to_existing_target(
     for name, count in before.items():
         expected = count + 1 if name == expected_target else count
         assert len(store.load_direct(name).order) == expected
+    target = store.load_direct(expected_target)
+    added_uid = target.ordered_uids()[before[expected_target]]
+    added_memory = target.memories[added_uid]
+    assert f"  [memory {added_uid[:8]}] {added_memory.content}" in result.output
     checkpoint = store.list_checkpoints(expected_target)[0]
     assert checkpoint["command"] == "distill"
     assert checkpoint["args"]["distill"]["effect"] == "ADD"
     assert checkpoint["args"]["distill"]["target_context"] == expected_target
+    assert f"REVIEW · mem review distill --receipt {checkpoint['uid']}" in result.output
+    assert "UNDO · mem undo" in result.output
+    assert not any(
+        line.startswith(("RECEIPT ·", "CHECKPOINT ·", "RECOVERY ·"))
+        for line in result.output.splitlines()
+    )
 
 
 @pytest.mark.parametrize("operation", ("elaborate", "distill"))

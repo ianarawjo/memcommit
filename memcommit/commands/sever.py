@@ -28,7 +28,9 @@ from memcommit.commands.sever_sessions import (
 from memcommit.context_targeting.catalog import freeze_granted_context_navigation
 from memcommit.context_naming import validate_portable_context_name
 from memcommit.context_targeting.tui.picker import context_memory_rows
-from memcommit.commands.sever_setup_shell import choose_sever_setup
+from memcommit.commands.sever_setup_shell import (
+    choose_sever_setup,
+)
 from memcommit.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,
@@ -49,6 +51,7 @@ from memcommit.sever import (
     SeverSelection,
     SeverSession,
 )
+from memcommit.interactive_command_review import sever_turn_command_review
 from memcommit.sever_application import (
     SeverAnalysisProgress,
     SeverAnalysisRequest,
@@ -76,7 +79,7 @@ from memcommit.sever_runtime import (
     execute_sever_session_start,
 )
 from memcommit.sever_store import SeverSessionStore
-from memcommit.store import MemoryStore, validate_context_name
+from memcommit.store import MemoryStore
 
 
 # Compatibility name for callers that historically caught the command-local
@@ -182,15 +185,25 @@ def _start(
 
 
 def render_sever(session: SeverSession) -> str:
+    self_save = session.save_mode == "SELF_SAVE"
     lines = [
-        f"SEVER · {session.state} · SOURCE UNCHANGED",
+        f"SEVER · {session.state} · "
+        + ("SELF-SAVE" if self_save else "OTHER-SAVE"),
         f"SOURCE · {safe_terminal_text(session.source.root_name)} · "
         f"{'INCLUDE DESCENDANTS' if session.source.include_descendants else 'THIS CONTEXT ONLY'} · "
         f"{len(session.source.memories)} Memories",
         f"CRITERIA · {safe_terminal_text(session.criteria.root_name)} · "
         f"{'INCLUDE DESCENDANTS' if session.criteria.include_descendants else 'THIS CONTEXT ONLY'}",
         f"OUTPUT · {safe_terminal_text(session.output_name)} · "
-        + ("CREATED LOCALLY" if session.state == "APPLIED" else "NOT CREATED"),
+        + (
+            "SOURCE UPDATED"
+            if self_save and session.state == "APPLIED"
+            else "WILL UPDATE SOURCE"
+            if self_save
+            else "CREATED LOCALLY"
+            if session.state == "APPLIED"
+            else "NOT CREATED"
+        ),
         "",
         safe_terminal_text(session.overview),
         "",
@@ -241,7 +254,16 @@ def render_sever(session: SeverSession) -> str:
                 "These query-only Contexts do not grant readable Memory access.",
             ]
         )
-    lines.extend(["", "The Source Context is unchanged."])
+    lines.extend(
+        [
+            "",
+            (
+                "The reviewed Result replaces the Source Context on Apply."
+                if self_save
+                else "The Source Context is unchanged."
+            ),
+        ]
+    )
     if session.state == "APPLIED":
         lines.append("RECOVERY · mem undo")
     return "\n".join(lines)
@@ -260,10 +282,12 @@ def render_sever_receipt(session: SeverSession) -> str:
         )
         for candidate in session.candidates
     )
+    self_save = session.save_mode == "SELF_SAVE"
     lines = [
         f"SEVER APPLIED · {session.source.root_name} → {session.output_name}",
+        f"SAVE MODE · {'SELF-SAVE' if self_save else 'OTHER-SAVE'}",
         f"DECISIONS · KEEP {len(session.application.result_memory_uids)} · FORGET {forgotten}",
-        "SOURCE · UNCHANGED",
+        "SOURCE · UPDATED" if self_save else "SOURCE · UNCHANGED",
         f"RECEIPT · {session.uid}",
         f"CHECKPOINT · {session.application.checkpoint_uid}",
         f"REVIEW · mem review sever --session {session.uid}",
@@ -382,6 +406,16 @@ def _run_workbench(
 
         def validate_destination(name: str) -> None:
             validate_portable_context_name(name)
+            if name == session.source.root_name:
+                if (
+                    session.source.granted is not None
+                    or session.source.include_descendants
+                ):
+                    raise ValueError(
+                        "Self-save requires an ordinary local Source root with "
+                        "Source descendants excluded."
+                    )
+                return
             if name != session.output_name and store.context_exists(name):
                 raise ValueError(f"Output Context '{name}' already exists.")
 
@@ -396,10 +430,18 @@ def _run_workbench(
             operation=active_view.operation,
             artifact_uid=active_view.artifact_uid,
             revision=active_view.revision,
-            title="IMPACT · LOCAL SEVER RESULT · SOURCE UNCHANGED",
+            title=(
+                "IMPACT · SEVER SELF-SAVE · SOURCE WILL BE REPLACED"
+                if session.save_mode == "SELF_SAVE"
+                else "IMPACT · SEVER OTHER-SAVE · SOURCE UNCHANGED"
+            ),
             summary=(
-                "This is the exact local result that Apply would materialize. "
-                "The Source Context remains unchanged."
+                "This is the exact local result that Apply would save. "
+                + (
+                    "It replaces the Source Context."
+                    if session.save_mode == "SELF_SAVE"
+                    else "The Source Context remains unchanged."
+                )
             ),
             changes=sever_memory_changes(session),
         )
@@ -428,6 +470,22 @@ def _run_workbench(
                     current_context=store.current_context_name(),
                 )
                 if allow_apply
+                else None
+            ),
+            turn_command_review=lambda proposed: (
+                sever_turn_command_review(
+                    session_uid=session.uid,
+                    candidate_uid=proposed.item_uid,
+                    choice=(
+                        "custom"
+                        if proposed.comment.strip()
+                        else (proposed.option_uid or "").rpartition(":")[2]
+                    ),
+                    comment=proposed.comment.strip(),
+                    expected_session=snapshot.version_token,
+                )
+                if proposed.kind == "SUBMIT_ITEM"
+                and proposed.item_uid is not None
                 else None
             ),
         )
@@ -486,12 +544,48 @@ def run_sever_review(store: MemoryStore, session: SeverSession) -> SeverSession:
     return _run_workbench(store, session, allow_apply=False)
 
 
+def _resolve_endpoint_syntax(
+    endpoints: list[str] | None,
+    *,
+    source_name: str | None,
+    criteria_name: str | None,
+    save_as: str | None,
+) -> tuple[str | None, str | None, str | None]:
+    """Normalize positional roles and their compatibility options."""
+
+    positional = tuple(endpoints or ())
+    if len(positional) > 3:
+        raise SeverCommandError(
+            "expected at most three positional Contexts: SOURCE CRITERIA [RESULT]."
+        )
+    resolved = [source_name, criteria_name, save_as]
+    role_options = ("--source", "--criteria/--against", "--save-as")
+    role_names = ("SOURCE", "CRITERIA", "RESULT")
+    for index, value in enumerate(positional):
+        if resolved[index] is not None:
+            raise SeverCommandError(
+                f"{role_names[index]} was supplied both positionally and with "
+                f"{role_options[index]}."
+            )
+        resolved[index] = value
+    return resolved[0], resolved[1], resolved[2]
+
+
 def cmd(
+    contexts: Annotated[
+        list[str] | None,
+        typer.Argument(
+            help=(
+                "SOURCE and CRITERIA Contexts, plus an optional RESULT; "
+                "omit RESULT to self-save or name a new Context to save elsewhere"
+            ),
+        ),
+    ] = None,
     source_name: Annotated[
         Optional[str],
         typer.Option(
             "--source",
-            help="Existing ordinary Source Context; defaults to current only in explicit flag mode",
+            help="Compatibility alias for the existing Source Context",
         ),
     ] = None,
     criteria_name: Annotated[
@@ -499,14 +593,17 @@ def cmd(
         typer.Option(
             "--criteria",
             "--against",
-            help="One readable Criteria root Context; query-only views are rejected",
+            help="Compatibility alias for one readable Criteria root Context",
         ),
     ] = None,
     save_as: Annotated[
         Optional[str],
         typer.Option(
             "--save-as",
-            help="New local Result Context name; never overwrites an existing Context",
+            help=(
+                "Save to SOURCE for self-save or to a fresh Context for other-save; "
+                "omission self-saves"
+            ),
         ),
     ] = None,
     direct: Annotated[
@@ -561,11 +658,19 @@ def cmd(
             "--comment", help="Exact custom result content when --choice custom"
         ),
     ] = None,
+    expect_session: Annotated[
+        Optional[str],
+        typer.Option(
+            "--expect-session",
+            metavar="SHA256",
+            help="Require the exact saved Sever revision reviewed for this decision",
+        ),
+    ] = None,
     accept: Annotated[
         bool,
         typer.Option(
             "--accept",
-            help="Create the reviewed local result Context; Source remains unchanged",
+            help="Apply the reviewed self-save or other-save Result",
         ),
     ] = False,
     sessions_flag: Annotated[
@@ -573,6 +678,20 @@ def cmd(
         typer.Option("--sessions", help="Enter the interactive Sever session launcher"),
     ] = False,
 ) -> None:
+    try:
+        source_name, criteria_name, save_as = _resolve_endpoint_syntax(
+            contexts,
+            source_name=source_name,
+            criteria_name=criteria_name,
+            save_as=save_as,
+        )
+    except SeverCommandError as error:
+        typer.secho(
+            f"Sever error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
     scope_flags_supplied = (
         direct
         or recursive
@@ -612,6 +731,7 @@ def cmd(
                         candidate,
                         choice,
                         comment,
+                        expect_session,
                     )
                 )
                 or accept
@@ -630,6 +750,7 @@ def cmd(
             and candidate is None
             and choice is None
             and comment is None
+            and expect_session is None
             and not accept
             and not scope_flags_supplied
         )
@@ -654,8 +775,8 @@ def cmd(
                     _render_saved_session_list(session_store)
                 else:
                     typer.echo(
-                        "No Sever setup supplied. Use --source, --criteria, "
-                        "and --save-as, or run in a TTY."
+                        "No Sever setup supplied. Use SOURCE CRITERIA [RESULT], "
+                        "or run in a TTY."
                     )
                 return
             launcher_action, selected_session = _choose_saved_sever_session(
@@ -705,7 +826,7 @@ def cmd(
             ):
                 if not interactive:
                     typer.echo(
-                        "No Sever setup supplied. Use --source, --criteria, and --save-as, or run in a TTY."
+                        "No Sever setup supplied. Use SOURCE CRITERIA [RESULT], or run in a TTY."
                     )
                     return
                 setup = _interactive_setup(store)
@@ -719,16 +840,19 @@ def cmd(
                     source_descendants,
                     criteria_descendants,
                 ) = setup
-            if criteria_name is None or save_as is None:
-                raise SeverCommandError(
-                    "Starting Sever requires --criteria and --save-as."
-                )
+            if criteria_name is None:
+                raise SeverCommandError("Starting Sever requires CRITERIA.")
             source_name = context_snapshot.resolve_or_current(source_name)
             if source_name is None:
                 raise SeverCommandError(
-                    "Starting Sever requires --source or a current Context."
+                    "Starting Sever requires SOURCE or a current Context."
                 )
             criteria_name = context_snapshot.resolve(criteria_name)
+            if save_as is None:
+                # SOURCE and CRITERIA were resolved against one command-start
+                # snapshot. Reuse that frozen canonical Source name so omitted
+                # RESULT cannot change meaning with later global-current state.
+                save_as = source_name
             if source_descendants is None or criteria_descendants is None:
                 raise SeverCommandError("Sever scope resolution produced no range.")
             analysis = _start_analysis(
@@ -754,6 +878,14 @@ def cmd(
             if candidate is None or choice is None:
                 raise SeverCommandError(
                     "A scripted decision requires --candidate and --choice."
+                )
+            if (
+                expect_session is not None
+                and expect_session != snapshot.version_token
+            ):
+                raise SeverCommandError(
+                    "The saved Sever session changed after this command was reviewed. "
+                    "Reopen it and rebuild the decision command."
                 )
             matches = [
                 item for item in session.candidates if item.uid.startswith(candidate)
@@ -787,6 +919,11 @@ def cmd(
                 store=store,
             )
             session = snapshot.session
+
+        elif expect_session is not None:
+            raise SeverCommandError(
+                "--expect-session requires a scripted --candidate and --choice decision."
+            )
 
         if accept:
             applied = execute_sever_session_apply(

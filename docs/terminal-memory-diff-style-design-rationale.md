@@ -7,6 +7,10 @@ same directional Memory transition.  Defining red, green, neutral, and report
 colors independently in each screen allowed the two views to drift even though
 their `- before`, `+ after`, and unchanged-line meanings are identical.
 
+The operation tags now resolve through the broader contract in
+`terminal-semantic-color-design-rationale.md`; this note retains the narrower
+mechanical Memory-diff boundary.
+
 ## Contract
 
 Both projections use the shared `memory-diff.remove`, `memory-diff.add`, and
@@ -28,11 +32,12 @@ A one-sided ADD or REMOVE receives one empty row after its sole content side.
 This gives the entry comparable visual separation to a two-sided EDIT without
 inventing an empty before or after line or changing the underlying diff model.
 
-The compact operation marker and tag retain a mutation-specific color: EDIT is
-green for updating an existing Memory, ADD is blue for introducing a new
-Memory, and REMOVE is red. This keeps all three mutations distinct without
-using warning-like yellow. The located Context and Memory identity remain
-lavender. Focus does not recolor that identity or the complete Memory body.
+The compact operation marker and tag retain a mutation-specific color from the
+shared semantic palette: EDIT is green for updating an existing Memory, ADD is
+blue for introducing a new Memory, and REMOVE is red. This keeps all three
+mutations distinct without using warning-like yellow. The located Context and
+Memory identity remain lavender. Focus does not recolor that identity or the
+complete Memory body.
 
 ## Boundary
 

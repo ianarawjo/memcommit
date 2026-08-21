@@ -45,6 +45,11 @@ from memcommit.study_prewarm.registry import (
     load_registry,
     uses_shared_bundle,
 )
+from memcommit.study_prewarm.quality import (
+    SemanticIdentity,
+    highest_quality_candidates,
+    prewarm_quality_satisfies,
+)
 from memcommit.study_prewarm.scope_equivalence import (
     transparent_context_scope_matches,
     transparent_scope_evidence_matches,
@@ -736,8 +741,8 @@ def find_declared_equivalent_compare_analysis(
         or _task_root(comparison_input.frames[1].context_name) != task
     ):
         return None
-    provider, model, reasoning = _configured_semantic_identity()
-    candidates: list[EquivalentComparePrewarmMatch] = []
+    requested_identity = _configured_semantic_identity()
+    candidates: list[tuple[SemanticIdentity, EquivalentComparePrewarmMatch]] = []
     for entry in registry.entries:
         if (
             not entry.enabled
@@ -751,10 +756,16 @@ def find_declared_equivalent_compare_analysis(
             entry_key=entry.key,
             entry_task=entry.task,
         )
+        cached_identity = (
+            artifact.get("provider"),
+            artifact.get("model"),
+            artifact.get("reasoning"),
+        )
         if (
-            artifact.get("provider") != provider
-            or artifact.get("model") != model
-            or artifact.get("reasoning") != reasoning
+            not prewarm_quality_satisfies(
+                cached_identity,  # type: ignore[arg-type]
+                requested_identity,
+            )
             or not _declared_compare_installation_matches(
                 store,
                 entry=entry,
@@ -799,24 +810,28 @@ def find_declared_equivalent_compare_analysis(
         if rebound is None:
             continue
         candidates.append(
-            EquivalentComparePrewarmMatch(
-                entry_key=entry.key,
-                analysis=rebound,
-                prepared_context_names=(
-                    prepared.frames[0].context_name,
-                    prepared.frames[1].context_name,
-                ),
-                origin=(
-                    "EXACT_PREWARM"
-                    if exact
-                    else "EQUIVALENT_SCOPE_PREWARM"
+            (
+                cached_identity,  # type: ignore[arg-type]
+                EquivalentComparePrewarmMatch(
+                    entry_key=entry.key,
+                    analysis=rebound,
+                    prepared_context_names=(
+                        prepared.frames[0].context_name,
+                        prepared.frames[1].context_name,
+                    ),
+                    origin=(
+                        "EXACT_PREWARM"
+                        if exact
+                        else "EQUIVALENT_SCOPE_PREWARM"
+                    ),
                 ),
             )
         )
-    if len(candidates) != 1:
+    selected = highest_quality_candidates(candidates)
+    if len(selected) != 1:
         # An ambiguous semantic origin is not selected by registry order.
         return None
-    return candidates[0]
+    return selected[0]
 
 
 def find_declared_projected_compare_analysis(
@@ -830,9 +845,9 @@ def find_declared_projected_compare_analysis(
 
     This is deliberately a Study-only, ephemeral shortcut. It accepts deleted
     members and lexical descendant views, but rejects additions, edits,
-    same-parent-side comparisons, cross-task requests, configuration drift,
-    and ambiguous parent bases. The returned analysis is never installed in
-    the durable exact-pair slot.
+    same-parent-side comparisons, cross-task requests, insufficient or
+    incomparable cached quality, and ambiguous parent bases. The returned
+    analysis is never installed in the durable exact-pair slot.
     """
 
     registry = load_registry(store.store_dir)
@@ -851,9 +866,15 @@ def find_declared_projected_compare_analysis(
         or _task_root(comparison_input.frames[1].context_name) != task
     ):
         return None
-    provider, model, reasoning = _configured_semantic_identity()
+    requested_identity = _configured_semantic_identity()
     candidates: list[
-        tuple[int, str, ComparisonAnalysis, tuple[str, str]]
+        tuple[
+            int,
+            SemanticIdentity,
+            str,
+            ComparisonAnalysis,
+            tuple[str, str],
+        ]
     ] = []
     for entry in registry.entries:
         if (
@@ -868,10 +889,16 @@ def find_declared_projected_compare_analysis(
             entry_key=entry.key,
             entry_task=entry.task,
         )
+        cached_identity = (
+            artifact.get("provider"),
+            artifact.get("model"),
+            artifact.get("reasoning"),
+        )
         if (
-            artifact.get("provider") != provider
-            or artifact.get("model") != model
-            or artifact.get("reasoning") != reasoning
+            not prewarm_quality_satisfies(
+                cached_identity,  # type: ignore[arg-type]
+                requested_identity,
+            )
             or not _declared_compare_installation_matches(
                 store,
                 entry=entry,
@@ -926,6 +953,7 @@ def find_declared_projected_compare_analysis(
         candidates.append(
             (
                 parent_size,
+                cached_identity,  # type: ignore[arg-type]
                 entry.key,
                 projected,
                 (parent.frames[0].context_name, parent.frames[1].context_name),
@@ -934,13 +962,22 @@ def find_declared_projected_compare_analysis(
 
     if not candidates:
         return None
-    candidates.sort(key=lambda item: (item[0], item[1]))
-    if len(candidates) > 1 and candidates[0][0] == candidates[1][0]:
+    smallest_size = min(candidate[0] for candidate in candidates)
+    most_specific = [
+        (
+            identity,
+            (entry_key, analysis, prepared_names),
+        )
+        for parent_size, identity, entry_key, analysis, prepared_names in candidates
+        if parent_size == smallest_size
+    ]
+    selected = highest_quality_candidates(most_specific)
+    if len(selected) != 1:
         # Two equally specific semantic parents make the projection origin
         # ambiguous. Use the ordinary live path instead of selecting one by
         # registry order.
         return None
-    _, entry_key, analysis, prepared_names = candidates[0]
+    entry_key, analysis, prepared_names = selected[0]
     return EquivalentComparePrewarmMatch(
         entry_key=entry_key,
         analysis=analysis,
@@ -1210,7 +1247,7 @@ def install_declared_compare_prewarms(
         raise StudyPrewarmRegistryError(
             "Study prewarm registry belongs to a different baseline."
         )
-    provider, model, reasoning = _configured_semantic_identity()
+    requested_identity = _configured_semantic_identity()
     current_name = store.current_context_name()
     installed = 0
     declared = 0
@@ -1225,10 +1262,14 @@ def install_declared_compare_prewarms(
             entry_key=entry.key,
             entry_task=entry.task,
         )
-        if (
-            artifact.get("provider") != provider
-            or artifact.get("model") != model
-            or artifact.get("reasoning") != reasoning
+        cached_identity = (
+            artifact.get("provider"),
+            artifact.get("model"),
+            artifact.get("reasoning"),
+        )
+        if not prewarm_quality_satisfies(
+            cached_identity,  # type: ignore[arg-type]
+            requested_identity,
         ):
             skipped += 1
             continue

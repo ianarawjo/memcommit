@@ -20,6 +20,10 @@ from memcommit.context_targeting.tui.reach import (
     ContextReachViewState,
     render_context_reach,
 )
+from memcommit.context_targeting.tui.picker import (
+    ContextMemoryPreviewController,
+    memory_visibility_key_hint,
+)
 from memcommit.context_targeting.tui.selector import (
     ContextSelectorControl,
     ContextSelectorRowProjection,
@@ -85,14 +89,39 @@ def run_context_summary_workbench(
             annotations=view.annotations,
         ),
         height=min(9, max(3, len(view.names))),
-        row_projector=(
-            None
-            if view.targeting_editable
-            else lambda _row, _focused: ContextSelectorRowProjection(
-                show_context_cursor=False
-            )
-        ),
     )
+    memory_preview = (
+        None
+        if view.memory_loader is None
+        else ContextMemoryPreviewController(selector.tree, view.memory_loader)
+    )
+
+    def project_context_row(row, focused) -> ContextSelectorRowProjection:
+        memory_focused = (
+            memory_preview is not None
+            and memory_preview.memory_anchor is not None
+            and memory_preview.memory_anchor[0] == row.name
+        )
+        return ContextSelectorRowProjection(
+            branch=(None if memory_preview is None else memory_preview.branch_for(row)),
+            nested_fragments=(
+                ()
+                if memory_preview is None
+                else memory_preview.render_nested(
+                    row,
+                    wrap_width=max(1, get_app().output.get_size().columns - 8),
+                )
+            ),
+            # A frozen Source may still receive read-only focus so its exact
+            # item preview remains inspectable without becoming retargetable.
+            show_context_cursor=(
+                (view.targeting_editable or focused)
+                and not (focused and memory_focused)
+            ),
+        )
+
+    if memory_preview is not None or not view.targeting_editable:
+        selector.row_projector = project_context_row
     reach = (
         ContextReachViewState.create(mode=view.range_mode)
         if view.allow_both
@@ -181,9 +210,16 @@ def run_context_summary_workbench(
         if app.layout.has_focus(selector.control):
             expansion = "A restore tree" if selector.tree.all_expanded else "A expand all"
             action = safe_terminal_text(view.operation_label.lower())
+            memory_hint = (
+                ""
+                if memory_preview is None
+                else memory_visibility_key_hint(selector.tree) + " · "
+            )
+            selection_hint = "Enter/Space select · " if view.targeting_editable else ""
             return (
-                " ↑/↓ move/cross · ←/→ collapse/expand · Enter/Space select · "
-                f"{expansion} · Tab Summary · S {action} · Esc/Backspace/Q close"
+                f" {memory_hint}↑/↓ move/cross · ←/→ collapse/expand · "
+                f"{selection_hint}{expansion} · "
+                f"Tab Summary · S {action} · Esc/Backspace/Q close"
             )
         if app.layout.has_focus(range_control):
             action = safe_terminal_text(view.operation_label.lower())
@@ -258,17 +294,25 @@ def run_context_summary_workbench(
         return "HANDLED"
 
     def move_context(_event, delta: int) -> SurfaceMoveResult:
+        if memory_preview is not None:
+            return "MOVED" if memory_preview.move(delta) else "BOUNDARY"
         before = selector.tree.selected_name
         selector.move(delta)
         return "MOVED" if selector.tree.selected_name != before else "BOUNDARY"
 
     def choose_context(_event) -> SurfaceActionResult:
+        if not view.targeting_editable or (
+            memory_preview is not None and memory_preview.memory_focused
+        ):
+            return "HANDLED"
         selector.choose_cursor()
         return "HANDLED"
 
     def enter_context(delta: int) -> None:
         rows = selector.tree.visible_rows()
         selector.tree.selected_name = rows[0 if delta > 0 else -1].name
+        if memory_preview is not None:
+            memory_preview.memory_anchor = None
 
     surfaces: SurfaceFocusController
 
@@ -302,22 +346,23 @@ def run_context_summary_workbench(
 
     surface_values = []
     if view.targeting_editable:
-        surface_values.extend(
-            [
-                FocusSurface(
-                    "DESCENDANTS",
-                    range_control,
-                    move_vertical=move_range,
-                    activate=advance_range,
-                ),
-                FocusSurface(
-                    "CONTEXT",
-                    selector.control,
-                    move_vertical=move_context,
-                    activate=choose_context,
-                    on_vertical_enter=enter_context,
-                ),
-            ]
+        surface_values.append(
+            FocusSurface(
+                "DESCENDANTS",
+                range_control,
+                move_vertical=move_range,
+                activate=advance_range,
+            )
+        )
+    if view.targeting_editable or memory_preview is not None:
+        surface_values.append(
+            FocusSurface(
+                "CONTEXT",
+                selector.control,
+                move_vertical=move_context,
+                activate=choose_context,
+                on_vertical_enter=enter_context,
+            )
         )
     surface_values.append(
         FocusSurface(
@@ -333,12 +378,18 @@ def run_context_summary_workbench(
 
     @bindings.add("left", filter=has_focus(selector.control), eager=True)
     def _collapse(event) -> None:
-        selector.collapse()
+        if memory_preview is None:
+            selector.collapse()
+        else:
+            memory_preview.collapse_selected()
         event.app.invalidate()
 
     @bindings.add("right", filter=has_focus(selector.control), eager=True)
     def _expand(event) -> None:
-        selector.expand()
+        if memory_preview is None:
+            selector.expand()
+        else:
+            memory_preview.expand_selected()
         event.app.invalidate()
 
     @bindings.add(" ", filter=has_focus(selector.control), eager=True)
@@ -348,7 +399,22 @@ def run_context_summary_workbench(
 
     @bind_case_insensitive_key(bindings, "a", filter=has_focus(selector.control))
     def _toggle_expand_all(event) -> None:
-        selector.toggle_expand_all()
+        if memory_preview is None:
+            selector.toggle_expand_all()
+        else:
+            memory_preview.toggle_expand_all()
+        event.app.invalidate()
+
+    @bindings.add("m", filter=has_focus(selector.control), eager=True)
+    def _toggle_selected_memories(event) -> None:
+        if memory_preview is not None:
+            memory_preview.toggle_selected_memories()
+        event.app.invalidate()
+
+    @bindings.add("M", filter=has_focus(selector.control), eager=True)
+    def _toggle_all_memories(event) -> None:
+        if memory_preview is not None:
+            memory_preview.toggle_all_memories()
         event.app.invalidate()
 
     @bindings.add("left", filter=has_focus(range_control), eager=True)

@@ -436,7 +436,7 @@ def test_exact_compare_public_api_materializes_hidden_receipt_without_provider(
     assert saved.to_dict() == prepared.to_dict()
 
 
-def test_configuration_mismatch_skips_seed_without_publishing(
+def test_higher_quality_cache_installs_without_publishing_ordinary_analysis(
     tmp_path,
     monkeypatch,
 ):
@@ -453,8 +453,8 @@ def test_configuration_mismatch_skips_seed_without_publishing(
     )
 
     assert result.declared == 1
-    assert result.installed == 0
-    assert result.skipped_configuration == 1
+    assert result.installed == 1
+    assert result.skipped_configuration == 0
     assert load_comparison_analysis(reference.uid, compared.uid) is None
 
 

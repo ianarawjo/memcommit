@@ -1,30 +1,46 @@
 LIVE PTY · 52 180
 PRE-BROWSE PROFILE/CURRENT
-Profile: study-20260813T202911Z-f393de78
-Store: /Users/KimMunyeong/.mem-profiles/stores/e98ae7b6-7a0b-4c07-952d-5597efcf0c06
-Contexts 66 owned + 43 granted · Memories 459 owned + 626 granted
-Current Context: task-2/participant/proposal-workspace
+Profile: study-20260817T034334Z-0bd9d45b
+Store: /Users/KimMunyeong/.mem-profiles/stores/0435d7b1-b69c-4f48-81af-4c4cd83256df
+Contexts 65 owned + 43 granted · Memories 467 owned + 625 granted
+Current Context: practice
 [?12l[?25h[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m List · task-2/advisor1[0m
-[0m Roots · practice · practice-atomize · task-1 · task-2 · task-3[0m
+[0m Roots · practice · task-1 · task-2 · task-3[0m
 [0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
 [0m    ▸ practice[165C[0;1m^[0m
-[0m    ▸ practice-atomize[157C[0;48;5;238m [0m
 [0m    ▸ task-1[167C[0;48;5;238m [0m
 [0m    ▾ task-2[167C[0;48;5;238m [0m
 [0m      ▸ task-2/description[153C[0;48;5;238m [0m
 [0m      ▸ task-2/participant[153C[0;48;5;238m [0m
-[0;1;7m› *   ▾ task-2/advisor1  READ GRANT · PERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED[14C[0;48;5;238m [0m
-[0m        ▾ task-2/advisor1/budget  [0;38;5;255;1mREAD GRANT[0m · [0;38;5;255;1mPERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS[0m · [0;38;5;255mANALYSIS RATIONALE SUBTREE + TRACE BLOCKED[5C[0;48;5;238m [0m
-[0;38;5;189m      · [memory 05e0261e] Keep the total, major cost categories, and one-line estimate basis in the main text so the resource argument can be understood without leaving the[7C[0;48;5;238m [0m
-[0;38;5;189m                          proposal.[144C[0;48;5;238m [0m
-[0;38;5;189m      · [memory 1083e9b3] Place each major cost beside the activity or deliverable it enables in the main text.[68C[0;48;5;238m [0m
-[0;38;5;189m      · [memory 3652f268] State the quantity and unit-rate basis for each major cost in the same paragraph that requests it.[55C[0;48;5;238m [0m
+[0;1;7m› *   ▾ task-2/advisor1  READ GRANT · PERMISSIONS READ + EMBED + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS · ANALYSIS RATIONALE SUBTREE + TRACE BLOCKED[6C[0;48;5;238m [0m
+[0;38;5;255m    · [context 0ff7abfd] VIA EMBED · task-2/advisor1/structure[117C[0;48;5;238m [0m
+[0;38;5;255m    · [context 6f253a9e] VIA EMBED · task-2/advisor1/emphasis[118C[0;48;5;238m [0m
+[0;38;5;255m    · [context a759f597] VIA EMBED · task-2/advisor1/style[121C[0;48;5;238m [0m
+[0;38;5;255m    · [context b0c4b50c] VIA EMBED · task-2/advisor1/claim-evidence[112C[0;48;5;238m [0m
+[0;38;5;255m    · [context 39a6f298] VIA EMBED · task-2/advisor1/expression[116C[0;48;5;248m [0m
+[0;38;5;255m    · [context 7699c7c5] VIA EMBED · task-2/advisor1/terminology[115C[0;48;5;248m [0m
+[0;38;5;255m    · [context d2f78b99] VIA EMBED · task-2/advisor1/methods[119C[0;48;5;248m [0m
+[0;38;5;255m    · [context 30568e2f] VIA EMBED · task-2/advisor1/evaluation[116C[0;48;5;248m [0m
+[0;38;5;255m    · [context 5cdea05f] VIA EMBED · task-2/advisor1/ethics[120C[0;48;5;248m [0m
+[0;38;5;255m    · [context 6db29abe] VIA EMBED · task-2/advisor1/scope[121C[0;48;5;248m [0m
+[0;38;5;255m    · [context cd6c1fab] VIA EMBED · task-2/advisor1/safety[120C[0;48;5;248m [0m
+[0;38;5;255m    · [context 52db6b06] VIA EMBED · task-2/advisor1/feasibility[115C[0;48;5;248m [0m
+[0;38;5;255m    · [context 7d293f75] VIA EMBED · task-2/advisor1/reproducibility[111C[0;48;5;248m [0m
+[0;38;5;255m    · [context d6d3ee9e] VIA EMBED · task-2/advisor1/budget[120C[0;48;5;248m [0m
+[0;38;5;255m    · [context 7ba75d6b] VIA EMBED · task-2/advisor1/compensation[114C[0;48;5;248m [0m
+[0;38;5;255m    · [context 57ec8c37] VIA EMBED · task-2/advisor1/review[120C[0;48;5;248m [0m
+[0m        ▾ task-2/advisor1/budget  [0;38;5;255;1mREAD GRANT[0m · [0;38;5;255;1mPERMISSIONS READ + EMBED + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS[0m · [0;38;5;255mANALYSIS RATIONALE SUBTREE + TRACE BLOC[179C[0;48;5;248m [0m
+[0m          [0;38;5;255mKED[166C[0;48;5;248m [0m
+[0;38;5;189m      · [memory 05e0261e] Keep the total, major cost categories, and one-line estimate basis in the main text so the resource argument can be understood without leaving the[7C[0;48;5;248m [0m
+[0;38;5;189m                          proposal.[144C[0;48;5;248m [0m
+[0;38;5;189m      · [memory 1083e9b3] Place each major cost beside the activity or deliverable it enables in the main text.[68C[0;48;5;248m [0m
+[0;38;5;189m      · [memory 3652f268] State the quantity and unit-rate basis for each major cost in the same paragraph that requests it.[55C[0;48;5;248m [0m
 [0;38;5;189m      · [memory 4e1e1201] Readers may question a proposed priority when its cost cannot be checked on the same page as the claimed benefit.[40C[0;48;5;248m [0m
 [0;38;5;189m      · [memory 2f5f9039] Update the cost sentence whenever the related activity changes so the narrative and requested amount cannot drift apart.[33C[0;48;5;248m [0m
 [0;38;5;189m      · [memory f7a16d08] Accept a denser main-text paragraph when the estimate basis is essential to deciding whether the request is proportionate.[31C[0;48;5;248m [0m
 [0;38;5;189m      · [memory 2ca1d5a1] The user tends to revise the work plan but forget a detached budget table unless the key amount is repeated beside the activity.[25C[0;48;5;248m [0m
-[0m        ▾ task-2/advisor1/claim-evidence  [0;38;5;255;1mREAD GRANT[0m · [0;38;5;255;1mPERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS[0m · [0;38;5;255mANALYSIS RATIONALE SUBTREE + TRACE BLOC[179C[0;48;5;248m [0m
-[0m                   [0;38;5;255mKED[157C[0;48;5;248m [0m
+[0m        ▾ task-2/advisor1/claim-evidence  [0;38;5;255;1mREAD GRANT[0m · [0;38;5;255;1mPERMISSIONS READ + EMBED + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS[0m · [0;38;5;255mANALYSIS RATIONALE SUBTREE + TR[179C[0;48;5;248m [0m
+[0m                   [0;38;5;255mACE BLOCKED[149C[0;48;5;248m [0m
 [0;38;5;189m      · [memory 06f6c673] Attach adjacent evidence or citations to verifiable claims about user behavior or technology effects.[52C[0;48;5;248m [0m
 [0;38;5;189m      · [memory 58991ce7] Distinguish between results observed in the pilot and expectations to be confirmed in the main user study using different expressions.[19C[0;48;5;248m [0m
 [0;38;5;189m      · [memory f5adf029] Do not use verbs that imply proving causation if the design does not support causal inference.[59C[0;48;5;248m [0m
@@ -36,28 +52,12 @@ Current Context: task-2/participant/proposal-workspace
 [0;38;5;189m      · [memory 9939e9e8] Identify which design judgment—retain, modify, or discard—each piece of evidence from formative evaluation supports.[37C[0;48;5;248m [0m
 [0;38;5;189m      · [memory 41060e8e] Results from controlled formative studies do not directly prove effects in actual long-term use.[57C[0;48;5;248m [0m
 [0;38;5;189m      · [memory ec54ce10] The user can have an explanation approved as a conceptual contribution only if it is falsifiable with observable data.[35C[0;48;5;248m [0m
-[0m        ▾ task-2/advisor1/compensation  [0;38;5;255;1mREAD GRANT[0m · [0;38;5;255;1mPERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS[0m · [0;38;5;255mANALYSIS RATIONALE SUBTREE + TRACE BLOCKE[179C[0;48;5;248m [0m
-[0m                   [0;38;5;255mD[159C[0;48;5;248m [0m
-[0;38;5;189m      · [memory 0ae46268] Calculate user study compensation budgets based on estimated participation burden, combining session time and preparation effort.[24C[0;48;5;248m [0m
-[0;38;5;189m      · [memory bdda6e22] Compensate for required travel time in face-to-face user studies as well.[80C[0;48;5;248m [0m
-[0;38;5;189m      · [memory f49b1d0a] Compensate for the actual time participants spent in sessions, regardless of research modality.[58C[0;48;5;248m [0m
-[0;38;5;189m      · [memory 1f4d05e4] Leave cash payment as an available compensation method for face-to-face studies.[73C[0;48;5;248m [0m
-[0;38;5;189m      · [memory abcba764] If compensation equity is explained, do not require finalizing the payment method at the proposal stage.[49C[0;48;5;248m [0m
-[0;38;5;189m      · [memory c6a28f37] Apply the same base hourly rate to face-to-face and remote studies if task burden is equal.[62C[0;48;5;248m [0m
-[0;38;5;189m      · [memory 874de649] Participants judge compensation fairness based on the total burden, combining session time with required travel and preparation time.[20C[0;48;5;248m [0m
-[0;38;5;189m      · [memory 529559f5] Account in compensation for the burden of rescheduling iterations and returning for multiple formative evaluation sessions.[30C[0;48;5;248m [0m
-[0;38;5;189m      · [memory c8be56ee] Compensate participants for time already invested even if a session is terminated early due to prototype errors.[41C[0;48;5;248m [0m
-[0;38;5;189m      · [memory bdac8cf8] The author of this proposal tends to exclude preparation burden between sessions when calculating compensation for iterative studies.[20C[0;48;5;248m [0m
-[0m        ▾ task-2/advisor1/emphasis  [0;38;5;255;1mREAD GRANT[0m · [0;38;5;255;1mPERMISSIONS READ + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS[0m · [0;38;5;255mANALYSIS RATIONALE SUBTREE + TRACE BLOCKED[3C[0;48;5;248m [0m
-[0;38;5;189m      · [memory 4a1de8df] Do not exceed two primary HCI contributions.[109C[0;48;5;248m [0m
-[0;38;5;189m      · [memory b5b6a901] Name each design or empirical contribution and present it in a single sentence.[74C[0;48;5;248m [0m
-[0;38;5;189m      · [memory e89de514] In studies recruiting community participants, emphasize the time burden associated with participation.[51C[0;48;5;248m [0m
-[0;38;5;189m      · [memory f7025cbb] In studies recruiting community participants, emphasize the travel burden associated with participation.[49C[0;48;5;248m [0m
-[0;38;5;189m      · [memory a42891a1] HCI reviewers find it difficult to identify primary contributions when named design or empirical contributions exceed two.[0m                               [179C[0;1mv[0m
+[0m        ▾ task-2/advisor1/compensation  [0;38;5;255;1mREAD GRANT[0m · [0;38;5;255;1mPERMISSIONS READ + EMBED + DERIVE + COMBINE + EXPORT + SAVE_BOUND_ANALYSIS + SAVE_ANALYSIS[0m · [0;38;5;255mANALYSIS RATIONALE SUBTREE + TRAC[179C[0;48;5;248m [0m
+[0m                   [0;38;5;255mE BLOCKED[0m                                                                                                                                                       [179C[0;1mv[0m
 [0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
-[0m ↑↓ move  ←→ expand  A expand all  m hide Memories here  M show all Memories  Enter open/collapse  q close · 7/176 · 109 selectable[131D[42A[0m[9A[J[0m[?7h[?1049l[?2004l[?12l[?25hPOST-BROWSE PROFILE/CURRENT
-Profile: study-20260813T202911Z-f393de78
-Store: /Users/KimMunyeong/.mem-profiles/stores/e98ae7b6-7a0b-4c07-952d-5597efcf0c06
-Contexts 66 owned + 43 granted · Memories 459 owned + 626 granted
-Current Context: task-2/participant/proposal-workspace
+[0m ↑↓ move  ←→ expand  A expand all  m THIS Context: hide items · M EVERY Context: show items  y copy Context  Y copy visible branch  Enter open/collapse  q close · 6/191 · 108 sele[179Cc[43A[0m[8A[J[0m[?7h[?1049l[?2004l[?12l[?25hPOST-BROWSE PROFILE/CURRENT
+Profile: study-20260817T034334Z-0bd9d45b
+Store: /Users/KimMunyeong/.mem-profiles/stores/0435d7b1-b69c-4f48-81af-4c4cd83256df
+Contexts 65 owned + 43 granted · Memories 467 owned + 625 granted
+Current Context: practice
 RECURSIVE LIST READ-ONLY VERIFIED · CURRENT CONTEXT UNCHANGED

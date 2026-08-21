@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 
+import click
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
@@ -14,6 +15,8 @@ from memcommit.commands.resolution_workbench_shell import (
 from memcommit.interfaces.console.text import (
     safe_terminal_text,
 )
+from memcommit.interfaces.console.theme import SemanticColorRole, semantic_color_rgb
+from memcommit.interfaces.tui.core.theme import semantic_role_style
 from memcommit.resolution_workbench import (
     ResolutionNavigation,
     ResolutionOverviewSection,
@@ -25,7 +28,11 @@ from memcommit.responses.resolution import (
     response_target_from_item,
 )
 from memcommit.responses.tui import response_snapshot_lines
-from memcommit.review_report import ReviewReport, ReviewReportController
+from memcommit.review_report import (
+    ReviewReport,
+    ReviewReportController,
+    ReviewTextFragment,
+)
 
 
 def render_review_report_snapshot(report: ReviewReport) -> str:
@@ -109,6 +116,51 @@ def render_review_report_snapshot(report: ReviewReport) -> str:
     return "\n\n".join(parts).rstrip()
 
 
+def echo_review_report_snapshot(report: ReviewReport) -> None:
+    """Emit a snapshot while retaining typed semantic tokens when available."""
+
+    if not report.report_fragments:
+        click.echo(render_review_report_snapshot(report))
+        return
+    fragments = (
+        ReviewTextFragment(f"{report.title}\n{report.summary}\n\n"),
+        *report.report_fragments,
+    )
+    for fragment in fragments:
+        if fragment.role is None:
+            click.echo(fragment.text, nl=False)
+        else:
+            click.secho(
+                fragment.text,
+                fg=semantic_color_rgb(fragment.role),
+                bold=fragment.bold,
+                nl=False,
+            )
+    click.echo()
+
+
+def _review_report_tui_fragments(
+    report: ReviewReport,
+) -> tuple[tuple[str, str], ...] | None:
+    if not report.report_fragments:
+        return None
+    return tuple(
+        (
+            (
+                "class:impact.add"
+                if fragment.role is SemanticColorRole.ADD
+                else "class:impact.remove"
+                if fragment.role is SemanticColorRole.REMOVE
+                else semantic_role_style(fragment.role)
+                if fragment.role is not None
+                else ""
+            ),
+            fragment.text,
+        )
+        for fragment in report.report_fragments
+    )
+
+
 def _text_only_view(report: ReviewReport) -> ResolutionWorkbenchView:
     overview_sections = (
         ResolutionOverviewSection("summary", "SUMMARY", report.summary),
@@ -160,6 +212,7 @@ def run_review_report_shell(
         snapshot_hint="Run the same 'mem review' command outside a TTY for a snapshot.",
         split_viewer_items=True,
         split_report_text=report.report_text or None,
+        split_report_fragments=_review_report_tui_fragments(report),
         read_only=not interactive_actions,
         draft_loader=draft_loader,
         draft_saver=draft_saver,

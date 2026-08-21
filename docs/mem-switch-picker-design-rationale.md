@@ -1,6 +1,6 @@
-# Interactive Context picker and read-only browser
+# Interactive Context picker
 
-Last reviewed: 2026-08-16.
+Last reviewed: 2026-08-20.
 
 ## Motivation
 
@@ -29,14 +29,11 @@ mem switch ./child       # switch to a child of the current Context
 mem switch ../sibling    # switch to a sibling of the current Context
 ```
 
-In a terminal, `mem contexts` and interactive `mem list` / `mem ls` open the
-same complete Profile namespace tree as bare `mem switch`, but in read-only
-browse mode. The current or explicitly resolved Context is only the initial
-row; it never crops ancestors, siblings, or other Profile roots. Enter opens or
-collapses a branch or direct-item preview; it never returns an executable target
-and never updates the current Context. Outside a terminal, `mem contexts` and
-List retain their line-oriented exact output contracts so pipes, agents, and
-existing output assertions do not need to drive a full-screen application.
+`mem contexts` and `mem list` / `mem ls` deliberately do not open this picker.
+They render their stable catalog or target-rooted result in terminals and pipes
+alike. That keeps interactive Profile navigation distinct from orientation and
+listing; the cross-command decision is recorded in
+[`context-listing-design-rationale.md`](context-listing-design-rationale.md).
 
 Bare `NAME` deliberately remains global. For example, from
 `organization/wiki`, `mem switch facilities` selects the canonical Context
@@ -60,6 +57,13 @@ uses the active Participant Profile to contrast six real `VIA EMBED` direct
 occurrences with their ordinary lexical child rows and a separate `READ GRANT`
 public tree.
 
+The focused disposable-Profile record under
+[`screenshots/mem-switch-context-colors-20260820/`](screenshots/mem-switch-context-colors-20260820/README.md)
+places a granted public Context, an embedded Context occurrence, and an opaque
+reference Context on the same screen and verifies their exact emitted
+`xterm-256color` ANSI foregrounds plus cancellation with no durable Profile
+change.
+
 - Up and Down move among currently visible rows and stop at the first or last
   row.
 - Right expands one complete descendant depth below the selected anchor. The
@@ -79,19 +83,23 @@ public tree.
   Context. Uppercase `M` shows or hides them for all Contexts and clears prior
   per-Context exceptions, providing a predictable fresh global state. The
   projection preserves persisted order and includes every durable form:
-  `memory`, `memory ref`, `query view`, and `context`. An embedded Context
-  occurrence carries `VIA EMBED`; its separate lexical namespace row does not,
-  because name ancestry is not evidence of an Embed edge. Query views expose
-  only their opaque name, never hidden content. Direct-item rows show their
-  short selector and escaped visible content, but never become semantic
-  selections or accepted values and never change which Context owns the
-  selection. While direct-item rows are visible, Up and Down interleave them as
+  `memory`, `memory ref`, and `context`. Both embedded Contexts and opaque
+  query-only references use the `context` object label; `VIA EMBED` and
+  `QUERY ONLY` state how each non-ordinary occurrence can be reached. An
+  embedded Context occurrence carries `VIA EMBED`; its separate lexical
+  namespace row does not, because name ancestry is not evidence of an Embed
+  edge. Query-only references expose only their opaque name, never hidden
+  content. Direct-item rows show their short selector and escaped visible
+  content, but never become semantic selections or accepted values and never
+  change which Context owns the selection. While direct-item rows are visible,
+  Up and Down interleave them as
   read-only viewport focus stops between their owning Context and the next
   Context. The same reverse-video focus bar moves from the owning Context onto
   all wrapped lines of the focused item; ordinary Memory rows remain lavender,
-  while pointer and Context rows stay neutral. This is presentation focus
-  only—the owning Context remains the semantic selection even though its focus
-  bar has moved. Enter on a direct-item
+  while navigation pointers and ordinary Context rows stay neutral; the three
+  special Context categories use the palette below. This is presentation
+  focus only—the owning Context remains the semantic selection even though its
+  focus bar has moved. Enter on a direct-item
   stop is inert, and Left returns the focus bar to that Context. This
   prevents a long expanded direct-item run from being skipped merely because only
   Contexts are selectable. Content wraps at the
@@ -104,6 +112,14 @@ public tree.
   Contexts are loaded into a process-local cache only when their effective
   visibility is on. Query-only and otherwise unavailable virtual rows remain
   opaque; their source content is never opened for the preview.
+- Outside the moving focus bar, color is limited to three typed words: `GRANT`
+  is green, `VIA EMBED` is yellow, and `QUERY ONLY` is purple. The public or
+  embedded Context name, selector UID, path, capability summary, punctuation,
+  and surrounding tree chrome remain white. Coloring only the semantic token
+  avoids turning a whole row into a category banner. Color is never parsed
+  back into identity, authority, or selection. When one of these rows receives
+  focus, the shared reverse focus treatment temporarily replaces its token
+  color so there is only one keyboard target.
 - A materialized Context leaf uses `▸`/`▾` for its direct-item presentation
   layer instead of remaining a `·`. Right opens that layer, Left closes it
   before moving to the parent, and read-only browse mode also toggles it with
@@ -133,9 +149,10 @@ public tree.
   Ordinary terminals reserve Command-C for terminal-owned selection copying
   and do not portably transmit the Command modifier to prompt-toolkit, so the
   semantic copy keys are `y` and `Y`; Ctrl-C retains its existing cancel role.
-- In `mem switch`, Enter accepts the selected Context. In `mem contexts`,
-  Enter only opens or collapses the focused branch or direct-item layer.
-  Every displayed row comes from the frozen real or granted Context catalog.
+- In `mem switch`, Enter accepts the selected Context. Read-only consumers of
+  the component may instead use Enter only to open or collapse the focused
+  branch or direct-item layer. Every displayed row comes from the frozen real
+  or granted Context catalog.
 - Escape, `q`, or Ctrl-C cancel without changing current state.
 - The list body expands to the terminal's available height. When visible rows
   exceed it, prompt-toolkit scrolls around the selected row and displays a
@@ -208,21 +225,18 @@ receipt.
 
 ## Dependency map and ownership
 
-`mem contexts`, interactive List, and the interactive form of `mem switch` are
-operational adapters over the same Context picker and ordinary/granted Profile
-catalog. They do not call each other's CLI command or parse each other's output.
-Instead, each depends directly on the catalog and picker components:
+Interactive `mem switch` and operation-owned selectors depend directly on the
+ordinary/granted Profile catalog and neutral picker. Static orientation and
+listing commands depend on their own renderers:
 
 ```text
 memcommit.cli
 ├── mem contexts -> commands.contexts.cmd
 │   ├── MemoryStore.list_context_names()
 │   ├── MemoryStore.current_context_name()
-│   ├── in a TTY
-│   │   └── context_targeting.tui.picker.choose_context(
-│   │           browse_only=True)                    # no target receipt
-│   └── outside a TTY
-│       └── render the read-only list and current `*` marker
+│   └── render the read-only list and current `*` marker
+├── mem list -> commands.list_memories.cmd
+│   └── render the resolved direct/recursive snapshot
 └── mem switch -> commands.switch.cmd
     ├── MemoryStore.current_context_name()       # one command-start snapshot
     ├── when NAME is omitted
@@ -238,13 +252,11 @@ memcommit.cli
         └── MemoryStore.set_current_*_if()       # the only switch-state write
 ```
 
-This shared lower-level dependency is intentional. The neutral Context picker owns tree
-navigation and exposes separate accepting and browse-only behavior;
-`commands.contexts` owns the guarantee that no target receipt has a
-state-writing continuation; and the Switch application/runtime owns relative
-resolution, target validation, and mutation. Keeping the commands from invoking one
-another avoids making human-oriented output into an internal data contract
-while still giving both surfaces the same sorted names and tree mechanics.
+The neutral Context picker owns tree navigation and exposes separate accepting
+and browse-only behavior for consumers that need them. The Switch
+application/runtime owns relative resolution, target validation, and mutation.
+Static commands neither import the picker nor invoke Switch, avoiding both a
+hidden input wait and a human-output dependency.
 
 `choose_context()` accepts caller-owned title and acceptance labels so a
 Compare, Update, Ground, or Switch flow does not mislabel selection as another
@@ -267,13 +279,12 @@ current pointer changes. The picker catalog can therefore be read cheaply, but
 a record with a valid header and malformed internal items may still appear in
 the list and then fail closed when selected.
 
-The two catalog reads are also not one atomic snapshot today. `mem contexts`
-reads the names and current pointer separately, and `mem switch` captures the
-current pointer before opening its independently read name list. This can make
-the displayed view temporarily stale during a concurrent create, delete, or
-switch, but it cannot authorize a stale switch: after selection, Switch
-reloads the target and the final compare-and-set rejects both a changed target
-record and a changed current pointer.
+The catalog and current pointer reads are not one atomic snapshot today.
+`mem contexts` may show a temporarily stale marker, while `mem switch` captures
+the current pointer before opening its independently read name list. A stale
+display cannot authorize a stale switch: after selection, Switch reloads the
+target and the final compare-and-set rejects both a changed target record and
+a changed current pointer.
 
 The lexical resolver itself is operation-neutral and lives in
 `memcommit.context_locator`; Switch owns existence and load validation plus
@@ -289,9 +300,8 @@ A bare `mem switch` requires an interactive stdin and stdout. In a pipe, test
 runner, or other non-TTY environment it fails with an instruction to pass the
 Context name explicitly. It must not wait indefinitely for terminal input.
 `mem switch NAME` remains noninteractive and unchanged for scripts and agents.
-`mem contexts` takes the complementary boundary: it opens the browse-only tree
-only when both stdin and stdout are terminals, and otherwise prints its stable
-catalog without waiting for input.
+`mem contexts` and List never inspect terminal interactivity and always print
+their stable results without waiting for input.
 
 The implementation uses a small prompt-toolkit component rather than the
 ambiguity `ReviewSession` shell. The two interfaces share key-handling

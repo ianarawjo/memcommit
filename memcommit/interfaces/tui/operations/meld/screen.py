@@ -38,7 +38,8 @@ from memcommit.interfaces.tui.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
 )
-from memcommit.meld import MeldSession
+from memcommit.meld import MeldSession, meld_canonical_digest
+from memcommit.interactive_command_review import meld_turn_command_review
 from memcommit.resolution_workbench import ResolutionNavigation
 from memcommit.selection.tui import choice_marker
 
@@ -742,6 +743,51 @@ def run_meld_shell(
             ),
         )
     )
+
+    def turn_review(action):
+        if action.kind == "ACCEPT" or action.kind == "CHANGE_DESTINATION":
+            return None
+        frame_by_role = {frame.role: frame for frame in session.frames}
+        left_frame = (
+            frame_by_role["INCOMING"]
+            if session.mode == "DIRECTIONAL"
+            else session.frames[0]
+        )
+        right_frame = (
+            frame_by_role["BASELINE"]
+            if session.mode == "DIRECTIONAL"
+            else session.frames[1]
+        )
+        option_number = None
+        if action.item_uid is not None and action.option_uid is not None:
+            issue = next(
+                issue
+                for issue in session.current_assessment.issues
+                if issue.uid == action.item_uid
+            )
+            option_number = next(
+                index
+                for index, option in enumerate(issue.options, start=1)
+                if option.uid == action.option_uid
+            )
+        return meld_turn_command_review(
+            left_name=left_frame.context_name,
+            right_name=right_frame.context_name,
+            target_name=(
+                session.target.context_name if session.mode == "SYMMETRIC" else None
+            ),
+            left_descendants=left_frame.include_descendants,
+            right_descendants=right_frame.include_descendants,
+            left_memory_uid=left_frame.selected_memory_uid,
+            right_memory_uid=right_frame.selected_memory_uid,
+            expected_session=meld_canonical_digest(session.to_dict()),
+            issue_uid=action.item_uid,
+            option_number=option_number,
+            comment=action.comment,
+            preserve_all=action.kind == "PRESERVE_ALL",
+            defer_all=action.kind == "DEFER",
+        )
+
     action = run_resolution_workbench_shell(
         review_view if review_view is not None else current_view,
         navigation=navigation,
@@ -770,6 +816,7 @@ def run_meld_shell(
         draft_loader=draft_loader,
         draft_saver=draft_saver,
         save_draft_on_close=draft_saver is not None,
+        turn_command_review=turn_review,
     )
     if action.kind == "CLOSE":
         return None

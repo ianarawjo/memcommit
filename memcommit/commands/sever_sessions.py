@@ -67,7 +67,14 @@ def list_sever_session_catalog(
                 f"{session.source.root_name} × {session.criteria.root_name} "
                 f"→ {session.output_name}"
             ),
-            status=f"{session.state} · SOURCE UNCHANGED",
+            status=(
+                f"{session.state} · "
+                + (
+                    "SELF-SAVE"
+                    if session.save_mode == "SELF_SAVE"
+                    else "OTHER-SAVE"
+                )
+            ),
             subtitle=(
                 f"{len(session.candidates)} result "
                 f"{'decision' if len(session.candidates) == 1 else 'decisions'}"
@@ -83,11 +90,20 @@ def list_sever_session_catalog(
                     f"({_scope_label(session, source=False)})",
                     f"Output: {session.output_name} · "
                     + (
-                        "CREATED LOCALLY"
+                        "SOURCE UPDATED"
+                        if session.save_mode == "SELF_SAVE"
+                        and session.state == "APPLIED"
+                        else "WILL UPDATE SOURCE"
+                        if session.save_mode == "SELF_SAVE"
+                        else "CREATED LOCALLY"
                         if session.state == "APPLIED"
                         else "NOT CREATED"
                     ),
-                    "Source: UNCHANGED",
+                    (
+                        "Source: SELF-SAVE TARGET"
+                        if session.save_mode == "SELF_SAVE"
+                        else "Source: UNCHANGED"
+                    ),
                 )
             ),
             reopen_argv=("mem", "sever", "--resume", session.uid),

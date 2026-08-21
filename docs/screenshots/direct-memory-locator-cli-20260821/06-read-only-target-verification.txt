@@ -1,0 +1,13 @@
+LIVE COLOR PTY · 180 columns × 52 rows                                                                                                                                              
+STORE · isolated disposable Profile                                                                                                                                                 
+                                                                                                                                                                                    
+$ mem list                                                                                                                                                                          
+Context: practice/4                                                                                                                                                                 
+  4 items                                                                                                                                                                           
+                                                                                                                                                                                    
+  [embedded 85ec346b] [practice/3][memory ca562047] a is apple  READ ONLY                                                                                                           
+  [reference 3d6d5bfb] [practice/3][memory dbdb4436] b is banana  READ ONLY                                                                                                         
+  [embedded 12dba268] [practice/3][memory 11111111] c is cherry  READ ONLY                                                                                                          
+  [reference 939604fe] [practice/3][memory 22222222] d is date  READ ONLY                                                                                                           
+                                                                                                                                                                                    
+READ-ONLY VERIFIED · 2 live Embeds · 2 immutable References

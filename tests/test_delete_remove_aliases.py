@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import click
 import pytest
 from typer.testing import CliRunner
 
@@ -35,10 +36,14 @@ def test_both_spellings_remove_a_direct_memory(isolated_store, command):
     store.create_context(context)
     store.set_current(context.name)
 
-    result = runner.invoke(app, [command, memory.uid[:8]])
+    result = runner.invoke(app, [command, memory.uid[:8]], color=True)
 
     assert result.exit_code == 0, result.output
-    assert f"Removed [{memory.uid[:8]}]" in result.output
+    assert result.output == (
+        click.style(f"Removed [{memory.uid[:8]}] ", fg="green")
+        + click.style(memory.content, fg="red")
+        + "\n"
+    )
     assert memory.uid not in store.load_direct(context.name).memories
 
 

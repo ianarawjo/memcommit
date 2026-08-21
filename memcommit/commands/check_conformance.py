@@ -107,11 +107,29 @@ def cmd(
             help="Existing local Context whose contents are checked against Rules"
         ),
     ] = None,
-    against: Annotated[
-        Optional[str],
+    rules_context: Annotated[
+        Optional[list[str]],
         typer.Option(
             "--against",
-            help="Existing local Context whose direct Memories are Rules",
+            "--rule",
+            "--from",
+            metavar="RULES_CONTEXT",
+            help=(
+                "Rules Context; --against, --rule, and --from are equivalent"
+            ),
+        ),
+    ] = None,
+    subject_context: Annotated[
+        Optional[list[str]],
+        typer.Option(
+            "--example",
+            "--case",
+            "--to",
+            metavar="SUBJECT_CONTEXT",
+            help=(
+                "Example, Case, or other Target Context; --example, --case, "
+                "and --to are equivalent"
+            ),
         ),
     ] = None,
     ground: Annotated[
@@ -126,10 +144,36 @@ def cmd(
 
     store = MemoryStore(create=False)
     try:
+        rules_operands = tuple(rules_context or ())
+        subject_operands = tuple(subject_context or ())
+        if len(rules_operands) > 1:
+            raise ConformanceError(
+                "Use only one of --against, --rule, or --from; they are "
+                "aliases for the Rules Context."
+            )
+        if len(subject_operands) > 1:
+            raise ConformanceError(
+                "Use only one of --example, --case, or --to; they are "
+                "aliases for the Subject Context."
+            )
+        if target_context is not None and subject_operands:
+            raise ConformanceError(
+                "Use the Target positional operand or --example/--case/--to, "
+                "not both."
+            )
+
+        rules_locator = rules_operands[0] if rules_operands else None
+        option_subject_locator = (
+            subject_operands[0] if subject_operands else None
+        )
         if ground is not None:
-            if target_context is not None or against is not None:
+            if (
+                target_context is not None
+                or rules_locator is not None
+                or option_subject_locator is not None
+            ):
                 raise ConformanceError(
-                    "--ground cannot be combined with a Target or --against."
+                    "--ground cannot be combined with Context operands."
                 )
             label = "replaying Ground cases"
 
@@ -140,17 +184,25 @@ def cmd(
                     provider_factory=connect_semantic_provider,
                 )
         else:
-            if against is None:
+            if rules_locator is None and option_subject_locator is None:
                 raise ConformanceError(
-                    "Context Conformance requires --against RULE_CONTEXT."
+                    "Context Conformance requires a Rules or Subject endpoint; "
+                    "use --rule/--from, --example/--case/--to, or --ground."
                 )
             snapshot = ContextOperandSnapshot.capture(store)
-            target_name = snapshot.resolve_or_current(target_context)
+            subject_locator = option_subject_locator or target_context
+            target_name = snapshot.resolve_or_current(subject_locator)
             if target_name is None:
                 raise ConformanceError(
-                    "Context Conformance needs a Target or a current Context."
+                    "Context Conformance needs an Example, Case, Target, or "
+                    "current Context."
                 )
-            rules_name = snapshot.resolve(against)
+            rules_name = snapshot.resolve_or_current(rules_locator)
+            if rules_name is None:
+                raise ConformanceError(
+                    "Context Conformance needs a Rules Context or a current "
+                    "Context."
+                )
             label = "checking Context against Rules"
 
             def run() -> ConformanceReport:

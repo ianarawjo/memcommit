@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import uuid
 
+import click
 import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
@@ -33,6 +34,10 @@ from memcommit.interfaces.agent import (
     DEDUP_AGENT_TOOL_NAME,
     build_default_agent_tool_registry,
 )
+from memcommit.interfaces.console.theme import (
+    SemanticColorRole,
+    semantic_color_rgb,
+)
 from memcommit.interfaces.tui.operations.dedup import (
     dedup_exact_review,
     dedup_resolution_spec,
@@ -42,13 +47,15 @@ from memcommit.interfaces.tui.workbenches.resolution import ResolutionOutcome
 from memcommit.quality_find_workbench import create_quality_find_workbench
 from memcommit.quality_finding_handoff import (
     QualityFindingHandoff,
+    QualityFindingHandoffError,
     QualityFindingReviewDraft,
     QualityFindingSource,
     quality_finding_handoffs,
 )
 from memcommit.semantic_redundancy_evidence import (
-    semantic_redundancy_evidence_dict,
-    semantic_redundancy_evidence_json,
+    redundancy_evidence_dict,
+    redundancy_evidence_from_dict,
+    redundancy_evidence_json,
 )
 from memcommit.profile_config import (
     AUTHORING_PROFILE_NAME,
@@ -153,6 +160,34 @@ def test_dedup_builds_transitive_components_and_keeps_context_order(isolated_sto
     )
 
 
+def test_dedun_combines_exact_dup_and_semantic_dun_evidence(isolated_store):
+    store = MemoryStore()
+    context, first, second, third, _unrelated = _context(store)
+    request = DedupRequest(
+        (
+            _handoff(context, first.uid, second.uid, relation="EXACT", index=1),
+            _handoff(
+                context,
+                second.uid,
+                third.uid,
+                relation="SEMANTIC_EQUIVALENT",
+                index=2,
+            ),
+        )
+    )
+
+    plan = prepare_dedup(
+        request,
+        port=MemoryStoreDedupPort(store, current_name=context.name),
+    )
+
+    assert len(plan.components) == 1
+    assert tuple(evidence.relation for evidence in plan.components[0].evidence) == (
+        "EXACT",
+        "SEMANTIC_EQUIVALENT",
+    )
+
+
 def test_dedup_applies_one_checkpoint_without_rewriting_survivor(isolated_store):
     store = MemoryStore()
     context, first, second, third, unrelated = _context(store)
@@ -188,9 +223,7 @@ def test_dedun_rejects_partial_overlap_until_memories_are_atomized(
     store.save(context)
 
     with pytest.raises(DedupError, match="OVERLAP"):
-        DedupRequest(
-            (_handoff(context, first.uid, second.uid, relation="OVERLAP"),)
-        )
+        DedupRequest((_handoff(context, first.uid, second.uid, relation="OVERLAP"),))
 
 
 def test_dedup_fails_closed_when_source_changes(isolated_store):
@@ -276,6 +309,13 @@ def test_dedup_tui_uses_common_required_resolution_order(isolated_store):
     assert spec.detail_title.startswith("VIEWER")
     assert spec.responses_title.startswith("RESPONSES")
     assert spec.items_title.startswith("ITEMS")
+    report_styles = {
+        style
+        for section in spec.report.sections
+        for style, _text in section.block.fragments
+    }
+    assert "class:impact.add" in report_styles
+    assert "class:impact.keep" not in report_styles
     review = dedup_exact_review(
         plan,
         ResolutionOutcome(
@@ -284,7 +324,7 @@ def test_dedup_tui_uses_common_required_resolution_order(isolated_store):
     )
     assert review.argv[:2] == ("mem", "dedun")
     assert "--evidence" in review.argv
-    assert "semantic-redundancy-evidence-v1" in review.argv[3]
+    assert "redundancy-evidence-v2" in review.argv[3]
     assert "--finding-handoff" not in review.argv
     assert review.argv[-1] == "--apply"
 
@@ -367,13 +407,19 @@ def test_cli_and_public_api_share_semantic_dedun_application(isolated_store):
         [
             "dedun",
             "--evidence",
-            semantic_redundancy_evidence_json(handoff),
+            redundancy_evidence_json(handoff),
             "--plain",
         ],
+        color=True,
     )
     assert result.exit_code == 0
-    assert public_plan.revision in result.stdout
-    assert "RECOMMENDED SURVIVOR" in result.stdout
+    assert public_plan.revision in click.unstyle(result.stdout)
+    assert "RECOMMENDED SURVIVOR" in click.unstyle(result.stdout)
+    assert click.style(
+        "RECOMMENDED SURVIVOR",
+        fg=semantic_color_rgb(SemanticColorRole.ADD),
+        bold=True,
+    ) in result.stdout
 
     receipt = client.apply_dedun(
         public_plan,
@@ -398,7 +444,7 @@ def test_agent_dedup_replays_revision_and_survivors(isolated_store):
     registry = build_default_agent_tool_registry(
         MemCommitClient(root=isolated_store, create=False)
     )
-    public_evidence = semantic_redundancy_evidence_dict(handoff)
+    public_evidence = redundancy_evidence_dict(handoff)
     assert public_evidence["kind"] == "REDUNDANCY"
     assert public_evidence["route"] == "DEDUN"
     analysis = registry.invoke(
@@ -431,6 +477,30 @@ def test_agent_dedup_replays_revision_and_survivors(isolated_store):
     assert applied["result"]["survivor_uids"] == [second.uid]
 
 
+def test_legacy_semantic_evidence_decodes_but_cannot_claim_exact_dup(
+    isolated_store,
+):
+    store = MemoryStore()
+    context, first, second, _third, _unrelated = _context(store)
+    semantic = _strict_handoffs(
+        context,
+        DuplicateFinding(
+            first,
+            second,
+            "SEMANTIC_EQUIVALENT",
+            "The claims are substitutable.",
+        ),
+    )[0]
+    legacy = redundancy_evidence_dict(semantic)
+    legacy["contract"] = "semantic-redundancy-evidence-v1"
+
+    assert redundancy_evidence_from_dict(legacy) == semantic
+
+    legacy["classification"] = "EXACT"
+    with pytest.raises(QualityFindingHandoffError, match="classification"):
+        redundancy_evidence_from_dict(legacy)
+
+
 def test_cli_dedun_replay_applies_the_reviewed_survivor(isolated_store):
     store = MemoryStore()
     context, first, second, _third, _unrelated = _context(store)
@@ -453,7 +523,7 @@ def test_cli_dedun_replay_applies_the_reviewed_survivor(isolated_store):
         [
             "dedun",
             "--evidence",
-            semantic_redundancy_evidence_json(handoff),
+            redundancy_evidence_json(handoff),
             "--survivor",
             f"{plan.components[0].uid}={second.uid}",
             "--expected-revision",
@@ -495,9 +565,9 @@ def test_help_teaches_exact_dedup_read_only_redundancy_and_applying_dedun():
 
     assert root_help.exit_code == 0
     assert "byte-identical duplicates (dup)" in root_help.stdout
-    assert "semantic redundancies (dun)" in root_help.stdout
+    assert "exact plus semantic redundancies" in root_help.stdout
     assert "find-redundancies" in root_help.stdout
-    assert "Report semantically redundant direct Memories" in root_help.stdout
+    assert "Report exact and semantically redundant direct Memories" in root_help.stdout
     assert "changing any Source Context" in root_help.stdout
     assert "consolidate" not in root_help.stdout
     assert dedun_help.exit_code == 0
@@ -520,6 +590,28 @@ def test_public_dedup_uses_the_same_exact_application(isolated_store):
     assert result.groups[0].survivor_uid == first.uid
     assert result.groups[0].absorbed_uids == (second.uid,)
     assert tuple(store.load_direct(context.name).memories) == (first.uid,)
+
+
+def test_public_find_duplicates_is_provider_free_and_read_only(isolated_store):
+    store = MemoryStore()
+    context = ops.init("dedup/public-find-exact")
+    first = ops.add(context, "same bytes")
+    surface = ops.add(context, " same bytes ")
+    second = ops.add(context, "same bytes")
+    store.save(context)
+    store.set_current(context.name)
+    before = store._context_file(context.name).read_bytes()
+
+    result = MemCommitClient(root=isolated_store, create=False).find_duplicates()
+
+    assert result.context_name == context.name
+    assert result.memory_count == 3
+    assert result.duplicate_count == 1
+    assert result.groups[0].survivor_uid == first.uid
+    assert result.groups[0].absorbed_uids == (second.uid,)
+    assert surface.uid not in result.groups[0].absorbed_uids
+    assert store._context_file(context.name).read_bytes() == before
+    assert store.list_checkpoints(context.name) == []
 
 
 def test_exact_dedup_blocks_inbound_reference_without_checkpoint(isolated_store):

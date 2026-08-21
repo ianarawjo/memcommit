@@ -1,0 +1,33 @@
+PTY 180 52                                                                                                                                                                          
+PTY 180 52                                                                                                                                                                          
+$ mem compare -h                                                                                                                                                                    
+                                                                                                                                                                                    
+ Usage: mem compare [OPTIONS] [CONTEXTS]...                                                                                                                                         
+                                                                                                                                                                                    
+ Compare Memories in two Contexts and report what they share, what differs, and what appears only on one side.                                                                      
+                                                                                                                                                                                    
+╭─ Arguments ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│   contexts      [CONTEXTS]...  One PEER Context (REFERENCE defaults to current), or explicit REFERENCE and PEER Contexts [default: None]                                         │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --from                                                                 TEXT        Compatibility alias for an explicit REFERENCE Context locator [default: None]                 │
+│ --to                                                                   TEXT        Compatibility alias for the PEER Context locator; REFERENCE defaults to current when --from   │
+│                                                                                    is omitted                                                                                    │
+│                                                                                    [default: None]                                                                               │
+│ --refresh                                                                          Run a fresh aggregate analysis even when sources match                                        │
+│ --ledger                                                                           Show every exact source-linked relation and explanation                                       │
+│ --snapshot                                                                         Print the compact report instead of opening the TTY workbench                                 │
+│ --sessions                                                                         Enter the interactive Compare session launcher                                                │
+│ --direct                 -d                                                        Compare only the selected REFERENCE and PEER roots                                            │
+│ --recursive              -r                                                        Include readable descendants under both comparison roots                                      │
+│ --reference-descendants      --reference-root-only,--reference-only                Include all readable descendants under REFERENCE A [default: reference-root-only]             │
+│ --compared-descendants       --compared-root-only,--compared-only                  Include all readable descendants under PEER B [default: compared-root-only]                   │
+│ --reference-memory                                                     UID/PREFIX  Compare one REFERENCE Memory; its neighbors remain non-actionable context [default: None]     │
+│ --compared-memory                                                      UID/PREFIX  Compare one PEER Memory; its neighbors remain non-actionable context [default: None]          │
+│ --help                   -h                                                        Show this message and exit.                                                                   │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                    
+ Positional forms: 'mem compare PEER' uses the current REFERENCE; 'mem compare REFERENCE PEER' names both peers. --from and --to remain compatibility aliases.                      
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+HELP EXIT · 0

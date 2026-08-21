@@ -1,0 +1,11 @@
+PTY 180 52                                                                                                                                                                          
+Rationale [d881fa8d] · rationale/origin                                                                                                                                             
+                                                                                                                                                                                    
+MEMORY                                                                                                                                                                              
+  Um...                                                                                                                                                                             
+                                                                                                                                                                                    
+PROVENANCE                                                                                                                                                                          
+  “Um...” separated an instruction from its example. Sentence chunking isolated it; undo removed it, redo restored it, and remove deleted it.                                       
+SCENARIO words RECEIPT · LIMIT 24 WORDS · PRESS V TO VERIFY                                                                                                                         
+v                                                                                                                                                                                   
+SCENARIO words VERIFIED · PROVIDER CALLS 1 · CACHE UNTOUCHED · STORE UNCHANGED
