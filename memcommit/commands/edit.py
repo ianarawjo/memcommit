@@ -6,11 +6,12 @@ import memcommit.ops as ops
 from memcommit.command_attempts import annotate_command_outcome
 from memcommit.commands.batch_input import parse_edit_lines, read_text_input
 from memcommit.authority.access import (
+    ContextAccess,
     authorized_context_mutation,
     grant_checkpoint_args,
     resolve_context_access,
 )
-from memcommit.context import AutoCheckpoint, Memory
+from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore
@@ -22,11 +23,110 @@ def _render_content(prefix: str, content: str, color: str) -> None:
         typer.secho(f"  {prefix} {line}", fg=color)
 
 
+def _split_single_locator(
+    selector: str,
+    context_name: str | None,
+) -> tuple[str | None, str]:
+    """Separate an optional Context owner from one direct-Memory selector."""
+
+    if "#" not in selector:
+        return context_name, selector
+    if context_name is not None:
+        raise ValueError(
+            "CONTEXT#UID cannot be combined with --context; choose one "
+            "Context locator."
+        )
+    if selector.count("#") != 1:
+        raise ValueError("Edit locator must use the form CONTEXT#UID.")
+    owner_name, memory_selector = selector.split("#", 1)
+    if not owner_name or not memory_selector:
+        raise ValueError("Edit locator must use the form CONTEXT#UID.")
+    return owner_name, memory_selector
+
+
+def _resolve_single_target(
+    active_store: MemoryStore,
+    *,
+    current_name: str | None,
+    selector: str,
+    context_name: str | None,
+) -> tuple[ContextAccess, Context, str]:
+    """Freeze one directly owned Memory target before Edit mutates it.
+
+    A bare selector prefers the command-start current Context. Only when that
+    Context has no matching item do we scan ordinary local Contexts. This
+    preserves the familiar local shorthand while making a locator copied from
+    a linked row executable without treating the link itself as writable.
+    """
+
+    owner_name, memory_selector = _split_single_locator(selector, context_name)
+    if owner_name is not None:
+        access = resolve_context_access(
+            active_store,
+            owner_name,
+            current_name=current_name,
+            required_permission="UPDATE",
+        )
+        ctx = access.store.load_direct(access.context_name)
+        memory = ops.resolve_direct_memory(ctx, memory_selector)
+        return access, ctx, memory.uid
+
+    if current_name is not None and active_store.context_exists(current_name):
+        access = resolve_context_access(
+            active_store,
+            current_name,
+            current_name=current_name,
+            required_permission="UPDATE",
+        )
+        ctx = access.store.load_direct(access.context_name)
+        try:
+            memory = ops.resolve_direct_memory(ctx, memory_selector)
+        except KeyError:
+            pass
+        else:
+            return access, ctx, memory.uid
+
+    matches = []
+    for candidate_name in sorted(active_store.list_context_names()):
+        if candidate_name == current_name:
+            continue
+        candidate = active_store.load_direct(candidate_name)
+        for uid, item in candidate.memories.items():
+            if isinstance(item, Memory) and uid.startswith(memory_selector):
+                matches.append((candidate_name, candidate, uid))
+
+    if not matches:
+        raise KeyError(
+            "No directly owned Memory with uid starting with "
+            f"'{memory_selector}' was found in local Contexts. Use "
+            "CONTEXT#UID to name its owner explicitly."
+        )
+    if len(matches) > 1:
+        choices = ", ".join(f"{name}#{uid[:8]}" for name, _, uid in matches)
+        raise ValueError(
+            f"Ambiguous Memory selector '{memory_selector}' matches "
+            f"{len(matches)} local Contexts: {choices}. Use CONTEXT#UID."
+        )
+
+    owner_name, ctx, uid = matches[0]
+    access = resolve_context_access(
+        active_store,
+        owner_name,
+        current_name=current_name,
+        required_permission="UPDATE",
+    )
+    return access, ctx, uid
+
+
 def cmd(
     selector: Annotated[
         Optional[str],
         typer.Argument(
-            help="UID (or unambiguous prefix) of the direct Memory to edit"
+            help=(
+                "UID (or unambiguous prefix) of a directly owned Memory, or "
+                "CONTEXT#UID; a bare UID searches local Contexts when absent "
+                "from the current Context"
+            )
         ),
     ] = None,
     content: Annotated[
@@ -70,24 +170,37 @@ def cmd(
         raise typer.Exit(1)
 
     active_store = MemoryStore()
+    current_name = active_store.current_context_name()
     try:
-        access = resolve_context_access(
-            active_store,
-            context_name,
-            current_name=active_store.current_context_name(),
-            required_permission="UPDATE",
-        )
+        if input_source is None:
+            assert selector is not None
+            access, ctx, selector = _resolve_single_target(
+                active_store,
+                current_name=current_name,
+                selector=selector,
+                context_name=context_name,
+            )
+        else:
+            access = resolve_context_access(
+                active_store,
+                context_name,
+                current_name=current_name,
+                required_permission="UPDATE",
+            )
+            ctx = access.store.load_direct(access.context_name)
         store = access.store
-        ctx = store.load_direct(access.context_name)
     except (
         FileNotFoundError,
+        KeyError,
         OSError,
         ProfileConfigError,
         ProfileError,
         RuntimeError,
+        TypeError,
         ValueError,
     ) as error:
-        typer.secho(str(error), fg=typer.colors.RED, err=True)
+        message = error.args[0] if isinstance(error, KeyError) else str(error)
+        typer.secho(str(message), fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
 
     if input_source is not None:

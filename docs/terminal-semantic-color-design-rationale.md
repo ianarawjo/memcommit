@@ -59,6 +59,13 @@ neutral or retain the Memory-object lavender. A focused History row uses the
 common focus treatment across the complete row; focus therefore overrides its
 unfocused action color instead of presenting two active visual states.
 
+Typed Source relationships use the same rule. A live Memory link classifies
+`embedded` as EMBED yellow, while an immutable snapshot classifies `reference`
+as REFERENCE mauve. The classifier consumes `SourceDisplayFacts`/`SourceForm`,
+not rendered prose. List and Show tint only that noun; link UID, Source Context,
+Source Memory UID, content, and `READ ONLY`/`DANGLING` remain textual evidence
+with their ordinary styles.
+
 Grant ownership and available capability are independent roles. Source
 projection in operation workbenches and static authority reports keeps the
 `GRANT` ownership identity neutral and bold, while a `READ + EDIT` capability

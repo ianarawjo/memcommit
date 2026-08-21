@@ -227,19 +227,26 @@ Memory whose content is `aaa` is independent of both Context paths.
 ## 7. MemoryRef Listing
 
 A resolved MemoryRef represents an atomic memory view, so its current target
-content is also used as the human-readable name. Its source locator remains
-visible to preserve reference provenance:
+content is also used as the human-readable name. Relationship identity and the
+Source owner precede the body so a locator can be copied without scanning past
+arbitrary content. Live links use `embedded`; immutable snapshots use
+`reference`:
 
 ```text
-[ref     12345678] Current target content. -> source-context#abcdef12
+[embedded 12345678] [source-context][memory abcdef12] Current target content.  READ ONLY
+[reference 87654321] [source-context][memory abcdef12] Retained target content.  READ ONLY
 ```
 
 A dangling reference has no content to use as a name, so the locator is shown
 with an explicit state:
 
 ```text
-[ref     12345678] (dangling) source-context#abcdef12
+[embedded 12345678] [source-context][memory abcdef12]  DANGLING
 ```
+
+Only the trusted `embedded` or `reference` relationship noun receives semantic
+color in an interactive terminal. IDs, Source owner, body, and state preserve
+their existing neutral styles, and ANSI stripping leaves the same text.
 
 Detailed reference metadata remains the responsibility of `mem show <ref-uid>`.
 

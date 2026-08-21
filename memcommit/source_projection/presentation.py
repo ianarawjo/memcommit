@@ -211,6 +211,26 @@ def source_object_label(
     return labels[form]
 
 
+def source_relationship_label(
+    value: SourceDisplayFacts | SourceForm,
+) -> str:
+    """Name a compact relationship row by its public time semantics.
+
+    Live Memory links are embeds and immutable retained links are references.
+    The shorter relationship nouns keep the Source identity beside the link
+    UID without repeating ``memory`` before the separate target badge.
+    """
+
+    form = value.form if isinstance(value, SourceDisplayFacts) else value
+    if not isinstance(form, SourceForm):
+        raise TypeError("Source relationship labels require a SourceForm value.")
+    if form in {SourceForm.MEMORY_EMBED, SourceForm.MEMORY_REF}:
+        return "embedded"
+    if form is SourceForm.MEMORY_REFERENCE:
+        return "reference"
+    return source_object_label(form)
+
+
 def source_annotation_tokens(
     facts: SourceDisplayFacts,
     *,

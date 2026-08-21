@@ -1,7 +1,14 @@
+import click
+
 from memcommit.commands.find_search_workbench import (
     FindSearchResult,
     _has_granted_materialization_source,
 )
+from memcommit.interfaces.console.theme import (
+    SemanticColorRole,
+    semantic_source_role,
+)
+from memcommit.source_projection.console import styled_source_relationship_label
 from memcommit.context_targeting.catalog import (
     grant_navigation_annotation,
     grant_navigation_capability_labels,
@@ -26,6 +33,7 @@ from memcommit.source_projection.presentation import (
     render_source_reference_row,
     source_annotation_text,
     source_object_label,
+    source_relationship_label,
     source_display_text,
     source_display_tokens,
 )
@@ -53,6 +61,19 @@ def test_source_display_uses_one_axis_order_and_canonical_vocabulary():
         "VIA EMBED · DANGLING · NOT INCLUDED"
     )
 
+
+def test_source_relationship_labels_share_embed_and_reference_semantics():
+    embedded = SourceDisplayFacts(form=SourceForm.MEMORY_EMBED)
+    reference = SourceDisplayFacts(form=SourceForm.MEMORY_REFERENCE)
+
+    assert source_relationship_label(embedded) == "embedded"
+    assert source_relationship_label(reference) == "reference"
+    assert semantic_source_role(embedded) is SemanticColorRole.EMBED
+    assert semantic_source_role(reference) is SemanticColorRole.REFERENCE
+    assert click.unstyle(styled_source_relationship_label(embedded)) == "embedded"
+    assert click.unstyle(styled_source_relationship_label(reference)) == "reference"
+    assert "38;2;238;212;159" in styled_source_relationship_label(embedded)
+    assert "38;2;198;160;246" in styled_source_relationship_label(reference)
 
 def test_source_reference_row_folds_content_and_keeps_owner_alias_separate():
     row = SourceReferenceRow(

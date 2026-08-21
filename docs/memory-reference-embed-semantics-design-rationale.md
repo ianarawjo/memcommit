@@ -84,6 +84,13 @@ snapshot or live embed as a directly owned Memory. Semantic inclusion remains
 operation-owned; adding a snapshot type does not silently broaden provider
 disclosure or permit semantic Apply to edit it.
 
+Edit may use the displayed Source identity to locate the ordinary owner: an
+explicit `CONTEXT#UID` selects that Context, while a bare UID searches other
+ordinary local Contexts only after it is absent from the current Context. This
+is owner selection, not write-through. Supplying the Reference or Embed's own
+direct-item UID still fails as read-only, and ambiguous cross-Context matches
+require a qualified owner before any mutation.
+
 Reference and Embed themselves use no semantic cache or provider. Any semantic
 consumer that deliberately admits either form must include snapshot
 content/digest for Reference or the exact resolved Source binding for live

@@ -78,15 +78,9 @@ def add_many(ctx: Context, contents: list[str]) -> list[Memory]:
     return memories
 
 
-def edit(ctx: Context, selector: str, content: str) -> Memory:
-    """
-    Replace one directly owned Memory's content while preserving its uid and order.
+def resolve_direct_memory(ctx: Context, selector: str) -> Memory:
+    """Resolve one ordinary directly owned Memory with Edit's prefix grammar."""
 
-    *selector* is resolved as an exact uid or unambiguous uid prefix.  The
-    original Memory is returned as a detached before-edit view.  Supplying the
-    existing content is a no-op.  References and embedded Contexts are
-    intentionally read-only through this operation.
-    """
     matches = [uid for uid in ctx.memories if uid.startswith(selector)]
     if not matches:
         raise KeyError(f"No item with uid starting with '{selector}'.")
@@ -102,6 +96,19 @@ def edit(ctx: Context, selector: str, content: str) -> Memory:
             f"'{selector}' is not a Memory directly owned by this Context — "
             "cannot edit."
         )
+    return item
+
+
+def edit(ctx: Context, selector: str, content: str) -> Memory:
+    """
+    Replace one directly owned Memory's content while preserving its uid and order.
+
+    *selector* is resolved as an exact uid or unambiguous uid prefix.  The
+    original Memory is returned as a detached before-edit view.  Supplying the
+    existing content is a no-op.  References and embedded Contexts are
+    intentionally read-only through this operation.
+    """
+    item = resolve_direct_memory(ctx, selector)
 
     original = Memory(uid=item.uid, content=item.content)
     if item.content != content:

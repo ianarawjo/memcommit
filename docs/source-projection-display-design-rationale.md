@@ -35,10 +35,23 @@ the redundant `context` noun while retaining any non-default annotations.
 
 This distinction prevents an ordinary object kind from looking like a status
 badge and preserves the established compact `memory`/`context` grammar.
-`memory ref` names the durable pointer object. `Referenced` would instead
-describe the target Memory's incidental state and could be mistaken for an
-answer citation or another semantic link. `query view` names an opaque query
-route; it does not imply that ordinary Memory content was opened.
+`memory ref` remains the generic durable pointer name used where time semantics
+are not known. When a typed link row does know them, its compact relationship
+noun is `embedded` for a live Memory link and `reference` for an immutable
+snapshot. `query view` names an opaque query route; it does not imply that
+ordinary Memory content was opened.
+
+List and Show place link and Source identity before optional content:
+
+```text
+[embedded LINK_UID] [SOURCE_CONTEXT][memory SOURCE_UID] content  READ ONLY
+[reference LINK_UID] [SOURCE_CONTEXT][memory SOURCE_UID] content  READ ONLY
+```
+
+The first UID continues to identify the direct link object. The bracketed
+Context and Memory pair identifies the ordinary Source owner and is a valid
+input to the explicit `CONTEXT#UID` Edit grammar. This ordering does not imply
+write-through: mutation still resolves the Source owner independently.
 
 ## Compact Reference rows
 
@@ -102,8 +115,9 @@ changing either operation's semantic result contract.
   case without changing the compact object-name policy.
 - Context and report text remain neutral. Standalone Memory bodies remain
   lavender; compact Source Reference rows remain neutral like Query citations,
-  compact reference-form tokens remain purple, and availability states use the
-  warning color. A selected or focused control's common blue treatment
+  live `embedded` relationship tokens use shared EMBED yellow, immutable
+  `reference` relationship tokens use shared REFERENCE mauve, and availability
+  states use the warning color. A selected or focused control's common blue treatment
   overrides token colors so one row never appears to have two keyboard owners.
 - Terminal escaping occurs after semantic tokenization.
 - Compact Reference row content is folded before adapter-owned terminal

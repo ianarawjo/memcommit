@@ -2,6 +2,7 @@
 
 import json
 
+import click
 import pytest
 from typer.testing import CliRunner
 
@@ -416,13 +417,15 @@ def test_reference_cli_lists_shows_snapshot_and_detaches(isolated_store):
     listing = runner.invoke(app, ["list"])
     assert listing.exit_code == 0
     assert ref.uid[:8] in listing.output
-    assert "source#" in listing.output
+    assert f"[source][memory {memory.uid[:8]}]" in listing.output
 
-    shown = runner.invoke(app, ["show", ref.uid[:8]])
+    shown = runner.invoke(app, ["show", ref.uid[:8]], color=True)
     assert shown.exit_code == 0
-    assert "Reference:" in shown.output
-    assert "State: READ ONLY" in shown.output
-    assert "version one" in shown.output
+    shown_plain = click.unstyle(shown.output)
+    assert "Reference:" in shown_plain
+    assert "State: READ ONLY" in shown_plain
+    assert "version one" in shown_plain
+    assert "\x1b[38;2;198;160;246mReference\x1b[0m" in shown.output
 
     source.replace(Memory(uid=memory.uid, content="version two"))
     store.save(source)
@@ -450,12 +453,14 @@ def test_show_handles_a_dangling_reference(isolated_store):
     source.remove(memory.uid)
     store.save(source)
 
-    result = runner.invoke(app, ["show", ref.uid[:8]])
+    result = runner.invoke(app, ["show", ref.uid[:8]], color=True)
 
     assert result.exit_code == 0
-    assert "Embedded Memory:" in result.output
-    assert "State: DANGLING" in result.output
-    assert "embedded Memory Source is unavailable" in result.output
+    plain = click.unstyle(result.output)
+    assert "Embedded Memory:" in plain
+    assert "State: DANGLING" in plain
+    assert "embedded Memory Source is unavailable" in plain
+    assert "\x1b[38;2;238;212;159mEmbedded Memory\x1b[0m" in result.output
 
 
 def test_chunk_replaces_a_memory_at_its_original_order_position(isolated_store):

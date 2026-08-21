@@ -9,6 +9,7 @@ import subprocess
 import threading
 from types import SimpleNamespace
 
+import click
 import pytest
 from typer.testing import CliRunner
 
@@ -368,6 +369,46 @@ def test_clean_copy_keeps_reference_meaning_without_object_ids(
     assert record["selection"]["items"][0]["target_memory_uid"] == (
         source_memory_uid
     )
+
+
+def test_list_places_colored_relationship_and_source_identity_before_content(
+    isolated_store,
+):
+    invoke("init", "practice/3")
+    invoke("add", "Write each proposition exactly.")
+    store = MemoryStore()
+    source = store.load_current()
+    source_memory_uid = next(iter(source.memories))
+    invoke("init", "practice/4")
+    invoke(
+        "embed",
+        source_memory_uid[:8],
+        "--from",
+        "practice/3",
+        "--into",
+        "practice/4",
+    )
+    invoke("reference", source_memory_uid[:8], "--from", "practice/3")
+    target = store.load("practice/4")
+    embedded, reference = list(target.iter_items())
+
+    result = runner.invoke(app, ["list", "practice/4"], color=True)
+
+    assert result.exit_code == 0
+    plain = click.unstyle(result.stdout)
+    assert plain == (
+        "Context: practice/4\n"
+        "  2 items\n"
+        "\n"
+        f"  [embedded {embedded.uid[:8]}] "
+        f"[practice/3][memory {source_memory_uid[:8]}] "
+        "Write each proposition exactly.  READ ONLY\n"
+        f"  [reference {reference.uid[:8]}] "
+        f"[practice/3][memory {source_memory_uid[:8]}] "
+        "Write each proposition exactly.  READ ONLY\n"
+    )
+    assert "\x1b[38;2;238;212;159membedded\x1b[0m" in result.stdout
+    assert "\x1b[38;2;198;160;246mreference\x1b[0m" in result.stdout
 
 
 def test_clean_copy_keeps_user_authored_bracket_text_literal(

@@ -16,6 +16,10 @@ from memcommit.show_application import (
     ShowResult,
 )
 from memcommit.source_projection.model import SourceForm
+from memcommit.source_projection.console import (
+    styled_source_object_label,
+    styled_source_relationship_label,
+)
 from memcommit.source_projection.presentation import (
     source_annotation_text,
     source_display_text,
@@ -36,7 +40,7 @@ def _render_memory_ref(
     context_name: str,
 ) -> None:
     typer.secho(
-        f"{source_object_label(memory_ref.source, title=True)}: "
+        f"{styled_source_object_label(memory_ref.source, title=True)}: "
         f"{display_escape_text(memory_ref.uid)}",
         bold=True,
     )
@@ -117,10 +121,10 @@ def _render_context(context: ShowContextSnapshot) -> None:
             )
         elif isinstance(item, ShowMemoryReference):
             typer.echo(
-                f"  [{source_object_label(item.source)} "
+                f"  [{styled_source_relationship_label(item.source)} "
                 f"{display_escape_text(item.uid[:8])}] "
-                f"{display_escape_text(item.target_context_name)}#"
-                f"{display_escape_text(item.target_memory_uid[:8])}"
+                f"[{display_escape_text(item.target_context_name)}]"
+                f"[memory {display_escape_text(item.target_memory_uid[:8])}]"
                 + (f"  {annotation}" if annotation else "")
             )
             if item.content is not None:

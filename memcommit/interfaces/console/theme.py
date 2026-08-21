@@ -9,6 +9,8 @@ from __future__ import annotations
 
 from enum import Enum
 
+from memcommit.source_projection.model import SourceDisplayFacts, SourceForm, SourceReach
+
 
 # Palette values are named once here so an operation adapter never owns a raw
 # terminal color. They retain the repository's established Macchiato-like
@@ -108,6 +110,30 @@ def semantic_action_role(value: str) -> SemanticColorRole | None:
     primary = normalized.split(maxsplit=1)[0] if normalized else ""
     primary = primary.split("/", 1)[0]
     return _ACTION_ROLES.get(primary)
+
+
+def semantic_source_role(
+    value: SourceDisplayFacts | SourceForm,
+) -> SemanticColorRole | None:
+    """Classify one typed Source relationship without parsing display text."""
+
+    if isinstance(value, SourceDisplayFacts):
+        form = value.form
+        reach = value.reach
+    elif isinstance(value, SourceForm):
+        form = value
+        reach = SourceReach.DIRECT
+    else:
+        raise TypeError(
+            "Source semantic colors require SourceDisplayFacts or SourceForm."
+        )
+    if form in {SourceForm.MEMORY_EMBED, SourceForm.MEMORY_REF}:
+        return SemanticColorRole.EMBED
+    if form is SourceForm.MEMORY_REFERENCE:
+        return SemanticColorRole.REFERENCE
+    if reach is SourceReach.VIA_EMBED:
+        return SemanticColorRole.EMBED
+    return None
 
 
 def semantic_color_hex(role: SemanticColorRole) -> str:

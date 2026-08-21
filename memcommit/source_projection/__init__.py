@@ -19,6 +19,7 @@ from memcommit.source_projection.presentation import (
     source_display_text,
     source_display_tokens,
     source_object_label,
+    source_relationship_label,
 )
 
 __all__ = [
@@ -37,5 +38,6 @@ __all__ = [
     "source_display_text",
     "source_display_tokens",
     "source_object_label",
+    "source_relationship_label",
     "render_source_reference_row",
 ]

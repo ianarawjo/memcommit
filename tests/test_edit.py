@@ -199,15 +199,106 @@ def test_ambiguous_prefix_and_missing_memory_do_not_mutate(isolated_store):
     assert ambiguous.exit_code == 1
     assert "Ambiguous prefix" in ambiguous.output
     assert missing.exit_code == 1
-    assert "No item with uid starting" in missing.output
+    assert "No directly owned Memory with uid starting" in missing.output
     reloaded = store.load("notes")
     assert reloaded.memories[first.uid].content == "first"
     assert reloaded.memories[second.uid].content == "second"
     assert store.list_checkpoints("notes") == []
 
 
-def test_edit_fails_without_current_context(isolated_store):
+def test_bare_selector_searches_local_contexts_when_absent_from_current(
+    isolated_store,
+):
+    store = MemoryStore()
+    owner = Context(uid="owner-context", name="practice/3")
+    memory = Memory(uid="ca562047-owner-memory", content="before")
+    owner.add(memory)
+    current = Context(uid="current-context", name="practice/4")
+    store.save(owner)
+    store.save(current)
+    store.set_current(current.name)
+
+    result = invoke("edit", memory.uid[:8], "after")
+
+    assert result.exit_code == 0
+    assert f"Edited [{memory.uid[:8]}] in 'practice/3'" in result.output
+    assert store.current_context_name() == "practice/4"
+    assert store.load("practice/3").memories[memory.uid].content == "after"
+
+
+@pytest.mark.parametrize(
+    "locator",
+    ("practice/3#ca562047", "../3#ca562047"),
+)
+def test_qualified_selector_accepts_canonical_or_relative_context_locator(
+    isolated_store,
+    locator,
+):
+    store = MemoryStore()
+    owner = Context(uid="owner-context", name="practice/3")
+    memory = Memory(uid="ca562047-owner-memory", content="before")
+    owner.add(memory)
+    store.save(owner)
+    store.save(Context(uid="current-context", name="practice/4"))
+    store.set_current("practice/4")
+
+    result = invoke("edit", locator, "after")
+
+    assert result.exit_code == 0
+    assert store.load("practice/3").memories[memory.uid].content == "after"
+    assert store.current_context_name() == "practice/4"
+
+
+def test_cross_context_search_requires_qualifier_when_uid_is_ambiguous(
+    isolated_store,
+):
+    store = MemoryStore()
+    duplicate_uid = "ca562047-duplicate-memory"
+    for name in ("branch/a", "branch/b"):
+        context = Context(uid=f"context-{name}", name=name)
+        context.add(Memory(uid=duplicate_uid, content=name))
+        store.save(context)
+    store.save(Context(uid="current-context", name="branch/current"))
+    store.set_current("branch/current")
+
+    result = invoke("edit", "ca562047", "after")
+
+    assert result.exit_code == 1
+    assert "Ambiguous Memory selector" in result.output
+    assert "branch/a#ca562047" in result.output
+    assert "branch/b#ca562047" in result.output
+    assert store.load("branch/a").memories[duplicate_uid].content == "branch/a"
+    assert store.load("branch/b").memories[duplicate_uid].content == "branch/b"
+
+
+def test_qualified_selector_cannot_be_combined_with_context_option(isolated_store):
+    result = invoke(
+        "edit",
+        "practice/3#ca562047",
+        "replacement",
+        "--context",
+        "practice/3",
+    )
+
+    assert result.exit_code == 1
+    assert "cannot be combined with --context" in result.output
+
+
+def test_edit_can_search_local_owner_without_current_context(isolated_store):
+    store = MemoryStore()
+    owner = Context(uid="owner-context", name="notes")
+    memory = Memory(uid="abcd1234-owner-memory", content="before")
+    owner.add(memory)
+    store.save(owner)
+
+    result = invoke("edit", memory.uid[:8], "replacement")
+
+    assert result.exit_code == 0
+    assert store.load("notes").memories[memory.uid].content == "replacement"
+
+
+def test_edit_reports_missing_local_owner_without_current_context(isolated_store):
     result = invoke("edit", "abcd1234", "replacement")
 
     assert result.exit_code == 1
-    assert "No current context" in result.output
+    assert "No directly owned Memory" in result.output

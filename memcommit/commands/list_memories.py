@@ -45,10 +45,14 @@ from memcommit.source_projection.model import (
     SourceReach,
     SourceState,
 )
+from memcommit.source_projection.console import (
+    styled_source_relationship_label,
+)
 from memcommit.source_projection.presentation import (
     source_annotation_text,
     source_display_text,
     source_object_label,
+    source_relationship_label,
 )
 
 
@@ -390,6 +394,7 @@ def _render_snapshot_item(
     memory_layout: _MemoryLayout,
     terminal_width: int,
     separate_context_blocks: bool,
+    style_relationships: bool,
 ) -> None:
     prefix = " " * indent
     kind = _require_string(item, "kind")
@@ -445,6 +450,7 @@ def _render_snapshot_item(
                     memory_layout=memory_layout,
                     terminal_width=terminal_width,
                     separate_context_blocks=separate_context_blocks,
+                    style_relationships=style_relationships,
                 )
         return
     if kind == "query_context_ref":
@@ -491,12 +497,17 @@ def _render_snapshot_item(
                 ),
                 states=(SourceState.DANGLING,),
             )
-            reference_label = source_object_label(reference_facts)
+            reference_label = (
+                styled_source_relationship_label(reference_facts)
+                if style_relationships
+                else source_relationship_label(reference_facts)
+            )
             annotation = source_annotation_text(reference_facts)
             if with_ids:
                 lines.append(
                     f"{prefix}[{reference_label} {uid[:8]}] "
-                    f"{target_context_name}#{target_memory_uid[:8]}  {annotation}"
+                    f"[{target_context_name}]"
+                    f"[memory {target_memory_uid[:8]}]  {annotation}"
                 )
             else:
                 lines.append(
@@ -511,12 +522,18 @@ def _render_snapshot_item(
                 ),
                 states=(SourceState.READ_ONLY,),
             )
-            reference_label = source_object_label(reference_facts)
+            reference_label = (
+                styled_source_relationship_label(reference_facts)
+                if style_relationships
+                else source_relationship_label(reference_facts)
+            )
             annotation = source_annotation_text(reference_facts)
             if with_ids:
                 lines.append(
-                    f"{prefix}[{reference_label} {uid[:8]}] {_one_line(content)} "
-                    f"-> {target_context_name}#{target_memory_uid[:8]}  {annotation}"
+                    f"{prefix}[{reference_label} {uid[:8]}] "
+                    f"[{target_context_name}]"
+                    f"[memory {target_memory_uid[:8]}] "
+                    f"{_one_line(content)}  {annotation}"
                 )
             else:
                 lines.append(
@@ -560,6 +577,7 @@ def _render_snapshot_items(
     memory_layout: _MemoryLayout,
     terminal_width: int,
     separate_context_blocks: bool,
+    style_relationships: bool,
 ) -> None:
     contexts, memories = _group_snapshot_items(items)
     for index, item in enumerate(contexts):
@@ -576,6 +594,7 @@ def _render_snapshot_items(
             memory_layout=memory_layout,
             terminal_width=terminal_width,
             separate_context_blocks=separate_context_blocks,
+            style_relationships=style_relationships,
         )
     for item in memories:
         _render_snapshot_item(
@@ -587,6 +606,7 @@ def _render_snapshot_items(
             memory_layout=memory_layout,
             terminal_width=terminal_width,
             separate_context_blocks=separate_context_blocks,
+            style_relationships=style_relationships,
         )
 
 
@@ -596,6 +616,7 @@ def _render_snapshot(
     with_ids: bool = True,
     memory_layout: _MemoryLayout,
     terminal_width: int = 100,
+    style_relationships: bool = False,
 ) -> str:
     if memory_layout not in {"hanging", "inline"}:
         raise _snapshot_error()
@@ -631,6 +652,7 @@ def _render_snapshot(
             memory_layout=memory_layout,
             terminal_width=terminal_width,
             separate_context_blocks=recursive,
+            style_relationships=style_relationships,
         )
     return "\n".join(lines) + "\n"
 
@@ -850,6 +872,7 @@ def render_index(ctx: Context, *, recursive: bool = False) -> None:
             ),
             memory_layout="hanging",
             terminal_width=shutil.get_terminal_size(fallback=(100, 24)).columns,
+            style_relationships=True,
         )
     )
 
@@ -970,6 +993,7 @@ def cmd(
                         "The granted list receipt and system clipboard disagree."
                     )
                 staged_text = replay_text
+                replay_with_ids = copied_with_ids
             else:
                 snapshot = payload.selection
                 annotated_text = _render_snapshot(
@@ -988,10 +1012,18 @@ def cmd(
                     )
                 assert payload.plain_text is not None
                 staged_text = payload.plain_text
+                replay_with_ids = staged_text == annotated_text
         except (ClipboardError, ValueError) as error:
             typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
             raise typer.Exit(1)
-        _emit_snapshot_text(staged_text)
+        _emit_snapshot_text(
+            _render_snapshot(
+                snapshot,
+                with_ids=replay_with_ids,
+                memory_layout="inline",
+                style_relationships=True,
+            )
+        )
         count = _snapshot_occurrence_count(snapshot)
         source_context = _require_record(snapshot.get("context"))
         source_name = _require_string(source_context, "name")
@@ -1051,6 +1083,7 @@ def cmd(
         with_ids=True,
         memory_layout="hanging",
         terminal_width=shutil.get_terminal_size(fallback=(100, 24)).columns,
+        style_relationships=True,
     )
     _emit_snapshot_text(
         annotated_text,
