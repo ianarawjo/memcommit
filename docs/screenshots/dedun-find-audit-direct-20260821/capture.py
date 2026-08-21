@@ -7,6 +7,7 @@ import io
 import json
 import os
 from pathlib import Path
+import re
 import sys
 import tempfile
 import time
@@ -19,6 +20,7 @@ OUT = ROOT / "docs/screenshots/dedun-find-audit-direct-20260821"
 COLUMNS = 180
 ROWS = 52
 QUALITY_MARKER = "QUALITY FIND PAYLOAD:\n"
+_SGR_PATTERN = re.compile(r"\x1b\[[0-9;]*m")
 
 _SUPPORT_PATH = (
     ROOT / "docs/screenshots/quality-conflict-resolve-handoff-20260816/capture.py"
@@ -318,6 +320,24 @@ def _snapshot(recorder: io.StringIO, stem: str) -> str:
     return (OUT / f"{stem}.txt").read_text(encoding="utf-8")
 
 
+def _last_token_styles(stream: str, token: str) -> tuple[str, ...]:
+    """Return SGRs active for the last rendered instance of one token."""
+
+    token_offset = stream.rfind(token)
+    assert token_offset >= 0, f"missing rendered token: {token}"
+    matches = tuple(_SGR_PATTERN.finditer(stream, 0, token_offset))
+    assert matches, f"missing ANSI style before rendered token: {token}"
+    reset_offset = max(
+        (
+            index
+            for index, match in enumerate(matches)
+            if match.group() == "\x1b[0m"
+        ),
+        default=-1,
+    )
+    return tuple(match.group() for match in matches[reset_offset + 1 :])
+
+
 def _capture_dedun() -> None:
     child, recorder = _spawn("dedun")
     try:
@@ -474,13 +494,34 @@ def main() -> None:
         red, green, blue = semantic_color_rgb(role)
         code = f"\x1b[38;2;{red};{green};{blue}m"
         assert code in raw
-        for stem in (
-            "03-dedun-checkpoint-review",
-            "03b-dedun-interactive-review",
-            "08-find-read-only-report",
-            "08b-find-duplicates-exact-report",
-        ):
-            assert code in (OUT / f"{stem}.typescript").read_text(encoding="utf-8")
+
+    expected_styles = {}
+    for role, token in (
+        (SemanticColorRole.ADD, "SURVIVOR"),
+        (SemanticColorRole.REMOVE, "ABSORB"),
+    ):
+        red, green, blue = semantic_color_rgb(role)
+        expected_styles[token] = f"\x1b[38;2;{red};{green};{blue}m"
+    for stem in (
+        "03-dedun-checkpoint-review",
+        "08-find-read-only-report",
+        "08b-find-duplicates-exact-report",
+    ):
+        stream = (OUT / f"{stem}.typescript").read_text(encoding="utf-8")
+        for token, expected_style in expected_styles.items():
+            assert expected_style in _last_token_styles(stream, token)
+
+    # prompt-toolkit may lower shared RGB values to terminal-palette indexes.
+    # Verify the final Viewer render itself owns two distinct non-reset styles;
+    # unit tests separately prove their impact.add/impact.remove classification.
+    interactive_stream = (
+        OUT / "03b-dedun-interactive-review.typescript"
+    ).read_text(encoding="utf-8")
+    survivor_styles = _last_token_styles(interactive_stream, "SURVIVOR")
+    absorb_styles = _last_token_styles(interactive_stream, "ABSORB")
+    assert survivor_styles
+    assert absorb_styles
+    assert survivor_styles != absorb_styles
 
 
 if __name__ == "__main__":
