@@ -22,7 +22,6 @@ from memcommit.comparison_store import (
 )
 from memcommit.commands.comparison_execution import (
     COMPARISON_AGGREGATE_TIMEOUT_SECONDS as SHARED_COMPARISON_TIMEOUT_SECONDS,
-    comparison_wait_view,
     connect_comparison_provider,
     ensure_comparison_analysis,
     load_comparison_context,
@@ -39,11 +38,7 @@ from memcommit.commands.compare_sessions import (
 )
 from memcommit.commands.compare_workbench import run_compare_workbench
 from memcommit.commands.command_progress import progressing_provider_factory
-from memcommit.commands.command_wait import (
-    CommandWaitView,
-    build_report_loading_view,
-    run_command_wait,
-)
+from memcommit.commands.command_wait import run_command_wait
 from memcommit.commands.compare_setup import choose_compare_setup
 from memcommit.commands.rationale import render_rationale
 from memcommit.interfaces.tui.components.operation_launcher.session import SessionNewReceipt
@@ -242,10 +237,6 @@ def _present_comparison(
         )
     else:
         typer.echo("Compare view closed.")
-
-
-def _comparison_wait_view(comparison_input: ComparisonInput) -> CommandWaitView:
-    return comparison_wait_view(comparison_input)
 
 
 def cmd(
@@ -540,16 +531,6 @@ def cmd(
                 "connecting provider",
                 total=2,
                 work=compare_frames,
-                return_view=build_report_loading_view(
-                    "COMPARE",
-                    sections=(
-                        "What mem understood",
-                        "Both",
-                        "Differences",
-                        "Items",
-                    ),
-                ),
-                context_view=_comparison_wait_view(comparison_input),
             )
 
         equivalent_match: EquivalentComparePrewarmMatch | None = None

@@ -29,11 +29,11 @@ MEM COMPARE · 2/2 · ANALYZING RELATIONS … · 18s
   the reusable workflow actually requests a provider, so a valid saved result
   or cache hit does not flash a false `CONNECTING PROVIDER` state.
 
-Compare, Meld, Forget, Sever, and Update now reuse the same stage line inside
-the full-screen interactive command-wait TUI when stdin and stdout are
-terminals. Their frozen work runs in an executor so `H` or `?` can open the
-read-only shared Help inventory. Non-TTY execution and other unmigrated
-commands retain the transient-line contract above. See
+Initial Compare, Meld, Forget, Sever, Update, and Audit work uses this same
+transient line in a TTY. Only a Meld or Update replacement turn submitted from
+an existing completed review enters the full-screen interactive command-wait
+TUI, where retaining that prior report provides real context. Non-TTY
+execution also retains the transient-line contract above. See
 [`interactive-command-wait-design-rationale.md`](interactive-command-wait-design-rationale.md).
 
 ## Coverage audit
@@ -41,18 +41,18 @@ commands retain the transient-line contract above. See
 The ordinary user-facing provider boundaries now use either the shared line or
 its interactive command-wait projection:
 
-- Update planning and comment-driven replanning use the interactive wait in a
-  TTY; directional Impact Update planning retains the transient line.
+- Update planning uses the transient line; comment-driven replanning retains
+  the previous reviewed report in the interactive wait. Directional Impact
+  Update planning also retains the transient line.
 - Atomize analysis from Atomize or Impact, plus Atomize grounding turns.
-- Meld initial analysis and later issue or whole-set turns, including Review
-  and Compare handoffs that re-enter the same Meld controller; Meld uses the
-  interactive wait in a TTY.
+- Meld initial analysis uses the transient line. Later issue or whole-set turns,
+  including Review handoffs that re-enter the same Meld controller, retain the
+  previous reviewed report in the interactive wait.
 - Find, temporal Find, Compare, Compare rationale, the three quality finders,
-  and ambiguity Review creation; initial Compare analysis uses the interactive
-  wait in a TTY.
+  and ambiguity Review creation; initial Compare analysis uses the transient
+  line in a TTY.
 - Query routing/answering, Translate, Summarize, Rationale, semantic Log and
-  Revert selection, Provider Probe, and initial Forget/Sever analysis; Forget
-  and Sever use the interactive wait in a TTY.
+  Revert selection, Provider Probe, and initial Forget/Sever analysis.
 
 Find follow-up turns and Ground dialogue turns remain inside their full-screen
 surfaces. They keep those surfaces responsive and animate there instead of

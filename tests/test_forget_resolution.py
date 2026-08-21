@@ -354,13 +354,7 @@ def test_forget_tty_controller_uses_shared_resolution_actions_before_apply(monke
     source_memory_count = len(context.memories)
     progress_events: list[tuple[object, ...]] = []
 
-    def wait(operation, stage, *, total, work, return_view, context_view):
-        report_text = "".join(fragment[1] for fragment in return_view.text)
-        assert return_view.title == "FORGET REPORT · BUILDING"
-        assert "CONTENT PENDING · THIS IS NOT A RESULT" in report_text
-        assert context_view.title == "FORGET CONFIRMED INPUTS · READ-ONLY"
-        assert f"FROZEN MEMORIES · {source_memory_count}" in context_view.text
-        assert "Forget the covered details." in context_view.text
+    def wait(operation, stage, *, total, work):
         progress_events.append(("start", operation, stage, total))
         try:
             return work(object())

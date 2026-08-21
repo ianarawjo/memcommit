@@ -130,14 +130,7 @@ def test_sever_start_reports_real_blocking_stages(isolated_store, monkeypatch):
         def update(self, stage, *, step):
             events.append(("update", stage, step))
 
-    def wait(operation, stage, *, total, work, return_view, context_view):
-        report_text = "".join(fragment[1] for fragment in return_view.text)
-        assert return_view.title == "SEVER REPORT · BUILDING"
-        assert "CONTENT PENDING · THIS IS NOT A RESULT" in report_text
-        assert context_view.title == "SEVER CONFIRMED INPUTS · READ-ONLY"
-        assert "SOURCE · local/source" in context_view.text
-        assert "CRITERIA · local/criteria" in context_view.text
-        assert "OUTPUT · local/result · NOT CREATED" in context_view.text
+    def wait(operation, stage, *, total, work):
         events.append(("start", operation, stage, total))
         try:
             return work(Progress())

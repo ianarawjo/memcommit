@@ -342,13 +342,15 @@ command callback; selection only returns editable shell text. Execution remains
 a later, separate Enter after the person has reviewed and edited that text.
 
 The same inventory also has a stricter `EXPLORE` presentation used by the
-shared interactive command-wait screen, where an operation-owned report or
-report skeleton is the default foreground.
+shared interactive command-wait screen, where a previously completed review
+report is the default foreground while submitted guidance is incorporated.
 In that mode Enter and Right keep descriptions and audited Forms inside Help;
 they never return a shell template. `H` or `h` opens Help from the report,
 confirmed-input copy, or read-only Context browser and hides it back to the
 same surface; `Q`, `q`, or Escape also returns. A completed background turn
-appears as `RESULT READY · H / Q RETURN` without closing Help. The
+appears as `RESULT READY · H / Q RETURN` without closing Help. Initial semantic
+analysis has no completed review and stays on the one-line progress contract,
+so it does not open this Help-capable full-screen surface. The
 inventory data and renderer remain shared; only the caller-owned visibility
 and exit policy differs. Ordinary `mem help` retains `H` for full command help.
 The sibling wait destinations are `C/c` for a browse-only switch-shaped

@@ -3,19 +3,16 @@
 from __future__ import annotations
 
 import sys
-import threading
 from collections.abc import Callable, Sequence
 from typing import Annotated, Optional
 
-from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 import typer
 
-from memcommit.commands.command_progress import BUSY_INTERVAL_SECONDS, busy_suffix
+from memcommit.commands.command_progress import BUSY_INTERVAL_SECONDS
 from memcommit.commands.command_wait import (
     CommandWaitProgress,
-    CommandWaitView,
     run_command_wait,
 )
 from memcommit.commands.context_operand import ContextOperandSnapshot
@@ -63,119 +60,6 @@ from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
 
 
-_AUDIT_WAIT_LABELS: tuple[tuple[QualityAuditKind, str], ...] = (
-    ("duplicates", "DUPLICATES"),
-    ("ambiguities", "AMBIGUITIES"),
-    ("conflicts", "CONFLICTS"),
-)
-_CONFORMANCE_WAIT_LABEL = ("conformance", "CONFORMANCE")
-
-
-class _AuditWaitState:
-    """Project the independent Audit turns into one cumulative screen."""
-
-    def __init__(
-        self,
-        *,
-        context_name: str,
-        memory_count: int,
-        include_conformance: bool = False,
-    ) -> None:
-        self.context_name = context_name
-        self.memory_count = memory_count
-        self._labels = (
-            (*_AUDIT_WAIT_LABELS, _CONFORMANCE_WAIT_LABEL)
-            if include_conformance
-            else _AUDIT_WAIT_LABELS
-        )
-        self._include_conformance = include_conformance
-        self._current_step = 0
-        self._completed_steps = 0
-        self._lock = threading.Lock()
-
-    def begin(self, kind: str, step: int, total: int) -> None:
-        if total != len(self._labels) or not 1 <= step <= total:
-            raise QualityAuditError("Invalid Audit progress boundary.")
-        expected_kind = self._labels[step - 1][0]
-        if kind != expected_kind:
-            raise QualityAuditError(
-                "Audit progress did not preserve its displayed check order."
-            )
-        with self._lock:
-            # A later row proves only that the preceding finder returned a
-            # complete validated report. Its content remains unpublished until
-            # the final complete snapshot exists.
-            self._completed_steps = step - 1
-            self._current_step = step
-
-    def complete(self) -> None:
-        with self._lock:
-            self._completed_steps = len(self._labels)
-            self._current_step = 0
-
-    def render(self, frame_index: int) -> StyleAndTextTuples:
-        with self._lock:
-            current_step = self._current_step
-            completed_steps = self._completed_steps
-        fragments: StyleAndTextTuples = [
-            (
-                "class:loading-label",
-                (
-                    "MEM AUDIT · THREE QUALITY FINDERS + RULE CONFORMANCE\n"
-                    if self._include_conformance
-                    else "MEM AUDIT · THREE QUALITY FINDERS\n"
-                ),
-            ),
-            ("class:loading-status", "RESULT PENDING · SOURCE UNCHANGED\n\n"),
-            ("class:report-label", "FROZEN SOURCE\n"),
-            (
-                "class:report-neutral",
-                f"{display_escape_text(self.context_name)} · "
-                f"{self.memory_count} direct Memories\n\n",
-            ),
-            ("class:viewer-section", "CHECKS · SAME FROZEN DIRECT SOURCE\n"),
-        ]
-        for step, (_kind, label) in enumerate(self._labels, start=1):
-            fragments.append(
-                ("class:report-neutral", f"{step}. {label:<12} · ")
-            )
-            if step <= completed_steps:
-                fragments.append(("class:loading-complete", "COMPLETE\n"))
-            elif step == current_step:
-                fragments.append(
-                    (
-                        "class:loading-status",
-                        f"RUNNING {busy_suffix(frame_index)}\n",
-                    )
-                )
-            else:
-                fragments.append(("class:loading-placeholder", "WAITING\n"))
-        fragments.extend(
-            [
-                ("", "\n"),
-                (
-                    "class:report-neutral",
-                    "Each check runs independently in this displayed order. "
-                    "No partial Audit is saved.\n",
-                ),
-                (
-                    "class:report-neutral",
-                    "H or ? opens Help while the active finder continues.",
-                ),
-            ]
-        )
-        return fragments
-
-    def view(self) -> CommandWaitView:
-        return CommandWaitView(
-            title="AUDIT CHECKS · " + " → ".join(
-                str(step) for step in range(1, len(self._labels) + 1)
-            ),
-            text=self.render(0),
-            frame_renderer=self.render,
-        )
-
-
 def _run_quality_audit_checks(
     ctx: Context,
     provider_factory: Callable[[], FindingsProvider],
@@ -188,18 +72,12 @@ def _run_quality_audit_checks(
     help_entries: Sequence[CommandEntry] | None = None,
     on_help_action: Callable[[str, str | None], None] | None = None,
 ) -> QualityAuditSession:
-    """Run the frozen checks behind one cumulative, Help-capable wait view."""
+    """Run the frozen checks behind one shared transient progress line."""
 
-    wait_state = _AuditWaitState(
-        context_name=ctx.name,
-        memory_count=len(ctx.memories),
-        include_conformance=conformance_rules is not None,
-    )
     total_checks = 4 if conformance_rules is not None else 3
 
     def work(progress: CommandWaitProgress) -> QualityAuditSession:
         def update_progress(kind: QualityAuditKind, step: int, _total: int) -> None:
-            wait_state.begin(kind, step, total_checks)
             progress.update(f"finding {kind}", step=step)
 
         session = run_quality_audit(
@@ -208,7 +86,6 @@ def _run_quality_audit_checks(
             on_check=update_progress,
         )
         if conformance_rules is not None:
-            wait_state.begin("conformance", 4, total_checks)
             progress.update("checking conformance", step=4)
             frozen = freeze_context_conformance(ctx, conformance_rules)
             report = check_context_conformance(
@@ -225,7 +102,6 @@ def _run_quality_audit_checks(
                 uid=session.uid,
                 created_at=session.created_at,
             )
-        wait_state.complete()
         return session
 
     return run_command_wait(
@@ -239,7 +115,6 @@ def _run_quality_audit_checks(
         interval=interval,
         help_entries=help_entries,
         on_help_action=on_help_action,
-        return_view=wait_state.view(),
     )
 
 

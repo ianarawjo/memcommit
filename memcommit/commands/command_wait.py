@@ -30,7 +30,6 @@ from memcommit.commands.background_turn import BackgroundExecutorTurn
 from memcommit.commands.command_progress import (
     BUSY_INTERVAL_SECONDS,
     CommandProgress,
-    busy_suffix,
     render_progress_line,
 )
 from memcommit.context_targeting.tui.picker import (
@@ -98,11 +97,12 @@ class CommandWaitProgress(Protocol):
 
 @dataclass(frozen=True)
 class CommandWaitView:
-    """Frozen operation-owned screen restored when Help is hidden.
+    """Frozen reviewed screen restored while a replacement turn runs.
 
-    The waiting shell owns only read-only display and navigation. Callers own
-    the semantic text so a pending result is never presented as an already
-    available report.
+    Initial analysis deliberately has no view: it stays on the shared one-line
+    progress contract until a complete result exists. The waiting shell owns
+    only read-only display and navigation for a previously completed report;
+    callers own its semantic text and the visibly unincorporated review turn.
     """
 
     title: str
@@ -242,76 +242,6 @@ def _freeze_default_context_browser() -> CommandWaitContextBrowser | None:
         return local_browser
 
 
-def _render_report_loading_frame(
-    operation: str,
-    sections: Sequence[str],
-    *,
-    frame_index: int,
-) -> StyleAndTextTuples:
-    """Project the shared busy cadence into an honest report topology."""
-
-    fragments: StyleAndTextTuples = [
-        ("class:loading-label", f"MEM {operation.upper()} · REPORT BUILDING\n"),
-        ("class:loading-status", "CONTENT PENDING · THIS IS NOT A RESULT\n\n"),
-    ]
-    for section_index, section in enumerate(sections):
-        fragments.append(("class:viewer-section", section.upper() + "\n"))
-        # Stagger the same three shared frames so a still capture communicates
-        # the cadence without introducing a second loading grammar.
-        fragments.append(
-            (
-                "class:loading-placeholder",
-                # Equal buffer width prevents animation from shifting a
-                # reader's preserved cursor or scroll anchor.
-                f"  {busy_suffix(frame_index + section_index):<3}\n",
-            )
-        )
-        if section_index < len(sections) - 1:
-            fragments.append(("", "\n"))
-    fragments.extend(
-        [
-            ("", "\n"),
-            (
-                "class:report-neutral",
-                "The completed report will replace these markers after analysis.\n",
-            ),
-            (
-                "class:report-neutral",
-                "C/c opens Contexts; R/r returns here; H/h/? opens Help.",
-            ),
-        ]
-    )
-    return fragments
-
-
-def build_report_loading_view(
-    operation: str,
-    *,
-    sections: Sequence[str],
-) -> CommandWaitView:
-    """Build an animated report-shaped wait view without invented content."""
-
-    if not operation.strip() or not sections or any(
-        not section.strip() for section in sections
-    ):
-        raise ValueError("A loading report requires an operation and sections.")
-    frozen_operation = operation.strip()
-    frozen_sections = tuple(section.strip() for section in sections)
-
-    def render(frame_index: int) -> StyleAndTextTuples:
-        return _render_report_loading_frame(
-            frozen_operation,
-            frozen_sections,
-            frame_index=frame_index,
-        )
-
-    return CommandWaitView(
-        title=f"{operation.upper()} REPORT · BUILDING",
-        text=render(0),
-        frame_renderer=render,
-    )
-
-
 class _InteractiveProgress:
     def __init__(
         self,
@@ -411,11 +341,13 @@ def run_command_wait(
     context_view: CommandWaitView | None = None,
     context_browser: CommandWaitContextBrowser | None = None,
 ) -> T:
-    """Run blocking work while a TTY may browse the shared Help inventory.
+    """Run one blocking turn with inline progress or a prior-review wait UI.
 
-    The Help session is deliberately read-only. It can inspect command names,
-    descriptions, and audited forms, but cannot prefill or execute another
-    command while the operation owns a frozen semantic turn.
+    Initial analysis remains on the shared transient progress line because no
+    result exists to review. A caller may supply ``return_view`` only when a
+    completed report already exists and a submitted review turn is producing
+    its replacement; that TTY path keeps the prior report and read-only Help
+    available without restarting the frozen work.
     """
 
     # ``context_view`` is the long-standing API name for the operation-owned
@@ -430,12 +362,13 @@ def run_command_wait(
         if interactive is None
         else interactive
     )
-    if not enabled:
+    if not enabled or return_view is None:
         with CommandProgress(
             operation,
             stage,
             total=total,
             step=step,
+            enabled=True if enabled else None,
             interval=interval,
         ) as progress:
             return work(progress)
@@ -1144,8 +1077,8 @@ def run_command_wait(
         application.exit()
 
     def start_work() -> None:
-        # The report (or prior report) remains the stable default surface.
-        # Help is an explicit exploration layer and never delays a fast result.
+        # A prior reviewed report remains the stable default surface. Initial
+        # analysis never enters this full-screen path.
         background.start(
             application,
             work=lambda: work(progress),

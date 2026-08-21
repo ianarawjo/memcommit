@@ -9,7 +9,6 @@ import typer
 from memcommit.application_flow import run_application_flow
 from memcommit.commands.command_wait import (
     CommandWaitView,
-    build_report_loading_view,
     run_command_wait,
 )
 from memcommit.commands.update_setup import choose_update_setup
@@ -261,15 +260,6 @@ def _update_confirmed_inputs_view(
     )
 
 
-def _update_loading_view() -> CommandWaitView:
-    """Project Update's eventual report topology through shared loading chrome."""
-
-    return build_report_loading_view(
-        "UPDATE",
-        sections=("Plan", "What will change", "Planned changes", "To do"),
-    )
-
-
 def _update_revision_wait_view(
     session: UpdateSession,
     guidance: str,
@@ -327,13 +317,6 @@ def _plan_update_with_wait(
         "connecting provider",
         total=2,
         work=plan,
-        return_view=_update_loading_view(),
-        context_view=_update_confirmed_inputs_view(
-            source,
-            target,
-            source_descendants=source_descendants,
-            target_descendants=target_descendants,
-        ),
     )
 
 

@@ -10,13 +10,9 @@ import typer
 
 from memcommit.comparison import (
     ComparisonAnalysis,
-    ComparisonInput,
 )
 from memcommit.comparison_provider import (
     ComparisonProviderError,
-)
-from memcommit.commands.comparison_execution import (
-    comparison_wait_view,
 )
 from memcommit.context import Context
 from memcommit.context_targeting.loading import load_context_scope
@@ -39,7 +35,6 @@ from memcommit.authority.access import (
 )
 from memcommit.commands.command_wait import (
     CommandWaitView,
-    build_report_loading_view,
     run_command_wait,
 )
 from memcommit.commands.meld_setup import choose_meld_setup
@@ -111,31 +106,6 @@ from memcommit.study_prewarm.registry import StudyPrewarmRegistryError
 
 class MeldCommandError(RuntimeError):
     """Safe user-facing orchestration failure."""
-
-
-def _symmetric_comparison_wait_context_view(
-    comparison_input: ComparisonInput,
-    *,
-    target_name: str,
-) -> CommandWaitView:
-    """Show all three frozen symmetric operands while Compare is pending."""
-
-    base = comparison_wait_view(comparison_input)
-    assert isinstance(base.text, str)
-    source_text = base.text.partition(
-        "\nThe comparison report will replace this setup"
-    )[0]
-    return CommandWaitView(
-        title="MELD CONFIRMED INPUTS · READ-ONLY",
-        text=(
-            source_text.rstrip()
-            + "\n\n"
-            + f"RESULT C · {safe_terminal_text(target_name)}\n"
-            + "  TARGET STATE · UNCHANGED WHILE COMPARE RUNS\n\n"
-            + "The ordered Compare basis will be saved before the Meld "
-            + "target and session are published."
-        ),
-    )
 
 
 def _session_command(session: MeldSession) -> str:
@@ -679,24 +649,14 @@ def _meld_wait_view(session: MeldSession) -> CommandWaitView:
     live object would replace the participant's report with only "pending".
     Reconstruct the immediately preceding durable view for display only and
     keep the submitted turn visibly separate. Initial analysis has no prior
-    report and therefore shows its frozen route and pending state instead.
+    report and remains on the shared one-line progress contract.
     """
 
     current = session.current_turn
     if current is None or current.assessment is not None or len(session.turns) <= 1:
-        result_section = (
-            "Proposed baseline changes"
-            if session.mode == "DIRECTIONAL"
-            else "Proposed target Memories"
-        )
-        return build_report_loading_view(
-            "MELD",
-            sections=(
-                "What mem understood",
-                "Relations",
-                "Issues",
-                result_section,
-            ),
+        raise ValueError(
+            "A Meld wait report requires a submitted turn after a completed "
+            "assessment."
         )
 
     prior_turn = session.turns[-2]
@@ -845,13 +805,20 @@ def _assess_and_save(
             observer=observe,
         ).session
 
+    if len(session.turns) > 1:
+        return run_command_wait(
+            "MELD",
+            "connecting provider",
+            total=2,
+            work=assess,
+            return_view=_meld_wait_view(session),
+            context_view=_meld_wait_context_view(session),
+        )
     return run_command_wait(
         "MELD",
         "connecting provider",
         total=2,
         work=assess,
-        return_view=_meld_wait_view(session),
-        context_view=_meld_wait_context_view(session),
     )
 
 
@@ -1847,39 +1814,16 @@ def cmd(
                         prepared=prepared,
                     )
 
-                if requested_mode == "DIRECTIONAL":
-                    assert prepared.provisional_session is not None
-                    return_view = _meld_wait_view(prepared.provisional_session)
-                    context_view = _meld_wait_context_view(prepared.provisional_session)
-                    stage = "connecting provider"
-                else:
-                    comparison_input = ComparisonInput.from_contexts(
-                        prepared.left,
-                        prepared.right,
-                        reference_descendants=left_descendants,
-                        compared_descendants=right_descendants,
-                    )
-                    return_view = build_report_loading_view(
-                        "MELD",
-                        sections=(
-                            "What mem understood",
-                            "Both",
-                            "Differences",
-                            "Items",
-                        ),
-                    )
-                    context_view = _symmetric_comparison_wait_context_view(
-                        comparison_input,
-                        target_name=target_name,
-                    )
-                    stage = "preparing ordered Compare basis"
+                stage = (
+                    "connecting provider"
+                    if requested_mode == "DIRECTIONAL"
+                    else "preparing ordered Compare basis"
+                )
                 started = run_command_wait(
                     "MELD",
                     stage,
                     total=2,
                     work=start_meld,
-                    return_view=return_view,
-                    context_view=context_view,
                 )
             else:
                 started = execute_meld_start(
@@ -1954,39 +1898,16 @@ def cmd(
                         prepared=prepared,
                     )
 
-                if requested_mode == "DIRECTIONAL":
-                    assert prepared.provisional_session is not None
-                    return_view = _meld_wait_view(prepared.provisional_session)
-                    context_view = _meld_wait_context_view(prepared.provisional_session)
-                    stage = "connecting provider"
-                else:
-                    comparison_input = ComparisonInput.from_contexts(
-                        prepared.left,
-                        prepared.right,
-                        reference_descendants=left_descendants,
-                        compared_descendants=right_descendants,
-                    )
-                    return_view = build_report_loading_view(
-                        "MELD",
-                        sections=(
-                            "What mem understood",
-                            "Both",
-                            "Differences",
-                            "Items",
-                        ),
-                    )
-                    context_view = _symmetric_comparison_wait_context_view(
-                        comparison_input,
-                        target_name=target_name,
-                    )
-                    stage = "preparing ordered Compare basis"
+                stage = (
+                    "connecting provider"
+                    if requested_mode == "DIRECTIONAL"
+                    else "preparing ordered Compare basis"
+                )
                 restarted = run_command_wait(
                     "MELD",
                     stage,
                     total=2,
                     work=restart_meld,
-                    return_view=return_view,
-                    context_view=context_view,
                 )
             else:
                 restarted = execute_meld_restart(

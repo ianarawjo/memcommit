@@ -31,7 +31,7 @@ from memcommit.ground import (
 )
 from memcommit.provider_types import ProviderIdentity
 from memcommit.store import MemoryStore
-from memcommit.commands.audit import _AuditWaitState, _run_quality_audit_checks
+from memcommit.commands.audit import _run_quality_audit_checks
 from memcommit.quality_audit import (
     QUALITY_AUDIT_LEGACY_SCHEMA_VERSION,
     QualityAuditSession,
@@ -412,23 +412,6 @@ def test_audit_cli_against_rules_saves_one_read_only_four_check_report(
     assert context_record_digest(store.load_direct(rules.name)) == rules_before
     assert store.list_checkpoints(target.name) == []
     assert store.list_checkpoints(rules.name) == []
-
-
-def test_audit_conformance_wait_view_displays_all_four_checks():
-    state = _AuditWaitState(
-        context_name="ticker/examples",
-        memory_count=2,
-        include_conformance=True,
-    )
-    state.begin("conformance", 4, 4)
-
-    view = state.view()
-    rendered = "".join(text for _style, text in state.render(0))
-
-    assert view.title == "AUDIT CHECKS · 1 → 2 → 3 → 4"
-    assert "THREE QUALITY FINDERS + RULE CONFORMANCE" in rendered
-    assert "3. CONFLICTS    · COMPLETE" in rendered
-    assert "4. CONFORMANCE  · RUNNING" in rendered
 
 
 def test_audit_still_reads_legacy_three_check_records_without_conformance():

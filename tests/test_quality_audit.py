@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from dataclasses import replace
-import threading
 
 import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
@@ -11,10 +10,10 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
+import memcommit.commands.audit as audit_command
 from memcommit.cli import app
-from memcommit.commands.audit import _AuditWaitState, _run_quality_audit_checks
+from memcommit.commands.audit import _run_quality_audit_checks
 from memcommit.commands.audit_sessions import audit_session_entries
-from memcommit.commands.help_inventory import CommandEntry
 from memcommit.commands.quality_find_workbench import (
     QualityFindSetupReceipt,
     choose_quality_find_setup,
@@ -62,22 +61,6 @@ class EmptyAuditProvider:
             upstream_provider="test",
         )
         return '{"findings": []}'
-
-
-class HelpBlockingAuditProvider(EmptyAuditProvider):
-    entered = threading.Event()
-    help_opened = threading.Event()
-
-    def complete(self, prompt, *, operation, output_schema=None):
-        if operation == "find_duplicates":
-            self.entered.set()
-            if not self.help_opened.wait(3):
-                raise RuntimeError("Help was not opened during Duplicate analysis.")
-        return super().complete(
-            prompt,
-            operation=operation,
-            output_schema=output_schema,
-        )
 
 
 def _context():
@@ -208,106 +191,36 @@ def test_run_quality_audit_calls_all_three_independent_finders_once():
     )
 
 
-def _wait_lines(state: _AuditWaitState) -> list[str]:
-    text = "".join(fragment[1] for fragment in state.render(0))
-    return [
-        line
-        for line in text.splitlines()
-        if line.startswith(("1.", "2.", "3."))
-    ]
-
-
-def test_audit_wait_accumulates_all_three_checks_on_one_screen():
-    state = _AuditWaitState(context_name="audit/source", memory_count=2)
-
-    assert [line.rsplit("·", 1)[1].strip() for line in _wait_lines(state)] == [
-        "WAITING",
-        "WAITING",
-        "WAITING",
-    ]
-
-    state.begin("duplicates", 1, 3)
-    assert [line.rsplit("·", 1)[1].strip() for line in _wait_lines(state)] == [
-        "RUNNING .",
-        "WAITING",
-        "WAITING",
-    ]
-
-    state.begin("ambiguities", 2, 3)
-    assert [line.rsplit("·", 1)[1].strip() for line in _wait_lines(state)] == [
-        "COMPLETE",
-        "RUNNING .",
-        "WAITING",
-    ]
-
-    state.begin("conflicts", 3, 3)
-    assert [line.rsplit("·", 1)[1].strip() for line in _wait_lines(state)] == [
-        "COMPLETE",
-        "COMPLETE",
-        "RUNNING .",
-    ]
-
-    state.complete()
-    assert [line.rsplit("·", 1)[1].strip() for line in _wait_lines(state)] == [
-        "COMPLETE",
-        "COMPLETE",
-        "COMPLETE",
-    ]
-    assert state.view().title == "AUDIT CHECKS · 1 → 2 → 3"
-
-
-def test_audit_wait_h_opens_help_without_restarting_finders():
+def test_audit_initial_checks_never_supply_a_full_screen_return_view(monkeypatch):
     ctx, _first, _second = _context()
     EmptyAuditProvider.calls = []
-    HelpBlockingAuditProvider.entered = threading.Event()
-    HelpBlockingAuditProvider.help_opened = threading.Event()
-    result_ready = threading.Event()
-    actions: list[tuple[str, str | None]] = []
+    stages: list[tuple[object, ...]] = []
 
-    def observe(action: str, command_name: str | None) -> None:
-        actions.append((action, command_name))
-        if action == "OPEN":
-            HelpBlockingAuditProvider.help_opened.set()
-        elif action == "RESULT_READY":
-            result_ready.set()
+    class Progress:
+        def update(self, stage, *, step):
+            stages.append(("UPDATE", stage, step))
 
-    help_entries = (
-        CommandEntry(
-            name="audit",
-            annotation=None,
-            description="Run all three Memory quality finders.",
-            command=object(),
-            forms=("mem audit", "mem audit --context NAME"),
-        ),
-    )
+    def wait(operation, stage, *, total, work, **kwargs):
+        assert "return_view" not in kwargs
+        stages.append(("WAIT", operation, stage, total))
+        return work(Progress())
+
+    monkeypatch.setattr(audit_command, "run_command_wait", wait)
 
     with create_pipe_input() as pipe_input:
-        def drive_terminal() -> None:
-            if not HelpBlockingAuditProvider.entered.wait(3):
-                pipe_input.send_text("\x03")
-                return
-            pipe_input.send_text("h")
-            if not result_ready.wait(3):
-                pipe_input.send_text("\x03")
-                return
-            # Completion does not dismiss Help; H returns to the ready Audit.
-            pipe_input.send_text("h")
-
-        driver = threading.Thread(target=drive_terminal, daemon=True)
-        driver.start()
         session = _run_quality_audit_checks(
             ctx,
-            HelpBlockingAuditProvider,
+            EmptyAuditProvider,
             app_input=pipe_input,
             app_output=DummyOutput(),
             interactive=True,
             interval=0.01,
-            help_entries=help_entries,
-            on_help_action=observe,
+            help_entries=(),
+            on_help_action=lambda *_args: pytest.fail(
+                "initial Audit must not enter full-screen Help"
+            ),
         )
-        driver.join(timeout=3)
 
-    assert not driver.is_alive()
     assert [check.kind for check in session.checks] == [
         "duplicates",
         "ambiguities",
@@ -318,8 +231,12 @@ def test_audit_wait_h_opens_help_without_restarting_finders():
         "find_ambiguities",
         "find_conflicts",
     ]
-    assert ("OPEN", None) in actions
-    assert ("RESULT_READY", None) in actions
+    assert stages == [
+        ("WAIT", "AUDIT", "finding duplicates", 3),
+        ("UPDATE", "finding duplicates", 1),
+        ("UPDATE", "finding ambiguities", 2),
+        ("UPDATE", "finding conflicts", 3),
+    ]
 
 
 def test_audit_report_keeps_three_sections_and_type_specific_items():

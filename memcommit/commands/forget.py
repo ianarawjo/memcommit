@@ -4,11 +4,7 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.command_attempts import annotate_command_outcome
-from memcommit.commands.command_wait import (
-    CommandWaitView,
-    build_report_loading_view,
-    run_command_wait,
-)
+from memcommit.commands.command_wait import run_command_wait
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.authority.access import (
     context_access_display_facts,
@@ -62,26 +58,6 @@ def _forget_analysis_stage(ctx: Context) -> str:
     return f"analyzing {len(ctx.memories)} source memories x 1 instruction"
 
 
-def _forget_wait_view(ctx: Context, info: str) -> CommandWaitView:
-    """Show the reviewed input because no Forget report exists pre-analysis."""
-
-    text = "\n".join(
-        [
-            "MEM FORGET · FROZEN INPUT · RESULT PENDING",
-            "",
-            f"SOURCE · {safe_terminal_text(ctx.name)} · THIS CONTEXT ONLY",
-            f"FROZEN MEMORIES · {len(ctx.memories)}",
-            "SOURCE STATE · UNCHANGED",
-            "",
-            "INSTRUCTION",
-            safe_terminal_text(info),
-            "",
-            "Execution decisions will replace this setup after the provider returns.",
-        ]
-    )
-    return CommandWaitView(title="FORGET CONFIRMED INPUTS · READ-ONLY", text=text)
-
-
 class _FrozenContextForgetSourcePort:
     """Compatibility port for historical in-memory controller tests."""
 
@@ -112,7 +88,6 @@ def _run_resolution_forget_snapshot(
     # changing the semantic request.
     source = source_port.freeze(request)
     ctx = source.context
-    info = request.instruction
     result = run_command_wait(
         "FORGET",
         _forget_analysis_stage(ctx),
@@ -122,11 +97,6 @@ def _run_resolution_forget_snapshot(
             source_port=source_port,
             provider_factory=provider_factory,
         ),
-        return_view=build_report_loading_view(
-            "FORGET",
-            sections=("What mem understood", "Review decisions", "To do"),
-        ),
-        context_view=_forget_wait_view(ctx, info),
     )
     return run_forget_review_workbench(
         result.snapshot,

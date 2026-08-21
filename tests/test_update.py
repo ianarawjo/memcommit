@@ -1138,8 +1138,8 @@ def test_tty_update_incorporates_review_comment_before_applying(
         *,
         total,
         work,
-        return_view,
-        context_view,
+        return_view=None,
+        context_view=None,
     ):
         wait_views.append((operation, stage, total, return_view, context_view))
         return work(Progress())
@@ -1173,16 +1173,7 @@ def test_tty_update_incorporates_review_comment_before_applying(
         ("UPDATE", "connecting provider", 2),
         ("UPDATE", "connecting provider", 2),
     ]
-    initial_report = "".join(fragment[1] for fragment in wait_views[0][3].text)
-    assert wait_views[0][3].title == "UPDATE REPORT · BUILDING"
-    assert "CONTENT PENDING · THIS IS NOT A RESULT" in initial_report
-    assert "PLANNED CHANGES" in initial_report
-    assert "  .  \n" in initial_report
-    assert "  .. \n" in initial_report
-    assert "  …  \n" in initial_report
-    assert wait_views[0][4].title == "UPDATE CONFIRMED INPUTS · READ-ONLY"
-    assert f"SOURCE A · {TASK1_SOURCE}" in wait_views[0][4].text
-    assert f"TARGET B · {TASK1_TARGET}" in wait_views[0][4].text
+    assert wait_views[0][3:] == (None, None)
 
     revision_report = wait_views[1][3]
     assert revision_report.title == "PREVIOUS UPDATE REPORT · READ-ONLY"

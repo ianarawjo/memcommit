@@ -1,0 +1,52 @@
+ MEM UPDATE · 1/2 · CONNECTING PROVIDER . · 0s                                                                                                                                      
+┌──────────────────────────────────────────────────────────────────────| PREVIOUS UPDATE REPORT · READ-ONLY |──────────────────────────────────────────────────────────────────────┐
+│STAGED UPDATE · COMPLETE REVIEW                                                                                                                                                  ^│
+│                                                                                                                                                                                  │
+│PLAN                                                                                                                                                                              │
+│Replace the obsolete entrance claim with verified access information.                                                                                                             │
+│                                                                                                                                                                                  │
+│PLANNED CHANGES                                                                                                                                                                   │
+│  ~ EDIT · The south entrance provides step-free public access.                                                                                                                   │
+│                                                                                                                                                                                  │
+│PENDING REVISION · SUBMITTED · NOT YET INCORPORATED                                                                                                                               │
+│Keep the claim limited to public step-free access.                                                                                                                                │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ C/c Contexts · I/i inputs · R/r report · ↑/↓ scroll · PgUp/PgDn page · Home/End · Q/q request close · read-only                                                                    

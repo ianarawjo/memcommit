@@ -2,11 +2,11 @@
 
 ## Problem
 
-The interactive provider-wait footer previously used `C` as a toggle between
-the report and frozen inputs. Its meaning therefore depended on the currently
-visible surface, lower-case input was not part of the displayed contract, and
-there was no safe way to inspect the Context namespace while a semantic turn
-was still running.
+The review-replacement wait footer previously used `C` as a toggle between the
+prior report and frozen submitted inputs. Its meaning therefore depended on
+the currently visible surface, lower-case input was not part of the displayed
+contract, and there was no safe way to inspect the Context namespace while the
+reviewed replacement turn was still running.
 
 ## Destination contract
 
@@ -15,7 +15,7 @@ key:
 
 - `C/c` opens a switch-shaped Context browser.
 - `I/i` opens the operation's exact frozen confirmed inputs, when supplied.
-- `R/r` opens the report or honest report-building skeleton, when supplied.
+- `R/r` opens the previous completed review report.
 - `H/h/?` opens the shared read-only Help inventory.
 
 Each letter remains a stable named destination on its first press. An
@@ -25,10 +25,10 @@ handoff, while `H/h` uses Help's existing open/hide lifecycle. Pressing a
 different destination establishes a new origin for that key pair. The footer
 changes the active key's label to `back` only when such an origin exists.
 
-The footer and bindings are derived from the same available surfaces. `I/i`
-is absent and unbound without a confirmed-input view. `R/r` is absent and
-unbound when the command has no report surface. This keeps a shortcut from
-advertising a destination that the operation cannot show.
+The footer and bindings are derived from the same available review surfaces.
+`I/i` is absent and unbound without a submitted-input view. Initial analysis
+has neither surface and uses the one-line progress path instead. This keeps a
+shortcut from advertising a destination that the operation cannot show.
 
 ## Context and Memory safety boundary
 
@@ -71,14 +71,12 @@ review, approval, CAS, and materialization boundary.
 ## Verification record
 
 Pipe-input tests exercise upper- and lower-case destinations, same-key return
-for Contexts, inputs, report, and Help, conditional input/report bindings,
+for Contexts, inputs, the previous report, and Help, conditional bindings,
 interleaved Memory navigation, and a guard that fails if
-`MemoryStore.set_current()` is reached from the browser. The real Update path
-is recorded at 180 columns × 52 rows under
-`docs/screenshots/mem-update-command-wait-20260810`: report entry, `c` Context
-entry and same-key return, `m` plus Down Memory focus, `i` input entry and
-return, `h` Help entry and return, `r` report entry and return, review, and
-read-only verification. The symmetric Meld capture under
-`docs/screenshots/meld-auto-compare-basis-20260810` separately verifies that
-the default/R surface is the report and I is the frozen A/B/C input surface
-while an unrelated current Context stays unchanged.
+`MemoryStore.set_current()` is reached from the browser. The dated Update and
+Meld captures under `docs/screenshots/mem-update-command-wait-20260810` and
+`docs/screenshots/meld-auto-compare-basis-20260810` preserve the earlier
+first-analysis skeleton rollout as historical evidence; they are not the
+current initial-analysis contract. The current 180×52 evidence under
+`docs/screenshots/inline-semantic-analysis-20260821` shows the one-line initial
+path and a separate prior-review replacement path.

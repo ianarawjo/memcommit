@@ -289,22 +289,11 @@ def render_comparison(
             "--to",
             compared.context_name,
         ]
-        meld_argv = [
-            "mem",
-            "meld",
-            reference.context_name,
-            compared.context_name,
-        ]
         if analysis.include_descendants[0]:
             compare_argv.append("--reference-descendants")
-            meld_argv.append("--left-descendants")
         if analysis.include_descendants[1]:
             compare_argv.append("--compared-descendants")
-            meld_argv.append("--right-descendants")
         ledger_command = display_escape_text(shlex.join([*compare_argv, "--ledger"]))
-        meld_command = display_escape_text(
-            shlex.join([*meld_argv, "--to", "RESULT_CONTEXT"])
-        )
         lines.extend(
             [
                 "",
@@ -318,14 +307,6 @@ def render_comparison(
                 f"  {ledger_command}",
             ]
         )
-        if durable:
-            lines.extend(
-                [
-                    "",
-                    "Create a new result Context and review both sources with Meld:",
-                    f"  {meld_command}",
-                ]
-            )
         return "\n".join(lines)
 
     lines.extend(["", f"RELATION LEDGER · {len(analysis.relations)}"])

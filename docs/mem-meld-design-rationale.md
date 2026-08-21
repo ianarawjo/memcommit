@@ -1204,14 +1204,15 @@ analysis or conversational reply**, not one call for every possible
 Memory pair. It does not use one opaque call for the entire
 analysis–conversation–application lifecycle.
 
-Every one of those provider-backed assessments crosses the same Meld-owned
-interactive wait boundary. This includes initial analysis, issue-scoped
-replies, whole-set guidance, and the `INCORPORATE RESPONSES` turn assembled by
-the Resolution Workbench. Task 2 produced valid first-turn Directional
-sessions whose response-incorporation calls ran for more than ten minutes and
-looked frozen after the review screen closed. Keeping every call on the shared
-wait surface preserves the indivisible semantic turn while exposing honest
-elapsed time and read-only Help.
+Every provider-backed assessment preserves one indivisible semantic turn, but
+its presentation depends on whether a completed review exists. Initial and
+restart analysis stays on the shared transient progress line. Issue-scoped
+replies, whole-set guidance, and `INCORPORATE RESPONSES` turns assembled by the
+Resolution Workbench retain the immediately preceding complete report in the
+interactive wait, with the submitted turn marked not yet incorporated. Task 2
+produced response-incorporation calls lasting more than ten minutes; preserving
+the actual reviewed report is useful there, while an empty full-screen report
+before first analysis is not.
 
 An interrupted provider call publishes no replacement assessment. The saved
 session remains at its last fully assessed turn and the target stays unchanged.

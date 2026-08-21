@@ -1,0 +1,52 @@
+CAPTURE PTY · 180x52                                                                                                                                                                
+CAPTURE READY · COMPARE · PRESS ENTER                                                                                                                                               
+                                                                                                                                                                                    
+CAPTURE RESULT · COMPARE COMPLETE                                                                                                                                                   
+CAPTURE NEXT · PRESS ENTER                                                                                                                                                          
+                                                                                                                                                                                    
+CAPTURE READY · MELD · PRESS ENTER                                                                                                                                                  
+                                                                                                                                                                                    
+CAPTURE RESULT · MELD COMPLETE                                                                                                                                                      
+CAPTURE NEXT · PRESS ENTER                                                                                                                                                          
+                                                                                                                                                                                    
+CAPTURE READY · UPDATE · PRESS ENTER                                                                                                                                                
+                                                                                                                                                                                    
+CAPTURE RESULT · UPDATE COMPLETE                                                                                                                                                    
+CAPTURE NEXT · PRESS ENTER                                                                                                                                                          
+                                                                                                                                                                                    
+CAPTURE READY · FORGET · PRESS ENTER                                                                                                                                                
+                                                                                                                                                                                    
+CAPTURE RESULT · FORGET COMPLETE                                                                                                                                                    
+CAPTURE NEXT · PRESS ENTER                                                                                                                                                          
+                                                                                                                                                                                    
+CAPTURE READY · SEVER · PRESS ENTER                                                                                                                                                 
+                                                                                                                                                                                    
+MEM SEVER · 3/3 · ANALYZING 2 SOURCE X 1 CRITERIA .. · 1s                                                                                                                           
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    

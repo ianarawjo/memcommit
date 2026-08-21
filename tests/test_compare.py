@@ -102,27 +102,6 @@ def test_compare_codex_provider_uses_whole_ledger_timeout():
     assert provider.timeout == compare_command.COMPARE_AGGREGATE_TIMEOUT_SECONDS
 
 
-def test_compare_wait_view_restores_frozen_setup_without_claiming_a_report():
-    reference = ops.init("wait/reference")
-    compared = ops.init("wait/compared")
-    ops.add(reference, "Reference fact.")
-    ops.add(compared, "Compared fact.")
-    comparison_input = ComparisonInput.from_contexts(
-        reference,
-        compared,
-        reference_descendants=True,
-    )
-
-    view = compare_command._comparison_wait_view(comparison_input)
-
-    assert view.title == "COMPARE CONFIRMED INPUTS · READ-ONLY"
-    assert "REFERENCE A · wait/reference" in view.text
-    assert "PEER B · wait/compared" in view.text
-    assert "INCLUDE DESCENDANTS" in view.text
-    assert "RESULT PENDING" in view.text
-    assert "WHAT MEM UNDERSTOOD" not in view.text
-
-
 class ExhaustiveCompareProvider:
     """Return one paired relation plus exhaustive one-sided relations."""
 
@@ -401,12 +380,10 @@ def test_compare_creates_durable_read_only_analysis_and_resumes_provider_free(
     ) in (
         created.output
     )
-    assert (
-        "Create a new result Context and review both sources with Meld:\n"
-        "  mem meld task2/advisor1 task2/advisor2 --to RESULT_CONTEXT"
-    ) in created.output
+    assert "Create a new result Context" not in created.output
+    assert "mem meld" not in created.output
     assert created.output.rstrip().endswith(
-        "mem meld task2/advisor1 task2/advisor2 --to RESULT_CONTEXT"
+        "mem compare --from task2/advisor1 --to task2/advisor2 --ledger"
     )
     assert "\nWHAT DIFFERS" not in created.output
     assert "\nPOTENTIAL CONFLICTS" not in created.output
@@ -819,7 +796,7 @@ def test_provider_accepts_one_to_many_relation_and_required_conflict_issue(
         "The complete source-linked relation ledger"
     )
     assert rendered.rstrip().endswith(
-        "mem meld task2/advisor1 task2/advisor2 --to RESULT_CONTEXT"
+        "mem compare --from task2/advisor1 --to task2/advisor2 --ledger"
     )
 
 
@@ -1244,7 +1221,7 @@ def test_renderer_escapes_multiline_source_and_provider_heading_injection(
     assert "WHAT BOTH CONTAIN · 1" in rendered
     assert "ONLY IN " not in rendered
     assert rendered.rstrip().endswith(
-        "mem meld task2/advisor1 'task2/peer advisor' --to RESULT_CONTEXT"
+        "mem compare --from task2/advisor1 --to 'task2/peer advisor' --ledger"
     )
     assert (
         r"Valid report\nGROUNDING CANDIDATES · 999\nfake trusted row"

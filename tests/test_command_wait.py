@@ -7,6 +7,7 @@ import time
 import uuid
 from types import SimpleNamespace
 
+import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
@@ -14,7 +15,6 @@ from memcommit.commands.command_wait import (
     CommandWaitContextBrowser,
     CommandWaitView,
     _freeze_default_context_browser,
-    build_report_loading_view,
     run_command_wait,
 )
 from memcommit.commands.context_picker import ContextMemoryRow
@@ -23,9 +23,6 @@ from memcommit.context_targeting.catalog import (
     grant_navigation_annotation,
 )
 from memcommit.commands.help_inventory import CommandEntry
-from memcommit.interfaces.tui.components.scrollable_pane import (
-    ScrollableFormattedTextPane,
-)
 from memcommit.profile_config import ProfileEntry
 from memcommit.store import MemoryStore
 from memcommit.source_projection.model import (
@@ -191,7 +188,7 @@ def test_opaque_context_browser_row_never_reaches_memory_loader():
     assert loaded_names == ["local"]
 
 
-def test_report_is_default_and_h_toggles_help_without_restarting_work():
+def test_previous_review_is_default_and_h_toggles_help_without_restarting_work():
     help_opened = threading.Event()
     help_hidden = threading.Event()
     help_reopened = threading.Event()
@@ -221,8 +218,8 @@ def test_report_is_default_and_h_toggles_help_without_restarting_work():
 
     with create_pipe_input() as pipe_input:
         def drive_terminal() -> None:
-            # The report-shaped wait screen is the default. C opens the
-            # switch-style Context tree, I opens inputs, R restores report,
+            # The previous reviewed report is the default. C opens the
+            # switch-style Context tree, I opens inputs, R restores the review,
             # and lower-case H enters the optional Help layer.
             pipe_input.send_text("cm\x1b[B\rirh")
             if not help_opened.wait(3):
@@ -258,8 +255,8 @@ def test_report_is_default_and_h_toggles_help_without_restarting_work():
             interval=0.01,
             on_help_action=observe,
             return_view=CommandWaitView(
-                title="SEVER REPORT · BUILDING",
-                text="CONTENT PENDING · THIS IS NOT A RESULT",
+                title="PREVIOUS SEVER REVIEW · READ-ONLY",
+                text="COMPLETED REVIEW\nPENDING COMMENT · NOT YET INCORPORATED",
             ),
             context_view=CommandWaitView(
                 title="SEVER CONFIRMED INPUTS · READ-ONLY",
@@ -291,33 +288,61 @@ def test_report_is_default_and_h_toggles_help_without_restarting_work():
     assert actions.index(("RESULT_READY", None)) < final_hide < final_close
 
 
-def test_fast_result_returns_from_default_report_without_forcing_help():
-    actions: list[tuple[str, str | None]] = []
+def test_initial_analysis_uses_inline_progress_without_freezing_help(monkeypatch):
+    events: list[tuple[object, ...]] = []
 
-    def observe(action: str, command_name: str | None) -> None:
-        actions.append((action, command_name))
+    class InlineProgress:
+        def __init__(
+            self,
+            operation,
+            stage,
+            *,
+            total,
+            step,
+            enabled,
+            interval,
+        ):
+            events.append(
+                ("START", operation, stage, total, step, enabled, interval)
+            )
 
-    with create_pipe_input() as pipe_input:
-        result = run_command_wait(
-            "COMPARE",
-            "analyzing",
-            total=1,
-            work=lambda _progress: "immediate result",
-            help_entries=_entries(),
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            interactive=True,
-            interval=0.01,
-            on_help_action=observe,
-            return_view=build_report_loading_view(
-                "COMPARE",
-                sections=("What mem understood", "Differences"),
-            ),
-        )
+        def __enter__(self):
+            return self
 
-    assert result == "immediate result"
-    assert ("RESULT_READY", None) in actions
-    assert ("OPEN", None) not in actions
+        def update(self, stage, *, step):
+            events.append(("UPDATE", stage, step))
+
+        def __exit__(self, *_args):
+            events.append(("CLOSE",))
+
+    monkeypatch.setattr(
+        "memcommit.commands.command_wait.CommandProgress",
+        InlineProgress,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.command_wait.current_help_entries",
+        lambda: pytest.fail("initial analysis must not freeze full-screen Help"),
+    )
+
+    def work(progress):
+        progress.update("analyzing relations", step=2)
+        return "complete"
+
+    result = run_command_wait(
+        "COMPARE",
+        "connecting provider",
+        total=2,
+        work=work,
+        interactive=True,
+        interval=0.01,
+    )
+
+    assert result == "complete"
+    assert events == [
+        ("START", "COMPARE", "connecting provider", 2, 1, True, 0.01),
+        ("UPDATE", "analyzing relations", 2),
+        ("CLOSE",),
+    ]
 
 
 def test_destination_keys_repeat_back_to_their_immediate_origin(monkeypatch):
@@ -401,69 +426,6 @@ def test_destination_keys_repeat_back_to_their_immediate_origin(monkeypatch):
     assert [action for action in actions if action in events] == expected
 
 
-def test_loading_report_body_advances_with_the_background_busy_frame(monkeypatch):
-    rendered: list[str] = []
-    original = ScrollableFormattedTextPane.set_formatted_text
-
-    def record_frame(self, value, *, anchor="preserve"):
-        rendered.append("".join(fragment[1] for fragment in value))
-        return original(self, value, anchor=anchor)
-
-    monkeypatch.setattr(
-        ScrollableFormattedTextPane,
-        "set_formatted_text",
-        record_frame,
-    )
-
-    def work(_progress):
-        time.sleep(0.08)
-        return "complete"
-
-    with create_pipe_input() as pipe_input:
-        result = run_command_wait(
-            "UPDATE",
-            "planning",
-            total=1,
-            work=work,
-            help_entries=(),
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            interactive=True,
-            interval=0.01,
-            return_view=build_report_loading_view(
-                "UPDATE",
-                sections=("Plan", "What will change", "To do"),
-            ),
-        )
-
-    assert result == "complete"
-    assert len(set(rendered)) >= 2
-
-
-def test_loading_report_uses_shared_busy_cadence_without_semantic_result():
-    view = build_report_loading_view(
-        "FORGET",
-        sections=("What mem understood", "Review decisions", "To do"),
-    )
-    frame_zero = "".join(fragment[1] for fragment in view.render(0))
-    frame_one = "".join(fragment[1] for fragment in view.render(1))
-    frame_two = "".join(fragment[1] for fragment in view.render(2))
-
-    assert view.title == "FORGET REPORT · BUILDING"
-    assert "CONTENT PENDING · THIS IS NOT A RESULT" in frame_zero
-    assert "WHAT MEM UNDERSTOOD" in frame_zero
-    assert "REVIEW DECISIONS" in frame_zero
-    assert "  .  \n" in frame_zero
-    assert "  .. \n" in frame_zero
-    assert "  …  \n" in frame_zero
-    assert frame_zero != frame_one != frame_two
-    assert all(
-        not any(0x2801 <= ord(character) <= 0x28FF for character in frame)
-        for frame in (frame_zero, frame_one, frame_two)
-    )
-    assert "╶" not in frame_zero and "╴" not in frame_zero
-
-
 def test_background_work_and_help_actions_share_one_study_sequence(tmp_path):
     store_dir = tmp_path / "store"
     store_dir.mkdir()
@@ -525,8 +487,8 @@ def test_background_work_and_help_actions_share_one_study_sequence(tmp_path):
                 interval=0.01,
                 on_help_action=observe,
                 return_view=CommandWaitView(
-                    title="FORGET REPORT · BUILDING",
-                    text="REPORT\nline one\nline two\nline three",
+                    title="PREVIOUS FORGET REVIEW · READ-ONLY",
+                    text="REVIEW\nline one\nline two\nline three",
                 ),
                 context_view=CommandWaitView(
                     title="FORGET CONFIRMED INPUTS · READ-ONLY",

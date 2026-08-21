@@ -4466,7 +4466,7 @@ def test_each_meld_option_has_a_distinct_exact_request_digest():
     assert keys[0] != keys[1]
 
 
-def test_initial_meld_wait_view_shows_report_shape_and_confirmed_inputs():
+def test_initial_meld_has_no_review_report_to_restore():
     incoming = ops.init("wait/incoming")
     baseline = ops.init("wait/baseline")
     ops.add(incoming, "Incoming fact.")
@@ -4474,58 +4474,8 @@ def test_initial_meld_wait_view_shows_report_shape_and_confirmed_inputs():
     session = MeldSession.create_directional(incoming, baseline)
     session.start_initial_analysis()
 
-    view = meld_command._meld_wait_view(session)
-    view_text = "".join(fragment[1] for fragment in view.text)
-    context_view = meld_command._meld_wait_context_view(session)
-
-    assert view.title == "MELD REPORT · BUILDING"
-    assert "CONTENT PENDING · THIS IS NOT A RESULT" in view_text
-    assert "PROPOSED BASELINE CHANGES" in view_text
-    assert context_view.title == "MELD CONFIRMED INPUTS · READ-ONLY"
-    assert "wait/incoming" in context_view.text
-    assert "wait/baseline" in context_view.text
-    assert "FROZEN MEMORIES · 1" in context_view.text
-
-
-def test_symmetric_basis_wait_view_shows_sources_and_unchanged_result():
-    left = ops.init("wait/advisor1")
-    right = ops.init("wait/advisor2")
-    ops.add(left, "Left fact.")
-    ops.add(right, "Right fact.")
-    comparison_input = ComparisonInput.from_contexts(
-        left,
-        right,
-        reference_descendants=True,
-    )
-
-    view = meld_command._symmetric_comparison_wait_context_view(
-        comparison_input,
-        target_name="wait/proposal-workspace",
-    )
-
-    assert view.title == "MELD CONFIRMED INPUTS · READ-ONLY"
-    assert "REFERENCE A · wait/advisor1" in view.text
-    assert "PEER B · wait/advisor2" in view.text
-    assert "RESULT C · wait/proposal-workspace" in view.text
-    assert "TARGET STATE · UNCHANGED WHILE COMPARE RUNS" in view.text
-    assert "INCLUDE DESCENDANTS" in view.text
-
-
-def test_symmetric_basis_wait_keeps_inputs_on_explicit_destination():
-    left = ops.init("wait/advisor1")
-    right = ops.init("wait/advisor2")
-    ops.add(left, "Pay CAD 20–30 per hour, including travel time.")
-    ops.add(right, "Allow cash, e-transfer, or a gift card.")
-    comparison_input = ComparisonInput.from_contexts(left, right)
-    view = meld_command._symmetric_comparison_wait_context_view(
-        comparison_input,
-        target_name="wait/proposal-workspace",
-    )
-
-    assert view.title == "MELD CONFIRMED INPUTS · READ-ONLY"
-    assert "REFERENCE A · wait/advisor1" in view.text
-    assert "PEER B · wait/advisor2" in view.text
-    assert "RESULT C · wait/proposal-workspace" in view.text
+    with pytest.raises(ValueError, match="requires a submitted turn"):
+        meld_command._meld_wait_view(session)
 
 
 def test_meld_wait_view_styles_memory_objects_without_tinting_report_prose():

@@ -1,0 +1,232 @@
+CAPTURE PTY · 180x52
+CAPTURE READY · COMPARE · PRESS ENTER
+
+MEM COMPARE · 1/2 · CONNECTING PROVIDER . · 0sMEM COMPARE · 1/2 · CONNECTING PROVIDER .. · 0sMEM COMPARE · 2/2 · ANALYZING RELATIONS . · 0s MEM COMPARE · 2/2 · ANALYZING RELATIONS .. · 0sMEM COMPARE · 2/2 · ANALYZING RELATIONS … · 0s MEM COMPARE · 2/2 · ANALYZING RELATIONS . · 0sMEM COMPARE · 2/2 · ANALYZING RELATIONS .. · 1sMEM COMPARE · 2/2 · ANALYZING RELATIONS … · 1s MEM COMPARE · 2/2 · ANALYZING RELATIONS . · 1sMEM COMPARE · 2/2 · ANALYZING RELATIONS .. · 1sMEM COMPARE · 2/2 · ANALYZING RELATIONS … · 1s MEM COMPARE · 2/2 · ANALYZING RELATIONS . · 2sMEM COMPARE · 2/2 · ANALYZING RELATIONS .. · 2sMEM COMPARE · 2/2 · ANALYZING RELATIONS … · 2s                                               CAPTURE RESULT · COMPARE COMPLETE
+CAPTURE NEXT · PRESS ENTER
+
+CAPTURE READY · MELD · PRESS ENTER
+
+MEM MELD · 1/2 · CONNECTING PROVIDER . · 0sMEM MELD · 1/2 · CONNECTING PROVIDER .. · 0sMEM MELD · 2/2 · ANALYZING MELD TURN . · 0s MEM MELD · 2/2 · ANALYZING MELD TURN .. · 0sMEM MELD · 2/2 · ANALYZING MELD TURN … · 0s MEM MELD · 2/2 · ANALYZING MELD TURN . · 0sMEM MELD · 2/2 · ANALYZING MELD TURN .. · 1sMEM MELD · 2/2 · ANALYZING MELD TURN … · 1s MEM MELD · 2/2 · ANALYZING MELD TURN . · 1sMEM MELD · 2/2 · ANALYZING MELD TURN .. · 1sMEM MELD · 2/2 · ANALYZING MELD TURN … · 1s MEM MELD · 2/2 · ANALYZING MELD TURN . · 2sMEM MELD · 2/2 · ANALYZING MELD TURN .. · 2sMEM MELD · 2/2 · ANALYZING MELD TURN … · 2s                                            CAPTURE RESULT · MELD COMPLETE
+CAPTURE NEXT · PRESS ENTER
+
+CAPTURE READY · UPDATE · PRESS ENTER
+
+MEM UPDATE · 1/2 · CONNECTING PROVIDER . · 0sMEM UPDATE · 1/2 · CONNECTING PROVIDER .. · 0sMEM UPDATE · 2/2 · PLANNING MEMORY CHANGES . · 0sMEM UPDATE · 2/2 · PLANNING MEMORY CHANGES .. · 0sMEM UPDATE · 2/2 · PLANNING MEMORY CHANGES … · 0s MEM UPDATE · 2/2 · PLANNING MEMORY CHANGES . · 0sMEM UPDATE · 2/2 · PLANNING MEMORY CHANGES .. · 1sMEM UPDATE · 2/2 · PLANNING MEMORY CHANGES … · 1s MEM UPDATE · 2/2 · PLANNING MEMORY CHANGES . · 1sMEM UPDATE · 2/2 · PLANNING MEMORY CHANGES .. · 1sMEM UPDATE · 2/2 · PLANNING MEMORY CHANGES … · 1s MEM UPDATE · 2/2 · PLANNING MEMORY CHANGES . · 2sMEM UPDATE · 2/2 · PLANNING MEMORY CHANGES .. · 2sMEM UPDATE · 2/2 · PLANNING MEMORY CHANGES … · 2s                                                  CAPTURE RESULT · UPDATE COMPLETE
+CAPTURE NEXT · PRESS ENTER
+
+CAPTURE READY · FORGET · PRESS ENTER
+
+MEM FORGET · 1/1 · ANALYZING 2 SOURCE MEMORIES X 1 INSTRUCTION . · 0sMEM FORGET · 1/1 · ANALYZING 2 SOURCE MEMORIES X 1 INSTRUCTION .. · 0sMEM FORGET · 1/1 · ANALYZING 2 SOURCE MEMORIES X 1 INSTRUCTION … · 0s MEM FORGET · 1/1 · ANALYZING 2 SOURCE MEMORIES X 1 INSTRUCTION . · 0sMEM FORGET · 1/1 · ANALYZING 2 SOURCE MEMORIES X 1 INSTRUCTION .. · 0sMEM FORGET · 1/1 · ANALYZING 2 SOURCE MEMORIES X 1 INSTRUCTION … · 1s MEM FORGET · 1/1 · ANALYZING 2 SOURCE MEMORIES X 1 INSTRUCTION . · 1sMEM FORGET · 1/1 · ANALYZING 2 SOURCE MEMORIES X 1 INSTRUCTION .. · 1sMEM FORGET · 1/1 · ANALYZING 2 SOURCE MEMORIES X 1 INSTRUCTION … · 1s MEM FORGET · 1/1 · ANALYZING 2 SOURCE MEMORIES X 1 INSTRUCTION . · 1sMEM FORGET · 1/1 · ANALYZING 2 SOURCE MEMORIES X 1 INSTRUCTION .. · 2s                                                                      CAPTURE RESULT · FORGET COMPLETE
+CAPTURE NEXT · PRESS ENTER
+
+CAPTURE READY · SEVER · PRESS ENTER
+
+MEM SEVER · 1/3 · FREEZING SOURCE AND CRITERIA . · 0sMEM SEVER · 1/3 · FREEZING SOURCE AND CRITERIA .. · 0sMEM SEVER · 2/3 · CONNECTING PROVIDER . · 0s          MEM SEVER · 2/3 · CONNECTING PROVIDER .. · 0sMEM SEVER · 2/3 · CONNECTING PROVIDER … · 0s MEM SEVER · 3/3 · ANALYZING 2 SOURCE X 1 CRITERIA . · 0sMEM SEVER · 3/3 · ANALYZING 2 SOURCE X 1 CRITERIA .. · 0sMEM SEVER · 3/3 · ANALYZING 2 SOURCE X 1 CRITERIA … · 1s MEM SEVER · 3/3 · ANALYZING 2 SOURCE X 1 CRITERIA . · 1sMEM SEVER · 3/3 · ANALYZING 2 SOURCE X 1 CRITERIA .. · 1sMEM SEVER · 3/3 · ANALYZING 2 SOURCE X 1 CRITERIA … · 1s MEM SEVER · 3/3 · ANALYZING 2 SOURCE X 1 CRITERIA . · 1sMEM SEVER · 3/3 · ANALYZING 2 SOURCE X 1 CRITERIA .. · 2sMEM SEVER · 3/3 · ANALYZING 2 SOURCE X 1 CRITERIA … · 2s MEM SEVER · 3/3 · ANALYZING 2 SOURCE X 1 CRITERIA . · 2sMEM SEVER · 3/3 · ANALYZING 2 SOURCE X 1 CRITERIA .. · 2sMEM SEVER · 3/3 · ANALYZING 2 SOURCE X 1 CRITERIA … · 2s                                                         CAPTURE RESULT · SEVER COMPLETE
+CAPTURE NEXT · PRESS ENTER
+
+CAPTURE READY · AUDIT · PRESS ENTER
+
+MEM AUDIT · 1/3 · FINDING DUPLICATES . · 0sMEM AUDIT · 1/3 · FINDING DUPLICATES .. · 0sMEM AUDIT · 2/3 · FINDING AMBIGUITIES . · 0sMEM AUDIT · 2/3 · FINDING AMBIGUITIES .. · 0sMEM AUDIT · 2/3 · FINDING AMBIGUITIES … · 0s MEM AUDIT · 3/3 · FINDING CONFLICTS . · 0s  MEM AUDIT · 3/3 · FINDING CONFLICTS .. · 0sMEM AUDIT · 3/3 · FINDING CONFLICTS … · 1s MEM AUDIT · 3/3 · FINDING CONFLICTS . · 1sMEM AUDIT · 3/3 · FINDING CONFLICTS .. · 1sMEM AUDIT · 3/3 · FINDING CONFLICTS … · 1s MEM AUDIT · 3/3 · FINDING CONFLICTS . · 1sMEM AUDIT · 3/3 · FINDING CONFLICTS .. · 2sMEM AUDIT · 3/3 · FINDING CONFLICTS … · 2s MEM AUDIT · 3/3 · FINDING CONFLICTS . · 2sMEM AUDIT · 3/3 · FINDING CONFLICTS .. · 2sMEM AUDIT · 3/3 · FINDING CONFLICTS … · 2s                                           CAPTURE RESULT · AUDIT COMPLETE
+CAPTURE NEXT · PRESS ENTER
+
+CAPTURE READY · REVIEW REPLACEMENT · PRESS ENTER
+
+[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM UPDATE · 1/2 · CONNECTING PROVIDER . · 0s[0m
+[0m┌──────────────────────────────────────────────────────────────────────| PREVIOUS UPDATE REPORT · READ-ONLY |──────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[0;38;5;117;1mSTAGED UPDATE · COMPLETE REVIEW[0m                                                                                                                                                  [0;1m^[179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;117;1mPLAN[0m                                                                                                                                                                             [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;231mReplace the obsolete entrance claim with verified access information.[0m                                                                                                            [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;117;1mPLANNED CHANGES[0m                                                                                                                                                                  [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m  ~ EDIT · The south entrance provides step-free public access.[0m                                                                                                                  [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│PENDING REVISION · SUBMITTED · NOT YET INCORPORATED                                                                                                                              [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;231mKeep the claim limited to public step-free access.[0m                                                                                                                               [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m C/c Contexts · I/i inputs · R/r report · ↑/↓ scroll · PgUp/PgDn page · Home/End · Q/q request close · read-only[112D[49A[C[0m[?12l[?25h[?25l[A[69C[0m| U[CDATE CONFIRMED[CIN[CUTS[0m
+[C[0mSOURCE A · capture/update/source [0m
+[C[0mTARGET B · capture/update/target [0m
+[C[0m     [0m
+[C[0mSUBMITTED COMMENT · NOT YET INCORPORATED                              [0m
+[C[0mKeep the claim limited to public step-free access. [0m
+[C[0m                [0m
+[C[0m                                                                [0m
+[C[0m [0m
+[C[0m                                                    [0m
+[C[0m                                                   [0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[20C[0mback ·[CR/r [Ceport ·[C↑/↓ scroll ·[CPgUp/PgDn page ·[CHome/End ·[CQ/q request close ·[Cread-only[0m[K[49A[109D[0m[?12l[?25h[?25l[2A[40C[0m. · 0s[0m
+
+[C[0m[?12l[?25h[?25l[2A[39C[0m… · 0s[0m[K[0m
+
+[C[0m[?12l[?25h[?25l[A[69C[0m─| [CREVIOUS UPDATE[CRE[CORT[0m
+[C[0;38;5;117;1mSTAGED UPDATE · COMPLETE REVIEW[0m  [0m
+[C[0m                                 [0m
+[C[0;38;5;117;1mPLAN[0m [0m
+[C[0;38;5;231mReplace the obsolete entrance claim with verified access information.[0m [0m
+[C[0m                                                   [0m
+[C[0;38;5;117;1mPLANNED CHANGES[0m [0m
+[C[0;38;5;189m  ~ EDIT · The south entrance provides step-free public access.[0m [0m
+[C[0m [0m
+[C[0mPENDING REVISION · SUBMITTED · NOT YET INCORPORATED [0m
+[C[0;38;5;231mKeep the claim limited to public step-free access.[0m [0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[20C[0minputs[C· R/[C report[C· ↑/↓ scroll[C· PgUp/PgDn page[C· Home/End[C· Q/q request close[C· read-only[49A[111D[0m[?12l[?25h[?25l[2A[13C[0m2[5CINCORPORATING REVIEW COMMENTS … · 0s[0m
+
+[C[0m[?12l[?25h[?25l[2A[49C[0m.[0m
+
+[C[0m[?12l[?25h[?25l[2A[50C[0m. · 1s[0m
+
+[C[0m[?12l[?25h[?25l[2A[49C[0m… · 1s[0m[K[0m
+
+[C[0m[?12l[?25h[?25l[2A[49C[0m.[0m
+
+[C[0m[?12l[?25h[?25l[2A[50C[0m. · 1s[0m
+
+[C[0m[?12l[?25h[?25l[2A[49C[0m… · 1s[0m[K[0m
+
+[C[0m[?12l[?25h[?25l[2A[49C[0m.[3C2[0m
+
+[C[0m[?12l[?25h[?25l[2A[50C[0m. · 2s[0m
+
+[C[0m[?12l[?25h[?25l[2A[49C[0m… · 2s[0m[K[0m
+
+[C[0m[?12l[?25h[?25l[2A[49C[0m.[0m
+
+[C[0m[?12l[?25h[?25l[2A[50C[0m. · 2s[0m
+
+[C[0m[?12l[?25h[?25l[2A[49C[0m… · 3s[0m[K[0m
+
+[C[0m[?12l[?25h[?25l[2A[49C[0m.[0m
+
+[C[0m[?12l[?25h[?25l[2A[50C[0m. · 3s[0m
+
+[C[0m[?12l[?25h[?25l[2A[49C[0m… · 3s[0m[K[0m
+
+[C[0m[?12l[?25h[?25l[2A[49C[0m.[0m
+
+[C[0m[?12l[?25h[?25l[2A[50C[0m. · 4s[0m
+
+[C[0m[?12l[?25h[?25l[2A[49C[0m… · 4s[0m[K[0m
+
+[C[0m[?12l[?25h[?25l[2A[49C[0m.[0m
+
+[C[0m[?12l[?25h[?25l[2A[50C[0m. · 4s[0m
+
+[C[0m[?12l[?25h[2A[J[0m[?7h[?1049l[?2004lCAPTURE RESULT · REVIEW REPLACEMENT COMPLETE
+CAPTURE VERIFY · PRESS ENTER

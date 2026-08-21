@@ -2,67 +2,53 @@
 
 ## Problem and scope
 
-Compare, Meld, Forget, Sever, and Update can each own one intentionally indivisible
-semantic turn for several minutes. The existing `CommandProgress` heartbeat
-proved liveness and elapsed time, but the foreground command remained blocked.
-In a Study run this made the participant wait without being able to learn the
-available command vocabulary, even though `mem help` already contains the
-audited command descriptions and forms. A generic progress box also gave no
-orientation to the report being constructed or to the exact inputs the person
-had just frozen.
+Meld and Update can own an intentionally indivisible replacement turn for
+several minutes after a person has reviewed a complete report and submitted
+guidance. Replacing that report with an empty loading screen discards useful
+review context, while blocking on only a progress line prevents the person from
+rechecking the exact report and comment that are being incorporated.
 
-The shared interactive wait keeps that semantic work whole while allowing a
-read-only Help session in the same process and terminal. It is used for the
-aggregate analysis in Compare, Forget, and Sever; Audit’s ordered three-finder
-orchestration; every provider-backed assessment turn in Meld, including issue
-replies and `INCORPORATE RESPONSES`; and Update's initial plan and
-whole-proposal comment revision. Other call sites that still use
-`CommandProgress` retain the one-line heartbeat until their operation adapters
-are migrated deliberately.
+The shared interactive wait therefore has one narrow purpose: keep the
+previously completed review report visible and read-only while its submitted
+Meld or Update revision runs in the background. Initial Compare, Meld, Forget,
+Sever, and Update analysis has no completed report to preserve and uses the
+shared transient one-line `CommandProgress` instead. Audit's ordinary initial
+route already uses the same line across its ordered checks. This avoids
+presenting report-shaped chrome before a semantic result exists and avoids a
+full-screen interruption for work that may immediately complete or auto-apply.
 
 ## Interaction contract
 
-In an interactive terminal, `run_command_wait` starts the frozen operation in
-an executor and gives the foreground to one operation-neutral waiting TUI. The
-screen reports only real host-owned stages and elapsed time; it does not invent
-a provider percentage. Its default foreground is the operation-owned report
-surface: an existing complete report during a Meld follow-up, or a report-shaped
-loading skeleton during first analysis. `C` opens a frozen read-only Context
-browser, `I` opens the separately frozen `CONFIRMED INPUTS` copy, and `R`
-returns directly to the report. Repeating an active destination key returns to
-the surface that opened it. `H` or `?` opens the same command inventory,
-category order, descriptions, and audited forms used by `mem help`; `H` inside
-Help restores whichever report, Context browser, or input copy was previously
-visible. None of these switches restarts or alters the frozen worker. The
-progress header remains above every host surface and reports only host-owned
-stages and elapsed time.
+When `run_command_wait` receives no prior review view, it runs the frozen work
+synchronously behind `CommandProgress`, including in an interactive terminal.
+The transient line reports only real host-owned stages and elapsed time; it
+does not invent a provider percentage. The line is erased before the completed
+result, review, receipt, or error is rendered.
 
-The report and confirmed-input views are supplied by the operation as frozen
-values. The common shell independently freezes the Profile navigation catalog
-and owns only switching, wrapping, scrolling, and read-only Context previews.
-Meld follow-up turns restore the immediately preceding complete report and show
-the submitted turn separately as not yet incorporated. Update comment revisions
-likewise retain the complete reviewed staged report and show the submitted
-comment as not yet incorporated.
-A first Compare, Forget, Sever, Meld, or Update analysis has no result report
-yet, so the default surface shows only its expected section topology and
-one shared busy marker under each section. It is explicitly labeled
-`CONTENT PENDING · THIS IS NOT A RESULT`; it contains no inferred prose,
-decision, count, or recommendation. The markers reuse the command progress
-contract's `.`, `..`, `…` frames and cadence, staggered across sections so a
-still screen also communicates the sequence. This keeps the loading grammar
-font-independent and uses the same liveness signal in the header and report
-body. Flow Circular remains appropriate for placeholders derived from known
-text, but a result-free wait has no prose shape to preserve. The markers use a
-legible neutral gray: softer than completed report prose, but neither Memory
-lavender nor focused-control blue.
+When a caller supplies a previous completed review, `run_command_wait` starts
+the replacement turn in an executor and gives the foreground to the shared
+read-only waiting TUI. `C` opens a frozen Context browser, `I` opens the exact
+submitted inputs, and `R` returns to the previous report. Repeating an active
+destination key returns to the surface that opened it. `H` or `?` opens the
+same command inventory, category order, descriptions, and audited forms used
+by `mem help`; `H` inside Help restores the originating surface. None of these
+switches restarts or alters the frozen worker. The progress header remains
+above every review surface and reports only host-owned stages and elapsed time.
 
-Audit supplies a different operation-owned first-analysis surface because its
-three exact host stages are already known. One numbered list stays visible
-throughout the turn: completed finders remain `COMPLETE`, the current finder
-animates as `RUNNING`, and later finders remain `WAITING`. No finding content
-appears on this surface, and the common shell still owns Help handoff,
-animation, terminal input, and deferred close behavior.
+The prior-report and submitted-input views are supplied by the operation as
+frozen values. The common shell independently freezes the Profile navigation
+catalog and owns only switching, wrapping, scrolling, and read-only Context
+previews. Meld follow-up turns restore the immediately preceding complete
+report and show the submitted turn separately as not yet incorporated. Update
+comment revisions likewise retain the complete reviewed staged report and
+show the submitted comment as not yet incorporated.
+
+A first analysis never supplies these views. Source, target, authority, cache,
+and output facts are still frozen by the operation before provider work; they
+are simply not projected as an interactive screen while no review exists.
+The completed operation then chooses its normal review, auto-apply, read-only
+result, or receipt path. This presentation decision does not widen authority
+or bypass post-analysis validation.
 
 `C` exposes the Profile's command-start Context namespace using the shared
 switch-shaped tree. Ordinary local and READ-granted Contexts may reveal their
@@ -104,9 +90,9 @@ its unchanged review, revalidation, save, and apply boundaries. Help does not
 receive provider input, Memory content, result data, or a writable command
 composer.
 
-Outside an interactive stdin/stdout terminal, `run_command_wait` executes the
-same work synchronously through `CommandProgress`. Stable stdout and redirected
-command behavior therefore remain unchanged.
+Outside an interactive stdin/stdout terminal, every turn executes synchronously
+through `CommandProgress`. Stable stdout and redirected command behavior remain
+unchanged.
 
 ## Execution and consistency invariants
 
@@ -165,22 +151,13 @@ opened and closed Help. The stage advanced from connection to analysis across
 these switches, and the deterministic worker returned once without being
 restarted.
 
-The first-analysis topology was separately replayed with a deterministic
-Compare wait: report skeleton, `I` confirmed inputs, `H` Help, `H` back to the
-same confirmed inputs, and `I` back to the skeleton. The header advanced from
-`CONNECTING PROVIDER` to `ANALYZING RELATIONS`; no switch restarted the worker,
-and every skeleton row remained visibly distinct from result prose.
-
-Update's migrated path was then captured through the real Typer command in a
-color-capable 180×52 PTY. Its initial report reused the shared `.`, `..`, `…`
-cadence under `PLAN`, `WHAT WILL CHANGE`, `PLANNED CHANGES`, and `TO DO`.
-`C` exposed the read-only Profile Context browser and `I` exposed the frozen
-Source→Target route. `H` opened the complete root inventory and restored the
-same originating host surface; the deterministic provider continued through
-every destination change. Closing the resulting staged review left both
-Contexts unchanged and retained exactly one staged receipt. The ordered ANSI
-evidence, text screens, PNGs, and reproduction driver are under
-[`screenshots/mem-update-command-wait-20260810/`](screenshots/mem-update-command-wait-20260810/).
+The first-analysis policy was later tightened: deterministic Compare, Meld,
+Update, Forget, Sever, and Audit turns now remain on the same transient progress
+line until a complete result exists. Focused tests fail if an initial turn
+freezes Help or constructs a return view, while Meld and Update follow-up tests
+still require the previous complete report and the submitted guidance to be
+present. The current ordered ANSI evidence and reproduction driver are under
+[`screenshots/inline-semantic-analysis-20260821/`](screenshots/inline-semantic-analysis-20260821/).
 
 A real Task 2 Directional Meld follow-up then exercised the production
 provider boundary with 300 Source Memories. The provider received 122,310
@@ -208,9 +185,11 @@ prevents Help setup from crashing an otherwise valid semantic turn.
 - Passive rotating tips were rejected as the primary interaction because they
   choose what the participant sees and provide weaker evidence of
   self-directed discovery. They may be added later without replacing Help.
-- Fabricated report prose was rejected for first analysis. The skeleton shows
-  only stable section shape and explicitly denies result status; exact source
-  facts live behind `I` instead.
+- A full-screen report skeleton was rejected for first analysis. Even an
+  honestly labeled empty topology visually claims report space, interrupts the
+  command for no review decision, and duplicates the liveness signal already
+  carried by the progress line. Initial input facts remain frozen internally
+  and appear in the completed operation's normal review or receipt when needed.
 - The provider primitive remains non-cancellable. The UI can defer closing but
   cannot truthfully claim that a remote request was stopped.
 - Re-entering the exact live setup or workbench `Application` was rejected for

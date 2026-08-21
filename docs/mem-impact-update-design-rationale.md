@@ -373,14 +373,13 @@ only the exact receipt reviewed through record CAS and returns to review; it is
 not applied implicitly. An empty comment batch leaves the original Apply path
 unchanged.
 
-Update's initial provider plan and a comment-driven replacement both use the
-shared interactive command wait. Initial planning shows the eventual `PLAN`,
-`WHAT WILL CHANGE`, `PLANNED CHANGES`, and `TO DO` topology with the same
-font-independent `.`, `..`, `…` busy cadence used by the progress header. `C`
-shows the exact frozen Source→Target route and scopes, while `H` or `?` opens
-the read-only command inventory without restarting the provider turn. During
-comment revision, the previously reviewed staged report remains visible and
-the submitted comment is marked not yet incorporated. Provider completion
+Update's initial provider plan uses the shared transient one-line progress
+contract; there is no report or review to occupy a full-screen surface yet.
+During a comment-driven replacement, the previously reviewed staged report
+remains visible in the shared interactive wait and the submitted comment is
+marked not yet incorporated. `C` can inspect the frozen read-only Context
+catalog, `I` shows the submitted Source→Target route and comment, and `H` or
+`?` opens Help without restarting that replacement turn. Provider completion
 alone still publishes nothing: the existing record CAS must replace the
 reviewed staged receipt before the revised report can return to review.
 
