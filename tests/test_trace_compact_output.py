@@ -16,7 +16,13 @@ from memcommit.commands.trace_projection import (
 from memcommit.interfaces.tui.components.plain_text_clipboard import (
     plain_text_from_fragments,
 )
-from memcommit.provenance import MemoryState, TraceEvent, TraceReport
+from memcommit.provenance import (
+    MemoryState,
+    TraceCommandContext,
+    TraceContextTransition,
+    TraceEvent,
+    TraceReport,
+)
 
 
 runner = CliRunner()
@@ -188,6 +194,47 @@ def test_trace_projects_one_formatted_vertical_document_without_items_surface(
     assert "class:semantic.edit" in styles
     assert "class:semantic.remove" in styles
     assert "class:memory-object" in styles
+
+
+def test_branch_route_renders_context_movement_without_a_fake_content_edit(capsys):
+    unchanged = _state(SELECTED_UID, "a is apple")
+    branch = TraceEvent(
+        kind="BRANCHED",
+        evidence="RECORDED",
+        timestamp="2026-08-21T09:30:00Z",
+        checkpoint_uid=RESTORE_CHECKPOINT_UID,
+        command="branch",
+        description="Branched 'practice/1' to 'practice/2'.",
+        before=(unchanged,),
+        after=(unchanged,),
+        operation_id="branch:dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+        context_transition=TraceContextTransition(
+            source=TraceCommandContext(uid="source-context", name="practice/1"),
+            target=TraceCommandContext(uid=CONTEXT_UID, name="practice/2"),
+        ),
+    )
+    report = TraceReport(
+        context_uid=CONTEXT_UID,
+        context_name="practice/2",
+        selected_uid=SELECTED_UID,
+        component_uids=(SELECTED_UID,),
+        originals=(unchanged,),
+        current=(unchanged,),
+        events=(branch,),
+        analyses=(),
+        warnings=(),
+    )
+
+    trace_command.render_trace(report)
+    output = capsys.readouterr().out
+
+    assert "[branch] [CHECKPOINT cccccccc]" in output
+    assert "practice/1 → practice/2 · Memory content unchanged" in output
+    assert "  Source Context: practice/1" in output
+    assert "  Target Context: practice/2" in output
+    assert "  = [11111111]@1 a is apple" in output
+    assert "  − [11111111]" not in output
+    assert "  + [11111111]" not in output
 
 
 def test_restore_that_removes_lineage_is_one_forward_transition_to_empty(

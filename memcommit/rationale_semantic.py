@@ -7,7 +7,7 @@ import json
 from typing import Callable, Protocol
 import unicodedata
 
-from memcommit.provenance import MemoryState, TraceReport
+from memcommit.provenance import MemoryState, TraceEvent, TraceReport
 from memcommit.rationale_rules import (
     DEFAULT_RATIONALE_PROVENANCE_LIMIT,
     RATIONALE_RULESET_VERSION,
@@ -127,6 +127,31 @@ def _selected_content(trace: TraceReport) -> str:
     )
 
 
+def _event_payload(
+    event: TraceEvent,
+    *,
+    sequence: int,
+    aliases: dict[str, str],
+) -> dict[str, object]:
+    payload: dict[str, object] = {
+        "sequence": sequence,
+        "kind": event.kind,
+        "command": event.command,
+        "description": event.description,
+        "reason": event.reason,
+        "before": [_state_payload(state, aliases=aliases) for state in event.before],
+        "after": [_state_payload(state, aliases=aliases) for state in event.after],
+    }
+    if event.context_transition is not None:
+        # Context names carry the semantic route. Durable Context UIDs stay in
+        # Trace JSON and are not needed in the provider-facing narrative turn.
+        payload["context_transition"] = {
+            "source": event.context_transition.source.name,
+            "target": event.context_transition.target.name,
+        }
+    return payload
+
+
 def rationale_provenance_payload(
     trace: TraceReport,
     *,
@@ -142,6 +167,7 @@ def rationale_provenance_payload(
         "ruleset": rationale_ruleset_prompt_payload(),
         "request": {
             "selected_memory_id": "selected",
+            "selected_context": trace.context_name,
             "selected_content": _selected_content(trace),
             "selected_status": (
                 "CURRENT"
@@ -155,21 +181,10 @@ def rationale_provenance_payload(
                 _state_payload(state, aliases=aliases) for state in trace.current
             ],
             "events": [
-                {
-                    "sequence": index,
-                    "kind": event.kind,
-                    "command": event.command,
-                    "description": event.description,
-                    "reason": event.reason,
-                    "before": [
-                        _state_payload(state, aliases=aliases) for state in event.before
-                    ],
-                    "after": [
-                        _state_payload(state, aliases=aliases) for state in event.after
-                    ],
-                }
+                _event_payload(event, sequence=index, aliases=aliases)
                 for index, event in enumerate(trace.events, 1)
             ],
+            "warnings": list(trace.warnings),
             "length": {"limit": limit, "unit": unit.value},
         },
     }
@@ -212,6 +227,8 @@ def _prompt(payload: dict[str, object]) -> str:
         "Memory, and the selected Memory's later disappearance, return, edits, or "
         "final removal. Use related parent and sibling states to explain origin "
         "context, but do not attribute a sibling-only event to the selected Memory. "
+        "When an event includes a Context transition, name its origin and "
+        "destination separately from whether the Memory content changed. "
         "You may describe a textual role directly supported by wording and placement, "
         "such as a hesitation, but never invent author intent or a reason for removal.\n\n"
         "Return one natural-language paragraph in the selected Memory's language. "

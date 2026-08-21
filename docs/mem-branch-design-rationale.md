@@ -88,6 +88,16 @@ Context actions. The additional direct Branch checkpoint intentionally raises
 the target's physical checkpoint count by one and makes the creation boundary
 visible ahead of its inherited history in Log and Status.
 
+Trace consumes that same validated receipt instead of treating every copied
+Source checkpoint as evidence that Branch was unrecorded. For each direct
+Memory present in the target snapshot it emits one recorded `BRANCHED` event
+that retains the Source and target Context identities while preserving the
+Memory UID. Equal before/after content therefore means Context movement without
+an Edit. A recursive Branch repeats the complete command membership on every
+target, while each per-Memory Trace projects only its exact Source-to-target
+Context route. Receipt-free legacy histories retain one warning per unexplained
+Source owner and do not receive a fabricated Branch event.
+
 Undo freshness-checks every target against the recorded creation post-image
 and validates deletion protection before moving any target. It then moves the
 exact Context records and checkpoint directories into private command-history
@@ -155,6 +165,10 @@ durable crash-recovery journal for a host failure between filesystem writes.
 - Treating copied Source checkpoints as the target's pre-Branch history was
   rejected because it would make Undo edit inherited lineage or consume an
   older Source command instead of cancelling target creation.
+- Inferring Branch from equal Memory text or a changed Context header was
+  rejected because equal wording is not lineage. Trace requires the validated
+  owned `branch_tree` receipt before suppressing legacy warnings or emitting a
+  recorded Context transition.
 
 The target root and every mapped descendant must be new. Branch does not merge
 into an existing target hierarchy, copy derived analysis/session artifacts, or

@@ -553,11 +553,18 @@ def _provenance_character_budget(trace: TraceReport) -> tuple[int, int]:
         # Endpoint content without a retained event is current state, not
         # evidence that can support a provenance claim.
         return 0, 0
-    values: list[str] = []
+    values: list[str] = [trace.context_name, *trace.warnings]
     for event in trace.events:
         values.extend((event.kind, event.command, event.evidence))
         if event.reason is not None:
             values.append(event.reason)
+        if event.context_transition is not None:
+            values.extend(
+                (
+                    event.context_transition.source.name,
+                    event.context_transition.target.name,
+                )
+            )
         values.extend(state.content for state in (*event.before, *event.after))
     values.extend(state.content for state in (*trace.originals, *trace.current))
     source_count = _semantic_character_count(values)

@@ -16,6 +16,7 @@ from typing import Any, Iterable, Literal, Sequence
 import uuid
 
 from memcommit.chunking import chunk_content
+from memcommit.command_history import CommandHistoryError, branch_tree_receipt
 from memcommit.context import Context, Memory
 from memcommit.history import HistoryError, flatten_checkpoint_entries
 from memcommit.store import (
@@ -40,6 +41,7 @@ EventKind = Literal[
     "ATOMIZE_KEEP",
     "ATOMIZE_PRESERVED",
     "MELDED",
+    "BRANCHED",
     "REORDERED",
     "HISTORY_GAP",
 ]
@@ -153,6 +155,20 @@ class TraceCommandOperation:
 
 
 @dataclass(frozen=True)
+class TraceContextTransition:
+    """One recorded movement of stable Memory identity between Contexts."""
+
+    source: TraceCommandContext
+    target: TraceCommandContext
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "source": self.source.to_dict(),
+            "target": self.target.to_dict(),
+        }
+
+
+@dataclass(frozen=True)
 class TraceEvent:
     kind: EventKind
     evidence: Evidence
@@ -167,6 +183,7 @@ class TraceEvent:
     source_occurrence: SourceOccurrence | None = None
     operation_id: str | None = None
     command_operation: TraceCommandOperation | None = None
+    context_transition: TraceContextTransition | None = None
     child_evidence: tuple[TraceChildEvidence, ...] = ()
     declared_frame: str | None = None
     declared_frame_digest: str | None = None
@@ -200,6 +217,11 @@ class TraceEvent:
             "command_operation": (
                 self.command_operation.to_dict()
                 if self.command_operation is not None
+                else None
+            ),
+            "context_transition": (
+                self.context_transition.to_dict()
+                if self.context_transition is not None
                 else None
             ),
             "child_evidence": [evidence.to_dict() for evidence in self.child_evidence],
@@ -2986,6 +3008,122 @@ def _transition_events(
     return events, warnings
 
 
+@dataclass(frozen=True)
+class _RecordedBranchTransition:
+    """Validated Context movement retained by one automatic Branch checkpoint."""
+
+    operation_uid: str
+    source: TraceCommandContext
+    target: TraceCommandContext
+    command_operation: TraceCommandOperation
+
+
+def _recorded_branch_transition(
+    *,
+    entry: dict,
+    frame: _Frame,
+) -> tuple[_RecordedBranchTransition | None, str | None]:
+    """Validate the Branch receipt that owns ``frame`` without guessing lineage."""
+
+    checkpoint_uid, _timestamp, command, _description, args = _checkpoint_fields(entry)
+    if command != "branch" or "branch_tree" not in args:
+        return None, None
+    try:
+        receipt = branch_tree_receipt(args)
+    except CommandHistoryError:
+        return (
+            None,
+            f"Checkpoint [{checkpoint_uid[:8]}] has invalid Branch creation "
+            "metadata; inherited lineage could not be connected to its target.",
+        )
+    mapping = next(
+        (
+            item
+            for item in receipt.contexts
+            if item.target_uid == frame.context_uid
+            and item.target_name == frame.context_name
+        ),
+        None,
+    )
+    if mapping is None or entry.get("auto") is not True:
+        return (
+            None,
+            f"Checkpoint [{checkpoint_uid[:8]}] has invalid Branch creation "
+            "ownership; inherited lineage could not be connected to its target.",
+        )
+    operation_uid = f"branch:{receipt.operation_uid}"
+    return (
+        _RecordedBranchTransition(
+            operation_uid=operation_uid,
+            source=TraceCommandContext(
+                uid=mapping.source_uid,
+                name=mapping.source_name,
+            ),
+            target=TraceCommandContext(
+                uid=mapping.target_uid,
+                name=mapping.target_name,
+            ),
+            command_operation=TraceCommandOperation(
+                uid=operation_uid,
+                command="branch",
+                contexts=tuple(
+                    TraceCommandContext(uid=item.target_uid, name=item.target_name)
+                    for item in receipt.contexts
+                ),
+            ),
+        ),
+        None,
+    )
+
+
+def _branch_transition_events(
+    *,
+    transition: _RecordedBranchTransition,
+    before: _Frame,
+    after: _Frame,
+    entry: dict,
+) -> list[TraceEvent]:
+    """Project stable direct Memories across one recorded Context Branch."""
+
+    checkpoint_uid, timestamp, command, description, _args = _checkpoint_fields(entry)
+    source_is_preceding_frame = (
+        before.context_uid == transition.source.uid
+        and before.context_name == transition.source.name
+    )
+    context_transition = TraceContextTransition(
+        source=transition.source,
+        target=transition.target,
+    )
+    events: list[TraceEvent] = []
+    for uid in after.order:
+        target_state = after.memories[uid]
+        source_state = before.memories.get(uid) if source_is_preceding_frame else None
+        # Branch preserves Memory identity and content. If the copied Source had
+        # uncheckpointed changes, the target snapshot proves the copied result
+        # but the older inherited frame must not be presented as its exact input.
+        retained_source = (
+            (source_state,)
+            if source_state is not None and source_state.content == target_state.content
+            else ()
+        )
+        events.append(
+            TraceEvent(
+                kind="BRANCHED",
+                evidence="RECORDED",
+                timestamp=timestamp,
+                checkpoint_uid=checkpoint_uid,
+                command=command,
+                description=description,
+                before=retained_source,
+                after=(target_state,),
+                operation_id=transition.operation_uid,
+                command_operation=transition.command_operation,
+                context_transition=context_transition,
+            )
+        )
+    return events
+
+
 def _history(
     store: MemoryStore,
     ctx: Context,
@@ -2998,18 +3136,52 @@ def _history(
             label=f"Checkpoint [{entry['uid'][:8]}]",
         )
 
-    events: list[TraceEvent] = []
-    warnings: list[str] = []
-    frames: list[_Frame] = []
-    previous: _Frame | None = None
+    recorded_branches: dict[str, _RecordedBranchTransition] = {}
+    branch_warnings: list[str] = []
+    branch_sources_by_target: dict[str, set[str]] = {}
     for entry in entries:
         frame = frames_by_checkpoint[entry["uid"]]
-        if frame.context_uid != ctx.uid or frame.context_name != ctx.name:
+        transition, warning = _recorded_branch_transition(entry=entry, frame=frame)
+        if warning is not None:
+            branch_warnings.append(warning)
+        if transition is None:
+            continue
+        recorded_branches[entry["uid"]] = transition
+        branch_sources_by_target.setdefault(
+            transition.target.uid,
+            set(),
+        ).add(transition.source.uid)
+
+    # A target can inherit a Source that was itself branched. Walk the complete
+    # recorded chain so earlier Source checkpoints remain lineage rather than
+    # being misreported as separate missing creation events.
+    explained_owner_uids = {ctx.uid}
+    pending_owner_uids = [ctx.uid]
+    while pending_owner_uids:
+        target_uid = pending_owner_uids.pop()
+        for source_uid in branch_sources_by_target.get(target_uid, ()):
+            if source_uid in explained_owner_uids:
+                continue
+            explained_owner_uids.add(source_uid)
+            pending_owner_uids.append(source_uid)
+
+    events: list[TraceEvent] = []
+    warnings: list[str] = list(branch_warnings)
+    frames: list[_Frame] = []
+    previous: _Frame | None = None
+    warned_inherited_owners: set[tuple[str, str]] = set()
+    for entry in entries:
+        frame = frames_by_checkpoint[entry["uid"]]
+        frame_owner = (frame.context_uid, frame.context_name)
+        if frame.context_uid not in explained_owner_uids and (
+            frame_owner not in warned_inherited_owners
+        ):
             warnings.append(
                 f"Checkpoint [{entry['uid'][:8]}] was inherited from "
                 f"'{frame.context_name}'; the branch creation event was not "
                 "recorded."
             )
+            warned_inherited_owners.add(frame_owner)
         if previous is None:
             command_before = entry.get("command_before")
             if isinstance(command_before, dict):
@@ -3023,6 +3195,20 @@ def _history(
                 )
             else:
                 previous = _empty_frame(frame.context_uid, frame.context_name)
+
+        recorded_branch = recorded_branches.get(entry["uid"])
+        if recorded_branch is not None:
+            events.extend(
+                _branch_transition_events(
+                    transition=recorded_branch,
+                    before=previous,
+                    after=frame,
+                    entry=entry,
+                )
+            )
+            frames.append(frame)
+            previous = frame
+            continue
 
         _, _, command, _, args = _checkpoint_fields(entry)
         command_operation = _command_restore_operation(

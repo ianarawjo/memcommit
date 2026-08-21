@@ -180,6 +180,16 @@ Rationale reuses the same target and Trace projection, then synthesizes only a
 compact natural-language account grounded in that Trace; it does not inherit
 Trace's owner-history authority when the target is granted.
 
+A validated Branch creation receipt is a recorded Context transition, not a
+content edit. Trace emits `BRANCHED` with the stable Memory UID, exact Source and
+target Context identities, and unchanged before/after content when the inherited
+checkpoint proves both sides. The compact projection renders one `=` Memory row
+instead of a false remove/add diff. Rationale receives the same typed Context
+transition in its provider payload so it can distinguish where the Memory was
+first added from the Context that inherited it. Receipt-free or invalid legacy
+history never receives a fabricated transition and retains one warning per
+unexplained Source owner.
+
 Outside a TTY, omission fails instead of silently selecting a Context or the
 first Memory;
 automation must pass an explicit UID or prefix. `--json` also requires an
@@ -661,8 +671,9 @@ This is a tested command-path invariant, not operating-system confidentiality.
   current Memory can be the earliest observable lineage state.
 - `RECORDED` metadata is structurally checked but unsigned and therefore not
   tamper-evident.
-- Old branch histories can retain source Context identities without a recorded
-  branch-creation event.
+- Old branch histories can retain Source Context identities without a recorded
+  branch-creation event. Trace reports one limit per unexplained Source owner;
+  it cannot backfill a typed Context transition without a valid receipt.
 - Legacy operations without explicit trace metadata may be reconstructable only
   at a coarse level.
 - Only the latest atomize analysis per Context UID is retained. A later preview

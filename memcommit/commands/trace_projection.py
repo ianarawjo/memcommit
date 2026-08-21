@@ -28,7 +28,12 @@ from memcommit.interfaces.tui.core.theme import (
     semantic_action_style,
 )
 from memcommit.interfaces.tui.viewers.read_only import run_read_only_viewer
-from memcommit.provenance import MemoryState, TraceEvent, TraceReport
+from memcommit.provenance import (
+    MemoryState,
+    TraceContextTransition,
+    TraceEvent,
+    TraceReport,
+)
 
 
 _COMPACT_CONTENT_LIMIT = 44
@@ -213,6 +218,17 @@ def _trace_row_summary(row: TraceOperationRow) -> str:
             else "(empty)"
         )
         return f'removed "{compact}"'
+    transitions = _unique_context_transitions(row)
+    if action == "branch" and len(transitions) == 1:
+        transition = transitions[0]
+        before_by_uid = {state.uid: state.content for state in row.before}
+        unchanged = bool(row.after) and all(
+            before_by_uid.get(state.uid) == state.content for state in row.after
+        )
+        suffix = "Memory content unchanged" if unchanged else "copied target state"
+        return (
+            f"{transition.source.name} → {transition.target.name} · {suffix}"
+        )
     descriptions = _unique_text(event.description for event in row.events)
     if descriptions:
         return " / ".join(" ".join(description.split()) for description in descriptions)
@@ -303,6 +319,14 @@ def format_trace_operation(
     # typed effect and evidence here would make one operation read three times.
     if not verbose and trace_row_action(row) in {"add", "remove"}:
         return header
+    transitions = _unique_context_transitions(row)
+    if trace_row_action(row) == "branch" and len(transitions) == 1:
+        transition = transitions[0]
+        return (
+            f"{header} · CONTEXT {display_escape_text(transition.source.name)} → "
+            f"{display_escape_text(transition.target.name)} · "
+            f"{format_trace_states(row.after, verbose=verbose)}"
+        )
     return (
         f"{header} · {format_trace_states(row.before, verbose=verbose)} → "
         f"{format_trace_states(row.after, verbose=verbose)}"
@@ -377,6 +401,61 @@ def _extend_diff_states(
 
 def _unique_text(values: Iterable[str | None]) -> tuple[str, ...]:
     return tuple(dict.fromkeys(value for value in values if value))
+
+
+def _unique_context_transitions(
+    row: TraceOperationRow,
+) -> tuple[TraceContextTransition, ...]:
+    return tuple(
+        dict.fromkeys(
+            event.context_transition
+            for event in row.events
+            if event.context_transition is not None
+        )
+    )
+
+
+def _extend_branch_transition(
+    fragments: StyleAndTextTuples,
+    row: TraceOperationRow,
+    *,
+    verbose: bool,
+) -> None:
+    """Render Context movement without depicting unchanged content as an edit."""
+
+    transitions = _unique_context_transitions(row)
+    for transition in transitions:
+        source_uid = (
+            f" [{display_escape_text(transition.source.uid)}]" if verbose else ""
+        )
+        target_uid = (
+            f" [{display_escape_text(transition.target.uid)}]" if verbose else ""
+        )
+        fragments.extend(
+            (
+                ("class:report-label", "  Source Context: "),
+                (
+                    "class:report-neutral",
+                    display_escape_text(transition.source.name) + source_uid + "\n",
+                ),
+                ("class:report-label", "  Target Context: "),
+                (
+                    "class:report-neutral",
+                    display_escape_text(transition.target.name) + target_uid + "\n",
+                ),
+            )
+        )
+    for state in row.after:
+        fragments.extend(
+            (
+                ("class:report-label", "  = "),
+                (
+                    "class:memory-object",
+                    f"[{_state_uid(state, verbose=verbose)}]@{state.position + 1} ",
+                ),
+                ("class:memory-object", display_escape_text(state.content) + "\n"),
+            )
+        )
 
 
 def _extend_verbose_event_evidence(
@@ -473,6 +552,19 @@ def _extend_verbose_event_evidence(
             (
                 ("class:report-label", "  Description: "),
                 ("class:report-neutral", display_escape_text(description) + "\n"),
+            )
+        )
+    for transition in _unique_context_transitions(row):
+        fragments.extend(
+            (
+                ("class:report-label", "  Context route: "),
+                (
+                    "class:report-neutral",
+                    f"{display_escape_text(transition.source.name)} "
+                    f"[{display_escape_text(transition.source.uid)}] → "
+                    f"{display_escape_text(transition.target.name)} "
+                    f"[{display_escape_text(transition.target.uid)}]\n",
+                ),
             )
         )
     for event in row.events:
@@ -585,7 +677,9 @@ def _extend_operation(
     # Direct Add/Remove rows already name their one content-bearing endpoint.
     # Edits and structural/restoration commands need the diff to communicate
     # their meaning; verbose inspection deliberately expands every operation.
-    if verbose or trace_row_action(row) not in {"add", "remove"}:
+    if trace_row_action(row) == "branch" and _unique_context_transitions(row):
+        _extend_branch_transition(fragments, row, verbose=verbose)
+    elif verbose or trace_row_action(row) not in {"add", "remove"}:
         _extend_diff_states(fragments, row, verbose=verbose)
     for reason in _unique_text(event.reason for event in row.events):
         fragments.extend(

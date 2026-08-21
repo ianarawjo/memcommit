@@ -9,6 +9,7 @@ import memcommit.store as store_module
 from memcommit.cli import app
 from memcommit.commands.branch_dialog import BranchCreationReceipt
 from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef
+from memcommit.provenance import build_trace
 from memcommit.store import MemoryStore
 
 
@@ -97,6 +98,19 @@ def test_explicit_subtree_branch_clones_hierarchy_and_internal_pointers(
     branch_child_history = store.list_checkpoints("experiment/child")
     assert branch_child_history[0]["command"] == "branch"
     assert branch_child_history[1:] == child_history
+    child_trace = build_trace(store, branch_child, child_memory.uid)
+    assert child_trace.warnings == ()
+    branch_event = next(
+        event for event in child_trace.events if event.kind == "BRANCHED"
+    )
+    assert branch_event.context_transition is not None
+    assert branch_event.context_transition.source.name == "source/child"
+    assert branch_event.context_transition.target.name == "experiment/child"
+    assert branch_event.command_operation is not None
+    assert {context.name for context in branch_event.command_operation.contexts} == {
+        "experiment",
+        "experiment/child",
+    }
 
     changed = store.load_for_update("experiment/child")
     ops.add(changed, "branch-only fact")

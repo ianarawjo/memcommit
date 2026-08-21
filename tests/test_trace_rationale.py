@@ -1,8 +1,11 @@
 """Per-Memory trace and evidence-layered rationale contracts."""
 from __future__ import annotations
 
+import copy
 import json
+import shutil
 
+import pytest
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
@@ -12,6 +15,7 @@ from memcommit.context import AutoCheckpoint, Memory
 from memcommit.findings import AmbiguityFinding, AmbiguityReport
 from memcommit.provenance import build_trace
 from memcommit.rationale import build_rationale
+from memcommit.rationale_semantic import rationale_provenance_payload
 from memcommit.review import create_ambiguity_review
 from memcommit.store import MemoryStore
 from memcommit.update import plan_update
@@ -82,6 +86,149 @@ def test_trace_shows_newest_operation_first_with_forward_row_arrows(
     assert "NOW\n" not in result.output
     assert "[MEMORY " in result.output
     assert "Checkpoint:" not in result.output
+
+
+@pytest.mark.parametrize(
+    "branch_command",
+    [
+        ("branch", "practice/2"),
+        ("checkout", "-b", "practice/2"),
+    ],
+)
+def test_trace_records_unchanged_memory_route_for_branch_entry_points(
+    isolated_store,
+    branch_command,
+):
+    assert invoke("init", "practice/1").exit_code == 0
+    assert invoke("add", "a is apple").exit_code == 0
+    store = MemoryStore()
+    source = store.load_current_direct()
+    memory = next(
+        item for item in source.iter_items() if isinstance(item, Memory)
+    )
+
+    branched = invoke(*branch_command)
+
+    assert branched.exit_code == 0, branched.output
+    target = store.load_direct("practice/2")
+    report = build_trace(store, target, memory.uid)
+    assert [event.kind for event in report.events] == ["CREATED", "BRANCHED"]
+    assert report.warnings == ()
+    branch_event = report.events[-1]
+    assert branch_event.evidence == "RECORDED"
+    assert branch_event.operation_id is not None
+    assert branch_event.operation_id.startswith("branch:")
+    assert branch_event.context_transition is not None
+    assert branch_event.context_transition.to_dict() == {
+        "source": {"uid": source.uid, "name": "practice/1"},
+        "target": {"uid": target.uid, "name": "practice/2"},
+    }
+    assert [state.uid for state in branch_event.before] == [memory.uid]
+    assert [state.uid for state in branch_event.after] == [memory.uid]
+    assert branch_event.before[0].content == branch_event.after[0].content
+    rationale_request = rationale_provenance_payload(report)["request"]
+    assert rationale_request["selected_context"] == "practice/2"
+    assert rationale_request["warnings"] == []
+    assert rationale_request["events"][-1]["context_transition"] == {
+        "source": "practice/1",
+        "target": "practice/2",
+    }
+
+    rendered = invoke("trace", memory.uid, "--plain")
+    assert rendered.exit_code == 0, rendered.output
+    assert "[branch]" in rendered.output
+    assert "practice/1 → practice/2 · Memory content unchanged" in rendered.output
+    assert "Source Context: practice/1" in rendered.output
+    assert "Target Context: practice/2" in rendered.output
+    assert "branch creation event was not recorded" not in rendered.output
+
+    structured = invoke("trace", memory.uid, "--json")
+    assert structured.exit_code == 0, structured.output
+    assert json.loads(structured.output)["events"][-1]["context_transition"] == {
+        "source": {"uid": source.uid, "name": "practice/1"},
+        "target": {"uid": target.uid, "name": "practice/2"},
+    }
+
+
+def test_trace_keeps_one_legacy_warning_when_no_branch_receipt_exists(
+    isolated_store,
+):
+    assert invoke("init", "legacy/source").exit_code == 0
+    assert invoke("add", "legacy inherited fact").exit_code == 0
+    store = MemoryStore()
+    source = store.load_current_direct()
+    memory = next(
+        item for item in source.iter_items() if isinstance(item, Memory)
+    )
+    target = ops.branch(source, "legacy/target")
+    store.save(target)
+    source_checkpoints = store._checkpoints_dir(source.name)
+    target_checkpoints = store._checkpoints_dir(target.name)
+    target_checkpoints.mkdir(parents=True, exist_ok=True)
+    for path in source_checkpoints.glob("*.json"):
+        shutil.copy2(path, target_checkpoints / path.name)
+
+    report = build_trace(store, store.load_direct(target.name), memory.uid)
+
+    assert [event.kind for event in report.events] == ["CREATED"]
+    assert len(report.warnings) == 1
+    assert "inherited from 'legacy/source'" in report.warnings[0]
+    assert "branch creation event was not recorded" in report.warnings[0]
+
+
+def test_trace_retains_each_recorded_context_route_across_nested_branches(
+    isolated_store,
+):
+    assert invoke("init", "nested/0").exit_code == 0
+    assert invoke("add", "stable through both branches").exit_code == 0
+    store = MemoryStore()
+    memory = next(
+        item
+        for item in store.load_current_direct().iter_items()
+        if isinstance(item, Memory)
+    )
+    assert invoke("branch", "nested/1").exit_code == 0
+    assert invoke("branch", "nested/2").exit_code == 0
+
+    report = build_trace(store, store.load_direct("nested/2"), memory.uid)
+
+    assert report.warnings == ()
+    routes = [
+        (
+            event.context_transition.source.name,
+            event.context_transition.target.name,
+        )
+        for event in report.events
+        if event.kind == "BRANCHED" and event.context_transition is not None
+    ]
+    assert routes == [("nested/0", "nested/1"), ("nested/1", "nested/2")]
+
+
+def test_trace_does_not_trust_invalid_branch_creation_metadata(
+    isolated_store,
+    monkeypatch,
+):
+    assert invoke("init", "invalid/source").exit_code == 0
+    assert invoke("add", "must not receive forged provenance").exit_code == 0
+    store = MemoryStore()
+    memory = next(
+        item
+        for item in store.load_current_direct().iter_items()
+        if isinstance(item, Memory)
+    )
+    assert invoke("branch", "invalid/target").exit_code == 0
+    retained = copy.deepcopy(store.list_checkpoints("invalid/target"))
+    branch_entry = next(entry for entry in retained if entry["command"] == "branch")
+    branch_entry["args"]["branch_tree"]["operation_uid"] = "forged"
+    monkeypatch.setattr(store, "list_checkpoints", lambda _name: retained)
+
+    report = build_trace(store, store.load_direct("invalid/target"), memory.uid)
+
+    assert not any(event.kind == "BRANCHED" for event in report.events)
+    assert any("invalid Branch creation metadata" in item for item in report.warnings)
+    assert any(
+        "branch creation event was not recorded" in item for item in report.warnings
+    )
 
 
 def test_trace_resolves_removed_historical_memory(isolated_store):
