@@ -23,6 +23,7 @@ from memcommit.authority.access import (
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
+from memcommit.interfaces.console.errors import render_cli_error
 from memcommit.context import (
     AutoCheckpoint,
     Context,
@@ -273,11 +274,7 @@ def _delete_context(
         )
         raise typer.Exit(1)
     except (OSError, RuntimeError, ValueError) as error:
-        typer.secho(
-            f"Error: {display_escape_text(str(error))}",
-            fg=typer.colors.RED,
-            err=True,
-        )
+        render_cli_error(error)
         raise typer.Exit(1)
     typer.secho(
         f"Deleted context '{display_name}' · ledger "
@@ -357,7 +354,7 @@ def _delete_item(target: _ItemTarget) -> None:
     try:
         item = _commit_item_deletion(target)
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
-        typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
+        render_cli_error(error)
         raise typer.Exit(1)
     _report_removed_item(item)
 
@@ -450,11 +447,7 @@ def cmd(
             ) as error:
                 if completed_deletions and not store.list_context_names():
                     return
-                typer.secho(
-                    f"Error: {display_escape_text(str(error))}",
-                    fg=typer.colors.RED,
-                    err=True,
-                )
+                render_cli_error(error)
                 raise typer.Exit(1)
             if selected is None:
                 if not completed_deletions and not attempted_item_deletions:
@@ -476,11 +469,7 @@ def cmd(
                     RuntimeError,
                     ValueError,
                 ) as error:
-                    typer.secho(
-                        f"Error: {display_escape_text(str(error))}",
-                        fg=typer.colors.RED,
-                        err=True,
-                    )
+                    render_cli_error(error)
                     raise typer.Exit(1)
                 initial_target = _next_item_target(item_target)
                 if initial_target is None:
@@ -542,11 +531,7 @@ def cmd(
         # An ambiguous direct-item prefix is still ambiguous in the combined
         # namespace; never let an exact Context silently win that collision.
         if isinstance(item_error, ValueError) and "Ambiguous" in str(item_error):
-            typer.secho(
-                f"Error: {display_escape_text(str(item_error))}",
-                fg=typer.colors.RED,
-                err=True,
-            )
+            render_cli_error(item_error)
             raise typer.Exit(1)
         _delete_context(store, context_target, force=force)
         return
@@ -562,9 +547,5 @@ def cmd(
         message = f"No Context or direct item matches '{selector}'."
     else:
         message = str(error)
-    typer.secho(
-        f"Error: {display_escape_text(message)}",
-        fg=typer.colors.RED,
-        err=True,
-    )
+    render_cli_error(message)
     raise typer.Exit(1)

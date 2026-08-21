@@ -11,6 +11,7 @@ except ImportError:  # pragma: no cover - compatibility with older Typer
     import click
 from typer.core import TyperGroup
 
+from memcommit.interfaces.console.errors import render_cli_error
 from memcommit.write_protection import (
     WriteProtectionError,
     WriteProtectionRegistryError,
@@ -100,7 +101,12 @@ class MemCommandGroup(TyperGroup):
                     with study_recording_app_session():
                         result = super().invoke(ctx)
             except (WriteProtectionError, WriteProtectionRegistryError) as error:
-                raise click.ClickException(str(error)) from error
+                # Typer renders ClickException with Rich panel chrome, while
+                # command-local failures use one plain error line. Protection
+                # is caught here for every writer, so render it here through
+                # the same shared surface and exit without a second formatter.
+                render_cli_error(error)
+                raise click.exceptions.Exit(1) from error
         except BaseException as error:
             if active_attempt is not None:
                 from memcommit.command_attempts import finish_command_attempt

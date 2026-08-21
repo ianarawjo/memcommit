@@ -23,6 +23,7 @@ from memcommit.authority.access import (
 from memcommit.commands.paste_input import PasteCancelled, capture_paste
 from memcommit.context_targeting.catalog import freeze_granted_context_navigation
 from memcommit.interfaces.cli.add import render_add_plain
+from memcommit.interfaces.console.errors import render_cli_error
 from memcommit.interfaces.console.terminal import is_interactive_terminal
 from memcommit.interfaces.tui.operations.add import AddTuiSetup, run_add_tui
 from memcommit.profile_config import ProfileConfigError
@@ -264,7 +265,7 @@ def cmd(
         TypeError,
         ValueError,
     ) as error:
-        typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
+        render_cli_error(error)
         raise typer.Exit(1)
 
     render_add_plain(result, mode=request.source.mode)

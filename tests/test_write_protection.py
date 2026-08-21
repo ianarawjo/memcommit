@@ -92,6 +92,30 @@ def test_context_lock_cli_blocks_changes_but_allows_checkpoint_and_branch(
     assert not (isolated_store / "write-protection.json").exists()
 
 
+def test_context_lock_failures_share_one_plain_cli_error_surface(isolated_store):
+    assert invoke("init", "protected").exit_code == 0
+    assert invoke("add", "existing").exit_code == 0
+    store = MemoryStore()
+    memory = _first_memory(store, "protected")
+    assert invoke("lock").exit_code == 0
+
+    expected = (
+        "Error: Context 'protected' is locked against changes. "
+        "Unlock that Context first.\n"
+    )
+    blocked = (
+        invoke("add", "must not be saved"),
+        invoke("delete", memory.uid[:8]),
+        invoke("remove", memory.uid[:8]),
+    )
+
+    for result in blocked:
+        assert result.exit_code == 1
+        assert _all_output(result) == expected
+        assert "╭─ Error" not in _all_output(result)
+    assert memory.uid in store.load_direct("protected").memories
+
+
 def test_recursive_context_lock_uses_a_frozen_existing_namespace_snapshot(
     isolated_store,
 ):

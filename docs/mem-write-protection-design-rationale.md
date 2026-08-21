@@ -114,7 +114,11 @@ implement their own incomplete list of protected operations. Consequently,
 direct edits, batch edits, semantic applications, merge, clear, restore,
 Revert, Undo, and Redo all fail if their final Context record would cross a
 lock. Typed protection failures are converted once at the root CLI group into
-a normal error rather than a Python traceback.
+a terminal-safe `Error: ...` line rather than a Python traceback or
+framework-owned Rich error panel. The root and command-local failures share
+one line-oriented renderer so a protection failure does not change shape
+according to which command happened to catch it first. Plain text remains the
+complete channel; red is only supplemental terminal emphasis.
 
 An invalid or unsafe protection registry fails closed for mutations. Read-only
 Context inspection can continue because it does not need to open the policy
