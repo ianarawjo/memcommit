@@ -64,14 +64,16 @@ class AgentSemanticProvider:
             )
         payload = json.loads(prompt.split(ELABORATE_PAYLOAD_MARKER, 1)[1])
         assert payload["mode"] == "GOAL_TO_RULES"
+        number = payload["number"]
         return json.dumps(
             {
-                "overview": "One suggested Rule.",
+                "overview": f"{number} suggested Rules.",
                 "rules": [
                     {
-                        "content": "Confirm before acting.",
-                        "rationale": "This makes the Goal operational.",
+                        "content": f"Confirm option {index} before acting.",
+                        "rationale": f"This makes Goal branch {index} operational.",
                     }
+                    for index in range(1, number + 1)
                 ],
             }
         )
@@ -144,12 +146,21 @@ def test_semantic_agent_elaborate_accepts_an_exact_number(isolated_store):
             "version": ELABORATE_AGENT_CONTRACT_VERSION,
             "kind": "goal_to_rules",
             "goal": "Confirm before acting.",
-            "number": 1,
+            "number": 5,
         },
     )
 
     assert result["ok"] is True
-    assert len(result["result"]["rules"]) == 1
+    assert len(result["result"]["rules"]) == 5
+    schema = next(
+        item
+        for item in registry.tool_schemas()
+        if item["name"] == ELABORATE_AGENT_TOOL_NAME
+    )
+    assert all(
+        "maximum" not in branch["properties"]["number"]
+        for branch in schema["parameters"]["oneOf"]
+    )
 
 
 def test_semantic_agent_rejects_unknown_fields_before_provider(tmp_path):

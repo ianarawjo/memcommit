@@ -25,8 +25,11 @@ the complete operation fails.
 more distinct nonempty Rules, plus an optional override for the exact proposal
 number. The normalized request always carries an exact count, defaulting to
 three.
-`ElaborateSemanticConfig` owns the safe directional maxima, text, rationale,
-overview, and response limits. One complete request is
+An explicit count may be any positive integer; three is a default, not a
+maximum. `ElaborateSemanticConfig` owns optional host-injected directional
+safety ceilings plus the text, rationale, overview, and response limits. Both
+directional ceilings are `None` in the ordinary CLI and public API contract.
+One complete request is
 `WHOLE_FRAME_ONLY`; hidden batching could duplicate, omit, or distort the
 requested proposal set. Input normalization occurs before prepared lookup; on
 an exact prepared miss, the one-turn budget is validated before provider
@@ -35,11 +38,15 @@ construction.
 Provider output uses a strict direction-specific schema. Both directions
 return exactly three proposals by default, while `--number` fixes both JSON
 Schema bounds to the requested override.
-The supported exact range is therefore 1–4 for Goal-to-Rules and 1–3 for
-Rules-to-Cases; the directional bounds continue to prevent an unbounded
-one-turn request. The provider instruction, decoder, typed analysis validator,
-prepared-result check, and atomic publication count all share this exact
-request value. A count mismatch publishes nothing.
+The ordinary supported count domain is therefore every positive integer in
+both directions; there is no fixed product-level count ceiling. A host that
+injects a nondefault configuration may set a positive directional one-turn
+ceiling. The provider instruction, decoder, typed analysis validator,
+prepared-result check, and atomic publication count all share the exact request
+value. A count mismatch publishes nothing. General provider input and response
+envelope limits remain independent of this count contract, so a provider may
+still fail an exceptionally large exact request rather than silently reducing
+its count.
 
 Every Case is classified as `FIT`, `BOUNDARY`, or `CONTRAST` and carries one
 ordered `rule_checks` entry for every current input Rule. Every stored
@@ -57,7 +64,29 @@ become current input Rules: `rule_checks` still range exactly over the
 request's Rule tuple. Provider contract version 4 prevented an unreferenced
 prompt result from replaying; version 5 introduced typed Target ambient
 context, version 6 introduced an optional exact proposal number, and version 7
-makes the omitted number normalize to the exact default of three.
+makes the omitted number normalize to the exact default of three. Version 8
+removes the ordinary directional count ceilings so every positive explicit
+count reaches the exact one-turn contract.
+
+### Why the former 4/3 ceilings were removed
+
+The first standalone Elaborate slice used four Rule proposals and three Case
+proposals as conservative one-turn maxima. When the exact `--number` option was
+added, those existing maxima were deliberately retained to avoid making an
+arbitrary provider call unbounded. A later change made three the omitted exact
+default but left the same maxima in place. That history caused the defect: the
+small proposal sets chosen for the initial workflow became public validation
+limits, so `--number 5` failed before provider construction even though the
+caller had explicitly requested an exact positive count.
+
+The ordinary contract now separates the two concerns. Three is only the
+omitted count, while a supplied positive integer is the exact requested count.
+Keeping 4/3 as hidden product ceilings was rejected because it makes the
+default workflow size silently govern caller capability. Removing all
+one-turn safeguards was also rejected: an embedding host may inject an
+explicit directional ceiling, and the shared input and response-envelope
+limits still fail closed. Hidden batching remains a non-goal because it could
+change the meaning or coverage of one exact proposal set.
 
 The nonempty-output invariant is enforced independently by the Provider
 instruction, JSON Schema `minItems`, strict decoder, and typed analysis. This
@@ -217,7 +246,9 @@ forms and the same optional exact-count override, and return
 slice does not silently broaden those callable adapters into mutations.
 Agent contract version 3 adds the name-only/content-safe Target ambient frame
 and per-proposal Target references; standalone public calls without a Target
-continue to return no ambient frame.
+continue to return no ambient frame. Accepting larger positive counts is a
+backward-compatible validation broadening, so agent contract version 3 remains
+valid while its JSON Schema no longer publishes a `maximum` for `number`.
 
 Elaborate currently opens directly on its result Viewer rather than providing
 an input-composer TUI. That is intentional for this slice: CLI, Python, or
@@ -230,4 +261,6 @@ can remain a presentation adapter over the same request.
 - no automatic Ground promotion or Ground-source Add;
 - no persisted hidden-prewarm artifact;
 - no interactive input composer; and
+- no guarantee that an external provider can fulfill an arbitrarily large
+  exact count within one response envelope; and
 - no claim that generated or stored Case propositions are evidence.

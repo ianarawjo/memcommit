@@ -1,4 +1,4 @@
-"""Generate bounded, explicitly unverified Rule or Case proposals."""
+"""Generate exact-count, explicitly unverified Rule or Case proposals."""
 
 from __future__ import annotations
 
@@ -12,7 +12,6 @@ from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.elaborate import ElaborateError
 from memcommit.elaborate_application import ElaborateRequest, ElaborateResult
-from memcommit.elaborate_config import DEFAULT_ELABORATE_SEMANTIC_CONFIG
 from memcommit.elaborate_add_runtime import (
     FrozenElaborateSource,
     PreparedElaborateAdd,
@@ -89,12 +88,7 @@ def cmd(
             "--n",
             "-n",
             min=1,
-            help=(
-                "Exact proposals to generate (default 3; Goal to Rules: "
-                f"1-{DEFAULT_ELABORATE_SEMANTIC_CONFIG.max_rule_proposals}; "
-                "Rules to Cases: "
-                f"1-{DEFAULT_ELABORATE_SEMANTIC_CONFIG.max_case_proposals})"
-            ),
+            help="Exact positive proposal count (default 3; no fixed maximum)",
         ),
     ] = None,
     ground: Annotated[

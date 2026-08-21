@@ -244,14 +244,14 @@ def test_rules_elaborate_to_diverse_unverified_case_propositions() -> None:
 @pytest.mark.parametrize(
     ("elaborate_request", "field", "number"),
     (
-        (ElaborateRequest(goal="Make this Goal operational.", number=3), "rules", 3),
+        (ElaborateRequest(goal="Make this Goal operational.", number=5), "rules", 5),
         (
             ElaborateRequest(
                 rules=("Keep every result reviewable.",),
-                number=3,
+                number=5,
             ),
             "cases",
-            3,
+            5,
         ),
     ),
 )
@@ -307,7 +307,7 @@ def test_elaborate_number_rejects_a_provider_count_mismatch() -> None:
         ElaborateRequest(rules=("One Rule.",), number=4),
     ),
 )
-def test_elaborate_number_rejects_the_direction_bound_before_provider(
+def test_elaborate_optional_direction_bound_rejects_before_provider(
     elaborate_request,
 ) -> None:
     provider_constructions = 0
@@ -318,7 +318,14 @@ def test_elaborate_number_rejects_the_direction_bound_before_provider(
         return ExactNumberProvider()
 
     with pytest.raises(ElaborateError, match="number must be between"):
-        execute_elaborate(elaborate_request, provider_factory=provider_factory)
+        execute_elaborate(
+            elaborate_request,
+            provider_factory=provider_factory,
+            config=ElaborateSemanticConfig(
+                max_rule_proposals=4,
+                max_case_proposals=3,
+            ),
+        )
 
     assert provider_constructions == 0
 
@@ -385,6 +392,10 @@ def test_elaborate_request_requires_exactly_one_direction() -> None:
         ElaborateRequest(goal="One Goal", rules=("One Rule",))
     with pytest.raises(ElaborateError, match="positive integer"):
         ElaborateRequest(goal="One Goal", number=0)
+    with pytest.raises(ElaborateError, match="positive integer"):
+        ElaborateRequest(goal="One Goal", number=-1)
+    with pytest.raises(ElaborateError, match="positive integer"):
+        ElaborateRequest(goal="One Goal", number=True)
 
 
 def test_elaborate_exact_prepared_lookup_avoids_provider() -> None:

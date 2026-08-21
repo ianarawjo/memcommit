@@ -16,7 +16,6 @@ from memcommit.api import (
     SemanticProviderFailure,
     SemanticStorageError,
 )
-from memcommit.elaborate_config import DEFAULT_ELABORATE_SEMANTIC_CONFIG
 from memcommit.interfaces.agent.contract import (
     AgentRequestError,
     JsonObject,
@@ -55,10 +54,7 @@ def _parse_request(payload: object) -> tuple[ElaborateAgentKind, dict[str, objec
         )
         return kind, {
             "goal": text_value(value["goal"], field="goal"),
-            "number": _number_value(
-                value.get("number"),
-                maximum=DEFAULT_ELABORATE_SEMANTIC_CONFIG.max_rule_proposals,
-            ),
+            "number": _number_value(value.get("number")),
         }
     if kind == "rules_to_cases":
         exact_fields(
@@ -72,10 +68,7 @@ def _parse_request(payload: object) -> tuple[ElaborateAgentKind, dict[str, objec
             raise AgentRequestError("rules must be a nonempty list of Rule texts.")
         return kind, {
             "rules": tuple(text_value(item, field="rules item") for item in raw),
-            "number": _number_value(
-                value.get("number"),
-                maximum=DEFAULT_ELABORATE_SEMANTIC_CONFIG.max_case_proposals,
-            ),
+            "number": _number_value(value.get("number")),
         }
     if kind in {"ground_goal_to_rules", "ground_rules_to_cases"}:
         exact_fields(
@@ -87,14 +80,7 @@ def _parse_request(payload: object) -> tuple[ElaborateAgentKind, dict[str, objec
         return kind, {
             "ground_name": text_value(value["ground_name"], field="ground_name"),
             "direction": "GOAL_TO_RULES" if kind == "ground_goal_to_rules" else "RULES_TO_CASES",
-            "number": _number_value(
-                value.get("number"),
-                maximum=(
-                    DEFAULT_ELABORATE_SEMANTIC_CONFIG.max_rule_proposals
-                    if kind == "ground_goal_to_rules"
-                    else DEFAULT_ELABORATE_SEMANTIC_CONFIG.max_case_proposals
-                ),
-            ),
+            "number": _number_value(value.get("number")),
         }
     raise AgentRequestError(
         "kind must be one of: goal_to_rules, rules_to_cases, "
@@ -102,11 +88,11 @@ def _parse_request(payload: object) -> tuple[ElaborateAgentKind, dict[str, objec
     )
 
 
-def _number_value(value: object, *, maximum: int) -> int | None:
+def _number_value(value: object) -> int | None:
     if value is None:
         return None
-    if type(value) is not int or not 1 <= value <= maximum:
-        raise AgentRequestError(f"number must be an integer from 1 to {maximum}.")
+    if type(value) is not int or value <= 0:
+        raise AgentRequestError("number must be a positive integer.")
     return value
 
 
@@ -262,11 +248,6 @@ def elaborate_agent_tool_schema() -> JsonObject:
                     "number": {
                         "type": "integer",
                         "minimum": 1,
-                        "maximum": (
-                            DEFAULT_ELABORATE_SEMANTIC_CONFIG.max_rule_proposals
-                            if kind == "goal_to_rules"
-                            else DEFAULT_ELABORATE_SEMANTIC_CONFIG.max_case_proposals
-                        ),
                     },
                 },
             }
@@ -284,11 +265,6 @@ def elaborate_agent_tool_schema() -> JsonObject:
                     "number": {
                         "type": "integer",
                         "minimum": 1,
-                        "maximum": (
-                            DEFAULT_ELABORATE_SEMANTIC_CONFIG.max_rule_proposals
-                            if kind == "ground_goal_to_rules"
-                            else DEFAULT_ELABORATE_SEMANTIC_CONFIG.max_case_proposals
-                        ),
                     },
                 },
             }
@@ -298,7 +274,8 @@ def elaborate_agent_tool_schema() -> JsonObject:
         "description": (
             "Propose unverified Rules from a Goal or Cases from Rules, using "
             "inline input or one exact Ground; omission of number requests exactly "
-            "3 proposals, and nothing is saved or accepted."
+            "3 proposals, any supplied number must be a positive exact count with "
+            "no fixed maximum, and nothing is saved or accepted."
         ),
         "parameters": {"type": "object", "oneOf": branches},
     }

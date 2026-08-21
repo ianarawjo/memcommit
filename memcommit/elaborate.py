@@ -1,4 +1,4 @@
-"""Bounded top-down Rule and Case proposal generation."""
+"""Exact-count top-down Rule and Case proposal generation."""
 
 from __future__ import annotations
 
@@ -29,7 +29,7 @@ from memcommit.semantic_execution import (
 
 
 ELABORATE_OPERATION = "elaborate"
-ELABORATE_PROVIDER_CONTRACT_VERSION = 7
+ELABORATE_PROVIDER_CONTRACT_VERSION = 8
 ELABORATE_PAYLOAD_MARKER = "ELABORATE PAYLOAD:\n"
 
 
@@ -178,7 +178,7 @@ def normalize_elaborate_number(
     number: int | None,
     config: ElaborateSemanticConfig = DEFAULT_ELABORATE_SEMANTIC_CONFIG,
 ) -> int:
-    """Resolve the default or explicit exact count against the direction bound."""
+    """Resolve the default or explicit positive exact proposal count."""
 
     if not isinstance(mode, ElaborateMode):
         raise ElaborateError("Elaborate proposal count requires a valid direction.")
@@ -186,12 +186,14 @@ def normalize_elaborate_number(
         raise TypeError("Elaborate requires an ElaborateSemanticConfig.")
     if number is None:
         number = config.default_proposal_count
+    if type(number) is not int or number <= 0:
+        raise ElaborateError("Elaborate number must be a positive integer.")
     maximum = (
         config.max_rule_proposals
         if mode is ElaborateMode.GOAL_TO_RULES
         else config.max_case_proposals
     )
-    if type(number) is not int or not 1 <= number <= maximum:
+    if maximum is not None and number > maximum:
         label = "Rule" if mode is ElaborateMode.GOAL_TO_RULES else "Case"
         raise ElaborateError(
             f"Elaborate {label} number must be between 1 and {maximum}."
@@ -442,7 +444,10 @@ def validate_elaborate_analysis(
             raise ElaborateError(
                 "Elaborate requires at least one Rule proposal."
             )
-        if len(analysis.rules) > config.max_rule_proposals:
+        if (
+            config.max_rule_proposals is not None
+            and len(analysis.rules) > config.max_rule_proposals
+        ):
             raise ElaborateError("Elaborate returned too many Rule proposals.")
         if len(analysis.rules) != number:
             raise ElaborateError(
@@ -456,7 +461,10 @@ def validate_elaborate_analysis(
             raise ElaborateError(
                 "Elaborate requires at least one Case proposal."
             )
-        if len(analysis.cases) > config.max_case_proposals:
+        if (
+            config.max_case_proposals is not None
+            and len(analysis.cases) > config.max_case_proposals
+        ):
             raise ElaborateError("Elaborate returned too many Case proposals.")
         if len(analysis.cases) != number:
             raise ElaborateError(
@@ -702,7 +710,7 @@ def analyze_elaborate(
     number: int | None = None,
     config: ElaborateSemanticConfig = DEFAULT_ELABORATE_SEMANTIC_CONFIG,
 ) -> ElaborateAnalysis:
-    """Generate bounded, explicitly unverified top-down proposals."""
+    """Generate an exact positive count of unverified top-down proposals."""
 
     mode, inputs = normalize_elaborate_inputs(
         goal=goal,
@@ -827,7 +835,10 @@ def analyze_elaborate(
         if (
             not isinstance(values, list)
             or not values
-            or len(values) > config.max_rule_proposals
+            or (
+                config.max_rule_proposals is not None
+                and len(values) > config.max_rule_proposals
+            )
             or len(values) != number
         ):
             raise ElaborateError("The Elaborate provider returned invalid Rules.")
@@ -860,7 +871,10 @@ def analyze_elaborate(
         if (
             not isinstance(values, list)
             or not values
-            or len(values) > config.max_case_proposals
+            or (
+                config.max_case_proposals is not None
+                and len(values) > config.max_case_proposals
+            )
             or len(values) != number
         ):
             raise ElaborateError("The Elaborate provider returned invalid Cases.")

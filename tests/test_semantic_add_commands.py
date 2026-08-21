@@ -64,6 +64,13 @@ class _ElaborateProvider:
                     "This defines the safe confirmation boundary.",
                 ),
             )
+            rule_specs += tuple(
+                (
+                    f"Generated operational Rule {index}.",
+                    f"This is distinct exact-count rationale {index}.",
+                )
+                for index in range(len(rule_specs) + 1, number + 1)
+            )
             return json.dumps(
                 {
                     "overview": f"Exactly {number} Rules make the Goal concrete.",
@@ -97,6 +104,15 @@ class _ElaborateProvider:
                 "This contrasts fresh and stale confirmation.",
                 "CONTRAST",
             ),
+        )
+        case_specs += tuple(
+            (
+                f"The user confirms generated ticker CASE{index} before acting.",
+                f"Proceed with CASE{index}.",
+                f"This is distinct exact-count Case {index}.",
+                ("FIT", "BOUNDARY", "CONTRAST")[(index - 1) % 3],
+            )
+            for index in range(len(case_specs) + 1, number + 1)
         )
         return json.dumps(
             {
@@ -207,6 +223,7 @@ def test_mem_elaborate_number_is_an_exact_cli_and_checkpoint_contract(
 ) -> None:
     store = MemoryStore()
     target = _create(store, "number/target", "Existing destination language.")
+    source = _create(store, "number/source", "Confirm a ticker before acting.")
     store.set_current(target.name)
     _ElaborateProvider.calls = []
     monkeypatch.setattr(
@@ -219,18 +236,18 @@ def test_mem_elaborate_number_is_an_exact_cli_and_checkpoint_contract(
         app,
         [
             "elaborate",
-            "--goal",
-            "Confirm a ticker before acting.",
+            "--from",
+            source.name,
             "--n",
-            "1",
+            "5",
         ],
     )
 
     assert result.exit_code == 0, result.output
-    assert "EFFECTS · ADD 1 MEMORIES" in result.output
-    assert _ElaborateProvider.calls[0]["number"] == 1
+    assert "EFFECTS · ADD 5 MEMORIES" in result.output
+    assert _ElaborateProvider.calls[0]["number"] == 5
     checkpoint = store.list_checkpoints(target.name)[0]
-    assert checkpoint["args"]["elaborate"]["number"] == 1
+    assert checkpoint["args"]["elaborate"]["number"] == 5
 
 
 def test_elaborate_context_role_is_explicit_and_not_name_based(
