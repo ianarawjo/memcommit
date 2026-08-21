@@ -185,9 +185,7 @@ def test_recursive_branch_undo_cancels_the_complete_created_tree_and_redo_restor
         name: store.load_direct(name).to_dict() for name in branch_records
     } == branch_records
     for name, original_uids in branch_history_uids.items():
-        restored_uids = [
-            entry["uid"] for entry in store.list_checkpoints(name)
-        ]
+        restored_uids = [entry["uid"] for entry in store.list_checkpoints(name)]
         assert restored_uids[-len(original_uids) :] == original_uids
 
 
@@ -202,9 +200,7 @@ def test_recursive_branch_undo_failure_restores_every_created_context(
         name: store.load_direct(name).to_dict()
         for name in ("experiment", "experiment/child")
     }
-    histories = {
-        name: store.list_checkpoints(name) for name in records
-    }
+    histories = {name: store.list_checkpoints(name) for name in records}
     original_save = MemoryStore._save_locked
     undo_saves = 0
 
@@ -223,12 +219,8 @@ def test_recursive_branch_undo_failure_restores_every_created_context(
     assert undone.exit_code == 1
     assert "injected Branch Undo failure" in undone.stderr
     assert store.current_context_name() == "experiment"
-    assert {
-        name: store.load_direct(name).to_dict() for name in records
-    } == records
-    assert {
-        name: store.list_checkpoints(name) for name in histories
-    } == histories
+    assert {name: store.load_direct(name).to_dict() for name in records} == records
+    assert {name: store.list_checkpoints(name) for name in histories} == histories
     assert store.list_command_context_archives() == ()
 
 

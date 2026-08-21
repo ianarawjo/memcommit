@@ -1,8 +1,8 @@
 COMMAND · mem checkout -b practice/2                                                                                                                                                
 Branched 'practice/1' → 'practice/2' and switched to it.                                                                                                                            
-RECORDED · BRANCH CHECKPOINT [36193ce8] · MEMORY [93db7e2a] · practice/1 → practice/2 · UID + CONTENT STABLE                                                                        
+RECORDED · BRANCH CHECKPOINT [b0391b7d] · MEMORY [40fc5b17] · practice/1 → practice/2 · UID + CONTENT STABLE                                                                        
 PTY · os.get_terminal_size=180×52 · stty=52 180                                                                                                                                     
 PRESS T · OPEN RECORDED BRANCH TRACE (READ ONLY)                                                                                                                                    
 t                                                                                                                                                                                   
-TRACE CLOSED · TARGET [93db7e2a] · CONTEXT practice/2 [56660f76] · STORE DIGEST UNCHANGED                                                                                           
+TRACE CLOSED · TARGET [40fc5b17] · CONTEXT practice/2 [6b08bf94] · STORE DIGEST UNCHANGED                                                                                           
 PRESS L · VERIFY RECEIPT-FREE LEGACY LIMIT

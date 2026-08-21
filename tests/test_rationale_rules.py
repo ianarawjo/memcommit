@@ -9,7 +9,13 @@ from typer.testing import CliRunner
 
 from memcommit.cli import app
 from memcommit.context import Memory
-from memcommit.provenance import MemoryState, TraceEvent, TraceReport
+from memcommit.provenance import (
+    MemoryState,
+    TraceCommandContext,
+    TraceContextTransition,
+    TraceEvent,
+    TraceReport,
+)
 from memcommit.rationale_rules import (
     RATIONALE_RULESET_VERSION,
     RationaleLimitUnit,
@@ -41,20 +47,38 @@ def _case_trace(case: dict[str, object]) -> TraceReport:
     assert isinstance(input_value, dict)
     raw_events = input_value["events"]
     assert isinstance(raw_events, list)
-    events = tuple(
-        TraceEvent(
-            kind=raw_event["kind"],
-            evidence="RECORDED",
-            timestamp=None,
-            checkpoint_uid=None,
-            command=raw_event["command"],
-            description=raw_event["description"],
-            before=tuple(_state(item) for item in raw_event["before"]),
-            after=tuple(_state(item) for item in raw_event["after"]),
-            reason=raw_event["reason"],
+    events: list[TraceEvent] = []
+    for raw_event in raw_events:
+        route = raw_event.get("context_transition")
+        transition = (
+            TraceContextTransition(
+                source=TraceCommandContext(
+                    uid="source-context",
+                    name=str(route["source"]),
+                ),
+                target=TraceCommandContext(
+                    uid="target-context",
+                    name=str(route["target"]),
+                ),
+            )
+            if isinstance(route, dict)
+            else None
         )
-        for raw_event in raw_events
-    )
+        events.append(
+            TraceEvent(
+                kind=raw_event["kind"],
+                evidence="RECORDED",
+                timestamp=None,
+                checkpoint_uid=None,
+                command=raw_event["command"],
+                description=raw_event["description"],
+                before=tuple(_state(item) for item in raw_event["before"]),
+                after=tuple(_state(item) for item in raw_event["after"]),
+                reason=raw_event["reason"],
+                context_transition=transition,
+            )
+        )
+    retained_events = tuple(events)
     selected = str(input_value["selected_memory_id"])
     component_uids = tuple(
         sorted(
@@ -62,7 +86,7 @@ def _case_trace(case: dict[str, object]) -> TraceReport:
                 selected,
                 *(
                     state.uid
-                    for event in events
+                    for event in retained_events
                     for state in (*event.before, *event.after)
                 ),
             }
@@ -70,14 +94,14 @@ def _case_trace(case: dict[str, object]) -> TraceReport:
     )
     return TraceReport(
         context_uid="context",
-        context_name="case",
+        context_name=str(input_value["context_name"]),
         selected_uid=selected,
         component_uids=component_uids,
         originals=tuple(_state(item) for item in input_value["originals"]),
         current=tuple(_state(item) for item in input_value["current"]),
-        events=events,
+        events=retained_events,
         analyses=(),
-        warnings=(),
+        warnings=tuple(str(item) for item in input_value["warnings"]),
     )
 
 
@@ -108,13 +132,103 @@ def test_every_rule_exact_case_and_known_wrong_enters_the_production_prompt():
     prompt = rationale_ruleset_prompt_payload()
 
     assert authored["ruleset_version"] == RATIONALE_RULESET_VERSION
-    assert len(authored["rules"]) == 9
+    assert len(authored["rules"]) == 13
     assert prompt == {
         "ruleset_version": RATIONALE_RULESET_VERSION,
         "rules": authored["rules"],
         "cases": authored["cases"],
     }
     assert all(case["known_wrong"] for case in prompt["cases"])
+
+
+@pytest.mark.parametrize(
+    "case_id",
+    [
+        "atomize-parent-to-selected-and-sibling",
+        "distilled-rule-then-edited",
+        "branch-inherited-unchanged-memory",
+    ],
+)
+def test_refinement_cases_use_the_production_payload_schema_and_decoder(case_id):
+    case = _case(case_id)
+    expected = case["expected"]
+    input_value = case["input"]
+    provider = _CapturingProvider(expected["provenance"])
+
+    projection = synthesize_rationale_provenance(
+        _case_trace(case),
+        provider_factory=lambda: provider,
+        history_available=input_value["history_available"],
+        limit=input_value["limit"],
+        unit=RationaleLimitUnit(input_value["unit"]),
+    )
+
+    assert projection.text == expected["provenance"]
+    assert projection.length <= input_value["limit"]
+    prompt_payload = json.loads(provider.prompts[0].split("RATIONALE PAYLOAD:\n", 1)[1])
+    assert prompt_payload["ruleset"] == rationale_ruleset_prompt_payload()
+    assert prompt_payload["request"]["selected_context"] == input_value["context_name"]
+    assert prompt_payload["request"]["warnings"] == input_value["warnings"]
+    if case_id == "branch-inherited-unchanged-memory":
+        assert prompt_payload["request"]["events"][-1]["context_transition"] == {
+            "source": "practice/1",
+            "target": "practice/2",
+        }
+        assert prompt_payload["request"]["events"][-1]["kind"] == "BRANCHED"
+
+
+def test_refinement_cases_encode_excerpt_operation_and_context_movement_rules():
+    rules = {rule["id"]: rule for rule in rationale_ruleset()["rules"]}
+    cases = {case["id"]: case for case in rationale_ruleset()["cases"]}
+
+    assert "exact contiguous excerpts" in rules["R10_EXACT_EXCERPT_ANCHOR"]["invariant"]
+    assert "Split or Atomize" in rules["R11_OPERATION_SHAPE"]["invariant"]
+    assert "origin and destination" in rules["R12_CONTEXT_MOVEMENT"]["invariant"]
+    assert (
+        "this “don't edit the draft immediately” instruction"
+        in cases["atomize-parent-to-selected-and-sibling"]["expected"]["provenance"]
+    )
+    assert (
+        "from practice/1 as"
+        in cases["distilled-rule-then-edited"]["expected"]["provenance"]
+    )
+    assert (
+        "inherited unchanged by practice/2"
+        in cases["branch-inherited-unchanged-memory"]["expected"]["provenance"]
+    )
+
+
+def test_long_history_reads_every_event_but_compresses_material_phases():
+    case = _case("long-edit-run-with-remove-undo-redo")
+    expected = case["expected"]["provenance"]
+    input_value = case["input"]
+    provider = _CapturingProvider(expected)
+
+    projection = synthesize_rationale_provenance(
+        _case_trace(case),
+        provider_factory=lambda: provider,
+        limit=input_value["limit"],
+        unit=RationaleLimitUnit(input_value["unit"]),
+    )
+
+    assert projection.text == expected
+    assert projection.length == 37
+    assert "remove–undo–redo–undo cycle" in projection.text
+    assert "should” to “must" not in projection.text
+    prompt_payload = json.loads(provider.prompts[0].split("RATIONALE PAYLOAD:\n", 1)[1])
+    events = prompt_payload["request"]["events"]
+    assert len(events) == 15
+    assert [event["kind"] for event in events][8:12] == [
+        "REMOVED",
+        "RESTORED",
+        "RESTORED",
+        "RESTORED",
+    ]
+    rules = {rule["id"]: rule for rule in prompt_payload["ruleset"]["rules"]}
+    assert (
+        "material chronological phase"
+        in rules["R13_MATERIAL_PHASE_COMPRESSION"]["invariant"]
+    )
 
 
 def test_um_case_runs_through_the_same_whole_trace_production_synthesizer():
@@ -158,10 +272,12 @@ def test_payload_uses_aliases_but_retains_parent_and_sibling_context():
     request = payload["request"]
 
     assert request["selected_memory_id"] == "selected"
+    assert request["selected_context"] == "practice/source"
     assert request["selected_content"] == "Um..."
     assert request["selected_status"] == "HISTORICAL"
     assert request["events"][0]["before"][0]["memory_id"] != "selected"
     assert "c9e05f9a" not in json.dumps(payload)
+    assert request["warnings"] == []
 
 
 def test_hidden_history_returns_without_connecting_a_provider():

@@ -1,18 +1,18 @@
 {
   "command": "rationale",
-  "schema_version": 1,
-  "ruleset_version": "rationale-natural-provenance-v1",
+  "schema_version": 2,
+  "ruleset_version": "rationale-natural-provenance-v3",
   "description": "Exact natural-language provenance rules and production calibration cases. Every case is prompt-visible and a regression contract; known-wrong narratives mark adjacent factual and presentation failures.",
   "rules": [
     {
       "id": "R01_COMPLETE_RETAINED_LINEAGE",
       "title": "Read the complete retained lineage",
-      "invariant": "Use the complete frozen Trace component in chronological order; do not reduce provenance to the latest event or latest recorded reason."
+      "invariant": "Read every event in the complete frozen Trace component in chronological order; do not reduce provenance to the latest event or latest recorded reason. Complete input coverage requires every material phase in the narrative, not one prose clause per event."
     },
     {
       "id": "R02_ORIGIN_CONTEXT",
       "title": "Explain the origin context",
-      "invariant": "When a selected Memory was derived from a larger Memory, state the selected content's meaningful role or placement within that source and preserve the specific nearby context needed to understand why the fragment existed."
+      "invariant": "When a selected Memory was derived from a larger Memory or another Context, name the retained source Context when available and preserve the specific nearby source content needed to understand the selected content's origin."
     },
     {
       "id": "R03_DERIVATION_MECHANISM",
@@ -22,7 +22,7 @@
     {
       "id": "R04_CHRONOLOGICAL_LIFECYCLE",
       "title": "Narrate disappearance and return",
-      "invariant": "Preserve every selected-Memory presence, content, or position transition needed to explain when it disappeared, returned, changed, or was finally removed."
+      "invariant": "Preserve the order of every selected-Memory disappearance and return plus every material content phase needed to explain what changed. Mention a position transition only when order or neighboring placement changes the provenance meaning; omit incidental numeric movement."
     },
     {
       "id": "R05_SELECTED_MEMORY_BOUNDARY",
@@ -37,7 +37,7 @@
     {
       "id": "R07_COMPACT_COMPLETE",
       "title": "Compress without truncating facts",
-      "invariant": "Use one or two complete sentences within the requested character, UTF-8 byte, or whitespace-delimited word limit. Merge repeated subjects and paired undo/redo clauses, but retain origin context, derivation mechanism, and final lifecycle state; never mechanically clip a generated sentence."
+      "invariant": "Use one or two complete sentences within the requested character, UTF-8 byte, or whitespace-delimited word limit. Preserve discriminating before-and-after content, the material operation, Context movement, and selected lifecycle before generic purpose, justification, or unchanged-status prose; never mechanically clip a generated sentence."
     },
     {
       "id": "R08_NO_INVENTED_INTENT",
@@ -48,6 +48,26 @@
       "id": "R09_EXPLICIT_HISTORY_BOUNDARY",
       "title": "Keep unavailable provenance explicit",
       "invariant": "Return no narrative when retained history is absent or hidden by a Grant; never fill either condition from current content or outside knowledge."
+    },
+    {
+      "id": "R10_EXACT_EXCERPT_ANCHOR",
+      "title": "Anchor changes in exact excerpts",
+      "invariant": "When the bound permits, quote the shortest exact contiguous excerpts that distinguish the earlier content, selected result, sibling result, or current replacement. Prefer these evidence anchors over an abstract paraphrase of what the text required, and never alter quoted wording."
+    },
+    {
+      "id": "R11_OPERATION_SHAPE",
+      "title": "Match the prose to the operation shape",
+      "invariant": "Express Split or Atomize as one parent becoming the selected and relevant sibling results; express Edit as earlier content becoming current content; and express a derived-then-edited Memory as source operation and first derived content followed by its replacement."
+    },
+    {
+      "id": "R12_CONTEXT_MOVEMENT",
+      "title": "Separate Context movement from content change",
+      "invariant": "When retained evidence says a Memory was copied, branched, or inherited into another Context, name the origin and destination and state separately whether its content changed; do not collapse that route into a direct Add in the destination."
+    },
+    {
+      "id": "R13_MATERIAL_PHASE_COMPRESSION",
+      "title": "Compress long history into material phases",
+      "invariant": "After reading every event, collapse consecutive or repeated edits that follow one semantic trajectory into one material chronological phase. Preserve the earliest content, the current content or its distinguishing additions, and every ordered disappearance/return cycle; mention an intermediate wording only when it introduces, removes, or reverses a material meaning rather than merely rephrasing it."
     }
   ],
   "cases": [
@@ -56,6 +76,7 @@
       "description": "A hesitation inside one longer instruction becomes a standalone sentence chunk, disappears under undo, returns under redo, and is later removed while sibling atomize events remain outside its lifecycle.",
       "input": {
         "selected_memory_id": "selected",
+        "context_name": "practice/source",
         "history_available": true,
         "originals": [
           {
@@ -159,6 +180,7 @@
             ]
           }
         ],
+        "warnings": [],
         "limit": 40,
         "unit": "words"
       },
@@ -204,6 +226,7 @@
       "description": "A directly added Memory is removed and restored when that removal is undone.",
       "input": {
         "selected_memory_id": "selected",
+        "context_name": "lifecycle",
         "history_available": true,
         "originals": [],
         "current": [
@@ -241,6 +264,7 @@
             ]
           }
         ],
+        "warnings": [],
         "limit": 24,
         "unit": "words"
       },
@@ -258,16 +282,484 @@
       ]
     },
     {
+      "id": "atomize-parent-to-selected-and-sibling",
+      "description": "A copied compound instruction is atomized into the selected no-edit instruction and one sibling instruction, so the compact narrative should show the exact parent-to-two-results contrast.",
+      "input": {
+        "selected_memory_id": "selected",
+        "context_name": "practice/source-atomized",
+        "history_available": true,
+        "originals": [
+          {
+            "id": "parent",
+            "content": "When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.",
+            "position": 0
+          }
+        ],
+        "current": [
+          {
+            "id": "selected",
+            "content": "When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately.",
+            "position": 0
+          },
+          {
+            "id": "sibling",
+            "content": "When I ask “How does this read?”, first check the sentence order and paragraph division.",
+            "position": 1
+          }
+        ],
+        "events": [
+          {
+            "kind": "CREATED",
+            "command": "atomize",
+            "description": "Copied the source frame before the reviewed Atomize transform",
+            "reason": "Copied into this Context from 'practice/source' before the reviewed Atomize transform.",
+            "before": [],
+            "after": [
+              {
+                "id": "parent",
+                "content": "When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.",
+                "position": 0
+              }
+            ]
+          },
+          {
+            "kind": "SPLIT",
+            "command": "atomize",
+            "description": "Atomized 1 compound Memory into 2 children",
+            "reason": "The request contains independently revisable instructions to withhold immediate editing and to check sentence order and paragraph division first.",
+            "before": [
+              {
+                "id": "parent",
+                "content": "When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division.",
+                "position": 0
+              }
+            ],
+            "after": [
+              {
+                "id": "selected",
+                "content": "When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately.",
+                "position": 0
+              },
+              {
+                "id": "sibling",
+                "content": "When I ask “How does this read?”, first check the sentence order and paragraph division.",
+                "position": 1
+              }
+            ]
+          }
+        ],
+        "warnings": [],
+        "limit": 40,
+        "unit": "words"
+      },
+      "expected": {
+        "status": "AVAILABLE",
+        "provenance": "In practice/source, it began as “don't edit the draft immediately; first check the sentence order and paragraph division.” Atomize split it into this “don't edit the draft immediately” instruction and “first check the sentence order and paragraph division.”",
+        "rule_ids": [
+          "R01_COMPLETE_RETAINED_LINEAGE",
+          "R02_ORIGIN_CONTEXT",
+          "R03_DERIVATION_MECHANISM",
+          "R05_SELECTED_MEMORY_BOUNDARY",
+          "R06_NATURAL_NARRATIVE",
+          "R07_COMPACT_COMPLETE",
+          "R10_EXACT_EXCERPT_ANCHOR",
+          "R11_OPERATION_SHAPE"
+        ]
+      },
+      "known_wrong": [
+        {
+          "provenance": "This content originally appeared as the first instruction in a longer Memory. Atomize made it independently revisable, and it remains current and unchanged.",
+          "violates": ["R07_COMPACT_COMPLETE", "R10_EXACT_EXCERPT_ANCHOR", "R11_OPERATION_SHAPE"],
+          "reason": "Generic purpose and status prose displace the exact compound source and the sibling result that explain what the split did."
+        },
+        {
+          "provenance": "Atomize created the current no-edit Memory.",
+          "violates": ["R02_ORIGIN_CONTEXT", "R03_DERIVATION_MECHANISM", "R11_OPERATION_SHAPE"],
+          "reason": "The created label hides both the parent content and the second result of the split."
+        }
+      ]
+    },
+    {
+      "id": "distilled-rule-then-edited",
+      "description": "A Rule distilled from another Context is later replaced by Edit, so the narrative should quote the first derived rule before the current replacement instead of abstracting the rule's purpose.",
+      "input": {
+        "selected_memory_id": "selected",
+        "context_name": "practice/3",
+        "history_available": true,
+        "originals": [
+          {
+            "id": "selected",
+            "content": "Write each proposition in the exact three-token pattern `<lowercase letter> is <lowercase word>`, using the literal lowercase copula `is` with one space on each side and no terminal punctuation.",
+            "position": 0
+          }
+        ],
+        "current": [
+          {
+            "id": "selected",
+            "content": "adfadfafasdf",
+            "position": 0
+          }
+        ],
+        "events": [
+          {
+            "kind": "CREATED",
+            "command": "distill",
+            "description": "Added 2 distilled Rules from 'practice/1' to 'practice/3'",
+            "reason": null,
+            "before": [],
+            "after": [
+              {
+                "id": "selected",
+                "content": "Write each proposition in the exact three-token pattern `<lowercase letter> is <lowercase word>`, using the literal lowercase copula `is` with one space on each side and no terminal punctuation.",
+                "position": 0
+              }
+            ]
+          },
+          {
+            "kind": "EDITED",
+            "command": "edit",
+            "description": "Edited the distilled Memory",
+            "reason": null,
+            "before": [
+              {
+                "id": "selected",
+                "content": "Write each proposition in the exact three-token pattern `<lowercase letter> is <lowercase word>`, using the literal lowercase copula `is` with one space on each side and no terminal punctuation.",
+                "position": 0
+              }
+            ],
+            "after": [
+              {
+                "id": "selected",
+                "content": "adfadfafasdf",
+                "position": 0
+              }
+            ]
+          }
+        ],
+        "warnings": [],
+        "limit": 40,
+        "unit": "words"
+      },
+      "expected": {
+        "status": "AVAILABLE",
+        "provenance": "Distill created this Memory from practice/1 as “Write each proposition in the exact three-token pattern `<lowercase letter> is <lowercase word>`.” A later edit replaced it with “adfadfafasdf.”",
+        "rule_ids": [
+          "R01_COMPLETE_RETAINED_LINEAGE",
+          "R02_ORIGIN_CONTEXT",
+          "R03_DERIVATION_MECHANISM",
+          "R04_CHRONOLOGICAL_LIFECYCLE",
+          "R06_NATURAL_NARRATIVE",
+          "R07_COMPACT_COMPLETE",
+          "R10_EXACT_EXCERPT_ANCHOR",
+          "R11_OPERATION_SHAPE"
+        ]
+      },
+      "known_wrong": [
+        {
+          "provenance": "This Memory was distilled as a rule requiring propositions to follow a three-token pattern, then edited to “adfadfafasdf.”",
+          "violates": ["R02_ORIGIN_CONTEXT", "R10_EXACT_EXCERPT_ANCHOR", "R11_OPERATION_SHAPE"],
+          "reason": "The abstraction drops the retained Source Context and the exact first derived content even though both fit within the bound."
+        },
+        {
+          "provenance": "This Memory was edited to “adfadfafasdf.”",
+          "violates": ["R01_COMPLETE_RETAINED_LINEAGE", "R03_DERIVATION_MECHANISM", "R11_OPERATION_SHAPE"],
+          "reason": "The latest edit alone hides the Distill origin and the content it replaced."
+        }
+      ]
+    },
+    {
+      "id": "branch-inherited-unchanged-memory",
+      "description": "A Memory added in one Context is carried unchanged into a new Context by a recorded Branch transition.",
+      "input": {
+        "selected_memory_id": "selected",
+        "context_name": "practice/2",
+        "history_available": true,
+        "originals": [
+          {"id": "selected", "content": "a is apple", "position": 0}
+        ],
+        "current": [
+          {"id": "selected", "content": "a is apple", "position": 0}
+        ],
+        "events": [
+          {
+            "kind": "CREATED",
+            "command": "add",
+            "description": "Added: a is apple",
+            "reason": null,
+            "before": [],
+            "after": [
+              {"id": "selected", "content": "a is apple", "position": 0}
+            ]
+          },
+          {
+            "kind": "BRANCHED",
+            "command": "branch",
+            "description": "Branched 'practice/1' to 'practice/2'.",
+            "reason": null,
+            "before": [
+              {"id": "selected", "content": "a is apple", "position": 0}
+            ],
+            "after": [
+              {"id": "selected", "content": "a is apple", "position": 0}
+            ],
+            "context_transition": {
+              "source": "practice/1",
+              "target": "practice/2"
+            }
+          }
+        ],
+        "warnings": [],
+        "limit": 40,
+        "unit": "words"
+      },
+      "expected": {
+        "status": "AVAILABLE",
+        "provenance": "“a is apple” was added in practice/1 and inherited unchanged by practice/2 when that Context branched.",
+        "rule_ids": [
+          "R01_COMPLETE_RETAINED_LINEAGE",
+          "R02_ORIGIN_CONTEXT",
+          "R06_NATURAL_NARRATIVE",
+          "R07_COMPACT_COMPLETE",
+          "R10_EXACT_EXCERPT_ANCHOR",
+          "R12_CONTEXT_MOVEMENT"
+        ]
+      },
+      "known_wrong": [
+        {
+          "provenance": "This Memory originally appeared as “a is apple” and was added directly as a standalone Memory; it remains present and unchanged.",
+          "violates": ["R02_ORIGIN_CONTEXT", "R07_COMPACT_COMPLETE", "R12_CONTEXT_MOVEMENT"],
+          "reason": "The direct-Add account omits the retained practice/1-to-practice/2 branch inheritance route and spends the remaining budget on generic status prose."
+        }
+      ]
+    },
+    {
+      "id": "long-edit-run-with-remove-undo-redo",
+      "description": "Fifteen retained events combine ten successive edits with a Remove, Undo, Redo, and second Undo; the narrative must read every event but compress wording-only revisions into material phases within the ordinary 40-word bound.",
+      "input": {
+        "selected_memory_id": "selected",
+        "context_name": "long-history",
+        "history_available": true,
+        "originals": [
+          {"id": "selected", "content": "Release notes should identify the changed command.", "position": 0}
+        ],
+        "current": [
+          {"id": "selected", "content": "For each release note, state the changed command, affected Context, user-visible effect, remaining compatibility boundary, and intentional non-goal.", "position": 0}
+        ],
+        "events": [
+          {
+            "kind": "CREATED",
+            "command": "add",
+            "description": "Added the initial release-note instruction",
+            "reason": null,
+            "before": [],
+            "after": [
+              {"id": "selected", "content": "Release notes should identify the changed command.", "position": 0}
+            ]
+          },
+          {
+            "kind": "EDITED",
+            "command": "edit",
+            "description": "Added affected Context",
+            "reason": null,
+            "before": [
+              {"id": "selected", "content": "Release notes should identify the changed command.", "position": 0}
+            ],
+            "after": [
+              {"id": "selected", "content": "Release notes should identify the changed command and affected Context.", "position": 0}
+            ]
+          },
+          {
+            "kind": "EDITED",
+            "command": "edit",
+            "description": "Added user-visible effect",
+            "reason": null,
+            "before": [
+              {"id": "selected", "content": "Release notes should identify the changed command and affected Context.", "position": 0}
+            ],
+            "after": [
+              {"id": "selected", "content": "Release notes should identify the changed command, affected Context, and user-visible effect.", "position": 0}
+            ]
+          },
+          {
+            "kind": "EDITED",
+            "command": "edit",
+            "description": "Changed should to must",
+            "reason": null,
+            "before": [
+              {"id": "selected", "content": "Release notes should identify the changed command, affected Context, and user-visible effect.", "position": 0}
+            ],
+            "after": [
+              {"id": "selected", "content": "Release notes must identify the changed command, affected Context, and user-visible effect.", "position": 0}
+            ]
+          },
+          {
+            "kind": "EDITED",
+            "command": "edit",
+            "description": "Changed Release notes to Every release note",
+            "reason": null,
+            "before": [
+              {"id": "selected", "content": "Release notes must identify the changed command, affected Context, and user-visible effect.", "position": 0}
+            ],
+            "after": [
+              {"id": "selected", "content": "Every release note must identify the changed command, affected Context, and user-visible effect.", "position": 0}
+            ]
+          },
+          {
+            "kind": "EDITED",
+            "command": "edit",
+            "description": "Added compatibility boundary",
+            "reason": null,
+            "before": [
+              {"id": "selected", "content": "Every release note must identify the changed command, affected Context, and user-visible effect.", "position": 0}
+            ],
+            "after": [
+              {"id": "selected", "content": "Every release note must identify the changed command, affected Context, user-visible effect, and compatibility boundary.", "position": 0}
+            ]
+          },
+          {
+            "kind": "EDITED",
+            "command": "edit",
+            "description": "Added intentional non-goal",
+            "reason": null,
+            "before": [
+              {"id": "selected", "content": "Every release note must identify the changed command, affected Context, user-visible effect, and compatibility boundary.", "position": 0}
+            ],
+            "after": [
+              {"id": "selected", "content": "Every release note must identify the changed command, affected Context, user-visible effect, compatibility boundary, and intentional non-goal.", "position": 0}
+            ]
+          },
+          {
+            "kind": "EDITED",
+            "command": "edit",
+            "description": "Changed Every to Each",
+            "reason": null,
+            "before": [
+              {"id": "selected", "content": "Every release note must identify the changed command, affected Context, user-visible effect, compatibility boundary, and intentional non-goal.", "position": 0}
+            ],
+            "after": [
+              {"id": "selected", "content": "Each release note must identify the changed command, affected Context, user-visible effect, compatibility boundary, and intentional non-goal.", "position": 0}
+            ]
+          },
+          {
+            "kind": "REMOVED",
+            "command": "remove",
+            "description": "Removed the release-note instruction",
+            "reason": null,
+            "before": [
+              {"id": "selected", "content": "Each release note must identify the changed command, affected Context, user-visible effect, compatibility boundary, and intentional non-goal.", "position": 0}
+            ],
+            "after": []
+          },
+          {
+            "kind": "RESTORED",
+            "command": "undo",
+            "description": "Undid the Remove",
+            "reason": null,
+            "before": [],
+            "after": [
+              {"id": "selected", "content": "Each release note must identify the changed command, affected Context, user-visible effect, compatibility boundary, and intentional non-goal.", "position": 0}
+            ]
+          },
+          {
+            "kind": "RESTORED",
+            "command": "redo",
+            "description": "Redid the Remove",
+            "reason": null,
+            "before": [
+              {"id": "selected", "content": "Each release note must identify the changed command, affected Context, user-visible effect, compatibility boundary, and intentional non-goal.", "position": 0}
+            ],
+            "after": []
+          },
+          {
+            "kind": "RESTORED",
+            "command": "undo",
+            "description": "Undid the Remove again",
+            "reason": null,
+            "before": [],
+            "after": [
+              {"id": "selected", "content": "Each release note must identify the changed command, affected Context, user-visible effect, compatibility boundary, and intentional non-goal.", "position": 0}
+            ]
+          },
+          {
+            "kind": "EDITED",
+            "command": "edit",
+            "description": "Changed Each release note must identify to For each release note identify",
+            "reason": null,
+            "before": [
+              {"id": "selected", "content": "Each release note must identify the changed command, affected Context, user-visible effect, compatibility boundary, and intentional non-goal.", "position": 0}
+            ],
+            "after": [
+              {"id": "selected", "content": "For each release note, identify the changed command, affected Context, user-visible effect, compatibility boundary, and intentional non-goal.", "position": 0}
+            ]
+          },
+          {
+            "kind": "EDITED",
+            "command": "edit",
+            "description": "Changed identify to state",
+            "reason": null,
+            "before": [
+              {"id": "selected", "content": "For each release note, identify the changed command, affected Context, user-visible effect, compatibility boundary, and intentional non-goal.", "position": 0}
+            ],
+            "after": [
+              {"id": "selected", "content": "For each release note, state the changed command, affected Context, user-visible effect, compatibility boundary, and intentional non-goal.", "position": 0}
+            ]
+          },
+          {
+            "kind": "EDITED",
+            "command": "edit",
+            "description": "Qualified compatibility boundary as remaining",
+            "reason": null,
+            "before": [
+              {"id": "selected", "content": "For each release note, state the changed command, affected Context, user-visible effect, compatibility boundary, and intentional non-goal.", "position": 0}
+            ],
+            "after": [
+              {"id": "selected", "content": "For each release note, state the changed command, affected Context, user-visible effect, remaining compatibility boundary, and intentional non-goal.", "position": 0}
+            ]
+          }
+        ],
+        "warnings": [],
+        "limit": 40,
+        "unit": "words"
+      },
+      "expected": {
+        "status": "AVAILABLE",
+        "provenance": "Added as “Release notes should identify the changed command,” it was repeatedly expanded and reworded into the current instruction covering Context, user-visible effect, remaining compatibility boundary, and intentional non-goal. A remove–undo–redo–undo cycle temporarily removed and restored it.",
+        "rule_ids": [
+          "R01_COMPLETE_RETAINED_LINEAGE",
+          "R04_CHRONOLOGICAL_LIFECYCLE",
+          "R06_NATURAL_NARRATIVE",
+          "R07_COMPACT_COMPLETE",
+          "R10_EXACT_EXCERPT_ANCHOR",
+          "R11_OPERATION_SHAPE",
+          "R13_MATERIAL_PHASE_COMPRESSION"
+        ]
+      },
+      "known_wrong": [
+        {
+          "provenance": "Added directly as “Release notes should identify the changed command,” this Memory was successively edited to add the affected Context and user-visible effect, strengthen “should” to “must,” change “Release notes” to “Every release note,” and add the compatibility boundary and intentional non-goal, before “Every” became “Each.” It was then removed, restored by undo, removed again by redo, and restored by another undo; later edits changed “Each release note must identify” to “For each release note, identify,” then “state,” and finally changed “compatibility boundary” to “remaining compatibility boundary.”",
+          "violates": ["R07_COMPACT_COMPLETE", "R13_MATERIAL_PHASE_COMPRESSION"],
+          "reason": "The event-by-event wording inventory is accurate but treats every micro-edit as a separate prose obligation and cannot fit the ordinary receipt bound."
+        },
+        {
+          "provenance": "This Memory was repeatedly edited from its original release-note instruction into the current version.",
+          "violates": ["R01_COMPLETE_RETAINED_LINEAGE", "R04_CHRONOLOGICAL_LIFECYCLE", "R10_EXACT_EXCERPT_ANCHOR"],
+          "reason": "Endpoint-only compression drops the retained Remove, Undo, Redo, and second Undo cycle and provides no distinguishing content evidence."
+        }
+      ]
+    },
+    {
       "id": "grant-hidden-history",
       "description": "Readable content received through a Grant does not expose retained owner history to Rationale.",
       "input": {
         "selected_memory_id": "selected",
+        "context_name": "granted/source",
         "history_available": false,
         "originals": [],
         "current": [
           {"id": "selected", "content": "A readable granted Memory.", "position": 0}
         ],
         "events": [],
+        "warnings": [],
         "limit": 40,
         "unit": "words"
       },

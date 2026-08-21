@@ -1,19 +1,19 @@
 COMMAND · mem checkout -b practice/2                                                                                                                                                
 Branched 'practice/1' → 'practice/2' and switched to it.                                                                                                                            
-RECORDED · BRANCH CHECKPOINT [36193ce8] · MEMORY [93db7e2a] · practice/1 → practice/2 · UID + CONTENT STABLE                                                                        
+RECORDED · BRANCH CHECKPOINT [b0391b7d] · MEMORY [40fc5b17] · practice/1 → practice/2 · UID + CONTENT STABLE                                                                        
 PTY · os.get_terminal_size=180×52 · stty=52 180                                                                                                                                     
 PRESS T · OPEN RECORDED BRANCH TRACE (READ ONLY)                                                                                                                                    
 t                                                                                                                                                                                   
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ LINEAGE ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃TRACE · practice/2                                                                                                                                                               ^┃
-┃[MEMORY 93db7e2a] · 2 OPERATIONS · LATEST FIRST                                                                                                                                   ┃
+┃[MEMORY 40fc5b17] · 2 OPERATIONS · LATEST FIRST                                                                                                                                   ┃
 ┃                                                                                                                                                                                  ┃
-┃[branch] [CHECKPOINT 36193ce8] [COMMAND a8a61142] [MEMORY 93db7e2a]  2026-08-21 12:27 · practice/1 → practice/2 · Memory content unchanged                                        ┃
+┃[branch] [CHECKPOINT b0391b7d] [COMMAND eef4a261] [MEMORY 40fc5b17]  2026-08-21 12:31 · practice/1 → practice/2 · Memory content unchanged                                        ┃
 ┃  Source Context: practice/1                                                                                                                                                      ┃
 ┃  Target Context: practice/2                                                                                                                                                      ┃
-┃  = [93db7e2a]@1 a is apple                                                                                                                                                       ┃
+┃  = [40fc5b17]@1 a is apple                                                                                                                                                       ┃
 ┃                                                                                                                                                                                  ┃
-┃[add] [CHECKPOINT a84289f8] [MEMORY 93db7e2a]  2026-08-21 12:27 · created "a is apple"                                                                                            ┃
+┃[add] [CHECKPOINT 08cef948] [MEMORY 40fc5b17]  2026-08-21 12:31 · created "a is apple"                                                                                            ┃
 ┃                                                                                                                                                                                  ┃
 ┃ATTACHMENTS                                                                                                                                                                       ┃
 ┃  none                                                                                                                                                                           v┃

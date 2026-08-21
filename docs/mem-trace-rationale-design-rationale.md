@@ -180,16 +180,6 @@ Rationale reuses the same target and Trace projection, then synthesizes only a
 compact natural-language account grounded in that Trace; it does not inherit
 Trace's owner-history authority when the target is granted.
 
-A validated Branch creation receipt is a recorded Context transition, not a
-content edit. Trace emits `BRANCHED` with the stable Memory UID, exact Source and
-target Context identities, and unchanged before/after content when the inherited
-checkpoint proves both sides. The compact projection renders one `=` Memory row
-instead of a false remove/add diff. Rationale receives the same typed Context
-transition in its provider payload so it can distinguish where the Memory was
-first added from the Context that inherited it. Receipt-free or invalid legacy
-history never receives a fabricated transition and retains one warning per
-unexplained Source owner.
-
 Outside a TTY, omission fails instead of silently selecting a Context or the
 first Memory;
 automation must pass an explicit UID or prefix. `--json` also requires an
@@ -293,6 +283,20 @@ narrative instead of truncating a valid sentence after generation. JSON keeps
 the complete typed Trace and the validated `provenance_projection`, including
 its ruleset version, exact bound, unit, and measured length.
 
+Within that bound, discriminating evidence has an explicit priority. The
+narrative first preserves short exact before-and-after excerpts, then the
+material operation, Context movement, and selected-Memory lifecycle. Generic
+purpose, justification, and `remains current and unchanged` prose are omitted
+first. An excerpt must be a contiguous substring of retained content; it may be
+shorter than the complete Memory but must not silently rewrite quoted wording.
+This prioritization lets a split say what one parent became instead of spending
+the receipt on an abstract explanation of why independent revision is useful.
+For a long edit run, complete lineage means reading every event while expressing
+each material chronological phase, not allocating one clause to every event.
+Wording-only revisions collapse into the phase; every disappearance and return
+stays ordered. Numeric positions are omitted unless changed order or neighboring
+placement is itself necessary to understand the provenance.
+
 ### Versioned natural-provenance rules and exact cases
 
 `memcommit/eval/fixtures/rationale.json` is the sole authored Rationale ruleset.
@@ -308,11 +312,45 @@ The first exact case is the real `c9e05f9a` scenario: the complete longer source
 instruction, the three sentence chunks, Chunk → Undo → Redo → Remove, and two
 later sibling-only Atomize events. Its exact 33-word answer must preserve the
 instruction/example origin context and selected lifecycle while excluding the
-sibling events. A second case covers direct Add → Remove → Undo, and a third
-freezes the Grant-hidden no-provider boundary. `tests/test_rationale_rules.py`
-proves that every authored item enters the production prompt, executes the
-`Um...` case through the production payload/schema/decoder, and rejects raw
-event chains and over-limit prose.
+sibling events. A second case covers direct Add → Remove → Undo, and a final
+authority case freezes the Grant-hidden no-provider boundary.
+
+Ruleset version 2 adds three calibration cases selected from actual Rationale
+receipts. They are not output-specific templates. Together they establish the
+general operation grammar that a parent split becomes the selected and relevant
+sibling results, a derived-then-edited Memory exposes its first retained content
+before its replacement, and branch inheritance names origin and destination
+separately from content change. The case inputs now include the selected Context
+and retained Trace warnings because both are production evidence. A validated
+Branch instead enters the event stream as a typed `BRANCHED` Context transition;
+warnings remain evidence only for receipt-free or invalid legacy history and
+must not be promoted into a recorded event. Prose still may not invent
+unretained source content or an unrecorded reason.
+
+The exact version-2 calibration outputs fit the ordinary bound: the real
+Atomize parent-to-two-results case uses 38 words, Distill-then-Edit uses 27, and
+branch inheritance uses 16. Before calibration, the same Atomize request
+exceeded 40 words by spending budget on independently-revisable and unchanged
+status prose; the Distill receipt abstracted the first Rule; and the inherited
+Memory was described only as a direct Add. Production re-execution after the
+ruleset update returned all three exact expected outputs within 40 words.
+
+Ruleset version 3 adds a 15-event long-history calibration produced through the
+real Add, ten Edit, Remove, Undo, Redo, and second Undo command paths. Before the
+new rule, the ordinary 40-word and an expanded 60-word request both failed the
+strict decoder; a 120-word request produced an accurate but event-enumerating
+87-word paragraph. Version 3 keeps all 15 events in the production request but
+collapses the edits into one material expansion/rewording phase and the four
+presence operations into one ordered `remove–undo–redo–undo` clause. The actual
+provider then returned the exact 37-word canonical paragraph under the unchanged
+40-word default. Raising the default would have hidden the missing compression
+contract and was therefore rejected.
+
+`tests/test_rationale_rules.py` proves that every authored item enters the
+production prompt, executes all six available-history canonical cases
+through the production payload/schema/decoder, carries Context and warnings,
+keeps all 15 long-history events provider-visible, and rejects raw event chains
+and over-limit prose.
 
 #### `EXAMPLE-01` coverage
 
@@ -325,6 +363,10 @@ they must not be counted as unseen evaluation evidence.
 | --- | --- | --- | --- | --- | --- |
 | `rationale.provenance.um-origin-lifecycle` | whole Trace → semantic prompt/schema/decoder | real split child, parent source, undo/redo/remove, sibling-only events | exact 33-word natural provenance with origin context | `PROVIDER_VISIBLE` | ruleset case `um-sentence-chunk-lifecycle`; production-payload regression |
 | `rationale.provenance.direct-restore` | whole Trace → semantic prompt/schema/decoder | direct Add, Remove, and Undo | compact chronological natural provenance | `PROVIDER_VISIBLE` | ruleset case `direct-add-remove-undo`; public-command integration test |
+| `rationale.provenance.atomize-parent-results` | whole Trace → semantic prompt/schema/decoder | copied compound instruction, selected child, sibling child | exact source excerpt → two-result contrast within 40 words | `PROVIDER_VISIBLE` | ruleset case `atomize-parent-to-selected-and-sibling`; actual-command re-execution |
+| `rationale.provenance.distill-edit` | whole Trace → semantic prompt/schema/decoder | Distill from named Source Context followed by Edit | exact first derived excerpt → current replacement | `PROVIDER_VISIBLE` | ruleset case `distilled-rule-then-edited`; actual-command re-execution |
+| `rationale.provenance.branch-inheritance` | whole Trace + recorded Context transition → semantic prompt/schema/decoder | Add retained unchanged across a validated Branch receipt | origin → destination separated from content change | `PROVIDER_VISIBLE` | ruleset case `branch-inherited-unchanged-memory`; actual-command re-execution |
+| `rationale.provenance.long-material-phases` | 15-event whole Trace → semantic prompt/schema/decoder | Add, ten Edits, Remove/Undo/Redo/Undo | exact 37-word origin → material edit phase → presence-cycle narrative | `PROVIDER_VISIBLE` | ruleset case `long-edit-run-with-remove-undo-redo`; isolated actual-command re-execution |
 | `rationale.provenance.grant-hidden` | readable granted Memory → application receipt | owner history unavailable | `hidden by Grant`, zero provider calls | `HOST_ONLY` | ruleset case `grant-hidden-history`; authority test |
 | `rationale.provenance.decoder-chain-rejection` | provider response → strict decoder | raw event-label arrow chain | rejected as non-narrative | `HOST_ONLY` | `test_provider_output_must_be_complete_narrative_within_the_exact_bound` |
 | `rationale.provenance.decoder-bound-rejection` | provider response → strict decoder | complete-looking paragraph beyond requested unit | rejected without clipping | `HOST_ONLY` | same production-decoder test |
@@ -671,7 +713,7 @@ This is a tested command-path invariant, not operating-system confidentiality.
   current Memory can be the earliest observable lineage state.
 - `RECORDED` metadata is structurally checked but unsigned and therefore not
   tamper-evident.
-- Old branch histories can retain Source Context identities without a recorded
+- Old branch histories can retain source Context identities without a recorded
   branch-creation event. Trace reports one limit per unexplained Source owner;
   it cannot backfill a typed Context transition without a valid receipt.
 - Legacy operations without explicit trace metadata may be reconstructable only

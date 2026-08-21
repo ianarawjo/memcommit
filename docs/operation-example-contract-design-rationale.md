@@ -100,8 +100,10 @@ The staged rollout is:
 
 1. Use Rationale's natural-provenance family as the first complete
    `EXAMPLE-01` operation set: the exact `Um...` parent/split/Undo/Redo/Remove
-   case and direct Add/Remove/Undo are `PROVIDER_VISIBLE`; Grant-hidden and
-   malformed/over-bound decoder cases remain `HOST_ONLY`.
+   case, direct Add/Remove/Undo, Atomize parent-to-two-results,
+   Distill-then-Edit, branch inheritance, and 15-event material-phase
+   compression are `PROVIDER_VISIBLE`;
+   Grant-hidden and malformed/over-bound decoder cases remain `HOST_ONLY`.
 2. Add the focused example table whenever an operation matrix is reviewed or
    materially changed. Missing rows remain explicit work rather than a
    fabricated complete state.

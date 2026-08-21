@@ -110,7 +110,7 @@ class _CaptureProvider:
             request["originals"][0]["content"]
         )
         assert payload["ruleset"]["ruleset_version"] == (
-            "rationale-natural-provenance-v1"
+            "rationale-natural-provenance-v3"
         )
         type(self).calls += 1
         return json.dumps(

@@ -1,12 +1,12 @@
-COMMAND · mem trace --context legacy/target --plain 82c84ab2                                                                                                                        
+COMMAND · mem trace --context legacy/target --plain a63f9b70                                                                                                                        
 TRACE · legacy/target                                                                                                                                                               
-[MEMORY 82c84ab2] · 1 OPERATION · LATEST FIRST                                                                                                                                      
+[MEMORY a63f9b70] · 1 OPERATION · LATEST FIRST                                                                                                                                      
                                                                                                                                                                                     
-[add] [CHECKPOINT c1a36c1c] [MEMORY 82c84ab2]  2026-08-21 12:27 · created "legacy inherited fact"                                                                                   
+[add] [CHECKPOINT c9fa3349] [MEMORY a63f9b70]  2026-08-21 12:31 · created "legacy inherited fact"                                                                                   
                                                                                                                                                                                     
 ATTACHMENTS                                                                                                                                                                         
   none                                                                                                                                                                              
                                                                                                                                                                                     
 LIMITS                                                                                                                                                                              
-  − Checkpoint [4df59651] was inherited from 'legacy/source'; the branch creation event was not recorded.                                                                           
+  − Checkpoint [7c2d37e5] was inherited from 'legacy/source'; the branch creation event was not recorded.                                                                           
 LEGACY VERIFIED · ONE OWNER WARNING · NO FABRICATED BRANCH EVENT

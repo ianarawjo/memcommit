@@ -128,8 +128,7 @@ def test_default_trace_is_newest_first_with_log_rows_and_inline_diffs(
     rows = _operation_lines(output)
     assert len(rows) == 2
     assert rows[0] == (
-        "[edit] [CHECKPOINT bbbbbbbb] [MEMORY 11111111]  "
-        "2026-08-01 09:15"
+        "[edit] [CHECKPOINT bbbbbbbb] [MEMORY 11111111]  " "2026-08-01 09:15"
     )
     assert rows[1].startswith(
         "[add] [CHECKPOINT aaaaaaaa] [MEMORY 11111111]  "

@@ -455,10 +455,7 @@ def _atomize_save_as_source_frame(
         ordered.append(item)
     actual_digest = hashlib.sha256(
         json.dumps(
-            [
-                {"uid": item["uid"], "content": item["content"]}
-                for item in ordered
-            ],
+            [{"uid": item["uid"], "content": item["content"]} for item in ordered],
             ensure_ascii=False,
             separators=(",", ":"),
         ).encode("utf-8")
@@ -980,10 +977,14 @@ def _owner_aware_meld_change_evidence(
                 or target.get("context_digest") != frame.context_digest
             ):
                 return {}, "has a mismatched directional BASELINE binding"
-    if set(source_roles.values()) != {"INCOMING", "BASELINE"} or (
-        before.context_uid,
-        before.context_name,
-    ) not in baseline_contexts:
+    if (
+        set(source_roles.values()) != {"INCOMING", "BASELINE"}
+        or (
+            before.context_uid,
+            before.context_name,
+        )
+        not in baseline_contexts
+    ):
         return {}, "has incomplete directional meld source roles"
 
     turns = record.get("turns")
@@ -1061,13 +1062,21 @@ def _owner_aware_meld_change_evidence(
         proposal_uid = result.get("proposal_uid")
         proposal = proposal_by_uid.get(proposal_uid)
         proposal_owner = (
-            proposal.owner_context_uid,
-            proposal.owner_context_name,
-        ) if proposal is not None else None
-        expected_owner = {
-            "uid": proposal_owner[0],
-            "name": proposal_owner[1],
-        } if proposal_owner is not None else None
+            (
+                proposal.owner_context_uid,
+                proposal.owner_context_name,
+            )
+            if proposal is not None
+            else None
+        )
+        expected_owner = (
+            {
+                "uid": proposal_owner[0],
+                "name": proposal_owner[1],
+            }
+            if proposal_owner is not None
+            else None
+        )
         if (
             proposal is None
             or proposal_uid in seen_proposals
@@ -2540,15 +2549,9 @@ def _transition_events(
         after_order=after.order,
         content=lambda state: state.content,
     )
-    removed = {
-        delta.memory_uid for delta in deltas if delta.kind == "REMOVED"
-    }
-    added = {
-        delta.memory_uid for delta in deltas if delta.kind == "CREATED"
-    }
-    changed = {
-        delta.memory_uid for delta in deltas if delta.kind == "EDITED"
-    }
+    removed = {delta.memory_uid for delta in deltas if delta.kind == "REMOVED"}
+    added = {delta.memory_uid for delta in deltas if delta.kind == "CREATED"}
+    changed = {delta.memory_uid for delta in deltas if delta.kind == "EDITED"}
 
     if restoration:
         command_operation = (
@@ -2576,9 +2579,7 @@ def _transition_events(
         return events, []
 
     trace_before = (
-        _atomize_save_as_source_frame(args, after)
-        if command == "atomize"
-        else None
+        _atomize_save_as_source_frame(args, after) if command == "atomize" else None
     )
     events, consumed_before, consumed_after, warnings = _explicit_trace_events(
         before=trace_before or before,
@@ -2589,9 +2590,7 @@ def _transition_events(
         receipt = args["atomize_save_as"]
         source_context = receipt.get("source_context")
         source_name = (
-            source_context.get("name")
-            if isinstance(source_context, dict)
-            else None
+            source_context.get("name") if isinstance(source_context, dict) else None
         )
         events = [
             TraceEvent(
@@ -2698,9 +2697,7 @@ def _transition_events(
         removed -= {
             state.uid for event in context_chunk_events for state in event.before
         }
-        added -= {
-            state.uid for event in context_chunk_events for state in event.after
-        }
+        added -= {state.uid for event in context_chunk_events for state in event.after}
     else:
         chunk_event = _legacy_chunk_event(
             before=before,
@@ -2904,9 +2901,7 @@ def _transition_events(
                             meld["disposition"],
                         )
                         if meld is not None and meld["mode"] == "DIRECTIONAL"
-                        else ("MELD", meld["disposition"])
-                        if meld is not None
-                        else ()
+                        else ("MELD", meld["disposition"]) if meld is not None else ()
                     )
                 ),
                 source_occurrence=occurrence,
@@ -3519,7 +3514,9 @@ def _lineage_operation_counts(
         if event.kind in {"SPLIT", "ABSORBED", "TRANSLATED"}:
             related = tuple(event_uids)
             for uid in related:
-                adjacency[uid].update(candidate for candidate in related if candidate != uid)
+                adjacency[uid].update(
+                    candidate for candidate in related if candidate != uid
+                )
 
     counts: dict[str, int] = {}
     visited: set[str] = set()
@@ -3537,9 +3534,7 @@ def _lineage_operation_counts(
                 pending.append(neighbor)
         visited.update(component)
         count = len(
-            set().union(
-                *(operations_by_uid.get(uid, set()) for uid in component)
-            )
+            set().union(*(operations_by_uid.get(uid, set()) for uid in component))
         )
         for uid in component:
             if uid in operations_by_uid:

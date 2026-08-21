@@ -173,11 +173,7 @@ def trace_row_action(row: TraceOperationRow) -> str:
 
 def trace_row_timestamp(row: TraceOperationRow) -> str:
     return next(
-        (
-            event.timestamp
-            for event in reversed(row.events)
-            if event.timestamp
-        ),
+        (event.timestamp for event in reversed(row.events) if event.timestamp),
         "(current)",
     )
 
@@ -226,9 +222,7 @@ def _trace_row_summary(row: TraceOperationRow) -> str:
             before_by_uid.get(state.uid) == state.content for state in row.after
         )
         suffix = "Memory content unchanged" if unchanged else "copied target state"
-        return (
-            f"{transition.source.name} → {transition.target.name} · {suffix}"
-        )
+        return f"{transition.source.name} → {transition.target.name} · {suffix}"
     descriptions = _unique_text(event.description for event in row.events)
     if descriptions:
         return " / ".join(" ".join(description.split()) for description in descriptions)
@@ -282,9 +276,7 @@ def trace_history_display_row(row: TraceOperationRow) -> HistoryDisplayRow:
             )
         )
 
-    memory_uids = _unique_text(
-        state.uid for state in (*row.before, *row.after)
-    )
+    memory_uids = _unique_text(state.uid for state in (*row.before, *row.after))
     if len(memory_uids) == 1:
         badges.append(
             HistoryDisplayBadge(f"MEMORY {memory_uids[0][:8]}", "memory-object")
@@ -533,9 +525,7 @@ def _extend_verbose_event_evidence(
             )
         for context in operation.contexts:
             prefix = (
-                "  Affected Context: "
-                if len(operation.contexts) == 1
-                else "    − "
+                "  Affected Context: " if len(operation.contexts) == 1 else "    − "
             )
             fragments.extend(
                 (
@@ -590,7 +580,9 @@ def _extend_verbose_event_evidence(
                     ("class:report-label", "  Rules: "),
                     (
                         "class:report-neutral",
-                        ", ".join(display_escape_text(code) for code in event.reason_codes)
+                        ", ".join(
+                            display_escape_text(code) for code in event.reason_codes
+                        )
                         + "\n",
                     ),
                 )
@@ -828,9 +820,7 @@ def trace_document_fragments(
     shown = rows if limit is None else rows[:limit]
     hidden = len(rows) - len(shown)
     selected_uid = display_escape_text(short_uid(report.selected_uid, verbose))
-    context_uid = (
-        f" [{display_escape_text(report.context_uid)}]" if verbose else ""
-    )
+    context_uid = f" [{display_escape_text(report.context_uid)}]" if verbose else ""
     fragments: StyleAndTextTuples = [
         ("class:report-label", "TRACE"),
         (
@@ -848,11 +838,7 @@ def trace_document_fragments(
         fragments.append(
             ("class:report-neutral", f" · SHOWING {len(shown)} OF {len(rows)}")
         )
-    fragments.extend(
-        (
-            ("class:report-neutral", "\n\n"),
-        )
-    )
+    fragments.extend((("class:report-neutral", "\n\n"),))
     if shown:
         for row in shown:
             _extend_operation(fragments, row, verbose=verbose)

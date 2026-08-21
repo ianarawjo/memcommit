@@ -82,7 +82,8 @@ def _prepare_recorded_branch() -> tuple[str, str]:
     assert target.name == "practice/2"
     assert copied.uid == memory.uid and copied.content == memory.content
     checkpoint = next(
-        entry for entry in store.list_checkpoints(target.name)
+        entry
+        for entry in store.list_checkpoints(target.name)
         if entry["command"] == "branch"
     )
     print(
@@ -120,7 +121,6 @@ def _prepare_legacy_copy() -> str:
 
 def _run_child() -> None:
     from memcommit.commands import trace
-    from memcommit.store import MemoryStore
 
     with tempfile.TemporaryDirectory(prefix="memcommit-trace-branch-") as temp:
         _isolate_store(Path(temp))

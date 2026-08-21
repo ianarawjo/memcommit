@@ -174,7 +174,7 @@ def test_natural_provenance_projection_uses_the_requested_word_limit(
     assert projection["unit"] == "words"
     assert projection["limit"] == 4
     assert projection["length"] <= 4
-    assert projection["ruleset_version"] == "rationale-natural-provenance-v1"
+    assert projection["ruleset_version"] == "rationale-natural-provenance-v3"
     lines = result.output.splitlines()
     heading = "PROVENANCE"
     provenance = lines[lines.index(heading) + 1].strip()
@@ -240,22 +240,28 @@ def test_cache_path_hashes_arbitrary_memory_uid_and_uses_runtime_store_root(
     assert first.is_relative_to(isolated_store)
     assert hashlib.sha256(selected_uid.encode("utf-8")).hexdigest() in first.name
     assert selected_uid not in str(first)
-    assert load_rationale_inference(
-        context_uid,
-        selected_uid,
-        digest,
-    ) == inference
+    assert (
+        load_rationale_inference(
+            context_uid,
+            selected_uid,
+            digest,
+        )
+        == inference
+    )
 
     other_root = tmp_path / "other-profile"
     monkeypatch.setattr(store_module, "STORE_DIR", other_root)
     second = rationale_inference_path(context_uid, selected_uid)
     assert second.is_relative_to(other_root)
     assert second.name == first.name
-    assert load_rationale_inference(
-        context_uid,
-        selected_uid,
-        digest,
-    ) is None
+    assert (
+        load_rationale_inference(
+            context_uid,
+            selected_uid,
+            digest,
+        )
+        is None
+    )
 
 
 def test_context_delete_removes_a_legacy_rationale_inference_cache(

@@ -1,4 +1,5 @@
 """Per-Memory trace and evidence-layered rationale contracts."""
+
 from __future__ import annotations
 
 import copy
@@ -74,8 +75,7 @@ def test_trace_shows_newest_operation_first_with_forward_row_arrows(
         if line.startswith("[") and "[CHECKPOINT " in line
     ]
     assert [
-        next(action for action in ("[edit]", "[add]") if action in row)
-        for row in rows
+        next(action for action in ("[edit]", "[add]") if action in row) for row in rows
     ] == ["[edit]", "[edit]", "[add]"]
     assert "  − [" in result.output
     assert "@1 revision one\n  + [" in result.output
@@ -103,9 +103,7 @@ def test_trace_records_unchanged_memory_route_for_branch_entry_points(
     assert invoke("add", "a is apple").exit_code == 0
     store = MemoryStore()
     source = store.load_current_direct()
-    memory = next(
-        item for item in source.iter_items() if isinstance(item, Memory)
-    )
+    memory = next(item for item in source.iter_items() if isinstance(item, Memory))
 
     branched = invoke(*branch_command)
 
@@ -157,9 +155,7 @@ def test_trace_keeps_one_legacy_warning_when_no_branch_receipt_exists(
     assert invoke("add", "legacy inherited fact").exit_code == 0
     store = MemoryStore()
     source = store.load_current_direct()
-    memory = next(
-        item for item in source.iter_items() if isinstance(item, Memory)
-    )
+    memory = next(item for item in source.iter_items() if isinstance(item, Memory))
     target = ops.branch(source, "legacy/target")
     store.save(target)
     source_checkpoints = store._checkpoints_dir(source.name)
@@ -430,19 +426,13 @@ def test_tampered_explicit_lineage_falls_back_to_snapshot_differences(
     absorbed_report = build_trace(store, ctx, absorbed.uid)
     child_report = build_trace(store, ctx, unexpected_child.uid)
 
-    assert "ATOMIZE_KEEP" not in {
-        event.kind for event in keep_report.events
-    }
+    assert "ATOMIZE_KEEP" not in {event.kind for event in keep_report.events}
     assert any(event.kind == "EDITED" for event in keep_report.events)
-    assert "ATOMIZE_PRESERVED" not in {
-        event.kind for event in preserve_report.events
-    }
+    assert "ATOMIZE_PRESERVED" not in {event.kind for event in preserve_report.events}
     assert any(event.kind == "EDITED" for event in preserve_report.events)
     assert not any(event.kind == "SPLIT" for event in split_report.events)
     assert split_report.component_uids == (split.uid,)
-    assert not any(
-        event.kind == "ABSORBED" for event in absorbed_report.events
-    )
+    assert not any(event.kind == "ABSORBED" for event in absorbed_report.events)
     assert any(event.kind == "EDITED" for event in absorbed_report.events)
     assert any(
         event.kind == "CREATED" and event.command == "atomize"
@@ -487,9 +477,7 @@ def test_tampered_v2_review_evidence_keeps_lineage_but_drops_evidence(
                 "source_review_digest": review_digest,
                 "trace": {
                     "schema_version": 2,
-                    "operation_id": (
-                        "30000000-0000-4000-8000-000000000003"
-                    ),
+                    "operation_id": ("30000000-0000-4000-8000-000000000003"),
                     "changes": [
                         {
                             "kind": "SPLIT",
@@ -536,8 +524,7 @@ def test_tampered_v2_review_evidence_keeps_lineage_but_drops_evidence(
     assert split.declared_frame is None
     assert split.child_evidence == ()
     assert any(
-        "invalid reviewed atomize evidence" in warning
-        for warning in report.warnings
+        "invalid reviewed atomize evidence" in warning for warning in report.warnings
     )
 
 
@@ -624,13 +611,9 @@ def test_rationale_proposal_source_matches_context_and_memory_identity(
     shared_uid = "10000000-0000-4000-8000-000000000001"
 
     intended_source = ops.init("intended-source")
-    intended_source.add(
-        Memory(uid=shared_uid, content="The intended source Memory.")
-    )
+    intended_source.add(Memory(uid=shared_uid, content="The intended source Memory."))
     unrelated_context = ops.init("unrelated-context")
-    unrelated_context.add(
-        Memory(uid=shared_uid, content="A colliding branch Memory.")
-    )
+    unrelated_context.add(Memory(uid=shared_uid, content="A colliding branch Memory."))
     target = ops.init("target")
     target.add("Existing target wording.")
     for ctx in (intended_source, unrelated_context, target):
@@ -659,9 +642,7 @@ def test_rationale_proposal_source_matches_context_and_memory_identity(
         None,
     )
 
-    assert [proposal.role for proposal in intended_report.proposals] == [
-        "SOURCE"
-    ]
+    assert [proposal.role for proposal in intended_report.proposals] == ["SOURCE"]
     assert unrelated_report.proposals == ()
 
 
@@ -677,8 +658,7 @@ def test_task1_rationale_keeps_structured_evidence_but_renders_only_provenance(
     lines[5] = "직원들 출입구는 평소처럼 계속 출입 가능하다."
     lines[6] = "학생들 - 안내해야 한다 - 실물 카드를 받고나 앱으로."
     lines[13] = (
-        "같은 nfc 쓰는데 교직원들만 출입가능하다, "
-        "학생들은 여전히 못 들어온다."
+        "같은 nfc 쓰는데 교직원들만 출입가능하다, " "학생들은 여전히 못 들어온다."
     )
     payload = "\n".join(lines)
     monkeypatch.setattr(add_command, "capture_paste", lambda: payload)
@@ -686,9 +666,7 @@ def test_task1_rationale_keeps_structured_evidence_but_renders_only_provenance(
 
     store = MemoryStore()
     ctx = store.load_current_direct()
-    memories = [
-        item for item in ctx.iter_items() if isinstance(item, Memory)
-    ]
+    memories = [item for item in ctx.iter_items() if isinstance(item, Memory)]
     target = memories[6]
     report = AmbiguityReport(
         memory_count=51,
@@ -743,16 +721,11 @@ def test_trace_degrades_corrupt_add_source_or_uid_order_to_reconstructed(
     assert invoke("add", "--paste", stdin="y\n").exit_code == 0
     store = MemoryStore()
     ctx = store.load_current_direct()
-    memories = [
-        item for item in ctx.iter_items() if isinstance(item, Memory)
-    ]
+    memories = [item for item in ctx.iter_items() if isinstance(item, Memory)]
     checkpoint_path = next(
-        (
-            isolated_store
-            / "contexts"
-            / ctx.name
-            / "checkpoints"
-        ).glob("*Added-2-memories-from-i*.json")
+        (isolated_store / "contexts" / ctx.name / "checkpoints").glob(
+            "*Added-2-memories-from-i*.json"
+        )
     )
     original = json.loads(checkpoint_path.read_text())
 
@@ -761,9 +734,7 @@ def test_trace_degrades_corrupt_add_source_or_uid_order_to_reconstructed(
     checkpoint_path.write_text(json.dumps(corrupt_hash))
     hash_report = build_trace(store, ctx, memories[0].uid)
 
-    created = next(
-        event for event in hash_report.events if event.kind == "CREATED"
-    )
+    created = next(event for event in hash_report.events if event.kind == "CREATED")
     assert created.evidence == "RECONSTRUCTED"
     assert created.source_occurrence is not None
     assert not created.source_occurrence.exact_raw_source
@@ -774,15 +745,11 @@ def test_trace_degrades_corrupt_add_source_or_uid_order_to_reconstructed(
     checkpoint_path.write_text(json.dumps(wrong_order))
     order_report = build_trace(store, ctx, memories[0].uid)
 
-    created = next(
-        event for event in order_report.events if event.kind == "CREATED"
-    )
+    created = next(event for event in order_report.events if event.kind == "CREATED")
     assert created.evidence == "RECONSTRUCTED"
     assert created.source_occurrence is not None
     assert not created.source_occurrence.exact_raw_source
-    assert any(
-        "out of Context order" in item for item in order_report.warnings
-    )
+    assert any("out of Context order" in item for item in order_report.warnings)
 
 
 def test_rationale_excludes_stale_review_from_provenance_projection(
@@ -851,8 +818,7 @@ def test_rationale_never_opens_query_only_source_or_mutates_authoritative_state(
         path.relative_to(isolated_store): path.read_bytes()
         for path in isolated_store.rglob("*")
         if path.is_file()
-        and "rationale-inferences"
-        not in path.relative_to(isolated_store).parts
+        and "rationale-inferences" not in path.relative_to(isolated_store).parts
     }
 
     def forbidden(*args, **kwargs):
@@ -864,12 +830,9 @@ def test_rationale_never_opens_query_only_source_or_mutates_authoritative_state(
         path.relative_to(isolated_store): path.read_bytes()
         for path in isolated_store.rglob("*")
         if path.is_file()
-        and "rationale-inferences"
-        not in path.relative_to(isolated_store).parts
+        and "rationale-inferences" not in path.relative_to(isolated_store).parts
     }
-    cache_files = list(
-        (isolated_store / "rationale-inferences").rglob("*.json")
-    )
+    cache_files = list((isolated_store / "rationale-inferences").rglob("*.json"))
 
     assert result.exit_code == 0
     assert "DO NOT DISCLOSE" not in result.output

@@ -6,6 +6,7 @@ synthesis.  This module still reads older saved analyses and retains the
 optional current-purpose inference types for JSON/cache compatibility with
 earlier prototypes; that distinct inference is not the public provenance turn.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -114,8 +115,7 @@ class SavedAnalysis:
             "reason": self.reason,
             "question": self.question,
             "readings": [
-                {"label": label, "text": text}
-                for label, text in self.readings
+                {"label": label, "text": text} for label, text in self.readings
             ],
             "selected_reading": self.selected_reading,
             "response": self.response,
@@ -186,9 +186,7 @@ class RationaleReport:
         return {
             "trace": self.trace.to_dict(),
             "target": self.target.to_dict(),
-            "origin_events": [
-                event.to_dict() for event in self.origin_events
-            ],
+            "origin_events": [event.to_dict() for event in self.origin_events],
             "recorded_reason_events": [
                 event.to_dict() for event in self.recorded_reason_events
             ],
@@ -200,14 +198,10 @@ class RationaleReport:
             "stale_analysis": self.stale_analysis,
             "proposals": [proposal.to_dict() for proposal in self.proposals],
             "inference": (
-                self.inference.to_dict()
-                if self.inference is not None
-                else None
+                self.inference.to_dict() if self.inference is not None else None
             ),
             "inference_cached": self.inference_cached,
-            "fallback_evidence": [
-                item.to_dict() for item in self.fallback_evidence
-            ],
+            "fallback_evidence": [item.to_dict() for item in self.fallback_evidence],
             "inference_error": self.inference_error,
             "warnings": list(self.warnings),
             "inference_scope": {
@@ -291,9 +285,7 @@ def _saved_analysis(
         try:
             atomize_analysis = store.load_atomize_analysis(ctx.uid)
         except ValueError as error:
-            warnings.append(
-                f"Saved atomize analysis could not be read: {error}"
-            )
+            warnings.append(f"Saved atomize analysis could not be read: {error}")
             return None, True, warnings
         matches_current = (
             atomize_analysis is not None
@@ -336,10 +328,7 @@ def _saved_analysis(
             clarification=item.clarification,
             reason=item.reason,
             question=item.question,
-            readings=tuple(
-                (choice.label, choice.text)
-                for choice in item.choices
-            ),
+            readings=tuple((choice.label, choice.text) for choice in item.choices),
             selected_reading=selected_reading,
             response=response_text,
         ),
@@ -374,10 +363,7 @@ def _proposal_evidence(
     ] = {}
     for session in sessions:
         for operation in session.operations:
-            source_uids = tuple(
-                source.memory_uid
-                for source in operation.source_refs
-            )
+            source_uids = tuple(source.memory_uid for source in operation.source_refs)
             roles: list[str] = []
             if (
                 operation.owner_context_uid == ctx.uid
@@ -385,8 +371,7 @@ def _proposal_evidence(
             ):
                 roles.append("TARGET")
             if any(
-                source.context_uid == ctx.uid
-                and source.memory_uid in component
+                source.context_uid == ctx.uid and source.memory_uid in component
                 for source in operation.source_refs
             ):
                 roles.append("SOURCE")
@@ -427,7 +412,8 @@ def _context_candidates(
     ]
     current_position = next(
         (
-            index for index, (_context_name, memory) in enumerate(memories)
+            index
+            for index, (_context_name, memory) in enumerate(memories)
             if memory.uid == target.uid
         ),
         target.position,
@@ -591,10 +577,7 @@ def _inference_schema(
                 "maxItems": RATIONALE_SUPPORT_LIMIT,
                 "items": {
                     "type": "string",
-                    "enum": [
-                        candidate.candidate_id
-                        for candidate in candidates
-                    ],
+                    "enum": [candidate.candidate_id for candidate in candidates],
                 },
             },
         },
@@ -643,8 +626,7 @@ def _inference_prompt(
                 "reason": analysis.reason,
                 "question": analysis.question,
                 "readings": [
-                    {"label": label, "text": text}
-                    for label, text in analysis.readings
+                    {"label": label, "text": text} for label, text in analysis.readings
                 ],
             }
             if analysis is not None
@@ -689,8 +671,7 @@ def _inference_prompt(
         "this limit is smaller than the supplied semantic evidence. Do not use "
         "headings, labels, bullets, or line breaks. Write the paragraph in the "
         "target Memory's language. Return only the required JSON.\n\n"
-        "RATIONALE PAYLOAD:\n"
-        + encoded
+        "RATIONALE PAYLOAD:\n" + encoded
     )
 
 
@@ -712,11 +693,7 @@ def _parse_inference(
         raise RationaleError(
             "Codex rationale returned invalid structured output."
         ) from error
-    if (
-        not isinstance(value, dict)
-        or set(value)
-        != {"explanation", "support_ids"}
-    ):
+    if not isinstance(value, dict) or set(value) != {"explanation", "support_ids"}:
         raise RationaleError("Codex rationale returned invalid structured output.")
     explanation_value = value["explanation"]
     support_ids = value["support_ids"]
@@ -738,10 +715,7 @@ def _parse_inference(
         or len(set(support_ids)) != len(support_ids)
     ):
         raise RationaleError("Codex rationale returned invalid structured output.")
-    by_id = {
-        candidate.candidate_id: candidate
-        for candidate in candidates
-    }
+    by_id = {candidate.candidate_id: candidate for candidate in candidates}
     if any(candidate_id not in by_id for candidate_id in support_ids):
         raise RationaleError("Codex rationale cited an unknown Memory.")
     evidence = tuple(
@@ -767,8 +741,8 @@ def _inference_request(
         raise RationaleEvidenceTooSmall(
             "No other directly owned Memories are available for inference."
         )
-    source_character_count, explanation_character_limit = (
-        _inference_character_budget(target, candidates, analysis)
+    source_character_count, explanation_character_limit = _inference_character_budget(
+        target, candidates, analysis
     )
     if explanation_character_limit < RATIONALE_MIN_EXPLANATION_CHAR_LIMIT:
         raise RationaleEvidenceTooSmall(
@@ -813,9 +787,7 @@ def _cached_inference(
             for memory_uid in cached.support_memory_uids
         ]
     except KeyError as error:
-        raise RationaleError(
-            "Saved rationale inference cache is invalid."
-        ) from error
+        raise RationaleError("Saved rationale inference cache is invalid.") from error
     normalized = json.dumps(
         {
             "explanation": cached.explanation,
@@ -918,8 +890,7 @@ def build_rationale(
                 limited=limited,
             )
             if (
-                request_source_character_count
-                != inference_source_character_count
+                request_source_character_count != inference_source_character_count
                 or request_character_limit != inference_character_limit
             ):
                 raise RationaleError(
@@ -948,11 +919,7 @@ def build_rationale(
                         "Rationale inference caching is unavailable for this "
                         "Context or Memory identity."
                     )
-            if (
-                cache_enabled
-                and input_digest is not None
-                and not refresh_inference
-            ):
+            if cache_enabled and input_digest is not None and not refresh_inference:
                 try:
                     cached = load_rationale_inference(
                         ctx.uid,
@@ -970,9 +937,7 @@ def build_rationale(
                             inference = _cached_inference(
                                 cached,
                                 candidates,
-                                explanation_character_limit=(
-                                    inference_character_limit
-                                ),
+                                explanation_character_limit=(inference_character_limit),
                             )
                         except RationaleError:
                             warnings.append(
@@ -1003,11 +968,9 @@ def build_rationale(
                         # useful cache slot.
                         with store._context_write_lock(ctx.name):
                             current = store.load_direct(ctx.name)
-                            if (
-                                current.uid != ctx.uid
-                                or context_record_digest(current)
-                                != context_record_digest(ctx)
-                            ):
+                            if current.uid != ctx.uid or context_record_digest(
+                                current
+                            ) != context_record_digest(ctx):
                                 warnings.append(
                                     "The Context changed during rationale "
                                     "inference, so the result was not cached."

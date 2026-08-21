@@ -13,7 +13,7 @@ import unicodedata
 from memcommit.provenance import EventKind
 
 
-RATIONALE_RULESET_VERSION = "rationale-natural-provenance-v1"
+RATIONALE_RULESET_VERSION = "rationale-natural-provenance-v3"
 RATIONALE_RULESET_FIXTURE = "rationale.json"
 DEFAULT_RATIONALE_PROVENANCE_LIMIT = 40
 MAX_RATIONALE_PROVENANCE_LIMIT = 100_000
@@ -132,16 +132,19 @@ def _validate_case(raw: object, *, rule_ids: set[str]) -> str:
         case["input"],
         {
             "selected_memory_id",
+            "context_name",
             "history_available",
             "originals",
             "current",
             "events",
+            "warnings",
             "limit",
             "unit",
         },
         f"case {case_id} input",
     )
     selected = _text(input_value["selected_memory_id"], "selected Memory id")
+    _text(input_value["context_name"], f"case {case_id} Context name")
     if type(input_value["history_available"]) is not bool:
         raise RationaleRulesError(f"Rationale case {case_id} history is invalid.")
     known_ids = _validate_states(input_value["originals"], label="original state")
@@ -151,19 +154,44 @@ def _validate_case(raw: object, *, rule_ids: set[str]) -> str:
         raise RationaleRulesError(f"Rationale case {case_id} events are invalid.")
     event_kinds = set(get_args(EventKind))
     for raw_event in events:
-        event = _object(
-            raw_event,
-            {"kind", "command", "description", "reason", "before", "after"},
-            f"case {case_id} event",
-        )
+        event_fields = {
+            "kind",
+            "command",
+            "description",
+            "reason",
+            "before",
+            "after",
+        }
+        if not isinstance(raw_event, dict) or frozenset(raw_event) not in {
+            frozenset(event_fields),
+            frozenset((*event_fields, "context_transition")),
+        }:
+            raise RationaleRulesError(
+                f"Invalid Rationale ruleset case {case_id} event."
+            )
+        event = raw_event
         if event["kind"] not in event_kinds:
             raise RationaleRulesError(f"Rationale case {case_id} event is unknown.")
         _text(event["command"], f"case {case_id} event command")
         _text(event["description"], f"case {case_id} event description")
         if event["reason"] is not None:
             _text(event["reason"], f"case {case_id} event reason")
+        context_transition = event.get("context_transition")
+        if context_transition is not None:
+            route = _object(
+                context_transition,
+                {"source", "target"},
+                f"case {case_id} event Context transition",
+            )
+            source = _text(route["source"], f"case {case_id} Source Context")
+            target = _text(route["target"], f"case {case_id} target Context")
+            if source == target:
+                raise RationaleRulesError(
+                    f"Rationale case {case_id} Context transition is stationary."
+                )
         known_ids |= _validate_states(event["before"], label="event before state")
         known_ids |= _validate_states(event["after"], label="event after state")
+    _texts(input_value["warnings"], f"case {case_id} warnings")
     if selected not in known_ids:
         raise RationaleRulesError(
             f"Rationale case {case_id} never contains its selected Memory."
@@ -251,7 +279,7 @@ def _loaded_ruleset() -> dict[str, object]:
     )
     if (
         data["command"] != "rationale"
-        or data["schema_version"] != 1
+        or data["schema_version"] != 2
         or data["ruleset_version"] != RATIONALE_RULESET_VERSION
     ):
         raise RationaleRulesError("Unsupported Rationale ruleset version.")
