@@ -461,8 +461,8 @@ _OPERATIONS = (
     ),
     _operation(
         "revert",
-        "Restore one local Context to a selected checkpoint, reviewing the "
-        "exact impact when selection is interactive.",
+        "Restore the current or an explicit local Context to a selected "
+        "checkpoint after reviewing that revision's complete result.",
         "Checkpoint -> restored Context state",
         ExecutionKind.MIXED,
         "Restores one Context; interactive or semantic selection requires "

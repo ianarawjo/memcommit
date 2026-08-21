@@ -7,8 +7,7 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, replace as dataclass_replace
 
 from memcommit.commands.checkpoint_diff import (
-    checkpoint_diff_detail_renderer,
-    checkpoint_restore_detail_renderer,
+    checkpoint_revision_detail_renderer,
 )
 from memcommit.context_targeting.tui.picker import (
     ContextMemoryBadge,
@@ -340,14 +339,7 @@ def _browse_local_checkpoints(
     }
     detail_renderer = None
     if checkpoints and show_diffs:
-        detail_renderer = (
-            checkpoint_restore_detail_renderer(
-                context.to_dict(),
-                all_checkpoints,
-            )
-            if mode == "revert"
-            else checkpoint_diff_detail_renderer(all_checkpoints)
-        )
+        detail_renderer = checkpoint_revision_detail_renderer(all_checkpoints)
     result = choose_history(
         [projected[checkpoint["uid"]] for checkpoint in checkpoints],
         context_name=context_name,

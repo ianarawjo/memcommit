@@ -160,10 +160,16 @@ SEMANTIC_VIEWER_STYLE = Style.from_dict(
             f"fg:{semantic_color_hex(SemanticColorRole.REMOVE)} bold"
         ),
         "memory-diff.remove": f"fg:{DETAIL_HEX}",
+        "memory-diff.before-marker": (
+            f"fg:{semantic_color_hex(SemanticColorRole.REMOVE)} bold"
+        ),
         "memory-diff.remove.changed": (
             f"fg:{semantic_color_hex(SemanticColorRole.REMOVE)} underline"
         ),
         "memory-diff.add": f"fg:{DETAIL_HEX}",
+        "memory-diff.after-marker": (
+            f"fg:{semantic_color_hex(SemanticColorRole.EDIT)} bold"
+        ),
         "memory-diff.add.changed": (
             f"fg:{semantic_color_hex(SemanticColorRole.EDIT)} underline"
         ),

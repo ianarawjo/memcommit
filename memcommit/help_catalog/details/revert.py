@@ -26,8 +26,8 @@ REVERT_DETAILS = (
             OperationComparisonOption(
                 label="INTERACTIVE",
                 guidance=(
-                    "Choose a Context and checkpoint, inspect the exact restore "
-                    "impact, and approve it."
+                    "Open the current Context's history, inspect one revision's "
+                    "complete result, and approve it."
                 ),
             ),
             OperationComparisonOption(

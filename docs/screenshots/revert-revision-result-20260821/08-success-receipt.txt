@@ -1,0 +1,10 @@
+Reverted Context: practice/2                                                                                                                                                        
+Restored state recorded by: mem update                                                                                                                                              
+Action detail: Applied semantic update e359037d from practice/update-source.                                                                                                        
+Affected Context: practice/2                                                                                                                                                        
+Affected content: 2 Memories removed                                                                                                                                                
+  - [8ecf0966] Memory: "h is holly — added after the target revision"                                                                                                               
+  - [c0295cde] Memory: "i is iris — added after the target revision"                                                                                                                
+Restored checkpoint: [c0af726b] (2026-08-21 11:35)                                                                                                                                  
+Undo command: mem undo                                                                                                                                                              
+Exact recovery checkpoint: mem revert e788fc32

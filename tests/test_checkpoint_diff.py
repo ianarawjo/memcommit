@@ -1,7 +1,11 @@
 """Checkpoint action and exact transition rendering for Context Diff."""
+
 from __future__ import annotations
 
-from memcommit.commands.checkpoint_diff import checkpoint_diff_detail_renderer
+from memcommit.commands.checkpoint_diff import (
+    checkpoint_diff_detail_renderer,
+    checkpoint_restore_detail_renderer,
+)
 from memcommit.commands.history_picker import HistoryDetailView
 from memcommit.commands.history_present import checkpoint_picker_entries
 
@@ -51,10 +55,14 @@ def test_selected_checkpoint_shows_action_and_red_then_green_memory_change():
     rendered = "".join(text for _style, text in fragments)
 
     assert "ACTION      update" in rendered
-    assert "UPDATE · EDIT [memory]" in rendered
-    assert rendered.index(" - Use the blue entrance.") < rendered.index(
-        " + Use the green entrance."
-    )
+    assert "REVISION DIFF · RESULT 1 DIRECT ITEM" in rendered
+    assert "SUMMARY · 0 kept · 0 added · 1 edited · 0 removed" in rendered
+    assert "- [EDIT]   [memory] Use the blue entrance." in rendered
+    assert "+ [EDIT]   [memory] Use the green entrance." in rendered
+    assert ("class:semantic.edit", "EDIT") in fragments
+    assert ("class:memory-diff.before-marker", " - ") in fragments
+    assert ("class:memory-diff.after-marker", " + ") in fragments
+    assert rendered.index("- [EDIT]") < rendered.index("+ [EDIT]")
     assert any(
         style.startswith("class:memory-diff.remove") and "blue" in text
         for style, text in fragments
@@ -63,7 +71,8 @@ def test_selected_checkpoint_shows_action_and_red_then_green_memory_change():
         style.startswith("class:memory-diff.add") and "green" in text
         for style, text in fragments
     )
-    assert detail.unit_start_lines == (4,)
+    assert detail.unit_start_lines == (7,)
+    assert detail.unit_label == "ITEM"
 
 
 def test_first_checkpoint_is_an_addition_from_the_empty_baseline():
@@ -79,13 +88,15 @@ def test_first_checkpoint_is_an_addition_from_the_empty_baseline():
     fragments = detail.content
     rendered = "".join(text for _style, text in fragments)
 
-    assert "ADD · ADD [memory]" in rendered
-    assert " + First Memory." in rendered
+    assert "REVISION DIFF · RESULT 1 DIRECT ITEM" in rendered
+    assert "+ [ADD]    [memory] First Memory." in rendered
     assert " - " not in rendered
-    assert detail.unit_start_lines == (4,)
+    assert fragments.count(("class:semantic.add", "ADD")) == 1
+    assert ("class:memory-diff.after-marker", " + ") in fragments
+    assert detail.unit_start_lines == (7,)
 
 
-def test_reorder_only_checkpoint_is_one_navigable_change():
+def test_reorder_only_checkpoint_keeps_result_items_navigable():
     first = _checkpoint(
         "11111111-1111-4111-8111-111111111111",
         "2026-08-06T10:00:00-04:00",
@@ -114,7 +125,96 @@ def test_reorder_only_checkpoint_is_one_navigable_change():
     detail = checkpoint_diff_detail_renderer(checkpoints)(entry)
 
     assert isinstance(detail, HistoryDetailView)
-    assert detail.unit_start_lines == (4,)
-    assert "Direct-item order changed" in "".join(
+    assert detail.unit_start_lines == (7, 8)
+    assert "ORDER · retained direct items changed position" in "".join(
         text for _style, text in detail.content
     )
+
+
+def test_revision_diff_shows_complete_result_and_removed_items():
+    before = _checkpoint(
+        "11111111-1111-4111-8111-111111111111",
+        "2026-08-06T10:00:00-04:00",
+        "add",
+        "unused",
+    )
+    before["snapshot"] = {
+        "uid": "context",
+        "name": "wiki/access",
+        "memories": {
+            "kept": {"type": "memory", "uid": "kept", "content": "Keep me"},
+            "edited": {
+                "type": "memory",
+                "uid": "edited",
+                "content": "Old wording",
+            },
+            "removed": {
+                "type": "memory",
+                "uid": "removed",
+                "content": "Remove me",
+            },
+        },
+        "order": ["kept", "edited", "removed"],
+    }
+    after = _checkpoint(
+        "22222222-2222-4222-8222-222222222222",
+        "2026-08-06T11:00:00-04:00",
+        "update",
+        "unused",
+    )
+    after["snapshot"] = {
+        "uid": "context",
+        "name": "wiki/access",
+        "memories": {
+            "kept": {"type": "memory", "uid": "kept", "content": "Keep me"},
+            "edited": {
+                "type": "memory",
+                "uid": "edited",
+                "content": "New wording",
+            },
+            "added": {"type": "memory", "uid": "added", "content": "Add me"},
+        },
+        "order": ["kept", "edited", "added"],
+    }
+    entry = checkpoint_picker_entries([after, before])[0]
+
+    detail = checkpoint_diff_detail_renderer([after, before])(entry)
+
+    assert isinstance(detail, HistoryDetailView)
+    rendered = "".join(text for _style, text in detail.content)
+    assert "SUMMARY · 1 kept · 1 added · 1 edited · 1 removed" in rendered
+    assert "  [KEEP]   [kept] Keep me" in rendered
+    assert "- [EDIT]   [edited] Old wording" in rendered
+    assert "+ [EDIT]   [edited] New wording" in rendered
+    assert "- [REMOVE] [removed] Remove me" in rendered
+    assert "+ [ADD]    [added] Add me" in rendered
+    assert rendered.index("[KEEP]") < rendered.index("- [EDIT]")
+    assert rendered.index("+ [EDIT]") < rendered.index("- [REMOVE]")
+    assert rendered.index("- [REMOVE]") < rendered.index("+ [ADD]")
+    assert "REMOVED BY REVISION" not in rendered
+    assert detail.unit_start_lines == (7, 8, 10, 11)
+
+
+def test_revert_uses_revision_result_instead_of_current_to_target_impact():
+    first = _checkpoint(
+        "11111111-1111-4111-8111-111111111111",
+        "2026-08-06T10:00:00-04:00",
+        "add",
+        "First Memory.",
+    )
+    entry = checkpoint_picker_entries([first])[0]
+    unrelated_current = _snapshot("A much later Memory.")
+
+    restored = checkpoint_restore_detail_renderer(
+        unrelated_current,
+        [first],
+    )(entry)
+    diffed = checkpoint_diff_detail_renderer([first])(entry)
+
+    assert isinstance(restored, HistoryDetailView)
+    assert isinstance(diffed, HistoryDetailView)
+    assert restored == diffed
+    rendered = "".join(text for _style, text in restored.content)
+    assert "REVISION DIFF" in rendered
+    assert "RESTORE IMPACT" not in rendered
+    assert "A much later Memory." not in rendered

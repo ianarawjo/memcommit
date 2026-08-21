@@ -88,7 +88,7 @@ def test_history_row_colors_only_the_unfocused_action_token():
     )
 
     assert any(
-        style == "class:impact.add" and text.strip() == "add"
+        style == "class:semantic.add" and text.strip() == "add"
         for style, text in unfocused
     )
     assert all(style == "class:memcommit.table.selected" for style, _text in focused)

@@ -218,7 +218,7 @@ _FR = {
         "Décider comment réparer des conflits sémantiques ou des ambiguïtés dans un cadre de Context borné.",
     ),
     "revert": _copy(
-        "Restaurer un Context local à un checkpoint sélectionné, avec examen de l’impact exact lors d’une sélection interactive.",
+        "Restaurer le Context local courant ou indiqué à un checkpoint sélectionné après examen de la révision et de son état résultant complet.",
         "Restaurer un Context à un point de récupération volontairement enregistré.",
     ),
     "review": _copy(
@@ -466,7 +466,7 @@ _ZH = {
         "决定如何修复有界 Context frame 中的语义冲突或歧义时。",
     ),
     "revert": _copy(
-        "将一个本地 Context 恢复到选定 checkpoint；交互选择时会审查精确影响。",
+        "将当前或指定的本地 Context 恢复到选定 checkpoint，并先审查该 revision 的完整结果状态。",
         "将 Context 恢复到有意保存的恢复点时。",
     ),
     "review": _copy(
@@ -716,7 +716,7 @@ _KO = {
         "제한된 Context frame 안의 의미적 충돌이나 모호성을 어떻게 고칠지 결정할 때.",
     ),
     "revert": _copy(
-        "하나의 로컬 Context를 선택한 checkpoint로 복원하며, 대화형 선택에서는 정확한 영향을 검토합니다.",
+        "현재 또는 명시한 로컬 Context를 선택한 checkpoint로 복원하기 전에 해당 revision과 완전한 결과 상태를 검토합니다.",
         "Context를 의도적으로 저장한 복구 지점으로 되돌릴 때.",
     ),
     "review": _copy(
@@ -967,7 +967,7 @@ _MN = {
         "Хязгаарлагдсан Context frame доторх утгын зөрчил эсвэл хоёрдмол байдлыг хэрхэн засахыг шийдэх үед.",
     ),
     "revert": _copy(
-        "Нэг локал Context-г сонгосон checkpoint руу сэргээж, интерактив сонголтын үед яг нөлөөг хянана.",
+        "Одоогийн эсвэл заасан локал Context-г сонгосон checkpoint руу сэргээхийн өмнө тухайн revision болон бүрэн үр дүнгийн төлөвийг хянана.",
         "Context-г зориуд хадгалсан сэргээх цэг рүү буцаах үед.",
     ),
     "review": _copy(

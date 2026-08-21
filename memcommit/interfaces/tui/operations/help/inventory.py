@@ -710,7 +710,7 @@ COMMAND_FORMS = {
     ),
     "redo": ("mem redo (redo the most recently undone Context command)",),
     "revert": (
-        "mem revert (choose a local Context, checkpoint, and history policy interactively)",
+        "mem revert (open the current Context's checkpoint revision and history-policy review)",
         "mem revert --context [context] (open one Context's checkpoint and history-policy review)",
         "mem revert [checkpoint] (restore exact and discard newer checkpoints)",
         "mem revert [checkpoint] --context [context] (restore an exact checkpoint in one Context)",

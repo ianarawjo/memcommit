@@ -10,7 +10,7 @@ from typing import Annotated, Any, Optional
 import typer
 
 from memcommit.commands.checkpoint_diff import (
-    checkpoint_restore_detail_renderer,
+    checkpoint_revision_detail_renderer,
 )
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.context_operand import ContextOperandSnapshot
@@ -71,7 +71,6 @@ def _semantic_selection(
     query: str,
     *,
     keep: bool,
-    current_snapshot: dict[str, Any],
 ) -> HistorySelectionReceipt | None:
     if not _interactive_terminal():
         raise ValueError(
@@ -111,10 +110,7 @@ def _semantic_selection(
         options,
         context_name=name,
         mode="revert",
-        detail_renderer=checkpoint_restore_detail_renderer(
-            current_snapshot,
-            entries,
-        ),
+        detail_renderer=checkpoint_revision_detail_renderer(entries),
         keep_history=keep,
     )
 
@@ -124,7 +120,6 @@ def _picker_selection(
     entries: list[dict[str, Any]],
     *,
     keep: bool,
-    current_snapshot: dict[str, Any],
 ) -> HistorySelectionReceipt | None:
     if not _interactive_terminal():
         raise ValueError(
@@ -135,10 +130,7 @@ def _picker_selection(
         checkpoint_picker_entries(entries),
         context_name=name,
         mode="revert",
-        detail_renderer=checkpoint_restore_detail_renderer(
-            current_snapshot,
-            entries,
-        ),
+        detail_renderer=checkpoint_revision_detail_renderer(entries),
         keep_history=keep,
     )
 
@@ -214,7 +206,7 @@ def cmd(
         typer.Argument(
             help=(
                 "Checkpoint UID/prefix, or a natural-language description; "
-                "omit to enter the interactive checkpoint picker"
+                "omit to inspect the current Context's checkpoint history"
             )
         ),
     ] = None,
@@ -232,8 +224,8 @@ def cmd(
             "--context",
             "-c",
             help=(
-                "Context whose checkpoint should be restored; omit with a "
-                "bare TTY command to choose from the local Context tree"
+                "Context whose checkpoint should be restored; omit to use "
+                "the command-start current Context"
             ),
         ),
     ] = None,
@@ -246,12 +238,20 @@ def cmd(
         typer.secho(f"Context error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
 
+    if not name:
+        typer.secho(
+            "No current context. Run 'mem init <name>' first.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
+
     if selector is None and _interactive_terminal():
         try:
             reviewed = browse_checkpoint_locations(
                 store,
                 session=None,
-                context_locator=name if context_name is not None else None,
+                context_locator=name,
                 title="REVERT",
                 mode="revert",
                 keep_history=keep,
@@ -276,14 +276,6 @@ def cmd(
             expected_history_digest=reviewed.history_digest,
         )
         return
-
-    if not name:
-        typer.secho(
-            "No current context. Run 'mem init <name>' first.",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(1)
 
     try:
         context = store.load_direct(name)
@@ -342,7 +334,6 @@ def cmd(
                 name,
                 entries,
                 keep=keep,
-                current_snapshot=context.to_dict(),
             )
             if selector is None
             else _semantic_selection(
@@ -351,7 +342,6 @@ def cmd(
                 entries,
                 selector,
                 keep=keep,
-                current_snapshot=context.to_dict(),
             )
         )
         if receipt is None:

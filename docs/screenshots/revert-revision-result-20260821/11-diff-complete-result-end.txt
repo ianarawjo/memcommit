@@ -1,0 +1,52 @@
+ DIFF · practice/2                                                                                                                                                                  
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ CHECKPOINT  e0556790-e43b-4486-bda4-4395056bded3                                                                                                                                ^┃
+┃ ACTION      update                                                                                                                                                               ┃
+┃ DESCRIPTION Applied semantic update de7baa65 from practice/update-source.                                                                                                        ┃
+┃                                                                                                                                                                                  ┃
+┃ REVISION DIFF · RESULT 6 DIRECT ITEMS                                                                                                                                            ┃
+┃ SUMMARY · 4 kept · 1 added · 1 edited · 1 removed                                                                                                                                ┃
+┃                                                                                                                                                                                  ┃
+┃   [KEEP]   [cc2ae855] a is apple                                                                                                                                                 ┃
+┃ - [EDIT]   [5f5b40a6] b is banana                                                                                                                                                ┃
+┃ + [EDIT]   [5f5b40a6] b is blueberry                                                                                                                                             ┃
+┃   [KEEP]   [e2902380] c is carrot                                                                                                                                                ┃
+┃   [KEEP]   [01095625] e is elm                                                                                                                                                   ┃
+┃ - [REMOVE] [160c503e] f is fig                                                                                                                                                   ┃
+┃   [KEEP]   [b5187f98] g is grape                                                                                                                                                 ┃
+┃ + [ADD]    [d97732d4] j is juniper                                                                                                                                               ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│   2026-08-21 11:35  add        88cbb1cb  Added two later Memories after the target revision                                                                                     ^│
+│›  2026-08-21 11:35  update     e0556790  Applied semantic update de7baa65 from practice/update-source.                                                                           │
+│   2026-08-21 11:35  elaborate  097497c2  Added 3 Elaborate Cases to 'practice/2'                                                                                                 │
+│   2026-08-21 11:35  add        1a7f2d22  Added the initial practice Memories                                                                                                     │
+│   2026-08-21 11:35  init       72437ae9  Initialized context 'practice/2'                                                                                                        │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ FOCUS VIEWER · ITEM 7/7 · ↑/↓ scroll  Enter/Esc/Backspace items  Tab switch  q close  ·  2/5

@@ -45,6 +45,7 @@
       "docs/unified-delete-selector-design-rationale.md"
     ],
     "diff": [
+      "docs/checkpoint-revision-diff-design-rationale.md",
       "docs/mem-history-search-design-rationale.md"
     ],
     "distill": [
@@ -150,7 +151,10 @@
       "docs/execution-receipt-review-lifecycle-design-rationale.md",
       "docs/resolution-lifecycle-design-rationale.md"
     ],
-    "revert": [],
+    "revert": [
+      "docs/checkpoint-revision-diff-design-rationale.md",
+      "docs/mem-history-search-design-rationale.md"
+    ],
     "review": [
       "docs/execution-receipt-review-lifecycle-design-rationale.md"
     ],

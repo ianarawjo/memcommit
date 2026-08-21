@@ -879,7 +879,9 @@ def test_final_help_categories_match_their_reviewed_runtime_boundaries():
     assert diff.flow == "Context checkpoint or active Update -> diff report"
     assert undo.summary == "Undo the most recent recorded command as one unit."
     assert "every Context and Memory change" in undo.effect
-    assert revert.summary.startswith("Restore one local Context")
+    assert revert.summary.startswith(
+        "Restore the current or an explicit local Context"
+    )
     assert "mem profile rename and mem profile remove" in profile.summary
     assert "backend semantic operations should use" in provider.best_for
     assert "legacy low-level interface" in config.best_for
