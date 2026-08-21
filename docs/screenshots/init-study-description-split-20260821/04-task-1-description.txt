@@ -1,0 +1,10 @@
+CAPTURE PTY · 180x52                                                                                                                                                                
+$ mem ls task-1/description --direct                                                                                                                                                
+Context: task-1/description                                                                                                                                                         
+  2 items                                                                                                                                                                           
+                                                                                                                                                                                    
+  [memory 2db26309] SITUATION · Imagine that you are a campus facilities coordinator responsible for maintaining a university organizational wiki used by campus members, visitors, 
+                    and AI agents. The Main Building of the campus is under construction, and you have just finished collecting and verifying all resulting changes in your local   
+                    work memory. This memory contains confirmed event relocations, temporary parking arrangements, updated shop and facility information, and related changes to    
+                    nearby routes and facilities.                                                                                                                                   
+  [memory f2c46cec] TASK · Using this verified local memory, update all affected parts of the organizational wiki and contribute the completed update.

@@ -1,0 +1,11 @@
+CAPTURE PTY · 180x52
+[38;2;138;173;244m$[0m mem ls task-2/description --direct
+[1mContext: task-2/description[0m
+  2 items
+
+  [memory 62ecc8ac] SITUATION · Imagine that you are a graduate student preparing a two-page research proposal with two co-advisors who have equal authority. Each advisor has
+                    provided an agent memory store containing their writing policies on structure, emphasis, claims and evidence, tone, and terminology. Both sets of guidance are
+                    useful, but they are not identical: some policies apply in different contexts, some conflict with one another, and others express the same underlying idea in
+                    different ways.
+  [memory a208006a] TASK · Combine the stores without favoring either advisor by consolidating duplicates, clarifying contexts, and either reconciling conflicts or preserving them
+                    with explanations.

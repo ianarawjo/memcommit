@@ -24,7 +24,7 @@ from memcommit.eval.study_fixtures import (
 
 
 EXPECTED_DATASETS = {
-    "task1-description": (1, {"PP": 1}),
+    "task1-description": (2, {"PP": 2}),
     "task1-construction-updates": (
         75,
         {"KB": 35, "PP": 16, "SM": 8, "UM": 6, "WM": 4, "OM": 6},
@@ -44,7 +44,7 @@ EXPECTED_DATASETS = {
         78,
         {"KB": 34, "PP": 38, "OM": 6},
     ),
-    "task2-description": (1, {"PP": 1}),
+    "task2-description": (2, {"PP": 2}),
     "task2-advisor1": (
         150,
         {"KB": 9, "PP": 96, "SM": 5, "UM": 8, "WM": 8, "OM": 24},
@@ -57,7 +57,7 @@ EXPECTED_DATASETS = {
         75,
         {"KB": 2, "PP": 57, "SM": 2, "UM": 2, "WM": 2, "OM": 10},
     ),
-    "task3-description": (1, {"PP": 1}),
+    "task3-description": (2, {"PP": 2}),
     "task3-personal-memory": (
         300,
         {
@@ -104,12 +104,15 @@ def test_korean_study_corpus_has_expected_counts_and_purposes() -> None:
 def test_loader_preserves_content_and_normalizes_available_metadata() -> None:
     corpus = load_study_fixture_corpus(language="ko").by_name()
 
-    description = corpus["task1-description"].records[0]
-    assert description.fixture_id == "T1-D-001"
-    assert description.canonical_locator == "description/task-1"
-    assert description.content.startswith(
-        "대학 구성원, 방문객, AI 에이전트가 사용하는 대학 조직 위키"
+    situation, task = corpus["task1-description"].records
+    assert situation.fixture_id == "T1-D-001"
+    assert situation.canonical_locator == "description/task-1"
+    assert situation.content.startswith(
+        "상황 · 대학 구성원, 방문객, AI 에이전트가 사용하는 대학 조직 위키"
     )
+    assert task.fixture_id == "T1-D-002"
+    assert task.canonical_locator == "description/task-1-task"
+    assert task.content.startswith("과업 · 이 검증된 로컬 Memory를 사용하여")
 
     update = corpus["task1-construction-updates"].records[0]
     assert update.fixture_id == "T1-U-001"
@@ -134,6 +137,29 @@ def test_loader_preserves_content_and_normalizes_available_metadata() -> None:
     assert personal.identity_key == "local/personal-memory/2024-01/01"
     assert personal.canonical_locator == "local/personal-memory/2024-01/01"
     assert personal.purpose == "KB"
+
+
+@pytest.mark.parametrize(
+    ("language", "situation_prefix", "task_prefix"),
+    (("en", "SITUATION ·", "TASK ·"), ("ko", "상황 ·", "과업 ·")),
+)
+def test_each_task_description_separates_situation_from_task(
+    language: str,
+    situation_prefix: str,
+    task_prefix: str,
+) -> None:
+    datasets = load_study_fixture_corpus(language=language).by_name()
+
+    for name in (
+        "task1-description",
+        "task2-description",
+        "task3-description",
+    ):
+        situation, task = datasets[name].records
+        assert situation.content.startswith(situation_prefix)
+        assert task.content.startswith(task_prefix)
+        assert situation.canonical_locator != task.canonical_locator
+        assert situation.purpose == task.purpose == "PP"
 
 
 @pytest.mark.parametrize(

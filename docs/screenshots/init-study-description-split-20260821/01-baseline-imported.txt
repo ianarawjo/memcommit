@@ -1,0 +1,8 @@
+CAPTURE PTY · 180x52                                                                                                                                                                
+$ mem profile import-study                                                                                                                                                          
+Imported editable Study baseline.                                                                                                                                                   
+  study-baseline: Contexts 141 owned + 0 granted · Memories 1324 owned + 0 granted · current=task-1 · kind=managed                                                                  
+The authoring store and generated package sources were not modified.                                                                                                                
+Authoring checkpoints, sessions, caches, locks, and run logs were not imported.                                                                                                     
+Edit it with: mem profile use study-baseline                                                                                                                                        
+Clone it as an isolated participant/authority run with: mem init-study NAME

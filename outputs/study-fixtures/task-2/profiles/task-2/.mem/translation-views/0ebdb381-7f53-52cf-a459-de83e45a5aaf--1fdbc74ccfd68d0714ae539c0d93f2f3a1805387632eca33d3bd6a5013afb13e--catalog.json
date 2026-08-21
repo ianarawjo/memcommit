@@ -3,23 +3,37 @@
   "context_uid": "0ebdb381-7f53-52cf-a459-de83e45a5aaf",
   "context_name": "description",
   "target_language": "ko",
-  "created_at": "2026-08-06T14:12:31.594296+00:00",
-  "updated_at": "2026-08-06T14:12:31.594354+00:00",
-  "revision": 2,
+  "created_at": "2026-08-21T15:27:55.608778+00:00",
+  "updated_at": "2026-08-21T15:27:55.608914+00:00",
+  "revision": 3,
   "contract_version": "translate-v2",
   "entries": [
     {
       "source_uid": "62ecc8ac-5e2c-5f54-87ad-fcd420259aa2",
       "provider": null,
       "curated": {
-        "source_sha256": "ebe5a5a64d111a2c14a3f894ac56f8d7b67f571e6da6b321e74949a2a612530c",
-        "translated_content": "\ub3d9\ub4f1\ud55c \uad8c\ud55c\uc744 \uac00\uc9c4 \ub450 \uacf5\ub3d9 \uc9c0\ub3c4\uad50\uc218\uc640 \ud568\uaed8 \ub450 \ucabd \ubd84\ub7c9\uc758 \uc5f0\uad6c \uc81c\uc548\uc11c\ub97c \uc900\ube44\ud558\ub294 \ub300\ud559\uc6d0\uc0dd\uc774\ub77c\uace0 \uac00\uc815\ud574 \ubcf4\uc2ed\uc2dc\uc624. \uac01 \uc9c0\ub3c4\uad50\uc218\ub294 \uad6c\uc870, \uac15\uc870\uc810, \uc8fc\uc7a5\uacfc \uadfc\uac70, \uc5b4\uc870, \uc6a9\uc5b4\uc5d0 \uad00\ud55c \uc790\uc2e0\uc758 \uc791\uc131 \uc815\ucc45\uc774 \ub2f4\uae34 \uc5d0\uc774\uc804\ud2b8 Memory store\ub97c \uc81c\uacf5\ud588\uc2b5\ub2c8\ub2e4. \ub450 \uc9c0\uce68\uc740 \ubaa8\ub450 \uc720\uc6a9\ud558\uc9c0\ub9cc \ub3d9\uc77c\ud558\uc9c0\ub294 \uc54a\uc2b5\ub2c8\ub2e4. \uc77c\ubd80 \uc815\ucc45\uc740 \uc11c\ub85c \ub2e4\ub978 \ub9e5\ub77d\uc5d0 \uc801\uc6a9\ub418\uace0, \uc77c\ubd80\ub294 \uc11c\ub85c \ucda9\ub3cc\ud558\uba70, \ub610 \ub2e4\ub978 \uc815\ucc45\ub4e4\uc740 \ud45c\ud604\uc740 \ub2e4\ub974\uc9c0\ub9cc \uac19\uc740 \uae30\ubcf8 \uc0dd\uac01\uc744 \ub2f4\uace0 \uc788\uc2b5\ub2c8\ub2e4. \ub2f9\uc2e0\uc758 \uacfc\uc5c5\uc740 \uc5b4\ub290 \uc9c0\ub3c4\uad50\uc218\ub3c4 \uc6b0\uc120\ud558\uc9c0 \uc54a\uc73c\uba74\uc11c \uc911\ubcf5\uc744 \ud1b5\ud569\ud558\uace0, \uc801\uc6a9 \ub9e5\ub77d\uc744 \uba85\ud655\ud788 \ud558\uba70, \ucda9\ub3cc\uc744 \ud574\uc18c\ud558\uac70\ub098 \uc124\uba85\uacfc \ud568\uaed8 \ubcf4\uc874\ud558\uc5ec \ub450 store\ub97c \uacb0\ud569\ud558\ub294 \uac83\uc785\ub2c8\ub2e4.",
+        "source_sha256": "34c160aea451236f1a65a8d7e64f025b2ef4498d4656a25a02d94f8daaa80ed5",
+        "translated_content": "\uc0c1\ud669 \u00b7 \ub3d9\ub4f1\ud55c \uad8c\ud55c\uc744 \uac00\uc9c4 \ub450 \uacf5\ub3d9 \uc9c0\ub3c4\uad50\uc218\uc640 \ud568\uaed8 \ub450 \ucabd \ubd84\ub7c9\uc758 \uc5f0\uad6c \uc81c\uc548\uc11c\ub97c \uc900\ube44\ud558\ub294 \ub300\ud559\uc6d0\uc0dd\uc774\ub77c\uace0 \uac00\uc815\ud574 \ubcf4\uc2ed\uc2dc\uc624. \uac01 \uc9c0\ub3c4\uad50\uc218\ub294 \uad6c\uc870, \uac15\uc870\uc810, \uc8fc\uc7a5\uacfc \uadfc\uac70, \uc5b4\uc870, \uc6a9\uc5b4\uc5d0 \uad00\ud55c \uc790\uc2e0\uc758 \uc791\uc131 \uc815\ucc45\uc774 \ub2f4\uae34 \uc5d0\uc774\uc804\ud2b8 Memory store\ub97c \uc81c\uacf5\ud588\uc2b5\ub2c8\ub2e4. \ub450 \uc9c0\uce68\uc740 \ubaa8\ub450 \uc720\uc6a9\ud558\uc9c0\ub9cc \ub3d9\uc77c\ud558\uc9c0\ub294 \uc54a\uc2b5\ub2c8\ub2e4. \uc77c\ubd80 \uc815\ucc45\uc740 \uc11c\ub85c \ub2e4\ub978 \ub9e5\ub77d\uc5d0 \uc801\uc6a9\ub418\uace0, \uc77c\ubd80\ub294 \uc11c\ub85c \ucda9\ub3cc\ud558\uba70, \ub610 \ub2e4\ub978 \uc815\ucc45\ub4e4\uc740 \ud45c\ud604\uc740 \ub2e4\ub974\uc9c0\ub9cc \uac19\uc740 \uae30\ubcf8 \uc0dd\uac01\uc744 \ub2f4\uace0 \uc788\uc2b5\ub2c8\ub2e4.",
         "origin": "IMPORTED",
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
-        "evidence_sha256": "a9814cdddd9e9f172af68da118923efb62ab9ae07a13c1b880fe197858454795",
-        "created_at": "2026-08-06T14:12:31.594354+00:00",
-        "updated_at": "2026-08-06T14:12:31.594354+00:00"
+        "evidence_sha256": "571173782cdad6f0dc07849146c0c33b7a73bc28e8067f3c9ff80759a261314d",
+        "created_at": "2026-08-21T15:27:55.608848+00:00",
+        "updated_at": "2026-08-21T15:27:55.608848+00:00"
+      }
+    },
+    {
+      "source_uid": "a208006a-5971-5c87-9a4b-65a634c7254c",
+      "provider": null,
+      "curated": {
+        "source_sha256": "e9b5fb570743cc894219fe8ccbc42d6909a3fae790955f8a6a24bcad3c28a848",
+        "translated_content": "\uacfc\uc5c5 \u00b7 \uc5b4\ub290 \uc9c0\ub3c4\uad50\uc218\ub3c4 \uc6b0\uc120\ud558\uc9c0 \uc54a\uc73c\uba74\uc11c \uc911\ubcf5\uc744 \ud1b5\ud569\ud558\uace0, \uc801\uc6a9 \ub9e5\ub77d\uc744 \uba85\ud655\ud788 \ud558\uba70, \ucda9\ub3cc\uc744 \ud574\uc18c\ud558\uac70\ub098 \uc124\uba85\uacfc \ud568\uaed8 \ubcf4\uc874\ud558\uc5ec \ub450 store\ub97c \uacb0\ud569\ud558\uc2ed\uc2dc\uc624.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "571173782cdad6f0dc07849146c0c33b7a73bc28e8067f3c9ff80759a261314d",
+        "created_at": "2026-08-21T15:27:55.608914+00:00",
+        "updated_at": "2026-08-21T15:27:55.608914+00:00"
       }
     }
   ]

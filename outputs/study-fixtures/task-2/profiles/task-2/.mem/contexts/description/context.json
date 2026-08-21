@@ -5,10 +5,16 @@
     "62ecc8ac-5e2c-5f54-87ad-fcd420259aa2": {
       "type": "memory",
       "uid": "62ecc8ac-5e2c-5f54-87ad-fcd420259aa2",
-      "content": "Imagine that you are a graduate student preparing a two-page research proposal with two co-advisors who have equal authority. Each advisor has provided an agent memory store containing their writing policies on structure, emphasis, claims and evidence, tone, and terminology. Both sets of guidance are useful, but they are not identical: some policies apply in different contexts, some conflict with one another, and others express the same underlying idea in different ways. Your task is to combine the stores without favoring either advisor by consolidating duplicates, clarifying contexts, and either reconciling conflicts or preserving them with explanations."
+      "content": "SITUATION \u00b7 Imagine that you are a graduate student preparing a two-page research proposal with two co-advisors who have equal authority. Each advisor has provided an agent memory store containing their writing policies on structure, emphasis, claims and evidence, tone, and terminology. Both sets of guidance are useful, but they are not identical: some policies apply in different contexts, some conflict with one another, and others express the same underlying idea in different ways."
+    },
+    "a208006a-5971-5c87-9a4b-65a634c7254c": {
+      "type": "memory",
+      "uid": "a208006a-5971-5c87-9a4b-65a634c7254c",
+      "content": "TASK \u00b7 Combine the stores without favoring either advisor by consolidating duplicates, clarifying contexts, and either reconciling conflicts or preserving them with explanations."
     }
   },
   "order": [
-    "62ecc8ac-5e2c-5f54-87ad-fcd420259aa2"
+    "62ecc8ac-5e2c-5f54-87ad-fcd420259aa2",
+    "a208006a-5971-5c87-9a4b-65a634c7254c"
   ]
 }

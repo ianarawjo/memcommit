@@ -13,13 +13,13 @@ reconstruction for user research.
 
 | Task | Ordinary material | Query-only material | Total |
 | --- | ---: | ---: | ---: |
-| Task 1 | `description` 1 + `construction-updates` 75 + `campus-wiki` 300 = 376 | `campus-wiki · construction-details` 78 | 454 |
-| Task 2 | `description` 1 + `advisor1` 150 + `advisor2` 150 = 301 | `proposal-submission-guidelines` 75 | 376 |
-| Task 3 | `description` 1 + `local/personal-memory` 300 + `local/guardrails` 75 + public healthcare guidance 25 = 401 | `remote/government/healthcare-agent/info-request/questions-and-answers` 75 | 476 |
-| Total | 1,078 | 228 | 1,306 |
+| Task 1 | `description` 2 + `construction-updates` 75 + `campus-wiki` 300 = 377 | `campus-wiki · construction-details` 78 | 455 |
+| Task 2 | `description` 2 + `advisor1` 150 + `advisor2` 150 = 302 | `proposal-submission-guidelines` 75 | 377 |
+| Task 3 | `description` 2 + `local/personal-memory` 300 + `local/guardrails` 75 + public healthcare guidance 25 = 402 | `remote/government/healthcare-agent/info-request/questions-and-answers` 75 | 477 |
+| Total | 1,081 | 228 | 1,309 |
 
 `Ordinary material` and `Query-only material` describe participant
-interaction. Physically, all 1,306 records are ordinary Memories: task-local
+interaction. Physically, all 1,309 records are ordinary Memories: task-local
 records live in task Profiles, and granted material lives in task-specific
 authority Profiles. A `QUERY` grant, rather than a special source file,
 enforces the query-only view in the generated study packages.

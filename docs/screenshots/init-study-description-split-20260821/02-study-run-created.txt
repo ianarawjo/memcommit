@@ -1,0 +1,11 @@
+CAPTURE PTY · 180x52                                                                                                                                                                
+$ mem init-study description-split-check                                                                                                                                            
+Initialized Study run 'description-split-check'.                                                                                                                                    
+Baseline Profile: study-baseline                                                                                                                                                    
+Participant Profile: description-split-check                                                                                                                                        
+Granted-memory Profile: description-split-check-granted-memory                                                                                                                      
+Contexts 65 · Memories 471 · current=practice                                                                                                                                       
+Granted Contexts 43 · Granted Memories 625                                                                                                                                          
+Task-owned and granted-memory data were copied into isolated run Profiles and connected with real authority grants.                                                                 
+Operational history starts empty; declared caches remain hidden until the first matching operation. Checkpoints, sessions, ad-hoc caches, locks, and run logs were not imported.    
+Active Profile: description-split-check

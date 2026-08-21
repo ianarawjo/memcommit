@@ -5,10 +5,16 @@
     "2db26309-b11b-5963-87ff-497f135eb150": {
       "type": "memory",
       "uid": "2db26309-b11b-5963-87ff-497f135eb150",
-      "content": "Imagine that you are a campus facilities coordinator responsible for maintaining a university organizational wiki used by campus members, visitors, and AI agents. The Main Building of the campus is under construction, and you have just finished collecting and verifying all resulting changes in your local work memory. This memory contains confirmed event relocations, temporary parking arrangements, updated shop and facility information, and related changes to nearby routes and facilities. Using this verified local memory, you must update all affected parts of the organizational wiki and contribute the completed update."
+      "content": "SITUATION \u00b7 Imagine that you are a campus facilities coordinator responsible for maintaining a university organizational wiki used by campus members, visitors, and AI agents. The Main Building of the campus is under construction, and you have just finished collecting and verifying all resulting changes in your local work memory. This memory contains confirmed event relocations, temporary parking arrangements, updated shop and facility information, and related changes to nearby routes and facilities."
+    },
+    "f2c46cec-ff25-5246-a0d8-46b6002b3c6f": {
+      "type": "memory",
+      "uid": "f2c46cec-ff25-5246-a0d8-46b6002b3c6f",
+      "content": "TASK \u00b7 Using this verified local memory, update all affected parts of the organizational wiki and contribute the completed update."
     }
   },
   "order": [
-    "2db26309-b11b-5963-87ff-497f135eb150"
+    "2db26309-b11b-5963-87ff-497f135eb150",
+    "f2c46cec-ff25-5246-a0d8-46b6002b3c6f"
   ]
 }

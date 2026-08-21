@@ -381,7 +381,7 @@ def test_import_study_registers_one_editable_baseline_and_keeps_authoring(
     assert result.exit_code == 0, result.output
     assert "Imported editable Study baseline." in result.output
     assert "study-baseline: Contexts 141 owned + 0 granted" in result.output
-    assert "Memories 1320 owned + 0 granted" in result.output
+    assert "Memories 1324 owned + 0 granted" in result.output
     assert _tree_digest(bundles) == source_digest
     assert _tree_digest(isolated_store) == authoring_digest
 
@@ -432,7 +432,13 @@ def test_import_study_registers_one_editable_baseline_and_keeps_authoring(
     ]
     assert [item.content for item in practice_memories] == [
         profiles_module._STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT,
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_SITUATION_CONTENT,
         profiles_module._STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT,
+    ]
+    assert [item.uid for item in practice_memories] == [
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_OVERVIEW_UID,
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_SITUATION_UID,
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_TASK_UID,
     ]
     practice_source = store.load_direct("practice/source")
     source_memories = [
@@ -1166,7 +1172,7 @@ def test_init_study_creates_isolated_participant_and_authority_profiles(
     assert "Participant Profile: pilot-001" in result.output
     assert "Granted-memory Profile: pilot-001-granted-memory" in result.output
     assert (
-        "Contexts 65 · Memories 467 · current=practice"
+        "Contexts 65 · Memories 471 · current=practice"
         in result.output
     )
     assert "Granted Contexts 43 · Granted Memories 625" in result.output
@@ -1243,6 +1249,7 @@ def test_init_study_creates_isolated_participant_and_authority_profiles(
     ]
     assert [item.content for item in practice_memories] == [
         profiles_module._STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT,
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_SITUATION_CONTENT,
         profiles_module._STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT,
     ]
     practice_source = copied_store.load_direct("practice/source")
@@ -1301,6 +1308,7 @@ def test_init_study_adds_practice_description_to_an_older_baseline(
     ]
     assert [item.content for item in memories] == [
         profiles_module._STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT,
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_SITUATION_CONTENT,
         profiles_module._STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT,
     ]
     source = store.load_direct("practice/source")
@@ -1326,17 +1334,21 @@ def test_init_study_migrates_legacy_practice_description_without_editing_baselin
     assert baseline is not None
     baseline_store = MemoryStore(root=profile_store_dir(baseline), create=False)
     description = baseline_store.load_direct("practice/description")
-    legacy_brand = {
-        profiles_module._STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT: (
-            profiles_module._LEGACY_STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT
-        ),
-        profiles_module._STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT: (
-            profiles_module._LEGACY_STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT
-        ),
-    }
-    for item in description.iter_items():
-        if isinstance(item, Memory) and item.content in legacy_brand:
-            item.content = legacy_brand[item.content]
+    overview = description.memories[
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_OVERVIEW_UID
+    ]
+    task = description.memories[
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_TASK_UID
+    ]
+    assert isinstance(overview, Memory)
+    assert isinstance(task, Memory)
+    overview.content = (
+        profiles_module._LEGACY_STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT
+    )
+    description.remove(profiles_module._STUDY_PRACTICE_DESCRIPTION_SITUATION_UID)
+    task.content = (
+        profiles_module._LEGACY_PRE_SPLIT_STUDY_PRACTICE_DESCRIPTION_CONTENT
+    )
     description.add(
         Memory(
             uid=profiles_module._LEGACY_STUDY_PRACTICE_PROVENANCE_UID,
@@ -1364,6 +1376,7 @@ def test_init_study_migrates_legacy_practice_description_without_editing_baselin
     ]
     assert [item.content for item in copied_memories] == [
         profiles_module._STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT,
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_SITUATION_CONTENT,
         profiles_module._STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT,
     ]
     unchanged_baseline = baseline_store.load_direct("practice/description")
@@ -1379,12 +1392,13 @@ def test_init_study_migrates_legacy_practice_description_without_editing_baselin
     ]
     assert [item.content for item in unchanged_memories] == [
         profiles_module._LEGACY_STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT,
-        profiles_module._LEGACY_STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT,
+        profiles_module._LEGACY_PRE_SPLIT_STUDY_PRACTICE_DESCRIPTION_CONTENT,
     ]
 
 
 def test_study_practice_source_matches_instruction_refinement_topic():
     overview = profiles_module._STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT
+    situation = profiles_module._STUDY_PRACTICE_DESCRIPTION_SITUATION_CONTENT
     source_memories = profiles_module._STUDY_PRACTICE_SOURCE_CONTENTS
     task = profiles_module._STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT
 
@@ -1429,10 +1443,13 @@ def test_study_practice_source_matches_instruction_refinement_topic():
     )
     assert overview.startswith("memcommit is a research prototype")
     assert "MemLab" not in overview
+    assert situation.startswith("SITUATION ·")
+    assert "MemLab" not in situation
+    assert task.startswith("TASK ·")
     assert "MemLab" not in task
-    assert "Each newline-separated editing note" in task
-    assert "stored as its own Memory" in task
-    assert "rough wording, and typos" in task
+    assert "Each newline-separated editing note" in situation
+    assert "stored as its own Memory" in situation
+    assert "rough wording, and typos" in situation
     assert "without performing the requested edits" in task
     assert "changing the intended meaning" in task
     assert "use it to atomize the notes" in task
@@ -1535,7 +1552,7 @@ def test_profile_inventory_shows_run_pair_and_real_granted_counts(
         if "Participant" in line and "profile=pilot-002 " in line
     )
     assert "Contexts 65 owned + 43 granted" in profile_line
-    assert "Memories 467 owned + 625 granted" in profile_line
+    assert "Memories 471 owned + 625 granted" in profile_line
     authority_line = next(
         line
         for line in result.output.splitlines()

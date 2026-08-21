@@ -269,7 +269,23 @@ _STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT = (
     "memcommit in three different situations, each involving a different context, "
     "goal, and kind of memory."
 )
+_STUDY_PRACTICE_DESCRIPTION_SITUATION_CONTENT = (
+    "SITUATION · Before beginning the three study tasks, complete a short practice "
+    "exercise to become familiar with how memcommit organizes and presents its "
+    "commands. Each newline-separated editing note in `practice/source` is "
+    "stored as its own Memory, preserving the boundaries between the original "
+    "requests. Some notes still combine recurring constraints, rough wording, "
+    "and typos."
+)
 _STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT = (
+    "TASK · Divide their underlying constraints into appropriate atomic Memories "
+    "without performing the requested edits, adding instructions, or changing "
+    "the intended meaning, so that each constraint can be reviewed "
+    "independently. Open `mem help`, inspect the available operations, find the "
+    "operation designed for atomization, and use it to atomize the notes and "
+    "save the result as `practice/source-atomized`."
+)
+_PRE_SPLIT_STUDY_PRACTICE_DESCRIPTION_CONTENT = (
     "Before beginning the three study tasks, complete a short practice "
     "exercise to become familiar with how memcommit organizes and presents its "
     "commands. Each newline-separated editing note in `practice/source` is "
@@ -285,8 +301,26 @@ _STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT = (
 _LEGACY_STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT = (
     _STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT.replace("memcommit", "MemLab")
 )
-_LEGACY_STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT = (
-    _STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT.replace("memcommit", "MemLab")
+_LEGACY_STUDY_PRACTICE_DESCRIPTION_SITUATION_CONTENT = (
+    _STUDY_PRACTICE_DESCRIPTION_SITUATION_CONTENT.replace("memcommit", "MemLab")
+)
+_LEGACY_PRE_SPLIT_STUDY_PRACTICE_DESCRIPTION_CONTENT = (
+    _PRE_SPLIT_STUDY_PRACTICE_DESCRIPTION_CONTENT.replace("memcommit", "MemLab")
+)
+_STUDY_PRACTICE_DESCRIPTION_OVERVIEW_UID = str(
+    uuid.uuid5(uuid.NAMESPACE_URL, "memcommit:study:practice/description:memory")
+)
+_STUDY_PRACTICE_DESCRIPTION_SITUATION_UID = str(
+    uuid.uuid5(
+        uuid.NAMESPACE_URL,
+        "memcommit:study:practice/description:situation-memory",
+    )
+)
+_STUDY_PRACTICE_DESCRIPTION_TASK_UID = str(
+    uuid.uuid5(
+        uuid.NAMESPACE_URL,
+        "memcommit:study:practice/description:task-memory",
+    )
 )
 _LEGACY_STUDY_PRACTICE_PROVENANCE_UID = str(
     uuid.uuid5(
@@ -3380,23 +3414,19 @@ def _study_practice_contexts() -> tuple[Context, ...]:
     )
     description.add(
         Memory(
-            uid=str(
-                uuid.uuid5(
-                    uuid.NAMESPACE_URL,
-                    "memcommit:study:practice/description:memory",
-                )
-            ),
+            uid=_STUDY_PRACTICE_DESCRIPTION_OVERVIEW_UID,
             content=_STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT,
         )
     )
     description.add(
         Memory(
-            uid=str(
-                uuid.uuid5(
-                    uuid.NAMESPACE_URL,
-                    "memcommit:study:practice/description:task-memory",
-                )
-            ),
+            uid=_STUDY_PRACTICE_DESCRIPTION_SITUATION_UID,
+            content=_STUDY_PRACTICE_DESCRIPTION_SITUATION_CONTENT,
+        )
+    )
+    description.add(
+        Memory(
+            uid=_STUDY_PRACTICE_DESCRIPTION_TASK_UID,
             content=_STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT,
         )
     )
@@ -3440,13 +3470,21 @@ def _canonicalize_study_practice_description(
         _LEGACY_STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT: (
             _STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT
         ),
-        _LEGACY_STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT: (
-            _STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT
+        _LEGACY_STUDY_PRACTICE_DESCRIPTION_SITUATION_CONTENT: (
+            _STUDY_PRACTICE_DESCRIPTION_SITUATION_CONTENT
         ),
     }
-    needs_copy = _LEGACY_STUDY_PRACTICE_PROVENANCE_UID in description.memories or any(
-        isinstance(item, Memory) and item.content in replacements
-        for item in description.iter_items()
+    pre_split_contents = {
+        _PRE_SPLIT_STUDY_PRACTICE_DESCRIPTION_CONTENT,
+        _LEGACY_PRE_SPLIT_STUDY_PRACTICE_DESCRIPTION_CONTENT,
+    }
+    needs_copy = (
+        _LEGACY_STUDY_PRACTICE_PROVENANCE_UID in description.memories
+        or any(
+            isinstance(item, Memory)
+            and (item.content in replacements or item.content in pre_split_contents)
+            for item in description.iter_items()
+        )
     )
     if not needs_copy:
         return contexts
@@ -3454,11 +3492,26 @@ def _canonicalize_study_practice_description(
     # independently edited description remains untouched and recoverable.
     sanitized = dict(contexts)
     sanitized_description = copy.deepcopy(description)
-    if _LEGACY_STUDY_PRACTICE_PROVENANCE_UID in sanitized_description.memories:
-        sanitized_description.remove(_LEGACY_STUDY_PRACTICE_PROVENANCE_UID)
-    for item in sanitized_description.iter_items():
-        if isinstance(item, Memory) and item.content in replacements:
+    sanitized_description.clear()
+    for source_item in description.iter_items():
+        if source_item.uid == _LEGACY_STUDY_PRACTICE_PROVENANCE_UID:
+            continue
+        item = copy.deepcopy(source_item)
+        if isinstance(item, Memory) and item.content in pre_split_contents:
+            # The old combined row owned the task identity. Keep that UID for
+            # the executable instruction while inserting a new stable
+            # Situation immediately before it, so existing history continues
+            # to name the instruction rather than its surrounding narrative.
+            sanitized_description.add(
+                Memory(
+                    uid=_STUDY_PRACTICE_DESCRIPTION_SITUATION_UID,
+                    content=_STUDY_PRACTICE_DESCRIPTION_SITUATION_CONTENT,
+                )
+            )
+            item.content = _STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT
+        elif isinstance(item, Memory) and item.content in replacements:
             item.content = replacements[item.content]
+        sanitized_description.add(item)
     sanitized[_STUDY_PRACTICE_DESCRIPTION] = sanitized_description
     return sanitized
 

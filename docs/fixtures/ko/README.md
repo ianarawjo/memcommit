@@ -11,13 +11,13 @@
 
 | 과업 | 일반 열람 자료 | 질의 전용 자료 | 합계 |
 | --- | ---: | ---: | ---: |
-| Task 1 | `description` 1 + `construction-updates` 75 + `campus-wiki` 300 = 376 | `campus-wiki · construction-details` 78 | 454 |
-| Task 2 | `description` 1 + `advisor1` 150 + `advisor2` 150 = 301 | `proposal-submission-guidelines` 75 | 376 |
-| Task 3 | `description` 1 + `local/personal-memory` 300 + `local/guardrails` 75 + 공개 의료 가이던스 25 = 401 | `remote/government/healthcare-agent/info-request/questions-and-answers` 75 | 476 |
-| 전체 | 1,078 | 228 | 1,306 |
+| Task 1 | `description` 2 + `construction-updates` 75 + `campus-wiki` 300 = 377 | `campus-wiki · construction-details` 78 | 455 |
+| Task 2 | `description` 2 + `advisor1` 150 + `advisor2` 150 = 302 | `proposal-submission-guidelines` 75 | 377 |
+| Task 3 | `description` 2 + `local/personal-memory` 300 + `local/guardrails` 75 + 공개 의료 가이던스 25 = 402 | `remote/government/healthcare-agent/info-request/questions-and-answers` 75 | 477 |
+| 전체 | 1,081 | 228 | 1,309 |
 
 `일반 열람`과 `질의 전용`은 participant 상호작용을 뜻한다. 물리적으로는
-1,306개 모두 ordinary Memory이며, task-local 자료는 task Profile에, grant
+1,309개 모두 ordinary Memory이며, task-local 자료는 task Profile에, grant
 자료는 task별 authority Profile에 저장한다. 생성된 연구 패키지에서는 특수
 source file이 아니라 `QUERY` grant가 질의 전용 view를 만든다.
 

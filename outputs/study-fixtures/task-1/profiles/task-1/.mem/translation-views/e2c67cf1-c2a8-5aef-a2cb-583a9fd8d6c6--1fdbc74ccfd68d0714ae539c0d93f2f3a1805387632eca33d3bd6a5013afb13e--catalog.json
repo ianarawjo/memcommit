@@ -3,23 +3,37 @@
   "context_uid": "e2c67cf1-c2a8-5aef-a2cb-583a9fd8d6c6",
   "context_name": "description",
   "target_language": "ko",
-  "created_at": "2026-08-06T14:12:31.478986+00:00",
-  "updated_at": "2026-08-06T14:12:31.479202+00:00",
-  "revision": 2,
+  "created_at": "2026-08-21T15:27:55.489588+00:00",
+  "updated_at": "2026-08-21T15:27:55.489851+00:00",
+  "revision": 3,
   "contract_version": "translate-v2",
   "entries": [
     {
       "source_uid": "2db26309-b11b-5963-87ff-497f135eb150",
       "provider": null,
       "curated": {
-        "source_sha256": "a3ef98780e9dcb30b1b7a3a9150ebeb802a645c0feadd8e9b1f015573985c58e",
-        "translated_content": "\ub300\ud559 \uad6c\uc131\uc6d0, \ubc29\ubb38\uac1d, AI \uc5d0\uc774\uc804\ud2b8\uac00 \uc0ac\uc6a9\ud558\ub294 \ub300\ud559 \uc870\uc9c1 \uc704\ud0a4\ub97c \uad00\ub9ac\ud558\ub294 \ucea0\ud37c\uc2a4 \uc2dc\uc124 \ucf54\ub514\ub124\uc774\ud130\ub77c\uace0 \uac00\uc815\ud574 \ubcf4\uc2ed\uc2dc\uc624. \ucea0\ud37c\uc2a4 \ubcf8\uad00\uc740 \uacf5\uc0ac \uc911\uc774\uba70, \uc774\ub85c \uc778\ud574 \ubc1c\uc0dd\ud55c \ubaa8\ub4e0 \ubcc0\uacbd \uc0ac\ud56d\uc744 \ub85c\uceec \uc791\uc5c5 Memory\uc5d0 \ubc29\uae08 \uc218\uc9d1\ud558\uace0 \uac80\uc99d\ud588\uc2b5\ub2c8\ub2e4. \uc774 Memory\uc5d0\ub294 \ud655\uc815\ub41c \ud589\uc0ac \uc7a5\uc18c \ubcc0\uacbd, \uc784\uc2dc \uc8fc\ucc28 \uc870\uce58, \uc0c1\uc810 \ubc0f \uc2dc\uc124 \uc815\ubcf4 \uc5c5\ub370\uc774\ud2b8, \uc778\uadfc \ub3d9\uc120\uacfc \uc2dc\uc124\uc5d0 \uad00\ud55c \uad00\ub828 \ubcc0\uacbd \uc0ac\ud56d\uc774 \ud3ec\ud568\ub418\uc5b4 \uc788\uc2b5\ub2c8\ub2e4. \uc774 \uac80\uc99d\ub41c \ub85c\uceec Memory\ub97c \uc0ac\uc6a9\ud558\uc5ec \uc870\uc9c1 \uc704\ud0a4\uc5d0\uc11c \uc601\ud5a5\uc744 \ubc1b\ub294 \ubaa8\ub4e0 \ubd80\ubd84\uc744 \uc5c5\ub370\uc774\ud2b8\ud558\uace0 \uc644\uc131\ub41c \uc5c5\ub370\uc774\ud2b8\ub97c \uae30\uc5ec\ud558\uc2ed\uc2dc\uc624.",
+        "source_sha256": "dfa202b712a62527118710db826efceca4c2e623e35b0924d7f12e9ddfd8216b",
+        "translated_content": "\uc0c1\ud669 \u00b7 \ub300\ud559 \uad6c\uc131\uc6d0, \ubc29\ubb38\uac1d, AI \uc5d0\uc774\uc804\ud2b8\uac00 \uc0ac\uc6a9\ud558\ub294 \ub300\ud559 \uc870\uc9c1 \uc704\ud0a4\ub97c \uad00\ub9ac\ud558\ub294 \ucea0\ud37c\uc2a4 \uc2dc\uc124 \ucf54\ub514\ub124\uc774\ud130\ub77c\uace0 \uac00\uc815\ud574 \ubcf4\uc2ed\uc2dc\uc624. \ucea0\ud37c\uc2a4 \ubcf8\uad00\uc740 \uacf5\uc0ac \uc911\uc774\uba70, \uc774\ub85c \uc778\ud574 \ubc1c\uc0dd\ud55c \ubaa8\ub4e0 \ubcc0\uacbd \uc0ac\ud56d\uc744 \ub85c\uceec \uc791\uc5c5 Memory\uc5d0 \ubc29\uae08 \uc218\uc9d1\ud558\uace0 \uac80\uc99d\ud588\uc2b5\ub2c8\ub2e4. \uc774 Memory\uc5d0\ub294 \ud655\uc815\ub41c \ud589\uc0ac \uc7a5\uc18c \ubcc0\uacbd, \uc784\uc2dc \uc8fc\ucc28 \uc870\uce58, \uc0c1\uc810 \ubc0f \uc2dc\uc124 \uc815\ubcf4 \uc5c5\ub370\uc774\ud2b8, \uc778\uadfc \ub3d9\uc120\uacfc \uc2dc\uc124\uc5d0 \uad00\ud55c \uad00\ub828 \ubcc0\uacbd \uc0ac\ud56d\uc774 \ud3ec\ud568\ub418\uc5b4 \uc788\uc2b5\ub2c8\ub2e4.",
         "origin": "IMPORTED",
         "review_status": "UNREVIEWED",
         "reviewed_content_sha256": null,
-        "evidence_sha256": "d87ba7264ad898e3cd49126b43f3365786d2f7a6e76ca18d17f43ec901f05813",
-        "created_at": "2026-08-06T14:12:31.479202+00:00",
-        "updated_at": "2026-08-06T14:12:31.479202+00:00"
+        "evidence_sha256": "a2274424451fdf2337da674f0025360c3e6b9d026165226b667d798136509062",
+        "created_at": "2026-08-21T15:27:55.489780+00:00",
+        "updated_at": "2026-08-21T15:27:55.489780+00:00"
+      }
+    },
+    {
+      "source_uid": "f2c46cec-ff25-5246-a0d8-46b6002b3c6f",
+      "provider": null,
+      "curated": {
+        "source_sha256": "226fb64ac19dd31d65578de3b42bddf757ff087b36a7a5f958d5e870fceae280",
+        "translated_content": "\uacfc\uc5c5 \u00b7 \uc774 \uac80\uc99d\ub41c \ub85c\uceec Memory\ub97c \uc0ac\uc6a9\ud558\uc5ec \uc870\uc9c1 \uc704\ud0a4\uc5d0\uc11c \uc601\ud5a5\uc744 \ubc1b\ub294 \ubaa8\ub4e0 \ubd80\ubd84\uc744 \uc5c5\ub370\uc774\ud2b8\ud558\uace0 \uc644\uc131\ub41c \uc5c5\ub370\uc774\ud2b8\ub97c \uae30\uc5ec\ud558\uc2ed\uc2dc\uc624.",
+        "origin": "IMPORTED",
+        "review_status": "UNREVIEWED",
+        "reviewed_content_sha256": null,
+        "evidence_sha256": "a2274424451fdf2337da674f0025360c3e6b9d026165226b667d798136509062",
+        "created_at": "2026-08-21T15:27:55.489851+00:00",
+        "updated_at": "2026-08-21T15:27:55.489851+00:00"
       }
     }
   ]

@@ -10,9 +10,9 @@ def test_bilingual_workbook_spec_pairs_every_fixture() -> None:
     assert spec.canonical_language == "en"
     assert spec.translation_language == "ko"
     assert (spec.ordinary_count, spec.query_only_count, spec.total_count) == (
-        1_078,
+        1_081,
         228,
-        1_306,
+        1_309,
     )
     assert len(spec.sheets) == 26
 

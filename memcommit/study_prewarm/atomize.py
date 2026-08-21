@@ -18,10 +18,15 @@ from memcommit.config import Config
 from memcommit.context import Context, Memory
 from memcommit.profile_config import ProfileEntry, ProfileRegistry, study_run_identity
 from memcommit.profiles import (
+    _LEGACY_PRE_SPLIT_STUDY_PRACTICE_DESCRIPTION_CONTENT,
     _LEGACY_STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT,
-    _LEGACY_STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT,
+    _LEGACY_STUDY_PRACTICE_DESCRIPTION_SITUATION_CONTENT,
+    _PRE_SPLIT_STUDY_PRACTICE_DESCRIPTION_CONTENT,
     _STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT,
+    _STUDY_PRACTICE_DESCRIPTION_SITUATION_CONTENT,
+    _STUDY_PRACTICE_DESCRIPTION_SITUATION_UID,
     _STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT,
+    _STUDY_PRACTICE_DESCRIPTION_TASK_UID,
 )
 from memcommit.review import direct_context_digest
 from memcommit.store import MemoryStore, context_record_digest
@@ -107,17 +112,18 @@ def _description_matches_prepared_digest(
         or _LEGACY_PRACTICE_PROVENANCE_UID in description.memories
     ):
         return False
-    # Older retained artifacts may bind the retired brand name, one retired
-    # provenance-only Memory, or both. Reconstruct only those exact variants
-    # in memory; none may be saved into the participant Context.
+    # Older retained artifacts may bind the pre-split description, the retired
+    # brand name, one retired provenance-only Memory, or a combination of
+    # those exact states. Reconstruct them only in memory; none may be saved
+    # into the participant Context.
     variants = [copy.deepcopy(description)]
     legacy_brand = copy.deepcopy(description)
     brand_replacements = {
         _STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT: (
             _LEGACY_STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT
         ),
-        _STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT: (
-            _LEGACY_STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT
+        _STUDY_PRACTICE_DESCRIPTION_SITUATION_CONTENT: (
+            _LEGACY_STUDY_PRACTICE_DESCRIPTION_SITUATION_CONTENT
         ),
     }
     for item in legacy_brand.iter_items():
@@ -125,6 +131,34 @@ def _description_matches_prepared_digest(
             item.content = brand_replacements[item.content]
     if context_record_digest(legacy_brand) != context_record_digest(description):
         variants.append(legacy_brand)
+    for variant in tuple(variants):
+        situation = variant.memories.get(
+            _STUDY_PRACTICE_DESCRIPTION_SITUATION_UID
+        )
+        task = variant.memories.get(_STUDY_PRACTICE_DESCRIPTION_TASK_UID)
+        if (
+            isinstance(situation, Memory)
+            and isinstance(task, Memory)
+            and task.content == _STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT
+            and situation.content
+            in {
+                _STUDY_PRACTICE_DESCRIPTION_SITUATION_CONTENT,
+                _LEGACY_STUDY_PRACTICE_DESCRIPTION_SITUATION_CONTENT,
+            }
+        ):
+            pre_split = copy.deepcopy(variant)
+            pre_split.remove(_STUDY_PRACTICE_DESCRIPTION_SITUATION_UID)
+            pre_split_task = pre_split.memories[
+                _STUDY_PRACTICE_DESCRIPTION_TASK_UID
+            ]
+            assert isinstance(pre_split_task, Memory)
+            pre_split_task.content = (
+                _LEGACY_PRE_SPLIT_STUDY_PRACTICE_DESCRIPTION_CONTENT
+                if situation.content
+                == _LEGACY_STUDY_PRACTICE_DESCRIPTION_SITUATION_CONTENT
+                else _PRE_SPLIT_STUDY_PRACTICE_DESCRIPTION_CONTENT
+            )
+            variants.append(pre_split)
     for variant in tuple(variants):
         with_provenance = copy.deepcopy(variant)
         with_provenance.add(

@@ -24,7 +24,7 @@ EXPECTED_PROFILES = {
     1: {
         "task-1": (
             "TASK",
-            76,
+            77,
             8,
             "participant/construction-updates",
         ),
@@ -38,7 +38,7 @@ EXPECTED_PROFILES = {
     2: {
         "task-2": (
             "TASK",
-            1,
+            2,
             2,
             "participant/proposal-workspace",
         ),
@@ -50,7 +50,7 @@ EXPECTED_PROFILES = {
         ),
     },
     3: {
-        "task-3": ("TASK", 376, 47, "local/personal-memory"),
+        "task-3": ("TASK", 377, 47, "local/personal-memory"),
         "task-3-healthcare-authority": (
             "AUTHORITY",
             100,
@@ -387,6 +387,18 @@ def test_builds_task_and_authority_profiles_with_grant_templates(
                     context_uids[(profile_name, context_name)] = store.load_direct(
                         context_name
                     ).uid
+                if role == "TASK":
+                    description = store.load_direct("description")
+                    description_memories = [
+                        item
+                        for item in description.iter_items()
+                        if isinstance(item, Memory)
+                    ]
+                    assert len(description_memories) == 2
+                    assert description_memories[0].content.startswith(
+                        "SITUATION ·"
+                    )
+                    assert description_memories[1].content.startswith("TASK ·")
                 assert not (store_root / "query-sources").exists()
 
             by_owner: dict[str, list[dict[str, object]]] = {}

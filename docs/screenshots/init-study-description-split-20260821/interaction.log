@@ -1,0 +1,13 @@
+capture_root=/var/folders/gb/k74fw7ks06x4c041g8gqgj600000gq/T/memcommit-init-study-description-split-55yud8t1
+pty=180x52
+TERM=xterm-256color
+COLORTERM=truecolor
+NO_COLOR=unset
+profile=description-split-check
+01 command=mem profile import-study mutation=creates isolated editable baseline
+02 command=mem init-study description-split-check mutation=creates and selects isolated Study run
+03 command=mem ls practice/description --direct mutation=none
+04 command=mem ls task-1/description --direct mutation=none
+05 command=mem ls task-2/description --direct mutation=none
+06 command=mem ls task-3/description --direct mutation=none
+final_current_context=practice

@@ -198,17 +198,25 @@ def test_init_study_copies_and_rebinds_declared_compare_and_atomize(
     )
     practice_source = first_store.load_direct("practice/source")
     practice_description = first_store.load_direct("practice/description")
-    legacy_brand = {
-        profiles_module._STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT: (
+
+    def make_legacy_pre_split(value):
+        overview = value.memories[
+            profiles_module._STUDY_PRACTICE_DESCRIPTION_OVERVIEW_UID
+        ]
+        task = value.memories[
+            profiles_module._STUDY_PRACTICE_DESCRIPTION_TASK_UID
+        ]
+        assert isinstance(overview, Memory)
+        assert isinstance(task, Memory)
+        overview.content = (
             profiles_module._LEGACY_STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT
-        ),
-        profiles_module._STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT: (
-            profiles_module._LEGACY_STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT
-        ),
-    }
-    for item in practice_description.iter_items():
-        if isinstance(item, Memory) and item.content in legacy_brand:
-            item.content = legacy_brand[item.content]
+        )
+        value.remove(profiles_module._STUDY_PRACTICE_DESCRIPTION_SITUATION_UID)
+        task.content = (
+            profiles_module._LEGACY_PRE_SPLIT_STUDY_PRACTICE_DESCRIPTION_CONTENT
+        )
+
+    make_legacy_pre_split(practice_description)
     legacy_provenance = Memory(
         uid=profiles_module._LEGACY_STUDY_PRACTICE_PROVENANCE_UID,
         content=atomize_prewarm_module._LEGACY_PRACTICE_PROVENANCE_CONTENT,
@@ -216,9 +224,7 @@ def test_init_study_copies_and_rebinds_declared_compare_and_atomize(
     practice_description.add(legacy_provenance)
     baseline_store = MemoryStore(root=profile_store_dir(baseline), create=False)
     baseline_description = baseline_store.load_direct("practice/description")
-    for item in baseline_description.iter_items():
-        if isinstance(item, Memory) and item.content in legacy_brand:
-            item.content = legacy_brand[item.content]
+    make_legacy_pre_split(baseline_description)
     baseline_description.add(legacy_provenance)
     baseline_store.save(baseline_description)
     atomize_analysis = create_atomize_analysis(
@@ -358,6 +364,7 @@ def test_init_study_copies_and_rebinds_declared_compare_and_atomize(
     ]
     assert [item.content for item in copied_memories] == [
         profiles_module._STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT,
+        profiles_module._STUDY_PRACTICE_DESCRIPTION_SITUATION_CONTENT,
         profiles_module._STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT,
     ]
     atomize_workbench = second_store.load_atomize_workbench(saved_atomize)

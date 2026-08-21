@@ -79,14 +79,14 @@ The current corpus contains:
 
 | Task | Task-owned | Authority READ/edit | Authority QUERY | Total ordinary records |
 | --- | ---: | ---: | ---: | ---: |
-| 1 | 76 | 300 | 78 | 454 |
-| 2 | 1 | 300 | 75 | 376 |
-| 3 | 301 | 100 | 75 | 476 |
-| Total | 378 | 700 | 228 | 1,306 |
+| 1 | 77 | 300 | 78 | 455 |
+| 2 | 2 | 300 | 75 | 377 |
+| 3 | 302 | 100 | 75 | 477 |
+| Total | 381 | 700 | 228 | 1,309 |
 
-The editable baseline additionally contains 14 participant-only rehearsal
+The editable baseline additionally contains 15 participant-only rehearsal
 Memories under `practice/description` and `practice/source`, bringing the
-composed baseline to 1,320 ordinary Memories. They are not part of any Task
+composed baseline to 1,324 ordinary Memories. They are not part of any Task
 corpus or authority package and therefore do not change the reviewed Task
 counts above.
 
@@ -96,12 +96,15 @@ input. Spreadsheet views are regenerated from the current parsed corpus.
 ## Ordinary Context mapping
 
 Every `init-study` participant Profile receives two separate local rehearsal
-Contexts. `practice/description` contains an overview Memory and a task Memory.
-The overview introduces memcommit and the
-three Study situations. The task directs the participant to use the grouped
-`mem help` browser to discover the atomization operation and then save the
-result as `practice/source-atomized`. It does not add a separate Impact,
-inspection, or approval step. `practice/source` contains 12 Memories, one for
+Contexts. `practice/description` contains an overview, a `SITUATION`, and a
+`TASK` Memory. The overview introduces memcommit and the three Study
+situations. `SITUATION` explains the rehearsal Source and why it needs
+atomization; `TASK` alone states the executable instruction to use the grouped
+`mem help` browser, discover Atomize, and save the result as
+`practice/source-atomized`. The visible role prefixes are deliberate
+participant-facing content, not designer-only purpose metadata. The task does
+not add a separate Impact, inspection, or approval step.
+`practice/source` contains 12 Memories, one for
 each newline-separated editing request from the original writing sessions.
 Some of those requests still contain multiple independently reviewable
 constraints for Atomize to separate. Separating the instruction from the source
@@ -118,7 +121,7 @@ A baseline created before this fixture existed is still accepted by
 `init-study`; the new run receives the canonical practice fixture without
 mutating that older baseline.
 
-The two description Memories are:
+The three Practice description Memories are:
 
 ```text
 memcommit is a research prototype that provides command-line and terminal user interfaces (CLI/TUI) for managing agent memory and supporting collaboration among people and agents.
@@ -127,7 +130,11 @@ In this study, you will use memcommit in three different situations, each involv
 ```
 
 ```text
-Before beginning the three study tasks, complete a short practice exercise to become familiar with how memcommit organizes and presents its commands. Each newline-separated editing note in `practice/source` is stored as its own Memory, preserving the boundaries between the original requests. Some notes still combine recurring constraints, rough wording, and typos. Divide their underlying constraints into appropriate atomic Memories without performing the requested edits, adding instructions, or changing the intended meaning, so that each constraint can be reviewed independently. Open `mem help`, inspect the available operations, find the operation designed for atomization, and use it to atomize the notes and save the result as `practice/source-atomized`.
+SITUATION · Before beginning the three study tasks, complete a short practice exercise to become familiar with how memcommit organizes and presents its commands. Each newline-separated editing note in `practice/source` is stored as its own Memory, preserving the boundaries between the original requests. Some notes still combine recurring constraints, rough wording, and typos.
+```
+
+```text
+TASK · Divide their underlying constraints into appropriate atomic Memories without performing the requested edits, adding instructions, or changing the intended meaning, so that each constraint can be reviewed independently. Open `mem help`, inspect the available operations, find the operation designed for atomization, and use it to atomize the notes and save the result as `practice/source-atomized`.
 ```
 
 The Source Context contains the following 12 accumulated English editing
@@ -170,21 +177,22 @@ as evidence while proposing independently reviewable policies; the rehearsal
 does not ask the model to perform any of the requested document edits or to
 turn spelling correction into the semantic task.
 
-The earlier fixture used `MemLab` as the participant-facing product name and
-included a third provenance-only description Memory. The current fixture uses
-the repository name `memcommit`. During initialization, only the exact legacy
-brand text is rewritten in the run snapshot; independently edited baseline
-prose is preserved. The third Memory
-was retired because it added a non-actionable row to the participant's
-onboarding Context without affecting the Atomize target or task contract. New
-fixtures do not create it. When a new run is initialized from an older editable
-baseline, snapshotting removes that one deterministic legacy Memory from the
-run copy without mutating the baseline itself; other baseline edits remain
-preserved. A retained Tutorial Atomize prewarm that was prepared against the
-older description remains admissible only when temporarily reconstructing the
-exact legacy brand, retired Memory, or both makes its full description digest
-match. The compatibility check never persists or renders those reconstructed
-variants, and any other instruction difference still fails closed.
+The earlier fixture used `MemLab` as the participant-facing product name,
+combined Practice situation and instruction in one task Memory, and included a
+third provenance-only description Memory. The current fixture uses the
+repository name `memcommit` and keeps the actionable instruction independently
+visible. During initialization, only exact known legacy text is rewritten in
+the run snapshot: the combined row keeps its stable task UID and becomes the
+new `TASK`, while a deterministic `SITUATION` UID is inserted immediately
+before it. Independently edited baseline prose is preserved. The retired
+provenance Memory remains removable because it added a non-actionable row
+without affecting the Atomize target or task contract. Snapshot migration does
+not mutate the editable baseline. A retained Tutorial Atomize prewarm prepared
+against the older description remains admissible only when temporarily
+reconstructing the exact pre-split row, legacy brand, retired Memory, or their
+known combinations makes its full description digest match. The compatibility
+check never persists or renders those reconstructed variants, and any other
+instruction difference still fails closed.
 
 A cold production Atomize check used `gpt-5.6-sol` with reasoning `medium`.
 Literal excerpts such as “polish this” initially returned `UNCERTAIN` because
@@ -227,11 +235,16 @@ remain part of the retained analysis, but they do not create a required review
 step. The tutorial intentionally contains no ambiguity interaction. Any change
 to the Source or tutorial instruction invalidates the exact binding.
 
-Each Task Profile also owns one participant-facing description Memory directly
-under `description`. Its English body is the previously authored Task
-description and its Korean body is a same-UID translation. Keeping the brief
+Each Task Profile owns two participant-facing description Memories directly
+under `description`: `SITUATION` contains the role and surrounding scenario,
+while `TASK` contains only the required outcome. Their English bodies are
+canonical and their Korean bodies are same-UID translations. Keeping the brief
 inside the Task branch makes it part of every baseline snapshot and
 `init-study` run without treating it as authority-owned evidence or a Grant.
+The historical description identity remains on `SITUATION`; each new `TASK`
+uses its own stable fixture identity. This preserves existing provenance while
+making the instruction independently retrievable and immediately visible in
+`mem ls`.
 Those operation-specific Contexts remain unchanged, but a newly initialized
 participant run does not select one until the participant leaves Practice.
 

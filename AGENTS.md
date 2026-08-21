@@ -246,6 +246,11 @@ conversation.
   paths so the images are visible in the conversation. A README, interaction
   log, file link, or textual description is supplementary evidence and must
   never substitute for showing the captures to the user in the conversation.
+- The final response that reports completion must itself embed every image in
+  that newly created or refreshed ordered set. An earlier commentary preview
+  does not satisfy this requirement because commentary may be collapsed. Do
+  not hand off only a README link, screenshot-directory link, interaction log,
+  or file list; those may appear only in addition to the inline images.
 - When the user asks for screenshots, snapshots, or captures of a terminal UI,
   run the reproduction in a color-capable PTY. Explicitly remove `NO_COLOR`
   from the capture process and set a capable terminal such as
