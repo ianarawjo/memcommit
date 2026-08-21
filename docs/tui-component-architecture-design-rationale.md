@@ -58,10 +58,12 @@ composition root for a runner; neither presenter imports or invokes the other.
 One invocation constructs one typed `SummarizeRequest`, then the router gives
 the selected sibling adapter control of when execution begins:
 
-- automatic mode chooses the TUI only when input and output are interactive;
-- `--plain` always uses the scripted renderer;
+- automatic mode executes the complete current-or-explicit Context request in
+  the line-oriented terminal flow, even when input and output are interactive;
+- `--plain` explicitly selects that same scripted renderer;
 - `--tui` requires an interactive terminal and fails before Store construction
-  or provider connection when that capability is absent; and
+  or provider connection when that capability is absent, then exposes the
+  Recent/Context/range setup as an additional action; and
 - the TUI can cancel before execution; an individual Run invokes the
   application once, while `BOTH` visibly invokes direct then recursive and
   publishes only the complete pair; and
@@ -158,6 +160,10 @@ application behavior.
   sections, focused and complete clipboard projections, cancellation before
   execution, byte/checkpoint verification, and the noninteractive plain route
   under `docs/screenshots/mem-summarize-context-first-workbench-20260813/`.
+- The later routing trace under
+  `docs/screenshots/mem-summarize-immediate-routing-20260821/` records immediate
+  current and explicit Context summaries without alternate-screen entry, plus
+  the same workbench as an explicit `--tui` action and unchanged Store bytes.
 - A built wheel contains the new interface hierarchy; an isolated
   `uvx --from <wheel>` environment runs the installed `mem summarize --help`
   and resolves the frame component from site-packages.

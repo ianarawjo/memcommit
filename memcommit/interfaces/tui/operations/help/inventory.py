@@ -768,6 +768,7 @@ COMMAND_FORMS = {
         "mem summarize [context] (direct summary of an explicit Context)",
         "mem summarize -r (recursive summary of the current Context)",
         "mem summarize [context] -r (lexical descendants and embedded Contexts)",
+        "mem summarize --tui (choose a Recent report or readable Context and range)",
         "mem summarize [context] --copy (copy verified direct understanding as plain text)",
     ),
     "switch": (

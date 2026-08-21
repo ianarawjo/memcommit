@@ -85,6 +85,7 @@ def test_mem_summarize_inventory_matches_direct_default_and_copy_contract():
         "mem summarize [context] (direct summary of an explicit Context)",
         "mem summarize -r (recursive summary of the current Context)",
         "mem summarize [context] -r (lexical descendants and embedded Contexts)",
+        "mem summarize --tui (choose a Recent report or readable Context and range)",
         "mem summarize [context] --copy "
         "(copy verified direct understanding as plain text)",
     )
@@ -229,7 +230,7 @@ def test_mem_summarize_forced_tui_requires_terminal_before_store_execution(
     assert "requires a TTY" in result.output
 
 
-def test_flagless_summarize_replays_a_recent_context_and_range(
+def test_explicit_tui_summarize_replays_a_recent_context_and_range(
     isolated_store,
     monkeypatch,
 ):
@@ -299,7 +300,7 @@ def test_flagless_summarize_replays_a_recent_context_and_range(
         recursive=False,
         copy_result=False,
         plain=False,
-        tui=False,
+        tui=True,
     )
 
     assert captured["request"].context_locator == "summary/recent"
@@ -307,7 +308,7 @@ def test_flagless_summarize_replays_a_recent_context_and_range(
     assert captured["request"].follow_embeds is True
 
 
-def test_flagless_summarize_replays_both_ranges_into_tui_setup(
+def test_explicit_tui_summarize_replays_both_ranges_into_tui_setup(
     isolated_store,
     monkeypatch,
 ):
@@ -388,11 +389,115 @@ def test_flagless_summarize_replays_both_ranges_into_tui_setup(
         recursive=False,
         copy_result=False,
         plain=False,
-        tui=False,
+        tui=True,
     )
 
     assert captured["setup"].selected_context == "summary/both"
     assert captured["setup"].initial_range_mode == "BOTH"
+
+
+def test_auto_tty_summarize_executes_current_direct_without_launcher(
+    isolated_store,
+    monkeypatch,
+    capsys,
+):
+    store = MemoryStore()
+    store.save(ops.init("summary/current"))
+    store.set_current("summary/current")
+
+    class InteractiveTerminal:
+        def is_interactive(self):
+            return True
+
+    monkeypatch.setattr(
+        summarize_command,
+        "SystemTerminalCapabilities",
+        InteractiveTerminal,
+    )
+    monkeypatch.setattr(
+        summarize_command,
+        "choose_read_report_recent",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            AssertionError("AUTO Summarize must not open the report launcher")
+        ),
+    )
+    monkeypatch.setattr(
+        summarize_command,
+        "connect_codex_chatgpt_provider",
+        lambda: (_ for _ in ()).throw(
+            AssertionError("an empty summary must remain provider-free")
+        ),
+    )
+
+    summarize_command.cmd(
+        context_name=None,
+        direct=False,
+        recursive=False,
+        copy_result=False,
+        plain=False,
+        tui=False,
+    )
+
+    captured = capsys.readouterr()
+    assert "SUMMARY · summary/current" in captured.out
+    assert "STATUS · READ-ONLY · DIRECT" in captured.out
+
+
+def test_auto_tty_summarize_executes_explicit_context_without_workbench(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    store.save(ops.init("summary/current"))
+    store.save(ops.init("practice/source"))
+    store.set_current("summary/current")
+
+    class InteractiveTerminal:
+        def is_interactive(self):
+            return True
+
+    monkeypatch.setattr(
+        summarize_command,
+        "SystemTerminalCapabilities",
+        InteractiveTerminal,
+    )
+    captured: dict[str, object] = {}
+
+    class ImmediateRunner:
+        def __init__(self, execute):
+            self.execute = execute
+
+        def run(self, request, *, mode):
+            captured["request"] = request
+            captured["mode"] = mode
+            return self.execute(request)
+
+    monkeypatch.setattr(
+        summarize_command,
+        "build_summarize_console_runner",
+        lambda **kwargs: ImmediateRunner(kwargs["execute"]),
+    )
+    monkeypatch.setattr(
+        summarize_command,
+        "connect_codex_chatgpt_provider",
+        lambda: (_ for _ in ()).throw(
+            AssertionError("an empty summary must remain provider-free")
+        ),
+    )
+
+    summarize_command.cmd(
+        context_name="practice/source",
+        direct=False,
+        recursive=False,
+        copy_result=False,
+        plain=False,
+        tui=False,
+    )
+
+    assert captured["mode"] is summarize_command.ConsoleMode.PLAIN
+    assert captured["request"] == summarize_command.SummarizeRequest(
+        context_locator="practice/source",
+    )
 
 
 def test_mem_summarize_plain_preserves_noninteractive_output(

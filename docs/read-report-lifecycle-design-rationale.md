@@ -25,6 +25,14 @@ optional content-free Recent or Select Target
   -> close without Context mutation
 ```
 
+That launcher is optional navigation, not the default meaning of every
+operand-free command. Summarize has a complete current-Context/direct request
+even when no Context operand is written, so its ordinary invocation executes
+immediately. `mem summarize --tui` opts into the Recent/Select Target lifecycle;
+an explicit Context combined with `--tui` enters the operation-owned setup with
+that Context staged. This matches the broader rule that executable argv does
+not open full-screen setup implicitly.
+
 `ReadReportTarget` is the interface-independent identity joining those steps.
 It records only the canonical operation name, effective readable Context names,
 explicit target roots, one-versus-many selection mode, direct/recursive range,
@@ -96,7 +104,8 @@ as a compatibility projection over that neutral value.
   never acquire a newly created lexical descendant implicitly.
 - No recent selection mutates global current Context or creates a saved
   analysis/session record.
-- Plain and explicitly targeted CLI routes retain their existing behavior.
+- Ordinary current-Context and explicitly targeted Summarize routes execute in
+  the primary terminal flow; `--tui` is the explicit launcher/setup route.
 
 ## Intentional limitations
 

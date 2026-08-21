@@ -32,6 +32,16 @@ unit. It does not run Atomize classifications, ambiguity or conflict scans, a
 comparison ledger, or any Context mutation. It is comprehension, not
 distillation: no summary Memory or checkpoint is created.
 
+The ordinary command is execution-first. `mem summarize` is already a complete
+request because its Source defaults to the command-start current Context and
+its reach defaults to direct; `mem summarize CONTEXT` replaces only that
+Source. In automatic console mode both forms execute immediately and remain in
+the primary line-oriented terminal flow, including in a TTY. The broader
+Recent/Context/range workbench is an additional, explicit `--tui` action. This
+keeps an executable operand from behaving like an initial value that still
+requires a second Run confirmation, while retaining the exploratory flow for
+people who ask for it.
+
 Atomize retains its existing serialized overview shape for compatibility, but
 its `understood` value is now the common type. Compare retains the serialized
 `overview` string accepted by earlier analysis schemas while exposing the
@@ -132,14 +142,15 @@ The application module imports neither Typer, prompt-toolkit, nor
 MemoryStore/Grant adapter and a terminal-free `execute_summarize` composition;
 provider construction remains injected and terminal rendering remains above the
 application. The console host selects an adapter without putting terminal state
-in the application. Plain mode executes immediately and renders once.
-Interactive mode first freezes the Profile-wide readable Context catalog. The
+in the application. Automatic and `--plain` modes execute immediately and
+render once. Explicit `--tui` mode first freezes the Profile-wide readable
+Context catalog. The
 three-way range control appears above the Context picker and offers `BOTH`,
 `THIS CONTEXT ONLY`, and `INCLUDE DESCENDANTS`. The Context picker owns initial
 focus. Before a result exists, the Summary frame itself contains the explicit
-Run action, so one forward focus move from Context reaches execution. A
-flagless TUI starts on `BOTH`; explicit `-d` and `-r` retain their individual
-initial selections.
+Run action, so one forward focus move from Context reaches execution. An
+operand-free `--tui` flow starts on `BOTH`; explicit `-d` and `-r` retain their
+individual initial selections.
 Only the explicit Summarize action constructs and executes requests;
 cancellation executes nothing. `BOTH` performs the direct request first and the
 recursive request second, then publishes the pair only after both succeed.
@@ -159,9 +170,8 @@ switches the global current Context. Each execution re-resolves and
 reauthorizes the selected canonical name, freezes its source, and connects the
 provider only when its frame is nonempty and no exact Study artifact is
 available. There is no review/Apply lifecycle or Context mutation. Automatic
-routing uses an injected terminal capability; `--plain` and `--tui` make the
-presentation route explicit, and forced TUI failure occurs before Store
-construction.
+routing remains line-oriented; the explicit `--tui` route uses an injected
+terminal capability and fails before Store construction when no TTY exists.
 
 The runtime has one documented transitional dependency on the existing
 operation-neutral Grant mechanics under `memcommit.authority.access`.
@@ -175,3 +185,5 @@ in [`summarize-application-boundary-matrix.md`](summarize-application-boundary-m
 The component ownership, alternatives, migration boundary, installed-wheel
 check, and ordered PTY evidence are recorded in
 [`tui-component-architecture-design-rationale.md`](tui-component-architecture-design-rationale.md).
+The current-vs-explicit immediate route and opt-in workbench are captured under
+[`screenshots/mem-summarize-immediate-routing-20260821/`](screenshots/mem-summarize-immediate-routing-20260821/README.md).

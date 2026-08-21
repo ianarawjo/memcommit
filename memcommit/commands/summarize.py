@@ -139,14 +139,14 @@ def cmd(
         bool,
         typer.Option(
             "--plain",
-            help="Print the result instead of opening the interactive Viewer",
+            help="Print the result (the default without --tui)",
         ),
     ] = False,
     tui: Annotated[
         bool,
         typer.Option(
             "--tui",
-            help="Require the interactive result Viewer",
+            help="Open the interactive Recent, Context, range, and result flow",
         ),
     ] = False,
 ) -> None:
@@ -154,6 +154,12 @@ def cmd(
     try:
         mode = resolve_console_mode(plain=plain, tui=tui)
         terminal = SystemTerminalCapabilities()
+        # A missing Context operand is still a complete request because
+        # Summarize owns the current-Context/direct defaults. Keep executable
+        # argv in the primary terminal flow; the broader Recent/target/range
+        # workbench is an explicit --tui action, as with supplied-pattern Find.
+        if mode is ConsoleMode.AUTO:
+            mode = ConsoleMode.PLAIN
         resources: tuple[MemoryStore, ContextOperandSnapshot] | None = None
 
         def command_resources() -> tuple[MemoryStore, ContextOperandSnapshot]:

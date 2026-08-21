@@ -1,0 +1,7 @@
+PTY 180 52                                                                                                                                                                          
+SUMMARY · practice/source                                                                                                                                                           
+STATUS · READ-ONLY · DIRECT                                                                                                                                                         
+                                                                                                                                                                                    
+WHAT MEM UNDERSTOOD                                                                                                                                                                 
+The selected Context contains no ordinary Memories to summarize.                                                                                                                    
+EXPLICIT ROUTE COMPLETE · CONTEXT BYTES UNCHANGED · CURRENT POINTER UNCHANGED

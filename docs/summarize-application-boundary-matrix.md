@@ -6,12 +6,13 @@ The internal application and production-runtime extractions are implemented and
 verified. `run_summarize` completes the use case through abstract ports, while
 `execute_summarize` composes it with a real `MemoryStore` and injected provider
 without Typer, prompt-toolkit, terminal output, or TUI state. The console host
-lets the plain adapter execute immediately or the TUI adapter execute after an
-explicit process-local selection, then presents the same typed result. These
-are internal boundaries, not yet a stable public
+lets the automatic/plain adapter execute the current or explicit Context
+immediately, while explicit `--tui` lets the interactive adapter execute after
+a process-local selection and then present the same typed result. These are
+internal boundaries, not yet a stable public
 Python API.
 
-Last reviewed: 2026-08-13.
+Last reviewed: 2026-08-21.
 
 ## Objective and non-goals
 
@@ -36,8 +37,10 @@ stage.
 
 Summarize is also the first complete console-composition slice. The existing
 plain route and a new read-only semantic Viewer sit behind an injected console
-runner and composition root. Automatic mode uses terminal capability;
-`--plain` and `--tui` make the route explicit. The application remains
+runner and composition root. Automatic mode deliberately selects the
+line-oriented execution route even in a TTY because the current-Context/direct
+defaults already form an executable request; `--tui` explicitly selects the
+broader Recent/target/range workbench. The application remains
 independent of Typer, prompt-toolkit, and process-global terminal detection.
 Atomize, Compare, and other semantic operations retain their operation
 behavior while their imports of the extracted component contracts now use the
@@ -70,6 +73,7 @@ Python production caller
 mem summarize argv
   -> memcommit.commands.summarize.cmd
   -> resolve semantic scope and presentation mode
+  -> AUTO becomes immediate plain execution; --tui alone opts into setup
   -> bootstrap builds ConsoleRunner(application callable, plain presenter,
      TUI route, terminal capability)
   -> ConsoleRunner validates forced TUI eligibility before execution
@@ -139,7 +143,8 @@ The focused suite covers:
 - real-Store execution without stdout, stderr, Typer, or TUI imports;
 - one current-Context snapshot for the Store-backed request;
 - forced TUI rejection before Store or provider construction and automatic
-  TTY/plain route selection;
+  immediate execution for both the command-start current Context and an
+  explicit Context operand;
 - plain execution followed by its independent presenter, plus TUI cancellation
   before execution, one application call for an individual range, and ordered
   direct/recursive calls for `BOTH`;
@@ -162,6 +167,9 @@ The focused suite covers:
   publication; and
 - the shared semantic execution policy and provider command boundary;
 - direct imports from the new component owners across every migrated consumer;
+- real 180×52 color PTY evidence that both `mem summarize` and
+  `mem summarize CONTEXT` stay out of the alternate screen while explicit
+  `--tui` retains the read-only setup and cancellation boundary;
 - real 180×52 color PTY Context-first entry, in-place empty Summary action,
   three-way range transition, complete dual result, focused/complete copy,
   cancellation, read-only byte/checkpoint, and plain-output evidence; and
