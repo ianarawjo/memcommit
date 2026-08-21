@@ -540,7 +540,7 @@ def test_long_and_annotated_command_labels_use_both_record_rows():
     selected = {
         entry.name: entry
         for entry in entries
-        if entry.name in {"delete", "check-conformance", "config", "import"}
+        if entry.name in {"delete", "check-conformance", "config", "ground", "import"}
     }
     rendered = "".join(
         text
@@ -560,6 +560,7 @@ def test_long_and_annotated_command_labels_use_both_record_rows():
         "delete": "(remove)",
         "check-": "conformance",
         "config": "(legacy)",
+        "ground": "[PARTIAL]",
         "import": "[PARTIAL]",
     }
     for first_row, second_row in expected_labels.items():
@@ -872,6 +873,7 @@ def test_final_help_categories_match_their_reviewed_runtime_boundaries():
     eval_operation = operation_help("eval")
 
     assert ground.summary.startswith("Develop an abstract idea")
+    assert ground.maturity == "PARTIAL"
     assert "Ground workspace Contexts" in ground.effect
     assert log.summary == (
         "Print or search recorded Context, Memory, and Profile history."

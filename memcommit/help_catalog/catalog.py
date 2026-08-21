@@ -307,6 +307,7 @@ _OPERATIONS = (
         "Creates or changes only Ground workspace Contexts; external Context "
         "changes require separate operations",
         "One named Ground workspace and its owned lanes",
+        maturity="PARTIAL",
     ),
     _operation(
         "help",
