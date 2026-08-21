@@ -155,6 +155,18 @@ complete atomic permission tuple. Permission management and authorization
 receipts must continue to use the exact Grant record; no command may authorize
 an operation by parsing `mem contexts`, picker text, color, or compact labels.
 
+Missing-name classification follows the same namespace boundary. A failed
+ordinary Context lookup becomes a Grant-specific error only when an effective
+Grant public name is an exact or lexical-prefix match for the requested name.
+The current local Context is orientation, not evidence that an unrelated
+operand names a granted view. This keeps missing local operands consistent
+across Switch, Embed, and every other consumer of the shared access resolver,
+while preserving permission, frozen-scope, and ambiguity errors for names that
+actually enter a Grant namespace. Persisted links and analysis receipts retain
+their exact attachment UID and Grant binding, so their revalidation bypasses
+general locator classification: loss of that route remains an explicit
+revocation failure rather than being downgraded to an ordinary missing input.
+
 This change does not grant query permission to Advisor content and does not
 make proposal guidelines readable. It also does not add authority history,
 revert, or checkpoint browsing to a READ grant.

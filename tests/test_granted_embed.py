@@ -230,6 +230,29 @@ def test_granted_embed_rejects_missing_permission_query_override_and_granted_tar
     assert advisor.uid not in store.load_direct(workspace.name).memories
 
 
+def test_missing_context_embed_child_is_not_reported_as_a_granted_view(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+) -> None:
+    store, _authority, workspace, _advisor, _advice, _grant = _fixture(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+    before = store.load_direct(workspace.name).ordered_uids()
+
+    result = runner.invoke(
+        app,
+        ["embed", "missing-child", "--into", workspace.name],
+    )
+
+    assert result.exit_code == 1
+    assert "Context 'missing-child' does not exist" in result.stderr
+    assert "Granted view" not in result.stderr
+    assert store.load_direct(workspace.name).ordered_uids() == before
+
+
 def test_granted_embed_tui_catalog_exposes_authority_without_broadening_target(
     isolated_store,
     tmp_path,

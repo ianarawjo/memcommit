@@ -543,7 +543,7 @@ def test_directional_meld_combines_granted_contexts_in_one_authority_profile(
     ]
 
 
-def test_directional_meld_revalidates_grant_before_baseline_acceptance(
+def test_directional_meld_revoked_target_fails_closed_before_baseline_acceptance(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -578,7 +578,8 @@ def test_directional_meld_revalidates_grant_before_baseline_acceptance(
         ],
     )
     assert accepted.exit_code == 1
-    assert "Grant" in accepted.stderr or "grant" in accepted.stderr
+    assert "Context 'campus-wiki/services' does not exist" in accepted.stderr
+    assert "Granted view" not in accepted.stderr
     assert authority.load_direct(target.name).to_dict() == original
     session = active.load_meld_session(target.uid)
     assert session is not None and session.state == "READY_TO_APPLY"

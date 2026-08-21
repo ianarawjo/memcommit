@@ -44,6 +44,40 @@ class ContextAccess:
         return self.view is not None
 
 
+def _resolve_bound_granted_context(
+    active_store: MemoryStore,
+    public_name: str,
+    *,
+    attachment_name: str,
+    attachment_uid: str,
+    required_permission: str,
+    registry: ProfileRegistry,
+) -> ContextAccess:
+    """Resolve an artifact's exact Grant attachment, not a general locator."""
+
+    if not active_store.context_exists(attachment_name):
+        raise ProfileError(
+            f"Grant attachment Context {attachment_name!r} does not exist."
+        )
+    attachment = active_store.load_direct(attachment_name)
+    if attachment.uid != attachment_uid:
+        raise ProfileError("The Grant attachment Context identity changed.")
+    view = resolve_granted_context_view(
+        public_name,
+        attachment_name=attachment_name,
+        required_permission=required_permission,
+        registry=registry,
+    )
+    return ContextAccess(
+        store=MemoryStore(root=view.authority_root, create=False),
+        context_name=view.authority_context_name,
+        display_name=public_name,
+        attachment_name=attachment_name,
+        permission=required_permission,
+        view=view,
+    )
+
+
 def granted_context_link(
     access: ContextAccess,
     *,
@@ -95,16 +129,16 @@ def load_granted_context_link(
         raise ProfileError(
             "The active Profile no longer matches the granted Context link."
         )
-    access = resolve_context_access(
+    access = _resolve_bound_granted_context(
         active_store,
         link.public_name,
-        current_name=link.attachment_context_name,
+        attachment_name=link.attachment_context_name,
+        attachment_uid=link.attachment_context_uid,
         required_permission="EMBED",
         registry=registry,
     )
     view = access.view
-    if view is None:
-        raise ProfileError("The embedded authority Context is no longer granted.")
+    assert view is not None
     grant = view.grant
     if (
         grant.uid != link.grant_uid
@@ -190,15 +224,14 @@ def revalidate_granted_context_binding(
         raise ProfileError(
             "The active Profile no longer matches the granted artifact binding."
         )
-    access = resolve_context_access(
+    access = _resolve_bound_granted_context(
         active_store,
         binding.public_name,
-        current_name=binding.attachment_context_name,
+        attachment_name=binding.attachment_context_name,
+        attachment_uid=binding.attachment_context_uid,
         required_permission=required_permission,
         registry=registry,
     )
-    if not access.is_granted:
-        raise ProfileError("The artifact no longer resolves to a granted Context.")
     if freeze_granted_context_binding(access) != binding:
         raise ProfileError(
             "The authority grant changed after this artifact was created."
@@ -240,8 +273,6 @@ def resolve_context_access(
     public_name = local_name if relative else operand
     registry = registry or load_profile_registry()
     attachment_names: list[str] = []
-    if current_name and active_store.context_exists(current_name):
-        attachment_names.append(current_name)
     for grant in registry.grants:
         if grant.grantee_profile_uid != registry.active.uid:
             continue
@@ -255,6 +286,10 @@ def resolve_context_access(
         attachment = active_store.load_direct(grant.attachment_context_name)
         if attachment.uid != grant.attachment_context_uid:
             continue
+        # Only a Grant whose public namespace matches the operand may classify
+        # a failed local lookup as a Grant error.  Trying the current local
+        # Context unconditionally would mislabel every unrelated missing name
+        # as a missing "Granted view" whenever that Context had any Grants.
         if grant.attachment_context_name not in attachment_names:
             attachment_names.append(grant.attachment_context_name)
 
@@ -276,7 +311,7 @@ def resolve_context_access(
     if not resolved:
         if errors:
             raise errors[0]
-        raise FileNotFoundError(f"Context '{local_name}' not found.")
+        raise FileNotFoundError(f"Context '{local_name}' does not exist.")
     identities = {
         (
             candidate.grant.uid,

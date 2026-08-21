@@ -1436,7 +1436,8 @@ class TestList:
     def test_fails_for_nonexistent_context(self, isolated_store):
         result = invoke("list", "ghost")
         assert result.exit_code == 1
-        assert "not found" in result.stderr
+        assert "Context 'ghost' does not exist" in result.stderr
+        assert "Granted view" not in result.stderr
 
     def test_fails_with_no_current_context(self, isolated_store):
         result = invoke("list")

@@ -1737,7 +1737,8 @@ def test_task1_query_only_origin_cannot_be_an_update_target(
     result = runner.invoke(app, ["update", "--to", "construction-details"])
 
     assert result.exit_code == 1
-    assert "Context 'construction-details' not found" in result.stderr
+    assert "Context 'construction-details' does not exist" in result.stderr
+    assert "Granted view" not in result.stderr
     assert not (isolated_store / "staged-update.json").exists()
     assert not store.context_exists("construction-details")
 
@@ -2214,7 +2215,8 @@ def test_missing_target_and_same_target_fail_without_traceback(
     same = runner.invoke(app, ["impact", "--to", "source"])
 
     assert missing.exit_code == 1
-    assert "not found" in missing.stderr
+    assert "Context 'missing' does not exist" in missing.stderr
+    assert "Granted view" not in missing.stderr
     assert same.exit_code == 1
     assert "Source and target Contexts must be distinct" in same.stderr
     assert "Traceback" not in missing.output + same.output

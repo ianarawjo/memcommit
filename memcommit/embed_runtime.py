@@ -139,6 +139,23 @@ class MemoryStoreEmbedPort(EmbedPort):
         )
 
     @staticmethod
+    def _direct_memory(source: Context, selector: str) -> Memory:
+        """Resolve one typed direct Memory with a Memory-specific absence error."""
+
+        try:
+            item = ops.resolve(source, selector)
+        except KeyError as error:
+            raise FileNotFoundError(
+                f"Memory {selector!r} does not exist in Context {source.name!r}."
+            ) from error
+        if not isinstance(item, Memory):
+            raise TypeError(
+                f"{selector!r} is not a directly owned Memory in "
+                f"{source.name!r}."
+            )
+        return item
+
+    @staticmethod
     def _source_snapshot(access: ContextAccess) -> tuple[Context, Context]:
         """Return raw identity bytes and the public Context used for validation."""
 
@@ -316,12 +333,7 @@ class MemoryStoreEmbedPort(EmbedPort):
                 raise FileNotFoundError(f"Context '{name}' does not exist locally.")
         source = self._store.load_direct(source_name)
         parent = self._store.load_for_update(into_name)
-        memory = ops.resolve(source, request.memory_selector)
-        if not isinstance(memory, Memory):
-            raise TypeError(
-                f"'{request.memory_selector}' is not a directly owned Memory "
-                f"in '{source_name}'."
-            )
+        memory = self._direct_memory(source, request.memory_selector)
         placement = _placement_for_context(
             parent,
             before=request.before,
@@ -360,12 +372,7 @@ class MemoryStoreEmbedPort(EmbedPort):
             )
         source = self._store.load_direct(source_name)
         parent = self._store.load_for_update(into_name)
-        memory = ops.resolve(source, memory_selector)
-        if not isinstance(memory, Memory):
-            raise TypeError(
-                f"'{memory_selector}' is not a directly owned Memory in "
-                f"'{source_name}'."
-            )
+        memory = self._direct_memory(source, memory_selector)
         return self._freeze_memory_loaded(
             request=request,
             source=source,

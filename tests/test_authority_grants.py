@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import uuid
 
+import pytest
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
@@ -103,6 +104,32 @@ def _grant_fixture(isolated_store, tmp_path, monkeypatch):
         recursive=True,
     )
     return authority_store, editable, campus_grant, details_grant
+
+
+def test_unrelated_missing_context_is_not_reported_as_a_granted_view(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    _grant_fixture(isolated_store, tmp_path, monkeypatch)
+    store = MemoryStore()
+
+    with pytest.raises(
+        FileNotFoundError,
+        match=r"Context 'practice/3' does not exist\.",
+    ):
+        resolve_context_access(
+            store,
+            "practice/3",
+            current_name="task-root",
+            required_permission="READ",
+        )
+
+    checkout = runner.invoke(app, ["checkout", "practice/3"])
+
+    assert checkout.exit_code == 1
+    assert "context 'practice/3' does not exist" in checkout.stderr
+    assert "Granted view" not in checkout.stderr
 
 
 def test_ls_projects_read_view_and_masks_narrower_query_view(
@@ -561,7 +588,8 @@ def test_delete_permission_and_view_revocation_fail_closed(
     assert revoked.exit_code == 0, revoked.output
     assert len(load_profile_registry().grants) == 1
     assert missing.exit_code == 1
-    assert "does not exist" in missing.stderr
+    assert "Context 'campus-wiki' does not exist" in missing.stderr
+    assert "Granted view" not in missing.stderr
 
 
 def test_granted_delete_permission_removes_only_authority_memory(

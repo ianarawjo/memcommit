@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
+import shlex
 from typing import Annotated, Optional
 
 import typer
 
+import memcommit.ops as ops
+from memcommit.context import Memory
 from memcommit.embed_application import (
     EmbedPlacement,
     EmbedRequest,
@@ -25,6 +28,42 @@ from memcommit.store import MemoryStore
 
 def _interactive_terminal() -> bool:
     return is_interactive_terminal()
+
+
+def _memory_embed_source_guidance(
+    port: MemoryStoreEmbedPort,
+    *,
+    selector: str,
+    into_locator: str,
+) -> str | None:
+    """Explain an omitted ``--from`` only when the current item is a Memory."""
+
+    current_name = port.current_context_name
+    if current_name is None or not port.store.context_exists(current_name):
+        return None
+    try:
+        item = ops.resolve(port.store.load_direct(current_name), selector)
+    except (KeyError, OSError, ValueError):
+        return None
+    if not isinstance(item, Memory):
+        return None
+    command = " ".join(
+        shlex.quote(part)
+        for part in (
+            "mem",
+            "embed",
+            selector,
+            "--from",
+            current_name,
+            "--into",
+            into_locator,
+        )
+    )
+    return (
+        f"{selector!r} identifies Memory [{item.uid[:8]}] in current Context "
+        f"{current_name!r}. Memory Embed requires an explicit Source Context; "
+        f"run: {command}"
+    )
 
 
 def _gap_description(placement: EmbedPlacement) -> str:
@@ -194,6 +233,23 @@ def cmd(
         TypeError,
         ValueError,
     ) as error:
+        if (
+            isinstance(request, EmbedRequest)
+            and isinstance(error, FileNotFoundError)
+            and str(error) == f"Context {request.child_locator!r} does not exist."
+        ):
+            guidance = _memory_embed_source_guidance(
+                port,
+                selector=request.child_locator,
+                into_locator=request.into_locator,
+            )
+            if guidance is not None:
+                typer.secho(
+                    f"Error: {display_escape_text(guidance)}",
+                    fg=typer.colors.RED,
+                    err=True,
+                )
+                raise typer.Exit(2)
         typer.secho(
             f"Error: {display_escape_text(str(error))}",
             fg=typer.colors.RED,

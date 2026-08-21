@@ -152,6 +152,60 @@ def test_cli_memory_embed_uses_from_and_preserves_reviewed_gap(isolated_store):
     assert target.ordered_uids()[2] == after.uid
 
 
+def test_cli_memory_without_from_reports_its_type_and_exact_source(isolated_store):
+    store = MemoryStore()
+    source = ops.init("practice/1")
+    memory = ops.add(source, "a is apple")
+    target = ops.init("practice/4")
+    store.save(source)
+    store.save(target)
+    store.set_current(source.name)
+    before = store.load_direct(target.name).ordered_uids()
+
+    result = runner.invoke(
+        app,
+        ["embed", memory.uid[:8], "--into", target.name],
+    )
+
+    assert result.exit_code == 2
+    assert (
+        f"{memory.uid[:8]!r} identifies Memory [{memory.uid[:8]}] in current "
+        "Context 'practice/1'"
+    ) in result.stderr
+    assert (
+        f"mem embed {memory.uid[:8]} --from practice/1 --into practice/4"
+        in result.stderr
+    )
+    assert "Granted view" not in result.stderr
+    assert store.load_direct(target.name).ordered_uids() == before
+
+
+def test_cli_missing_memory_with_from_uses_memory_specific_error(isolated_store):
+    store = MemoryStore()
+    source = ops.init("practice/1")
+    target = ops.init("practice/4")
+    store.save(source)
+    store.save(target)
+    store.set_current(source.name)
+
+    result = runner.invoke(
+        app,
+        [
+            "embed",
+            "ca562047",
+            "--from",
+            source.name,
+            "--into",
+            target.name,
+        ],
+    )
+
+    assert result.exit_code == 1
+    assert "Memory 'ca562047' does not exist in Context 'practice/1'" in result.stderr
+    assert "Granted view" not in result.stderr
+    assert store.load_direct(target.name).ordered_uids() == []
+
+
 def test_cli_memory_embed_reads_latest_source_after_target_reload(isolated_store):
     assert runner.invoke(app, ["init", "source"]).exit_code == 0
     assert runner.invoke(app, ["add", "version one"]).exit_code == 0

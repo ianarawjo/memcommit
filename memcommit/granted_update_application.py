@@ -238,13 +238,20 @@ def _resolve_exact_access(
     binding: GrantedUpdateTarget,
     registry: ProfileRegistry,
 ):
-    access = resolve_context_access(
-        active_store,
-        binding.public_name,
-        current_name=binding.attachment_context_name,
-        required_permission="READ",
-        registry=registry,
-    )
+    try:
+        access = resolve_context_access(
+            active_store,
+            binding.public_name,
+            current_name=binding.attachment_context_name,
+            required_permission="READ",
+            registry=registry,
+        )
+    except FileNotFoundError as error:
+        # This route starts from a persisted exact Grant binding, so loss of
+        # the public route is revocation rather than an ordinary missing input.
+        raise ProfileError(
+            "The granted update target is no longer available."
+        ) from error
     current = freeze_granted_context_binding(access)
     if current != binding:
         raise ConcurrentContextUpdateError(
