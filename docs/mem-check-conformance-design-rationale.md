@@ -74,6 +74,25 @@ Each Rule receives exactly one `CONFORMS`, `VIOLATES`,
 Every Target Memory must be cited by at least one Rule judgment or explicitly
 placed outside the judgments. Absence of evidence is not conformance.
 
+The provider also returns the exact counterexample subset for every
+`VIOLATES` or `PARTIALLY_CONFORMS` judgment. A violating judgment's cited
+evidence is entirely nonconforming; a partial judgment has both conforming and
+nonconforming cited cases. The host validates those relations rather than
+trying to recover counterexamples from explanatory prose. This case identity
+is retained in Conformance schema version 2. Version-1 saved reports remain
+readable, but honestly carry no reconstructed counterexample detail because
+their evidence list did not distinguish supporting cases from counterexamples.
+
+The direct Context report keeps the Rule account compact: one
+`RULE_ALIAS · RULE CONTENT · STATUS` row per Rule, followed only when necessary
+by a `NONCONFORMING CASES` section. Each counterexample is one
+`[MEMORY_ALIAS] MEMORY CONTENT [RULE_ALIASES]` row, so the content and the Rules
+it violates can be scanned without opening a nested evidence block. Evidence
+lists and provider reasons remain in the typed report but are not repeated in
+this projection. The outside-judgment boundary is shown only when nonempty.
+This keeps an all-conforming result scannable while making failures actionable
+by case rather than by undifferentiated evidence volume.
+
 Both Contexts are frozen from one command-start locator snapshot and
 revalidated after the provider turn. The first implementation accepts local
 direct Contexts only. Descendant, embedded, and granted frames require explicit

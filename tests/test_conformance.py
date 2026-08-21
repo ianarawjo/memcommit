@@ -141,8 +141,8 @@ def test_context_conformance_judges_each_rule_and_accounts_every_memory():
         {
             "overview": "The Context conforms to both applicable Rules.",
             "judgments": [
-                {"rule_id": "r1", "status": "CONFORMS", "evidence_memory_ids": ["m000001", "m000002"], "reason": "Both use initials."},
-                {"rule_id": "r2", "status": "CONFORMS", "evidence_memory_ids": ["m000002"], "reason": "Class B uses .B."},
+                {"rule_id": "r1", "status": "CONFORMS", "evidence_memory_ids": ["m000001", "m000002"], "nonconforming_memory_ids": [], "reason": "Both use initials."},
+                {"rule_id": "r2", "status": "CONFORMS", "evidence_memory_ids": ["m000002"], "nonconforming_memory_ids": [], "reason": "Class B uses .B."},
             ],
             "outside_memory_ids": ["m000003"],
         }
@@ -159,6 +159,112 @@ def test_context_conformance_judges_each_rule_and_accounts_every_memory():
     assert ConformanceReport.from_dict(report.to_dict()) == report
 
 
+def test_context_conformance_renders_rule_summary_and_exact_failing_cases():
+    shape_rule = _rule("Use exactly three tokens with lowercase is.")
+    initial_rule = ConformanceRule(
+        _uid(), "r2", "The word must begin with the initial letter."
+    )
+    subjects = (
+        ConformanceSubject(
+            _uid(),
+            "m000001",
+            "a is apple",
+            linked_rule_uids=(shape_rule.uid, initial_rule.uid),
+        ),
+        ConformanceSubject(
+            _uid(),
+            "m000002",
+            "b is apple",
+            linked_rule_uids=(shape_rule.uid, initial_rule.uid),
+        ),
+    )
+    provider = Provider(
+        {
+            "overview": "One case violates the initial-letter Rule.",
+            "judgments": [
+                {
+                    "rule_id": "r1",
+                    "status": "CONFORMS",
+                    "evidence_memory_ids": ["m000001", "m000002"],
+                    "nonconforming_memory_ids": [],
+                    "reason": "Both cases use the required shape.",
+                },
+                {
+                    "rule_id": "r2",
+                    "status": "PARTIALLY_CONFORMS",
+                    "evidence_memory_ids": ["m000001", "m000002"],
+                    "nonconforming_memory_ids": ["m000002"],
+                    "reason": "The second word does not begin with b.",
+                },
+            ],
+            "outside_memory_ids": [],
+        }
+    )
+
+    report = check_context_conformance(
+        source_label="letters/examples",
+        rules_label="letters/rules",
+        rules=(shape_rule, initial_rule),
+        subjects=subjects,
+        provider=provider,
+    )
+    rendered = check_conformance_command.render_conformance(report)
+
+    assert (
+        "r1 · Use exactly three tokens with lowercase is. · CONFORMS"
+        in rendered
+    )
+    assert (
+        "r2 · The word must begin with the initial letter. · "
+        "PARTIALLY_CONFORMS"
+        in rendered
+    )
+    assert "NONCONFORMING CASES · 1" in rendered
+    assert "[m000002] b is apple [r2]" in rendered
+    assert "  RULE ·" not in rendered
+    assert "  EVIDENCE ·" not in rendered
+    assert "  WHY ·" not in rendered
+    assert "OUTSIDE RULE JUDGMENTS" not in rendered
+
+
+def test_context_conformance_still_reads_schema_one_without_case_details():
+    rule = _rule()
+    subject = ConformanceSubject(
+        _uid(), "m000001", "A -> A", linked_rule_uids=(rule.uid,)
+    )
+    report = check_context_conformance(
+        source_label="legacy/examples",
+        rules_label="legacy/rules",
+        rules=(rule,),
+        subjects=(subject,),
+        provider=Provider(
+            {
+                "overview": "The case conforms.",
+                "judgments": [
+                    {
+                        "rule_id": "r1",
+                        "status": "CONFORMS",
+                        "evidence_memory_ids": ["m000001"],
+                        "nonconforming_memory_ids": [],
+                        "reason": "It follows the Rule.",
+                    }
+                ],
+                "outside_memory_ids": [],
+            }
+        ),
+    )
+    legacy = report.to_dict()
+    legacy["schema_version"] = 1
+    for judgment in legacy["context_judgments"]:
+        judgment.pop("nonconforming_subject_uids")
+
+    restored = ConformanceReport.from_dict(legacy)
+
+    assert restored.schema_version == 1
+    assert restored.context_judgments[0].nonconforming_subject_uids == ()
+    assert restored.to_dict() == legacy
+
+
 def test_context_conformance_rejects_silent_target_omission():
     rule = _rule()
     subjects = (
@@ -169,7 +275,7 @@ def test_context_conformance_rejects_silent_target_omission():
         {
             "overview": "Incomplete.",
             "judgments": [
-                {"rule_id": "r1", "status": "CONFORMS", "evidence_memory_ids": ["m000001"], "reason": "One."}
+                {"rule_id": "r1", "status": "CONFORMS", "evidence_memory_ids": ["m000001"], "nonconforming_memory_ids": [], "reason": "One."}
             ],
             "outside_memory_ids": [],
         }
@@ -195,6 +301,7 @@ def test_context_conformance_rejects_observed_status_without_evidence():
                     "rule_id": "r1",
                     "status": "CONFORMS",
                     "evidence_memory_ids": [],
+                    "nonconforming_memory_ids": [],
                     "reason": "No evidence was cited.",
                 }
             ],
@@ -293,6 +400,7 @@ def test_check_conformance_cli_runs_the_shared_context_core(
                     "rule_id": "r1",
                     "status": "CONFORMS",
                     "evidence_memory_ids": ["m000001"],
+                    "nonconforming_memory_ids": [],
                     "reason": "NSE uses the three initials.",
                 }
             ],
@@ -312,7 +420,14 @@ def test_check_conformance_cli_runs_the_shared_context_core(
 
     assert result.exit_code == 0, result.output
     assert "CHECK CONFORMANCE · CONTEXT" in result.output
-    assert "r1 · CONFORMS" in result.output
+    assert (
+        "r1 · Use uppercase initials for multiword names. · CONFORMS"
+        in result.output
+    )
+    assert "  RULE ·" not in result.output
+    assert "  EVIDENCE ·" not in result.output
+    assert "  WHY ·" not in result.output
+    assert "OUTSIDE RULE JUDGMENTS" not in result.output
     assert "NO CONTEXT CHANGES" in result.output
 
 
@@ -333,6 +448,7 @@ class AuditProvider:
                         "rule_id": "r1",
                         "status": "CONFORMS",
                         "evidence_memory_ids": ["m000001", "m000002"],
+                        "nonconforming_memory_ids": [],
                         "reason": "Both Memories follow the Rule.",
                     }
                 ],

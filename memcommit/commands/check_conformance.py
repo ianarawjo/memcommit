@@ -21,7 +21,7 @@ from memcommit.store import MemoryStore
 
 
 def render_conformance(report: ConformanceReport) -> str:
-    """Render every typed judgment without implying mutation or enforcement."""
+    """Render compact judgments and expose exact nonconforming cases."""
 
     identity = report.provider_identity
     lines = [
@@ -35,7 +35,7 @@ def render_conformance(report: ConformanceReport) -> str:
         safe_terminal_text(report.overview),
         "",
     ]
-    rule_alias = {rule.uid: rule.alias for rule in report.rules}
+    rule_alias_by_uid = {rule.uid: rule.alias for rule in report.rules}
     subject_by_uid = {subject.uid: subject for subject in report.subjects}
     if report.mode == "CASE":
         lines.append(f"CASE CONFORMANCE · {len(report.case_judgments)}")
@@ -45,7 +45,9 @@ def render_conformance(report: ConformanceReport) -> str:
                 [
                     "",
                     f"{subject.alias} · {judgment.status} · RULES "
-                    + ", ".join(rule_alias[uid] for uid in judgment.rule_uids),
+                    + ", ".join(
+                        rule_alias_by_uid[uid] for uid in judgment.rule_uids
+                    ),
                     f"  INPUT · {safe_terminal_text(subject.content)}",
                     f"  PREDICTED · {safe_terminal_text(judgment.predicted or '(none)')}",
                     f"  EXPECTED · {safe_terminal_text(subject.expected or '(none)')}",
@@ -57,24 +59,43 @@ def render_conformance(report: ConformanceReport) -> str:
         lines.append(f"CONTEXT CONFORMANCE · {len(report.context_judgments)} RULES")
         for judgment in report.context_judgments:
             rule = rule_by_uid[judgment.rule_uid]
-            evidence = ", ".join(
-                subject_by_uid[uid].alias for uid in judgment.evidence_subject_uids
-            ) or "none"
+            lines.append(
+                f"{rule.alias} · {safe_terminal_text(rule.content)} · "
+                f"{judgment.status}"
+            )
+
+        rules_by_nonconforming_subject: dict[str, list[str]] = {}
+        for judgment in report.context_judgments:
+            alias = rule_alias_by_uid[judgment.rule_uid]
+            for subject_uid in judgment.nonconforming_subject_uids:
+                rules_by_nonconforming_subject.setdefault(subject_uid, []).append(alias)
+        if rules_by_nonconforming_subject:
             lines.extend(
                 [
                     "",
-                    f"{rule.alias} · {judgment.status}",
-                    f"  RULE · {safe_terminal_text(rule.content)}",
-                    f"  EVIDENCE · {evidence}",
-                    f"  WHY · {safe_terminal_text(judgment.reason)}",
+                    "NONCONFORMING CASES · "
+                    f"{len(rules_by_nonconforming_subject)}",
                 ]
             )
-        lines.extend(
-            [
-                "",
-                f"OUTSIDE RULE JUDGMENTS · {len(report.outside_subject_uids)} Memories",
-            ]
-        )
+            for subject in report.subjects:
+                aliases = rules_by_nonconforming_subject.get(subject.uid)
+                if aliases is None:
+                    continue
+                lines.append(
+                    f"[{subject.alias}] {safe_terminal_text(subject.content)} "
+                    f"[{', '.join(aliases)}]"
+                )
+        if report.outside_subject_uids:
+            outside_aliases = ", ".join(
+                subject_by_uid[uid].alias for uid in report.outside_subject_uids
+            )
+            lines.extend(
+                [
+                    "",
+                    "OUTSIDE RULE JUDGMENTS · "
+                    f"{len(report.outside_subject_uids)} Memories · {outside_aliases}",
+                ]
+            )
     lines.extend(["", f"ISSUES · {report.issue_count}", f"REPORT DIGEST · {report.digest}"])
     return "\n".join(lines)
 
