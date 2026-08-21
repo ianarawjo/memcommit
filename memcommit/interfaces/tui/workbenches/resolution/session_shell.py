@@ -1999,20 +1999,19 @@ def resolution_seeded_report_fragments(
         impact_controller=impact_controller,
         drafts=drafts,
     )
+    seeded_text = "\n".join(lines)
+    if report_fragments is not None and (
+        seeded_text == report_text or seeded_text.startswith(report_text + "\n")
+    ):
+        styled = [
+            (style, safe_terminal_text(text)) for style, text in report_fragments
+        ]
+        suffix = seeded_text[len(report_text) :]
+        if suffix:
+            styled.append(("", safe_terminal_text(suffix)))
+        return styled
     sections = _seeded_report_sections(lines)
     if not sections:
-        seeded_text = "\n".join(lines)
-        if report_fragments is not None and (
-            seeded_text == report_text or seeded_text.startswith(report_text + "\n")
-        ):
-            styled = [
-                (style, safe_terminal_text(text))
-                for style, text in report_fragments
-            ]
-            suffix = seeded_text[len(report_text) :]
-            if suffix:
-                styled.append(("", safe_terminal_text(suffix)))
-            return styled
         return [("", safe_terminal_text(seeded_text))]
     focused_section = max(0, min(focused_section, len(sections) - 1))
     draft_values = drafts or {}
