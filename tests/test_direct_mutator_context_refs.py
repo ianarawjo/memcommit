@@ -108,7 +108,6 @@ def test_chunk_preserves_unresolved_context_ref(isolated_store):
     result = runner.invoke(
         app,
         ["chunk", memories[0].uid[:8]],
-        input="y\n",
     )
 
     assert result.exit_code == 0, result.output

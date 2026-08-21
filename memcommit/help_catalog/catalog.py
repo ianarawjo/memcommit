@@ -100,7 +100,7 @@ _OPERATIONS = (
         "Mechanically split all splittable direct Memories in one Context, or one selected Memory, at configured sentence, clause, structural, literal, or size boundaries.",
         "Context direct Memories or one direct Memory -> ordered Memory chunks",
         ExecutionKind.DETERMINISTIC,
-        "Changes one Source Context after confirmation",
+        "Immediately changes one Source Context; Undo can restore the checkpointed split",
         "One exact Context; optional direct Memory selector",
     ),
     _operation(

@@ -242,14 +242,8 @@ def cmd(
             _preview_chunk(chunk_number, chunk_memory)
     typer.echo("─" * 56)
 
-    decision = typer.prompt(
-        "Apply? [y/n]", default="", show_default=False
-    ).strip().lower()
-    if decision not in ("y", "yes"):
-        annotate_command_outcome("CANCELLED")
-        typer.echo("Aborted — no changes made.")
-        raise typer.Exit(0)
-
+    # Chunk is one checkpointed, Undoable command, so invoking it is the
+    # approval boundary; only history-destroying deletion keeps a second prompt.
     split_records: list[dict[str, object]] = []
     for original, chunks in proposals:
         original_position = ctx.ordered_uids().index(original.uid)

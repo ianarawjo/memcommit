@@ -1,9 +1,9 @@
 # Command-attempt outcome capture log
 
-This ordered capture reproduces the concise `mem log --operations` outcome
-contract against an isolated real CLI store. Normal success has no status
-label. Only a proven no-change completion, a whole-command cancellation, and
-an unsuccessful lifecycle are called out.
+This ordered capture reproduces immediate checkpointed Chunk plus the concise
+`mem log --operations` outcome contract against an isolated real CLI store.
+Normal success has no status label. Only a proven no-change completion and an
+unsuccessful lifecycle are called out in this path.
 
 ## Reproduction frame
 
@@ -22,21 +22,22 @@ an unsuccessful lifecycle are called out.
 - Renderer: actual color-preserving PTY bytes replayed through `pyte` and drawn
   at the full `1832×1124` Menlo terminal canvas. Raw `.typescript` and plain
   `.txt` evidence are retained beside each PNG.
-- Fixture: `mem init outcome-demo`, one two-sentence Memory used for reviewed
-  cancellation, and one indivisible Memory used for the no-change result.
-- Durable-state check: the complete set of fixture `context.json` bytes is
-  identical before and after every observed no-change, cancellation, failure,
-  and Log command. Only the Profile command-attempt ledger changes.
+- Fixture: `mem init outcome-demo`, one two-sentence Memory used for immediate
+  Chunk application, and one indivisible Memory used for the no-change result.
+- Durable-state check: the no-change command preserves the complete fixture
+  `context.json` bytes; immediate Chunk changes them once; the following List,
+  parser failure, and Log commands preserve the exact post-Chunk bytes. Only
+  the Profile command-attempt ledger changes outside that one Chunk checkpoint.
 
 ## Ordered evidence
 
 | Image | Exact command / preceding input | Visible state | Durable Context mutation |
 | --- | --- | --- | --- |
 | `01-chunk-no-change.png` | `mem chunk SHORT_UID` | One indivisible Memory produces one chunk and reports `no changes made` | None |
-| `02-chunk-cancel-review.png` | `mem chunk MULTI_SENTENCE_UID` | Two proposed chunks and the exact `Apply?` decision boundary | None |
-| `03-chunk-cancelled.png` | Previous state, then `n` + Enter | `Aborted — no changes made` receipt | None |
+| `02-chunk-immediate-apply.png` | `mem chunk MULTI_SENTENCE_UID` | Two visible proposed chunks followed directly by the success receipt; no y/n prompt | One checkpointed split |
+| `03-chunk-read-only-verification.png` | `mem list` | Both replacement Memories are visible in the Context | None |
 | `04-chunk-parser-failure.png` | `mem chunk --method invalid-method` | Typer rejects the invalid enum before `chunk.cmd()` executes; exit 2 | None |
-| `05-operation-log-outcomes.png` | `mem log --operations --limit 20` | Normal `init`/`add` rows carry no positive label; Chunk rows show only `NO CHANGE`, `CANCELLED`, and `FAILED` | None |
+| `05-operation-log-outcomes.png` | `mem log --operations --limit 20` | Normal successful `init`/`add`/`chunk` rows carry no positive label; exceptional Chunk rows show `NO CHANGE` and `FAILED` | None |
 
 The ordered raw streams are required to contain an ANSI foreground style, and
 the final Log stream must exclude the alternate-screen sequence. The

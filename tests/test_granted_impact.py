@@ -941,7 +941,6 @@ def test_granted_chunk_requires_create_and_delete_before_authority_save(
     denied = runner.invoke(
         app,
         ["chunk", original.uid, "--method", "paragraphs"],
-        input="y\n",
     )
 
     assert denied.exit_code == 1
@@ -969,7 +968,6 @@ def test_granted_chunk_and_clear_apply_to_authority_with_effect_permissions(
     chunked = runner.invoke(
         app,
         ["chunk", original.uid, "--method", "paragraphs"],
-        input="y\n",
     )
 
     assert chunked.exit_code == 0, chunked.output + chunked.stderr

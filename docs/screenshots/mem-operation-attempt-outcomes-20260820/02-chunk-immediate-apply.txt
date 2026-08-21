@@ -1,10 +1,12 @@
 LIVE COLOR PTY · 52 180                                                                                                                                                             
                                                                                                                                                                                     
-$ mem chunk 30d0e68d                                                                                                                                                                
+$ mem chunk e52da93c                                                                                                                                                                
                                                                                                                                                                                     
-Proposed split of [30d0e68d] in Context 'outcome-demo' → 2 chunks (method=sentences)                                                                                                
+Proposed split of [e52da93c] in Context 'outcome-demo' → 2 chunks (method=sentences)                                                                                                
 ────────────────────────────────────────────────────────                                                                                                                            
    1  The first sentence is retained.                                                                                                                                               
    2  The second sentence is retained.                                                                                                                                              
 ────────────────────────────────────────────────────────                                                                                                                            
-Apply? [y/n]:
+Done — 2 memories added in 'outcome-demo'.                                                                                                                                          
+                                                                                                                                                                                    
+CHUNK APPLY COMPLETE · EXIT 0

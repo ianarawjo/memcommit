@@ -13,19 +13,21 @@ already-ingested Context into smaller reviewable units.
 
 Chunk has one Context mutation boundary and two target ranges:
 
-- `mem chunk` reviews every splittable directly owned Memory in the current
+- `mem chunk` splits every splittable directly owned Memory in the current
   Context;
 - `mem chunk --context CONTEXT` does the same in one explicit local Context or
   granted view;
-- `mem chunk MEMORY_SELECTOR` reviews one directly owned Memory in the current
+- `mem chunk MEMORY_SELECTOR` splits one directly owned Memory in the current
   Context; and
 - `mem chunk MEMORY_SELECTOR --context CONTEXT` selects one direct Memory in
   the explicit Context.
 
 The Context operand is resolved once against the current-Context snapshot. A
-Context-scoped run freezes one ordered proposal, displays the canonical public
-target before approval, and publishes every replacement in one Context save
-and checkpoint. Memories that produce zero or one chunk are retained with
+Context-scoped run freezes one ordered split plan, displays the canonical public
+target, and immediately publishes every replacement in one Context save and
+checkpoint. The command invocation is the complete approval boundary; the
+displayed plan is useful effect visibility, not a second decision prompt.
+Memories that produce zero or one chunk are retained with
 their existing UID and position. Embedded Contexts, immutable Memory
 references, query-only sources, and descendants are not traversed: their
 presence in the visible Context does not transfer ownership to Chunk.
@@ -44,7 +46,7 @@ Three independent refinements can be added to any method: `--break-on` names
 literal punctuation or symbol boundaries, `--max-chars` sets a hard
 Unicode-code-point ceiling, and `--min-chars` requests a preferred packing
 floor. A short chunk is retained when absorbing it would cross the hard
-maximum; the preview reports each such minimum miss before approval. These
+maximum; the preview reports each such minimum miss before publication. These
 controls are explicit because no one size or punctuation set is a safe
 universal semantic unit.
 
@@ -72,12 +74,20 @@ legacy Add or Import path already enforces paragraph ingestion. Until all
 ingestion adapters share that contract, an explicit `--method paragraphs`
 remains useful for older multi-paragraph Memories.
 
-## Authority, approval, and history
+## Authority, execution, and history
 
-Loading and proposal construction require the target's existing mutation
-route and do not write state. Apply revalidates both `DELETE` and `CREATE`,
-because each split removes one direct Memory and creates multiple replacements.
-One negative approval or any pre-save failure publishes no partial split.
+Loading and split-plan construction require the target's existing mutation
+route and do not write state. Publication revalidates both `DELETE` and
+`CREATE`, because each split removes one direct Memory and creates multiple
+replacements. Any pre-save failure publishes no partial split.
+
+Chunk no longer asks `Apply? [y/n]`. Like Clear, it is a deterministic,
+single-Context command whose successful effect is captured as one checkpoint
+and can be restored with `mem undo`, then reapplied with `mem redo`. Keeping a
+second yes/no prompt would make interactive and scripted invocation differ
+without adding a distinct judgment or recovery boundary. Permanent deletion
+remains different because it destroys the history needed for Undo and retains
+its separate confirmation contract.
 
 Single-Memory checkpoints retain their historical `uid` field for compatible
 Trace and restoration. Context-scoped checkpoints record every exact Source

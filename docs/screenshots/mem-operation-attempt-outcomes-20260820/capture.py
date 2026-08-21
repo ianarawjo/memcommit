@@ -10,7 +10,6 @@ import shlex
 import subprocess
 import sys
 import tempfile
-import time
 
 import pexpect
 
@@ -105,7 +104,7 @@ def _run(environment: dict[str, str], *arguments: str) -> str:
 
 def _fixture(environment: dict[str, str]) -> tuple[str, str]:
     _run(environment, "init", "outcome-demo")
-    cancellable = _run(
+    splittable = _run(
         environment,
         "add",
         "The first sentence is retained. The second sentence is retained.",
@@ -118,7 +117,7 @@ def _fixture(environment: dict[str, str]) -> tuple[str, str]:
             raise RuntimeError(f"Could not recover fixture Memory UID: {output!r}")
         return match.group(1)
 
-    return uid(cancellable), uid(unchanged)
+    return uid(splittable), uid(unchanged)
 
 
 def _context_bytes(store_dir: Path) -> dict[str, bytes]:
@@ -176,47 +175,6 @@ def _capture_complete(
     return raw
 
 
-def _capture_cancel(
-    memory_uid: str,
-    *,
-    environment: dict[str, str],
-) -> tuple[str, str]:
-    command = shlex.join(("mem", "chunk", memory_uid))
-    completion = "CHUNK CANCEL COMPLETE"
-    recorder = _BASE._StreamRecorder()
-    child = pexpect.spawn(
-        "/bin/zsh",
-        ["-f", "-c", _shell_command(command, completion)],
-        cwd=str(ROOT),
-        env=environment,
-        encoding="utf-8",
-        codec_errors="replace",
-        timeout=15,
-        dimensions=(ROWS, COLUMNS),
-    )
-    child.logfile_read = recorder
-    try:
-        child.expect_exact("Apply? [y/n]:")
-        deadline = time.monotonic() + 0.25
-        while time.monotonic() < deadline:
-            try:
-                child.read_nonblocking(65_536, timeout=0.05)
-            except pexpect.TIMEOUT:
-                pass
-        _BASE._snapshot(recorder, "02-chunk-cancel-review")
-        review_raw = recorder.getvalue()
-
-        child.sendline("n")
-        child.expect(completion)
-        child.expect(pexpect.EOF)
-    finally:
-        if child.isalive():
-            child.close(force=True)
-    assert child.exitstatus == 0, (child.exitstatus, child.signalstatus)
-    _BASE._snapshot(recorder, "03-chunk-cancelled")
-    return review_raw, recorder.getvalue()
-
-
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(
@@ -232,7 +190,7 @@ def main() -> None:
             store_dir=store_dir,
             profile_dir=temporary_root / "profiles",
         )
-        cancellable_uid, unchanged_uid = _fixture(environment)
+        splittable_uid, unchanged_uid = _fixture(environment)
         before = _context_bytes(store_dir)
 
         no_change = _capture_complete(
@@ -241,8 +199,19 @@ def main() -> None:
             stem="01-chunk-no-change",
             environment=environment,
         )
-        review, cancelled = _capture_cancel(
-            cancellable_uid,
+        assert before == _context_bytes(store_dir)
+        applied = _capture_complete(
+            shlex.join(("mem", "chunk", splittable_uid)),
+            completion="CHUNK APPLY COMPLETE",
+            stem="02-chunk-immediate-apply",
+            environment=environment,
+        )
+        after_apply = _context_bytes(store_dir)
+        assert before != after_apply
+        verification = _capture_complete(
+            shlex.join(("mem", "list")),
+            completion="CHUNK VERIFICATION COMPLETE",
+            stem="03-chunk-read-only-verification",
             environment=environment,
         )
         failed = _capture_complete(
@@ -251,6 +220,7 @@ def main() -> None:
             stem="04-chunk-parser-failure",
             environment=environment,
         )
+        assert after_apply == _context_bytes(store_dir)
         operation_log = _capture_complete(
             shlex.join(("mem", "log", "--operations", "--limit", "20")),
             completion="OPERATION LOG COMPLETE",
@@ -258,17 +228,18 @@ def main() -> None:
             environment=environment,
         )
 
-        after = _context_bytes(store_dir)
-        assert before == after
+        assert after_apply == _context_bytes(store_dir)
         assert "no changes made" in no_change
-        assert "Apply?" in review
-        assert "Aborted" in cancelled
+        assert "Apply?" not in applied
+        assert "Done" in applied
+        assert "The first sentence is retained." in verification
+        assert "The second sentence is retained." in verification
         assert "Invalid value" in failed
-        for label in ("NO CHANGE", "CANCELLED", "FAILED"):
+        for label in ("NO CHANGE", "FAILED"):
             assert label in operation_log
-        for hidden in ("COMPLETED", "APPLIED", "NOT DISPATCHED"):
+        for hidden in ("COMPLETED", "APPLIED", "CANCELLED", "NOT DISPATCHED"):
             assert hidden not in operation_log
-        color_evidence = no_change + review + cancelled + failed + operation_log
+        color_evidence = no_change + applied + verification + failed + operation_log
         assert re.search(
             r"\x1b\[(?:3[0-7]|9[0-7]|38;(?:2|5);)",
             color_evidence,

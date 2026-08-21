@@ -1,0 +1,11 @@
+LIVE COLOR PTY · 52 180
+
+$ mem list
+[1mContext: outcome-demo[0m
+  3 items
+
+  [memory 44c8f3e4] The first sentence is retained.
+  [memory 4c994e9b] The second sentence is retained.
+  [memory a80638e5] One indivisible clause
+
+CHUNK VERIFICATION COMPLETE · EXIT 0

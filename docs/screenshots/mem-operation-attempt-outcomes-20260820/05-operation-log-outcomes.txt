@@ -2,12 +2,13 @@ LIVE COLOR PTY · 52 180
                                                                                                                                                                                     
 $ mem log --operations --limit 20                                                                                                                                                   
 Operation attempts · recent first                                                                                                                                                   
-  [4c5fe4e7] 2026-08-20 14:15  chunk           FAILED · 0.0s                                                                                                                        
+  [c5f9836d] 2026-08-21 14:34  chunk           FAILED · 0.0s                                                                                                                        
       BadParameter · exit 2                                                                                                                                                         
-  [12aa8d4d] 2026-08-20 14:15  chunk           CANCELLED · 0.4s                                                                                                                     
-  [c043e6b1] 2026-08-20 14:15  chunk           NO CHANGE · 0.0s                                                                                                                     
-  [68832905] 2026-08-20 14:15  add             0.0s                                                                                                                                 
-  [683116d7] 2026-08-20 14:15  add             0.0s                                                                                                                                 
-  [df26431c] 2026-08-20 14:15  init            0.0s                                                                                                                                 
+  [4f014d79] 2026-08-21 14:34  list            0.0s                                                                                                                                 
+  [c7f333ae] 2026-08-21 14:34  chunk           0.0s                                                                                                                                 
+  [54bdcb9f] 2026-08-21 14:34  chunk           NO CHANGE · 0.0s                                                                                                                     
+  [9b4ace14] 2026-08-21 14:34  add             0.0s                                                                                                                                 
+  [ca621465] 2026-08-21 14:34  add             0.0s                                                                                                                                 
+  [87042511] 2026-08-21 14:34  init            0.0s                                                                                                                                 
                                                                                                                                                                                     
 OPERATION LOG COMPLETE · EXIT 0

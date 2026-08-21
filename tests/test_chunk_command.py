@@ -28,9 +28,10 @@ def test_chunk_without_selector_chunks_current_context_by_sentences(isolated_sto
     context = store.load_current_direct()
     first, unchanged, third = _direct_memories(store, context.name)
 
-    result = runner.invoke(app, ["chunk"], input="y\n")
+    result = runner.invoke(app, ["chunk"])
 
     assert result.exit_code == 0, result.output + result.stderr
+    assert "Apply?" not in result.output
     assert "2 direct Memories / 4 chunks (method=sentences)" in result.output
     after = _direct_memories(store, context.name)
     assert [memory.content for memory in after] == [
@@ -75,7 +76,6 @@ def test_chunk_context_option_does_not_change_or_mutate_current_context(
     result = runner.invoke(
         app,
         ["chunk", "--context", target.name],
-        input="y\n",
     )
 
     assert result.exit_code == 0, result.output + result.stderr
@@ -102,7 +102,6 @@ def test_chunk_one_memory_uses_sentence_default_in_explicit_context(isolated_sto
     result = runner.invoke(
         app,
         ["chunk", selected.uid[:8], "--context", target.name],
-        input="y\n",
     )
 
     assert result.exit_code == 0, result.output + result.stderr
@@ -117,7 +116,7 @@ def test_chunk_one_memory_uses_sentence_default_in_explicit_context(isolated_sto
     assert other.uid == after[-1].uid
 
 
-def test_chunk_context_abort_publishes_no_partial_split(isolated_store):
+def test_chunk_context_applies_immediately_as_one_undoable_command(isolated_store):
     store = MemoryStore()
     context = ops.init("notes")
     originals = (
@@ -127,13 +126,27 @@ def test_chunk_context_abort_publishes_no_partial_split(isolated_store):
     store.save(context)
     store.set_current(context.name)
 
-    result = runner.invoke(app, ["chunk"], input="n\n")
+    result = runner.invoke(app, ["chunk"])
 
     assert result.exit_code == 0, result.output + result.stderr
-    assert "Aborted — no changes made." in result.output
+    assert "Apply?" not in result.output
     after = _direct_memories(store, context.name)
-    assert [memory.uid for memory in after] == [memory.uid for memory in originals]
-    assert store.list_checkpoints(context.name) == []
+    assert [memory.content for memory in after] == ["One.", "Two.", "Three.", "Four."]
+    assert len(store.list_checkpoints(context.name)) == 1
+
+    undone = runner.invoke(app, ["undo"])
+    assert undone.exit_code == 0, undone.output + undone.stderr
+    restored = _direct_memories(store, context.name)
+    assert [memory.uid for memory in restored] == [memory.uid for memory in originals]
+
+    redone = runner.invoke(app, ["redo"])
+    assert redone.exit_code == 0, redone.output + redone.stderr
+    assert [memory.content for memory in _direct_memories(store, context.name)] == [
+        "One.",
+        "Two.",
+        "Three.",
+        "Four.",
+    ]
 
 
 def test_chunk_context_records_literal_boundary_for_trace(isolated_store):
@@ -145,7 +158,6 @@ def test_chunk_context_records_literal_boundary_for_trace(isolated_store):
     result = runner.invoke(
         app,
         ["chunk", "--break-on", ","],
-        input="y\n",
     )
 
     assert result.exit_code == 0, result.output + result.stderr
@@ -200,7 +212,6 @@ def test_chunk_clauses_break_on_and_character_limits_are_applied_and_recorded(
             "--max-chars",
             "18",
         ],
-        input="y\n",
     )
 
     assert result.exit_code == 0, result.output + result.stderr

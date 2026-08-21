@@ -233,8 +233,8 @@ class TestChunkWorkflow:
         assert len(ctx.memories) == 1
         original_uid = next(iter(ctx.memories))
 
-        # Chunk by paragraphs, confirm the split (input "y" to the prompt).
-        r = mem("chunk", original_uid[:8], "--method", "paragraphs", input="y\n")
+        # Chunk is immediate because its checkpoint supports Undo/Redo.
+        r = mem("chunk", original_uid[:8], "--method", "paragraphs")
         assert r.exit_code == 0
         assert "3 memories added" in r.output
 
@@ -247,7 +247,7 @@ class TestChunkWorkflow:
         assert any("ATP" in c for c in contents)
         assert any("maternal" in c for c in contents)
 
-    def test_chunk_aborted_leaves_context_unchanged(self, isolated_store):
+    def test_chunk_does_not_require_confirmation(self, isolated_store):
         mem("init", "notes")
         mem("add", "Para one.\n\nPara two.\n\nPara three.")
 
@@ -255,13 +255,13 @@ class TestChunkWorkflow:
         ctx = store.load_current()
         uid = next(iter(ctx.memories))
 
-        r = mem("chunk", uid[:8], "--method", "paragraphs", input="n\n")
+        r = mem("chunk", uid[:8], "--method", "paragraphs")
         assert r.exit_code == 0
-        assert "Aborted" in r.output
+        assert "Apply?" not in r.output
 
         ctx2 = store.load_current()
-        assert len(ctx2.memories) == 1
-        assert uid in ctx2.memories
+        assert len(ctx2.memories) == 3
+        assert uid not in ctx2.memories
 
 
 # ---------------------------------------------------------------------------

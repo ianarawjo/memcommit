@@ -469,7 +469,6 @@ def test_chunk_replaces_a_memory_at_its_original_order_position(isolated_store):
     result = runner.invoke(
         app,
         ["chunk", original.uid[:8], "--method", "paragraphs"],
-        input="y\n",
     )
 
     assert result.exit_code == 0
