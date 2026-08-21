@@ -208,15 +208,13 @@ def main() -> None:
     normalized_memory = " ".join(memory_text.split())
     if "PTY · 180×52" not in context_text or "PTY · 180×52" not in memory_text:
         raise RuntimeError("The multi-source captures did not retain 180×52.")
-    if any(
-        f"[CONTEXT context-{suffix}]" not in normalized_context
-        for suffix in ("a", "b", "c")
+    if "[TARGETS: CONTEXT context-a, context-b, context-c]" not in normalized_context:
+        raise RuntimeError("The Context target group is incomplete.")
+    if (
+        "[TARGETS: MEMORY 11111111, 22222222, 33333333]" not in normalized_memory
+        or "CONTEXT" in normalized_memory.split("SOURCE KIND", 1)[0]
     ):
-        raise RuntimeError("The Context capture omitted a typed operand.")
-    if normalized_memory.count("[MEMORY ") != 3 or "[CONTEXT " in normalized_memory:
-        raise RuntimeError("The direct-Memory capture mislabeled an operand.")
-    if context_text.count("↔") != 2 or memory_text.count("↔") != 2:
-        raise RuntimeError("A three-operand relation separator is missing.")
+        raise RuntimeError("The direct-Memory target group is incorrect.")
     if any(
         "FIT RECEIPTS · 0" not in text or "READ-ONLY VERIFICATION · True" not in text
         for text in (context_text, memory_text)

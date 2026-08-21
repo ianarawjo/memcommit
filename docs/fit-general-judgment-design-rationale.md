@@ -170,19 +170,22 @@ mem fit "[A]" --memory [UID_OR_PREFIX] --context [CONTEXT]
 
 It is read-only and process-local. It creates no Context, Memory, Ground, or
 receipt. Standalone output uses an explicit operation-wide grammar:
-`FIT · YES|MAY|NO · operand ↔ operand [↔ operand ...]`. The leading verdict is
-the result of the complete n-ary operation, not the status of its first pair.
+`FIT · YES|MAY|NO · [TARGETS: TYPE value, value, TYPE value ...]`. The leading
+verdict is the result of the complete n-ary operation, not the status of the
+first listed target.
 
 Fit always returns a compact terminal receipt; it has no standalone Viewer or
-`--tui` route. Every general result is one logical operator line. Literal
-operands render as `[PROPOSITION pN]`, direct selections as
-`[MEMORY <uid-prefix>]`, and Context-expanded operands as
-`[CONTEXT <public-name>] [MEMORY <uid-prefix>]`, each followed by its exact
-body. `↔` separates operands in the complete Fit frame; it is presentation of
-the n-ary compatibility operator, not an assertion that every pair is
-equivalent. The typed result still retains the reason, material aliases, and
-both required ordinary readings for `MAY` even though the small receipt does
-not expand them. In a color-capable TTY, only the typed `YES`, `MAY`, or `NO`
+`--tui` route. Every general result is one logical target-summary line. One
+outer `[TARGETS: ...]` groups selected Context names, direct Memory UID
+prefixes, and literal proposition aliases by type. A type label starts a group;
+comma-separated values belong to it until the next type label. Contexts are
+listed once even when they expand to several direct Memories, while directly
+selected Memories retain their individual UID prefixes. The compact line
+therefore does not repeat exact bodies, Context-to-Memory provenance, or the
+original interleaved argv order. The typed result still retains every expanded
+Memory origin, exact proposition body, reason, material alias, and both
+required ordinary readings for `MAY`. In a color-capable TTY, only the typed
+`YES`, `MAY`, or `NO`
 token uses its shared judgment role: green, yellow, or red respectively.
 Operation chrome, punctuation, source labels, Context/Ground names, counts,
 and Memory bodies remain neutral. `--plain` remains accepted for compatibility
@@ -231,9 +234,10 @@ available through explicit `--context`.
 Every selected Context retains its exact public name, Context UID, and either
 its complete direct-record digest or the content digest of each explicitly
 selected Memory. Those origins support authorization, exact revalidation, and
-the public operand labels; the compact general receipt projects the complete
-frozen operand frame in order. A source change during inference prevents a
-result from being returned. Effectively
+the grouped public target labels. The typed result retains the complete frozen
+operand frame in order, while the compact receipt groups only source identities
+by category. A source change during inference prevents a result from being
+returned. Effectively
 READ-granted inputs additionally require `DERIVE`, and
 `COMBINE` when another ownership domain or caller-supplied literal participates;
 the Grant binding and exact selected content are revalidated before the
@@ -254,7 +258,7 @@ Legacy exact-output Grounds continue through deterministic conformance replay
 and retain their historic receipt vocabulary for compatibility.
 
 The Ground adapter projects the complete stored analysis as a small receipt:
-one `FIT · YES|MAY|NO|STALE · [GROUND CONTEXT <name>] · <fitted>/<total>` whole-operation
+one `FIT · YES|MAY|NO|STALE · [TARGETS: GROUND <name>] · <fitted>/<total>` whole-operation
 summary followed only by current non-fitting checks.
 A Rule–Example issue is exactly one line: `! NO · [RULE r1] [MEMORY <uid-prefix>] <content> ↔ [EXAMPLE e3] [MEMORY <uid-prefix>] <content>`.
 It has no alias-only heading, blank separator, or expanded `WHY`; the immutable

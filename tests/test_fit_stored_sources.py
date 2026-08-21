@@ -147,9 +147,7 @@ def test_stored_fit_combines_literal_memory_and_context_sources(isolated_store):
             propositions=(
                 FitProposition("p1", "Visitors use the lobby.", "PROPOSITION"),
             ),
-            memory_sources=(
-                FitMemorySourceRequest(current_memories[0].uid[:8]),
-            ),
+            memory_sources=(FitMemorySourceRequest(current_memories[0].uid[:8]),),
             context_locators=(other.name,),
         ),
         store=store,
@@ -212,9 +210,7 @@ def test_mem_fit_accepts_multiple_current_memory_selectors(
 
     assert result.exit_code == 0, result.output
     assert result.output == (
-        f"FIT · YES · [MEMORY {memories[0].uid[:8]}] "
-        "The lobby closes at five. ↔ "
-        f"[MEMORY {memories[1].uid[:8]}] The side entrance remains open.\n"
+        f"FIT · YES · [TARGETS: MEMORY {memories[0].uid[:8]}, {memories[1].uid[:8]}]\n"
     )
     question = provider.payload["questions"][0]
     assert [item["content"] for item in question["propositions"]] == [
@@ -254,6 +250,10 @@ def test_mem_fit_auto_resolves_memory_context_and_literal_in_operand_order(
     )
 
     assert result.exit_code == 0, result.output
+    assert result.output == (
+        f"FIT · YES · [TARGETS: CONTEXT {policies.name}, "
+        f"MEMORY {current_memories[0].uid[:8]}, PROPOSITION p1]\n"
+    )
     question = provider.payload["questions"][0]
     assert [item["content"] for item in question["propositions"]] == [
         current_memories[0].content,
@@ -287,6 +287,9 @@ def test_mem_fit_text_prefix_forces_literal_when_context_name_collides(
     )
 
     assert result.exit_code == 0, result.output
+    assert result.output == (
+        f"FIT · YES · [TARGETS: MEMORY {memories[0].uid[:8]}, PROPOSITION p1]\n"
+    )
     question = provider.payload["questions"][0]
     assert [item["content"] for item in question["propositions"]] == [
         "policies",
@@ -328,6 +331,10 @@ def test_mem_fit_auto_qualified_memory_uses_relative_context_locator(
     )
 
     assert result.exit_code == 0, result.output
+    assert result.output == (
+        f"FIT · YES · [TARGETS: MEMORY {current_memories[0].uid[:8]}, "
+        f"{sibling_memories[0].uid[:8]}]\n"
+    )
     question = provider.payload["questions"][0]
     assert [item["content"] for item in question["propositions"]] == [
         current_memories[0].content,
@@ -380,6 +387,7 @@ def test_mem_fit_explicit_context_preserves_uid_shaped_legacy_name(
     )
 
     assert result.exit_code == 0, result.output
+    assert result.output == "FIT · YES · [TARGETS: CONTEXT deadbeef]\n"
     question = provider.payload["questions"][0]
     assert [item["content"] for item in question["propositions"]] == [
         memory.content for memory in memories
@@ -426,6 +434,10 @@ def test_mem_fit_accepts_multiple_contexts_and_relative_memory_qualifier(
     )
 
     assert result.exit_code == 0, result.output
+    assert result.output == (
+        f"FIT · YES · [TARGETS: CONTEXT {third.name}, {fourth.name}, "
+        f"MEMORY {sibling_memories[0].uid[:8]}]\n"
+    )
     question = provider.payload["questions"][0]
     assert [item["content"] for item in question["propositions"]] == [
         sibling_memories[0].content,

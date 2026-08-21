@@ -1,6 +1,6 @@
 $ mem fit --ground ticker
 PTY · 180×52
-FIT · [38;2;237;135;150m[1mNO[0m · [GROUND CONTEXT ticker] · 1/3
+FIT · [38;2;237;135;150m[1mNO[0m · [TARGETS: GROUND ticker] · 1/3
 ? [38;2;238;212;159m[1mMAY[0m · [RULE r1] [MEMORY 11111111] Use one stable abbreviation. ↔ [EXAMPLE e2] [MEMORY 33333333] Axiom AI Technologies may be AAT or AAIT.
 ! [38;2;237;135;150m[1mNO[0m · [RULE r1] [MEMORY 11111111] Use one stable abbreviation. ↔ [EXAMPLE e3] [MEMORY 44444444] One exact symbol must be both AAT and AXAI.
 FITTING EXAMPLE e1 EXPANDED · NO

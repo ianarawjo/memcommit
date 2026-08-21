@@ -1,6 +1,6 @@
 $ mem fit --ground ticker --receipt 00000000-0000-0000-0000-000000000005                                                                                                            
 PTY · 180×52                                                                                                                                                                        
-FIT · STALE · [GROUND CONTEXT ticker] · 1/3                                                                                                                                         
+FIT · STALE · [TARGETS: GROUND ticker] · 1/3                                                                                                                                        
 FITTING EXAMPLE e1 EXPANDED · NO                                                                                                                                                    
 PROJECTION FIXTURE DURABLE WRITES · 0                                                                                                                                               
 CAPTURE GATE · PRESS V

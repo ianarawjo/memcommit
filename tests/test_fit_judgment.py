@@ -196,10 +196,7 @@ def test_mem_fit_accepts_two_literal_propositions_and_prints_yes(
 
     assert result.exit_code == 0, result.output
     assert "\x1b[" not in result.output
-    assert result.output == (
-        "FIT · YES · [PROPOSITION p1] The main entrance closes. ↔ "
-        "[PROPOSITION p2] The staff entrance opens.\n"
-    )
+    assert result.output == "FIT · YES · [TARGETS: PROPOSITION p1, p2]\n"
 
 
 def test_mem_fit_requires_two_operands_and_explicit_ground_mode() -> None:

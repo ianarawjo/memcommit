@@ -392,7 +392,10 @@ def main() -> None:
     }
     if not canvases or any("PTY · 180×52" not in text for text in canvases.values()):
         raise RuntimeError("A Fit receipt capture did not retain the 180×52 PTY.")
-    if "FIT · YES" not in canvases["02-yes-receipt.txt"]:
+    if (
+        "FIT · YES · [TARGETS: PROPOSITION p1, p2]"
+        not in canvases["02-yes-receipt.txt"]
+    ):
         raise RuntimeError("The compact YES receipt was not captured.")
     if (
         styled_judgment("YES", SemanticColorRole.JUDGMENT_YES)
@@ -400,7 +403,7 @@ def main() -> None:
     ):
         raise RuntimeError("The shared green YES token was not captured.")
     issue_text = canvases["03-issue-only-ground-receipt.txt"]
-    if "FIT · NO · [GROUND CONTEXT ticker] · 1/3" not in issue_text:
+    if "FIT · NO · [TARGETS: GROUND ticker] · 1/3" not in issue_text:
         raise RuntimeError("The whole Ground verdict was not captured.")
     if "? MAY" not in issue_text or "! NO" not in issue_text:
         raise RuntimeError("The issue-only Ground receipt was not captured.")
@@ -415,11 +418,11 @@ def main() -> None:
     ):
         raise RuntimeError("The Ground issue receipt omitted one relation side.")
     repeated_text = canvases["05-repeated-operands-fit-yes.txt"]
-    if "FIT · YES" not in repeated_text or "↔" not in repeated_text:
-        raise RuntimeError("Repeated Fit operands did not produce an operator result.")
+    if "[TARGETS: CONTEXT fit/current, MEMORY " not in repeated_text:
+        raise RuntimeError("The mixed Fit target groups were not captured.")
     no_text = canvases["06-general-no-relation-receipt.txt"]
-    if "FIT · NO · [PROPOSITION p1]" not in no_text:
-        raise RuntimeError("The general NO receipt omitted one relation side.")
+    if "FIT · NO · [TARGETS: PROPOSITION p1, p2]" not in no_text:
+        raise RuntimeError("The general NO target summary was not captured.")
     if (
         styled_judgment("NO", SemanticColorRole.JUDGMENT_NO)
         not in streams["06-general-no-relation-receipt.typescript"]
@@ -429,8 +432,8 @@ def main() -> None:
     if "STALE" not in stale_stream or "\x1b[" in stale_stream:
         raise RuntimeError("The STALE receipt must remain neutral and ANSI-free.")
     three_text = canvases["07-three-context-operands.txt"]
-    if three_text.count("[CONTEXT context-") != 3 or three_text.count("↔") != 2:
-        raise RuntimeError("The three-operand Fit receipt was not captured.")
+    if "[TARGETS: CONTEXT context-a, context-b, context-c]" not in three_text:
+        raise RuntimeError("The three-Context target summary was not captured.")
 
 
 if __name__ == "__main__":

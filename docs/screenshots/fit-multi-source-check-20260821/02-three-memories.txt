@@ -1,6 +1,6 @@
 $ mem fit 11111111 22222222 33333333                                                                                                                                                
 PTY · 180×52                                                                                                                                                                        
-FIT · YES · [MEMORY 11111111] Use one stable public ticker per company. ↔ [MEMORY 22222222] Apple Inc. uses AAPL. ↔ [MEMORY 33333333] Axiom AI Technologies uses AXAI.              
+FIT · YES · [TARGETS: MEMORY 11111111, 22222222, 33333333]                                                                                                                          
 SOURCE KIND · 3 DIRECT MEMORIES · GROUND ABSENT                                                                                                                                     
 READ-ONLY VERIFICATION · True                                                                                                                                                       
 PROVIDER CALLS · 1                                                                                                                                                                  

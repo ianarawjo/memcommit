@@ -25,7 +25,7 @@ AUTO-FIT projection.
 | --- | --- | --- |
 | Domain/application | Role-neutral propositions, typed stored-source requests and origins, frozen background, YES/MAY/NO, complete-coverage decoding; Ground Rule–Example plus Context/vertical/peer graph checks, report projection, digests, and revision identity | Terminal detection, ANSI styling, keybindings, clipboard state, repair policy |
 | Runtime/infrastructure | Whole-frame Fit planning before provider construction; exact Memory/Context locator resolution from one current-name snapshot; direct ordinary-Memory expansion; READ/DERIVE/COMBINE authorization; exact source revalidation; Ground and direct bound-Context load/freeze, immutable receipt store, current/stale lookup | CLI receipt prose, descendant/reference widening, mutation |
-| CLI receipt adapter | One `FIT · VERDICT · operand ↔ operand ...` n-ary general line, and a `FIT · VERDICT · [GROUND CONTEXT name] · fraction` summary plus one line for each current `MAY/NO/N/A` Rule–Example relationship; fitting details remain omitted; only typed `YES/MAY/NO` tokens use shared judgment colors | Provider calls, Ground loading, receipt freshness decisions, full receipt expansion, operation-local palette values |
+| CLI receipt adapter | One `FIT · VERDICT · [TARGETS: TYPE value, value, TYPE value ...]` general summary, and a `FIT · VERDICT · [TARGETS: GROUND name] · fraction` summary plus one line for each current `MAY/NO/N/A` Rule–Example relationship; fitting details remain omitted; only typed `YES/MAY/NO` tokens use shared judgment colors | Provider calls, Ground loading, receipt freshness decisions, full receipt expansion, operation-local palette values |
 | Ground shell adapter | Process-local AUTO-FIT scheduling after durable revisions and how `·`, `✓`, `?`, `!`, and `◷` project onto Goal, Contexts, Rules, and Examples | Thread/executor lifecycle, a second Fit implementation, or automatic repair |
 | Shared background turn | Mutual exclusion, animation, ContextVar propagation, non-abandoning executor shutdown, deferred close | Ground refresh, Fit success text, provider selection, receipt semantics |
 
@@ -68,13 +68,15 @@ reserved for local Ground checks and the embedded compatibility projection:
 - `!`: the current receipt reports `CONTRADICTS`;
 - `◷`: a receipt exists but no longer describes the current Ground revision.
 
-The ANSI-free output contract is terminal-independent. Every general result prints exactly
-one logical line: `FIT · VERDICT · operand ↔ operand [↔ operand ...]`. Each
-operand includes its typed literal, Memory, or Context-plus-Memory label and
-exact body. The arrow is the n-ary operator separator, not a pairwise
-equivalence claim. Reasons, material ids, and split `MAY` readings remain in
-the typed result. Ground Fit prints
-`FIT · VERDICT · [GROUND CONTEXT <name>] · <fitted>/<total>` as its whole-operation
+The ANSI-free output contract is terminal-independent. Every general result
+prints exactly one logical line:
+`FIT · VERDICT · [TARGETS: TYPE value, value, TYPE value ...]`. Context names,
+direct Memory UID prefixes, and literal aliases are grouped in stable type
+order. Context-expanded Memory identities, exact bodies, source associations,
+original interleaving, reasons, material ids, and split `MAY` readings remain
+in the typed result rather than repeating in the compact summary. Ground Fit
+prints
+`FIT · VERDICT · [TARGETS: GROUND <name>] · <fitted>/<total>` as its whole-operation
 summary; each current `MAY`, `NO`, or legacy `N/A` Rule–Example check adds
 exactly one line: `[RULE alias] [MEMORY <uid-prefix>] <content> ↔ [EXAMPLE alias] [MEMORY <uid-prefix>] <content>`.
 There are no blank separators or expanded reasons; the immutable receipt
@@ -99,7 +101,7 @@ retain the exact labels, order, and punctuation; there is no `--tui` route.
    peer check receives exactly one finding in frozen order.
 5. Publication fails if the Ground revision/digest or any bound Context
    UID/digest changed after freezing.
-6. General output is exactly one n-ary operator line for every verdict. Ground
+6. General output is exactly one grouped target line for every verdict. Ground
    output is one operation-wide `FIT` summary plus one line per current
    Rule–Example issue; `--plain` suppresses color without changing that layout.
 7. Ground's embedded run and standalone Fit use the same application/runtime
@@ -209,11 +211,11 @@ Revised 2026-08-21:
 
 - the standalone semantic Viewer, clipboard projections, and `--tui` route were
   removed because Fit is detection, not a review session;
-- receipt tests prove one operation-wide `FIT` verdict, complete two- and
-  three-operand general projection, both visible sides for Ground issues, and
+- receipt tests prove one operation-wide `FIT` verdict, grouped literal,
+  Memory, and Context target summaries, both visible sides for Ground issues, and
   stale suppression of old details;
 - `docs/screenshots/fit-compact-receipt-20260821` records provider progress,
-  compact success, n-ary general and Ground issues, stale, and repeated stored
+  compact success, grouped general and Ground targets, stale, and repeated stored
   operands in real `180 × 52` PTYs; and
 - the earlier Viewer screenshot sets remain historical evidence of the
   superseded interface rather than the current terminal contract.

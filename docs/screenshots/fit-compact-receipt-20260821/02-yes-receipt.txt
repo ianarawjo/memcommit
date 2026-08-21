@@ -1,6 +1,6 @@
 $ mem fit "The lobby closes at five." "Visitors may use the side entrance after five."                                                                                              
 PTY · 180×52                                                                                                                                                                        
-FIT · YES · [PROPOSITION p1] The lobby closes at five. ↔ [PROPOSITION p2] Visitors may use the side entrance after five.                                                            
+FIT · YES · [TARGETS: PROPOSITION p1, p2]                                                                                                                                           
 RECEIPT COMPLETE · VIEWER ROUTE ABSENT                                                                                                                                              
 PROVIDER CALLS · 1                                                                                                                                                                  
 DURABLE WRITES · 0                                                                                                                                                                  

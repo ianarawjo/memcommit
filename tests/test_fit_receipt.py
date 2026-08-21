@@ -101,7 +101,7 @@ def test_fit_receipt_prints_only_may_and_no_details() -> None:
     text = fit_result_text(_result())
 
     assert text.splitlines() == [
-        "FIT · NO · [GROUND CONTEXT ticker] · 1/3",
+        "FIT · NO · [TARGETS: GROUND ticker] · 1/3",
         "? MAY · [RULE r1] [MEMORY 11111111] Use one stable abbreviation. ↔ "
         "[EXAMPLE e2] [MEMORY 33333333] Axiom AI Technologies may be AAT or AAIT.",
         "! NO · [RULE r1] [MEMORY 11111111] Use one stable abbreviation. ↔ "
@@ -120,13 +120,13 @@ def test_fit_receipt_uses_may_when_no_check_is_no() -> None:
     )
 
     assert fit_result_text(FitResult(report, True)).splitlines()[0] == (
-        "FIT · MAY · [GROUND CONTEXT ticker] · 1/2"
+        "FIT · MAY · [TARGETS: GROUND ticker] · 1/2"
     )
 
 
 def test_stale_fit_receipt_does_not_repeat_old_issue_details() -> None:
     assert fit_result_text(_result(current=False)) == (
-        "FIT · STALE · [GROUND CONTEXT ticker] · 1/3"
+        "FIT · STALE · [TARGETS: GROUND ticker] · 1/3"
     )
 
 
@@ -166,10 +166,9 @@ def _proposition_result(verdict: str) -> FitPropositionsResult:
     )
 
 
-def test_general_no_receipt_names_and_shows_both_material_propositions() -> None:
+def test_general_no_receipt_groups_both_proposition_targets() -> None:
     assert proposition_fit_result_text(_proposition_result("NO")) == (
-        "FIT · NO · [PROPOSITION p1] The main entrance closes at five. ↔ "
-        "[PROPOSITION p2] The main entrance stays open until ten."
+        "FIT · NO · [TARGETS: PROPOSITION p1, p2]"
     )
 
 
@@ -177,14 +176,13 @@ def test_general_may_receipt_is_one_line_but_typed_readings_remain() -> None:
     result = _proposition_result("MAY")
 
     assert proposition_fit_result_text(result) == (
-        "FIT · MAY · [PROPOSITION p1] The main entrance closes at five. ↔ "
-        "[PROPOSITION p2] The main entrance stays open until ten."
+        "FIT · MAY · [TARGETS: PROPOSITION p1, p2]"
     )
     assert result.analysis.assessment.consistent_reading
     assert result.analysis.assessment.inconsistent_reading
 
 
-def test_general_receipt_projects_three_typed_operands_as_one_operator() -> None:
+def test_general_receipt_groups_mixed_targets_by_type() -> None:
     question = FitQuestion(
         "fit",
         (
@@ -226,9 +224,7 @@ def test_general_receipt_projects_three_typed_operands_as_one_operator() -> None
     )
 
     assert proposition_fit_result_text(result) == (
-        "FIT · YES · [CONTEXT context-a] [MEMORY 11111111] "
-        "Claim from Context A. ↔ [MEMORY 22222222] "
-        "One directly selected claim. ↔ [PROPOSITION p1] One literal claim."
+        "FIT · YES · [TARGETS: CONTEXT context-a, MEMORY 22222222, PROPOSITION p1]"
     )
 
 

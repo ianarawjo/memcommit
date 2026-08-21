@@ -12,9 +12,11 @@ router.
 
 This is a deliberate product boundary, not a rejection of the shared
 components. Operations with navigable evidence or user decisions continue to
-use them. General Fit is one n-ary operator line for every verdict:
-`FIT · VERDICT · operand ↔ operand ...`. Ground Fit first states the complete
-result as `FIT · VERDICT · [GROUND CONTEXT name] · fraction`; each non-successful
+use them. General Fit is one grouped target line for every verdict:
+`FIT · VERDICT · [TARGETS: TYPE value, value, TYPE value ...]`. Contexts,
+direct Memories, and literal aliases share that one bracket without expanding
+their bodies or provenance relationships. Ground Fit first states the complete
+result as `FIT · VERDICT · [TARGETS: GROUND name] · fraction`; each non-successful
 Rule–Example check is one uninterrupted line containing its local
 classification, both role/Memory labels, both exact bodies, and `↔`. Stored
 reasons are not expanded and fitting detail remains omitted.
@@ -50,7 +52,7 @@ or provider construction. Historical Viewer screenshots under
 `docs/screenshots/ground-unified-fit-20260816` document the superseded route;
 they are not current interface specifications.
 
-Focused tests cover two- and three-operand general lines for every verdict,
+Focused tests cover grouped two- and three-target general lines for every verdict,
 the operation-wide Ground header, two-sided local Ground issues, retained typed
 split readings for `MAY`, repeated stored operands, stale suppression, the
 compatibility flag, absence of the Viewer route, immutable receipt reopening,

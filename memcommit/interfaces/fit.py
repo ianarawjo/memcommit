@@ -31,42 +31,52 @@ class FitReceiptLine:
 def _proposition_fit_receipt_line(
     result: FitPropositionsResult,
 ) -> FitReceiptLine:
-    """Build one typed n-ary operator line for the general Fit frame."""
+    """Build one typed, category-grouped target line for general Fit."""
 
     if not isinstance(result, FitPropositionsResult):
         raise TypeError("General Fit summaries require a typed result.")
     question = result.analysis.question
     origin_by_alias = {origin.alias: origin for origin in result.input_origins}
-    background_aliases = {item.alias for item in question.background}
+    groups: dict[str, list[str]] = {
+        "CONTEXT": [],
+        "MEMORY": [],
+        "PROPOSITION": [],
+        "GOAL": [],
+        "RULE": [],
+        "EXAMPLE": [],
+        "BACKGROUND": [],
+    }
+    for origin in result.input_origins:
+        value = (
+            origin.context_name if origin.kind == "CONTEXT" else origin.memory_uid[:8]
+        )
+        # Context expansion may yield many Memory propositions, but the compact
+        # target receipt names the selected Context once. The typed result
+        # still retains every expanded alias and exact Memory origin.
+        if origin.kind == "MEMORY" or value not in groups[origin.kind]:
+            groups[origin.kind].append(value)
+    for proposition in question.propositions:
+        if proposition.alias in origin_by_alias:
+            continue
+        groups[proposition.role].append(proposition.alias)
+    groups["BACKGROUND"].extend(item.alias for item in question.background)
 
-    def operand(proposition) -> str:
-        origin = origin_by_alias.get(proposition.alias)
-        if origin is not None:
-            source = (
-                f"[CONTEXT {display_escape_text(origin.context_name)}] "
-                if origin.kind == "CONTEXT"
-                else ""
-            )
-            label = f"{source}[MEMORY {origin.memory_uid[:8]}]"
-        else:
-            role = (
-                "BACKGROUND"
-                if proposition.alias in background_aliases
-                else proposition.role
-            )
-            label = f"[{role} {display_escape_text(proposition.alias)}]"
-        return f"{label} {display_escape_text(proposition.content)}"
-
-    operands = " ↔ ".join(operand(item) for item in question.all_propositions)
+    target_groups = []
+    for label, values in groups.items():
+        if not values:
+            continue
+        escaped = ", ".join(display_escape_text(value) for value in values)
+        target_groups.append(f"{label} {escaped}")
+    targets = ", ".join(target_groups)
     return FitReceiptLine(
         "FIT · ",
         result.analysis.assessment.verdict,
-        f" · {operands}",
+        f" · [TARGETS: {targets}]",
     )
 
 
 def proposition_fit_summary_line(result: FitPropositionsResult) -> str:
-    """Return one n-ary operator line for the complete general Fit frame."""
+    """Return one grouped target line for the complete general Fit frame."""
 
     return _proposition_fit_receipt_line(result).text
 
@@ -74,7 +84,7 @@ def proposition_fit_summary_line(result: FitPropositionsResult) -> str:
 def proposition_fit_receipt_lines(
     result: FitPropositionsResult,
 ) -> tuple[FitReceiptLine, ...]:
-    """Return typed segments for one general Fit operator line."""
+    """Return typed segments for one general Fit target line."""
 
     if not isinstance(result, FitPropositionsResult):
         raise TypeError("General Fit presentation requires a typed result.")
@@ -84,7 +94,7 @@ def proposition_fit_receipt_lines(
 def proposition_fit_result_lines(
     result: FitPropositionsResult,
 ) -> tuple[str, ...]:
-    """Project one operator line while retaining detail in the typed result."""
+    """Project one target line while retaining detail in the typed result."""
 
     if not isinstance(result, FitPropositionsResult):
         raise TypeError("General Fit presentation requires a typed result.")
@@ -206,7 +216,7 @@ def _fit_summary_receipt_line(result: FitResult) -> FitReceiptLine:
         raise TypeError("Fit summaries require a typed Fit result.")
     verdict = fit_verdict(result)
     suffix = (
-        f" · [GROUND CONTEXT {display_escape_text(result.report.ground_name)}]"
+        f" · [TARGETS: GROUND {display_escape_text(result.report.ground_name)}]"
         f" · {fit_fraction(result)}"
     )
     axis_counts = fit_axis_issue_counts(result)

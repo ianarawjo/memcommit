@@ -1,6 +1,6 @@
-$ mem fit 22e68904 fit/current
+$ mem fit 6bf0fcde fit/current
 PTY · 180×52
-MEM FIT · 1/1 · JUDGING THE COMPLETE PROPOSITION SET . · 0sMEM FIT · 1/1 · JUDGMENT COMPLETE . · 0s                                                           FIT · [38;2;166;218;149m[1mYES[0m · [MEMORY 22e68904] The lobby closes at five. ↔ [CONTEXT fit/current] [MEMORY 22e68904] The lobby closes at five.
+MEM FIT · 1/1 · JUDGING THE COMPLETE PROPOSITION SET . · 0sMEM FIT · 1/1 · JUDGMENT COMPLETE . · 0s                                                           FIT · [38;2;166;218;149m[1mYES[0m · [TARGETS: CONTEXT fit/current, MEMORY 6bf0fcde]
 REPEATED COORDINATE · TWO OPERATOR OPERANDS · READ-ONLY VERIFICATION
   CURRENT UNCHANGED · True
   PROVIDER CALLS · 1

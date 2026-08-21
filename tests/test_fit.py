@@ -234,15 +234,23 @@ def test_proposition_fit_accounts_for_observation_counterexample() -> None:
     assert provider.operation == "fit_propositions"
     assert "role-neutral compatibility judgment" in provider.prompt
     assert "MAY describes a real semantic split" in provider.prompt
-    assert "Missing support or an unknown fact is not itself a contradiction" in provider.prompt
+    assert (
+        "Missing support or an unknown fact is not itself a contradiction"
+        in provider.prompt
+    )
     assert "Do not omit, rank, retrieve, generate, revise" in provider.prompt
 
 
 def test_fit_rejects_mixed_projection_and_incomplete_coverage() -> None:
     rule = _rule()
     exact = FitExample(
-        _uid(), "e1", "Apple -> APPL", "EXACT_OUTPUT", (rule.uid,),
-        input_text="Apple", expected_output="APPL",
+        _uid(),
+        "e1",
+        "Apple -> APPL",
+        "EXACT_OUTPUT",
+        (rule.uid,),
+        input_text="Apple",
+        expected_output="APPL",
     )
     proposition = FitExample(
         _uid(), "e2", "Apple maps to APPL.", "PROPOSITION", (rule.uid,)
@@ -349,9 +357,7 @@ def test_version_three_fit_uses_native_propositions_and_explicit_rule_scope(
 
     frozen = freeze_ground_fit(session)
 
-    assert {example.projection for example in frozen.examples} == {
-        "PROPOSITION"
-    }
+    assert {example.projection for example in frozen.examples} == {"PROPOSITION"}
     assert all(
         example.input_text is None and example.expected_output is None
         for example in frozen.examples
@@ -360,9 +366,9 @@ def test_version_three_fit_uses_native_propositions_and_explicit_rule_scope(
     assert by_statement[
         "On August 15 the sky over Toronto was yellow."
     ].rule_uids == tuple(rule.uid for rule in frozen.rules)
-    assert by_statement[
-        "Apple Inc. may be represented by AAPL."
-    ].rule_uids == (rules[1].uid,)
+    assert by_statement["Apple Inc. may be represented by AAPL."].rule_uids == (
+        rules[1].uid,
+    )
 
 
 def test_fit_store_publishes_current_receipt_then_reports_stale(
@@ -508,7 +514,7 @@ def test_mem_fit_runs_and_reopens_immutable_receipt(
 
     assert result.exit_code == 0, result.output
     assert result.output == (
-        "FIT · YES · [GROUND CONTEXT ticker] · 6/6 checks · CONTEXT 0 · VERTICAL 0 · PEER 0\n"
+        "FIT · YES · [TARGETS: GROUND ticker] · 6/6 checks · CONTEXT 0 · VERTICAL 0 · PEER 0\n"
     )
     receipt = FitStore(store).latest_for_ground(session)
     assert receipt is not None
@@ -525,7 +531,7 @@ def test_mem_fit_runs_and_reopens_immutable_receipt(
     )
     assert reopened.exit_code == 0, reopened.output
     assert reopened.output == (
-        "FIT · YES · [GROUND CONTEXT ticker] · 6/6 checks · CONTEXT 0 · VERTICAL 0 · PEER 0\n"
+        "FIT · YES · [TARGETS: GROUND ticker] · 6/6 checks · CONTEXT 0 · VERTICAL 0 · PEER 0\n"
     )
 
 
@@ -548,7 +554,7 @@ def test_mem_fit_plain_flag_preserves_one_line_noninteractive_result(
 
     assert result.exit_code == 0, result.output
     assert result.output == (
-        "FIT · YES · [GROUND CONTEXT ticker] · 6/6 checks · CONTEXT 0 · VERTICAL 0 · PEER 0\n"
+        "FIT · YES · [TARGETS: GROUND ticker] · 6/6 checks · CONTEXT 0 · VERTICAL 0 · PEER 0\n"
     )
 
 
@@ -694,5 +700,5 @@ def test_mem_fit_plain_runs_against_physical_ground(monkeypatch, isolated_store)
 
     assert result.exit_code == 0, result.output
     assert result.output == (
-        "FIT · YES · [GROUND CONTEXT physical-fit] · 6/6 checks · CONTEXT 0 · VERTICAL 0 · PEER 0\n"
+        "FIT · YES · [TARGETS: GROUND physical-fit] · 6/6 checks · CONTEXT 0 · VERTICAL 0 · PEER 0\n"
     )

@@ -16,8 +16,8 @@ python docs/screenshots/fit-multi-source-check-20260821/capture.py
 
 | # | File | Exact Fit command | Profile/current Context | Visible state | Durable mutation |
 | --- | --- | --- | --- | --- | --- |
-| 01 | `01-three-contexts` | `mem fit context-a context-b context-c` | isolated fixture / `context-a` | Three `[CONTEXT name] [MEMORY uid] body` operands in source order, two `↔` separators, and operation-wide green `YES` | Fixture setup precedes the command; Fit changes no Context and creates zero Fit receipts |
-| 02 | `02-three-memories` | `mem fit 11111111 22222222 33333333` | isolated fixture / `memory-set` | Three direct `[MEMORY uid] body` operands in selector order, no Context label, two `↔` separators, and operation-wide green `YES` | Fixture setup precedes the command; Fit changes no Context and creates zero Fit receipts |
+| 01 | `01-three-contexts` | `mem fit context-a context-b context-c` | isolated fixture / `context-a` | One `[TARGETS: CONTEXT context-a, context-b, context-c]` bracket and operation-wide green `YES`; expanded Memory bodies remain typed but hidden | Fixture setup precedes the command; Fit changes no Context and creates zero Fit receipts |
+| 02 | `02-three-memories` | `mem fit 11111111 22222222 33333333` | isolated fixture / `memory-set` | One `[TARGETS: MEMORY 11111111, 22222222, 33333333]` bracket and operation-wide green `YES`; no Context group is fabricated | Fixture setup precedes the command; Fit changes no Context and creates zero Fit receipts |
 
 No keys or text are sent between command entry and the result; the provider
 turn completes once and the compact receipt appears directly. The trailing

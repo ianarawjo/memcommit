@@ -1,6 +1,6 @@
-$ mem fit 22e68904 fit/current                                                                                                                                                      
+$ mem fit 6bf0fcde fit/current                                                                                                                                                      
 PTY · 180×52                                                                                                                                                                        
-FIT · YES · [MEMORY 22e68904] The lobby closes at five. ↔ [CONTEXT fit/current] [MEMORY 22e68904] The lobby closes at five.                                                         
+FIT · YES · [TARGETS: CONTEXT fit/current, MEMORY 6bf0fcde]                                                                                                                         
 REPEATED COORDINATE · TWO OPERATOR OPERANDS · READ-ONLY VERIFICATION                                                                                                                
   CURRENT UNCHANGED · True                                                                                                                                                          
   PROVIDER CALLS · 1                                                                                                                                                                

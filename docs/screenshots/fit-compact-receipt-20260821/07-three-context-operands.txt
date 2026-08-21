@@ -1,7 +1,6 @@
 $ mem fit context-a context-b context-c                                                                                                                                             
 PTY · 180×52                                                                                                                                                                        
-FIT · YES · [CONTEXT context-a] [MEMORY 5548f6c4] Claim from Context A. ↔ [CONTEXT context-b] [MEMORY 07efc4b2] Claim from Context B. ↔ [CONTEXT context-c] [MEMORY bd422af5] Claim 
-from Context C.                                                                                                                                                                     
+FIT · YES · [TARGETS: CONTEXT context-a, context-b, context-c]                                                                                                                      
 OPERATOR OPERANDS · 3                                                                                                                                                               
 PROVIDER CALLS · 1                                                                                                                                                                  
 FIT RECEIPTS · 0                                                                                                                                                                    
