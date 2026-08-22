@@ -428,7 +428,7 @@ def test_check_conformance_cli_runs_the_shared_context_core(
     assert "  EVIDENCE ·" not in result.output
     assert "  WHY ·" not in result.output
     assert "OUTSIDE RULE JUDGMENTS" not in result.output
-    assert "NO CONTEXT CHANGES" in result.output
+    assert "STATUS · COMPLETE" in result.output
 
 
 def _install_context_conformance_cli_fixture(monkeypatch):

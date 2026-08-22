@@ -232,34 +232,34 @@ def _update_confirmed_inputs_view(
     """Freeze the exact Update route shown while its semantic turn runs."""
 
     lines = [
-        "MEM UPDATE · FROZEN INPUTS · RESULT PENDING",
+        "MEM UPDATE · INPUTS CONFIRMED · BUILDING PLAN",
         "",
         f"SOURCE A · {display_escape_text(source.name)}",
         "  SCOPE · "
         + ("INCLUDE DESCENDANTS" if source_descendants else "SELECTED GRAPH ONLY"),
-        "  UPDATE EFFECT · READ-ONLY WHILE PLANNING",
+        "  ROLE · INPUT TO THIS PLAN",
         "",
         f"TARGET B · {display_escape_text(target.name)}",
         "  SCOPE · "
         + ("INCLUDE DESCENDANTS" if target_descendants else "SELECTED GRAPH ONLY"),
-        "  UPDATE EFFECT · READ-ONLY UNTIL EXPLICIT APPLY",
+        "  ROLE · CHANGES APPLY HERE AFTER REVIEW",
     ]
     if guidance is not None:
         lines.extend(
             [
                 "",
-                "REVISION COMMENT · SUBMITTED · NOT YET INCORPORATED",
+                "REVISION COMMENT · SUBMITTED",
                 safe_terminal_text(guidance),
             ]
         )
     lines.extend(
         [
             "",
-            "No target change is applied while this report is being built.",
+            "Building the plan. Apply remains a separate review action.",
         ]
     )
     return CommandWaitView(
-        title="UPDATE CONFIRMED INPUTS · READ-ONLY",
+        title="UPDATE INPUTS",
         text="\n".join(lines),
     )
 
@@ -274,12 +274,12 @@ def _update_revision_wait_view(
         [
             render_update_report_snapshot(session, staged=True),
             "",
-            "PENDING REVISION · SUBMITTED · NOT YET INCORPORATED",
+            "PENDING REVISION · SUBMITTED",
             safe_terminal_text(guidance),
         ]
     )
     return CommandWaitView(
-        title="PREVIOUS UPDATE REPORT · READ-ONLY",
+        title="PREVIOUS UPDATE REPORT",
         text=text,
     )
 
@@ -757,7 +757,7 @@ def cmd(
             )
             store.save_staged_update(revised, expected_current=session)
             render_plan(revised, staged=True)
-            typer.echo("Update semantic turn saved; target changes were not applied.")
+            typer.echo("Update revision saved; review it before applying the target changes.")
             return
         if session is None:
             if (

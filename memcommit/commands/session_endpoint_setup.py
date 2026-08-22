@@ -206,7 +206,7 @@ def _confirmed_new_context_row(
             ("class:memcommit.choice.active", "    + "),
             (
                 "class:memcommit.choice.active",
-                f"{display_escape_text(name)}  NEW · NOT CREATED",
+                f"{display_escape_text(name)}  NEW · CREATE ON START",
             ),
         ]
     )
@@ -561,7 +561,7 @@ def choose_session_endpoints(
                 ExactNameFieldView(
                     value=role.initial_new_name,
                     label=role.new_label,
-                    state="NOT CREATED",
+                    state="CREATE ON START",
                     validate=validate_new_name,
                     value_label="Context name",
                 ),

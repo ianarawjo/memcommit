@@ -388,7 +388,7 @@ def run_literal_find_tui(
                 ("class:report-label", "MEM FIND\n"),
                 (
                     "class:report-neutral",
-                    "READ-ONLY · PROVIDER-FREE · COMPLETE, UNTRUNCATED ROWS",
+                    "EXACT TEXT OR REGEX · COMPLETE, UNTRUNCATED ROWS",
                 ),
             ]
         ),

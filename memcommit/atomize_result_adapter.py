@@ -426,7 +426,7 @@ class AtomizeResultWorkbenchAdapter:
             artifact_uid=self._analysis.uid,
             artifact_digest=self._artifact_digest,
             title=self._analysis.context_name,
-            status="READ-ONLY PREVIEW",
+            status="ANALYSIS COMPLETE",
             metrics=(
                 ResultMetric(
                     key="source_memories",

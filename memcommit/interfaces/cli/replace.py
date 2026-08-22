@@ -13,7 +13,7 @@ def render_replace_plan(plan: FrozenReplacePlan) -> str:
         else safe_terminal_text(plan.request.replacement)
     )
     lines = [
-        "REPLACE PLAN · NOT APPLIED",
+        "REPLACE PLAN · READY FOR REVIEW",
         (
             f"PATTERN · {safe_terminal_text(plan.request.pattern)}"
             f" · {plan.request.mode}"
@@ -43,7 +43,7 @@ def render_replace_plan(plan: FrozenReplacePlan) -> str:
                 )
             )
     if plan.matched_memory_count == 0:
-        lines.extend(("", "(no matching Memories; Apply would create no checkpoint)"))
+        lines.extend(("", "(no matching Memories)"))
     elif plan.changed_memory_count == 0:
         lines.extend(("", "(matches found, but replacement would change no content)"))
     return "\n".join(lines)

@@ -22,7 +22,7 @@ def merge_endpoint_setup_spec(setup: MergeTuiSetup) -> EndpointSetupSpec:
         raise TypeError("Merge endpoint setup requires a MergeTuiSetup.")
     return EndpointSetupSpec(
         title="NEW MERGE · A → B",
-        subtitle="DETERMINISTIC · REQUIRED CONFLICTS REVIEWED BEFORE APPLY",
+        subtitle="REVIEW REQUIRED CONFLICTS BEFORE APPLY",
         modes=(
             EndpointSetupMode(
                 MergeReach.DIRECT.value,
@@ -53,7 +53,7 @@ def merge_endpoint_setup_spec(setup: MergeTuiSetup) -> EndpointSetupSpec:
             ),
             EndpointSetupRole(
                 "B",
-                "B · TARGET · CREATE AUTHORITY",
+                "B · TARGET · CAN RECEIVE CHANGES",
                 setup.target_names,
                 setup.target_selectable_names,
                 setup.target_context,
@@ -62,7 +62,7 @@ def merge_endpoint_setup_spec(setup: MergeTuiSetup) -> EndpointSetupSpec:
                 height=min(10, max(4, len(setup.target_names))),
             ),
         ),
-        action_label="CLASSIFY · APPLY IF NO DECISION IS REQUIRED",
+        action_label="REVIEW MERGE PLAN",
     )
 
 

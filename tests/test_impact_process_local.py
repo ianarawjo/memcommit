@@ -353,7 +353,7 @@ def test_distill_impact_marks_the_result_not_created_and_source_unchanged() -> N
         )
     )
 
-    assert "RESULT · impact/rules · NOT CREATED" in rendered
+    assert "RESULT · impact/rules · CREATE ON APPLY" in rendered
     assert "PROPOSED RULES · 1" in rendered
     assert "IMPACT · DISTILL" not in rendered
     assert "[ADD]" not in rendered
@@ -453,7 +453,7 @@ def test_distill_route_leaves_the_proposed_result_uncreated(
     )
 
     assert result.exit_code == 0, result.output + result.stderr
-    assert "NOT CREATED" in result.output
+    assert "CREATE ON APPLY" in result.output
     assert "PROPOSED RULES · 1" in result.output
     assert "IMPACT · DISTILL" not in result.output
     assert not store.context_exists("impact/distill-result")

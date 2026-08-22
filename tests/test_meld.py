@@ -4067,10 +4067,10 @@ def test_followup_meld_turn_uses_shared_interactive_wait(
 
     def run_wait(operation, stage, *, total, work, return_view, context_view):
         return_text = "".join(fragment[1] for fragment in return_view.text)
-        assert return_view.title == "PREVIOUS MELD REPORT · READ-ONLY"
-        assert "PENDING TURN · SUBMITTED · NOT YET INCORPORATED" in return_text
+        assert return_view.title == "PREVIOUS MELD REPORT"
+        assert "PENDING TURN · SUBMITTED" in return_text
         assert "Keep all supported compensation details." in return_text
-        assert context_view.title == "MELD CONFIRMED INPUTS · READ-ONLY"
+        assert context_view.title == "MELD INPUTS"
         assert "Keep all supported compensation details." in context_view.text
         calls.append(("WAIT", operation, stage, total))
         return work(Progress())

@@ -30,13 +30,13 @@ def test_sentence_positional_prints_seeded_unsaved_frame_without_writing(
     result = runner.invoke(app, ["ground", request])
 
     assert result.exit_code == 0, result.output
-    assert "MEM GROUND · WORKING · NOT SAVED" in result.output
+    assert "MEM GROUND · DRAFT" in result.output
     assert "WORKING · FROM STARTING REQUEST" not in result.output
-    assert result.output.count("NOT SAVED") == 1
+    assert "NOT SAVED" not in result.output
     assert request in result.output
     assert "CHAT\n  YOU · STARTING REQUEST" in result.output
     assert "DIALOGUE" not in result.output
-    assert "CONTEXTS\n  (not bound; not inferred)" in result.output
+    assert "CONTEXTS\n  (none selected)" in result.output
     assert "submitted request starts the agent's Context discovery turn" in (
         result.output
     )
@@ -51,7 +51,7 @@ def test_explicit_request_disambiguates_valid_name_like_text(
     result = runner.invoke(app, ["ground", "--request", "task-1"])
 
     assert result.exit_code == 0, result.output
-    assert "MEM GROUND · WORKING · NOT SAVED" in result.output
+    assert "MEM GROUND · DRAFT" in result.output
     assert "WORKING · FROM STARTING REQUEST" not in result.output
     assert "task-1" in result.output
     assert not isolated_store.exists()

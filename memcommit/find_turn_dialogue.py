@@ -194,7 +194,7 @@ def _provider_from(
 
 def _build_prompt(state: FindChatState, user_text: str) -> str:
     pending_clarification = None
-    if state.status == "WAITING FOR CLARIFICATION · RESULTS UNCHANGED":
+    if state.status == "WAITING FOR CLARIFICATION":
         # Preserve only the provider's latest visible understanding/question.
         # Command receipts can contain durable UIDs and must never be replayed
         # into the next one-shot provider turn.

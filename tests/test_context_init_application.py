@@ -302,7 +302,7 @@ def test_context_init_tui_returns_a_request_without_executing_storage():
         create_parents=True,
         expected_current="project",
     )
-    assert observed["view"].state == "NOT CREATED"
+    assert observed["view"].state == "NEW CONTEXT"
     assert observed["view"].current_context == "project"
 
 

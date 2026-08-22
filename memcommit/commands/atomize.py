@@ -863,7 +863,7 @@ def cmd(
                     typer.echo(
                         "Apply the planned Output with: mem atomize --save\n"
                         f"  INPUT  {name}\n"
-                        f"  OUTPUT {planned_output} · NOT CREATED"
+                        f"  OUTPUT {planned_output} · CREATE ON APPLY"
                     )
                 return
 

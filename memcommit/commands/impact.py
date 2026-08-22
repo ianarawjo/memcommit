@@ -186,7 +186,7 @@ def _show_saved_impact(presentation, *, kind: str) -> bool:
             terminal_label=f"Interactive saved {kind.title()} Impact",
         )
         if not handoff:
-            typer.echo(f"{kind.title()} Impact closed; session unchanged.")
+            typer.echo(f"{kind.title()} Impact closed.")
         return handoff
     typer.echo(render_impact_session_snapshot(presentation))
     return False

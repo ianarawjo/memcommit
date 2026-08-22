@@ -349,7 +349,7 @@ def run_compact_endpoint_setup(
             label = " · ".join(values)
             style = "class:source-access"
         elif role.allow_new:
-            label = "NEW · NOT CREATED"
+            label = "NEW · CREATE ON START"
             style = "class:source-state"
         else:
             completion_state = role_inputs[role_uid].buffer.complete_state

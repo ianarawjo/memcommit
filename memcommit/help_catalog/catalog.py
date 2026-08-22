@@ -92,7 +92,7 @@ _OPERATIONS = (
         "condition propositions and report conformance issues.",
         "Rules or condition propositions + Ground Examples or Context -> Conformance report",
         ExecutionKind.SEMANTIC,
-        "Read-only; no Rule, Ground, Context, or Memory changes",
+        "Creates a conformance report without editing the selected data",
         "One saved Ground, or one exact local Target and Rules Context",
     ),
     _operation(
@@ -169,7 +169,7 @@ _OPERATIONS = (
         "candidate propositions.",
         "Goal -> added Rules; Rules -> added Case propositions -> receipt",
         ExecutionKind.SEMANTIC,
-        "Standalone atomically adds unverified results to one existing Target; Impact is read-only",
+        "Standalone atomically adds unverified results to one existing Target; Impact previews the result",
         "One Goal or Rule set, inline or from one exact Ground revision",
     ),
     _operation(
@@ -208,7 +208,7 @@ _OPERATIONS = (
         "Find exact text or explicit regular-expression (regex) matches in readable Memories.",
         "Text pattern + Context scope -> exact Memory spans",
         ExecutionKind.DETERMINISTIC,
-        "Read-only; no Context changes",
+        "Returns exact matching spans without editing the selected Contexts",
         "One or more readable Context roots; descendants and embedded Contexts are optional",
     ),
     _operation(
@@ -217,7 +217,7 @@ _OPERATIONS = (
         "Context set + query -> ranked Memories",
         ExecutionKind.SEMANTIC,
         (
-            "Search results are read-only; optional reviewed Save As creates a "
+            "Returns ranked results; optional reviewed Save As creates a "
             "new local Context"
         ),
         (
@@ -231,16 +231,16 @@ _OPERATIONS = (
         "compatible under ordinary interpretation, returning YES, MAY, or NO.",
         "Auto-typed text, Memory UID, or readable Context operands + optional background -> YES / MAY / NO; Ground + bound Contexts -> complete Fit receipt",
         ExecutionKind.SEMANTIC,
-        "Read-only; changes no Context, Ground, Rule, Goal, or Memory",
-        "One complete frozen proposition frame from auto-typed or explicit literals, direct Memory selectors, or readable direct Contexts; Ground checks Context, vertical, peer, and Rule–Example relations",
+        "Returns a YES, MAY, or NO judgment without editing its inputs",
+        "One complete bounded proposition frame from auto-typed or explicit literals, direct Memory selectors, or readable direct Contexts; Ground checks Context, vertical, peer, and Rule–Example relations",
     ),
     _operation(
         "resolve",
         "Automatically interpret incompatibility Issues in one complete direct-Memory "
         "Context frame and verify one small Fit-YES plan.",
-        "Complete Context frame + optional guidance -> one grounded automatic Apply or one assumed read-only interpretation",
+        "Complete Context frame + optional guidance -> one grounded automatic Apply or one temporary assumed interpretation",
         ExecutionKind.SEMANTIC,
-        "Assumed plans stay process-local; a grounded plan applies as one checkpoint",
+        "An assumed plan is temporary; a grounded plan applies as one checkpoint",
         "One complete bounded direct Context frame; explicit Memory UID prefixes limit edits, not semantic reading",
     ),
     _operation(
@@ -263,34 +263,34 @@ _OPERATIONS = (
     ),
     _operation(
         "find-ambiguities",
-        "Report ambiguous direct Memories in the current or explicit Context; no Context changes.",
+        "Report ambiguous direct Memories in the current or explicit Context.",
         "Context Memories -> ambiguity report",
         ExecutionKind.SEMANTIC,
-        "No Context content changes",
+        "Creates an ambiguity report without editing the Source",
         "One exact direct Context",
     ),
     _operation(
         "find-conflicts",
-        "Report conflicting direct Memory pairs in the current or explicit Context; no Context changes.",
+        "Report conflicting direct Memory pairs in the current or explicit Context.",
         "Context Memories -> conflict report",
         ExecutionKind.SEMANTIC,
-        "No Context content changes",
+        "Creates a conflict report without editing the Source",
         "One exact direct Context",
     ),
     _operation(
         "find-duplicates",
-        "Report byte-identical duplicate direct Memories without changing the Context.",
+        "Report byte-identical duplicate direct Memories.",
         "Direct Context Memories -> exact DUP groups",
         ExecutionKind.DETERMINISTIC,
-        "Read-only; no provider connection and no Context changes",
+        "Creates an exact-duplicate report without editing the Source",
         "One exact direct Context",
     ),
     _operation(
         "find-redundancies",
-        "Report exact and semantically redundant direct Memories without changing any Source Context.",
+        "Report exact and semantically redundant direct Memories.",
         "Direct Context Memories -> DUP + semantic DUN evidence report",
         ExecutionKind.SEMANTIC,
-        "Read-only; explicit --select can open process-local multi-target review",
+        "Creates a redundancy report; --select can review multiple readable targets",
         "One exact direct Context by default; explicit --select enables readable multi-target scope",
     ),
     _operation(
@@ -317,7 +317,7 @@ _OPERATIONS = (
         "Enter the interactive command browser and open syntax help.",
         "Operation catalog + optional natural-language request -> usage guidance",
         ExecutionKind.MIXED,
-        "Read-only",
+        "Browses command guidance",
     ),
     _operation(
         "impact",
@@ -325,7 +325,7 @@ _OPERATIONS = (
         "applying them.",
         "Operation inputs or session -> impact report",
         ExecutionKind.MIXED,
-        "Impact is read-only; execution remains a separate operation invocation",
+        "Shows expected effects; execution remains a separate operation invocation",
         "Operation-owned Source and Target ranges",
     ),
     _operation(
@@ -425,7 +425,7 @@ _OPERATIONS = (
         "Print the current canonical Context name without loading its contents.",
         "Current Context pointer -> canonical name",
         ExecutionKind.DETERMINISTIC,
-        "Read-only; Context content is not loaded",
+        "Prints the name without loading Context content",
     ),
     _operation(
         "query",
@@ -435,7 +435,7 @@ _OPERATIONS = (
         ),
         "Readable source + question -> answer with references",
         ExecutionKind.SEMANTIC,
-        "No Context content changes; visible transcript may be retained",
+        "Returns an answer; the visible transcript may be retained",
         (
             "Readable exact, descendant, or embedded Context scope; or one "
             "QUERY-authorized query-only view"
@@ -483,7 +483,7 @@ _OPERATIONS = (
     ),
     _operation(
         "review",
-        "Inspect terminal execution evidence or a saved read-only report and, "
+        "Inspect terminal execution evidence or a saved report and, "
         "where supported, record report responses. Review never applies Memories.",
         "Applied receipt or saved report artifact -> evidence/report",
         ExecutionKind.MIXED,
@@ -519,7 +519,7 @@ _OPERATIONS = (
         "Show a Memory, reference, embedded Context, or the direct contents of a current/explicit Context.",
         "Context or direct item -> rendered content",
         ExecutionKind.DETERMINISTIC,
-        "Read-only",
+        "Returns retained lineage",
         "One exact Context or direct item",
     ),
     _operation(
@@ -572,7 +572,7 @@ _OPERATIONS = (
         "while preserving the original content.",
         "Context or Memory -> translated view or materialization",
         ExecutionKind.SEMANTIC,
-        "Source unchanged; explicit routes may create or add material",
+        "Explicit materialization routes create or add translated material",
         "One exact Context or one direct Memory",
     ),
     _operation(

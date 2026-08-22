@@ -42,7 +42,7 @@ def test_summarize_projects_typed_result_without_parsing_plain_output() -> None:
     ]
     rendered = "".join(text for _style, text in document.render(focused_uid=None))
     assert "SUMMARY · summary/context" in rendered
-    assert "READ-ONLY · RECURSIVE · SOURCES 3" in rendered
+    assert "STATUS · RECURSIVE · SOURCES 3" in rendered
     assert "WHAT MEM UNDERSTOOD" in rendered
     assert "closure and its staff exception" in rendered
 
@@ -271,7 +271,7 @@ def test_summarize_both_outcome_keeps_direct_and_recursive_views_visible() -> No
     document = project_summarize_outcome(outcome)
     rendered = "".join(text for _style, text in document.render(focused_uid=None))
 
-    assert "STATUS · READ-ONLY · BOTH VIEWS" in rendered
+    assert "STATUS · BOTH VIEWS" in rendered
     assert "[CURRENT ONLY]" in rendered
     assert "STATUS · DIRECT · SOURCES 1" in rendered
     assert "[CURRENT + DESCENDANTS]" in rendered

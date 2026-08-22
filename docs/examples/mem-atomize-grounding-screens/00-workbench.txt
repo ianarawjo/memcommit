@@ -1,5 +1,5 @@
  RESULT · atomize · temp/grounding
- STATUS · READ-ONLY PREVIEW · sources=2 · projected=2 · splits=0 · children=0 · review issues=4
+ STATUS · ANALYSIS COMPLETE · sources=2 · projected=2 · splits=0 · children=0 · review issues=4
 
  WHAT MEM UNDERSTOOD
  The notes describe student and staff NFC access.

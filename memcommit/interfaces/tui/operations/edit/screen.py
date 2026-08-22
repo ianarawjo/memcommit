@@ -158,7 +158,7 @@ def run_edit_tui(
         DirectMemorySelectorView(
             names=setup.names,
             selected_context=setup.selected_context,
-            label="MEMORY · DIRECTLY OWNED · UPDATE AUTHORITY · * CURRENT",
+            label="MEMORY · DIRECTLY OWNED · EDITABLE · * CURRENT",
             current_context=setup.current_context,
             selectable_names=setup.selectable_names,
             annotations=setup.annotations,
@@ -167,7 +167,7 @@ def run_edit_tui(
         height=min(10, max(4, len(setup.names) + 2)),
     )
     editor = build_framed_multiline_input(
-        "REPLACEMENT CONTENT · NOT SAVED",
+        "REPLACEMENT CONTENT",
         buffer_name="edit-replacement-content",
         height=Dimension(min=7, preferred=9, max=12),
     )
@@ -309,7 +309,7 @@ def run_edit_tui(
         ) as error:
             status["value"] = str(error)
         else:
-            status["value"] = "Memory selected · replacement is still process-local."
+            status["value"] = "Memory selected · edit the replacement below."
             command_control.sync_from_review()
         return "HANDLED"
 

@@ -367,7 +367,7 @@ def choose_import_setup(
             ExactNameFieldView(
                 value=_fresh_profile_name(source.name, registry),
                 label="NEW PROFILE NAME",
-                state="NOT CREATED",
+                state="NEW PROFILE",
                 detail="Edit the exact destination Profile name",
                 validate=_profile_target_validator(registry),
                 value_label="Profile name",
@@ -450,7 +450,7 @@ def choose_import_setup(
                     destination_names=destination_names,
                 ),
                 label="IMPORT DESTINATION",
-                state="NOT CREATED",
+                state="CREATE ON IMPORT",
                 detail="Edit directly or choose an existing parent; no Context is created yet.",
                 validate=_context_target_validator(
                     frozen_source_names,

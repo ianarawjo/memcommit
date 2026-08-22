@@ -282,10 +282,10 @@ def _update_operation_rows(
             for receipt in session.application.checkpoints
             if receipt.context_name == name
         ),
-        "(not created)",
+        "(pending)",
     )
     checkpoint_badge = (
-        checkpoint_uid[:8] if checkpoint_uid != "(not created)" else checkpoint_uid
+        checkpoint_uid[:8] if checkpoint_uid != "(pending)" else checkpoint_uid
     )
     rows = [
         ContextMemoryRow(

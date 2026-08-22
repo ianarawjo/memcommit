@@ -27,4 +27,4 @@ PROVISIONAL CHANGES — blocked by required follow-up
 
 Continue with: mem atomize --reply "CONFIRM, CORRECT, OR EXTEND"
 Keep without changing Memories: mem atomize --keep-review-only
-No Memory changes have been applied and no checkpoint has been created by this dialogue.
+This dialogue has not changed the Memories.

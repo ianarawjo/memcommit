@@ -36,12 +36,12 @@ def audit_endpoint_setup_spec(
     labels = tuple((annotations or {}).items())
     return EndpointSetupSpec(
         title="MEM AUDIT · SOURCE",
-        subtitle="READ-ONLY SETUP · ONE DIRECT CONTEXT · NO PROVIDER CALL",
+        subtitle="CHOOSE ONE DIRECT CONTEXT",
         modes=(
             EndpointSetupMode(
                 "AUDIT",
                 "AUDIT · ONE DIRECT CONTEXT",
-                "Freeze one readable Source before running independent checks.",
+                "Choose one readable Source, then run the independent checks.",
             ),
         ),
         initial_mode_uid="AUDIT",
@@ -57,7 +57,7 @@ def audit_endpoint_setup_spec(
                 height=min(9, max(3, len(catalog))),
             ),
         ),
-        action_label="RUN AUDIT ON FROZEN SOURCE",
+        action_label="RUN AUDIT",
     )
 
 

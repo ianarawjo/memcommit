@@ -852,7 +852,7 @@ def test_mem_distill_save_as_without_apply_remains_read_only(
     )
 
     assert result.exit_code == 0, result.output
-    assert "NOT CREATED" in result.output
+    assert "READY TO CREATE" in result.output
     assert not store.context_exists("distill/preview-rules")
 
 

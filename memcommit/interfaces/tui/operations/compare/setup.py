@@ -30,12 +30,12 @@ def compare_endpoint_setup_spec(setup: CompareTuiSetup) -> EndpointSetupSpec:
     height = min(10, max(4, len(setup.names)))
     return EndpointSetupSpec(
         title="NEW COMPARE · A ↔ B → ANALYSIS",
-        subtitle="READ-ONLY · INDEPENDENT RANGE AND MEMORY FOCUS",
+        subtitle="CHOOSE TWO PEERS · RANGE AND MEMORY FOCUS ARE INDEPENDENT",
         modes=(
             EndpointSetupMode(
                 "COMPARE",
                 "COMPARE · A ↔ B → ANALYSIS",
-                "A and B have equal authority; REFERENCE only anchors the report.",
+                "A and B are peers; REFERENCE sets the report order.",
             ),
         ),
         initial_mode_uid="COMPARE",
@@ -67,7 +67,7 @@ def compare_endpoint_setup_spec(setup: CompareTuiSetup) -> EndpointSetupSpec:
                 memory_height=8,
             ),
         ),
-        action_label="RUN READ-ONLY COMPARE",
+        action_label="RUN COMPARE",
     )
 
 

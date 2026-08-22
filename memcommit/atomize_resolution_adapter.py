@@ -345,7 +345,7 @@ class AtomizeResolutionWorkbenchAdapter:
                         "IN PLACE"
                         if (workbench.output_context_name or analysis.context_name)
                         == analysis.context_name
-                        else "NOT CREATED"
+                        else "CREATE ON APPLY"
                     ),
                 ),
             ),

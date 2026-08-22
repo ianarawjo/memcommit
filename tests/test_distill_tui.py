@@ -89,7 +89,7 @@ def test_distill_projects_operation_meaning_over_shared_viewer() -> None:
     )
     assert "GOAL · RELEVANCE FOCUS ONLY" in rendered
     assert "Prefer a quiet setting" in rendered
-    assert "SOURCE UNCHANGED" in rendered
+    assert "STATUS · PROPOSAL" in rendered
 
 
 def test_distill_clipboard_keeps_focused_rule_and_whole_proposal_distinct() -> None:

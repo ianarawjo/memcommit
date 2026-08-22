@@ -671,7 +671,7 @@ def test_cli_redundancy_report_groups_members_once_without_left_right_labels(
     assert result.exit_code == 0, result.output
     plain = click.unstyle(result.output)
     assert "DUN GROUP  1/1 · 3 Memories · SEMANTIC DUN" in plain
-    assert "CLEANUP MAP · PROPOSED · NOT APPLIED" in plain
+    assert "CLEANUP MAP · READY FOR REVIEW" in plain
     assert plain.count("SURVIVOR") == 1
     assert plain.count("ABSORB") == 2
     assert "EVIDENCE 1 · SEMANTIC_EQUIVALENT" in plain
@@ -839,7 +839,7 @@ def test_cli_positional_context_does_not_switch_current(
         assert "1 link = 1 DUP / EXACT link + 0 SEMANTIC DUN links" in result.output
         assert "1 connected group" in result.output
         assert "DUN GROUP  1/1 · 2 Memories · DUP / EXACT" in result.output
-        assert "CLEANUP MAP · PROPOSED · NOT APPLIED" in result.output
+        assert "CLEANUP MAP · READY FOR REVIEW" in result.output
         assert "SURVIVOR" in result.output
         assert "ABSORB" in result.output
         assert "FIRST" not in result.output

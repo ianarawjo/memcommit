@@ -31,7 +31,7 @@ def update_endpoint_setup_spec(setup: UpdateTuiSetup) -> EndpointSetupSpec:
     height = min(10, max(4, len(setup.names)))
     return EndpointSetupSpec(
         title="NEW UPDATE · A → B",
-        subtitle="SETUP ONLY · NO PLAN, PROVIDER, SESSION, OR APPLY",
+        subtitle="CHOOSE SOURCE AND TARGET",
         modes=(
             EndpointSetupMode(
                 "UPDATE",
@@ -56,7 +56,7 @@ def update_endpoint_setup_spec(setup: UpdateTuiSetup) -> EndpointSetupSpec:
             ),
             EndpointSetupRole(
                 "B",
-                "B · TARGET · AUTHORITY CHECKED BEFORE PLANNING",
+                "B · TARGET · CHANGES APPLY HERE",
                 setup.names,
                 selectable,
                 setup.target_name,

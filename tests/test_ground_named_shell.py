@@ -1582,12 +1582,12 @@ def test_named_contexts_pane_distinguishes_unbound_and_recorded_frames():
         context_hints=("temp/task-1", "campus-wiki"),
         new_context_hint="test/ground/ticker-rule-examples",
     )
-    assert "UNBOUND · LOCAL CONTEXT PLAN" in hinted
-    assert "MAIN · temp/task-1 · NOT BOUND" in hinted
-    assert "ADDITIONAL · campus-wiki · NOT BOUND" in hinted
+    assert "CONTEXT PLAN" in hinted
+    assert "MAIN · temp/task-1 · SUGGESTED" in hinted
+    assert "ADDITIONAL · campus-wiki · SUGGESTED" in hinted
     assert (
         "NEW CONTEXT · test/ground/ticker-rule-examples · "
-        "LOCAL ONLY · NOT CREATED"
+        "PLANNED · NOT CREATED"
         in hinted
     )
     assert "separately reviewed commands" in hinted
@@ -2781,13 +2781,13 @@ def test_comment_is_classified_once_and_one_ready_rule_is_proposed(
     assert result.session.revision == 1
     assert result.submitted_turns == ("fixture requirements",)
     assert any(
-        "DRAFTS · NOT SAVED · 2" in rendered
+        "DRAFTS · PENDING · 2" in rendered
         and "d1 [RULE · READY]" in rendered
         and "d2 [FACT · READY]" in rendered
         for rendered in rendered_rules
     )
     assert any(
-        "DRAFTS · NOT SAVED · 1" in rendered
+        "DRAFTS · PENDING · 1" in rendered
         and "RECLASSIFY REQUIRED" in rendered
         and "d1 [FACT · STALE]" in rendered
         for rendered in rendered_rules

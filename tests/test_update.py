@@ -1238,9 +1238,9 @@ def test_tty_update_incorporates_review_comment_before_applying(
     assert wait_views[0][3:] == (None, None)
 
     revision_report = wait_views[1][3]
-    assert revision_report.title == "PREVIOUS UPDATE REPORT · READ-ONLY"
+    assert revision_report.title == "PREVIOUS UPDATE REPORT"
     assert "Staged update:" in revision_report.text
-    assert "PENDING REVISION · SUBMITTED · NOT YET INCORPORATED" in (
+    assert "PENDING REVISION · SUBMITTED" in (
         revision_report.text
     )
     assert "Make the accessibility wording less absolute." in revision_report.text

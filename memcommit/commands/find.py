@@ -143,7 +143,7 @@ def _outside_confirmation_message(user_text: str) -> str:
 
 
 def _pending_find_clarification(state: FindChatState) -> str | None:
-    if state.status != "WAITING FOR CLARIFICATION · RESULTS UNCHANGED":
+    if state.status != "WAITING FOR CLARIFICATION":
         return None
     return next(
         (message.text for message in reversed(state.messages) if message.role == "MEM"),
@@ -236,7 +236,7 @@ class FindTurnController:
                         text=f"{turn.understanding}\n\n{turn.question}",
                     ),
                 ),
-                status="WAITING FOR CLARIFICATION · RESULTS UNCHANGED",
+                status="WAITING FOR CLARIFICATION",
             )
         proposal = _show_result_proposal(state, turn, text)
         if proposal.result.kind == "artifact":
@@ -334,7 +334,7 @@ class FindTurnController:
                         text="The other-Context answer request was cancelled.",
                     ),
                 ),
-                status="OTHER CONTEXTS CANCELLED · RESULTS UNCHANGED",
+                status="OTHER CONTEXTS CANCELLED",
                 pending_answer=None,
             )
         if token != FIND_OUTSIDE_CONFIRMATION:
@@ -833,11 +833,8 @@ def _show_result_proposal(
             selected.context_name,
         ),
         effects=(
-            (
-                f"Read-only inspection: SHOW {selected.alias} "
-                f"from {selected.context_name}"
-            ),
-            "Contexts, Memories, checkpoints, and current Context: unchanged",
+            f"Show {selected.alias} from {selected.context_name}.",
+            "This opens the selected result without editing stored data.",
         ),
     )
     return FindShowProposal(
@@ -868,10 +865,10 @@ def _apply_artifact_show_result(
             ),
             FindChatMessage(
                 role="STATUS",
-                text="READ-ONLY ARTIFACT · SHOWN · Find results unchanged.",
+                text="ARTIFACT SHOWN",
             ),
         ),
-        status=f"SHOWED {proposal.result.alias} · RESULTS UNCHANGED",
+        status=f"SHOWED {proposal.result.alias}",
     )
 
 
@@ -905,19 +902,19 @@ def _apply_show_result(
     try:
         completed = _run_read_only_find_command(proposal.review.argv)
     except subprocess.TimeoutExpired as error:
-        raise FindError("The read-only mem show action timed out.") from error
+        raise FindError("The mem show action timed out.") from error
     except OSError as error:
         raise FindError(
-            "The read-only mem show action could not be started."
+            "The mem show action could not be started."
         ) from error
     if completed.returncode != 0:
         detail = (completed.stderr or completed.stdout).strip()
         raise FindError(
-            "The read-only mem show action failed" + (f": {detail}" if detail else ".")
+            "The mem show action failed" + (f": {detail}" if detail else ".")
         )
     actual_output = completed.stdout.strip()
     if not actual_output:
-        raise FindError("The read-only mem show action returned no output.")
+        raise FindError("The mem show action returned no output.")
     action = proposal.action
     return replace(
         state,
@@ -935,18 +932,18 @@ def _apply_show_result(
                 role="STATUS",
                 text="\n".join(
                     [
-                        "READ-ONLY ACTION · APPLIED",
+                        "SHOW COMPLETE",
                         f"  {format_exact_command(proposal.review)}",
                         "",
                         "ACTUAL OUTPUT",
                         actual_output,
                         "",
-                        "Find results unchanged.",
+                        "Stored data was not edited.",
                     ]
                 ),
             ),
         ),
-        status=f"SHOWED {proposal.result.alias} · RESULTS UNCHANGED",
+        status=f"SHOWED {proposal.result.alias}",
     )
 
 

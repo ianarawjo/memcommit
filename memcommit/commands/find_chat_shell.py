@@ -354,7 +354,7 @@ def _failed_turn_state(
                 ),
             ),
         ),
-        status="TURN FAILED · RESULTS UNCHANGED",
+        status="TURN FAILED · PREVIOUS RESULTS KEPT",
     )
 
 
@@ -529,7 +529,7 @@ def _run_find_chat_application(
                     *base_state.messages,
                     FindChatMessage(role="USER", text=text),
                 ),
-                status="THINKING · RESULTS UNCHANGED",
+                status="THINKING",
             )
         )
         event.app.layout.focus(conversation_control)

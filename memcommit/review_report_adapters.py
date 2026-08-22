@@ -87,7 +87,7 @@ def atomize_review_report(
 
     result_view = AtomizeResultWorkbenchAdapter(analysis).view()
     if workbench.application is not None:
-        result_view = replace(result_view, status="APPLIED ANALYSIS · READ ONLY")
+        result_view = replace(result_view, status="APPLIED ANALYSIS")
 
     return ReviewReportController.from_resolution(
         AtomizeResolutionWorkbenchAdapter(analysis, workbench).view,

@@ -404,7 +404,7 @@ def test_impact_endpoint_preview_never_adds(
 
     assert result.exit_code == 0, result.output
     assert f"SOURCE · {source.name}" in result.output
-    assert f"TARGET · {target.name} · EXISTING · UNCHANGED" in result.output
+    assert f"TARGET · {target.name} · EXISTING" in result.output
     if operation == "distill":
         assert "PROPOSED RULES" in result.output
         assert "IMPACT · DISTILL ADD" not in result.output

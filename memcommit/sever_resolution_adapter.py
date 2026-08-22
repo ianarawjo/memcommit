@@ -155,7 +155,7 @@ def _report_items_summary(session: SeverSession) -> str:
         + (
             "Self-save replaces the Source with that reviewed Result. "
             if self_save
-            else "Other-save leaves the Source unchanged. "
+            else "Other-save creates a separate Result. "
         )
         + result_boundary
     )
@@ -404,7 +404,7 @@ class SeverResolutionWorkbenchAdapter:
                         if session.save_mode == "SELF_SAVE"
                         else "CREATED"
                         if session.state == "APPLIED"
-                        else "NOT CREATED"
+                        else "CREATE ON APPLY"
                     ),
                 ),
             ),
@@ -416,7 +416,7 @@ class SeverResolutionWorkbenchAdapter:
             results_label=(
                 "SELF-SAVE DRAFT · SOURCE WILL BE REPLACED"
                 if session.save_mode == "SELF_SAVE"
-                else "OTHER-SAVE DRAFT · SOURCE UNCHANGED"
+                else "OTHER-SAVE DRAFT"
             ),
             results=results,
             capabilities=(

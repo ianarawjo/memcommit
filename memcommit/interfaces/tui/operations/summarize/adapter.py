@@ -115,7 +115,7 @@ def project_summarize_result(result: SummarizeResult) -> SemanticViewerDocument:
                     (
                         (
                             "class:report-label",
-                            " STATUS · READ-ONLY · "
+                            " STATUS · "
                             f"{summarize_scope_label(result)} · "
                             f"SOURCES {result.source_count:,}\n",
                         ),
@@ -172,7 +172,7 @@ def project_summarize_outcome(
             "SUMMARY:STATUS",
             "STATUS",
             SemanticViewerBlock(
-                (("class:report-label", " STATUS · READ-ONLY · BOTH VIEWS\n"),)
+                (("class:report-label", " STATUS · BOTH VIEWS\n"),)
             ),
         ),
     ]

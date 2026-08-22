@@ -102,7 +102,7 @@ def _show_process_local_impact(
             presentation,
             terminal_label=f"Interactive {operation.title()} Impact",
         )
-        typer.echo(f"{operation.title()} Impact closed; Source unchanged.")
+        typer.echo(f"{operation.title()} Impact closed.")
         return
     typer.echo(render_impact_session_snapshot(presentation))
 
@@ -194,7 +194,7 @@ def forget_cmd(
                 annotations=annotations,
             )
             if receipt is None:
-                typer.echo("Forget Impact cancelled; Source unchanged.")
+                typer.echo("Forget Impact cancelled.")
                 return
             source_locator = receipt.context_name
             instruction = receipt.instruction
@@ -314,7 +314,7 @@ def distill_impact_presentation(
             if existing_target
             else f"SOURCE {analysis.source.context_name} → NEW RESULT {result_name}"
         ),
-        status="PROPOSAL · READ-ONLY",
+        status="PROPOSAL",
         metrics=(
             ResolutionMetric("SOURCE", str(len(analysis.source.sources))),
             ResolutionMetric("RULES", str(len(analysis.rules))),
@@ -325,7 +325,7 @@ def distill_impact_presentation(
             ResolutionContextLocation(
                 "TARGET" if existing_target else "RESULT",
                 result_name,
-                "EXISTING · UNCHANGED" if existing_target else "NOT CREATED",
+                "EXISTING" if existing_target else "CREATE ON APPLY",
             ),
         ),
         overview=analysis.overview,
@@ -345,16 +345,14 @@ def distill_impact_presentation(
         controller=ImpactController.from_resolution(
             view,
             title=(
-                "IMPACT · DISTILL ADD · ENDPOINTS UNCHANGED"
+                "IMPACT · DISTILL ADD"
                 if existing_target
-                else "IMPACT · DISTILL RESULT · SOURCE UNCHANGED"
+                else "IMPACT · DISTILL RESULT"
             ),
             summary=(
-                "These Rules would be added to the existing Target Context. "
-                "Neither Source nor Target has been changed."
+                "Apply would add these Rules to the existing Target Context."
                 if existing_target
-                else "These Rules would be added to a fresh Result Context. "
-                "No Result has been created and the Source remains unchanged."
+                else "Apply would create a Result Context with these Rules."
             ),
         ),
         handoff_available=False,
@@ -604,7 +602,7 @@ def elaborate_impact_presentation(
         revision=analysis.digest,
         title="MEM ELABORATE · ADD PROPOSAL",
         route=f"SOURCE {display_source} → TARGET {target_name}",
-        status="PROPOSAL · READ-ONLY · UNVERIFIED",
+        status="PROPOSAL · NEEDS REVIEW",
         metrics=(
             ResolutionMetric("INPUTS", str(len(analysis.inputs))),
             ResolutionMetric("PROPOSALS", str(len(proposals))),
@@ -616,7 +614,7 @@ def elaborate_impact_presentation(
         ),
         context_locations=(
             ResolutionContextLocation("SOURCE", display_source),
-            ResolutionContextLocation("TARGET", target_name, "EXISTING · UNCHANGED"),
+            ResolutionContextLocation("TARGET", target_name, "EXISTING"),
         ),
         overview=analysis.overview,
         overview_sections=(
@@ -636,10 +634,9 @@ def elaborate_impact_presentation(
         view=view,
         controller=ImpactController.from_resolution(
             view,
-            title="IMPACT · ELABORATE ADD · ENDPOINTS UNCHANGED",
+            title="IMPACT · ELABORATE ADD",
             summary=(
-                "These unverified Memories would be added to the existing "
-                "Target. Neither Source nor Target has been changed."
+                "Review these proposed Memories before adding them to the Target."
             ),
         ),
         handoff_available=False,
@@ -809,9 +806,9 @@ def _resolve_candidate_view(
         title="MEM RESOLVE · AUTOMATIC INTERPRETATION PLAN",
         route=f"SOURCE {analysis.frame.display_name} → SAME SOURCE",
         status=(
-            "GROUNDED PLAN · READ-ONLY"
+            "GROUNDED PLAN"
             if candidate.grounded
-            else "ASSUMED WORKING VIEW · READ-ONLY"
+            else "ASSUMED WORKING VIEW"
         ),
         metrics=(
             ResolutionMetric("EFFECTS", str(len(candidate.effects))),
@@ -909,7 +906,7 @@ def resolve_impact_presentation(
         revision=analysis.frame.revision,
         title="MEM RESOLVE · NO EFFECT PROPOSAL",
         route=f"SOURCE {analysis.frame.display_name} → SAME SOURCE",
-        status=f"{analysis.status} · READ-ONLY",
+        status=analysis.status,
         metrics=(
             ResolutionMetric("SOURCE", str(len(analysis.frame.memories))),
             ResolutionMetric("EFFECTS", "0"),

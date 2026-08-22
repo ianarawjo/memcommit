@@ -494,7 +494,7 @@ def choose_profile(
         ExactNameFieldView(
             value="",
             label="NEW PROFILE NAME",
-            state="NOT APPLIED",
+            state="NEW NAME",
             detail="Enter to review this exact Profile rename.",
             validate=validate_profile_name,
             value_label="Profile name",
@@ -794,8 +794,7 @@ def choose_profile(
                 and action.kind == "RENAME_PROFILE"
             ):
                 return (
-                    " Enter/A apply exact command  Esc back · Profile UID, "
-                    "store, Contexts, Memories, and Grants stay unchanged"
+                    " Enter/A rename Profile  Esc back"
                 )
             return (
                 " Enter/A apply exact command  Esc back · IRREVERSIBLE · "

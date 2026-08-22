@@ -562,7 +562,7 @@ def run_find_search_workbench(
         if background_turn.busy:
             return (
                 f" SEARCHING {busy_suffix(background_turn.frame)} · "
-                "scope frozen · Ctrl-C closes after search"
+                "Ctrl-C closes after search"
             )
         hint = (
             "Enter search · Tab/Shift-Tab panes · Esc/Ctrl-C close"
@@ -817,7 +817,7 @@ def run_find_search_workbench(
                 finally:
                     save_location_edit["programmatic"] = False
             status["value"] = (
-                f"{response.mode} · {len(response.results)} RESULT(S) · SCOPE FROZEN"
+                f"{response.mode} · {len(response.results)} RESULT(S)"
             )
 
         def fail(error: Exception) -> None:
@@ -838,7 +838,7 @@ def run_find_search_workbench(
             on_idle=return_to_surface,
             on_close=close_after_search,
         )
-        status["value"] = "SEARCHING · SCOPE FROZEN"
+        status["value"] = "SEARCHING"
         event.app.layout.focus(results_control)
         return "HANDLED"
 

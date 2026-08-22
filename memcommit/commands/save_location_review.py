@@ -18,7 +18,7 @@ def render_save_location(name: str, *, detail: str) -> None:
 
     location = SaveLocationView(
         value=name,
-        state="NOT CREATED",
+        state="CREATE ON APPLY",
         detail=detail,
     )
     for line in save_location_card_lines(location):
@@ -37,7 +37,7 @@ def review_save_location(
     # display escaping alone must not turn an invalid CLI operand into a name.
     location = SaveLocationView(
         value=name,
-        state="NOT CREATED",
+        state="CREATE ON APPLY",
         detail="E edits this exact new Context name before Apply.",
         validate=validate,
     )

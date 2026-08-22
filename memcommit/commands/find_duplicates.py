@@ -129,7 +129,7 @@ def _render_redundancy_groups(
             f"{_count(len(members), 'Memory', 'Memories')} · {layer}",
             bold=True,
         )
-        typer.echo("    CLEANUP MAP · PROPOSED · NOT APPLIED")
+        typer.echo("    CLEANUP MAP · READY FOR REVIEW")
         uid_prefixes = collision_safe_uid_prefixes(memory.uid for memory in members)
         for member_index, memory in enumerate(members):
             role = "SURVIVOR" if member_index == 0 else "ABSORB"

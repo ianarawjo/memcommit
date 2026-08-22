@@ -405,7 +405,7 @@ def render_named_ground_contexts_pane(
             hint_lines = [
                 *(
                     f"{'MAIN' if index == 0 else 'ADDITIONAL'} · "
-                    f"{safe_terminal_text(name)} · NOT BOUND"
+                    f"{safe_terminal_text(name)} · SUGGESTED"
                     for index, name in enumerate(context_hints)
                 )
             ]
@@ -413,16 +413,16 @@ def render_named_ground_contexts_pane(
                 hint_lines.append(
                     "NEW CONTEXT · "
                     f"{safe_terminal_text(new_context_hint)} · "
-                    "LOCAL ONLY · NOT CREATED"
+                    "PLANNED · NOT CREATED"
                 )
             return "\n".join(
                 [
-                    "UNBOUND · LOCAL CONTEXT PLAN",
+                    "CONTEXT PLAN",
                     *hint_lines,
                     "",
                     "Create any NEW Context and assign frame roles through",
                     "separately reviewed commands.",
-                    "No Context content was loaded or inferred.",
+                    "Context Memory content was not opened.",
                 ]
             )
         return "\n".join(
@@ -511,7 +511,7 @@ def render_named_ground_rules_pane(
         blocks.append("SAVED RULES\n(none yet)")
 
     if drafts:
-        draft_heading = f"DRAFTS · NOT SAVED · {len(drafts)}"
+        draft_heading = f"DRAFTS · PENDING · {len(drafts)}"
         if drafts_stale:
             draft_heading += " · RECLASSIFY REQUIRED"
         blocks.append(
@@ -1891,7 +1891,7 @@ def run_named_ground_shell(
                 conversation.append(
                     "\n".join(
                         [
-                            "DRAFTS · NOT SAVED",
+                            "DRAFTS · PENDING",
                             (
                                 f"  {len(response.drafts)} independent "
                                 "unit(s) classified from this turn."
@@ -2184,7 +2184,7 @@ def run_named_ground_shell(
         conversation.append(
             "DIRECT WORDING FROZEN\n"
             "  The edited text was not rewritten by the provider.\n"
-            "  It remains NOT SAVED until the exact command receives Enter."
+            "  Press Enter on the exact command to save this wording."
         )
         suspended_message["value"] = ""
         pending_inline_edit["value"] = (
@@ -2793,7 +2793,7 @@ def run_named_ground_shell(
                         "  One READY Rule was reduced to the exact command "
                         "shown below."
                     ),
-                    "  It is still NOT SAVED until Enter approves it.",
+                    "  Press Enter to approve and save it.",
                 ]
             )
         )
@@ -3064,7 +3064,7 @@ def run_named_ground_shell(
             application.invalidate()
         if draft_queue["value"]:
             status_message["value"] = (
-                "Ground changed; remaining drafts are NOT SAVED and require "
+                "Ground changed; remaining drafts are pending and require "
                 "R reclassification."
             )
             sync_rules_pane(align_draft=True)

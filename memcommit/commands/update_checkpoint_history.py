@@ -169,7 +169,7 @@ def update_checkpoint_detail_renderer(
                 (
                     display_escape_text(checkpoint)
                     if checkpoint is not None
-                    else "(not created)"
+                    else "(pending)"
                 )
                 + "\n",
             ),

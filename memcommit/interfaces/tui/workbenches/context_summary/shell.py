@@ -83,7 +83,7 @@ def run_context_summary_workbench(
             label=(
                 "CONTEXT · ALL READABLE CONTEXTS · * CURRENT"
                 if view.targeting_editable
-                else "SOURCE CONTEXT · FROZEN"
+                else "SOURCE CONTEXT"
             ),
             current_context=view.current_context,
             annotations=view.annotations,
@@ -147,7 +147,6 @@ def run_context_summary_workbench(
             else [
                 ("", " RANGE · "),
                 ("class:memcommit.choice.selected", "[ THIS CONTEXT ONLY ]"),
-                ("", " · FROZEN"),
             ]
         ),
         focusable=view.targeting_editable,
@@ -155,7 +154,7 @@ def run_context_summary_workbench(
     )
     range_frame = build_focused_frame(
         Window(range_control, wrap_lines=False),
-        title=("DESCENDANTS" if view.targeting_editable else "REACH · FROZEN"),
+        title=("DESCENDANTS" if view.targeting_editable else "REACH"),
         is_focused=lambda: get_app().layout.has_focus(range_control),
         height=Dimension.exact(3),
     )
@@ -196,9 +195,9 @@ def run_context_summary_workbench(
         FormattedTextControl(
             f" MEM {safe_terminal_text(view.operation_label.upper())}\n"
             + (
-                " READ-ONLY · PICK CONTEXT AND DESCENDANTS SEPARATELY"
+                " PICK CONTEXT AND DESCENDANTS SEPARATELY"
                 if view.targeting_editable
-                else " READ-ONLY · SOURCE FROZEN BY CALLER"
+                else " SOURCE SELECTED"
             )
         ),
         height=Dimension.exact(2),
@@ -236,7 +235,7 @@ def run_context_summary_workbench(
                 )
                 return (
                     f" Enter run · {navigation_hint}"
-                    "Esc/Backspace/Q close · read-only"
+                    "Esc/Backspace/Q close"
                 )
             receipt = ""
             if copy_receipt is not None:
@@ -246,9 +245,9 @@ def run_context_summary_workbench(
             return (
                 f"{receipt} y current · Y all · ↑/↓ section/cross · "
                 "PgUp/PgDn page · Home/End · S rerun · "
-                "Esc/Backspace/Q close · read-only"
+                "Esc/Backspace/Q close"
             )
-        return " Esc/Backspace/Q close · read-only"
+        return " Esc/Backspace/Q close"
 
     footer = Window(
         FormattedTextControl(render_footer),

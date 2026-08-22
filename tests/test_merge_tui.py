@@ -206,7 +206,7 @@ def test_frozen_plan_projection_exposes_complete_mapping_before_apply() -> None:
         "SUMMARY",
         "CONTEXT_PLAN",
     ]
-    assert "STATUS · FROZEN · NOT APPLIED" in rendered
+    assert "STATUS · READY FOR REVIEW" in rendered
     assert "source → target" in rendered
     assert "TARGET · EXISTING" in rendered
     assert "MEMORY · [memory-u]" in rendered

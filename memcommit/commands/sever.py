@@ -202,7 +202,7 @@ def render_sever(session: SeverSession) -> str:
             if self_save
             else "CREATED LOCALLY"
             if session.state == "APPLIED"
-            else "NOT CREATED"
+            else "READY TO CREATE"
         ),
         "",
         safe_terminal_text(session.overview),
@@ -260,7 +260,7 @@ def render_sever(session: SeverSession) -> str:
             (
                 "The reviewed Result replaces the Source Context on Apply."
                 if self_save
-                else "The Source Context is unchanged."
+                else "Apply creates a separate Result Context."
             ),
         ]
     )
@@ -287,7 +287,7 @@ def render_sever_receipt(session: SeverSession) -> str:
         f"SEVER APPLIED · {session.source.root_name} → {session.output_name}",
         f"SAVE MODE · {'SELF-SAVE' if self_save else 'OTHER-SAVE'}",
         f"DECISIONS · KEEP {len(session.application.result_memory_uids)} · FORGET {forgotten}",
-        "SOURCE · UPDATED" if self_save else "SOURCE · UNCHANGED",
+        "SOURCE · UPDATED" if self_save else "RESULT · CREATED SEPARATELY",
         f"RECEIPT · {session.uid}",
         f"CHECKPOINT · {session.application.checkpoint_uid}",
         f"REVIEW · mem review sever --session {session.uid}",
@@ -461,14 +461,14 @@ def _run_workbench(
             title=(
                 "IMPACT · SEVER SELF-SAVE · SOURCE WILL BE REPLACED"
                 if session.save_mode == "SELF_SAVE"
-                else "IMPACT · SEVER OTHER-SAVE · SOURCE UNCHANGED"
+                else "IMPACT · SEVER OTHER-SAVE"
             ),
             summary=(
                 "This is the exact local result that Apply would save. "
                 + (
                     "It replaces the Source Context."
                     if session.save_mode == "SELF_SAVE"
-                    else "The Source Context remains unchanged."
+                    else "It creates a separate Result Context."
                 )
             ),
             changes=sever_memory_changes(session),
@@ -492,7 +492,7 @@ def _run_workbench(
             destination=(
                 ResolutionDestination(
                     value=session.output_name,
-                    state="NOT CREATED",
+                    state="CREATE ON APPLY",
                     validate=validate_destination,
                     context_names=tuple(store.list_context_names()),
                     current_context=store.current_context_name(),

@@ -98,7 +98,7 @@ def project_distill_result(result: DistillResult) -> SemanticViewerDocument:
             SemanticViewerBlock(
                 ((
                     "class:report-label",
-                    " STATUS · REVIEW ONLY · SOURCE UNCHANGED · "
+                    " STATUS · PROPOSAL · "
                     + ("RECURSIVE" if analysis.source.include_descendants else "DIRECT")
                     + f" · {result.origin.replace('_', ' ')}\n",
                 ),)

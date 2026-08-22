@@ -42,7 +42,7 @@ def test_replace_plain_previews_every_change_without_mutating(isolated_store) ->
     )
 
     assert result.exit_code == 0, result.output + result.stderr
-    assert "REPLACE PLAN · NOT APPLIED" in result.output
+    assert "REPLACE PLAN · READY FOR REVIEW" in result.output
     assert "MATCHED 1 · CHANGED 1 · OCCURRENCES 2" in result.output
     assert "+ pin one; pin two." in result.output
     assert _memory_contents(store, context.name) == ("Needle one; needle two.",)

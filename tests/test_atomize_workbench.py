@@ -1858,7 +1858,7 @@ def test_applied_output_preview_does_not_become_a_second_session_owner(
         ],
     )
     assert reviewed_output.exit_code == 0, reviewed_output.output
-    assert "APPLIED ANALYSIS · READ ONLY" in reviewed_output.output
+    assert "APPLIED ANALYSIS" in reviewed_output.output
     assert store.load_atomize_workbench(output_analysis) is None
 
     # Recover catalogs produced by the historical bug without deleting the

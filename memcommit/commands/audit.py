@@ -382,4 +382,3 @@ def cmd(
         f"Session [{session.uid[:8]}] · review: "
         f"mem review audit --session {session.uid}"
     )
-    typer.echo("Source unchanged. No checkpoint created.")

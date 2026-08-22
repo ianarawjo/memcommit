@@ -152,7 +152,7 @@ def render_grounding_session(
             elif session.state == "APPLIED":
                 proposal_heading = "APPLIED CHANGES"
             elif session.state == "KEPT_REVIEW_ONLY":
-                proposal_heading = "REVIEW-ONLY PROPOSALS — not applied"
+                proposal_heading = "REVIEW PROPOSALS"
             elif assessment.has_required_follow_up:
                 proposal_heading = (
                     "PROVISIONAL CHANGES — blocked by required follow-up"
@@ -214,10 +214,7 @@ def render_grounding_session(
             "Keep without changing Memories: "
             "mem atomize --keep-review-only"
         )
-        lines.append(
-            "No Memory changes have been applied and no checkpoint has been "
-            "created by this dialogue."
-        )
+        lines.append("This dialogue has not changed the Memories.")
     return "\n".join(lines)
 
 

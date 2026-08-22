@@ -59,7 +59,7 @@ def present_atomize_workbench(
             destination=(
                 ResolutionDestination(
                     value=planned_output,
-                    state="NOT CREATED",
+                    state="CREATE ON APPLY",
                     detail=(
                         "Enter to change this exact new Context name before "
                         "Review and Apply."

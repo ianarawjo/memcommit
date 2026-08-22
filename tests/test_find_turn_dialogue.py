@@ -278,7 +278,7 @@ def test_short_reply_receives_only_the_pending_visible_clarification():
                 ),
             ),
         ),
-        status="WAITING FOR CLARIFICATION · RESULTS UNCHANGED",
+        status="WAITING FOR CLARIFICATION",
     )
     provider = Provider(
         {

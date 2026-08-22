@@ -136,7 +136,7 @@ def project_merge_plan(plan: FrozenMergePlan) -> SemanticViewerDocument:
                         "class:title",
                         f"MERGE PLAN · {safe_terminal_text(plan.source_name)} → {safe_terminal_text(plan.target_name)}\n",
                     ),
-                    ("class:report-label", "STATUS · FROZEN · NOT APPLIED\n"),
+                    ("class:report-label", "STATUS · READY FOR REVIEW\n"),
                     (
                         "class:viewer-body",
                         f"RANGE · {plan.request.reach.value}\n"
@@ -233,7 +233,7 @@ def run_merge_plan_review(
             wrap_lines=True,
             right_margins=[ScrollbarMargin(display_arrows=True)],
         ),
-        title="FROZEN PLAN · COMPLETE CONTEXT MAPPINGS",
+        title="PLAN · COMPLETE CONTEXT MAPPINGS",
         is_focused=lambda: get_app().layout.has_focus(viewer_control),
         height=Dimension(min=18, weight=1),
     )
@@ -251,7 +251,7 @@ def run_merge_plan_review(
                 *cursor,
                 (
                     focused_control_style(focused=focused),
-                    "[ PRESS ENTER TO APPLY THE FROZEN MERGE PLAN ]",
+                    "[ PRESS ENTER TO APPLY THE MERGE PLAN ]",
                 ),
             ]
         created = sum(context.target_created for context in result.contexts)
@@ -292,13 +292,13 @@ def run_merge_plan_review(
     )
     todo_frame = build_focused_frame(
         Window(todo_control, wrap_lines=True),
-        title="TO DO · EXACT FROZEN PLAN",
+        title="TO DO · REVIEWED PLAN",
         is_focused=lambda: get_app().layout.has_focus(todo_control),
         height=Dimension(min=15, max=18),
     )
     header = Window(
         FormattedTextControl(
-            " MEM MERGE · REVIEW FROZEN PLAN\n"
+            " MEM MERGE · REVIEW PLAN\n"
             " DETERMINISTIC · NO PROVIDER · COMPLETE PLAN BEFORE APPLY"
         ),
         height=Dimension.exact(2),

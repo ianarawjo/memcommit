@@ -440,8 +440,8 @@ def cmd(
             typer.echo("UNDO · mem undo")
         elif save_as is not None:
             typer.echo(
-                f"RESULT · {display_escape_text(save_as)} · NOT CREATED · "
-                "rerun with --apply only after reviewing this proposal"
+                f"RESULT · {display_escape_text(save_as)} · READY TO CREATE · "
+                "rerun with --apply after reviewing this proposal"
             )
     except (
         DistillError,

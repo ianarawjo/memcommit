@@ -145,7 +145,7 @@ def test_replace_tui_lowercase_y_copies_one_change_and_uppercase_y_the_plan() ->
     assert isinstance(returned, ReplaceTuiOutcome)
     assert len(copied) == 2
     assert copied[0].startswith("alpha · MEMORY memory-1")
-    assert copied[1].startswith("REPLACE PLAN · NOT APPLIED")
+    assert copied[1].startswith("REPLACE PLAN · READY FOR REVIEW")
     assert port.applied == []
 
 

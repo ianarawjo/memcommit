@@ -706,7 +706,7 @@ def _meld_wait_view(session: MeldSession) -> CommandWaitView:
     pending_lines = [
         render_meld_session(prior_session),
         "",
-        "PENDING TURN · SUBMITTED · NOT YET INCORPORATED",
+        "PENDING TURN · SUBMITTED",
         f"SCOPE · {current.scope}",
     ]
     if current.issue_uids:
@@ -716,7 +716,7 @@ def _meld_wait_view(session: MeldSession) -> CommandWaitView:
     if current.comment:
         pending_lines.extend(["", "COMMENT", safe_terminal_text(current.comment)])
     return CommandWaitView(
-        title="PREVIOUS MELD REPORT · READ-ONLY",
+        title="PREVIOUS MELD REPORT",
         text=_meld_wait_fragments("\n".join(pending_lines)),
     )
 
@@ -725,7 +725,7 @@ def _meld_wait_context_view(session: MeldSession) -> CommandWaitView:
     """Show the exact route, scopes, and submitted turn frozen for analysis."""
 
     lines = [
-        f"MEM MELD · {session.mode} · FROZEN INPUTS",
+        f"MEM MELD · {session.mode} · INPUTS CONFIRMED",
         _session_route(session),
         _session_scope(session),
         "",
@@ -739,14 +739,14 @@ def _meld_wait_context_view(session: MeldSession) -> CommandWaitView:
             [
                 f"  {frame.role} · {safe_terminal_text(frame.context_name)}",
                 f"    SCOPE · {scope}",
-                f"    FROZEN MEMORIES · {len(frame.memories)}",
+                f"    MEMORIES · {len(frame.memories)}",
             ]
         )
     lines.extend(
         [
             "",
             f"TARGET · {safe_terminal_text(session.target.context_name)}",
-            "TARGET STATE · UNCHANGED WHILE ANALYSIS RUNS",
+            "TARGET · CHANGES APPLY HERE AFTER REVIEW",
         ]
     )
     current = session.current_turn
@@ -765,7 +765,7 @@ def _meld_wait_context_view(session: MeldSession) -> CommandWaitView:
         if current.comment:
             lines.extend(["", "COMMENT", safe_terminal_text(current.comment)])
     return CommandWaitView(
-        title="MELD CONFIRMED INPUTS · READ-ONLY",
+        title="MELD INPUTS",
         text="\n".join(lines),
     )
 

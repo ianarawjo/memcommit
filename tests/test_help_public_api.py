@@ -29,7 +29,7 @@ def test_client_describes_one_json_safe_public_value(tmp_path):
 
     assert result.name == "help"
     assert result.execution == "MIXED"
-    assert result.effect == "Read-only"
+    assert result.effect == "Browses command guidance"
     assert result.range is None
 
 

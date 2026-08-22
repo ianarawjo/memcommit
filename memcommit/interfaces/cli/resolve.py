@@ -131,8 +131,8 @@ def render_resolve_plain(analysis: ResolveAnalysis) -> None:
     elif analysis.status == "ASSUMED":
         typer.echo()
         typer.echo(
-            "PROCESS-LOCAL · this reasonable interpretation may inform the next "
-            "agent turn but cannot be applied to durable Memories."
+            "TEMPORARY INTERPRETATION · use this as guidance for the next turn; "
+            "it is not an executable Memory change."
         )
 
 

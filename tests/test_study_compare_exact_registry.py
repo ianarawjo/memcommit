@@ -552,7 +552,7 @@ def test_declared_parent_projects_opposite_descendant_subsets_without_provider(
         origin=execution.origin,
         durable=execution.durable,
     )
-    assert "PROJECTED · NOT SAVED · PREVIEW" in rendered
+    assert "PROJECTED · TEMPORARY PREVIEW" in rendered
     assert "Create a new result Context" not in rendered
 
 

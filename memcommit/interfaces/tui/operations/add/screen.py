@@ -80,11 +80,11 @@ def _draft_fragments(
         if saved is not None and index < saved.count:
             status = f"SAVED {saved.memories[index].uid[:8]}"
         elif state.editing == index:
-            status = "EDITING · NOT SAVED"
+            status = "EDITING"
         elif content is None:
-            status = "EMPTY · E EDIT · NOT SAVED"
+            status = "EMPTY · E EDIT"
         else:
-            status = "EDITABLE · NOT SAVED"
+            status = "DRAFT"
         heading = f"{pointer} {index + 1} · [{status}]\n"
         heading_style = "class:detail-card.focused" if selected else "class:detail-card"
         fragments.append((heading_style, heading))
@@ -126,7 +126,7 @@ def run_add_tui(
             names=setup.names,
             selected=(setup.selected_context,),
             mode="SINGLE",
-            label="TARGET · CREATE AUTHORITY · * CURRENT",
+            label="TARGET · CAN ADD MEMORIES · * CURRENT",
             current_context=setup.current_context,
             selectable_names=setup.selectable_names,
             annotations=setup.annotations,

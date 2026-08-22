@@ -470,7 +470,7 @@ def test_failed_controller_turn_preserves_results_in_same_application():
         )
 
     assert result.state.results == initial.results
-    assert result.state.status == "TURN FAILED · RESULTS UNCHANGED"
+    assert result.state.status == "TURN FAILED · PREVIOUS RESULTS KEPT"
     assert result.state.messages[-1].role == "STATUS"
     assert "provider unavailable" in result.state.messages[-1].text
 
@@ -552,7 +552,7 @@ def test_busy_turn_stays_visible_and_blocks_parallel_submission(monkeypatch):
     calls = []
 
     def capturing_header(state):
-        if state.status == "THINKING · RESULTS UNCHANGED":
+        if state.status == "THINKING":
             thinking_rendered.set()
         return original_header(state)
 

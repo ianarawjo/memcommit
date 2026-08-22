@@ -240,7 +240,7 @@ def test_adapter_projects_local_counts_and_three_separate_sections() -> None:
         "split_children": 2,
         "review_issues": 4,
     }
-    assert view.status == "READ-ONLY PREVIEW"
+    assert view.status == "ANALYSIS COMPLETE"
     assert view.understood.state == "PRESENT"
     assert view.understood.text == _overview().understood.text
     assert view.happened.state == "PRESENT"

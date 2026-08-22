@@ -386,7 +386,7 @@ def choose_sever_setup(
         )
         return (
             " MEM SEVER · SETUP · "
-            + ("SELF-SAVE" if self_save else "OTHER-SAVE · SOURCE UNCHANGED")
+            + ("SELF-SAVE" if self_save else "OTHER-SAVE")
             + "\n "
             f"SOURCE {display_escape_text(selections['SOURCE'].selected_name)} "
             f"({'SUBTREE' if scope_choice['SOURCE'].include_descendants else 'THIS ONLY'}) × "

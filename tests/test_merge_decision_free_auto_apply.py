@@ -41,8 +41,8 @@ def test_setup_discloses_conditional_auto_apply() -> None:
         )
     )
 
-    assert spec.action_label == "CLASSIFY · APPLY IF NO DECISION IS REQUIRED"
-    assert "REQUIRED CONFLICTS REVIEWED BEFORE APPLY" in spec.subtitle
+    assert spec.action_label == "REVIEW MERGE PLAN"
+    assert spec.subtitle == "REVIEW REQUIRED CONFLICTS BEFORE APPLY"
 
 
 def _plan(*, granted: bool, with_addition: bool) -> FrozenMergePlan:

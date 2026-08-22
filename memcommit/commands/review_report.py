@@ -171,7 +171,7 @@ def _text_only_view(report: ReviewReport) -> ResolutionWorkbenchView:
         revision=report.revision,
         title=report.title,
         route=report.kind,
-        status="REVIEW REPORT · READ ONLY",
+        status="REVIEW REPORT",
         metrics=(),
         overview=report.summary,
         overview_sections=overview_sections,

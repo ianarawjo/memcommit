@@ -183,13 +183,13 @@ def render_ground_start(initial_request: str = "") -> str:
     )
     return "\n".join(
         [
-            "MEM GROUND · WORKING · NOT SAVED",
+            "MEM GROUND · DRAFT",
             "",
             "GOAL",
             *goal_lines,
             "",
             "CONTEXTS",
-            "  (not bound; not inferred)",
+            "  (none selected)",
             "  No current Context was read.",
             "",
             "RULES",

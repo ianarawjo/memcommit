@@ -722,7 +722,8 @@ def test_cli_keep_review_only_creates_no_checkpoint(
     assert opened.exit_code == 0, opened.output
     assert kept.exit_code == 0, kept.output
     assert "KEPT_REVIEW_ONLY" in kept.output
-    assert "REVIEW-ONLY PROPOSALS — not applied" in kept.output
+    assert "Kept as review evidence" in kept.output
+    assert "REVIEW-ONLY PROPOSALS — not applied" not in kept.output
     assert "PROVISIONAL CHANGES" not in kept.output
     assert "No Memory changes or checkpoint" in kept.output
     assert store.list_context_names() == context_names_before

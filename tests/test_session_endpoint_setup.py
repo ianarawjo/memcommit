@@ -654,7 +654,7 @@ def test_confirmed_new_context_is_projected_back_into_endpoint_selector():
 
     assert fragments[0] == ("[SetCursorPosition]", "")
     assert "".join(text for _style, text in fragments) == (
-        "    + atomize/output  NEW · NOT CREATED"
+        "    + atomize/output  NEW · CREATE ON START"
     )
     assert all(
         style == "class:memcommit.choice.active" for style, _text in fragments[1:]

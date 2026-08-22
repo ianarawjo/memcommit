@@ -90,7 +90,7 @@ def choose_meld_target(
         ExactNameFieldView(
             value="",
             label="NEW RESULT CONTEXT",
-            state="NOT CREATED",
+            state="CREATE ON START",
             validate=store.assert_context_creatable,
             value_label="Context name",
         ),

@@ -28,7 +28,7 @@ def run_context_init_tui(
         ContextNameView(
             value=suggestion,
             label="NEW CONTEXT NAME",
-            state="NOT CREATED",
+            state="NEW CONTEXT",
             detail="Enter creates this exact Context and switches to it.",
             validate=setup.validate_name,
             context_names=setup.context_names,

@@ -17,7 +17,7 @@ def render_summarize_plain(result: SummarizeResult) -> None:
         "SUMMARY · " + display_escape_text(result.context_name),
         bold=True,
     )
-    typer.echo("STATUS · READ-ONLY · " + summarize_scope_label(result))
+    typer.echo("STATUS · " + summarize_scope_label(result))
     typer.echo()
     for line in understanding_lines(result.understanding):
         typer.echo(line)

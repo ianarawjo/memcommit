@@ -336,7 +336,7 @@ def render_ground_top_panel(
     ).splitlines()
     return "\n".join(
         [
-            "MEM GROUND · WORKING · NOT SAVED",
+            "MEM GROUND · DRAFT",
             "GOAL",
             f"  {safe_terminal_text(goal)}",
             "CONTEXTS",
@@ -487,19 +487,17 @@ def render_ground_contexts_pane(
         return (
             f"{candidate_prefix(item)}{checkbox}{current_marker}"
             f"{candidate_label(item)} · "
-            f"{one_line(item.context_name)}{selection_marker(item)} · "
-            "NOT BOUND — "
+            f"{one_line(item.context_name)}{selection_marker(item)} — "
             f"{one_line(item.reason)}"
         )
 
     if selection_finished:
         lines = (
-            [f"SELECTED CONTEXTS · {len(selected_names)} · NOT BOUND"]
+            [f"SELECTED CONTEXTS · {len(selected_names)}"]
             if selected_names
             else [
                 "CONTEXT PLAN · "
                 + ("NEW ONLY" if local_new_context_name else "NONE")
-                + " · NOT BOUND"
             ]
         )
         for name in selected_names:
@@ -513,32 +511,26 @@ def render_ground_contexts_pane(
                 )
             else:
                 lines.append(
-                    f"DIRECT · {one_line(name)} · SELECTED · NOT BOUND"
+                    f"DIRECT · {one_line(name)} · SELECTED"
                 )
         if local_new_context_name:
             lines.append(
                 "NEW CONTEXT · "
                 f"{one_line(local_new_context_name)} · "
-                "LOCAL ONLY · NOT CREATED"
+                "PLANNED · NOT CREATED"
             )
         lines.append(
-            "EVIDENCE · locator names only; binding still needs approval"
+            "These Contexts will be reviewed with the Ground draft."
         )
         return "\n".join(lines)
 
-    lines = ["NAME-ONLY CHECK · NOT BOUND"]
+    lines = ["CONTEXT SUGGESTIONS"]
     if current_context_name is None:
         lines.append("CURRENT · (none)")
     elif current_match is not None:
         lines.append(candidate_line(current_match, current=True))
-    elif discovery_complete:
-        lines.append(
-            f"CURRENT · {current_name} · NO DISPLAYED MATCH · NOT BOUND"
-        )
     else:
-        lines.append(
-            f"CURRENT · {current_name} · STATE POINTER ONLY · NOT BOUND"
-        )
+        lines.append(f"CURRENT · {current_name}")
 
     if discovery_in_progress:
         subject = (
@@ -560,7 +552,7 @@ def render_ground_contexts_pane(
                 continue
             lines.append(candidate_line(alternative))
     elif discovery_complete:
-        lines.append("MAIN? · (none found from locator names) · NOT BOUND")
+        lines.append("MAIN? · (none found from Context names)")
     elif catalog_count:
         lines.append(
             f"READY · {catalog_count} ordinary Context locator names"
@@ -583,7 +575,7 @@ def render_ground_contexts_pane(
             lines.append(
                 "NEW CONTEXT · "
                 f"{one_line(local_new_context_name)} · "
-                "LOCAL ONLY · NOT CREATED"
+                "PLANNED · NOT CREATED"
             )
         if direct_context_names:
             lines.append(
@@ -601,14 +593,7 @@ def render_ground_contexts_pane(
                     + "CONTINUE WITHOUT CONTEXT PLAN · Review Ground only"
                 )
 
-    lines.append(
-        (
-            "EVIDENCE · locator names only; no Context Memory content read; "
-            "NEW is local only"
-        )
-        if new_context_suggestions or local_new_context_name
-        else "EVIDENCE · locator names only; no Context Memory content read"
-    )
+    lines.append("Suggestions use Context names only; Memory content was not opened.")
     return "\n".join(lines)
 
 
@@ -807,10 +792,10 @@ def _proposal_review(
     has_local_new_context: bool = False,
 ) -> ExactCommandReview:
     if has_local_new_context:
-        new_context_effect = "New Context plan: local only (not created)"
+        new_context_effect = "New Context plan: reviewed with this Ground"
     elif proposal.new_context_suggestions:
         new_context_effect = (
-            "Provider new-Context suggestion: unaccepted (not created)"
+            "New Context suggestion: not selected"
         )
     else:
         new_context_effect = "New Context plan: none"
@@ -819,13 +804,9 @@ def _proposal_review(
         effects=(
             f"Ground: CREATE {proposal.ground_name}",
             "Goal: SET",
-            "Rules: unchanged (none)",
-            "Ground Memories: unchanged (none)",
-            "Context selections: local only (not saved or bound)",
+            "Rules and Ground Memories: none in this draft",
             new_context_effect,
-            "Contexts: unchanged",
-            "Context Memories: unchanged",
-            "Checkpoints: unchanged",
+            "Other Contexts will not be edited by this command",
         ),
     )
 
@@ -1354,7 +1335,7 @@ def run_ground_shell(
     error_message = {"value": ""}
     status_message = {
         "value": (
-            "Draft resumed · NOT CREATED · exact approval is still required."
+            "Draft resumed · NOT CREATED · review and approve the exact command."
             if frozen_initial_proposal is not None
             else ""
         )
@@ -1717,7 +1698,7 @@ def run_ground_shell(
     direct_edit_area = direct_editor.text_area
 
     header = Window(
-        FormattedTextControl(" MEM GROUND · WORKING · NOT SAVED"),
+        FormattedTextControl(" MEM GROUND · DRAFT"),
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
@@ -1875,7 +1856,7 @@ def run_ground_shell(
                 and row.kind == "ADD_NEW"
             ):
                 return (
-                    " CONTEXTS: N · add a local NOT CREATED name    "
+                    " CONTEXTS: N · plan a new Context name    "
                     "Enter approve · B Grounds · Q quit"
                 )
             return (
@@ -2679,8 +2660,7 @@ def run_ground_shell(
             mode["value"] = "APPROVAL"
             sync_input_host()
             status_message["value"] = (
-                f"{summary} · NOT BOUND/NOT CREATED. "
-                "The unchanged Ground command is ready for a fresh Enter."
+                f"{summary}. The Ground command is ready for a fresh Enter."
             )
             sync_panes(dialogue_anchor="end")
             focus_conversation()
@@ -2692,13 +2672,13 @@ def run_ground_shell(
             mode["value"] = "APPROVAL"
             sync_input_host()
             status_message["value"] = (
-                f"{summary} · NOT BOUND/NOT CREATED. "
+                f"{summary}. "
                 "Enter approves only the Ground name and Goal."
             )
             focus_conversation()
         else:
             status_message["value"] = (
-                f"{summary} · NOT BOUND/NOT CREATED. Continue in Message."
+                f"{summary}. Continue in Message."
             )
             application.layout.focus(input_area)
         application.invalidate()
@@ -2760,7 +2740,7 @@ def run_ground_shell(
                     [
                         "YOU · NEW CONTEXT NAME (DIRECTLY)",
                         f"  {safe_terminal_text(exact_name)}",
-                        "  LOCAL ONLY · NOT CREATED · NOT BOUND",
+                        "  PLANNED CONTEXT · NOT CREATED",
                     ]
                 )
             )
@@ -2866,7 +2846,7 @@ def run_ground_shell(
             if editable_goal["value"]:
                 blocks.extend(
                     [
-                        "CURRENT GOAL · VISIBLE UNSAVED DRAFT",
+                        "CURRENT GOAL · DRAFT",
                         editable_goal["value"],
                     ]
                 )
@@ -3252,7 +3232,7 @@ def run_ground_shell(
         selected_context_names["value"] = tuple(selected)
         sync_contexts_pane(align_candidate=True)
         status_message["value"] = (
-            f"{len(selected)} Context(s) selected locally · NOT BOUND."
+            f"{len(selected)} Context(s) selected for this draft."
         )
         event.app.invalidate()
 
@@ -3291,7 +3271,7 @@ def run_ground_shell(
                     names.append(result)
                 selected_context_names["value"] = tuple(names)
                 status_message["value"] = (
-                    f"{len(names)} Context(s) selected locally · NOT BOUND."
+                    f"{len(names)} Context(s) selected for this draft."
                 )
                 sync_contexts_pane(align_candidate=True)
             application.invalidate()

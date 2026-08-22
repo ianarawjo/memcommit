@@ -785,10 +785,10 @@ def test_fixed_top_panel_and_effect_review_show_all_boundaries():
     proposed = render_ground_top_panel(frozen)
     review = render_proposal_review(frozen)
 
-    assert blank.startswith("MEM GROUND · WORKING · NOT SAVED")
+    assert blank.startswith("MEM GROUND · DRAFT")
     assert "GOAL\n  (not yet stated)" in blank
     assert "COMPLETION" not in blank
-    assert "CONTEXTS\n  NAME-ONLY CHECK · NOT BOUND" in blank
+    assert "CONTEXTS\n  CONTEXT SUGGESTIONS" in blank
     assert "CURRENT · (none)" in blank
     assert "RULES\n  (none yet)" in blank
     assert "MEMORIES\n  (none yet)" in blank
@@ -797,12 +797,9 @@ def test_fixed_top_panel_and_effect_review_show_all_boundaries():
     assert "PROPOSED COMMAND · NOT RUN" in review
     assert "Ground: CREATE task-1-report-coverage" in review
     assert "Goal: SET" in review
-    assert "Rules: unchanged (none)" in review
-    assert "Ground Memories: unchanged (none)" in review
-    assert "Context selections: local only (not saved or bound)" in review
-    assert "Contexts: unchanged" in review
-    assert "Context Memories: unchanged" in review
-    assert "Checkpoints: unchanged" in review
+    assert "Rules and Ground Memories: none in this draft" in review
+    assert "New Context plan: none" in review
+    assert "Other Contexts will not be edited by this command" in review
 
 
 def test_blank_ground_layers_render_as_complete_independent_components():
@@ -854,21 +851,18 @@ def test_blank_ground_layers_render_as_complete_independent_components():
         catalog_count=4,
         discovery_complete=True,
     )
-    assert "NAME-ONLY CHECK · NOT BOUND" in suggested
+    assert "CONTEXT SUGGESTIONS" in suggested
+    assert "CURRENT · test/update/from" in suggested
     assert (
-        "CURRENT · test/update/from · NO DISPLAYED MATCH · NOT BOUND"
+        "MAIN? · temp/task-1 — The name matches Task 1."
         in suggested
     )
     assert (
-        "MAIN? · temp/task-1 · NOT BOUND — The name matches Task 1."
-        in suggested
-    )
-    assert (
-        "ALTERNATIVE · temp/task-1-atomized · NOT BOUND — "
+        "ALTERNATIVE · temp/task-1-atomized — "
         "A processed Task 1 variant."
         in suggested
     )
-    assert "no Context Memory content read" in suggested
+    assert "Memory content was not opened" in suggested
     assert "SOURCE?" not in suggested
     assert "DERIVED?" not in suggested
     assert "TARGET?" not in suggested
@@ -968,17 +962,16 @@ def test_first_turn_renders_new_context_and_immediate_rule_memory_drafts():
     assert "NOTES ·" not in memories
     assert "NEW? · ticker-rule-examples" in top
     assert "DRAFTS · NOT SAVED" not in top
-    assert "Rules: unchanged (none)" in review
-    assert "Ground Memories: unchanged (none)" in review
+    assert "Rules and Ground Memories: none in this draft" in review
     assert (
-        "Provider new-Context suggestion: unaccepted (not created)"
+        "New Context suggestion: not selected"
         in review
     )
     accepted_local_effects = ground_shell_module._render_proposal_effects_block(
         frozen,
         has_local_new_context=True,
     )
-    assert "New Context plan: local only (not created)" in accepted_local_effects
+    assert "New Context plan: reviewed with this Ground" in accepted_local_effects
     assert "unaccepted" not in accepted_local_effects
     command = format_proposal_command(frozen)
     assert command.startswith("mem ground ticker-rules --goal")
@@ -1489,12 +1482,12 @@ def test_current_main_is_rendered_once_and_candidate_reasons_stay_one_line():
 
     assert rendered.count("MAIN?") == 1
     assert (
-        "[ ] CURRENT · MAIN? · temp/task-1-atomized · NOT BOUND — "
+        "[ ] CURRENT · MAIN? · temp/task-1-atomized — "
         "Best processed candidate."
     ) in rendered
     assert rendered.count("temp/task-1-atomized") == 1
     assert (
-        "[ ] ALTERNATIVE · temp/task-1 · NOT BOUND — "
+        "[ ] ALTERNATIVE · temp/task-1 — "
         "Current candidate with a compact reason."
     ) in rendered
 
@@ -1544,22 +1537,22 @@ def test_context_candidate_cursor_and_multiple_selections_are_distinct():
         selected_context_names=("temp/task-1",),
     )
 
-    assert "› [ ] MAIN? · temp/task-1 · NOT BOUND" in recommended
+    assert "› [ ] MAIN? · temp/task-1" in recommended
     assert (
-        "  [ ] ALTERNATIVE · temp/task-1-atomized · NOT BOUND"
+        "  [ ] ALTERNATIVE · temp/task-1-atomized"
         in recommended
     )
     assert "  [x] ADDITIONAL · temp/task-1 · SELECTED" in selected_multiple
     assert (
-        "› [x] MAIN · temp/task-1-atomized · SELECTED · NOT BOUND"
+        "› [x] MAIN · temp/task-1-atomized · SELECTED"
         in selected_multiple
     )
     assert selected_current.count("CURRENT · MAIN · temp/task-1 ·") == 1
     assert (
-        "› [x] CURRENT · MAIN · temp/task-1 · SELECTED · NOT BOUND"
+        "› [x] CURRENT · MAIN · temp/task-1 · SELECTED"
         in selected_current
     )
-    assert "[ ] MAIN? · temp/task-1 · NOT BOUND" not in selected_current
+    assert "[ ] MAIN? · temp/task-1" not in selected_current
 
     finished = render_ground_contexts_pane(
         candidates,
@@ -1570,12 +1563,12 @@ def test_context_candidate_cursor_and_multiple_selections_are_distinct():
         ),
         selection_finished=True,
     )
-    assert "SELECTED CONTEXTS · 2 · NOT BOUND" in finished
+    assert "SELECTED CONTEXTS · 2" in finished
     assert (
-        "MAIN · temp/task-1-atomized · SELECTED · NOT BOUND"
+        "MAIN · temp/task-1-atomized · SELECTED"
         in finished
     )
-    assert "ADDITIONAL · temp/task-1 · SELECTED · NOT BOUND" in finished
+    assert "ADDITIONAL · temp/task-1 · SELECTED" in finished
     assert "ALTERNATIVE" not in finished
     assert "[ ]" not in finished
 
@@ -1620,10 +1613,10 @@ def test_add_new_context_remains_available_without_catalog_or_suggestion():
         selection_finished=True,
     )
 
-    assert "MAIN? · (none found from locator names)" in rendered
+    assert "MAIN? · (none found from Context names)" in rendered
     assert "ADD NEW CONTEXT · N to enter an exact Context name" in rendered
     assert "CONTINUE WITHOUT CONTEXT PLAN · Review Ground only" in rendered
-    assert "CONTEXT PLAN · NONE · NOT BOUND" in finished_empty
+    assert "CONTEXT PLAN · NONE" in finished_empty
     assert "NEW ONLY" not in finished_empty
 
 
@@ -2061,9 +2054,9 @@ def test_context_selection_supports_multiple_names_before_separate_approval(
         "temp/task-1",
     )
     assert any(
-        "SELECTED CONTEXTS · 2 · NOT BOUND" in value
-        and "MAIN · temp/task-1-atomized · SELECTED · NOT BOUND" in value
-        and "ADDITIONAL · temp/task-1 · SELECTED · NOT BOUND" in value
+        "SELECTED CONTEXTS · 2" in value
+        and "MAIN · temp/task-1-atomized · SELECTED" in value
+        and "ADDITIONAL · temp/task-1 · SELECTED" in value
         and "ALTERNATIVE" not in value
         for value in rendered
     )
@@ -2135,8 +2128,8 @@ def test_suggested_new_context_can_be_edited_without_entering_creation_argv(
     assert result.new_context_name_hint == exact_name
     assert exact_name not in format_proposal_command(result.proposal)
     assert any(
-        "CONTEXT PLAN · NEW ONLY · NOT BOUND" in value
-        and f"NEW CONTEXT · {exact_name} · LOCAL ONLY · NOT CREATED"
+        "CONTEXT PLAN · NEW ONLY" in value
+        and f"NEW CONTEXT · {exact_name} · PLANNED · NOT CREATED"
         in value
         for value in rendered
     )
@@ -2436,8 +2429,8 @@ def test_page_scroll_does_not_toggle_or_apply_a_different_context(monkeypatch):
     assert applied == []
     assert result.selected_context_names == ("temp/task-1",)
     assert any(
-        "SELECTED CONTEXTS · 1 · NOT BOUND" in value
-        and "MAIN · temp/task-1 · SELECTED · NOT BOUND" in value
+        "SELECTED CONTEXTS · 1" in value
+        and "MAIN · temp/task-1 · SELECTED" in value
         for value in rendered
     )
     assert not any(
@@ -2598,7 +2591,7 @@ def test_initial_name_check_renders_thinking_and_escape_discards_late_result(
     assert "GOAL REVISION REQUEST · SUBMITTED" in panes["GOAL"].text_area.text
     assert "Separate Task 1 into usable Contexts." in panes["GOAL"].text_area.text
     assert (
-        "CURRENT · test/update/from · STATE POINTER ONLY · NOT BOUND"
+        "CURRENT · test/update/from"
         in panes["CONTEXTS"].text_area.text
     )
     assert "THINKING" not in panes["CONTEXTS"].text_area.text
@@ -2677,8 +2670,8 @@ def test_completed_name_check_replaces_thinking_with_one_main_and_alternatives(
     final = next(value for value in rendered if "MAIN?" in value)
     assert "THINKING" not in final
     assert final.count("MAIN?") == 1
-    assert "MAIN? · temp/task-1 · NOT BOUND" in final
-    assert "ALTERNATIVE · temp/task-1-atomized · NOT BOUND" in final
+    assert "MAIN? · temp/task-1" in final
+    assert "ALTERNATIVE · temp/task-1-atomized" in final
 
 
 def test_starting_request_escape_closes_after_one_read_only_agent_turn():

@@ -419,7 +419,7 @@ def test_flagless_audit_uses_current_context_and_prints_saved_session_receipt(
     assert result.exit_code == 0, result.output
     assert "Audit saved: 0 finding(s) across 3 quality checks." in result.output
     assert "mem review audit --session" in result.output
-    assert "Source unchanged. No checkpoint created." in result.output
+    assert "Source unchanged. No checkpoint created." not in result.output
     saved = QualityAuditStore(store).list()
     assert len(saved) == 1
     assert saved[0].source.context_name == ctx.name

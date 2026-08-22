@@ -461,7 +461,7 @@ def run_query_workbench(
         if background_turn.busy:
             return (
                 f" QUERYING {busy_suffix(background_turn.frame)} · "
-                "scope frozen · H Help · Ctrl-C closes after query"
+                "H Help · Ctrl-C closes after query"
             )
         if app.layout.has_focus(question_area):
             navigation = "Enter ask · Tab switch · Esc close"
@@ -817,7 +817,7 @@ def run_query_workbench(
             copy_receipt = None
             answer_focus.reset()
             answer_window.vertical_scroll = 0
-            status["value"] = "QUERY COMPLETE · SOURCE AND SCOPE FROZEN"
+            status["value"] = "QUERY COMPLETE"
 
         def fail(error: Exception) -> None:
             detail = " ".join(safe_terminal_text(str(error)).split())
@@ -839,7 +839,7 @@ def run_query_workbench(
             on_idle=return_to_surface,
             on_close=close_after_query,
         )
-        status["value"] = "QUERYING · SOURCE AND SCOPE FROZEN"
+        status["value"] = "QUERYING"
         event.app.layout.focus(answer_control)
         return "HANDLED"
 

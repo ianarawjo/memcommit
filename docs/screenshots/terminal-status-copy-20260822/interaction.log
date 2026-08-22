@@ -1,0 +1,3 @@
+01-ground-draft | command: mem ground | PTY: 180x52 | profile: temporary capture store | current: capture/reference | preceding input: none | state: blank Ground draft | durable mutation: no | following key: Escape
+02-compare-task-setup | command: mem compare | PTY: 180x52 | profile: temporary capture store | current: capture/reference | preceding input: none | state: new Compare endpoint setup | durable mutation: no; Context bytes verified | following key: Escape
+03-summarize-result | command: mem summarize capture/reference | PTY: 180x52 | profile: typed temporary capture | current: capture/reference | preceding input: completed direct Summary result | state: immutable result viewer | durable mutation: no | following key: Escape

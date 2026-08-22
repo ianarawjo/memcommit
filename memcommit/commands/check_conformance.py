@@ -26,7 +26,7 @@ def render_conformance(report: ConformanceReport) -> str:
     identity = report.provider_identity
     lines = [
         f"CHECK CONFORMANCE · {report.mode}",
-        "STATUS · READ-ONLY · COMPLETE · NO CONTEXT CHANGES",
+        "STATUS · COMPLETE",
         f"SUBJECT · {safe_terminal_text(report.source_label)}",
         f"RULES · {safe_terminal_text(report.rules_label)} · {len(report.rules)}",
         "PROVIDER · " + (identity.display_name() if identity is not None else "UNRECORDED"),

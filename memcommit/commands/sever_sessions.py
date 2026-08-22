@@ -97,7 +97,7 @@ def list_sever_session_catalog(
                         if session.save_mode == "SELF_SAVE"
                         else "CREATED LOCALLY"
                         if session.state == "APPLIED"
-                        else "NOT CREATED"
+                        else "CREATE ON APPLY"
                     ),
                     (
                         "Source: SELF-SAVE TARGET"

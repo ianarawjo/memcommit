@@ -151,7 +151,7 @@ def sever_impact_presentation(session: SeverSession) -> ImpactSessionPresentatio
             title=(
                 "IMPACT · SEVER SELF-SAVE · SOURCE WILL BE REPLACED"
                 if self_save
-                else "IMPACT · SEVER OTHER-SAVE · SOURCE UNCHANGED"
+                else "IMPACT · SEVER OTHER-SAVE"
             ),
             summary=summary,
             changes=sever_memory_changes(session),

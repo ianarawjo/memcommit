@@ -42,7 +42,7 @@ def meld_endpoint_setup_spec(
     )
     return EndpointSetupSpec(
         title="NEW MELD",
-        subtitle="SETUP ONLY · NO PROVIDER, SESSION, RESULT, OR APPLY",
+        subtitle="CHOOSE MODE AND ENDPOINTS",
         modes=(
             EndpointSetupMode(
                 "SYMMETRIC",

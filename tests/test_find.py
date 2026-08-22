@@ -1153,9 +1153,9 @@ def test_show_result_proposal_runs_exact_read_only_cli_and_preserves_results(
     updated = _apply_show_result(state, proposal)
 
     assert updated.results == state.results
-    assert updated.status == "SHOWED m1 · RESULTS UNCHANGED"
+    assert updated.status == "SHOWED m1"
     receipt = updated.messages[-1].text
-    assert "READ-ONLY ACTION · APPLIED" in receipt
+    assert "SHOW COMPLETE" in receipt
     assert "mem show" in receipt
     assert memory.uid in receipt
     assert "ACTUAL OUTPUT" in receipt
@@ -1414,7 +1414,7 @@ def test_provider_cannot_expand_to_other_contexts_without_user_request(
         FIND_OUTSIDE_CANCELLATION,
     )
     assert cancelled.pending_answer is None
-    assert cancelled.status == "OTHER CONTEXTS CANCELLED · RESULTS UNCHANGED"
+    assert cancelled.status == "OTHER CONTEXTS CANCELLED"
 
     assert provider.operations == ["search turn"]
 

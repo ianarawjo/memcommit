@@ -206,8 +206,8 @@ def run_endpoint_setup(
             ExactNameFieldView(
                 value=role.initial_new_name,
                 label=role.new_label,
-                state="NOT CREATED",
-                detail="Enter confirms this exact process-local Result Context name.",
+                state="CREATE ON START",
+                detail="Enter confirms this exact Result Context name.",
                 validate=validate_new_name,
                 value_label="Context name",
             ),
@@ -371,7 +371,7 @@ def run_endpoint_setup(
         mode_uid = selected_mode_uid()
         focused = get_app().layout.has_focus(action_control)
         fragments: list[tuple[str, str]] = [
-            ("class:report-label", "SETUP · NOT RUN\n"),
+            ("class:report-label", "SELECTIONS READY\n"),
             ("class:report-neutral", f"MODE · {safe_terminal_text(mode_uid)}\n"),
         ]
         for role_uid in spec.active_role_uids(mode_uid):
@@ -414,7 +414,7 @@ def run_endpoint_setup(
                     f"{safe_terminal_text(role_uid)} · "
                     f"{safe_terminal_text(context_name)}"
                     f"{range_suffix}{memory_suffix}"
-                    f"{' · NEW · NOT CREATED' if is_new else ''}\n",
+                    f"{' · NEW · CREATE ON START' if is_new else ''}\n",
                 )
             )
         fragments.extend(
@@ -437,7 +437,7 @@ def run_endpoint_setup(
     )
     action_frame = build_focused_frame(
         Window(action_control, wrap_lines=True),
-        title="TO DO · SETUP ONLY",
+        title="TO DO",
         is_focused=lambda: get_app().layout.has_focus(action_control),
         height=Dimension(min=9, weight=1),
     )
@@ -614,7 +614,7 @@ def run_endpoint_setup(
             memory_focuses[role_uid].clear()
         if role_uid in reach_states:
             reach_states[role_uid] = ContextReachState.create(include_descendants=False)
-        status["value"] = f"{candidate} confirmed as NEW · NOT CREATED."
+        status["value"] = f"{candidate} will be created when this operation starts."
         surfaces.focus_relative(event.app, 1, wrap=False)
         return "HANDLED"
 

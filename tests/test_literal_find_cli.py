@@ -26,7 +26,7 @@ def test_find_plain_matches_every_literal_occurrence(isolated_store) -> None:
     )
 
     assert result.exit_code == 0, result.output + result.stderr
-    assert "READ-ONLY · PROVIDER-FREE" in result.output
+    assert "STATUS · COMPLETE" in result.output
     assert "MATCHED 1 · OCCURRENCES 2" in result.output
     assert "1 [" in result.output
     assert "] Needle one; needle two. [find/source m1]" in result.output

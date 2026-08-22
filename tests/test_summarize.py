@@ -137,7 +137,7 @@ def test_mem_summarize_recurses_and_renders_only_shared_understanding(
 
     assert result.exit_code == 0
     assert "SUMMARY · summary" in result.output
-    assert "STATUS · READ-ONLY · RECURSIVE" in result.output
+    assert "STATUS · RECURSIVE" in result.output
     assert "WHAT MEM UNDERSTOOD" in result.output
     assert "WHAT HAPPENED" not in result.output
     assert "WHAT BOTH CONTAIN" not in result.output
@@ -171,7 +171,7 @@ def test_mem_summarize_direct_excludes_child_memories(
     result = runner.invoke(app, ["summarize", "summary", "-d"])
 
     assert result.exit_code == 0
-    assert "STATUS · READ-ONLY · DIRECT" in result.output
+    assert "STATUS · DIRECT" in result.output
     payload = json.loads(
         provider.calls[0][0].split("SUMMARIZE CONTEXT PAYLOAD:\n", 1)[1]
     )
@@ -440,7 +440,7 @@ def test_auto_tty_summarize_executes_current_direct_without_launcher(
 
     captured = capsys.readouterr()
     assert "SUMMARY · summary/current" in captured.out
-    assert "STATUS · READ-ONLY · DIRECT" in captured.out
+    assert "STATUS · DIRECT" in captured.out
 
 
 def test_auto_tty_summarize_executes_explicit_context_without_workbench(
@@ -520,7 +520,7 @@ def test_mem_summarize_plain_preserves_noninteractive_output(
 
     assert result.exit_code == 0
     assert "SUMMARY · plain-summary" in result.output
-    assert "STATUS · READ-ONLY · DIRECT" in result.output
+    assert "STATUS · DIRECT" in result.output
     assert "contains no ordinary Memories to summarize" in result.output
 
 

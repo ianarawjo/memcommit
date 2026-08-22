@@ -376,7 +376,7 @@ def run_resolve_tui(
     if not analysis.candidates or analysis.status == "ASSUMED":
         run_semantic_viewer(
             project_resolve_analysis(analysis),
-            title="RESOLVE · READ-ONLY OUTCOME",
+            title="RESOLVE · OUTCOME",
             clipboard_writer=clipboard_writer,
             app_input=app_input,
             app_output=app_output,
