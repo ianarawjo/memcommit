@@ -1695,7 +1695,7 @@ def test_granted_compare_is_retained_and_seeds_local_symmetric_meld(
     )
 
     assert melded.exit_code == 0, melded.output + melded.stderr
-    assert "MEM MELD · SYMMETRIC" in melded.output
+    assert "MELD NEEDS INPUT · SYMMETRIC · participant-meld" in melded.output
     assert source.name in melded.output
     assert wiki.name in melded.output
     assert active.load_meld_session(target.uid) is not None
@@ -1707,7 +1707,7 @@ def test_granted_compare_is_retained_and_seeds_local_symmetric_meld(
     )
 
     assert resumed.exit_code == 0, resumed.output + resumed.stderr
-    assert "MEM MELD · SYMMETRIC" in resumed.output
+    assert "MELD NEEDS INPUT · SYMMETRIC" in resumed.output
     assert "Resumed without calling the semantic provider." in resumed.output
 
 

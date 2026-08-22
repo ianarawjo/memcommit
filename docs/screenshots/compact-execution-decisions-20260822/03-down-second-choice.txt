@@ -1,0 +1,52 @@
+ MELD NEEDS INPUT · < 2/2 >                                                                                                                                                         
+ CONFLICT · Access window                                                                                                                                                           
+ Which access window should the policy use?                                                                                                                                         
+   [1] A · Allow access during staffed hours. (Recommended)                                                                                                                         
+   [2] B · Allow access at any time.                                                                                                                                                
+   [3] Preserve both · Retain both readings with their exact scopes.                                                                                                                
+   [D] Defer                                                                                                                                                                        
+   [A] Apply staged judgments                                                                                                                                                       
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+ ←/→ issue · ↑/↓ choice/action · Enter select · 1–9 choose · A continue · D defer · Esc save & close

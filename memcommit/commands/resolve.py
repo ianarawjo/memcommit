@@ -137,6 +137,10 @@ def cmd(
 
     try:
         mode = resolve_console_mode(plain=plain, tui=tui)
+        # A terminal outcome is still a result, not an invitation to inspect a
+        # report. Keep the Viewer behind the explicit --tui route.
+        if mode is ConsoleMode.AUTO:
+            mode = ConsoleMode.PLAIN
         if apply_now:
             if candidate_uid is None or expected_revision is None:
                 raise ResolveError(

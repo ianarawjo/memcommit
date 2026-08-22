@@ -1,0 +1,15 @@
+                                                                                                                                                                                    
+MELD APPLIED · SYMMETRIC · policy                                                                                                                                                   
+JUDGMENTS · 2 STAGED · 2 APPLIED                                                                                                                                                    
+SOURCE · advisor-a + advisor-b · UNCHANGED                                                                                                                                          
+TARGET · policy · CHECKPOINT CREATED                                                                                                                                                
+REPORT · RETAINED · mem review meld --session capture-meld-session                                                                                                                  
+CAPTURE GATE · PRESS V FOR READ-ONLY VERIFICATION                                                                                                                                   
+v                                                                                                                                                                                   
+                                                                                                                                                                                    
+READ-ONLY RESULT VERIFICATION                                                                                                                                                       
+  RETENTION · Preserve both · REVIEWED                                                                                                                                              
+  ACCESS · Allow access at any time · REVIEWED                                                                                                                                      
+  REPORT AVAILABLE · YES                                                                                                                                                            
+  UNRESOLVED REQUIRED · 0                                                                                                                                                           
+  ADDITIONAL PROVIDER CALLS · 0

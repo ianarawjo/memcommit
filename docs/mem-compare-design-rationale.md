@@ -345,12 +345,20 @@ Comparison artifacts copy source text and derived explanations. Deleting
 either bound source therefore removes both ordered orientations involving
 that Context. Compare never opens query-only sources.
 
-## Interactive workbench, compact snapshot, and exact ledger
+## Explicit workbench, compact default receipt, and exact ledger
 
-In a TTY, a newly completed or reopened analysis enters one read-only
-workbench. The upper Viewer receives roughly seventy percent of the available
-content height and initially preserves the complete compact report. The lower
-item navigator is deliberately short: it contains individually selectable
+Completing or reopening Compare does not automatically enter a Viewer in a
+TTY. A transient summary stays line-oriented; an exhaustive saved analysis
+returns a bounded receipt with overview, relation/attention counts, analysis
+UID, and the exact `mem review compare --session UID` route. Explicit
+`--snapshot` prints the complete compact report and `--ledger` prints its full
+relation ledger. The read-only workbench described below belongs to explicit
+Review, so durable detail remains available without making every execution a
+second full-screen reading task.
+
+In that explicit workbench, the upper Viewer receives roughly seventy percent
+of the available content height and initially preserves the complete compact
+report. The lower item navigator is deliberately short: it contains individually selectable
 report sections, individual Potential Conflict items, one explicit Relation
 Ledger boundary, and every relation in that exact saved ledger as compact
 single-line rows. Relation count therefore increases scroll depth without
@@ -409,8 +417,7 @@ actions deliberately exit rather than returning to a hidden cursor so their
 terminal output remains visible; `mem compare --sessions` is the stable resume
 route.
 
-Non-TTY execution and explicit `--snapshot` use the compact report ordered by
-decision relevance:
+Explicit `--snapshot` uses the compact report ordered by decision relevance:
 
 ```text
 METRICS

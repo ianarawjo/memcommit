@@ -66,7 +66,7 @@ def test_trace_shows_newest_operation_first_with_forward_row_arrows(
     assert invoke("edit", memory.uid, "revision one").exit_code == 0
     assert invoke("edit", memory.uid, "revision two").exit_code == 0
 
-    result = invoke("trace", memory.uid[:8])
+    result = invoke("trace", memory.uid[:8], "--plain")
 
     assert result.exit_code == 0
     rows = [
@@ -238,7 +238,7 @@ def test_trace_resolves_removed_historical_memory(isolated_store):
     )
     assert invoke("remove", memory.uid[:8]).exit_code == 0
 
-    result = invoke("trace", memory.uid[:8])
+    result = invoke("trace", memory.uid[:8], "--plain")
 
     assert result.exit_code == 0
     assert "[add]" in result.output
@@ -275,8 +275,8 @@ def test_trace_reconstructs_legacy_chunk_lineage_both_directions(
     ]
     assert len(children) == 2
 
-    from_parent = invoke("trace", parent.uid[:8], "--verbose")
-    from_child = invoke("trace", children[1].uid[:8], "--verbose")
+    from_parent = invoke("trace", parent.uid[:8], "--verbose", "--plain")
+    from_child = invoke("trace", children[1].uid[:8], "--verbose", "--plain")
 
     for result in (from_parent, from_child):
         assert result.exit_code == 0
@@ -541,7 +541,7 @@ def test_trace_reads_current_state_after_revert(isolated_store):
     assert invoke("edit", memory.uid, "later").exit_code == 0
     assert invoke("revert", keep_checkpoint[:8]).exit_code == 0
 
-    result = invoke("trace", memory.uid[:8])
+    result = invoke("trace", memory.uid[:8], "--plain")
 
     assert result.exit_code == 0
     assert "[revert]" in result.output

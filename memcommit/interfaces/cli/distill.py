@@ -60,8 +60,30 @@ def render_distill_plain(result: DistillResult) -> None:
     typer.echo(distill_result_text(result))
 
 
+def render_distill_receipt(result: DistillResult) -> None:
+    """Return a bounded proposal result while keeping detail explicitly opt-in."""
+
+    analysis = result.analysis
+    overview = " ".join(safe_terminal_text(analysis.overview).split())
+    if len(overview) > 280:
+        overview = overview[:279].rstrip() + "…"
+    typer.echo(
+        "\n".join(
+            [
+                f"DISTILL COMPLETE · {safe_terminal_text(analysis.source.context_name)}",
+                f"UNDERSTOOD · {overview}",
+                f"PROPOSED · {len(analysis.rules)} rules",
+                f"ATTENTION · {len(analysis.outside_memory_uids)} source Memories outside proposed Rules",
+                "DETAILS · rerun with --plain or --tui",
+                "SOURCE · UNCHANGED",
+            ]
+        )
+    )
+
+
 __all__ = [
     "distill_result_lines",
     "distill_result_text",
     "render_distill_plain",
+    "render_distill_receipt",
 ]

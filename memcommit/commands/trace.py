@@ -60,6 +60,25 @@ def render_trace(
     )
 
 
+def render_trace_receipt(report: TraceReport) -> None:
+    """Return a bounded lineage result; the document remains explicitly reachable."""
+
+    typer.echo(
+        "\n".join(
+            [
+                f"TRACE COMPLETE · {display_escape_text(report.context_name)}",
+                f"MEMORY · {report.selected_uid}",
+                f"LINEAGE · {len(report.events)} events · "
+                f"{len(report.component_uids)} components",
+                f"ATTENTION · {len(report.warnings)} limits",
+                "DETAILS · mem trace "
+                f"{report.selected_uid} --context "
+                f"{display_escape_text(report.context_name)} --plain",
+            ]
+        )
+    )
+
+
 def cmd(
     selector: Annotated[
         Optional[str],
@@ -116,11 +135,25 @@ def cmd(
         bool,
         typer.Option(
             "--plain",
-            help="Print the lineage document instead of opening its read-only Viewer",
+            help="Print the lineage document (the default result route)",
+        ),
+    ] = False,
+    tui: Annotated[
+        bool,
+        typer.Option(
+            "--tui",
+            help="Open the retained lineage in the read-only Viewer",
         ),
     ] = False,
 ) -> None:
     """Show recorded and safely reconstructed content lineage."""
+    if plain and tui:
+        typer.secho(
+            "Trace error: choose either --plain or --tui, not both.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
     if not 1 <= limit <= MAX_TRACE_OPERATION_LIMIT:
         typer.secho(
             "Trace error: --limit must be between 1 and "
@@ -233,11 +266,21 @@ def cmd(
             )
         )
         return
-    if interactive_report_terminal() and not plain:
+    if tui:
+        if not interactive_report_terminal():
+            typer.secho(
+                "Trace error: --tui requires an interactive terminal.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(2)
         open_trace_viewer(
             report,
             verbose=verbose,
             limit=operation_limit,
         )
         return
-    render_trace(report, verbose=verbose, limit=operation_limit)
+    if plain:
+        render_trace(report, verbose=verbose, limit=operation_limit)
+        return
+    render_trace_receipt(report)

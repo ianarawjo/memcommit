@@ -46,9 +46,13 @@ from memcommit.ground_distill import (
     execute_ground_distill,
     freeze_ground_distill,
 )
-from memcommit.interfaces.cli.distill import distill_result_text
+from memcommit.interfaces.cli.distill import (
+    distill_result_text,
+    render_distill_receipt,
+)
 from memcommit.interfaces.cli.semantic_add import render_applied_memory_preview
 from memcommit.interfaces.console import (
+    ConsoleMode,
     ConsoleModeError,
     SystemTerminalCapabilities,
     resolve_console_mode,
@@ -178,7 +182,12 @@ def cmd(
             default=ContextScopePreset.DIRECT,
         )
         traversal = resolve_context_traversal(preset=preset)
+        automatic_result = not plain and not tui
         mode = resolve_console_mode(plain=plain, tui=tui)
+        # Standalone results return through the compact/plain adapter. The
+        # Context Summary Viewer is an explicit --tui inspection surface.
+        if mode is ConsoleMode.AUTO:
+            mode = ConsoleMode.PLAIN
         if ground is not None and (
             context_name is not None
             or source_name is not None
@@ -391,11 +400,15 @@ def cmd(
         result = (
             execute(execution_request)
             if save_as is not None and apply
+            else execute(execution_request)
+            if automatic_result
             else runner.run(execution_request, mode=mode)
         )
         if result is None:
             typer.echo("Distill cancelled; Source unchanged.")
             return
+        if automatic_result and not (save_as is not None and apply):
+            render_distill_receipt(result)
 
         should_apply = apply
         if save_as is not None and not apply and sys.stdin.isatty() and sys.stdout.isatty():

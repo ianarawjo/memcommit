@@ -296,6 +296,34 @@ def render_sever_receipt(session: SeverSession) -> str:
     return "\n".join(lines)
 
 
+def render_sever_incomplete_receipt(session: SeverSession) -> str:
+    """Return saved Sever state without repeating its candidate report."""
+
+    view = SeverResolutionWorkbenchAdapter(session).view()
+    required = sum(
+        item.effective_obligation == "REQUIRED"
+        and item.response_state != "ANSWERED"
+        for item in view.items
+    )
+    output_state = (
+        "WILL UPDATE SOURCE"
+        if session.save_mode == "SELF_SAVE"
+        else "READY TO CREATE"
+    )
+    return "\n".join(
+        [
+            f"SEVER {'NEEDS INPUT' if required else 'READY'} · "
+            f"{session.source.root_name} → {session.output_name}",
+            f"JUDGMENTS · REQUIRED {required}",
+            f"OUTPUT · {session.output_name} · {output_state}",
+            f"SESSION · {session.uid}",
+            "SOURCE · UNCHANGED",
+            f"IMPACT · mem impact sever --session {session.uid}",
+            f"RESUME · mem sever --resume {session.uid}",
+        ]
+    )
+
+
 def _apply(store: MemoryStore, session: SeverSession) -> SeverSession:
     return execute_sever_apply(
         SeverApplyRequest(session=session),
@@ -488,6 +516,7 @@ def _run_workbench(
                 and proposed.item_uid is not None
                 else None
             ),
+            compact_decisions=allow_apply,
         )
         if action.kind == "CLOSE":
             break
@@ -940,8 +969,7 @@ def cmd(
         if session.state == "APPLIED":
             typer.echo(render_sever_receipt(session))
         else:
-            typer.echo(render_sever(session))
-            typer.secho(f"Session · {session.uid}", fg=typer.colors.CYAN)
+            typer.echo(render_sever_incomplete_receipt(session))
     except (
         FileNotFoundError,
         OSError,

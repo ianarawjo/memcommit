@@ -54,6 +54,29 @@ into a precondition named Review or rendering it again after success.
 7. A no-change result is terminal and explicit even when it creates no Context
    checkpoint. It must not be presented as an unaccepted proposal.
 
+## Compact judgment surface
+
+An execution command with unresolved judgments uses a report-free decision
+surface rather than embedding the complete Impact document above its controls.
+The surface shows one issue's kind, title, question, and operation-authored
+choices at a time. `Left`/`Right` wraps across issues, so the person may answer
+them in any order; it is not a forced one-item wizard. `Up`/`Down` moves the
+visible keyboard target, `Enter` stages that row, and `1` through `9` are direct
+choice accelerators. The blue target makes arrow movement visible, while `✓`
+is the complete non-color channel for a staged value.
+
+Staging is process-local or saved through the operation's existing draft port.
+It does not call a provider or mutate a Context. One Continue action may submit
+all staged required choices together. `D` remains a first-class Defer action,
+and a consequential semantic turn still receives the adjacent exact-command
+review required by its operation. The compact surface may mark
+`(Recommended)` only when the operation's typed option identity or label says
+so; choice order alone is not a recommendation.
+
+The complete report remains durable. Execution receipts name the exact Impact
+or Review route that opens it, but execution itself does not render the report
+before every choice or reopen it after terminal success.
+
 ## Evidence ownership
 
 Distill, Elaborate, Forget, Dedun, and Resolve use immutable checkpoint-backed
@@ -76,9 +99,9 @@ authority to mutate.
 - An execution operation may expose an explicit Impact route for preflight
   inspection. Impact remains non-mutating and is not silently inserted into
   the execution lifecycle.
-- Required ambiguity/conflict decisions may still use shared Resolution
-  mechanics. Compact deterministic routes omit Viewer but keep the frozen
-  context beside the choices.
+- Required ambiguity/conflict decisions use the compact Resolution projection
+  by default. Explicit Impact and Review retain the source-linked report and
+  the full shared Viewer when inspection is requested.
 - Ground-owned Distill/Elaborate proposal adapters remain read-only where their
   workspace application authority has not been implemented. This does not
   change the standalone Add lifecycle.
@@ -100,6 +123,8 @@ Review.
 
 The lifecycle is shared; semantic judgments, authority, persistence, no-op
 meaning, and recovery remain operation-owned. This change does not create one
-universal proposal schema or one universal Review document model. Legacy
-staged artifacts may still be resumed through their owning operation, but the
-Review launcher must not expose them as terminal evidence.
+universal proposal schema or one universal Review document model. A compact
+execution surface does not replace custom free-form response routes when an
+operation requires them; those remain operation-owned. Legacy staged artifacts
+may still be resumed through their owning operation, but the Review launcher
+must not expose them as terminal evidence.

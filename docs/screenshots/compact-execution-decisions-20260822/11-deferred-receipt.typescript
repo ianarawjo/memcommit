@@ -1,0 +1,109 @@
+$ mem meld advisor-a advisor-b policy
+PTY 180 52
+[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;2;244;245;247;1m MELD NEEDS INPUT · < 1/2 >[0m
+[0m CONFLICT · Retention period[0m
+[0;38;2;244;245;247m Which retention period should the policy use?[0m
+[0;38;2;16;36;47;48;2;139;213;255;1m   [1] A · Keep records for 30 days. (Recommended)[0m
+[0m   [2] B · Keep records for 90 days.[0m
+[0m   [3] Preserve both · Retain both readings with their exact scopes.[0m
+[0m   [D] Defer[0m
+[0m   [A] Apply staged judgments[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[0m [0m
+[0m ←/→ issue · ↑/↓ choice/action · Enter select · 1–9 choose · A continue · D defer · Esc save & close[100D[50A[0m[?25l[0;38;2;244;245;247;1m RUN EXACT COMMAND[0m[K[0m
+[0;38;2;244;245;247mPROPOSED COMMAND[C· NOT RUN[0m[K[0m
+[0;38;2;244;245;247m  mem meld advisor-a advisor-b policy --defer-all[0m[K[0m
+[0m [0m[K[0m
+[0;38;2;244;245;247mEFFECTS · ONE COMMAND[0m[K[0m
+[0;38;2;244;245;247m  Keep the saved Meld report for later Review without applying it.[0m
+[0;38;2;244;245;247m  All Source and target Contexts remain unchanged.[0m
+
+[0;38;2;244;245;247mApproval applies only to the exact command shown above.[0m
+
+[0;38;2;16;36;47;48;2;139;213;255;1m › Enter · Run exact command[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[C[0mEnter r[Cn[3CEsc/Backspace return · Q canc[Cl[0m[K[50A[44D[0m[A[J[0m[?7h[?1049l[?2004l
+MELD DEFERRED · SYMMETRIC · policy
+SESSION · capture-meld-session · RETAINED
+SOURCE · UNCHANGED
+TARGET · UNCHANGED · NO CHECKPOINT
+REPORT · mem review meld --session capture-meld-session

@@ -326,7 +326,9 @@ def test_atomize_review_comment_is_persisted_reanalyzed_and_applied(
     )
     assert later_preview.exit_code == 0, later_preview.output
 
-    trace = runner.invoke(app, ["trace", memory.uid[:8], "--verbose"])
+    trace = runner.invoke(
+        app, ["trace", memory.uid[:8], "--verbose", "--plain"]
+    )
     assert trace.exit_code == 0, trace.output
     assert "Reviewed declared context/comment" in trace.output
     assert comment in trace.output

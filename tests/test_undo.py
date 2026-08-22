@@ -359,7 +359,7 @@ def test_history_and_trace_keep_command_undo_and_redo_operation_boundaries(
         for event in restoration_events
     )
 
-    rendered = invoke("trace", memory.uid[:8])
+    rendered = invoke("trace", memory.uid[:8], "--plain")
 
     assert rendered.exit_code == 0, rendered.output
     assert "[undo] [CHECKPOINT " in rendered.output
@@ -369,7 +369,7 @@ def test_history_and_trace_keep_command_undo_and_redo_operation_boundaries(
         "[undo] [CHECKPOINT "
     )
 
-    detailed = invoke("trace", memory.uid[:8], "--verbose")
+    detailed = invoke("trace", memory.uid[:8], "--verbose", "--plain")
     assert detailed.exit_code == 0, detailed.output
     assert "Operation: undo" in detailed.output
     assert "Operation: redo" in detailed.output

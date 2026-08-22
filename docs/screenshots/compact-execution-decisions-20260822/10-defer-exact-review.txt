@@ -1,0 +1,52 @@
+ MELD NEEDS INPUT · < 1/2 >                                                                                                                                                         
+ RUN EXACT COMMAND                                                                                                                                                                  
+PROPOSED COMMAND · NOT RUN                                                                                                                                                          
+  mem meld advisor-a advisor-b policy --defer-all                                                                                                                                   
+                                                                                                                                                                                    
+EFFECTS · ONE COMMAND                                                                                                                                                               
+  Keep the saved Meld report for later Review without applying it.                                                                                                                  
+  All Source and target Contexts remain unchanged.                                                                                                                                  
+                                                                                                                                                                                    
+Approval applies only to the exact command shown above.                                                                                                                             
+                                                                                                                                                                                    
+ › Enter · Run exact command                                                                                                                                                        
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+ Enter run · Esc/Backspace return · Q cancel

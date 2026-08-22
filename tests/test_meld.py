@@ -1325,8 +1325,8 @@ def test_directional_command_uses_exact_saved_compare_basis(
     assert [relation.uid for relation in session.current_assessment.relations] == [
         relation.uid for relation in comparison.relations
     ]
-    assert "Compare:" in result.output
-    assert "· IMPORTED" in result.output
+    assert "MELD NEEDS INPUT · DIRECTIONAL" in result.output
+    assert f"IMPACT · mem impact meld --session {session.uid}" in result.output
 
 
 def test_directional_compare_seed_output_cannot_restate_relation_drift():
@@ -1855,10 +1855,7 @@ def test_context_meld_one_shot_reply_resume_and_provider_free_apply(
     )
     assert initial.exit_code == 0, initial.output
     assert len(provider.payloads) == 0
-    assert "MEM MELD · SYMMETRIC" in initial.output
-    assert "Compare:" in initial.output
-    assert "· IMPORTED" in initial.output
-    assert "Participant compensation policy" in initial.output
+    assert "MELD NEEDS INPUT · SYMMETRIC" in initial.output
     assert store._context_file(target.name).read_bytes() == target_before
     assert store.list_checkpoints(target.name) == []
     comparison = load_comparison_analysis(left.uid, right.uid)
@@ -1870,6 +1867,10 @@ def test_context_meld_one_shot_reply_resume_and_provider_free_apply(
     assert session.comparison_seed.analysis_digest == (
         comparison_canonical_digest(comparison.to_dict())
     )
+    impact = runner.invoke(app, ["impact", "meld", "--session", session.uid])
+    assert impact.exit_code == 0, impact.output
+    assert "MEM COMPARE · SYMMETRIC PEERS" in impact.output
+    assert "Participant compensation policy" in impact.output
     assert [frame.uid for frame in session.frames] == [
         frame.uid for frame in comparison.frames
     ]
@@ -1907,13 +1908,17 @@ def test_context_meld_one_shot_reply_resume_and_provider_free_apply(
     )
     assert grounded.exit_code == 0, grounded.output
     assert len(provider.payloads) == 1
-    assert "State: READY_TO_APPLY" in grounded.output
-    assert "CAD 20–30" in grounded.output
-    assert "cash" in grounded.output
-    assert "e-transfer" in grounded.output
-    assert "gift card" in grounded.output
+    assert "MELD READY · SYMMETRIC" in grounded.output
     assert store._context_file(target.name).read_bytes() == target_before
     ready_session = store.load_meld_session(target.uid)
+    grounded_impact = runner.invoke(
+        app, ["impact", "meld", "--session", ready_session.uid]
+    )
+    assert grounded_impact.exit_code == 0, grounded_impact.output
+    assert "CAD 20–30" in grounded_impact.output
+    assert "cash" in grounded_impact.output
+    assert "e-transfer" in grounded_impact.output
+    assert "gift card" in grounded_impact.output
     assert _comparison_issue_resolution_badges(ready_session) == (
         "CHOSEN · Keep all supported options",
     )
@@ -2184,11 +2189,10 @@ def test_directional_meld_uses_current_incoming_and_relative_baseline(
     result = runner.invoke(app, ["meld", "--into", "../to"])
 
     assert result.exit_code == 0, result.output
-    assert "MEM MELD · DIRECTIONAL" in result.output
+    assert "MELD READY · DIRECTIONAL" in result.output
     assert (
         "INCOMING test/update/from → BASELINE / TARGET test/update/to"
     ) in result.output
-    assert "State: READY_TO_APPLY" in result.output
     assert len(provider.payloads) == 1
     assert [frame["context_name"] for frame in provider.payloads[0]["frames"]] == [
         incoming.name,
@@ -2222,7 +2226,7 @@ def test_directional_meld_from_uses_current_baseline_and_canonical_session(
     assert (
         "INCOMING test/update/from → BASELINE / TARGET test/update/to"
     ) in shorthand.output
-    assert "mem meld test/update/from test/update/to --accept" in shorthand.output
+    assert "MELD READY · DIRECTIONAL" in shorthand.output
     first_session = store.load_meld_session(baseline.uid)
     assert first_session is not None
     assert [frame.context_name for frame in first_session.frames] == [
@@ -2258,8 +2262,7 @@ def test_directional_meld_edits_adds_and_preserves_baseline_then_recovers(
         ["meld", incoming.name, "--into", baseline.name],
     )
     assert initial.exit_code == 0, initial.output
-    assert "~  1. [EDIT · SYNTHESIZE]" in initial.output
-    assert "+  2. [ADD · PRESERVE]" in initial.output
+    assert "MELD READY · DIRECTIONAL" in initial.output
     assert store.list_checkpoints(baseline.name) == []
 
     applied = runner.invoke(
@@ -2373,9 +2376,7 @@ def test_directional_meld_applies_descendants_to_exact_owners_as_one_command(
     )
 
     assert initial.exit_code == 0, initial.output
-    assert "State: READY_TO_APPLY" in initial.output
-    assert f"OWNER · {baseline_access.name}" in initial.output
-    assert f"OWNER · {baseline_hours.name}" in initial.output
+    assert "MELD READY · DIRECTIONAL" in initial.output
     assert [
         item["context_name"] for item in provider.payloads[0]["target"]["contexts"]
     ] == [baseline.name, baseline_access.name, baseline_hours.name]
@@ -2508,8 +2509,7 @@ def test_zero_change_directional_meld_checkpoints_and_repeats_provider_free(
         ["meld", incoming.name, "--into", baseline.name],
     )
     assert initial.exit_code == 0, initial.output
-    assert "State: READY_TO_APPLY" in initial.output
-    assert "no material baseline changes" in initial.output
+    assert "MELD READY · DIRECTIONAL" in initial.output
 
     applied = runner.invoke(
         app,
@@ -2887,7 +2887,7 @@ def test_defer_all_is_provider_free_and_does_not_mutate_target(
     )
 
     assert deferred.exit_code == 0
-    assert "KEPT_REVIEW_ONLY" in deferred.output
+    assert "MELD DEFERRED · SYMMETRIC" in deferred.output
     assert len(provider.payloads) == 0
     assert store._context_file(target.name).read_bytes() == before
     assert store.list_checkpoints(target.name) == []
@@ -3069,10 +3069,8 @@ def test_v3_preserve_all_materializes_provider_free_and_remains_non_applying(
 
     assert result.exit_code == 0, result.output
     assert len(provider.payloads) == 0
-    assert "READY_TO_APPLY" in result.output
-    assert result.output.count("[PRESERVE]") == 2
-    assert "Source coverage: 2/2" in result.output
-    assert "Cross-relation results: 0" in result.output
+    assert "MELD READY · SYMMETRIC" in result.output
+    assert f"IMPACT · mem impact meld --session {store.load_meld_session(target.uid).uid}" in result.output
     assert store._context_file(target.name).read_bytes() == before
 
 
@@ -4816,7 +4814,7 @@ def test_user_add_cannot_claim_peer_source_evidence():
     assert turn.assessment is None
 
 
-def test_meld_shell_selects_one_issue_reading_and_free_form_comment():
+def test_meld_shell_selects_one_issue_reading_from_the_compact_surface():
     left = ops.init("left/shell")
     ops.add(left, "Cash compensation includes travel time.")
     right = ops.init("right/shell")
@@ -4832,10 +4830,7 @@ def test_meld_shell_selects_one_issue_reading_and_free_form_comment():
     )
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text(
-            "\t\x1b[B\r\t\r\x1b[B\x1b[B\r"
-            "Keep all supported details.\x13\t\t\r\x1b[F\r"
-        )
+        pipe_input.send_text("1a\r")
         action = run_meld_shell(
             session,
             app_input=pipe_input,
@@ -4846,8 +4841,7 @@ def test_meld_shell_selects_one_issue_reading_and_free_form_comment():
     assert action is not None
     assert action.kind == "COMMENT_ALL"
     assert "Choose this reading:" in action.comment
-    assert "Keep all supported details." in action.comment
-    assert comparison.issues[0].title in action.comment
+    assert comparison.issues[0].options[0].text in action.comment
 
 
 def test_ready_meld_applies_after_the_shared_final_review_screen():
@@ -4927,7 +4921,7 @@ def test_ready_meld_review_report_cannot_accept_or_apply():
     assert session.state == "READY_TO_APPLY"
 
 
-def test_meld_framed_composer_matches_ground_send_and_newline_contract():
+def test_meld_compact_surface_number_and_continue_contract():
     left = ops.init("left/dialogue-input")
     ops.add(left, "Cash compensation includes travel time.")
     right = ops.init("right/dialogue-input")
@@ -4941,10 +4935,7 @@ def test_meld_framed_composer_matches_ground_send_and_newline_contract():
     )
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text(
-            "\t\x1b[B\r\t\r\x1b[B\x1b[B\r"
-            "Keep the rate.\nKeep every payment method.\r\t\t\r\x1b[F\r"
-        )
+        pipe_input.send_text("2a\r")
         action = run_meld_shell(
             session,
             app_input=pipe_input,
@@ -4955,11 +4946,11 @@ def test_meld_framed_composer_matches_ground_send_and_newline_contract():
     assert action is not None
     assert action.kind == "COMMENT_ALL"
     assert "Choose this reading:" in action.comment
-    assert "Keep the rate.\nKeep every payment method." in action.comment
+    assert session.current_assessment.issues[0].options[1].text in action.comment
 
 
 @pytest.mark.parametrize("back_key", ["\x1b", "\x7f"])
-def test_meld_back_key_collapses_detail_before_leaving_the_workbench(
+def test_meld_compact_back_key_saves_and_closes_without_a_turn(
     back_key: str,
 ):
     left = ops.init("left/escape-detail")
@@ -4975,11 +4966,7 @@ def test_meld_back_key_collapses_detail_before_leaving_the_workbench(
     )
 
     with create_pipe_input() as pipe_input:
-        # Tab reaches Items and Down selects conflict 1. Either back key returns
-        # to REPORT instead of closing, then the conflict can be selected again.
-        pipe_input.send_text(
-            f"\t\x1b[B\r{back_key}\x1b[B\rcStill reviewing.\x13\t\t\r\x1b[F\r"
-        )
+        pipe_input.send_text(back_key)
         action = run_meld_shell(
             session,
             app_input=pipe_input,
@@ -4987,9 +4974,8 @@ def test_meld_back_key_collapses_detail_before_leaving_the_workbench(
             require_tty=False,
         )
 
-    assert action is not None
-    assert action.kind == "COMMENT_ALL"
-    assert "Response: Still reviewing." in action.comment
+    assert action is None
+    assert session.state == "AWAITING_REPLY"
 
 
 def test_meld_escape_from_overview_closes_without_changing_session():

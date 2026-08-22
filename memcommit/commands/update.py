@@ -173,33 +173,33 @@ def _browse_saved_update(store: MemoryStore) -> None:
         raise UpdateError(
             "The saved Update session changed while the launcher was open. Reopen it."
         )
-    while True:
-        handoff = _run_saved_update_workbench(current)
-        if not handoff:
-            typer.echo("Update view closed; saved session unchanged.")
-            return
-
-        # The Impact workbench is inspection-only. Re-enter Update through its
-        # public command boundary so an Apply request repeats the normal endpoint,
-        # authority, freshness, and exact-review checks.
-        cmd(
-            source_name=current.source_name,
-            target_name=current.target_name,
-            replace_stage=False,
-            source_descendants=current.source_include_descendants,
-            target_descendants=current.target_include_descendants,
+    if current.status == "applied":
+        typer.echo(render_update_receipt(current))
+        return
+    if current.status == "undone":
+        typer.echo(
+            f"UPDATE UNDONE · {current.source_name} → {current.target_name}\n"
+            f"SESSION · {current.uid}\n"
+            "RECOVERY · mem redo"
         )
-        refreshed = store.load_staged_update()
-        if (
-            refreshed is None
-            or refreshed.uid != current.uid
-            or refreshed.status not in {"impact", "staged"}
-        ):
-            return
-        # A cancelled final Apply leaves the exact staged receipt actionable.
-        # Reopen its Impact screen so Back is a real stack transition rather
-        # than dropping the person at the command prompt.
-        current = refreshed
+        return
+    if current.status == "impact":
+        typer.echo(
+            f"UPDATE IMPACT SAVED · {current.source_name} → {current.target_name}\n"
+            f"SESSION · {current.uid}\n"
+            f"IMPACT · mem impact update --session {current.uid}"
+        )
+        return
+
+    # Re-enter execution directly. Only outstanding judgments are shown; the
+    # retained report remains behind the explicit Impact command.
+    cmd(
+        source_name=current.source_name,
+        target_name=current.target_name,
+        replace_stage=False,
+        source_descendants=current.source_include_descendants,
+        target_descendants=current.target_include_descendants,
+    )
 
 
 def _resolve_update_access(

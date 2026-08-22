@@ -96,7 +96,7 @@ def test_bare_trace_runs_existing_report_for_picker_uid(
         select,
     )
 
-    result = invoke("trace")
+    result = invoke("trace", "--plain")
 
     assert result.exit_code == 0, result.output
     assert observed == {
@@ -167,7 +167,7 @@ def test_trace_descendant_range_opens_the_selected_owner_history(
         select,
     )
 
-    result = invoke("trace")
+    result = invoke("trace", "--plain")
 
     assert result.exit_code == 0, result.output
     assert observed["rows"] == [("notes/child", target.uid, 2)]
@@ -245,7 +245,7 @@ def test_interactive_rationale_returns_terminal_receipt_without_viewer(
     assert "RATIONALE REPORT" not in result.output
 
 
-def test_interactive_trace_routes_bare_and_explicit_targets_to_vertical_viewer(
+def test_interactive_trace_opens_vertical_viewer_only_when_requested(
     isolated_store,
     monkeypatch,
 ):
@@ -275,10 +275,14 @@ def test_interactive_trace_routes_bare_and_explicit_targets_to_vertical_viewer(
     )
     bare = invoke("trace")
     explicit = invoke("trace", target.uid)
+    explicit_tui = invoke("trace", target.uid, "--tui")
 
     assert bare.exit_code == 0, bare.output
     assert explicit.exit_code == 0, explicit.output
-    assert viewed == [("notes", target.uid), ("notes", target.uid)]
+    assert explicit_tui.exit_code == 0, explicit_tui.output
+    assert "TRACE COMPLETE" in bare.output
+    assert "TRACE COMPLETE" in explicit.output
+    assert viewed == [("notes", target.uid)]
 
 
 def test_bare_trace_recent_reopens_without_context_memory_selector(
@@ -312,7 +316,7 @@ def test_bare_trace_recent_reopens_without_context_memory_selector(
         lambda report, *, verbose, limit: viewed.append(report.current[0].content),
     )
 
-    result = invoke("trace")
+    result = invoke("trace", "--tui")
 
     assert result.exit_code == 0, result.output
     assert len(viewed) == 1

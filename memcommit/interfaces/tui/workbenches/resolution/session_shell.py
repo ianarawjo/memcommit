@@ -81,6 +81,9 @@ from memcommit.interfaces.tui.components.save_location import (
     save_location_tree_fragments,
 )
 from memcommit.interfaces.tui.components.session_help import bind_session_help
+from memcommit.interfaces.tui.workbenches.resolution.compact_shell import (
+    run_compact_resolution_decisions,
+)
 from memcommit.interfaces.tui.viewers.semantic.detail import (
     semantic_detail_block_fragments,
     semantic_detail_header_fragments,
@@ -2480,6 +2483,7 @@ def run_resolution_workbench_shell(
     turn_command_review: (
         Callable[[ResolutionWorkbenchAction], ExactCommandReview | None] | None
     ) = None,
+    compact_decisions: bool = False,
 ) -> ResolutionWorkbenchAction:
     """Collect one UID-bound semantic or close action; never call a provider.
 
@@ -4953,6 +4957,68 @@ def run_resolution_workbench_shell(
                 action=automatic.kind,
             )
             return automatic
+
+    if compact_decisions:
+
+        def selected_compact_option(item_uid: str) -> str | None:
+            item = current_view().item(item_uid)
+            return _item_draft(item, local_drafts).selected_choice_uid
+
+        def stage_compact_option(item_uid: str, option_uid: str) -> None:
+            item = current_view().item(item_uid)
+            item.option(option_uid)
+            existing = _item_draft(item, local_drafts)
+            draft = ResponseDraft(option_uid, existing.text)
+            local_drafts[item_uid] = draft
+            if draft_saver is not None:
+                draft_saver(item_uid, option_uid, draft.text)
+
+        def compact_continue_action(
+            focused_item_uid: str | None,
+        ) -> ResolutionWorkbenchAction | None:
+            active_view = current_view()
+            action = final_review_action(active_view, open_custom=False)
+            if action is not None:
+                return action
+            if focused_item_uid is None:
+                return None
+            draft = _item_draft(active_view.item(focused_item_uid), local_drafts)
+            if draft.selected_choice_uid is None and not draft.text.strip():
+                return None
+            return semantic_action(
+                "SUBMIT_ITEM",
+                item_uid=focused_item_uid,
+                option_uid=draft.selected_choice_uid,
+                comment=draft.text,
+            )
+
+        def compact_continue_label() -> str:
+            todo = session_todo_view(
+                current_view(),
+                local_drafts,
+                review_and_apply=review_and_apply,
+                read_only=read_only,
+                whole_set_available=bool(global_strategies),
+                read_only_handoff=read_only_handoff,
+                item_handoff=current_item_handoff(),
+            )
+            return {
+                "REVIEW AND APPLY": "Apply",
+                "RESOLVE ALL": "Continue",
+                "COMPLETE": "Close",
+            }.get(todo.kind, "Submit selected")
+
+        return run_compact_resolution_decisions(
+            current_view,
+            selected_option=selected_compact_option,
+            stage_option=stage_compact_option,
+            build_continue_action=compact_continue_action,
+            build_simple_action=lambda kind: semantic_action(kind),
+            continue_label=compact_continue_label,
+            turn_command_review=turn_command_review,
+            app_input=app_input,
+            app_output=app_output,
+        )
 
     def open_initial_final_review() -> None:
         if (

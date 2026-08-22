@@ -1002,7 +1002,9 @@ def test_saved_atomize_analysis_applies_once_with_recorded_lineage(
     assert "already applied" in repeated.output
     assert len(store.list_checkpoints(ctx.name)) == checkpoints_before + 1
 
-    traced = runner.invoke(app, ["trace", composite.uid[:8], "--verbose"])
+    traced = runner.invoke(
+        app, ["trace", composite.uid[:8], "--verbose", "--plain"]
+    )
     assert traced.exit_code == 0
     assert "SPLIT · RECORDED" in traced.output
     assert "ATOMIZE_PREVIEW  APPLIED" in traced.output
@@ -1969,8 +1971,9 @@ def test_atomize_save_as_is_one_creation_command_with_lifecycle_undo_redo(
             composite.uid[:8],
             "--context",
             destination.name,
-            "--verbose",
-        ],
+                "--verbose",
+                "--plain",
+            ],
     )
     assert traced.exit_code == 0, traced.output
     assert "CREATED+SPLIT · RECORDED" in traced.output

@@ -1,0 +1,6 @@
+                                                                                                                                                                                    
+MELD DEFERRED · SYMMETRIC · policy                                                                                                                                                  
+SESSION · capture-meld-session · RETAINED                                                                                                                                           
+SOURCE · UNCHANGED                                                                                                                                                                  
+TARGET · UNCHANGED · NO CHECKPOINT                                                                                                                                                  
+REPORT · mem review meld --session capture-meld-session

@@ -212,6 +212,11 @@ def _resume_selected_atomize(
             fg=typer.colors.CYAN,
         )
         return
+    if applied:
+        typer.echo(f"ATOMIZE APPLIED · {planned_output}")
+        typer.echo(f"ANALYSIS · {analysis.uid}")
+        typer.echo(f"REVIEW · mem review atomize --context {planned_output}")
+        return
     action = present_atomize_workbench(
         store=store,
         analysis=analysis,
@@ -736,27 +741,9 @@ def cmd(
                     or atomize_workbench_was_applied(store, session)
                 )
             ):
-                workbench = store.load_atomize_workbench(session)
-                if workbench is None:
-                    # A save-as Output owns an applied analysis copy for
-                    # provenance, not a second mutable shared session. Build
-                    # only the read-only presentation projection here; saving
-                    # it would make the session launcher observe two owners
-                    # for one analysis UID on the next invocation.
-                    workbench = create_atomize_workbench(session)
-                present_atomize_workbench(
-                    store=store,
-                    analysis=session,
-                    workbench=workbench,
-                    show_all=show_all,
-                    workflow_actions=False,
-                    application_complete=True,
-                )
-                typer.secho(
-                    f"Saved analysis [{session.uid[:8]}]: APPLIED.",
-                    fg=typer.colors.GREEN,
-                    bold=True,
-                )
+                typer.echo(f"ATOMIZE APPLIED · {name}")
+                typer.echo(f"ANALYSIS · {session.uid}")
+                typer.echo(f"REVIEW · mem review atomize --context {name}")
                 return
             with progressing_provider_factory(
                 "ATOMIZE",

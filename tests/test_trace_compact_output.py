@@ -498,8 +498,10 @@ def test_cli_limit_and_all_control_only_the_human_operation_projection(
     )
     monkeypatch.setattr(trace_command, "build_memory_history", lambda *_args: report)
 
-    bounded = runner.invoke(app, ["trace", SELECTED_UID, "--limit", "1"])
-    complete = runner.invoke(app, ["trace", SELECTED_UID, "--all"])
+    bounded = runner.invoke(
+        app, ["trace", SELECTED_UID, "--limit", "1", "--plain"]
+    )
+    complete = runner.invoke(app, ["trace", SELECTED_UID, "--all", "--plain"])
     invalid = runner.invoke(app, ["trace", SELECTED_UID, "--limit", "0"])
 
     assert bounded.exit_code == 0, bounded.output

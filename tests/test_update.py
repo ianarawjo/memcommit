@@ -1667,29 +1667,23 @@ def test_saved_update_launcher_opens_state_aware_interactive_workbench(
             argv=entries[0].reopen_argv,
         ),
     )
-    opened = []
-    monkeypatch.setattr(
-        update_command,
-        "_run_saved_update_workbench",
-        lambda opened_session: opened.append(opened_session) or False,
-    )
-    monkeypatch.setattr(update_command.typer, "echo", lambda *_args, **_kwargs: None)
-    monkeypatch.setattr(
-        update_command,
-        "render_plan",
-        lambda *_args, **_kwargs: pytest.fail(
-            "interactive saved Update fell back to the static plan dump"
-        ),
-    )
+    invoked = []
+    monkeypatch.setattr(update_command, "cmd", lambda **kwargs: invoked.append(kwargs))
 
     update_command._browse_saved_update(store)
 
-    assert len(opened) == 1
-    opened_session = opened[0]
-    assert opened_session == session
+    assert invoked == [
+        {
+            "source_name": session.source_name,
+            "target_name": session.target_name,
+            "replace_stage": False,
+            "source_descendants": session.source_include_descendants,
+            "target_descendants": session.target_include_descendants,
+        }
+    ]
 
 
-def test_saved_update_workbench_handoff_reenters_normal_update_command(
+def test_saved_update_launcher_does_not_open_the_retained_impact_report(
     isolated_store,
     monkeypatch,
 ):
@@ -1722,11 +1716,9 @@ def test_saved_update_workbench_handoff_reenters_normal_update_command(
         ),
     )
     opened = []
-    handoffs = iter((True, False))
-
     def open_workbench(opened_session):
         opened.append(opened_session)
-        return next(handoffs)
+        return False
 
     monkeypatch.setattr(
         update_command,
@@ -1748,7 +1740,7 @@ def test_saved_update_workbench_handoff_reenters_normal_update_command(
             "target_descendants": session.target_include_descendants,
         }
     ]
-    assert opened == [session, session]
+    assert opened == []
 
 
 @pytest.mark.parametrize("command", ["impact", "update"])
@@ -1993,6 +1985,7 @@ def test_multi_context_update_is_one_atomic_undo_and_redo_unit(
             "--context",
             TASK1_TARGET_CHILD,
             "--verbose",
+            "--plain",
         ],
     )
 

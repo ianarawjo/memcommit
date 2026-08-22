@@ -164,6 +164,7 @@ def review_update_application(
                 if action.kind == "SUBMIT_ALL"
                 else None
             ),
+            compact_decisions=True,
         )
         if action.kind == "ACCEPT":
             return current

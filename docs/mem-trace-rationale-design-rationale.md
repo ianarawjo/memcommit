@@ -155,20 +155,21 @@ Rationale uses the full-screen target selector only when a target is omitted.
 After selection it restores the ordinary terminal and prints one compact
 receipt; an explicit operand prints the same receipt directly. Its usual
 Memory-plus-lifecycle result does not justify a second Viewer or a close key.
-Trace instead projects one continuous vertical lineage document in the common
-read-only Viewer. The selected Memory has already fixed the subject, so a
-second `ITEMS` surface would make the person choose an operation merely to
-reveal evidence that belongs directly in the report. The
-document renders every visible newest-first operation as the same typed compact
-History row used by Log, followed immediately by its inline `− before` / `+
-after` Memory diff. `NOW` and `ORIGIN` endpoint bands are intentionally omitted:
-the newest diff's after side and the oldest visible diff's before side already
-carry that state, while the shared `[command] [CHECKPOINT …] [MEMORY …]  time ·
-summary` grammar gives the operation the same scan landmarks as Log. Bare,
-recent, and explicit Trace targets all enter this single-surface Viewer in a TTY. `--plain` and
-non-TTY routes print the exact ANSI-free text projection of the same document;
-JSON retains the complete structured Trace and the validated bounded provenance
-projection. Trace moves by visible wrapped rows through the common
+Trace normally returns a bounded lineage receipt with Context, selected Memory,
+event/component counts, warning count, and an exact `--plain` detail route.
+Bare, recent, and explicit targets share that result contract; selecting a
+target does not cause a second automatic full-screen transition. `--plain`
+prints the complete ANSI-free lineage document, while explicit `--tui` opens
+that document in the common read-only Viewer. JSON retains the complete
+structured Trace and the validated bounded provenance projection.
+
+The full document renders every visible newest-first operation as the same
+typed compact History row used by Log, followed immediately by its inline `−
+before` / `+ after` Memory diff. `NOW` and `ORIGIN` endpoint bands are
+intentionally omitted: the newest diff's after side and the oldest visible
+diff's before side already carry that state, while the shared `[command]
+[CHECKPOINT …] [MEMORY …]  time · summary` grammar gives the operation the same
+scan landmarks as Log. In `--tui`, Trace moves by visible wrapped rows through the common
 cursor-backed read pane, so a hidden fixed cursor cannot reset the viewport to
 its first logical line.
 Trace sizes that Viewer to the document with a ten-row minimum and a 28-row

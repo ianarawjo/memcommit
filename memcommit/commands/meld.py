@@ -422,6 +422,43 @@ def render_meld_receipt(
     return "\n".join(lines)
 
 
+def render_meld_incomplete_receipt(session: MeldSession) -> str:
+    """Return saved execution state without echoing the retained report."""
+
+    assessment = session.current_assessment
+    issues = assessment.issues if assessment is not None else ()
+    required = sum(issue.priority == "REQUIRED" for issue in issues)
+    optional = len(issues) - required
+    state_label = {
+        "AWAITING_REPLY": "NEEDS INPUT",
+        "READY_TO_APPLY": "READY",
+        "KEPT_REVIEW_ONLY": "DEFERRED",
+        "PENDING_ANALYSIS": "PENDING",
+    }.get(session.state, session.state.replace("_", " "))
+    if session.mode == "DIRECTIONAL":
+        frame_by_role = {frame.role: frame for frame in session.frames}
+        route = (
+            f"INCOMING {frame_by_role['INCOMING'].context_name} → "
+            f"BASELINE / TARGET {session.target.context_name}"
+        )
+    else:
+        route = (
+            f"{session.frames[0].context_name} + {session.frames[1].context_name} "
+            f"→ {session.target.context_name}"
+        )
+    return "\n".join(
+        [
+            f"MELD {state_label} · {session.mode} · {session.target.context_name}",
+            f"ROUTE · {route}",
+            f"JUDGMENTS · REQUIRED {required} · OPTIONAL {optional}",
+            f"SESSION · {session.uid}",
+            "SOURCE · UNCHANGED",
+            f"IMPACT · mem impact meld --session {session.uid}",
+            "RESUME · mem meld --sessions",
+        ]
+    )
+
+
 def _load_bound_contexts(
     store: MemoryStore,
     session: MeldSession,
@@ -1118,31 +1155,35 @@ def _resume_picked_meld(
         _assert_unapplied_target(session, target)
 
     interactive_ran = sys.stdin.isatty() and sys.stdout.isatty()
-    read_only_ran = interactive_ran and session.state in {
+    terminal_session = session.state in {
         "APPLIED",
         "KEPT_REVIEW_ONLY",
     }
     if interactive_ran:
-        if read_only_ran:
-            # Terminal states remain durable research artifacts. Reopen the
-            # same report surface without controls that could imply another
-            # provider turn or a second application.
-            run_meld_shell(session, read_only=True)
+        if session.state == "APPLIED":
+            typer.echo(render_meld_receipt(session))
+        elif session.state == "KEPT_REVIEW_ONLY":
+            typer.echo(f"MELD DEFERRED · {session.target.context_name}")
+            typer.echo(f"SESSION · {session.uid}")
+            typer.echo("SOURCE · UNCHANGED")
+            typer.echo("RESUME · mem meld --sessions")
         else:
             session = _run_interactive(
                 store=store,
                 session=session,
                 provider_factory=connect_codex_chatgpt_provider,
             )
+            if session.state == "APPLIED":
+                typer.echo(render_meld_receipt(session))
+                terminal_session = True
     else:
-        typer.echo(render_meld_session(session))
+        typer.echo(
+            render_meld_receipt(session)
+            if session.state == "APPLIED"
+            else render_meld_incomplete_receipt(session)
+        )
     if interactive_ran:
-        if read_only_ran:
-            typer.secho(
-                "Read-only Meld view closed; saved session unchanged.",
-                fg=typer.colors.CYAN,
-            )
-        else:
+        if not terminal_session:
             typer.secho(
                 "Interactive Meld view closed; any approved turns remain saved.",
                 fg=typer.colors.CYAN,
@@ -1877,7 +1918,7 @@ def cmd(
             typer.echo(
                 render_meld_receipt(session)
                 if session.state == "APPLIED"
-                else render_meld_session(session)
+                else render_meld_incomplete_receipt(session)
             )
             return
 
@@ -1948,7 +1989,7 @@ def cmd(
             typer.echo(
                 render_meld_receipt(session)
                 if session.state == "APPLIED"
-                else render_meld_session(session)
+                else render_meld_incomplete_receipt(session)
             )
             return
 
@@ -2035,7 +2076,7 @@ def cmd(
                 session_snapshot,
                 store=store,
             ).session
-            typer.echo(render_meld_session(session))
+            typer.echo(render_meld_incomplete_receipt(session))
             typer.secho(
                 "Deferred this meld without changing the target.",
                 fg=typer.colors.YELLOW,
@@ -2060,7 +2101,7 @@ def cmd(
                     provider_factory=connect_codex_chatgpt_provider,
                     expected_session_digest=expected_session_digest,
                 )
-            typer.echo(render_meld_session(session))
+            typer.echo(render_meld_incomplete_receipt(session))
             return
 
         if comment is not None or choice is not None:
@@ -2108,7 +2149,7 @@ def cmd(
                 provider_factory=connect_codex_chatgpt_provider,
                 expected_session_digest=expected_session_digest,
             )
-            typer.echo(render_meld_session(session))
+            typer.echo(render_meld_incomplete_receipt(session))
             return
 
         expanded_uid = None
@@ -2133,6 +2174,8 @@ def cmd(
                 session,
                 expanded_issue_uid=expanded_uid,
             )
+            if expanded_uid is not None
+            else render_meld_incomplete_receipt(session)
         )
         if interactive_ran:
             typer.secho(

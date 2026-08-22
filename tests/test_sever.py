@@ -213,9 +213,10 @@ def test_explicit_sever_creates_review_session_without_output_or_query_access(
     )
 
     assert result.exit_code == 0, result.output
-    assert "REVIEWING · OTHER-SAVE" in result.output
+    assert "SEVER READY · local/personal-memory → healthcare-draft" in result.output
+    assert "IMPACT · mem impact sever --session" in result.output
     assert "query-only Contexts do not grant" not in result.output
-    assert "The Source Context is unchanged" in result.output
+    assert "OUTPUT · healthcare-draft · READY TO CREATE" in result.output
     assert not store.context_exists("healthcare-draft")
     sessions = SeverSessionStore(store).list()
     assert len(sessions) == 1
@@ -266,14 +267,14 @@ def test_sever_accepts_positional_roles_and_defaults_to_self_save(
     )
 
     assert defaulted.exit_code == 0, defaulted.output + defaulted.stderr
-    assert "REVIEWING · SELF-SAVE" in defaulted.output
+    assert "SEVER READY · practice/source → practice/source" in defaulted.output
     assert "OUTPUT · practice/source · WILL UPDATE SOURCE" in defaulted.output
     assert store.load_direct("practice/source").memories
     assert applied.exit_code == 0, applied.output + applied.stderr
     assert "SEVER APPLIED · practice/source → practice/result" in applied.output
     assert store.context_exists("practice/result")
     assert mixed_alias.exit_code == 0, mixed_alias.output + mixed_alias.stderr
-    assert "OUTPUT · practice/alias-result · NOT CREATED" in mixed_alias.output
+    assert "OUTPUT · practice/alias-result · READY TO CREATE" in mixed_alias.output
     assert len(provider.payloads) == 3
 
 
@@ -1304,8 +1305,9 @@ def test_bare_sever_opens_a_selected_saved_session_without_provider_call(
     result = runner.invoke(app, ["sever"])
 
     assert result.exit_code == 0, result.output
-    assert f"Session · {session.uid}" in result.output
-    assert "REVIEWING · OTHER-SAVE" in result.output
+    assert f"SESSION · {session.uid}" in result.output
+    assert f"IMPACT · mem impact sever --session {session.uid}" in result.output
+    assert "SEVER READY · source → draft" in result.output
 
 
 def test_non_tty_sever_sessions_retains_plain_listing(

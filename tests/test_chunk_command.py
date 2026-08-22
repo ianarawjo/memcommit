@@ -54,7 +54,7 @@ def test_chunk_without_selector_chunks_current_context_by_sentences(isolated_sto
     ]
 
     for selector in (first.uid[:8], after[0].uid[:8]):
-        trace = runner.invoke(app, ["trace", selector])
+        trace = runner.invoke(app, ["trace", selector, "--plain", "--verbose"])
         assert trace.exit_code == 0, trace.output + trace.stderr
         assert "SPLIT" in trace.output
         assert "RECORDED" in trace.output
@@ -168,7 +168,9 @@ def test_chunk_context_records_literal_boundary_for_trace(isolated_store):
     ]
     checkpoint = store.list_checkpoints("notes")[0]
     assert checkpoint["args"]["break_on"] == ","
-    trace = runner.invoke(app, ["trace", original.uid[:8]])
+    trace = runner.invoke(
+        app, ["trace", original.uid[:8], "--plain", "--verbose"]
+    )
     assert trace.exit_code == 0, trace.output + trace.stderr
     assert "SPLIT" in trace.output
     assert "RECORDED" in trace.output
@@ -234,7 +236,9 @@ def test_chunk_clauses_break_on_and_character_limits_are_applied_and_recorded(
     assert checkpoint["args"]["min_chars"] == 10
     assert checkpoint["args"]["max_chars"] == 18
 
-    trace = runner.invoke(app, ["trace", after[0].uid[:8]])
+    trace = runner.invoke(
+        app, ["trace", after[0].uid[:8], "--plain", "--verbose"]
+    )
     assert trace.exit_code == 0, trace.output + trace.stderr
     assert "SPLIT" in trace.output
     assert "mapping could not be reconstructed" not in trace.output

@@ -64,6 +64,7 @@ def run_forget_review_workbench(
             ).decision_free_behavior,
             split_viewer_items=True,
             impact_controller=impact_controller,
+            compact_decisions=True,
         )
         if action.kind == "CLOSE":
             return None

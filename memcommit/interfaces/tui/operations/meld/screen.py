@@ -817,6 +817,7 @@ def run_meld_shell(
         draft_saver=draft_saver,
         save_draft_on_close=draft_saver is not None,
         turn_command_review=turn_review,
+        compact_decisions=not read_only and not review_only,
     )
     if action.kind == "CLOSE":
         return None

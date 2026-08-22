@@ -214,9 +214,11 @@ revision and mapping. Revocation or drift leaves the participant artifact
 stored but prevents Grant-bound review or mutation; retained-analysis access
 follows the Grant artifact retention rules.
 
-The first invocation performs one bounded semantic turn, saves a non-applying
-relation ledger and proposal, and opens the interactive workbench in a
-terminal. If the active Profile already contains an exact fresh ordered
+The first invocation performs one bounded semantic turn and saves a
+non-applying relation ledger and proposal. A terminal shows only the compact
+decision surface when judgments remain; otherwise the command returns a
+bounded receipt. The complete ledger is explicit under the printed Impact or
+Review route. If the active Profile already contains an exact fresh ordered
 Compare for the same `INCOMING → BASELINE` pair and descendant flags, Meld
 imports that relation ledger and asks the provider only for the
 authority-specific Directional issues and materialization over it:

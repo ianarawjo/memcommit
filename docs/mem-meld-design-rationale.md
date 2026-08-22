@@ -1538,13 +1538,21 @@ mem meld INCOMING_CONTEXT BASELINE_CONTEXT --restart
 mem meld INCOMING_CONTEXT BASELINE_CONTEXT --accept
 ```
 
-The plain symmetric or directional command opens the arrow-key workbench in a
-terminal and prints a complete snapshot outside a TTY. Omitting the
-directional baseline operand uses the current Context; naming it explicitly
-creates the same role binding. Repeating the same resolved command resumes
-without a provider call. An issue choice/comment, an unscoped `--comment`, and
-`--preserve-all` each cause one new aggregate semantic call. `--expand`,
-`--defer-all`, resume, and `--accept` are provider-free in both modes.
+The plain symmetric or directional command returns a bounded saved-session
+receipt outside a TTY. In a terminal, unresolved judgments open the shared
+compact decision surface, not the complete report Viewer. `Left`/`Right`
+navigates issues in either order, `Up`/`Down` exposes the current row target,
+`Enter` stages it, numeric keys choose directly, and one Continue action may
+submit all staged choices. `D` defers without applying. The report remains
+available through the receipt's exact `mem impact meld --session UID` route;
+`--expand ISSUE` is an explicit detailed projection.
+
+Omitting the directional baseline operand uses the current Context; naming it
+explicitly creates the same role binding. Repeating the same resolved command
+resumes without a provider call. An issue choice/comment, an unscoped
+`--comment`, and `--preserve-all` each cause one new aggregate semantic call.
+`--expand`, `--defer-all`, resume, and `--accept` are provider-free in both
+modes.
 
 `--revision {confirm|extend|correct|retract}` records how a semantic comment
 relates to earlier dialogue; corrections and retractions identify the affected
@@ -1570,19 +1578,19 @@ embedding a second semantic implementation.
 ## Reopening terminal Melds
 
 Applied and review-only Meld sessions remain durable artifacts in
-`mem meld --sessions`. In a TTY, selecting either terminal state reopens the
-same report Viewer in an explicitly read-only presentation: report sections
-and any retained conflict details remain navigable, while resolution,
-provider-turn, and apply controls are absent. Closing the Viewer returns only a
-short confirmation instead of printing the full report into the terminal
-scrollback. Outside a TTY, the command still emits the stable text snapshot so
-scripts and redirected inspection retain their existing contract.
+`mem meld --sessions`. Selecting either terminal state returns its compact
+receipt and exact Impact/Review route; it does not reopen the report merely
+because stdout is a TTY. Explicit Impact or Review opens the same report Viewer
+in a read-only presentation: report sections and retained conflict details
+remain navigable, while resolution, provider-turn, and apply controls are
+absent.
 
 This split avoids two misleading alternatives. Removing completed sessions
 would discard the decision artifact, while reopening the ordinary mutable
 workbench could imply that an applied receipt may be edited or applied twice.
-The read-only Viewer preserves inspectability without weakening the saved
-application and checkpoint boundary.
+The explicit read-only Viewer preserves inspectability without weakening the
+saved application and checkpoint boundary or imposing that reading task on
+ordinary execution.
 
 ## Implementation sequence
 
