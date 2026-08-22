@@ -1879,6 +1879,24 @@ def test_impact_arrows_open_only_the_focused_row_and_close_it_idempotently():
     assert _impact_arrow_expansion(first, None, expand=True) == first
 
 
+@pytest.mark.parametrize(
+    ("kind", "expected"),
+    (
+        ("RESPONSES", "Responses are stacked · use Up/Down"),
+        ("ITEM", "This detail is vertical · use Up/Down"),
+        ("REPORT", "This report is vertical · use Up/Down"),
+        ("TODO", "This frame has no Left/Right action"),
+    ),
+)
+def test_split_horizontal_noop_explains_the_real_stacked_path(
+    kind: str,
+    expected: str,
+) -> None:
+    message = resolution_shell_module._stacked_horizontal_key_message(kind)
+
+    assert message.startswith(expected)
+
+
 def test_review_and_apply_stages_each_choice_before_one_whole_set_turn():
     first = _item(
         "a",

@@ -1,0 +1,12 @@
+$ mem meld · BROWSE FROM/TO editing                                                                                                                                                 
+PTY 180 52                                                                                                                                                                          
+ NEW MELD · SETUP ONLY · NO PROVIDER, SESSION, RESULT, OR APPLY                                                                                                                     
+  MODE · [   SYMMETRIC · CREATE SEPARATE RESULT ]  [ ✓ DIRECTIONAL · UPDATE EXISTING ] · ←/→ TO SELECT                                                                              
+  FROM › route/from-b                            [ BROWSE ]                                   [   INCLUDE DESCENDANTS ]  [ MEMORY · WHOLE CONTEXT ]                                 
+  TO   › route/from-b                            [ BROWSE ]                                   [   INCLUDE DESCENDANTS ]  [ MEMORY · WHOLE CONTEXT ]                                 
+ COMMAND · INVALID                                                                                                                                                                  
+ A and B must be distinct Contexts.                                                                                                                                                 
+  CONTEXTS · TO · ALL ALLOWED                                                                                                                                                       
+› · * · route/from-a                                                                                                                                                               ^
+  ✓   · route/from-b                                                                                                                                                               v
+ ↑/↓ Context · Enter use exact name · Esc close all

@@ -4,12 +4,13 @@ PTY 180 52
   MODE · [   SYMMETRIC · CREATE SEPARATE RESULT ]  [ ✓ DIRECTIONAL · UPDATE EXISTING ] · ←/→ TO SELECT                                                                              
 › FROM › capture/incoming                        [ BROWSE ] CURRENT                           [   INCLUDE DESCENDANTS ]  [ MEMORY · WHOLE CONTEXT ]                                 
   TO   › capture/baseline                        [ BROWSE ]                                   [   INCLUDE DESCENDANTS ]  [ MEMORY · WHOLE CONTEXT ]                                 
-  [ START MELD ]                                                                                                                                                                    
+ COMMAND · RUNNABLE · ENTER TO START                                                                                                                                                
+ mem meld capture/incoming capture/baseline                                                                                                                                         
   MEMORY · FROM · capture/incoming                                                                                                                                                 ^
 ✓ WHOLE CONTEXT                                                                                                                                                                     
   Use every direct Memory in this exact Context.                                                                                                                                    
                                                                                                                                                                                     
-  MEMORY · fc6a81a8                                                                                                                                                                 
+  MEMORY · e228a879                                                                                                                                                                 
   Only the south vehicle entrance closes during construction.                                                                                                                       
                                                                                                                                                                                    v
- ↑/↓ Memory · Enter choose · Esc close details
+ ↑/↓ Memory (edge continues by row) · Enter choose · ←/Esc close details

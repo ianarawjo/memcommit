@@ -1,0 +1,10 @@
+$ mem meld · compact setup to real directional application                                                                                                                          
+PTY 180 52                                                                                                                                                                          
+ NEW MELD · CHOOSE MODE AND ENDPOINTS                                                                                                                                               
+› MODE · [ ✓ SYMMETRIC · CREATE SEPARATE RESULT ]  [   DIRECTIONAL · UPDATE EXISTING ] · ←/→ TO SELECT                                                                              
+  FROM › test/update/from                        [ BROWSE ] CURRENT                           [   INCLUDE DESCENDANTS ]                                                             
+  WITH › test/update/to                          [ BROWSE ]                                   [   INCLUDE DESCENDANTS ]                                                             
+  TO   ›                                         ENTER NEW NAME                                                                                                                     
+ COMMAND · INVALID                                                                                                                                                                  
+ TO needs a Context name.                                                                                                                                                           
+ ←/→ mode · ↓ first endpoint row · Tab next control · Esc cancel

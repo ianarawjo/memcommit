@@ -4,5 +4,6 @@ PTY 180 52
 › MODE · [   SYMMETRIC · CREATE SEPARATE RESULT ]  [ ✓ DIRECTIONAL · UPDATE EXISTING ] · ←/→ TO SELECT                                                                              
   FROM › capture/incoming                        [ BROWSE ] CURRENT                           [   INCLUDE DESCENDANTS ]  [ MEMORY · WHOLE CONTEXT ]                                 
   TO   › capture/baseline                        [ BROWSE ]                                   [   INCLUDE DESCENDANTS ]  [ MEMORY · WHOLE CONTEXT ]                                 
-  [ START MELD ]                                                                                                                                                                    
- ←/→ mode · ↓ FROM · Tab next · Esc cancel
+ COMMAND · RUNNABLE · ENTER TO START                                                                                                                                                
+ mem meld capture/incoming capture/baseline                                                                                                                                         
+ ←/→ mode · ↓ first endpoint row · Tab next control · Esc cancel

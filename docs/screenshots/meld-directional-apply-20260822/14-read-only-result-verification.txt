@@ -1,0 +1,13 @@
+$ mem context test/update/to · read-only reload                                                                                                                                     
+PTY 180 52                                                                                                                                                                          
+                                                                                                                                                                                    
+DURABLE VERIFICATION · DIRECTIONAL MELD                                                                                                                                             
+  SESSION STATE · APPLIED                                                                                                                                                           
+  PROVIDER CALLS · 0                                                                                                                                                                
+  TARGET CHECKPOINTS · 3                                                                                                                                                            
+  INCOMING MEMORIES · 2 · UNCHANGED SOURCE                                                                                                                                          
+  TARGET MEMORIES · 3                                                                                                                                                               
+    1. [47f3f855] The underground-parking stairwell remains open; only the vehicle entrance and exit are closed.                                                                    
+    2. [959c5df5] The Campus Store remains open during construction.                                                                                                                
+    3. [c918cffa] Students needing an ATM should use the nearby Bank Annex ATM.                                                                                                     
+  CHECKPOINT EFFECTS · EDIT, ADD

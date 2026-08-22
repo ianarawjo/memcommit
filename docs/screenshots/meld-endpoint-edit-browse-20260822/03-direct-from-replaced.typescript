@@ -1,0 +1,22 @@
+$ mem meld · DIRECT FROM/TO editing
+PTY 180 52
+[?2004h[?1l[?25l[0m[?7l[0m[J[0m NEW MELD · SETUP ONLY · NO PROVIDER, SESSION, RESULT, OR APPLY[0m
+[0m› MODE · [0;38;2;139;213;255;1m[[0;38;2;16;36;47;48;2;139;213;255;1m ✓ SYMMETRIC · CREATE SEPARATE RESULT [0;38;2;139;213;255;1m][0m  [   DIRECTIONAL · UPDATE EXISTING ] · ←/→ TO SELECT[0m
+[0m  FROM › route/from-a                            [ BROWSE ] [0;38;2;139;213;202;1mCURRENT[0m                           [   INCLUDE DESCENDANTS ][0m
+[0m  WITH › route/from-b                            [ BROWSE ]                                   [   INCLUDE DESCENDANTS ][0m
+[0m  TO   ›                                         [0;38;2;245;169;127;1mENTER NEW NAME[0m
+[0m COMMAND · INVALID[0m
+[0m TO needs a Context name.[0m
+[0m ←/→ mode · ↓ first endpoint row · Tab next control · Esc cancel[64D[6A[?7h[0m[?25l[?7l[0m [8C[   SYMMETRIC · CREATE SEPARATE RESULT ][3C[0;38;2;16;36;47;48;2;139;213;255m ✓ DIRECTIONAL · UPDATE EXISTING [0m
+[0;1m› FROM[115C[0m[ MEMORY · WHOLE CONTEXT ][0m
+[2C[0mTO  [115C[ MEMORY · WHOLE CONTEXT ][0m
+[0m COMMAND · RUNNABLE · ENTER TO START[0m[K[0m
+[0m mem meld route/from-a route/from-b[0m
+[0m Type exact Context · ←/→ caret · → at end next control · ↑/↓ endpoint row · Enter confirm · Tab next control · Esc cancel[0m
+[0m [0m[K[5A[20C[?7h[0m[?12l[?25h[?25l[?7l[0m  [38C[0;38;2;245;169;127;1mUNAVAILABLE[0m
+
+[0m COMMAND · INVALID[0m[K[0m
+[0m FROM requires an existing readable Context.[3A[24D[?7h[0m[?12l[?25h[?25l[?7l[0mb [38C           [0m
+
+
+[C[0mA and B must be distinct Contexts.[0m[K[3A[14D[?7h[0m[?12l[?25h

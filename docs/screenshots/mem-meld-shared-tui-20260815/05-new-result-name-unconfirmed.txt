@@ -5,5 +5,6 @@ PTY 180 52
   FROM › capture/incoming                        [ BROWSE ] CURRENT                           [   INCLUDE DESCENDANTS ]                                                             
   WITH › capture/baseline                        [ BROWSE ]                                   [   INCLUDE DESCENDANTS ]                                                             
 › TO   › capture/new-result                      [ BROWSE ] NEW · NOT CREATED                                                                                                       
-  [ START MELD ]                                                                                                                                                                    
- Type exact Context · ↑/↓ matches · Enter confirm · Tab next · Esc cancel
+ COMMAND · RUNNABLE · ENTER TO START                                                                                                                                                
+ mem meld capture/incoming capture/baseline --to capture/new-result                                                                                                                 
+ Type exact Context · ←/→ caret · → at end next control · ↑/↓ endpoint row · Enter confirm · Tab next control · Esc cancel

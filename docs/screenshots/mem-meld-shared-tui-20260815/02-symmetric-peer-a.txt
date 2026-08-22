@@ -5,5 +5,6 @@ PTY 180 52
 › FROM › capture/incoming                        [ BROWSE ] CURRENT                           [   INCLUDE DESCENDANTS ]                                                             
   WITH › capture/baseline                        [ BROWSE ]                                   [   INCLUDE DESCENDANTS ]                                                             
   TO   ›                                         [ BROWSE ] CHOOSE EMPTY OR ENTER NEW NAME                                                                                          
-  [ START MELD ]                                                                                                                                                                    
- Type exact Context · ↑/↓ matches · Enter confirm · Tab next · Esc cancel
+ COMMAND · INVALID                                                                                                                                                                  
+ TO needs a Context name.                                                                                                                                                           
+ Type exact Context · ←/→ caret · → at end next control · ↑/↓ endpoint row · Enter confirm · Tab next control · Esc cancel
