@@ -1,0 +1,10 @@
+$ mem meld · BROWSE FROM/TO editing                                                                                                                                                 
+PTY 180 52                                                                                                                                                                          
+                                                                                                                                                                                    
+BROWSE SETUP RECEIPT · PROCESS-LOCAL                                                                                                                                                
+  MODE · directional                                                                                                                                                                
+  FROM · route/from-b                                                                                                                                                               
+  TO · route/from-a                                                                                                                                                                 
+  EXACT COMMAND · mem meld route/from-b route/from-a                                                                                                                                
+  SWAPPED ENDPOINTS · True                                                                                                                                                          
+CAPTURE GATE · PRESS V FOR READ-ONLY VERIFICATION

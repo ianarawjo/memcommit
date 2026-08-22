@@ -5,5 +5,6 @@ PTY 180 52
 › FROM › capture/                                [ BROWSE ] 3 MATCHES                         [   INCLUDE DESCENDANTS ]                                                             
   WITH › capture/ capture/baseline              ^[ BROWSE ]                                   [   INCLUDE DESCENDANTS ]                                                             
   TO   ›          capture/empty-result           [ BROWSE ] CHOOSE EMPTY OR ENTER NEW NAME                                                                                          
-  [ START MELD ]  capture/incoming      CURRENT v                                                                                                                                   
- Type exact Context · ↑/↓ matches · Enter confirm · Tab next · Esc cancel
+ COMMAND · INVALI capture/incoming      CURRENT v                                                                                                                                   
+ FROM requires an existing readable Context.                                                                                                                                        
+ Type exact Context · ←/→ caret · → at end next control · ↑/↓ matches · Enter confirm · Tab next control · Esc cancel

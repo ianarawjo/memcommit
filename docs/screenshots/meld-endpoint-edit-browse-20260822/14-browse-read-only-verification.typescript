@@ -1,0 +1,56 @@
+$ mem meld · BROWSE FROM/TO editing
+PTY 180 52
+[?2004h[?1l[?25l[0m[?7l[0m[J[0m NEW MELD · SETUP ONLY · NO PROVIDER, SESSION, RESULT, OR APPLY[0m
+[0m› MODE · [0;38;2;139;213;255;1m[[0;38;2;16;36;47;48;2;139;213;255;1m ✓ SYMMETRIC · CREATE SEPARATE RESULT [0;38;2;139;213;255;1m][0m  [   DIRECTIONAL · UPDATE EXISTING ] · ←/→ TO SELECT[0m
+[0m  FROM › route/from-a                            [ BROWSE ] [0;38;2;139;213;202;1mCURRENT[0m                           [   INCLUDE DESCENDANTS ][0m
+[0m  WITH › route/from-b                            [ BROWSE ]                                   [   INCLUDE DESCENDANTS ][0m
+[0m  TO   ›                                         [0;38;2;245;169;127;1mENTER NEW NAME[0m
+[0m COMMAND · INVALID[0m
+[0m TO needs a Context name.[0m
+[0m ←/→ mode · ↓ first endpoint row · Tab next control · Esc cancel[64D[6A[?7h[0m[?25l[?7l[0m [8C[   SYMMETRIC · CREATE SEPARATE RESULT ][3C[0;38;2;16;36;47;48;2;139;213;255m ✓ DIRECTIONAL · UPDATE EXISTING [0m
+[121C[0m[ MEMORY · WHOLE CONTEXT ][0m
+[2C[0mTO  [115C[ MEMORY · WHOLE CONTEXT ][0m
+[0m COMMAND · RUNNABLE · ENTER TO START[0m[K[0m
+[0m mem meld route/from-a route/from-b[0m
+[0m  CONTEXTS · FROM · ALL ALLOWED[0m
+[0;1;7m› ✓ * · [0;38;2;16;36;47;48;2;139;213;255;1mroute/from-a[0m                                                                                                                                                               [179C[0;1m^[0m
+[0m  ·   · route/from-b                                                                                                                                                               [179C[0;1mv[0m
+[0m ↑/↓ Context · Enter use exact name · Esc close all[51D[2A[?7h[0m[?25l[?7l[5A[0;1m› FROM[14C[0mb[39C       [0m
+
+[0m COMMAND · INVALID[0m[K[0m
+[0m A and B must be distinct Contexts.[0m
+[C[0mType exact Context[C· ←/→ caret · → at end next control · ↑/↓ endpoint row · Enter confirm · Tab next control · Esc cancel[0m
+[0m [0m[K[0m
+[0m [0m[K[0m
+[0m [0m[K[7A[20C[?7h[0m[?12l[?25h[?25l[?7l[21D[0m  FROM[0m
+
+
+
+[C[0m CONTEXTS · TO · ALL[CALLOWED[0m[K[0m
+[0;1;7m› · * · route/from-a[159C[0;1m^[0m
+[0m  ✓   · [0;38;2;16;36;47;48;2;139;213;255mroute/from-b[0m                                                                                                                                                               [179C[0;1mv[0m
+[0m ↑/↓ Context · Enter use exact name · Esc close all[2A[51D[?7h[0m[?25l[?7l[4A[0;1m› TO[16C[0ma[39C[0;38;2;139;213;202;1mCURRENT[0m
+[0m COMMAND · RUNNABLE · ENTER TO START[0m
+[0m mem meld route/from-b route/from-a[0m
+[C[0mType exact Context ·[C←/→ caret · → at end next control · ↑/↓ endpoint row · Enter confirm · Tab next control · Esc cancel[0m
+[0m [0m[K[0m
+[0m [0m[K[0m
+[0m [0m[K[6A[20C[?7h[0m[?12l[?25h[?25l[?7l[21D[0m  TO[0m
+[0;38;2;16;36;47;48;2;139;213;255;1m COMMAND · RUNNABLE · ENTER TO START[0m
+
+[C[0mEnt[Cr run exac[C START comm[Cnd · ↑ previous · Es[C cancel[0m[K[2A[56D[?7h[0m[4A[J[0m[?7h[?2004l
+BROWSE SETUP RECEIPT · PROCESS-LOCAL
+  MODE · directional
+  FROM · route/from-b
+  TO · route/from-a
+  EXACT COMMAND · mem meld route/from-b route/from-a
+  SWAPPED ENDPOINTS · True
+CAPTURE GATE · PRESS V FOR READ-ONLY VERIFICATION
+v
+
+READ-ONLY SETUP VERIFICATION
+  CONTEXT BYTES UNCHANGED · True
+  CURRENT CONTEXT · route/from-a
+  CONTEXT CHECKPOINTS · 0
+  MELD SESSIONS · 0
+  PROVIDER CALLS · 0

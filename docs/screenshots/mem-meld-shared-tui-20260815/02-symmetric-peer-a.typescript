@@ -5,10 +5,12 @@ PTY 180 52
 [0m  FROM › capture/incoming                        [ BROWSE ] [0;38;2;139;213;202;1mCURRENT[0m                           [   INCLUDE DESCENDANTS ][0m
 [0m  WITH › capture/baseline                        [ BROWSE ]                                   [   INCLUDE DESCENDANTS ][0m
 [0m  TO   ›                                         [ BROWSE ] [0;38;2;245;169;127;1mCHOOSE EMPTY OR ENTER NEW NAME[0m
-[0m  [ START MELD ][0m
-[0m ←/→ mode · ↓ FROM · Tab next · Esc cancel[42D[5A[?7h[0m[?25l[?7l[0m [8C[[0;38;2;16;36;47;48;2;139;213;255m ✓ SYMMETRIC · CREATE SEPARATE RESULT [0m][0m
+[0m COMMAND · INVALID[0m
+[0m TO needs a Context name.[0m
+[0m ←/→ mode · ↓ first endpoint row · Tab next control · Esc cancel[64D[6A[?7h[0m[?25l[?7l[0m [8C[[0;38;2;16;36;47;48;2;139;213;255m ✓ SYMMETRIC · CREATE SEPARATE RESULT [0m][0m
 [0;1m› FROM[0m
 
 
 
-[C[0mType exact[CContext · ↑/↓ ma[Cches ·[CEnter confirm · Tab next · Esc cancel[4A[48D[?7h[0m[?12l[?25h
+
+[C[0mType exact[CContex[2C· ←/→ caret · → [Ct[Cend next c[Cntrol ·[C↑/↓ [Cndpoint row · Enter confirm · Tab next control · Esc cancel[5A[97D[?7h[0m[?12l[?25h

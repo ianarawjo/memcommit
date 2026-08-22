@@ -6,7 +6,7 @@ MELD SETUP RECEIPT · PROCESS-LOCAL · NOT RUN
   A · capture/incoming · DESCENDANTS=False · MEMORY=None                                                                                                                            
   B · capture/baseline · DESCENDANTS=False · MEMORY=None                                                                                                                            
   C · capture/new-result · CREATE=True · NOT CREATED                                                                                                                                
-  EXPECTED A MEMORY · 3be4d89e-0a66-4a01-8511-7b3a4545816d · MATCH=False                                                                                                            
+  EXPECTED A MEMORY · e7826736-9cfe-4148-b9e1-38f5a6ab5385 · MATCH=False                                                                                                            
 CAPTURE GATE · PRESS V FOR READ-ONLY VERIFICATION                                                                                                                                   
 v                                                                                                                                                                                   
                                                                                                                                                                                     

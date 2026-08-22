@@ -5,10 +5,12 @@ PTY 180 52
 [0m  FROM › capture/incoming                        [ BROWSE ] [0;38;2;139;213;202;1mCURRENT[0m                           [   INCLUDE DESCENDANTS ][0m
 [0m  WITH › capture/baseline                        [ BROWSE ]                                   [   INCLUDE DESCENDANTS ][0m
 [0m  TO   ›                                         [ BROWSE ] [0;38;2;245;169;127;1mCHOOSE EMPTY OR ENTER NEW NAME[0m
-[0m  [ START MELD ][0m
-[0m ←/→ mode · ↓ FROM · Tab next · Esc cancel[42D[5A[?7h[0m[?25l[?7l[9C[0m[   SYMMETRIC · CREATE SEPARATE RESULT ][2C[0;38;2;139;213;255;1m[[0;38;2;16;36;47;48;2;139;213;255;1m ✓ DIRECTIONAL · UPDATE EXISTING [0;38;2;139;213;255;1m][0m
+[0m COMMAND · INVALID[0m
+[0m TO needs a Context name.[0m
+[0m ←/→ mode · ↓ first endpoint row · Tab next control · Esc cancel[64D[6A[?7h[0m[?25l[?7l[9C[0m[   SYMMETRIC · CREATE SEPARATE RESULT ][2C[0;38;2;139;213;255;1m[[0;38;2;16;36;47;48;2;139;213;255;1m ✓ DIRECTIONAL · UPDATE EXISTING [0;38;2;139;213;255;1m][0m
 [121C[0m[ MEMORY · WHOLE CONTEXT ][0m
 [2C[0mTO  [115C[ MEMORY · WHOLE CONTEXT ][0m
-[2C[0m[ START MELD ][0m[K[0m
-[C[0m←/→ mode[C· ↓ FROM · Tab next · Esc cancel[0m
-[0m [0m[K[5A[?7h[0m
+[0m COMMAND · RUNNABLE · ENTER TO START[0m[K[0m
+[0m mem meld capture/incoming capture/baseline[0m
+[0m ←/→ mode · ↓ first endpoint row · Tab next control · Esc cancel[0m
+[0m [0m[K[6A[?7h[0m

@@ -5,5 +5,6 @@ PTY 180 52
 [0m  FROM › capture/incoming                        [ BROWSE ] [0;38;2;139;213;202;1mCURRENT[0m                           [   INCLUDE DESCENDANTS ][0m
 [0m  WITH › capture/baseline                        [ BROWSE ]                                   [   INCLUDE DESCENDANTS ][0m
 [0m  TO   ›                                         [ BROWSE ] [0;38;2;245;169;127;1mCHOOSE EMPTY OR ENTER NEW NAME[0m
-[0m  [ START MELD ][0m
-[0m ←/→ mode · ↓ FROM · Tab next · Esc cancel[42D[5A[?7h[0m
+[0m COMMAND · INVALID[0m
+[0m TO needs a Context name.[0m
+[0m ←/→ mode · ↓ first endpoint row · Tab next control · Esc cancel[64D[6A[?7h[0m

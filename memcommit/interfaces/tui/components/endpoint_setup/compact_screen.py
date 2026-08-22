@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 
 from prompt_toolkit.application import Application, get_app
 from prompt_toolkit.completion import WordCompleter
@@ -663,10 +663,42 @@ def run_compact_endpoint_setup(
         status["value"] = ""
         return "HANDLED"
 
+    def adjacent_role_uid(role_uid: str, delta: int) -> str | None:
+        """Return the primary field on the adjacent persistent form row."""
+
+        active_role_uids = spec.active_role_uids(selected_mode_uid())
+        index = active_role_uids.index(role_uid)
+        candidate = index + delta
+        return (
+            active_role_uids[candidate]
+            if 0 <= candidate < len(active_role_uids)
+            else None
+        )
+
+    def move_role_row(event, role_uid: str, delta: int) -> SurfaceMoveResult:
+        """Move vertically by form row, not across controls drawn on one row.
+
+        Left/Right own non-editor peers and Tab keeps the exhaustive fallback.
+        Mapping Up/Down to that same sequence made a visually vertical form
+        move sideways and left the on-demand Memory list as an arrow-key trap.
+        """
+
+        memory_detail["role_uid"] = None
+        status["value"] = ""
+        adjacent = adjacent_role_uid(role_uid, delta)
+        if adjacent is not None:
+            event.app.layout.focus(role_inputs[adjacent])
+            return "CONSUMED"
+        if delta < 0:
+            event.app.layout.focus(mode_control)
+        else:
+            event.app.layout.focus(action_control)
+        return "CONSUMED"
+
     def move_role(event, role_uid: str, delta: int) -> SurfaceMoveResult:
         buffer = role_inputs[role_uid].buffer
         if buffer.complete_state is None:
-            return "BOUNDARY"
+            return move_role_row(event, role_uid, delta)
         if delta > 0:
             buffer.complete_next()
         else:
@@ -744,12 +776,57 @@ def run_compact_endpoint_setup(
         return "HANDLED"
 
     def prepare_browse(role_uid: str) -> None:
+        memory_detail["role_uid"] = None
         buffer = role_inputs[role_uid].buffer
         if buffer.complete_state is not None:
             buffer.cancel_completion()
 
-    def move_reach(_event, role_uid: str, _delta: int) -> SurfaceMoveResult:
-        return "BOUNDARY"
+    def close_memory_detail() -> None:
+        memory_detail["role_uid"] = None
+
+    def role_peer_controls(role_uid: str) -> tuple[object, ...]:
+        """Return the visible left-to-right controls for one endpoint row."""
+
+        values: list[object] = [role_inputs[role_uid]]
+        if role_uid in browse_controls:
+            values.append(browse_controls[role_uid])
+        if role_uid in reach_controls and role_allows_descendants(role_uid):
+            values.append(reach_controls[role_uid])
+        if role_uid in memory_controls and role_allows_memory_focus(role_uid):
+            values.append(memory_controls[role_uid])
+        return tuple(values)
+
+    def move_role_peer(
+        event,
+        role_uid: str,
+        control: object,
+        delta: int,
+    ) -> bool:
+        """Move spatially between non-editor controls on one endpoint row.
+
+        Exact-name inputs hand off here only after their own caret reaches the
+        right edge. Mode and transient Context trees retain their horizontal
+        semantics.
+        """
+
+        controls = role_peer_controls(role_uid)
+        index = controls.index(control)
+        candidate = index + delta
+        if not 0 <= candidate < len(controls):
+            status["value"] = (
+                "No more controls on this row · use Up/Down for endpoint rows."
+            )
+            return False
+        memory_detail["role_uid"] = None
+        status["value"] = ""
+        target = controls[candidate]
+        if target is browse_controls.get(role_uid):
+            prepare_browse(role_uid)
+        event.app.layout.focus(target)
+        return True
+
+    def move_reach(event, role_uid: str, delta: int) -> SurfaceMoveResult:
+        return move_role_row(event, role_uid, delta)
 
     def set_reach(role_uid: str, *, include_descendants: bool) -> None:
         reach_states[role_uid].move(1 if include_descendants else -1)
@@ -790,13 +867,17 @@ def run_compact_endpoint_setup(
         status["value"] = ""
         return True
 
-    def move_memory(_event, role_uid: str, delta: int) -> SurfaceMoveResult:
+    def move_memory(event, role_uid: str, delta: int) -> SurfaceMoveResult:
         if memory_detail["role_uid"] != role_uid:
-            if not open_memory(role_uid):
-                return "CONSUMED"
-        memory_focuses[role_uid].move(delta)
+            return move_role_row(event, role_uid, delta)
+        changed = memory_focuses[role_uid].move(delta)
         status["value"] = ""
-        return "CONSUMED"
+        if changed:
+            return "CONSUMED"
+        # Once the transient list reaches an edge, the same arrow closes it
+        # and continues along the compact form's vertical row topology.
+        memory_detail["role_uid"] = None
+        return move_role_row(event, role_uid, delta)
 
     def choose_memory(_event, role_uid: str) -> SurfaceActionResult:
         if memory_detail["role_uid"] != role_uid:
@@ -825,6 +906,14 @@ def run_compact_endpoint_setup(
         event.app.exit(result=draft)
         return "HANDLED"
 
+    def move_action(event, delta: int) -> SurfaceMoveResult:
+        if delta > 0:
+            return "BOUNDARY"
+        active_role_uids = spec.active_role_uids(selected_mode_uid())
+        event.app.layout.focus(role_inputs[active_role_uids[-1]])
+        status["value"] = ""
+        return "CONSUMED"
+
     def visible_surfaces() -> tuple[FocusSurface, ...]:
         catalog_role_uid = catalog_detail["role_uid"]
         if catalog_role_uid is not None:
@@ -849,6 +938,7 @@ def run_compact_endpoint_setup(
                 mode_control,
                 move_vertical=lambda _event, _delta: "BOUNDARY",
                 activate=choose_mode,
+                on_focus=close_memory_detail,
             )
         ]
         for role_uid in spec.active_role_uids(selected_mode_uid()):
@@ -860,6 +950,7 @@ def run_compact_endpoint_setup(
                         lambda event, delta, uid=role_uid: move_role(event, uid, delta)
                     ),
                     activate=(lambda event, uid=role_uid: choose_role(event, uid)),
+                    on_focus=close_memory_detail,
                 )
             )
             if role_uid in browse_controls:
@@ -867,7 +958,11 @@ def run_compact_endpoint_setup(
                     FocusSurface(
                         f"BROWSE:{role_uid}",
                         browse_controls[role_uid],
-                        move_vertical=lambda _event, _delta: "BOUNDARY",
+                        move_vertical=(
+                            lambda event, delta, uid=role_uid: move_role_row(
+                                event, uid, delta
+                            )
+                        ),
                         activate=(
                             lambda event, uid=role_uid: choose_browse(event, uid)
                         ),
@@ -885,6 +980,7 @@ def run_compact_endpoint_setup(
                             )
                         ),
                         activate=(lambda event, uid=role_uid: choose_reach(event, uid)),
+                        on_focus=close_memory_detail,
                     )
                 )
             if role_uid in memory_controls and role_allows_memory_focus(role_uid):
@@ -906,8 +1002,9 @@ def run_compact_endpoint_setup(
             FocusSurface(
                 "CONTINUE",
                 action_control,
-                move_vertical=lambda _event, _delta: "BOUNDARY",
+                move_vertical=move_action,
                 activate=finish,
+                on_focus=close_memory_detail,
             )
         )
         return tuple(values)
@@ -942,17 +1039,17 @@ def run_compact_endpoint_setup(
         )
 
     @bindings.add("left", filter=reach_focus, eager=True)
-    def _exact_reach(event) -> None:
+    def _previous_reach_peer(event) -> None:
         role_uid = focused_reach_role()
         if role_uid is not None:
-            set_reach(role_uid, include_descendants=False)
+            move_role_peer(event, role_uid, reach_controls[role_uid], -1)
         event.app.invalidate()
 
     @bindings.add("right", filter=reach_focus, eager=True)
-    def _descendant_reach(event) -> None:
+    def _next_reach_peer(event) -> None:
         role_uid = focused_reach_role()
         if role_uid is not None:
-            set_reach(role_uid, include_descendants=True)
+            move_role_peer(event, role_uid, reach_controls[role_uid], 1)
         event.app.invalidate()
 
     @bindings.add(" ", filter=reach_focus, eager=True)
@@ -973,6 +1070,83 @@ def run_compact_endpoint_setup(
             get_app().layout.has_focus(control) for control in browse_controls.values()
         )
     )
+    memory_focus = Condition(
+        lambda: any(
+            get_app().layout.has_focus(control) for control in memory_controls.values()
+        )
+    )
+
+    def focused_control_role(controls: Mapping[str, object]) -> str | None:
+        return next(
+            (
+                role_uid
+                for role_uid, control in controls.items()
+                if get_app().layout.has_focus(control)
+            ),
+            None,
+        )
+
+    @bindings.add("right", filter=input_focus, eager=True)
+    def _next_input_position_or_peer(event) -> None:
+        """Keep editing inside the field, then cross its visible right edge.
+
+        The exact Context name must retain ordinary caret semantics, but a
+        Right press that cannot move the caret should not become a dead key on
+        a row whose Browse/range/Memory controls are visibly to its right.
+        """
+
+        buffer = event.current_buffer
+        if buffer.cursor_position < len(buffer.text):
+            buffer.cursor_position += 1
+        else:
+            role_uid = focused_control_role(role_inputs)
+            if role_uid is not None:
+                move_role_peer(event, role_uid, role_inputs[role_uid], 1)
+        event.app.invalidate()
+
+    @bindings.add("left", filter=browse_focus, eager=True)
+    def _previous_browse_peer(event) -> None:
+        role_uid = focused_control_role(browse_controls)
+        if role_uid is not None:
+            move_role_peer(event, role_uid, browse_controls[role_uid], -1)
+        event.app.invalidate()
+
+    @bindings.add("right", filter=browse_focus, eager=True)
+    def _next_browse_peer(event) -> None:
+        role_uid = focused_control_role(browse_controls)
+        if role_uid is not None:
+            move_role_peer(event, role_uid, browse_controls[role_uid], 1)
+        event.app.invalidate()
+
+    @bindings.add("left", filter=memory_focus, eager=True)
+    def _previous_memory_peer(event) -> None:
+        role_uid = focused_control_role(memory_controls)
+        if role_uid is None:
+            return
+        if memory_detail["role_uid"] == role_uid:
+            memory_detail["role_uid"] = None
+            status["value"] = ""
+        else:
+            move_role_peer(event, role_uid, memory_controls[role_uid], -1)
+        event.app.invalidate()
+
+    @bindings.add("right", filter=memory_focus, eager=True)
+    def _next_memory_peer(event) -> None:
+        role_uid = focused_control_role(memory_controls)
+        if role_uid is None:
+            return
+        if memory_detail["role_uid"] == role_uid:
+            status["value"] = "Memory choices use Up/Down · Left closes details."
+        else:
+            move_role_peer(event, role_uid, memory_controls[role_uid], 1)
+        event.app.invalidate()
+
+    def focused_input_has_completions() -> bool:
+        return any(
+            get_app().layout.has_focus(input_area)
+            and input_area.buffer.complete_state is not None
+            for input_area in role_inputs.values()
+        )
 
     @bindings.add("escape", eager=True)
     def _escape(event) -> None:
@@ -1007,19 +1181,38 @@ def run_compact_endpoint_setup(
         if catalog_detail["role_uid"] is not None:
             return " ↑/↓ Context · Enter use exact name · Esc close all"
         if get_app().layout.has_focus(mode_control):
-            return " ←/→ mode · ↓ FROM · Tab next · Esc cancel"
+            return " ←/→ mode · ↓ first endpoint row · Tab next control · Esc cancel"
         if input_focus():
-            return " Type exact Context · ↑/↓ matches · Enter confirm · Tab next · Esc cancel"
+            has_matches = focused_input_has_completions()
+            movement = "↑/↓ matches" if has_matches else "↑/↓ endpoint row"
+            return (
+                f" Type exact Context · ←/→ caret · → at end next control · "
+                f"{movement} · Enter confirm · Tab next control · Esc cancel"
+            )
         if browse_focus():
-            return " Enter browse all allowed Contexts · Tab next · Esc cancel"
+            return (
+                " ↑/↓ endpoint row · ←/→ row control · "
+                "Enter browse all allowed Contexts · "
+                "Tab next control · Esc cancel"
+            )
         if reach_focus():
-            return " ←/→, Space, or Enter toggle descendants · Tab next · Esc cancel"
+            return (
+                " ↑/↓ endpoint row · ←/→ row control · "
+                "Space or Enter toggle descendants · Tab next control · Esc cancel"
+            )
         if any(
             get_app().layout.has_focus(control) for control in memory_controls.values()
         ):
             if memory_detail["role_uid"] is not None:
-                return " ↑/↓ Memory · Enter choose · Esc close details"
-            return " Enter open Memory choices · Tab next · Esc cancel"
+                return (
+                    " ↑/↓ Memory (edge continues by row) · Enter choose · "
+                    "←/Esc close details"
+                )
+            return (
+                " ↑/↓ endpoint row · ←/→ row control · "
+                "Enter open Memory choices · "
+                "Tab next control · Esc cancel"
+            )
         if get_app().layout.has_focus(action_control):
             return (
                 " Enter run exact START command · ↑ previous · Esc cancel"

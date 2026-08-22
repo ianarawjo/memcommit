@@ -192,7 +192,7 @@ def _capture_symmetric(store_root: Path) -> None:
         _BASE._settle(child)
         _snapshot(recorder, "01-symmetric-mode-entry")
 
-        child.send("\t")
+        child.send("\x1b[B")
         _BASE._settle(child)
         _snapshot(recorder, "02-symmetric-peer-a")
 
@@ -202,7 +202,7 @@ def _capture_symmetric(store_root: Path) -> None:
 
         child.send("\x15capture/incoming")
         _BASE._settle(child)
-        child.send("\t")
+        child.send("\x1b[C")
         _BASE._settle(child)
         _snapshot(recorder, "02b-symmetric-browse-trigger")
 
@@ -212,11 +212,11 @@ def _capture_symmetric(store_root: Path) -> None:
 
         child.send("\x1b")
         _BASE._settle(child)
-        child.send("\t\t\t")
+        child.send("\x1b[B")
         _BASE._settle(child)
         _snapshot(recorder, "03-symmetric-peer-b")
 
-        child.send("\t\t")
+        child.send("\x1b[B")
         _BASE._settle(child)
         _snapshot(recorder, "04-new-result-name-entry")
 
@@ -253,19 +253,19 @@ def _capture_directional(store_root: Path) -> None:
         _BASE._settle(child)
         _snapshot(recorder, "09-directional-mode-selected")
 
-        child.send("\t\t\t\t\x1b[B")
+        child.send("\x1b[B\x1b[C\x1b[C\x1b[C\r")
         _BASE._settle(child)
         _snapshot(recorder, "09a-directional-memory-choices")
 
-        child.send("\r")
+        child.send("\x1b[B\r")
         _BASE._settle(child)
         _snapshot(recorder, "10-directional-incoming-memory")
 
-        child.send("\t")
+        child.send("\x1b[B")
         _BASE._settle(child)
         _snapshot(recorder, "11-directional-baseline")
 
-        child.send("\t\t\x1b[C")
+        child.send("\t\x1b[C ")
         _BASE._settle(child)
         _snapshot(recorder, "12-directional-baseline-descendants")
 
@@ -273,7 +273,7 @@ def _capture_directional(store_root: Path) -> None:
         _BASE._settle(child)
         _snapshot(recorder, "13-directional-memory-disabled")
 
-        child.send("\t")
+        child.send("\x1b[B")
         _BASE._settle(child)
         _snapshot(recorder, "14-directional-setup-reviewed")
 
@@ -307,6 +307,10 @@ def _capture_session(store_root: Path) -> None:
         child.send("\t\r")
         _BASE._settle(child)
         _snapshot(recorder, "19-relocated-session-choice")
+
+        child.send("\x1b[C")
+        _BASE._settle(child)
+        _snapshot(recorder, "19a-relocated-session-horizontal-guidance")
 
         child.send("q")
         child.expect("MELD SESSION VIEW CLOSED")

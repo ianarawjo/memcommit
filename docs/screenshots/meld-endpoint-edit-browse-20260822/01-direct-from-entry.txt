@@ -1,0 +1,9 @@
+$ mem meld · DIRECT FROM/TO editing                                                                                                                                                 
+PTY 180 52                                                                                                                                                                          
+ NEW MELD · SETUP ONLY · NO PROVIDER, SESSION, RESULT, OR APPLY                                                                                                                     
+  MODE · [   SYMMETRIC · CREATE SEPARATE RESULT ]  [ ✓ DIRECTIONAL · UPDATE EXISTING ] · ←/→ TO SELECT                                                                              
+› FROM › route/from-a                            [ BROWSE ] CURRENT                           [   INCLUDE DESCENDANTS ]  [ MEMORY · WHOLE CONTEXT ]                                 
+  TO   › route/from-b                            [ BROWSE ]                                   [   INCLUDE DESCENDANTS ]  [ MEMORY · WHOLE CONTEXT ]                                 
+ COMMAND · RUNNABLE · ENTER TO START                                                                                                                                                
+ mem meld route/from-a route/from-b                                                                                                                                                 
+ Type exact Context · ←/→ caret · → at end next control · ↑/↓ endpoint row · Enter confirm · Tab next control · Esc cancel

@@ -1,0 +1,9 @@
+$ mem meld · DIRECT FROM/TO editing                                                                                                                                                 
+PTY 180 52                                                                                                                                                                          
+ NEW MELD · SETUP ONLY · NO PROVIDER, SESSION, RESULT, OR APPLY                                                                                                                     
+  MODE · [   SYMMETRIC · CREATE SEPARATE RESULT ]  [ ✓ DIRECTIONAL · UPDATE EXISTING ] · ←/→ TO SELECT                                                                              
+› FROM › route/from-                             [ BROWSE ] UNAVAILABLE                       [   INCLUDE DESCENDANTS ]  [ MEMORY · WHOLE CONTEXT ]                                 
+  TO   › route/from-b                            [ BROWSE ]                                   [   INCLUDE DESCENDANTS ]  [ MEMORY · WHOLE CONTEXT ]                                 
+ COMMAND · INVALID                                                                                                                                                                  
+ FROM requires an existing readable Context.                                                                                                                                        
+ Type exact Context · ←/→ caret · → at end next control · ↑/↓ endpoint row · Enter confirm · Tab next control · Esc cancel
