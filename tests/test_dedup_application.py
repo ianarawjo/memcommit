@@ -349,7 +349,7 @@ def test_dedup_tui_uses_common_required_resolution_order(isolated_store):
     assert second.uid not in store.load_direct(context.name).memories
 
 
-def test_confirmed_finder_links_enter_dedup_as_one_typed_batch(isolated_store):
+def test_reported_finder_links_enter_dedup_as_one_typed_batch(isolated_store):
     store = MemoryStore()
     context, first, second, _third, _unrelated = _context(store)
     session = create_quality_find_workbench(
@@ -371,7 +371,9 @@ def test_confirmed_finder_links_enter_dedup_as_one_typed_batch(isolated_store):
     received = []
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\t\x1b[B\r\t\r\t\t\rq")
+        # Find reports evidence without asking for confirmation. Dedun owns
+        # the later survivor and Apply decisions.
+        pipe_input.send_text("d")
         run_quality_find_resolution_workbench(
             session,
             context,
@@ -383,6 +385,7 @@ def test_confirmed_finder_links_enter_dedup_as_one_typed_batch(isolated_store):
 
     assert len(received) == 1
     assert tuple(handoff.finding_uid for handoff in received[0]) == (item_uid,)
+    assert session.responses == {}
 
 
 def test_cli_and_public_api_share_semantic_dedun_application(isolated_store):
@@ -568,7 +571,7 @@ def test_help_teaches_exact_dedup_read_only_redundancy_and_applying_dedun():
     assert "exact plus semantic redundancies" in root_help.stdout
     assert "find-redundancies" in root_help.stdout
     assert "Report exact and semantically redundant direct Memories" in root_help.stdout
-    assert "changing any Source Context" in root_help.stdout
+    assert "changing any Source Context" not in root_help.stdout
     assert "consolidate" not in root_help.stdout
     assert dedun_help.exit_code == 0
     assert "--context" in dedun_help.stdout

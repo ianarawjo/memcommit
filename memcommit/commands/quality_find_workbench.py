@@ -1,4 +1,4 @@
-"""Shared setup and process-local review UI for semantic quality finders."""
+"""Shared setup and compact read-only UI for semantic quality finders."""
 
 from __future__ import annotations
 
@@ -29,10 +29,6 @@ from memcommit.authority.access import (
 from memcommit.commands.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.commands.resolution_workbench_shell import (
-    SessionTodoView,
-    run_resolution_workbench_shell,
-)
 from memcommit.interfaces.tui.components.focus import (
     FocusSurface,
     SurfaceFocusController,
@@ -62,6 +58,7 @@ from memcommit.interfaces.tui.workbenches.read_report import (
     ReadReportSelectTarget,
     choose_read_report_recent,
 )
+from memcommit.interfaces.tui.workbenches.findings import run_quality_find_browser
 from memcommit.context import Context
 from memcommit.context_targeting.tui.range_selection import (
     ContextRangeSelectionState,
@@ -80,17 +77,14 @@ from memcommit.quality_find_workbench import (
     QualityFindWorkbenchError,
     QualityFindWorkbenchSession,
     create_quality_find_workbench,
-    quality_find_resolution_view,
-    validate_quality_find_response,
+    quality_find_report_view,
 )
-from memcommit.resolution_workbench import ResolutionNavigation
 from memcommit.quality_finding_handoff import (
     QualityFindingHandoff,
     quality_finding_handoff,
     quality_finding_handoffs,
 )
 from memcommit.dedup_application import DEDUP_ELIGIBLE_RELATIONS
-from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
 from memcommit.source_projection.presentation import SourceDisplayValue
 from memcommit.store import MemoryStore
 from memcommit.read_report import (
@@ -352,8 +346,7 @@ def choose_quality_find_setup(
             if kind == "audit"
             else (
                 f"Analyze direct Memories across {len(selected)} selected "
-                f"{'Context' if len(selected) == 1 else 'Contexts'} as one frame; "
-                "Sources unchanged."
+                f"{'Context' if len(selected) == 1 else 'Contexts'} as one frame."
                 if selected
                 else "Select at least one readable Context before running."
             )
@@ -378,7 +371,7 @@ def choose_quality_find_setup(
 
     def render_header() -> str:
         if target_state is None:
-            return f" MEM {operation} · SETUP\n ONE DIRECT CONTEXT · SOURCE UNCHANGED"
+            return f" MEM {operation} · SETUP\n ONE DIRECT CONTEXT"
         target_label = (
             "PROFILE"
             if target_state.profile_selected
@@ -395,7 +388,7 @@ def choose_quality_find_setup(
         )
         return (
             f" MEM {operation} · SETUP\n {target_label} · {reach} · "
-            f"{len(target_state.effective_names)} CONTEXT(S) · SOURCE UNCHANGED"
+            f"{len(target_state.effective_names)} CONTEXT(S)"
         )
 
     header = Window(
@@ -622,122 +615,59 @@ def run_quality_find_resolution_workbench(
     ) = None,
     operation_name: ReadReportOperation | None = None,
 ) -> QualityFindWorkbenchSession:
-    """Inspect and answer one process-local report in the common workbench."""
+    """Inspect one process-local report without creating answer state."""
 
-    navigation = ResolutionNavigation()
-    workbench_navigation = SessionWorkbenchNavigation()
-
-    def confirmed_duplicate_handoffs() -> tuple[QualityFindingHandoff, ...]:
+    def eligible_duplicate_handoffs() -> tuple[QualityFindingHandoff, ...]:
         if session.kind != "duplicates":
             return ()
         return tuple(
             handoff
             for handoff in quality_finding_handoffs(session)
             if handoff.classification in DEDUP_ELIGIBLE_RELATIONS
-            and handoff.review_draft.selected_option_uid
-            == f"{handoff.finding_uid}:confirm"
         )
 
-    def load_draft(item_uid: str) -> tuple[str | None, str]:
-        response = session.response_for(item_uid)
-        return response.selected_option_uid, response.text
-
-    def save_draft(item_uid: str, option_uid: str | None, text: str) -> None:
-        validate_quality_find_response(text)
-        item = quality_find_resolution_view(
+    conflict_handoff_available = (
+        handoff_handler is not None
+        and session.kind == "conflicts"
+        and len(session.source.contexts) == 1
+        and bool(session.report.findings)
+    )
+    duplicate_handoffs = eligible_duplicate_handoffs()
+    duplicate_handoff_available = (
+        duplicate_handoff_handler is not None and bool(duplicate_handoffs)
+    )
+    action = run_quality_find_browser(
+        quality_find_report_view(
             session,
             source,
             operation_label=_operation_label(session.kind, operation_name),
-        ).item(item_uid)
-        if option_uid is not None:
-            item.option(option_uid)
-        response = session.response_for(item_uid)
-        response.selected_option_uid = option_uid
-        response.text = text
-
-    while True:
-        item_handoff = (
-            SessionTodoView(
-                "RESOLVE",
-                "Resolve selected conflict",
-                (
-                    "Enter to open Resolve for this exact conflict. Resolve will "
-                    "recheck the complete source, authority, and Fit before any Apply."
-                ),
-            )
-            if (
-                handoff_handler is not None
-                and session.kind == "conflicts"
-                and len(session.source.contexts) == 1
-                and bool(session.report.findings)
-            )
-            else (
-                lambda: (
-                    SessionTodoView(
-                        "DEDUN",
-                        (
-                            "Dedun "
-                            f"{len(confirmed_duplicate_handoffs())} confirmed "
-                            "semantic redundancy link(s)"
-                        ),
-                        (
-                            "Enter to submit only the confirmed eligible links. "
-                            "Dedun will recheck the Source, DELETE authority, "
-                            "components, and inbound references before exact Apply."
-                        ),
-                    )
-                    if confirmed_duplicate_handoffs()
-                    else None
-                )
-            )
-            if duplicate_handoff_handler is not None
-            else None
-        )
-        action = run_resolution_workbench_shell(
-            lambda: quality_find_resolution_view(
-                session,
-                source,
-                operation_label=_operation_label(session.kind, operation_name),
+            handoff_available=(
+                conflict_handoff_available or duplicate_handoff_available
             ),
-            navigation=navigation,
-            workbench_navigation=workbench_navigation,
-            app_input=app_input,
-            app_output=app_output,
-            require_tty=require_tty,
-            terminal_label=(
-                f"Interactive "
-                f"{_operation_label(session.kind, operation_name).title()}"
-            ),
-            snapshot_hint="Pass --context NAME for one-shot terminal output.",
-            draft_loader=load_draft,
-            draft_saver=save_draft,
-            response_validator=validate_quality_find_response,
-            save_draft_on_close=True,
-            split_viewer_items=True,
-            item_handoff=item_handoff,
-        )
-        if action.kind == "CLOSE":
-            return session
-        if action.kind == "HANDOFF" and action.item_uid is not None:
-            if session.kind == "duplicates":
-                confirmed = confirmed_duplicate_handoffs()
-                if duplicate_handoff_handler is None or not confirmed:
-                    raise QualityFindWorkbenchError(
-                        "Confirmed redundancy evidence is unavailable in this adapter."
-                    )
-                duplicate_handoff_handler(confirmed)
-                return session
-            if handoff_handler is None:
-                raise QualityFindWorkbenchError(
-                    "Quality finding handoff is unavailable in this adapter."
-                )
-            handoff_handler(quality_finding_handoff(session, action.item_uid))
-            return session
-        if action.kind != "SUBMIT_ITEM" or action.item_uid is None:
+        ),
+        app_input=app_input,
+        app_output=app_output,
+        require_tty=require_tty,
+    )
+    if action.action == "CLOSE":
+        return session
+    if session.kind == "duplicates":
+        if duplicate_handoff_handler is None or not duplicate_handoffs:
             raise QualityFindWorkbenchError(
-                f"Unsupported process-local Quality Find action '{action.kind}'."
+                "Eligible redundancy evidence is unavailable in this adapter."
             )
-        save_draft(action.item_uid, action.option_uid, action.comment)
+        duplicate_handoff_handler(duplicate_handoffs)
+        return session
+    if (
+        session.kind != "conflicts"
+        or handoff_handler is None
+        or action.item_uid is None
+    ):
+        raise QualityFindWorkbenchError(
+            "Quality finding handoff is unavailable in this adapter."
+        )
+    handoff_handler(quality_finding_handoff(session, action.item_uid))
+    return session
 
 
 def run_interactive_quality_find(

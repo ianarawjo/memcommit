@@ -52,8 +52,8 @@ Context content matches the previous run.
 Hidden semantic caches remain separate. A rerun may obtain an exact,
 equivalent, or operation-approved projected cache hit only after its normal
 authority and frozen-evidence checks. The recent record neither contains a
-cache key nor grants cache eligibility. Likewise, quality-finder response
-drafts remain process-local and are not reconstructed from Recents.
+cache key nor grants cache eligibility. Quality Find reports do not own
+response drafts at all, so Recents reconstruct only their target identity.
 
 Legacy Trace/Rationale `memory_report` metadata remains readable. New Memory
 report attempts also publish the generic shape so both operations use the same
@@ -67,12 +67,15 @@ Select-Target action. It does not own target trees or result documents:
 
 - Summarize retains its Context Summary workbench and direct/recursive/Both
   result contract.
-- Trace retains the temporal history explorer and exact Memory lineage.
+- Trace returns a bounded receipt by default, retains its complete temporal
+  lineage under `--plain`, and opens the history explorer only with `--tui`.
 - Rationale retains its whole-Trace, example-calibrated natural-provenance
   synthesis and compact terminal receipt; its legacy current-purpose inference
   fields remain JSON compatibility data only.
 - Ambiguity and Conflict retain explicit `--select` multi-target/Profile setup
-  and process-local Resolution reports. Exact Duplicate and complete-DUN
+  and compact process-local read-only finding browsers. Their questions and
+  possible readings remain evidence rather than answer controls. Exact
+  Duplicate and complete-DUN
   Redundancy are direct one-Context reports in both TTY and non-TTY execution;
   neither exposes an initial selector. Dedun is an applying command rather
   than a report viewer.

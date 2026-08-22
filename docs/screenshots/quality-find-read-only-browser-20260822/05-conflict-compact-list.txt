@@ -1,0 +1,17 @@
+$ mem find-conflicts --context study/reporting                                                                                                                                      
+PTY · 180 COLUMNS × 52 ROWS                                                                                                                                                         
+ FIND CONFLICTS · FINDINGS · 1/1                                                                                                                                                    
+ 1 CONTEXT(S) · 3 SOURCE MEMORIES · study/reporting                                                                                                                                 
+›  1  MAY · TIME · Report the incident within 30 days. ↔ Notify the office no later than one month after discovery.                                                                ^
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+ ↑/↓ finding · Enter inspect · Home/End · Esc/Backspace/Q close · R open Resolve · read-only

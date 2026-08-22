@@ -1,9 +1,8 @@
-"""Process-local review state and Resolution projection for quality finders.
+"""Frozen quality-finder reports and their presentation projections.
 
-The semantic finder reports remain immutable one-shot results.  This module
-adds only an in-memory response layer so a TTY caller can inspect the complete
-report through the common Resolution Session without implying persistence or
-Memory mutation.
+Ordinary Find routes are read-only reports.  The response-bearing Resolution
+projection remains only for durable legacy Audit records until that persisted
+schema is migrated; it must not make a one-shot finder look answerable.
 """
 
 from __future__ import annotations
@@ -22,6 +21,12 @@ from memcommit.findings import (
     ConflictReport,
     DuplicateFinding,
     DuplicateReport,
+)
+from memcommit.quality_find_report import (
+    QualityFindReportView,
+    QualityFindingReading,
+    QualityFindingReportItem,
+    QualityFindingSource,
 )
 from memcommit.resolution_workbench import (
     ResolutionContextLocation,
@@ -224,7 +229,7 @@ class QualityFindResponse:
 
 @dataclass
 class QualityFindWorkbenchSession:
-    """One immutable finder result with process-local response drafts."""
+    """One immutable finder result plus legacy response compatibility state."""
 
     uid: str
     kind: QualityFindKind
@@ -587,6 +592,157 @@ def _duplicate_item(
     )
 
 
+def quality_find_report_view(
+    session: QualityFindWorkbenchSession,
+    source: Context | QualityFindSourceFrame,
+    *,
+    operation_label: str | None = None,
+    handoff_available: bool = False,
+) -> QualityFindReportView:
+    """Project one immutable finder result without review or response state."""
+
+    current_contexts = (
+        source.contexts if isinstance(source, QualityFindSourceFrame) else (source,)
+    )
+    if (
+        isinstance(source, QualityFindSourceFrame)
+        and source.digest != session.source.digest
+    ) or not session.source.matches(current_contexts):
+        raise QualityFindWorkbenchError(
+            "Quality finder report no longer matches its Context frame."
+        )
+
+    ordinal_by_uid = session.source.memory_ordinals
+    context_name_by_uid = session.source.memory_context_names
+
+    def report_source(memory: Memory, label: str) -> QualityFindingSource:
+        return QualityFindingSource(
+            label=label,
+            context_name=context_name_by_uid[memory.uid],
+            memory_uid=memory.uid,
+            content=memory.content,
+            ordinal=ordinal_by_uid[memory.uid],
+        )
+
+    items: list[QualityFindingReportItem] = []
+    if session.kind == "ambiguities":
+        assert isinstance(session.report, AmbiguityReport)
+        for finding in session.report.findings:
+            classification = (
+                f"{finding.interpretation} · "
+                f"CLARIFICATION {finding.clarification}"
+            )
+            items.append(
+                QualityFindingReportItem(
+                    uid=_ambiguity_item_uid(finding),
+                    kind="AMBIGUITY",
+                    classification=classification,
+                    title=_preview(finding.memory.content),
+                    reason_heading="WHY THIS IS UNCLEAR",
+                    reason=finding.reason,
+                    sources=(report_source(finding.memory, "SOURCE MEMORY"),),
+                    follow_up=finding.question,
+                    readings=tuple(
+                        QualityFindingReading(role, reading)
+                        for role, reading in zip(
+                            _reading_roles(finding),
+                            finding.ordinary_readings,
+                        )
+                    ),
+                )
+            )
+        empty_message = "No ambiguity findings in this analysis."
+    elif session.kind == "conflicts":
+        assert isinstance(session.report, ConflictReport)
+        for finding in session.report.findings:
+            dimensions = " · ".join(finding.scope_dimensions)
+            classification = finding.conflict
+            if dimensions:
+                classification += f" · {dimensions}"
+            items.append(
+                QualityFindingReportItem(
+                    uid=_pair_item_uid("conflict", finding.left, finding.right),
+                    kind="CONFLICT",
+                    classification=classification,
+                    title=(
+                        f"{_preview(finding.left.content)} ↔ "
+                        f"{_preview(finding.right.content)}"
+                    ),
+                    reason_heading="WHY THESE MEMORIES CONFLICT",
+                    reason=finding.reason,
+                    sources=(
+                        report_source(finding.left, "SOURCE 1"),
+                        report_source(finding.right, "SOURCE 2"),
+                    ),
+                    follow_up=finding.question,
+                )
+            )
+        empty_message = "No conflict findings in this analysis."
+    else:
+        assert session.kind == "duplicates"
+        assert isinstance(session.report, DuplicateReport)
+        for finding in session.report.findings:
+            exact = finding.relation == "EXACT"
+            items.append(
+                QualityFindingReportItem(
+                    uid=_pair_item_uid("duplicate", finding.left, finding.right),
+                    kind="DUP / EXACT" if exact else "SEMANTIC DUN",
+                    classification=finding.relation,
+                    title=(
+                        f"{_preview(finding.left.content)} ↔ "
+                        f"{_preview(finding.right.content)}"
+                    ),
+                    reason_heading=(
+                        "WHY THESE MEMORIES ARE EXACT DUPLICATES"
+                        if exact
+                        else "WHY THESE MEMORIES ARE SEMANTICALLY REDUNDANT"
+                    ),
+                    reason=finding.reason,
+                    sources=(
+                        report_source(finding.left, "SOURCE 1"),
+                        report_source(finding.right, "SOURCE 2"),
+                    ),
+                )
+            )
+        empty_message = "No redundancy evidence in this analysis."
+
+    default_operation_label = (
+        "DEDUN" if session.kind == "duplicates" else f"FIND {session.kind.upper()}"
+    )
+    label = default_operation_label if operation_label is None else operation_label
+    if (
+        not isinstance(label, str)
+        or not label.strip()
+        or label != label.strip()
+        or any(character in label for character in "\r\n")
+    ):
+        raise QualityFindWorkbenchError(
+            "Quality finder operation label must be exact nonblank text."
+        )
+
+    handoff_key: str | None = None
+    handoff_label: str | None = None
+    if handoff_available and items:
+        if session.kind == "conflicts":
+            handoff_key, handoff_label = "r", "open Resolve"
+        elif session.kind == "duplicates":
+            handoff_key, handoff_label = "d", "open Dedun"
+
+    return QualityFindReportView(
+        kind=session.kind,
+        operation=label,
+        artifact_uid=session.uid,
+        revision=session.context_digest,
+        route=session.source.route,
+        source_count=len(session.source.contexts),
+        memory_count=session.report.memory_count,
+        items=tuple(items),
+        empty_message=empty_message,
+        handoff_key=handoff_key,
+        handoff_label=handoff_label,
+    )
+
+
 def quality_find_resolution_view(
     session: QualityFindWorkbenchSession,
     source: Context | QualityFindSourceFrame,
@@ -703,7 +859,7 @@ def quality_find_resolution_view(
             "SCOPE",
             (
                 f"Inspected {report.memory_count} direct Memories across "
-                f"{len(session.source.contexts)} frozen readable "
+                f"{len(session.source.contexts)} selected readable "
                 f"{'Context' if len(session.source.contexts) == 1 else 'Contexts'} "
                 f"as one analysis frame. {target_mode} · {reach}. "
                 "Embedded Context edges were not followed."
@@ -718,8 +874,7 @@ def quality_find_resolution_view(
             "boundary",
             "BOUNDARY",
             (
-                "Responses are process-local review notes. No Context or "
-                "Memory changes have been applied."
+                "Responses are review notes for this report."
             ),
         ),
     )

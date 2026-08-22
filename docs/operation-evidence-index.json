@@ -88,10 +88,14 @@
     ],
     "find-ambiguities": [
       "docs/context-locator-design-rationale.md",
+      "docs/memory-quality-finders-design-rationale.md",
+      "docs/quality-finding-handoff-design-rationale.md",
       "docs/read-report-lifecycle-design-rationale.md"
     ],
     "find-conflicts": [
       "docs/context-locator-design-rationale.md",
+      "docs/memory-quality-finders-design-rationale.md",
+      "docs/quality-finding-handoff-design-rationale.md",
       "docs/read-report-lifecycle-design-rationale.md"
     ],
   "find-duplicates": [

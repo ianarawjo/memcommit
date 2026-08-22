@@ -568,7 +568,7 @@ def test_process_local_workbench_fails_closed_when_context_changes():
         quality_find_resolution_view(session, ctx)
 
 
-def test_process_local_resolution_shell_can_close_without_mutating_context():
+def test_process_local_finding_browser_can_close_without_mutating_context():
     ctx, _first, _second = _context()
     session = create_quality_find_workbench(
         "ambiguities",
@@ -589,6 +589,7 @@ def test_process_local_resolution_shell_can_close_without_mutating_context():
 
     assert result is session
     assert ctx.to_dict() == before
+    assert session.responses == {}
 
 
 def test_conflict_workbench_hands_off_the_selected_typed_finding():
@@ -614,8 +615,8 @@ def test_conflict_workbench_hands_off_the_selected_typed_finding():
     observed = []
 
     with create_pipe_input() as pipe_input:
-        # Viewer -> Items -> To Do, then run the selected finding handoff.
-        pipe_input.send_text("\t\t\r")
+        # Find itself stays read-only; R explicitly leaves for Resolve.
+        pipe_input.send_text("r")
         result = run_quality_find_resolution_workbench(
             session,
             ctx,
@@ -629,6 +630,7 @@ def test_conflict_workbench_hands_off_the_selected_typed_finding():
     assert len(observed) == 1
     assert observed[0].finding_uid == f"conflict:{first.uid}:{second.uid}"
     assert observed[0].route == "RESOLVE"
+    assert session.responses == {}
 
 
 @pytest.mark.parametrize(

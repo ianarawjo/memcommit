@@ -1,0 +1,45 @@
+$ mem find-ambiguities --context study/reporting
+PTY · 180 COLUMNS × 52 ROWS
+[6n[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;2;244;245;247;1m FIND AMBIGUITIES · FINDINGS · 1/1[0m
+[0;38;2;244;245;247m 1 CONTEXT(S) · 3 SOURCE MEMORIES · study/reporting[0m
+[0;1;7m›  1  DOMINANT · CLARIFICATION REQUIRED · Report the incident within 30 days.[102C[0;1m^[0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[0m                                                                                                                                                                                   [179C[0;1mv[0m
+[0m ↑/↓ finding · Enter inspect · Home/End · Esc/Backspace/Q close · read-only[75D[12A[?7h[0m[?25l[?7l[2A[20C[0;38;2;244;245;247;1mDETA[CL ·[C1/[C[0m[K[0m
+
+[0;38;2;139;213;255;1m AMBIGUITY · DOMINANT · CLARIFICATION REQUIRED[0m                               [0m
+[0;38;2;139;213;255;1m Report the incident within 30 days.[0m
+[0;38;2;244;245;247;1m SOURCE MEMORY · study/reporting · [00000000][0m
+[0;38;2;202;211;245m Report the incident within 30 days.[0m
+[0;38;2;244;245;247;1m WHY THIS IS UNCLEAR[0m
+[0;38;2;244;245;247m The deadline does not identify which event starts the clock.[0m
+[0;38;2;244;245;247;1m FOLLOW-UP QUESTION[0m
+[0;38;2;244;245;247m Which event starts the 30-day period?[0m
+[0;38;2;244;245;247;1m POSSIBLE READINGS[0m
+[0;38;2;244;245;247m - DOMINANT · Thirty days after the incident.[0m
+[0;38;2;244;245;247m - ALTERNATIVE · Thirty days after discovery.[134C[0;48;2;68;68;68m [0m
+[0;38;2;244;245;247m - ALTERNATIVE · Thirty days after notification.[0m
+[5C[0msect[Con[3CPgUp/PgDn page · ←/→ finding · Es[C/Backspace list · Q cl[Cse · read-only[12A[86D[?7h[0m[?25l[?7l[2A[20C[0;38;2;244;245;247;1mFIND[CNGS[C· [C/1[0m
+
+[0;1;7m›  1  DOMINANT · CLARIFICATION REQUIRED · Report the incident within 30 days.[0m
+[0m                                    [0m
+[0m                                             [0m
+[0m                                    [0m
+[0m                    [0m
+[0m                                                             [0m
+[0m                   [0m
+[0m                                      [0m
+[0m                  [0m
+[0m                                             [0m
+[0m                                             [134C[0;48;2;68;68;68m [0m
+[0m                                                [0m
+[5C[0mfind[Cng[3CEnter inspect · Home/End · Esc/Ba[Ckspace/Q close · read-[Cnly[0m[K[12A[75D[?7h[0m

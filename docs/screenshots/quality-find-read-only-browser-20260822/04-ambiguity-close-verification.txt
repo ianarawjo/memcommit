@@ -1,0 +1,26 @@
+$ mem find-ambiguities --context study/reporting                                                                                                                                    
+PTY · 180 COLUMNS × 52 ROWS                                                                                                                                                         
+WARNING: your terminal doesn't support cursor position requests (CPR).                                                                                                              
+ FIND AMBIGUITIES · FINDINGS · 1/1                                                                                                                                                  
+ 1 CONTEXT(S) · 3 SOURCE MEMORIES · study/reporting                                                                                                                                 
+›  1  DOMINANT · CLARIFICATION REQUIRED · Report the incident within 30 days.                                                                                                      ^
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+ ↑/↓ finding · Enter inspect · Home/End · Esc/Backspace/Q close · read-only                                                                                                         
+                                                                                                                                                                                    
+BROWSER RECEIPT · CLOSE · NO TARGET                                                                                                                                                 
+READ-ONLY VERIFICATION                                                                                                                                                              
+  RESPONSE STATE · 0                                                                                                                                                                
+  SOURCE DIGEST UNCHANGED · True                                                                                                                                                    
+  SOURCE MEMORIES · 3                                                                                                                                                               
+  CONTEXT WRITES · 0                                                                                                                                                                
+  CHECKPOINTS · 0

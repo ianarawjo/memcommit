@@ -3,10 +3,11 @@
 ## Problem
 
 `find-redundancies`, `find-ambiguities`, `find-conflicts`, and Dedun's shared
-analysis begin as read-only observations. Their Resolution workbench can collect process-local responses,
-but a response is not itself an executable request, mutation authority, or a
-freshness guarantee. CLI, TUI, Python, and agent adapters therefore must not
-reconstruct different next-operation requests from rendered text.
+analysis begin as read-only observations. A question or possible reading in a
+finding is report evidence, not a prompt for an answer. The finder browser
+therefore has no selection, response, obligation, or draft state. CLI, TUI,
+Python, and agent adapters must not reconstruct different next-operation
+requests from rendered text.
 
 The motivating Task 1 flow is a staged pipeline:
 
@@ -37,9 +38,11 @@ The routes are deliberately explicit:
 | Ambiguity | `CLARIFY` | Typed route only |
 | Conflict | `RESOLVE` | Same-Context conversion implemented |
 
-The handoff also snapshots the workbench response as
-`QualityFindingReviewDraft`. This name and type are a safety boundary: merely
-typing text or selecting a review option does not submit Resolve guidance.
+The version-1 receipt retains its `QualityFindingReviewDraft` field for wire
+compatibility with previously serialized handoffs. The read-only finder
+adapter always emits the empty value; only a separately answerable legacy
+review consumer may populate it. A receiving operation never treats that
+compatibility field as submitted guidance.
 
 The receipt has one strict JSON form. Decoding rejects unknown or missing
 fields, duplicate JSON keys, invalid nested values, unsupported contract
@@ -103,7 +106,7 @@ synthesize its own digest, target, Memory selector, or guidance.
   revalidates the deterministic survivor and Apply boundary.
 - Serialized receipts are transferable but intentionally not durable sessions.
   Callers that retain them own that file or message lifecycle; MemCommit does
-  not create a new cache containing finding reasons, questions, or responses.
+  not create a new cache containing finding reasons, questions, or answers.
 - Dedun and Clarify remain named routes rather than fake Resolve variants.
   Dedun consumes the source-bound redundancy handoff while retaining its own
   disposition and materialization semantics; a future Clarify executor must do

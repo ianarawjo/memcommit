@@ -25,8 +25,8 @@ read-only complete DUN analysis and never exposes an Apply action. Dedun
 deliberately reuses that same analysis and treats the invocation as immediate
 Apply intent, retaining the earliest existing UID in each eligible connected
 group. `find-duplicates` is a separate provider-free exact-DUP report. There is
-no singular
-`find-redundancy` command. The existing
+no separate singular operation: `find-redundancy` is an input alias for the
+canonical plural command. The existing
 `mem find <query>` is separate literal text lookup, not a quality or
 relationship judge.
 
@@ -107,24 +107,26 @@ candidate, and the local workbench preserves that owner for each evidence
 source. The temporary aggregate is process-local, has a deterministic frame
 identity, and is never saved or exposed as a new Context.
 
-The validated report is projected into the common Resolution Session
-presentation. Its Scope section records Context count, direct-Memory count,
-target mode, and lexical reach; every selected Context is listed as a source
-location. The complete report starts focused, followed by the finding Items
-list and To Do. Opening an item uses the shared
-`VIEWER → RESPONSES → ITEMS → TO DO` topology. Ambiguity keeps its proposed
-reading choices, while Conflict keeps its exact pair and question.
-Responses in this first rollout are process-local review state: they do not
-alter the report, persist a new artifact, imply resolution, or mutate Memory.
-Dedun does not consume process-local notes from another finder: its own
-invocation accepts every eligible finding in the newly frozen exact frame and
+The validated report is projected into a compact read-only finding browser.
+Its header records Context count, direct-Memory count, and the exact Source
+route. The initial list contains only finding classification and a bounded
+preview; Enter opens the source-linked detail in the same terminal flow.
+Ambiguity keeps its proposed readings and clarification question as evidence,
+not answer controls. Conflict likewise keeps its exact pair and question
+without creating a response field. Escape or Backspace returns one level and
+then closes; neither inspection nor closing can create response state.
+
+An explicit `R` handoff on an eligible single-Context Conflict may leave the
+browser for Resolve, and the complete-DUN report may explicitly leave for
+Dedun. Those keys start a separate operation with its own request and authority
+boundary; they are not answers to Find and do not turn a finding into mutable
+review state. Dedun independently revalidates its newly frozen exact frame and
 enters its deterministic Apply boundary. Sharing the analyzer does not share
-Apply authority. The individual judgment workbenches retain that compatibility
-boundary. Durable
-multi-session retention is instead explicit through `mem audit`, which records
-all three reports, each finder ruleset, and provider/model provenance without
-silently changing a one-shot `find-* --context` invocation into a stored
-artifact. The older ambiguity Review singleton remains independently readable.
+Apply authority. Durable multi-session retention is instead explicit through
+`mem audit`, which records all three reports, each finder ruleset, and
+provider/model provenance without silently changing a one-shot
+`find-* --context` invocation into a stored artifact. The older ambiguity
+Review singleton remains independently readable.
 
 The one-shot `find-redundancies` report projects the evidence forest as
 connected `DUN GROUP` blocks. Each Memory appears once per group in frozen
@@ -155,13 +157,14 @@ uses the shared REMOVE red as a member that would leave it. UIDs, Memory bodies,
 evidence, and `PROPOSED · NOT APPLIED` remain neutral, and ANSI-free output keeps
 the identical labels and ordering.
 
-Ambiguity and Conflict deliberately reuse two existing component families
-rather than creating a finder-specific full-screen grammar: common Context
-targeting owns setup selection, while the common Resolution Session owns
-finding inspection and response mechanics. The receipt between them is the
-semantic boundary; the setup UI never calls a finder merely because a cursor
-moved or a Context was checked. The direct Duplicate and Redundancy reports do
-not enter either component. When more than one effective Context crosses authority domains,
+Ambiguity and Conflict deliberately combine common Context targeting with one
+small finder-specific report adapter rather than inheriting the answerable
+Resolution Session grammar. Context targeting owns setup selection; the
+compact browser owns read-only list/detail inspection. The receipt between
+them is the semantic boundary; the setup UI never calls a finder merely
+because a cursor moved or a Context was checked. The direct Duplicate and
+Redundancy reports skip setup but may use the same read-only report model after
+analysis. When more than one effective Context crosses authority domains,
 the operation applies the normal `DERIVE`/`COMBINE` Grant boundary before
 loading content or connecting the provider. Local Contexts need no additional
 Grant authority.
@@ -509,7 +512,8 @@ Version 1 does not:
   explicit pair boundary;
 - turn duplicate evidence into mutation-ready survivor groups, resolve
   conflicts, answer clarifying questions, or mutate Memories;
-- apply or canonically interpret responses collected by the separate ambiguity
-  review shell;
+- answer its own follow-up questions or interpret its possible readings as a
+  reviewer decision; the separate `mem review ambiguities` operation owns that
+  answerable workflow;
 - treat `MAY` or `UNKNOWN` as provider-confidence scores;
 - use calibration cases as evidence of held-out performance.

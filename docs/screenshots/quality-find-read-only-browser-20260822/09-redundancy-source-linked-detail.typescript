@@ -1,0 +1,31 @@
+$ mem find-redundancies --context study/reporting
+PTY · 180 COLUMNS × 52 ROWS
+[6n[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;2;244;245;247;1m FIND REDUNDANCIES · FINDINGS · 1/2[0m
+[0;38;2;244;245;247m 1 CONTEXT(S) · 3 SOURCE MEMORIES · study/reporting[0m
+[0;1;7m›  1  SEMANTIC_EQUIVALENT · Report the incident within 30 days. ↔ Notify the office no later than one month after discovery.[55C[0;1m^[0m
+[0m   2  OVERLAP · Notify the office no later than one month after discovery. ↔ The accessible entrance remains open during office hours.[45C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[0m                                                                                                                                                                                   [179C[0;1mv[0m
+[0m ↑/↓ finding · Enter inspect · Home/End · Esc/Backspace/Q close · D open Dedun · read-only[90D[12A[?7h[0m[?25l[?7l[2A[21C[0;38;2;244;245;247;1mDETA[CL ·[C1/2[0m[K[0m
+
+[0;38;2;139;213;255;1m SEMANTIC DUN · SEMANTIC_EQUIVALENT[0m                                                                                         [0m
+[0;38;2;139;213;255;1m Report the incident within 30 days. ↔ Notify the office no later than one month after discovery.[0m                                     [0m
+[0;38;2;244;245;247;1m SOURCE 1 · study/reporting · [00000000][0m
+[0;38;2;202;211;245m Report the incident within 30 days.[0m
+[0;38;2;244;245;247;1m SOURCE 2 · study/reporting · [00000000][0m
+[0;38;2;202;211;245m Notify the office no later than one month after discovery.[0m
+[0;38;2;244;245;247;1m WHY THESE MEMORIES ARE SEMANTICALLY REDUNDANT[0m
+[0;38;2;244;245;247m Both Memories impose the same reporting window in this frame.[0m
+
+
+
+
+[5C[0msect[Con[3CPgUp/PgDn page · ←/→ finding · Es[C/Backspace list · D open Dedun · Q cl[Cse · read-only[12A[101D[?7h[0m

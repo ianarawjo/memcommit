@@ -1,0 +1,17 @@
+$ mem find-conflicts --context study/reporting
+PTY · 180 COLUMNS × 52 ROWS
+[6n[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;2;244;245;247;1m FIND CONFLICTS · FINDINGS · 1/1[0m
+[0;38;2;244;245;247m 1 CONTEXT(S) · 3 SOURCE MEMORIES · study/reporting[0m
+[0;1;7m›  1  MAY · TIME · Report the incident within 30 days. ↔ Notify the office no later than one month after discovery.[64C[0;1m^[0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[0m                                                                                                                                                                                   [179C[0;1mv[0m
+[0m ↑/↓ finding · Enter inspect · Home/End · Esc/Backspace/Q close · R open Resolve · read-only[92D[12A[?7h[0m
