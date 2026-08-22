@@ -53,7 +53,6 @@ from memcommit.query_provider import (
 )
 from memcommit.quality_audit import (
     QualityAuditError,
-    quality_audit_resolution_view,
 )
 from memcommit.quality_audit_store import QualityAuditStore
 from memcommit.review import (
@@ -221,8 +220,8 @@ def _run_audit_review(
 
     from memcommit.commands.audit import run_quality_audit_review
     from memcommit.commands.audit_sessions import audit_session_entries
-    from memcommit.commands.resolution_workbench_shell import (
-        render_resolution_workbench_snapshot,
+    from memcommit.interfaces.tui.operations.audit import (
+        render_quality_audit_review_snapshot,
     )
 
     sessions = QualityAuditStore(store)
@@ -236,9 +235,7 @@ def _run_audit_review(
         return
     session = sessions.load(selected.key)
     if snapshot or not _interactive_terminal():
-        typer.echo(
-            render_resolution_workbench_snapshot(quality_audit_resolution_view(session))
-        )
+        typer.echo(render_quality_audit_review_snapshot(session))
         return
     run_quality_audit_review(store, session)
 

@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ MEM AUDIT                                                                                                                                                                       ^┃
+┃ SAVED · 3/3 CHECKS · READ-ONLY REPORT                                                                                                                                            ┃
+┃ SESSION [00000000] · CREATED 2026-08-22T12:00:00+00:00 · 3 FINDING(S)                                                                                                            ┃
+┃ AUDIT SUMMARY                                                                                                                                                                    ┃
+┃ All quality finders completed over the same saved direct Context snapshot. Reported 3 total findings.                                                                            ┃
+┃ CHECKS                                                                                                                                                                           ┃
+┃ DUPLICATES · COMPLETE · 1 finding                                                                                                                                                ┃
+┃AMBIGUITIES · COMPLETE · 1 finding                                                                                                                                                ┃
+┃CONFLICTS · COMPLETE · 1 finding                                                                                                                                                  ┃
+┃ AUDITED SOURCE                                                                                                                                                                   ┃
+┃ study/audit-source · 2 direct Memories as captured when this Audit ran. Descendants and embedded Contexts were not analyzed.                                                     ┃
+┃ SOURCE MEMORY 1/2 · [00000000]                                                                                                                                                   ┃
+┃ The main entrance opens at 08:00.                                                                                                                                                ┃
+┃ SOURCE MEMORY 2/2 · [00000000]                                                                                                                                                   ┃
+┃ The main entrance remains closed until 09:00.                                                                                                                                    ┃
+┃ PROVENANCE                                                                                                                                                                       ┃
+┃ DUPLICATES · duplicates-v1-draft · capture:audit-model                                                                                                                           ┃
+┃AMBIGUITIES · ambiguity-v1-draft · capture:audit-model                                                                                                                            ┃
+┃CONFLICTS · conflict-v1-draft · capture:audit-model                                                                                                                               ┃
+┃ DUPLICATES · COMPLETE · 1 FINDING                                                                                                                                                ┃
+┃ Complete source-linked findings follow.                                                                                                                                          ┃
+┃ SEMANTIC DUN · SEMANTIC_EQUIVALENT                                                                                                                                               ┃
+┃ The main entrance opens at 08:00. ↔ The main entrance remains closed until 09:00.                                                                                                ┃
+┃ SOURCE 1 · study/audit-source · [00000000]                                                                                                                                       ┃
+┃ The main entrance opens at 08:00.                                                                                                                                                ┃
+┃ SOURCE 2 · study/audit-source · [00000000]                                                                                                                                       ┃
+┃ The main entrance remains closed until 09:00.                                                                                                                                    ┃
+┃ WHY THESE MEMORIES ARE SEMANTICALLY REDUNDANT                                                                                                                                    ┃
+┃ Both Memories govern the same entrance schedule in this frame.                                                                                                                   ┃
+┃ SAVED REVIEW NOTE · HISTORICAL                                                                                                                                                   ┃
+┃ DISPOSITION · CONFIRM LINK                                                                                                                                                       ┃
+┃ Retain this pair as positive semantic-DUN evidence.                                                                                                                              ┃
+┃ NOTE                                                                                                                                                                             ┃
+┃ Earlier reviewer retained this evidence for follow-up.                                                                                                                           ┃
+┃ AMBIGUITIES · COMPLETE · 1 FINDING                                                                                                                                               ┃
+┃ Complete source-linked findings follow.                                                                                                                                          ┃
+┃ AMBIGUITY · DOMINANT · CLARIFICATION HELPFUL                                                                                                                                     ┃
+┃ The main entrance opens at 08:00.                                                                                                                                                ┃
+┃ SOURCE MEMORY · study/audit-source · [00000000]                                                                                                                                  ┃
+┃ The main entrance opens at 08:00.                                                                                                                                                ┃
+┃ WHY THIS IS UNCLEAR                                                                                                                                                              ┃
+┃ The audience for the entrance schedule is not explicit.                                                                                                                          ┃
+┃ FOLLOW-UP QUESTION                                                                                                                                                               ┃
+┃ Which audience uses this schedule?                                                                                                                                               ┃
+┃ POSSIBLE READINGS                                                                                                                                                                ┃
+┃ - DOMINANT · The public entrance opens at 08:00.                                                                                                                                 ┃
+┃ - ALTERNATIVE · A staff entrance opens at 08:00.                                                                                                                                 ┃
+┃ CONFLICTS · COMPLETE · 1 FINDING                                                                                                                                                 ┃
+┃ Complete source-linked findings follow.                                                                                                                                         v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ AUDIT REVIEW · ↑/↓ section · PgUp/PgDn page · Home/End · Esc/Backspace/Q close · read-only

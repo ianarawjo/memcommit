@@ -21,116 +21,15 @@ from memcommit.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
 )
-from memcommit.interfaces.tui.viewers.semantic import (
-    SemanticViewerBlock,
-    SemanticViewerController,
-    SemanticViewerDocument,
-    SemanticViewerSection,
+from memcommit.interfaces.tui.viewers.semantic import SemanticViewerController
+from memcommit.interfaces.tui.workbenches.findings.document import (
+    quality_finding_item_document,
 )
 from memcommit.quality_find_report import (
     QualityFindBrowserReceipt,
     QualityFindReportView,
-    QualityFindingReportItem,
 )
 from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
-
-
-def _plain(value: str) -> str:
-    return safe_terminal_text(value).strip()
-
-
-def _item_document(item: QualityFindingReportItem) -> SemanticViewerDocument:
-    sections: list[SemanticViewerSection] = [
-        SemanticViewerSection(
-            f"FINDING:{item.uid}:IDENTITY",
-            "IDENTITY",
-            SemanticViewerBlock(
-                (
-                    (
-                        "class:report-label",
-                        f" {safe_terminal_text(item.kind)} · "
-                        f"{safe_terminal_text(item.classification)}\n",
-                    ),
-                    ("class:memory-object", f" {safe_terminal_text(item.title)}\n"),
-                )
-            ),
-        )
-    ]
-    for source in item.sources:
-        sections.append(
-            SemanticViewerSection(
-                f"FINDING:{item.uid}:SOURCE:{source.memory_uid}",
-                "SOURCE",
-                SemanticViewerBlock(
-                    (
-                        (
-                            "class:report-label",
-                            f" {safe_terminal_text(source.label)} · "
-                            f"{safe_terminal_text(source.context_name)} · "
-                            f"[{safe_terminal_text(source.memory_uid[:8])}]\n",
-                        ),
-                        (
-                            "class:memory-object",
-                            f" {safe_terminal_text(source.content)}\n",
-                        ),
-                    )
-                ),
-            )
-        )
-    sections.append(
-        SemanticViewerSection(
-            f"FINDING:{item.uid}:REASON",
-            "REASON",
-            SemanticViewerBlock(
-                (
-                    (
-                        "class:report-label",
-                        f" {safe_terminal_text(item.reason_heading)}\n",
-                    ),
-                    ("class:viewer-body", f" {safe_terminal_text(item.reason)}\n"),
-                )
-            ),
-        )
-    )
-    if item.follow_up:
-        sections.append(
-            SemanticViewerSection(
-                f"FINDING:{item.uid}:FOLLOW_UP",
-                "FOLLOW_UP",
-                SemanticViewerBlock(
-                    (
-                        ("class:report-label", " FOLLOW-UP QUESTION\n"),
-                        (
-                            "class:viewer-body",
-                            f" {safe_terminal_text(item.follow_up)}\n",
-                        ),
-                    )
-                ),
-            )
-        )
-    if item.readings:
-        fragments: list[tuple[str, str]] = [
-            ("class:report-label", " POSSIBLE READINGS\n")
-        ]
-        for reading in item.readings:
-            fragments.extend(
-                [
-                    (
-                        "class:report-neutral",
-                        f" - {safe_terminal_text(reading.label)} · ",
-                    ),
-                    ("class:viewer-body", safe_terminal_text(reading.text) + "\n"),
-                ]
-            )
-        sections.append(
-            SemanticViewerSection(
-                f"FINDING:{item.uid}:READINGS",
-                "READINGS",
-                SemanticViewerBlock(tuple(fragments)),
-            )
-        )
-    return SemanticViewerDocument(tuple(sections))
-
 
 def run_quality_find_browser(
     view: QualityFindReportView,
@@ -160,7 +59,7 @@ def run_quality_find_browser(
 
     def current_document() -> SemanticViewerDocument | None:
         item = current_item()
-        return None if item is None else _item_document(item)
+        return None if item is None else quality_finding_item_document(item)
 
     def render_header() -> list[tuple[str, str]]:
         position = (

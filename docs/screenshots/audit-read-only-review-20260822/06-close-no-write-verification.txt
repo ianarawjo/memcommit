@@ -1,0 +1,7 @@
+AUDIT REVIEW CLOSED · READ-ONLY                                                                                                                                                     
+  RECORD DIGEST UNCHANGED · True                                                                                                                                                    
+  HISTORICAL NOTES · 1                                                                                                                                                              
+  RESPONSE WRITES · 0                                                                                                                                                               
+  PROVIDER CALLS · 0                                                                                                                                                                
+  CONTEXT WRITES · 0                                                                                                                                                                
+  CHECKPOINTS · 0

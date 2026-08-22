@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ MEM AUDIT                                                                                                                                                                       ^┃
+┃ SAVED · 3/3 CHECKS · READ-ONLY REPORT                                                                                                                                            ┃
+┃ SESSION [00000000] · CREATED 2026-08-22T12:00:00+00:00 · 0 FINDING(S)                                                                                                            ┃
+┃ AUDIT SUMMARY                                                                                                                                                                    ┃
+┃ All quality finders completed over the same saved direct Context snapshot. Reported 0 total findings.                                                                            ┃
+┃ CHECKS                                                                                                                                                                           ┃
+┃ DUPLICATES · COMPLETE · 0 findings                                                                                                                                               ┃
+┃AMBIGUITIES · COMPLETE · 0 findings                                                                                                                                               ┃
+┃CONFLICTS · COMPLETE · 0 findings                                                                                                                                                 ┃
+┃ AUDITED SOURCE                                                                                                                                                                   ┃
+┃ study/audit-source · 2 direct Memories as captured when this Audit ran. Descendants and embedded Contexts were not analyzed.                                                     ┃
+┃ SOURCE MEMORY 1/2 · [00000000]                                                                                                                                                   ┃
+┃ The main entrance opens at 08:00.                                                                                                                                                ┃
+┃ SOURCE MEMORY 2/2 · [00000000]                                                                                                                                                   ┃
+┃ The main entrance remains closed until 09:00.                                                                                                                                    ┃
+┃ PROVENANCE                                                                                                                                                                       ┃
+┃ DUPLICATES · duplicates-v1-draft · capture:audit-model                                                                                                                           ┃
+┃AMBIGUITIES · ambiguity-v1-draft · capture:audit-model                                                                                                                            ┃
+┃CONFLICTS · conflict-v1-draft · capture:audit-model                                                                                                                               ┃
+┃ DUPLICATES · COMPLETE · 0 FINDINGS                                                                                                                                               ┃
+┃ No redundancy evidence in this analysis.                                                                                                                                         ┃
+┃ AMBIGUITIES · COMPLETE · 0 FINDINGS                                                                                                                                              ┃
+┃ No ambiguity findings in this analysis.                                                                                                                                          ┃
+┃ CONFLICTS · COMPLETE · 0 FINDINGS                                                                                                                                                ┃
+┃ No conflict findings in this analysis.                                                                                                                                           ┃
+┃ BOUNDARY                                                                                                                                                                         ┃
+┃ This saved Audit is a model-assisted finding record, not proof that the Source is free of quality problems. Saved historical review notes do not alter the snapshot, Context, or ┃
+┃ Memories. This Viewer cannot select a reading, write a response, rerun a finder, or apply a Memory change.                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ AUDIT REVIEW · ↑/↓ section · PgUp/PgDn page · Home/End · Esc/Backspace/Q close · read-only

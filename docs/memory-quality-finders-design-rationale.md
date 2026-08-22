@@ -216,11 +216,10 @@ artifact freezes:
 - the creation time and immutable Audit UID.
 
 The completed snapshot is saved before its compact receipt is printed. A
-disconnect therefore cannot discard the provider result.
-Reviewer responses are the only mutable portion of the session and use CAS
-persistence. Every response target is namespaced by its finder kind and must
-still exist in the immutable snapshot; a response save cannot replace or
-rewrite the report it claims to annotate.
+disconnect therefore cannot discard the provider result. Audit schemas 1 and 2
+retain their response map for compatibility with already saved artifacts, but
+the current Review route never creates or edits it. A nonempty older response
+is displayed only as a historical note beside its exact immutable finding.
 
 Durable Audit requires retained-analysis authority before provider connection.
 An ordinary local Context satisfies that ownership boundary. A granted Source
@@ -243,16 +242,13 @@ sections:
 4. `PROVENANCE`, retaining each finder ruleset and provider/model identity; and
 5. `BOUNDARY`, stating the non-proof and non-mutation limits.
 
-The Items frame contains review targets only, in the stable group order
-Duplicate, Ambiguity, Conflict. A zero-finding check remains visible in
-`CHECKS` but does not become a synthetic Item. Each positive result keeps its
-operation-owned detail and response mechanics: Duplicate retains its emitted
-evidence pair and confirm/reject/defer disposition, Ambiguity retains its
-classification, readings, and clarification question, and Conflict retains
-its exact pair, scope dimensions, and free-form response without fabricated
-resolution choices. A `REQUIRED` ambiguity remains finding priority rather
-than becoming a mandatory reviewer answer; Audit does not conflate the need
-for source clarification with an obligation to submit a response.
+The comprehensive Viewer preserves the stable group order Duplicate,
+Ambiguity, Conflict. A zero-finding check remains visible in `CHECKS`; each
+positive result follows as complete source-linked detail. Ambiguity readings
+and clarification questions are report evidence, while Conflict keeps its
+exact pair, scope dimensions, reason, and question. None is selectable and no
+`REQUIRED` or `OPTIONAL` answer obligation is created. Every frozen direct
+Source Memory is also visible, including Memories that have no finding.
 
 Saved Audits appear in the aggregate `mem review` launcher and reopen exactly
 through `mem review audit --session UID`. Review renders the saved audited
@@ -263,8 +259,9 @@ never mutate a Context, Memory, or checkpoint.
 
 Ordinary `mem audit` does not open Review automatically. It prints the Audit
 session UID and exact Review command. `--snapshot` explicitly prints the full
-new report, and `mem review audit --session UID` owns interactive response
-work. This keeps execution, durable evidence, and later inspection distinct.
+typed report, and `mem review audit --session UID` opens the same document as a
+read-only full-screen Viewer. This keeps execution, durable evidence, and later
+inspection distinct.
 
 ## Units of judgment
 

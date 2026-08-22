@@ -28,14 +28,15 @@ from memcommit.commands.help_inventory import CommandEntry
 from memcommit.commands.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.commands.resolution_workbench_shell import (
-    render_resolution_workbench_snapshot,
-    run_resolution_workbench_shell,
-)
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
-from memcommit.interfaces.tui.operations.audit import choose_audit_setup
+from memcommit.interfaces.tui.operations.audit import (
+    choose_audit_setup,
+    quality_audit_review_document,
+    render_quality_audit_review_snapshot,
+)
+from memcommit.interfaces.tui.viewers.semantic import run_semantic_viewer
 from memcommit.context import Context
 from memcommit.conformance import ConformanceError, check_context_conformance
 from memcommit.conformance_runtime import freeze_context_conformance
@@ -47,19 +48,14 @@ from memcommit.quality_audit import (
     QualityAuditError,
     QualityAuditKind,
     QualityAuditSession,
-    quality_audit_record_digest,
-    quality_audit_resolution_view,
     create_quality_audit,
     run_quality_audit,
 )
 from memcommit.quality_audit_store import QualityAuditStore
-from memcommit.quality_find_workbench import validate_quality_find_response
 from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
-from memcommit.resolution_workbench import ResolutionNavigation
-from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
 
 
@@ -133,59 +129,20 @@ def run_quality_audit_review(
     app_output: Output | None = None,
     require_tty: bool = True,
 ) -> QualityAuditSession:
-    """Resume one saved Audit response ledger without rerunning a finder."""
+    """Read one complete saved Audit without rerunning or editing it."""
 
-    sessions = QualityAuditStore(store)
-    expected_digest = quality_audit_record_digest(session)
-    navigation = ResolutionNavigation()
-    workbench_navigation = SessionWorkbenchNavigation()
-
-    def load_draft(item_uid: str) -> tuple[str | None, str]:
-        response = session.responses.get(item_uid)
-        if response is None:
-            return None, ""
-        return response.selected_option_uid, response.text
-
-    def save_draft(item_uid: str, option_uid: str | None, text: str) -> None:
-        nonlocal expected_digest
-        validate_quality_find_response(text)
-        item = quality_audit_resolution_view(session).item(item_uid)
-        if option_uid is not None:
-            item.option(option_uid)
-        response = session.response_for(item_uid)
-        response.selected_option_uid = option_uid
-        response.text = text
-        sessions.save(session, expected_digest=expected_digest)
-        expected_digest = quality_audit_record_digest(session)
-
-    while True:
-        action = run_resolution_workbench_shell(
-            lambda: quality_audit_resolution_view(session),
-            navigation=navigation,
-            workbench_navigation=workbench_navigation,
-            app_input=app_input,
-            app_output=app_output,
-            require_tty=require_tty,
-            terminal_label="Interactive Memory quality Audit",
-            snapshot_hint=(
-                "Use 'mem review audit --session UID --snapshot' to inspect "
-                "the saved Audit."
-            ),
-            draft_loader=load_draft,
-            draft_saver=save_draft,
-            response_validator=validate_quality_find_response,
-            save_draft_on_close=True,
-            split_viewer_items=True,
-            # Audit has no whole-set provider turn or Apply route. Ask the
-            # common shell to derive COMPLETE from the real capabilities
-            # instead of rendering its generic empty RESOLVE ALL placeholder.
-            review_and_apply=True,
-        )
-        if action.kind == "CLOSE":
-            return session
-        if action.kind != "SUBMIT_ITEM" or action.item_uid is None:
-            raise QualityAuditError(f"Unsupported Audit review action '{action.kind}'.")
-        save_draft(action.item_uid, action.option_uid, action.comment)
+    # Keep the Store parameter for the established command adapter signature,
+    # but do not open it: the already validated saved snapshot is the review
+    # object and this Viewer owns no persistence boundary.
+    del store
+    run_semantic_viewer(
+        quality_audit_review_document(session),
+        title="AUDIT REVIEW",
+        app_input=app_input,
+        app_output=app_output,
+        require_tty=require_tty,
+    )
+    return session
 
 
 def _interactive_source(store: MemoryStore, *, current_name: str | None):
@@ -368,9 +325,7 @@ def cmd(
         raise typer.Exit(1)
 
     if snapshot:
-        typer.echo(
-            render_resolution_workbench_snapshot(quality_audit_resolution_view(session))
-        )
+        typer.echo(render_quality_audit_review_snapshot(session))
         return
     typer.secho(
         f"Audit saved: {session.finding_count} finding(s) across "

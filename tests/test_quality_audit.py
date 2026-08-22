@@ -12,7 +12,10 @@ from typer.testing import CliRunner
 import memcommit.ops as ops
 import memcommit.commands.audit as audit_command
 from memcommit.cli import app
-from memcommit.commands.audit import _run_quality_audit_checks
+from memcommit.commands.audit import (
+    _run_quality_audit_checks,
+    run_quality_audit_review,
+)
 from memcommit.commands.audit_sessions import audit_session_entries
 from memcommit.commands.quality_find_workbench import (
     QualityFindSetupReceipt,
@@ -28,6 +31,11 @@ from memcommit.findings import (
     DuplicateReport,
 )
 from memcommit.provider_types import CompletionRun, ProviderIdentity
+from memcommit.interfaces.tui.operations.audit import (
+    quality_audit_review_document,
+    render_quality_audit_review_snapshot,
+)
+from memcommit.interfaces.tui.viewers.semantic import semantic_document_plain_text
 from memcommit.quality_audit import (
     QUALITY_AUDIT_RULESETS,
     QualityAuditCheck,
@@ -266,6 +274,66 @@ def test_audit_report_keeps_three_sections_and_type_specific_items():
         "AUDITED SOURCE"
     ]
     assert "not proof" in view.overview
+    assert view.capabilities == frozenset()
+    assert view.status.endswith("READ-ONLY REPORT")
+
+
+def test_audit_review_is_one_complete_answer_free_document():
+    ctx, first, second = _context()
+    session = _finding_session(ctx, first, second)
+    legacy_item = quality_audit_resolution_view(session).items[0]
+    response = session.response_for(legacy_item.uid)
+    response.selected_option_uid = legacy_item.options[0].uid
+    response.text = "Retained from an earlier review version."
+
+    document = quality_audit_review_document(session)
+    rendered = semantic_document_plain_text(
+        document,
+        focused_uid=None,
+        whole_document=True,
+    )
+
+    assert "MEM AUDIT" in rendered
+    assert "SAVED · 3/3 CHECKS · READ-ONLY REPORT" in rendered
+    assert "SOURCE MEMORY 1/2" in rendered
+    assert first.content in rendered
+    assert second.content in rendered
+    assert "DUPLICATES · COMPLETE · 1 FINDING" in rendered
+    assert "AMBIGUITY · SINGLE · CLARIFICATION HELPFUL" in rendered
+    assert "CONFLICT · YES · TIME" in rendered
+    assert "SAVED REVIEW NOTE · HISTORICAL" in rendered
+    assert "Retained from an earlier review version." in rendered
+    assert "RESPONSES" not in rendered
+    assert "TO DO" not in rendered
+    assert "[Enter] select" not in rendered
+    assert document.sections[-1].kind == "BOUNDARY"
+
+
+def test_audit_review_close_cannot_persist_or_change_a_saved_annotation(
+    isolated_store,
+):
+    ctx, first, second = _context()
+    store = MemoryStore()
+    session = _finding_session(ctx, first, second)
+    item = quality_audit_resolution_view(session).items[0]
+    session.response_for(item.uid).text = "Historical note."
+    sessions = QualityAuditStore(store)
+    sessions.save(session, expected_digest=None)
+    before = quality_audit_record_digest(sessions.load(session.uid))
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("q")
+        returned = run_quality_audit_review(
+            store,
+            sessions.load(session.uid),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert returned.responses[item.uid].text == "Historical note."
+    assert quality_audit_record_digest(sessions.load(session.uid)) == before
+    assert "RESPONSES" not in render_quality_audit_review_snapshot(returned)
 
 
 def test_audit_store_preserves_snapshot_while_saving_review_response(isolated_store):

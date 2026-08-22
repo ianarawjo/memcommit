@@ -11,6 +11,7 @@
       "docs/execution-receipt-review-lifecycle-design-rationale.md"
     ],
     "audit": [
+      "docs/audit-read-only-review-design-rationale.md",
       "docs/context-locator-design-rationale.md",
       "docs/mem-check-conformance-design-rationale.md"
     ],

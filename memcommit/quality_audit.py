@@ -1,10 +1,10 @@
 """Durable Memory quality Audit snapshots and review projection.
 
-Audit is an orchestration boundary, not a fourth semantic judge.  It freezes
-one direct Context frame, runs the existing Duplicate, Ambiguity, and Conflict
+Audit is an orchestration boundary, not a fourth semantic judge. It freezes one
+direct Context frame, runs the existing Duplicate, Ambiguity, and Conflict
 finders independently, and may retain one separately typed Conformance check
-against an explicit Rules Context. Only the reviewer response ledger may
-change after creation.
+against an explicit Rules Context. Version-1/2 response fields remain readable
+as historical annotations, but the Audit Review route no longer edits them.
 """
 
 from __future__ import annotations
@@ -548,7 +548,7 @@ def _finding_item_uids(check: QualityAuditCheck) -> tuple[str, ...]:
 
 @dataclass
 class QualityAuditSession:
-    """One immutable completed Audit snapshot plus durable review responses."""
+    """One immutable Audit plus legacy durable review annotations."""
 
     uid: str
     created_at: str
@@ -856,7 +856,7 @@ def quality_audit_record_digest(session: QualityAuditSession) -> str:
 def quality_audit_resolution_view(
     session: QualityAuditSession,
 ) -> ResolutionWorkbenchView:
-    """Compose typed finder and optional Conformance reports into one view."""
+    """Compose the legacy Resolution-shaped compatibility projection."""
 
     ctx = session.source.context()
     source_frame = QualityFindSourceFrame.create((ctx,))
@@ -935,8 +935,8 @@ def quality_audit_resolution_view(
             "BOUNDARY",
             (
                 "This saved Audit is a model-assisted finding record, not proof "
-                "that the Source is free of quality problems. Review responses do "
-                "not alter the snapshot, Context, or Memories."
+                "that the Source is free of quality problems. Saved historical "
+                "review notes do not alter the snapshot, Context, or Memories."
             ),
         ),
     ]
@@ -970,7 +970,7 @@ def quality_audit_resolution_view(
         revision=session.snapshot_digest,
         title="MEM AUDIT",
         route=session.source.context_name,
-        status=f"SAVED · {check_total}/{check_total} CHECKS · {session.answered_count}/{total} ANSWERED",
+        status=f"SAVED · {check_total}/{check_total} CHECKS · READ-ONLY REPORT",
         metrics=tuple(metrics),
         context_locations=(
             ResolutionContextLocation("AUDITED SOURCE", session.source.context_name),
@@ -987,6 +987,6 @@ def quality_audit_resolution_view(
         ),
         results_label="EXACT RESULTS",
         results=(),
-        capabilities=(frozenset({"SUBMIT_ITEM"}) if items else frozenset()),
+        capabilities=frozenset(),
         show_results=False,
     )

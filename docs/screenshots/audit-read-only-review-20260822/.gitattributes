@@ -1,0 +1,3 @@
+*.png -text -diff
+*.txt -text -diff
+*.typescript -text -diff

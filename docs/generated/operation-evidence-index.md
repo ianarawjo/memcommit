@@ -9,7 +9,7 @@ only from `docs/operation-evidence-index.json`.
 | --- | --- | --- | --- |
 | `add` | `CLOSED` | [`add-callable-boundary-matrix.md`](../add-callable-boundary-matrix.md) | The typed batch, authority, mutation, CLI, TUI, public, and agent routes are verified against one application/runtime boundary. |
 | `atomize` | `CLOSED` | [`atomize-application-boundary-matrix.md`](../atomize-application-boundary-matrix.md)<br>[`context-locator-design-rationale.md`](../context-locator-design-rationale.md)<br>[`execution-receipt-review-lifecycle-design-rationale.md`](../execution-receipt-review-lifecycle-design-rationale.md) | Analysis, saved review, reanalysis, both Apply directions, recovery, and public projection are verified as one structural lifecycle. |
-| `audit` | `UNREVIEWED` | [`context-locator-design-rationale.md`](../context-locator-design-rationale.md)<br>[`mem-check-conformance-design-rationale.md`](../mem-check-conformance-design-rationale.md) | — |
+| `audit` | `UNREVIEWED` | [`audit-read-only-review-design-rationale.md`](../audit-read-only-review-design-rationale.md)<br>[`context-locator-design-rationale.md`](../context-locator-design-rationale.md)<br>[`mem-check-conformance-design-rationale.md`](../mem-check-conformance-design-rationale.md) | — |
 | `branch` | `UNREVIEWED` | [`history-uid-presentation-design-rationale.md`](../history-uid-presentation-design-rationale.md)<br>[`mem-branch-design-rationale.md`](../mem-branch-design-rationale.md) | — |
 | `check-conformance` | `UNREVIEWED` | [`mem-check-conformance-design-rationale.md`](../mem-check-conformance-design-rationale.md) | — |
 | `checkout` | `UNREVIEWED` | [`switch-application-boundary-matrix.md`](../switch-application-boundary-matrix.md) | — |
