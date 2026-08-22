@@ -111,10 +111,7 @@ def _header_lines(
     )
     return [
         "MEM COMPARE · SYMMETRIC PEERS",
-        (
-            f"Reference: {display_escape_text(reference.context_name)} "
-            "(layout only; no authority)"
-        ),
+        f"Reference: {display_escape_text(reference.context_name)}",
         f"Compared:  {display_escape_text(compared.context_name)}",
         (
             "SCOPE · REFERENCE "
@@ -134,7 +131,7 @@ def _header_lines(
             f"Analysis: {analysis.uid[:8]} · "
             + analysis_state
             + (
-                " · NOT SAVED · PREVIEW"
+                " · TEMPORARY PREVIEW"
                 if origin == "PROJECTED"
                 else " · SAVED · RETAINED"
                 if retention == "RETAINED"
@@ -142,7 +139,7 @@ def _header_lines(
                 if retention == "GRANT_BOUND"
                 else ""
                 if durable
-                else f" · NOT SAVED · {read_grant_label}"
+                else f" · TEMPORARY · {read_grant_label}"
             )
         ),
         (
@@ -365,4 +362,37 @@ def render_comparison(
             )
 
     lines.extend(_potential_conflict_lines(analysis, numbered))
+    return "\n".join(lines)
+
+
+def render_comparison_receipt(
+    analysis: ComparisonAnalysis,
+    *,
+    durable: bool = True,
+) -> str:
+    """Render the bounded default result while retaining the complete report."""
+
+    reference, compared = analysis.frames
+    counts = Counter(relation.kind for relation in analysis.relations)
+    lines = [
+        (
+            "COMPARE COMPLETE · "
+            f"{display_escape_text(reference.context_name)} ↔ "
+            f"{display_escape_text(compared.context_name)}"
+        ),
+        "",
+        "UNDERSTOOD · " + _single_line(analysis.understanding.text, limit=280),
+        (
+            "RELATIONS · "
+            f"SAME {counts['EQUIVALENT'] + counts['COMPATIBLE']} · "
+            f"DIFFERENT {counts['SCOPED'] + counts['DISTINCT']} · "
+            f"UNCLEAR {counts['UNCLEAR']}"
+        ),
+        f"ATTENTION · {len(analysis.issues)} potential conflicts",
+        f"ANALYSIS · {analysis.uid}",
+    ]
+    if durable:
+        lines.append(f"REVIEW · mem review compare --session {analysis.uid}")
+    else:
+        lines.append("REVIEW · unavailable for this temporary projection")
     return "\n".join(lines)

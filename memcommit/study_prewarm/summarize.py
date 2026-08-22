@@ -9,6 +9,9 @@ accepted: direct and recursive requests have distinct exact keys.
 from __future__ import annotations
 
 from memcommit.config import Config
+from memcommit.infrastructure.providers.policy import (
+    resolve_operation_provider_policy,
+)
 from memcommit.store import MemoryStore
 from memcommit.summarize import (
     SUMMARIZE_PROVIDER_CONTRACT_VERSION,
@@ -48,15 +51,12 @@ def _task_root(name: str) -> str | None:
 
 
 def _configured_semantic_identity() -> tuple[str, str | None, str | None]:
-    config = Config()
-    provider = config.semantic_provider()
-    model = config.model_for_provider(provider)
-    reasoning = (
-        config.codex_reasoning_effort()
-        if provider == "codex_chatgpt"
-        else None
+    resolved = resolve_operation_provider_policy(
+        "summarize_context",
+        config=Config(),
+        mode="STUDY_PARTICIPANT",
     )
-    return provider, model, reasoning
+    return resolved.provider_id, resolved.model, resolved.reasoning_effort
 
 
 def _frame_identity(frame: SummaryFrame) -> dict[str, object]:

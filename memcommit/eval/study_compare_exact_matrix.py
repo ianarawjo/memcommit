@@ -32,6 +32,9 @@ from memcommit.eval.study_compare_graph_prewarm import (
     TaskGraphPlan,
     build_graph_plan,
 )
+from memcommit.infrastructure.providers.policy import (
+    resolve_codex_evaluation_policy,
+)
 from memcommit.profile_config import (
     load_profile_registry,
     profile_store_dir,
@@ -472,8 +475,8 @@ def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--baseline-profile", default="study-baseline")
     parser.add_argument("--model", default=None)
-    parser.add_argument("--reasoning", choices=CODEX_REASONING_EFFORTS, default="medium")
-    parser.add_argument("--timeout", type=float, default=DEFAULT_TIMEOUT_SECONDS)
+    parser.add_argument("--reasoning", choices=CODEX_REASONING_EFFORTS, default=None)
+    parser.add_argument("--timeout", type=float, default=None)
     parser.add_argument("--workers", type=int, default=DEFAULT_WORKERS)
     parser.add_argument("--retries", type=int, default=DEFAULT_RETRIES)
     parser.add_argument("--output-root", type=Path, default=None)
@@ -483,10 +486,19 @@ def _parser() -> argparse.ArgumentParser:
 def main(argv: Sequence[str] | None = None) -> int:
     args = _parser().parse_args(argv)
     config = Config()
-    model = args.model or config.model_for_provider(CODEX_CHATGPT_PROVIDER)
+    policy = resolve_codex_evaluation_policy(
+        "compare_contexts",
+        config=config,
+        model=args.model,
+        reasoning_effort=args.reasoning,
+        timeout_seconds=args.timeout,
+    )
+    model = policy.model
+    reasoning = policy.reasoning_effort
     if not model:
         print("No Codex model configured; pass --model.", file=sys.stderr)
         return 2
+    assert reasoning is not None
     try:
         registry = load_profile_registry()
         store = MemoryStore(create=False)
@@ -508,11 +520,11 @@ def main(argv: Sequence[str] | None = None) -> int:
         plans = build_graph_plan(
             catalog,
             model=model,
-            reasoning=args.reasoning,
+            reasoning=reasoning,
             tasks=TASKS,
         )
         root = args.output_root or Path("outputs/study-compare-exact-matrix") / (
-            f"{registry.active.name}-{model}-{args.reasoning}"
+            f"{registry.active.name}-{model}-{reasoning}"
         )
         summary = run_exact_matrix(
             store=store,
@@ -520,8 +532,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             output_root=root,
             baseline_profile_name=args.baseline_profile,
             model=model,
-            reasoning=args.reasoning,
-            timeout=args.timeout,
+            reasoning=reasoning,
+            timeout=policy.timeout_seconds,
             workers=args.workers,
             retries=args.retries,
             progress=lambda message: print(message, flush=True),

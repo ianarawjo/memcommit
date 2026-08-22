@@ -148,10 +148,14 @@ physical call.
 
 ## Relation and holistic operations
 
-Compare, Meld, Update, Conflict, Atomize quality, Atomize grounding, Summarize,
-and Rationale now declare shared policies and budget vectors, but their staged
-reconcilers are not enabled. Their existing exhaustive or source-linked result
-contracts remain one-shot below the bound and fail closed above it.
+Deep Compare, lightweight Compare, Meld, Update, Conflict, Atomize quality,
+Atomize grounding, Summarize, and Rationale now declare shared policies and
+budget vectors, but their staged reconcilers are not enabled. Their existing
+exhaustive or source-linked result contracts remain one-shot below the bound
+and fail closed above it. Lightweight Compare uses a distinct source-linked
+`HIERARCHICAL_REDUCE` report schema; it does not construct a partial relation
+matrix and never substitutes for the exhaustive deep Compare basis used by
+Meld.
 
 Update records the complete theoretical workload of one addition per Source
 plus one mutually exclusive edit or removal per Target, but does not confuse

@@ -16,6 +16,10 @@ from memcommit.interfaces.console.text import (
     display_escape_text,
 )
 from memcommit.config import Config
+from memcommit.infrastructure.providers.policy import (
+    ProviderPolicyOverride,
+    resolve_operation_provider_policy,
+)
 from memcommit.eval.semantic_campaign import (
     CORPUS_CHOICES,
     LEDGER_KIND,
@@ -277,30 +281,40 @@ def _connect_transient_provider(
         reasoning=reasoning,
         thinking=thinking,
     )
-    timeout = config.semantic_timeout_seconds()
-    if selection.provider_id == CODEX_CHATGPT_PROVIDER:
-        return CodexChatGPTProvider.connect(
-            env=dict(os.environ),
-            timeout=timeout,
+    policy = resolve_operation_provider_policy(
+        "semantic_evaluation",
+        config=config,
+        mode="EVALUATION",
+        override=ProviderPolicyOverride(
+            provider_id=selection.provider_id,
             model=selection.model,
             reasoning_effort=selection.reasoning_effort,
+            timeout_seconds=config.semantic_timeout_seconds(),
+        ),
+    )
+    if policy.provider_id == CODEX_CHATGPT_PROVIDER:
+        return CodexChatGPTProvider.connect(
+            env=dict(os.environ),
+            timeout=policy.timeout_seconds,
+            model=policy.model,
+            reasoning_effort=policy.reasoning_effort,
         )
-    if selection.provider_id == OLLAMA_PROVIDER:
-        assert selection.model is not None
+    if policy.provider_id == OLLAMA_PROVIDER:
+        assert policy.model is not None
         return OllamaProvider.connect(
-            model=selection.model,
+            model=policy.model,
             base_url=config.ollama_base_url(),
-            timeout=timeout,
+            timeout=policy.timeout_seconds,
             context_tokens=config.semantic_context_tokens(),
             max_output_tokens=config.semantic_max_output_tokens(),
             thinking=selection.thinking,
         )
-    if selection.provider_id == OPENROUTER_PROVIDER:
-        assert selection.model is not None
+    if policy.provider_id == OPENROUTER_PROVIDER:
+        assert policy.model is not None
         return OpenRouterProvider.connect(
-            model=selection.model,
+            model=policy.model,
             api_key=os.environ.get("OPENROUTER_API_KEY", ""),
-            timeout=timeout,
+            timeout=policy.timeout_seconds,
             max_output_tokens=config.semantic_max_output_tokens(),
             zdr=config.openrouter_zdr(),
         )

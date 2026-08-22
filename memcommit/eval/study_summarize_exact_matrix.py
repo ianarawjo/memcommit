@@ -24,6 +24,9 @@ from memcommit.context_targeting.readable_catalog import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.config import Config
+from memcommit.infrastructure.providers.policy import (
+    resolve_codex_evaluation_policy,
+)
 from memcommit.profile_config import (
     load_profile_registry,
     profile_store_dir,
@@ -472,9 +475,9 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--reasoning",
         choices=CODEX_REASONING_EFFORTS,
-        default="medium",
+        default=None,
     )
-    parser.add_argument("--timeout", type=float, default=DEFAULT_TIMEOUT_SECONDS)
+    parser.add_argument("--timeout", type=float, default=None)
     parser.add_argument("--workers", type=int, default=DEFAULT_WORKERS)
     parser.add_argument("--retries", type=int, default=DEFAULT_RETRIES)
     parser.add_argument("--output-root", type=Path, default=None)
@@ -484,10 +487,19 @@ def _parser() -> argparse.ArgumentParser:
 def main(argv: Sequence[str] | None = None) -> int:
     args = _parser().parse_args(argv)
     config = Config()
-    model = args.model or config.model_for_provider(CODEX_CHATGPT_PROVIDER)
+    policy = resolve_codex_evaluation_policy(
+        "summarize_context",
+        config=config,
+        model=args.model,
+        reasoning_effort=args.reasoning,
+        timeout_seconds=args.timeout,
+    )
+    model = policy.model
+    reasoning = policy.reasoning_effort
     if not model:
         print("No Codex model configured; pass --model.", file=sys.stderr)
         return 2
+    assert reasoning is not None
     try:
         registry = load_profile_registry()
         store = MemoryStore(create=False)
@@ -512,7 +524,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             current_context_name=current,
         )
         root = args.output_root or Path("outputs/study-summarize-exact-matrix") / (
-            f"{registry.active.name}-{model}-{args.reasoning}"
+            f"{registry.active.name}-{model}-{reasoning}"
         )
         summary = run_exact_matrix(
             store=store,
@@ -520,8 +532,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             output_root=root,
             baseline_profile_name=args.baseline_profile,
             model=model,
-            reasoning=args.reasoning,
-            timeout=args.timeout,
+            reasoning=reasoning,
+            timeout=policy.timeout_seconds,
             workers=args.workers,
             retries=args.retries,
             progress=lambda message: print(message, flush=True),

@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import sys
 from typing import Annotated, Optional
 
 import typer
@@ -12,7 +11,14 @@ from memcommit.comparison import (
     ComparisonError,
     ComparisonInput,
 )
-from memcommit.comparison_present import render_comparison
+from memcommit.comparison_summary import ComparisonSummary, ComparisonSummaryError
+from memcommit.comparison_summary_application import run_comparison_summary
+from memcommit.comparison_summary_present import render_comparison_summary
+from memcommit.comparison_summary_provider import COMPARISON_SUMMARY_OPERATION
+from memcommit.comparison_present import (
+    render_comparison,
+    render_comparison_receipt,
+)
 from memcommit.comparison_provider import (
     ComparisonProviderError,
     analyze_comparison,
@@ -36,7 +42,6 @@ from memcommit.commands.compare_sessions import (
     load_saved_comparison,
     revalidate_saved_comparison,
 )
-from memcommit.commands.compare_workbench import run_compare_workbench
 from memcommit.commands.command_wait import run_command_wait
 from memcommit.commands.compare_setup import choose_compare_setup
 from memcommit.commands.rationale import render_rationale
@@ -65,6 +70,7 @@ from memcommit.rationale_scope import (
     resolve_rationale_target,
 )
 from memcommit.store import MemoryStore
+from memcommit.semantic_provider import connect_operation_provider
 from memcommit.study_prewarm.compare import (
     EquivalentComparePrewarmMatch,
     find_declared_equivalent_compare_analysis,
@@ -109,6 +115,38 @@ def _resume_selected_comparison(
         ledger=ledger,
         snapshot=snapshot,
     )
+
+
+def _start_new_comparison_from_setup(
+    *,
+    store: MemoryStore,
+    refresh: bool,
+    ledger: bool,
+    snapshot: bool,
+) -> None:
+    """Collect one new Compare request without browsing saved analyses."""
+
+    setup = choose_compare_setup(store)
+    if setup is None:
+        typer.echo("Compare setup cancelled; no analysis was opened.")
+        return
+    start_kwargs = {
+        "from_": setup.reference_name,
+        "to": setup.compared_name,
+        "refresh": refresh,
+        "ledger": ledger,
+        "snapshot": snapshot,
+        "reference_descendants": setup.reference_descendants,
+        "compared_descendants": setup.compared_descendants,
+    }
+    if setup.reference_memory_uid is not None:
+        start_kwargs["reference_memory"] = setup.reference_memory_uid
+    if setup.compared_memory_uid is not None:
+        start_kwargs["compared_memory"] = setup.compared_memory_uid
+    # Re-enter only after the process-local setup has frozen explicit operands.
+    # This keeps bare and launcher-New creation on the normal command boundary
+    # without letting saved-session discovery choose an analysis implicitly.
+    cmd(**start_kwargs)
 
 
 def _start_meld_from_compare(
@@ -184,8 +222,8 @@ def _present_comparison(
     durable: bool = True,
     retention: AnalysisRetention | None = None,
 ) -> None:
-    """Use the TTY workbench by default and preserve stable snapshot output."""
-    if ledger or snapshot or not (sys.stdin.isatty() and sys.stdout.isatty()):
+    """Return a compact receipt; full evidence is an explicit Review route."""
+    if ledger or snapshot:
         typer.echo(
             render_comparison(
                 analysis,
@@ -197,43 +235,17 @@ def _present_comparison(
             )
         )
         return
+    typer.echo(render_comparison_receipt(analysis, durable=durable))
 
-    receipt = run_compare_workbench(
-        analysis,
-        report_text=render_comparison(
-            analysis,
-            reused=reused,
-            origin=origin,
-            durable=durable,
-            retention=retention,
-        ),
-        allow_meld=durable and origin != "PROJECTED",
-    )
-    if receipt.action == "ledger":
-        typer.echo(
-            render_comparison(
-                analysis,
-                reused=True,
-                origin=origin,
-                ledger=True,
-                durable=durable,
-                retention=retention,
-            )
-        )
-    elif receipt.action == "meld":
-        _start_meld_from_compare(store=store, analysis=analysis)
-    elif receipt.action == "rationale":
-        if receipt.context_name is None or receipt.memory_uid is None:
-            raise CompareCommandError(
-                "Compare workbench returned an incomplete Rationale selection."
-            )
-        _render_selected_rationale(
-            store=store,
-            context_name=receipt.context_name,
-            memory_uid=receipt.memory_uid,
-        )
-    else:
-        typer.echo("Compare view closed.")
+
+def _present_comparison_summary(
+    summary: ComparisonSummary,
+    *,
+    snapshot: bool,
+) -> None:
+    """Return the transient summary without an automatic full-screen viewer."""
+
+    typer.echo(render_comparison_summary(summary))
 
 
 def _resolve_endpoint_syntax(
@@ -302,14 +314,16 @@ def cmd(
         bool,
         typer.Option(
             "--ledger",
-            help="Show every exact source-linked relation and explanation",
+            help=(
+                "Run, save, and show the exhaustive relation ledger used by Meld"
+            ),
         ),
     ] = False,
     snapshot: Annotated[
         bool,
         typer.Option(
             "--snapshot",
-            help="Print the compact report instead of opening the TTY workbench",
+            help="Print the result instead of opening its read-only TTY viewer",
         ),
     ] = False,
     sessions: Annotated[
@@ -373,7 +387,7 @@ def cmd(
         ),
     ] = None,
 ) -> None:
-    """Compare two equal-authority Contexts, defaulting A to current."""
+    """Summarize two peer Contexts; use --ledger for deep relation analysis."""
     try:
         from_, to = _resolve_endpoint_syntax(
             contexts,
@@ -471,34 +485,33 @@ def cmd(
         raise typer.Exit(2)
     store = MemoryStore(create=False)
     try:
-        if sessions or (from_ is None and to is None):
+        if sessions:
             receipt = choose_comparison_session(store, ledger=ledger)
             if receipt is None:
                 typer.echo("Compare selection ended; no analysis was opened.")
                 return
             if isinstance(receipt, SessionNewReceipt):
-                setup = choose_compare_setup(store)
-                if setup is None:
-                    typer.echo("New Compare cancelled; no analysis was opened.")
-                    return
-                start_kwargs = {
-                    "from_": setup.reference_name,
-                    "to": setup.compared_name,
-                    "refresh": refresh,
-                    "ledger": ledger,
-                    "snapshot": snapshot,
-                    "reference_descendants": setup.reference_descendants,
-                    "compared_descendants": setup.compared_descendants,
-                }
-                if setup.reference_memory_uid is not None:
-                    start_kwargs["reference_memory"] = setup.reference_memory_uid
-                if setup.compared_memory_uid is not None:
-                    start_kwargs["compared_memory"] = setup.compared_memory_uid
-                cmd(**start_kwargs)
+                _start_new_comparison_from_setup(
+                    store=store,
+                    refresh=refresh,
+                    # The session launcher is an explicit saved-analysis
+                    # route. New must not fall through to the transient
+                    # default and then leave the launcher with no row to open.
+                    ledger=True,
+                    snapshot=snapshot,
+                )
                 return
             _resume_selected_comparison(
                 store=store,
                 analysis_uid=receipt.key,
+                ledger=ledger,
+                snapshot=snapshot,
+            )
+            return
+        if from_ is None and to is None:
+            _start_new_comparison_from_setup(
+                store=store,
+                refresh=refresh,
                 ledger=ledger,
                 snapshot=snapshot,
             )
@@ -561,6 +574,43 @@ def cmd(
             profile_registry = registry
         if reference.uid == compared.uid or reference.name == compared.name:
             raise CompareCommandError("Compare requires two distinct Contexts.")
+
+        if not ledger and not refresh:
+            def summarize_frames(progress):
+                def provider_factory():
+                    provider, policy = connect_operation_provider(
+                        COMPARISON_SUMMARY_OPERATION
+                    )
+                    detail = policy.model or policy.provider_id
+                    if policy.reasoning_effort is not None:
+                        detail += f" · reasoning {policy.reasoning_effort}"
+                    progress.update(f"summarizing · {detail}", step=2)
+                    return provider
+
+                return run_comparison_summary(
+                    store=store,
+                    reference_access=reference_access,
+                    compared_access=compared_access,
+                    reference=reference,
+                    compared=compared,
+                    current_name=current_name,
+                    include_descendants=(
+                        reference_descendants,
+                        compared_descendants,
+                    ),
+                    memory_selectors=(reference_memory, compared_memory),
+                    provider_factory=provider_factory,
+                    context_loader=load_comparison_context,
+                )
+
+            summary = run_command_wait(
+                "COMPARE",
+                "connecting provider",
+                total=2,
+                work=summarize_frames,
+            )
+            _present_comparison_summary(summary, snapshot=snapshot)
+            return
 
         def analyze_input(comparison_input: ComparisonInput) -> ComparisonAnalysis:
             def compare_frames(progress):
@@ -661,6 +711,7 @@ def cmd(
         CompareCommandError,
         ComparisonError,
         ComparisonProviderError,
+        ComparisonSummaryError,
         ConcurrentComparisonUpdateError,
         FileNotFoundError,
         OSError,

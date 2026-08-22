@@ -33,6 +33,9 @@ from memcommit.comparison_store import load_comparison_analysis
 from memcommit.config import Config
 from memcommit.context import Context
 from memcommit.granted_comparison_store import load_granted_comparison_artifact
+from memcommit.infrastructure.providers.policy import (
+    resolve_codex_evaluation_policy,
+)
 from memcommit.profile_config import load_profile_registry
 from memcommit.profiles import authority_grant_snapshot_lock
 from memcommit.provider_types import (
@@ -319,9 +322,9 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--reasoning",
         choices=CODEX_REASONING_EFFORTS,
-        default="medium",
+        default=None,
     )
-    parser.add_argument("--timeout", type=float, default=DEFAULT_TIMEOUT_SECONDS)
+    parser.add_argument("--timeout", type=float, default=None)
     parser.add_argument("--refresh", action="store_true")
     parser.add_argument("--output", type=Path, default=None)
     return parser
@@ -329,11 +332,19 @@ def _parser() -> argparse.ArgumentParser:
 
 def main(argv: Sequence[str] | None = None) -> int:
     args = _parser().parse_args(argv)
-    if args.timeout <= 0:
+    if args.timeout is not None and args.timeout <= 0:
         print("--timeout must be positive.", file=sys.stderr)
         return 2
     config = Config()
-    model = args.model or config.model_for_provider(CODEX_CHATGPT_PROVIDER)
+    policy = resolve_codex_evaluation_policy(
+        "compare_contexts",
+        config=config,
+        model=args.model,
+        reasoning_effort=args.reasoning,
+        timeout_seconds=args.timeout,
+    )
+    model = policy.model
+    reasoning = policy.reasoning_effort
     if not model:
         print("No Codex model configured; pass --model explicitly.", file=sys.stderr)
         return 2
@@ -351,13 +362,13 @@ def main(argv: Sequence[str] | None = None) -> int:
             "PREWARM "
             f"{contexts[0].name} {len(contexts[0].memories)} -> "
             f"{contexts[1].name} {len(contexts[1].memories)} "
-            f"model={model} reasoning={args.reasoning}",
+            f"model={model} reasoning={reasoning}",
             flush=True,
         )
         provider = _TimedProvider(CodexChatGPTProvider.connect(
-            timeout=args.timeout,
+            timeout=policy.timeout_seconds,
             model=model,
-            reasoning_effort=args.reasoning,
+            reasoning_effort=reasoning,
         ))
         analyzer = _ProviderAnalyzer(provider)
         _, receipt = prewarm_pair(
@@ -371,7 +382,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             analyze=analyzer,
             profile_name=registry.active.name,
             requested_model=model,
-            requested_reasoning=args.reasoning,
+            requested_reasoning=reasoning,
             refresh=args.refresh,
         )
         output = args.output or _default_output_path()

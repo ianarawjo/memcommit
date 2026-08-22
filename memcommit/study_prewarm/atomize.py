@@ -15,6 +15,9 @@ from memcommit.atomize import (
     atomize_analysis_matches_context,
 )
 from memcommit.config import Config
+from memcommit.infrastructure.providers.policy import (
+    resolve_operation_provider_policy,
+)
 from memcommit.context import Context, Memory
 from memcommit.profile_config import ProfileEntry, ProfileRegistry, study_run_identity
 from memcommit.profiles import (
@@ -279,15 +282,12 @@ def build_atomize_prewarm_artifact(
 
 
 def _configured_semantic_identity() -> tuple[str, str | None, str | None]:
-    config = Config()
-    provider = config.semantic_provider()
-    model = config.model_for_provider(provider)
-    reasoning = (
-        config.codex_reasoning_effort()
-        if provider == "codex_chatgpt"
-        else None
+    resolved = resolve_operation_provider_policy(
+        "impact_atomize",
+        config=Config(),
+        mode="STUDY_PARTICIPANT",
     )
-    return provider, model, reasoning
+    return resolved.provider_id, resolved.model, resolved.reasoning_effort
 
 
 def _validate_artifact(

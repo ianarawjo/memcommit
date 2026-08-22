@@ -50,6 +50,9 @@ from memcommit.comparison import (
 )
 from memcommit.config import Config
 from memcommit.context import Context, Memory
+from memcommit.infrastructure.providers.policy import (
+    resolve_codex_evaluation_policy,
+)
 from memcommit.eval.compare_latency_ab import (
     COMPACT_PROMPT_VERSION,
     _run_compact,
@@ -1009,9 +1012,9 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--reasoning",
         choices=CODEX_REASONING_EFFORTS,
-        default="medium",
+        default=None,
     )
-    parser.add_argument("--timeout", type=float, default=DEFAULT_TIMEOUT_SECONDS)
+    parser.add_argument("--timeout", type=float, default=None)
     parser.add_argument("--workers", type=int, default=DEFAULT_WORKERS)
     parser.add_argument("--retries", type=int, default=1)
     parser.add_argument("--output-root", type=Path, default=None)
@@ -1021,14 +1024,27 @@ def _parser() -> argparse.ArgumentParser:
 
 def main(argv: Sequence[str] | None = None) -> int:
     args = _parser().parse_args(argv)
-    if args.timeout <= 0 or args.workers < 1 or args.retries < 0:
+    if (
+        (args.timeout is not None and args.timeout <= 0)
+        or args.workers < 1
+        or args.retries < 0
+    ):
         print("Timeout/workers must be positive and retries nonnegative.", file=sys.stderr)
         return 2
     config = Config()
-    model = args.model or config.model_for_provider(CODEX_CHATGPT_PROVIDER)
+    policy = resolve_codex_evaluation_policy(
+        "compare_contexts",
+        config=config,
+        model=args.model,
+        reasoning_effort=args.reasoning,
+        timeout_seconds=args.timeout,
+    )
+    model = policy.model
+    reasoning = policy.reasoning_effort
     if not model:
         print("No Codex model configured; pass --model explicitly.", file=sys.stderr)
         return 2
+    assert reasoning is not None
     try:
         registry = load_profile_registry()
         store = MemoryStore(create=False)
@@ -1044,19 +1060,19 @@ def main(argv: Sequence[str] | None = None) -> int:
         plans = build_graph_plan(
             catalog,
             model=model,
-            reasoning=args.reasoning,
+            reasoning=reasoning,
             tasks=args.tasks or TASK_PREFIXES,
         )
         output_root = args.output_root or _default_output_root(
             registry.active.name,
             model,
-            args.reasoning,
+            reasoning,
         )
         plan_summary = {
             "output_root": str(output_root),
             "profile_name": registry.active.name,
             "model": model,
-            "reasoning": args.reasoning,
+            "reasoning": reasoning,
             "tasks": [
                 {
                     "task": plan.task,
@@ -1082,9 +1098,9 @@ def main(argv: Sequence[str] | None = None) -> int:
 
         def provider_factory() -> _Provider:
             return CodexChatGPTProvider.connect(
-                timeout=args.timeout,
+                timeout=policy.timeout_seconds,
                 model=model,
-                reasoning_effort=args.reasoning,
+                reasoning_effort=reasoning,
             )
 
         summary = run_graph_prewarm(
@@ -1094,7 +1110,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             profile_name=registry.active.name,
             profile_uid=registry.active.uid,
             model=model,
-            reasoning=args.reasoning,
+            reasoning=reasoning,
             workers=args.workers,
             retries=args.retries,
             progress=lambda message: print(message, flush=True),

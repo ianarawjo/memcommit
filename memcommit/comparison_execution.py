@@ -39,6 +39,9 @@ from memcommit.granted_comparison_store import (
     save_granted_comparison_artifact,
 )
 from memcommit.profiles import ProfileError, authority_grant_snapshot_lock
+from memcommit.infrastructure.providers.policy import (
+    COMPARE_LEDGER_PROVIDER_POLICY,
+)
 from memcommit.query_provider import CodexChatGPTProvider
 from memcommit.store import MemoryStore
 
@@ -46,7 +49,9 @@ if TYPE_CHECKING:
     from memcommit.profile_config import ProfileRegistry
 
 
-COMPARISON_AGGREGATE_TIMEOUT_SECONDS = 900
+COMPARISON_AGGREGATE_TIMEOUT_SECONDS = int(
+    COMPARE_LEDGER_PROVIDER_POLICY.timeout_floor_seconds or 900
+)
 
 
 @dataclass(frozen=True)

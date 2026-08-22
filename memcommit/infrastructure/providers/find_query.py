@@ -2,10 +2,19 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, replace
+from dataclasses import replace
 
 from memcommit.config import Config
 from memcommit.provider_types import CODEX_CHATGPT_PROVIDER, SemanticProvider
+from memcommit.infrastructure.providers.policy import (
+    FIND_PROVIDER_POLICY,
+    HELP_PROVIDER_POLICY,
+    QUERY_PROVIDER_POLICY,
+    OperationProviderPolicy,
+    ProviderPolicyOverride,
+    operation_provider_policy,
+    resolve_operation_provider_policy,
+)
 from memcommit.query_provider import (
     CodexChatGPTProvider,
     connect_query_provider as _connect_configured_query_provider,
@@ -13,32 +22,6 @@ from memcommit.query_provider import (
 from memcommit.study_action_log import (
     record_provider_connection_finished,
     record_provider_connection_started,
-)
-
-
-@dataclass(frozen=True)
-class OperationProviderPolicy:
-    """One explicit model/reasoning choice for a semantic operation."""
-
-    operation: str
-    model: str
-    reasoning_effort: str
-
-
-FIND_PROVIDER_POLICY = OperationProviderPolicy(
-    operation="search",
-    model="gpt-5.6-terra",
-    reasoning_effort="low",
-)
-QUERY_PROVIDER_POLICY = OperationProviderPolicy(
-    operation="query",
-    model="gpt-5.6-sol",
-    reasoning_effort="none",
-)
-HELP_PROVIDER_POLICY = OperationProviderPolicy(
-    operation="help",
-    model="gpt-5.6-sol",
-    reasoning_effort="none",
 )
 
 
@@ -65,18 +48,30 @@ def _connect_pinned_codex_provider(
     timeout_seconds: float | None = None,
 ) -> CodexChatGPTProvider:
     """Connect one evaluated policy while retaining shared auth and logging."""
-
-    timeout = (
-        Config().semantic_timeout_seconds()
-        if timeout_seconds is None
-        else timeout_seconds
+    config = Config()
+    authored = operation_provider_policy(policy.operation)
+    explicit = policy != authored or timeout_seconds is not None
+    resolved = resolve_operation_provider_policy(
+        policy.operation,
+        config=config,
+        mode="EVALUATION" if explicit else "PRODUCTION",
+        override=(
+            ProviderPolicyOverride(
+                provider_id=CODEX_CHATGPT_PROVIDER,
+                model=policy.model,
+                reasoning_effort=policy.reasoning_effort,
+                timeout_seconds=timeout_seconds,
+            )
+            if explicit
+            else None
+        ),
     )
     started_at = record_provider_connection_started(policy.operation)
     try:
         provider = CodexChatGPTProvider.connect(
-            timeout=timeout,
-            model=policy.model,
-            reasoning_effort=policy.reasoning_effort,
+            timeout=resolved.timeout_seconds,
+            model=resolved.model,
+            reasoning_effort=resolved.reasoning_effort,
         )
     except BaseException as error:
         record_provider_connection_finished(

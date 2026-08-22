@@ -38,25 +38,33 @@ from memcommit.semantic.changes import (
     apply_changes,
 )
 from memcommit.store import MemoryStore
+from memcommit.infrastructure.providers.policy import (
+    FORGET_PROVIDER_POLICY,
+    resolve_operation_provider_policy,
+)
 from memcommit.study_action_log import (
     record_provider_connection_finished,
     record_provider_connection_started,
 )
 
 
-FORGET_PROVIDER_MODEL = "gpt-5.6-sol"
-FORGET_PROVIDER_REASONING_EFFORT = "none"
+FORGET_PROVIDER_MODEL = FORGET_PROVIDER_POLICY.model
+FORGET_PROVIDER_REASONING_EFFORT = FORGET_PROVIDER_POLICY.reasoning_effort
 
 
 def connect_forget_provider() -> CodexChatGPTProvider:
     """Connect Forget's benchmark-selected provisional provider policy."""
 
+    resolved = resolve_operation_provider_policy(
+        "forget",
+        config=Config(),
+    )
     started_at = record_provider_connection_started("forget")
     try:
         provider = CodexChatGPTProvider.connect(
-            timeout=Config().semantic_timeout_seconds(),
-            model=FORGET_PROVIDER_MODEL,
-            reasoning_effort=FORGET_PROVIDER_REASONING_EFFORT,
+            timeout=resolved.timeout_seconds,
+            model=resolved.model,
+            reasoning_effort=resolved.reasoning_effort,
         )
     except BaseException as error:
         record_provider_connection_finished(

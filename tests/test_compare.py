@@ -46,6 +46,41 @@ from memcommit.query_provider import CodexChatGPTProvider
 runner = CliRunner()
 
 
+def test_bare_compare_enters_setup_without_session_launcher(
+    isolated_store,
+    monkeypatch,
+):
+    monkeypatch.setattr(
+        compare_command,
+        "choose_comparison_session",
+        lambda *_args, **_kwargs: pytest.fail(
+            "bare Compare must not browse saved analyses"
+        ),
+    )
+    monkeypatch.setattr(
+        compare_command,
+        "choose_compare_setup",
+        lambda _store: CompareSetupReceipt("setup/reference", "setup/peer"),
+    )
+    calls = []
+    monkeypatch.setattr(compare_command, "cmd", lambda **kwargs: calls.append(kwargs))
+
+    result = runner.invoke(app, ["compare"])
+
+    assert result.exit_code == 0, result.output
+    assert calls == [
+        {
+            "from_": "setup/reference",
+            "to": "setup/peer",
+            "refresh": False,
+            "ledger": False,
+            "snapshot": False,
+            "reference_descendants": False,
+            "compared_descendants": False,
+        }
+    ]
+
+
 def test_compare_launcher_passes_exact_setup_memories_to_command(
     isolated_store,
     monkeypatch,
@@ -79,7 +114,7 @@ def test_compare_launcher_passes_exact_setup_memories_to_command(
             "from_": "focused/reference",
             "to": "focused/peer",
             "refresh": False,
-            "ledger": False,
+            "ledger": True,
             "snapshot": False,
             "reference_descendants": False,
             "compared_descendants": False,
@@ -343,50 +378,18 @@ def test_compare_creates_durable_read_only_analysis_and_resumes_provider_free(
 
     created = runner.invoke(
         app,
-        ["compare", "--to", compared.name],
+        ["compare", "--to", compared.name, "--refresh"],
     )
 
     assert created.exit_code == 0, created.output
     assert len(provider.payloads) == 1
-    assert "MEM COMPARE · SYMMETRIC PEERS" in created.output
-    assert "Reference: task2/advisor1 (layout only; no authority)" in (
-        created.output
-    )
-    assert "Analysis:" in created.output
-    assert "NEW" in created.output
-    assert "METRICS · MEMORIES 2 + 2 · RELATIONS 3 · POTENTIAL CONFLICTS 0" in (
-        created.output
-    )
-    assert created.output.index("METRICS ·") < created.output.index(
-        "WHAT MEM UNDERSTOOD"
-    )
-    assert "WHAT BOTH CONTAIN · 1" in created.output
-    assert (
-        "ONLY IN task2/advisor1 · 1 · "
-        "not automatically a deficiency"
-    ) in created.output
-    assert (
-        "ONLY IN task2/advisor2 · 1 · "
-        "not automatically a deficiency"
-    ) in created.output
-    assert "Both advisors require a concise proposal" in created.output
-    assert "The reference alone adds guidance about headings." in (
-        created.output
-    )
-    assert (
-        "The complete source-linked relation ledger is saved. "
-        "Inspect it with:\n"
-        "  mem compare task2/advisor1 task2/advisor2 --ledger"
-    ) in (
-        created.output
-    )
-    assert "Create a new result Context" not in created.output
-    assert "mem meld" not in created.output
-    assert created.output.rstrip().endswith(
-        "mem compare task2/advisor1 task2/advisor2 --ledger"
-    )
-    assert "\nWHAT DIFFERS" not in created.output
-    assert "\nPOTENTIAL CONFLICTS" not in created.output
+    assert "COMPARE COMPLETE · task2/advisor1 ↔ task2/advisor2" in created.output
+    assert "UNDERSTOOD · The two equal-authority advisors" in created.output
+    assert "RELATIONS · SAME 1 · DIFFERENT 2 · UNCLEAR 0" in created.output
+    assert "ATTENTION · 0 potential conflicts" in created.output
+    assert "ANALYSIS ·" in created.output
+    assert "REVIEW · mem review compare --session" in created.output
+    assert "MEM COMPARE · SYMMETRIC PEERS" not in created.output
     assert reference.uid[:8] not in created.output
     assert next(iter(reference.memories))[:8] not in created.output
     assert next(iter(compared.memories))[:8] not in created.output
@@ -442,7 +445,7 @@ def test_compare_creates_durable_read_only_analysis_and_resumes_provider_free(
 
     resumed = runner.invoke(
         app,
-        ["compare", "--to", compared.name],
+        ["compare", "--to", compared.name, "--ledger"],
     )
 
     assert resumed.exit_code == 0, resumed.output
@@ -462,7 +465,7 @@ def test_compare_accepts_one_or_two_positional_contexts_and_reuses_legacy_route(
 
     current_pair = runner.invoke(
         app,
-        ["compare", compared.name, "--snapshot"],
+        ["compare", compared.name, "--ledger", "--snapshot"],
     )
 
     assert current_pair.exit_code == 0, current_pair.output
@@ -472,7 +475,7 @@ def test_compare_accepts_one_or_two_positional_contexts_and_reuses_legacy_route(
     store._write_state({"current": None})
     explicit_pair = runner.invoke(
         app,
-        ["compare", reference.name, compared.name, "--snapshot"],
+        ["compare", reference.name, compared.name, "--ledger", "--snapshot"],
     )
     legacy_pair = runner.invoke(
         app,
@@ -482,6 +485,7 @@ def test_compare_accepts_one_or_two_positional_contexts_and_reuses_legacy_route(
             reference.name,
             "--to",
             compared.name,
+            "--ledger",
             "--snapshot",
         ],
     )
@@ -542,6 +546,7 @@ def test_compare_descendant_flags_freeze_lexical_child_memories(
             "--to",
             compared.name,
             "-r",
+            "--ledger",
             "--snapshot",
         ],
     )
@@ -569,14 +574,14 @@ def test_refresh_and_source_change_each_replace_the_ordered_latest_slot(
 
     assert runner.invoke(
         app,
-        ["compare", "--to", compared.name],
+        ["compare", "--to", compared.name, "--ledger"],
     ).exit_code == 0
     first = load_comparison_analysis(reference.uid, compared.uid)
     assert first is not None
 
     refreshed = runner.invoke(
         app,
-        ["compare", "--to", compared.name, "--refresh"],
+        ["compare", "--to", compared.name, "--ledger", "--refresh"],
     )
 
     assert refreshed.exit_code == 0, refreshed.output
@@ -590,7 +595,7 @@ def test_refresh_and_source_change_each_replace_the_ordered_latest_slot(
     store.save(changed)
     rerun = runner.invoke(
         app,
-        ["compare", "--to", compared.name],
+        ["compare", "--to", compared.name, "--ledger"],
     )
 
     assert rerun.exit_code == 0, rerun.output
@@ -615,13 +620,13 @@ def test_reverse_orientation_has_an_independent_cache_slot(
 
     forward = runner.invoke(
         app,
-        ["compare", "--to", compared.name],
+        ["compare", "--to", compared.name, "--ledger"],
     )
     assert forward.exit_code == 0, forward.output
     store.set_current(compared.name)
     reverse = runner.invoke(
         app,
-        ["compare", "--to", reference.name],
+        ["compare", "--to", reference.name, "--ledger"],
     )
 
     assert reverse.exit_code == 0, reverse.output
@@ -638,7 +643,7 @@ def test_reverse_orientation_has_an_independent_cache_slot(
     store.set_current(reference.name)
     resumed = runner.invoke(
         app,
-        ["compare", "--to", compared.name],
+        ["compare", "--to", compared.name, "--ledger"],
     )
     assert resumed.exit_code == 0
     assert "REUSED" in resumed.output
@@ -656,7 +661,7 @@ def test_relative_peer_locator_uses_active_namespace_and_reuses_cache(
 
     relative = runner.invoke(
         app,
-        ["compare", "../advisor2"],
+        ["compare", "../advisor2", "--ledger"],
     )
 
     assert relative.exit_code == 0, relative.output
@@ -673,7 +678,7 @@ def test_relative_peer_locator_uses_active_namespace_and_reuses_cache(
 
     canonical = runner.invoke(
         app,
-        ["compare", "--to", compared.name],
+        ["compare", "--to", compared.name, "--ledger"],
     )
 
     assert canonical.exit_code == 0, canonical.output
@@ -736,6 +741,7 @@ def test_compare_explicit_from_does_not_change_current_context(
             reference.name,
             "--to",
             compared.name,
+            "--ledger",
             "--snapshot",
         ],
     )
@@ -763,6 +769,7 @@ def test_compare_explicit_endpoints_work_without_current_context(
             reference.name,
             "--to",
             compared.name,
+            "--ledger",
             "--snapshot",
         ],
     )
@@ -960,7 +967,7 @@ def test_failed_refresh_preserves_previous_analysis(
     _patch_provider(monkeypatch, provider)
     assert runner.invoke(
         app,
-        ["compare", "--to", compared.name],
+        ["compare", "--to", compared.name, "--ledger"],
     ).exit_code == 0
     path = comparison_analysis_path(reference.uid, compared.uid)
     before = path.read_bytes()
@@ -976,7 +983,7 @@ def test_failed_refresh_preserves_previous_analysis(
     )
     failed = runner.invoke(
         app,
-        ["compare", "--to", compared.name, "--refresh"],
+        ["compare", "--to", compared.name, "--ledger", "--refresh"],
     )
 
     assert failed.exit_code == 1
@@ -1005,7 +1012,7 @@ def test_source_change_during_provider_call_is_not_saved(
     _patch_provider(monkeypatch, MutatingProvider())
     result = runner.invoke(
         app,
-        ["compare", "--to", compared.name],
+        ["compare", "--to", compared.name, "--ledger"],
     )
 
     assert result.exit_code == 1
@@ -1022,7 +1029,7 @@ def test_saved_frame_snapshot_is_cryptographically_bound_to_context_digest(
     _patch_provider(monkeypatch, ExhaustiveCompareProvider())
     assert runner.invoke(
         app,
-        ["compare", "--to", compared.name],
+        ["compare", "--to", compared.name, "--ledger"],
     ).exit_code == 0
     path = comparison_analysis_path(reference.uid, compared.uid)
     value = json.loads(path.read_text())
@@ -1050,7 +1057,7 @@ def test_older_supported_ruleset_is_readable_but_not_reused(
     _patch_provider(monkeypatch, provider)
     assert runner.invoke(
         app,
-        ["compare", "--to", compared.name],
+        ["compare", "--to", compared.name, "--ledger"],
     ).exit_code == 0
     path = comparison_analysis_path(reference.uid, compared.uid)
     value = json.loads(path.read_text())
@@ -1068,7 +1075,7 @@ def test_older_supported_ruleset_is_readable_but_not_reused(
 
     replaced = runner.invoke(
         app,
-        ["compare", "--to", compared.name],
+        ["compare", "--to", compared.name, "--ledger"],
     )
 
     assert replaced.exit_code == 0, replaced.output
@@ -1323,12 +1330,12 @@ def test_deleting_either_source_removes_both_orientations(
     _patch_provider(monkeypatch, provider)
     assert runner.invoke(
         app,
-        ["compare", "--to", compared.name],
+        ["compare", "--to", compared.name, "--ledger"],
     ).exit_code == 0
     store.set_current(compared.name)
     assert runner.invoke(
         app,
-        ["compare", "--to", reference.name],
+        ["compare", "--to", reference.name, "--ledger"],
     ).exit_code == 0
     forward = comparison_analysis_path(reference.uid, compared.uid)
     reverse = comparison_analysis_path(compared.uid, reference.uid)
@@ -1477,7 +1484,10 @@ def test_compare_sessions_catalog_and_bare_picker_are_provider_free(
     reference, compared = _task2_contexts(store)
     provider = ExhaustiveCompareProvider()
     _patch_provider(monkeypatch, provider)
-    created = runner.invoke(app, ["compare", "--to", compared.name])
+    created = runner.invoke(
+        app,
+        ["compare", "--to", compared.name, "--ledger"],
+    )
     assert created.exit_code == 0, created.output
     analysis = load_comparison_analysis(reference.uid, compared.uid)
     assert analysis is not None
@@ -1520,12 +1530,11 @@ def test_compare_sessions_catalog_and_bare_picker_are_provider_free(
         "memcommit.commands.compare.connect_codex_chatgpt_provider",
         provider_must_not_connect,
     )
-    resumed = runner.invoke(app, ["compare"])
+    resumed = runner.invoke(app, ["compare", "--sessions"])
 
     assert resumed.exit_code == 0, resumed.output
-    assert "REUSED" in resumed.output
-    assert f"Reference: {reference.name}" in resumed.output
-    assert f"Compared:  {compared.name}" in resumed.output
+    assert "COMPARE COMPLETE · task2/advisor1 ↔ task2/advisor2" in resumed.output
+    assert "REVIEW · mem review compare --session" in resumed.output
     assert store.current_context_name() == unrelated.name
     assert len(provider.payloads) == 1
 
@@ -1543,7 +1552,7 @@ def test_compare_sessions_empty_and_forged_receipts_fail_closed(
     )
 
     assert choose_comparison_session(store) is None
-    empty = runner.invoke(app, ["compare"])
+    empty = runner.invoke(app, ["compare", "--sessions"])
     assert empty.exit_code == 0, empty.output
     assert "Compare selection ended; no analysis was opened." in empty.output
 

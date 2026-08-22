@@ -17,14 +17,24 @@ mem compare --to PEER
 mem compare --from REFERENCE --to PEER
 ```
 
-Bare `mem compare` and `mem compare --sessions` open the shared saved-work
-picker. This is compatible with the earlier command because omitting `--to`
-previously produced only a missing-option error; it did not mean “start a new
-comparison.” One positional operand is the peer and retains the active Context
-as reference; two positional operands explicitly name reference and peer.
-`--from` and `--to` remain compatibility aliases, but positional endpoints and
-endpoint options cannot be mixed in one invocation. `--refresh` still requires
-an explicit peer and is rejected on the picker route.
+Bare `mem compare` opens the shared A/B endpoint setup for one new transient
+summary. `mem compare --sessions` alone opens the shared saved-work picker.
+Choosing New there delegates to the same endpoint setup but retains the
+launcher's explicit exhaustive saved-analysis contract, so it produces a row
+that the launcher can reopen. One positional operand is
+the peer and retains the active Context as reference; two positional operands
+explicitly name reference and peer. `--from` and `--to` remain compatibility
+aliases, but positional endpoints and endpoint options cannot be mixed in one
+invocation. `--refresh` still requires an explicit peer and is rejected on the
+picker route.
+
+The unqualified explicit-pair route is now a transient lightweight summary.
+It returns an overview and four optional source-linked prose sections without
+constructing or saving relations, assignments, Issues, or a Meld basis.
+`--ledger` explicitly selects the exhaustive saved analysis described by the
+remainder of this document; `--refresh` retains that deep replacement contract.
+The split and migration boundary are recorded in
+[`compare-summary-design-rationale.md`](compare-summary-design-rationale.md).
 
 The picker presents Compare as a **saved read-only analysis**, not as a chat,
 dialogue, or mutable session. Each row names the ordered pair, reports relation
@@ -42,8 +52,8 @@ distinct entries even though the compact title uses a symmetric peer marker.
 Selecting a row freezes its analysis UID process-locally. Compare reloads that
 exact persisted UID after the picker closes, loads both sources by the names
 and UIDs captured in the artifact, verifies their complete direct digests and
-the current Compare ruleset, and only then opens the saved analysis workbench
-in a TTY. It does
+the current Compare ruleset, and only then prints a bounded saved-analysis
+receipt with the exact `mem review compare --session UID` route. It does
 not consult or switch the global current Context after selection, connect a
 provider, refresh an analysis, save a replacement, or create a checkpoint. A
 deleted, replaced, stale, or older-ruleset selection fails with an explicit
@@ -58,9 +68,9 @@ one ordered pair are outside this first selector slice.
 
 The picker includes both ordinary comparison slots and authorized retained or
 grant-bound comparison artifacts. Otherwise a participant could successfully
-save a granted Compare result but have no route back to it from bare
-`mem compare`. Reopening revalidates the artifact according to its retention
-mode and never broadens its source grant.
+save a granted Compare result but have no route back to it from
+`mem compare --sessions`. Reopening revalidates the artifact according to its
+retention mode and never broadens its source grant.
 
 The active Context is the display reference when one positional `PEER` or only
 `--to PEER` is supplied. Two positional Contexts are `REFERENCE PEER`; the
@@ -99,8 +109,9 @@ spellings reuse the same durable analysis. The shared contract and its
 non-goals are recorded in
 [`context-locator-design-rationale.md`](context-locator-design-rationale.md).
 
-Compare performs one aggregate semantic call over the two complete bounded
-direct-Memory frames. It saves an immutable `ComparisonAnalysis` containing:
+Deep Compare performs one aggregate semantic call over the two complete
+bounded direct-Memory frames. It saves an immutable `ComparisonAnalysis`
+containing:
 
 - exact ordered source Context identities, names, digests, Memory order, and
   Memory snapshots;
@@ -121,9 +132,9 @@ was still running when the configured 600-second transport limit expired. The
 larger ceiling does not relax input, output, schema, coverage, or one-call
 invariants; it only allows the already-authorized indivisible call to finish.
 
-## Why the analysis persists
+## Why the deep analysis persists
 
-One-shot interaction does not imply disposable analysis. Provider output is
+Deep one-shot interaction does not imply disposable analysis. Provider output is
 not assumed to be deterministic, and a later Meld must be able to identify
 the exact relations the person inspected. Reopening an unchanged ordered pair
 therefore renders the saved analysis without another provider call.
@@ -136,7 +147,7 @@ The latest ordered slot is:
 ```
 
 Context names do not determine storage paths. If either source UID, name,
-complete direct record digest, or order changes, ordinary `mem compare`
+complete direct record digest, or order changes, `mem compare --ledger`
 performs a fresh analysis and atomically replaces that ordered latest slot.
 `--refresh` forces a fresh analysis even when both source snapshots still
 match. A changed semantic ruleset also performs a fresh analysis while an
@@ -395,7 +406,7 @@ then revalidates the frozen Compare UID, both source bindings, grant/transfer
 policy, and the target before atomically creating any new result and its
 target-bound session. `Q` closes with no semantic or durable change. These
 actions deliberately exit rather than returning to a hidden cursor so their
-terminal output remains visible; bare `mem compare` is the stable resume
+terminal output remains visible; `mem compare --sessions` is the stable resume
 route.
 
 Non-TTY execution and explicit `--snapshot` use the compact report ordered by

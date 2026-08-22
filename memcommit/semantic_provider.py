@@ -30,6 +30,12 @@ from memcommit.study_action_log import (
     record_provider_connection_started,
     record_study_provider_turn,
 )
+from memcommit.infrastructure.providers.policy import (
+    ProviderPolicyMode,
+    ProviderPolicyOverride,
+    ResolvedProviderPolicy,
+    resolve_operation_provider_policy,
+)
 
 
 OLLAMA_DEFAULT_BASE_URL = "http://127.0.0.1:11434"
@@ -509,6 +515,82 @@ def connect_provider(
     return provider
 
 
+def connect_operation_provider(
+    operation: str,
+    *,
+    mode: ProviderPolicyMode = "PRODUCTION",
+    override: ProviderPolicyOverride | None = None,
+    config: Config | None = None,
+    env: dict[str, str] | None = None,
+) -> tuple[SemanticProvider, ResolvedProviderPolicy]:
+    """Connect the one centrally resolved policy for an operation.
+
+    The returned receipt is intentionally separate from mutable provider state:
+    production telemetry and Study artifacts can retain the exact policy even
+    when a provider object is later reused for another completion.
+    """
+
+    settings = config or Config()
+    resolved = resolve_operation_provider_policy(
+        operation,
+        config=settings,
+        mode=mode,
+        override=override,
+    )
+    environment = os.environ if env is None else env
+    started_at = record_provider_connection_started(operation)
+    try:
+        if resolved.provider_id == CODEX_CHATGPT_PROVIDER:
+            provider: SemanticProvider = CodexChatGPTProvider.connect(
+                env=dict(environment),
+                timeout=resolved.timeout_seconds,
+                model=resolved.model,
+                reasoning_effort=resolved.reasoning_effort,
+            )
+        elif resolved.provider_id == OLLAMA_PROVIDER:
+            if not resolved.model:
+                raise QueryProviderError(
+                    "The resolved Ollama operation policy has no model."
+                )
+            provider = OllamaProvider.connect(
+                model=resolved.model,
+                base_url=settings.ollama_base_url(),
+                timeout=resolved.timeout_seconds,
+                context_tokens=settings.semantic_context_tokens(),
+                max_output_tokens=settings.semantic_max_output_tokens(),
+                thinking=settings.semantic_thinking(),
+            )
+        elif resolved.provider_id == OPENROUTER_PROVIDER:
+            if not resolved.model:
+                raise QueryProviderError(
+                    "The resolved OpenRouter operation policy has no model."
+                )
+            provider = OpenRouterProvider.connect(
+                model=resolved.model,
+                api_key=environment.get("OPENROUTER_API_KEY", ""),
+                timeout=resolved.timeout_seconds,
+                max_output_tokens=settings.semantic_max_output_tokens(),
+                zdr=settings.openrouter_zdr(),
+            )
+        else:  # pragma: no cover - resolver has already closed this boundary.
+            raise QueryProviderError(
+                f"Unsupported semantic provider {resolved.provider_id!r}."
+            )
+    except BaseException as error:
+        record_provider_connection_finished(
+            operation,
+            started_at,
+            failure=error,
+        )
+        raise
+    record_provider_connection_finished(
+        operation,
+        started_at,
+        provider=resolved.provider_id,
+    )
+    return provider, resolved
+
+
 def _connect_provider(
     provider_id: str,
     *,
@@ -556,23 +638,21 @@ def connect_semantic_provider(
     config: Config | None = None,
     env: dict[str, str] | None = None,
 ) -> SemanticProvider:
-    """Resolve the configured provider once for one command process."""
+    """Resolve the shared inherited policy once for one command process."""
     global _provider_cache
     # Injected config/env calls are diagnostics and tests; they should never
     # populate the CLI-process cache with an artificial provider.
     if config is not None or env is not None:
-        settings = config or Config()
-        return connect_provider(
-            settings.semantic_provider(),
-            config=settings,
+        provider, _policy = connect_operation_provider(
+            "semantic_default",
+            config=config,
             env=env,
         )
+        return provider
     with _provider_cache_lock:
         if _provider_cache is None:
-            settings = Config()
-            _provider_cache = connect_provider(
-                settings.semantic_provider(),
-                config=settings,
+            _provider_cache, _policy = connect_operation_provider(
+                "semantic_default",
             )
         return _provider_cache
 

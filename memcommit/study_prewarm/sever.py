@@ -10,6 +10,9 @@ import uuid
 
 from memcommit.authority.access import ContextAccess, resolve_context_access
 from memcommit.config import Config
+from memcommit.infrastructure.providers.policy import (
+    resolve_operation_provider_policy,
+)
 from memcommit.context import Context
 from memcommit.context_naming import validate_portable_context_name
 from memcommit.derived_policy import (
@@ -179,11 +182,12 @@ def build_sever_prewarm_artifact(
 
 
 def _configured_semantic_identity() -> tuple[str, str | None, str | None]:
-    config = Config()
-    provider = config.semantic_provider()
-    model = config.model_for_provider(provider)
-    reasoning = config.codex_reasoning_effort() if provider == "codex_chatgpt" else None
-    return provider, model, reasoning
+    resolved = resolve_operation_provider_policy(
+        "sever",
+        config=Config(),
+        mode="STUDY_PARTICIPANT",
+    )
+    return resolved.provider_id, resolved.model, resolved.reasoning_effort
 
 
 def _validate_artifact(

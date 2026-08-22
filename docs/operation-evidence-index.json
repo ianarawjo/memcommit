@@ -33,6 +33,7 @@
     ],
     "compare": [
       "docs/compare-application-boundary-matrix.md",
+      "docs/compare-summary-design-rationale.md",
       "docs/compare-session-lifecycle-design-rationale.md",
       "docs/context-locator-design-rationale.md",
       "docs/mem-compare-design-rationale.md"
@@ -157,7 +158,9 @@
     "profile": [
       "docs/context-name-portability-design-rationale.md"
     ],
-    "provider": [],
+    "provider": [
+      "docs/semantic-provider-policy-design-rationale.md"
+    ],
     "pwd": [
       "docs/mem-pwd-design-rationale.md"
     ],

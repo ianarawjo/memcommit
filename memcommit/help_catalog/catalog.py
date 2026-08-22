@@ -117,7 +117,10 @@ _OPERATIONS = (
         "differs, and what appears only on one side.",
         "Context <-> Context -> comparison report",
         ExecutionKind.SEMANTIC,
-        "Read-only; neither Context is treated as authoritative",
+        (
+            "Default summary is transient and read-only; --ledger saves the "
+            "exhaustive relation basis used by Meld"
+        ),
         "Each side exact or readable descendants",
     ),
     _operation(

@@ -1244,11 +1244,14 @@ def test_compare_reads_recursive_grant_excludes_query_override_and_saves_nothing
         lambda: Provider(),
     )
     switched = runner.invoke(app, ["switch", wiki.name])
-    compared = runner.invoke(app, ["compare", "--to", "./services"])
+    compared = runner.invoke(
+        app,
+        ["compare", "--to", "./services", "--ledger"],
+    )
 
     assert switched.exit_code == 0, switched.output
     assert compared.exit_code == 0, compared.output + compared.stderr
-    assert "NOT SAVED · READ GRANT" in compared.output
+    assert "TEMPORARY · READ GRANT" in compared.output
     assert len(payloads) == 1
     encoded = json.dumps(payloads[0])
     assert "west lobby" in encoded
@@ -1638,7 +1641,10 @@ def test_granted_compare_is_retained_and_seeds_local_symmetric_meld(
         "memcommit.commands.compare.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
-    compared = runner.invoke(app, ["compare", "--to", wiki.name])
+    compared = runner.invoke(
+        app,
+        ["compare", "--to", wiki.name, "--ledger"],
+    )
 
     assert compared.exit_code == 0, compared.output + compared.stderr
     assert "SAVED · RETAINED" in compared.output

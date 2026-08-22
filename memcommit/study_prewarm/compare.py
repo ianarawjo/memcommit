@@ -23,6 +23,9 @@ from memcommit.comparison import (
 )
 from memcommit.comparison_provider import COMPARISON_PROVIDER_CONTRACT_VERSION
 from memcommit.config import Config
+from memcommit.infrastructure.providers.policy import (
+    resolve_operation_provider_policy,
+)
 from memcommit.context import Context
 from memcommit.context_targeting.loading import load_context_scope
 from memcommit.derived_policy import (
@@ -610,15 +613,12 @@ def build_compare_prewarm_artifact(
 
 
 def _configured_semantic_identity() -> tuple[str, str | None, str | None]:
-    config = Config()
-    provider = config.semantic_provider()
-    model = config.model_for_provider(provider)
-    reasoning = (
-        config.codex_reasoning_effort()
-        if provider == "codex_chatgpt"
-        else None
+    resolved = resolve_operation_provider_policy(
+        "compare_contexts",
+        config=Config(),
+        mode="STUDY_PARTICIPANT",
     )
-    return provider, model, reasoning
+    return resolved.provider_id, resolved.model, resolved.reasoning_effort
 
 
 def _task_root(name: str) -> str | None:

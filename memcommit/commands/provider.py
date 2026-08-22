@@ -21,6 +21,10 @@ from memcommit.provider_types import (
     ProviderIdentity,
 )
 from memcommit.query_provider import QueryProviderError, connect_semantic_provider
+from memcommit.infrastructure.providers.policy import (
+    POLICY_VERSION,
+    resolve_operation_provider_policy,
+)
 
 
 app = typer.Typer(no_args_is_help=True, help="Select and verify a semantic provider.")
@@ -159,12 +163,46 @@ def use_provider(
 
 
 @app.command("status")
-def provider_status() -> None:
-    """Show provider selection without contacting it or exposing credentials."""
+def provider_status(
+    operation: Annotated[
+        Optional[str],
+        typer.Option(
+            "--operation",
+            help="Resolve the effective policy for one provider operation",
+        ),
+    ] = None,
+    study: Annotated[
+        bool,
+        typer.Option(
+            "--study",
+            help="Resolve the participant-Study policy for the operation",
+        ),
+    ] = False,
+) -> None:
+    """Show global defaults or one effective operation policy, without contact."""
     config = Config()
     try:
-        provider = config.semantic_provider()
-        model = config.semantic_model()
+        if study and operation is None:
+            raise typer.BadParameter("--study requires --operation")
+        resolved = (
+            resolve_operation_provider_policy(
+                operation,
+                config=config,
+                mode="STUDY_PARTICIPANT" if study else "PRODUCTION",
+            )
+            if operation is not None
+            else None
+        )
+        provider = (
+            resolved.provider_id if resolved is not None else config.semantic_provider()
+        )
+        model = resolved.model if resolved is not None else config.semantic_model()
+        if resolved is not None:
+            typer.echo(f"operation: {resolved.operation}")
+            typer.echo(f"policy_mode: {resolved.mode.lower()}")
+            typer.echo(f"policy_source: {resolved.source.lower()}")
+            typer.echo(f"policy_version: {POLICY_VERSION}")
+            typer.echo(f"policy_digest: {resolved.digest}")
         typer.echo(f"provider: {provider}")
         typer.echo(
             "model: "
@@ -174,12 +212,20 @@ def provider_status() -> None:
                 else "Codex current recommended selection"
             )
         )
-        typer.echo(f"timeout_seconds: {config.semantic_timeout_seconds():g}")
+        typer.echo(
+            "timeout_seconds: "
+            f"{(resolved.timeout_seconds if resolved else config.semantic_timeout_seconds()):g}"
+        )
         typer.echo(f"max_output_tokens: {config.semantic_max_output_tokens()}")
         if provider == CODEX_CHATGPT_PROVIDER:
             typer.echo(
                 "reasoning: "
-                + (config.codex_reasoning_effort() or "Codex/model default")
+                + (
+                    resolved.reasoning_effort
+                    if resolved is not None and resolved.reasoning_effort
+                    else config.codex_reasoning_effort()
+                    or "Codex/model default"
+                )
             )
             preset = config.codex_preset()
             if preset:

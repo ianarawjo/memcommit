@@ -1,0 +1,4 @@
+$ mem compare capture/reference capture/peer                                                                                                                                        
+PTY · 180 COLUMNS × 52 ROWS                                                                                                                                                         
+PROFILE · ISOLATED CAPTURE STORE · CURRENT capture/reference                                                                                                                        
+MEM COMPARE · 2/2 · SUMMARIZING · GPT-5.6-SOL · REASONING NONE .. · 0s
