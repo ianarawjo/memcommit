@@ -1,4 +1,0 @@
-$ mem redo
-PTY 180 52
-[38;2;183;189;248m[1mRedid command: [0mmem meld test/update/from --into test/update/to --accept · Affected Contexts: 1 · Affected Memories: 2 · [38;2;138;173;244m+ 1 added[0m · [38;2;166;218;149m~ 1 edited[0m
-REDO VERIFICATION · SESSION APPLIED · TARGET MEMORIES 3 · CHECKPOINTS 3

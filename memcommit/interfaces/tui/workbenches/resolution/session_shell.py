@@ -492,18 +492,6 @@ def _impact_arrow_expansion(
     return None if expanded_uid == focused_uid else expanded_uid
 
 
-def _stacked_horizontal_key_message(kind: str) -> str:
-    """Explain the vertical path for a split frame without horizontal meaning."""
-
-    if kind == "RESPONSES":
-        return "Responses are stacked · use Up/Down for choices and Response."
-    if kind == "ITEM":
-        return "This detail is vertical · use Up/Down, or Tab to reach Responses."
-    if kind == "REPORT":
-        return "This report is vertical · use Up/Down between blocks."
-    return "This frame has no Left/Right action · use Up/Down or Tab."
-
-
 def _impact_lines(impact: ImpactView) -> list[str]:
     lines = [impact.title, impact.summary]
     if impact.detail:
@@ -3812,11 +3800,6 @@ def run_resolution_workbench_shell(
     def _copy_complete_viewer(event) -> None:
         copy_current_viewer(event, whole_document=True)
 
-    def explain_unused_split_horizontal_key() -> None:
-        """Make stacked-frame horizontal no-ops explicit instead of silent."""
-
-        set_status(_stacked_horizontal_key_message(split_kind()))
-
     @bindings.add("right", filter=~writable_input_focused)
     def _right(event) -> None:
         state = destination_editor_state["value"]
@@ -3839,8 +3822,6 @@ def run_resolution_workbench_shell(
                     strategy["index"] + 1,
                     len(global_strategies) - 1,
                 )
-            else:
-                explain_unused_split_horizontal_key()
             event.app.invalidate()
             return
         save_draft()
@@ -3869,8 +3850,6 @@ def run_resolution_workbench_shell(
                 impact_reason_expanded["uid"] = collapsed
             elif split_kind() == "RESOLVE_ALL" and global_strategies:
                 strategy["index"] = max(strategy["index"] - 1, 0)
-            else:
-                explain_unused_split_horizontal_key()
             event.app.invalidate()
             return
         save_draft()
@@ -4745,8 +4724,8 @@ def run_resolution_workbench_shell(
             )
         elif split_viewer_items:
             navigation_help = (
-                " ↑/↓ section  Tab Responses/Items  C response/comment  "
-                "Esc/Backspace report "
+                " ↑/↓ section/item  Tab switch  ←/→ option  "
+                "Enter choose/other  C send/comment  Esc/Backspace report "
             )
         elif (
             item is not None

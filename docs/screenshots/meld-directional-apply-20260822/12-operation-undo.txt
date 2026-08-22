@@ -1,4 +1,0 @@
-$ mem undo                                                                                                                                                                          
-PTY 180 52                                                                                                                                                                          
-Undid command: mem meld test/update/from --into test/update/to --accept · Affected Contexts: 1 · Affected Memories: 2 · ~ 1 edited · - 1 removed                                    
-UNDO VERIFICATION · SESSION READY_TO_APPLY · TARGET MEMORIES 2 · CHECKPOINTS 2

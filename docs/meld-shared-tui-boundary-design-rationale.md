@@ -95,45 +95,6 @@ mode still disables it, and changing modes still clears a Memory identity the
 new mode cannot represent. The executable draft and CLI mapping therefore
 receive the same mode, reach flags, direct-Memory selector, and result intent.
 
-The compact form has two distinct spatial axes. `Up` and `Down` move between
-the persistent `MODE`, endpoint, and `START MELD` rows, regardless of whether
-the current endpoint-row focus is its exact input, Browse action, descendant
-control, or Memory action. `Left` and `Right` move between the non-editor peer
-controls drawn on one endpoint row, while `Tab` and `Shift-Tab` retain the
-complete traversal fallback. Exact-name inputs keep ordinary Left/Right caret
-ownership, the Mode choice keeps its own Left/Right selection, and an opened
-Context tree keeps Left/Right expansion. Because descendant reach is rendered
-as one checked control rather than two horizontal choices, Space or Enter now
-changes that value; using Left/Right for both the value and the surrounding row
-made it impossible to reach Memory spatially without first broadening the
-scope and disabling exact-Memory selection. A visible completion menu, opened
-Context catalog, or opened Memory list temporarily owns its own navigation;
-reaching a Memory-list vertical edge closes that transient detail and continues
-to the adjacent persistent row, while Left closes the detail. This separation
-also prevents a Down press from moving sideways and prevents the Memory list
-from consuming arrows indefinitely at its edge. Typed draft semantics are
-unchanged.
-
-Browse and direct editing are two presentations of the same exact endpoint
-field, not separate staged values. Choosing a Context in Browse replaces that
-row's writable text, then returns focus to Browse; Left returns to the field so
-the chosen name can still be edited in place. While the field owns focus,
-Left/Right remain ordinary caret movement until Right reaches the end of the
-name. A further Right then crosses the visible boundary into Browse, while Tab
-remains the exhaustive traversal fallback. The runnable command and completion
-receipt are rebuilt from the current field text, which ensures both a catalog
-choice and a later direct correction change the actual FROM/TO operands rather
-than only their display labels.
-
-The saved Resolution Session keeps its stacked topology: Viewer, conditional
-Responses, Items, optional Save Location, and To Do. Its response choices are
-therefore an Up/Down sequence, not a Left/Right option strip. The session must
-not advertise the retired `Left/Right option` grammar after choices move into
-Responses, and an unsupported horizontal key now explains the correct vertical
-or Tab path instead of being consumed silently. Left/Right remains meaningful
-only for controls that visibly own horizontal semantics, including Impact
-rationale disclosure, Resolve All strategy, and Save Location tree expansion.
-
 The compact form renders in the terminal's main buffer and requests only its
 visible rows. It does not enter an alternate full-screen buffer or keep a
 flexible blank spacer merely to fill the viewport; terminal history above the

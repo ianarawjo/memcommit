@@ -2,8 +2,7 @@ $ mem meld --sessions -> New Meld · DIRECTIONAL
 PTY 180 52                                                                                                                                                                          
  NEW MELD · SETUP ONLY · NO PROVIDER, SESSION, RESULT, OR APPLY                                                                                                                     
   MODE · [   SYMMETRIC · CREATE SEPARATE RESULT ]  [ ✓ DIRECTIONAL · UPDATE EXISTING ] · ←/→ TO SELECT                                                                              
-› FROM › capture/incoming                        [ BROWSE ] CURRENT                           [   INCLUDE DESCENDANTS ]  [ MEMORY · e228a879 ]                                      
+› FROM › capture/incoming                        [ BROWSE ] CURRENT                           [   INCLUDE DESCENDANTS ]  [ MEMORY · fc6a81a8 ]                                      
   TO   › capture/baseline                        [ BROWSE ]                                   [   INCLUDE DESCENDANTS ]  [ MEMORY · WHOLE CONTEXT ]                                 
- COMMAND · RUNNABLE · ENTER TO START                                                                                                                                                
- mem meld capture/incoming capture/baseline --incoming-memory e228a879-a52a-4479-95b9-c07c188852cb                                                                                  
- FROM uses Memory e228a879.
+  [ START MELD ]                                                                                                                                                                    
+ FROM uses Memory fc6a81a8.

@@ -518,7 +518,7 @@ def test_common_endpoint_uppercase_m_loads_all_visible_context_memories():
         ("update", "mq", ("preview/a",)),
         (
             "meld",
-            "\x1b[C" + "\t" * 4 + "\r" + "\t" * 4 + "\rq",
+            "\x1b[C" + "\t" * 4 + "\x1b[B" + "\t" * 4 + "\x1b[Bq",
             ("preview/a", "preview/b"),
         ),
         ("atomize", "mq", ("preview/a",)),
@@ -859,7 +859,7 @@ def test_meld_directional_option_has_no_third_target(isolated_store):
     with create_pipe_input() as pipe_input:
         # Directional mode exposes independent A and B reach/Memory controls
         # but no C surface. Broaden only B, then continue to the action.
-        pipe_input.send_text("\x1b[C" + "\t" * 7 + " \t\t\r")
+        pipe_input.send_text("\x1b[C" + "\t" * 7 + "\x1b[C\t\t\r")
         receipt = choose_meld_setup(
             store,
             app_input=pipe_input,
