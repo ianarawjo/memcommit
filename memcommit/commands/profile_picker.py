@@ -77,7 +77,13 @@ class ProfilePickerEntry:
 class ProfilePickerAction:
     """One exact selector action returned only after its required key path."""
 
-    kind: Literal["USE", "RENAME_PROFILE", "REMOVE_PROFILE", "REMOVE_STUDY"]
+    kind: Literal[
+        "USE",
+        "CREATE_PROFILE",
+        "RENAME_PROFILE",
+        "REMOVE_PROFILE",
+        "REMOVE_STUDY",
+    ]
     name: str
     uid: str | None
     registry_generation: int | None
@@ -403,6 +409,22 @@ def _rename_review(action: ProfilePickerAction) -> ExactCommandReview:
     )
 
 
+def _creation_review(action: ProfilePickerAction) -> ExactCommandReview:
+    """Render the exact empty-Profile publication selected in the picker."""
+
+    if action.kind != "CREATE_PROFILE":
+        raise ValueError("Profile creation review requires an exact new name.")
+    return ExactCommandReview(
+        argv=("mem", "profile", "create", action.name),
+        effects=(
+            f"Create empty managed Profile {action.name!r} with a fresh UID.",
+            "Create a private store with no Contexts, Memories, Grants, or history.",
+            "Keep the current Profile selected.",
+            "Select the new Profile separately, then run mem init CONTEXT.",
+        ),
+    )
+
+
 def choose_profile(
     entries: Sequence[ProfilePickerEntry],
     *,
@@ -451,6 +473,7 @@ def choose_profile(
     }
     pending: dict[str, object | None] = {"action": None, "review": None}
     rename_target: dict[str, ProfilePickerAction | None] = {"action": None}
+    create_target = {"active": False}
     status = {"text": initial_status}
     status_is_error = {"value": False}
     background_turn: BackgroundExecutorTurn[str] = BackgroundExecutorTurn(
@@ -466,9 +489,15 @@ def choose_profile(
         and pending["action"] is None
         and not background_turn.busy
     )
+    create_mode = Condition(
+        lambda: create_target["active"]
+        and pending["action"] is None
+        and not background_turn.busy
+    )
     picker_mode = Condition(
         lambda: pending["action"] is None
         and rename_target["action"] is None
+        and not create_target["active"]
         and not background_turn.busy
     )
 
@@ -505,13 +534,29 @@ def choose_profile(
         input_name="profile-picker-rename",
         frame_style="class:profile-rename-field",
     )
+    create_field = ExactNameFieldControl.create(
+        ExactNameFieldView(
+            value="",
+            label="NEW PROFILE NAME",
+            state="NOT CREATED",
+            detail="Enter to review this exact empty Profile creation.",
+            validate=validate_profile_name,
+            value_label="Profile name",
+            # Creation must preserve the exact reviewed registry key; padding
+            # cannot be normalized into a different Profile identity.
+            strip_candidate=False,
+        ),
+        input_name="profile-picker-create",
+        frame_style="class:profile-create-field",
+    )
 
     def clear_stale_rename_error(_buffer) -> None:
-        if rename_target["action"] is not None:
+        if rename_target["action"] is not None or create_target["active"]:
             status["text"] = ""
             status_is_error["value"] = False
 
     rename_field.input.buffer.on_text_changed += clear_stale_rename_error
+    create_field.input.buffer.on_text_changed += clear_stale_rename_error
 
     def move(delta: int) -> None:
         selected["index"] = max(
@@ -547,6 +592,54 @@ def choose_profile(
                 registry_generation=registry_generation,
             )
         )
+
+    @bind_case_insensitive_key(bindings, "n", filter=picker_mode, eager=True)
+    def _edit_new_profile_name(event) -> None:
+        create_target["active"] = True
+        create_field.set_text("")
+        status["text"] = ""
+        status_is_error["value"] = False
+        event.app.layout.focus(create_field.input)
+        event.app.invalidate()
+
+    @bindings.add(
+        "enter",
+        filter=create_mode & has_focus(create_field.input),
+        eager=True,
+    )
+    def _review_new_profile(event) -> None:
+        try:
+            name = create_field.validate_candidate()
+        except (ProfileConfigError, TypeError, ValueError) as error:
+            status["text"] = display_escape_text(str(error))
+            status_is_error["value"] = True
+            event.app.invalidate()
+            return
+        action = ProfilePickerAction(
+            kind="CREATE_PROFILE",
+            name=name,
+            uid=None,
+            registry_generation=registry_generation,
+            # New ordinary Profiles append after all frozen Profile/Study rows.
+            row_index=len(rows),
+        )
+        pending["action"] = action
+        pending["review"] = _creation_review(action)
+        create_target["active"] = False
+        status["text"] = ""
+        status_is_error["value"] = False
+        event.app.layout.focus(control)
+        event.app.invalidate()
+
+    @bindings.add(
+        "c-j",
+        filter=create_mode & has_focus(create_field.input),
+        eager=True,
+    )
+    def _reject_new_profile_name_newline(event) -> None:
+        status["text"] = "Profile name must stay on one line"
+        status_is_error["value"] = True
+        event.app.invalidate()
 
     @bind_case_insensitive_key(bindings, "r", filter=picker_mode, eager=True)
     def _edit_profile_name(event) -> None:
@@ -656,9 +749,9 @@ def choose_profile(
         action = pending["action"]
         assert isinstance(action, ProfilePickerAction)
         reviewed_row_index = selected["index"]
-        # Rename is a short registry mutation. Return its frozen receipt to the
-        # Profile command so the picker is rebuilt from the next generation.
-        if action.kind == "RENAME_PROFILE" or apply_removal is None:
+        # Create and rename are short registry mutations. Return their frozen
+        # receipts so the picker is rebuilt from the next generation.
+        if action.kind in {"CREATE_PROFILE", "RENAME_PROFILE"} or apply_removal is None:
             event.app.exit(result=action)
             return
 
@@ -714,7 +807,13 @@ def choose_profile(
             action = pending["action"]
             pending["action"] = None
             pending["review"] = None
-            if (
+            if isinstance(action, ProfilePickerAction) and action.kind == "CREATE_PROFILE":
+                create_target["active"] = True
+                create_field.set_text(action.name)
+                status["text"] = "Create review cancelled"
+                status_is_error["value"] = False
+                event.app.layout.focus(create_field.input)
+            elif (
                 isinstance(action, ProfilePickerAction)
                 and action.kind == "RENAME_PROFILE"
             ):
@@ -731,6 +830,13 @@ def choose_profile(
             else:
                 status["text"] = "Removal review cancelled"
                 status_is_error["value"] = False
+            event.app.invalidate()
+            return
+        if create_target["active"]:
+            create_target["active"] = False
+            status["text"] = "Profile creation cancelled"
+            status_is_error["value"] = False
+            event.app.layout.focus(control)
             event.app.invalidate()
             return
         if rename_target["action"] is not None:
@@ -764,18 +870,19 @@ def choose_profile(
             action = rename_target["action"]
             assert isinstance(action, ProfilePickerAction)
             return " Rename Profile " + display_escape_text(action.name)
-        return (
-            (
-                " Review exact Profile rename"
-                if isinstance(pending["action"], ProfilePickerAction)
-                and pending["action"].kind == "RENAME_PROFILE"
-                else " Review irreversible deletion"
-            )
-            if review_mode()
-            else " Select a Profile or Study"
-        )
+        if create_mode():
+            return " Create an empty Profile"
+        if not review_mode():
+            return " Select a Profile or Study"
+        action = pending["action"]
+        if isinstance(action, ProfilePickerAction):
+            if action.kind == "CREATE_PROFILE":
+                return " Review exact Profile creation"
+            if action.kind == "RENAME_PROFILE":
+                return " Review exact Profile rename"
+        return " Review irreversible deletion"
 
-    def footer_text() -> str:
+    def footer_text():
         if background_turn.busy:
             close_note = (
                 " · close requested"
@@ -789,6 +896,11 @@ def choose_profile(
             )
         if review_mode():
             action = pending["action"]
+            if (
+                isinstance(action, ProfilePickerAction)
+                and action.kind == "CREATE_PROFILE"
+            ):
+                return " Enter/A create empty Profile  Esc back"
             if (
                 isinstance(action, ProfilePickerAction)
                 and action.kind == "RENAME_PROFILE"
@@ -811,6 +923,17 @@ def choose_profile(
                 else "class:memcommit.notification"
             )
             return [("", prefix + " · "), (message_style, message)]
+        if create_mode():
+            message = status["text"]
+            prefix = " Ctrl-U clear  Enter review exact command  Esc back"
+            if not message:
+                return prefix
+            message_style = (
+                "class:error"
+                if status_is_error["value"]
+                else "class:memcommit.notification"
+            )
+            return [("", prefix + " · "), (message_style, message)]
         row = current_row()
         action = (
             "D remove Study"
@@ -818,16 +941,23 @@ def choose_profile(
             else "Enter use  R rename  D remove Profile"
         )
         message = status["text"]
-        prefix = (
-            f" ↑/↓ move  {action}  Esc/q cancel"
-            f"  ·  {selected['index'] + 1}/{len(rows)}"
-        )
+        prefix = f" ↑/↓ move  {action}  "
+        suffix = f"  Esc/q cancel  ·  {selected['index'] + 1}/{len(rows)}"
         if not message:
-            return prefix
+            return [
+                ("", prefix),
+                ("class:semantic.create", "N new Profile"),
+                ("", suffix),
+            ]
         message_style = (
             "class:error" if status_is_error["value"] else "class:success"
         )
-        return [("", prefix + " · "), (message_style, message)]
+        return [
+            ("", prefix),
+            ("class:semantic.create", "N new Profile"),
+            ("", suffix + " · "),
+            (message_style, message),
+        ]
 
     header = Window(
         FormattedTextControl(header_text),
@@ -853,6 +983,15 @@ def choose_profile(
                     header,
                     Window(height=1, char="─"),
                     options_window,
+                    ConditionalContainer(
+                        content=HSplit(
+                            [
+                                Window(height=1, char="─"),
+                                create_field.frame,
+                            ]
+                        ),
+                        filter=create_mode,
+                    ),
                     ConditionalContainer(
                         content=HSplit(
                             [
@@ -883,6 +1022,7 @@ def choose_profile(
                         "study": "ansicyan bold",
                         "success": "ansigreen bold",
                         "error": "ansired bold",
+                        "profile-create-field": "fg:#f4f5f7",
                         "profile-rename-field": "fg:#f4f5f7",
                     }
                 ),

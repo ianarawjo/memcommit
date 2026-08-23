@@ -12,7 +12,7 @@ PROFILE_DETAILS = (
         id="management-actions",
         operation="profile",
         title="PROFILE MANAGEMENT",
-        use_when="Choosing a Profile selection, rename, or removal action.",
+        use_when="Choosing a Profile creation, selection, rename, or removal action.",
         discovery=DetailDiscovery.ON_DEMAND,
         explanation=(
             "The interactive picker and explicit Profile subcommands share the "
@@ -20,6 +20,13 @@ PROFILE_DETAILS = (
             "remove, not delete, in the CLI."
         ),
         options=(
+            OperationComparisonOption(
+                label="CREATE",
+                guidance=(
+                    "Press N in the picker, or use mem profile create. The empty "
+                    "Profile is not selected automatically."
+                ),
+            ),
             OperationComparisonOption(
                 label="SELECT",
                 guidance="Press Enter in the picker, or use mem profile use.",

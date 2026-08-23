@@ -21,7 +21,7 @@ use NAME` remains the explicit form for scripts, while `mem profile NAME` is
 the concise interactive spelling requested to parallel `mem switch NAME`.
 Both forms reach the same validation, locking, and atomic selector update;
 the shorthand is parser routing rather than a second mutation path. Known
-subcommands (`list`, its hidden `ls` alias, `current`, `use`, `import`,
+subcommands (`list`, its hidden `ls` alias, `current`, `create`, `use`, `import`,
 `import-study`, `archive-study`, `rename`, and `grant`) take precedence, so a
 Profile whose name equals one of those reserved command tokens must be selected
 with the explicit `use` form. `mem profile list` remains an explicit inventory
@@ -245,6 +245,44 @@ directory-swap lock that existing commands do not share. The registry uses an
 external file lock, generation number, fsynced temporary file, and atomic
 replacement. A corrupt existing registry fails closed; only an absent registry
 falls back to the legacy `authoring` store without creating metadata.
+
+## Empty managed Profile creation
+
+`mem profile create NAME` publishes the smallest valid managed store: one
+private `contexts/` directory, one `state.json` with no current Context, a fresh
+Profile UID, and `EMPTY_PROFILE` creation provenance. It deliberately creates
+no Context, Memory, Grant, checkpoint, command history, session, cache, lock, or
+write-protection record. The active Profile remains unchanged; selecting the
+new row with `mem profile use NAME` and creating its first Context with `mem init
+CONTEXT` are separate visible actions.
+
+Creation belongs to the Profile namespace rather than overloading top-level
+`mem init`, whose established resource is a Context inside the already active
+Profile. It also differs from both import routes: clean Profile import copies an
+allowlisted content baseline, while archival `mem profile import` copies a
+complete store. A source-free empty Profile must not silently inherit either
+content or operational history.
+
+In the Profile picker, `N` opens the shared exact one-line name field. Enter
+freezes `mem profile create NAME` and its effects for review; only the common
+approval key applies it. The command revalidates the frozen registry generation
+and name under the registry lock, then stages the complete empty store before
+publishing its stable UID directory and replacement registry. A failure before
+registry publication removes the staged or rolled-back store. If registry
+replacement is visible but its durability confirmation fails, the store remains
+present and the receipt reports the uncertain durability boundary rather than
+deleting a possibly registered root.
+
+Successful picker creation reloads the registry and focuses the appended new
+row without selecting it. Automatic selection was rejected because creation
+and whole-store switching are independent control-plane effects, and Profile
+import already preserves the active selection. The person can inspect the zero
+inventory row and press Enter to switch explicitly.
+
+Names retain the portable one-segment contract. Creation rejects
+case-insensitive collisions with live or removed Profile identities, fixed
+`authoring` and `study-baseline` anchors, and live legacy Study headings. The
+retained-name boundary keeps tombstones and Study grouping unambiguous.
 
 ## Stable-identity Profile rename
 

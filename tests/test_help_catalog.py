@@ -884,7 +884,7 @@ def test_final_help_categories_match_their_reviewed_runtime_boundaries():
     assert revert.summary.startswith(
         "Restore the current or an explicit local Context"
     )
-    assert "mem profile rename and mem profile remove" in profile.summary
+    assert "Create, select, and manage" in profile.summary
     assert "backend semantic operations should use" in provider.best_for
     assert "legacy low-level interface" in config.best_for
     assert "existing semantic evaluation campaigns" in eval_operation.summary
@@ -914,6 +914,13 @@ def test_final_help_categories_expose_exact_on_demand_details():
     ]
     assert profile_management.title == "PROFILE MANAGEMENT"
     assert "remove, not delete" in profile_management.explanation
+    assert [option.label for option in profile_management.options] == [
+        "CREATE",
+        "SELECT",
+        "RENAME",
+        "REMOVE",
+        "REMOVE STUDY",
+    ]
     assert provider_actions.title == "PROVIDER ACTIONS"
     assert "synthetic strict-schema" in provider_actions.options[2].guidance
     assert evaluation_scope.title == "EVALUATION SCOPE"

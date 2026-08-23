@@ -177,6 +177,15 @@ class StudyInitializationResult:
 
 
 @dataclass(frozen=True)
+class ProfileCreationResult:
+    """One fresh empty managed Profile published without selecting it."""
+
+    profile: ProfileEntry
+    inspection: StoreInspection
+    active_profile_name: str
+
+
+@dataclass(frozen=True)
 class LegacyStudyArchiveResult:
     """One split legacy Study detached from the live Profile selector."""
 
@@ -1289,6 +1298,150 @@ def use_profile(name: str) -> tuple[ProfileRegistry, StoreInspection, bool]:
         )
         _write_registry(updated)
         return updated, inspection, True
+
+
+def _write_empty_profile_store(destination: Path) -> StoreInspection:
+    """Stage the smallest valid store without resolving the active Profile.
+
+    Profile creation is a control-plane operation. Building the new root
+    directly keeps the process-local active store frozen while still using the
+    same private permissions and durable JSON boundary as ordinary stores.
+    """
+
+    if destination.exists() or destination.is_symlink():
+        raise ProfileError(f"Profile staging path is already occupied: {destination}")
+    ensure_private_directory(destination)
+    contexts = destination / "contexts"
+    ensure_private_directory(contexts)
+    state = destination / "state.json"
+    descriptor = open_private_exclusive(state)
+    try:
+        with os.fdopen(descriptor, "w", encoding="utf-8") as file:
+            json.dump({"current": None}, file, ensure_ascii=False, indent=2)
+            file.write("\n")
+            file.flush()
+            os.fsync(file.fileno())
+    except BaseException:
+        if state.exists() and not state.is_symlink():
+            state.unlink()
+        raise
+    _fsync_directory(contexts)
+    _fsync_directory(destination)
+    return inspect_store(destination)
+
+
+def create_profile(
+    name: str,
+    *,
+    expected_generation: int | None = None,
+) -> ProfileCreationResult:
+    """Atomically publish one empty managed Profile and keep selection fixed."""
+
+    try:
+        canonical = validate_profile_name(name)
+    except (ProfileConfigError, ValueError) as error:
+        raise ProfileError("New Profile name is invalid.") from error
+    if canonical.casefold() == AUTHORING_PROFILE_NAME.casefold():
+        raise ProfileError("The fixed authoring Profile name is reserved.")
+    if canonical.casefold() == STUDY_BASELINE_PROFILE_NAME.casefold():
+        raise ProfileError("The fixed study-baseline Profile name is reserved.")
+
+    with _registry_lock():
+        registry = load_profile_registry()
+        if (
+            expected_generation is not None
+            and registry.generation != expected_generation
+        ):
+            raise ProfileError(
+                "Profile registry changed after create review; review the current "
+                "Profile list and try again."
+            )
+        collision = next(
+            (
+                profile
+                for profile in registry.profiles
+                if profile.name.casefold() == canonical.casefold()
+            ),
+            None,
+        )
+        if collision is not None:
+            raise ProfileError(f"Profile {collision.name!r} already exists.")
+        legacy_study = next(
+            (
+                group
+                for group in study_profile_groups(registry.profiles)
+                if group.name.casefold() == canonical.casefold()
+            ),
+            None,
+        )
+        if legacy_study is not None:
+            raise ProfileError(
+                f"Profile name {canonical!r} conflicts with existing legacy "
+                f"Study {legacy_study.name!r}."
+            )
+
+        profile = ProfileEntry(
+            uid=str(uuid.uuid4()),
+            name=canonical,
+            kind="MANAGED",
+            source={
+                "kind": "EMPTY_PROFILE",
+                "created_at": datetime.now(timezone.utc).isoformat(),
+            },
+        )
+        staging = profile_stores_dir() / f".{profile.uid}.staging-{uuid.uuid4().hex}"
+        destination = profile_store_dir(profile)
+        published = False
+        try:
+            inspection = _write_empty_profile_store(staging)
+            if destination.exists() or destination.is_symlink():
+                raise ProfileError("Managed Profile destination is occupied.")
+            os.replace(staging, destination)
+            published = True
+            try:
+                _fsync_directory(destination.parent)
+            except Exception:
+                os.replace(destination, staging)
+                published = False
+                _fsync_directory(destination.parent)
+                raise
+            updated = replace(
+                registry,
+                generation=max(1, registry.generation + 1),
+                profiles=(*registry.profiles, profile),
+            )
+            try:
+                _write_registry(updated)
+            except Exception as error:
+                try:
+                    visible = load_profile_registry()
+                except (OSError, ProfileConfigError, ValueError) as read_error:
+                    raise ProfileError(
+                        "Profile creation registry state could not be confirmed; "
+                        "inspect it with 'mem profile list'."
+                    ) from read_error
+                if visible == updated:
+                    raise ProfileError(
+                        f"Profile {canonical!r} was created, but registry "
+                        "durability could not be confirmed; it remains registered."
+                    ) from error
+                if visible != registry:
+                    raise ProfileError(
+                        "Profile creation registry changed unexpectedly; inspect "
+                        "it with 'mem profile list'."
+                    ) from error
+                os.replace(destination, staging)
+                published = False
+                _fsync_directory(destination.parent)
+                raise
+            return ProfileCreationResult(
+                profile=profile,
+                inspection=replace(inspection, root=destination),
+                active_profile_name=updated.active.name,
+            )
+        finally:
+            if not published and staging.exists() and not staging.is_symlink():
+                shutil.rmtree(staging)
 
 
 def rename_profile(

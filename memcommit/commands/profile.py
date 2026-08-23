@@ -22,6 +22,10 @@ from memcommit.commands.profile_picker import (
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
+from memcommit.interfaces.console.theme import (
+    SemanticColorRole,
+    semantic_color_rgb,
+)
 from memcommit.context_targeting.presets import (
     ContextScopePreset,
     resolve_scope_preset,
@@ -38,6 +42,7 @@ from memcommit.profiles import (
     ProfileError,
     STUDY_BASELINE_PROFILE_NAME,
     archive_legacy_study,
+    create_profile,
     create_authority_grant,
     default_study_bundle_root,
     delete_authority_grant,
@@ -67,7 +72,7 @@ app = typer.Typer(
     no_args_is_help=False,
     subcommand_metavar="COMMAND|PROFILE",
     help=(
-        "Register and select complete local MemoryStore profiles. "
+        "Create, register, and select complete local MemoryStore profiles. "
         "Use 'mem profile NAME' to select one."
     ),
 )
@@ -384,6 +389,36 @@ def _profile_removal_status(result) -> str:
     )
 
 
+def _profile_creation_status(result) -> str:
+    return (
+        "Created empty Profile '"
+        + display_escape_text(result.profile.name)
+        + "' · 0 Contexts · active Profile unchanged: "
+        + display_escape_text(result.active_profile_name)
+    )
+
+
+def _print_profile_creation(result) -> None:
+    typer.secho(
+        "Created empty Profile '"
+        + display_escape_text(result.profile.name)
+        + "'.",
+        fg=semantic_color_rgb(SemanticColorRole.CREATE),
+    )
+    typer.echo("Profile UID: " + display_escape_text(result.profile.uid))
+    typer.echo("Store: " + display_escape_text(str(result.inspection.root)))
+    typer.echo("Contexts 0 owned + 0 granted · Memories 0 owned + 0 granted")
+    typer.echo(
+        "Active Profile unchanged: "
+        + display_escape_text(result.active_profile_name)
+    )
+    typer.echo(
+        "Use it with: mem profile use "
+        + display_escape_text(result.profile.name)
+    )
+    typer.echo("Then create its first Context with: mem init CONTEXT")
+
+
 def _profile_rename_status(result) -> str:
     if not result.changed:
         return "Profile '" + display_escape_text(result.profile.name) + "' unchanged"
@@ -455,7 +490,12 @@ def _apply_profile_picker_action(
         _use_profile(action.name)
         return None
     try:
-        if action.kind == "RENAME_PROFILE":
+        if action.kind == "CREATE_PROFILE":
+            result = create_profile(
+                action.name,
+                expected_generation=action.registry_generation,
+            )
+        elif action.kind == "RENAME_PROFILE":
             if action.new_name is None:
                 raise ProfileError("Profile picker rename is missing its new name.")
             result = rename_profile(
@@ -480,6 +520,10 @@ def _apply_profile_picker_action(
         if propagate_errors:
             raise
         _fail(error)
+    if action.kind == "CREATE_PROFILE":
+        if print_receipt:
+            _print_profile_creation(result)
+        return _profile_creation_status(result)
     if action.kind == "RENAME_PROFILE":
         if print_receipt:
             _print_profile_rename(result)
@@ -884,6 +928,22 @@ def current_cmd() -> None:
                 display_escape_text(name) for name in inspection.query_source_names
             )
         )
+
+
+@app.command("create")
+def create_cmd(
+    name: Annotated[
+        str,
+        typer.Argument(help="Unique name for the new empty managed Profile"),
+    ],
+) -> None:
+    """Create one empty managed Profile without selecting it."""
+
+    try:
+        result = create_profile(name)
+    except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
+        _fail(error)
+    _print_profile_creation(result)
 
 
 @app.command("use")

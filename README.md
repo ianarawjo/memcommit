@@ -262,10 +262,18 @@ only prints shell code; it does not edit shell startup files itself.
 complete local store should change instead:
 
 ```zsh
+mem profile create scratch
+mem profile use scratch
+mem init inbox
 mem import profile rehearsal-baseline --from path/to/source/.mem
 mem import profile rehearsal-copy --from-profile rehearsal-baseline
 mem profile rehearsal-baseline
 ```
+
+`mem profile create NAME` publishes a new empty managed store and leaves the
+active Profile unchanged. In the interactive `mem profile` picker, press `N`,
+review the exact create command, and apply it; the refreshed picker focuses the
+new row so Enter can select it before `mem init` creates its first Context.
 
 Profiles and complete Study runs can be permanently deleted. This removes the
 complete selected store, including Memories, sessions, and every checkpoint,
