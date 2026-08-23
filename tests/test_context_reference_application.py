@@ -174,7 +174,7 @@ def test_cli_supports_context_reference_and_compatible_memory_from_form(
 
     context_result = runner.invoke(
         app,
-        ["reference", "source", "--into", "target", "--recursive"],
+        ["reference", "--from", "source", "--to", "target", "--recursive"],
     )
     memory_result = runner.invoke(
         app,
@@ -194,6 +194,31 @@ def test_cli_supports_context_reference_and_compatible_memory_from_form(
     assert "Referenced snapshot" in memory_result.output
     loaded = store.load("target")
     assert any(isinstance(item, ContextSnapshotRef) for item in loaded.iter_items())
+
+
+def test_reference_rejects_duplicate_target_aliases_without_mutation(
+    isolated_store,
+):
+    store, _root, _descendant, _embedded, target = _fixture()
+    before = target.to_dict()
+
+    result = runner.invoke(
+        app,
+        [
+            "reference",
+            "--from",
+            "source",
+            "--into",
+            "target",
+            "--to",
+            "other",
+        ],
+    )
+
+    assert result.exit_code == 2
+    assert "--into and --to" in result.stderr
+    assert store.load_direct("target").to_dict() == before
+    assert store.list_checkpoints("target") == []
 
 
 def test_memory_reference_rejects_context_scope_flags(isolated_store):

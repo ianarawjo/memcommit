@@ -7,6 +7,7 @@ Implemented for both public entry routes:
 ```text
 mem embed
 mem embed CHILD [--into CONTEXT | --to CONTEXT] [--before ITEM | --after ITEM]
+mem embed --from CHILD [--into CONTEXT | --to CONTEXT] [--before ITEM | --after ITEM]
 mem embed MEMORY [--into CONTEXT | --to CONTEXT] [--before ITEM | --after ITEM]
 mem embed SOURCE:MEMORY [--into CONTEXT | --to CONTEXT] [--before ITEM | --after ITEM]
 ```
@@ -17,7 +18,9 @@ Memory mode presents directly owned ordinary Memories from local Contexts.
 Only local owned Contexts can be targets. The explicit forms remain the
 non-interactive and scripting routes. `SOURCE:MEMORY` names an exact owner;
 a bare public UID/prefix searches every ordinary local direct Context and must
-be unique. Existing `MEMORY --from SOURCE` scripts remain supported. Omitting
+be unique. An omitted ITEM makes `--from SOURCE` a complete Context Source;
+existing `MEMORY --from SOURCE` scripts retain their owner-qualified Memory
+meaning. Omitting
 `--into` uses the command-start current Context; an explicit `--into` overrides
 it. `--to` is accepted as a compatibility alias for `--into`, while generated
 commands and receipts keep `--into` as the canonical spelling.
@@ -81,8 +84,9 @@ unsafe ambiguity for a mutating command.
   directly owned Memories. Hidden exclusion of pointer slots would make the
   visible gap differ from the persisted position.
 
-The command resolves `CHILD`, a qualified Memory owner, compatibility
-`--from`, and `--into` from one command-start current-Context snapshot. A bare
+The command resolves `CHILD`, a qualified Memory owner, `--from`, and
+`--into`/`--to` from one command-start current-Context snapshot. With no ITEM,
+`--from` names CHILD; with a Memory ITEM it names that Memory's direct owner. A bare
 Memory UID instead searches one strict snapshot of every ordinary local direct
 frame and succeeds only when exactly one ordinary Memory matches; the current
 Context has no priority. Multiple matches list canonical `CONTEXT:FULL_UID`

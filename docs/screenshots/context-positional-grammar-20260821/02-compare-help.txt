@@ -15,8 +15,8 @@ $ mem compare -h
 │                                                                                    is omitted                                                                                    │
 │                                                                                    [default: None]                                                                               │
 │ --refresh                                                                          Run a fresh aggregate analysis even when sources match                                        │
-│ --ledger                                                                           Show every exact source-linked relation and explanation                                       │
-│ --snapshot                                                                         Print the compact report instead of opening the TTY workbench                                 │
+│ --ledger                                                                           Run, save, and show the exhaustive relation ledger used by Meld                               │
+│ --snapshot                                                                         Print the result instead of opening its read-only TTY viewer                                  │
 │ --sessions                                                                         Enter the interactive Compare session launcher                                                │
 │ --direct                 -d                                                        Compare only the selected REFERENCE and PEER roots                                            │
 │ --recursive              -r                                                        Include readable descendants under both comparison roots                                      │

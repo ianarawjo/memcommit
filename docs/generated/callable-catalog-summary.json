@@ -1,12 +1,12 @@
 {
-  "callable_count": 10308,
+  "callable_count": 10295,
   "callable_kinds": {
     "async-function": 13,
-    "class": 1688,
-    "function": 7993,
-    "lambda": 614
+    "class": 1687,
+    "function": 7985,
+    "lambda": 610
   },
-  "module_count": 810,
+  "module_count": 811,
   "operation_count": 64,
   "operation_curated_states": {
     "CLOSED": 27,
@@ -20,8 +20,8 @@
     "PARTIAL_SURFACE": 6
   },
   "visibility": {
-    "local": 2161,
-    "private": 3317,
-    "public": 4830
+    "local": 2150,
+    "private": 3314,
+    "public": 4831
   }
 }

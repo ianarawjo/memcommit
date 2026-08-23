@@ -6,7 +6,7 @@ The conflict-aware direct and path-aligned recursive Merge contracts are
 implemented and verified through one terminal-independent typed
 Application/Runtime boundary. The public CLI exposes explicit `--direct` and
 `--recursive` reach, positional `SOURCE [TARGET]`, compatibility
-`--into TARGET`, and complete per-item or bulk
+`--from SOURCE`, equivalent `--into TARGET`/`--to TARGET`, and complete per-item or bulk
 deterministic decisions. Bare `mem merge` opens the Source/Target setup. A decision-free local
 plan applies immediately through the normal checkpointed application boundary;
 a decision-free granted-authority plan retains final review, and a
@@ -32,7 +32,7 @@ application boundary.
 
 | Concern | Current owner | Frozen behavior |
 | --- | --- | --- |
-| CLI input | `commands.merge` | One existing Source locator and optional positional Target locator; `--into` is a compatibility alias, and omitting Target uses the command-start current Context. Supplying both target spellings fails before Store access. |
+| CLI input | `commands.merge` | One existing Source locator and optional positional Target locator; `--from` aliases positional Source, `--into` and `--to` alias Target, and omitting Target uses the command-start current Context. Supplying a role more than once fails before Store access or current-Context capture. |
 | Locator meaning | `MemoryStoreMergePort` and authority access | Source and Target are resolved from one captured current-name snapshot. |
 | Authority | Grant-aware access and derived-transfer policy | Source requires `READ`; Target additions require `CREATE`; `TAKE SOURCE` replacement also requires `UPDATE`; cross-domain transfer enforces its derived permissions. |
 | Write protection | Store policy frozen during planning and revalidated during persistence | A protected Target Memory or Context removes `TAKE SOURCE` before the decision UI; a protected Context blocks unconditional additions before review; concurrent policy changes still fail closed at Store save. |
@@ -157,7 +157,7 @@ instead of attempting a full-screen UI.
 ## Interface verification
 
 The focused automated gate covers direct and recursive typed results,
-explicit `--into` without a current Context, recursive CLI path creation,
+explicit `--from`/`--to` including a relative Source, `--into` without a current Context, recursive CLI path creation,
 conflicting reach flags, non-TTY routing, independently frozen readable Source
 and CREATE-authorized Target catalogs, selectable Target return, coupled reach
 traversal, setup-only continuation, complete frozen-plan projection, exact-plan

@@ -131,6 +131,9 @@ def test_editable_embed_command_parser_accepts_to_as_into_alias() -> None:
     assert parse_embed_command_argv(
         ("mem", "embed", "examples", "--to", "guide")
     ) == EmbedRequest("examples", "guide")
+    assert parse_embed_command_argv(
+        ("mem", "embed", "--from", "examples", "--to", "guide")
+    ) == EmbedRequest("examples", "guide")
 
 
 def test_editable_embed_command_parser_rejects_both_target_spellings() -> None:
@@ -345,6 +348,24 @@ def test_cli_embed_accepts_to_as_into_alias(isolated_store) -> None:
     assert f"into '{parent.name}'" in result.output
 
 
+def test_cli_embed_accepts_from_as_a_complete_context_source(
+    isolated_store,
+) -> None:
+    store, child, parent, first, second = _ordered_store()
+
+    result = runner.invoke(
+        app,
+        ["embed", "--from", child.name, "--to", parent.name],
+    )
+
+    assert result.exit_code == 0, result.output + result.stderr
+    assert store.load_direct(parent.name).ordered_uids() == [
+        first.uid,
+        second.uid,
+        child.uid,
+    ]
+
+
 def test_cli_embed_help_keeps_into_canonical_and_lists_to_alias() -> None:
     result = runner.invoke(app, ["embed", "--help"])
 
@@ -352,6 +373,7 @@ def test_cli_embed_help_keeps_into_canonical_and_lists_to_alias() -> None:
     assert "--into" in result.output
     assert "--to" in result.output
     assert "Compatibility alias for --into" in result.output
+    assert "Source Context when ITEM is omitted" in result.output
 
 
 def test_cli_embed_rejects_into_and_to_without_mutation(isolated_store) -> None:
@@ -371,7 +393,7 @@ def test_cli_embed_rejects_into_and_to_without_mutation(isolated_store) -> None:
     )
 
     assert result.exit_code == 2
-    assert "only one of --into or --to" in result.stderr
+    assert "--into and --to" in result.stderr
     assert store.load_direct(parent.name).to_dict() == before
     assert store.list_checkpoints(parent.name) == []
 

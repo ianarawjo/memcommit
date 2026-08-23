@@ -112,7 +112,7 @@ def test_runtime_rejects_target_drift_without_overwriting_it(isolated_store):
 
 def test_cli_reference_operand_roles_are_actionable_outside_a_tty(isolated_store):
     context_route = runner.invoke(app, ["reference", "abcd1234"])
-    misplaced_selector = runner.invoke(
+    explicit_context = runner.invoke(
         app,
         ["reference", "--from", "abcd1234"],
     )
@@ -120,8 +120,8 @@ def test_cli_reference_operand_roles_are_actionable_outside_a_tty(isolated_store
 
     assert context_route.exit_code == 1
     assert "No directly owned Memory" in context_route.stderr
-    assert misplaced_selector.exit_code == 2
-    assert "pass a Context or Memory item" in misplaced_selector.stderr
+    assert explicit_context.exit_code == 1
+    assert "No current Context" in explicit_context.stderr
     assert bare.exit_code == 1
     assert "outside a terminal" in bare.stderr
 

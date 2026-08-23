@@ -26,6 +26,7 @@ from memcommit.commands.sever_sessions import (
     reload_selected_sever_session,
 )
 from memcommit.context_targeting.catalog import freeze_granted_context_navigation
+from memcommit.context_targeting.operands import choose_endpoint_operand
 from memcommit.context_naming import validate_portable_context_name
 from memcommit.context_targeting.tui.picker import context_memory_rows
 from memcommit.commands.sever_setup_shell import (
@@ -588,7 +589,11 @@ def _resolve_endpoint_syntax(
             "expected at most three positional Contexts: SOURCE CRITERIA [RESULT]."
         )
     resolved = [source_name, criteria_name, save_as]
-    role_options = ("--source", "--criteria/--against", "--save-as")
+    role_options = (
+        "--source/--from",
+        "--criteria/--against",
+        "--save-as/--to",
+    )
     role_names = ("SOURCE", "CRITERIA", "RESULT")
     for index, value in enumerate(positional):
         if resolved[index] is not None:
@@ -617,12 +622,25 @@ def cmd(
             help="Compatibility alias for the existing Source Context",
         ),
     ] = None,
+    from_: Annotated[
+        Optional[str],
+        typer.Option(
+            "--from",
+            help="Directional compatibility alias for --source",
+        ),
+    ] = None,
     criteria_name: Annotated[
         Optional[str],
         typer.Option(
             "--criteria",
+            help="One readable Criteria root Context",
+        ),
+    ] = None,
+    against: Annotated[
+        Optional[str],
+        typer.Option(
             "--against",
-            help="Compatibility alias for one readable Criteria root Context",
+            help="Compatibility alias for --criteria",
         ),
     ] = None,
     save_as: Annotated[
@@ -633,6 +651,13 @@ def cmd(
                 "Save to SOURCE for self-save or to a fresh Context for other-save; "
                 "omission self-saves"
             ),
+        ),
+    ] = None,
+    to: Annotated[
+        Optional[str],
+        typer.Option(
+            "--to",
+            help="Directional compatibility alias for --save-as Result",
         ),
     ] = None,
     direct: Annotated[
@@ -708,13 +733,28 @@ def cmd(
     ] = False,
 ) -> None:
     try:
+        source_option = choose_endpoint_operand(
+            None,
+            role="SOURCE",
+            options=(("--source", source_name), ("--from", from_)),
+        )
+        criteria_option = choose_endpoint_operand(
+            None,
+            role="CRITERIA",
+            options=(("--criteria", criteria_name), ("--against", against)),
+        )
+        result_option = choose_endpoint_operand(
+            None,
+            role="RESULT",
+            options=(("--save-as", save_as), ("--to", to)),
+        )
         source_name, criteria_name, save_as = _resolve_endpoint_syntax(
             contexts,
-            source_name=source_name,
-            criteria_name=criteria_name,
-            save_as=save_as,
+            source_name=source_option,
+            criteria_name=criteria_option,
+            save_as=result_option,
         )
-    except SeverCommandError as error:
+    except (SeverCommandError, ValueError) as error:
         typer.secho(
             f"Sever error: {display_escape_text(str(error))}",
             fg=typer.colors.RED,

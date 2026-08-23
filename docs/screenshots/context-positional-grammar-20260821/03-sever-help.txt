@@ -11,9 +11,12 @@ $ mem sever -h
 ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │ --source                                                            TEXT    Compatibility alias for the existing Source Context [default: None]                                  │
-│ --criteria,--against                                                TEXT    Compatibility alias for one readable Criteria root Context [default: None]                           │
+│ --from                                                              TEXT    Directional compatibility alias for --source [default: None]                                         │
+│ --criteria                                                          TEXT    One readable Criteria root Context [default: None]                                                   │
+│ --against                                                           TEXT    Compatibility alias for --criteria [default: None]                                                   │
 │ --save-as                                                           TEXT    Save to SOURCE for self-save or to a fresh Context for other-save; omission self-saves               │
 │                                                                             [default: None]                                                                                      │
+│ --to                                                                TEXT    Directional compatibility alias for --save-as Result [default: None]                                 │
 │ --direct                -d                                                  Use only the selected Source and Criteria roots                                                      │
 │ --recursive             -r                                                  Include descendants under both Source and Criteria roots                                             │
 │ --source-descendants        --source-root-only,--source-only                Include the Source root's readable descendant Contexts [default: source-root-only]                   │
@@ -28,8 +31,8 @@ $ mem sever -h
 │ --help                  -h                                                  Show this message and exit.                                                                          │
 ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
                                                                                                                                                                                     
- Positional form: 'mem sever SOURCE CRITERIA [RESULT]'. Omitting RESULT self-saves into SOURCE; an explicit fresh RESULT saves elsewhere. --source, --criteria/--against, and       
- --save-as remain compatibility aliases.                                                                                                                                            
+ Positional form: 'mem sever SOURCE CRITERIA [RESULT]'. Omitting RESULT self-saves into SOURCE; an explicit fresh RESULT saves elsewhere. --source/--from, --criteria/--against,    
+ and --save-as/--to are equivalent role aliases.                                                                                                                                    
                                                                                                                                                                                     
                                                                                                                                                                                     
 HELP EXIT · 0

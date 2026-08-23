@@ -15,7 +15,7 @@ boundary.
 | Snapshot requests, frozen plans, and durable receipts | `memcommit.reference_application` | Memory and Context units are explicitly typed independently of terminal, Store, provider, and adapter state. |
 | Locator snapshot, Source package, content digest, Source locks, Target CAS, checkpoint | `memcommit.reference_runtime` | Every contributing local Context binding and the Target are frozen from one current-name snapshot and publish atomically. |
 | Immutable stored values | `memcommit.context.MemoryRef`, `memcommit.context_snapshot.ContextSnapshotRef`, `memcommit.ops` | `memory_snapshot_ref` stores one Memory; `context_snapshot_ref` stores a validated versioned Context package. Neither dereferences live storage after publication. |
-| CLI composition | `memcommit.interfaces.cli.reference` | `CONTEXT:UID` explicitly names one Memory owner; a bare public UID/prefix selects Memory mode and must have exactly one ordinary local direct owner. `--from` remains a mutually exclusive compatibility spelling. Other operands are Context locators and `-d/-r` controls their scope. |
+| CLI composition | `memcommit.interfaces.cli.reference` | `CONTEXT:UID` explicitly names one Memory owner; a bare public UID/prefix selects Memory mode and must have exactly one ordinary local direct owner. With no ITEM, `--from` names a Context Source; with a Memory ITEM, it remains the owner qualifier. `--into` and `--to` are equivalent Target spellings and duplicates fail before Store access. Other operands are Context locators and `-d/-r` controls their scope. |
 | Interactive setup | `memcommit.interfaces.tui.operations.reference` | Explicit Context/Memory unit -> unit-owned Source control -> Context scope when applicable -> Target -> reviewed exact command; the TUI owns no persistence. |
 | Stable Python API | `memcommit.api._operations.reference`, `memcommit.api.client` | `reference_memory` and `reference_context` return unit-specific typed receipts and share the public Reference error taxonomy. |
 | Agent and MCP | `memcommit.interfaces.agent.reference`, registry projection | Version 2 is a strict tagged `memory`/`context` union; MCP exposes the same schema and result envelope. |
@@ -26,7 +26,9 @@ Bare Reference enters interactive setup only in a terminal. Outside a terminal,
 `[SOURCE_CONTEXT:]MEMORY_SELECTOR` selects Memory mode. A bare Memory selector
 must have the public eight-or-more-character UUID-prefix shape because the same
 slot also accepts Context locators; explicit owner syntax and `--from` continue
-to accept shorter prefixes.
+to accept shorter prefixes. An omitted ITEM plus `--from SOURCE_CONTEXT`
+selects Context mode instead, so the same explicit endpoint vocabulary works
+without changing the established Memory form.
 
 The shared direct-Memory resolver searches only ordinary local direct records.
 A qualified locator resolves its owner against the command-start current

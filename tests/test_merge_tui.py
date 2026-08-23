@@ -920,7 +920,73 @@ def test_cli_merge_accepts_a_positional_target_and_rejects_a_duplicate_alias(
     assert addition.uid in store.load_direct("target").memories
     assert store.current_context_name() is None
     assert duplicate.exit_code == 2
-    assert "supply Target either positionally or with --into" in duplicate.stderr
+    assert "Target was supplied both positionally and with --into" in duplicate.stderr
+
+
+def test_cli_merge_accepts_directional_aliases_and_relative_source(
+    isolated_store,
+) -> None:
+    store = MemoryStore()
+    source = ops.init("practice/1")
+    addition = ops.add(source, "directional alias fact")
+    store.create_context(source)
+    store.create_context(ops.init("practice/2"))
+    store.set_current("practice/2")
+
+    result = runner.invoke(app, ["merge", "--from", "../1"])
+
+    assert result.exit_code == 0, result.output + result.stderr
+    assert addition.uid in store.load_direct("practice/2").memories
+    assert "'practice/1' → 'practice/2'" in result.output
+
+
+def test_cli_merge_accepts_complete_from_to_pair_without_current(
+    isolated_store,
+) -> None:
+    store = MemoryStore()
+    source = ops.init("source")
+    addition = ops.add(source, "complete directional pair")
+    store.create_context(source)
+    store.create_context(ops.init("target"))
+
+    result = runner.invoke(
+        app,
+        ["merge", "--from", "source", "--to", "target"],
+    )
+
+    assert result.exit_code == 0, result.output + result.stderr
+    assert addition.uid in store.load_direct("target").memories
+    assert store.current_context_name() is None
+
+
+def test_cli_merge_rejects_duplicate_directional_spellings_before_store_access(
+    isolated_store,
+    monkeypatch,
+) -> None:
+    monkeypatch.setattr(
+        MemoryStore,
+        "current_context_name",
+        lambda _store: (_ for _ in ()).throw(
+            AssertionError("duplicate endpoints opened the Store")
+        ),
+    )
+
+    source = runner.invoke(app, ["merge", "one", "--from", "two"])
+    target = runner.invoke(
+        app,
+        ["merge", "source", "target", "--to", "other"],
+    )
+    aliases = runner.invoke(
+        app,
+        ["merge", "source", "--into", "one", "--to", "two"],
+    )
+
+    assert source.exit_code == 2
+    assert "Source was supplied both positionally and with --from" in source.stderr
+    assert target.exit_code == 2
+    assert "Target was supplied both positionally and with --to" in target.stderr
+    assert aliases.exit_code == 2
+    assert "--into and --to" in aliases.stderr
 
 
 def test_cli_rejects_conflicting_reach_flags(isolated_store) -> None:

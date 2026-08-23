@@ -180,7 +180,8 @@ app.command(
     help=operation_summary("merge"),
     epilog=(
         "Positional form: 'mem merge SOURCE TARGET'. Omitting TARGET uses the "
-        "command-start current Context; --into remains a compatibility alias."
+        "command-start current Context. --from selects Source; --to and --into "
+        "select Target."
     ),
 )(merge.cmd)
 app.command(
@@ -363,8 +364,8 @@ app.command(
     epilog=(
         "Positional form: 'mem sever SOURCE CRITERIA [RESULT]'. Omitting "
         "RESULT self-saves into SOURCE; an explicit fresh RESULT saves "
-        "elsewhere. --source, "
-        "--criteria/--against, and --save-as remain compatibility aliases."
+        "elsewhere. --source/--from, --criteria/--against, and "
+        "--save-as/--to are equivalent role aliases."
     ),
 )(sever.cmd)
 app.command(

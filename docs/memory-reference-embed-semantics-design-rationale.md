@@ -79,16 +79,21 @@ unique lookup for both operations:
 
 ```text
 mem embed CHILD_CONTEXT [--into TARGET]
+mem embed --from CHILD_CONTEXT [--to TARGET | --into TARGET]
 mem embed MEMORY_UID [--into TARGET]
 mem embed SOURCE_CONTEXT:MEMORY_UID [--into TARGET]
 mem reference SOURCE_CONTEXT --into TARGET --direct
 mem reference SOURCE_CONTEXT --into TARGET --recursive
+mem reference --from SOURCE_CONTEXT [--to TARGET | --into TARGET] --direct
+mem reference --from SOURCE_CONTEXT [--to TARGET | --into TARGET] --recursive
 mem reference MEMORY_UID --into TARGET
 mem reference SOURCE_CONTEXT:MEMORY_UID --into TARGET
 ```
 
-`--from SOURCE_CONTEXT` remains a compatibility spelling for an explicitly
-owned Memory selector. It cannot be combined with `SOURCE_CONTEXT:MEMORY_UID`.
+When ITEM is omitted, `--from SOURCE_CONTEXT` is the complete Context Source;
+when a Memory ITEM is present, it remains the compatibility owner qualifier for
+that explicit Memory selector. The Memory form cannot be combined with
+`SOURCE_CONTEXT:MEMORY_UID`.
 The single `:` is reserved because it has always been invalid in ordinary
 Context names; `#` already has a separate view-handle role elsewhere, and `::`
 would add punctuation without adding an ambiguity boundary.
@@ -109,8 +114,10 @@ prefixes remain available when their type is explicit through `CONTEXT:UID` or
 the compatibility `--from` option. Interactive and callable routes remain
 explicitly typed and do not infer a unit from display text.
 
-For explicit Embed CLI forms, omitted `--into` means the command-start current
-Context. The adapter writes that frozen canonical Target into the typed request;
+For explicit Embed and Reference CLI forms, `--into` and `--to` select the same
+Target and duplicate spellings fail before Store access. An omitted Target
+means the command-start current Context. The adapter writes that frozen
+canonical Target into the typed request;
 the application/runtime contract never resolves a later mutable current value.
 
 This avoids guessing from string shape. Context names may resemble UIDs, and a
@@ -154,6 +161,17 @@ consumer that deliberately admits either form must include snapshot
 content/digest for Reference or the exact resolved Source binding for live
 Embed in its evidence identity. A later cache hit must mean the same visible
 evidence even after Source state changes.
+
+Compare deliberately admits all readable content-bearing forms through one
+typed projection. It sends their unmodified content as ordinary peer claims,
+keeps placement, source form, Source Memory, owner, and live-versus-snapshot
+freshness as host-only provenance, and shows that provenance only in its exact
+ledger. A Reference remains bound to retained content; a live Embed is
+revalidated against its external owner and a same-content retarget is still a
+different evidence identity. Compare Summary reuses the same projection.
+Query-only rows fail explicitly because their hidden content is not ordinary
+readable Memory input. None of this grants Compare or a downstream mutation
+operation write-through authority over the Source.
 
 ## Callable adapters
 

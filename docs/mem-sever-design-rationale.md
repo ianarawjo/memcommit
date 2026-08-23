@@ -33,10 +33,14 @@ mem sever SOURCE CRITERIA RESULT
 With two operands, Sever self-saves: the canonical Source is also the Result.
 An optional third operand equal to that canonical Source is the explicit
 self-save spelling; any distinct third operand selects other-save and must be
-an exact require-new Result name. `--source`, `--criteria`/`--against`, and `--save-as` remain
-compatibility aliases and may fill roles not already supplied positionally.
-`--to` is absent because the Result is a save location, not a receiver.
-`mem share` remains an independent delivery operation.
+an exact require-new Result name. `--source`/`--from`,
+`--criteria`/`--against`, and `--save-as`/`--to` are equivalent role aliases
+and may fill roles not already supplied positionally. `--to` is only a
+directional spelling for the Result save location; it does not make Result a
+recipient or change self-/other-save authority. Retaining that distinction in
+Help and the typed request was preferred over forcing people to remember that
+Sever alone rejected the otherwise shared `--from`/`--to` vocabulary.
+`mem share` remains the independent delivery operation.
 
 SOURCE and CRITERIA are existing-Context locators resolved from one captured
 current-name snapshot. Omitted RESULT reuses that frozen canonical Source name;
@@ -44,8 +48,9 @@ an explicit RESULT is compared with that canonical Source and otherwise
 treated as a new identifier, never passed through the existing-Context locator
 resolver. The explicit self-save spelling must therefore use the canonical
 Source name; omission is the relative-locator-safe way to request self-save.
-Supplying one role twice or more than three positional operands fails before
-provider or Store access.
+Supplying one role twice—including two aliases such as `--source` plus
+`--from`—or more than three positional operands fails before provider or Store
+access.
 
 The common `-d/-r` preset applies to both input roles; either canonical
 role-qualified pair can then override one role. The older `--source-only` and

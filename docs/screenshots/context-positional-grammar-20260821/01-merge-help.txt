@@ -11,16 +11,18 @@ $ mem merge -h
 │   target      [TARGET]  Existing CREATE-authorized Target Context; equivalent to --into and defaults to the command-start current Context [default: None]                        │
 ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --from                     TEXT  Explicit Source Context; compatibility alias for the first positional endpoint [default: None]                                                  │
 │ --into                     TEXT  Existing CREATE-authorized Target Context; defaults to the command-start current Context [default: None]                                        │
+│ --to                       TEXT  Compatibility alias for --into Target Context [default: None]                                                                                   │
 │ --direct           -d            Merge direct items from the exact Source root only (default)                                                                                    │
-│ --recursive        -r            Merge matching lexical descendants by complete relative path, creating Source-only Target paths                                                 │
-│ --resolve                  TEXT  Resolve one frozen conflict as ID=keep-target or ID=take-source; repeat for every conflict [default: None]                                      │
+│ --recursive        -r            Merge matching descendants by the same relative path, creating Source-only Target paths                                                         │
+│ --resolve                  TEXT  Resolve one conflict as ID=keep-target or ID=take-source; repeat for every conflict [default: None]                                             │
 │ --keep-target-all                Resolve every deterministic conflict by keeping Target                                                                                          │
 │ --take-source-all                Resolve every deterministic conflict by taking Source                                                                                           │
 │ --help             -h            Show this message and exit.                                                                                                                     │
 ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
                                                                                                                                                                                     
- Positional form: 'mem merge SOURCE TARGET'. Omitting TARGET uses the command-start current Context; --into remains a compatibility alias.                                          
+ Positional form: 'mem merge SOURCE TARGET'. Omitting TARGET uses the command-start current Context. --from selects Source; --to and --into select Target.                          
                                                                                                                                                                                     
                                                                                                                                                                                     
 HELP EXIT · 0

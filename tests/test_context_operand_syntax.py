@@ -8,7 +8,9 @@ from memcommit.commands.compare import (
     _resolve_endpoint_syntax,
 )
 from memcommit.commands.context_operand import choose_context_operand
+from memcommit.context_targeting.operands import choose_endpoint_operand
 from memcommit.update_endpoints import choose_update_endpoint_operands
+
 
 def test_unary_context_operand_defaults_to_current_and_rejects_duplicates():
     assert choose_context_operand(None, option=None) is None
@@ -16,6 +18,31 @@ def test_unary_context_operand_defaults_to_current_and_rejects_duplicates():
     assert choose_context_operand(None, option="scope/target") == "scope/target"
     with pytest.raises(ValueError, match="both positionally"):
         choose_context_operand("scope/a", option="scope/b")
+
+
+def test_directional_endpoint_options_never_use_silent_precedence():
+    assert choose_endpoint_operand(
+        "source",
+        role="Source",
+        options=(("--from", None),),
+    ) == "source"
+    assert choose_endpoint_operand(
+        None,
+        role="Target",
+        options=(("--into", None), ("--to", "target")),
+    ) == "target"
+    with pytest.raises(ValueError, match="both positionally and with --from"):
+        choose_endpoint_operand(
+            "source",
+            role="Source",
+            options=(("--from", "other"),),
+        )
+    with pytest.raises(ValueError, match="--into and --to"):
+        choose_endpoint_operand(
+            None,
+            role="Target",
+            options=(("--into", "one"), ("--to", "two")),
+        )
 
 
 def test_compare_positional_arity_preserves_current_reference():

@@ -62,7 +62,7 @@ SeverPersistedApplyResult
 
 | Concern | Typed/application owner | Production adapter | Existing interface adapter | Verified invariant |
 | --- | --- | --- | --- | --- |
-| Analysis input | `SeverAnalysisRequest` | `MemoryStoreSeverInputPort` | CLI flags and three-pane setup map Source, Criteria, Result, and the two ranges | Relative CLI locators are frozen to canonical public names before confirmation; runtime repeats authority checks before disclosure |
+| Analysis input | `SeverAnalysisRequest` | `MemoryStoreSeverInputPort` | Positional roles, `--source`/`--from`, `--criteria`/`--against`, `--save-as`/`--to`, and three-pane setup map Source, Criteria, Result, and the two ranges | Duplicate role spellings fail before Store access; relative CLI locators are frozen to canonical public names before confirmation; runtime repeats authority checks before disclosure |
 | Frozen evidence | `FrozenSeverInputs` | `capture_sever_binding` | No interface may append hidden Memories | Source and Criteria each retain exact Context identities, digests, ordinary Memories, Grant binding, range, and excluded query-only names |
 | Cache | `SeverPreparedLookup` | installed Sever prewarm adapter | Interface receives the typed exact/equivalent/projected origin | Lookup runs only after authority and complete frame capture; a prepared decision ledger must exactly match the requested frozen bindings and output name after any adapter-owned safe projection |
 | Provider | lazy `SeverProviderFactory` | configured provider supplied by the composition boundary | Progress is projected from typed stages | Cache hits never construct a provider; live work remains one whole-frame selective-curation turn |

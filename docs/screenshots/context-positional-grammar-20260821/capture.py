@@ -1,4 +1,4 @@
-"""Capture positional Merge, Compare, and Sever routes in real 180x52 PTYs."""
+"""Capture positional and explicit endpoint routes in real 180x52 PTYs."""
 
 from __future__ import annotations
 

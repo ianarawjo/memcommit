@@ -1,11 +1,11 @@
 PTY 180 52
 $ mem sever capture/sever/source capture/sever/criteria capture/sever/result --accept
-MEM SEVER · 1/3 · FREEZING SOURCE AND CRITERIA . · 0sMEM SEVER · 2/3 · CONNECTING PROVIDER . · 0s         MEM SEVER · 3/3 · ANALYZING 1 SOURCE X 1 CRITERIA . · 0s                                                        SEVER APPLIED · capture/sever/source → capture/sever/result
+MEM SEVER · 1/3 · PREPARING SOURCE AND CRITERIA . · 0sMEM SEVER · 2/3 · CONNECTING PROVIDER . · 0s          MEM SEVER · 3/3 · ANALYZING 1 SOURCE X 1 CRITERIA . · 0s                                                        SEVER APPLIED · capture/sever/source → capture/sever/result
 SAVE MODE · OTHER-SAVE
 DECISIONS · KEEP 1 · FORGET 0
-SOURCE · UNCHANGED
-RECEIPT · fd53f085-7593-425f-b290-1243c54b1b60
-CHECKPOINT · c72d91c1-3242-4d21-b248-5d8544f0ccdd
-REVIEW · mem review sever --session fd53f085-7593-425f-b290-1243c54b1b60
+RESULT · CREATED SEPARATELY
+RECEIPT · 59b0b6da-66b6-4ede-b47b-12085c1f7745
+CHECKPOINT · ec8adff9-45ba-46d9-8f47-bc3035eed468
+REVIEW · mem review sever --session 59b0b6da-66b6-4ede-b47b-12085c1f7745
 RECOVERY · mem undo
 OTHER-SAVE VERIFICATION · EXIT 0 · CURRENT capture/orientation · SOURCE UID PRESERVED True · MEMORY UID PRESERVED True · SOURCE MEMORIES 1 · SOURCE CHANGED False · OTHER RESULT True · CHECKPOINTS 0 · PROVIDER CALLS 1

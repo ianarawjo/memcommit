@@ -9,6 +9,7 @@ import typer
 from memcommit.context_targeting.loading import (
     resolve_local_direct_memory_locator,
 )
+from memcommit.context_targeting.operands import choose_endpoint_operand
 from memcommit.context_targeting.presets import (
     ContextScopePreset,
     resolve_scope_preset,
@@ -72,7 +73,10 @@ def cmd(
         typer.Option(
             "--from",
             metavar="SOURCE_CONTEXT",
-            help="Compatibility Source Context for an explicit Memory selector",
+            help=(
+                "Source Context when ITEM is omitted; otherwise the owner "
+                "Context for an explicit Memory selector"
+            ),
         ),
     ] = None,
     into: Annotated[
@@ -81,6 +85,14 @@ def cmd(
             "--into",
             metavar="TARGET_CONTEXT",
             help="Local Context to retain the snapshot (defaults to current)",
+        ),
+    ] = None,
+    to: Annotated[
+        Optional[str],
+        typer.Option(
+            "--to",
+            metavar="TARGET_CONTEXT",
+            help="Compatibility alias for --into",
         ),
     ] = None,
     direct: Annotated[
@@ -101,6 +113,19 @@ def cmd(
     ] = False,
 ) -> None:
     try:
+        target_option = choose_endpoint_operand(
+            None,
+            role="Target",
+            options=(("--into", into), ("--to", to)),
+        )
+    except ValueError as error:
+        typer.secho(
+            f"Error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+    try:
         scope = resolve_scope_preset(
             direct=direct,
             recursive=recursive,
@@ -116,8 +141,11 @@ def cmd(
     store = MemoryStore()
     port = MemoryStoreReferencePort.capture(store)
     frozen_plan: FrozenReferencePlan | FrozenContextReferencePlan | None = None
-    if item is None:
-        if source_name is not None or into is not None or direct or recursive:
+    source_from_option = item is None and source_name is not None
+    source_item = source_name if source_from_option else item
+    memory_owner = None if source_from_option else source_name
+    if source_item is None:
+        if target_option is not None or direct or recursive:
             typer.secho(
                 "Error: run 'mem reference' with no operands for interactive "
                 "setup, or pass a Context or Memory item.",
@@ -155,9 +183,9 @@ def cmd(
         request = frozen_plan.request
     else:
         try:
-            memory_mode = is_direct_memory_locator_operand(
-                item,
-                explicit_context=source_name,
+            memory_mode = not source_from_option and is_direct_memory_locator_operand(
+                source_item,
+                explicit_context=memory_owner,
             )
             if memory_mode:
                 if direct or recursive:
@@ -171,9 +199,9 @@ def cmd(
                     raise typer.Exit(2)
                 memory_target = resolve_local_direct_memory_locator(
                     store,
-                    item,
+                    source_item,
                     current=port.current_context_name,
-                    explicit_context=source_name,
+                    explicit_context=memory_owner,
                 )
             else:
                 memory_target = None
@@ -189,13 +217,13 @@ def cmd(
             request = ReferenceRequest(
                 memory_selector=memory_target.memory_uid,
                 source_locator=memory_target.context_name,
-                into_locator=into,
+                into_locator=target_option,
             )
         else:
             recursive_scope = scope is ContextScopePreset.RECURSIVE
             request = ContextReferenceRequest(
-                source_locator=item,
-                into_locator=into,
+                source_locator=source_item,
+                into_locator=target_option,
                 include_descendants=recursive_scope,
                 follow_embeds=recursive_scope,
             )

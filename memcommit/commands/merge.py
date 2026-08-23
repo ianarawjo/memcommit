@@ -7,6 +7,7 @@ import typer
 from memcommit.application_review_policy import (
     ownership_aware_application_review,
 )
+from memcommit.context_targeting.operands import choose_endpoint_operand
 from memcommit.interfaces.cli.merge import (
     parse_merge_resolutions,
     render_merge_conflicts_plain,
@@ -53,6 +54,16 @@ def cmd(
             )
         ),
     ] = None,
+    from_: Annotated[
+        Optional[str],
+        typer.Option(
+            "--from",
+            help=(
+                "Explicit Source Context; compatibility alias for the first "
+                "positional endpoint"
+            ),
+        ),
+    ] = None,
     into: Annotated[
         Optional[str],
         typer.Option(
@@ -61,6 +72,13 @@ def cmd(
                 "Existing CREATE-authorized Target Context; defaults to the "
                 "command-start current Context"
             ),
+        ),
+    ] = None,
+    to: Annotated[
+        Optional[str],
+        typer.Option(
+            "--to",
+            help="Compatibility alias for --into Target Context",
         ),
     ] = None,
     direct: Annotated[
@@ -107,9 +125,20 @@ def cmd(
         ),
     ] = False,
 ) -> None:
-    if target is not None and into is not None:
+    try:
+        requested_source = choose_endpoint_operand(
+            source,
+            role="Source",
+            options=(("--from", from_),),
+        )
+        requested_target = choose_endpoint_operand(
+            target,
+            role="Target",
+            options=(("--into", into), ("--to", to)),
+        )
+    except ValueError as error:
         typer.secho(
-            "Error: supply Target either positionally or with --into, not both.",
+            f"Error: {display_escape_text(str(error))}",
             fg=typer.colors.RED,
             err=True,
         )
@@ -137,17 +166,17 @@ def cmd(
         raise typer.Exit(2)
     store = MemoryStore()
     current = store.current_context_name()
-    requested_target = target if target is not None else into
     if not current and requested_target is None:
         typer.secho(
-            "No current Target. Pass TARGET/--into or run 'mem init <name>' first.",
+            "No current Target. Pass TARGET/--into/--to or run "
+            "'mem init <name>' first.",
             fg=typer.colors.RED,
             err=True,
         )
         raise typer.Exit(1)
     port = MemoryStoreMergePort(store, current_name=current)
     try:
-        if source is None:
+        if requested_source is None:
             if not is_interactive_terminal():
                 raise MergeError(
                     "Merge requires SOURCE outside a TTY; pass SOURCE with "
@@ -202,7 +231,7 @@ def cmd(
                 return
         else:
             request = MergeRequest(
-                source_locator=source,
+                source_locator=requested_source,
                 target_locator=requested_target,
                 reach=(MergeReach.DESCENDANTS if recursive else MergeReach.DIRECT),
             )

@@ -9,6 +9,7 @@ import typer
 from memcommit.context_targeting.loading import (
     resolve_local_direct_memory_locator,
 )
+from memcommit.context_targeting.operands import choose_endpoint_operand
 from memcommit.context_targeting.resolution import (
     is_direct_memory_locator_operand,
 )
@@ -81,7 +82,10 @@ def cmd(
         Optional[str],
         typer.Option(
             "--from",
-            help="Compatibility Source Context for an explicit Memory selector",
+            help=(
+                "Source Context when ITEM is omitted; otherwise the owner "
+                "Context for an explicit Memory selector"
+            ),
         ),
     ] = None,
     into: Annotated[
@@ -113,17 +117,19 @@ def cmd(
         ),
     ] = None,
 ) -> None:
-    if into is not None and to is not None:
+    try:
+        target_option = choose_endpoint_operand(
+            None,
+            role="Target",
+            options=(("--into", into), ("--to", to)),
+        )
+    except ValueError as error:
         typer.secho(
-            "Error: use only one of --into or --to.",
+            f"Error: {display_escape_text(str(error))}",
             fg=typer.colors.RED,
             err=True,
         )
         raise typer.Exit(2)
-
-    # Resolve spelling ambiguity before capturing even the current Context:
-    # a mutating command must never inherit Click's silent last-option-wins rule.
-    target_option = into or to
 
     if before is not None and after is not None:
         typer.secho(
@@ -136,11 +142,12 @@ def cmd(
     store = MemoryStore()
     port = MemoryStoreEmbedPort.capture(store)
     frozen_plan = None
-    if a is None:
+    source_from_option = a is None and source_name is not None
+    source_item = source_name if source_from_option else a
+    memory_owner = None if source_from_option else source_name
+    if source_item is None:
         if (
-            source_name is not None
-            or into is not None
-            or to is not None
+            target_option is not None
             or before is not None
             or after is not None
         ):
@@ -184,15 +191,15 @@ def cmd(
             )
             raise typer.Exit(1)
         try:
-            if is_direct_memory_locator_operand(
-                a,
-                explicit_context=source_name,
+            if not source_from_option and is_direct_memory_locator_operand(
+                source_item,
+                explicit_context=memory_owner,
             ):
                 memory_target = resolve_local_direct_memory_locator(
                     port.store,
-                    a,
+                    source_item,
                     current=port.current_context_name,
-                    explicit_context=source_name,
+                    explicit_context=memory_owner,
                 )
                 request = MemoryEmbedRequest(
                     memory_selector=memory_target.memory_uid,
@@ -203,7 +210,7 @@ def cmd(
                 )
             else:
                 request = EmbedRequest(
-                    child_locator=a,
+                    child_locator=source_item,
                     into_locator=target_locator,
                     before=before,
                     after=after,

@@ -586,6 +586,10 @@ class TestHelp:
         assert any("[source_context]:[UID]" in form for form in embed_forms)
         assert any("Target defaults to current Context" in form for form in embed_forms)
         assert any("--from" in form and "compatibility" in form for form in embed_forms)
+        assert any(
+            "--from [child_context] --to [target_context]" in form
+            for form in embed_forms
+        )
         assert any("[source_context]:[UID]" in form for form in reference_forms)
         assert any(
             "Target defaults to current Context" in form for form in reference_forms
@@ -593,6 +597,23 @@ class TestHelp:
         assert any(
             "--from" in form and "compatibility" in form
             for form in reference_forms
+        )
+        assert any(
+            "--from [source_context] --to [target_context]" in form
+            for form in reference_forms
+        )
+
+    def test_directional_alias_forms_cover_merge_and_sever_roles(self):
+        merge_forms = help_inventory.COMMAND_FORMS["merge"]
+        sever_forms = help_inventory.COMMAND_FORMS["sever"]
+
+        assert any(
+            "--from [source_context] --to [target_context]" in form
+            for form in merge_forms
+        )
+        assert any(
+            "--from [source] --against [criteria] --to [result]" in form
+            for form in sever_forms
         )
 
     def test_forms_include_meaningful_bare_entry_routes(self):

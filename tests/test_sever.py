@@ -203,11 +203,11 @@ def test_explicit_sever_creates_review_session_without_output_or_query_access(
         app,
         [
             "sever",
-            "--source",
+            "--from",
             "local/personal-memory",
-            "--criteria",
+            "--against",
             "local/guardrails",
-            "--save-as",
+            "--to",
             "healthcare-draft",
         ],
     )
@@ -293,14 +293,30 @@ def test_sever_rejects_duplicate_or_overfull_positional_roles_before_provider(
         app,
         ["sever", "source", "criteria", "--source", "other"],
     )
+    duplicate_aliases = runner.invoke(
+        app,
+        [
+            "sever",
+            "--source",
+            "source",
+            "--from",
+            "other",
+            "--criteria",
+            "criteria",
+        ],
+    )
     overfull = runner.invoke(
         app,
         ["sever", "source", "criteria", "result", "extra"],
     )
 
     assert duplicate.exit_code == 2
-    assert "SOURCE was supplied both positionally and with --source" in (
+    assert "SOURCE was supplied both positionally and with --source/--from" in (
         duplicate.output + duplicate.stderr
+    )
+    assert duplicate_aliases.exit_code == 2
+    assert "SOURCE was supplied with more than one option" in (
+        duplicate_aliases.output + duplicate_aliases.stderr
     )
     assert overfull.exit_code == 2
     assert "expected at most three positional Contexts" in (

@@ -21,7 +21,9 @@ mem impact update LOCATOR LOCATOR
 mem update LOCATOR LOCATOR
 mem update [--from LOCATOR] [--to LOCATOR]
 mem sever LOCATOR LOCATOR [RESULT_NAME]
-mem sever [--source LOCATOR] --criteria LOCATOR [--save-as RESULT_NAME]
+mem sever [--source LOCATOR | --from LOCATOR]
+           [--criteria LOCATOR | --against LOCATOR]
+           [--save-as RESULT_NAME | --to RESULT_NAME]
 mem list [LOCATOR]
 mem ls [LOCATOR]
 mem show [SELECTOR] --context LOCATOR
@@ -45,8 +47,11 @@ mem clear [LOCATOR] --recursive
 mem delete LOCATOR
 mem remove LOCATOR
 mem merge LOCATOR [LOCATOR]
+mem merge --from LOCATOR [--to LOCATOR | --into LOCATOR]
 mem embed LOCATOR --into LOCATOR [--before ITEM | --after ITEM]
+mem embed --from LOCATOR [--to LOCATOR | --into LOCATOR]
 mem reference SELECTOR --from LOCATOR [--into LOCATOR]
+mem reference --from LOCATOR [--to LOCATOR | --into LOCATOR]
 mem dev query-source install ... --into LOCATOR
 ```
 
@@ -144,7 +149,13 @@ The option aliases retain the same roles for compatibility.
 
 Existing-Context resolution and public command syntax are separate concerns,
 but commands with the same semantic Context role should expose the same small
-grammar. The rollout uses this table as the authored cross-operation rule:
+grammar. A directional endpoint should be expressible either positionally or
+through an explicit role option without changing its meaning. `--from` and
+`--to` are shared aliases only where they accurately describe data flow;
+operation-specific names such as `--into`, `--criteria`, and `--save-as` remain
+available. Duplicate spellings for one role fail before current-Context capture
+instead of inheriting Click's last-option-wins behavior. The rollout uses this
+table as the authored cross-operation rule:
 
 | Operation family | Zero Context operands | Positional form | Compatibility options |
 | --- | --- | --- | --- |
@@ -153,10 +164,13 @@ grammar. The rollout uses this table as the authored cross-operation rule:
 | `resolve` | Use current Context, unless bare Memory operands uniquely locate one local owner | mixed `CONTEXT`, UUID-shaped `MEMORY`, and `CONTEXT:MEMORY`; every owner must canonicalize to one Context | `--context CONTEXT`, repeatable `--memory [CONTEXT:]UID`; short Memory prefixes require `--memory` or qualification |
 | `compare` | Open saved-session launcher | `PEER` uses current as Reference; `REFERENCE PEER` is fully explicit | `--from REFERENCE`, `--to PEER` |
 | `branch` | Open compact Source/new-target setup | `RESULT_NAME` creates from current | `--from SOURCE` chooses one existing local Source; Result remains a new identifier |
+| `merge` | Open Source/Target setup | `SOURCE [TARGET]`; omitted Target is current | `--from SOURCE`; `--to TARGET` and `--into TARGET` are equivalent |
 | `update` | Open saved Update work | `SOURCE TARGET` only | `--from SOURCE`, `--to TARGET`; one omitted option endpoint uses current |
 | `impact update` | Inspect saved Update Impact | `SOURCE TARGET` starts a new preview | same `--from`/`--to` endpoint aliases |
 | root `impact` | Error without a named route or endpoint | none, because the first token is a subcommand | retained `--from`/`--to` directional alias |
 | `forget`, `impact forget` | Context defaults to current; instruction is still required outside the setup TTY | the position is reserved for `INSTRUCTION` | `--context CONTEXT` |
+| `sever` | Open Source/Criteria/Result setup | `SOURCE CRITERIA [RESULT]`; omitted Result self-saves | `--source`/`--from`, `--criteria`/`--against`, `--save-as`/`--to` |
+| `embed`, `reference` | Open Source/Target setup | `ITEM`; omitted Target is current | A Context Source may use `--from SOURCE`; `--into`/`--to` select Target. With an explicit Memory ITEM, `--from` retains its owner-Context qualifier meaning |
 | `impact meld`, `impact sever` | Inspect saved operation work | none | `--session UID` only |
 
 For the ordinary unary families, supplying both the positional Context and
@@ -179,19 +193,28 @@ current Context when both locators are canonical global names. A relative
 locator still requires current even when the other endpoint is explicit.
 
 Sever follows the same command-entry rule for its positional Source/Criteria
-inputs and their `--source`/`--criteria` aliases. When Source is omitted, the
-captured current Context supplies it; a relative Criteria locator is still
+inputs and their `--source`/`--from` and `--criteria`/`--against` aliases. When
+Source is omitted, the captured current Context supplies it; a relative Criteria locator is still
 resolved against that exact same snapshot, not against a later reread of
 global current state. When Result is omitted, Sever self-saves by reusing the
 canonical Source name from that snapshot. An explicit positional Result or
 `--save-as` value is not passed through the existing-Context resolver: it must
 either equal that canonical Source name for self-save or be a fresh ordinary
-Context identifier for other-save. A raw relative Result is never reinterpreted
-against later global current state.
+Context identifier for other-save. `--save-as` and `--to` are equivalent Result
+spellings. A raw relative Result is never reinterpreted against later global
+current state.
 
-Merge similarly resolves positional SOURCE and TARGET, or SOURCE plus its
-`--into` Target alias, against one captured current snapshot. Omitting Target
-uses that snapshot directly; supplying it positionally never switches current.
+Merge similarly resolves positional SOURCE and TARGET, or `--from` SOURCE plus
+the `--into`/`--to` Target aliases, against one captured current snapshot.
+Omitting Target uses that snapshot directly; supplying it positionally never
+switches current.
+
+Embed and Reference preserve their mixed Context/Memory selector contract. An
+omitted ITEM plus `--from CONTEXT` means the complete Context Source; an
+explicit Memory ITEM plus `--from CONTEXT` still qualifies that Memory's direct
+owner. `--into` and `--to` select the same Target. This arity distinction adds
+the missing explicit Context form without reinterpreting existing Memory
+scripts.
 
 Resolution itself grants no mutation authority and replaces no existing
 identity or freshness checks. Switch still compare-and-sets current state and

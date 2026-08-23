@@ -86,7 +86,7 @@ from memcommit.interfaces.tui.operations.embed.model import EmbedTuiSetup
 EMBED_COMMAND_FORM = ExactCommandForm(
     command=("mem", "embed"),
     usage=(
-        "mem embed ITEM [--from SOURCE] --into TARGET "
+        "mem embed [ITEM] [--from SOURCE] --into TARGET "
         "[--before ITEM | --after ITEM]"
     ),
     fields=(
@@ -96,7 +96,10 @@ EMBED_COMMAND_FORM = ExactCommandForm(
         ),
         ExactCommandFormField(
             "--from SOURCE",
-            "select Memory link mode and its directly owning Source Context",
+            (
+                "select a Source Context when ITEM is omitted, or the directly "
+                "owning Context for a Memory ITEM"
+            ),
         ),
         ExactCommandFormField(
             "--into TARGET",
@@ -136,8 +139,10 @@ def parse_embed_command_argv(
             continue
         operands.append(value)
         index += 1
-    if len(operands) != 1:
-        raise ValueError("Editable Embed commands require exactly one ITEM operand.")
+    if len(operands) > 1 or (not operands and "--from" not in options):
+        raise ValueError(
+            "Editable Embed commands require one ITEM operand or --from SOURCE."
+        )
     if "--into" in options and "--to" in options:
         raise ValueError("Use only one of --into or --to.")
     into_locator = options.get("--into") or options.get("--to")
@@ -148,7 +153,7 @@ def parse_embed_command_argv(
         )
     if "--before" in options and "--after" in options:
         raise ValueError("Pass only one of --before or --after.")
-    if "--from" in options:
+    if operands and "--from" in options:
         return validate_memory_embed_request(
             MemoryEmbedRequest(
                 memory_selector=operands[0],
@@ -158,9 +163,10 @@ def parse_embed_command_argv(
                 after=options.get("--after"),
             )
         )
+    child_locator = operands[0] if operands else options["--from"]
     return validate_embed_request(
         EmbedRequest(
-            child_locator=operands[0],
+            child_locator=child_locator,
             into_locator=into_locator,
             before=options.get("--before"),
             after=options.get("--after"),
