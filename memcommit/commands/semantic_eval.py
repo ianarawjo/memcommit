@@ -12,6 +12,8 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.commands.command_group import CanonicalCommandGroup
+
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
@@ -134,14 +136,17 @@ _SECRET_ENV_NAMES = (
 
 
 eval_app = typer.Typer(
+    cls=CanonicalCommandGroup,
     no_args_is_help=True,
     help="Run and inspect reproducible semantic evaluation campaigns.",
 )
 semantic_app = typer.Typer(
+    cls=CanonicalCommandGroup,
     no_args_is_help=True,
     help="Evaluate staged semantic-operation contracts.",
 )
 run_app = typer.Typer(
+    cls=CanonicalCommandGroup,
     no_args_is_help=True,
     help="Run one frozen semantic evaluation campaign.",
 )

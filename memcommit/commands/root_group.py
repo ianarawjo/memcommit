@@ -9,7 +9,8 @@ try:  # Typer 0.27+ vendors Click; older supported Typer releases do not.
     from typer import _click as click
 except ImportError:  # pragma: no cover - compatibility with older Typer
     import click
-from typer.core import TyperGroup
+
+from memcommit.commands.command_group import CanonicalCommandGroup
 
 from memcommit.interfaces.console.errors import render_cli_error
 from memcommit.write_protection import (
@@ -18,7 +19,7 @@ from memcommit.write_protection import (
 )
 
 
-class MemCommandGroup(TyperGroup):
+class MemCommandGroup(CanonicalCommandGroup):
     """Render store-level protection failures without Python tracebacks.
 
     Protection is enforced below individual commands, including legacy and
@@ -48,13 +49,9 @@ class MemCommandGroup(TyperGroup):
             entered = tuple(getattr(ctx, "_protected_args", ())) or tuple(
                 getattr(ctx, "protected_args", ())
             )
-            operation = (
-                entered[0]
-                if entered
-                and isinstance(entered[0], str)
-                and entered[0] in self.commands
-                else "mem"
-            )
+            operation = "mem"
+            if entered and isinstance(entered[0], str):
+                operation = self.canonical_command_name(ctx, entered[0]) or "mem"
             command_store_dir = MemoryStore(create=False).store_dir
             active_attempt = begin_command_attempt(
                 store_dir=command_store_dir,

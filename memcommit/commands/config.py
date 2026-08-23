@@ -1,9 +1,13 @@
 """mem config — read and write global configuration."""
 import typer
 
+from memcommit.commands.command_group import CanonicalCommandGroup
 from memcommit.config import Config
 
-app = typer.Typer(help="Read and write global mem configuration.")
+app = typer.Typer(
+    cls=CanonicalCommandGroup,
+    help="Read and write global mem configuration.",
+)
 
 
 @app.command("set")

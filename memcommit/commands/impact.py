@@ -9,6 +9,8 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.commands.command_group import CanonicalCommandGroup
+
 from memcommit.atomize import (
     AtomizeFrameOrigin,
     AtomizeImpactError,
@@ -95,6 +97,7 @@ from memcommit.update_endpoints import (
 
 
 app = typer.Typer(
+    cls=CanonicalCommandGroup,
     invoke_without_command=True,
     no_args_is_help=False,
     help=(

@@ -6,10 +6,15 @@ from typing import Annotated
 import json
 import typer
 
+from memcommit.commands.command_group import CanonicalCommandGroup
 from memcommit.context_locator import resolve_context_locator
 
-app = typer.Typer(help="Developer tools: evals, diagnostics.")
+app = typer.Typer(
+    cls=CanonicalCommandGroup,
+    help="Developer tools: evals, diagnostics.",
+)
 query_source_app = typer.Typer(
+    cls=CanonicalCommandGroup,
     help="Install concealed sources for the query-only research prototype."
 )
 app.add_typer(query_source_app, name="query-source")

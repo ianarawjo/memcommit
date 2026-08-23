@@ -7,6 +7,7 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.commands.command_group import CanonicalCommandGroup
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.config import Config
 from memcommit.provider_types import (
@@ -33,6 +34,7 @@ from memcommit.infrastructure.providers.policy import (
 
 
 app = typer.Typer(
+    cls=CanonicalCommandGroup,
     invoke_without_command=True,
     no_args_is_help=False,
     help="Inspect, select, and verify semantic-provider routing.",

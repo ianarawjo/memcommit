@@ -11,6 +11,7 @@ from typing import Annotated, Callable, Optional
 import typer
 
 from memcommit.command_attempts import current_command_attempt_uid
+from memcommit.commands.command_group import CanonicalCommandGroup
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.profile_group import ProfileAliasGroup
 from memcommit.commands.profile_picker import (
@@ -79,6 +80,7 @@ app = typer.Typer(
 )
 
 grant_app = typer.Typer(
+    cls=CanonicalCommandGroup,
     no_args_is_help=True,
     help="Grant, inspect, revise, or revoke cross-Profile Context views.",
 )

@@ -5,9 +5,9 @@ from __future__ import annotations
 from typing import Annotated, Any, Optional
 
 import typer
-from typer.core import TyperGroup
 
 import memcommit.ops as ops
+from memcommit.commands.command_group import CanonicalCommandGroup
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.context_targeting.loading import (
     resolve_local_direct_memory_locator,
@@ -26,7 +26,7 @@ from memcommit.context_targeting.presets import (
 from memcommit.store import MemoryStore, context_record_digest
 
 
-class _ProtectionCommandGroup(TyperGroup):
+class _ProtectionCommandGroup(CanonicalCommandGroup):
     """Preserve explicit resource commands while accepting one auto target."""
 
     _AUTO_TARGET_COMMAND = "_target"
@@ -47,13 +47,11 @@ class _ProtectionCommandGroup(TyperGroup):
     ) -> tuple[str | None, Any, list[str]]:
         if args:
             candidate = str(args[0])
-            command = self.get_command(ctx, candidate)
-            if command is None and ctx.token_normalize_func is not None:
-                command = self.get_command(
-                    ctx,
-                    ctx.token_normalize_func(candidate),
-                )
-            if not candidate.startswith("-") and command is None:
+            resolved = self._resolve_known_command(ctx, candidate)
+            if resolved is not None:
+                canonical, command = resolved
+                return canonical, command, args[1:]
+            if not candidate.startswith("-"):
                 command = self.get_command(ctx, self._AUTO_TARGET_COMMAND)
                 if command is None:  # pragma: no cover - registration invariant
                     raise RuntimeError("Protection auto-target route is unavailable.")
