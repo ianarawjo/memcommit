@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from prompt_toolkit.application.current import get_app
 
 from memcommit.context_targeting.model import DirectMemoryTarget
+from memcommit.context_targeting.model import ContextSelectionMode
 from memcommit.context_targeting.tui.memory_selection import (
     DirectMemorySelectionState,
 )
@@ -33,6 +34,7 @@ class DirectMemorySelectorView:
     current_context: str | None = None
     selectable_names: frozenset[str] | None = None
     annotations: tuple[tuple[str, SourceDisplayValue], ...] = ()
+    mode: ContextSelectionMode = "SINGLE"
 
 
 class DirectMemorySelectorControl:
@@ -66,7 +68,7 @@ class DirectMemorySelectorControl:
             self.contexts.tree,
             memory_loader,
         )
-        self.selection = DirectMemorySelectionState()
+        self.selection = DirectMemorySelectionState(mode=view.mode)
         self.contexts.row_projector = self._project_row
         # A direct-Memory role should expose the selected Context's item layer
         # on entry; making the person discover a separate visibility toggle
@@ -85,6 +87,17 @@ class DirectMemorySelectorControl:
     def selected(self) -> DirectMemoryTarget | None:
         return self.selection.selected
 
+    @property
+    def selected_many(self) -> tuple[DirectMemoryTarget, ...]:
+        """Return checked targets in explicit check or command-edit order."""
+
+        selected = self.selection.selected_targets
+        for target in selected:
+            rows = self.preview.memory_cache.get(target.context_name, ())
+            if not any(row.selector == target.memory_uid for row in rows):
+                raise RuntimeError("A selected direct Memory left the frozen selector.")
+        return selected
+
     def _project_row(self, row, focused: bool) -> ContextSelectorRowProjection:
         width = max(1, get_app().output.get_size().columns - 8)
         memory_focused = (
@@ -98,7 +111,12 @@ class DirectMemorySelectorControl:
                 row,
                 wrap_width=width,
                 selectable_memories=True,
-                selected_memory=self.selection.selected,
+                selected_memory=(
+                    None if self.selection.multiple else self.selection.selected
+                ),
+                selected_memories=(
+                    self.selection.selected_set if self.selection.multiple else None
+                ),
             ),
             show_context_cursor=not (focused and memory_focused),
         )
@@ -172,6 +190,31 @@ class DirectMemorySelectorControl:
             ),
         )
         return self.selection.choose(target)
+
+    def replace_targets(self, targets: Sequence[DirectMemoryTarget]) -> bool:
+        """Resolve and atomically stage an exact set through the shared control."""
+
+        resolved = tuple(
+            self.resolve_target(target.context_name, target.memory_uid)
+            for target in targets
+        )
+        if resolved != tuple(targets):
+            raise ValueError("A direct Memory target changed before it was selected.")
+        changed = self.selection.replace(resolved)
+        if resolved:
+            target = resolved[-1]
+            self.contexts.select_name(target.context_name)
+            self.contexts.tree.memory_visibility_overrides[target.context_name] = True
+            rows = self.preview.memory_cache[target.context_name]
+            self.preview.memory_anchor = (
+                target.context_name,
+                next(
+                    index
+                    for index, row in enumerate(rows)
+                    if row.selector == target.memory_uid
+                ),
+            )
+        return changed
 
     def expand(self) -> None:
         self.preview.expand_selected()

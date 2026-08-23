@@ -343,7 +343,8 @@ def move_memories_agent_tool_schema() -> JsonObject:
         "name": MOVE_MEMORIES_AGENT_TOOL_NAME,
         "description": (
             "Move an ordered batch of directly owned local Memories into one "
-            "distinct local Target as one Undoable atomic command."
+            "distinct local Target as one Undoable atomic command. Local live "
+            "Memory Embeds follow by default; snapshots remain unchanged."
         ),
         "parameters": {
             "type": "object",
@@ -351,8 +352,14 @@ def move_memories_agent_tool_schema() -> JsonObject:
             "required": ["version", "memory_locators"],
             "properties": _properties(
                 {
-                    "retarget_links": {"type": "boolean"},
-                    "break_links": {"type": "boolean"},
+                    "retarget_links": {
+                        "type": "boolean",
+                        "description": "Compatibility spelling for default retargeting.",
+                    },
+                    "break_links": {
+                        "type": "boolean",
+                        "description": "Explicitly allow live Embeds to become dangling.",
+                    },
                 }
             ),
         },

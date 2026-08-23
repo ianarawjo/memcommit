@@ -333,7 +333,33 @@ def test_move_batch_across_sources_is_one_undo_and_redo_unit(isolated_store):
     ]
 
 
-def test_move_blocks_inbound_live_embed_by_default_without_partial_change(
+def test_move_retargets_inbound_live_embed_by_default(
+    isolated_store,
+):
+    store = MemoryStore()
+    source, (memory,) = _context(store, "source", "linked")
+    target, _ = _context(store, "target")
+    watcher, _ = _context(store, "watcher")
+    ref = ops.embed_memory(memory, source, watcher)
+    store.save(watcher)
+    result = runner.invoke(
+        app,
+        ["move", f"source:{memory.uid[:8]}", "--into", "target"],
+    )
+
+    assert result.exit_code == 0, result.output + result.stderr
+    assert "RETARGET LINKS" in result.output
+    assert "Retargeted 1 live Memory Embed" in result.output
+    moved_ref = store.load_direct(watcher.name).memories[ref.uid]
+    assert isinstance(moved_ref, MemoryRef)
+    assert moved_ref.target_context_uid == target.uid
+    assert moved_ref.target_context_name == target.name
+    assert moved_ref.target_memory_uid == memory.uid
+    assert store.load_direct(source.name).memories == {}
+    assert list(store.load_direct(target.name).memories) == [memory.uid]
+
+
+def test_move_retains_explicit_internal_block_policy_without_partial_change(
     isolated_store,
 ):
     store = MemoryStore()
@@ -347,14 +373,17 @@ def test_move_blocks_inbound_live_embed_by_default_without_partial_change(
         for name in (source.name, target.name, watcher.name)
     }
 
-    result = runner.invoke(
-        app,
-        ["move", f"source:{memory.uid[:8]}", "--into", "target"],
-    )
+    with pytest.raises(MemoryTransferError, match="blocked by 1 inbound"):
+        run_move(
+            MoveMemoriesRequest(
+                (f"source:{memory.uid[:8]}",),
+                into_locator=target.name,
+                link_policy="BLOCK",
+            ),
+            port=MemoryStoreMemoryTransferPort.capture(store),
+        )
 
-    assert result.exit_code == 1
-    assert "blocked by 1 inbound live Memory Embed" in result.stderr
-    assert ref.uid[:8] in result.stderr
+    assert ref.uid in store.load_direct(watcher.name).memories
     assert {
         name: store.load_direct(name).to_dict()
         for name in (source.name, target.name, watcher.name)
@@ -513,7 +542,7 @@ def test_move_rejects_a_target_uid_collision_before_source_mutation(
     )
 
 
-def test_move_retarget_refuses_a_target_owned_self_link(isolated_store):
+def test_move_default_retarget_refuses_a_target_owned_self_link(isolated_store):
     store = MemoryStore()
     source, (memory,) = _context(store, "source", "linked")
     target, _ = _context(store, "target")
@@ -529,7 +558,6 @@ def test_move_retarget_refuses_a_target_owned_self_link(isolated_store):
             f"source:{memory.uid[:8]}",
             "--into",
             target.name,
-            "--retarget-links",
         ],
     )
 

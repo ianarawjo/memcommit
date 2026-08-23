@@ -167,7 +167,10 @@ def move_memories(
         raise MemoryTransferInputError(
             "Choose only one of retarget_links or break_links."
         )
-    policy = "RETARGET" if retarget_links else "BREAK" if break_links else "BLOCK"
+    # Retargeting is the normal meaning of moving a live Memory identity.
+    # Keep retarget_links as a compatibility spelling while breakage remains
+    # the only behavior that needs an explicit opt-in.
+    policy = "BREAK" if break_links else "RETARGET"
     try:
         result = run_move(
             MoveMemoriesRequest(

@@ -8,6 +8,7 @@ import typer
 
 from memcommit.context_targeting.operands import choose_endpoint_operand
 from memcommit.interfaces.console.errors import render_cli_error
+from memcommit.interfaces.console.terminal import is_interactive_terminal
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.interfaces.console.theme import (
     SemanticColorRole,
@@ -23,6 +24,9 @@ from memcommit.memory_transfer_application import (
     run_move,
 )
 from memcommit.memory_transfer_runtime import MemoryStoreMemoryTransferPort
+from memcommit.interfaces.tui.operations.memory_transfer import (
+    choose_memory_transfer_setup,
+)
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
@@ -210,20 +214,47 @@ def copy_cmd(
     ] = False,
 ) -> None:
     try:
-        locators = _selected_locators(memory_locators, memory_options)
-        target = _target_option(into, to)
-        request = CopyMemoriesRequest(
-            memory_locators=locators,
-            source_locator=source,
-            into_locator=target,
-            before=before,
-            after=after,
-            uid_policy="PRESERVE" if preserve_uids else "FRESH",
-        )
         store = MemoryStore()
+        port = MemoryStoreMemoryTransferPort.capture(store)
+        frozen_plan = None
+        bare = not any(
+            (
+                memory_locators,
+                memory_options,
+                source,
+                into,
+                to,
+                before,
+                after,
+                preserve_uids,
+            )
+        )
+        if bare:
+            if not is_interactive_terminal():
+                raise MemoryTransferError(
+                    "Memory locators are required outside a terminal; for example: "
+                    "mem copy CONTEXT:MEMORY --into TARGET."
+                )
+            frozen_plan = choose_memory_transfer_setup(port, kind="COPY")
+            if frozen_plan is None:
+                typer.echo("Copy cancelled — no Context was changed.")
+                return
+            request = frozen_plan.request
+        else:
+            locators = _selected_locators(memory_locators, memory_options)
+            target = _target_option(into, to)
+            request = CopyMemoriesRequest(
+                memory_locators=locators,
+                source_locator=source,
+                into_locator=target,
+                before=before,
+                after=after,
+                uid_policy="PRESERVE" if preserve_uids else "FRESH",
+            )
         result = run_copy(
             request,
-            port=MemoryStoreMemoryTransferPort.capture(store),
+            port=port,
+            frozen_plan=frozen_plan,
         )
     except (
         ConcurrentContextUpdateError,
@@ -305,7 +336,10 @@ def move_cmd(
         bool,
         typer.Option(
             "--retarget-links",
-            help="Atomically retarget every local inbound live Memory Embed",
+            help=(
+                "Compatibility spelling for the default: atomically retarget "
+                "every local inbound live Memory Embed"
+            ),
         ),
     ] = False,
     break_links: Annotated[
@@ -321,23 +355,48 @@ def move_cmd(
             raise MemoryTransferError(
                 "Pass only one of --retarget-links or --break-links."
             )
-        locators = _selected_locators(memory_locators, memory_options)
-        target = _target_option(into, to)
-        policy = (
-            "RETARGET" if retarget_links else "BREAK" if break_links else "BLOCK"
-        )
-        request = MoveMemoriesRequest(
-            memory_locators=locators,
-            source_locator=source,
-            into_locator=target,
-            before=before,
-            after=after,
-            link_policy=policy,
-        )
         store = MemoryStore()
+        port = MemoryStoreMemoryTransferPort.capture(store)
+        frozen_plan = None
+        bare = not any(
+            (
+                memory_locators,
+                memory_options,
+                source,
+                into,
+                to,
+                before,
+                after,
+                retarget_links,
+                break_links,
+            )
+        )
+        if bare:
+            if not is_interactive_terminal():
+                raise MemoryTransferError(
+                    "Memory locators are required outside a terminal; for example: "
+                    "mem move CONTEXT:MEMORY --into TARGET."
+                )
+            frozen_plan = choose_memory_transfer_setup(port, kind="MOVE")
+            if frozen_plan is None:
+                typer.echo("Move cancelled — no Context was changed.")
+                return
+            request = frozen_plan.request
+        else:
+            locators = _selected_locators(memory_locators, memory_options)
+            target = _target_option(into, to)
+            request = MoveMemoriesRequest(
+                memory_locators=locators,
+                source_locator=source,
+                into_locator=target,
+                before=before,
+                after=after,
+                link_policy="BREAK" if break_links else "RETARGET",
+            )
         result = run_move(
             request,
-            port=MemoryStoreMemoryTransferPort.capture(store),
+            port=port,
+            frozen_plan=frozen_plan,
         )
     except (
         ConcurrentContextUpdateError,

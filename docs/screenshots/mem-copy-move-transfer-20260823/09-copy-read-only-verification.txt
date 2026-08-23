@@ -1,0 +1,25 @@
+COPIED · 2 Memories → 'archive/decisions' · PRESERVE UIDs · between [ab120001] and [cd340002]                                                                                       
+  'inbox/notes' [9ef031a2] → [9ef031a2]                                                                                                                                             
+  'inbox/notes' [ea713f91] → [ea713f91]                                                                                                                                             
+Checkpoint 'archive/decisions' [e449d548].                                                                                                                                          
+COMMAND EXIT · 0                                                                                                                                                                    
+CAPTURE PAUSE · press Enter for read-only verification                                                                                                                              
+                                                                                                                                                                                    
+COPY · READ-ONLY STORE VERIFICATION                                                                                                                                                 
+CONTEXT · archive/decisions                                                                                                                                                         
+  MEMORY [ab120001] · Archived decision: bounded recovery needs an owner.                                                                                                           
+  MEMORY [9ef031a2] · Prefer bounded retries over unbounded recovery loops.                                                                                                         
+  MEMORY [ea713f91] · Operational decisions require an owner.                                                                                                                       
+  MEMORY [cd340002] · Archived decision: verify every operational handoff.                                                                                                          
+CONTEXT · inbox/notes                                                                                                                                                               
+  MEMORY [9ef031a2] · Prefer bounded retries over unbounded recovery loops.                                                                                                         
+  MEMORY [ea713f91] · Operational decisions require an owner.                                                                                                                       
+  MEMORY [ca112233] · Document the exact boundary before applying a change.                                                                                                         
+CONTEXT · reports/snapshots                                                                                                                                                         
+  SNAPSHOT [fa560001] · OWNER FIELD inbox/notes · MEMORY [9ef031a2]                                                                                                                 
+CONTEXT · watchers/live                                                                                                                                                             
+  LIVE EMBED [de450001] · OWNER FIELD inbox/notes · MEMORY [9ef031a2]                                                                                                               
+LIVE RESOLVES · YES                                                                                                                                                                 
+ALL CONTEXTS UNCHANGED · NO                                                                                                                                                         
+CHECKPOINTS · 1                                                                                                                                                                     
+CURRENT CONTEXT · inbox/notes

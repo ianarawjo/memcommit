@@ -1,0 +1,3 @@
+Error: Context 'watchers/live' is locked against changes. Unlock that Context first.                                                                                                
+COMMAND EXIT · 1                                                                                                                                                                    
+CAPTURE PAUSE · press Enter for read-only verification

@@ -38,10 +38,22 @@ current Context. `--before` and `--after` select one exact Target direct-item
 gap; omitting both appends the complete batch. Every selector, collision, gap,
 Source binding, and Target binding is validated before publication.
 
-There is no operand-free TUI route in version 1. Bare Copy or Move returns the
-required-locator error. A later multi-Memory selector may be added only by
-composing the shared Context tree, direct-Memory selection state, Target tree,
-and exact placement review; it must not introduce a second mutation path.
+In a TTY, bare Copy and Move open one full-screen setup shaped by the current
+Embed workbench rather than a compact endpoint form. The Source frame extends
+the shared direct-Memory selector to `MULTIPLE`; checked Memories are projected
+in explicit check order, and a valid exact-command edit replaces that order
+atomically. The Target frame composes the
+shared Context tree with Embed's direct-item placement projection, so exactly
+one movable `POSITION · n/total` line represents the current gap instead of a
+duplicated BEFORE/AFTER row for every item. Copy adds one small FRESH/PRESERVE
+choice; Move adds no normal link-policy frame.
+
+The last frame is the same compact editable `COMMAND · RUNNABLE` control used
+by Embed. Edits are parsed and resolved completely before the Source checks,
+Target, gap, or policy state changes. Enter freezes an exact application plan,
+returns it to the CLI, and the CLI applies that same plan once. The TUI never
+publishes storage itself. Outside a TTY, bare Copy and Move return stable
+`CONTEXT:MEMORY --into TARGET` guidance.
 
 ## Copy identity
 
@@ -71,20 +83,25 @@ direct item may already use a selected UID. Same-UID copies from different
 branch Contexts cannot be moved into one Target because one Context cannot own
 two direct items with the same key.
 
-A live Memory Embed binds both Source Context identity and Memory identity.
-Moving its Source without an explicit policy could silently change navigation
-or leave a pointer dangling. Move therefore freezes the complete ordinary
-local direct graph and applies one of three policies:
+A live Memory Embed binds both Source Context identity and Memory identity. Its
+meaning is live ownership-following, while a Reference is the immutable form.
+Move therefore freezes the complete ordinary local direct graph and applies
+one of two normal dispositions:
 
-- `BLOCK` is the default. Any inbound live Memory Embed rejects the complete
-  Move before mutation, matching the fail-closed Delete and Dedup boundary.
-- `RETARGET`, selected by `--retarget-links`, atomically rewrites every local
-  inbound live Embed to the new owner while preserving the Embed item's UID and
-  order. A Target-owned inbound Embed is rejected because retargeting it would
-  create a forbidden self-link; remove that Embed first or choose Break.
+- `RETARGET` is the default. It atomically rewrites every local inbound live
+  Embed to the new owner while preserving the Embed item's UID and order.
+  `--retarget-links` remains accepted as a compatibility spelling but does not
+  alter the default. A Target-owned inbound Embed is rejected because
+  retargeting it would create a forbidden self-link; remove that Embed first or
+  choose Break.
 - `BREAK`, selected by `--break-links`, deliberately leaves existing live
   Embeds bound to the old Source identity. They become dangling after Move and
   the receipt reports their exact count.
+
+The application retains the typed `BLOCK` value only for compatibility with
+already constructed internal requests; no current CLI, TUI, Python, agent, or
+MCP route chooses it by default. A normal Move that cannot write one known live
+Embed owner fails the complete Store batch before its first durable write.
 
 Immutable Memory snapshot References never change. Cross-Profile or concealed
 query-only links do not enter the local graph and are not inferred as writable
@@ -125,6 +142,12 @@ Memories. Move is deliberately not assigned one action color: it is a mixed
 REMOVE-plus-ADD effect, so its receipt colors only those two shortest typed
 tokens. Plain and no-color output retains the same labels and ordering.
 
+The TUI intentionally reuses Embed's full-screen source/target/placement and
+compact exact-command grammar. Reference's larger explanatory To Do report was
+rejected here because Copy and Move already expose their complete mechanical
+effects in the exact command and final typed receipt; duplicating that report
+would make the first screen denser without adding a distinct review boundary.
+
 ## Deliberate limits
 
 - Copy and Move do not accept MemoryRef, snapshot Reference, query view, or
@@ -136,4 +159,3 @@ tokens. Plain and no-color output retains the same labels and ordering.
   provenance is the operation checkpoint and UID mapping.
 - Move retargets only ordinary local live Memory Embeds. A later cross-Profile
   ownership protocol must define authority and revocation separately.
-

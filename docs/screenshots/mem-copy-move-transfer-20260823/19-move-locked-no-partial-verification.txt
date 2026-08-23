@@ -1,0 +1,20 @@
+Error: Context 'watchers/live' is locked against changes. Unlock that Context first.                                                                                                
+COMMAND EXIT · 1                                                                                                                                                                    
+CAPTURE PAUSE · press Enter for read-only verification                                                                                                                              
+                                                                                                                                                                                    
+LOCKED · READ-ONLY STORE VERIFICATION                                                                                                                                               
+CONTEXT · archive/decisions                                                                                                                                                         
+  MEMORY [ab120001] · Archived decision: bounded recovery needs an owner.                                                                                                           
+  MEMORY [cd340002] · Archived decision: verify every operational handoff.                                                                                                          
+CONTEXT · inbox/notes                                                                                                                                                               
+  MEMORY [9ef031a2] · Prefer bounded retries over unbounded recovery loops.                                                                                                         
+  MEMORY [ea713f91] · Operational decisions require an owner.                                                                                                                       
+  MEMORY [ca112233] · Document the exact boundary before applying a change.                                                                                                         
+CONTEXT · reports/snapshots                                                                                                                                                         
+  SNAPSHOT [fa560001] · OWNER FIELD inbox/notes · MEMORY [9ef031a2]                                                                                                                 
+CONTEXT · watchers/live                                                                                                                                                             
+  LIVE EMBED [de450001] · OWNER FIELD inbox/notes · MEMORY [9ef031a2]                                                                                                               
+LIVE RESOLVES · YES                                                                                                                                                                 
+ALL CONTEXTS UNCHANGED · YES                                                                                                                                                        
+CHECKPOINTS · 0                                                                                                                                                                     
+CURRENT CONTEXT · inbox/notes

@@ -57,7 +57,7 @@ def test_public_copy_and_move_return_typed_undoable_receipts(tmp_path):
     assert copied.items[0].into_memory_uid != first.uid
     assert isinstance(moved, MoveMemoriesReceipt)
     assert moved.undoable is True
-    assert moved.link_policy == "BLOCK"
+    assert moved.link_policy == "RETARGET"
     assert moved.items[0].source_memory_uid == second.uid
     assert moved.items[0].into_memory_uid == second.uid
     assert list(store.load_direct(source.name).memories) == [first.uid]

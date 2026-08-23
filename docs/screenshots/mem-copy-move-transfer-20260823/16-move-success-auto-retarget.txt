@@ -1,0 +1,6 @@
+MOVED · 1 Memory → 'archive/decisions' · RETARGET LINKS · between [ab120001] and [cd340002]                                                                                         
+  REMOVE 'inbox/notes' [9ef031a2] · ADD 'archive/decisions' [9ef031a2]                                                                                                              
+Retargeted 1 live Memory Embed(s).                                                                                                                                                  
+Checkpoints 'archive/decisions' [380964ae], 'inbox/notes' [51dd206b], 'watchers/live' [2ca464b0].                                                                                   
+COMMAND EXIT · 0                                                                                                                                                                    
+CAPTURE PAUSE · press Enter for read-only verification

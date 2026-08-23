@@ -1,0 +1,52 @@
+ MEM MOVE · DIRECT MEMORIES → INTO                                                                                                                                                  
+ CHECK ONE OR MORE SOURCE MEMORIES, THEN CHOOSE ONE TARGET GAP · LIVE EMBEDS FOLLOW                                                                                                 
+┌────────────────────────────────────────────────────────────| SOURCE MEMORIES · MOVE THESE DIRECT ITEMS · * CURRENT |─────────────────────────────────────────────────────────────┐
+│  ·   ▸ archive/decisions                                                                                                                                                        ^│
+│› ✓ * ▾ inbox/notes                                                                                                                                                               │
+│  › ✓ [memory 9ef031a2] Prefer bounded retries over unbounded recovery loops.                                                                                                     │
+│    · [memory ea713f91] Operational decisions require an owner.                                                                                                                   │
+│    · [memory ca112233] Document the exact boundary before applying a change.                                                                                                     │
+│  ·   ▸ reports/snapshots                                                                                                                                                         │
+│  ·   ▸ watchers/live                                                                                                                                                             │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────| INTO + POSITION · CHANGE THIS CONTEXT |─────────────────────────────────────────────────────────────────────┐
+│› ✓   ▾ archive/decisions                                                                                                                                                        ^│
+│  · [memory ab120001] Archived decision: bounded recovery needs an owner.                                                                                                         │
+│  · [memory cd340002] Archived decision: verify every operational handoff.                                                                                                        │
+│    ✓ ───────── POSITION · 3/4 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── │
+│  · [embedded memory de450001] DANGLING · inbox/notes#9ef031a2                                                                                                                    │
+│  · * · inbox/notes                                                                                                                                                               │
+│  ·   · reports/snapshots                                                                                                                                                         │
+│  ·   · watchers/live                                                                                                                                                             │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ COMMAND · RUNNABLE ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃› mem move inbox/notes:9ef031a --into archive/decisions --before de45000                                                                                                          ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+                                                                                                                                                                                    
+ Move cannot retarget a live Embed held by the Target Context because that would create a self-link. Remove the Target Embed first or explicitly use --break-links.

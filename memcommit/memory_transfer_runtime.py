@@ -303,6 +303,21 @@ class MemoryStoreMemoryTransferPort(MemoryTransferPort):
     def capture(cls, store: MemoryStore) -> "MemoryStoreMemoryTransferPort":
         return cls(store, current_name=store.current_context_name())
 
+    @property
+    def local_context_names(self) -> tuple[str, ...]:
+        """Expose the frozen-role catalog needed by interactive adapters."""
+
+        return tuple(self._store.list_context_names())
+
+    @property
+    def current_context_name(self) -> str | None:
+        return self._current_name
+
+    def inspect_local_context(self, name: str) -> Context:
+        """Load one local direct-order preview without changing it."""
+
+        return self._store.load_direct(name)
+
     def _frames(self) -> tuple[_StoreTransferFrame, ...]:
         contexts = self._store.load_direct_context_graph_strict()
         return tuple(

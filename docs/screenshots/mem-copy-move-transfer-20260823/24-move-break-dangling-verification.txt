@@ -1,0 +1,23 @@
+MOVED · 1 Memory → 'archive/decisions' · BREAK LINKS · before [ab120001] at the start                                                                                               
+  REMOVE 'inbox/notes' [9ef031a2] · ADD 'archive/decisions' [9ef031a2]                                                                                                              
+Left 1 live Memory Embed(s) dangling as explicitly requested.                                                                                                                       
+Checkpoints 'archive/decisions' [80f100a5], 'inbox/notes' [b634bcc3].                                                                                                               
+COMMAND EXIT · 0                                                                                                                                                                    
+CAPTURE PAUSE · press Enter for read-only verification                                                                                                                              
+                                                                                                                                                                                    
+BREAK · READ-ONLY STORE VERIFICATION                                                                                                                                                
+CONTEXT · archive/decisions                                                                                                                                                         
+  MEMORY [9ef031a2] · Prefer bounded retries over unbounded recovery loops.                                                                                                         
+  MEMORY [ab120001] · Archived decision: bounded recovery needs an owner.                                                                                                           
+  MEMORY [cd340002] · Archived decision: verify every operational handoff.                                                                                                          
+CONTEXT · inbox/notes                                                                                                                                                               
+  MEMORY [ea713f91] · Operational decisions require an owner.                                                                                                                       
+  MEMORY [ca112233] · Document the exact boundary before applying a change.                                                                                                         
+CONTEXT · reports/snapshots                                                                                                                                                         
+  SNAPSHOT [fa560001] · OWNER FIELD inbox/notes · MEMORY [9ef031a2]                                                                                                                 
+CONTEXT · watchers/live                                                                                                                                                             
+  LIVE EMBED [de450001] · OWNER FIELD inbox/notes · MEMORY [9ef031a2]                                                                                                               
+LIVE RESOLVES · DANGLING                                                                                                                                                            
+ALL CONTEXTS UNCHANGED · NO                                                                                                                                                         
+CHECKPOINTS · 2                                                                                                                                                                     
+CURRENT CONTEXT · inbox/notes

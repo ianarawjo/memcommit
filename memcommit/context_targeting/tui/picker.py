@@ -423,6 +423,7 @@ class ContextMemoryPreviewController:
         wrap_width: int | None,
         selectable_memories: bool = False,
         selected_memory: DirectMemoryTarget | None = None,
+        selected_memories: AbstractSet[DirectMemoryTarget] | None = None,
     ) -> tuple[tuple[str, str], ...]:
         if row.name not in self.visible_memory_contexts() or not row.materialized:
             return ()
@@ -434,6 +435,7 @@ class ContextMemoryPreviewController:
                 memory_anchor=self.memory_anchor,
                 selectable_memories=selectable_memories,
                 selected_memory=selected_memory,
+                selected_memories=selected_memories,
                 show_selection_marker=selectable_memories,
             )
         )
@@ -561,6 +563,7 @@ def render_context_memory_previews(
     memory_anchor: tuple[str, int] | None,
     selectable_memories: bool = False,
     selected_memory: DirectMemoryTarget | None = None,
+    selected_memories: AbstractSet[DirectMemoryTarget] | None = None,
     show_selection_marker: bool = False,
 ) -> list[tuple[str, str]]:
     """Render direct Memory rows nested beneath one shared Context-tree row."""
@@ -581,10 +584,17 @@ def render_context_memory_previews(
             # Hover anchors viewport motion; retained selection is independent.
             fragments.append(("[SetCursorPosition]", ""))
         memory_style = "class:focused" if memory_is_focused else f"class:{memory.style}"
+        memory_target = (
+            DirectMemoryTarget(row.name, memory.selector)
+            if memory.selector is not None
+            else None
+        )
         memory_is_selected = (
-            selected_memory is not None
-            and selected_memory.context_name == row.name
-            and memory.selector == selected_memory.memory_uid
+            memory_target is not None
+            and (
+                memory_target in (selected_memories or frozenset())
+                or memory_target == selected_memory
+            )
         )
         if show_selection_marker:
             memory_pointer = "›" if memory_is_focused else " "

@@ -70,7 +70,7 @@ def test_memory_transfer_agent_calls_public_facade_and_returns_typed_receipts(
     assert copied["result"]["provider_used"] is False
     assert moved["ok"] is True
     assert moved["result"]["effect"] == "CHECKPOINTED_MEMORY_MOVE"
-    assert moved["result"]["link_policy"] == "BLOCK"
+    assert moved["result"]["link_policy"] == "RETARGET"
     assert moved["result"]["provider_used"] is False
     assert list(store.load_direct(source.name).memories) == [first.uid]
 

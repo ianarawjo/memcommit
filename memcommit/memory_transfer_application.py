@@ -59,7 +59,10 @@ class MoveMemoriesRequest:
     source_locator: str | None = None
     before: str | None = None
     after: str | None = None
-    link_policy: MoveLinkPolicy = "BLOCK"
+    # A live Embed names the Memory's current owner binding, so moving that
+    # Memory retargets the local live link atomically unless breakage is an
+    # explicit request. Immutable Reference snapshots never participate.
+    link_policy: MoveLinkPolicy = "RETARGET"
 
 
 @dataclass(frozen=True, slots=True)

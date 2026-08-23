@@ -90,6 +90,40 @@ def test_direct_memory_selection_keeps_exact_owner_separate_from_hover():
     assert state.selected is None
 
 
+def test_multiple_direct_memory_selection_toggles_exact_owner_uid_pairs():
+    first = DirectMemoryTarget("task/source", "first-memory")
+    second = DirectMemoryTarget("task/other", "second-memory")
+    state = DirectMemorySelectionState(mode="MULTIPLE")
+
+    assert state.choose(first) is True
+    assert state.choose(second) is True
+    assert state.selected_targets == (first, second)
+    assert state.choose(first) is True
+    assert state.selected_targets == (second,)
+    assert state.clear_unless_context("task/source") is False
+
+
+def test_multiple_direct_memory_selection_retains_explicit_batch_order():
+    first = DirectMemoryTarget("task/source", "first-memory")
+    second = DirectMemoryTarget("task/source", "second-memory")
+    state = DirectMemorySelectionState(mode="MULTIPLE")
+
+    state.choose(second)
+    state.choose(first)
+
+    assert state.selected_targets == (second, first)
+
+
+def test_multiple_direct_memory_selection_has_no_ambiguous_single_value():
+    state = DirectMemorySelectionState(
+        mode="MULTIPLE",
+        selected_targets=(DirectMemoryTarget("task/source", "memory-uid"),),
+    )
+
+    with pytest.raises(ValueError, match="has no single target"):
+        _ = state.selected
+
+
 @pytest.mark.parametrize(
     ("context_name", "memory_uid"),
     (("", "memory-uid"), ("task/source", "")),

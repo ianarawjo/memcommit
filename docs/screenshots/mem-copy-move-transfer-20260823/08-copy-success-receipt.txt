@@ -1,0 +1,6 @@
+COPIED · 2 Memories → 'archive/decisions' · PRESERVE UIDs · between [ab120001] and [cd340002]                                                                                       
+  'inbox/notes' [9ef031a2] → [9ef031a2]                                                                                                                                             
+  'inbox/notes' [ea713f91] → [ea713f91]                                                                                                                                             
+Checkpoint 'archive/decisions' [e449d548].                                                                                                                                          
+COMMAND EXIT · 0                                                                                                                                                                    
+CAPTURE PAUSE · press Enter for read-only verification
