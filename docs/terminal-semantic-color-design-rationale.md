@@ -158,6 +158,28 @@ judgment field without reparsing report prose. A color-capable TTY shows
 `YES`, `MAY`, and `NO` through the shared judgment roles; `--plain`, a pipe,
 or `NO_COLOR` emits the exact same receipt with no ANSI styling.
 
+The line-oriented Revert receipt likewise consumes typed restoration facts,
+but owns a compact composition distinct from the checkpoint Viewer. Its
+Revert heading and recovery commands use UNDO, the command that recorded the
+target state keeps its own semantic action role, and each `+`, `~`, or `-`
+detail marker uses ADD, EDIT, or REMOVE. The aggregate `Affected content:`
+summary remains neutral report prose. Detailed identities follow the shared
+Source vocabulary and badge order—for example `[memory UID]`, `[embedded UID]`,
+and `[reference UID]`—instead of restating a Revert-only item label after the
+UID. A Memory relationship then follows the List projection's compact Source
+locator as `CONTEXT:MEMORY_UID`, without a directional arrow, and shows the
+bounded Memory body plus `READ ONLY` when its exact Source identity resolves.
+A live Embed body is the value observed after Revert, not bytes retained by the
+checkpoint; an unavailable or deleted/recreated Source instead yields
+`DANGLING` without fabricated content. Added Memory bodies use the shared
+Memory-object lavender; removed directly owned bodies and an Edit's before/after
+values use REMOVE red and EDIT green; live Embed and immutable Reference kinds
+retain their relationship role while their displayed Source Memory body remains
+lavender. UIDs, Context names, arrows, and explanatory prose remain neutral,
+while the restored checkpoint badge uses HISTORY. Stripping ANSI still yields
+the exact same receipt text instead of making terminal capability alter
+restoration evidence.
+
 The shared History picker colors only the unfocused command column. Checkpoint,
 restore, and saved-Update details color action and child-effect tokens through
 the same classifier. Mechanical before/after Memory diff spans retain their

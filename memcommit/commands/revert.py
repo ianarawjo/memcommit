@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import re
 import sys
+from collections.abc import Mapping
 from typing import Annotated, Any, Optional
 
 import typer
@@ -20,7 +21,12 @@ from memcommit.commands.history_picker import (
     choose_history,
 )
 from memcommit.commands.history_present import checkpoint_picker_entries
-from memcommit.commands.restoration_present import render_revert_receipt
+from memcommit.commands.restoration_present import (
+    MemoryRefTargetKey,
+    memory_ref_target_key,
+    render_revert_receipt,
+)
+from memcommit.context import Memory
 from memcommit.history import HistoryError, build_history
 from memcommit.history_search import HistorySearchError, search_history
 from memcommit.query_provider import (
@@ -169,6 +175,53 @@ def _validate_reviewed_frame(
     return receipt.checkpoint_uid
 
 
+def _resolved_memory_ref_contents(
+    store: MemoryStore,
+    *snapshots: object,
+) -> dict[MemoryRefTargetKey, str | None]:
+    """Resolve only the direct Source Memories named by receipt relationships.
+
+    Revert checkpoints retain live Embed identity rather than Source bytes.
+    Resolve those exact targets after the mutation so the receipt matches the
+    list view without turning a failed optional display read into a failed
+    mutation receipt.
+    """
+
+    result: dict[MemoryRefTargetKey, str | None] = {}
+    for snapshot in snapshots:
+        if not isinstance(snapshot, Mapping):
+            continue
+        items = snapshot.get("memories")
+        if not isinstance(items, Mapping):
+            continue
+        for item in items.values():
+            if not isinstance(item, Mapping) or item.get("type") not in {
+                "memory_ref",
+                "memory_snapshot_ref",
+            }:
+                continue
+            key = memory_ref_target_key(item)
+            if key is None or key in result:
+                continue
+            if item.get("type") == "memory_snapshot_ref":
+                content = item.get("content")
+                result[key] = content if isinstance(content, str) else None
+                continue
+            target_name, target_context_uid, target_memory_uid = key
+            try:
+                source = store.load_direct(target_name)
+            except (FileNotFoundError, OSError, ValueError):
+                result[key] = None
+                continue
+            target = source.memories.get(target_memory_uid)
+            result[key] = (
+                target.content
+                if source.uid == target_context_uid and isinstance(target, Memory)
+                else None
+            )
+    return result
+
+
 def _apply_revert(
     store: MemoryStore,
     name: str,
@@ -197,6 +250,11 @@ def _apply_revert(
         before_snapshot=pre_checkpoint.snapshot,
         target=target,
         recovery=pre_checkpoint,
+        resolved_memory_ref_contents=_resolved_memory_ref_contents(
+            store,
+            pre_checkpoint.snapshot,
+            target.snapshot,
+        ),
     )
 
 

@@ -1,0 +1,9 @@
+52 180                                                                                                                                                                              
+READ-ONLY REVERT VERIFICATION                                                                                                                                                       
+LIVE COLOR PTY 52 180                                                                                                                                                               
+Current Context: receipt/colors                                                                                                                                                     
+Added effect restored: 'restored by revert'                                                                                                                                         
+Memory ref effect restored: True                                                                                                                                                    
+Edit effect restored: 'target spelling'                                                                                                                                             
+Remove effect absent: True                                                                                                                                                          
+COMPLETE TARGET RESULT VERIFIED: True

@@ -1,0 +1,6 @@
+52 180
+READ-ONLY STATE BEFORE REVERT
+LIVE COLOR PTY 52 180
+Current Context: receipt/colors
+  [memory a73f0a67] 'changed after target'
+  [memory 681a2ac2] 'removed by revert'

@@ -5,15 +5,25 @@ import click
 import json
 
 import pytest
+from click.testing import CliRunner as ClickCliRunner
 from typer.testing import CliRunner
 
 from memcommit.cli import app
 from memcommit.command_history import CommandContextChange, ContextCommandUnit
-from memcommit.commands.restoration_present import _restored_command
+from memcommit.commands.restoration_present import (
+    _render_impact,
+    _restored_command,
+)
 from memcommit.context import AutoCheckpoint, Memory
 from memcommit.interfaces.console.theme import (
     SemanticColorRole,
+    memory_object_color_rgb,
     semantic_color_rgb,
+)
+from memcommit.source_projection.model import SourceForm
+from memcommit.source_projection.presentation import (
+    source_object_label,
+    source_relationship_label,
 )
 from memcommit.store import MemoryStore
 
@@ -106,18 +116,174 @@ def test_revert_reports_target_action_and_removed_content(isolated_store):
     added = invoke("add", "remove this")
     removed_uid = added.output.split("[", 1)[1].split("]", 1)[0]
 
-    result = invoke("revert", target_uid[:8])
+    result = runner.invoke(app, ["revert", target_uid[:8]], color=True)
+    plain = click.unstyle(result.output)
 
     assert result.exit_code == 0
-    assert "Reverted Context: notes" in result.output
-    assert "Restored state recorded by: mem add" in result.output
-    assert 'Action detail: Added: "keep this"' in result.output
-    assert "Affected Context: notes" in result.output
-    assert "Affected content: 1 Memory removed" in result.output
-    assert f'- [{removed_uid}] Memory: "remove this"' in result.output
-    assert "Undo command: mem undo" in result.output
-    assert "Exact recovery checkpoint: mem revert" in result.output
-    assert "--discard-newer" in result.output
+    assert "Reverted Context: notes" in plain
+    assert "Restored state recorded by: mem add" in plain
+    assert 'Action detail: Added: "keep this"' in plain
+    assert "Affected Context: notes" in plain
+    assert "Affected content: 1 Memory removed" in plain
+    memory_label = source_object_label(SourceForm.MEMORY)
+    assert f'- [{memory_label} {removed_uid}] "remove this"' in plain
+    assert f"[{removed_uid}] Memory:" not in plain
+    assert "Undo command: mem undo" in plain
+    assert "Exact recovery checkpoint: mem revert" in plain
+    assert "--discard-newer" in plain
+    for text, role in (
+        ("mem add", SemanticColorRole.ADD),
+        (f"[{target_uid[:8]}]", SemanticColorRole.HISTORY),
+        ("mem undo", SemanticColorRole.UNDO),
+        ("mem revert", SemanticColorRole.UNDO),
+    ):
+        assert click.style(
+            text,
+            fg=semantic_color_rgb(role),
+            bold=True,
+        ) in result.output
+    assert click.style(
+        '"remove this"',
+        fg=semantic_color_rgb(SemanticColorRole.REMOVE),
+    ) in result.output
+
+
+def test_revert_impact_colors_typed_markers_without_changing_plain_text():
+    removed_uid = "11111111-1111-1111-1111-111111111111"
+    edited_uid = "22222222-2222-2222-2222-222222222222"
+    added_uid = "33333333-3333-3333-3333-333333333333"
+    ref_uid = "44444444-4444-4444-4444-444444444444"
+
+    @click.command()
+    def receipt():
+        _render_impact(
+            context_name="notes",
+            before_snapshot={
+                "memories": {
+                    removed_uid: {"type": "memory", "content": "remove me"},
+                    edited_uid: {"type": "memory", "content": "before"},
+                },
+                "order": [removed_uid, edited_uid],
+            },
+            after_snapshot={
+                "memories": {
+                    edited_uid: {"type": "memory", "content": "after"},
+                    added_uid: {"type": "memory", "content": "add me"},
+                    ref_uid: {
+                        "type": "memory_ref",
+                        "target_context": {
+                            "uid": "source-context-uid",
+                            "name": "source/notes",
+                        },
+                        "target_memory_uid": "55555555-5555-5555-5555-555555555555",
+                    },
+                },
+                "order": [edited_uid, added_uid, ref_uid],
+            },
+            resolved_memory_ref_contents={
+                (
+                    "source/notes",
+                    "source-context-uid",
+                    "55555555-5555-5555-5555-555555555555",
+                ): "embedded source body"
+            },
+        )
+
+    colored = ClickCliRunner().invoke(receipt, color=True)
+    plain = ClickCliRunner().invoke(receipt, color=False)
+
+    assert colored.exit_code == 0, colored.output
+    assert plain.exit_code == 0, plain.output
+    assert click.unstyle(colored.output) == plain.output
+    memory_label = source_object_label(SourceForm.MEMORY)
+    embed_label = source_relationship_label(SourceForm.MEMORY_REF)
+    for marker, label, uid, role in (
+        ("-", memory_label, removed_uid, SemanticColorRole.REMOVE),
+        ("~", memory_label, edited_uid, SemanticColorRole.EDIT),
+        ("+", memory_label, added_uid, SemanticColorRole.ADD),
+        ("+", embed_label, ref_uid, SemanticColorRole.ADD),
+    ):
+        assert click.style(
+            marker,
+            fg=semantic_color_rgb(role),
+            bold=True,
+        ) in colored.output
+        assert (
+            f"  {marker} [{label} {uid[:8]}]"
+            in plain.output
+        )
+    summary = (
+        "Affected content: 1 Memory added, 1 Memory ref added, "
+        "1 Memory edited, 1 Memory removed"
+    )
+    # The compact count is report prose. Typed detail rows below it carry the
+    # semantic colors without making the heading visually noisy.
+    assert summary in colored.output
+    for text, role in (
+        ('"before"', SemanticColorRole.REMOVE),
+        ('"after"', SemanticColorRole.EDIT),
+        ('"remove me"', SemanticColorRole.REMOVE),
+    ):
+        assert click.style(
+            text,
+            fg=semantic_color_rgb(role),
+        ) in colored.output
+    assert click.style(
+        '"add me"',
+        fg=memory_object_color_rgb(),
+    ) in colored.output
+    assert click.style(
+        '"embedded source body"',
+        fg=memory_object_color_rgb(),
+    ) in colored.output
+    assert click.style(
+        embed_label,
+        fg=semantic_color_rgb(SemanticColorRole.EMBED),
+    ) in colored.output
+    assert (
+        'source/notes:55555555 "embedded source body"  READ ONLY'
+        in plain.output
+    )
+    assert f"[{removed_uid[:8]}] Memory:" not in plain.output
+    assert f"[{ref_uid[:8]}] Memory ref:" not in plain.output
+    assert " Memory [55555555]" not in plain.output
+    assert "to Context" not in plain.output
+
+
+def test_revert_impact_marks_an_unavailable_live_embed_as_dangling():
+    ref_uid = "44444444-4444-4444-4444-444444444444"
+
+    @click.command()
+    def receipt():
+        _render_impact(
+            context_name="notes",
+            before_snapshot={"memories": {}, "order": []},
+            after_snapshot={
+                "memories": {
+                    ref_uid: {
+                        "type": "memory_ref",
+                        "uid": ref_uid,
+                        "target_context": {
+                            "uid": "source-context-uid",
+                            "name": "source/notes",
+                        },
+                        "target_memory_uid": (
+                            "55555555-5555-5555-5555-555555555555"
+                        ),
+                    }
+                },
+                "order": [ref_uid],
+            },
+        )
+
+    result = ClickCliRunner().invoke(receipt, color=False)
+
+    assert result.exit_code == 0, result.output
+    assert (
+        "  + [embedded 44444444] source/notes:55555555  DANGLING"
+        in result.output
+    )
+    assert "READ ONLY" not in result.output
 
 
 def test_undo_of_revert_names_revert_as_the_action(isolated_store):

@@ -1,0 +1,15 @@
+52 180
+LIVE COLOR PTY 52 180
+COMMAND · mem revert c50f8f00 --context receipt/colors
+[38;2;245;169;127m[1mReverted Context: receipt/colors[0m
+Restored state recorded by: [38;2;138;173;244m[1mmem add[0m
+Action detail: Added the target receipt fixture Memories and embed
+Affected Context: receipt/colors
+Affected content: 1 Memory added, 1 Memory ref added, 1 Memory edited, 1 Memory removed
+  [38;2;166;218;149m[1m~[0m [memory a73f0a67] [38;2;237;135;150m"changed after target"[0m → [38;2;166;218;149m"target spelling"[0m
+  [38;2;237;135;150m[1m-[0m [memory 681a2ac2] [38;2;237;135;150m"removed by revert"[0m
+  [38;2;138;173;244m[1m+[0m [memory 665678f6] [38;2;202;211;245m"restored by revert"[0m
+  [38;2;138;173;244m[1m+[0m [[38;2;238;212;159membedded[0m 90148c7c] receipt/source:f365b4fa [38;2;202;211;245m"embedded source Memory"[0m  READ ONLY
+[2mRestored checkpoint: [0m[38;2;201;173;147m[1m[c50f8f00][0m[2m (2026-08-23 14:28)[0m
+[2mUndo command: [0m[38;2;245;169;127m[1mmem undo[0m
+[2mExact recovery checkpoint: [0m[38;2;245;169;127m[1mmem revert[0m[2m f0ae1c0b --discard-newer[0m

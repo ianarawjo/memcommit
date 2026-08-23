@@ -15,22 +15,40 @@ from memcommit.interfaces.console.text import (
 )
 from memcommit.interfaces.console.theme import (
     SemanticColorRole,
+    memory_object_color_rgb,
+    semantic_action_role,
     semantic_color_rgb,
 )
 from memcommit.context import Checkpoint
-from memcommit.source_projection.model import SourceForm
-from memcommit.source_projection.presentation import source_object_label
+from memcommit.source_projection.console import (
+    styled_source_object_label,
+    styled_source_relationship_label,
+)
+from memcommit.source_projection.model import (
+    SourceDisplayFacts,
+    SourceForm,
+    SourceReach,
+    SourceState,
+)
+from memcommit.source_projection.presentation import (
+    source_annotation_text,
+    source_object_label,
+)
 
 
 _MAX_ITEM_LINES = 12
 _MAX_CONTENT_CODEPOINTS = 240
 _MAX_DESCRIPTION_CODEPOINTS = 240
 
+_MEMORY_KIND = source_object_label(SourceForm.MEMORY, title=True)
 _MEMORY_REF_KIND = source_object_label(SourceForm.MEMORY_REF, title=True)
 _QUERY_VIEW_KIND = source_object_label(SourceForm.QUERY_VIEW, title=True)
-_EMBEDDED_CONTEXT_KIND = "Embedded " + source_object_label(
-    SourceForm.CONTEXT
-)
+_EMBEDDED_CONTEXT_KIND = "Embedded " + source_object_label(SourceForm.CONTEXT)
+_CHANGE_COLOR_ROLES = {
+    "added": SemanticColorRole.ADD,
+    "edited": SemanticColorRole.EDIT,
+    "removed": SemanticColorRole.REMOVE,
+}
 
 
 @dataclass(frozen=True)
@@ -41,6 +59,26 @@ class _ItemChange:
     uid: str
     before: Mapping[str, Any] | None
     after: Mapping[str, Any] | None
+
+
+MemoryRefTargetKey = tuple[str, str, str]
+
+
+def memory_ref_target_key(item: Mapping[str, Any]) -> MemoryRefTargetKey | None:
+    """Identify a Memory relationship by its exact persisted Source target."""
+
+    target_context = item.get("target_context")
+    if not isinstance(target_context, Mapping):
+        return None
+    target_name = target_context.get("name")
+    target_context_uid = target_context.get("uid")
+    target_memory_uid = item.get("target_memory_uid")
+    if not all(
+        isinstance(value, str) and value
+        for value in (target_name, target_context_uid, target_memory_uid)
+    ):
+        return None
+    return target_name, target_context_uid, target_memory_uid
 
 
 def _snapshot_items(
@@ -118,7 +156,7 @@ def _quoted_content(value: object) -> str:
 def _item_kind(item: Mapping[str, Any] | None) -> str:
     raw = item.get("type") if item is not None else None
     return {
-        "memory": "Memory",
+        "memory": _MEMORY_KIND,
         "memory_ref": _MEMORY_REF_KIND,
         # Snapshot References carry retained bytes in the checkpoint record.
         # Classify them as pointers so restoration receipts never fall back to
@@ -129,45 +167,178 @@ def _item_kind(item: Mapping[str, Any] | None) -> str:
     }.get(raw, "direct item")
 
 
-def _item_description(item: Mapping[str, Any]) -> str:
+def _item_source(
+    item: Mapping[str, Any] | None,
+) -> SourceDisplayFacts | SourceForm | None:
+    """Return the shared public Source classification for a receipt item."""
+
+    raw = item.get("type") if item is not None else None
+    if raw == "context_ref":
+        return SourceDisplayFacts(form=SourceForm.CONTEXT, reach=SourceReach.VIA_EMBED)
+    return {
+        "memory": SourceForm.MEMORY,
+        "memory_ref": SourceForm.MEMORY_REF,
+        "memory_snapshot_ref": SourceForm.MEMORY_REFERENCE,
+        "query_context_ref": SourceForm.QUERY_VIEW,
+    }.get(raw)
+
+
+def _styled_item_identity_label(item: Mapping[str, Any] | None) -> str:
+    source = _item_source(item)
+    if source is None:
+        return "direct item"
+    if isinstance(source, SourceForm) and source in {
+        SourceForm.MEMORY_REF,
+        SourceForm.MEMORY_REFERENCE,
+    }:
+        return styled_source_relationship_label(source)
+    return styled_source_object_label(source)
+
+
+def _memory_ref_description_parts(
+    item: Mapping[str, Any],
+    *,
+    resolved_memory_ref_contents: Mapping[MemoryRefTargetKey, str | None],
+) -> tuple[str, str | None, str]:
+    key = memory_ref_target_key(item)
+    target_name = key[0] if key is not None else "(unknown)"
+    target_memory_uid = key[2] if key is not None else "unknown"
+    locator = (
+        _short(target_name, limit=_MAX_CONTENT_CODEPOINTS)
+        + ":"
+        + _short(target_memory_uid, limit=64)[:8]
+    )
+    if item.get("type") == "memory_snapshot_ref":
+        retained = item.get("content")
+        content = retained if isinstance(retained, str) else None
+        form = SourceForm.MEMORY_REFERENCE
+    else:
+        content = resolved_memory_ref_contents.get(key) if key is not None else None
+        form = SourceForm.MEMORY_EMBED
+    state = SourceState.READ_ONLY if content is not None else SourceState.DANGLING
+    annotation = source_annotation_text(SourceDisplayFacts(form=form, states=(state,)))
+    return locator, content, annotation
+
+
+def _item_description(
+    item: Mapping[str, Any],
+    *,
+    resolved_memory_ref_contents: Mapping[MemoryRefTargetKey, str | None],
+) -> str:
     kind = item.get("type")
     if kind == "memory":
         return _quoted_content(item.get("content", ""))
     if kind in {"memory_ref", "memory_snapshot_ref"}:
-        target_context = item.get("target_context")
-        target_name = (
-            target_context.get("name")
-            if isinstance(target_context, Mapping)
-            else None
+        locator, content, annotation = _memory_ref_description_parts(
+            item,
+            resolved_memory_ref_contents=resolved_memory_ref_contents,
         )
-        target_uid = item.get("target_memory_uid")
-        return (
-            "to Context "
-            + _quoted_content(target_name or "(unknown)")
-            + (
-                f" Memory [{_short(target_uid, limit=64)[:8]}]"
-                if isinstance(target_uid, str) and target_uid
-                else ""
-            )
-        )
+        body = f" {_quoted_content(content)}" if content is not None else ""
+        return f"{locator}{body}  {annotation}"
     if kind in {"query_context_ref", "context_ref"}:
         return _quoted_content(item.get("name", "(unknown)"))
     return _quoted_content(item)
 
 
-def _change_line(change: _ItemChange) -> str:
-    before_kind = _item_kind(change.before)
-    after_kind = _item_kind(change.after)
+def _styled_item_description(
+    item: Mapping[str, Any],
+    *,
+    resolved_memory_ref_contents: Mapping[MemoryRefTargetKey, str | None],
+    effect_role: SemanticColorRole | None = None,
+) -> str:
+    if item.get("type") in {"memory_ref", "memory_snapshot_ref"}:
+        locator, content, annotation = _memory_ref_description_parts(
+            item,
+            resolved_memory_ref_contents=resolved_memory_ref_contents,
+        )
+        body = (
+            " "
+            + typer.style(
+                _quoted_content(content),
+                fg=memory_object_color_rgb(),
+            )
+            if content is not None
+            else ""
+        )
+        # The marker describes adding/removing the relationship; the Source
+        # Memory itself remains a read-only object and keeps its own color.
+        return f"{locator}{body}  {annotation}"
+    description = _item_description(
+        item,
+        resolved_memory_ref_contents=resolved_memory_ref_contents,
+    )
+    if effect_role is not None:
+        return typer.style(description, fg=semantic_color_rgb(effect_role))
+    if item.get("type") == "memory":
+        return typer.style(description, fg=memory_object_color_rgb())
+    return description
+
+
+def _styled_change_line(
+    change: _ItemChange,
+    *,
+    resolved_memory_ref_contents: Mapping[MemoryRefTargetKey, str | None],
+) -> str:
+    """Compose Revert's effect, object, and before/after color axes."""
+
+    marker = typer.style(
+        {"added": "+", "edited": "~", "removed": "-"}[change.kind],
+        fg=semantic_color_rgb(_CHANGE_COLOR_ROLES[change.kind]),
+        bold=True,
+    )
     uid = _short(change.uid, limit=64)[:8]
     if change.kind == "removed" and change.before is not None:
-        return f"  - [{uid}] {before_kind}: {_item_description(change.before)}"
+        return (
+            f"  {marker} [{_styled_item_identity_label(change.before)} {uid}] "
+            + _styled_item_description(
+                change.before,
+                resolved_memory_ref_contents=resolved_memory_ref_contents,
+                effect_role=SemanticColorRole.REMOVE,
+            )
+        )
     if change.kind == "added" and change.after is not None:
-        return f"  + [{uid}] {after_kind}: {_item_description(change.after)}"
+        return (
+            f"  {marker} [{_styled_item_identity_label(change.after)} {uid}] "
+            + _styled_item_description(
+                change.after,
+                resolved_memory_ref_contents=resolved_memory_ref_contents,
+            )
+        )
     assert change.before is not None and change.after is not None
-    label = before_kind if before_kind == after_kind else "direct item"
+    before_kind = _item_kind(change.before)
+    after_kind = _item_kind(change.after)
+    label = (
+        _styled_item_identity_label(change.after)
+        if before_kind == after_kind
+        else "direct item"
+    )
     return (
-        f"  ~ [{uid}] {label}: {_item_description(change.before)}"
-        f" → {_item_description(change.after)}"
+        f"  {marker} [{label} {uid}] "
+        + _styled_item_description(
+            change.before,
+            resolved_memory_ref_contents=resolved_memory_ref_contents,
+            effect_role=SemanticColorRole.REMOVE,
+        )
+        + " → "
+        + _styled_item_description(
+            change.after,
+            resolved_memory_ref_contents=resolved_memory_ref_contents,
+            effect_role=SemanticColorRole.EDIT,
+        )
+    )
+
+
+def _styled_action_name(command: str | None, *, fallback: str) -> str:
+    action = _action_name(command, fallback=fallback)
+    role = semantic_action_role(action)
+    if role is None and command is None and action == fallback:
+        role = SemanticColorRole.HISTORY
+    if role is None:
+        return action
+    return typer.style(
+        action,
+        fg=semantic_color_rgb(role),
+        bold=True,
     )
 
 
@@ -189,7 +360,7 @@ def _impact_summary(changes: list[_ItemChange], reordered: bool) -> str:
         counts[key] = counts.get(key, 0) + 1
 
     plural = {
-        "Memory": "Memories",
+        _MEMORY_KIND: "Memories",
         _MEMORY_REF_KIND: _MEMORY_REF_KIND + "s",
         _QUERY_VIEW_KIND: _QUERY_VIEW_KIND + "s",
         _EMBEDDED_CONTEXT_KIND: _EMBEDDED_CONTEXT_KIND + "s",
@@ -198,7 +369,7 @@ def _impact_summary(changes: list[_ItemChange], reordered: bool) -> str:
     parts: list[str] = []
     for change_kind in ("added", "edited", "removed"):
         for item_kind in (
-            "Memory",
+            _MEMORY_KIND,
             _MEMORY_REF_KIND,
             _QUERY_VIEW_KIND,
             _EMBEDDED_CONTEXT_KIND,
@@ -575,15 +746,21 @@ def _render_impact(
     context_name: str,
     before_snapshot: object,
     after_snapshot: object,
+    resolved_memory_ref_contents: Mapping[MemoryRefTargetKey, str | None] | None = None,
 ) -> None:
     changes, reordered = _changes(before_snapshot, after_snapshot)
+    resolved_contents = resolved_memory_ref_contents or {}
     typer.echo(
-        "Affected Context: "
-        + _short(context_name, limit=_MAX_CONTENT_CODEPOINTS)
+        "Affected Context: " + _short(context_name, limit=_MAX_CONTENT_CODEPOINTS)
     )
-    typer.echo(f"Affected content: {_impact_summary(changes, reordered)}")
+    typer.echo("Affected content: " + _impact_summary(changes, reordered))
     for change in changes[:_MAX_ITEM_LINES]:
-        typer.echo(_change_line(change))
+        typer.echo(
+            _styled_change_line(
+                change,
+                resolved_memory_ref_contents=resolved_contents,
+            )
+        )
     omitted = len(changes) - _MAX_ITEM_LINES
     if omitted > 0:
         typer.echo(
@@ -625,23 +802,21 @@ def _compact_restore_effect(
         reordered_contexts += int(reordered)
 
     memory_changes = [
-        change
-        for change in changes
-        if _change_item_kind(change) == "Memory"
+        change for change in changes if _change_item_kind(change) == _MEMORY_KIND
     ]
     parts: list[tuple[str, str | tuple[int, int, int] | None]] = [
         (f"Affected Memories: {len(memory_changes)}", None)
     ]
     markers = {"added": "+", "edited": "~", "removed": "-"}
-    colors = {
-        "added": semantic_color_rgb(SemanticColorRole.ADD),
-        "edited": semantic_color_rgb(SemanticColorRole.EDIT),
-        "removed": semantic_color_rgb(SemanticColorRole.REMOVE),
-    }
     for kind in ("added", "edited", "removed"):
         count = sum(change.kind == kind for change in memory_changes)
         if count:
-            parts.append((f"{markers[kind]} {count} {kind}", colors[kind]))
+            parts.append(
+                (
+                    f"{markers[kind]} {count} {kind}",
+                    semantic_color_rgb(_CHANGE_COLOR_ROLES[kind]),
+                )
+            )
 
     other_changes = [change for change in changes if change not in memory_changes]
     if other_changes:
@@ -687,34 +862,52 @@ def render_revert_receipt(
     before_snapshot: object,
     target: Checkpoint,
     recovery: Checkpoint,
+    resolved_memory_ref_contents: Mapping[MemoryRefTargetKey, str | None] | None = None,
 ) -> None:
     """Report Revert's Context impact and the action that made its target."""
     typer.secho(
-        "Reverted Context: "
-        + _short(context_name, limit=_MAX_CONTENT_CODEPOINTS),
+        "Reverted Context: " + _short(context_name, limit=_MAX_CONTENT_CODEPOINTS),
         fg=semantic_color_rgb(SemanticColorRole.UNDO),
         bold=True,
     )
     typer.echo(
         "Restored state recorded by: "
-        + _action_name(target.command, fallback="manual checkpoint")
+        + _styled_action_name(target.command, fallback="manual checkpoint")
     )
     _render_action_detail(target.description or target.message)
     _render_impact(
         context_name=context_name,
         before_snapshot=before_snapshot,
         after_snapshot=target.snapshot,
+        resolved_memory_ref_contents=resolved_memory_ref_contents,
     )
     target_ts = target.timestamp.strftime("%Y-%m-%d %H:%M")
-    typer.secho(
-        f"Restored checkpoint: [{target.uid[:8]}] ({target_ts})",
-        dim=True,
+    typer.echo(
+        typer.style("Restored checkpoint: ", dim=True)
+        + typer.style(
+            f"[{target.uid[:8]}]",
+            fg=semantic_color_rgb(SemanticColorRole.HISTORY),
+            bold=True,
+        )
+        + typer.style(f" ({target_ts})", dim=True)
     )
-    typer.secho(
-        "Undo command: mem undo",
-        dim=True,
+    typer.echo(
+        typer.style("Undo command: ", dim=True)
+        + typer.style(
+            "mem undo",
+            fg=semantic_color_rgb(SemanticColorRole.UNDO),
+            bold=True,
+        )
     )
-    typer.secho(
-        f"Exact recovery checkpoint: mem revert {recovery.uid[:8]} --discard-newer",
-        dim=True,
+    typer.echo(
+        # Recovery checkpoints carry the displaced log snapshot. Explicit
+        # discard mode materializes that snapshot again; the keep-all default
+        # would restore content without rebuilding removed active files.
+        typer.style("Exact recovery checkpoint: ", dim=True)
+        + typer.style(
+            "mem revert",
+            fg=semantic_color_rgb(SemanticColorRole.UNDO),
+            bold=True,
+        )
+        + typer.style(f" {recovery.uid[:8]} --discard-newer", dim=True)
     )

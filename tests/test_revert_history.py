@@ -6,8 +6,10 @@ import json
 
 from typer.testing import CliRunner
 
+import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.commands.history_picker import HistorySelectionReceipt
+from memcommit.context import AutoCheckpoint, Memory
 from memcommit.store import MemoryStore
 
 
@@ -199,6 +201,70 @@ def test_exact_revert_keeps_all_checkpoint_files_by_default(isolated_store):
     assert result.exit_code == 0, result.output
     after_uids = {entry["uid"] for entry in store.list_checkpoints("notes")}
     assert {entry["uid"] for entry in before} <= after_uids
+
+
+def test_exact_revert_shows_a_live_embed_through_its_current_source_locator(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = ops.init("source")
+    source_memory = ops.add(source, "checkpoint source body")
+    store.save(
+        source,
+        AutoCheckpoint(
+            command="init",
+            args={"name": source.name},
+            description="Initialized Source fixture",
+        ),
+    )
+    notes = ops.init("notes")
+    store.save(
+        notes,
+        AutoCheckpoint(
+            command="init",
+            args={"name": notes.name},
+            description="Initialized Revert fixture",
+        ),
+    )
+    embedded = ops.embed_memory(source_memory, source, notes)
+    store.save(
+        notes,
+        AutoCheckpoint(
+            command="embed",
+            args={"context": notes.name},
+            description="Embedded the Source Memory",
+        ),
+    )
+    target_uid = store.list_checkpoints(notes.name)[0]["uid"]
+
+    source.replace(Memory(source_memory.uid, "current source body"))
+    store.save(
+        source,
+        AutoCheckpoint(
+            command="edit",
+            args={"context": source.name},
+            description="Changed the live Source Memory",
+        ),
+    )
+    notes.remove(embedded.uid)
+    store.save(
+        notes,
+        AutoCheckpoint(
+            command="remove",
+            args={"context": notes.name},
+            description="Removed the Embed after the target checkpoint",
+        ),
+    )
+    store.set_current(notes.name)
+
+    result = invoke("revert", target_uid[:8])
+
+    assert result.exit_code == 0, result.output
+    assert (
+        f'[embedded {embedded.uid[:8]}] source:{source_memory.uid[:8]} '
+        '"current source body"  READ ONLY'
+    ) in result.output
+    assert '"checkpoint source body"' not in result.output
 
 
 def test_discard_newer_removes_active_files_but_retains_recovery_snapshot(

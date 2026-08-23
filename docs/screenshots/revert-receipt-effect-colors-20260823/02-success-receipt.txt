@@ -1,0 +1,15 @@
+52 180                                                                                                                                                                              
+LIVE COLOR PTY 52 180                                                                                                                                                               
+COMMAND · mem revert c50f8f00 --context receipt/colors                                                                                                                              
+Reverted Context: receipt/colors                                                                                                                                                    
+Restored state recorded by: mem add                                                                                                                                                 
+Action detail: Added the target receipt fixture Memories and embed                                                                                                                  
+Affected Context: receipt/colors                                                                                                                                                    
+Affected content: 1 Memory added, 1 Memory ref added, 1 Memory edited, 1 Memory removed                                                                                             
+  ~ [memory a73f0a67] "changed after target" → "target spelling"                                                                                                                    
+  - [memory 681a2ac2] "removed by revert"                                                                                                                                           
+  + [memory 665678f6] "restored by revert"                                                                                                                                          
+  + [embedded 90148c7c] receipt/source:f365b4fa "embedded source Memory"  READ ONLY                                                                                                 
+Restored checkpoint: [c50f8f00] (2026-08-23 14:28)                                                                                                                                  
+Undo command: mem undo                                                                                                                                                              
+Exact recovery checkpoint: mem revert f0ae1c0b --discard-newer
