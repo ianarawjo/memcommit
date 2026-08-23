@@ -103,6 +103,7 @@ def test_plain_help_does_not_connect_a_provider(monkeypatch):
     assert result.exit_code == 0
     assert "mem command inventory" in result.stdout
     assert "ground [PARTIAL]" in result.stdout
+    assert "translate [PARTIAL]" in result.stdout
 
 
 def test_thinking_progress_is_tty_only_and_focused_lookup_only(monkeypatch):

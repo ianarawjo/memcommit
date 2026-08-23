@@ -601,6 +601,7 @@ _OPERATIONS = (
         ExecutionKind.SEMANTIC,
         "Explicit materialization routes create or add translated material",
         "One exact Context or one direct Memory",
+        maturity="PARTIAL",
     ),
     _operation(
         "undo",
