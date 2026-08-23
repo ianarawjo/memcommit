@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 from memcommit.interfaces.console.text import safe_terminal_text
+from memcommit.interfaces.console.theme import semantic_quality_role
+from memcommit.interfaces.tui.core.theme import semantic_role_style
 from memcommit.interfaces.tui.viewers.semantic import (
     SemanticViewerBlock,
     SemanticViewerDocument,
@@ -132,16 +134,18 @@ def quality_audit_review_document(
             operation_label=f"AUDIT · {check.kind.upper()}",
         )
         count = counts[check.kind]
+        header_label = check.kind.upper()
+        header_text = quality_find_report_header_text(
+            report_view,
+            label=header_label,
+        )
+        header_role = semantic_quality_role(check.kind)
+        if header_role is None:  # pragma: no cover - Audit validates this union.
+            raise ValueError("Unsupported Audit quality check kind.")
         fragments: list[tuple[str, str]] = [
-            (
-                "class:report-label",
-                " "
-                + quality_find_report_header_text(
-                    report_view,
-                    label=check.kind.upper(),
-                )
-                + "\n",
-            )
+            ("class:report-neutral", " "),
+            (semantic_role_style(header_role), header_label),
+            ("class:report-label", header_text[len(header_label) :] + "\n"),
         ]
         if count == 0:
             fragments.append(

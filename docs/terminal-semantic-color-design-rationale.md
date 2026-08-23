@@ -74,6 +74,10 @@ structure must remain distinguishable from the keyboard target. Relation
 values, Context and Memory references, punctuation, and rationale prose remain
 neutral; individual Memory bodies retain the shared Memory lavender. Focus
 temporarily overrides the complete active row.
+Saved Audit repeats the same category role on the shortest trusted token in
+both places where the category is named: the check header and its issue row.
+The repeated color makes the aggregate header-to-evidence relationship visible
+without coloring the flagged count, Source reference, or whole section.
 
 Read-only Duplicate and Redundancy cleanup maps use the same child-disposition
 rule without implying execution. `SURVIVOR` is ADD blue because that existing

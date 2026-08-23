@@ -3,6 +3,9 @@
 This ordered set records the comprehensive Viewer retained for a saved Audit
 after compacting its document topology. Unlike an answerable Review, it has no
 Items hub, Responses frame, selection, draft, To Do, rerun, or Apply action.
+Each quality category uses the same semantic color on its section header and
+its issue-row token; counts, Source references, and rationale prose stay
+neutral.
 
 ## Reproduction frame
 

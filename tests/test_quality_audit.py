@@ -35,6 +35,8 @@ from memcommit.interfaces.tui.operations.audit import (
     quality_audit_review_document,
     render_quality_audit_review_snapshot,
 )
+from memcommit.interfaces.console.theme import SemanticColorRole
+from memcommit.interfaces.tui.core.theme import semantic_role_style
 from memcommit.interfaces.tui.viewers.semantic import semantic_document_plain_text
 from memcommit.quality_audit import (
     QUALITY_AUDIT_RULESETS,
@@ -325,6 +327,23 @@ def test_audit_review_is_one_complete_answer_free_document():
     assert all(section.kind != "SOURCE_MEMORY" for section in document.sections)
     assert all(section.kind != "SAVED_NOTE" for section in document.sections)
     assert document.sections[-1].kind == "BOUNDARY"
+    check_fragments = [
+        section.block.fragments
+        for section in document.sections
+        if section.kind == "CHECK"
+    ]
+    assert (
+        semantic_role_style(SemanticColorRole.QUALITY_DUPLICATE),
+        "DUPLICATES",
+    ) in check_fragments[0]
+    assert (
+        semantic_role_style(SemanticColorRole.QUALITY_AMBIGUITY),
+        "AMBIGUITIES",
+    ) in check_fragments[1]
+    assert (
+        semantic_role_style(SemanticColorRole.QUALITY_CONFLICT),
+        "CONFLICTS",
+    ) in check_fragments[2]
 
 
 def test_audit_review_close_cannot_persist_or_change_a_saved_annotation(

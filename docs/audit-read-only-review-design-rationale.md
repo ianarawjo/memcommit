@@ -32,6 +32,10 @@ and `WHY`, and Duplicate keeps its relation and pair without a repeated reason.
 Question and reading field labels are absent because Audit Review does not ask
 for an answer. This preserves the typed historical report while making section
 navigation track real Audit concepts rather than serialized fields.
+Each quality section colors its `DUPLICATES`, `AMBIGUITIES`, or `CONFLICTS`
+header token with the same typed semantic role used by the finding token below
+it. Counts, `FLAGGED`, Source identity, relation values, and prose remain
+neutral, so the color links category to evidence without tinting report chrome.
 
 The same typed document is used by interactive Review, non-interactive Review,
 and `--snapshot`. Arrow keys move among semantic sections; Escape, Backspace,
