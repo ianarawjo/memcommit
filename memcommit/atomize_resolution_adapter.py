@@ -266,6 +266,7 @@ class AtomizeResolutionWorkbenchAdapter:
                     ),
                     unresolved_refs=(ResultRef("atomize-finding", finding.uid),),
                     issue_presentation=issue_presentation,
+                    commentable=True,
                 )
             )
         # Unary responses can change the atomization proposal and therefore

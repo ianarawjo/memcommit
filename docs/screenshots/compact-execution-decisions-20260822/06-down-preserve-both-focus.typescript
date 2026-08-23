@@ -6,6 +6,7 @@ PTY 180 52
 [0;38;2;16;36;47;48;2;139;213;255;1m✓ A · Keep records for 30 days. · Recommended[0m
 [0m  B · Keep records for 90 days.[0m
 [0m  Preserve both · Retain both readings with their exact scopes.[0m
+[0m  RESPONSE · Add a direction…[0m
 
 [0m  APPLY ALL · 2/2 READY[0m
 
@@ -49,9 +50,8 @@ PTY 180 52
 
 
 
-
 [0m [0m
-[0m ←/→ issue · ↑/↓ move · Enter select/apply · Esc close[54D[51A[0m[?25l[22C[0;38;2;244;245;247;1m2[0m
+[0m ←/→ issue · ↑/↓ move · Enter select/respond/apply · Esc close[62D[51A[0m[?25l[22C[0;38;2;244;245;247;1m2[0m
 [12C[0mAcc[Css window[0m[K[0m
 [7C[0;38;2;244;245;247macc[Css window should the policy use?[0m[K[0m
 [6C[0;38;2;16;36;47;48;2;139;213;255;1mAllow a[Cces[2Cdu[Cing[Cstaffed[Chours. · Recommended[0m
@@ -161,7 +161,7 @@ PTY 180 52
 
 
 
-[C[0m←/→ issue · ↑/↓ move · Enter select/apply · Esc close[51A[54D[0m[?25l[0m
+[C[0m←/→ issue · ↑/↓ move · Enter select/respond/apply · Esc close[51A[62D[0m[?25l[0m
 
 
 [0;38;2;16;36;47;48;2;139;213;255m✓ A · Keep records for 30 days. · Recommended[0m

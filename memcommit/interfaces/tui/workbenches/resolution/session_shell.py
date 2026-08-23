@@ -226,7 +226,9 @@ def session_review_action_view(
     pending_comments = tuple(
         item
         for item in view.items
-        if item.commentable and _item_draft(item, drafts).text.strip()
+        if item.commentable
+        and _item_draft(item, drafts).text.strip()
+        and _item_draft(item, drafts).text != item.response_text
     )
     if pending_comments and whole_set_available:
         noun = "comment" if len(pending_comments) == 1 else "comments"
@@ -4959,6 +4961,8 @@ def run_resolution_workbench_shell(
             return automatic
 
     if compact_decisions:
+        compact_response_changes: set[str] = set()
+
         def selected_compact_option(item_uid: str) -> str | None:
             item = current_view().item(item_uid)
             return _item_draft(item, local_drafts).selected_choice_uid
@@ -4972,10 +4976,53 @@ def run_resolution_workbench_shell(
             # it. Closing this surface must not manufacture a durable draft.
             local_drafts[item_uid] = draft
 
+        def compact_response_text(item_uid: str) -> str:
+            item = current_view().item(item_uid)
+            return _item_draft(item, local_drafts).text
+
+        def stage_compact_response(item_uid: str, text: str) -> None:
+            item = current_view().item(item_uid)
+            existing = _item_draft(item, local_drafts)
+            # Response text follows the same process-local boundary as compact
+            # choices. Continue consumes it; opening or closing this surface
+            # must not manufacture a durable draft.
+            local_drafts[item_uid] = ResponseDraft(
+                existing.selected_choice_uid,
+                text,
+            )
+            compact_response_changes.add(item_uid)
+
         def compact_continue_action(
             focused_item_uid: str | None,
         ) -> ResolutionWorkbenchAction | None:
             active_view = current_view()
+            changed_responses = tuple(
+                item
+                for item in active_view.items
+                if item.uid in compact_response_changes
+            )
+            if changed_responses and global_strategies:
+                action = final_review_action(active_view, open_custom=False)
+                if action is not None:
+                    return action
+            if changed_responses:
+                item = next(
+                    (
+                        candidate
+                        for candidate in changed_responses
+                        if candidate.uid == focused_item_uid
+                    ),
+                    changed_responses[0],
+                )
+                draft = _item_draft(item, local_drafts)
+                if draft.selected_choice_uid is None and not draft.text.strip():
+                    return None
+                return semantic_action(
+                    "SUBMIT_ITEM",
+                    item_uid=item.uid,
+                    option_uid=draft.selected_choice_uid,
+                    comment=draft.text,
+                )
             action = final_review_action(active_view, open_custom=False)
             if action is not None:
                 return action
@@ -5011,6 +5058,9 @@ def run_resolution_workbench_shell(
             current_view,
             selected_option=selected_compact_option,
             stage_option=stage_compact_option,
+            response_text=compact_response_text,
+            stage_response=stage_compact_response,
+            response_validator=response_validator,
             build_continue_action=compact_continue_action,
             continue_label=compact_continue_label,
             destination=destination,

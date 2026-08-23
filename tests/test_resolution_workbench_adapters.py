@@ -181,6 +181,7 @@ def test_meld_adapter_preserves_route_issue_evidence_and_exact_proposals() -> No
         ("RESULT", "participant/merged-guidance"),
     ]
     assert view.status == "READY_TO_APPLY"
+    assert all(item.commentable for item in view.items)
     assert view.overview.startswith(assessment.overview)
     assert "ACCOUNTING" in view.overview
     assert view.accept_enabled is True
@@ -345,6 +346,7 @@ def test_atomize_adapter_joins_findings_sources_children_and_saved_response() ->
     assert view.accept_mode == "AS_IS"
     assert view.unresolved_at_apply_count == 1
     assert view.status == "READY_TO_APPLY_AS_IS"
+    assert all(item.commentable for item in view.items)
     assert view.results == ()
     assert [section.heading for section in view.overview_sections] == [
         "UNDERSTOOD",

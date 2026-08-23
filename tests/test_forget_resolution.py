@@ -157,6 +157,7 @@ def test_forget_projects_instruction_and_memories_into_shared_resolution_report(
     item = view.items[0]
 
     assert view.route == "SOURCE personal × INSTRUCTION → SAME SOURCE"
+    assert item.commentable is True
     assert [option.label for option in item.options] == [
         "Use recommendation · EDIT",
         "Keep as written",

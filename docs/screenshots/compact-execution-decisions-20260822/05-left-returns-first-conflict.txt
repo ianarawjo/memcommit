@@ -4,6 +4,7 @@
 ✓ A · Keep records for 30 days. · Recommended                                                                                                                                       
   B · Keep records for 90 days.                                                                                                                                                     
   Preserve both · Retain both readings with their exact scopes.                                                                                                                     
+  RESPONSE · Add a direction…                                                                                                                                                       
                                                                                                                                                                                     
   APPLY ALL · 2/2 READY                                                                                                                                                             
                                                                                                                                                                                     
@@ -48,5 +49,4 @@
                                                                                                                                                                                     
                                                                                                                                                                                     
                                                                                                                                                                                     
-                                                                                                                                                                                    
- ←/→ issue · ↑/↓ move · Enter select/apply · Esc close
+ ←/→ issue · ↑/↓ move · Enter select/respond/apply · Esc close

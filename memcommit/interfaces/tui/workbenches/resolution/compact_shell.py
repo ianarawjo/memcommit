@@ -6,7 +6,7 @@ from collections.abc import Callable
 
 from prompt_toolkit.application import Application
 from prompt_toolkit.application.current import get_app
-from prompt_toolkit.filters import Condition
+from prompt_toolkit.filters import Condition, has_focus
 from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.keys import Keys
@@ -23,12 +23,19 @@ from prompt_toolkit.styles import merge_styles
 from memcommit.interfaces.console.text import safe_terminal_text
 from memcommit.interfaces.tui.components.exact_name import ExactNameInputControl
 from memcommit.interfaces.tui.components.frame import TuiRegion, build_tui_frame
+from memcommit.interfaces.tui.components.multiline_input import (
+    build_framed_multiline_input,
+)
 from memcommit.interfaces.tui.components.save_location import SaveLocationView
 from memcommit.interfaces.tui.core.keybindings import bind_case_insensitive_key
 from memcommit.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
     focused_control_style,
+)
+from memcommit.interfaces.tui.core.text_layout import (
+    elide_terminal_text,
+    single_line_terminal_text,
 )
 from memcommit.resolution_workbench import (
     ResolutionItem,
@@ -64,6 +71,9 @@ def run_compact_resolution_decisions(
     *,
     selected_option: Callable[[str], str | None],
     stage_option: Callable[[str, str], None],
+    response_text: Callable[[str], str] | None = None,
+    stage_response: Callable[[str, str], None] | None = None,
+    response_validator: Callable[[str], None] | None = None,
     build_continue_action: Callable[[str | None], ResolutionWorkbenchAction | None],
     continue_label: Callable[[], str],
     destination: SaveLocationView | None = None,
@@ -73,9 +83,13 @@ def run_compact_resolution_decisions(
     """Navigate issues and stage choices without rendering the retained report.
 
     Left/Right changes the issue, Up/Down changes the compact row, and Enter is
-    the sole activation grammar for choices, location, and Apply. Staging is
-    process-local and the separated Apply row is the operation's confirmation.
+    the sole activation grammar for choices, a direct Response, location, and
+    Apply. Staging is process-local and the separated Apply row is the
+    operation's confirmation.
     """
+
+    if (response_text is None) != (stage_response is None):
+        raise ValueError("Compact Response requires both read and stage callbacks.")
 
     supplier = (
         view_or_supplier if callable(view_or_supplier) else lambda: view_or_supplier
@@ -112,20 +126,48 @@ def run_compact_resolution_decisions(
     row_index = {"value": 0}
     status = {"value": ""}
     destination_editing = {"value": False}
+    response_editing = {"value": False}
     bindings = KeyBindings()
     destination_field = (
         ExactNameInputControl.create(destination, input_name="compact-save-location")
         if destination is not None
         else None
     )
-    decision_keys_active = Condition(lambda: not destination_editing["value"])
+    response_composer = (
+        build_framed_multiline_input(
+            "RESPONSE",
+            prompt="› ",
+            buffer_name="compact-resolution-response",
+            height=Dimension(min=4, preferred=5, max=7),
+            frame_style="fg:#f4f5f7 nobold",
+        )
+        if stage_response is not None
+        else None
+    )
+    response_area = (
+        response_composer.text_area if response_composer is not None else None
+    )
+    decision_keys_active = Condition(
+        lambda: not destination_editing["value"] and not response_editing["value"]
+    )
     destination_keys_active = Condition(lambda: destination_editing["value"])
+    response_keys_active = Condition(lambda: response_editing["value"])
 
     def active_item() -> ResolutionItem | None:
         return items[item_index["value"]] if items else None
 
+    def response_available(item: ResolutionItem | None) -> bool:
+        return (
+            item is not None
+            and item.commentable
+            and response_text is not None
+            and stage_response is not None
+        )
+
     def action_rows() -> tuple[SelectionOption, ...]:
         rows: list[SelectionOption] = []
+        if response_available(active_item()):
+            rows.append(SelectionOption("action:RESPONSE", "Response"))
         if destination is not None:
             rows.append(
                 SelectionOption(
@@ -265,6 +307,28 @@ def run_compact_resolution_decisions(
                 )
             )
         action_offset = len(option_rows)
+        if response_available(item):
+            assert item is not None
+            assert response_text is not None
+            focused = row_index["value"] == action_offset
+            current_response = single_line_terminal_text(response_text(item.uid))
+            available = max(12, get_app().output.get_size().columns - 20)
+            response_label = (
+                elide_terminal_text(current_response, available)
+                if current_response
+                else "Add a direction…"
+            )
+            fragments.append(
+                (
+                    focused_control_style(
+                        focused=focused,
+                        selected=focused or bool(current_response),
+                    ),
+                    f"  {'✓ ' if current_response else ''}RESPONSE · "
+                    f"{safe_terminal_text(response_label)}\n",
+                )
+            )
+            action_offset += 1
         if destination is not None:
             focused = row_index["value"] == action_offset
             fragments.append(
@@ -291,7 +355,9 @@ def run_compact_resolution_decisions(
             return " " + safe_terminal_text(status["value"])
         if destination_editing["value"]:
             return " Enter use exact name · Esc return · Ctrl-C cancel"
-        return " ←/→ issue · ↑/↓ move · Enter select/apply · Esc close"
+        if response_editing["value"]:
+            return " Enter use response · Ctrl-J newline · Esc return"
+        return " ←/→ issue · ↑/↓ move · Enter select/respond/apply · Esc close"
 
     header_control = FormattedTextControl(render_header)
     body_control = FormattedTextControl(render_body, focusable=True, show_cursor=False)
@@ -300,6 +366,8 @@ def run_compact_resolution_decisions(
     def active_body():
         if destination_editing["value"] and destination_field is not None:
             return destination_field.input
+        if response_editing["value"] and response_composer is not None:
+            return response_composer.container
         return Window(body_control, wrap_lines=True)
 
     root = build_tui_frame(
@@ -371,8 +439,50 @@ def run_compact_resolution_decisions(
             finish(
                 build_continue_action(item.uid if item is not None else None)
             )
-        else:
+        elif action_uid == "action:CHANGE_DESTINATION":
             open_destination()
+        else:
+            open_response()
+
+    def open_response() -> None:
+        item = active_item()
+        if (
+            not response_available(item)
+            or item is None
+            or response_area is None
+            or response_text is None
+        ):
+            return
+        current = response_text(item.uid)
+        response_area.text = current
+        response_area.buffer.cursor_position = len(current)
+        response_editing["value"] = True
+        status["value"] = ""
+        get_app().layout.focus(response_area)
+
+    def close_response() -> None:
+        response_editing["value"] = False
+        status["value"] = ""
+        get_app().layout.focus(body_control)
+
+    def submit_response() -> None:
+        item = active_item()
+        if item is None or response_area is None or stage_response is None:
+            return
+        if response_validator is not None:
+            try:
+                response_validator(response_area.text)
+            except (TypeError, ValueError) as error:
+                status["value"] = str(error)
+                return
+        stage_response(item.uid, response_area.text)
+        response_editing["value"] = False
+        status["value"] = (
+            "Response staged for this run."
+            if response_area.text.strip()
+            else "Response cleared for this run."
+        )
+        get_app().layout.focus(body_control)
 
     def open_destination() -> None:
         if destination is None or destination_field is None:
@@ -444,6 +554,23 @@ def run_compact_resolution_decisions(
     def _destination_submit(event) -> None:
         submit_destination()
         event.app.invalidate()
+
+    @bindings.add("escape", filter=response_keys_active, eager=True)
+    def _response_back(event) -> None:
+        close_response()
+        event.app.invalidate()
+
+    @bindings.add("enter", filter=response_keys_active, eager=True)
+    def _response_submit(event) -> None:
+        submit_response()
+        event.app.invalidate()
+
+    if response_area is not None:
+
+        @bindings.add("c-j", filter=has_focus(response_area), eager=True)
+        def _response_newline(event) -> None:
+            response_area.buffer.insert_text("\n")
+            event.app.invalidate()
 
     @bindings.add("c-c", eager=True)
     @bindings.add(Keys.SIGINT, eager=True)

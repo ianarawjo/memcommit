@@ -1027,6 +1027,7 @@ def test_custom_sever_response_remains_answered_and_apply_ready(isolated_store):
         read_only=False,
     )
 
+    assert item.commentable is True
     assert item.response_state == "ANSWERED"
     assert item.response_text == "Custom local result."
     assert item.blocks[0].text == "Custom local result."

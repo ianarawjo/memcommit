@@ -67,6 +67,7 @@ def _item(uid: str, title: str, question: str, first: str, second: str):
         summary=question,
         obligation="REQUIRED",
         question=question,
+        commentable=True,
         options=(
             ResolutionOption(
                 f"{uid}:recommended",
@@ -129,10 +130,13 @@ def _run_child(kind: str) -> None:
     if (size.columns, size.lines) != (COLUMNS, ROWS):
         raise RuntimeError(f"unexpected PTY size: {size.columns}x{size.lines}")
     selected: dict[str, str] = {}
+    responses: dict[str, str] = {}
 
     def continue_action(_focused_uid: str | None):
         if set(selected) != {"retention", "access"}:
             return None
+        if any(value.strip() for value in responses.values()):
+            return ResolutionWorkbenchAction(kind="SUBMIT_ALL")
         return ResolutionWorkbenchAction(kind="ACCEPT")
 
     print("$ mem meld advisor-a advisor-b policy", flush=True)
@@ -141,8 +145,14 @@ def _run_child(kind: str) -> None:
         _view,
         selected_option=selected.get,
         stage_option=selected.__setitem__,
+        response_text=lambda uid: responses.get(uid, ""),
+        stage_response=responses.__setitem__,
         build_continue_action=continue_action,
-        continue_label=lambda: "Apply",
+        continue_label=lambda: (
+            "Continue"
+            if any(value.strip() for value in responses.values())
+            else "Apply"
+        ),
     )
     if kind == "success":
         if action.kind != "ACCEPT":
@@ -161,11 +171,20 @@ def _run_child(kind: str) -> None:
         print("  REPORT AVAILABLE · YES")
         print("  UNRESOLVED REQUIRED · 0")
         print("  ADDITIONAL PROVIDER CALLS · 0")
+    elif kind == "response":
+        if action.kind != "SUBMIT_ALL":
+            raise RuntimeError(f"expected SUBMIT_ALL, received {action.kind}")
+        print("\nMELD RESPONSE INCORPORATED · PROVIDER REVISION REQUIRED")
+        print("RESPONSE · PRESERVE 30 DAYS FOR AUDIT LOGS ONLY")
+        print("SOURCE · advisor-a + advisor-b · UNCHANGED")
+        print("TARGET · policy · UNCHANGED · NO CHECKPOINT")
+        print("NEXT · REVIEW REVISED PROPOSAL BEFORE APPLY")
+        print("REPORT · RETAINED · mem review meld --session capture-meld-session")
     else:
         if action.kind != "CLOSE":
             raise RuntimeError(f"expected CLOSE, received {action.kind}")
         print("\nMELD CLOSED · NO DECISION APPLIED")
-        print("PROCESS-LOCAL SELECTIONS · DISCARDED")
+        print("PROCESS-LOCAL SELECTIONS AND RESPONSE · DISCARDED")
         print("SOURCE · UNCHANGED")
         print("TARGET · UNCHANGED · NO CHECKPOINT")
         print("DRAFT · NOT SAVED")
@@ -313,17 +332,54 @@ def _capture_success() -> None:
 
         child.send(DOWN)
         _settle(child)
-        _snapshot(recorder, "08-apply-row-ready")
+        _snapshot(recorder, "08-response-row-focus")
+
+        child.send(DOWN)
+        _settle(child)
+        _snapshot(recorder, "09-apply-row-ready")
 
         child.send("\r")
         child.expect("CAPTURE GATE .* READ-ONLY VERIFICATION")
         _settle(child)
-        _snapshot(recorder, "09-applied-receipt")
+        _snapshot(recorder, "10-applied-receipt")
 
         child.send("v\r")
         child.expect("ADDITIONAL PROVIDER CALLS .* 0")
         child.expect(pexpect.EOF)
-        _snapshot(recorder, "10-read-only-verification")
+        _snapshot(recorder, "11-read-only-verification")
+    finally:
+        if child.isalive():
+            child.close(force=True)
+
+
+def _capture_response() -> None:
+    child, recorder = _spawn("response")
+    try:
+        child.expect("MELD NEEDS INPUT")
+        _settle(child)
+        child.send(DOWN * 3)
+        child.send("\r")
+        _settle(child)
+        _snapshot(recorder, "12-response-editor")
+
+        child.send("Preserve 30 days for audit logs only.")
+        child.sendcontrol("j")
+        child.send("Delete operational copies after 7 days.")
+        _settle(child)
+        _snapshot(recorder, "13-response-multiline-text")
+
+        child.send("\r")
+        _settle(child)
+        _snapshot(recorder, "14-response-staged")
+
+        child.send(DOWN)
+        _settle(child)
+        _snapshot(recorder, "15-continue-response")
+
+        child.send("\r")
+        child.expect("NEXT .* REVIEW REVISED PROPOSAL BEFORE APPLY")
+        child.expect(pexpect.EOF)
+        _snapshot(recorder, "16-response-incorporated-receipt")
     finally:
         if child.isalive():
             child.close(force=True)
@@ -334,11 +390,14 @@ def _capture_close() -> None:
     try:
         child.expect("MELD NEEDS INPUT")
         _settle(child)
-        child.send("2")
+        child.send(DOWN * 3)
+        child.send("\r")
+        child.send("Temporary direction")
+        child.send("\r")
         child.send("\x1b")
         child.expect("DRAFT .* NOT SAVED")
         child.expect(pexpect.EOF)
-        _snapshot(recorder, "11-close-discards-process-local-choice")
+        _snapshot(recorder, "17-close-discards-process-local-response")
     finally:
         if child.isalive():
             child.close(force=True)
@@ -348,6 +407,7 @@ def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="memcommit-compact-decisions-"):
         _capture_success()
+        _capture_response()
         _capture_close()
     raw = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript"))
     if "38;2;" not in raw and "48;2;" not in raw:

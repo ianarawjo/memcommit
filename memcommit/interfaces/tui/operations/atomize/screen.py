@@ -424,17 +424,20 @@ def run_atomize_workbench_shell(
 
     saved_in_round = {"value": False}
 
-    def save_draft(
-        issue_uid: str,
-        option_uid: str | None,
-        comment: str,
-    ) -> None:
+    def validate_response(comment: str) -> None:
         if len(comment) > ATOMIZE_WORKBENCH_RESPONSE_CHAR_LIMIT:
             raise ValueError(
                 "Response is too long to save "
                 f"({len(comment):,}/"
                 f"{ATOMIZE_WORKBENCH_RESPONSE_CHAR_LIMIT:,} characters)."
             )
+
+    def save_draft(
+        issue_uid: str,
+        option_uid: str | None,
+        comment: str,
+    ) -> None:
+        validate_response(comment)
         response = session.response_for(issue_uid)
         response.selected_choice_uid = option_uid
         response.text = comment
@@ -462,6 +465,7 @@ def run_atomize_workbench_shell(
             ),
             draft_loader=load_draft,
             draft_saver=save_draft,
+            response_validator=validate_response,
             save_draft_on_close=True,
             toggle_sort=toggle_sort,
             split_viewer_items=True,

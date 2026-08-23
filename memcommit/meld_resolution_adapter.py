@@ -272,6 +272,7 @@ class MeldResolutionWorkbenchAdapter:
                                 "REFINE, COMMENT, OR ENTER A DIFFERENT RESOLUTION"
                             ),
                         ),
+                        commentable=True,
                     )
                 )
             items = tuple(projected_items)

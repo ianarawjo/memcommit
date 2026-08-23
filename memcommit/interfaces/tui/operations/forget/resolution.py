@@ -152,6 +152,7 @@ class ForgetResolutionWorkbenchAdapter:
                         other_option_label="Different retained wording",
                         response_heading="REFINE OR ENTER DIFFERENT RETAINED WORDING",
                     ),
+                    commentable=True,
                 )
             )
             action, content = selected_action, selected_content

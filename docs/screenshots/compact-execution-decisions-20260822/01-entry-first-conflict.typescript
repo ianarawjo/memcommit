@@ -6,6 +6,7 @@ PTY 180 52
 [0;38;2;16;36;47;48;2;139;213;255;1m✓ A · Keep records for 30 days. · Recommended[0m
 [0m  B · Keep records for 90 days.[0m
 [0m  Preserve both · Retain both readings with their exact scopes.[0m
+[0m  RESPONSE · Add a direction…[0m
 
 [0m  APPLY ALL · 2/2 READY[0m
 
@@ -49,6 +50,5 @@ PTY 180 52
 
 
 
-
 [0m [0m
-[0m ←/→ issue · ↑/↓ move · Enter select/apply · Esc close[54D[51A[0m
+[0m ←/→ issue · ↑/↓ move · Enter select/respond/apply · Esc close[62D[51A[0m

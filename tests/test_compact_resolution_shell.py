@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from dataclasses import replace
+
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
@@ -7,6 +9,7 @@ from memcommit.interfaces.tui.workbenches.resolution.compact_shell import (
     run_compact_resolution_decisions,
 )
 from memcommit.interfaces.tui.workbenches.resolution.session_shell import (
+    ResolutionGlobalStrategy,
     run_resolution_workbench_shell,
 )
 from memcommit.interfaces.tui.components.save_location import SaveLocationView
@@ -158,6 +161,96 @@ def test_compact_choice_is_discarded_on_close_instead_of_saved_as_a_draft():
 
     assert action.kind == "CLOSE"
     assert saved == []
+
+
+def test_compact_response_accepts_direct_multiline_guidance_process_locally():
+    item = replace(_item("retention", "Retention period"), commentable=True)
+    view = replace(
+        _view(),
+        items=(item,),
+        capabilities=frozenset({"SUBMIT_ITEM"}),
+    )
+    saved: list[tuple[str, str | None, str]] = []
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text(
+            "\x1b[B" * 3
+            + "\rKeep 45 days for audit logs.\x0aDelete other copies.\r"
+            + "\x1b[B\r"
+        )
+        action = run_resolution_workbench_shell(
+            view,
+            compact_decisions=True,
+            draft_saver=lambda uid, option_uid, comment: saved.append(
+                (uid, option_uid, comment)
+            ),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "SUBMIT_ITEM"
+    assert action.item_uid == "retention"
+    assert action.option_uid == "retention:recommended"
+    assert action.comment == (
+        "Keep 45 days for audit logs.\nDelete other copies."
+    )
+    assert saved == []
+
+
+def test_compact_response_escape_discards_unsaved_text_before_root_close():
+    item = replace(_item("retention", "Retention period"), commentable=True)
+    view = replace(_view(), items=(item,))
+    saved: list[tuple[str, str | None, str]] = []
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[B" * 3 + "\rtemporary direction\x1b\x1b")
+        action = run_resolution_workbench_shell(
+            view,
+            compact_decisions=True,
+            draft_saver=lambda uid, option_uid, comment: saved.append(
+                (uid, option_uid, comment)
+            ),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "CLOSE"
+    assert saved == []
+
+
+def test_compact_response_uses_one_whole_set_revision_turn_when_available():
+    item = replace(_item("retention", "Retention period"), commentable=True)
+    view = replace(
+        _view(),
+        items=(item,),
+        capabilities=frozenset({"SUBMIT_ALL"}),
+    )
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text(
+            "\x1b[B" * 3
+            + "\rPreserve 30 days for audit logs only.\r"
+            + "\x1b[B\r"
+        )
+        action = run_resolution_workbench_shell(
+            view,
+            compact_decisions=True,
+            global_strategies=(
+                ResolutionGlobalStrategy(
+                    "Keep remaining recommendations",
+                    "SUBMIT_ALL",
+                    "Keep every other recommendation unchanged.",
+                ),
+            ),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "SUBMIT_ALL"
+    assert "Preserve 30 days for audit logs only." in action.comment
 
 
 def test_compact_decisions_edit_the_exact_save_location_inline():

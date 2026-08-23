@@ -1,6 +1,6 @@
                                                                                                                                                                                     
 MELD CLOSED · NO DECISION APPLIED                                                                                                                                                   
-PROCESS-LOCAL SELECTIONS · DISCARDED                                                                                                                                                
+PROCESS-LOCAL SELECTIONS AND RESPONSE · DISCARDED                                                                                                                                   
 SOURCE · UNCHANGED                                                                                                                                                                  
 TARGET · UNCHANGED · NO CHECKPOINT                                                                                                                                                  
 DRAFT · NOT SAVED

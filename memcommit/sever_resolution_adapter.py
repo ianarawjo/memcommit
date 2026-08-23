@@ -333,6 +333,7 @@ class SeverResolutionWorkbenchAdapter:
                             "REFINE, COMMENT, OR ENTER DIFFERENT RESULT WORDING"
                         ),
                     ),
+                    commentable=True,
                 )
             )
         results = tuple(

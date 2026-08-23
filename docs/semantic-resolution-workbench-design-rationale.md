@@ -195,14 +195,28 @@ Escape retreats from the editor before it can close the decision surface.
 
 The compact surface intentionally has one visible grammar: `Left`/`Right`
 changes the semantic item, `Up`/`Down` changes the visible row, and `Enter`
-activates that row. Choice numbers and `L` may remain undisclosed accelerators;
-direct `A`, `D`, and `P` actions are inert. This prevents issue ordinals from
-being mistaken for choice ordinals and keeps Location and Apply discoverable
-as ordinary rows. A unique operation-authored recommendation may be checked
+activates that row. Choice numbers and direct `L`, `A`, `D`, or `P` shortcuts
+are inert. This prevents issue ordinals from being mistaken for choice
+ordinals and keeps Location and Apply discoverable as ordinary rows. A unique
+operation-authored recommendation may be checked
 process-locally on entry; closing saves no newly changed selection, while the
 separated Apply row is the single explicit mutation boundary. The complete
 report remains a Review concern and
 does not reappear as a second confirmation screen.
+
+An answerable compact item also exposes one unboxed `RESPONSE` row after its
+authored choices. This is not a fabricated `Other` choice: Enter opens the
+shared multiline field in place, Enter stages its text, `Ctrl-J` inserts a
+newline, and Escape returns without using the edit. A response remains
+independent from the checked choice so a person can qualify the recommended
+direction instead of losing it merely by entering the field. The operation
+adapter still decides whether text refines a semantic turn or supplies exact
+custom result wording. Both the choice and response stay process-local until
+Continue consumes them; closing the execution surface does not create a saved
+draft. Existing custom result text is not mistaken for a newly pending
+comment. Resolve, Merge, Dedun, and any other exact action without an
+item-response contract omit this row rather than accepting text they cannot
+honor.
 
 ## Common contract
 

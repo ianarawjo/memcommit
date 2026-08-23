@@ -1,9 +1,9 @@
  MELD NEEDS INPUT · < 1/2 >                                                                                                                                                         
  CONFLICT · Retention period                                                                                                                                                        
  Which retention period should the policy use?                                                                                                                                      
-✓ A · Keep records for 30 days. · Recommended                                                                                                                                       
+  A · Keep records for 30 days. · Recommended                                                                                                                                       
   B · Keep records for 90 days.                                                                                                                                                     
-  Preserve both · Retain both readings with their exact scopes.                                                                                                                     
+✓ Preserve both · Retain both readings with their exact scopes.                                                                                                                     
   RESPONSE · Add a direction…                                                                                                                                                       
                                                                                                                                                                                     
   APPLY ALL · 2/2 READY                                                                                                                                                             

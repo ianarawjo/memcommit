@@ -1640,7 +1640,7 @@ def test_atomize_uses_shared_save_location_frame_before_final_review():
         # Location is an ordinary Enter-activated row after the issue choices;
         # no operation-specific shortcut restores the retained report shell.
         pipe_input.send_text(
-            "\x1b[B" * len(issue.choice_uids)
+            "\x1b[B" * (len(issue.choice_uids) + 1)
             + "\r\x15workbench/destination-final\r"
         )
         action = run_atomize_workbench_shell(
