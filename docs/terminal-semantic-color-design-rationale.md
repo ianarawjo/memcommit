@@ -103,7 +103,10 @@ Typed Source relationship rows use the same rule. List and Show classify
 `MEMORY_EMBED`/legacy live `MEMORY_REF` as EMBED and immutable Memory or Context
 Reference forms as REFERENCE before rendering. Only the relationship noun is
 colored; the relationship UID, `[Context][memory UID]` Source identity, content,
-and `READ ONLY` state are not inferred from or absorbed into that color.
+and `READ ONLY` state are not inferred from or absorbed into that color. Show
+renders direct and resolved-reference Memory bodies with the shared Memory-object
+lavender in both exact-item and whole-Context views; it does not dim a body to
+suggest a state that the operation model does not contain.
 
 Grant ownership and available capability are independent roles. Source
 projection in operation workbenches and static authority reports keeps the

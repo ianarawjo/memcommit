@@ -7,6 +7,7 @@ import shlex
 import typer
 
 from memcommit.interfaces.console.text import display_escape_text, safe_terminal_text
+from memcommit.interfaces.console.theme import memory_object_color_rgb
 from memcommit.show_application import (
     ShowContextSnapshot,
     ShowEmbeddedContext,
@@ -27,12 +28,21 @@ from memcommit.source_projection.presentation import (
 )
 
 
+def _render_memory_content(content: str, *, prefix: str = "") -> None:
+    """Keep every visible Memory body on the shared semantic foreground."""
+
+    typer.secho(
+        f"{prefix}{safe_terminal_text(content)}",
+        fg=memory_object_color_rgb(),
+    )
+
+
 def _render_memory(memory: ShowMemory, context_name: str) -> None:
     label = source_object_label(SourceForm.MEMORY, title=True)
     typer.secho(f"{label}: {display_escape_text(memory.uid)}", bold=True)
     typer.echo(f"Context: {display_escape_text(context_name)}")
     typer.echo()
-    typer.echo(safe_terminal_text(memory.content))
+    _render_memory_content(memory.content)
 
 
 def _render_memory_ref(
@@ -64,7 +74,7 @@ def _render_memory_ref(
             fg=typer.colors.YELLOW,
         )
     else:
-        typer.echo(safe_terminal_text(memory_ref.content))
+        _render_memory_content(memory_ref.content)
 
 
 def _render_query_view(query_view: ShowQueryView, context_name: str) -> None:
@@ -134,17 +144,14 @@ def _render_context(context: ShowContextSnapshot) -> None:
                 + (f"  {annotation}" if annotation else "")
             )
             if item.content is not None:
-                typer.secho(
-                    f"           {safe_terminal_text(item.content)}",
-                    dim=True,
-                )
+                _render_memory_content(item.content, prefix="           ")
         else:
             typer.echo(
                 f"  [{source_object_label(item.source)} "
                 f"{display_escape_text(item.uid[:8])}] ",
                 nl=False,
             )
-            typer.secho(safe_terminal_text(item.content), dim=True)
+            _render_memory_content(item.content)
             if annotation:
                 typer.echo(f"    {annotation}")
 
