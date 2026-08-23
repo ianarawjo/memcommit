@@ -43,7 +43,7 @@ Permissions are independent capabilities:
 | `UPDATE` | edit a direct Memory; `EDIT` is a CLI input alias; requires `READ` |
 | `DELETE` | remove a direct item; requires `READ` |
 | `QUERY` | browse opaque Memory shapes/handles and ask a provider without reading source text |
-| `SHARE` | deliver one exactly reviewed ordinary Context snapshot as a receiver-owned consent unit; grants no receiver read access |
+| `SHARE` | deliver one exactly reviewed ordinary Context or lexical subtree snapshot as a receiver-owned consent unit; grants no receiver read access |
 
 These permissions currently govern direct items inside existing Contexts.
 They do not delegate Context lifecycle operations such as `init`, `rename`,

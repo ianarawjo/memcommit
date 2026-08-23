@@ -7,7 +7,7 @@ independent of how its source Context was created: a Source may be authored,
 updated, melded, severed, or produced by another ordinary local workflow.
 
 ```text
-mem share [SOURCE_CONTEXT] --to ENDPOINT
+mem share [SOURCE_CONTEXT] [-d | -r] --to ENDPOINT
 ```
 
 Complete operands use the direct command path. In a TTY, missing operands open
@@ -15,22 +15,54 @@ ordinary-Context and endpoint pickers, freeze the selection, and show the
 Share viewer before receiver state changes. Query-only sources are never
 opened or offered.
 
+Omission and `-d/--direct` select the exact Source Context. `-r/--recursive`
+selects that Context plus every ordinary local lexical descendant. Share does
+not follow embedded Context edges: an embed is a relationship to separately
+owned material, whereas recursive Share is an explicit namespace bundle. The
+two flags are mutually exclusive so the command line records one unambiguous
+disclosure range.
+
 ## Selection and send
 
-The source picker lists nonempty ordinary Contexts whose direct items are all
-ordinary Memories. It does not require a particular creator command or
+The source picker lists ordinary Context roots whose requested range contains
+at least one Memory and whose direct items are all ordinary Memories. A direct
+Source must itself be nonempty. A recursive Source may use empty structural
+Context members, including an empty root, provided the complete bundle has at
+least one Memory. It does not require a particular creator command or
 checkpoint. This deliberately decouples Share authorization from Sever or any
 other semantic transformation.
 
 The source picker shows Context names only; it does not expand every candidate's
-Memories. After selection, the viewer has three regions: `CONTEXT` shows the
-selected name and endpoint, `MEMORIES` shows only that Context's direct
-Memories, and `ACTION` contains the one `SEND CONTEXT` action. It has no
-provider turn, semantic options, or durable Share session. If no source or
-endpoint exists, the same surface opens read-only with `SEND UNAVAILABLE`.
+Memories. After selection, the viewer has three regions: direct Share keeps its
+`CONTEXT` projection, while recursive Share uses a compact `CONTEXTS` roster
+showing the root summary, every included canonical Context name and its
+direct-Memory count, and the endpoint; `MEMORIES` shows every disclosed direct
+Memory beside its owning Context; and `ACTION` contains the one `SEND CONTEXT`
+or `SEND CONTEXT BUNDLE` action. It has no provider turn, semantic options, or
+durable Share session. If no source or endpoint exists, the same surface opens
+read-only with `SEND UNAVAILABLE`.
+
+Each recursive Context consumes exactly one unboxed row:
+
+```text
+ROOT · practice · 4 CONTEXTS · 3 MEMORIES
+C1 · practice              · 1 Memory
+C2 · practice/appointments · 1 Memory
+C3 · practice/empty-lane   · 0 Memories
+C4 · practice/medication   · 1 Memory
+TO · government/healthcare-agent
+```
+
+The focused row alone receives the shared blue focus treatment. Full names and
+zero-Memory members remain visible because an aggregate-only summary would
+hide part of the consent unit. Per-Context cards, repeated count lines, and
+blank separators were rejected because they consumed about three terminal
+rows per member and made even a four-Context bundle require scrolling. A
+collapsible tree was also rejected: it would save space by concealing exactly
+which members will be sent.
 
 These three regions declare the shared Surface topology
-`CONTEXT → MEMORIES → ACTION`. Tab and Shift-Tab wrap without resetting the
+`CONTEXT(S) → MEMORIES → ACTION`. Tab and Shift-Tab wrap without resetting the
 Viewer section or Memory cursor. Up and Down first move within the current
 region, then cross a real top or bottom boundary without wrapping; vertical
 entry selects the nearest Context section or Memory row. Enter has a Share
@@ -45,14 +77,19 @@ meaning, authority revalidation, and delivery. This separation keeps keyboard
 behavior consistent with other workbenches without turning a presentation
 component into a disclosure boundary.
 
-The viewer freezes the canonical Source name and UID, Source digest, ordered
-Memory contents, consent digest, endpoint Grant UID and revision, receiver
-identity, and deterministic placement. Send revalidates the complete frozen
-projection under the registry and Context locks. Any Source or endpoint change
-requires reopening Share and reviewing a fresh snapshot.
+The viewer freezes the canonical Source root, direct/recursive range, complete
+ordered Context membership, every Context name/UID/digest, ordered Memory
+contents, consent digest, endpoint Grant UID and revision, receiver identity,
+and deterministic placement. Send revalidates the complete frozen projection
+under the registry, namespace-graph, and Context locks. A recursive Send holds
+an exclusive Source graph lock from final membership validation through
+receiver publication, so a new child cannot enter the bundle after review. Any
+Source, membership, range, or endpoint change requires reopening Share and
+reviewing a fresh snapshot.
 
 References and embedded Contexts are rejected because Share must send exactly
-the direct Memories shown in the viewer. Empty Contexts are not eligible.
+the direct Memories shown in the viewer. They are not silently traversed or
+converted into owned receiver data.
 
 ## Delivery and authority
 
@@ -62,20 +99,34 @@ checks the grantee attachment, receiver Profile, receiver Context UID, and
 frozen resource root while holding the registry Grant lock. `SHARE` does not
 imply receiver `READ` access.
 
-The ordered Memory batch is one frozen Context snapshot. Delivery creates a
-receiver-owned ordinary Context at:
+The ordered direct Context or recursive Context batch is one frozen consent
+unit. Delivery creates a receiver-owned ordinary Context root at:
 
 ```text
 RECEIVER_ROOT/received-shares/SHARE_UID
 ```
 
-Its direct Memories contain the selected text. The `share-receive` checkpoint
-records sender identity, endpoint Grant and revision, Source identity and
-digest, source-to-received UID mapping, and consent digest.
+Direct Share stores the exact Source Memories there. Recursive Share preserves
+every lexical suffix below that root, so `SOURCE/child/grandchild` becomes
+`RECEIVER_ROOT/received-shares/SHARE_UID/child/grandchild`. Every member is an
+ordinary receiver-owned Context. Its `share-receive` checkpoint records sender
+identity, endpoint Grant and revision, Source root and member identities and
+digests, the complete bundle manifest, source-to-received UID mappings, and
+the shared consent digest.
 
 The Share UID is deterministic over endpoint, sender, Source identity/digest,
-and consent digest. Retrying the same unit validates and reuses the receiver
-Context; a collision with different data fails closed.
+range version, and consent digest. Version-1 direct digest and UID construction
+remain byte-compatible so an exact unit delivered before recursive support is
+still idempotent. Retrying the same unit validates and reuses the complete
+receiver Context set; a partial set or collision with different data fails
+closed.
+
+Receiver publication uses one command lock and one complete destination lock
+set. Every member is preflighted before the first creation, and an exception
+rolls back members created earlier in the batch. This research prototype
+therefore provides exception atomicity for a recursive Share, not a durable
+cross-store transaction journal that can recover from a process or machine
+crash between Context-file replacements.
 
 ## Alternatives and limitations
 
@@ -88,6 +139,12 @@ Context; a collision with different data fails closed.
   would create general cross-Profile write authority.
 - Moving or referencing the Source was rejected because later sender edits or
   deletion must not rewrite the receiver-owned copy.
+- Flattening descendants into one received Context was rejected because it
+  erases the namespaced grouping the recursive option is meant to preserve and
+  makes equal Memory text from different child Contexts indistinguishable.
+- Following embedded Contexts under `-r` was rejected because lexical ownership
+  and graph reach are independent axes. A referenced or embedded Context must
+  be selected and reviewed as its own Share root.
 - Keeping Share-authored Tab and arrow handlers was rejected after the common
   Surface contract existed. That duplicate path clamped Up/Down inside each
   frame and maintained a second Memory cursor beside the shared workbench
@@ -96,4 +153,15 @@ Context; a collision with different data fails closed.
 
 This remains a local research-profile transfer, not an authenticated network
 transfer. There is no sender-side receipt artifact, receiver acknowledgement,
-recall, or multi-endpoint routing yet.
+recall, multi-endpoint routing, or durable cross-store crash-recovery journal
+yet.
+
+## Verification record
+
+- `tests/test_share.py` covers direct version-1 compatibility, recursive
+  hierarchy preservation, empty structural members, idempotence, mutually
+  exclusive range flags, reviewed-membership freshness, receiver rollback,
+  interactive range propagation, and viewer projection.
+- `docs/screenshots/mem-share-recursive-20260822/` records the ordered real
+  `180×52` color-PTY endpoint, review, approval, success, read-only
+  verification, cancellation, and stale-membership failure states.

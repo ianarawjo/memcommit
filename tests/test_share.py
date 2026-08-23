@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import importlib
 import uuid
@@ -28,10 +29,11 @@ from memcommit.profile_config import (
     GrantContextBinding,
     ProfileEntry,
     ProfileRegistry,
+    load_profile_registry,
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.store import MemoryStore
+from memcommit.store import MemoryStore, context_record_digest
 from memcommit.share import (
     ShareError,
     deliver_prepared_share,
@@ -150,6 +152,57 @@ def test_share_creates_real_receiver_memories_and_is_idempotent(
     assert second.exit_code == 0, second.stderr or second.output
     assert "already shared" in second.output
     assert second.output.count("Share: ") == 1
+
+
+def test_direct_share_preserves_version_one_consent_and_uid_identity(
+    tmp_path,
+    monkeypatch,
+):
+    _sender_store, _receiver_store, source, _receiver = _study_share_topology(
+        tmp_path,
+        monkeypatch,
+    )
+    registry = load_profile_registry()
+    grant = registry.grants[0]
+    source_digest = context_record_digest(source)
+    record = {
+        "endpoint_grant_uid": grant.uid,
+        "recipient": grant.public_name,
+        "sender_profile_uid": registry.active.uid,
+        "source_context_uid": source.uid,
+        "source_digest": source_digest,
+        "memories": [
+            {"source_memory_uid": memory.uid, "content": memory.content}
+            for memory in source.iter_items()
+            if isinstance(memory, Memory)
+        ],
+    }
+    encoded = json.dumps(
+        record,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    expected_consent_digest = hashlib.sha256(encoded).hexdigest()
+    expected_uid = str(
+        uuid.uuid5(
+            uuid.UUID(grant.uid),
+            "\0".join(
+                (
+                    registry.active.uid,
+                    source.uid,
+                    source_digest,
+                    expected_consent_digest,
+                )
+            ),
+        )
+    )
+
+    preview = prepare_share(source.name, grant.public_name)
+
+    assert preview.consent_digest == expected_consent_digest
+    assert preview.uid == expected_uid
+    assert preview.include_descendants is False
 
 
 def test_bare_share_opens_tty_flow_and_sends_selected_context(
@@ -486,3 +539,299 @@ def test_share_reviews_current_context_even_when_it_changed_after_sever(
 
     assert result.exit_code == 0, result.stderr or result.output
     assert "Shared Context." in result.output
+
+
+def _add_share_subtree(
+    sender_store: MemoryStore, source: Context
+) -> tuple[Context, ...]:
+    child = Context(uid=str(uuid.uuid4()), name=source.name + "/preferences")
+    child.add("Use a written follow-up after every appointment.")
+    empty = Context(uid=str(uuid.uuid4()), name=source.name + "/empty-lane")
+    grandchild = Context(
+        uid=str(uuid.uuid4()),
+        name=source.name + "/preferences/medication",
+    )
+    grandchild.add("Confirm medication changes with the prescribing clinician.")
+    for context in (child, empty, grandchild):
+        sender_store.create_context(context)
+    return child, empty, grandchild
+
+
+def test_recursive_share_preserves_the_complete_lexical_context_bundle(
+    tmp_path,
+    monkeypatch,
+):
+    sender_store, receiver_store, source, _receiver = _study_share_topology(
+        tmp_path,
+        monkeypatch,
+    )
+    child, empty, grandchild = _add_share_subtree(sender_store, source)
+
+    first = runner.invoke(
+        app,
+        [
+            "share",
+            source.name,
+            "-r",
+            "--to",
+            "government/healthcare-agent",
+        ],
+    )
+
+    assert first.exit_code == 0, first.stderr or first.output
+    assert "Shared Context bundle." in first.output
+    assert "Contexts: 4" in first.output
+    assert "Memories: 4" in first.output
+    receiver_line = next(
+        line for line in first.output.splitlines() if line.startswith("Receiver: ")
+    )
+    receiver_root = receiver_line.split(":", 2)[2]
+    expected = {
+        source.name: receiver_root,
+        child.name: receiver_root + "/preferences",
+        empty.name: receiver_root + "/empty-lane",
+        grandchild.name: receiver_root + "/preferences/medication",
+    }
+    for source_name, receiver_name in expected.items():
+        received = receiver_store.load_direct(receiver_name)
+        receipt = receiver_store.list_checkpoints(receiver_name)[0]
+        share = receipt["args"]["share"]
+        assert share["schema_version"] == 2
+        assert share["include_descendants"] is True
+        assert share["context_count"] == 4
+        assert share["source_context_name"] == source_name
+        assert share["receiver_root_context_name"] == receiver_root
+        assert len(share["contexts"]) == 4
+        if source_name == empty.name:
+            assert tuple(received.iter_items()) == ()
+
+    second = runner.invoke(
+        app,
+        [
+            "share",
+            source.name,
+            "--recursive",
+            "--to",
+            "government/healthcare-agent",
+        ],
+    )
+    assert second.exit_code == 0, second.stderr or second.output
+    assert "bundle was already shared" in second.output
+
+
+def test_direct_share_excludes_lexical_descendants(tmp_path, monkeypatch):
+    sender_store, receiver_store, source, _receiver = _study_share_topology(
+        tmp_path,
+        monkeypatch,
+    )
+    child, _empty, _grandchild = _add_share_subtree(sender_store, source)
+
+    result = runner.invoke(
+        app,
+        [
+            "share",
+            source.name,
+            "-d",
+            "--to",
+            "government/healthcare-agent",
+        ],
+    )
+
+    assert result.exit_code == 0, result.stderr or result.output
+    assert "Shared Context." in result.output
+    assert "Contexts:" not in result.output
+    receiver_line = next(
+        line for line in result.output.splitlines() if line.startswith("Receiver: ")
+    )
+    receiver_root = receiver_line.split(":", 2)[2]
+    root = receiver_store.load_direct(receiver_root)
+    assert len(tuple(root.iter_items())) == 2
+    with pytest.raises(FileNotFoundError):
+        receiver_store.load_direct(receiver_root + child.name[len(source.name) :])
+    assert (
+        receiver_store.list_checkpoints(receiver_root)[0]["args"]["share"][
+            "schema_version"
+        ]
+        == 1
+    )
+
+
+def test_share_rejects_conflicting_direct_and_recursive_flags(
+    tmp_path,
+    monkeypatch,
+):
+    _sender_store, _receiver_store, source, _receiver = _study_share_topology(
+        tmp_path,
+        monkeypatch,
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "share",
+            source.name,
+            "-d",
+            "-r",
+            "--to",
+            "government/healthcare-agent",
+        ],
+    )
+
+    assert result.exit_code == 1
+    assert "Choose either --direct or --recursive" in result.stderr
+
+
+def test_recursive_prepared_share_rejects_new_descendant_after_review(
+    tmp_path,
+    monkeypatch,
+):
+    sender_store, receiver_store, source, _receiver = _study_share_topology(
+        tmp_path,
+        monkeypatch,
+    )
+    _add_share_subtree(sender_store, source)
+    preview = prepare_share(
+        source.name,
+        "government/healthcare-agent",
+        include_descendants=True,
+    )
+    late = Context(uid=str(uuid.uuid4()), name=source.name + "/late")
+    late.add("Added after recursive review.")
+    sender_store.create_context(late)
+
+    with pytest.raises(ShareError, match="selected Share content changed"):
+        deliver_prepared_share(preview)
+    with pytest.raises(FileNotFoundError):
+        receiver_store.load_direct(preview.receiver_context)
+
+
+def test_recursive_receiver_creation_rolls_back_an_earlier_bundle_member(
+    tmp_path,
+    monkeypatch,
+):
+    sender_store, receiver_store, source, _receiver = _study_share_topology(
+        tmp_path,
+        monkeypatch,
+    )
+    child = Context(uid=str(uuid.uuid4()), name=source.name + "/child")
+    child.add("Child content.")
+    sender_store.create_context(child)
+    preview = prepare_share(
+        source.name,
+        "government/healthcare-agent",
+        include_descendants=True,
+    )
+    original_save = MemoryStore._save_locked
+
+    def fail_second_receiver_member(self, context, checkpoint, **kwargs):
+        if "/received-shares/" in context.name and context.name.endswith("/child"):
+            raise OSError("simulated receiver write failure")
+        return original_save(self, context, checkpoint, **kwargs)
+
+    monkeypatch.setattr(MemoryStore, "_save_locked", fail_second_receiver_member)
+
+    with pytest.raises(OSError, match="simulated receiver write failure"):
+        deliver_prepared_share(preview)
+    for context in preview.contexts:
+        with pytest.raises(FileNotFoundError):
+            receiver_store.load_direct(context.receiver_context)
+
+
+def test_recursive_share_viewer_names_every_context_in_the_consent_unit(
+    tmp_path,
+    monkeypatch,
+):
+    sender_store, _receiver_store, source, _receiver = _study_share_topology(
+        tmp_path,
+        monkeypatch,
+    )
+    _add_share_subtree(sender_store, source)
+    preview = prepare_share(
+        source.name,
+        "government/healthcare-agent",
+        include_descendants=True,
+    )
+
+    rendered = share_context_text(preview)
+
+    lines = rendered.splitlines()
+    assert lines[0].endswith("· 4 CONTEXTS · 4 MEMORIES")
+    assert len(lines) == len(preview.contexts) + 2
+    assert "" not in lines
+    for index, context in enumerate(preview.contexts, start=1):
+        assert lines[index].startswith(f"C{index} · {context.source_context} · ")
+        assert lines[index].endswith((" Memory", " Memories"))
+
+
+def test_recursive_share_compact_context_roster_scrolls_to_destination(
+    tmp_path,
+    monkeypatch,
+):
+    sender_store, _receiver_store, source, _receiver = _study_share_topology(
+        tmp_path,
+        monkeypatch,
+    )
+    for index in range(15):
+        child = Context(
+            uid=str(uuid.uuid4()),
+            name=f"{source.name}/lane-{index:02d}",
+        )
+        child.add(f"Memory for recursive lane {index:02d}.")
+        sender_store.create_context(child)
+    preview = prepare_share(
+        source.name,
+        "government/healthcare-agent",
+        include_descendants=True,
+    )
+    navigation = SessionWorkbenchNavigation()
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[B" * (len(preview.contexts) + 1) + "q")
+        receipt = run_share_viewer(
+            preview,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+            navigation=navigation,
+        )
+
+    assert receipt.action == "close"
+    assert navigation.section_uid == "SHARE:DESTINATION"
+
+
+def test_incomplete_recursive_cli_keeps_range_through_tty_review(
+    tmp_path,
+    monkeypatch,
+):
+    sender_store, _receiver_store, source, _receiver = _study_share_topology(
+        tmp_path,
+        monkeypatch,
+    )
+    _add_share_subtree(sender_store, source)
+    share_command = importlib.import_module("memcommit.commands.share")
+    share_viewer = importlib.import_module("memcommit.commands.share_viewer")
+    seen = {}
+    monkeypatch.setattr(share_command, "_interactive_terminal", lambda: True)
+
+    def close(preview):
+        seen["preview"] = preview
+        return ShareViewerReceipt(action="close")
+
+    monkeypatch.setattr(share_viewer, "run_share_viewer", close)
+
+    result = runner.invoke(app, ["share", source.name, "-r"])
+
+    assert result.exit_code == 0, result.stderr or result.output
+    assert "nothing was sent" in result.output
+    assert seen["preview"].include_descendants is True
+    assert len(seen["preview"].contexts) == 4
+
+
+def test_share_help_exposes_direct_and_recursive_range_flags():
+    result = runner.invoke(app, ["share", "-h"])
+
+    assert result.exit_code == 0, result.stderr or result.output
+    assert "--direct" in result.output
+    assert "-d" in result.output
+    assert "--recursive" in result.output
+    assert "-r" in result.output

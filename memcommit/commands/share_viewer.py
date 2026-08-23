@@ -62,9 +62,29 @@ def _compact_memory(content: str) -> str:
     return display_escape_text(content).replace("\n", " ↵ ")
 
 
+def _memory_count_text(count: int) -> str:
+    return f"{count} {'Memory' if count == 1 else 'Memories'}"
+
+
 def share_context_text(preview: SharePreview) -> str:
     """Render the selected Context and destination without workflow jargon."""
 
+    if preview.include_descendants:
+        members = tuple(
+            f"C{index} · {display_escape_text(context.source_context)} · "
+            f"{_memory_count_text(len(context.memories))}"
+            for index, context in enumerate(preview.contexts, start=1)
+        )
+        return "\n".join(
+            (
+                "ROOT · "
+                + display_escape_text(preview.source_context)
+                + f" · {len(preview.contexts)} CONTEXTS"
+                + f" · {len(preview.memories)} MEMORIES",
+                *members,
+                "TO · " + display_escape_text(preview.endpoint),
+            )
+        )
     return "\n".join(
         (
             "CONTEXT TO SEND",
@@ -98,35 +118,76 @@ def run_share_viewer(
         nav.focus("viewer")
     nav.move_row(len(preview.memories), 0)
 
-    context_document = SemanticViewerDocument(
-        (
-            SemanticViewerSection(
-                uid="SHARE:CONTEXT",
-                kind="CONTEXT",
-                block=SemanticViewerBlock(
+    context_sections = [
+        SemanticViewerSection(
+            uid="SHARE:CONTEXT",
+            kind="CONTEXT",
+            block=SemanticViewerBlock(
+                (
                     (
-                        ("class:section", "CONTEXT TO SEND\n"),
-                        ("", display_escape_text(preview.source_context) + "\n"),
-                        ("", f"MEMORIES · {len(preview.memories)}\n\n"),
+                        "class:section",
+                        (
+                            "ROOT · "
+                            + display_escape_text(preview.source_context)
+                            + f" · {len(preview.contexts)} CONTEXTS"
+                            + f" · {len(preview.memories)} MEMORIES\n"
+                            if preview.include_descendants
+                            else "CONTEXT TO SEND\n"
+                        ),
                     ),
-                    focus_indices=(0,),
+                    *(
+                        ()
+                        if preview.include_descendants
+                        else (
+                            (
+                                "",
+                                display_escape_text(preview.source_context) + "\n",
+                            ),
+                            ("", f"MEMORIES · {len(preview.memories)}\n\n"),
+                        )
+                    ),
                 ),
+                focus_indices=(0,),
             ),
+        ),
+    ]
+    if preview.include_descendants:
+        context_sections.extend(
             SemanticViewerSection(
-                uid="SHARE:DESTINATION",
-                kind="DESTINATION",
+                uid=f"SHARE:CONTEXT:{index}",
+                kind="CONTEXT",
                 block=SemanticViewerBlock(
                     (
                         (
                             "class:section",
-                            "TO · " + display_escape_text(preview.endpoint),
+                            f"C{index} · "
+                            + display_escape_text(context.source_context)
+                            + " · "
+                            + _memory_count_text(len(context.memories))
+                            + "\n",
                         ),
                     ),
                     focus_indices=(0,),
                 ),
-            ),
+            )
+            for index, context in enumerate(preview.contexts, start=1)
         )
+    context_sections.append(
+        SemanticViewerSection(
+            uid="SHARE:DESTINATION",
+            kind="DESTINATION",
+            block=SemanticViewerBlock(
+                (
+                    (
+                        "class:section",
+                        "TO · " + display_escape_text(preview.endpoint),
+                    ),
+                ),
+                focus_indices=(0,),
+            ),
+        ),
     )
+    context_document = SemanticViewerDocument(tuple(context_sections))
 
     def render_context():
         return FormattedText(
@@ -138,15 +199,26 @@ def run_share_viewer(
 
     def render_memories():
         fragments: list[tuple[str, str]] = []
-        for index, memory in enumerate(preview.memories):
+        rows = tuple(
+            (context.source_context, memory)
+            for context in preview.contexts
+            for memory in context.memories
+        )
+        for index, (context_name, memory) in enumerate(rows):
             focused = nav.pane == "items" and index == nav.row_index
             marker = "›" if focused else " "
+            owner = (
+                display_escape_text(context_name) + " · "
+                if preview.include_descendants
+                else ""
+            )
             fragments.extend(
                 semantic_viewer_block_fragments(
                     [
                         (
                             "class:memory-object",
-                            f"{marker} M{index + 1} · {_compact_memory(memory.content)}",
+                            f"{marker} M{index + 1} · {owner}"
+                            f"{_compact_memory(memory.content)}",
                         )
                     ],
                     active=focused,
@@ -158,7 +230,16 @@ def run_share_viewer(
 
     def render_send():
         return semantic_viewer_block_fragments(
-            [("class:section", "SEND CONTEXT · Enter")],
+            [
+                (
+                    "class:section",
+                    (
+                        "SEND CONTEXT BUNDLE · Enter"
+                        if preview.include_descendants
+                        else "SEND CONTEXT · Enter"
+                    ),
+                )
+            ],
             active=nav.pane == "todo",
         )
 
@@ -169,7 +250,11 @@ def run_share_viewer(
 
     header = Window(
         FormattedTextControl(
-            " MEM SHARE · NOT SENT"
+            (
+                " MEM SHARE · RECURSIVE · NOT SENT"
+                if preview.include_descendants
+                else " MEM SHARE · NOT SENT"
+            )
         ),
         height=Dimension.exact(1),
         dont_extend_height=True,
@@ -252,7 +337,7 @@ def run_share_viewer(
     bind_surface_navigation(bindings, surface_controller, back=True)
     context_frame = Frame(
         context_window,
-        title="CONTEXT",
+        title="CONTEXTS" if preview.include_descendants else "CONTEXT",
         height=Dimension(min=7, preferred=8, max=10),
     )
     memories_frame = Frame(
@@ -270,7 +355,9 @@ def run_share_viewer(
             lambda: (
                 " FOCUS "
                 + {
-                    "viewer": "CONTEXT",
+                    "viewer": (
+                        "CONTEXTS" if preview.include_descendants else "CONTEXT"
+                    ),
                     "items": "MEMORIES",
                     "todo": "ACTION",
                 }[nav.pane]
@@ -439,9 +526,7 @@ def run_share_unavailable_viewer(
             HSplit(
                 [
                     Window(
-                        FormattedTextControl(
-                            " MEM SHARE · NOT SENT"
-                        ),
+                        FormattedTextControl(" MEM SHARE · NOT SENT"),
                         height=Dimension.exact(1),
                         dont_extend_height=True,
                     ),

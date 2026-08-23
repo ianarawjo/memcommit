@@ -4929,6 +4929,86 @@ class MemoryStore:
                     )
                 yield current
 
+    @contextmanager
+    def locked_context_snapshots(
+        self,
+        bindings: Iterable[tuple[str, str, str]],
+        *,
+        source_root: str,
+        include_descendants: bool,
+    ) -> Iterator[tuple[Context, ...]]:
+        """Hold one exact local Context scope across an external publish.
+
+        Recursive disclosure binds namespace membership as well as record
+        bytes.  The exclusive graph lock prevents a new lexical descendant
+        from entering the reviewed bundle while its receiver copy is being
+        created; direct disclosure retains the narrower shared graph lock.
+        """
+
+        records = tuple(bindings)
+        names = tuple(name for name, _uid, _digest in records)
+        if (
+            not records
+            or len(names) != len(set(names))
+            or any(
+                not isinstance(name, str)
+                or not name
+                or not isinstance(uid, str)
+                or not uid
+                or not isinstance(digest, str)
+                or not digest
+                for name, uid, digest in records
+            )
+            or type(include_descendants) is not bool
+        ):
+            raise ValueError("Invalid Context publication snapshot set.")
+
+        with self._command_write_lock():
+            with self._context_graph_lock(exclusive=include_descendants):
+                if include_descendants:
+                    from memcommit.context_targeting.model import ContextScope
+                    from memcommit.context_targeting.resolution import (
+                        expand_lexical_context_names,
+                    )
+
+                    live_names = expand_lexical_context_names(
+                        ContextScope.create(
+                            (source_root,),
+                            include_descendants=True,
+                        ),
+                        self.list_context_names(),
+                    )
+                    if live_names != names:
+                        raise ConcurrentContextUpdateError(
+                            "The Source Context subtree changed before it could "
+                            "be published."
+                        )
+                elif names != (source_root,):
+                    raise ValueError(
+                        "A direct Context publication must bind exactly its root."
+                    )
+
+                with self._context_write_locks(names):
+                    frozen: list[Context] = []
+                    for name, expected_uid, expected_digest in records:
+                        try:
+                            current = self.load_direct(name)
+                        except FileNotFoundError as error:
+                            raise ConcurrentContextUpdateError(
+                                f"Context '{name}' no longer exists."
+                            ) from error
+                        if (
+                            current.uid != expected_uid
+                            or context_record_digest(current) != expected_digest
+                        ):
+                            raise ConcurrentContextUpdateError(
+                                f"Context '{name}' changed before it could be "
+                                "published."
+                            )
+                        frozen.append(current)
+                    yield tuple(frozen)
+
+
     def create_context_with_sources(
         self,
         ctx: Context,

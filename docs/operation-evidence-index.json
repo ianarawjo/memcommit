@@ -226,7 +226,9 @@
       "docs/study-semantic-prewarm-registry-design-rationale.md",
       "docs/terminal-ui-integration-design-rationale.md"
     ],
-    "share": [],
+    "share": [
+      "docs/mem-share-design-rationale.md"
+    ],
     "shell-init": [],
     "show": [
       "docs/show-application-boundary-matrix.md",

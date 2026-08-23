@@ -39,14 +39,37 @@ def cmd(
             help="Exact grant-backed receiver endpoint",
         ),
     ] = "",
+    direct: Annotated[
+        bool,
+        typer.Option(
+            "-d",
+            "--direct",
+            help="Send only the exact Source Context",
+        ),
+    ] = False,
+    recursive: Annotated[
+        bool,
+        typer.Option(
+            "-r",
+            "--recursive",
+            help="Send the Source Context and all lexical descendants",
+        ),
+    ] = False,
 ) -> None:
-    """Copy one ordinary Context into its grant-backed receiver Profile."""
+    """Copy one ordinary Context scope into its grant-backed receiver Profile."""
 
     try:
+        if direct and recursive:
+            raise ShareError("Choose either --direct or --recursive, not both.")
+        include_descendants = recursive
         if source is not None and recipient:
             # Complete explicit operands retain the compact automation path,
             # even in a TTY. The bare/incomplete form owns interactive setup.
-            delivery = deliver_context(source, recipient)
+            delivery = deliver_context(
+                source,
+                recipient,
+                include_descendants=include_descendants,
+            )
         elif _interactive_terminal():
             from memcommit.commands.share_flow import (
                 ShareFlowUnavailable,
@@ -58,7 +81,11 @@ def cmd(
             )
 
             try:
-                preview = choose_share_preview(source, recipient or None)
+                preview = choose_share_preview(
+                    source,
+                    recipient or None,
+                    include_descendants=include_descendants,
+                )
             except ShareFlowUnavailable as unavailable:
                 run_share_unavailable_viewer(str(unavailable))
                 annotate_command_outcome("CANCELLED")
@@ -100,13 +127,20 @@ def cmd(
         )
         raise typer.Exit(1)
 
-    if delivery.created:
+    if delivery.created and delivery.include_descendants:
+        typer.secho("Shared Context bundle.", fg=typer.colors.GREEN, bold=True)
+    elif delivery.created:
         typer.secho("Shared Context.", fg=typer.colors.GREEN, bold=True)
+    elif delivery.include_descendants:
+        annotate_command_outcome("NO_CHANGE")
+        typer.echo("Context bundle was already shared; no duplicate was created.")
     else:
         annotate_command_outcome("NO_CHANGE")
         typer.echo("Context was already shared; no duplicate was created.")
     typer.echo(f"Share: {delivery.uid}")
     typer.echo("To: " + display_escape_text(delivery.endpoint))
+    if delivery.include_descendants:
+        typer.echo("Contexts: " + str(delivery.context_count))
     typer.echo("Memories: " + str(delivery.memory_count))
     typer.echo("Consent digest: " + delivery.consent_digest)
     typer.echo(

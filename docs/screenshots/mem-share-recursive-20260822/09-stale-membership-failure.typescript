@@ -1,0 +1,9 @@
+$ mem share practice -r
+CAPTURE PTY · 180x52
+PROFILE · share-sender · CURRENT · practice
+[31m[1mSTALE BUNDLE REJECTED[0m
+  ERROR · The selected Share content changed; reopen Share before sending.
+FAIL-CLOSED VERIFICATION
+  RECEIVED CONTEXTS · 0
+  SOURCE CONTEXTS · 6
+  CURRENT · practice

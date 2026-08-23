@@ -65,6 +65,7 @@ def choose_share_preview(
     source: str | None,
     recipient: str | None,
     *,
+    include_descendants: bool = False,
     source_chooser: ShareNameChooser = choose_context,
     endpoint_chooser: ShareNameChooser = choose_context,
 ) -> SharePreview | None:
@@ -72,7 +73,9 @@ def choose_share_preview(
 
     selected_source = source
     if selected_source is None:
-        current, names = list_share_sources()
+        current, names = list_share_sources(
+            include_descendants=include_descendants,
+        )
         selected_source = _choose_source(
             names,
             current=current,
@@ -90,4 +93,8 @@ def choose_share_preview(
         if selected_endpoint is None:
             return None
 
-    return prepare_share(selected_source, selected_endpoint)
+    return prepare_share(
+        selected_source,
+        selected_endpoint,
+        include_descendants=include_descendants,
+    )

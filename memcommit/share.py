@@ -1,4 +1,4 @@
-"""Grant-authorized cross-Profile delivery of one selected ordinary Context."""
+"""Grant-authorized cross-Profile delivery of one reviewed Context scope."""
 
 from __future__ import annotations
 
@@ -9,6 +9,8 @@ import uuid
 
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.context_locator import resolve_context_locator
+from memcommit.context_targeting.model import ContextScope
+from memcommit.context_targeting.resolution import expand_lexical_context_names
 from memcommit.profile_config import ProfileRegistry, profile_store_dir
 from memcommit.profiles import (
     ShareEndpoint,
@@ -24,15 +26,17 @@ class ShareError(RuntimeError):
 
 @dataclass(frozen=True)
 class ShareDelivery:
-    """Stable receipt for one Context delivery."""
+    """Stable receipt for one direct Context or recursive Context bundle."""
 
     uid: str
     endpoint: str
     receiver_profile: str
     receiver_context: str
     source_context: str
+    context_count: int
     memory_count: int
     consent_digest: str
+    include_descendants: bool
     created: bool
 
 
@@ -45,8 +49,19 @@ class ShareMemoryPreview:
 
 
 @dataclass(frozen=True)
+class ShareContextPreview:
+    """One exact Context member inside a frozen Share unit."""
+
+    source_context: str
+    source_context_uid: str
+    source_digest: str
+    receiver_context: str
+    memories: tuple[ShareMemoryPreview, ...]
+
+
+@dataclass(frozen=True)
 class SharePreview:
-    """Frozen Context selection shown by the interactive Share viewer."""
+    """Frozen direct Context or recursive Context bundle shown before Send."""
 
     uid: str
     endpoint: str
@@ -60,9 +75,21 @@ class SharePreview:
     source_digest: str
     memories: tuple[ShareMemoryPreview, ...]
     consent_digest: str
+    include_descendants: bool
+    contexts: tuple[ShareContextPreview, ...]
 
 
-def _direct_memories(source: Context) -> tuple[Memory, ...]:
+@dataclass(frozen=True)
+class _PreparedShare:
+    preview: SharePreview
+    receiver_entries: tuple[tuple[Context, AutoCheckpoint], ...]
+
+
+def _direct_memories(
+    source: Context,
+    *,
+    allow_empty: bool = False,
+) -> tuple[Memory, ...]:
     memories: list[Memory] = []
     for item in source.iter_items():
         if not isinstance(item, Memory):
@@ -70,29 +97,98 @@ def _direct_memories(source: Context) -> tuple[Memory, ...]:
                 "A shared Context may contain only directly owned Memories."
             )
         memories.append(item)
-    if not memories:
+    if not memories and not allow_empty:
         raise ShareError("An empty Context cannot be shared.")
     return tuple(memories)
+
+
+def _source_scope_names(
+    store: MemoryStore,
+    source_root: str,
+    *,
+    include_descendants: bool,
+) -> tuple[str, ...]:
+    if not include_descendants:
+        return (source_root,)
+    return expand_lexical_context_names(
+        ContextScope.create(
+            (source_root,),
+            include_descendants=True,
+        ),
+        store.list_context_names(),
+    )
+
+
+def _source_bindings(
+    store: MemoryStore,
+    source_root: str,
+    *,
+    include_descendants: bool,
+) -> tuple[tuple[str, str, str], ...]:
+    bindings: list[tuple[str, str, str]] = []
+    for name in _source_scope_names(
+        store,
+        source_root,
+        include_descendants=include_descendants,
+    ):
+        source = store.load_direct(name)
+        bindings.append((source.name, source.uid, context_record_digest(source)))
+    return tuple(bindings)
 
 
 def _consent_digest(
     *,
     endpoint: ShareEndpoint,
-    source: Context,
-    source_digest: str,
-    memories: tuple[Memory, ...],
+    source_root: str,
+    include_descendants: bool,
+    sources: tuple[Context, ...],
+    source_digests: tuple[str, ...],
+    memories_by_context: tuple[tuple[Memory, ...], ...],
 ) -> str:
-    record = {
-        "endpoint_grant_uid": endpoint.grant.uid,
-        "recipient": endpoint.public_name,
-        "sender_profile_uid": endpoint.sender.uid,
-        "source_context_uid": source.uid,
-        "source_digest": source_digest,
-        "memories": [
-            {"source_memory_uid": memory.uid, "content": memory.content}
-            for memory in memories
-        ],
-    }
+    if not include_descendants:
+        # Preserve the version-1 exact Share identity. Upgrading must not make a
+        # previously delivered exact consent unit appear to be a new delivery.
+        source = sources[0]
+        record = {
+            "endpoint_grant_uid": endpoint.grant.uid,
+            "recipient": endpoint.public_name,
+            "sender_profile_uid": endpoint.sender.uid,
+            "source_context_uid": source.uid,
+            "source_digest": source_digests[0],
+            "memories": [
+                {"source_memory_uid": memory.uid, "content": memory.content}
+                for memory in memories_by_context[0]
+            ],
+        }
+    else:
+        record = {
+            "schema_version": 2,
+            "endpoint_grant_uid": endpoint.grant.uid,
+            "recipient": endpoint.public_name,
+            "sender_profile_uid": endpoint.sender.uid,
+            "source_root": source_root,
+            "include_descendants": True,
+            "contexts": [
+                {
+                    "source_context_uid": source.uid,
+                    "source_context_name": source.name,
+                    "source_digest": source_digest,
+                    "memories": [
+                        {
+                            "source_memory_uid": memory.uid,
+                            "content": memory.content,
+                        }
+                        for memory in memories
+                    ],
+                }
+                for source, source_digest, memories in zip(
+                    sources,
+                    source_digests,
+                    memories_by_context,
+                    strict=True,
+                )
+            ],
+        }
     encoded = json.dumps(
         record,
         ensure_ascii=False,
@@ -102,48 +198,163 @@ def _consent_digest(
     return hashlib.sha256(encoded).hexdigest()
 
 
-def _delivery_context(
+def _share_uid(
     *,
     endpoint: ShareEndpoint,
-    source: Context,
-    source_digest: str,
-    memories: tuple[Memory, ...],
-) -> tuple[Context, AutoCheckpoint, str, str]:
+    source_root: Context,
+    source_root_digest: str,
+    include_descendants: bool,
+    consent_digest: str,
+) -> str:
+    parts = [
+        endpoint.sender.uid,
+        source_root.uid,
+        source_root_digest,
+        consent_digest,
+    ]
+    if include_descendants:
+        parts.insert(2, "recursive-v2")
+    return str(uuid.uuid5(uuid.UUID(endpoint.grant.uid), "\0".join(parts)))
+
+
+def _prepare_delivery(
+    *,
+    endpoint: ShareEndpoint,
+    source_root: str,
+    include_descendants: bool,
+    sources: tuple[Context, ...],
+) -> _PreparedShare:
+    if not sources or sources[0].name != source_root:
+        raise ShareError("The Share Source root is missing from its frozen scope.")
+    if not include_descendants and len(sources) != 1:
+        raise ShareError("A direct Share must contain exactly one Context.")
+    if any(
+        source.name != source_root and not source.name.startswith(source_root + "/")
+        for source in sources
+    ):
+        raise ShareError("The Share bundle contains a Context outside its root.")
+
+    memories_by_context = tuple(
+        _direct_memories(source, allow_empty=include_descendants) for source in sources
+    )
+    if include_descendants and not any(memories_by_context):
+        raise ShareError("An empty Context bundle cannot be shared.")
+    source_digests = tuple(context_record_digest(source) for source in sources)
     consent_digest = _consent_digest(
         endpoint=endpoint,
-        source=source,
-        source_digest=source_digest,
-        memories=memories,
+        source_root=source_root,
+        include_descendants=include_descendants,
+        sources=sources,
+        source_digests=source_digests,
+        memories_by_context=memories_by_context,
     )
-    share_uid = str(
-        uuid.uuid5(
-            uuid.UUID(endpoint.grant.uid),
-            "\0".join(
-                (
-                    endpoint.sender.uid,
-                    source.uid,
-                    source_digest,
-                    consent_digest,
-                )
-            ),
+    share_uid = _share_uid(
+        endpoint=endpoint,
+        source_root=sources[0],
+        source_root_digest=source_digests[0],
+        include_descendants=include_descendants,
+        consent_digest=consent_digest,
+    )
+    receiver_root = f"{endpoint.receiver_context_name}/received-shares/{share_uid}"
+
+    received_contexts: list[Context] = []
+    mappings_by_context: list[list[dict[str, str]]] = []
+    context_previews: list[ShareContextPreview] = []
+    all_memories: list[ShareMemoryPreview] = []
+    for index, (source, source_digest, memories) in enumerate(
+        zip(sources, source_digests, memories_by_context, strict=True)
+    ):
+        receiver_name = receiver_root + source.name[len(source_root) :]
+        receiver_uid = (
+            share_uid
+            if index == 0
+            else str(uuid.uuid5(uuid.UUID(share_uid), source.uid))
         )
-    )
-    receiver_name = f"{endpoint.receiver_context_name}/received-shares/{share_uid}"
-    received = Context(uid=share_uid, name=receiver_name)
-    mappings: list[dict[str, str]] = []
-    for memory in memories:
-        received_uid = str(uuid.uuid5(uuid.UUID(share_uid), memory.uid))
-        received.add(Memory(uid=received_uid, content=memory.content))
-        mappings.append(
-            {
-                "source_memory_uid": memory.uid,
-                "received_memory_uid": received_uid,
+        received = Context(uid=receiver_uid, name=receiver_name)
+        mappings: list[dict[str, str]] = []
+        memory_previews: list[ShareMemoryPreview] = []
+        for memory in memories:
+            received_uid = str(uuid.uuid5(uuid.UUID(receiver_uid), memory.uid))
+            received.add(Memory(uid=received_uid, content=memory.content))
+            mappings.append(
+                {
+                    "source_memory_uid": memory.uid,
+                    "received_memory_uid": received_uid,
+                }
+            )
+            preview = ShareMemoryPreview(uid=memory.uid, content=memory.content)
+            memory_previews.append(preview)
+            all_memories.append(preview)
+        received_contexts.append(received)
+        mappings_by_context.append(mappings)
+        context_previews.append(
+            ShareContextPreview(
+                source_context=source.name,
+                source_context_uid=source.uid,
+                source_digest=source_digest,
+                receiver_context=receiver_name,
+                memories=tuple(memory_previews),
+            )
+        )
+
+    bundle_contexts = [
+        {
+            "source_context_uid": source.uid,
+            "source_context_name": source.name,
+            "source_context_digest": source_digest,
+            "received_context_uid": received.uid,
+            "received_context_name": received.name,
+            "memories": mappings,
+        }
+        for source, source_digest, received, mappings in zip(
+            sources,
+            source_digests,
+            received_contexts,
+            mappings_by_context,
+            strict=True,
+        )
+    ]
+    receiver_entries: list[tuple[Context, AutoCheckpoint]] = []
+    for index, (source, source_digest, received, mappings) in enumerate(
+        zip(
+            sources,
+            source_digests,
+            received_contexts,
+            mappings_by_context,
+            strict=True,
+        )
+    ):
+        if include_descendants:
+            share_record = {
+                "schema_version": 2,
+                "share_uid": share_uid,
+                "consent_unit_digest": consent_digest,
+                "endpoint": endpoint.public_name,
+                "endpoint_grant_uid": endpoint.grant.uid,
+                "endpoint_grant_revision": endpoint.grant.revision,
+                "sender_profile_uid": endpoint.sender.uid,
+                "sender_profile_name": endpoint.sender.name,
+                "source_root_context_uid": sources[0].uid,
+                "source_root_context_name": source_root,
+                "source_context_uid": source.uid,
+                "source_context_name": source.name,
+                "source_context_digest": source_digest,
+                "receiver_root_context_name": receiver_root,
+                "include_descendants": True,
+                "context_index": index,
+                "context_count": len(sources),
+                "contexts": bundle_contexts,
+                "memories": mappings,
             }
-        )
-    checkpoint = AutoCheckpoint(
-        command="share-receive",
-        args={
-            "share": {
+            description = (
+                f"Received Context bundle member {index + 1}/{len(sources)} "
+                f"with {len(memories_by_context[index])} Memories from Profile "
+                f"'{endpoint.sender.name}' through '{endpoint.public_name}'."
+            )
+        else:
+            # Keep the version-1 exact receipt byte contract compatible with
+            # already delivered Share units.
+            share_record = {
                 "schema_version": 1,
                 "share_uid": share_uid,
                 "consent_unit_digest": consent_digest,
@@ -157,40 +368,91 @@ def _delivery_context(
                 "source_context_digest": source_digest,
                 "memories": mappings,
             }
-        },
-        description=(
-            f"Received one Context with {len(memories)} Memories from Profile "
-            f"'{endpoint.sender.name}' through '{endpoint.public_name}'."
-        ),
+            description = (
+                f"Received one Context with {len(memories_by_context[index])} "
+                f"Memories from Profile '{endpoint.sender.name}' through "
+                f"'{endpoint.public_name}'."
+            )
+        receiver_entries.append(
+            (
+                received,
+                AutoCheckpoint(
+                    command="share-receive",
+                    args={"share": share_record},
+                    description=description,
+                ),
+            )
+        )
+
+    preview = SharePreview(
+        uid=share_uid,
+        endpoint=endpoint.public_name,
+        endpoint_grant_uid=endpoint.grant.uid,
+        endpoint_grant_revision=endpoint.grant.revision,
+        sender_profile_uid=endpoint.sender.uid,
+        receiver_profile=endpoint.authority.name,
+        receiver_context=receiver_root,
+        source_context=source_root,
+        source_context_uid=sources[0].uid,
+        source_digest=source_digests[0],
+        memories=tuple(all_memories),
+        consent_digest=consent_digest,
+        include_descendants=include_descendants,
+        contexts=tuple(context_previews),
     )
-    return received, checkpoint, share_uid, consent_digest
+    return _PreparedShare(preview=preview, receiver_entries=tuple(receiver_entries))
 
 
 def _is_same_delivery(
     store: MemoryStore,
-    expected: Context,
+    entries: tuple[tuple[Context, AutoCheckpoint], ...],
     *,
     share_uid: str,
 ) -> bool:
-    try:
-        existing = store.load_direct(expected.name)
-    except FileNotFoundError:
-        return False
-    if existing.uid != expected.uid or context_record_digest(
-        existing
-    ) != context_record_digest(expected):
-        raise ShareError("The receiver delivery path is occupied by other data.")
-    checkpoints = store.list_checkpoints(existing.name)
-    if not checkpoints:
-        raise ShareError("The receiver copy has no delivery receipt.")
-    args = checkpoints[0].get("args")
-    share = args.get("share") if isinstance(args, dict) else None
-    if (
-        checkpoints[0].get("command") != "share-receive"
-        or not isinstance(share, dict)
-        or share.get("share_uid") != share_uid
+    present = 0
+    for expected, _checkpoint in entries:
+        try:
+            existing = store.load_direct(expected.name)
+        except FileNotFoundError:
+            continue
+        present += 1
+        if existing.uid != expected.uid or context_record_digest(
+            existing
+        ) != context_record_digest(expected):
+            raise ShareError("A receiver delivery path is occupied by other data.")
+        checkpoints = store.list_checkpoints(existing.name)
+        if not checkpoints:
+            raise ShareError("A receiver copy has no delivery receipt.")
+        args = checkpoints[0].get("args")
+        share = args.get("share") if isinstance(args, dict) else None
+        if (
+            checkpoints[0].get("command") != "share-receive"
+            or not isinstance(share, dict)
+            or share.get("share_uid") != share_uid
+        ):
+            raise ShareError("A receiver copy has an invalid delivery receipt.")
+    if present not in {0, len(entries)}:
+        raise ShareError("The receiver contains only part of this Share bundle.")
+    return present == len(entries)
+
+
+def _publish_prepared(
+    store: MemoryStore,
+    prepared: _PreparedShare,
+) -> bool:
+    if _is_same_delivery(
+        store,
+        prepared.receiver_entries,
+        share_uid=prepared.preview.uid,
     ):
-        raise ShareError("The receiver copy has an invalid delivery receipt.")
+        return False
+    # One receiver command lock and one complete target lock set keep the
+    # recursive bundle exception-atomic. A failed member cannot leave a
+    # successfully reported partial disclosure behind.
+    store.create_missing_contexts(
+        prepared.receiver_entries,
+        require_all_new=True,
+    )
     return True
 
 
@@ -199,6 +461,7 @@ def _deliver_locked(
     registry: ProfileRegistry,
     source_name: str,
     endpoint_name: str,
+    include_descendants: bool,
     expected: SharePreview | None = None,
 ) -> ShareDelivery:
     endpoint = resolve_share_endpoint(endpoint_name, registry=registry)
@@ -208,72 +471,65 @@ def _deliver_locked(
         or endpoint.grant.revision != expected.endpoint_grant_revision
         or endpoint.sender.uid != expected.sender_profile_uid
         or endpoint.authority.name != expected.receiver_profile
+        or include_descendants is not expected.include_descendants
     ):
         raise ShareError(
-            "The selected Share endpoint changed; reopen Share before sending."
+            "The selected Share endpoint or range changed; reopen Share before sending."
         )
     source_store = MemoryStore(
         root=profile_store_dir(registry.active),
         create=False,
     )
-    source = source_store.load_direct(source_name)
-    source_digest = context_record_digest(source)
-    _direct_memories(source)
-
+    bindings = _source_bindings(
+        source_store,
+        source_name,
+        include_descendants=include_descendants,
+    )
     receiver_store = MemoryStore(root=endpoint.receiver_root, create=False)
-    with source_store.locked_context_snapshot(
-        source.name,
-        expected_uid=source.uid,
-        expected_digest=source_digest,
+    with source_store.locked_context_snapshots(
+        bindings,
+        source_root=source_name,
+        include_descendants=include_descendants,
     ) as frozen:
-        # Re-derive the complete payload under the source lock. The earlier
-        # validation is only a helpful error boundary, not the publish proof.
-        memories = _direct_memories(frozen)
-        received, checkpoint, share_uid, consent_digest = _delivery_context(
+        prepared = _prepare_delivery(
             endpoint=endpoint,
-            source=frozen,
-            source_digest=source_digest,
-            memories=memories,
+            source_root=source_name,
+            include_descendants=include_descendants,
+            sources=frozen,
         )
-        if expected is not None and (
-            frozen.name != expected.source_context
-            or frozen.uid != expected.source_context_uid
-            or source_digest != expected.source_digest
-            or share_uid != expected.uid
-            or received.name != expected.receiver_context
-            or consent_digest != expected.consent_digest
-            or tuple(
-                ShareMemoryPreview(uid=memory.uid, content=memory.content)
-                for memory in memories
-            )
-            != expected.memories
-        ):
-            # Send belongs to the exact Context snapshot and endpoint that
-            # were visible, never merely to resources with the same names.
+        if expected is not None and prepared.preview != expected:
+            # Send belongs to the complete Context scope visible in review,
+            # including recursive membership, order, bytes, and destination.
             raise ShareError(
                 "The selected Share content changed; reopen Share before sending."
             )
-        if _is_same_delivery(receiver_store, received, share_uid=share_uid):
-            created = False
-        else:
-            receiver_store.create_context(received, checkpoint)
-            created = True
+        created = _publish_prepared(receiver_store, prepared)
 
+    preview = prepared.preview
     return ShareDelivery(
-        uid=share_uid,
-        endpoint=endpoint.public_name,
-        receiver_profile=endpoint.authority.name,
-        receiver_context=received.name,
-        source_context=source.name,
-        memory_count=len(memories),
-        consent_digest=consent_digest,
+        uid=preview.uid,
+        endpoint=preview.endpoint,
+        receiver_profile=preview.receiver_profile,
+        receiver_context=preview.receiver_context,
+        source_context=preview.source_context,
+        context_count=len(preview.contexts),
+        memory_count=len(preview.memories),
+        consent_digest=preview.consent_digest,
+        include_descendants=preview.include_descendants,
         created=created,
     )
 
 
-def deliver_context(source_locator: str | None, endpoint_name: str) -> ShareDelivery:
-    """Deliver one exact local Context through a frozen SHARE grant."""
+def deliver_context(
+    source_locator: str | None,
+    endpoint_name: str,
+    *,
+    include_descendants: bool = False,
+) -> ShareDelivery:
+    """Deliver one exact local Context scope through a frozen SHARE grant."""
 
+    if type(include_descendants) is not bool:
+        raise TypeError("Share descendant scope must be a boolean.")
     with authority_grant_snapshot_lock() as registry:
         source_store = MemoryStore(
             root=profile_store_dir(registry.active),
@@ -288,12 +544,20 @@ def deliver_context(source_locator: str | None, endpoint_name: str) -> ShareDeli
             registry=registry,
             source_name=source_name,
             endpoint_name=endpoint_name,
+            include_descendants=include_descendants,
         )
 
 
-def prepare_share(source_locator: str | None, endpoint_name: str) -> SharePreview:
+def prepare_share(
+    source_locator: str | None,
+    endpoint_name: str,
+    *,
+    include_descendants: bool = False,
+) -> SharePreview:
     """Freeze one display-safe Share unit without changing receiver state."""
 
+    if type(include_descendants) is not bool:
+        raise TypeError("Share descendant scope must be a boolean.")
     with authority_grant_snapshot_lock() as registry:
         endpoint = resolve_share_endpoint(endpoint_name, registry=registry)
         source_store = MemoryStore(
@@ -305,37 +569,22 @@ def prepare_share(source_locator: str | None, endpoint_name: str) -> SharePrevie
         if raw_source is None:
             raise ShareError("No current Context is available to share.")
         source_name = resolve_context_locator(raw_source, current=current)
-        source = source_store.load_direct(source_name)
-        source_digest = context_record_digest(source)
-        with source_store.locked_context_snapshot(
-            source.name,
-            expected_uid=source.uid,
-            expected_digest=source_digest,
+        bindings = _source_bindings(
+            source_store,
+            source_name,
+            include_descendants=include_descendants,
+        )
+        with source_store.locked_context_snapshots(
+            bindings,
+            source_root=source_name,
+            include_descendants=include_descendants,
         ) as frozen:
-            memories = _direct_memories(frozen)
-            received, _checkpoint, share_uid, consent_digest = _delivery_context(
+            return _prepare_delivery(
                 endpoint=endpoint,
-                source=frozen,
-                source_digest=source_digest,
-                memories=memories,
-            )
-            return SharePreview(
-                uid=share_uid,
-                endpoint=endpoint.public_name,
-                endpoint_grant_uid=endpoint.grant.uid,
-                endpoint_grant_revision=endpoint.grant.revision,
-                sender_profile_uid=endpoint.sender.uid,
-                receiver_profile=endpoint.authority.name,
-                receiver_context=received.name,
-                source_context=frozen.name,
-                source_context_uid=frozen.uid,
-                source_digest=source_digest,
-                memories=tuple(
-                    ShareMemoryPreview(uid=memory.uid, content=memory.content)
-                    for memory in memories
-                ),
-                consent_digest=consent_digest,
-            )
+                source_root=source_name,
+                include_descendants=include_descendants,
+                sources=frozen,
+            ).preview
 
 
 def deliver_prepared_share(preview: SharePreview) -> ShareDelivery:
@@ -348,24 +597,51 @@ def deliver_prepared_share(preview: SharePreview) -> ShareDelivery:
             registry=registry,
             source_name=preview.source_context,
             endpoint_name=preview.endpoint,
+            include_descendants=preview.include_descendants,
             expected=preview,
         )
 
 
-def list_share_sources() -> tuple[str | None, tuple[str, ...]]:
-    """List ordinary Context names that Share can copy directly."""
+def list_share_sources(
+    *,
+    include_descendants: bool = False,
+) -> tuple[str | None, tuple[str, ...]]:
+    """List ordinary Context roots eligible for the requested Share range."""
 
+    if type(include_descendants) is not bool:
+        raise TypeError("Share descendant scope must be a boolean.")
     with authority_grant_snapshot_lock() as registry:
         store = MemoryStore(root=profile_store_dir(registry.active), create=False)
         current = store.current_context_name()
+        catalog = store.list_context_names()
         names: list[str] = []
-        for name in store.list_context_names():
+        for candidate in catalog:
             try:
-                context = store.load_direct(name)
-                _direct_memories(context)
+                scope_names = (
+                    expand_lexical_context_names(
+                        ContextScope.create(
+                            (candidate,),
+                            include_descendants=True,
+                        ),
+                        catalog,
+                    )
+                    if include_descendants
+                    else (candidate,)
+                )
+                memory_count = 0
+                for name in scope_names:
+                    context = store.load_direct(name)
+                    memory_count += len(
+                        _direct_memories(
+                            context,
+                            allow_empty=include_descendants,
+                        )
+                    )
+                if memory_count == 0:
+                    raise ShareError("An empty Context bundle cannot be shared.")
             except (FileNotFoundError, OSError, ShareError, RuntimeError, ValueError):
                 continue
-            names.append(context.name)
+            names.append(candidate)
         ordered = tuple(sorted(names))
         return (current if current in ordered else None), ordered
 

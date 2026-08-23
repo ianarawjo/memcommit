@@ -504,11 +504,11 @@ _OPERATIONS = (
     ),
     _operation(
         "share",
-        "Send one ordinary Context through a grant-backed receiver endpoint.",
-        "Owned Context -> receiver endpoint",
+        "Send one exact Context or lexical Context subtree through a grant-backed receiver endpoint.",
+        "Owned Context scope -> receiver endpoint",
         ExecutionKind.DETERMINISTIC,
         "External delivery; Source remains unchanged",
-        "One exact ordinary Source Context",
+        "One exact ordinary Source Context, or its lexical descendants with -r",
     ),
     _operation(
         "shell-init",

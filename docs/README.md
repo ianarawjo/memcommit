@@ -322,8 +322,9 @@ classification, and stale generated output.
 - [`mem-sever-design-rationale.md`](mem-sever-design-rationale.md) defines the
   local disclosure-review artifact and its strict separation from sending.
 - [`mem-share-design-rationale.md`](mem-share-design-rationale.md) defines the
-  grant-backed Task 3 receiver endpoint, exact Sever-output requirement,
-  receiver-owned Memory copy, consent digest, and idempotent delivery receipt.
+  grant-backed receiver endpoint, direct and recursive lexical scope,
+  receiver-owned Context-bundle copy, consent digest, and idempotent delivery
+  receipt.
 
 ## Saved-work launcher contract
 

@@ -1,0 +1,17 @@
+Shared Context bundle.                                                                                                                                                              
+Share: 16a171fa-2c1d-5b9b-be93-f1f91a5e8854                                                                                                                                         
+To: government/healthcare-agent                                                                                                                                                     
+Contexts: 4                                                                                                                                                                         
+Memories: 3                                                                                                                                                                         
+Consent digest: 5a5ec8f4be562d289f95204cdade5a9506dc9742a5c6a948a2786c71708940b2                                                                                                    
+Receiver: share-receiver:remote/government/healthcare-agent/received-shares/16a171fa-2c1d-5b9b-be93-f1f91a5e8854                                                                    
+CAPTURE GATE · PRESS V FOR READ-ONLY VERIFICATION                                                                                                                                   
+v                                                                                                                                                                                   
+READ-ONLY RECEIVER VERIFICATION                                                                                                                                                     
+  RECEIVED CONTEXTS · 4                                                                                                                                                             
+  MEMBER · 16a171fa-2c1d-5b9b-be93-f1f91a5e8854 · MEMORIES 1 · BUNDLE 1/4                                                                                                           
+  MEMBER · 16a171fa-2c1d-5b9b-be93-f1f91a5e8854/appointments · MEMORIES 1 · BUNDLE 2/4                                                                                              
+  MEMBER · 16a171fa-2c1d-5b9b-be93-f1f91a5e8854/empty-lane · MEMORIES 0 · BUNDLE 3/4                                                                                                
+  MEMBER · 16a171fa-2c1d-5b9b-be93-f1f91a5e8854/medication · MEMORIES 1 · BUNDLE 4/4                                                                                                
+  SOURCE ROOT MEMORIES · 1                                                                                                                                                          
+  CURRENT · practice
