@@ -46,7 +46,40 @@ select another tier.
 `mem provider status --operation OPERATION` prints the complete effective
 policy without contacting a provider. `--study` resolves the participant-Study
 mode and exposes its policy digest. The ordinary `mem provider status` output
-continues to show the stored global defaults.
+shows the effective inherited global default and labels its scope explicitly.
+
+## CLI routing overview and scope
+
+Provider configuration is global machine-local state in `~/.mem/config.json`;
+it is shared by every Profile. It is not a claim that every semantic operation
+will use the configured identity. Authored operation policies may pin a
+provider, model, or reasoning effort, or retain the global identity while
+raising an independent timeout floor.
+
+Bare `mem provider` therefore renders a provider-free routing overview instead
+of Click's implicit missing-subcommand Help response or a single ambiguous
+"selected provider" value. The overview labels the configuration as global and
+all-Profile, shows the effective `semantic_default`, resolves every authored
+entry from `OPERATION_PROVIDER_POLICIES`, and states that all other operations
+inherit the default. The displayed routes are derived from the policy registry
+and resolver rather than copied into a command-local policy table. Rendering
+the overview never connects to a provider and exits successfully; explicit
+syntax remains under `mem provider --help`.
+
+`mem provider use` changes only the global default and its receipt says that
+operation-specific policies remain unchanged. `mem provider status` labels
+whether it is showing `global_default` or an `effective_operation`, including
+the policy source, version, and digest in both cases. A pinned operation must
+not display an unrelated global Codex preset merely because the global config
+retains one.
+
+The default `mem provider probe` verifies `semantic_default` only.
+`mem provider probe --operation OPERATION` resolves and connects the same
+effective production policy as that operation, then runs the existing
+synthetic strict-schema completion. Its receipt records the probe scope,
+policy source, and digest. This does not claim semantic quality or execute the
+operation's real prompt; it verifies transport and schema conformance for the
+route that would supply that operation.
 
 ## Production, participant Study, and evaluation
 

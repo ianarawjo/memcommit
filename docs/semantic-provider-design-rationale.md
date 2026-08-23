@@ -104,9 +104,12 @@ selection have equal semantic quality across memcommit operations.
 
 ## Configuration and process snapshot
 
-`mem provider use` records an explicit provider and optional model. `status`
-is local and provider-free. `probe` makes one synthetic strict-schema call and
-does not read a Context or save a semantic artifact.
+`mem provider use` records an explicit global provider and optional model for
+operations that inherit the default; authored operation overrides remain
+unchanged. Bare `mem provider` shows the resolved default and every authored
+override without contact. `status` is local and provider-free. `probe` makes
+one synthetic strict-schema call against the default or an explicitly named
+operation policy and does not read a Context or save a semantic artifact.
 
 The provider factory reads configuration once when a command requests its
 provider. A Ground or other interactive process keeps that provider instance;
