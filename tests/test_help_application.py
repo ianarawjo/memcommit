@@ -36,7 +36,10 @@ def test_describe_returns_the_exact_catalog_contract():
     assert compare.name == "compare"
     assert compare.flow == "Context <-> Context -> comparison report"
     assert compare.execution.value == "SEMANTIC"
-    assert compare.effect == "Read-only; neither Context is treated as authoritative"
+    assert compare.effect == (
+        "Default summary is transient and read-only; --ledger saves the exhaustive "
+        "relation basis used by Meld"
+    )
 
 
 def test_detail_queries_use_exact_stable_ids_without_runtime_state():

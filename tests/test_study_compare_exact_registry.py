@@ -376,6 +376,7 @@ def test_exact_compare_cli_materializes_hidden_receipt_without_provider(
             compared.name,
             "--reference-descendants",
             "--compared-descendants",
+            "--ledger",
             "--snapshot",
         ],
     )
