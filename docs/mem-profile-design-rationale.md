@@ -182,9 +182,10 @@ pilot-001  STUDY
 └─ Granted memory  profile=pilot-001-granted-memory
 ```
 
-The group and roles come from immutable Study UID/source-kind provenance, not
-from the current display names. A Profile rename therefore keeps the same Study
-label and role. These two current roles also opt into the content-free Study
+The group and roles come from stable Study UID/source-kind provenance, not from
+the current display names. A Profile rename therefore keeps the same Study
+label and role, while an explicit Study rename can change that shared label
+without changing either Profile name. These two current roles also opt into the content-free Study
 action ledger; the baseline, ordinary Profiles, and legacy six-Profile runs do
 not. Initialization selects the new participant Profile in the same atomic
 registry generation that publishes the complete pair and grants. Its detailed
@@ -304,8 +305,9 @@ an eligible Profile opens the shared exact one-line name field prefilled with
 the current display name. Enter produces an exact
 `mem profile rename OLD NEW` review; a second Enter or `A` applies it. Escape
 returns from review to the name field, then from the field to the picker.
-Study headers, fixed anchors, and individually protected legacy Study members
-fail in the picker before the name field opens.
+Study headers route to the separate whole-Study rename described below. Fixed
+anchors and individually protected legacy Study members fail in the picker
+before the Profile-name field opens.
 
 The picker receipt freezes the target Profile UID and registry generation.
 Application checks both under the registry lock, then reloads the complete
@@ -337,7 +339,7 @@ rename. Because the UID and root remain stable, the protection state remains
 attached to the same Profile after rename.
 
 Source provenance and archive manifests are historical snapshots, not live
-display-name indexes. A rename therefore does not rewrite an earlier
+display-name indexes. A Profile rename therefore does not rewrite an earlier
 `source_profile_name`, legacy Study provenance, or an archived Profile record.
 Those records retain the name observed when they were created, while their
 stable UIDs preserve identity. Archived names do not reserve a live display
@@ -377,6 +379,48 @@ but the following durability confirmation fails, the command reports that
 durability is uncertain and that the Profile remains renamed. If registry
 state cannot be classified, it directs the person to `mem profile list`
 instead of claiming either name won.
+
+## Stable-identity Study rename
+
+The Study heading in the Profile picker is a separately editable display label.
+Pressing `R` on that heading, or running
+`mem profile rename-study OLD NEW`, freezes the selected Study UID and registry
+generation, accepts one exact portable name, shows the exact command for
+approval, and publishes one replacement registry generation. The Study UID,
+member Profile UIDs, store directories, active Profile, Contexts, Memories, and
+Grants remain unchanged. Study-label collisions are checked case-insensitively;
+an exact same-name request is a successful no-op and a case-only change is a
+real rename.
+
+Current two-Profile runs deliberately keep their independently editable
+participant and granted-memory Profile names. Renaming `pilot` to `trial-a`,
+for example, changes only the `STUDY trial-a` heading; the child rows may still
+be named `pilot` and `pilot-granted-memory`. Renaming both Profile rows
+implicitly was rejected because it would collapse the separate Study and
+Profile controls that the picker exposes and surprise anyone who had already
+renamed one child independently.
+
+Legacy six-Profile Studies are the compatibility exception. Their validator
+derives every task and authority Profile name from `source.study_name`, so
+changing only the heading would make the persisted group unreadable. A legacy
+Study rename therefore rewrites the shared provenance label and all six derived
+Profile display names atomically, after validating every generated name and
+collision. It still does not move or rewrite a store, and the exact review says
+that member names will change before approval.
+
+Current Study action events retain the Study label observed when each event was
+written. Readers bind historical events by Study UID, Profile UID, and role, so
+earlier actions remain readable after a rename and later actions can carry the
+new label without rewriting append-only telemetry. Treating the mutable label
+as the ledger identity was rejected because it would either invalidate the
+history or require rewriting the research record.
+
+If another process changes the registry after picker selection, or if the
+frozen Study UID no longer matches, Apply fails before publication. Registry
+replacement uses the same fsynced temporary-file transaction as Profile rename.
+A failure is reported as old, newly visible but durability-uncertain, or
+unclassifiable based on the registry that can actually be read; no message
+claims a rollback that cannot be proven.
 
 ## Import boundary
 

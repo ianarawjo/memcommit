@@ -406,12 +406,12 @@ _OPERATIONS = (
     _operation(
         "profile",
         "Create, select, and manage complete local MemoryStore Profiles. Profiles "
-        "can be renamed or permanently removed through the picker or with "
-        "mem profile rename and mem profile remove.",
+        "can be renamed or permanently removed, and Study headings can be renamed "
+        "through the picker or explicit profile subcommands.",
         "Profile registry <-> Profile administration",
         ExecutionKind.DETERMINISTIC,
-        "May create, switch, import, rename, or permanently remove Profiles; Grant "
-        "subcommands manage cross-Profile views",
+        "May create, switch, import, rename, or permanently remove Profiles, rename "
+        "Study headings, or manage cross-Profile views through Grant subcommands",
     ),
     _operation(
         "provider",

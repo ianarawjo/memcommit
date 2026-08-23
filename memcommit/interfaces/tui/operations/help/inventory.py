@@ -727,6 +727,7 @@ COMMAND_FORMS = {
         "mem profile current (show the active Profile)",
         "mem profile rename [new_name] (rename the active Profile)",
         "mem profile rename [profile_name] [new_name] (rename an explicit Profile)",
+        "mem profile rename-study [study_name] [new_name] (rename a Study heading)",
         "mem profile migrate-context [legacy_context] [portable_context] (preview a legacy Context-name migration; run its exact Apply receipt to commit)",
         "mem profile remove [profile_name] (permanently delete one Profile store)",
         "mem profile remove-study [study_name] (permanently delete Study stores)",

@@ -81,6 +81,7 @@ class ProfilePickerAction:
         "USE",
         "CREATE_PROFILE",
         "RENAME_PROFILE",
+        "RENAME_STUDY",
         "REMOVE_PROFILE",
         "REMOVE_STUDY",
     ]
@@ -89,6 +90,7 @@ class ProfilePickerAction:
     registry_generation: int | None
     new_name: str | None = None
     row_index: int | None = None
+    renames_member_profiles: bool = False
 
 
 @dataclass(frozen=True)
@@ -110,6 +112,7 @@ class _ProfilePickerRow:
     created_at: str | None = None
     profile_count: int = 1
     removed_count: int = 0
+    renames_member_profiles: bool = False
 
 
 _PROFILE_DELETION_BUSY_INTERVAL_SECONDS = BUSY_INTERVAL_SECONDS
@@ -239,6 +242,7 @@ def _picker_rows(
                     created_at=entry.study_created_at,
                     profile_count=entry.study_profile_count,
                     removed_count=entry.study_removed_count,
+                    renames_member_profiles=entry.study_role in {"TASK", "AUTHORITY"},
                 )
             )
         rows.append(
@@ -395,10 +399,26 @@ def _removal_review(
 
 
 def _rename_review(action: ProfilePickerAction) -> ExactCommandReview:
-    """Render the exact Profile display-name mutation selected in the picker."""
+    """Render the exact Profile or Study name mutation selected in the picker."""
 
-    if action.kind != "RENAME_PROFILE" or action.new_name is None:
-        raise ValueError("Profile rename review requires an exact new name.")
+    if action.kind not in {"RENAME_PROFILE", "RENAME_STUDY"} or action.new_name is None:
+        raise ValueError("Rename review requires an exact new name.")
+    if action.kind == "RENAME_STUDY":
+        profile_effect = (
+            "Update every legacy member Profile display name as one registry change."
+            if action.renames_member_profiles
+            else "Keep both member Profile display names unchanged."
+        )
+        return ExactCommandReview(
+            argv=("mem", "profile", "rename-study", action.name, action.new_name),
+            effects=(
+                f"Change the Study display name from {action.name!r} to "
+                f"{action.new_name!r}.",
+                profile_effect,
+                "Keep the same Study UID, Profile UIDs, stores, Contexts, Memories, and Grants.",
+                "Keep the same active Profile selected.",
+            ),
+        )
     return ExactCommandReview(
         argv=("mem", "profile", "rename", action.name, action.new_name),
         effects=(
@@ -549,6 +569,26 @@ def choose_profile(
         input_name="profile-picker-create",
         frame_style="class:profile-create-field",
     )
+    study_rename_field = ExactNameFieldControl.create(
+        ExactNameFieldView(
+            value="",
+            label="NEW STUDY NAME",
+            state="NEW NAME",
+            detail="Enter to review this exact Study rename.",
+            validate=validate_profile_name,
+            value_label="Study name",
+            # Study labels use the same exact portable one-segment contract as
+            # Profile names; whitespace must not select a different identity.
+            strip_candidate=False,
+        ),
+        input_name="profile-picker-study-rename",
+        frame_style="class:profile-rename-field",
+    )
+
+    def active_rename_field() -> ExactNameFieldControl:
+        action = rename_target["action"]
+        assert isinstance(action, ProfilePickerAction)
+        return study_rename_field if action.kind == "RENAME_STUDY" else rename_field
 
     def clear_stale_rename_error(_buffer) -> None:
         if rename_target["action"] is not None or create_target["active"]:
@@ -557,6 +597,7 @@ def choose_profile(
 
     rename_field.input.buffer.on_text_changed += clear_stale_rename_error
     create_field.input.buffer.on_text_changed += clear_stale_rename_error
+    study_rename_field.input.buffer.on_text_changed += clear_stale_rename_error
 
     def move(delta: int) -> None:
         selected["index"] = max(
@@ -644,39 +685,39 @@ def choose_profile(
     @bind_case_insensitive_key(bindings, "r", filter=picker_mode, eager=True)
     def _edit_profile_name(event) -> None:
         row = current_row()
-        if row.kind == "STUDY":
-            status["text"] = "Study headers cannot be renamed here"
-            status_is_error["value"] = True
-            event.app.invalidate()
-            return
-        entry = row.entry
-        assert entry is not None
-        if entry.rename_block is not None:
-            status["text"] = entry.rename_block
-            status_is_error["value"] = True
-            event.app.invalidate()
-            return
+        if row.kind == "PROFILE":
+            entry = row.entry
+            assert entry is not None
+            if entry.rename_block is not None:
+                status["text"] = entry.rename_block
+                status_is_error["value"] = True
+                event.app.invalidate()
+                return
         rename_target["action"] = ProfilePickerAction(
-            kind="RENAME_PROFILE",
+            kind="RENAME_STUDY" if row.kind == "STUDY" else "RENAME_PROFILE",
             name=row.name,
             uid=row.uid,
             registry_generation=registry_generation,
             row_index=selected["index"],
+            renames_member_profiles=row.renames_member_profiles,
         )
-        rename_field.set_text(row.name)
+        field = active_rename_field()
+        field.set_text(row.name)
         status["text"] = ""
         status_is_error["value"] = False
-        event.app.layout.focus(rename_field.input)
+        event.app.layout.focus(field.input)
         event.app.invalidate()
 
     @bindings.add(
         "enter",
-        filter=rename_mode & has_focus(rename_field.input),
+        filter=rename_mode
+        & (has_focus(rename_field.input) | has_focus(study_rename_field.input)),
         eager=True,
     )
     def _review_profile_name(event) -> None:
+        field = active_rename_field()
         try:
-            new_name = rename_field.validate_candidate()
+            new_name = field.validate_candidate()
         except (ProfileConfigError, TypeError, ValueError) as error:
             status["text"] = display_escape_text(str(error))
             status_is_error["value"] = True
@@ -685,12 +726,13 @@ def choose_profile(
         target = rename_target["action"]
         assert isinstance(target, ProfilePickerAction)
         action = ProfilePickerAction(
-            kind="RENAME_PROFILE",
+            kind=target.kind,
             name=target.name,
             uid=target.uid,
             registry_generation=target.registry_generation,
             new_name=new_name,
             row_index=target.row_index,
+            renames_member_profiles=target.renames_member_profiles,
         )
         pending["action"] = action
         pending["review"] = _rename_review(action)
@@ -702,11 +744,15 @@ def choose_profile(
 
     @bindings.add(
         "c-j",
-        filter=rename_mode & has_focus(rename_field.input),
+        filter=rename_mode
+        & (has_focus(rename_field.input) | has_focus(study_rename_field.input)),
         eager=True,
     )
     def _reject_profile_name_newline(event) -> None:
-        status["text"] = "Profile name must stay on one line"
+        action = rename_target["action"]
+        assert isinstance(action, ProfilePickerAction)
+        target_kind = "Study" if action.kind == "RENAME_STUDY" else "Profile"
+        status["text"] = f"{target_kind} name must stay on one line"
         status_is_error["value"] = True
         event.app.invalidate()
 
@@ -750,8 +796,11 @@ def choose_profile(
         assert isinstance(action, ProfilePickerAction)
         reviewed_row_index = selected["index"]
         # Create and rename are short registry mutations. Return their frozen
-        # receipts so the picker is rebuilt from the next generation.
-        if action.kind in {"CREATE_PROFILE", "RENAME_PROFILE"} or apply_removal is None:
+        # Profile command so the picker is rebuilt from the next generation.
+        if (
+            action.kind in {"CREATE_PROFILE", "RENAME_PROFILE", "RENAME_STUDY"}
+            or apply_removal is None
+        ):
             event.app.exit(result=action)
             return
 
@@ -815,18 +864,19 @@ def choose_profile(
                 event.app.layout.focus(create_field.input)
             elif (
                 isinstance(action, ProfilePickerAction)
-                and action.kind == "RENAME_PROFILE"
+                and action.kind in {"RENAME_PROFILE", "RENAME_STUDY"}
             ):
                 rename_target["action"] = ProfilePickerAction(
-                    kind="RENAME_PROFILE",
+                    kind=action.kind,
                     name=action.name,
                     uid=action.uid,
                     registry_generation=action.registry_generation,
                     row_index=action.row_index,
+                    renames_member_profiles=action.renames_member_profiles,
                 )
                 status["text"] = "Rename review cancelled"
                 status_is_error["value"] = False
-                event.app.layout.focus(rename_field.input)
+                event.app.layout.focus(active_rename_field().input)
             else:
                 status["text"] = "Removal review cancelled"
                 status_is_error["value"] = False
@@ -869,7 +919,8 @@ def choose_profile(
         if rename_mode():
             action = rename_target["action"]
             assert isinstance(action, ProfilePickerAction)
-            return " Rename Profile " + display_escape_text(action.name)
+            target_kind = "Study" if action.kind == "RENAME_STUDY" else "Profile"
+            return f" Rename {target_kind} " + display_escape_text(action.name)
         if create_mode():
             return " Create an empty Profile"
         if not review_mode():
@@ -880,6 +931,8 @@ def choose_profile(
                 return " Review exact Profile creation"
             if action.kind == "RENAME_PROFILE":
                 return " Review exact Profile rename"
+            if action.kind == "RENAME_STUDY":
+                return " Review exact Study rename"
         return " Review irreversible deletion"
 
     def footer_text():
@@ -903,11 +956,10 @@ def choose_profile(
                 return " Enter/A create empty Profile  Esc back"
             if (
                 isinstance(action, ProfilePickerAction)
-                and action.kind == "RENAME_PROFILE"
+                and action.kind in {"RENAME_PROFILE", "RENAME_STUDY"}
             ):
-                return (
-                    " Enter/A rename Profile  Esc back"
-                )
+                target_kind = "Study" if action.kind == "RENAME_STUDY" else "Profile"
+                return f" Enter/A rename {target_kind}  Esc back"
             return (
                 " Enter/A apply exact command  Esc back · IRREVERSIBLE · "
                 "store and checkpoints will be deleted"
@@ -936,7 +988,7 @@ def choose_profile(
             return [("", prefix + " · "), (message_style, message)]
         row = current_row()
         action = (
-            "D remove Study"
+            "R rename  D remove Study"
             if row.kind == "STUDY"
             else "Enter use  R rename  D remove Profile"
         )
@@ -999,7 +1051,26 @@ def choose_profile(
                                 rename_field.frame,
                             ]
                         ),
-                        filter=rename_mode,
+                        filter=Condition(
+                            lambda: isinstance(
+                                rename_target["action"], ProfilePickerAction
+                            )
+                            and rename_target["action"].kind == "RENAME_PROFILE"
+                        ),
+                    ),
+                    ConditionalContainer(
+                        content=HSplit(
+                            [
+                                Window(height=1, char="─"),
+                                study_rename_field.frame,
+                            ]
+                        ),
+                        filter=Condition(
+                            lambda: isinstance(
+                                rename_target["action"], ProfilePickerAction
+                            )
+                            and rename_target["action"].kind == "RENAME_STUDY"
+                        ),
                     ),
                     Window(height=1, char="─"),
                     footer,

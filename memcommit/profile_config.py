@@ -87,7 +87,7 @@ class ProfileEntry:
 
 @dataclass(frozen=True)
 class StudyRunIdentity:
-    """Validated immutable provenance shared by one current Study pair."""
+    """Validated stable provenance shared by one current Study pair."""
 
     uid: str
     name: str
@@ -101,9 +101,10 @@ class StudyRunIdentity:
 def study_run_identity(profile: ProfileEntry) -> StudyRunIdentity | None:
     """Return current ``init-study`` identity without relying on its name.
 
-    Profile display names may change independently from provenance.  The
-    source record is therefore the only durable Study discriminator used by
-    logging and presentation.
+    Profile display names may change independently from the Study label. The
+    stable Study UID and role in this source record are therefore the durable
+    discriminators used by logging and presentation; ``name`` is editable
+    display metadata shared by both members.
     """
 
     source = profile.source

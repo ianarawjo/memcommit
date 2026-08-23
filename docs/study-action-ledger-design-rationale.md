@@ -32,8 +32,11 @@ UID/role, UTC occurrence time, optional monotonic elapsed time, one allowlisted
 action, and action-specific allowlisted data. Files and directories use private
 permissions, reject symbolic links and unexpected directory entries, and are
 fsynced after append. Readers require complete newline-terminated JSON,
-strictly increasing sequence numbers beginning at one, and exact Study/Profile
-identity. A gap left by an earlier recorder build remains readable and is
+strictly increasing sequence numbers beginning at one, and exact stable
+Study/Profile identity. The Study name is the historical display label observed
+when the event was written: `mem profile rename-study` does not rewrite the
+append-only files, and readers continue to bind events by Study UID, Profile
+UID, and role. A gap left by an earlier recorder build remains readable and is
 reported as unavailable telemetry; duplicate or decreasing sequence numbers
 still fail closed. The current recorder advances its in-memory sequence only
 after a durable append, so a rejected event cannot create a new gap.

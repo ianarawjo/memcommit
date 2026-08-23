@@ -418,9 +418,11 @@ class StudyActionLedger:
                     event = StudyActionEvent.from_dict(json.loads(line))
                     if event.attempt_uid != attempt_uid:
                         raise StudyActionError("Study action attempt identity changed.")
+                    # Event names are historical labels: a Study rename keeps
+                    # its UID, Profile UID, and role while later events carry
+                    # the new label. Those stable fields remain the boundary.
                     if (
                         event.study_uid != self.identity.uid
-                        or event.study_name != self.identity.name
                         or event.profile_uid != self.profile.uid
                         or event.profile_role != self.identity.role
                     ):

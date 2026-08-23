@@ -885,6 +885,7 @@ def test_final_help_categories_match_their_reviewed_runtime_boundaries():
         "Restore the current or an explicit local Context"
     )
     assert "Create, select, and manage" in profile.summary
+    assert "Study headings can be renamed" in profile.summary
     assert "backend semantic operations should use" in provider.best_for
     assert "legacy low-level interface" in config.best_for
     assert "existing semantic evaluation campaigns" in eval_operation.summary
@@ -918,6 +919,7 @@ def test_final_help_categories_expose_exact_on_demand_details():
         "CREATE",
         "SELECT",
         "RENAME",
+        "RENAME STUDY",
         "REMOVE",
         "REMOVE STUDY",
     ]

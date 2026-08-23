@@ -161,7 +161,9 @@
       "docs/execution-receipt-review-lifecycle-design-rationale.md"
     ],
     "profile": [
-      "docs/context-name-portability-design-rationale.md"
+      "docs/context-name-portability-design-rationale.md",
+      "docs/mem-profile-design-rationale.md",
+      "docs/study-action-ledger-design-rationale.md"
     ],
     "provider": [
       "docs/semantic-provider-policy-design-rationale.md"

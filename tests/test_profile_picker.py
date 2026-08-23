@@ -149,6 +149,62 @@ def test_profile_picker_rename_review_uses_explicit_profile_command():
     assert any("UID" in effect and "store" in effect for effect in review.effects)
 
 
+def test_profile_picker_r_on_study_header_reviews_exact_study_rename():
+    entries = (
+        ENTRIES[0],
+        ProfilePickerEntry(
+            name="pilot-participant",
+            uid="participant-uid",
+            context_count=2,
+            current_context="practice",
+            study_uid="study-uid",
+            study_name="pilot",
+            study_created_at="2026-08-22T12:00:00+00:00",
+            study_role="PARTICIPANT",
+            study_profile_count=2,
+        ),
+        ProfilePickerEntry(
+            name="pilot-authority",
+            uid="authority-uid",
+            context_count=3,
+            current_context="source",
+            study_uid="study-uid",
+            study_name="pilot",
+            study_created_at="2026-08-22T12:00:00+00:00",
+            study_role="GRANTED_MEMORY",
+            study_profile_count=2,
+        ),
+    )
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[Br\x15renamed-pilot\ra")
+        selected = choose_profile(
+            entries,
+            current="authoring",
+            registry_generation=12,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == ProfilePickerAction(
+        kind="RENAME_STUDY",
+        name="pilot",
+        uid="study-uid",
+        registry_generation=12,
+        new_name="renamed-pilot",
+        row_index=1,
+    )
+    review = _rename_review(selected)
+    assert review.argv == (
+        "mem",
+        "profile",
+        "rename-study",
+        "pilot",
+        "renamed-pilot",
+    )
+    assert any("Profile display names unchanged" in effect for effect in review.effects)
+
+
 def test_profile_picker_blocks_rename_before_opening_the_name_field():
     entries = (
         ProfilePickerEntry(

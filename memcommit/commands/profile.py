@@ -54,6 +54,7 @@ from memcommit.profiles import (
     remove_study,
     refresh_study_profile,
     rename_profile,
+    rename_study,
     study_run_profile_pairs,
     study_profile_groups,
     update_authority_grant,
@@ -431,6 +432,24 @@ def _profile_rename_status(result) -> str:
     )
 
 
+def _study_rename_status(result) -> str:
+    if not result.changed:
+        return "Study '" + display_escape_text(result.name) + "' unchanged"
+    profile_note = (
+        f" · {result.renamed_profile_count} legacy Profile names updated"
+        if result.renamed_profile_count
+        else " · member Profile names unchanged"
+    )
+    return (
+        "Renamed Study '"
+        + display_escape_text(result.previous_name)
+        + "' to '"
+        + display_escape_text(result.name)
+        + "' · UID unchanged"
+        + profile_note
+    )
+
+
 def _print_profile_rename(result) -> None:
     if not result.changed:
         typer.echo(
@@ -469,6 +488,32 @@ def _print_profile_rename(result) -> None:
     )
 
 
+def _print_study_rename(result) -> None:
+    if not result.changed:
+        typer.echo(
+            "Study '" + display_escape_text(result.name) + "' already has that name."
+        )
+        return
+    typer.secho(
+        f"Renamed Study '{display_escape_text(result.previous_name)}' to "
+        f"'{display_escape_text(result.name)}'.",
+        fg=typer.colors.GREEN,
+    )
+    typer.echo("Study UID unchanged: " + display_escape_text(result.uid))
+    if result.renamed_profile_count:
+        typer.echo(
+            "Legacy member Profile display names updated atomically: "
+            + str(result.renamed_profile_count)
+        )
+    else:
+        typer.echo("Member Profile display names unchanged.")
+    typer.echo("Profile UIDs, stores, Contexts, Memories, and Grants unchanged.")
+    typer.echo(
+        "Active Profile unchanged: "
+        + display_escape_text(result.active_profile_name)
+    )
+
+
 def _study_removal_status(result) -> str:
     grant_label = "Grant" if result.removed_grant_count == 1 else "Grants"
     return (
@@ -504,6 +549,15 @@ def _apply_profile_picker_action(
                 expected_uid=action.uid,
                 expected_generation=action.registry_generation,
             )
+        elif action.kind == "RENAME_STUDY":
+            if action.new_name is None:
+                raise ProfileError("Profile picker Study rename is missing its new name.")
+            result = rename_study(
+                action.name,
+                action.new_name,
+                expected_uid=action.uid,
+                expected_generation=action.registry_generation,
+            )
         elif action.kind == "REMOVE_PROFILE":
             result = remove_profile(
                 action.name,
@@ -528,6 +582,10 @@ def _apply_profile_picker_action(
         if print_receipt:
             _print_profile_rename(result)
         return _profile_rename_status(result)
+    if action.kind == "RENAME_STUDY":
+        if print_receipt:
+            _print_study_rename(result)
+        return _study_rename_status(result)
     if action.kind == "REMOVE_PROFILE":
         if print_receipt:
             _print_profile_removal(result)
@@ -1069,6 +1127,26 @@ def rename_cmd(
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
         _fail(error)
     _print_profile_rename(result)
+
+
+@app.command("rename-study")
+def rename_study_cmd(
+    name: Annotated[
+        str,
+        typer.Argument(help="Current or legacy Study name"),
+    ],
+    new_name: Annotated[
+        str,
+        typer.Argument(help="New Study display name"),
+    ],
+) -> None:
+    """Rename one complete Study without moving any member store."""
+
+    try:
+        result = rename_study(name, new_name)
+    except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
+        _fail(error)
+    _print_study_rename(result)
 
 
 def _context_migration_grant_blockers(

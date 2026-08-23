@@ -210,6 +210,19 @@ class ProfileRenameResult:
 
 
 @dataclass(frozen=True)
+class StudyRenameResult:
+    """One stable Study identity published under a new display name."""
+
+    uid: str
+    previous_name: str
+    name: str
+    profiles: tuple[ProfileEntry, ...]
+    active_profile_name: str
+    changed: bool
+    renamed_profile_count: int
+
+
+@dataclass(frozen=True)
 class ProfileRemovalResult:
     """One Profile permanently deleted behind a retained identity tombstone."""
 
@@ -1627,6 +1640,177 @@ def _study_target(
     if len(matches) != 1:
         raise ProfileError(f"Study selector {canonical!r} is ambiguous.")
     return matches[0]
+
+
+def rename_study(
+    old_name: str,
+    new_name: str,
+    *,
+    expected_uid: str | None = None,
+    expected_generation: int | None = None,
+) -> StudyRenameResult:
+    """Rename one complete Study without changing its stable identity.
+
+    Current two-Profile runs keep their independently editable Profile display
+    names. Legacy split Studies encoded the Study name into every member name,
+    so that compatibility topology is renamed as one atomic registry change.
+    """
+
+    try:
+        canonical_old = validate_profile_name(old_name)
+        canonical_new = validate_profile_name(new_name)
+    except (ProfileConfigError, ValueError) as error:
+        raise ProfileError("Study rename name is invalid.") from error
+
+    with _registry_lock():
+        registry = load_profile_registry()
+        if (
+            expected_generation is not None
+            and registry.generation != expected_generation
+        ):
+            raise ProfileError(
+                "Profile registry changed after Study rename selection; review "
+                "the current Profile list and try again."
+            )
+        study_uid, study_name, members = _study_target(registry, canonical_old)
+        if expected_uid is not None and study_uid != expected_uid:
+            raise ProfileError(
+                f"Study {study_name!r} identity changed after rename selection; "
+                "nothing was renamed."
+            )
+        if all(registry.is_removed(profile) for profile in members):
+            raise ProfileError(f"Study {study_name!r} is already removed.")
+        if study_name == canonical_new:
+            return StudyRenameResult(
+                uid=study_uid,
+                previous_name=study_name,
+                name=study_name,
+                profiles=members,
+                active_profile_name=registry.active.name,
+                changed=False,
+                renamed_profile_count=0,
+            )
+
+        studies = (
+            *study_profile_groups(registry.profiles),
+            *study_run_profile_pairs(registry.profiles),
+        )
+        collision = next(
+            (
+                study
+                for study in studies
+                if study.uid != study_uid
+                and study.name.casefold() == canonical_new.casefold()
+            ),
+            None,
+        )
+        if collision is not None:
+            raise ProfileError(f"Study {collision.name!r} already exists.")
+
+        legacy_group = next(
+            (
+                group
+                for group in study_profile_groups(registry.profiles)
+                if group.uid == study_uid
+            ),
+            None,
+        )
+        renamed_by_uid: dict[str, ProfileEntry] = {}
+        for profile in members:
+            source = profile.source
+            if not isinstance(source, dict):
+                raise ProfileError("Study Profile provenance is invalid.")
+            renamed_source = dict(source)
+            renamed_source["study_name"] = canonical_new
+            renamed_name = profile.name
+            if legacy_group is not None:
+                task = source.get("task")
+                if type(task) is not int or task not in _STUDY_TASKS:
+                    raise ProfileError("Study Task number is invalid.")
+                if source.get("kind") == _STUDY_PROFILE_SOURCE_KIND:
+                    renamed_name = _study_task_profile_name(canonical_new, task)
+                elif source.get("kind") == _STUDY_AUTHORITY_SOURCE_KIND:
+                    renamed_name = _study_authority_profile_name(
+                        canonical_new,
+                        _STUDY_AUTHORITY_PROFILE_NAMES[task],
+                    )
+                else:
+                    raise ProfileError("Study Profile provenance is invalid.")
+            renamed_by_uid[profile.uid] = replace(
+                profile,
+                name=renamed_name,
+                source=renamed_source,
+            )
+
+        if legacy_group is not None:
+            member_uids = set(renamed_by_uid)
+            existing_names = {
+                profile.name.casefold()
+                for profile in registry.profiles
+                if profile.uid not in member_uids
+            }
+            generated_names = [
+                profile.name.casefold() for profile in renamed_by_uid.values()
+            ]
+            if len(generated_names) != len(set(generated_names)):
+                raise ProfileError("Renamed legacy Study Profile names collide.")
+            generated_collision = next(
+                (
+                    profile.name
+                    for profile in renamed_by_uid.values()
+                    if profile.name.casefold() in existing_names
+                ),
+                None,
+            )
+            if generated_collision is not None:
+                raise ProfileError(
+                    f"Profile {generated_collision!r} already exists."
+                )
+
+        updated_profiles = tuple(
+            renamed_by_uid.get(profile.uid, profile)
+            for profile in registry.profiles
+        )
+        updated = ProfileRegistry(
+            generation=max(1, registry.generation + 1),
+            active_uid=registry.active_uid,
+            profiles=updated_profiles,
+            grants=registry.grants,
+            removed_profile_uids=registry.removed_profile_uids,
+        )
+        try:
+            _write_registry(updated)
+        except Exception as error:
+            try:
+                visible = load_profile_registry()
+            except (OSError, ProfileConfigError, ValueError) as read_error:
+                raise ProfileError(
+                    "Study rename registry state could not be confirmed; inspect "
+                    "it with 'mem profile list'."
+                ) from read_error
+            if visible == updated:
+                raise ProfileError(
+                    f"Study {study_name!r} was renamed to {canonical_new!r}, but "
+                    "registry durability could not be confirmed; it remains "
+                    "renamed."
+                ) from error
+            if visible != registry:
+                raise ProfileError(
+                    "Study rename registry changed unexpectedly; inspect it "
+                    "with 'mem profile list'."
+                ) from error
+            raise
+
+        renamed_members = tuple(renamed_by_uid[profile.uid] for profile in members)
+        return StudyRenameResult(
+            uid=study_uid,
+            previous_name=study_name,
+            name=canonical_new,
+            profiles=renamed_members,
+            active_profile_name=updated.active.name,
+            changed=True,
+            renamed_profile_count=(len(members) if legacy_group is not None else 0),
+        )
 
 
 def _profile_study_target(
