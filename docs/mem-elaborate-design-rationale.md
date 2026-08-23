@@ -48,7 +48,10 @@ prepared-result check, and atomic publication count all share the exact request
 value. A count mismatch publishes nothing. General provider input and response
 envelope limits remain independent of this count contract, so a provider may
 still fail an exceptionally large exact request rather than silently reducing
-its count.
+its count. Rules-to-Cases also fails before provider construction when the
+complete Rule-by-Case Conformance/Fit validation frame exceeds the shared
+whole-frame item or text limits; this is an execution bound, not a smaller
+substitute count.
 
 Proposal identity is not derived from normalized content. Every returned Rule
 or Case has a distinct proposal UID even when its content repeats, and
@@ -66,7 +69,7 @@ appear in the rationale but is not stored as a violating Example. Structural
 domain validation and active-config validation are separate so an injected
 configuration is applied consistently to live and prepared output.
 
-Every provider prompt quotes the complete café, lost-property, and Cloze
+Every generative provider prompt quotes the complete café, lost-property, and Cloze
 Rule/Example reference pairs. Rules-to-Cases reads them in the generative
 direction. Goal-to-Rules uses their Rule sides as examples of independently
 reviewable Rule form and their paired Example sides as the reason those Rules
@@ -80,6 +83,39 @@ removes the ordinary directional count ceilings so every positive explicit
 count reaches the exact one-turn contract. Version 9 makes proposal identity
 UID-backed rather than content-backed and explicitly admits repeated output
 content without weakening exact count or complete Rule coverage.
+
+Provider contract version 10 adds mandatory post-generation validation for
+Rules-to-Cases: every Case must independently conform to every Source Rule and
+receive general Fit `YES` against the complete Source frame before an analysis
+can be returned or published.
+
+### Independent Source validation
+
+Generator-authored `rule_checks` remain useful evidence pointers, but they are
+not acceptance evidence because the same turn produced both the Case and its
+self-assessment. Rules-to-Cases therefore composes two existing judgment
+contracts after generation. Context Conformance checks the complete generated
+Case set against every Source Rule and must classify every Case as `CONFORMS`
+under all Rules. General Fit then checks each Case together with the complete
+Source Rule frame and must return `YES`. `VIOLATES`, `NOT_APPLICABLE`,
+`INSUFFICIENT_EVIDENCE`, Fit `NO`, and Fit `MAY` all fail the operation before
+publication; the operation does not silently reduce the requested exact count
+or loop through hidden regeneration attempts.
+
+Fit remains compatibility rather than factual grounding. A concrete value
+that does not appear in Source is allowed when it is a legitimate Rule
+instantiation and creates no Source contradiction. The validation must not
+treat missing support as incompatibility, establish objective truth, or turn a
+synthetic Case into real-world evidence. For that reason accepted Cases remain
+`SUGGESTED` and `UNVERIFIED` even though their Source conformance and
+compatibility have been checked.
+
+Each semantic primitive keeps one complete frame: generation is
+`WHOLE_FRAME_ONLY`, Conformance judges all generated Cases and Source Rules in
+one turn, and Fit judges the exhaustive Case question set in one turn. No
+primitive batches or truncates the frame. The typed Case, digest, public and
+agent projections, plain detail, and Add checkpoint retain the accepted
+conformance and Source-Fit result.
 
 ### Why the former 4/3 ceilings were removed
 
@@ -109,7 +145,8 @@ advanced when this invariant replaced the earlier zero-proposal behavior.
 
 An injectable exact prepared lookup may avoid provider construction only when
 the normalized direction, complete input tuple, exact-number request, and
-Target ambient frame match. There is no persisted Elaborate cache artifact yet
+Target ambient frame match, and a Rules-to-Cases result already contains the
+version-10 validation evidence. There is no persisted Elaborate cache artifact yet
 and no subset/projection reuse claim.
 
 ## Standalone Add and endpoint contract
@@ -179,7 +216,7 @@ aliases report exactly which ambient items the provider says it materially
 used, may be empty, and are locally restricted to the frozen Target aliases.
 They do not replace `rule_checks` and do not turn Target Memories into Rule
 evidence. The typed analysis, plain and TUI details, public proposal, agent
-projection, digest, and version-2 Add receipt retain this trace. Any root,
+projection, digest, and version-3 Add receipt retain this trace. Any root,
 embedded, referenced, or granted ambient pre-image drift rejects the proposal
 or Add without partially appending generated Memories.
 
@@ -236,7 +273,7 @@ Ground CLI accepts one exact saved Ground and either `--from-goal` or
 `--from-rules`, plus the same optional exact `--number`. It calls the same
 `run_elaborate` application function. The
 Ground adapter freezes and revalidates the exact Ground UID, revision, and
-record digest before and after the provider call. A physical Ground uses
+record digest before and after the provider sequence. A physical Ground uses
 `/rules` as Goal-to-Rules destination ambient context and `/examples` as
 Rules-to-Cases destination ambient context; other lanes are not included.
 The legacy record projects its active Rule or Case destination lane under the
@@ -257,11 +294,11 @@ exact Ground projections. Versioned agent and MCP tools expose all four input
 forms and the same optional exact-count override, and return
 `verification: UNVERIFIED` and `effect: NONE`; this first Add
 slice does not silently broaden those callable adapters into mutations.
-Agent contract version 3 adds the name-only/content-safe Target ambient frame
+Agent contract version 3 added the name-only/content-safe Target ambient frame
 and per-proposal Target references; standalone public calls without a Target
-continue to return no ambient frame. Accepting larger positive counts is a
-backward-compatible validation broadening, so agent contract version 3 remains
-valid while its JSON Schema no longer publishes a `maximum` for `number`.
+continue to return no ambient frame. Agent contract version 4 adds accepted
+per-Case Source conformance and Fit evidence. Its JSON Schema still publishes
+no `maximum` for `number`.
 
 Elaborate currently opens directly on its result Viewer rather than providing
 an input-composer TUI. That is intentional for this slice: CLI, Python, or

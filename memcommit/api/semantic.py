@@ -82,6 +82,14 @@ class ElaborateRuleCheckProposal:
 
 
 @dataclass(frozen=True)
+class ElaborateCaseValidationProposal:
+    source_fit: str
+    source_fit_reason: str
+    rule_conformance: str
+    conforming_source_rule_indexes: tuple[int, ...]
+
+
+@dataclass(frozen=True)
 class ElaborateCaseProposal:
     uid: str
     proposition: str
@@ -89,6 +97,7 @@ class ElaborateCaseProposal:
     rationale: str
     case_role: str
     rule_checks: tuple[ElaborateRuleCheckProposal, ...]
+    validation: ElaborateCaseValidationProposal
     target_context_refs: tuple[str, ...] = ()
 
 
@@ -120,6 +129,7 @@ __all__ = [
     "DistillProposal",
     "DistillRuleProposal",
     "ElaborateCaseProposal",
+    "ElaborateCaseValidationProposal",
     "ElaborateProposal",
     "ElaborateRuleCheckProposal",
     "ElaborateRuleProposal",

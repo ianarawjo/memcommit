@@ -142,7 +142,8 @@ and what additional contract they add:
 | Conflict | Pairwise projection with reversed public polarity: Fit `YES` corresponds to Conflict `NO`, and Fit `NO` to Conflict `YES`. |
 | Ambiguity | Uses ordinary readings to determine whether materially different interpretations remain; it does not make a compatibility judgment by itself. |
 | Compare, Meld, Update | May use the same ordinary-reading prior to judge relations, but must additionally preserve exhaustive disposition, provenance, direction, authority, and operation-specific review. |
-| Distill, Elaborate | Use generative model capabilities, so their proposals remain unverified. A later Fit judgment can test compatibility but cannot establish truth or evidential support. |
+| Distill | Uses generative reduction, so its Rules remain unverified. A later Fit judgment can test compatibility but cannot establish truth or evidential support. |
+| Elaborate | Uses generative expansion, so its proposals remain unverified. Rules-to-Cases automatically composes general Fit after independent Rule Conformance and accepts only Source-compatible Cases. Fit still cannot establish truth, factual grounding, or evidential support. |
 | Find, Query | Use interpretation and relevance rather than compatibility; ordinary common sense can assist retrieval, but Fit labels are not relevance scores. |
 | Ground | Projects selected Rules and an Example into a Fit frame. Exact-output replay remains a separate conformance adapter because deterministic output reproduction is stronger than proposition compatibility. |
 

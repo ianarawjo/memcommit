@@ -20,11 +20,17 @@ from memcommit.distill import DISTILL_PAYLOAD_MARKER
 from memcommit.elaborate import ELABORATE_PAYLOAD_MARKER
 from memcommit.fit_judgment import FIT_JUDGMENT_PAYLOAD_MARKER
 from memcommit.store import MemoryStore
+from tests.elaborate_validation_support import (
+    passing_elaborate_validation_response,
+)
 
 
 class SemanticProvider:
     def complete(self, prompt, *, operation, output_schema=None):
         assert output_schema is not None
+        validation = passing_elaborate_validation_response(prompt, operation)
+        if validation is not None:
+            return validation
         if operation == "fit_propositions":
             payload = json.loads(prompt.split(FIT_JUDGMENT_PAYLOAD_MARKER, 1)[1])
             question = payload["questions"][0]
@@ -145,6 +151,8 @@ def test_public_elaborate_uses_one_typed_entry_for_both_directions(isolated_stor
     assert rules.mode == "RULES_TO_CASES"
     assert len(rules.cases) == 1
     assert rules.cases[0].case_role == "FIT"
+    assert rules.cases[0].validation.source_fit == "YES"
+    assert rules.cases[0].validation.rule_conformance == "CONFORMS"
 
 
 def test_public_fit_accepts_role_typed_propositions_without_store_effect(

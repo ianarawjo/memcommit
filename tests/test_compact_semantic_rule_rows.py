@@ -24,6 +24,9 @@ from memcommit.interfaces.cli.elaborate import elaborate_result_text
 from memcommit.interfaces.tui.operations.distill import project_distill_clipboard
 from memcommit.interfaces.tui.operations.elaborate import project_elaborate_clipboard
 from memcommit.store import MemoryStore
+from tests.elaborate_validation_support import (
+    passing_elaborate_validation_response,
+)
 
 
 LONG_RULE = (
@@ -74,6 +77,9 @@ class _LongElaborateProvider:
 
 class _CaseElaborateProvider:
     def complete(self, prompt, *, operation, output_schema=None):
+        validation = passing_elaborate_validation_response(prompt, operation)
+        if validation is not None:
+            return validation
         assert operation == ELABORATE_OPERATION
         payload = json.loads(prompt.split(ELABORATE_PAYLOAD_MARKER, 1)[1])
         target = payload.get("target_context")

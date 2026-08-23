@@ -15,6 +15,9 @@ from memcommit.cli import app
 from memcommit.distill import DISTILL_OPERATION, DISTILL_PAYLOAD_MARKER
 from memcommit.elaborate import ELABORATE_OPERATION, ELABORATE_PAYLOAD_MARKER
 from memcommit.store import MemoryStore, context_record_digest
+from tests.elaborate_validation_support import (
+    passing_elaborate_validation_response,
+)
 
 
 runner = CliRunner()
@@ -36,6 +39,9 @@ class _ElaborateProvider:
     calls: list[dict[str, object]] = []
 
     def complete(self, prompt, *, operation, output_schema=None):
+        validation = passing_elaborate_validation_response(prompt, operation)
+        if validation is not None:
+            return validation
         assert operation == ELABORATE_OPERATION
         payload = json.loads(prompt.split(ELABORATE_PAYLOAD_MARKER, 1)[1])
         type(self).calls.append(payload)
@@ -455,9 +461,10 @@ def test_elaborate_target_drift_publishes_no_generated_memory(
 
     class _DriftingProvider(_ElaborateProvider):
         def complete(self, prompt, *, operation, output_schema=None):
-            changed = store.load_for_update(target.name)
-            ops.add(changed, "Concurrent target change.")
-            store.save(changed)
+            if operation == ELABORATE_OPERATION:
+                changed = store.load_for_update(target.name)
+                ops.add(changed, "Concurrent target change.")
+                store.save(changed)
             return super().complete(
                 prompt,
                 operation=operation,

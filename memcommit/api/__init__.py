@@ -188,6 +188,7 @@ __all__ = [
     "DistillProposal",
     "DistillRuleProposal",
     "ElaborateCaseProposal",
+    "ElaborateCaseValidationProposal",
     "ElaborateProposal",
     "ElaborateRuleCheckProposal",
     "ElaborateRuleProposal",
@@ -416,6 +417,10 @@ _LAZY_EXPORTS = {
     "DistillProposal": ("memcommit.api.semantic", "DistillProposal"),
     "DistillRuleProposal": ("memcommit.api.semantic", "DistillRuleProposal"),
     "ElaborateCaseProposal": ("memcommit.api.semantic", "ElaborateCaseProposal"),
+    "ElaborateCaseValidationProposal": (
+        "memcommit.api.semantic",
+        "ElaborateCaseValidationProposal",
+    ),
     "ElaborateProposal": ("memcommit.api.semantic", "ElaborateProposal"),
     "ElaborateRuleCheckProposal": (
         "memcommit.api.semantic",

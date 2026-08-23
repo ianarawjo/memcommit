@@ -16,6 +16,7 @@ import memcommit.commands.elaborate as elaborate_command
 import memcommit.elaborate_application as elaborate_application
 import memcommit.ops as ops
 from memcommit.cli import app
+from memcommit.conformance import CONTEXT_CONFORMANCE_OPERATION
 from memcommit.context import Context, Memory
 from memcommit.elaborate import (
     ELABORATE_OPERATION,
@@ -26,6 +27,10 @@ from memcommit.elaborate import (
 from memcommit.elaborate_application import ElaborateRequest
 from memcommit.elaborate_config import ElaborateSemanticConfig
 from memcommit.elaborate_runtime import execute_elaborate
+from memcommit.fit_judgment import (
+    FIT_JUDGMENT_OPERATION,
+    FIT_JUDGMENT_PAYLOAD_MARKER,
+)
 from memcommit.ground import (
     GroundTargetSpec,
     bind_ground_workbench,
@@ -50,6 +55,9 @@ from memcommit.interfaces.tui.operations.elaborate import (
     run_elaborate_tui,
 )
 from memcommit.store import MemoryStore, ground_session_record_digest
+from tests.elaborate_validation_support import (
+    passing_elaborate_validation_response,
+)
 
 
 runner = CliRunner()
@@ -61,6 +69,9 @@ class ElaborateProvider:
         self.calls: list[tuple[str, dict[str, object]]] = []
 
     def complete(self, prompt, *, operation, output_schema=None):
+        validation = passing_elaborate_validation_response(prompt, operation)
+        if validation is not None:
+            return validation
         assert operation == ELABORATE_OPERATION
         assert output_schema is not None
         self.calls.append((prompt, output_schema))
@@ -152,6 +163,9 @@ class ExactNumberProvider:
         self.calls: list[tuple[dict[str, object], dict[str, object], str]] = []
 
     def complete(self, prompt, *, operation, output_schema=None):
+        validation = passing_elaborate_validation_response(prompt, operation)
+        if validation is not None:
+            return validation
         assert operation == ELABORATE_OPERATION
         assert output_schema is not None
         payload = json.loads(prompt.split(ELABORATE_PAYLOAD_MARKER, 1)[1])
@@ -239,6 +253,137 @@ def test_rules_elaborate_to_diverse_unverified_case_propositions() -> None:
     assert "complete input Rule set together" in provider.calls[0][0]
     assert "not a reason to return an empty set" in provider.calls[0][0]
     assert result.analysis.number == 3
+    assert all(case.validation is not None for case in result.analysis.cases)
+    assert all(
+        case.validation.source_fit == "YES"
+        and case.validation.rule_conformance == "CONFORMS"
+        for case in result.analysis.cases
+        if case.validation is not None
+    )
+
+
+def test_rules_elaborate_accepts_source_absent_values_when_they_fit() -> None:
+    class CapturingProvider(ElaborateProvider):
+        def __init__(self) -> None:
+            super().__init__()
+            self.semantic_calls: list[tuple[str, str]] = []
+
+        def complete(self, prompt, *, operation, output_schema=None):
+            self.semantic_calls.append((operation, prompt))
+            return super().complete(
+                prompt,
+                operation=operation,
+                output_schema=output_schema,
+            )
+
+    provider = CapturingProvider()
+    result = execute_elaborate(
+        ElaborateRequest(
+            rules=("Act only after explicit confirmation.",),
+            number=1,
+        ),
+        provider_factory=lambda: provider,
+    )
+
+    assert "option A" in result.analysis.cases[0].proposition
+    assert "option A" not in result.analysis.inputs[0]
+    assert [operation for operation, _prompt in provider.semantic_calls] == [
+        ELABORATE_OPERATION,
+        CONTEXT_CONFORMANCE_OPERATION,
+        FIT_JUDGMENT_OPERATION,
+    ]
+    fit_prompt = provider.semantic_calls[-1][1]
+    assert "Missing support or an unknown fact is not itself a contradiction" in fit_prompt
+
+
+def test_rules_elaborate_rejects_a_case_that_fails_source_rule_conformance() -> None:
+    class RejectingProvider(ElaborateProvider):
+        def complete(self, prompt, *, operation, output_schema=None):
+            if operation == CONTEXT_CONFORMANCE_OPERATION:
+                payload = json.loads(
+                    prompt.split("CONFORMANCE CONTEXT PAYLOAD:\n", 1)[1]
+                )
+                case_id = payload["target_context"]["memories"][0]["memory_id"]
+                return json.dumps(
+                    {
+                        "judgments": [
+                            {
+                                "rule_id": payload["rules"][0]["rule_id"],
+                                "status": "VIOLATES",
+                                "evidence_memory_ids": [case_id],
+                                "nonconforming_cases": [
+                                    {
+                                        "memory_id": case_id,
+                                        "reason": "The Case acts before confirmation.",
+                                    }
+                                ],
+                                "reason": "The generated Case violates the Rule.",
+                            }
+                        ],
+                        "outside_memory_ids": [],
+                    }
+                )
+            return super().complete(
+                prompt,
+                operation=operation,
+                output_schema=output_schema,
+            )
+
+    with pytest.raises(ElaborateError, match="did not conform to every Source Rule"):
+        execute_elaborate(
+            ElaborateRequest(
+                rules=("Act only after explicit confirmation.",),
+                number=1,
+            ),
+            provider_factory=RejectingProvider,
+        )
+
+
+def test_rules_elaborate_rejects_a_case_that_does_not_fit_the_source() -> None:
+    class RejectingProvider(ElaborateProvider):
+        def complete(self, prompt, *, operation, output_schema=None):
+            if operation == FIT_JUDGMENT_OPERATION:
+                payload = json.loads(
+                    prompt.split(FIT_JUDGMENT_PAYLOAD_MARKER, 1)[1]
+                )
+                question = payload["questions"][0]
+                aliases = [
+                    item["proposition_id"]
+                    for item in (
+                        *question["background"],
+                        *question["propositions"],
+                    )
+                ]
+                return json.dumps(
+                    {
+                        "overview": "The generated Case conflicts with the Source.",
+                        "judgments": [
+                            {
+                                "question_id": question["question_id"],
+                                "verdict": "NO",
+                                "reason": "The Case contradicts the Source Rule.",
+                                "considered_proposition_ids": aliases,
+                                "material_proposition_ids": aliases,
+                                "consistent_reading": "",
+                                "inconsistent_reading": "",
+                            }
+                        ],
+                    }
+                )
+            return super().complete(
+                prompt,
+                operation=operation,
+                output_schema=output_schema,
+            )
+
+    with pytest.raises(ElaborateError, match="did not Fit the complete Source frame"):
+        execute_elaborate(
+            ElaborateRequest(
+                rules=("Act only after explicit confirmation.",),
+                number=1,
+            ),
+            provider_factory=RejectingProvider,
+        )
 
 
 @pytest.mark.parametrize(
@@ -414,6 +559,26 @@ def test_elaborate_exact_prepared_lookup_avoids_provider() -> None:
     assert prepared.origin == "PREPARED_EXACT"
 
 
+def test_rules_elaborate_prepared_lookup_reuses_exact_validation() -> None:
+    request = ElaborateRequest(
+        rules=("Act only after explicit confirmation.",),
+        number=1,
+    )
+    live = execute_elaborate(request, provider_factory=ElaborateProvider)
+
+    prepared = execute_elaborate(
+        request,
+        provider_factory=lambda: (_ for _ in ()).throw(
+            AssertionError("validated prepared Elaborate must avoid providers")
+        ),
+        prepared_lookup=lambda _request, _config: live.analysis,
+    )
+
+    assert prepared.analysis is live.analysis
+    assert prepared.analysis.cases[0].validation is not None
+    assert prepared.origin == "PREPARED_EXACT"
+
+
 def test_elaborate_rejects_an_analysis_from_the_prior_provider_contract() -> None:
     live = execute_elaborate(
         ElaborateRequest(goal="Confirm before acting."),
@@ -469,13 +634,33 @@ def test_elaborate_live_plan_rejects_oversized_input_before_provider() -> None:
         return ElaborateProvider()
 
     config = ElaborateSemanticConfig(text_limit=600_100)
-    with pytest.raises(ElaborateError, match="bounded one-turn plan"):
+    with pytest.raises(ElaborateError, match="shared Conformance/Fit"):
         execute_elaborate(
             ElaborateRequest(
                 rules=("A" * 600_000, "B" * 600_000),
             ),
             provider_factory=provider_factory,
             config=config,
+        )
+
+    assert provider_constructions == 0
+
+
+def test_rules_elaborate_rejects_oversized_validation_frame_before_provider() -> None:
+    provider_constructions = 0
+
+    def provider_factory():
+        nonlocal provider_constructions
+        provider_constructions += 1
+        return ExactNumberProvider()
+
+    with pytest.raises(ElaborateError, match="validation frame exceeds"):
+        execute_elaborate(
+            ElaborateRequest(
+                rules=("Apply the complete Rule.",),
+                number=1_001,
+            ),
+            provider_factory=provider_factory,
         )
 
     assert provider_constructions == 0

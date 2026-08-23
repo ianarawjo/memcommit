@@ -19,6 +19,9 @@ from memcommit.elaborate import (
 from memcommit.elaborate_application import ElaborateRequest
 from memcommit.elaborate_runtime import execute_elaborate
 from memcommit.store import MemoryStore
+from tests.elaborate_validation_support import (
+    passing_elaborate_validation_response,
+)
 
 
 runner = CliRunner()
@@ -31,6 +34,9 @@ class RepeatingElaborateProvider:
         self.prompts: list[str] = []
 
     def complete(self, prompt, *, operation, output_schema=None):
+        validation = passing_elaborate_validation_response(prompt, operation)
+        if validation is not None:
+            return validation
         assert operation == ELABORATE_OPERATION
         assert output_schema is not None
         self.prompts.append(prompt)

@@ -78,6 +78,15 @@ def elaborate_result_lines(result: ElaborateResult) -> tuple[str, ...]:
                         f"{check.source_rule_index} · {safe_terminal_text(check.evidence)}"
                         for check in case.rule_checks
                     ),
+                    *(
+                        (
+                            "   SOURCE FIT · YES",
+                            "   RULE CONFORMANCE · ALL "
+                            f"{len(case.validation.conforming_source_rule_indexes)}",
+                        )
+                        if case.validation is not None
+                        else ()
+                    ),
                     f"   EXPECTED · {safe_terminal_text(case.expected or '(open)')}",
                     f"   WHY · {safe_terminal_text(case.rationale)}",
                     *(

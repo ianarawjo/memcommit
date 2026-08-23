@@ -17,6 +17,9 @@ from memcommit.elaborate import ELABORATE_PAYLOAD_MARKER
 from memcommit.elaborate_application import ElaborateRequest
 from memcommit.elaborate_runtime import execute_elaborate
 from memcommit.summarize import collect_summary_frame
+from tests.elaborate_validation_support import (
+    passing_elaborate_validation_response,
+)
 
 
 FIXTURE_PATH = (
@@ -219,6 +222,9 @@ def test_elaborate_cafe_fixture_requires_every_rule_in_every_example() -> None:
         prompt = ""
 
         def complete(self, prompt, *, operation, output_schema=None):
+            validation = passing_elaborate_validation_response(prompt, operation)
+            if validation is not None:
+                return validation
             type(self).prompt = prompt
             payload = json.loads(prompt.split(ELABORATE_PAYLOAD_MARKER, 1)[1])
             checks = [
@@ -327,6 +333,9 @@ def test_every_distill_and_elaborate_prompt_quotes_all_reference_families() -> N
         prompts: list[str] = []
 
         def complete(self, prompt, *, operation, output_schema=None):
+            validation = passing_elaborate_validation_response(prompt, operation)
+            if validation is not None:
+                return validation
             type(self).prompts.append(prompt)
             payload = json.loads(prompt.split(ELABORATE_PAYLOAD_MARKER, 1)[1])
             if payload["mode"] == "GOAL_TO_RULES":

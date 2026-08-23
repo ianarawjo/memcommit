@@ -1,6 +1,6 @@
 # Distill and Elaborate generative reduction design rationale
 
-Last updated: 2026-08-20.
+Last updated: 2026-08-23.
 
 ## Motivating failure
 
@@ -92,13 +92,16 @@ oracle. Live evaluation checks semantic anchors and complete Rule coverage.
 This distinction permits equivalent wording without accepting the former
 three-Rule behavioral subset as complete.
 
-Every production provider prompt quotes all three complete bidirectional
+Every production generation prompt quotes all three complete bidirectional
 families. Distill reads each pair as `Example Memories -> Rule Memories`.
 Rules-to-Cases Elaborate reads the same pairs in reverse. Goal-to-Rules
 Elaborate uses the Rule sides as examples of independently reviewable,
 generative Rule form and the paired Examples as a demonstration of why those
 Rules are operational. The reference block is therefore present in every
-Distill and Elaborate provider call rather than existing only in tests.
+Distill and Elaborate generation call rather than existing only in tests.
+Elaborate's later Conformance and Fit turns instead receive only the exact
+current Source Rule and generated Case frames required by those shared
+judgment contracts.
 
 Prompt reference and execution evidence remain distinct. The authored
 reference families have no current-run Memory aliases. Distill may populate
@@ -147,15 +150,21 @@ input count, and the local decoder independently rejects omissions,
 duplicates, reordering, and unavailable indexes. The evidence must identify
 observable content in the proposition according to the provider instruction.
 
-This is structural coverage, not independent truth verification. A provider
-can still make a mistaken semantic claim, so Cases remain `SUGGESTED` and
-`UNVERIFIED`; the calibration fixture and configured-provider trial supply the
-review evidence. Provider contract version 4 prevents prepared version-3
-results without the quoted reference corpus from replaying and also preserves
-the earlier barrier against version-2
-single-Rule Cases from replaying under the joint-coverage meaning. The public
-agent contract advances to version 2 because its Case projection now contains
-`rule_checks` rather than one scalar source index.
+Structural coverage alone is not acceptance evidence because the generator
+can make a mistaken semantic claim. Rules-to-Cases now follows generation with
+two independent judgment turns over complete frames. Context Conformance must
+classify every generated Case as conforming to every Source Rule; general Fit
+must return `YES` for each Case together with the complete Source frame. Any
+violation, non-applicability, insufficient evidence, Fit `NO`, or Fit `MAY`
+fails the operation before result publication. The operation preserves the
+requested exact count and does not silently drop or regenerate failed Cases.
+
+Neither judgment establishes truth or evidential support. A concrete value may
+be absent from Source and still pass when it legitimately instantiates the
+Rules and introduces no contradiction. Cases therefore remain `SUGGESTED` and
+`UNVERIFIED`. Provider contract version 10 prevents earlier generation-only
+analyses from replaying without accepted Conformance and Fit evidence. Agent
+contract version 4 exposes the same per-Case evidence.
 
 ## Configured-provider observation
 
@@ -197,8 +206,9 @@ zero Target Memories with no checkpoint.
   reviewed Example families unreconstructable.
 - Requiring byte-identical Distill output was rejected because equivalent Rule
   decompositions can split or combine anchors without semantic loss.
-- Making Elaborate its own verifier was rejected. Rule checks expose coverage;
-  reviewed fixtures and later judgment establish quality.
+- Relying on generator-authored `rule_checks` as verification was rejected.
+  Elaborate instead composes the shared Conformance and general Fit contracts
+  after generation, while retaining `UNVERIFIED` for truth and evidence.
 - Allowing reference Memories to appear as current evidence was rejected
   because a demonstration cannot establish a Rule about the selected Source.
 - Injecting all readable Profile Contexts into Elaborate was rejected; only the

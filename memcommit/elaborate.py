@@ -2,13 +2,22 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from enum import Enum
 import hashlib
 import json
 from typing import Protocol
 import uuid
 
+from memcommit.conformance import (
+    CONFORMANCE_MAX_RULES,
+    CONFORMANCE_MAX_SUBJECTS,
+    CONFORMANCE_TEXT_LIMIT,
+    ConformanceError,
+    ConformanceRule,
+    ConformanceSubject,
+    check_context_conformance,
+)
 from memcommit.elaborate_config import (
     DEFAULT_ELABORATE_SEMANTIC_CONFIG,
     ElaborateSemanticConfig,
@@ -26,10 +35,20 @@ from memcommit.semantic_execution import (
     json_budget,
     plan_semantic_execution,
 )
+from memcommit.fit_judgment import (
+    FIT_JUDGMENT_MAX_ITEMS,
+    FIT_JUDGMENT_MAX_QUESTIONS,
+    FIT_JUDGMENT_TEXT_LIMIT,
+    FitJudgmentError,
+    FitProposition,
+    FitQuestion,
+    execute_fit_judgments,
+    prepare_fit_judgments,
+)
 
 
 ELABORATE_OPERATION = "elaborate"
-ELABORATE_PROVIDER_CONTRACT_VERSION = 9
+ELABORATE_PROVIDER_CONTRACT_VERSION = 10
 ELABORATE_PAYLOAD_MARKER = "ELABORATE PAYLOAD:\n"
 
 
@@ -238,6 +257,38 @@ class ElaboratedRuleCheck:
 
 
 @dataclass(frozen=True)
+class ElaboratedCaseValidation:
+    """Independent Rule-conformance and Source-Fit evidence for one Case."""
+
+    source_fit: str
+    source_fit_reason: str
+    rule_conformance: str
+    conforming_source_rule_indexes: tuple[int, ...]
+
+    def __post_init__(self) -> None:
+        if self.source_fit != "YES":
+            raise ElaborateError("An accepted Elaborate Case must Fit its Source.")
+        if not isinstance(self.source_fit_reason, str) or not self.source_fit_reason.strip():
+            raise ElaborateError(
+                "Elaborated Case Source-Fit reason must be nonempty text."
+            )
+        if self.rule_conformance != "CONFORMS":
+            raise ElaborateError(
+                "An accepted Elaborate Case must conform to every Source Rule."
+            )
+        indexes = self.conforming_source_rule_indexes
+        if (
+            not isinstance(indexes, tuple)
+            or not indexes
+            or len(indexes) != len(set(indexes))
+            or any(type(index) is not int or index < 1 for index in indexes)
+        ):
+            raise ElaborateError(
+                "Elaborated Case conforming Source Rule indexes are invalid."
+            )
+
+
+@dataclass(frozen=True)
 class ElaboratedCase:
     uid: str
     proposition: str
@@ -246,6 +297,7 @@ class ElaboratedCase:
     case_role: str
     rule_checks: tuple[ElaboratedRuleCheck, ...]
     target_context_refs: tuple[str, ...] = ()
+    validation: ElaboratedCaseValidation | None = None
 
     def __post_init__(self) -> None:
         try:
@@ -271,6 +323,10 @@ class ElaboratedCase:
             or any(not isinstance(alias, str) or not alias for alias in self.target_context_refs)
         ):
             raise ElaborateError("Elaborated Case Target references are invalid.")
+        if self.validation is not None and not isinstance(
+            self.validation, ElaboratedCaseValidation
+        ):
+            raise ElaborateError("Elaborated Case validation is invalid.")
 
 
 @dataclass(frozen=True)
@@ -327,6 +383,16 @@ class ElaborateAnalysis:
             raise ElaborateError(
                 "Every Elaborate Case must check every source Rule exactly once "
                 "in input order."
+            )
+        if any(
+            item.validation is None
+            or item.validation.conforming_source_rule_indexes
+            != required_rule_indexes
+            for item in self.cases
+        ):
+            raise ElaborateError(
+                "Every Elaborate Case must independently conform to every Source "
+                "Rule and Fit the complete Source frame."
             )
         if self.provider_contract_version != ELABORATE_PROVIDER_CONTRACT_VERSION:
             raise ElaborateError("Unsupported Elaborate provider contract version.")
@@ -390,6 +456,18 @@ class ElaborateAnalysis:
                         for check in case.rule_checks
                     ],
                     "target_context_refs": list(case.target_context_refs),
+                    "validation": (
+                        None
+                        if case.validation is None
+                        else {
+                            "source_fit": case.validation.source_fit,
+                            "source_fit_reason": case.validation.source_fit_reason,
+                            "rule_conformance": case.validation.rule_conformance,
+                            "conforming_source_rule_indexes": list(
+                                case.validation.conforming_source_rule_indexes
+                            ),
+                        }
+                    ),
                 }
                 for case in self.cases
             ],
@@ -473,7 +551,11 @@ def validate_elaborate_analysis(
                 f"Elaborate requires exactly {number} Case proposals."
             )
         for case in analysis.cases:
-            _text(case.proposition, "Case proposition", limit=config.text_limit)
+            _text(
+                case.proposition,
+                "Case proposition",
+                limit=_case_validation_text_limit(config),
+            )
             _text(
                 case.expected,
                 "Case expected value",
@@ -516,6 +598,14 @@ def _strict_json_object(pairs: list[tuple[str, object]]) -> dict[str, object]:
             raise ElaborateError(f"Elaborate returned duplicate JSON key {key!r}.")
         result[key] = value
     return result
+
+
+def _case_validation_text_limit(config: ElaborateSemanticConfig) -> int:
+    return min(
+        config.text_limit,
+        CONFORMANCE_TEXT_LIMIT,
+        FIT_JUDGMENT_TEXT_LIMIT,
+    )
 
 
 def _schema(
@@ -573,6 +663,11 @@ def _schema(
         }
         required = ["overview", "rules"]
     else:
+        case_text = {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": _case_validation_text_limit(config),
+        }
         case_required = [
             "proposition",
             "expected",
@@ -581,7 +676,7 @@ def _schema(
             "rule_checks",
         ]
         case_properties: dict[str, object] = {
-            "proposition": text,
+            "proposition": case_text,
             "expected": {
                 "type": "string",
                 "minLength": 1,
@@ -649,6 +744,24 @@ def validate_elaborate_provider_plan(
     if not isinstance(config, ElaborateSemanticConfig):
         raise TypeError("Elaborate requires an ElaborateSemanticConfig.")
     number = normalize_elaborate_number(mode=mode, number=number, config=config)
+    if mode is ElaborateMode.RULES_TO_CASES:
+        validation_items = number * (len(inputs) + 1)
+        if (
+            len(inputs) > CONFORMANCE_MAX_RULES
+            or number > CONFORMANCE_MAX_SUBJECTS
+            or number > FIT_JUDGMENT_MAX_QUESTIONS
+            or validation_items > FIT_JUDGMENT_MAX_ITEMS
+        ):
+            raise ElaborateError(
+                "The complete Elaborate Case validation frame exceeds its "
+                "bounded whole-frame plan."
+            )
+        validation_text_limit = _case_validation_text_limit(config)
+        if any(len(value) > validation_text_limit for value in inputs):
+            raise ElaborateError(
+                "An Elaborate Source Rule exceeds the shared Conformance/Fit "
+                f"{validation_text_limit}-character limit."
+            )
     payload: dict[str, object] = {"mode": mode.value, "inputs": list(inputs)}
     payload["number"] = number
     if target_context is not None:
@@ -701,6 +814,133 @@ def _decode_target_context_refs(
             "The Elaborate provider returned invalid Target Context references."
         )
     return tuple(value)
+
+
+def _validate_elaborated_cases(
+    *,
+    analysis_uid: str,
+    inputs: tuple[str, ...],
+    cases: tuple[ElaboratedCase, ...],
+    provider: ElaborateProvider,
+) -> tuple[ElaboratedCaseValidation, ...]:
+    """Fail closed unless every generated Case conforms and Fits its Source."""
+
+    namespace = uuid.UUID(analysis_uid)
+    rules = tuple(
+        ConformanceRule(
+            uid=str(uuid.uuid5(namespace, f"source-rule:{index}:{content}")),
+            alias=f"r{index}",
+            content=content,
+        )
+        for index, content in enumerate(inputs, 1)
+    )
+    rule_uids = tuple(rule.uid for rule in rules)
+    rule_index_by_uid = {
+        rule.uid: index for index, rule in enumerate(rules, 1)
+    }
+    subjects = tuple(
+        ConformanceSubject(
+            uid=case.uid,
+            alias=f"c{index}",
+            content=case.proposition,
+            role=case.case_role,
+            linked_rule_uids=rule_uids,
+        )
+        for index, case in enumerate(cases, 1)
+    )
+    try:
+        conformance = check_context_conformance(
+            source_label="ELABORATE GENERATED CASES",
+            rules_label="ELABORATE SOURCE RULES",
+            rules=rules,
+            subjects=subjects,
+            provider=provider,  # type: ignore[arg-type]
+        )
+    except ConformanceError as error:
+        raise ElaborateError(
+            "Elaborate could not validate Case conformance against the complete "
+            "Source Rule frame."
+        ) from error
+
+    conformance_by_uid = {
+        judgment.subject_uid: judgment
+        for judgment in conformance.context_example_judgments
+    }
+    conformance_failures: list[str] = []
+    for index, case in enumerate(cases, 1):
+        judgment = conformance_by_uid.get(case.uid)
+        if (
+            judgment is None
+            or judgment.status != "CONFORMS"
+            or judgment.rule_uids != rule_uids
+        ):
+            status = "MISSING" if judgment is None else judgment.status
+            conformance_failures.append(f"Case {index}: {status}")
+    if conformance_failures:
+        raise ElaborateError(
+            "Elaborate rejected generated Cases that did not conform to every "
+            "Source Rule (" + "; ".join(conformance_failures) + ")."
+        )
+
+    questions = tuple(
+        FitQuestion(
+            question_id=f"c{case_index}",
+            propositions=(
+                *(
+                    FitProposition(
+                        alias=f"r{rule_index}",
+                        content=content,
+                        role="RULE",
+                    )
+                    for rule_index, content in enumerate(inputs, 1)
+                ),
+                FitProposition(
+                    alias=f"c{case_index}",
+                    content=case.proposition,
+                    role="EXAMPLE",
+                ),
+            ),
+        )
+        for case_index, case in enumerate(cases, 1)
+    )
+    try:
+        prepared_fit = prepare_fit_judgments(questions)
+        fit = execute_fit_judgments(
+            prepared_fit,
+            provider=provider,  # type: ignore[arg-type]
+        )
+    except FitJudgmentError as error:
+        raise ElaborateError(
+            "Elaborate could not validate generated Cases against the complete "
+            "Source frame."
+        ) from error
+
+    fit_by_question = {
+        assessment.question_id: assessment for assessment in fit.assessments
+    }
+    fit_failures = tuple(
+        f"Case {index}: {fit_by_question[f'c{index}'].verdict}"
+        for index in range(1, len(cases) + 1)
+        if fit_by_question[f"c{index}"].verdict != "YES"
+    )
+    if fit_failures:
+        raise ElaborateError(
+            "Elaborate rejected generated Cases that did not Fit the complete "
+            "Source frame (" + "; ".join(fit_failures) + ")."
+        )
+
+    conforming_indexes = tuple(
+        rule_index_by_uid[rule_uid] for rule_uid in rule_uids
+    )
+    return tuple(
+        ElaboratedCaseValidation(
+            source_fit="YES",
+            source_fit_reason=fit_by_question[f"c{index}"].reason,
+            rule_conformance="CONFORMS",
+            conforming_source_rule_indexes=conforming_indexes,
+        )
+        for index in range(1, len(cases) + 1)
+    )
 
 
 def analyze_elaborate(
@@ -901,7 +1141,7 @@ def analyze_elaborate(
             proposition = _text(
                 value["proposition"],
                 "Case proposition",
-                limit=config.text_limit,
+                limit=_case_validation_text_limit(config),
             )
             expected_value = _text(
                 value["expected"],
@@ -983,6 +1223,20 @@ def analyze_elaborate(
                     target_context_refs=target_refs,
                 )
             )
+        validations = _validate_elaborated_cases(
+            analysis_uid=analysis_uid,
+            inputs=inputs,
+            cases=tuple(proposed_cases),
+            provider=provider,
+        )
+        proposed_cases = [
+            replace(case, validation=validation)
+            for case, validation in zip(
+                proposed_cases,
+                validations,
+                strict=True,
+            )
+        ]
     analysis = ElaborateAnalysis(
         uid=analysis_uid,
         mode=mode,
@@ -1006,6 +1260,7 @@ __all__ = [
     "ElaborateMode",
     "ElaborateProvider",
     "ElaboratedCase",
+    "ElaboratedCaseValidation",
     "ElaboratedRuleCheck",
     "ElaboratedRule",
     "ElaborateTargetContext",

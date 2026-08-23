@@ -18,10 +18,16 @@ from memcommit.interfaces.agent import (
 )
 from memcommit.interfaces.mcp import McpRegistryProjection
 from memcommit.store import MemoryStore
+from tests.elaborate_validation_support import (
+    passing_elaborate_validation_response,
+)
 
 
 class AgentSemanticProvider:
     def complete(self, prompt, *, operation, output_schema=None):
+        validation = passing_elaborate_validation_response(prompt, operation)
+        if validation is not None:
+            return validation
         if operation == "fit_propositions":
             payload = json.loads(prompt.split(FIT_JUDGMENT_PAYLOAD_MARKER, 1)[1])
             question = payload["questions"][0]
@@ -63,8 +69,33 @@ class AgentSemanticProvider:
                 }
             )
         payload = json.loads(prompt.split(ELABORATE_PAYLOAD_MARKER, 1)[1])
-        assert payload["mode"] == "GOAL_TO_RULES"
         number = payload["number"]
+        if payload["mode"] == "RULES_TO_CASES":
+            return json.dumps(
+                {
+                    "overview": f"{number} suggested Cases.",
+                    "cases": [
+                        {
+                            "proposition": (
+                                f"The person confirms option {index} before acting."
+                            ),
+                            "expected": f"Proceed with option {index}.",
+                            "rationale": "This Case follows the complete Rule set.",
+                            "case_role": "FIT",
+                            "rule_checks": [
+                                {
+                                    "source_rule_index": rule_index,
+                                    "evidence": "The Case visibly follows this Rule.",
+                                }
+                                for rule_index, _rule in enumerate(
+                                    payload["inputs"], 1
+                                )
+                            ],
+                        }
+                        for index in range(1, number + 1)
+                    ],
+                }
+            )
         return json.dumps(
             {
                 "overview": f"{number} suggested Rules.",
@@ -101,7 +132,7 @@ def test_default_registry_and_mcp_expose_read_only_semantic_tools(isolated_store
     elaborate = registry.invoke(
         ELABORATE_AGENT_TOOL_NAME,
         {
-            "version": 3,
+            "version": ELABORATE_AGENT_CONTRACT_VERSION,
             "kind": "goal_to_rules",
             "goal": "Confirm before acting.",
             "number": 1,
@@ -163,6 +194,29 @@ def test_semantic_agent_elaborate_accepts_an_exact_number(isolated_store):
     )
 
 
+def test_semantic_agent_elaborate_exposes_case_validation(isolated_store):
+    client = MemCommitClient(
+        root=isolated_store,
+        semantic_provider_factory=AgentSemanticProvider,
+    )
+    registry = build_default_agent_tool_registry(client)
+
+    result = registry.invoke(
+        ELABORATE_AGENT_TOOL_NAME,
+        {
+            "version": ELABORATE_AGENT_CONTRACT_VERSION,
+            "kind": "rules_to_cases",
+            "rules": ["Act only after explicit confirmation."],
+            "number": 1,
+        },
+    )
+
+    assert result["ok"] is True
+    validation = result["result"]["cases"][0]["validation"]
+    assert validation["source_fit"] == "YES"
+    assert validation["rule_conformance"] == "CONFORMS"
+
+
 def test_semantic_agent_rejects_unknown_fields_before_provider(tmp_path):
     root = tmp_path / "store"
     registry = build_default_agent_tool_registry(MemCommitClient(root=root))
@@ -170,7 +224,7 @@ def test_semantic_agent_rejects_unknown_fields_before_provider(tmp_path):
     result = registry.invoke(
         ELABORATE_AGENT_TOOL_NAME,
         {
-            "version": 3,
+            "version": ELABORATE_AGENT_CONTRACT_VERSION,
             "kind": "goal_to_rules",
             "goal": "A Goal",
             "save": True,
@@ -197,7 +251,7 @@ def test_semantic_agent_ground_routes_preserve_context_error_category(
     elaborate = registry.invoke(
         ELABORATE_AGENT_TOOL_NAME,
         {
-            "version": 3,
+            "version": ELABORATE_AGENT_CONTRACT_VERSION,
             "kind": "ground_goal_to_rules",
             "ground_name": "missing-ground",
         },

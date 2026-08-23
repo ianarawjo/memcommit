@@ -209,6 +209,16 @@ def apply_prepared_elaborate_add(
                     }
                     for check in item.rule_checks
                 ],
+                "validation": {
+                    "source_fit": item.validation.source_fit,
+                    "source_fit_reason": item.validation.source_fit_reason,
+                    "rule_conformance": item.validation.rule_conformance,
+                    "conforming_source_rule_indexes": list(
+                        item.validation.conforming_source_rule_indexes
+                    ),
+                }
+                if item.validation is not None
+                else None,
                 "target_context_refs": list(item.target_context_refs),
             }
             for item in analysis.cases
@@ -235,12 +245,17 @@ def apply_prepared_elaborate_add(
             contents=contents,
             source_bindings=all_source_bindings,
             operation_args={
-                "version": 2,
+                "version": 3,
                 "analysis_uid": analysis.uid,
                 "analysis_digest": analysis.digest,
                 "mode": analysis.mode.value,
                 "number": analysis.number,
                 "verification": "UNVERIFIED",
+                "case_validation": (
+                    "INDEPENDENT_SOURCE_RULE_CONFORMANCE_AND_SOURCE_FIT"
+                    if analysis.mode is ElaborateMode.RULES_TO_CASES
+                    else None
+                ),
                 "origin": prepared.result.origin,
                 "overview": analysis.overview,
                 "inputs": list(analysis.inputs),

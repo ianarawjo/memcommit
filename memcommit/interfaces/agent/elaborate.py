@@ -26,7 +26,7 @@ from memcommit.interfaces.agent.contract import (
 )
 
 
-ELABORATE_AGENT_CONTRACT_VERSION = 3
+ELABORATE_AGENT_CONTRACT_VERSION = 4
 ELABORATE_AGENT_TOOL_NAME = "memcommit_elaborate"
 ElaborateAgentKind = Literal[
     "goal_to_rules",
@@ -136,6 +136,14 @@ def _serialize(result: ElaborateProposal) -> JsonObject:
                     }
                     for check in item.rule_checks
                 ],
+                "validation": {
+                    "source_fit": item.validation.source_fit,
+                    "source_fit_reason": item.validation.source_fit_reason,
+                    "rule_conformance": item.validation.rule_conformance,
+                    "conforming_source_rule_indexes": list(
+                        item.validation.conforming_source_rule_indexes
+                    ),
+                },
                 "target_context_refs": list(item.target_context_refs),
             }
             for item in result.cases

@@ -1,25 +1,25 @@
 # Distill and Elaborate application boundary matrix
 
-Last reviewed: 2026-08-22.
+Last reviewed: 2026-08-23.
 
 | Concern | Distill | Elaborate | Evidence state |
 | --- | --- | --- | --- |
 | Meaning | Case/Example Context propositions → evidence-linked generative Rules, including common language, tone, expression, and notation; optional Goal focuses relevance | Goal → at least one suggested Rule, or Rules → at least one suggested Case | `VERIFIED` against quoted café, lost-property, and Cloze reference families |
 | Typed application entry | `run_distill(DistillRequest, ...)` | `run_elaborate(ElaborateRequest, ...)` | `VERIFIED` source-level absence of command/terminal imports; fresh-process package isolation is tracked separately by `IMPORT-01` |
-| Production runtime | exact local Source port, pre-provider existing-Target freeze, atomic generated-Memory Add, and lazy provider factory | exact ordinary Context Source/Target freeze; recursive exact-Target ambient projection; atomic generated-Memory Add; lazy provider factory | `VERIFIED` focused tests |
+| Production runtime | exact local Source port, pre-provider existing-Target freeze, atomic generated-Memory Add, and lazy provider factory | exact ordinary Context Source/Target freeze; recursive exact-Target ambient projection; Rules-to-Cases generation followed by complete-frame Source Rule Conformance and Source Fit; atomic generated-Memory Add; lazy provider factory | `VERIFIED` focused tests |
 | Directional endpoints | omitted `--from`/`--to` fill from one Current snapshot; Source may equal Target | same four-way endpoint matrix; inline input has only a Target | `VERIFIED` CLI matrix and same-Context pre-image tests |
 | Ground adapter | physical Goal plus ordinary `/examples` and `/contexts` subtree Memories; legacy Goal + `WORKING_CANDIDATES` remains transitional | physical exact Goal or directly owned Rules; existing `/rules` or `/examples` destination lane is ambient; legacy Ground projects its corresponding Rule/Case lane | `VERIFIED` destination-lane and unrelated-lane tests |
-| Provider planning | complete Source frame plus all three quoted reference families, `WHOLE_FRAME_ONLY`; no default Rule-count ceiling, while an injected explicit ceiling remains enforceable | complete input tuple, all three quoted reference families, and exact Target ambient frame in both modes, `WHOLE_FRAME_ONLY`; exactly three proposals by default or exactly any positive `--n N` (`-n`/`--number`), with no ordinary count ceiling; count is over ordered, UID-backed occurrences and does not require unique content | `VERIFIED` prompt quotation, repeated-content exact counts, default unbounded count, optional injected-limit enforcement, Target budget inclusion, exact-count mismatch rejection, empty-response, and oversized-input miss tests |
+| Provider planning | complete Source frame plus all three quoted reference families, `WHOLE_FRAME_ONLY`; no default Rule-count ceiling, while an injected explicit ceiling remains enforceable | complete input tuple, all three quoted reference families, and exact Target ambient frame in one `WHOLE_FRAME_ONLY` generation turn; Rules-to-Cases then uses one complete Conformance frame and one exhaustive Fit question frame; exactly three proposals by default or exactly any positive `--n N` (`-n`/`--number`), with no ordinary count ceiling; count is over ordered, UID-backed occurrences and does not require unique content | `VERIFIED` prompt quotation, independent validation rejection/acceptance, repeated-content exact counts, default unbounded count, optional injected-limit enforcement, Target budget inclusion, exact-count mismatch rejection, empty-response, and oversized-input miss tests |
 | Prepared reuse | exact Source frame + Goal + config only | exact direction + normalized input tuple + exact number (default three) + Target ambient frame + config only | `VERIFIED` injectable port; no persisted artifact |
 | Projection reuse | rejected; changing any proposition can change the complete Rule set | rejected; proposal set is defined over the complete input | intentional `N/A` |
 | Configuration | one `DistillSemanticConfig` snapshot validates request, schema, live and prepared output; `max_rules=None` by default and a positive injected ceiling is optional | one `ElaborateSemanticConfig` snapshot validates request, schema, live and prepared output; both directional maxima are `None` by default and positive injected ceilings are optional | `VERIFIED` default-unbounded and nondefault-limit tests |
 | Session | process-local exact proposal; Impact does not persist it | process-local exact proposal; Impact does not persist it | intentional `N/A`; no durable session |
-| Publication | default standalone → existing Target, all Rules or none; legacy require-new Apply remains compatible | default standalone → existing Target, all proposal occurrences or none; equal content remains separately identified and materialized | `VERIFIED` endpoint, repeated-content UID/materialization, checkpoint, target/source drift, and no-partial-publication tests |
+| Publication | default standalone → existing Target, all Rules or none; legacy require-new Apply remains compatible | default standalone → existing Target, all proposal occurrences or none; a failed Case validation publishes none; equal content remains separately identified and materialized | `VERIFIED` endpoint, validation failure, repeated-content UID/materialization, checkpoint, target/source drift, and no-partial-publication tests |
 | Authority | standalone local Source; physical typed Ground inputs fail before provider until authority-aware projection exists | Source remains exact ordinary input; Target local embeds are exact; QUERY-only is name-only; granted proposal context requires `READ + EMBED + DERIVE + COMBINE`, while direct Add also requires `EXPORT + SAVE_ANALYSIS` before provider connection | `VERIFIED` local cycle/dedup, name-only query, grant proposal/Add success and denial, and ambient-drift tests |
 | Plain CLI | semantic generation has no default Rule-count ceiling; the Add receipt previews up to 20 exact added Memories while storing the complete Rule set, then prints exact Review and Undo routes; explicit Impact is read-only | the Add receipt uses the same bounded preview; `--n` (`-n`/`--number`) accepts any positive integer as the exact Rule or Case count and explicit Impact is read-only | `VERIFIED` |
 | TUI | Impact owns one compact proposal catalog; the hidden legacy/Ground read-only adapter retains its Viewer | Impact owns one compact Rule/Case proposal catalog, count-only Target ambient summary, and compact exhaustive-coverage detail; only the Ground read-only adapter retains its result Viewer | `VERIFIED` in component tests; refreshed Add/Impact PTY evidence is recorded separately |
-| Public Python | typed proposal with no default Rule-count ceiling; exact in-process Distill Apply; Ground projections | typed unverified proposal; Ground projections; exact count defaults to three and accepts any positive override in both directions | `VERIFIED` focused tests |
-| Agent/MCP | complete proposal with no default Rule-count ceiling, `effect: NONE` | proposal only; exact count defaults to three and its schema accepts any positive override; typed Target ambient/use trace, `effect: NONE`, `verification: UNVERIFIED` | Distill agent contract v1 and Elaborate agent contract v3; CLI mutation does not silently broaden callable authority |
+| Public Python | typed proposal with no default Rule-count ceiling; exact in-process Distill Apply; Ground projections | typed unverified proposal with per-Case Source Conformance/Fit evidence; Ground projections; exact count defaults to three and accepts any positive override in both directions | `VERIFIED` focused tests |
+| Agent/MCP | complete proposal with no default Rule-count ceiling, `effect: NONE` | proposal only; exact count defaults to three and its schema accepts any positive override; typed Target ambient/use and per-Case validation trace, `effect: NONE`, `verification: UNVERIFIED` | Distill agent contract v1 and Elaborate agent contract v4; CLI mutation does not silently broaden callable authority |
 | Clipboard | focused `y`, whole document `Y` | focused `y`, whole document `Y` | `VERIFIED` |
 
 ## Verification evidence
@@ -45,9 +45,11 @@ revalidates the exact frozen frame and appends to an existing Target in one
 checkpoint. Ground Distill cannot publish through its CLI, public result,
 agent tool, or MCP projection.
 
-Standalone Elaborate stores its proposals but never marks them verified or
-accepted. Ground Elaborate remains proposal-only. Stored generated Case
-propositions therefore remain hypotheses rather than fabricated evidence.
+Standalone Elaborate stores only Rules-to-Cases proposals that independently
+conform to every Source Rule and Fit the complete Source frame, but never marks
+them verified as truth or accepted as evidence. Ground Elaborate remains
+proposal-only. Stored generated Case propositions therefore remain hypotheses
+rather than fabricated evidence.
 
 ## Remaining gates
 
