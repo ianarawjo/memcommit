@@ -39,7 +39,6 @@ from memcommit.cli import app
 from memcommit.commands.atomize import _materialize_reviewed_workbench
 from memcommit.interfaces.tui.operations.atomize.screen import (
     _finding_map,
-    _list_fragments,
     _list_text,
     _source_map,
     render_atomize_workbench_snapshot,
@@ -1319,23 +1318,6 @@ def test_enter_drills_into_readings_and_toggles_the_selected_choice():
     assert "It accepts the previously described credential." in expanded
     assert "›   2. [ALTERNATIVE]" in expanded
     assert not any(marker in expanded for marker in ("○", "●", "◇"))
-    fragments = _list_fragments(
-        workbench,
-        analysis,
-        _finding_map(analysis),
-        _source_map(analysis),
-        expanded_issue_uid=first.uid,
-        reading_index=1,
-    )
-    cursor_markers = [
-        index
-        for index, fragment in enumerate(fragments)
-        if fragment[0] == "[SetCursorPosition]"
-    ]
-    assert len(cursor_markers) == 1
-    cursor_line = fragments[cursor_markers[0] + 1][1]
-    assert cursor_line.lstrip().startswith("›   2. [ALTERNATIVE]")
-
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("\t\x1b[B\r\t\x1b[B\rq")
         run_atomize_workbench_shell(

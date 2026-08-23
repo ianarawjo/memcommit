@@ -48,7 +48,6 @@ from memcommit.commands.meld_shell import (
     MeldShellAction,
     _comparison_issue_resolution_badges,
     _line,
-    _screen_text,
     run_meld_shell,
 )
 from memcommit.commands.resolution_workbench_shell import (
@@ -57,6 +56,7 @@ from memcommit.commands.resolution_workbench_shell import (
     ResolutionGlobalStrategy,
     _seeded_report_lines,
     _seeded_report_sections,
+    render_resolution_workbench_snapshot,
     resolution_seeded_report_fragments,
 )
 from memcommit.meld import (
@@ -5179,7 +5179,7 @@ def test_meld_escape_from_composer_discards_unsent_text(prefix):
     assert session.to_dict() == before
 
 
-def test_meld_screen_sanitizes_option_labels_and_truncates_by_cell_width():
+def test_meld_resolution_view_sanitizes_option_labels_and_truncates_text():
     left = ops.init("left/safe-screen")
     ops.add(left, "Cash compensation includes travel time.")
     right = ops.init("right/safe-screen")
@@ -5213,15 +5213,10 @@ def test_meld_screen_sanitizes_option_labels_and_truncates_by_cell_width():
         replace(current_turn, assessment=safe_assessment),
     )
 
-    rendered = "".join(
-        text
-        for _style, text in _screen_text(
-            session,
-            selected_index=0,
-            expanded=True,
-            choice_index=None,
-        )
-    )
+    view = MeldResolutionWorkbenchAdapter(session).view()
+    navigation = ResolutionNavigation(selected_item_uid=safe_issue.uid)
+    navigation.toggle_detail(view)
+    rendered = render_resolution_workbench_snapshot(view, navigation=navigation)
 
     assert "\x1b" not in rendered
     assert "\u202e" not in rendered

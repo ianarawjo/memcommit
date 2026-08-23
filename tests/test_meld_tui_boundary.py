@@ -21,7 +21,6 @@ def test_meld_command_enters_the_operation_tui_directly() -> None:
 def test_legacy_meld_shell_is_an_import_only_facade() -> None:
     assert legacy_shell.MeldShellAction is meld_screen.MeldShellAction
     assert legacy_shell.run_meld_shell is meld_screen.run_meld_shell
-    assert legacy_shell._screen_text is meld_screen._screen_text
 
     facade_path = Path(legacy_shell.__file__)
     module = ast.parse(facade_path.read_text(encoding="utf-8"))
@@ -43,6 +42,21 @@ def test_meld_uses_the_interface_neutral_compare_presenter() -> None:
     }
     assert "memcommit.comparison_present" in imported_modules
     assert "memcommit.commands.compare" not in imported_modules
+
+
+def test_meld_screen_has_one_live_workbench_host() -> None:
+    source = Path(meld_screen.__file__).read_text(encoding="utf-8")
+    module = ast.parse(source)
+    hosts = [
+        node
+        for node in module.body
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+        and node.name == "run_meld_shell"
+    ]
+
+    assert len(hosts) == 1
+    assert "_run_legacy_meld_shell" not in source
+    assert "def _screen_text" not in source
 
 
 def test_legacy_resolution_shell_is_an_import_only_facade() -> None:

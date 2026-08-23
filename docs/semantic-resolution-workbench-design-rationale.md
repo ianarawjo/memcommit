@@ -170,6 +170,16 @@ inspection surface even though its exact edit, add, and remove records have the
 same list/detail shape.  Sharing only low-level panes and composers did not
 address this higher interaction layer.
 
+The migration boundary is now structural as well as behavioral. Atomize and
+Meld each retain exactly one live operation host, and both delegate their
+interactive decision topology to the shared Resolution Session. Their former
+prompt-toolkit applications, private cursor grammars, and full-screen renderers
+were removed instead of being kept behind `_run_legacy_*` aliases. Thin command
+facades may preserve the public host import during migration, but they must not
+re-export deleted private renderers or become a second implementation. Static
+boundary tests count the live host definitions so a future compatibility edit
+cannot silently restore a shadow application.
+
 ## Common contract
 
 `ResolutionWorkbenchView` is a complete immutable projection of one operation

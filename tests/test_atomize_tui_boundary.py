@@ -72,3 +72,18 @@ def test_atomize_command_delegates_terminal_presentation_to_interfaces() -> None
     assert "memcommit.interfaces.cli.atomize" in source
     assert "memcommit.commands.atomize_workbench_shell" not in source
     assert "prompt_toolkit" not in source
+
+
+def test_atomize_screen_has_one_live_workbench_host() -> None:
+    module = ast.parse(INTERFACE_MODULES[1].read_text(encoding="utf-8"))
+    hosts = [
+        node
+        for node in module.body
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+        and node.name == "run_atomize_workbench_shell"
+    ]
+
+    assert len(hosts) == 1
+    assert "_run_legacy_atomize_workbench_shell" not in INTERFACE_MODULES[
+        1
+    ].read_text(encoding="utf-8")
