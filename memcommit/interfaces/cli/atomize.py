@@ -12,6 +12,11 @@ from memcommit.atomize import (
 from memcommit.interfaces.console.text import (
     safe_terminal_text,
 )
+from memcommit.interfaces.console.theme import (
+    SemanticColorRole,
+    memory_object_color_rgb,
+    semantic_color_rgb,
+)
 
 
 _CLASSIFICATION_COLORS = {
@@ -28,14 +33,79 @@ def _plural(count: int, singular: str, plural: str | None = None) -> str:
     return singular if count == 1 else (plural or f"{singular}s")
 
 
-def _render_apply_content(prefix: str, content: str) -> None:
-    """Render one selected full Memory without allowing terminal injection."""
+def _render_apply_memory(
+    action: str,
+    uid: str,
+    content: str,
+    *,
+    role: SemanticColorRole,
+) -> None:
+    """Render one exact applied Memory with independently styled semantics."""
 
     lines = safe_terminal_text(content).splitlines() or [""]
-    typer.echo(prefix + lines[0])
-    continuation = " " * len(prefix)
+    plain_prefix = f"  {action:<6} · [{uid[:8]}] "
+    styled_action = typer.style(
+        f"{action:<6}",
+        fg=semantic_color_rgb(role),
+        bold=True,
+    )
+    styled_prefix = f"  {styled_action} · [{uid[:8]}] "
+    typer.echo(
+        styled_prefix
+        + typer.style(lines[0], fg=memory_object_color_rgb())
+    )
+    # ANSI bytes in the styled prefix are not terminal columns, so continuation
+    # indentation must be based on the equivalent plain prefix.
+    continuation = " " * len(plain_prefix)
     for line in lines[1:]:
-        typer.echo(continuation + line)
+        typer.echo(
+            continuation
+            + typer.style(line, fg=memory_object_color_rgb())
+        )
+
+
+def _render_applied_splits(*, session: AtomizeAnalysisSession, result) -> None:
+    """Show a bounded proof of the exact source-to-child effects."""
+
+    sources = {item.memory_uid: item for item in session.items}
+    splits = tuple(
+        item for item in result.items if item.classification == "COMPOSITE"
+    )
+    if len(splits) != result.split_count:
+        raise ValueError("Atomize split count does not match its applied items.")
+
+    for index, item in enumerate(splits[:_APPLY_RESULT_SAMPLE_LIMIT], start=1):
+        source = sources.get(item.source_uid)
+        if source is None:
+            raise ValueError("Atomize applied source is missing from its analysis.")
+        if len(item.result_uids) != len(item.result_contents):
+            raise ValueError("Atomize child identities and contents must align.")
+        typer.echo("")
+        typer.echo(f"SPLIT {index}")
+        _render_apply_memory(
+            "REMOVE",
+            item.source_uid,
+            source.content,
+            role=SemanticColorRole.REMOVE,
+        )
+        for uid, content in zip(
+            item.result_uids,
+            item.result_contents,
+            strict=True,
+        ):
+            _render_apply_memory(
+                "ADD",
+                uid,
+                content,
+                role=SemanticColorRole.ADD,
+            )
+
+    remaining = len(splits) - min(len(splits), _APPLY_RESULT_SAMPLE_LIMIT)
+    if remaining:
+        typer.echo("")
+        typer.echo(
+            f"… {remaining} MORE {_plural(remaining, 'SPLIT').upper()} · see REVIEW"
+        )
 
 
 def render_atomize_apply_result(
@@ -53,7 +123,6 @@ def render_atomize_apply_result(
 
     typer.secho(
         f"ATOMIZE APPLIED · {context_name}",
-        fg=typer.colors.GREEN,
         bold=True,
     )
     typer.echo(
@@ -69,6 +138,9 @@ def render_atomize_apply_result(
             "recorded as applied-as-is",
             fg=typer.colors.YELLOW,
         )
+    _render_applied_splits(session=session, result=result)
+    if result.split_count:
+        typer.echo("")
     typer.echo(f"RECEIPT · {session.uid}")
     typer.echo(f"CHECKPOINT · {checkpoint_uid}")
     typer.echo(f"REVIEW · mem review atomize --context {context_name}")

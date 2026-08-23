@@ -120,7 +120,7 @@ pair publication, exact reanalysis pair-CAS, and synchronous restoration path. T
 | --- | --- | --- | --- |
 | Preview or workbench open | Analysis/workbench artifacts only; no Context checkpoint | existing preview, workbench, and Study-prewarm tests | typed analysis result must remain non-applying |
 | Ordinary exact-Context command | compatible complete analysis is created/reused and immediately applied in place; no launcher or workbench is opened | bare and explicit-Context execution tests | freeze exact name, complete scope, and in-place Output before ordinary Apply |
-| Compact direct receipt | split/child/keep counts and unresolved-judgment count hand off to exact post-application Review; a first-use prepared hit also states `ANALYSIS · EXACT PREWARM · PROVIDER NOT CALLED`; no Memory body is reprinted | compact receipt, prepared auto-Apply, and applied Review tests | presentation must not truncate durable evidence, hide prepared provenance, imply findings were resolved, or turn evidence into a post-success Viewer |
+| Compact direct receipt | split/child/keep counts and unresolved-judgment count accompany up to three exact source-to-child effect groups; additional splits hand off explicitly to exact post-application Review; a first-use prepared hit also states `ANALYSIS · EXACT PREWARM · PROVIDER NOT CALLED` | compact receipt, prepared auto-Apply, and applied Review tests | changed Memory content is bounded proof rather than a second report; presentation must name omitted splits, preserve durable evidence, retain prepared provenance, and never imply findings were resolved |
 | Applied Review reopen | complete analysis remains read-only and provider-free despite the post-split Context digest; each item title pairs source UID with its content preview | direct receipt/review and adapter tests | accept only exact terminal receipt/checkpoint evidence; reject response edits |
 | Close/cancel before final action | Saved review may remain; no Context effect | shared Resolution CLOSE and workbench persistence tests | application port must never be called |
 | Local current analysis, one or more splits | one in-place Context checkpoint, complete SPLIT/KEEP/PRESERVE trace | `test_saved_atomize_analysis_applies_once_with_recorded_lineage` | consume exact analysis and workbench revision |
@@ -279,9 +279,11 @@ explicit refresh, stale rejection, and analysis/workbench pair restoration.
 
 ## 2026-08-20 execution-receipt migration
 
-Atomize execution now ends with effect counts, analysis/session receipt,
-checkpoint, post-application `mem review atomize`, and recovery. It no longer
-reprints sample split contents after Apply. Required responses remain owned by
-the Atomize invocation; Review accepts only an applied analysis and is
+Atomize execution ends with effect counts, a bounded proof of up to three exact
+source-to-child split groups, analysis/session receipt, checkpoint,
+post-application `mem review atomize`, and recovery. The bound keeps large
+receipts scannable while an explicit omitted-split line prevents compactness
+from being mistaken for complete effect evidence. Required responses remain
+owned by the Atomize invocation; Review accepts only an applied analysis and is
 read-only. This supersedes earlier wording that treated Review as an execution
 resume surface. The full analysis is retained, not discarded.

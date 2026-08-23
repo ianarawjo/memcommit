@@ -619,8 +619,11 @@ def test_bare_atomize_receipt_samples_content_and_applied_review_remains_complet
     assert "ATOMIZE APPLIED" in applied.output
     assert "EFFECTS · SPLIT 4 · CHILDREN 8 · KEEP 0" in applied.output
     assert "REVIEW · mem review atomize" in applied.output
-    for source in sources:
-        assert source.content not in applied.output
+    for source in sources[:3]:
+        assert source.content in applied.output
+    assert sources[3].content not in applied.output
+    assert applied.output.count("SPLIT ") >= 3
+    assert "… 1 MORE SPLIT · see REVIEW" in applied.output
     assert len(provider.payloads) == 1
 
     checkpoints_after_apply = store.list_checkpoints(ctx.name)
