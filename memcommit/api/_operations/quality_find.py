@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
+from dataclasses import replace
 
 import memcommit.ops as ops
 from memcommit.api._runtime import ClientRuntime
@@ -20,6 +21,7 @@ from memcommit.api.quality_find import QualityFindResult
 from memcommit.authority.access import GrantedReadStore, resolve_context_access
 from memcommit.context_locator import resolve_context_locator
 from memcommit.derived_policy import authorize_combination
+from memcommit.direct_item_duplicates import find_exact_duplicate_groups
 from memcommit.findings import ConflictReport, FindingsError
 from memcommit.profile_config import (
     ProfileConfigError,
@@ -95,9 +97,7 @@ def _source(
         authorize_combination(accesses)
     contexts = tuple(
         (
-            GrantedReadStore(access, registry=registry).load_direct(
-                access.display_name
-            )
+            GrantedReadStore(access, registry=registry).load_direct(access.display_name)
             if access.is_granted
             else access.store.load_direct(access.context_name)
         )
@@ -145,6 +145,15 @@ def find_quality(
             lambda: safe_semantic_provider(runtime),
             context_name_by_uid=source.memory_context_names,
         )
+        if kind == "duplicates" and len(source.contexts) == 1:
+            report = replace(
+                report,
+                exact_item_groups=tuple(
+                    group
+                    for group in find_exact_duplicate_groups(source.contexts[0])
+                    if group.item_kind != "MEMORY"
+                ),
+            )
         session = create_quality_find_workbench(kind, source, report)
         handoffs = quality_finding_handoffs(session)
     except SemanticProviderFailure:
@@ -160,6 +169,7 @@ def find_quality(
         memory_count=report.memory_count,
         pair_count=(report.pair_count if isinstance(report, ConflictReport) else None),
         handoffs=handoffs,
+        exact_item_groups=(report.exact_item_groups if kind == "duplicates" else ()),
     )
 
 

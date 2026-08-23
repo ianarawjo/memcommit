@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from memcommit.direct_item_duplicates import ExactDuplicateGroup
 from memcommit.quality_finding_handoff import QualityFindingHandoff
 
 
@@ -17,6 +18,7 @@ class QualityFindResult:
     memory_count: int
     pair_count: int | None
     handoffs: tuple[QualityFindingHandoff, ...]
+    exact_item_groups: tuple[ExactDuplicateGroup, ...] = ()
 
     @property
     def evidence(self) -> tuple[QualityFindingHandoff, ...]:

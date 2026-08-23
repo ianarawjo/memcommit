@@ -27,6 +27,10 @@ from memcommit.dedup_application import (
     validate_dedup_selections,
 )
 from memcommit.dedup_planning import build_dedup_components
+from memcommit.direct_item_duplicates import (
+    ExactDuplicateGroup,
+    find_exact_duplicate_groups,
+)
 from memcommit.profile_config import ProfileRegistry
 from memcommit.review import direct_context_digest
 from memcommit.store import MemoryStore, context_record_digest
@@ -40,6 +44,7 @@ def _revision(
     display_name: str,
     context_digest: str,
     component_uids: tuple[str, ...],
+    exact_item_groups: tuple[ExactDuplicateGroup, ...],
 ) -> str:
     payload = {
         "contract": DEDUP_CONTRACT_VERSION,
@@ -50,6 +55,15 @@ def _revision(
             "digest": context_digest,
         },
         "components": list(component_uids),
+        "exact_item_groups": [
+            {
+                "item_kind": group.item_kind,
+                "survivor_uid": group.survivor_uid,
+                "absorbed_uids": list(group.absorbed_uids),
+                "summary": group.summary,
+            }
+            for group in exact_item_groups
+        ],
         "handoffs": [handoff.uid for handoff in request.handoffs],
     }
     return hashlib.sha256(
@@ -125,6 +139,15 @@ class MemoryStoreDedupPort:
             item for item in context.iter_items() if isinstance(item, Memory)
         )
         components = build_dedup_components(request, memories)
+        exact_item_groups = (
+            tuple(
+                group
+                for group in find_exact_duplicate_groups(context)
+                if group.item_kind != "MEMORY"
+            )
+            if request.exact_source is not None
+            else ()
+        )
         digest = context_record_digest(context)
         return FrozenDedupPlan(
             request=request,
@@ -139,8 +162,10 @@ class MemoryStoreDedupPort:
                 display_name=access.display_name,
                 context_digest=digest,
                 component_uids=tuple(component.uid for component in components),
+                exact_item_groups=exact_item_groups,
             ),
             components=components,
+            exact_item_groups=exact_item_groups,
             granted_binding=(
                 freeze_granted_context_binding(access)
                 if access.view is not None
@@ -201,15 +226,25 @@ class MemoryStoreDedupPort:
         ):
             raise TypeError("Dedun Apply requires a frozen plan and selections.")
         selections = validate_dedup_selections(plan, selections)
-        survivor_uids = tuple(selection.survivor_uid for selection in selections)
-        absorbed_uids = tuple(
+        semantic_survivor_uids = tuple(
+            selection.survivor_uid for selection in selections
+        )
+        semantic_absorbed_uids = tuple(
             member.uid
             for component, selection in zip(plan.components, selections)
             for member in component.members
             if member.uid != selection.survivor_uid
         )
+        exact_survivor_uids = tuple(
+            group.survivor_uid for group in plan.exact_item_groups
+        )
+        exact_absorbed_uids = tuple(
+            uid for group in plan.exact_item_groups for uid in group.absorbed_uids
+        )
+        survivor_uids = semantic_survivor_uids + exact_survivor_uids
+        absorbed_uids = semantic_absorbed_uids + exact_absorbed_uids
         if not absorbed_uids:
-            raise DedupError("Dedun Apply requires at least one absorbed Memory.")
+            raise DedupError("Dedun Apply requires at least one absorbed direct item.")
         access = self._revalidated_access(plan)
         with authorized_context_mutation(
             access,
@@ -229,7 +264,15 @@ class MemoryStoreDedupPort:
                 inbound = self._inbound_references(
                     access.store,
                     context_uid=plan.context_uid,
-                    absorbed_uids=set(absorbed_uids),
+                    absorbed_uids={
+                        *semantic_absorbed_uids,
+                        *(
+                            uid
+                            for group in plan.exact_item_groups
+                            if group.item_kind == "MEMORY"
+                            for uid in group.absorbed_uids
+                        ),
+                    },
                 )
                 if inbound:
                     locations = ", ".join(
@@ -240,11 +283,12 @@ class MemoryStoreDedupPort:
                         "Dedun cannot absorb Memories with inbound references in "
                         f"version 1: {locations}."
                     )
-                for uid in absorbed_uids:
+                for uid in semantic_absorbed_uids:
                     if not isinstance(current.memories.get(uid), Memory):
                         raise DedupConflictError(
                             f"Dedun Memory '{uid[:8]}' is no longer directly owned."
                         )
+                for uid in absorbed_uids:
                     current.remove(uid)
                 checkpoint = access.store._save_command_locked(  # noqa: SLF001
                     current,
@@ -294,14 +338,25 @@ class MemoryStoreDedupPort:
                                     plan.components, selections, strict=True
                                 )
                             ],
+                            "exact_item_groups": [
+                                {
+                                    "item_kind": group.item_kind,
+                                    "survivor_uid": group.survivor_uid,
+                                    "absorbed_uids": list(group.absorbed_uids),
+                                    "summary": group.summary,
+                                }
+                                for group in plan.exact_item_groups
+                            ],
                             "redundancy_evidence_uids": [
                                 handoff.uid for handoff in plan.request.handoffs
                             ],
                             **grant_checkpoint_args(access),
                         },
                         description=(
-                            f"Resolved {len(plan.components)} redundancy group(s); "
-                            f"absorbed {len(absorbed_uids)} Memory item(s)"
+                            "Resolved "
+                            f"{len(plan.components) + len(plan.exact_item_groups)} "
+                            "redundancy group(s); absorbed "
+                            f"{len(absorbed_uids)} direct item(s)"
                         ),
                     ),
                     expected_context_digest=plan.context_digest,
@@ -318,6 +373,7 @@ class MemoryStoreDedupPort:
             selections=selections,
             survivor_uids=survivor_uids,
             absorbed_uids=absorbed_uids,
+            exact_item_groups=plan.exact_item_groups,
         )
 
 

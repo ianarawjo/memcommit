@@ -1,4 +1,4 @@
-"""Remove byte-identical direct Memories without semantic inference or review."""
+"""Remove same-role exact duplicate direct items without semantic inference."""
 
 from __future__ import annotations
 
@@ -21,7 +21,7 @@ def cmd(
         typer.Argument(help="Context to deduplicate (defaults to current)"),
     ] = None,
 ) -> None:
-    """Remove later byte-identical Memories, retaining the first existing UID."""
+    """Remove later same-role exact items, retaining the first existing UID."""
 
     active_store = MemoryStore(create=False)
     try:
@@ -54,11 +54,11 @@ def cmd(
 
     context_label = display_escape_text(receipt.context_name)
     if receipt.removed_count == 0:
-        typer.echo(f"No exact duplicate Memories in '{context_label}'.")
+        typer.echo(f"No exact duplicate direct items in '{context_label}'.")
         return
     typer.secho(
         f"Deduplicated '{context_label}': removed {receipt.removed_count} exact "
-        f"duplicate Memory item(s); kept {len(receipt.groups)} original UID(s).",
+        f"duplicate direct item(s); kept {len(receipt.groups)} original UID(s).",
         fg=typer.colors.GREEN,
     )
     typer.echo(f"Checkpoint [{receipt.checkpoint_uid[:8]}] · recovery: mem undo")

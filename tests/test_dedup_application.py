@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import uuid
 
@@ -17,7 +18,12 @@ from memcommit.cli import app
 from memcommit.commands.quality_find_workbench import (
     run_quality_find_resolution_workbench,
 )
-from memcommit.context import MemoryRef
+from memcommit.context import Context, MemoryRef, QueryContextRef
+from memcommit.context_snapshot import (
+    CONTEXT_SNAPSHOT_SCHEMA_VERSION,
+    ContextSnapshotRef,
+    context_snapshot_digest,
+)
 from memcommit.dedup_application import (
     DedupAuthorityError,
     DedupConflictError,
@@ -29,6 +35,7 @@ from memcommit.dedup_application import (
     recommended_dedup_selections,
 )
 from memcommit.dedup_runtime import MemoryStoreDedupPort
+from memcommit.direct_item_duplicates import find_exact_duplicate_groups
 from memcommit.findings import DuplicateFinding, DuplicateReport
 from memcommit.interfaces.agent import (
     DEDUP_AGENT_TOOL_NAME,
@@ -129,6 +136,88 @@ def _strict_handoffs(context, *findings: DuplicateFinding):
         ),
     )
     return quality_finding_handoffs(session)
+
+
+def _role_aware_exact_fixture(store: MemoryStore):
+    """Persist one frame with same-role duplicates and cross-role overlap."""
+
+    source = ops.init("dedup/role-source")
+    source_memory = ops.add(source, "same visible content")
+    other_source = ops.init("dedup/other-source")
+    other_memory = ops.add(other_source, "same visible content")
+    target = ops.init("dedup/role-target")
+    owned = ops.add(target, "same visible content")
+
+    live_refs = tuple(
+        MemoryRef(
+            uid=str(uuid.uuid4()),
+            target_context_uid=source.uid,
+            target_context_name=source.name,
+            target_memory_uid=source_memory.uid,
+            target=source_memory,
+        )
+        for _ in range(2)
+    )
+    digest = hashlib.sha256(source_memory.content.encode("utf-8")).hexdigest()
+    snapshot_refs = tuple(
+        MemoryRef(
+            uid=str(uuid.uuid4()),
+            target_context_uid=source.uid,
+            target_context_name=source.name,
+            target_memory_uid=source_memory.uid,
+            target=source_memory,
+            snapshot_content_sha256=digest,
+        )
+        for _ in range(2)
+    )
+    other_digest = hashlib.sha256(other_memory.content.encode("utf-8")).hexdigest()
+    other_snapshot = MemoryRef(
+        uid=str(uuid.uuid4()),
+        target_context_uid=other_source.uid,
+        target_context_name=other_source.name,
+        target_memory_uid=other_memory.uid,
+        target=other_memory,
+        snapshot_content_sha256=other_digest,
+    )
+
+    package = {
+        "schema_version": CONTEXT_SNAPSHOT_SCHEMA_VERSION,
+        "root": {"uid": source.uid, "name": source.name},
+        "recursive": False,
+        "lexical_context_names": [source.name],
+        "contexts": [source.to_dict()],
+    }
+    package_digest = context_snapshot_digest(package)
+    context_snapshots = tuple(
+        ContextSnapshotRef(
+            uid=str(uuid.uuid4()),
+            target_context_uid=source.uid,
+            target_context_name=source.name,
+            snapshot_package=package,
+            snapshot_content_sha256=package_digest,
+        )
+        for _ in range(2)
+    )
+
+    for item in (
+        *live_refs,
+        *snapshot_refs,
+        other_snapshot,
+        Context(uid=source.uid, name=source.name),
+        *context_snapshots,
+    ):
+        target.add(item)
+    for context in (source, other_source, target):
+        store.save(context)
+    store.set_current(target.name)
+    return (
+        target,
+        owned,
+        live_refs,
+        snapshot_refs,
+        other_snapshot,
+        context_snapshots,
+    )
 
 
 def test_dedup_builds_transitive_components_and_keeps_context_order(isolated_store):
@@ -418,11 +507,14 @@ def test_cli_and_public_api_share_semantic_dedun_application(isolated_store):
     assert result.exit_code == 0
     assert public_plan.revision in click.unstyle(result.stdout)
     assert "RECOMMENDED SURVIVOR" in click.unstyle(result.stdout)
-    assert click.style(
-        "RECOMMENDED SURVIVOR",
-        fg=semantic_color_rgb(SemanticColorRole.ADD),
-        bold=True,
-    ) in result.stdout
+    assert (
+        click.style(
+            "RECOMMENDED SURVIVOR",
+            fg=semantic_color_rgb(SemanticColorRole.ADD),
+            bold=True,
+        )
+        in result.stdout
+    )
 
     receipt = client.apply_dedun(
         public_plan,
@@ -430,6 +522,58 @@ def test_cli_and_public_api_share_semantic_dedun_application(isolated_store):
     )
     assert receipt.survivor_uids == (second.uid,)
     assert first.uid in receipt.absorbed_uids
+
+
+def test_public_dedun_plan_exposes_and_applies_exact_embed_groups(
+    isolated_store,
+):
+    store = MemoryStore()
+    context, first, second, _third, _unrelated = _context(store)
+    source = ops.init("dedun/public-embed-source")
+    source_memory = ops.add(source, "live content")
+    refs = tuple(
+        MemoryRef(
+            uid=str(uuid.uuid4()),
+            target_context_uid=source.uid,
+            target_context_name=source.name,
+            target_memory_uid=source_memory.uid,
+            target=source_memory,
+        )
+        for _ in range(2)
+    )
+    for reference in refs:
+        context.add(reference)
+    store.save(source)
+    store.save(context)
+    handoff = _strict_handoffs(
+        context,
+        DuplicateFinding(
+            first,
+            second,
+            "SEMANTIC_EQUIVALENT",
+            "The claims are substitutable.",
+        ),
+    )[0]
+    client = MemCommitClient(root=isolated_store, create=False)
+
+    plan = client.plan_dedun((handoff,))
+
+    assert len(plan.components) == 1
+    assert len(plan.exact_item_groups) == 1
+    assert plan.exact_item_groups[0].item_kind == "MEMORY_EMBED"
+    assert plan.exact_item_groups[0].survivor_uid == refs[0].uid
+    receipt = client.apply_dedun(
+        plan,
+        survivors={plan.components[0].uid: first.uid},
+    )
+    assert second.uid in receipt.absorbed_uids
+    assert refs[1].uid in receipt.absorbed_uids
+    current = store.load_direct(context.name)
+    assert first.uid in current.memories
+    assert second.uid not in current.memories
+    assert refs[0].uid in current.memories
+    assert refs[1].uid not in current.memories
+    assert len(store.list_checkpoints(context.name)) == 1
 
 
 def test_agent_dedup_replays_revision_and_survivors(isolated_store):
@@ -542,6 +686,139 @@ def test_cli_dedun_replay_applies_the_reviewed_survivor(isolated_store):
     assert second.uid in current.memories
 
 
+def test_exact_discovery_groups_only_same_role_and_exact_provenance(isolated_store):
+    store = MemoryStore()
+    (
+        target,
+        owned,
+        live_refs,
+        snapshot_refs,
+        other_snapshot,
+        context_snapshots,
+    ) = _role_aware_exact_fixture(store)
+
+    current = store.load_for_update(target.name)
+    query_refs = tuple(
+        QueryContextRef(
+            uid=str(uuid.uuid4()),
+            name="query-only",
+            target_source_uid="opaque-source",
+            provider="codex_chatgpt",
+        )
+        for _ in range(2)
+    )
+    for reference in query_refs:
+        current.add(reference)
+    store.save(current)
+
+    groups = find_exact_duplicate_groups(store.load_direct(target.name))
+
+    assert [group.item_kind for group in groups] == [
+        "MEMORY_EMBED",
+        "MEMORY_REFERENCE",
+        "CONTEXT_REFERENCE",
+    ]
+    assert groups[0].survivor_uid == live_refs[0].uid
+    assert groups[0].absorbed_uids == (live_refs[1].uid,)
+    assert groups[1].survivor_uid == snapshot_refs[0].uid
+    assert groups[1].absorbed_uids == (snapshot_refs[1].uid,)
+    assert groups[2].survivor_uid == context_snapshots[0].uid
+    assert groups[2].absorbed_uids == (context_snapshots[1].uid,)
+    grouped_uids = {
+        uid for group in groups for uid in (group.survivor_uid, *group.absorbed_uids)
+    }
+    assert owned.uid not in grouped_uids
+    assert other_snapshot.uid not in grouped_uids
+    assert all(reference.uid not in grouped_uids for reference in query_refs)
+
+
+def test_cli_dedup_removes_same_role_exact_links_in_one_checkpoint(isolated_store):
+    store = MemoryStore()
+    (
+        target,
+        owned,
+        live_refs,
+        snapshot_refs,
+        other_snapshot,
+        context_snapshots,
+    ) = _role_aware_exact_fixture(store)
+
+    result = runner.invoke(app, ["dedup"])
+
+    assert result.exit_code == 0, result.output
+    assert "removed 3 exact duplicate direct item(s)" in result.stdout
+    current = store.load_direct(target.name)
+    assert owned.uid in current.memories
+    assert live_refs[0].uid in current.memories
+    assert live_refs[1].uid not in current.memories
+    assert snapshot_refs[0].uid in current.memories
+    assert snapshot_refs[1].uid not in current.memories
+    assert other_snapshot.uid in current.memories
+    assert context_snapshots[0].uid in current.memories
+    assert context_snapshots[1].uid not in current.memories
+    checkpoints = store.list_checkpoints(target.name)
+    assert len(checkpoints) == 1
+    assert checkpoints[0]["args"]["contract"] == "exact-dedup-v2"
+    assert [group["item_kind"] for group in checkpoints[0]["args"]["groups"]] == [
+        "MEMORY_EMBED",
+        "MEMORY_REFERENCE",
+        "CONTEXT_REFERENCE",
+    ]
+
+
+def test_cli_dedun_includes_role_aware_dedup_without_cross_role_edges(
+    isolated_store,
+):
+    store = MemoryStore()
+    (
+        target,
+        owned,
+        live_refs,
+        snapshot_refs,
+        other_snapshot,
+        context_snapshots,
+    ) = _role_aware_exact_fixture(store)
+
+    result = runner.invoke(app, ["dedun"])
+
+    assert result.exit_code == 0, result.output
+    assert "absorbed 3 redundant direct item(s)" in result.output
+    assert "3 DUP / EXACT links" in result.output
+    current = store.load_direct(target.name)
+    assert owned.uid in current.memories
+    assert live_refs[0].uid in current.memories
+    assert snapshot_refs[0].uid in current.memories
+    assert other_snapshot.uid in current.memories
+    assert context_snapshots[0].uid in current.memories
+    assert live_refs[1].uid not in current.memories
+    assert snapshot_refs[1].uid not in current.memories
+    assert context_snapshots[1].uid not in current.memories
+    checkpoints = store.list_checkpoints(target.name)
+    assert len(checkpoints) == 1
+    assert checkpoints[0]["command"] == "dedun"
+    assert checkpoints[0]["args"]["contract"] == "dedun-v3"
+    assert checkpoints[0]["args"]["components"] == []
+    assert [
+        group["item_kind"] for group in checkpoints[0]["args"]["exact_item_groups"]
+    ] == ["MEMORY_EMBED", "MEMORY_REFERENCE", "CONTEXT_REFERENCE"]
+
+    review = runner.invoke(
+        app,
+        [
+            "review",
+            "dedun",
+            "--receipt",
+            checkpoints[0]["uid"][:8],
+            "--snapshot",
+        ],
+    )
+    assert review.exit_code == 0, review.output
+    assert "RESOLVED GROUPS · 3" in review.output
+    assert "MEMORY_EMBED" in review.output
+    assert "MEMORY_REFERENCE" in review.output
+    assert "CONTEXT_REFERENCE" in review.output
+
+
 def test_cli_dedup_removes_only_exact_content_without_review(isolated_store):
     store = MemoryStore()
     context = ops.init("dedup/exact")
@@ -554,7 +831,7 @@ def test_cli_dedup_removes_only_exact_content_without_review(isolated_store):
     result = runner.invoke(app, ["dedup"])
 
     assert result.exit_code == 0
-    assert "removed 1 exact duplicate Memory item(s)" in result.stdout
+    assert "removed 1 exact duplicate direct item(s)" in result.stdout
     current = store.load_direct(context.name)
     assert first.uid in current.memories
     assert surface.uid in current.memories
@@ -567,10 +844,12 @@ def test_help_teaches_exact_dedup_read_only_redundancy_and_applying_dedun():
     dedun_help = runner.invoke(app, ["dedun", "--help"])
 
     assert root_help.exit_code == 0
-    assert "byte-identical duplicates (dup)" in root_help.stdout
-    assert "exact plus semantic redundancies" in root_help.stdout
+    assert "same-role exact duplicates (dup)" in root_help.stdout
+    assert "role-aware exact plus direct-Memory" in root_help.stdout
+    assert "semantic redundancies (dun)" in root_help.stdout
     assert "find-redundancies" in root_help.stdout
-    assert "Report exact and semantically redundant direct Memories" in root_help.stdout
+    assert "Report same-role exact direct items" in root_help.stdout
+    assert "redundant direct Memories" in root_help.stdout
     assert "changing any Source Context" not in root_help.stdout
     assert "consolidate" not in root_help.stdout
     assert dedun_help.exit_code == 0
@@ -615,6 +894,24 @@ def test_public_find_duplicates_is_provider_free_and_read_only(isolated_store):
     assert surface.uid not in result.groups[0].absorbed_uids
     assert store._context_file(context.name).read_bytes() == before
     assert store.list_checkpoints(context.name) == []
+
+
+def test_public_find_duplicates_projects_role_aware_exact_groups(isolated_store):
+    store = MemoryStore()
+    target, *_rest = _role_aware_exact_fixture(store)
+    before = store._context_file(target.name).read_bytes()
+
+    result = MemCommitClient(root=isolated_store, create=False).find_duplicates()
+
+    assert result.item_count == len(target.ordered_uids())
+    assert [group.item_kind for group in result.groups] == [
+        "MEMORY_EMBED",
+        "MEMORY_REFERENCE",
+        "CONTEXT_REFERENCE",
+    ]
+    assert result.duplicate_count == 3
+    assert store._context_file(target.name).read_bytes() == before
+    assert store.list_checkpoints(target.name) == []
 
 
 def test_exact_dedup_blocks_inbound_reference_without_checkpoint(isolated_store):

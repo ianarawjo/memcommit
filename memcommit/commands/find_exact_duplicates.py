@@ -1,4 +1,4 @@
-"""Provider-free read-only discovery of byte-identical direct Memories."""
+"""Provider-free read-only discovery of same-role exact direct items."""
 
 from __future__ import annotations
 
@@ -96,9 +96,9 @@ def cmd(
     context_label = display_escape_text(access.display_name)
     typer.echo(f"Context: {context_label}")
     typer.echo(
-        f"  {report.memory_count} direct memories, "
+        f"  {report.item_count} direct items ({report.memory_count} Memories), "
         f"{len(report.groups)} exact duplicate group(s), "
-        f"{report.duplicate_count} later duplicate Memory item(s)"
+        f"{report.duplicate_count} later duplicate direct item(s)"
     )
     if not report.groups:
         typer.echo("\n  (no exact duplicate groups)")
@@ -107,7 +107,7 @@ def cmd(
     for index, group in enumerate(report.groups, start=1):
         typer.echo()
         typer.secho(
-            f"  DUP / EXACT  {index}/{len(report.groups)}",
+            f"  DUP / EXACT  {index}/{len(report.groups)} \u00b7 {group.item_kind}",
             bold=True,
         )
         member_uids = (group.survivor_uid, *group.absorbed_uids)
@@ -115,10 +115,14 @@ def cmd(
         render_cleanup_member(
             "SURVIVOR",
             uid_prefixes[group.survivor_uid],
-            content=group.content,
+            content=group.content if group.content is not None else group.summary,
         )
         for uid in group.absorbed_uids:
-            render_cleanup_member("ABSORB", uid_prefixes[uid], content=group.content)
+            render_cleanup_member(
+                "ABSORB",
+                uid_prefixes[uid],
+                content=group.content if group.content is not None else group.summary,
+            )
     typer.echo("\n  Read-only report. Apply exact cleanup with mem dedup.")
 
 

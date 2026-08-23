@@ -245,18 +245,18 @@ _OPERATIONS = (
     ),
     _operation(
         "dedup",
-        "Remove byte-identical duplicates (dup) immediately, retaining the "
-        "first existing UID for each exact-content group.",
-        "Direct Context Memories -> exact-content groups -> atomic removal",
+        "Remove same-role exact duplicates (dup) immediately, retaining the "
+        "first existing UID for each role-specific identity group.",
+        "Direct Context items -> role-aware exact groups -> atomic removal",
         ExecutionKind.DETERMINISTIC,
         "Deletes later exact copies in one checkpoint; no provider or TUI",
-        "One exact direct Context; inbound references block removal",
+        "One exact direct Context; cross-role items never merge and inbound references block Memory removal",
     ),
     _operation(
         "dedun",
-        "Immediately resolve exact plus semantic redundancies (dun), retaining "
-        "the first existing Memory in each complete DUN group.",
-        "Direct Context Memories -> exact and semantic groups -> deterministic survivor -> atomic Apply -> receipt",
+        "Immediately resolve role-aware exact plus direct-Memory semantic "
+        "redundancies (dun), retaining the first existing UID in each group.",
+        "Direct Context items -> role-aware DUP + Memory semantic DUN groups -> atomic Apply -> receipt",
         ExecutionKind.SEMANTIC,
         "The invocation expresses Apply intent and publishes at most one checkpoint",
         "One exact direct Context; inbound references block version 1 Apply",
@@ -279,16 +279,16 @@ _OPERATIONS = (
     ),
     _operation(
         "find-duplicates",
-        "Report byte-identical duplicate direct Memories.",
-        "Direct Context Memories -> exact DUP groups",
+        "Report same-role exact duplicate direct items.",
+        "Direct Context items -> role-aware exact DUP groups",
         ExecutionKind.DETERMINISTIC,
         "Creates an exact-duplicate report without editing the Source",
         "One exact direct Context",
     ),
     _operation(
         "find-redundancies",
-        "Report exact and semantically redundant direct Memories.",
-        "Direct Context Memories -> DUP + semantic DUN evidence report",
+        "Report same-role exact direct items and semantically redundant direct Memories.",
+        "Direct Context items -> role-aware DUP + Memory semantic DUN evidence report",
         ExecutionKind.SEMANTIC,
         "Creates a redundancy report; --select can review multiple readable targets",
         "One exact direct Context by default; explicit --select enables readable multi-target scope",

@@ -22,10 +22,13 @@ def _semantic_line(label: str, value: str, role: SemanticColorRole) -> None:
 
 
 def render_dedup_plan_plain(plan: FrozenDedupPlan) -> None:
-    typer.secho("DEDUN · CONFIRMED SEMANTIC REDUNDANCIES", bold=True)
+    typer.secho("DEDUN · CONFIRMED EXACT + SEMANTIC REDUNDANCIES", bold=True)
     _line("CONTEXT", plan.display_name)
     _line("REVISION", plan.revision)
-    _line("COMPONENTS", str(len(plan.components)))
+    _line(
+        "GROUPS",
+        str(len(plan.components) + len(plan.exact_item_groups)),
+    )
     for index, component in enumerate(plan.components, 1):
         typer.echo()
         typer.secho(f"COMPONENT {index} · {component.uid}", bold=True)
@@ -46,6 +49,18 @@ def render_dedup_plan_plain(plan: FrozenDedupPlan) -> None:
                 f"{evidence.relation} · {evidence.left_uid} ↔ {evidence.right_uid}",
             )
             _line("WHY", evidence.reason)
+    for offset, group in enumerate(plan.exact_item_groups, 1):
+        index = len(plan.components) + offset
+        typer.echo()
+        typer.secho(f"COMPONENT {index} · {group.item_kind}", bold=True)
+        _semantic_line(
+            "RECOMMENDED SURVIVOR",
+            f"[{group.survivor_uid}] · {group.summary}",
+            SemanticColorRole.ADD,
+        )
+        for uid in group.absorbed_uids:
+            _line("MEMBER", f"[{uid}] · {group.summary}")
+        _line("EVIDENCE", "EXACT · same role-specific identity")
     typer.echo()
     typer.echo(
         "APPLY · rerun every --evidence, then add one "

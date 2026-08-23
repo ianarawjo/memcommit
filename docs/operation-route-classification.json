@@ -163,14 +163,14 @@
           "docs/quality-finding-handoff-design-rationale.md",
           "docs/resolution-lifecycle-design-rationale.md"
         ],
-        "reason": "Dedun reuses the closed exact-plus-semantic DUN analysis, applies the deterministic earliest-UID survivor in direct CLI execution, and shares Grant revalidation, reference blocking, exact replay, and one checkpointed Apply across CLI, Python, agent, and MCP routes."
+        "reason": "Dedun reuses the closed exact-plus-semantic Memory analysis, includes same-role exact Embed and Reference groups, forbids cross-role edges, applies deterministic earliest-UID survivors, and shares Grant revalidation, reference blocking, exact replay, and one checkpointed Apply across exposed routes."
       },
       "dedup": {
         "evidence": [
           "docs/dedup-callable-boundary-matrix.md",
           "docs/dedup-design-rationale.md"
         ],
-        "reason": "The direct CLI and public Python routes enter one provider-free exact-content application boundary that retains first-in-Context UIDs and removes later byte-identical copies in one checkpoint."
+        "reason": "The direct CLI and public Python routes enter one provider-free role-aware exact application boundary that retains first-in-Context occurrence UIDs, never merges roles, and removes later same-identity Memory, Embed, or Reference copies in one checkpoint."
       },
       "find-duplicates": {
         "evidence": [
@@ -178,7 +178,7 @@
           "docs/find-duplicates-callable-boundary-matrix.md",
           "docs/dedup-design-rationale.md"
         ],
-        "reason": "The direct CLI and public Python routes share one provider-free exact-group analysis and publish a complete typed read-only report without mutation or checkpoint creation."
+        "reason": "The direct CLI and public Python routes share one provider-free role-aware exact-group analysis for eligible Memory, Embed, and Reference items and publish a complete typed read-only report without mutation or checkpoint creation."
       },
       "find-redundancies": {
         "evidence": [
@@ -188,7 +188,7 @@
           "docs/quality-finding-handoff-design-rationale.md",
           "docs/read-report-lifecycle-design-rationale.md"
         ],
-        "reason": "CLI, public Python, agent, and MCP routes share one frozen readable-frame exact-plus-semantic DUN analysis and typed read-only report; only the separate Dedun adapter enters the survivor and Apply boundary."
+        "reason": "CLI, public Python, agent, and MCP routes share one frozen readable-frame DUN analysis: same-role exact direct items remain typed and semantic inference remains limited to owned Memories; only the separate Dedun adapter enters the survivor and Apply boundary."
       },
       "sever": {
         "evidence": [

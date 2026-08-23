@@ -12,6 +12,7 @@ from memcommit.api.dedup import (
     DedunEvidenceResult,
     DedunMemberResult,
     DedunPlanResult,
+    ExactDedupGroupResult,
 )
 from memcommit.api.errors import (
     SemanticAuthorityError,
@@ -59,7 +60,8 @@ def _port(runtime: ClientRuntime) -> MemoryStoreDedupPort:
             allow_grants = bool(
                 runtime.profile is not None
                 and runtime.profile.uid == live_registry.active.uid
-                and runtime.store_root == profile_store_dir(live_registry.active).resolve()
+                and runtime.store_root
+                == profile_store_dir(live_registry.active).resolve()
             )
             if allow_grants:
                 registry = live_registry
@@ -88,9 +90,7 @@ def _public(plan) -> DedunPlanResult:
                         uid=member.uid,
                         content=member.content,
                         ordinal=member.ordinal,
-                        recommended=(
-                            member.uid == component.recommended_survivor_uid
-                        ),
+                        recommended=(member.uid == component.recommended_survivor_uid),
                     )
                     for member in component.members
                 ),
@@ -107,6 +107,16 @@ def _public(plan) -> DedunPlanResult:
                 recommended_survivor_uid=component.recommended_survivor_uid,
             )
             for component in plan.components
+        ),
+        exact_item_groups=tuple(
+            ExactDedupGroupResult(
+                survivor_uid=group.survivor_uid,
+                absorbed_uids=group.absorbed_uids,
+                content=group.content,
+                item_kind=group.item_kind,
+                summary=group.summary,
+            )
+            for group in plan.exact_item_groups
         ),
         _application_plan=plan,
     )
@@ -125,12 +135,18 @@ def plan_dedun(
             raise TypeError(
                 "Dedun evidence must be a sequence of typed redundancy receipts."
             )
-        request = DedupRequest(tuple(evidence))
+        handoffs = tuple(evidence)
+        first = handoffs[0] if handoffs else None
+        request = DedupRequest(
+            handoffs,
+            exact_source=(first.sources[0] if first is not None else None),
+            exact_source_frame_digest=(
+                first.source_frame_digest if first is not None else None
+            ),
+        )
         plan = prepare_dedup(request, port=_port(runtime))
         if expected_revision is not None and plan.revision != expected_revision:
-            raise DedupConflictError(
-                "The reviewed Dedun revision was not regenerated."
-            )
+            raise DedupConflictError("The reviewed Dedun revision was not regenerated.")
     except DedupAuthorityError as error:
         raise_public(SemanticAuthorityError, error)
     except DedupConflictError as error:
@@ -163,9 +179,7 @@ def apply_dedun(
         or not survivor_uid
         for component_uid, survivor_uid in survivors.items()
     ):
-        raise SemanticInputError(
-            "Dedun survivors must map group UIDs to Memory UIDs."
-        )
+        raise SemanticInputError("Dedun survivors must map group UIDs to Memory UIDs.")
     try:
         receipt = apply_core_dedup(
             plan._application_plan,

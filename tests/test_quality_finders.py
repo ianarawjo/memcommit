@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import uuid
 
 import click
 import pytest
@@ -843,7 +844,7 @@ def test_cli_positional_context_does_not_switch_current(
 
     assert result.exit_code == 0
     if command_name == "dedun":
-        assert "Dedun 'target': absorbed 1 redundant Memory item(s)" in result.output
+        assert "Dedun 'target': absorbed 1 redundant direct item(s)" in result.output
         assert "1 DUP / EXACT link" in result.output
     elif command_name == "find-redundancies":
         assert (
@@ -984,13 +985,77 @@ def test_cli_dedun_immediately_applies_eligible_groups_and_prints_review_receipt
     result = runner.invoke(app, ["dedun"])
 
     assert result.exit_code == 0, result.output
-    assert "absorbed 1 redundant Memory item(s)" in result.output
+    assert "absorbed 1 redundant direct item(s)" in result.output
     assert "mem review dedun --receipt" in result.output
     current = store.load_direct(ctx.name)
     assert tuple(current.memories) == (first.uid, unrelated.uid)
     checkpoint = store.list_checkpoints(ctx.name)[0]
     assert checkpoint["command"] == "dedun"
     assert checkpoint["args"]["components"][0]["survivor_uid"] == first.uid
+
+
+def test_cli_dedun_unions_semantic_memory_and_exact_embed_groups_atomically(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = ops.init("dedun/mixed-source")
+    source_memory = ops.add(source, "Source-owned live content.")
+    target = ops.init("dedun/mixed-target")
+    first = ops.add(target, "The garage is unavailable.")
+    second = ops.add(target, "The garage is closed.")
+    live_refs = tuple(
+        MemoryRef(
+            uid=str(uuid.uuid4()),
+            target_context_uid=source.uid,
+            target_context_name=source.name,
+            target_memory_uid=source_memory.uid,
+            target=source_memory,
+        )
+        for _ in range(2)
+    )
+    for reference in live_refs:
+        target.add(reference)
+    store.save(source)
+    store.save(target)
+    store.set_current(target.name)
+
+    def respond(operation, payload):
+        assert operation == "find_duplicates"
+        return {
+            "findings": [
+                {
+                    "candidate_ids": [
+                        _candidate_id_for_content(payload, first.content),
+                        _candidate_id_for_content(payload, second.content),
+                    ],
+                    "relation": "SEMANTIC_EQUIVALENT",
+                    "reason": "Both Memories state the same garage closure.",
+                }
+            ]
+        }
+
+    monkeypatch.setattr(
+        "memcommit.commands.find_duplicates.connect_codex_chatgpt_provider",
+        lambda: PayloadProvider(respond),
+    )
+
+    result = runner.invoke(app, ["dedun"])
+
+    assert result.exit_code == 0, result.output
+    assert "absorbed 2 redundant direct item(s)" in result.output
+    assert (
+        "2 evidence links = 1 DUP / EXACT link + 1 SEMANTIC DUN link" in result.output
+    )
+    current = store.load_direct(target.name)
+    assert first.uid in current.memories
+    assert second.uid not in current.memories
+    assert live_refs[0].uid in current.memories
+    assert live_refs[1].uid not in current.memories
+    checkpoints = store.list_checkpoints(target.name)
+    assert len(checkpoints) == 1
+    assert len(checkpoints[0]["args"]["components"]) == 1
+    assert len(checkpoints[0]["args"]["exact_item_groups"]) == 1
 
 
 def test_conflicts_enumerates_all_pairs_without_count_gate():

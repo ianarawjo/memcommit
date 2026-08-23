@@ -5,6 +5,7 @@ from memcommit.exact_dedup import (
     ExactDedupError,
     ExactDedupReceipt,
     ExactDuplicateGroup,
+    ExactDuplicateKind,
     apply_exact_dedup,
     find_exact_duplicate_groups,
 )
@@ -15,6 +16,7 @@ __all__ = [
     "ExactDedupError",
     "ExactDedupReceipt",
     "ExactDuplicateGroup",
+    "ExactDuplicateKind",
     "apply_exact_dedup",
     "find_exact_duplicate_groups",
 ]

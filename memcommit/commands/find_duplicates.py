@@ -26,7 +26,7 @@ from memcommit.interfaces.console.text import (
 )
 from memcommit.interfaces.console.identity import collision_safe_uid_prefixes
 from memcommit.context import Memory
-from memcommit.findings import DuplicateFinding, FindingsError
+from memcommit.findings import DuplicateFinding, DuplicateReport, FindingsError
 from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
@@ -46,7 +46,10 @@ from memcommit.quality_find_workbench import (
     QualityFindSourceFrame,
     create_quality_find_workbench,
 )
-from memcommit.quality_finding_handoff import quality_finding_handoffs
+from memcommit.quality_finding_handoff import (
+    QualityFindingSource,
+    quality_finding_handoffs,
+)
 from memcommit.semantic_redundancy_evidence import (
     redundancy_evidence_json,
 )
@@ -113,9 +116,9 @@ def _connected_redundancy_groups(
 
 
 def _render_redundancy_groups(
-    findings: tuple[DuplicateFinding, ...],
+    report: DuplicateReport,
 ) -> None:
-    groups = _connected_redundancy_groups(findings)
+    groups = _connected_redundancy_groups(report.findings)
     for group_index, (members, evidence) in enumerate(groups, start=1):
         relations = {finding.relation for finding in evidence}
         if relations == {"EXACT"}:
@@ -126,7 +129,7 @@ def _render_redundancy_groups(
             layer = "SEMANTIC DUN"
         typer.echo()
         typer.secho(
-            f"  DUN GROUP  {group_index}/{len(groups)} · "
+            f"  DUN GROUP  {group_index}/{report.group_count} · "
             f"{_count(len(members), 'Memory', 'Memories')} · {layer}",
             bold=True,
         )
@@ -148,6 +151,33 @@ def _render_redundancy_groups(
                 nl=False,
             )
             typer.echo(" · " + display_escape_text(finding.reason))
+
+    for exact_index, group in enumerate(report.exact_item_groups, start=1):
+        group_index = len(groups) + exact_index
+        member_uids = (group.survivor_uid, *group.absorbed_uids)
+        uid_prefixes = collision_safe_uid_prefixes(member_uids)
+        typer.echo()
+        typer.secho(
+            f"  DUN GROUP  {group_index}/{report.group_count} · "
+            f"{_count(len(member_uids), 'direct item')} · DUP / EXACT · "
+            f"{group.item_kind}",
+            bold=True,
+        )
+        typer.echo("    CLEANUP MAP · READY FOR REVIEW")
+        render_cleanup_member(
+            "SURVIVOR",
+            uid_prefixes[group.survivor_uid],
+            content=group.summary,
+        )
+        for uid in group.absorbed_uids:
+            render_cleanup_member(
+                "ABSORB",
+                uid_prefixes[uid],
+                content=group.summary,
+            )
+        typer.echo("    EVIDENCE 1 · ", nl=False)
+        typer.secho("EXACT", fg=typer.colors.GREEN, bold=True, nl=False)
+        typer.echo(" · Same role-specific identity.")
 
 
 def _run(
@@ -229,14 +259,25 @@ def _run(
             if handoff.classification in DEDUP_ELIGIBLE_RELATIONS
         )
         context_label = display_escape_text(access.display_name)
-        if not applicable:
+        if not applicable and not report.exact_item_groups:
             typer.echo(f"No redundancies in '{context_label}'.")
             return
         port = MemoryStoreDedupPort(
             store,
             current_name=context_snapshot.current_name,
         )
-        plan = prepare_dedup(DedupRequest(applicable), port=port)
+        plan = prepare_dedup(
+            DedupRequest(
+                applicable,
+                exact_source=QualityFindingSource(
+                    context_uid=ctx.uid,
+                    display_name=access.display_name,
+                    direct_memory_digest=source.context_digests[0],
+                ),
+                exact_source_frame_digest=source.digest,
+            ),
+            port=port,
+        )
         receipt = apply_dedup(
             plan,
             recommended_dedup_selections(plan),
@@ -244,7 +285,7 @@ def _run(
         )
         typer.secho(
             f"Dedun '{context_label}': absorbed {len(receipt.absorbed_uids)} "
-            "redundant Memory item(s); kept "
+            "redundant direct item(s); kept "
             f"{len(receipt.survivor_uids)} original UID(s).",
             fg=typer.colors.GREEN,
         )
@@ -267,12 +308,12 @@ def _run(
         memory_count=report.memory_count,
     )
     render_finding_outcome(
-        finding_count=len(report.findings),
+        finding_count=report.redundancy_count,
         singular="redundancy finding",
         plural_form="redundancy findings",
         empty_message="No redundancies found",
     )
-    if not report.findings:
+    if not report.findings and not report.exact_item_groups:
         return
     else:
         typer.echo()
@@ -289,9 +330,9 @@ def _run(
         typer.echo(
             "    CLEANUP   "
             f"{_count(report.group_count, 'connected group')} · "
-            f"{_count(report.redundancy_count, 'redundant Memory', 'redundant Memories')}"
+            f"{_count(report.redundancy_count, 'redundant direct item')}"
         )
-        _render_redundancy_groups(report.findings)
+        _render_redundancy_groups(report)
 
 
 def cmd(

@@ -7,18 +7,19 @@ one command appear to have two incompatible meanings. MemCommit now uses a
 deliberate compositional vocabulary:
 
 ```text
-dup = exact stored duplicate
-semantic dun = differently stored surface or semantic redundancy
+dup = same-role exact duplicate
+semantic dun = differently stored direct-Memory surface or semantic redundancy
 dun = dup + semantic dun
 ```
 
-Accordingly, `mem dedup` proves byte-identical content in program logic and
-applies only exact cleanup. `mem dedun` resolves the complete redundancy set:
-the same exact-DUP edges plus conservative surface equivalence and semantic
-provider equivalence. “De-redundancy” was rejected as an awkward command
-spelling, while “consolidate” was rejected because it suggests rewriting or
-combining content. Dedun is short, symmetrical with Dedup, and names the
-broader product-specific safety contract after Help teaches the equation once.
+Accordingly, `mem dedup` proves role-specific exact identity in program logic
+and applies only exact cleanup. `mem dedun` resolves the complete redundancy
+set: every same-role exact-DUP group plus conservative direct-Memory surface
+equivalence and semantic provider equivalence. “De-redundancy” was rejected as
+an awkward command spelling, while “consolidate” was rejected because it
+suggests rewriting or combining content. Dedun is short, symmetrical with
+Dedup, and names the broader product-specific safety contract after Help
+teaches the equation once.
 
 ## Shared analysis, Dedun-owned Apply
 
@@ -32,8 +33,9 @@ mem find-redundancies
 
 mem dedun
   -> reuse the same analysis and evidence report
-  -> accept every eligible typed evidence link
-  -> form connected redundancy groups
+  -> accept every eligible typed Memory evidence link
+  -> include every same-role exact Embed and Reference group
+  -> form role-bounded redundancy groups
   -> retain the earliest unchanged existing UID per group
   -> apply one atomic checkpoint
   -> print a compact receipt
@@ -57,8 +59,11 @@ adapter, not another discovery operation.
 
 ## Invariants
 
-- `EXACT` content remains a typed DUN edge and is eligible for immediate
-  Dedun Apply; `mem dedup` is the provider-free exact-only alternative.
+- Every provider-free same-role exact group is part of DUN. Direct Memory
+  `EXACT` content remains a typed DUN edge; live Embeds and immutable
+  References use their role-specific Source/binding or snapshot identity.
+- Cross-role pairs never form DUN edges. In particular, Memory–Embed,
+  Memory–Reference, and Embed–Reference equality cannot authorize removal.
 - The complete stored content of each direct Memory is one indivisible judgment
   unit. Dedun does not split a Memory, extract a matching substring, or delete
   only one proposition inside it.
@@ -69,15 +74,18 @@ adapter, not another discovery operation.
 - Public complete-DUN evidence uses `redundancy-evidence-v2` and says
   `kind=REDUNDANCY` and `route=DEDUN`; the former semantic-only v1 wire form
   remains decode-only compatibility evidence.
-- Every evidence edge names two directly owned Memories in one frozen frame.
+- Every semantic evidence edge names two directly owned Memories in one frozen
+  frame. Exact Embed and Reference groups remain deterministic typed groups and
+  are never fabricated as Memory evidence.
 - Connected edges form groups; edge order never chooses a survivor.
-- The stored-order rule chooses exactly one existing UID per group. Dedun never
-  rewrites or integrates Memory content.
+- The stored-order rule chooses exactly one existing occurrence UID per group.
+  Dedun never rewrites content, retargets a live link, or converts one role to
+  another.
 - Source identity, direct-Memory digest, Context record digest, evidence UIDs,
   group identities, Grant binding, and reviewed revision are checked at Apply.
 - Granted Apply requires `READ + DERIVE + DELETE`.
-- Inbound references to absorbed UIDs block the complete Apply.
-- All deletions publish in one `dedun` / `dedun-v2` checkpoint, or
+- Inbound References to absorbed owned Memory UIDs block the complete Apply.
+- All deletions publish in one `dedun` / `dedun-v3` checkpoint, or
   nothing is published. Recovery is `mem undo`.
 
 ## Presentation boundary and limits
@@ -94,10 +102,10 @@ when only one claim or a shared proper part overlaps, instead of implying that
 Dedun may remove a fragment from a stored Memory.
 
 The current Dedun contract does not synthesize canonical wording, migrate
-inbound references, atomize compound Memories, or apply one group across
-multiple Contexts. Rewriting belongs to Normalize, Meld, Update, or Fit Resolve;
-claim-boundary decomposition belongs to Atomize; reference migration needs its
-own reviewed identity contract.
+inbound references, deduplicate query-only views, atomize compound Memories,
+or apply one group across multiple Contexts. Rewriting belongs to Normalize,
+Meld, Update, or Fit Resolve; claim-boundary decomposition belongs to Atomize;
+reference migration needs its own reviewed identity contract.
 
 ## 2026-08-21 direct execution-receipt migration
 
@@ -108,6 +116,12 @@ rule, and stores groups, selections, contents, and reasons in the checkpoint.
 Success is compact; `mem review dedun --receipt UID` renders the immutable
 terminal evidence. The hidden exact replay remains for compatibility and for
 external adapters that already possess a separately reviewed survivor set.
+
+The direct route additionally stores deterministic `exact_item_groups` for
+same-role Embed and Reference occurrences. These groups need no semantic
+survivor choice: the first direct occurrence survives. They join Memory DUN
+groups in the same revision and checkpoint, and Review labels each retained or
+absorbed occurrence with its exact item role and Source/snapshot summary.
 
 Within each reviewed resolved group, the surviving UID and its retained
 content appear once on the `SURVIVOR` row. Removed members remain separate

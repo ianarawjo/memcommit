@@ -141,6 +141,15 @@ def _plan_result(result: DedunPlanResult) -> JsonObject:
             }
             for component in result.components
         ],
+        "exact_item_groups": [
+            {
+                "item_kind": group.item_kind,
+                "survivor_uid": group.survivor_uid,
+                "absorbed_uids": list(group.absorbed_uids),
+                "summary": group.summary,
+            }
+            for group in result.exact_item_groups
+        ],
         "effect": "NONE",
     }
 

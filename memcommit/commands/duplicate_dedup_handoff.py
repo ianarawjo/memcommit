@@ -22,7 +22,11 @@ def run_dedun_resolution(
 ) -> None:
     """Open Dedun review after fresh Source and authority validation."""
 
-    request = DedupRequest(handoffs)
+    request = DedupRequest(
+        handoffs,
+        exact_source=handoffs[0].sources[0],
+        exact_source_frame_digest=handoffs[0].source_frame_digest,
+    )
     port = MemoryStoreDedupPort(store, current_name=current_name)
     plan = prepare_dedup(request, port=port)
     run_dedup_tui(

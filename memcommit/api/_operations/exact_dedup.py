@@ -46,7 +46,7 @@ def dedup_exact(
     runtime: ClientRuntime,
     context_name: str | None = None,
 ) -> ExactDedupResult:
-    """Remove byte-identical direct Memories without provider inference."""
+    """Remove same-role exact duplicate direct items without provider inference."""
 
     try:
         current_name = runtime.store.current_context_name()
@@ -86,6 +86,8 @@ def dedup_exact(
                 survivor_uid=group.survivor_uid,
                 absorbed_uids=group.absorbed_uids,
                 content=group.content,
+                item_kind=group.item_kind,
+                summary=group.summary,
             )
             for group in receipt.groups
         ),

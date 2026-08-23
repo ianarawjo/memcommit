@@ -13,7 +13,9 @@ if TYPE_CHECKING:
 class ExactDedupGroupResult:
     survivor_uid: str
     absorbed_uids: tuple[str, ...]
-    content: str
+    content: str | None
+    item_kind: str = "MEMORY"
+    summary: str = ""
 
 
 @dataclass(frozen=True)
@@ -34,6 +36,7 @@ class ExactDuplicateFindResult:
     context_name: str
     memory_count: int
     groups: tuple[ExactDedupGroupResult, ...]
+    item_count: int = 0
 
     @property
     def duplicate_count(self) -> int:
@@ -71,6 +74,7 @@ class DedunPlanResult:
     context_uid: str
     revision: str
     components: tuple[DedunComponentResult, ...]
+    exact_item_groups: tuple[ExactDedupGroupResult, ...]
     _application_plan: "FrozenDedupPlan" = field(repr=False, compare=False)
 
 

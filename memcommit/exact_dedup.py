@@ -1,9 +1,4 @@
-"""Provider-free exact duplicate removal for one direct Context.
-
-Exact Dedup is intentionally narrower than semantic redundancy review. It
-compares stored Memory content byte-for-byte, keeps the first direct Memory in
-Context order, and removes later copies in one checkpoint.
-"""
+"""Provider-free role-aware exact duplicate removal for one direct Context."""
 
 from __future__ import annotations
 
@@ -15,10 +10,15 @@ from memcommit.authority.access import (
     grant_checkpoint_args,
 )
 from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef
+from memcommit.direct_item_duplicates import (
+    ExactDuplicateGroup,
+    ExactDuplicateKind,
+    find_exact_duplicate_groups,
+)
 from memcommit.store import MemoryStore, context_record_digest
 
 
-EXACT_DEDUP_CONTRACT_VERSION = "exact-dedup-v1"
+EXACT_DEDUP_CONTRACT_VERSION = "exact-dedup-v2"
 
 
 class ExactDedupError(RuntimeError):
@@ -26,20 +26,12 @@ class ExactDedupError(RuntimeError):
 
 
 @dataclass(frozen=True)
-class ExactDuplicateGroup:
-    """One byte-identical direct-Memory group in Context order."""
-
-    survivor_uid: str
-    absorbed_uids: tuple[str, ...]
-    content: str
-
-
-@dataclass(frozen=True)
 class ExactDuplicateReport:
-    """Complete provider-free exact-duplicate discovery for one Context."""
+    """Complete provider-free role-aware exact discovery for one Context."""
 
     memory_count: int
     groups: tuple[ExactDuplicateGroup, ...]
+    item_count: int = 0
 
     @property
     def duplicate_count(self) -> int:
@@ -59,36 +51,8 @@ class ExactDedupReceipt:
         return sum(len(group.absorbed_uids) for group in self.groups)
 
 
-def find_exact_duplicate_groups(context: Context) -> tuple[ExactDuplicateGroup, ...]:
-    """Group direct Memories by exact stored content without normalization."""
-
-    if not isinstance(context, Context):
-        raise TypeError("Exact Dedup requires one Context.")
-    members_by_content: dict[str, list[str]] = {}
-    content_order: list[str] = []
-    for item in context.iter_items():
-        if not isinstance(item, Memory):
-            continue
-        if item.content not in members_by_content:
-            members_by_content[item.content] = []
-            content_order.append(item.content)
-        members_by_content[item.content].append(item.uid)
-    groups: list[ExactDuplicateGroup] = []
-    for content in content_order:
-        members = members_by_content[content]
-        if len(members) > 1:
-            groups.append(
-                ExactDuplicateGroup(
-                    survivor_uid=members[0],
-                    absorbed_uids=tuple(members[1:]),
-                    content=content,
-                )
-            )
-    return tuple(groups)
-
-
 def find_exact_duplicates(context: Context) -> ExactDuplicateReport:
-    """Return every exact group without provider access or Source mutation."""
+    """Return every same-role exact group without provider access or mutation."""
 
     if not isinstance(context, Context):
         raise TypeError("Find Duplicates requires one Context.")
@@ -96,6 +60,7 @@ def find_exact_duplicates(context: Context) -> ExactDuplicateReport:
     return ExactDuplicateReport(
         memory_count=memory_count,
         groups=find_exact_duplicate_groups(context),
+        item_count=len(context.ordered_uids()),
     )
 
 
@@ -121,7 +86,7 @@ def apply_exact_dedup(
     access: ContextAccess,
     context: Context,
 ) -> ExactDedupReceipt:
-    """Remove every later byte-identical copy atomically, or publish nothing."""
+    """Remove every later same-role exact occurrence atomically."""
 
     if not isinstance(access, ContextAccess) or not isinstance(context, Context):
         raise TypeError("Exact Dedup requires frozen Context access and content.")
@@ -131,6 +96,12 @@ def apply_exact_dedup(
 
     expected_digest = context_record_digest(context)
     absorbed_uids = tuple(uid for group in groups for uid in group.absorbed_uids)
+    absorbed_memory_uids = {
+        uid
+        for group in groups
+        if group.item_kind == "MEMORY"
+        for uid in group.absorbed_uids
+    }
     with authorized_context_mutation(
         access,
         required_permissions=("READ", "DELETE"),
@@ -149,7 +120,7 @@ def apply_exact_dedup(
             inbound = _inbound_references(
                 access.store,
                 context_uid=context.uid,
-                absorbed_uids=set(absorbed_uids),
+                absorbed_uids=absorbed_memory_uids,
             )
             if inbound:
                 locations = ", ".join(
@@ -170,6 +141,7 @@ def apply_exact_dedup(
                         "context": access.display_name,
                         "groups": [
                             {
+                                "item_kind": group.item_kind,
                                 "survivor_uid": group.survivor_uid,
                                 "absorbed_uids": list(group.absorbed_uids),
                             }
@@ -178,7 +150,7 @@ def apply_exact_dedup(
                         **grant_checkpoint_args(access),
                     },
                     description=(
-                        f"Removed {len(absorbed_uids)} exact duplicate Memory "
+                        f"Removed {len(absorbed_uids)} exact duplicate direct "
                         f"item(s) from '{access.display_name}'"
                     ),
                 ),
@@ -196,6 +168,7 @@ __all__ = [
     "ExactDedupError",
     "ExactDedupReceipt",
     "ExactDuplicateGroup",
+    "ExactDuplicateKind",
     "ExactDuplicateReport",
     "apply_exact_dedup",
     "find_exact_duplicate_groups",

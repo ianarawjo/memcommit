@@ -19,8 +19,9 @@ mem find-conflicts
 mem dedun
 ```
 
-`dedun` is a deliberate product term: `dup` denotes exact stored duplicates,
-while `dun = dup + semantic dun`. `find-redundancies` owns the frozen
+`dedun` is a deliberate product term: `dup` denotes same-role exact direct-item
+duplicates, while `dun = dup + direct-Memory semantic dun`.
+`find-redundancies` owns the frozen
 read-only complete DUN analysis and never exposes an Apply action. Dedun
 deliberately reuses that same analysis and treats the invocation as immediate
 Apply intent, retaining the earliest existing UID in each eligible connected
@@ -283,8 +284,8 @@ The judgments and their public evidence deliberately have different arities:
 
 | Command | Discovery input and result unit | Primary labels |
 |---|---|---|
-| `find-duplicates` | one direct Context; exact-content groups | emitted: provider-free `DUP / EXACT` groups |
-| `find-redundancies` / Dedun analysis | whole selected direct-Memory frame; positive evidence links identify unordered Memory pairs | emitted: `EXACT`, `SURFACE_EQUIVALENT`, `SEMANTIC_EQUIVALENT`; rejection boundaries: `OVERLAP`, `UNKNOWN`, `DISTINCT` |
+| `find-duplicates` | one direct Context; same-role exact Memory, Embed, and Reference groups | emitted: provider-free typed `DUP / EXACT` groups |
+| `find-redundancies` / Dedun analysis | same-role exact direct items plus the whole selected direct-Memory semantic frame; positive semantic evidence links identify unordered Memory pairs | emitted: typed exact groups plus `EXACT`, `SURFACE_EQUIVALENT`, `SEMANTIC_EQUIVALENT`; rejection boundaries: cross-role pairs, `OVERLAP`, `UNKNOWN`, `DISTINCT` |
 | `find-ambiguities` | one Memory interpreted inside the complete selected frame | `SINGLE`, `DOMINANT`, `COMPETING` crossed with `NONE`, `HELPFUL`, `REQUIRED` |
 | `find-conflicts` | one unordered pair of Memories | `YES`, `MAY`, `NO` |
 
@@ -470,11 +471,13 @@ to the finders, not a fourth quality finder and not behavior silently performed
 by any `find-*` command. The finders can still inspect unatomized intake, but
 their labels apply to the stored Memory boundaries they receive.
 
-`dedup` removes byte-identical direct Memories without a provider or review
-screen. `dedun` instead discovers the complete exact-plus-semantic evidence
-set, validates connected groups, turns confirmed equivalence into a
-stale-safe plan, selects an existing survivor UID, checks inbound references,
-and creates a checkpoint on Apply.
+`dedup` removes same-role exact direct-item occurrences without a provider or
+review screen. Memory keys use byte-identical content; Embed and Reference keys
+retain their live binding or snapshot provenance. `dedun` includes that entire
+exact layer, then adds semantic equivalence only among directly owned Memories,
+turns the role-bounded groups into a stale-safe plan, checks inbound references,
+and creates one checkpoint on Apply. Cross-role equality never authorizes
+removal.
 `OVERLAP` and `UNKNOWN` remain negative golden boundaries and must never flow
 into removal.
 

@@ -34,12 +34,12 @@ BEST_FOR_BY_OPERATION = {
     "contexts": "Exploring every Context currently available to the Profile.",
     "delete": "Removing a specific Context or item that is no longer needed.",
     "dedup": (
-        "Removing byte-identical direct Memories while preserving the first "
-        "existing UID."
+        "Removing same-role exact duplicate Memories, Embeds, or References "
+        "while preserving the first existing UID."
     ),
     "dedun": (
-        "Removing exact plus semantic redundancy while preserving one exact "
-        "existing Memory and its UID in each complete DUN group."
+        "Removing role-aware exact plus direct-Memory semantic redundancy while "
+        "preserving one existing UID in each complete DUN group."
     ),
     "diff": "Verifying exactly what a recorded operation changed.",
     "distill": (
@@ -74,7 +74,7 @@ BEST_FOR_BY_OPERATION = {
     ),
     "find-conflicts": "Finding mutually incompatible claims or instructions.",
     "find-duplicates": (
-        "Inspecting byte-identical direct Memories without applying exact cleanup."
+        "Inspecting same-role exact duplicate direct items without applying cleanup."
     ),
     "find-redundancies": (
         "Inspecting complete exact and semantic redundancy before cleanup."

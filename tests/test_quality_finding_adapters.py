@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import uuid
 
 import pytest
 from typer.testing import CliRunner
@@ -10,6 +11,7 @@ from typer.testing import CliRunner
 import memcommit.ops as ops
 from memcommit.api import MemCommitClient, SemanticConflictError
 from memcommit.cli import app
+from memcommit.context import MemoryRef
 from memcommit.interfaces.agent.quality_find import QualityFindAgentAdapter
 from memcommit.interfaces.agent.resolve import (
     RESOLVE_AGENT_CONTRACT_VERSION,
@@ -168,6 +170,57 @@ def test_public_find_redundancies_includes_exact_dup_without_provider(
     agent_evidence = agent_result["result"]["evidence"][0]
     assert agent_evidence["contract"] == "redundancy-evidence-v2"
     assert agent_evidence["classification"] == "EXACT"
+
+
+def test_public_and_agent_redundancy_results_include_exact_embed_groups(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = ops.init("quality/embed-source")
+    memory = ops.add(source, "live source")
+    target = ops.init("quality/embed-target")
+    ops.add(target, "one direct candidate")
+    refs = tuple(
+        MemoryRef(
+            uid=str(uuid.uuid4()),
+            target_context_uid=source.uid,
+            target_context_name=source.name,
+            target_memory_uid=memory.uid,
+            target=memory,
+        )
+        for _ in range(2)
+    )
+    for reference in refs:
+        target.add(reference)
+    store.save(source)
+    store.save(target)
+    store.set_current(target.name)
+    client = MemCommitClient(
+        root=isolated_store,
+        semantic_provider_factory=lambda: (_ for _ in ()).throw(
+            AssertionError("one direct Memory must not connect a provider")
+        ),
+    )
+
+    found = client.find_redundancies((target.name,))
+
+    assert found.evidence == ()
+    assert len(found.exact_item_groups) == 1
+    assert found.exact_item_groups[0].item_kind == "MEMORY_EMBED"
+    assert found.exact_item_groups[0].survivor_uid == refs[0].uid
+    assert found.exact_item_groups[0].absorbed_uids == (refs[1].uid,)
+
+    agent_result = QualityFindAgentAdapter(client).invoke(
+        {
+            "version": 1,
+            "kind": "redundancies",
+            "context_names": [target.name],
+        }
+    )
+    exact = agent_result["result"]["exact_item_groups"][0]
+    assert exact["item_kind"] == "MEMORY_EMBED"
+    assert exact["survivor_uid"] == refs[0].uid
+    assert exact["absorbed_uids"] == [refs[1].uid]
 
 
 def test_agent_finder_output_enters_resolve_without_adapter_reconstruction(

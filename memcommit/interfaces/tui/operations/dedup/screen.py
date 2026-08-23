@@ -116,13 +116,15 @@ def project_dedup_plan(plan: FrozenDedupPlan) -> SemanticViewerDocument:
             "class:report-label",
             f"CONTEXT · {safe_terminal_text(plan.display_name)}\n"
             f"REVISION · {safe_terminal_text(plan.revision)}\n"
-            f"COMPONENTS · {len(plan.components)}\n",
+            "COMPONENTS · "
+            f"{len(plan.components) + len(plan.exact_item_groups)}\n",
         ),
         (
             "class:viewer-body",
             "\nDETERMINISTIC BOUNDARY\n"
-            "DUN includes EXACT, SURFACE_EQUIVALENT, and SEMANTIC_EQUIVALENT "
-            "evidence links. Dedun does not rewrite or integrate content.\n",
+            "DUN includes same-role exact direct items plus Memory "
+            "SURFACE_EQUIVALENT and SEMANTIC_EQUIVALENT evidence. Cross-role "
+            "items never merge.\n",
         ),
     ]
     for index, component in enumerate(plan.components, 1):
@@ -143,11 +145,31 @@ def project_dedup_plan(plan: FrozenDedupPlan) -> SemanticViewerDocument:
                 ),
             ]
         )
+    for offset, group in enumerate(plan.exact_item_groups, 1):
+        index = len(plan.components) + offset
+        fragments.extend(
+            [
+                (
+                    "class:section",
+                    f"\nCOMPONENT {index} · {group.item_kind} · "
+                    f"{1 + len(group.absorbed_uids)} MEMBERS\n",
+                ),
+                (
+                    "class:impact.add",
+                    "DETERMINISTIC SURVIVOR · "
+                    f"[{safe_terminal_text(group.survivor_uid)}]\n",
+                ),
+                (
+                    "class:viewer-body",
+                    f"EXACT IDENTITY · {safe_terminal_text(group.summary)}\n",
+                ),
+            ]
+        )
     fragments.append(
         (
             "class:impact.remove",
-            "\nAPPLY · one checkpoint · inbound references to absorbed UIDs block "
-            "the complete operation.\n",
+            "\nAPPLY · one checkpoint · inbound References to absorbed Memory UIDs "
+            "block the complete operation.\n",
         )
     )
     return SemanticViewerDocument(
@@ -173,7 +195,9 @@ def dedup_exact_review(
     outcome: ResolutionOutcome,
 ) -> ExactCommandReview:
     selections = _selections(outcome)
-    member_count = sum(len(component.members) for component in plan.components)
+    member_count = sum(len(component.members) for component in plan.components) + sum(
+        1 + len(group.absorbed_uids) for group in plan.exact_item_groups
+    )
     argv = ["mem", "dedun"]
     for handoff in plan.request.handoffs:
         argv.extend(("--evidence", redundancy_evidence_json(handoff)))
@@ -191,17 +215,20 @@ def dedup_exact_review(
         for component in plan.components
         for member in component.members
         if member.uid not in survivor_uids
-    )
+    ) + tuple(uid for group in plan.exact_item_groups for uid in group.absorbed_uids)
     return ExactCommandReview(
         argv=tuple(argv),
         effects=(
             f"Context revision · {plan.revision}.",
             "Apply will stop if the Context has changed.",
-            f"Keep {len(selections)} unchanged existing survivor UID(s).",
+            "Keep "
+            f"{len(selections) + len(plan.exact_item_groups)} unchanged existing "
+            "survivor UID(s).",
             f"Absorb {len(absorbed)} of {member_count} component member UID(s): "
             + ", ".join(absorbed),
-            "No replacement wording is generated and unrelated Memories stay unchanged.",
-            "Inbound references block the whole Apply; recovery is mem undo.",
+            "No replacement wording or cross-role conversion is generated; unrelated direct items stay unchanged.",
+            "Inbound References to absorbed Memories block the whole Apply; "
+            "recovery is mem undo.",
         ),
     )
 
@@ -248,8 +275,10 @@ def dedup_resolution_spec(plan: FrozenDedupPlan) -> ResolutionWorkbenchSpec:
         items_title="ITEMS · REQUIRED REDUNDANCY GROUPS",
         compact_summary=(
             f"CONTEXT · {safe_terminal_text(plan.display_name)} · "
-            f"GROUPS {len(plan.components)} · choose one unchanged existing "
-            "survivor per group; recommendations are preselected."
+            "GROUPS "
+            f"{len(plan.components) + len(plan.exact_item_groups)} · choose one "
+            "unchanged Memory survivor per semantic group; exact item groups "
+            "keep their first occurrence automatically."
         ),
         show_viewer=False,
     )

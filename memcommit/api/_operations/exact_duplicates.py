@@ -23,7 +23,7 @@ def find_duplicates_exact(
     runtime: ClientRuntime,
     context_name: str | None = None,
 ) -> ExactDuplicateFindResult:
-    """Return exact direct-Memory groups without provider access or mutation."""
+    """Return same-role exact direct-item groups without provider mutation."""
 
     try:
         current_name = runtime.store.current_context_name()
@@ -58,11 +58,14 @@ def find_duplicates_exact(
     return ExactDuplicateFindResult(
         context_name=access.display_name,
         memory_count=report.memory_count,
+        item_count=report.item_count,
         groups=tuple(
             ExactDedupGroupResult(
                 survivor_uid=group.survivor_uid,
                 absorbed_uids=group.absorbed_uids,
                 content=group.content,
+                item_kind=group.item_kind,
+                summary=group.summary,
             )
             for group in report.groups
         ),

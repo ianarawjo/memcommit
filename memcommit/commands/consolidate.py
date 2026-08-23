@@ -107,8 +107,13 @@ def cmd(
             raise DedupError(
                 "Dedun --survivor and --expected-revision require --apply."
             )
+        handoffs = tuple(
+            redundancy_evidence_from_json(item) for item in evidence
+        )
         request = DedupRequest(
-            tuple(redundancy_evidence_from_json(item) for item in evidence)
+            handoffs,
+            exact_source=handoffs[0].sources[0],
+            exact_source_frame_digest=handoffs[0].source_frame_digest,
         )
         store = MemoryStore(create=False)
         try:

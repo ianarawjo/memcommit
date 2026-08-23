@@ -10,6 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Protocol
 
+from memcommit.direct_item_duplicates import ExactDuplicateGroup
 from memcommit.quality_finding_handoff import (
     QualityFindingHandoff,
     QualityFindingSource,
@@ -28,7 +29,7 @@ if TYPE_CHECKING:
     from memcommit.update import GrantedUpdateTarget
 
 
-DEDUP_CONTRACT_VERSION = "dedun-v2"
+DEDUP_CONTRACT_VERSION = "dedun-v3"
 DEDUP_ELIGIBLE_RELATIONS = frozenset(
     {"EXACT", "SURFACE_EQUIVALENT", "SEMANTIC_EQUIVALENT"}
 )
@@ -48,17 +49,35 @@ class DedupConflictError(DedupError):
 
 @dataclass(frozen=True)
 class DedupRequest:
-    """One or more typed redundancy edges from the same complete DUN frame."""
+    """Typed semantic edges plus optional complete role-aware exact scope."""
 
     handoffs: tuple[QualityFindingHandoff, ...]
+    exact_source: QualityFindingSource | None = None
+    exact_source_frame_digest: str | None = None
 
     def __post_init__(self) -> None:
-        if not self.handoffs or any(
+        if any(
             not isinstance(handoff, QualityFindingHandoff) for handoff in self.handoffs
         ):
-            raise DedupError(
-                "Dedun requires at least one typed redundancy evidence item."
+            raise DedupError("Dedun requires typed redundancy evidence items.")
+        if (self.exact_source is None) != (self.exact_source_frame_digest is None):
+            raise DedupError("Dedun exact scope requires both Source and frame digest.")
+        if self.exact_source is not None and (
+            not isinstance(self.exact_source, QualityFindingSource)
+            or not isinstance(self.exact_source_frame_digest, str)
+            or len(self.exact_source_frame_digest) != 64
+            or any(
+                character not in "0123456789abcdef"
+                for character in self.exact_source_frame_digest
             )
+        ):
+            raise DedupError("Dedun exact scope binding is invalid.")
+        if not self.handoffs:
+            if self.exact_source is None:
+                raise DedupError(
+                    "Dedun requires redundancy evidence or one complete exact scope."
+                )
+            return
         first = self.handoffs[0]
         if len(first.sources) != 1:
             raise DedupError("Dedun requires evidence from one exact direct Context.")
@@ -97,14 +116,27 @@ class DedupRequest:
                 raise DedupError("Dedun evidence repeats or contains an invalid pair.")
             seen_edges.add(edge)
             seen_findings.add(handoff.finding_uid)
+        if self.exact_source is not None and (
+            self.exact_source != source
+            or self.exact_source_frame_digest != first.source_frame_digest
+        ):
+            raise DedupError(
+                "Dedun exact scope must match the semantic evidence frame."
+            )
 
     @property
     def source(self) -> QualityFindingSource:
-        return self.handoffs[0].sources[0]
+        if self.handoffs:
+            return self.handoffs[0].sources[0]
+        assert self.exact_source is not None
+        return self.exact_source
 
     @property
     def source_frame_digest(self) -> str:
-        return self.handoffs[0].source_frame_digest
+        if self.handoffs:
+            return self.handoffs[0].source_frame_digest
+        assert self.exact_source_frame_digest is not None
+        return self.exact_source_frame_digest
 
 
 @dataclass(frozen=True)
@@ -188,10 +220,11 @@ class FrozenDedupPlan:
     context_digest: str
     revision: str
     components: tuple[DedupComponent, ...]
+    exact_item_groups: tuple[ExactDuplicateGroup, ...] = ()
     granted_binding: "GrantedUpdateTarget | None" = None
 
     def __post_init__(self) -> None:
-        if not self.components:
+        if not self.components and not self.exact_item_groups:
             raise DedupError("Dedun plan requires at least one redundancy group.")
 
 
@@ -206,6 +239,7 @@ class DedupReceipt:
     selections: tuple[DedupSelection, ...]
     survivor_uids: tuple[str, ...]
     absorbed_uids: tuple[str, ...]
+    exact_item_groups: tuple[ExactDuplicateGroup, ...] = ()
 
 
 class DedupPort(Protocol):
@@ -253,6 +287,10 @@ def validate_dedup_selections(
         not isinstance(selection, DedupSelection) for selection in selections
     ):
         raise TypeError("Dedun selection validation requires typed values.")
+    if not plan.components:
+        if selections:
+            raise DedupError("Dedun exact-only plan accepts no Memory selections.")
+        return ()
     case = dedup_resolution_case(plan)
     try:
         progress = require_resolution_ready(

@@ -2,12 +2,13 @@
 
 ## Reviewed scope
 
-Find Redundancies is the public read-only complete-DUN operation. It freezes
-one readable direct-Memory frame, determines exact and conservative surface
-relations locally, obtains and validates semantic redundancy evidence for the
-remaining representatives, and projects the combined typed report without
-modifying any Source. Dedun reuses this analysis but owns the separate
-deterministic-survivor and Apply boundary.
+Find Redundancies is the public read-only complete-DUN operation. Its direct
+CLI freezes one readable direct-item frame, determines same-role exact groups
+and conservative direct-Memory surface relations locally, obtains and
+validates semantic Memory redundancy evidence for the remaining
+representatives, and projects the combined typed report without modifying any
+Source. Dedun reuses this analysis but owns the separate deterministic-survivor
+and Apply boundary.
 
 | Route | Public input | Application entry | Result/effect |
 | --- | --- | --- | --- |
@@ -31,6 +32,10 @@ Every current route:
   provider connection;
 - includes typed `EXACT`, `SURFACE_EQUIVALENT`, and
   `SEMANTIC_EQUIVALENT` evidence in one complete DUN forest;
+- includes role-aware exact Embed and Reference groups in the one-Context CLI
+  frame without disclosing them to the semantic provider;
+- never compares different item roles, and keeps provider inference limited to
+  directly owned Memories;
 - validates the complete typed report before publication;
 - leaves Contexts, Memories, checkpoints, global current Context, and durable
   review state unchanged.
@@ -57,8 +62,10 @@ join the same component.
 
 ## Limits
 
-Find Redundancies reports only directly owned Memories in the frozen readable
-frame. It does not remove exact or semantic redundancy, synthesize canonical
-wording, migrate inbound references, atomize partial overlaps, persist reviewer
-notes, or apply a cross-Context consolidation. Those effects remain owned by
-Dedup, Atomize, transformation operations, or Dedun's separate Apply boundary.
+Find Redundancies reports same-role exact groups from the frozen one-Context
+direct-item frame and semantic relations only among directly owned Memories.
+It does not remove redundancy, synthesize canonical wording, migrate inbound
+references, compare roles, deduplicate query-only views, atomize partial
+overlaps, persist reviewer notes, or apply a cross-Context consolidation.
+Those effects remain owned by Dedup, Atomize, transformation operations, or
+Dedun's separate Apply boundary.

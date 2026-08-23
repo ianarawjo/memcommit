@@ -16,6 +16,10 @@ from importlib import resources
 from typing import Callable, Literal, Protocol
 
 from memcommit.context import Context, Memory
+from memcommit.direct_item_duplicates import (
+    ExactDuplicateGroup,
+    find_exact_duplicate_groups,
+)
 from memcommit.semantic_execution import (
     BudgetLimits,
     BudgetVector,
@@ -145,6 +149,7 @@ class ConflictFinding:
 class DuplicateReport:
     memory_count: int
     findings: tuple[DuplicateFinding, ...]
+    exact_item_groups: tuple[ExactDuplicateGroup, ...] = ()
 
     @property
     def exact_findings(self) -> tuple[DuplicateFinding, ...]:
@@ -164,11 +169,11 @@ class DuplicateReport:
 
     @property
     def group_count(self) -> int:
-        return _duplicate_group_count(self.findings)
+        return _duplicate_group_count(self.findings) + len(self.exact_item_groups)
 
     @property
     def exact_group_count(self) -> int:
-        return _duplicate_group_count(self.exact_findings)
+        return _duplicate_group_count(self.exact_findings) + len(self.exact_item_groups)
 
     @property
     def semantic_group_count(self) -> int:
@@ -176,7 +181,9 @@ class DuplicateReport:
 
     @property
     def exact_duplicate_count(self) -> int:
-        return len(self.exact_findings)
+        return len(self.exact_findings) + sum(
+            group.duplicate_count for group in self.exact_item_groups
+        )
 
     @property
     def semantic_redundancy_count(self) -> int:
@@ -186,7 +193,9 @@ class DuplicateReport:
     def redundancy_count(self) -> int:
         # The analyzer emits a forest: each evidence edge adds exactly one
         # redundant member to its connected DUN group.
-        return len(self.findings)
+        return len(self.findings) + sum(
+            group.duplicate_count for group in self.exact_item_groups
+        )
 
 
 @dataclass(frozen=True)
@@ -725,6 +734,11 @@ def find_redundancies(
     return DuplicateReport(
         memory_count=len(candidates),
         findings=_ordered_duplicate_findings(candidates, findings),
+        exact_item_groups=tuple(
+            group
+            for group in find_exact_duplicate_groups(ctx)
+            if group.item_kind != "MEMORY"
+        ),
     )
 
 

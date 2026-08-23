@@ -8,16 +8,16 @@ obvious command fail for a Context containing two Memories with the same text:
 `mem dedup` demanded an opaque finder handoff instead of removing the copy.
 
 `mem dedup [CONTEXT]` and `MemCommitClient.dedup(context_name)` now have one
-narrow, provider-free meaning. They examine
-direct ordinary Memories, groups content by exact Python string equality,
-retains the first UID in the Context's explicit item order, removes every later
-UID in that group, and records the whole change in one checkpoint. With no
-operand it uses the Context that was current when the command began. Existing
-Context locator syntax is resolved through the shared locator boundary.
+provider-free meaning. They examine direct items through a role-specific exact
+identity key, retain the first occurrence UID in the Context's explicit item
+order, remove every later occurrence in that group, and record the whole
+change in one checkpoint. With no operand the command uses the Context that
+was current when the command began. Existing Context locator syntax is
+resolved through the shared locator boundary.
 
 ```text
 direct Context
-  -> byte-identical content groups
+  -> same-role exact identity groups
   -> first-in-Context survivor per group
   -> reference and freshness validation
   -> one atomic removal checkpoint
@@ -30,33 +30,46 @@ A no-op prints that no exact duplicates exist and creates no checkpoint.
 
 ## Invariants
 
-- Equality is byte-for-byte stored content equality. Unicode, whitespace,
-  punctuation, casing, and line endings are not normalized.
-- Only directly owned `Memory` items participate. References, query views, and
-  embedded Contexts are neither compared nor removed.
-- The earliest direct item retains its exact content, UID, provenance, and
-  position. Later byte-identical UIDs are removed.
+- Equality begins with role. A directly owned Memory, live Embed, and immutable
+  Reference never share a DUP edge merely because their visible content is
+  equal.
+- Memory equality is byte-for-byte stored content equality. Unicode,
+  whitespace, punctuation, casing, and line endings are not normalized.
+- Live Memory Embed equality requires the same Source Context UID/name and
+  Source Memory UID. Memory Reference equality additionally requires snapshot
+  mode, the same retained content, and the same snapshot digest.
+- Context Reference equality requires the same Source identity, complete
+  snapshot package, scope, and digest. Context Embed equality includes its
+  complete local or Grant binding; the current direct-item map already
+  prevents two occurrences with the same target UID from coexisting.
+- Query-only views remain outside ordinary Embed/Reference cleanup because
+  their authorization and execution contract is distinct.
+- The earliest direct occurrence retains its exact role, UID, provenance, and
+  position. Later same-role exact occurrences are removed.
 - Every exact group in the frozen Context is applied together or nothing is
   published. A changed Context digest fails before mutation.
-- An inbound `MemoryRef` to any would-be removed UID blocks the whole command.
-  Retargeting a reference is not inferred merely because content is equal.
+- An inbound `MemoryRef` to any would-be removed owned Memory UID blocks the
+  whole command. Retargeting a reference is not inferred merely because
+  content is equal.
 - Granted targets require `READ + DELETE` and are revalidated at the normal
   authorized mutation boundary.
-- A successful mutation records contract `exact-dedup-v1`, exact survivor and
-  absorbed UIDs, and remains recoverable with `mem undo`.
+- A successful mutation records contract `exact-dedup-v2`, item role, exact
+  survivor and absorbed UIDs, and remains recoverable with `mem undo`.
 
 ## Semantic redundancy finder and Dedun
 
 Differently stored wording is not an exact duplicate. `mem find-duplicates`
 owns the provider-free, read-only exact-DUP report. `mem find-redundancies`
 owns the complete exact-plus-semantic DUN report, and `mem dedun` reuses that
-analysis before applying the earliest-existing-UID survivor rule to eligible
-`EXACT`, `SURFACE_EQUIVALENT`, and `SEMANTIC_EQUIVALENT` evidence. There is no
-singular `find-redundancy` command. Hidden `consolidate` remains only the exact
-Dedun review replay route.
+analysis before applying the earliest-existing-UID survivor rule to all
+role-aware exact groups and eligible Memory `EXACT`, `SURFACE_EQUIVALENT`, and
+`SEMANTIC_EQUIVALENT` evidence. There is no singular `find-redundancy` command.
+Hidden `consolidate` remains only the exact Dedun review replay route.
 
 ## Alternatives and limits
 
+- Comparing items across roles was rejected: ownership, live update, retention,
+  and authority behavior are part of identity rather than incidental metadata.
 - Automatically running semantic inference from `mem dedup` was rejected:
   model equivalence is evidence requiring a different review and authority
   boundary, while exact equality is complete and deterministic.

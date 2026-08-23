@@ -528,7 +528,7 @@ class MemCommitClient:
         )
 
     def dedup(self, context_name: str | None = None) -> ExactDedupResult:
-        """Remove byte-identical direct Memories in one checkpoint."""
+        """Remove same-role exact duplicate direct items in one checkpoint."""
 
         from memcommit.api._operations.exact_dedup import dedup_exact
 
