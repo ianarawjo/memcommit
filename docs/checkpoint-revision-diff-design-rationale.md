@@ -57,6 +57,22 @@ advances once. Memory bodies reuse the shared line/word diff mechanics.
 Non-Memory direct items are rendered from their stored record without opening
 a Reference, embedded Context, Grant, or provider connection.
 
+## Line-oriented entry contract
+
+Diff exposes the same checkpoint revision outside a TTY. `mem diff CONTEXT`
+uses the newest retained checkpoint when no selector is supplied, while
+`mem diff CHECKPOINT --context CONTEXT` and
+`mem diff CONTEXT --checkpoint CHECKPOINT` select an exact UID or unambiguous
+prefix. The Context is required for this explicit form because checkpoint
+prefixes are resolved only inside the frozen owning history; this prevents a
+short UID from silently selecting an unrelated Context's artifact.
+
+`--stat`, `--raw`, and `--verbose` refine that selected checkpoint instead of
+switching back to the process-wide active Update slot. Stat reports the exact
+revision counts, raw emits provider-free direct-item unified diffs, and verbose
+retains full direct-item UIDs. With no Context or checkpoint target these flags
+continue to describe the active Update record for compatibility.
+
 ## Revert target scope and approval
 
 Bare interactive `mem revert` captures the current Context name once and opens

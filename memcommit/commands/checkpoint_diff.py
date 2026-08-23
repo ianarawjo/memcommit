@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import difflib
 import json
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
@@ -161,6 +162,7 @@ def _render_revision_item(
     change: _CheckpointItemChange,
     *,
     location: str,
+    verbose_uid: bool = False,
 ) -> StyleAndTextTuples:
     """Render a dense diff row while keeping its disposition text-visible."""
 
@@ -201,7 +203,7 @@ def _render_revision_item(
             (
                 "class:report-neutral",
                 "]" + " " * (9 - len(label))
-                + f"[{display_escape_text(change.uid[:8])}] ",
+                + f"[{display_escape_text(change.uid if verbose_uid else change.uid[:8])}] ",
             )
         )
         fragments.extend(
@@ -220,6 +222,8 @@ def _render_revision_item(
 
 def checkpoint_revision_detail_renderer(
     checkpoints: Sequence[Mapping[str, Any]],
+    *,
+    verbose_uids: bool = False,
 ):
     """Render one revision diff together with its complete resulting state."""
     records = {
@@ -282,6 +286,7 @@ def checkpoint_revision_detail_renderer(
                 _render_revision_item(
                     change,
                     location=entry.uid,
+                    verbose_uid=verbose_uids,
                 )
             )
         if reordered:
@@ -299,6 +304,120 @@ def checkpoint_revision_detail_renderer(
         )
 
     return render
+
+
+def _encoded_lines(content: str) -> list[str]:
+    encoded: list[str] = []
+    for line in content.splitlines(keepends=True):
+        if line.endswith("\r\n"):
+            text = line[:-2]
+            has_newline = True
+        elif line.endswith(("\n", "\r")):
+            text = line[:-1]
+            has_newline = True
+        else:
+            text = line
+            has_newline = False
+        encoded.append(
+            json.dumps([text, has_newline], ensure_ascii=False, separators=(",", ":"))
+        )
+    return encoded
+
+
+def _raw_revision_lines(
+    changes: Sequence[_CheckpointItemChange],
+    *,
+    context_name: str,
+) -> list[str]:
+    lines: list[str] = []
+    for change in changes:
+        if change.treatment == "KEEP":
+            continue
+        before = _item_text(change.before)
+        after = _item_text(change.after)
+        label = f"{context_name}#{change.uid}"
+        lines.append(f"diff --mem {label}")
+        encoded = difflib.unified_diff(
+            _encoded_lines(before or ""),
+            _encoded_lines(after or ""),
+            fromfile=f"a/{label}" if before is not None else "/dev/null",
+            tofile=f"b/{label}" if after is not None else "/dev/null",
+            lineterm="",
+        )
+        for line in encoded:
+            if line.startswith(("--- ", "+++ ", "@@")) or not line:
+                lines.append(line)
+                continue
+            marker = line[0]
+            try:
+                value = json.loads(line[1:])
+            except json.JSONDecodeError:
+                lines.append(line)
+                continue
+            if (
+                isinstance(value, list)
+                and len(value) == 2
+                and isinstance(value[0], str)
+                and isinstance(value[1], bool)
+            ):
+                lines.append(marker + value[0])
+                if not value[1]:
+                    lines.append("\\ No newline at end of file")
+            else:
+                lines.append(line)
+    return lines
+
+
+def render_checkpoint_revision_cli(
+    checkpoints: Sequence[Mapping[str, Any]],
+    entry: HistoryPickerItem,
+    *,
+    context_name: str,
+    stat: bool = False,
+    raw: bool = False,
+    verbose: bool = False,
+) -> str:
+    """Render one exact checkpoint revision without opening a terminal picker."""
+
+    records = {
+        checkpoint["uid"]: checkpoint
+        for checkpoint in checkpoints
+        if isinstance(checkpoint.get("uid"), str)
+    }
+    checkpoint = records[entry.uid]
+    changes, result_count, _reordered = _checkpoint_revision_items(
+        _before_snapshots(checkpoints)[entry.uid],
+        checkpoint.get("snapshot"),
+    )
+    counts = {
+        treatment: sum(change.treatment == treatment for change in changes)
+        for treatment in ("KEEP", "ADD", "EDIT", "REMOVE")
+    }
+    action = checkpoint.get("command")
+    action = action if isinstance(action, str) and action else "checkpoint"
+    header = [
+        f"CHECKPOINT  {entry.uid}",
+        f"CONTEXT     {context_name}",
+        f"ACTION      {action}",
+        f"DESCRIPTION {entry.description or '(none)'}",
+        f"RESULT      {_direct_item_count(result_count)}",
+        (
+            "SUMMARY     "
+            f"{counts['KEEP']} kept · {counts['ADD']} added · "
+            f"{counts['EDIT']} edited · {counts['REMOVE']} removed"
+        ),
+    ]
+    if stat:
+        return "\n".join(header)
+    if raw:
+        body = _raw_revision_lines(changes, context_name=context_name)
+        return "\n".join((*header, "", *body))
+    detail = checkpoint_revision_detail_renderer(
+        checkpoints,
+        verbose_uids=verbose,
+    )(entry)
+    fragments = detail.content if isinstance(detail, HistoryDetailView) else detail
+    return f"CONTEXT     {context_name}\n" + "".join(text for _style, text in fragments).rstrip()
 
 
 def checkpoint_diff_detail_renderer(

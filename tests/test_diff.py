@@ -284,6 +284,10 @@ def test_diff_context_operand_bypasses_location_selection(
         opened.append((store_arg.store_dir, session, context_locator))
 
     monkeypatch.setattr("memcommit.commands.diff.browse_diff", browse)
+    monkeypatch.setattr(
+        "memcommit.commands.diff._interactive_terminal",
+        lambda: True,
+    )
 
     result = runner.invoke(app, ["diff", "campus-wiki"])
 
@@ -291,16 +295,61 @@ def test_diff_context_operand_bypasses_location_selection(
     assert opened == [(store.store_dir, session, "campus-wiki")]
 
 
-def test_diff_context_operand_rejects_update_record_output_flags(
+def test_diff_context_operand_renders_latest_checkpoint_stat_noninteractively(
     isolated_store,
 ):
     store = MemoryStore()
     _stage(store)
+    store.checkpoint(store.load("campus-wiki"), command="checkpoint")
 
-    result = runner.invoke(app, ["diff", "campus-wiki", "--raw"])
+    latest = store.list_checkpoints("campus-wiki")[0]
+    result = runner.invoke(app, ["diff", "campus-wiki", "--stat"])
 
-    assert result.exit_code == 2
-    assert "Context operand cannot be combined" in result.stderr
+    assert result.exit_code == 0, result.output
+    assert f"CHECKPOINT  {latest['uid']}" in result.output
+    assert "CONTEXT     campus-wiki" in result.output
+    assert "SUMMARY" in result.output
+
+
+def test_diff_checkpoint_and_context_form_reopens_exact_revision(isolated_store):
+    store = MemoryStore()
+    _stage(store)
+    store.checkpoint(store.load("campus-wiki"), command="checkpoint")
+    checkpoint_uid = store.list_checkpoints("campus-wiki")[0]["uid"]
+
+    result = runner.invoke(
+        app,
+        ["diff", checkpoint_uid[:8], "--context", "campus-wiki"],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert f"CHECKPOINT  {checkpoint_uid}" in result.output
+    assert "CONTEXT     campus-wiki" in result.output
+    assert "REVISION DIFF" in result.output
+
+
+def test_diff_context_and_checkpoint_option_support_raw_output(isolated_store):
+    store = MemoryStore()
+    _stage(store)
+    store.checkpoint(store.load("campus-wiki"), command="checkpoint")
+    checkpoint_uid = store.list_checkpoints("campus-wiki")[0]["uid"]
+
+    result = runner.invoke(
+        app,
+        [
+            "diff",
+            "campus-wiki",
+            "--checkpoint",
+            checkpoint_uid[:8],
+            "--raw",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert f"CHECKPOINT  {checkpoint_uid}" in result.output
+    assert "diff --mem campus-wiki#" in result.output
+    assert "--- " in result.output
+    assert "+++ " in result.output
 
 
 def test_diff_renders_empty_fresh_stage(isolated_store):

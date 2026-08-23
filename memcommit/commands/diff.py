@@ -21,7 +21,11 @@ from memcommit.memory_diff import (
     update_operation_change,
 )
 from memcommit.commands.diff_browser import browse_diff
+from memcommit.commands.checkpoint_diff import render_checkpoint_revision_cli
+from memcommit.commands.history_present import checkpoint_picker_entries
 from memcommit.commands.update_render import render_plan
+from memcommit.context_locator import resolve_context_locator
+from memcommit.uid_locator import resolve_exact_or_unique_uid
 from memcommit.update import (
     AddOperation,
     EditOperation,
@@ -388,13 +392,27 @@ def render_diff(
 
 
 def cmd(
-    context_name: Annotated[
+    target: Annotated[
         str | None,
         typer.Argument(
             help=(
-                "Existing Context to inspect; omit in a TTY to inspect the "
-                "current Context"
+                "Existing Context, or CHECKPOINT when --context is supplied"
             )
+        ),
+    ] = None,
+    context_name: Annotated[
+        str | None,
+        typer.Option(
+            "--context",
+            "-c",
+            help="Existing Context that owns an explicit checkpoint",
+        ),
+    ] = None,
+    checkpoint_uid: Annotated[
+        str | None,
+        typer.Option(
+            "--checkpoint",
+            help="Exact checkpoint UID or unambiguous prefix",
         ),
     ] = None,
     raw: Annotated[
@@ -427,22 +445,82 @@ def cmd(
             err=True,
         )
         raise typer.Exit(2)
-    if context_name is not None and (raw or stat or verbose):
+    if target is not None and context_name is not None and checkpoint_uid is not None:
         typer.secho(
-            "Diff error: a Context operand cannot be combined with "
-            "--raw, --stat, or --verbose.",
+            "Diff error: pass the checkpoint either as the operand or with "
+            "--checkpoint, not both.",
             fg=typer.colors.RED,
             err=True,
         )
         raise typer.Exit(2)
 
     store = MemoryStore(create=False)
+    checkpoint_selector = checkpoint_uid
+    context_locator = context_name
+    if context_name is not None and target is not None:
+        checkpoint_selector = target
+    elif context_name is None and target is not None:
+        context_locator = target
+
+    history_requested = context_locator is not None or checkpoint_selector is not None
+    if checkpoint_selector is not None and context_locator is None:
+        typer.secho(
+            "Diff error: an explicit checkpoint requires its Context; pass "
+            "--context CONTEXT.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+
+    if history_requested and (
+        checkpoint_selector is not None
+        or raw
+        or stat
+        or verbose
+        or not _interactive_terminal()
+    ):
+        try:
+            canonical_context = resolve_context_locator(
+                context_locator,
+                current=store.current_context_name(),
+            )
+            checkpoints = store.list_checkpoints(canonical_context)
+            entries = checkpoint_picker_entries(checkpoints)
+            if not entries:
+                raise ValueError(
+                    f"Context '{canonical_context}' has no checkpoints."
+                )
+            entry = (
+                entries[0]
+                if checkpoint_selector is None
+                else resolve_exact_or_unique_uid(
+                    entries,
+                    checkpoint_selector,
+                    uid=lambda candidate: candidate.uid,
+                    label="Checkpoint",
+                )
+            )
+            typer.echo(
+                render_checkpoint_revision_cli(
+                    checkpoints,
+                    entry,
+                    context_name=canonical_context,
+                    stat=stat,
+                    raw=raw,
+                    verbose=verbose,
+                )
+            )
+        except (OSError, RuntimeError, ValueError) as error:
+            typer.secho(f"Diff error: {error}", fg=typer.colors.RED, err=True)
+            raise typer.Exit(1)
+        return
+
     try:
         session = store.load_staged_update()
     except (OSError, ValueError) as error:
         typer.secho(f"Diff error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
-    if context_name is not None or (
+    if context_locator is not None or (
         not raw and not stat and not verbose and _interactive_terminal()
     ):
         browser_session = (
@@ -455,7 +533,7 @@ def cmd(
             browse_diff(
                 store,
                 session=browser_session,
-                context_locator=context_name,
+                context_locator=context_locator,
             )
         except (OSError, RuntimeError, ValueError) as error:
             typer.secho(
