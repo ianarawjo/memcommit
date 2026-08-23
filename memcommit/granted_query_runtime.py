@@ -9,6 +9,7 @@ from memcommit.operations.query.granted_runtime import (
     execute_granted_query_read,
     execute_granted_query_request,
     freeze_granted_query_targets,
+    resolve_granted_query_target,
 )
 
 __all__ = [
@@ -17,4 +18,5 @@ __all__ = [
     "execute_granted_query_read",
     "execute_granted_query_request",
     "freeze_granted_query_targets",
+    "resolve_granted_query_target",
 ]

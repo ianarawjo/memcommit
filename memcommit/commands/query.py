@@ -18,6 +18,7 @@ from memcommit.operations.query.granted_application import (
 from memcommit.operations.query.granted_runtime import (
     execute_granted_query_request,
     freeze_granted_query_targets,
+    resolve_granted_query_target,
 )
 from memcommit.infrastructure.providers.find_query import (
     connect_ordinary_query_provider as connect_codex_chatgpt_provider,
@@ -69,30 +70,45 @@ from memcommit.search import FindError
 def _query_ordinary_context(
     store: MemoryStore,
     *,
-    context_name: str | None,
+    context_names: tuple[str | None, ...],
     current_name: str | None,
     question: str,
     traversal: ContextTraversal,
     all_contexts: bool = False,
 ) -> None:
     """Answer from the same frozen searchable frame used by ordinary Find."""
-    access = resolve_context_access(
-        store,
-        context_name,
-        current_name=current_name,
-        required_permission="READ",
+    accesses = tuple(
+        resolve_context_access(
+            store,
+            context_name,
+            current_name=current_name,
+            required_permission="READ",
+        )
+        for context_name in context_names
     )
+    if not accesses:
+        raise ValueError("Select at least one readable Query Context.")
+    target_names = tuple(access.display_name for access in accesses)
+    if len(set(target_names)) != len(target_names):
+        raise ValueError("Query Context roots must be distinct.")
     if all_contexts:
         # PROFILE is only a process-local shortcut. Freeze the concrete public
         # names once so provider work cannot reinterpret --all after current or
         # Profile state changes.
-        catalog = freeze_profile_readable_context_catalog(store, access)
+        catalog = freeze_profile_readable_context_catalog(store, accesses[0])
         target_names = tuple(catalog.list_context_names())
-        accesses = tuple(catalog.access_for(name) for name in target_names)
-        authorize_combination(accesses)
+    elif len(accesses) == 1:
+        # A granted public name is the semantic Source. Its local attachment is
+        # authorization metadata and must never replace this exact target.
+        catalog = freeze_readable_context_catalog(store, accesses[0])
     else:
-        catalog = freeze_readable_context_catalog(store, access)
-        target_names = (access.display_name,)
+        # Multiple explicit roots need the shared Profile catalog only as a
+        # namespace. The request below still freezes exactly the named roots.
+        catalog = freeze_profile_readable_context_catalog(store, accesses[0])
+    frozen_accesses = tuple(catalog.access_for(name) for name in target_names)
+    # Provider inference is a derived use even for one granted Source; combining
+    # more than one ownership domain additionally requires COMBINE.
+    authorize_combination(frozen_accesses)
     request = OrdinaryQueryRequest(
         question=question,
         target_names=target_names,
@@ -182,6 +198,78 @@ def _open_query_workbench(
     )
 
 
+def _query_granted_target(
+    store: MemoryStore,
+    *,
+    target: GrantedQueryTarget,
+    question: str | None,
+    language: str,
+    memory_handle: str | None,
+    federate_descendants: bool,
+) -> None:
+    """Execute and render one already resolved public QUERY target."""
+
+    progress = (
+        CommandProgress(
+            "QUERY",
+            "connecting provider",
+            total=3,
+        )
+        if question is not None
+        else None
+    )
+    try:
+        if progress is not None:
+            progress.start()
+        response = execute_granted_query_request(
+            GrantedQueryRequest(
+                target=target,
+                question=question,
+                language=language,
+                memory_handle=memory_handle,
+                federate_descendants=federate_descendants,
+            ),
+            store=store,
+            provider_factory=lambda: connect_query_provider("codex_chatgpt"),
+            observer=(
+                (
+                    lambda stage: progress.update(
+                        {
+                            "PREPARING_SOURCES": "preparing authorized sources",
+                            "ANSWERING": "answering query",
+                        }[stage],
+                        step={"PREPARING_SOURCES": 2, "ANSWERING": 3}[stage],
+                    )
+                    if stage in {"PREPARING_SOURCES", "ANSWERING"}
+                    else None
+                )
+                if progress is not None
+                else None
+            ),
+            load_catalog=load_authority_query_catalog,
+        )
+        if progress is not None:
+            progress.close()
+        render_granted_query_response(response)
+    except (
+        FileNotFoundError,
+        OSError,
+        ProfileConfigError,
+        ProfileError,
+        QueryProviderError,
+        GrantedQuerySourceError,
+        ValueError,
+    ) as error:
+        if progress is not None:
+            progress.close()
+        typer.secho(
+            f"Query error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
+
+
 def cmd(
     selector: Annotated[
         Optional[str],
@@ -203,13 +291,15 @@ def cmd(
         ),
     ] = None,
     context_name: Annotated[
-        Optional[str],
+        Optional[list[str]],
         typer.Option(
             "--context",
             "-c",
+            show_default=False,
             help=(
-                "Ordinary Context to answer from, or parent Context containing "
-                "the query-only reference"
+                "Readable Context root to answer from; repeat for multiple "
+                "ordinary roots. One exact QUERY-only public name may also "
+                "identify the answer Source"
             ),
         ),
     ] = None,
@@ -285,7 +375,14 @@ def cmd(
         )
         raise typer.Exit(2)
     store = MemoryStore()
-    if all_contexts and context_name is not None:
+    context_operands: tuple[str, ...] = (
+        (context_name,)
+        if isinstance(context_name, str)
+        else tuple(context_name)
+        if context_name
+        else ()
+    )
+    if all_contexts and context_operands:
         typer.secho(
             "Query error: --all/-a cannot be combined with --context/-c.",
             fg=typer.colors.RED,
@@ -293,6 +390,14 @@ def cmd(
         )
         raise typer.Exit(2)
     if selector is None:
+        if len(context_operands) > 1:
+            typer.secho(
+                "Query error: the interactive workbench accepts at most one "
+                "initial --context; choose multiple Sources in its Scope control.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(2)
         if scope_flags_supplied:
             typer.secho(
                 "Query error: scope flags require a one-shot SELECTOR; "
@@ -313,7 +418,7 @@ def cmd(
         try:
             _open_query_workbench(
                 store,
-                context_name=context_name,
+                context_name=(context_operands[0] if context_operands else None),
                 language=language,
             )
         except (
@@ -356,7 +461,7 @@ def cmd(
             context_snapshot = ContextOperandSnapshot.capture(store)
             _query_ordinary_context(
                 store,
-                context_name=None,
+                context_names=(None,),
                 current_name=context_snapshot.current_name,
                 question=selector,
                 traversal=traversal,
@@ -388,15 +493,105 @@ def cmd(
     memory_handle = None
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
-        selected_name = context_snapshot.resolve_or_current(context_name)
-        if not selected_name:
+        resolved_context_names = tuple(
+            context_snapshot.resolve(operand) for operand in context_operands
+        )
+        if question is not None and not question.strip():
+            raise ValueError("Question must be non-empty.")
+        # A public QUERY name is already a complete operation target. Resolve
+        # it from public Grant metadata before consulting the unrelated current
+        # Context. With --context, READ wins so a readable grant keeps ordinary
+        # Query semantics; a QUERY-only public name is the one-question alias.
+        direct_granted_target = (
+            resolve_granted_query_target(store, candidate_route_selector)
+            if not resolved_context_names
+            else None
+        )
+        if direct_granted_target is not None:
+            _query_granted_target(
+                store,
+                target=direct_granted_target,
+                question=question,
+                language=language,
+                memory_handle=candidate_memory_handle,
+                federate_descendants=traversal.include_descendants,
+            )
+            return
+        if question is None and len(resolved_context_names) == 1:
+            try:
+                resolve_context_access(
+                    store,
+                    resolved_context_names[0],
+                    current_name=context_snapshot.current_name,
+                    required_permission="READ",
+                )
+            except (FileNotFoundError, ProfileError) as read_error:
+                explicit_granted_target = resolve_granted_query_target(
+                    store,
+                    resolved_context_names[0],
+                )
+                if explicit_granted_target is None:
+                    raise read_error
+                _query_granted_target(
+                    store,
+                    target=explicit_granted_target,
+                    question=selector,
+                    language=language,
+                    memory_handle=None,
+                    federate_descendants=traversal.include_descendants,
+                )
+                return
+        if question is None:
+            if language != "en":
+                raise ValueError("--language applies only to a query-only view.")
+            _query_ordinary_context(
+                store,
+                context_names=(resolved_context_names or (None,)),
+                current_name=context_snapshot.current_name,
+                question=selector,
+                traversal=traversal,
+            )
+            return
+    except (
+        FileNotFoundError,
+        FindAnswerCorpusTooLarge,
+        OrdinaryQueryCorpusTooLarge,
+        FindError,
+        OSError,
+        ProfileConfigError,
+        ProfileError,
+        QueryProviderError,
+        RuntimeError,
+        ValueError,
+    ) as error:
+        typer.secho(
+            f"Query error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
+    if len(resolved_context_names) > 1:
+        typer.secho(
+            "Query error: repeated --context applies only to the ordinary "
+            "one-question form.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+    try:
+        anchor_name = (
+            resolved_context_names[0]
+            if resolved_context_names
+            else context_snapshot.current_name
+        )
+        if not anchor_name:
             raise RuntimeError(
                 "No current context. Pass --context or run 'mem init <name>' first."
             )
-        if not store.context_exists(selected_name):
-            # A READ-granted current view is not a local Context. Query routes
-            # remain attached to its owned workspace, so recover that public
-            # control-plane anchor without opening authority content.
+        if not store.context_exists(anchor_name):
+            # Legacy two-positional routing needs a local control-plane anchor.
+            # Keep it separate from the already classified semantic Source so
+            # attachment recovery can never retarget an ordinary Query.
             navigation_registry = load_profile_registry()
             attachment_identities = {
                 (
@@ -406,8 +601,8 @@ def cmd(
                 for grant in navigation_registry.grants
                 if grant.grantee_profile_uid == navigation_registry.active.uid
                 and (
-                    selected_name == grant.public_name
-                    or selected_name.startswith(grant.public_name + "/")
+                    anchor_name == grant.public_name
+                    or anchor_name.startswith(grant.public_name + "/")
                 )
                 and store.context_exists(grant.attachment_context_name)
             }
@@ -419,8 +614,8 @@ def cmd(
             attachment = store.load_direct(attachment_name)
             if attachment.uid != attachment_uid:
                 raise RuntimeError("The current granted view's query anchor changed.")
-            selected_name = attachment_name
-        ctx = store.load(selected_name)
+            anchor_name = attachment_name
+        ctx = store.load(anchor_name)
     except (FileNotFoundError, OSError, RuntimeError, ValueError) as error:
         typer.secho(
             f"Error: {display_escape_text(str(error))}",
@@ -429,13 +624,6 @@ def cmd(
         )
         raise typer.Exit(1)
 
-    if question is not None and not question.strip():
-        typer.secho(
-            "Error: question must be non-empty.",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(1)
     resolution_error: KeyError | ValueError | None = None
     try:
         item = ops.resolve(ctx, selector)
@@ -501,7 +689,7 @@ def cmd(
             for grant in registry.grants
             if grant.grantee_profile_uid == registry.active.uid
             and grant.attachment_context_uid == ctx.uid
-            and grant.attachment_context_name == selected_name
+            and grant.attachment_context_name == anchor_name
             and (
                 selector == grant.public_name
                 or selector.startswith(grant.public_name + "/")
@@ -517,7 +705,7 @@ def cmd(
                 for grant in registry.grants
                 if grant.grantee_profile_uid == registry.active.uid
                 and grant.attachment_context_uid == ctx.uid
-                and grant.attachment_context_name == selected_name
+                and grant.attachment_context_name == anchor_name
                 and (
                     route_selector == grant.public_name
                     or route_selector.startswith(grant.public_name + "/")
@@ -531,41 +719,6 @@ def cmd(
         )
         raise typer.Exit(1)
     if not routed_grants:
-        if question is None:
-            if language != "en":
-                typer.secho(
-                    "Error: --language applies only to a query-only view.",
-                    fg=typer.colors.RED,
-                    err=True,
-                )
-                raise typer.Exit(1)
-            try:
-                _query_ordinary_context(
-                    store,
-                    context_name=selected_name,
-                    current_name=context_snapshot.current_name,
-                    question=selector,
-                    traversal=traversal,
-                )
-            except (
-                FileNotFoundError,
-                FindAnswerCorpusTooLarge,
-                OrdinaryQueryCorpusTooLarge,
-                FindError,
-                OSError,
-                ProfileConfigError,
-                ProfileError,
-                QueryProviderError,
-                RuntimeError,
-                ValueError,
-            ) as error:
-                typer.secho(
-                    f"Query error: {display_escape_text(str(error))}",
-                    fg=typer.colors.RED,
-                    err=True,
-                )
-                raise typer.Exit(1)
-            return
         message = (
             str(resolution_error)
             if resolution_error is not None
@@ -592,66 +745,15 @@ def cmd(
         )
         raise typer.Exit(1)
 
-    progress = (
-        CommandProgress(
-            "QUERY",
-            "connecting provider",
-            total=3,
-        )
-        if question is not None
-        else None
+    _query_granted_target(
+        store,
+        target=GrantedQueryTarget(
+            grant_uid=effective_grant.uid,
+            public_name=route_selector,
+            attachment_name=anchor_name,
+        ),
+        question=question,
+        language=language,
+        memory_handle=memory_handle,
+        federate_descendants=traversal.include_descendants,
     )
-    try:
-        if progress is not None:
-            progress.start()
-        response = execute_granted_query_request(
-            GrantedQueryRequest(
-                target=GrantedQueryTarget(
-                    grant_uid=effective_grant.uid,
-                    public_name=route_selector,
-                    attachment_name=selected_name,
-                ),
-                question=question,
-                language=language,
-                memory_handle=memory_handle,
-                federate_descendants=traversal.include_descendants,
-            ),
-            store=store,
-            provider_factory=lambda: connect_query_provider("codex_chatgpt"),
-            observer=(
-                (
-                    lambda stage: progress.update(
-                        {
-                            "PREPARING_SOURCES": "preparing authorized sources",
-                            "ANSWERING": "answering query",
-                        }[stage],
-                        step={"PREPARING_SOURCES": 2, "ANSWERING": 3}[stage],
-                    )
-                    if stage in {"PREPARING_SOURCES", "ANSWERING"}
-                    else None
-                )
-                if progress is not None
-                else None
-            ),
-            load_catalog=load_authority_query_catalog,
-        )
-        if progress is not None:
-            progress.close()
-        render_granted_query_response(response)
-    except (
-        FileNotFoundError,
-        OSError,
-        ProfileConfigError,
-        ProfileError,
-        QueryProviderError,
-        GrantedQuerySourceError,
-        ValueError,
-    ) as error:
-        if progress is not None:
-            progress.close()
-        typer.secho(
-            f"Query error: {display_escape_text(str(error))}",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(1)

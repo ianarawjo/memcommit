@@ -195,6 +195,68 @@ def freeze_granted_query_targets(store: MemoryStore) -> tuple[GrantedQueryTarget
     )
 
 
+def resolve_granted_query_target(
+    store: MemoryStore,
+    public_name: str,
+) -> GrantedQueryTarget | None:
+    """Resolve one public QUERY route independently of the current Context.
+
+    Grant metadata and the local attachment identity are the public
+    control-plane boundary. Concealed authority Contexts remain unopened
+    until the granted Query runtime has connected its provider.
+    """
+
+    registry = load_profile_registry()
+    # An explicit isolated Store must not inherit host grants by name collision.
+    if store.store_dir.resolve() != profile_store_dir(registry.active).resolve():
+        return None
+    candidates = [
+        grant
+        for grant in registry.grants
+        if grant.grantee_profile_uid == registry.active.uid
+        and (
+            public_name == grant.public_name
+            or public_name.startswith(grant.public_name + "/")
+        )
+    ]
+    if not candidates:
+        return None
+
+    # A narrower route is an authority override even when it removes QUERY.
+    # Falling back to a broader QUERY Grant would bypass that boundary.
+    depth = max(len(grant.public_name.split("/")) for grant in candidates)
+    effective = [
+        grant for grant in candidates if len(grant.public_name.split("/")) == depth
+    ]
+    valid = []
+    for grant in effective:
+        if not store.context_exists(grant.attachment_context_name):
+            continue
+        attachment = store.load_direct(grant.attachment_context_name)
+        if attachment.uid == grant.attachment_context_uid:
+            valid.append(grant)
+    if len(valid) != len(effective):
+        raise ValueError("The query-only View attachment Context changed.")
+    identities = {
+        (grant.uid, grant.attachment_context_uid, grant.attachment_context_name)
+        for grant in valid
+    }
+    if len(identities) != 1:
+        raise ValueError(
+            f"Query-only View {public_name!r} is ambiguous across attachment Contexts."
+        )
+    grant = valid[0]
+    if "QUERY" not in grant.permissions:
+        raise ValueError(
+            f"Grant {grant.uid[:8]} does not allow query access to {public_name!r}."
+        )
+    return GrantedQueryTarget(
+        grant_uid=grant.uid,
+        public_name=public_name,
+        attachment_name=grant.attachment_context_name,
+    )
+
+
 class MemoryStoreGrantedQueryReadPort(GrantedQueryReadPort):
     """Read and revalidate concealed grant material without persistence."""
 
@@ -449,4 +511,5 @@ __all__ = [
     "execute_granted_query_read",
     "execute_granted_query_request",
     "freeze_granted_query_targets",
+    "resolve_granted_query_target",
 ]

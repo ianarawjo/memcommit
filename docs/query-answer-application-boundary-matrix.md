@@ -66,7 +66,10 @@ The extraction preserves the existing ordinary Query contract:
   `follow_embeds=True`;
 - the same readable search-root and candidate collectors freeze the corpus;
 - a single selected target uses its public name as the empty/no-answer label;
-- multiple targets use `<n> selected Contexts`;
+- repeated CLI `--context` operands freeze those exact distinct readable public
+  names, while their Grant attachments remain authorization metadata;
+- multiple targets use `<n> selected Contexts` and require granted DERIVE plus
+  cross-domain COMBINE authority before provider construction;
 - CLI `-a/--all` expands the frozen Profile-readable catalog to concrete exact
   target names and authorizes their combined semantic use before provider
   construction;
@@ -105,6 +108,14 @@ boundary.
 - execution emits no terminal output and preserves every Source Context; and
 - application/runtime modules import no command, Typer, prompt-toolkit, or
   concrete provider module, while only the runtime imports `MemoryStore`.
+
+`tests/test_granted_query_sources.py` additionally proves that an explicit
+READ-granted ordinary target and a repeated pair retain their public Context
+identities in both the provider corpus and host-rendered References, never
+include the local attachment's distractor Memory, and fail before provider
+construction when DERIVE or COMBINE is absent. The same suite proves that a
+QUERY-only `--context` enters the exact granted runtime instead of ordinary
+local fallback.
 
 The focused application, synthesis, provider, and workbench suite passed after
 the extraction. The existing compatibility test

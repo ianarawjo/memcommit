@@ -188,6 +188,7 @@
       "docs/mem-pwd-design-rationale.md"
     ],
     "query": [
+      "docs/federated-query-design-rationale.md",
       "docs/query-callable-boundary-matrix.md",
       "docs/query-answer-application-boundary-matrix.md",
       "docs/query-reference-application-boundary-matrix.md",

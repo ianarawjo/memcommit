@@ -1,6 +1,6 @@
 # Query callable boundary matrix
 
-Last verified: 2026-08-22.
+Last verified: 2026-08-23.
 
 ## Scope
 
@@ -20,6 +20,7 @@ public-interface boundaries. Query has no durability boundary.
 | `operations.query.granted_source:load_authority_query_catalog` | infrastructure | public route -> opaque catalog | opens no source text to the caller; handle/placeholders only | granted Source tests | `VERIFIED` |
 | `operations.query.granted_application:run_granted_query_read` | application | request -> response | QUERY freezes before provider construction; response withheld until Grant and Sources revalidate | granted application tests | `VERIFIED` |
 | `operations.query.granted_runtime:freeze_granted_query_targets` | infrastructure | Store -> public target tuple | reads Grant control-plane metadata only | Query TUI tests | `VERIFIED` |
+| `operations.query.granted_runtime:resolve_granted_query_target` | infrastructure | Store + public name -> exact target or none | resolves independently of current Context from Grant metadata and exact local attachment identity; opens no concealed Source | canonical CLI route tests | `VERIFIED` |
 | `operations.query.granted_runtime:execute_granted_query_read` | Store facade | request + injected dependencies -> response | provider-before-Source order and post-call revalidation; no write | runtime/public API tests | `VERIFIED` |
 | `operations.query.granted_runtime:execute_granted_query_request` | compatibility alias | same as read facade | identical one-shot execution; no publication stage | CLI/TUI tests | `VERIFIED` |
 | `operations.query.reference_application:run_query_reference` | application | request -> response | provider construction before Source port; no durable effect | reference boundary tests | `VERIFIED` |
@@ -34,7 +35,7 @@ public-interface boundaries. Query has no durability boundary.
 | `interfaces.tui.operations.query:run_query_workbench` | TUI | frozen catalogs + runners -> result | process-local state, one provider turn after Enter, optional plain clipboard | workbench tests and 180×52 trace | `VERIFIED` |
 | `interfaces.tui.operations.query:project_query_answer_clipboard` | TUI projection | typed answer + focus -> text | no effect until injected writer; never reparses terminal output | clipboard tests | `VERIFIED` |
 | `commands.query:_open_query_workbench` | CLI composition | Store + public options -> workbench | freezes ordinary and Query View catalogs; injects runners and Help | Query command tests | `VERIFIED IN PLACE` |
-| `commands.query:cmd` | CLI composition | argv/TTY -> explicit route | route selection, progress, error/exit, provider wiring; no transcript grammar | Query CLI tests | `VERIFIED IN PLACE` |
+| `commands.query:cmd` | CLI composition | argv/TTY -> explicit route | freezes public Source identity before legacy attachment lookup; repeated ordinary roots retain exact names and QUERY-only `--context` cannot fall through to local data | CF-01 route regressions and Query CLI tests | `VERIFIED IN PLACE` |
 
 ## Operation summary
 
@@ -43,6 +44,13 @@ public-interface boundaries. Query has no durability boundary.
 | Ordinary Context Query | agent, Python, CLI, TUI | readable freeze and whole-frame preflight before completion | none |
 | Authority-granted Query | agent, Python, CLI, TUI | authentication before concealed Source; post-call Grant/Source revalidation | none |
 | Local `QueryContextRef` | agent, Python, CLI | authentication before exact concealed Source open | none |
+
+The CLI ordinary route accepts repeated `--context` operands. It resolves all
+of them from one current-Context snapshot, requires distinct public names,
+checks granted DERIVE and cross-domain COMBINE authority before provider
+construction, and passes only those exact names to the ordinary application.
+The local attachment recovered for the legacy two-positional route is never an
+ordinary request target.
 
 ## Deliberate limits
 

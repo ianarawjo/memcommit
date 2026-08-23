@@ -138,6 +138,7 @@
       },
       "query": {
         "evidence": [
+          "docs/federated-query-design-rationale.md",
           "docs/query-callable-boundary-matrix.md",
           "docs/query-answer-application-boundary-matrix.md",
           "docs/query-reference-application-boundary-matrix.md",
