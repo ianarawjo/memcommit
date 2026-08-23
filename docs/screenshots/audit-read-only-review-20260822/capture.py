@@ -88,6 +88,14 @@ def _session(*, empty: bool):
             "The audience for the entrance schedule is not explicit.",
             "Which audience uses this schedule?",
         ),
+        AmbiguityFinding(
+            second,
+            "SINGLE",
+            "HELPFUL",
+            ("The public entrance remains closed until 09:00.",),
+            "The audience affected by the closure is not explicit.",
+            "Which audience is affected by the closure?",
+        ),
     )
     conflict_findings = () if empty else (
         ConflictFinding(
@@ -194,28 +202,44 @@ def _capture_full(store_root: Path) -> None:
 
         child.send(DOWN)
         _BASE._settle(child)
-        _BASE._snapshot(recorder, "02-duplicate-one-line-evidence")
+        _BASE._snapshot(recorder, "02-duplicate-check-header")
 
         child.send(DOWN)
         _BASE._settle(child)
-        _BASE._snapshot(recorder, "03-ambiguity-one-line-rationale")
+        _BASE._snapshot(recorder, "03-duplicate-one-line-evidence")
 
         child.send(DOWN)
         _BASE._settle(child)
-        _BASE._snapshot(recorder, "04-conflict-one-line-evidence")
+        _BASE._snapshot(recorder, "04-ambiguity-check-header")
 
         child.send(DOWN)
         _BASE._settle(child)
-        _BASE._snapshot(recorder, "05-compact-provenance")
+        _BASE._snapshot(recorder, "05-first-ambiguity-finding")
 
         child.send(DOWN)
         _BASE._settle(child)
-        _BASE._snapshot(recorder, "06-explicit-read-only-boundary")
+        _BASE._snapshot(recorder, "06-second-ambiguity-finding")
+
+        child.send(DOWN)
+        _BASE._settle(child)
+        _BASE._snapshot(recorder, "07-conflict-check-header")
+
+        child.send(DOWN)
+        _BASE._settle(child)
+        _BASE._snapshot(recorder, "08-conflict-one-line-evidence")
+
+        child.send(DOWN)
+        _BASE._settle(child)
+        _BASE._snapshot(recorder, "09-compact-provenance")
+
+        child.send(DOWN)
+        _BASE._settle(child)
+        _BASE._snapshot(recorder, "10-explicit-read-only-boundary")
 
         child.send("q")
         child.expect("AUDIT REVIEW CLOSED .* READ-ONLY")
         child.expect(pexpect.EOF)
-        _BASE._snapshot(recorder, "07-close-no-write-verification")
+        _BASE._snapshot(recorder, "11-close-no-write-verification")
     finally:
         if child.isalive():
             child.close(force=True)
@@ -226,7 +250,7 @@ def _capture_empty(store_root: Path) -> None:
     try:
         child.expect("0 FINDING")
         _BASE._settle(child)
-        _BASE._snapshot(recorder, "08-zero-finding-complete-report")
+        _BASE._snapshot(recorder, "12-zero-finding-complete-report")
         child.send("q")
         child.expect("AUDIT REVIEW CLOSED .* READ-ONLY")
         child.expect(pexpect.EOF)
@@ -251,7 +275,7 @@ def main() -> None:
     )
     if "38;2;" not in raw and "48;2;" not in raw:
         raise RuntimeError("PTY stream did not contain expected true-color ANSI.")
-    verification = (OUT / "07-close-no-write-verification.txt").read_text(
+    verification = (OUT / "11-close-no-write-verification.txt").read_text(
         encoding="utf-8"
     )
     for expected in (

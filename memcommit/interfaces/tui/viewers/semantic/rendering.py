@@ -11,6 +11,7 @@ from memcommit.interfaces.tui.viewers.semantic.model import (
 
 _RESTING_STYLE = {
     "class:viewer-section": "class:section",
+    "class:finding-marker.focused": "class:finding-marker",
     "class:report-label.focused": "class:report-label",
     "class:viewer-body.focused": "class:viewer-body",
     "class:detail-card.focused": "class:detail-card",

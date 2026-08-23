@@ -80,6 +80,8 @@ MEMCOMMIT_TUI_STYLE = Style.from_dict(
 SEMANTIC_VIEWER_STYLE = Style.from_dict(
     {
         "report-neutral": f"fg:{REPORT_HEX}",
+        "finding-marker": f"fg:{REPORT_HEX}",
+        "finding-marker.focused": f"fg:{FOCUS_HEX} bold",
         "report-label": f"fg:{REPORT_HEX} bold",
         "report-label.focused": f"fg:{FOCUS_HEX} bold",
         "viewer-section": f"fg:{FOCUS_HEX} bold",

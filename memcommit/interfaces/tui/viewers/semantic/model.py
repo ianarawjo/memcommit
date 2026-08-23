@@ -19,6 +19,7 @@ _FOCUSED_STYLE = {
     "class:case-title": "class:viewer-section",
     "class:detail-heading": "class:viewer-section",
     "class:block-heading": "class:viewer-section",
+    "class:finding-marker": "class:finding-marker.focused",
     "class:report-label": "class:report-label.focused",
     "class:viewer-body": "class:viewer-body.focused",
     "class:detail-card": "class:detail-card.focused",

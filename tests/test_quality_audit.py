@@ -319,8 +319,11 @@ def test_audit_review_is_one_complete_answer_free_document():
     assert [section.kind for section in document.sections] == [
         "OVERVIEW",
         "CHECK",
+        "FINDING",
         "CHECK",
+        "FINDING",
         "CHECK",
+        "FINDING",
         "PROVENANCE",
         "BOUNDARY",
     ]
@@ -344,6 +347,75 @@ def test_audit_review_is_one_complete_answer_free_document():
         semantic_role_style(SemanticColorRole.QUALITY_CONFLICT),
         "CONFLICTS",
     ) in check_fragments[2]
+    finding_sections = tuple(
+        section for section in document.sections if section.kind == "FINDING"
+    )
+    for section, marker, role, label in zip(
+        finding_sections,
+        ("≈ ", "? ", "! "),
+        (
+            SemanticColorRole.QUALITY_DUPLICATE,
+            SemanticColorRole.QUALITY_AMBIGUITY,
+            SemanticColorRole.QUALITY_CONFLICT,
+        ),
+        ("REDUNDANT", "AMBIGUOUS", "CONFLICT"),
+        strict=True,
+    ):
+        assert ("class:finding-marker", marker) in section.block.fragments
+        focused_fragments = section.block.render(active=True)
+        assert ("class:finding-marker.focused", marker) in focused_fragments
+        # Focus is shown by the marker while the category keeps its meaning.
+        assert (semantic_role_style(role), label) in focused_fragments
+
+
+def test_audit_review_scrolls_each_finding_in_one_check_independently():
+    ctx, first, second = _context()
+    session = _finding_session(ctx, first, second)
+    ambiguity_check = session.checks[1]
+    assert isinstance(ambiguity_check.report, AmbiguityReport)
+    second_finding = AmbiguityFinding(
+        second,
+        "SINGLE",
+        "HELPFUL",
+        ("The public entrance stays closed until 9:00.",),
+        "The affected audience is not explicit.",
+        "Which audience is affected?",
+    )
+    session.checks = (
+        session.checks[0],
+        replace(
+            ambiguity_check,
+            report=replace(
+                ambiguity_check.report,
+                findings=ambiguity_check.report.findings + (second_finding,),
+            ),
+        ),
+        session.checks[2],
+    )
+
+    document = quality_audit_review_document(session)
+    ambiguity_sections = tuple(
+        section
+        for section in document.sections
+        if section.uid.startswith("AUDIT:CHECK:ambiguities")
+    )
+
+    assert [section.kind for section in ambiguity_sections] == [
+        "CHECK",
+        "FINDING",
+        "FINDING",
+    ]
+    assert first.content in "".join(
+        text for _style, text in ambiguity_sections[1].block.fragments
+    )
+    assert second.content in "".join(
+        text for _style, text in ambiguity_sections[2].block.fragments
+    )
+    focused = document.render(
+        focused_uid=ambiguity_sections[2].uid,
+        viewer_focused=True,
+    )
+    assert sum(style == "[SetCursorPosition]" for style, _text in focused) == 1
 
 
 def test_audit_review_close_cannot_persist_or_change_a_saved_annotation(

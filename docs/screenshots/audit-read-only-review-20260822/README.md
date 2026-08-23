@@ -3,9 +3,13 @@
 This ordered set records the comprehensive Viewer retained for a saved Audit
 after compacting its document topology. Unlike an answerable Review, it has no
 Items hub, Responses frame, selection, draft, To Do, rerun, or Apply action.
-Each quality category uses the same semantic color on its section header and
-its issue-row token; counts, Source references, and rationale prose stay
-neutral.
+Each quality category uses the same semantic color on its check header and its
+issue-row token; counts, Source references, and rationale prose stay neutral.
+The check header and every individual finding are separate semantic scroll
+stops, so a category with many findings never moves as one large block.
+On a focused finding, its leading `=`, `≈`, `?`, or `!` marker turns focus blue
+while the adjacent category label retains its Duplicate, Ambiguity, or Conflict
+semantic color.
 
 ## Reproduction frame
 
@@ -27,13 +31,17 @@ neutral.
 | Image | Preceding input | Visible state | Following input | Durable mutation |
 | --- | --- | --- | --- | --- |
 | `01-compact-overview-and-source.png` | exact saved Audit selected | Identity, check counts, Source scope, and every frozen Memory share one overview | `Down` | None |
-| `02-duplicate-one-line-evidence.png` | `Down` | The Duplicate relation and exact pair form one line; the retained legacy note is not default report content | `Down` | None |
-| `03-ambiguity-one-line-rationale.png` | `Down` | Exact Source, reason, and readings form one natural `WHY` rationale rather than an answer surface | `Down` | None |
-| `04-conflict-one-line-evidence.png` | `Down` | The scoped Conflict pair and `WHY` form one evidence line, with no Resolve or Apply action | `Down` | None |
-| `05-compact-provenance.png` | `Down` | All three ruleset/provider identities share one provenance section | `Down` | None |
-| `06-explicit-read-only-boundary.png` | `Down` | Final non-proof and no-select/no-write/no-rerun/no-Apply boundary | `Q` | None |
-| `07-close-no-write-verification.png` | `Q` | Digest unchanged; response/provider/Context/checkpoint writes all zero | process exit | None |
-| `08-zero-finding-complete-report.png` | saved zero-finding Audit selected | All three completed zero-finding checks remain explicit | `Q` | None |
+| `02-duplicate-check-header.png` | `Down` | Duplicate count and frozen Source form their own category header stop | `Down` | None |
+| `03-duplicate-one-line-evidence.png` | `Down` | The blue `≈` marker identifies the independently focused finding while `REDUNDANT` retains its semantic color; the retained legacy note is not default report content | `Down` | None |
+| `04-ambiguity-check-header.png` | `Down` | Ambiguity count and frozen Source form their own category header stop | `Down` | None |
+| `05-first-ambiguity-finding.png` | `Down` | The first blue `?` marker identifies the focused finding while `AMBIGUOUS` stays yellow; Source, reason, and readings form one natural `WHY` rationale | `Down` | None |
+| `06-second-ambiguity-finding.png` | `Down` | The blue `?` moves to the second finding in the same category with its independent viewport anchor | `Down` | None |
+| `07-conflict-check-header.png` | `Down` | Conflict count and frozen Source form their own category header stop | `Down` | None |
+| `08-conflict-one-line-evidence.png` | `Down` | The blue `!` identifies the focused finding while `CONFLICT` stays red; its scoped pair and `WHY` remain one unit with no Resolve or Apply action | `Down` | None |
+| `09-compact-provenance.png` | `Down` | All three ruleset/provider identities share one provenance section | `Down` | None |
+| `10-explicit-read-only-boundary.png` | `Down` | Final non-proof and no-select/no-write/no-rerun/no-Apply boundary | `Q` | None |
+| `11-close-no-write-verification.png` | `Q` | Digest unchanged; response/provider/Context/checkpoint writes all zero | process exit | None |
+| `12-zero-finding-complete-report.png` | saved zero-finding Audit selected | All three completed zero-finding checks remain explicit | `Q` | None |
 
 The historical note fixture proves decode and no-write compatibility only. The
 compact default Viewer neither displays nor modifies that note, and the

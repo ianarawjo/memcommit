@@ -142,30 +142,46 @@ def quality_audit_review_document(
         header_role = semantic_quality_role(check.kind)
         if header_role is None:  # pragma: no cover - Audit validates this union.
             raise ValueError("Unsupported Audit quality check kind.")
-        fragments: list[tuple[str, str]] = [
+        header_fragments: list[tuple[str, str]] = [
             ("class:report-neutral", " "),
             (semantic_role_style(header_role), header_label),
             ("class:report-label", header_text[len(header_label) :] + "\n"),
         ]
         if count == 0:
-            fragments.append(
+            header_fragments.append(
                 ("class:viewer-body", f" {_inline(report_view.empty_message)}\n")
-            )
-        for item in report_view.items:
-            fragments.append(("class:report-neutral", " "))
-            fragments.extend(
-                quality_finding_compact_fragments(
-                    item,
-                    show_context=report_view.source_count > 1,
-                )
             )
         sections.append(
             SemanticViewerSection(
                 f"AUDIT:CHECK:{check.kind}",
                 "CHECK",
-                SemanticViewerBlock(tuple(fragments)),
+                SemanticViewerBlock(tuple(header_fragments)),
             )
         )
+        for item in report_view.items:
+            # A finder can return many findings.  Keep each source-linked
+            # paragraph as one semantic stop so one large category cannot
+            # become an indivisible Viewer scroll block.
+            finding_fragments = [("class:report-neutral", " ")]
+            compact_fragments = quality_finding_compact_fragments(
+                item,
+                show_context=report_view.source_count > 1,
+            )
+            # The compact projector always begins with the typed =/≈/?/!
+            # marker.  Give only that glyph a focus-aware class: the adjacent
+            # category label must retain its semantic color while focused.
+            marker_style, marker_text = compact_fragments[0]
+            if marker_style != "class:report-neutral":  # pragma: no cover
+                raise ValueError("Audit finding marker projection changed.")
+            compact_fragments[0] = ("class:finding-marker", marker_text)
+            finding_fragments.extend(compact_fragments)
+            sections.append(
+                SemanticViewerSection(
+                    f"AUDIT:CHECK:{check.kind}:FINDING:{item.uid}",
+                    "FINDING",
+                    SemanticViewerBlock(tuple(finding_fragments)),
+                )
+            )
 
     if "conformance" in overview_by_uid:
         overview = overview_by_uid["conformance"]

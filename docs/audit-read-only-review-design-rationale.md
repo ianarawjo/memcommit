@@ -19,8 +19,9 @@ contains, in order:
 1. one overview with saved Audit identity, completion state, check counts,
    Source scope, and every frozen direct Source Memory in one wrapping snapshot
    line;
-2. one section per Duplicate, Ambiguity, and Conflict check, with every finding
-   represented as the same source-linked logical line used by Find;
+2. one header section per Duplicate, Ambiguity, and Conflict check, followed by
+   one independently navigable section for every finding, represented as the
+   same source-linked logical line used by Find;
 3. optional Conformance, then provider/ruleset provenance; and
 4. the explicit model-assistance and no-effect boundary.
 
@@ -32,10 +33,23 @@ and `WHY`, and Duplicate keeps its relation and pair without a repeated reason.
 Question and reading field labels are absent because Audit Review does not ask
 for an answer. This preserves the typed historical report while making section
 navigation track real Audit concepts rather than serialized fields.
-Each quality section colors its `DUPLICATES`, `AMBIGUITIES`, or `CONFLICTS`
-header token with the same typed semantic role used by the finding token below
-it. Counts, `FLAGGED`, Source identity, relation values, and prose remain
-neutral, so the color links category to evidence without tinting report chrome.
+Each finding is deliberately the smallest scroll stop: its source Memory or
+pair and rationale remain together, while a category containing many findings
+cannot become one indivisible focused block. Splitting a finding again into
+field-sized stops was rejected because it would separate one judgment from the
+evidence needed to understand it. Each quality header colors its `DUPLICATES`,
+`AMBIGUITIES`, or `CONFLICTS` token with the same typed semantic role used by
+the finding token below it. Counts, `FLAGGED`, Source identity, relation values,
+and prose remain neutral, so the color links category to evidence without
+tinting report chrome.
+
+Within a focused finding, the leading `=`, `≈`, `?`, or `!` marker temporarily
+changes from neutral white to the shared focus blue. The adjacent `DUPLICATE`,
+`REDUNDANT`, `AMBIGUOUS`, or `CONFLICT` label deliberately retains its semantic
+color. This makes the left edge advertise the active keyboard stop without
+erasing the finding category; leaving the row restores the marker to neutral.
+The Memory and rationale fragments retain their existing blue focus treatment,
+so the marker and evidence identify one active logical paragraph.
 
 The same typed document is used by interactive Review, non-interactive Review,
 and `--snapshot`. Arrow keys move among semantic sections; Escape, Backspace,

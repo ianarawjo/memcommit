@@ -51,4 +51,12 @@ PTY · 180 COLUMNS × 52 ROWS
 [0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
-[0m AUDIT REVIEW · ↑/↓ section · PgUp/PgDn page · Home/End · Esc/Backspace/Q close · read-only[91D[50A[C[0m
+[0m AUDIT REVIEW · ↑/↓ section · PgUp/PgDn page · Home/End · Esc/Backspace/Q close · read-only[91D[50A[C[0m[?25l[0;38;2;244;245;247;1m MEM AUDIT[0m
+[C[0;38;2;244;245;247m SAVED · 3/3 CHECKS · READ-ONLY REPORT[0m
+
+[C[0;38;2;244;245;247;1m SUMMARY · [0;38;2;244;245;247mAll quality finders completed over the same saved direct Context snapshot. Reported 4 total findings.[0m
+[C[0;38;2;244;245;247;1m CHECKS · [0;38;2;244;245;247mDUPLICATES · FINISHED · 1 finding / AMBIGUITIES · FINISHED · 2 findings / CONFLICTS · FINISHED · 1 finding[0m
+[C[0;38;2;244;245;247;1m SOURCE · [0;38;2;244;245;247mstudy/audit-source · 2 direct Memories as captured when this Audit ran. Descendants and embedded Contexts were not analyzed.[0m
+[C[0;38;2;244;245;247;1m SNAPSHOT · [a31f02c1] [0;38;2;202;211;245mThe main entrance opens at 08:00.[3C[0;38;2;244;245;247;1m[5ce891d4] [0;38;2;202;211;245mThe main entrance remains closed until 09:00.[0m
+[12C[0;38;2;139;213;255;1m · 1/1 PAIRS FLAGGED · [SOURCE study/audit-source][61D[0m[?25l[11C[0;38;2;244;245;247;1m · 1/1 PAIRS FLAGGED · [SOURCE study/audit-source][0m
+[2C[0;38;2;139;213;255;1m≈ [12CSEMANTIC_EQUIVALENT[3C[MEMORY a31f02c1] “The main entrance opens at 08:00.”[3C[MEMORY 5ce891d4] “The main entrance remains closed until 09:00.”[158D[0m
