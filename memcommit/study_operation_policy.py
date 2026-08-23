@@ -31,11 +31,12 @@ def operation_policy(
     """Return the effective Rationale/Trace boundary for one visible Context.
 
     Rationale is a content interpretation over the same ordinary-Memory frame
-    authorized by READ. Trace is different: it opens retained checkpoints and
-    command receipts, so a granted READ view never implies Trace authority.
-    Every locally owned Context may inspect its own retained history.  The
-    unused registry/store parameters remain accepted so older embedders do not
-    acquire a source-incompatible policy call during this migration.
+    authorized by READ. ``trace_allowed`` specifically denotes retained
+    checkpoints and command receipts: a granted READ view may expose a typed
+    current-access report, but never implies retained-history authority. Every
+    locally owned Context may inspect its own retained history. The unused
+    registry/store parameters remain accepted so older embedders do not acquire
+    a source-incompatible policy call during this migration.
     """
     del context_name, registry, store_root
     return StudyOperationPolicy(
@@ -52,7 +53,11 @@ def analysis_boundary_label(
     registry: ProfileRegistry | None = None,
     store_root: Path | None = None,
 ) -> str:
-    """Render the compact operation badge shared by ``ls`` and ``switch``."""
+    """Render the retained-analysis badge shared by ``ls`` and ``switch``.
+
+    ``TRACE BLOCKED`` remains shorthand for retained history being hidden; it
+    does not rule out the content-bounded current Grant report.
+    """
 
     policy = operation_policy(
         context_name,
@@ -89,6 +94,5 @@ def require_trace_access(
             "expose authority checkpoint or command-log history."
         )
     raise PermissionError(
-        "Trace is unavailable because retained history is not readable at "
-        "this Context."
+        "Trace is unavailable because retained history is not readable at this Context."
     )

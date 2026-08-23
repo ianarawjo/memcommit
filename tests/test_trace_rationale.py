@@ -132,7 +132,7 @@ def test_trace_records_unchanged_memory_route_for_branch_entry_points(
         "target": "practice/2",
     }
 
-    rendered = invoke("trace", memory.uid, "--plain")
+    rendered = invoke("trace", f"practice/2:{memory.uid}", "--plain")
     assert rendered.exit_code == 0, rendered.output
     assert "[branch]" in rendered.output
     assert "practice/1 → practice/2 · Memory content unchanged" in rendered.output
@@ -140,7 +140,7 @@ def test_trace_records_unchanged_memory_route_for_branch_entry_points(
     assert "Target Context: practice/2" in rendered.output
     assert "branch creation event was not recorded" not in rendered.output
 
-    structured = invoke("trace", memory.uid, "--json")
+    structured = invoke("trace", f"practice/2:{memory.uid}", "--json")
     assert structured.exit_code == 0, structured.output
     assert json.loads(structured.output)["events"][-1]["context_transition"] == {
         "source": {"uid": source.uid, "name": "practice/1"},

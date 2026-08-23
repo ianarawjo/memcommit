@@ -26,16 +26,59 @@ mem rationale
 mem rationale MEMORY
 ```
 
-All Memory-targeted routes accept a current or retained historical direct-Memory
-UID or unambiguous prefix. `mem trace MEMORY` is the public interactive route for
-`mem log --memory MEMORY`; both use the same retained-history controller and
-compact projection rather than invoking another CLI command. Log always prints
-that projection, while Trace may open its interactive workbench in a TTY.
+Explicit Memory-targeted routes accept a current or retained historical direct
+Memory or MemoryRef UID, an unambiguous prefix, or a qualified `CONTEXT:UID`
+locator. A bare explicit UID is resolved across ordinary local direct and
+retained items; if more than one owner has that UID, the command lists typed
+qualified candidates instead of preferring the current Context. A qualified
+locator is exact and never broadens into descendants. `mem trace MEMORY` is the
+public interactive route for `mem log --memory MEMORY` when the target is a
+direct local Memory; both use the same retained-history controller and compact
+projection rather than invoking another CLI command. Log always prints that
+projection, while Trace may open its interactive workbench in a TTY.
 Neither command changes Contexts, checkpoints, saved semantic analyses,
 proposals, active state, or provider-derived caches. Rationale gives the exact
 whole retained Trace to one provider turn under the versioned natural-provenance
 ruleset and validates one bounded paragraph. Compare's source-row Rationale
 action enters the same ruleset, payload, schema, and decoder.
+
+### Typed Reference and granted-current reports
+
+A MemoryRef is an occurrence with its own UID, owner, position, and lifecycle;
+it is not an alias for the target Memory's identity. Reference Trace therefore
+has two explicit layers:
+
+1. **REFERENCE OCCURRENCE** reconstructs creation, removal, restoration,
+   retargeting, and reorder evidence from the owning Context's retained raw
+   snapshots.
+2. **TARGET MEMORY** follows a live reference only when its local target Context
+   UID resolves uniquely, then renders the target's ordinary direct-Memory
+   Trace as a distinct report. A snapshot reference retains its captured
+   content and never reopens a live target. A missing live target remains a
+   visible limit rather than being guessed.
+
+Reference Rationale always renders that deterministic relationship and
+occurrence provenance. When a live target is locally readable, it may also run
+the existing target-Memory semantic provenance projection. Provider failure
+does not discard the already proven relationship, and a snapshot reference
+never connects a provider merely to reinterpret its retained copy. Neither
+route opens query-only content.
+
+An explicit Memory selector in a READ-granted Context may produce a different
+typed Trace: **CURRENT GRANTED VIEW**. It shows the currently readable Memory,
+the public Context name, owner Profile, Grant UID and revision, grantee,
+resource, and effective permissions. Its history section is always
+`HISTORY HIDDEN`: construction must not call the authority Profile's checkpoint
+API. Granted Rationale shows the same access route and keeps its semantic
+history projection provider-free and hidden. `mem log --memory` and other
+retained-history controllers continue to reject the granted route.
+
+This first slice deliberately does not create a local observation ledger for a
+Grant. Consequently it can explain the current access path but cannot prove
+when externally owned content changed between observations. A future version
+would need an explicit `HISTORY`/`AUDIT` capability or a privacy-reviewed,
+content-lifecycle-bound observation ledger; READ alone must not silently gain
+either power.
 
 In an interactive terminal, omitting `MEMORY` first opens the common session
 picker as a Recents launcher. Recent rows are scoped to the current operation,
@@ -137,8 +180,10 @@ The picker renders the first eight UID characters as a compact identity badge,
 but that badge is presentation only. It returns the exact root, owner Context,
 descendant boolean, and full UID, then enters the same report-building path as
 an explicit selector. Explicit CLI selectors continue to accept either that
-full UID or an unambiguous prefix; ambiguity is rejected rather than guessed. It
-does not perform per-row semantic inference or open Memory references,
+full UID, an unambiguous prefix, or `CONTEXT:UID`; ambiguity is rejected rather
+than guessed. The interactive picker and Recents deliberately remain a direct
+Memory launcher in this slice. They do not perform per-row semantic inference
+or open Memory references,
 embedded Contexts, or query-only sources. `mem rationale` has no provider
 connection before target selection and never sends the readable picker catalog.
 After the full-screen picker
@@ -662,10 +707,12 @@ the Grant attachment, still determines picker hierarchy.
 A granted READ view permits the current Memory projection but does not imply
 authority to inspect the source Profile's checkpoints, command receipts, saved
 reviews, or atomize attachments. Granted Rationale therefore labels provenance
-`hidden by Grant` and never connects a provider. A locally owned target sends
-only its exact owner Trace component after selection; it does not combine the
-picker's readable catalog or neighboring Contexts, so Rationale needs no
-`COMBINE` permission. Trace remains rejected for a granted target.
+`hidden by Grant` and never connects a provider. An explicit granted Trace may
+show only the current Memory and typed access route; its retained-history
+section remains hidden and its construction never calls the owner checkpoint
+API. A locally owned target sends only its exact owner Trace component after
+selection; it does not combine the picker's readable catalog or neighboring
+Contexts, so Rationale needs no `COMBINE` permission.
 
 Every locally owned ordinary Context may inspect its own retained history,
 including every task namespace in a composed participant Study run. Task names
@@ -673,7 +720,11 @@ are research organization, not an authority primitive. Granted READ remains
 different: it exposes the reviewed current content projection but not the
 authority Profile's checkpoints, command receipts, or saved history artifacts.
 Only Grant rows therefore need a visible `TRACE BLOCKED` analysis boundary;
-local Study rows no longer repeat task-dependent Trace annotations.
+that existing compact label means retained Trace history is blocked, not that
+the new current-access report is unavailable. Local Study rows no longer
+repeat task-dependent Trace annotations. Renaming this shared TUI label is a
+separate presentation migration because its recorded interaction snapshots
+must change atomically with the visible flow.
 
 The executable request does not preserve the selected range as an inference
 scope. This deliberate narrowing prevents a provenance lookup from becoming a
@@ -729,3 +780,9 @@ This is a tested command-path invariant, not operating-system confidentiality.
   This favors one authoritative selector domain and post-picker freshness over
   caching private frame objects; very large retained histories can therefore
   make the interactive path slower than an explicit UID.
+- MemoryRef and granted-current reports are explicit-selector, plain/JSON
+  routes in this slice. They are not added to Recents, the interactive picker,
+  or the read-only Trace Viewer.
+- A granted-current report has no local observation ledger. It cannot prove
+  when or why an owner changed content outside the grantee Profile; READ shows
+  current content and the access route, while retained history remains hidden.

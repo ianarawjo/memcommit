@@ -439,7 +439,7 @@ def test_explicit_granted_rationale_picker_keeps_readable_descendants(
     assert MemoryStore().current_context_name() == "task-root"
 
 
-def test_granted_read_allows_subtree_rationale_but_never_trace_history(
+def test_granted_read_shows_current_trace_route_but_never_opens_history(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -454,6 +454,11 @@ def test_granted_read_allows_subtree_rationale_but_never_trace_history(
         for item in authority_store.load_direct("campus-wiki/public").iter_items()
         if isinstance(item, Memory)
     )
+    owner = authority_store.load_direct("campus-wiki/public")
+    updated_content = "Current owner revision visible through READ."
+    owner.replace(Memory(uid=target.uid, content=updated_content))
+    authority_store.save(owner)
+
     def forbidden_history(*args, **kwargs):
         raise AssertionError("granted READ opened authority checkpoint history")
 
@@ -465,7 +470,13 @@ def test_granted_read_allows_subtree_rationale_but_never_trace_history(
     )
     trace = runner.invoke(
         app,
-        ["trace", target.uid[:8], "--context", "campus-wiki/public"],
+        [
+            "trace",
+            target.uid[:8],
+            "--context",
+            "campus-wiki/public",
+            "--plain",
+        ],
     )
     log_memory = runner.invoke(
         app,
@@ -477,12 +488,17 @@ def test_granted_read_allows_subtree_rationale_but_never_trace_history(
             "campus-wiki/public",
         ],
     )
-    assert rationale.exit_code == 0, rationale.output
+    assert rationale.exit_code == 0, rationale.output + rationale.stderr
     assert "PROVENANCE — hidden by Grant" in rationale.output
+    assert "ACCESS ROUTE" in rationale.output
     assert "APPARENT PURPOSE" not in rationale.output
     assert SECRET not in rationale.output
-    assert trace.exit_code == 1
-    assert "READ does not expose authority checkpoint" in trace.stderr
+    assert updated_content in rationale.output
+    assert trace.exit_code == 0, trace.output
+    assert "CURRENT GRANTED VIEW" in trace.output
+    assert "ACCESS ROUTE" in trace.output
+    assert "HISTORY — hidden by Grant" in trace.output
+    assert updated_content in trace.output
     assert log_memory.exit_code == 1
     assert "READ does not expose authority checkpoint" in log_memory.stderr
 

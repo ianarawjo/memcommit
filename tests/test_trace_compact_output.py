@@ -16,6 +16,7 @@ from memcommit.commands.trace_projection import (
 from memcommit.interfaces.tui.components.plain_text_clipboard import (
     plain_text_from_fragments,
 )
+from memcommit.context_targeting.report_items import ResolvedMemoryReportTarget
 from memcommit.provenance import (
     MemoryState,
     TraceCommandContext,
@@ -497,6 +498,16 @@ def test_cli_limit_and_all_control_only_the_human_operation_projection(
         ),
     )
     monkeypatch.setattr(trace_command, "build_memory_history", lambda *_args: report)
+    monkeypatch.setattr(
+        trace_command,
+        "resolve_local_memory_report_target",
+        lambda *_args, **_kwargs: ResolvedMemoryReportTarget(
+            context_name="bounded-trace",
+            uid=SELECTED_UID,
+            kind="MEMORY",
+            status="CURRENT",
+        ),
+    )
 
     bounded = runner.invoke(
         app, ["trace", SELECTED_UID, "--limit", "1", "--plain"]
@@ -548,6 +559,16 @@ def test_json_keeps_structured_events_in_chronological_order(
         trace_command,
         "build_memory_history",
         lambda *_args: report,
+    )
+    monkeypatch.setattr(
+        trace_command,
+        "resolve_local_memory_report_target",
+        lambda *_args, **_kwargs: ResolvedMemoryReportTarget(
+            context_name="json-trace",
+            uid=SELECTED_UID,
+            kind="MEMORY",
+            status="CURRENT",
+        ),
     )
 
     result = runner.invoke(app, ["trace", SELECTED_UID, "--json"])

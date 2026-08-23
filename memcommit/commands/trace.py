@@ -7,6 +7,7 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.authority.access import resolve_context_access
 from memcommit.command_attempts import annotate_memory_report_attempt
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.commands.memory_history import (
@@ -32,11 +33,24 @@ from memcommit.commands.trace_projection import (
 )
 from memcommit.interfaces.console.text import (
     display_escape_text,
+    safe_terminal_text,
+)
+from memcommit.granted_provenance import (
+    GrantedMemoryTraceReport,
+    build_granted_memory_trace,
+)
+from memcommit.context_targeting.report_items import (
+    parse_memory_report_locator,
+    resolve_local_memory_report_target,
 )
 from memcommit.provenance import (
     ProvenanceError,
     TraceReport,
     collect_trace_candidates,
+)
+from memcommit.reference_provenance import (
+    MemoryReferenceTraceReport,
+    build_reference_trace,
 )
 from memcommit.store import MemoryStore
 from memcommit.profile_config import ProfileConfigError
@@ -79,14 +93,147 @@ def render_trace_receipt(report: TraceReport) -> None:
     )
 
 
+def _shown_uid(value: str, *, verbose: bool) -> str:
+    return value if verbose else value[:8]
+
+
+def render_reference_trace(
+    report: MemoryReferenceTraceReport,
+    *,
+    verbose: bool = False,
+    limit: int | None = DEFAULT_TRACE_OPERATION_LIMIT,
+) -> None:
+    """Render a pointer occurrence without collapsing it into target lineage."""
+
+    reference = report.reference
+    events = tuple(reversed(report.events))
+    if limit is not None:
+        events = events[:limit]
+    typer.echo(f"TRACE · {display_escape_text(report.context_name)}")
+    typer.echo(
+        f"[REFERENCE {_shown_uid(report.selected_uid, verbose=verbose)}] · "
+        f"{reference.mode} · {len(report.events)} OCCURRENCE "
+        f"{'OPERATION' if len(report.events) == 1 else 'OPERATIONS'} · LATEST FIRST"
+    )
+    typer.echo(
+        "TARGET · "
+        f"{display_escape_text(reference.target_context_name)}"
+        f":[{_shown_uid(reference.target_memory_uid, verbose=verbose)}]"
+    )
+    typer.echo("\nREFERENCE OCCURRENCE")
+    for event in events:
+        checkpoint = (
+            _shown_uid(event.checkpoint_uid, verbose=verbose)
+            if event.checkpoint_uid is not None
+            else "unrecorded"
+        )
+        timestamp = event.timestamp or "(current)"
+        detail = event.description.strip()
+        suffix = f" · {safe_terminal_text(detail)}" if detail else ""
+        typer.echo(
+            f"[{display_escape_text(event.command)}] "
+            f"[CHECKPOINT {checkpoint}] "
+            f"[{event.kind} · {event.evidence}]  "
+            f"{display_escape_text(timestamp)}{suffix}"
+        )
+    if not events:
+        typer.echo("  no retained occurrence changes")
+
+    typer.echo("\nTARGET MEMORY")
+    if report.target_trace is not None:
+        typer.echo(
+            format_compact_trace_report(
+                report.target_trace,
+                verbose=verbose,
+                limit=limit,
+            )
+        )
+    elif reference.mode == "SNAPSHOT":
+        typer.echo("  SNAPSHOT · source changes do not rewrite this retained value")
+        for line in safe_terminal_text(
+            reference.snapshot_content or ""
+        ).splitlines() or [""]:
+            typer.echo(f"  {line}")
+    else:
+        typer.echo("  HISTORY UNAVAILABLE")
+    if report.warnings:
+        typer.echo("\nATTENTION")
+        for warning in report.warnings:
+            typer.echo(f"  {display_escape_text(warning)}")
+
+
+def render_reference_trace_receipt(report: MemoryReferenceTraceReport) -> None:
+    reference = report.reference
+    typer.echo(
+        "\n".join(
+            [
+                f"TRACE · {display_escape_text(report.context_name)}",
+                f"REFERENCE · {report.selected_uid} · {reference.mode}",
+                "TARGET · "
+                f"{display_escape_text(reference.target_context_name)}:"
+                f"{reference.target_memory_uid}",
+                f"OCCURRENCE · {len(report.events)} events",
+                f"TARGET HISTORY · {report.target_history_status}",
+                "DETAILS · mem trace "
+                f"{display_escape_text(report.context_name)}:{report.selected_uid} "
+                "--plain",
+            ]
+        )
+    )
+
+
+def render_granted_trace(
+    report: GrantedMemoryTraceReport,
+    *,
+    verbose: bool = False,
+) -> None:
+    typer.echo(f"TRACE · {display_escape_text(report.context_name)}")
+    typer.echo(
+        f"[MEMORY {_shown_uid(report.selected_uid, verbose=verbose)}] · "
+        "CURRENT GRANTED VIEW"
+    )
+    typer.echo("\nMEMORY")
+    for line in safe_terminal_text(report.current.content).splitlines() or [""]:
+        typer.echo(f"  {line}")
+    typer.echo("\nACCESS ROUTE")
+    typer.echo(
+        f"  GRANT {_shown_uid(report.grant_uid, verbose=verbose)} · "
+        f"REVISION {report.grant_revision} · " + " + ".join(report.permissions)
+    )
+    if verbose:
+        typer.echo(f"  AUTHORITY PROFILE · {report.authority_profile_uid}")
+        typer.echo(f"  GRANTEE PROFILE · {report.grantee_profile_uid}")
+        typer.echo(
+            f"  RESOURCE · {display_escape_text(report.resource_name)} "
+            f"[{report.resource_uid}]"
+        )
+    typer.echo("\nHISTORY — hidden by Grant")
+    typer.echo(f"  {display_escape_text(report.warning)}")
+
+
+def render_granted_trace_receipt(report: GrantedMemoryTraceReport) -> None:
+    typer.echo(
+        "\n".join(
+            [
+                f"TRACE · {display_escape_text(report.context_name)}",
+                f"MEMORY · {report.selected_uid}",
+                f"ACCESS · GRANT {report.grant_uid} · REVISION {report.grant_revision}",
+                "HISTORY · HIDDEN BY GRANT",
+                "DETAILS · mem trace "
+                f"{report.selected_uid} --context "
+                f"{display_escape_text(report.context_name)} --plain",
+            ]
+        )
+    )
+
+
 def cmd(
     selector: Annotated[
         Optional[str],
         typer.Argument(
             help=(
-                "UID (or unambiguous prefix) of a current or historical "
-                "direct Memory; omit in a terminal to select from the current "
-                "Context or its descendants"
+                "Memory/MemoryRef UID/prefix or CONTEXT:UID. Omit to select "
+                "from the current Context or its descendants"
             )
         ),
     ] = None,
@@ -96,8 +243,7 @@ def cmd(
             "--context",
             "-c",
             help=(
-                "Start Memory selection in this Context instead of the current "
-                "Context"
+                "Start Memory selection in this Context instead of the current Context"
             ),
         ),
     ] = None,
@@ -156,8 +302,7 @@ def cmd(
         raise typer.Exit(2)
     if not 1 <= limit <= MAX_TRACE_OPERATION_LIMIT:
         typer.secho(
-            "Trace error: --limit must be between 1 and "
-            f"{MAX_TRACE_OPERATION_LIMIT}.",
+            f"Trace error: --limit must be between 1 and {MAX_TRACE_OPERATION_LIMIT}.",
             fg=typer.colors.RED,
             err=True,
         )
@@ -167,7 +312,7 @@ def cmd(
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
         if selector is None and as_json:
-            raise ProvenanceError("JSON output requires an explicit Memory UID.")
+            raise ProvenanceError("JSON output requires an explicit item UID.")
         explicit_context = context_name is not None
         if selector is None and not explicit_context and interactive_report_terminal():
             launch = choose_memory_report_recent(store, operation="trace")
@@ -179,12 +324,13 @@ def cmd(
                 selector = launch.memory_uid
             elif not isinstance(launch, MemoryReportSelectAction):
                 raise ProvenanceError("Trace launcher returned an invalid action.")
-        name = context_snapshot.resolve_or_current(context_name)
-        if not name:
-            raise ProvenanceError(
-                "No current context. Pass --context or run 'mem init <name>' first."
-            )
+
         if selector is None:
+            name = context_snapshot.resolve_or_current(context_name)
+            if not name:
+                raise ProvenanceError(
+                    "No current context. Pass --context or run 'mem init <name>' first."
+                )
             # The current or explicit Context is already the useful default.
             # Freeze its descendants for the range control, but do not force a
             # second location decision before the person can see its Memories.
@@ -227,19 +373,74 @@ def cmd(
             # The pickers are read-only, but another process may have changed
             # the Context while they were open. Re-read before resolving the
             # exact UID so the report never mixes old live state with new history.
-        history_context = load_retained_history_context(
-            store,
-            context_locator=context_name,
-            current_name=context_snapshot.current_name,
+        assert selector is not None
+        owner_locator, item_selector = parse_memory_report_locator(
+            selector,
+            explicit_context=context_name,
         )
-        name = history_context.display_name
-        report = build_memory_history(store, history_context, selector)
-        annotate_memory_report_attempt(
-            operation="trace",
-            context_name=name,
-            memory_uid=report.selected_uid,
-            include_descendants=False,
-        )
+        report: TraceReport | MemoryReferenceTraceReport | GrantedMemoryTraceReport
+        granted_access = None
+        if owner_locator is not None:
+            access = resolve_context_access(
+                store,
+                owner_locator,
+                current_name=context_snapshot.current_name,
+                required_permission="READ",
+            )
+            if access.is_granted:
+                granted_access = access
+                resolved_target = None
+            else:
+                resolved_target = resolve_local_memory_report_target(
+                    store,
+                    item_selector,
+                    current=context_snapshot.current_name,
+                    context_locator=access.context_name,
+                )
+        else:
+            # A bare explicit UID is already a stable type signal. Search every
+            # ordinary local owner once instead of silently preferring current.
+            resolved_target = resolve_local_memory_report_target(
+                store,
+                item_selector,
+                current=context_snapshot.current_name,
+                context_locator=None,
+            )
+
+        if granted_access is not None:
+            report = build_granted_memory_trace(granted_access, item_selector)
+            annotate_memory_report_attempt(
+                operation="trace",
+                context_name=report.context_name,
+                memory_uid=report.selected_uid,
+                include_descendants=False,
+            )
+        else:
+            assert resolved_target is not None
+            if resolved_target.kind == "MEMORY_REFERENCE":
+                owner = store.load_direct(resolved_target.context_name)
+                report = build_reference_trace(
+                    store,
+                    owner,
+                    resolved_target.uid,
+                )
+            else:
+                history_context = load_retained_history_context(
+                    store,
+                    context_locator=resolved_target.context_name,
+                    current_name=context_snapshot.current_name,
+                )
+                report = build_memory_history(
+                    store,
+                    history_context,
+                    resolved_target.uid,
+                )
+                annotate_memory_report_attempt(
+                    operation="trace",
+                    context_name=history_context.display_name,
+                    memory_uid=report.selected_uid,
+                    include_descendants=False,
+                )
     except (
         FileNotFoundError,
         OSError,
@@ -274,6 +475,14 @@ def cmd(
                 err=True,
             )
             raise typer.Exit(2)
+        if not isinstance(report, TraceReport):
+            typer.secho(
+                "Trace error: --tui currently supports direct local Memory "
+                "lineage; use --plain for a reference or granted Memory.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(2)
         open_trace_viewer(
             report,
             verbose=verbose,
@@ -281,6 +490,20 @@ def cmd(
         )
         return
     if plain:
-        render_trace(report, verbose=verbose, limit=operation_limit)
+        if isinstance(report, MemoryReferenceTraceReport):
+            render_reference_trace(
+                report,
+                verbose=verbose,
+                limit=operation_limit,
+            )
+        elif isinstance(report, GrantedMemoryTraceReport):
+            render_granted_trace(report, verbose=verbose)
+        else:
+            render_trace(report, verbose=verbose, limit=operation_limit)
         return
-    render_trace_receipt(report)
+    if isinstance(report, MemoryReferenceTraceReport):
+        render_reference_trace_receipt(report)
+    elif isinstance(report, GrantedMemoryTraceReport):
+        render_granted_trace_receipt(report)
+    else:
+        render_trace_receipt(report)

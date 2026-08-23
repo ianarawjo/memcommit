@@ -587,8 +587,8 @@ def test_bare_json_requires_an_explicit_selector(isolated_store, monkeypatch):
 
     assert trace.exit_code == 1
     assert rationale.exit_code == 1
-    assert "requires an explicit Memory UID" in trace.output
-    assert "requires an explicit Memory UID" in rationale.output
+    assert "requires an explicit item UID" in trace.output
+    assert "requires an explicit item UID" in rationale.output
 
 
 def test_command_help_marks_memory_selector_as_optional():
