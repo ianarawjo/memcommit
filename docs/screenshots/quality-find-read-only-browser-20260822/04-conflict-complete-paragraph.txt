@@ -1,0 +1,29 @@
+$ mem find-conflicts --context study/reporting                                                                                                                                      
+PTY · 180 COLUMNS × 52 ROWS                                                                                                                                                         
+ FIND CONFLICTS · 1/1                                                                                                                                                               
+ 1 CONTEXT(S) · 3 SOURCE MEMORIES · study/reporting                                                                                                                                 
+› CONFLICT · MAY · TIME — SOURCE 1 · study/reporting [00000000]: “Report the incident within 30 days.” / SOURCE 2 · study/reporting [00000000]: “Notify the office no later than on^
+e month after discovery.” · WHY THESE MEMORIES CONFLICT · The deadlines can disagree when discovery occurs after the incident. · QUESTION · Which event governs the reporting deadl 
+ine?                                                                                                                                                                                
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+ ↑/↓ finding · Home/End · Enter open Resolve · Esc/Backspace/Q close · read-only

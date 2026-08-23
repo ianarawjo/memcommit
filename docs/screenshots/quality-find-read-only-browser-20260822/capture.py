@@ -78,6 +78,17 @@ def _session(kind: str, *, empty: bool = False):
                 reason="The deadline does not identify which event starts the clock.",
                 question="Which event starts the 30-day period?",
             ),
+            AmbiguityFinding(
+                memory=third,
+                interpretation="COMPETING",
+                clarification="HELPFUL",
+                ordinary_readings=(
+                    "The staffed entrance schedule.",
+                    "The published office schedule.",
+                ),
+                reason="Office hours can refer to two different schedules.",
+                question="Which schedule defines office hours?",
+            ),
         )
         report = AmbiguityReport(memory_count=3, findings=findings)
     elif kind == "conflicts":
@@ -188,46 +199,49 @@ def _spawn(kind: str) -> tuple[pexpect.spawn, io.StringIO]:
 def _capture_ambiguity() -> None:
     child, recorder = _spawn("ambiguities")
     try:
-        child.expect("FIND AMBIGUITIES .* FINDINGS")
+        child.expect("FIND AMBIGUITIES .* 1/2")
         _BASE._settle(child)
-        _BASE._snapshot(recorder, "01-ambiguity-compact-list")
+        _BASE._snapshot(recorder, "01-ambiguity-complete-paragraphs")
 
-        child.send("\r")
-        child.expect("POSSIBLE READINGS")
+        child.send("\x1b[B")
+        child.expect("FIND AMBIGUITIES .* 2/2")
         _BASE._settle(child)
-        _BASE._snapshot(recorder, "02-ambiguity-read-only-detail")
+        _BASE._snapshot(recorder, "02-ambiguity-second-paragraph-focused")
 
-        child.send("\x1b")
-        _BASE._settle(child)
-        _BASE._snapshot(recorder, "03-ambiguity-one-level-back")
-
-        child.send("\x1b")
+        # Enter is deliberately inert: Find ambiguity has no detail or answer.
+        child.send("\r\x1b")
         child.expect("BROWSER RECEIPT .* CLOSE")
         child.expect("CHECKPOINTS .* 0")
         child.expect(pexpect.EOF)
-        _BASE._snapshot(recorder, "04-ambiguity-close-verification")
+        _BASE._snapshot(recorder, "03-ambiguity-close-verification")
     finally:
         if child.isalive():
             child.close(force=True)
 
 
-def _capture_handoff(kind: str, key: str, stems: tuple[str, str, str]) -> None:
+def _capture_handoff(
+    kind: str,
+    stems: tuple[str, str],
+    *,
+    move_to_second: bool = False,
+) -> None:
     child, recorder = _spawn(kind)
     label = "FIND CONFLICTS" if kind == "conflicts" else "FIND REDUNDANCIES"
     try:
-        child.expect(label + " .* FINDINGS")
+        child.expect(label + " .* 1/")
         _BASE._settle(child)
         _BASE._snapshot(recorder, stems[0])
 
-        child.send("\r")
-        child.expect("FOLLOW-UP QUESTION" if kind == "conflicts" else "WHY THESE MEMORIES")
-        _BASE._settle(child)
-        _BASE._snapshot(recorder, stems[1])
+        if move_to_second:
+            child.send("\x1b[B")
+            child.expect(label + " .* 2/2")
+            _BASE._settle(child)
+            _BASE._snapshot(recorder, "07-redundancy-second-paragraph-focused")
 
-        child.send(key)
+        child.send("\r")
         child.expect("BROWSER RECEIPT .* HANDOFF")
         child.expect(pexpect.EOF)
-        _BASE._snapshot(recorder, stems[2])
+        _BASE._snapshot(recorder, stems[1])
     finally:
         if child.isalive():
             child.close(force=True)
@@ -238,7 +252,7 @@ def _capture_empty() -> None:
     try:
         child.expect("NO FINDINGS")
         _BASE._settle(child)
-        _BASE._snapshot(recorder, "11-empty-report")
+        _BASE._snapshot(recorder, "09-empty-report")
         child.send("q")
         child.expect("BROWSER RECEIPT .* CLOSE")
         child.expect("CHECKPOINTS .* 0")
@@ -256,21 +270,18 @@ def main() -> None:
     _capture_ambiguity()
     _capture_handoff(
         "conflicts",
-        "r",
         (
-            "05-conflict-compact-list",
-            "06-conflict-source-linked-detail",
-            "07-conflict-resolve-handoff-verification",
+            "04-conflict-complete-paragraph",
+            "05-conflict-resolve-handoff-verification",
         ),
     )
     _capture_handoff(
         "duplicates",
-        "d",
         (
-            "08-redundancy-compact-list",
-            "09-redundancy-source-linked-detail",
-            "10-redundancy-dedun-handoff-verification",
+            "06-redundancy-complete-paragraphs",
+            "08-redundancy-dedun-handoff-verification",
         ),
+        move_to_second=True,
     )
     _capture_empty()
     raw = "".join(
@@ -279,9 +290,9 @@ def main() -> None:
     if "38;2;" not in raw and "48;2;" not in raw:
         raise RuntimeError("PTY stream did not contain expected true-color ANSI.")
     for stem in (
-        "04-ambiguity-close-verification",
-        "07-conflict-resolve-handoff-verification",
-        "10-redundancy-dedun-handoff-verification",
+        "03-ambiguity-close-verification",
+        "05-conflict-resolve-handoff-verification",
+        "08-redundancy-dedun-handoff-verification",
     ):
         plain = (OUT / f"{stem}.txt").read_text(encoding="utf-8")
         if "RESPONSE STATE · 0" not in plain or "CHECKPOINTS · 0" not in plain:

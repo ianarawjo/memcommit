@@ -19,6 +19,9 @@ from memcommit.findings import (
     DuplicateFinding,
     DuplicateReport,
 )
+from memcommit.interfaces.tui.workbenches.findings.document import (
+    quality_finding_compact_text,
+)
 from memcommit.quality_find_workbench import (
     create_quality_find_workbench,
     quality_find_report_view,
@@ -74,8 +77,17 @@ def test_ambiguity_report_exposes_readings_without_answer_contract() -> None:
     assert not hasattr(item, "response_state")
     assert session.responses == {}
 
+    paragraph = quality_finding_compact_text(item)
+    assert "SOURCE MEMORY · quality/report" in paragraph
+    assert "Reports are due within 30 days." in paragraph
+    assert "WHY THIS IS UNCLEAR · The starting event is not named." in paragraph
+    assert "QUESTION · Which event starts the deadline?" in paragraph
+    assert "DOMINANT: Thirty days after the event." in paragraph
+    assert "ALTERNATIVE: Thirty days after discovery." in paragraph
+    assert paragraph.count("\n") == 1
 
-def test_finding_browser_detail_and_back_never_create_response_state() -> None:
+
+def test_finding_browser_root_close_never_creates_response_state() -> None:
     context, first, _second = _source()
     session = create_quality_find_workbench(
         "ambiguities",
@@ -96,8 +108,8 @@ def test_finding_browser_detail_and_back_never_create_response_state() -> None:
     )
 
     with create_pipe_input() as pipe_input:
-        # Open detail, return to the list, then close the root browser.
-        pipe_input.send_text("\r\x1b\x1b")
+        # Enter is inert because a Find ambiguity has no answer or detail mode.
+        pipe_input.send_text("\r\x1b")
         returned = run_quality_find_resolution_workbench(
             session,
             context,
@@ -137,7 +149,7 @@ def test_dedun_handoff_receives_all_eligible_report_evidence_without_confirmatio
     received = []
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("d")
+        pipe_input.send_text("\r")
         run_quality_find_resolution_workbench(
             session,
             context,

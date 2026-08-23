@@ -1,0 +1,29 @@
+$ mem find-redundancies --context study/reporting                                                                                                                                   
+PTY · 180 COLUMNS × 52 ROWS                                                                                                                                                         
+ FIND REDUNDANCIES · 1/2                                                                                                                                                            
+ 1 CONTEXT(S) · 3 SOURCE MEMORIES · study/reporting                                                                                                                                 
+› SEMANTIC DUN · SEMANTIC_EQUIVALENT — SOURCE 1 · study/reporting [00000000]: “Report the incident within 30 days.” / SOURCE 2 · study/reporting [00000000]: “Notify the office no ^
+later than one month after discovery.” · WHY THESE MEMORIES ARE SEMANTICALLY REDUNDANT · Both Memories impose the same reporting window in this frame.                              
+                                                                                                                                                                                    
+  SEMANTIC DUN · OVERLAP — SOURCE 1 · study/reporting [00000000]: “Notify the office no later than one month after discovery.” / SOURCE 2 · study/reporting [00000000]: “The access 
+ible entrance remains open during office hours.” · WHY THESE MEMORIES ARE SEMANTICALLY REDUNDANT · The Memories share operational context but are not substitutes.                  
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+ ↑/↓ finding · Home/End · Enter open Dedun · Esc/Backspace/Q close · read-only

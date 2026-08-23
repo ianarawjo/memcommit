@@ -720,13 +720,12 @@ def quality_find_report_view(
             "Quality finder operation label must be exact nonblank text."
         )
 
-    handoff_key: str | None = None
     handoff_label: str | None = None
     if handoff_available and items:
         if session.kind == "conflicts":
-            handoff_key, handoff_label = "r", "open Resolve"
+            handoff_label = "open Resolve"
         elif session.kind == "duplicates":
-            handoff_key, handoff_label = "d", "open Dedun"
+            handoff_label = "open Dedun"
 
     return QualityFindReportView(
         kind=session.kind,
@@ -738,7 +737,6 @@ def quality_find_report_view(
         memory_count=session.report.memory_count,
         items=tuple(items),
         empty_message=empty_message,
-        handoff_key=handoff_key,
         handoff_label=handoff_label,
     )
 

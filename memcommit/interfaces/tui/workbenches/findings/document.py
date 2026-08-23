@@ -11,6 +11,95 @@ from memcommit.interfaces.tui.viewers.semantic import (
 from memcommit.quality_find_report import QualityFindingReportItem
 
 
+def _inline(value: str) -> str:
+    """Collapse provider prose to one safe terminal paragraph."""
+
+    return " ".join(safe_terminal_text(value).split())
+
+
+def quality_finding_compact_fragments(
+    item: QualityFindingReportItem,
+    *,
+    focused: bool = False,
+) -> list[tuple[str, str]]:
+    """Render one complete finding as a single source-linked paragraph."""
+
+    focus_style = "class:memcommit.table.selected" if focused else ""
+
+    def styled(base: str) -> str:
+        # Focus is a transient interaction state and therefore overrides the
+        # semantic Memory/report foregrounds across this one paragraph.
+        return focus_style or base
+
+    fragments: list[tuple[str, str]] = [
+        (
+            styled("class:report-label"),
+            f"{_inline(item.kind)} · {_inline(item.classification)} — ",
+        )
+    ]
+    for index, source in enumerate(item.sources):
+        if index:
+            fragments.append((styled("class:report-neutral"), " / "))
+        fragments.extend(
+            [
+                (
+                    styled("class:report-label"),
+                    f"{_inline(source.label)} · {_inline(source.context_name)} "
+                    f"[{_inline(source.memory_uid[:8])}]: ",
+                ),
+                (
+                    styled("class:memory-object"),
+                    f"“{_inline(source.content)}”",
+                ),
+            ]
+        )
+    fragments.extend(
+        [
+            (styled("class:report-neutral"), " · "),
+            (
+                styled("class:report-label"),
+                f"{_inline(item.reason_heading)} · ",
+            ),
+            (styled("class:viewer-body"), _inline(item.reason)),
+        ]
+    )
+    if item.follow_up:
+        fragments.extend(
+            [
+                (styled("class:report-neutral"), " · "),
+                (styled("class:report-label"), "QUESTION · "),
+                (styled("class:viewer-body"), _inline(item.follow_up)),
+            ]
+        )
+    if item.readings:
+        fragments.extend(
+            [
+                (styled("class:report-neutral"), " · "),
+                (styled("class:report-label"), "READINGS · "),
+            ]
+        )
+        for index, reading in enumerate(item.readings):
+            if index:
+                fragments.append((styled("class:report-neutral"), " / "))
+            fragments.extend(
+                [
+                    (
+                        styled("class:report-label"),
+                        f"{_inline(reading.label)}: ",
+                    ),
+                    (styled("class:viewer-body"), _inline(reading.text)),
+                ]
+            )
+    fragments.append((styled("class:report-neutral"), "\n"))
+    return fragments
+
+
+def quality_finding_compact_text(item: QualityFindingReportItem) -> str:
+    """Return the ANSI-free equivalent of the compact finding paragraph."""
+
+    return "".join(text for _style, text in quality_finding_compact_fragments(item))
+
+
 def quality_finding_item_sections(
     item: QualityFindingReportItem,
     *,
@@ -128,4 +217,9 @@ def quality_finding_item_document(
     return SemanticViewerDocument(quality_finding_item_sections(item))
 
 
-__all__ = ["quality_finding_item_document", "quality_finding_item_sections"]
+__all__ = [
+    "quality_finding_compact_fragments",
+    "quality_finding_compact_text",
+    "quality_finding_item_document",
+    "quality_finding_item_sections",
+]

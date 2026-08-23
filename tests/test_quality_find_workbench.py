@@ -615,8 +615,8 @@ def test_conflict_workbench_hands_off_the_selected_typed_finding():
     observed = []
 
     with create_pipe_input() as pipe_input:
-        # Find itself stays read-only; R explicitly leaves for Resolve.
-        pipe_input.send_text("r")
+        # Find itself stays read-only; Enter explicitly leaves for Resolve.
+        pipe_input.send_text("\r")
         result = run_quality_find_resolution_workbench(
             session,
             ctx,
@@ -630,6 +630,44 @@ def test_conflict_workbench_hands_off_the_selected_typed_finding():
     assert len(observed) == 1
     assert observed[0].finding_uid == f"conflict:{first.uid}:{second.uid}"
     assert observed[0].route == "RESOLVE"
+    assert session.responses == {}
+
+
+def test_conflict_workbench_legacy_handoff_letter_is_inert():
+    ctx, first, second = _context()
+    session = create_quality_find_workbench(
+        "conflicts",
+        ctx,
+        ConflictReport(
+            memory_count=2,
+            pair_count=1,
+            findings=(
+                ConflictFinding(
+                    first,
+                    second,
+                    "YES",
+                    ("TIME",),
+                    "The entrance hours conflict.",
+                    "Which opening time is authoritative?",
+                ),
+            ),
+        ),
+    )
+    observed = []
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("r\x1b")
+        result = run_quality_find_resolution_workbench(
+            session,
+            ctx,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+            handoff_handler=observed.append,
+        )
+
+    assert result is session
+    assert observed == []
     assert session.responses == {}
 
 

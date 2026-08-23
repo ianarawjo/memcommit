@@ -1,6 +1,8 @@
 """Compact read-only browser for model-assisted quality findings."""
 
 from memcommit.interfaces.tui.workbenches.findings.document import (
+    quality_finding_compact_fragments,
+    quality_finding_compact_text,
     quality_finding_item_document,
     quality_finding_item_sections,
 )
@@ -9,6 +11,8 @@ from memcommit.interfaces.tui.workbenches.findings.screen import (
 )
 
 __all__ = [
+    "quality_finding_compact_fragments",
+    "quality_finding_compact_text",
     "quality_finding_item_document",
     "quality_finding_item_sections",
     "run_quality_find_browser",

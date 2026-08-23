@@ -1,0 +1,98 @@
+$ mem find-ambiguities --context study/reporting
+PTY · 180 COLUMNS × 52 ROWS
+[6n[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;2;244;245;247;1m FIND AMBIGUITIES · 1/2[0m
+[0;38;2;244;245;247m 1 CONTEXT(S) · 3 SOURCE MEMORIES · study/reporting[0m
+[0;1;7m› AMBIGUITY · DOMINANT · CLARIFICATION REQUIRED — SOURCE MEMORY · study/reporting [00000000]: “Report the incident within 30 days.” · WHY THIS IS UNCLEAR · The deadline does not i[179C[0;1m^[0m
+[0;1;7mdentify which event starts the clock. · QUESTION · Which event starts the 30-day period? · READINGS · DOMINANT: Thirty days after the incident. / ALTERNATIVE: Thirty days after di[179C[0;48;2;68;68;68m [0m
+[0;1;7mscovery. / ALTERNATIVE: Thirty days after notification.[124C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[0m  [0;38;2;244;245;247;1mAMBIGUITY · COMPETING · CLARIFICATION HELPFUL — SOURCE MEMORY · study/reporting [00000000]: [0;38;2;202;211;245m“The accessible entrance remains open during office hours.”[0;38;2;244;245;247m · [0;38;2;244;245;247;1mWHY THIS IS UNCLEAR · [0;38;2;244;245;247mO[179C[0;48;2;68;68;68m [0m
+[0;38;2;244;245;247mffice hours can refer to two different schedules. · [0;38;2;244;245;247;1mQUESTION · [0;38;2;244;245;247mWhich schedule defines office hours? · [0;38;2;244;245;247;1mREADINGS · COMPETING: [0;38;2;244;245;247mThe staffed entrance schedule. / [0;38;2;244;245;247;1mCOMPETING: [0;38;2;244;245;247mThe publish[179C[0;48;2;68;68;68m [0m
+[0;38;2;244;245;247med office schedule.[160C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[0m                                                                                                                                                                                   [179C[0;1mv[0m
+[0m ↑/↓ finding · Home/End · Esc/Backspace/Q close · read-only[59D[24A[?7h[0m[?25l[?7l[2A[20C[0;38;2;244;245;247;1m2[0m
+
+[0m  [0;38;2;244;245;247;1mAMBIGUITY · DOMINANT · CLARIFICATION REQUIRED — SOURCE MEMORY · study/reporting [00000000]: [0;38;2;202;211;245m“Report the incident within 30 days.”[0;38;2;244;245;247m · [0;38;2;244;245;247;1mWHY THIS IS UNCLEAR · [0;38;2;244;245;247mThe deadline does not i[0m
+[0;38;2;244;245;247mdentify which event starts the clock. · [0;38;2;244;245;247;1mQUESTION · [0;38;2;244;245;247mWhich event starts the 30-day period? · [0;38;2;244;245;247;1mREADINGS · DOMINANT: [0;38;2;244;245;247mThirty days after the incident. / [0;38;2;244;245;247;1mALTERNATIVE: [0;38;2;244;245;247mThirty days after di[0m
+[0;38;2;244;245;247mscovery. / [0;38;2;244;245;247;1mALTERNATIVE: [0;38;2;244;245;247mThirty days after notification.[0m
+
+[0;1;7m› AMBIGUITY · COMPETING · CLARIFICATION HELPFUL — SOURCE MEMORY · study/reporting [00000000]: “The accessible entrance remains open during office hours.” · WHY THIS IS UNCLEAR · O[0m
+[0;1;7mffice hours can refer to two different schedules. · QUESTION · Which schedule defines office hours? · READINGS · COMPETING: The staffed entrance schedule. / COMPETING: The publish[0m
+[0;1;7med office schedule.[2A[19D[?7h[0m[6A[J[0m[?7h[?2004lWARNING: your terminal doesn't support cursor position requests (CPR).
+[?2004h[?25l[0m[?7l[0m[J[0;38;2;244;245;247;1m FIND AMBIGUITIES · 2/2[0m
+[0;38;2;244;245;247m 1 CONTEXT(S) · 3 SOURCE MEMORIES · study/reporting[0m
+[0m  [0;38;2;244;245;247;1mAMBIGUITY · DOMINANT · CLARIFICATION REQUIRED — SOURCE MEMORY · study/reporting [00000000]: [0;38;2;202;211;245m“Report the incident within 30 days.”[0;38;2;244;245;247m · [0;38;2;244;245;247;1mWHY THIS IS UNCLEAR · [0;38;2;244;245;247mThe deadline does not i[179C[0;1m^[0m
+[0;38;2;244;245;247mdentify which event starts the clock. · [0;38;2;244;245;247;1mQUESTION · [0;38;2;244;245;247mWhich event starts the 30-day period? · [0;38;2;244;245;247;1mREADINGS · DOMINANT: [0;38;2;244;245;247mThirty days after the incident. / [0;38;2;244;245;247;1mALTERNATIVE: [0;38;2;244;245;247mThirty days after di[179C[0;48;2;68;68;68m [0m
+[0;38;2;244;245;247mscovery. / [0;38;2;244;245;247;1mALTERNATIVE: [0;38;2;244;245;247mThirty days after notification.[124C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[0;1;7m› AMBIGUITY · COMPETING · CLARIFICATION HELPFUL — SOURCE MEMORY · study/reporting [00000000]: “The accessible entrance remains open during office hours.” · WHY THIS IS UNCLEAR · O[179C[0;48;2;68;68;68m [0m
+[0;1;7mffice hours can refer to two different schedules. · QUESTION · Which schedule defines office hours? · READINGS · COMPETING: The staffed entrance schedule. / COMPETING: The publish[179C[0;48;2;68;68;68m [0m
+[0;1;7med office schedule.[160C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[0m                                                                                                                                                                                   [179C[0;1mv[0m
+[0m ↑/↓ finding · Home/End · Esc/Backspace/Q close · read-only[59D[20A[?7h[0m[?25l[?7l[6A[0m[J[0;38;2;244;245;247;1m FIND AMBIGUITIES · 2/2[0m
+[0;38;2;244;245;247m 1 CONTEXT(S) · 3 SOURCE MEMORIES · study/reporting[0m
+[0m  [0;38;2;244;245;247;1mAMBIGUITY · DOMINANT · CLARIFICATION REQUIRED — SOURCE MEMORY · study/reporting [00000000]: [0;38;2;202;211;245m“Report the incident within 30 days.”[0;38;2;244;245;247m · [0;38;2;244;245;247;1mWHY THIS IS UNCLEAR · [0;38;2;244;245;247mThe deadline does not i[179C[0;1m^[0m
+[0;38;2;244;245;247mdentify which event starts the clock. · [0;38;2;244;245;247;1mQUESTION · [0;38;2;244;245;247mWhich event starts the 30-day period? · [0;38;2;244;245;247;1mREADINGS · DOMINANT: [0;38;2;244;245;247mThirty days after the incident. / [0;38;2;244;245;247;1mALTERNATIVE: [0;38;2;244;245;247mThirty days after di[179C[0;48;2;68;68;68m [0m
+[0;38;2;244;245;247mscovery. / [0;38;2;244;245;247;1mALTERNATIVE: [0;38;2;244;245;247mThirty days after notification.[124C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[0;1;7m› AMBIGUITY · COMPETING · CLARIFICATION HELPFUL — SOURCE MEMORY · study/reporting [00000000]: “The accessible entrance remains open during office hours.” · WHY THIS IS UNCLEAR · O[179C[0;48;2;68;68;68m [0m
+[0;1;7mffice hours can refer to two different schedules. · QUESTION · Which schedule defines office hours? · READINGS · COMPETING: The staffed entrance schedule. / COMPETING: The publish[179C[0;48;2;68;68;68m [0m
+[0;1;7med office schedule.[160C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[0m                                                                                                                                                                                   [179C[0;1mv[0m
+[0m ↑/↓ finding · Home/End · Esc/Backspace/Q close · read-only[59D[0m
+[J[?7h[0m[?12l[?25h[?2004l
+BROWSER RECEIPT · CLOSE · NO TARGET
+READ-ONLY VERIFICATION
+  RESPONSE STATE · 0
+  SOURCE DIGEST UNCHANGED · True
+  SOURCE MEMORIES · 3
+  CONTEXT WRITES · 0
+  CHECKPOINTS · 0

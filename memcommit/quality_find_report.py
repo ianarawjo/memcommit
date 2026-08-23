@@ -100,7 +100,6 @@ class QualityFindReportView:
     memory_count: int
     items: tuple[QualityFindingReportItem, ...]
     empty_message: str
-    handoff_key: str | None = None
     handoff_label: str | None = None
 
     def __post_init__(self) -> None:
@@ -122,12 +121,7 @@ class QualityFindReportView:
                 raise QualityFindReportError(f"Invalid {label}.")
         if len({item.uid for item in self.items}) != len(self.items):
             raise QualityFindReportError("Duplicate quality finding uid.")
-        if (self.handoff_key is None) != (self.handoff_label is None):
-            raise QualityFindReportError("Finding handoff key and label must agree.")
-        if self.handoff_key is not None:
-            key = _text(self.handoff_key, "finding handoff key")
-            if len(key) != 1:
-                raise QualityFindReportError("Finding handoff key must be one key.")
+        if self.handoff_label is not None:
             _text(self.handoff_label, "finding handoff label")
 
 

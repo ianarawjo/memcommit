@@ -109,18 +109,22 @@ identity, and is never saved or exposed as a new Context.
 
 The validated report is projected into a compact read-only finding browser.
 Its header records Context count, direct-Memory count, and the exact Source
-route. The initial list contains only finding classification and a bounded
-preview; Enter opens the source-linked detail in the same terminal flow.
-Ambiguity keeps its proposed readings and clarification question as evidence,
-not answer controls. Conflict likewise keeps its exact pair and question
-without creating a response field. Escape or Backspace returns one level and
-then closes; neither inspection nor closing can create response state.
+route. Every finding is one complete wrapping paragraph containing its
+classification, exact source identities and Memory bodies, reason, follow-up
+question when present, and possible readings when present. There is no
+preview/detail split: `Up`/`Down` changes the focused paragraph, while an
+Ambiguity `Enter` is inert because Find has no answer or inspection action.
+Escape or Backspace closes; navigation and closing cannot create response
+state.
 
-An explicit `R` handoff on an eligible single-Context Conflict may leave the
-browser for Resolve, and the complete-DUN report may explicitly leave for
-Dedun. Those keys start a separate operation with its own request and authority
+On an eligible single-Context Conflict, `Enter` may leave the browser for
+Resolve, and the complete-DUN report may leave for Dedun through the same
+visible Enter grammar. The former `R` and `D` handoff letters are inert. These
+transitions start a separate operation with its own request and authority
 boundary; they are not answers to Find and do not turn a finding into mutable
-review state. Dedun independently revalidates its newly frozen exact frame and
+review state. Conflict Resolve then uses the shared Meld-style compact
+execution form instead of restoring a large finder detail or Resolve report.
+Dedun independently revalidates its newly frozen exact frame and
 enters its deterministic Apply boundary. Sharing the analyzer does not share
 Apply authority. Durable multi-session retention is instead explicit through
 `mem audit`, which records all three reports, each finder ruleset, and
@@ -160,7 +164,7 @@ the identical labels and ordering.
 Ambiguity and Conflict deliberately combine common Context targeting with one
 small finder-specific report adapter rather than inheriting the answerable
 Resolution Session grammar. Context targeting owns setup selection; the
-compact browser owns read-only list/detail inspection. The receipt between
+compact browser owns read-only complete-paragraph navigation. The receipt between
 them is the semantic boundary; the setup UI never calls a finder merely
 because a cursor moved or a Context was checked. The direct Duplicate and
 Redundancy reports skip setup but may use the same read-only report model after

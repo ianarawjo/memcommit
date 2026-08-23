@@ -1,9 +1,21 @@
-$ mem find-ambiguities --context study/reporting                                                                                                                                    
+$ mem find-redundancies --context study/reporting                                                                                                                                   
 PTY · 180 COLUMNS × 52 ROWS                                                                                                                                                         
 WARNING: your terminal doesn't support cursor position requests (CPR).                                                                                                              
- FIND AMBIGUITIES · FINDINGS · 1/1                                                                                                                                                  
+ FIND REDUNDANCIES · 2/2                                                                                                                                                            
  1 CONTEXT(S) · 3 SOURCE MEMORIES · study/reporting                                                                                                                                 
-›  1  DOMINANT · CLARIFICATION REQUIRED · Report the incident within 30 days.                                                                                                      ^
+  SEMANTIC DUN · SEMANTIC_EQUIVALENT — SOURCE 1 · study/reporting [00000000]: “Report the incident within 30 days.” / SOURCE 2 · study/reporting [00000000]: “Notify the office no ^
+later than one month after discovery.” · WHY THESE MEMORIES ARE SEMANTICALLY REDUNDANT · Both Memories impose the same reporting window in this frame.                              
+                                                                                                                                                                                    
+› SEMANTIC DUN · OVERLAP — SOURCE 1 · study/reporting [00000000]: “Notify the office no later than one month after discovery.” / SOURCE 2 · study/reporting [00000000]: “The access 
+ible entrance remains open during office hours.” · WHY THESE MEMORIES ARE SEMANTICALLY REDUNDANT · The Memories share operational context but are not substitutes.                  
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
                                                                                                                                                                                     
                                                                                                                                                                                     
                                                                                                                                                                                     
@@ -15,9 +27,9 @@ WARNING: your terminal doesn't support cursor position requests (CPR).
                                                                                                                                                                                     
                                                                                                                                                                                     
                                                                                                                                                                                    v
- ↑/↓ finding · Enter inspect · Home/End · Esc/Backspace/Q close · read-only                                                                                                         
+ ↑/↓ finding · Home/End · Enter open Dedun · Esc/Backspace/Q close · read-only                                                                                                      
                                                                                                                                                                                     
-BROWSER RECEIPT · CLOSE · NO TARGET                                                                                                                                                 
+BROWSER RECEIPT · HANDOFF · duplicate:00000000-0000-4000-8000-000000000712:00000000-0000-4000-8000-000000000713                                                                     
 READ-ONLY VERIFICATION                                                                                                                                                              
   RESPONSE STATE · 0                                                                                                                                                                
   SOURCE DIGEST UNCHANGED · True                                                                                                                                                    

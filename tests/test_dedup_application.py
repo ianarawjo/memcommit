@@ -373,7 +373,7 @@ def test_reported_finder_links_enter_dedup_as_one_typed_batch(isolated_store):
     with create_pipe_input() as pipe_input:
         # Find reports evidence without asking for confirmation. Dedun owns
         # the later survivor and Apply decisions.
-        pipe_input.send_text("d")
+        pipe_input.send_text("\r")
         run_quality_find_resolution_workbench(
             session,
             context,
