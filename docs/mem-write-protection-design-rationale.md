@@ -21,12 +21,14 @@ mem lock --profile | mem unlock --profile
 
 Bare lock and unlock target the current Context. A positional `TARGET` uses the
 shared direct-Memory locator grammar: an eight-or-more-character UUID-shaped
-operand or `CONTEXT:UID` selects Memory, and every other operand selects an
-existing Context. A bare Memory selector scans one strict snapshot of every
-ordinary local direct Context and must have exactly one owner; a qualified
-selector searches only its canonical owner. `--memory` explicitly types a
-shorter prefix, while `--context` qualifies its owner or, without `--memory`,
-selects an explicit Context. All Context locators, including `.`, `..`,
+operand or `CONTEXT:UID` selects Memory without storage-dependent typing. A
+shorter hexadecimal target preserves an exact Context first and otherwise
+selects Memory only when one ordinary-local direct owner matches. A bare Memory
+selector scans one strict snapshot of every ordinary local direct Context and
+must have exactly one owner; a qualified selector searches only its canonical
+owner. `--memory` explicitly types any short prefix, while `--context`
+qualifies its owner or, without `--memory`, selects an explicit Context. All
+Context locators, including `.`, `..`,
 `./...`, and `../...`, resolve against one current-name snapshot captured at
 command start.
 

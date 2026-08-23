@@ -24,15 +24,17 @@ MemoryValue = TypeVar("MemoryValue", bound=MemoryIdentity)
 _CANONICAL_UUID_SHAPE = "00000000-0000-0000-0000-000000000000"
 
 
-def is_memory_uid_selector(value: object) -> bool:
-    """Return whether text has the unambiguous public UUID-prefix shape.
+def is_memory_uid_prefix(value: object) -> bool:
+    """Return whether text is any nonempty canonical UUID prefix.
 
-    Automatic operand classification starts at the eight-character prefix
-    shown by the CLI. Shorter prefixes remain available behind explicit
-    operation options, where their Memory role is already known.
+    This broader predicate supports an operation that already has a safe
+    storage-backed disambiguation path.  It must not replace
+    :func:`is_memory_uid_selector` in storage-independent overloaded operand
+    classification, where fewer than eight characters can still be a Context
+    name.
     """
 
-    if not isinstance(value, str) or not 8 <= len(value) <= 36:
+    if not isinstance(value, str) or not 1 <= len(value) <= 36:
         return False
     folded = value.casefold()
     for index, character in enumerate(folded):
@@ -43,6 +45,17 @@ def is_memory_uid_selector(value: object) -> bool:
         elif character not in "0123456789abcdef":
             return False
     return True
+
+
+def is_memory_uid_selector(value: object) -> bool:
+    """Return whether text has the unambiguous public UUID-prefix shape.
+
+    Automatic operand classification starts at the eight-character prefix
+    shown by the CLI. Shorter prefixes remain available behind explicit
+    operation options, where their Memory role is already known.
+    """
+
+    return isinstance(value, str) and len(value) >= 8 and is_memory_uid_prefix(value)
 
 
 class MemoryFocusError(ValueError):

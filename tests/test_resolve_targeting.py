@@ -2,8 +2,11 @@ from __future__ import annotations
 
 import pytest
 
+import memcommit.ops as ops
+from memcommit.context import Memory
 from memcommit.resolve_application import ResolveError
 from memcommit.resolve_targeting import normalize_resolve_cli_targets
+from memcommit.store import MemoryStore
 
 
 class _UnusedStore:
@@ -43,24 +46,36 @@ def test_resolve_targets_share_one_relative_context_snapshot() -> None:
     assert targets.memory_selectors == ("abcdef12",)
 
 
-def test_resolve_targets_accept_short_prefix_only_as_explicit_memory() -> None:
+def test_resolve_targets_accept_short_prefix_as_auto_or_explicit_memory(
+    isolated_store,
+) -> None:
+    store = MemoryStore()
+    owner = ops.init("work/owner")
+    memory = Memory(
+        uid="abcd1111-1111-4111-8111-111111111111",
+        content="short prefix target",
+    )
+    owner.add(memory)
+    current = ops.init("work/current")
+    store.save(owner)
+    store.save(current)
     positional = normalize_resolve_cli_targets(
-        _UnusedStore(),
+        store,
         ("abcd",),
         context_locator=None,
         memory_operands=(),
         current_context_name="work/current",
     )
     explicit = normalize_resolve_cli_targets(
-        _UnusedStore(),
+        store,
         (),
         context_locator="work/current",
         memory_operands=("abcd",),
         current_context_name="work/current",
     )
 
-    assert positional.context_name == "abcd"
-    assert positional.memory_selectors == ()
+    assert positional.context_name == owner.name
+    assert positional.memory_selectors == (memory.uid,)
     assert explicit.context_name == "work/current"
     assert explicit.memory_selectors == ("abcd",)
 

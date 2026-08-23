@@ -129,7 +129,7 @@ def test_cli_auto_types_bare_memory_and_finds_its_owner(
     provider = PayloadProvider()
     _patch_provider(monkeypatch, provider)
 
-    result = runner.invoke(app, ["translate", selected.uid[:8]])
+    result = runner.invoke(app, ["translate", selected.uid[:7]])
 
     assert result.exit_code == 0, result.output
     assert "Translation view: 'translate/source'" in result.output

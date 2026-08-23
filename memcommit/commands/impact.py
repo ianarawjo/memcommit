@@ -66,9 +66,11 @@ from memcommit.commands.update_render import (
     run_update_workbench,
 )
 from memcommit.context_targeting.loading import (
+    DirectMemoryAmbiguityError,
     load_context_scope,
     resolve_local_context_memory_target,
 )
+from memcommit.context_targeting.memory_focus import is_memory_uid_prefix
 from memcommit.context_targeting.model import (
     ContextTarget,
     DirectMemoryLocator,
@@ -1462,6 +1464,32 @@ def atomize_impact_cmd(
             if context_operand is not None
             else None
         )
+        if (
+            isinstance(parsed_operand, ExistingContextOperand)
+            and context_name is None
+            and is_memory_uid_prefix(context_operand)
+        ):
+            early_store = MemoryStore(create=False)
+            early_snapshot = ContextOperandSnapshot.capture(early_store)
+            try:
+                early_target = resolve_local_context_memory_target(
+                    early_store,
+                    context_operand,
+                    current=early_snapshot.current_name,
+                )
+            except FileNotFoundError:
+                early_target = None
+            except DirectMemoryAmbiguityError:
+                # Keep this in Memory mode so duplicate options and saved-
+                # session conflicts are rejected before the runtime replays
+                # the complete ambiguity diagnostic.
+                parsed_operand = DirectMemoryLocator(context_operand)
+                early_target = None
+            if isinstance(early_target, DirectMemoryTarget):
+                parsed_operand = DirectMemoryLocator(
+                    early_target.memory_uid,
+                    early_target.context_name,
+                )
         if isinstance(parsed_operand, DirectMemoryLocator):
             if context_name is not None:
                 raise ValueError(

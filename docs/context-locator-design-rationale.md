@@ -248,9 +248,11 @@ resolve an authorized public Grant Context. Both sides share one command-start
 current-name and Grant-registry snapshot. The resulting exact owner and Memory
 UID feed the existing focused-Compare contract, so automatic typing neither
 widens descendants nor promotes neighboring Memories from context-only
-evidence. Existing UUID-shaped Contexts use `--from`/`--to`, and prefixes
-shorter than the public eight-character Memory shape use the explicit Memory
-options or a qualified locator.
+evidence. Eight-or-more-character UUID shapes are storage-independently typed
+as Memory. A shorter hexadecimal positional preserves an exact readable
+Context first, then uses the same unique ordinary-local Memory fallback;
+`--from`/`--to`, explicit Memory options, and qualified locators remain the
+unambiguous compatibility forms.
 
 Atomize, Impact Atomize, Chunk, and Translate use that same shape classifier.
 Their bare Memory operands require one unique ordinary-local direct owner, so

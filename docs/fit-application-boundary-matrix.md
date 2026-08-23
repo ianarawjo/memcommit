@@ -34,12 +34,14 @@ AUTO-FIT projection.
 The ordinary executable request is one complete proposition set and optional
 background. Positional operands automatically resolve `text:` escapes,
 eight-or-more-character UUID-shaped Memory selectors, qualified
-`CONTEXT:UID_OR_PREFIX` selectors, and exact frozen readable Context names;
-everything else is literal. Explicit repeatable Memory and Context options
-remain available. Contexts expand their direct ordinary Memories in stored
-order. Unqualified Memory selectors use the command-start current Context;
-qualified and relative Context operands resolve against that same captured
-name. It creates no receipt. The explicit Ground
+`CONTEXT:UID_OR_PREFIX` selectors, and exact frozen readable Context names. A
+shorter hexadecimal value selects one unique ordinary-local direct Memory only
+after exact Context lookup misses; otherwise the established literal fallback
+remains. Explicit repeatable Memory and Context options remain available.
+Contexts expand their direct ordinary Memories in stored order. Unqualified
+Memory selectors use the command-start current Context; qualified and relative
+Context operands resolve against that same captured name. It creates no
+receipt. The explicit Ground
 request is one exact saved Ground name and either:
 
 - no receipt selector, meaning freeze, evaluate, and atomically save a new Fit

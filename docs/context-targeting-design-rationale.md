@@ -100,13 +100,22 @@ The overloaded positional grammar is now one typed pipeline rather than a
 collection of command-local boolean branches. `parse_auto_typed_context_memory_operand`
 first returns either `ExistingContextOperand` or `DirectMemoryLocator` without
 reading storage. New Context roots reserve the public eight-or-more-character
-UUID-prefix shape and Context names forbid `:`, so this classification does not
-depend on which Contexts happen to exist. A local-only caller may then use
-`resolve_local_context_memory_target` to obtain either a canonical
-`ContextTarget` or an exact `DirectMemoryTarget`. Compare, Resolve, Lock and
-Unlock, Embed, Reference, Fit, Conformance, Atomize, Impact Atomize, Chunk,
-Translate, and Show now consume that common classification rather than
-reimplementing its shape rules.
+UUID-prefix shape and Context names forbid `:`, so this first classification
+does not depend on which Contexts happen to exist. A local-only caller may then
+use `resolve_local_context_memory_target` to obtain either a canonical
+`ContextTarget` or an exact `DirectMemoryTarget`.
+
+The storage-backed completion also accepts the shorter UID prefixes people may
+type from a compact display. It preserves an exact Context name first, then
+tries the complete ordinary-local direct-Memory owner catalog. A unique match
+becomes an exact owner/UID coordinate, no match returns to the operation's
+established missing-Context or literal behavior, and multiple matches fail with
+every canonical `CONTEXT:UID` candidate. Grant-aware adapters preserve an exact
+authorized public Context before this local fallback; bare short prefixes never
+enumerate Grant contents. Compare, Resolve, Lock and Unlock, Embed, Reference,
+Fit, Conformance, Atomize, Impact Atomize, Chunk, Translate, and Show consume
+this common classification and fallback rather than setting their own minimum
+prefix length.
 
 This reuse has three deliberate semantic domains:
 
@@ -118,6 +127,12 @@ This reuse has three deliberate semantic domains:
 - Fit and Conformance additionally accept literal text, so `text:` and the
   final literal fallback remain their adapter responsibility after the common
   Context/Memory shape classification.
+
+Show applies the same short-prefix precedence to its broader direct-item
+catalog. Because it may select MemoryRefs, embedded Context rows, and query
+rows in addition to ordinary Memories, that final lookup remains
+operation-owned. It still requires one unique owner and never prefers the
+current Context.
 
 A bare Memory-shaped operand may enumerate only strict ordinary-local direct
 records and must have one unique owner. A qualified owner may instead be

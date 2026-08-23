@@ -22,6 +22,9 @@ from memcommit.context_targeting.memory_focus import (
     MemoryFocusError,
     resolve_memory_focus,
 )
+from memcommit.context_targeting.loading import (
+    try_resolve_short_local_direct_memory_locator,
+)
 from memcommit.context_targeting.model import (
     DirectMemoryLocator,
     ExistingContextOperand,
@@ -423,6 +426,19 @@ def run_stored_source_fit(
         )
         if canonical_name in all_readable_names():
             select_context(parsed.locator)
+            continue
+        short_target = try_resolve_short_local_direct_memory_locator(
+            store,
+            parsed.locator,
+            current=current_name,
+        )
+        if short_target is not None:
+            select_memory(
+                FitMemorySourceRequest(
+                    selector=short_target.memory_uid,
+                    context_locator=short_target.context_name,
+                )
+            )
             continue
         if is_relative_context_locator(parsed.locator):
             raise FitSourceError(

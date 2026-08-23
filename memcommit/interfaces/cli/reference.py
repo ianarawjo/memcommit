@@ -7,9 +7,10 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.context_targeting.loading import (
+    resolve_local_context_memory_target,
     resolve_local_direct_memory_locator,
 )
-from memcommit.context_targeting.model import DirectMemoryLocator
+from memcommit.context_targeting.model import DirectMemoryLocator, DirectMemoryTarget
 from memcommit.context_targeting.operands import choose_endpoint_operand
 from memcommit.context_targeting.presets import (
     ContextScopePreset,
@@ -192,7 +193,25 @@ def cmd(
                 if not source_from_option
                 else None
             )
-            memory_mode = isinstance(parsed_source, DirectMemoryLocator)
+            auto_target = None
+            if (
+                parsed_source is not None
+                and not isinstance(parsed_source, DirectMemoryLocator)
+            ):
+                try:
+                    auto_target = resolve_local_context_memory_target(
+                        store,
+                        source_item,
+                        current=port.current_context_name,
+                    )
+                except FileNotFoundError:
+                    # Preserve the established Context error route when a
+                    # short hexadecimal token matches neither local role.
+                    auto_target = None
+            memory_mode = isinstance(
+                parsed_source,
+                DirectMemoryLocator,
+            ) or isinstance(auto_target, DirectMemoryTarget)
             if memory_mode:
                 if direct or recursive:
                     typer.secho(
@@ -205,9 +224,17 @@ def cmd(
                     raise typer.Exit(2)
                 memory_target = resolve_local_direct_memory_locator(
                     store,
-                    source_item,
+                    (
+                        source_item
+                        if isinstance(parsed_source, DirectMemoryLocator)
+                        else auto_target.memory_uid
+                    ),
                     current=port.current_context_name,
-                    explicit_context=memory_owner,
+                    explicit_context=(
+                        memory_owner
+                        if isinstance(parsed_source, DirectMemoryLocator)
+                        else auto_target.context_name
+                    ),
                 )
             else:
                 memory_target = None
@@ -228,7 +255,11 @@ def cmd(
         else:
             recursive_scope = scope is ContextScopePreset.RECURSIVE
             request = ContextReferenceRequest(
-                source_locator=source_item,
+                source_locator=(
+                    auto_target.context_name
+                    if auto_target is not None
+                    else source_item
+                ),
                 into_locator=target_option,
                 include_descendants=recursive_scope,
                 follow_embeds=recursive_scope,

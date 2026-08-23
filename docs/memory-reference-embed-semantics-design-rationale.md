@@ -108,11 +108,14 @@ content are not owners in this scan. A qualified locator searches only its
 resolved canonical owner, including relative spellings such as `../3:UID`.
 
 Because Embed and Reference also accept a Context in the same operand slot,
-automatic bare-Memory classification starts at the public eight-character UUID
-prefix shape. New Context names already reserve that shape. Shorter Memory
-prefixes remain available when their type is explicit through `CONTEXT:UID` or
-the compatibility `--from` option. Interactive and callable routes remain
-explicitly typed and do not infer a unit from display text.
+the storage-independent bare-Memory classification starts at the public
+eight-character UUID prefix shape. New Context names already reserve that
+shape. For a shorter hexadecimal token, an exact authorized Context wins;
+otherwise one unique ordinary-local direct-Memory match selects Memory mode.
+Zero matches retain the Context route and multiple matches fail closed.
+`CONTEXT:UID` and the compatibility `--from` option remain explicit short-prefix
+forms. Interactive and callable routes remain explicitly typed and do not
+infer a unit from display text.
 
 For explicit Embed and Reference CLI forms, `--into` and `--to` select the same
 Target and duplicate spellings fail before Store access. An omitted Target

@@ -108,10 +108,12 @@ Rule proposition, so a caller need not create a one-Memory Rules Context merely
 to run an ad hoc check. Automatic classification follows the general Fit
 grammar: `text:VALUE` forces literal text; an eight-or-more-character
 UUID-shaped value or `CONTEXT:UID_OR_PREFIX` is a strict Memory selector; an
-existing local Context keeps its Context meaning; and remaining non-relative
-text is a literal Rule. A relative locator that resolves to no local Context is
-an error rather than silently becoming Rule text. A literal colliding with a
-Context name or UID shape must use `text:`.
+existing local Context keeps its Context meaning; and a shorter hexadecimal
+value becomes a Memory selector only when the complete local direct-owner
+catalog has one unique match. Remaining non-relative text is a literal Rule. A
+relative locator that resolves to no local Context is an error rather than
+silently becoming Rule text. A literal colliding with a Context name or matched
+UID prefix must use `text:`.
 
 Bare Memory selectors use the shared direct-Memory locator and must have one
 unique owner across all ordinary local Contexts. The current Context receives

@@ -5,10 +5,13 @@ from __future__ import annotations
 from collections.abc import Sequence
 from dataclasses import dataclass
 
+from memcommit.authority.access import resolve_context_access
 from memcommit.context_locator import resolve_context_locator
+from memcommit.context_targeting.memory_focus import is_memory_uid_prefix
 from memcommit.context_targeting.loading import (
     LocalDirectMemoryLocatorStore,
     resolve_local_direct_memory_locator,
+    try_resolve_short_local_direct_memory_locator,
 )
 from memcommit.context_targeting.model import (
     DirectMemoryLocator,
@@ -66,7 +69,46 @@ def normalize_resolve_cli_targets(
                 context_locators.append(parsed.context_locator)
         else:
             assert isinstance(parsed, ExistingContextOperand)
-            context_locators.append(parsed.locator)
+            short_target = None
+            if is_memory_uid_prefix(parsed.locator):
+                canonical = resolve_context_locator(
+                    parsed.locator,
+                    current=current_context_name,
+                )
+                exact_context = store.context_exists(canonical)
+                if not exact_context:
+                    try:
+                        resolve_context_access(
+                            store,
+                            canonical,
+                            current_name=current_context_name,
+                            required_permission="READ",
+                        )
+                    except FileNotFoundError:
+                        pass
+                    else:
+                        exact_context = True
+                short_target = (
+                    None
+                    if exact_context
+                    else try_resolve_short_local_direct_memory_locator(
+                        store,
+                        parsed.locator,
+                        current=current_context_name,
+                    )
+                )
+            if short_target is None:
+                # A nonlocal name may still be a readable Grant. Resolve's
+                # authority port retains the final existence decision.
+                context_locators.append(parsed.locator)
+            else:
+                context_locators.append(short_target.context_name)
+                memory_locators.append(
+                    DirectMemoryLocator(
+                        short_target.memory_uid,
+                        short_target.context_name,
+                    )
+                )
 
     for operand in memory_operands:
         add_memory_operand(operand)

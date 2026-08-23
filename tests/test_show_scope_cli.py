@@ -6,6 +6,7 @@ from typer.testing import CliRunner
 
 import memcommit.ops as ops
 from memcommit.cli import app
+from memcommit.context import Memory
 from memcommit.store import MemoryStore
 
 
@@ -104,3 +105,80 @@ def test_recursive_show_rejects_direct_item_selector(isolated_store):
 
     assert result.exit_code == 2
     assert "cannot be combined with a direct-item selector" in result.stderr
+
+
+def test_show_resolves_a_unique_short_uid_prefix_outside_current_context(
+    isolated_store,
+):
+    store = MemoryStore()
+    owner = ops.init("task-3/local/personal-memory/2026/01")
+    memory = Memory(
+        uid="08dfb937-7b28-55b5-801c-c0da00cbd414",
+        content="Short-prefix target",
+    )
+    owner.add(memory)
+    current = ops.init("practice/greetings")
+    for context in (owner, current):
+        store.save(context)
+    store.set_current(current.name)
+
+    result = runner.invoke(app, ["show", "08df"])
+
+    assert result.exit_code == 0, result.output
+    assert memory.uid in result.output
+    assert owner.name in result.output
+    assert memory.content in result.output
+
+
+def test_show_short_uid_prefix_does_not_prefer_a_current_context_match(
+    isolated_store,
+):
+    store = MemoryStore()
+    current = ops.init("current")
+    current.add(
+        Memory(
+            uid="08df1111-1111-4111-8111-111111111111",
+            content="Current candidate",
+        )
+    )
+    other = ops.init("other")
+    other.add(
+        Memory(
+            uid="08df2222-2222-4222-8222-222222222222",
+            content="Other candidate",
+        )
+    )
+    for context in (current, other):
+        store.save(context)
+    store.set_current(current.name)
+
+    result = runner.invoke(app, ["show", "08df"])
+
+    assert result.exit_code == 1
+    assert "Direct-item prefix '08df' has multiple local matches (2)" in result.stderr
+    assert "current:08df1111-1111-4111-8111-111111111111" in result.stderr
+    assert "other:08df2222-2222-4222-8222-222222222222" in result.stderr
+    assert "CONTEXT:UID" in result.stderr
+
+
+def test_show_exact_short_hex_context_name_wins_over_uid_prefix(isolated_store):
+    store = MemoryStore()
+    named_context = ops.init("08df")
+    ops.add(named_context, "Exact Context content")
+    memory_owner = ops.init("memory-owner")
+    memory_owner.add(
+        Memory(
+            uid="08dfb937-7b28-55b5-801c-c0da00cbd414",
+            content="Prefix Memory content",
+        )
+    )
+    for context in (named_context, memory_owner):
+        store.save(context)
+    store.set_current(memory_owner.name)
+
+    result = runner.invoke(app, ["show", "08df"])
+
+    assert result.exit_code == 0, result.output
+    assert "Context: 08df" in result.output
+    assert "Exact Context content" in result.output
+    assert "Prefix Memory content" not in result.output

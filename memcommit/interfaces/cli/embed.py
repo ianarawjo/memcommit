@@ -6,10 +6,17 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.authority.access import resolve_context_access
 from memcommit.context_targeting.loading import (
+    resolve_local_context_memory_target,
     resolve_local_direct_memory_locator,
 )
-from memcommit.context_targeting.model import DirectMemoryLocator
+from memcommit.context_targeting.memory_focus import is_memory_uid_prefix
+from memcommit.context_targeting.model import (
+    ContextTarget,
+    DirectMemoryLocator,
+    DirectMemoryTarget,
+)
 from memcommit.context_targeting.operands import choose_endpoint_operand
 from memcommit.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
@@ -200,12 +207,54 @@ def cmd(
                 if not source_from_option
                 else None
             )
-            if isinstance(parsed_source, DirectMemoryLocator):
+            auto_target = None
+            if (
+                parsed_source is not None
+                and not isinstance(parsed_source, DirectMemoryLocator)
+            ):
+                exact_access = None
+                if is_memory_uid_prefix(source_item):
+                    try:
+                        exact_access = resolve_context_access(
+                            port.store,
+                            source_item,
+                            current_name=port.current_context_name,
+                            required_permission="EMBED",
+                        )
+                    except FileNotFoundError:
+                        pass
+                if exact_access is not None:
+                    auto_target = ContextTarget(exact_access.display_name)
+                else:
+                    try:
+                        auto_target = resolve_local_context_memory_target(
+                            port.store,
+                            source_item,
+                            current=port.current_context_name,
+                        )
+                    except FileNotFoundError:
+                        # A missing local Context may still be a granted public
+                        # Context. Keep that operation-owned authority route when
+                        # no short local Memory matched.
+                        auto_target = None
+            if isinstance(parsed_source, DirectMemoryLocator) or isinstance(
+                auto_target,
+                DirectMemoryTarget,
+            ):
+                memory_operand = (
+                    source_item
+                    if isinstance(parsed_source, DirectMemoryLocator)
+                    else auto_target.memory_uid
+                )
                 memory_target = resolve_local_direct_memory_locator(
                     port.store,
-                    source_item,
+                    memory_operand,
                     current=port.current_context_name,
-                    explicit_context=memory_owner,
+                    explicit_context=(
+                        memory_owner
+                        if isinstance(parsed_source, DirectMemoryLocator)
+                        else auto_target.context_name
+                    ),
                 )
                 request = MemoryEmbedRequest(
                     memory_selector=memory_target.memory_uid,
@@ -216,7 +265,11 @@ def cmd(
                 )
             else:
                 request = EmbedRequest(
-                    child_locator=source_item,
+                    child_locator=(
+                        auto_target.context_name
+                        if auto_target is not None
+                        else source_item
+                    ),
                     into_locator=target_locator,
                     before=before,
                     after=after,

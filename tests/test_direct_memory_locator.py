@@ -3,7 +3,7 @@
 import pytest
 
 import memcommit.ops as ops
-from memcommit.context import MemoryRef, QueryContextRef
+from memcommit.context import Memory, MemoryRef, QueryContextRef
 from memcommit.context_targeting.loading import (
     resolve_local_direct_item_locator,
     resolve_local_context_memory_target,
@@ -104,6 +104,40 @@ def test_local_auto_target_resolves_context_or_exact_memory(isolated_store):
 
     assert context_target == ContextTarget(source.name)
     assert memory_target == DirectMemoryTarget(source.name, memory.uid)
+
+
+def test_local_auto_target_resolves_short_uid_after_exact_context_miss(
+    isolated_store,
+):
+    store = MemoryStore()
+    owner = ops.init("owner")
+    memory = Memory(
+        uid="084b1111-1111-4111-8111-111111111111",
+        content="short-prefix target",
+    )
+    owner.add(memory)
+    store.save(owner)
+
+    target = resolve_local_context_memory_target(store, "084b", current=None)
+
+    assert target == DirectMemoryTarget(owner.name, memory.uid)
+
+
+def test_local_auto_target_preserves_exact_short_hex_context_name(isolated_store):
+    store = MemoryStore()
+    named = ops.init("084b")
+    owner = ops.init("owner")
+    memory = Memory(
+        uid="084b1111-1111-4111-8111-111111111111",
+        content="short-prefix target",
+    )
+    owner.add(memory)
+    store.save(named)
+    store.save(owner)
+
+    target = resolve_local_context_memory_target(store, "084b", current=None)
+
+    assert target == ContextTarget(named.name)
 
 
 def test_bare_locator_ignores_memory_refs_and_embedded_context_bodies(

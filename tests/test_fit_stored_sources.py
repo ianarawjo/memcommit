@@ -335,7 +335,7 @@ def test_mem_fit_text_prefix_forces_literal_when_context_name_collides(
 
     result = CliRunner().invoke(
         app,
-        ["fit", "text:policies", memories[0].uid[:8], "--plain"],
+        ["fit", "text:policies", memories[0].uid[:7], "--plain"],
     )
 
     assert result.exit_code == 0, result.output

@@ -23,6 +23,7 @@ from memcommit.context_locator import (
 )
 from memcommit.context_targeting.loading import (
     resolve_local_direct_memory_locator,
+    try_resolve_short_local_direct_memory_locator,
 )
 from memcommit.context_targeting.model import (
     DirectMemoryLocator,
@@ -199,6 +200,28 @@ def freeze_conformance_rules_operand(
             context_name=context.name,
             context_uid=context.uid,
             context_digest=context_record_digest(context),
+        )
+    short_target = try_resolve_short_local_direct_memory_locator(
+        store,
+        parsed.locator,
+        current=current_name,
+    )
+    if short_target is not None:
+        context = store.load_direct(short_target.context_name)
+        memory = context.memories.get(short_target.memory_uid)
+        if not isinstance(memory, Memory):  # pragma: no cover - resolver invariant
+            raise ConformanceError(
+                "The selected Conformance Rule is not a direct ordinary Memory."
+            )
+        rule = ConformanceRule(memory.uid, "r1", memory.content)
+        return FrozenConformanceRulesOperand(
+            kind="MEMORY",
+            label=f"MEMORY {context.name}:{memory.uid[:8]}",
+            rules=(rule,),
+            context_name=context.name,
+            context_uid=context.uid,
+            memory_uid=memory.uid,
+            memory_digest=_memory_digest(memory),
         )
     if is_relative_context_locator(parsed.locator):
         raise ConformanceError(

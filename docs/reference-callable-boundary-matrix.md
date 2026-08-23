@@ -24,11 +24,13 @@ boundary.
 Bare Reference enters interactive setup only in a terminal. Outside a terminal,
 `SOURCE_CONTEXT [-d|-r]` selects Context mode and
 `[SOURCE_CONTEXT:]MEMORY_SELECTOR` selects Memory mode. A bare Memory selector
-must have the public eight-or-more-character UUID-prefix shape because the same
-slot also accepts Context locators; explicit owner syntax and `--from` continue
-to accept shorter prefixes. An omitted ITEM plus `--from SOURCE_CONTEXT`
-selects Context mode instead, so the same explicit endpoint vocabulary works
-without changing the established Memory form.
+with the public eight-or-more-character UUID-prefix shape is typed without
+storage. A shorter hexadecimal prefix preserves an exact local Context name
+first, then selects Memory mode only when the complete ordinary-local catalog
+has one unique match. Explicit owner syntax and `--from` continue to accept
+short prefixes directly. An omitted ITEM plus `--from SOURCE_CONTEXT` selects
+Context mode instead, so the same explicit endpoint vocabulary works without
+changing the established Memory form.
 
 The shared direct-Memory resolver searches only ordinary local direct records.
 A qualified locator resolves its owner against the command-start current

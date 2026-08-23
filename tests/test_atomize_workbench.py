@@ -248,7 +248,7 @@ def test_atomize_auto_types_bare_memory_and_finds_its_owner(
     provider = AggregateProvider()
     _patch_provider(monkeypatch, provider)
 
-    result = runner.invoke(app, ["atomize", selected.uid[:8]])
+    result = runner.invoke(app, ["atomize", selected.uid[:7]])
 
     assert result.exit_code == 0, result.output
     analysis = store.load_atomize_analysis(source.uid)

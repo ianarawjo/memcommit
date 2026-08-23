@@ -16,9 +16,11 @@ from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.context_snapshot import ContextSnapshotRef
 from memcommit.context_locator import resolve_context_locator
 from memcommit.context_targeting.loading import (
+    DirectItemAmbiguityError,
     DirectItemNotFoundError,
     resolve_local_direct_item_locator,
 )
+from memcommit.context_targeting.memory_focus import is_memory_uid_prefix
 from memcommit.context_targeting.model import (
     ContextScope,
     DirectMemoryLocator,
@@ -565,9 +567,11 @@ def execute_show_cli_operand(
     Explicit ``--context`` retains its compatibility meaning: with an operand
     it forces direct-item selection inside that owner, and without one it names
     the Context itself.  A bare UUID-shaped operand uses the shared strict local
-    direct-item catalog; a qualified operand names its owner explicitly.  Other
-    text first preserves Show's established current direct-name selection, then
-    falls back to an existing Context locator such as ``task-1`` or ``../peer``.
+    direct-item catalog; a qualified operand names its owner explicitly.  A
+    short UUID prefix first preserves an exact Context of the same name, then
+    uses that catalog so it agrees with direct-Memory commands when the prefix
+    is unique. Other text preserves Show's established current direct-name
+    selection before falling back to an existing Context locator.
     """
 
     current_context_name = store.current_context_name()
@@ -578,6 +582,34 @@ def execute_show_cli_operand(
             store=store,
             allow_grants=allow_grants,
             registry=registry,
+        )
+
+    def execute_bare_direct_item(selector: str) -> ShowResult:
+        if include_descendants or follow_embeds:
+            raise ShowDirectItemScopeError(
+                "--recursive/-r cannot be combined with a direct-item selector."
+            )
+        try:
+            target = resolve_local_direct_item_locator(
+                store,
+                selector,
+                current=current_context_name,
+            )
+        except DirectItemNotFoundError as local_error:
+            # A current attached Grant may expose a row outside the enumerable
+            # ordinary-local owner catalog. Preserve the established exact
+            # current-row route without broadening global Grant enumeration.
+            if current_context_name is None:
+                raise local_error
+            try:
+                return execute(ShowRequest(selector=selector))
+            except ShowItemNotFoundError:
+                raise local_error
+        return execute(
+            ShowRequest(
+                context_name=target.context_name,
+                selector=target.item_uid,
+            )
         )
 
     if operand is None or context_name is not None:
@@ -603,30 +635,34 @@ def execute_show_cli_operand(
                     selector=parsed.memory_selector,
                 )
             )
-        try:
-            target = resolve_local_direct_item_locator(
-                store,
-                parsed.memory_selector,
-                current=current_context_name,
-            )
-        except DirectItemNotFoundError as local_error:
-            # A current attached Grant may expose a row outside the enumerable
-            # ordinary-local owner catalog. Preserve the established exact
-            # current-row route without broadening global Grant enumeration.
-            if current_context_name is None:
-                raise local_error
-            try:
-                return execute(ShowRequest(selector=parsed.memory_selector))
-            except ShowItemNotFoundError:
-                raise local_error
-        return execute(
-            ShowRequest(
-                context_name=target.context_name,
-                selector=target.item_uid,
-            )
-        )
+        return execute_bare_direct_item(parsed.memory_selector)
 
     assert isinstance(parsed, ExistingContextOperand)
+    if is_memory_uid_prefix(operand):
+        # A short hexadecimal token can still be a valid Context name. Exact
+        # Context identity wins; only a missing Context authorizes the same
+        # unique global prefix lookup used by direct-Memory operations.
+        try:
+            return execute(
+                ShowRequest(
+                    context_name=parsed.locator,
+                    include_descendants=include_descendants,
+                    follow_embeds=follow_embeds,
+                )
+            )
+        except FileNotFoundError:
+            pass
+        try:
+            return execute_bare_direct_item(operand)
+        except DirectItemAmbiguityError as error:
+            # Retain Show's established public error class while exposing the
+            # complete owner coordinates supplied by the shared catalog.
+            raise ShowInputError(f"Ambiguous selector {operand!r}: {error}") from error
+        except DirectItemNotFoundError as error:
+            raise ShowInputError(
+                f"No Context or direct item matches {operand!r}."
+            ) from error
+
     if current_context_name is not None:
         try:
             direct_item = execute(ShowRequest(selector=operand))

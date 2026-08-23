@@ -13,7 +13,7 @@ mutation lifecycle.
 | Explicit Context | `mem show --context NAME` | one existing-Context locator and READ resolution | Same direct Context text | None | CLI and context-operand tests |
 | Explicit direct scope | `mem show -d` | common DIRECT preset → both traversal axes false | Byte-identical default direct Context text | None | Show scope CLI tests |
 | Recursive Context scope | `mem show -r [--context NAME]` | common RECURSIVE preset → frozen readable lexical names + readable Embed traversal → UID de-duplication | Aggregate counts followed by one complete direct-content block per Context | None | Show scope, snapshot-reference, and authority/catalog tests |
-| Direct Memory | `mem show UID` | frozen direct UID-prefix selection | Compact `[Memory CONTEXT:UID] CONTENT` line with full owner, UID, and Memory text | None | CLI, application, public tests |
+| Direct Memory | `mem show UID` | frozen unique direct UID-prefix selection; short bare prefixes preserve an exact same-named Context first, then search every ordinary-local direct owner without current preference | Compact `[Memory CONTEXT:UID] CONTENT` line with full owner, UID, and Memory text | None | CLI, application, public tests |
 | Embedded Context | `mem show NAME` | exact direct embedded-name selection | Selected Context's direct contents | None | CLI, application, public tests |
 | Memory reference | `mem show UID` | direct reference snapshot with detached resolved content or dangling state | Existing reference detail | None | Memory-ref regression tests |
 | Query view | `mem show UID/NAME` | opaque query-view row; no query-source load | Metadata and separate Query instruction only | None | query-only, public, and agent tests |
@@ -30,7 +30,9 @@ mutation lifecycle.
 2. A bare Context operand remains a canonical global name. Only explicit
    relative syntax opts into current-relative lookup.
 3. Selection is direct: UID prefix for every item and exact name only for
-   embedded Contexts and query views. Ambiguity never guesses.
+   embedded Contexts and query views. A short UUID-shaped bare operand first
+   preserves an exact same-named Context; otherwise all ordinary-local direct
+   owners participate and ambiguity never guesses or prefers current state.
 4. Context item order is preserved. Recursive output preserves ownership by
    rendering separate direct-content blocks; it never silently flattens child
    content into the root.

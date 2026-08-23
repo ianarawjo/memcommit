@@ -9,6 +9,7 @@ from typer.testing import CliRunner
 import memcommit.commands.compare as compare_command
 import memcommit.ops as ops
 from memcommit.cli import app
+from memcommit.context import Memory
 from memcommit.infrastructure.providers.policy import ResolvedProviderPolicy
 from memcommit.profile_config import (
     AUTHORING_PROFILE_NAME,
@@ -78,11 +79,29 @@ def test_compare_auto_types_two_bare_memory_operands_without_current(
 ):
     store = MemoryStore()
     reference = ops.init("auto/reference")
-    reference_focus = ops.add(reference, "Use short descriptive headings.")
-    ops.add(reference, "Reference-only neighboring guidance.")
+    reference_focus = Memory(
+        uid="084b1111-1111-4111-8111-111111111111",
+        content="Use short descriptive headings.",
+    )
+    reference.add(reference_focus)
+    reference.add(
+        Memory(
+            uid="11111111-1111-4111-8111-111111111111",
+            content="Reference-only neighboring guidance.",
+        )
+    )
     compared = ops.init("auto/compared")
-    compared_focus = ops.add(compared, "Use continuous paragraph transitions.")
-    ops.add(compared, "Compared-only neighboring guidance.")
+    compared_focus = Memory(
+        uid="084f2222-2222-4222-8222-222222222222",
+        content="Use continuous paragraph transitions.",
+    )
+    compared.add(compared_focus)
+    compared.add(
+        Memory(
+            uid="22222222-2222-4222-8222-222222222222",
+            content="Compared-only neighboring guidance.",
+        )
+    )
     store.create_context(reference)
     store.create_context(compared)
     provider = _CapturingSummaryProvider()
@@ -90,7 +109,7 @@ def test_compare_auto_types_two_bare_memory_operands_without_current(
 
     result = runner.invoke(
         app,
-        ["compare", reference_focus.uid[:8], compared_focus.uid[:8], "--snapshot"],
+        ["compare", reference_focus.uid[:4], compared_focus.uid[:4], "--snapshot"],
     )
 
     assert result.exit_code == 0, result.output

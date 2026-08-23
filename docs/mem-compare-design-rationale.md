@@ -29,10 +29,13 @@ the peer and retains the active Context as reference; two positional operands
 explicitly name reference and peer. Each positional endpoint uses the shared
 Context/direct-Memory classifier: an eight-or-more-character UUID-shaped value
 is a bare Memory selector, `CONTEXT:UID` is an owner-qualified Memory selector,
-and every other value is an existing Context locator. `--from` and `--to`
-remain explicitly typed Context compatibility aliases, but positional
-endpoints and endpoint options cannot be mixed in one invocation. `--refresh`
-still requires an explicit peer and is rejected on the picker route.
+and other values begin as existing Context locators. A shorter hexadecimal
+endpoint preserves an exact readable Context first and otherwise becomes a
+Memory only when the complete ordinary-local catalog has one unique match.
+`--from` and `--to` remain explicitly typed Context compatibility aliases, but
+positional endpoints and endpoint options cannot be mixed in one invocation.
+`--refresh` still requires an explicit peer and is rejected on the picker
+route.
 
 The unqualified explicit-pair route is now a transient lightweight summary.
 It returns exactly one bounded source-linked relation paragraph under the

@@ -561,6 +561,8 @@ def cmd(
                 compared_operand=to,
                 reference_is_auto_memory=reference_is_auto_memory,
                 compared_is_auto_memory=compared_is_auto_memory,
+                reference_is_auto_typed=auto_type_positionals,
+                compared_is_auto_typed=auto_type_positionals,
                 reference_memory_selector=reference_memory,
                 compared_memory_selector=compared_memory,
                 current_name=current_name,
@@ -570,6 +572,16 @@ def cmd(
             compared_access = targets.compared_access
             reference_memory = targets.reference_memory_uid
             compared_memory = targets.compared_memory_uid
+            if targets.reference_operand_is_memory and reference_descendants:
+                raise CompareCommandError(
+                    "REFERENCE Memory selection cannot be combined with "
+                    "--reference-descendants."
+                )
+            if targets.compared_operand_is_memory and compared_descendants:
+                raise CompareCommandError(
+                    "PEER Memory selection cannot be combined with "
+                    "--compared-descendants."
+                )
             reference = load_comparison_context(
                 reference_access,
                 include_descendants=reference_descendants,

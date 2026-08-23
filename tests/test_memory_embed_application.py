@@ -187,7 +187,7 @@ def test_cli_bare_memory_uid_finds_unique_local_owner_without_from(
 
     result = runner.invoke(
         app,
-        ["embed", memory.uid[:8], "--into", target.name],
+        ["embed", memory.uid[:7], "--into", target.name],
     )
 
     assert result.exit_code == 0, result.output + result.stderr

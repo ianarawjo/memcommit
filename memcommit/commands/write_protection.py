@@ -10,12 +10,10 @@ import memcommit.ops as ops
 from memcommit.commands.command_group import CanonicalCommandGroup
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.context_targeting.loading import (
+    resolve_local_context_memory_target,
     resolve_local_direct_memory_locator,
 )
-from memcommit.context_targeting.model import DirectMemoryLocator
-from memcommit.context_targeting.resolution import (
-    parse_auto_typed_context_memory_operand,
-)
+from memcommit.context_targeting.model import DirectMemoryTarget
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
@@ -256,8 +254,20 @@ def _change_auto_target_protection(
 
     store = MemoryStore()
     snapshot = ContextOperandSnapshot.capture(store)
-    parsed = parse_auto_typed_context_memory_operand(target_operand)
-    if isinstance(parsed, DirectMemoryLocator):
+    try:
+        target = resolve_local_context_memory_target(
+            store,
+            target_operand,
+            current=snapshot.current_name,
+        )
+    except (FileNotFoundError, OSError, TypeError, ValueError) as error:
+        typer.secho(
+            f"Error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
+    if isinstance(target, DirectMemoryTarget):
         if direct or recursive:
             typer.secho(
                 "Error: --direct/-d and --recursive/-r apply only to a Context target.",
@@ -265,19 +275,6 @@ def _change_auto_target_protection(
                 err=True,
             )
             raise typer.Exit(2)
-        try:
-            target = resolve_local_direct_memory_locator(
-                store,
-                target_operand,
-                current=snapshot.current_name,
-            )
-        except (FileNotFoundError, OSError, TypeError, ValueError) as error:
-            typer.secho(
-                f"Error: {display_escape_text(str(error))}",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
         _change_memory_protection(
             target.memory_uid,
             target.context_name,
@@ -287,7 +284,7 @@ def _change_auto_target_protection(
         )
         return
     _change_context_protection(
-        parsed.locator,
+        target.context_name,
         protected=protected,
         recursive=_recursive_scope(direct=direct, recursive=recursive),
         store=store,

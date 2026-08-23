@@ -78,7 +78,7 @@ def test_auto_target_cli_classifies_context_and_unique_direct_memory(
     assert store.write_protection_state().context_is_protected(context.uid)
     assert invoke("unlock", "target/context").exit_code == 0
 
-    locked_memory = invoke("lock", memory.uid[:8])
+    locked_memory = invoke("lock", memory.uid[:7])
     assert locked_memory.exit_code == 0
     assert "Locked Memory" in locked_memory.output
     assert memory.uid in store.write_protection_state().protected_memory_uids(

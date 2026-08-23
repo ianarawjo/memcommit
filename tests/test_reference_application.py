@@ -138,7 +138,7 @@ def test_cli_reference_finds_unique_bare_uid_and_qualified_relative_owner(
     store.save(target)
     store.set_current(target.name)
 
-    bare = runner.invoke(app, ["reference", first.uid[:8]])
+    bare = runner.invoke(app, ["reference", first.uid[:7]])
     qualified = runner.invoke(app, ["reference", f"../3:{second.uid[:8]}"])
 
     assert bare.exit_code == 0, bare.output + bare.stderr

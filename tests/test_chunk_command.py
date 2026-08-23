@@ -118,7 +118,7 @@ def test_chunk_auto_types_bare_memory_and_finds_its_owner(isolated_store):
         store.save(context)
     store.set_current(current.name)
 
-    result = runner.invoke(app, ["chunk", selected.uid[:8]])
+    result = runner.invoke(app, ["chunk", selected.uid[:7]])
 
     assert result.exit_code == 0, result.output + result.stderr
     assert "in Context 'work/target'" in result.output

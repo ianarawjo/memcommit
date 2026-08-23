@@ -719,7 +719,7 @@ def test_check_conformance_revalidates_selected_rule_memory(
 
     result = CliRunner().invoke(
         app,
-        ["check-conformance", "--from", rule.uid[:8]],
+        ["check-conformance", "--from", rule.uid[:7]],
     )
 
     assert result.exit_code == 1

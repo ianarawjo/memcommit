@@ -65,12 +65,14 @@ mem resolve [FULL_MEMORY_UID ...] --context CANONICAL_NAME [same effect flags]
 
 Resolve uses the shared mixed Context/direct-Memory operand grammar before it
 constructs an operation request. A positional eight-or-more-character
-UUID-shaped value is a Memory selector, `CONTEXT:UID` is an owner-qualified
-Memory selector, and any other positional value is an existing Context
-locator. `--memory` makes the Memory role explicit and therefore also accepts
-short prefixes; `--context` preserves explicit legacy UUID-shaped Context
-names. Every Context spelling, including relative qualifiers, resolves against
-one command-start current-Context snapshot.
+UUID-shaped value is a strict Memory selector, `CONTEXT:UID` is an
+owner-qualified Memory selector, and other positional values begin as existing
+Context locators. When a shorter hexadecimal value is not an exact readable
+Context, one unique ordinary-local direct-Memory match promotes it to Memory;
+zero matches retain Context meaning and multiple matches fail closed.
+`--memory` makes the Memory role explicit, while `--context` preserves explicit
+legacy UUID-shaped Context names. Every Context spelling, including relative
+qualifiers, resolves against one command-start current-Context snapshot.
 
 A bare Memory selector with no named Context searches the strict local direct-
 ownership catalog and must have exactly one owner; current Context has no

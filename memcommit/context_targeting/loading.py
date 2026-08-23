@@ -7,6 +7,7 @@ from typing import Protocol
 
 from memcommit.context import Context, Information, Memory
 from memcommit.context_locator import resolve_context_locator
+from memcommit.context_targeting.memory_focus import is_memory_uid_prefix
 from memcommit.context_targeting.model import (
     ContextScope,
     ContextTarget,
@@ -273,14 +274,54 @@ def resolve_local_context_memory_target(
     parsed = parse_auto_typed_context_memory_operand(operand)
     if isinstance(parsed, ExistingContextOperand):
         context_name = resolve_context_locator(parsed.locator, current=current)
-        if not store.context_exists(context_name):
-            raise FileNotFoundError(f"Context {context_name!r} does not exist locally.")
-        return ContextTarget(context_name)
+        if store.context_exists(context_name):
+            return ContextTarget(context_name)
+        short_memory = try_resolve_short_local_direct_memory_locator(
+            store,
+            parsed.locator,
+            current=current,
+        )
+        if short_memory is not None:
+            return short_memory
+        raise FileNotFoundError(f"Context {context_name!r} does not exist locally.")
     return resolve_local_direct_memory_locator(
         store,
         operand,
         current=current,
     )
+
+
+def try_resolve_short_local_direct_memory_locator(
+    store: LocalDirectMemoryLocatorStore,
+    operand: object,
+    *,
+    current: str | None,
+) -> DirectMemoryTarget | None:
+    """Resolve a short bare UID only after an exact Context has missed.
+
+    The pure overloaded-operand parser deliberately reserves only the public
+    eight-character UID shape.  Shorter hexadecimal text can still be an
+    existing Context name or literal operation input, so storage-backed
+    adapters call this fallback only after preserving that stronger meaning.
+    A real ambiguity remains an error; only an empty local match returns
+    ``None`` so the calling operation can retain its established missing-name
+    or literal fallback.
+    """
+
+    if (
+        not isinstance(operand, str)
+        or not is_memory_uid_prefix(operand)
+        or len(operand) >= 8
+    ):
+        return None
+    try:
+        return resolve_local_direct_memory_locator(
+            store,
+            operand,
+            current=current,
+        )
+    except DirectMemoryNotFoundError:
+        return None
 
 
 def _context_uids(root: Context) -> set[str]:

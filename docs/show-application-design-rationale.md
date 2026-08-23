@@ -91,11 +91,17 @@ The CLI positional operand now auto-types as an existing Context locator or a
 direct item. `mem show task-1` therefore opens Context `task-1` even when the
 current Context is `practice/greetings`; `mem show UID` finds one unique
 ordinary-local direct owner; and `mem show CONTEXT:UID` states the owner
-explicitly. Non-UUID text first preserves the established current direct-name
-route for embedded Context and query-view rows, then falls back to Context
-lookup. `--context` remains the explicit disambiguator and the qualified READ
-route. The CLI normalizes every form into the same `ShowRequest`; the Python
-and agent contracts deliberately retain separate `selector` and
+explicitly. For a bare UUID prefix shorter than the normal eight-character
+display token, Show first preserves an exact readable Context with that name.
+When no such Context exists, it searches the same complete ordinary-local
+direct-item catalog as longer UID prefixes, requires one unique owner, and
+never prefers a match merely because it is current. This keeps `mem show 08df`
+consistent with direct-Memory operations without making a valid short
+hexadecimal Context name unreachable. Non-UUID text preserves the established
+current direct-name route for embedded Context and query-view rows, then falls
+back to Context lookup. `--context` remains the explicit disambiguator and the
+qualified READ route. The CLI normalizes every form into the same `ShowRequest`;
+the Python and agent contracts deliberately retain separate `selector` and
 `context_name` fields instead of exposing shell-oriented overloading.
 
 `MemCommitClient.show(selector=None, context_name=None)` projects the same

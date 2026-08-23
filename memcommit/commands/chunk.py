@@ -14,10 +14,15 @@ from memcommit.authority.access import (
 from memcommit.chunking import ChunkMethod, chunk_content
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.context import AutoCheckpoint, Memory
-from memcommit.context_targeting.loading import resolve_local_direct_memory_locator
+from memcommit.context_targeting.loading import (
+    resolve_local_context_memory_target,
+    resolve_local_direct_memory_locator,
+)
+from memcommit.context_targeting.memory_focus import is_memory_uid_prefix
 from memcommit.context_targeting.model import (
+    ContextTarget,
     DirectMemoryLocator,
-    ExistingContextOperand,
+    DirectMemoryTarget,
 )
 from memcommit.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
@@ -151,9 +156,48 @@ def cmd(
             else:
                 context_name = parsed_operand.context_locator
                 memory_selector = parsed_operand.memory_selector
-        elif isinstance(parsed_operand, ExistingContextOperand):
-            context_name = parsed_operand.locator
-            memory_selector = None
+        elif parsed_operand is not None:
+            exact_access = None
+            if is_memory_uid_prefix(memory_selector):
+                try:
+                    exact_access = resolve_context_access(
+                        active_store,
+                        parsed_operand.locator,
+                        current_name=snapshot.current_name,
+                        required_permission="DELETE",
+                    )
+                except FileNotFoundError:
+                    pass
+            if exact_access is not None:
+                auto_target = ContextTarget(exact_access.display_name)
+            else:
+                try:
+                    auto_target = resolve_local_context_memory_target(
+                        active_store,
+                        memory_selector,
+                        current=snapshot.current_name,
+                    )
+                except FileNotFoundError:
+                    auto_target = None
+            if auto_target is not None:
+                if isinstance(auto_target, DirectMemoryTarget):
+                    context_name = auto_target.context_name
+                    memory_selector = auto_target.memory_uid
+                else:
+                    assert isinstance(auto_target, ContextTarget)
+                    context_name = auto_target.context_name
+                    memory_selector = None
+            elif (
+                snapshot.current_name is not None
+                and not active_store.context_exists(snapshot.current_name)
+                and is_memory_uid_prefix(memory_selector)
+            ):
+                # A selected granted Context is an explicit owner even though
+                # bare prefixes never enumerate arbitrary Grants.
+                context_name = snapshot.current_name
+            else:
+                context_name = parsed_operand.locator
+                memory_selector = None
         access = resolve_context_access(
             active_store,
             context_name,
