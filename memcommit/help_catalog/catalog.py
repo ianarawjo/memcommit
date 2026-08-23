@@ -519,11 +519,18 @@ _OPERATIONS = (
     ),
     _operation(
         "show",
-        "Show a Memory, reference, embedded Context, or the direct contents of a current/explicit Context.",
-        "Context or direct item -> rendered content",
+        (
+            "Show a Memory, reference, embedded Context, or complete Context "
+            "contents. Use -r to include readable descendants and embedded "
+            "Contexts as separate owner-preserving blocks."
+        ),
+        "Context scope or direct item -> rendered content",
         ExecutionKind.DETERMINISTIC,
         "Returns retained lineage",
-        "One exact Context or direct item",
+        (
+            "One exact Context or direct item by default; -r follows readable "
+            "lexical descendants and embedded Contexts"
+        ),
     ),
     _operation(
         "status",

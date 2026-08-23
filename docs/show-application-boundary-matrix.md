@@ -2,7 +2,7 @@
 
 ## Closure statement
 
-Every currently implemented Show route enters one terminal-independent direct
+Every currently implemented Show route enters one terminal-independent typed
 inspection boundary. The operation performs one live authorized read and has
 no provider, cache, session, Apply, receipt, checkpoint, Undo, or current-state
 mutation lifecycle.
@@ -11,6 +11,8 @@ mutation lifecycle.
 | --- | --- | --- | --- | --- | --- |
 | Current Context | `mem show` | command-start current snapshot → `execute_show` → `show` | Existing direct Context text | None | `TestShow`, application tests |
 | Explicit Context | `mem show --context NAME` | one existing-Context locator and READ resolution | Same direct Context text | None | CLI and context-operand tests |
+| Explicit direct scope | `mem show -d` | common DIRECT preset → both traversal axes false | Byte-identical default direct Context text | None | Show scope CLI tests |
+| Recursive Context scope | `mem show -r [--context NAME]` | common RECURSIVE preset → frozen readable lexical names + readable Embed traversal → UID de-duplication | Aggregate counts followed by one complete direct-content block per Context | None | Show scope, snapshot-reference, and authority/catalog tests |
 | Direct Memory | `mem show UID` | frozen direct UID-prefix selection | Complete Memory text | None | CLI, application, public tests |
 | Embedded Context | `mem show NAME` | exact direct embedded-name selection | Selected Context's direct contents | None | CLI, application, public tests |
 | Memory reference | `mem show UID` | direct reference snapshot with detached resolved content or dangling state | Existing reference detail | None | Memory-ref regression tests |
@@ -29,22 +31,28 @@ mutation lifecycle.
    relative syntax opts into current-relative lookup.
 3. Selection is direct: UID prefix for every item and exact name only for
    embedded Contexts and query views. Ambiguity never guesses.
-4. Context item order is preserved. Whole-Context output never silently
-   flattens lexical descendants or embedded content.
-5. Every READ-granted snapshot belongs to one authority-registry generation.
+4. Context item order is preserved. Recursive output preserves ownership by
+   rendering separate direct-content blocks; it never silently flattens child
+   content into the root.
+5. Recursive lexical names and Embed edges are independent. A live Context
+   reached through both has one block, while an immutable Context Reference is
+   traversed only within its retained package and never replaced by live state.
+6. Every READ-granted snapshot belongs to one authority-registry generation.
    An explicit-root client never borrows global Profile grants.
-6. A query-view result has no content or concealed-source identity field and
+   Grant attachment metadata never becomes a recursive hierarchy edge.
+7. A query-view result has no content or concealed-source identity field and
    Show never opens query-source storage.
-7. A successful call performs no provider connection and publishes no Context,
+8. A successful call performs no provider connection and publishes no Context,
    checkpoint, session, receipt, cache entry, or current-pointer change. A
    Profile-backed read may briefly use the shared authority coordination lock;
    that lock is infrastructure coordination, not a Show result artifact.
-8. CLI, Python, agent, and MCP project one typed result; none reconstructs
-targeting or authority policy.
+9. CLI, Python, agent, and MCP project one typed result; none reconstructs
+   targeting or authority policy. Recursive item selection is rejected rather
+   than reinterpreting the direct selector contract.
 
 ## Intentional exclusions
 
-Show has no current interactive TUI. A future read-only Viewer, recursive
-scope, historical snapshot, or bulk selector is a new contract rather than an
-implicit extension of this direct inspection route. Provider-mediated
-one-shot answering remains owned by Query.
+Show has no current interactive TUI. A future read-only Viewer, historical
+snapshot, or bulk selector is a new contract rather than an implicit extension
+of this inspection route. Provider-mediated one-shot answering remains owned
+by Query.

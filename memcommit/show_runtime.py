@@ -10,10 +10,14 @@ from memcommit.authority.access import (
     context_access_display_facts,
     project_grants_into_context,
     resolve_context_access,
+    top_level_grants,
 )
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.context_snapshot import ContextSnapshotRef
 from memcommit.context_locator import resolve_context_locator
+from memcommit.context_targeting.model import ContextScope
+from memcommit.context_targeting.readable_catalog import ReadableContextCatalog
+from memcommit.context_targeting.resolution import expand_lexical_context_names
 from memcommit.profile_config import ProfileRegistry
 from memcommit.profiles import (
     ProfileError,
@@ -56,8 +60,7 @@ def _snapshot_context(
                 ShowMemory(
                     uid=item.uid,
                     content=item.content,
-                    source=explicit
-                    or SourceDisplayFacts(form=SourceForm.MEMORY),
+                    source=explicit or SourceDisplayFacts(form=SourceForm.MEMORY),
                 )
             )
         elif isinstance(item, MemoryRef):
@@ -89,8 +92,7 @@ def _snapshot_context(
                 ShowQueryView(
                     uid=item.uid,
                     name=item.name,
-                    source=explicit
-                    or SourceDisplayFacts(form=SourceForm.QUERY_VIEW),
+                    source=explicit or SourceDisplayFacts(form=SourceForm.QUERY_VIEW),
                 )
             )
         elif isinstance(item, Context):
@@ -152,9 +154,7 @@ class MemoryStoreShowPort:
         operand = context_name
         if operand is None:
             if not current_context_name:
-                raise ProfileError(
-                    "No current context. Run 'mem init <name>' first."
-                )
+                raise ProfileError("No current context. Run 'mem init <name>' first.")
             operand = current_context_name
         canonical_name = resolve_context_locator(
             operand,
@@ -238,17 +238,251 @@ class MemoryStoreShowPort:
             item_facts=item_facts,
         )
 
-    def load_context(
+    def _recursive_contexts(
         self,
         context_name: str | None,
         *,
         current_context_name: str | None,
-    ) -> ShowContextSnapshot:
+        include_descendants: bool,
+        follow_embeds: bool,
+        registry: ProfileRegistry | None,
+    ) -> tuple[ShowContextSnapshot, ...]:
+        try:
+            root_access = (
+                resolve_context_access(
+                    self._store,
+                    context_name,
+                    current_name=current_context_name,
+                    required_permission="READ",
+                    registry=registry,
+                )
+                if self._allow_grants
+                else self._local_access(
+                    context_name,
+                    current_context_name=current_context_name,
+                )
+            )
+        except ValueError as error:
+            raise ShowInputError(str(error)) from error
+
+        catalog = (
+            ReadableContextCatalog(
+                self._store,
+                root_access,
+                registry=registry,
+                # Owned Context rows retain Show's established attached-Grant
+                # projection below. Avoid projecting QUERY rows twice.
+                include_query_routes=False,
+            )
+            if self._allow_grants
+            else None
+        )
+        catalog_names = tuple(
+            sorted(
+                (
+                    catalog.list_context_names()
+                    if catalog is not None
+                    else self._store.list_context_names()
+                ),
+                key=str.casefold,
+            )
+        )
+        scope = ContextScope.create(
+            (root_access.display_name,),
+            include_descendants=include_descendants,
+        )
+        expanded_names = expand_lexical_context_names(scope, catalog_names)
+        names = (
+            root_access.display_name,
+            *(name for name in expanded_names if name != root_access.display_name),
+        )
+
+        contexts: list[ShowContextSnapshot] = []
+        seen_live_uids: set[str] = set()
+        seen_snapshot_contexts: set[tuple[str, str]] = set()
+
+        def access_for(public_name: str) -> ContextAccess:
+            if catalog is not None:
+                return catalog.access_for(public_name)
+            return ContextAccess(
+                store=self._store,
+                context_name=public_name,
+                display_name=public_name,
+                attachment_name=None,
+                permission="READ",
+            )
+
+        def load_public(
+            public_name: str,
+            *,
+            access: ContextAccess,
+        ) -> tuple[Context, dict[str, SourceDisplayFacts], frozenset[str]]:
+            context = (
+                catalog.load(public_name)
+                if catalog is not None
+                else self._store.load(public_name)
+            )
+            item_facts: dict[str, SourceDisplayFacts] = {}
+            projected_grant_context_uids: set[str] = set()
+            if not access.is_granted and self._allow_grants and registry is not None:
+                grants = grants_for_attachment(
+                    attachment_name=access.context_name,
+                    registry=registry,
+                )
+                if grants:
+                    context = project_grants_into_context(context, grants)
+                    for grant in top_level_grants(grants):
+                        if "READ" in grant.permissions:
+                            projected_grant_context_uids.add(grant.resource_uid)
+                            item_facts[grant.resource_uid] = context_access_facts(
+                                granted=True,
+                                permission="READ",
+                                permissions=grant.permissions,
+                            )
+                        elif "QUERY" in grant.permissions:
+                            item_facts[grant.uid] = context_access_facts(
+                                granted=True,
+                                permission="QUERY",
+                                permissions=grant.permissions,
+                                form=SourceForm.QUERY_VIEW,
+                            )
+            return context, item_facts, frozenset(projected_grant_context_uids)
+
+        def visit_snapshot(
+            snapshot: ContextSnapshotRef,
+            *,
+            reach: SourceReach,
+        ) -> None:
+            package_records = snapshot.snapshot_package["contexts"]
+            assert isinstance(package_records, list)
+            retained_uids = frozenset(
+                record["uid"]
+                for record in package_records
+                if isinstance(record, dict) and isinstance(record.get("uid"), str)
+            )
+
+            def visit_retained(
+                context: Context,
+                *,
+                retained_reach: SourceReach,
+                root: bool = False,
+            ) -> None:
+                key = (snapshot.uid, context.uid)
+                if key in seen_snapshot_contexts:
+                    return
+                seen_snapshot_contexts.add(key)
+                contexts.append(
+                    _snapshot_context(
+                        context,
+                        context_facts=SourceDisplayFacts(
+                            reach=retained_reach,
+                            form=(
+                                SourceForm.CONTEXT_REFERENCE
+                                if root
+                                else SourceForm.CONTEXT
+                            ),
+                            states=(SourceState.READ_ONLY,),
+                        ),
+                    )
+                )
+                if not follow_embeds:
+                    return
+                for item in context.iter_items():
+                    if isinstance(item, ContextSnapshotRef):
+                        visit_snapshot(item, reach=SourceReach.VIA_EMBED)
+                    elif isinstance(item, Context) and item.uid in retained_uids:
+                        visit_retained(
+                            item,
+                            retained_reach=(
+                                SourceReach.DESCENDANT
+                                if getattr(item, "_snapshot_relation", None)
+                                == "DESCENDANT"
+                                else SourceReach.VIA_EMBED
+                            ),
+                        )
+
+            visit_retained(snapshot, retained_reach=reach, root=True)
+
+        def visit_public(
+            public_name: str,
+            *,
+            reach: SourceReach,
+            expected_uid: str | None = None,
+        ) -> None:
+            access = access_for(public_name)
+            context, item_facts, projected_grant_uids = load_public(
+                public_name,
+                access=access,
+            )
+            if expected_uid is not None and context.uid != expected_uid:
+                raise RuntimeError("An embedded Context identity changed during Show.")
+            if context.uid in seen_live_uids:
+                return
+            seen_live_uids.add(context.uid)
+            contexts.append(
+                _snapshot_context(
+                    context,
+                    context_facts=context_access_display_facts(
+                        access,
+                        reach=reach,
+                        states=(SourceState.READ_ONLY,) if access.is_granted else (),
+                    ),
+                    item_facts=item_facts,
+                )
+            )
+            if not follow_embeds:
+                return
+            for item in context.iter_items():
+                if not isinstance(item, Context):
+                    continue
+                # An attached Grant is an authorization projection, not an
+                # Embed edge. Public lexical placement alone may bring the
+                # same readable name into scope independently.
+                if item.uid in projected_grant_uids:
+                    continue
+                if isinstance(item, ContextSnapshotRef):
+                    visit_snapshot(item, reach=SourceReach.VIA_EMBED)
+                    continue
+                if item.name not in catalog_names:
+                    continue
+                visit_public(
+                    item.name,
+                    reach=SourceReach.VIA_EMBED,
+                    expected_uid=item.uid,
+                )
+
+        for index, name in enumerate(names):
+            visit_public(
+                name,
+                reach=(SourceReach.DIRECT if index == 0 else SourceReach.DESCENDANT),
+            )
+        return tuple(contexts)
+
+    def load_contexts(
+        self,
+        context_name: str | None,
+        *,
+        current_context_name: str | None,
+        include_descendants: bool,
+        follow_embeds: bool,
+    ) -> tuple[ShowContextSnapshot, ...]:
         if not self._allow_grants:
-            return self._load(
-                context_name,
-                current_context_name=current_context_name,
-                registry=None,
+            return (
+                self._recursive_contexts(
+                    context_name,
+                    current_context_name=current_context_name,
+                    include_descendants=include_descendants,
+                    follow_embeds=follow_embeds,
+                    registry=None,
+                )
+                if include_descendants or follow_embeds
+                else (
+                    self._load(
+                        context_name,
+                        current_context_name=current_context_name,
+                        registry=None,
+                    ),
+                )
             )
         # Grant changes and Profile switching share this lock. The complete
         # snapshot therefore belongs to one authorization generation.
@@ -260,10 +494,22 @@ class MemoryStoreShowPort:
                 raise RuntimeError(
                     "The active Profile changed before Show could freeze access."
                 )
-            return self._load(
-                context_name,
-                current_context_name=current_context_name,
-                registry=live_registry,
+            return (
+                self._recursive_contexts(
+                    context_name,
+                    current_context_name=current_context_name,
+                    include_descendants=include_descendants,
+                    follow_embeds=follow_embeds,
+                    registry=live_registry,
+                )
+                if include_descendants or follow_embeds
+                else (
+                    self._load(
+                        context_name,
+                        current_context_name=current_context_name,
+                        registry=live_registry,
+                    ),
+                )
             )
 
 

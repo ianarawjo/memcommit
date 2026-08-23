@@ -87,6 +87,7 @@ selected Context record.
 | Command family | `-d` mapping | `-r` mapping | More precise controls |
 | --- | --- | --- | --- |
 | `list` / `ls` | selected Context | existing recursive listing | `-R` remains a compatibility alias |
+| `show` | selected Context or direct item | readable lexical descendants and embedded Contexts | recursive scope rejects the direct-item selector |
 | `branch` / `checkout -b` | Source root | Source lexical subtree | `--source-root-only` / `--source-descendants` (`--source-only` is compatible) |
 | `import context` | Source root | Source lexical subtree | presets are rejected for Profile and Memory import |
 | `lock` / `unlock` (current or `context`) | selected Context | frozen lexical namespace | Memory and Profile subcommands have no scope choice |

@@ -106,12 +106,20 @@ def test_recursive_context_reference_freezes_descendants_and_embeds(
         app,
         ["show", result.reference_uid[:8], "--context", "target"],
     )
+    shown_recursive = runner.invoke(
+        app,
+        ["show", "--recursive", "--context", "target"],
+    )
     assert listed.exit_code == 0, listed.output
     assert "context reference" in listed.output
     assert "descendant fact" in listed.output
     assert "embedded fact" in listed.output
     assert shown.exit_code == 0, shown.output
     assert "root fact" in shown.output
+    assert shown_recursive.exit_code == 0, shown_recursive.output
+    assert "root fact" in shown_recursive.output
+    assert "descendant fact" in shown_recursive.output
+    assert "embedded fact" in shown_recursive.output
 
 
 def test_context_reference_freezes_live_memory_embed_content(isolated_store):

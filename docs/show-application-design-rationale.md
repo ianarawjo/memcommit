@@ -16,10 +16,11 @@ making concealed query-only content structurally impossible to return.
 
 `memcommit.show_application` owns one `ShowRequest` and one typed `show` use
 case. A request contains an optional Context locator, an optional direct-item
-selector, and the command-start current-Context snapshot. The application
-loads one immutable `ShowContextSnapshot`, then either returns that Context or
-selects exactly one direct item by UID prefix or exact embedded/query-view
-name. Unknown and ambiguous selectors fail visibly.
+selector, independent lexical-descendant and Embed reach, and the command-start
+current-Context snapshot. The application loads one ordered immutable Context
+scope, then either returns the root Context, exposes every Context as a direct
+snapshot, or selects exactly one direct item by UID prefix or exact
+embedded/query-view name. Unknown and ambiguous selectors fail visibly.
 
 The result distinguishes ordinary Memories, read-only Memory references,
 query views, embedded Context rows, and Context snapshots. Every value carries
@@ -27,21 +28,34 @@ typed source access, reach, form, state, and permission facts. A query view has
 only route identity and public name: its application and public result types
 have no content or concealed-source field.
 
-Show is direct and live. It does not recurse through lexical descendants,
-perform semantic inference, read an analysis cache, create a saved session,
-publish a receipt, checkpoint, or mutate current state. Selecting an embedded
-Context shows that Context's direct contents because it is the selected value;
-merely listing its parent does not flatten or retain the child's loaded body in
-the returned direct snapshot.
+Show is live and direct by default. `-d/--direct` makes that default explicit;
+`-r/--recursive` freezes readable lexical descendants and follows readable
+Embed edges. Recursive scope de-duplicates live Context identities reached by
+both paths and renders one complete direct-content block per Context rather
+than flattening ownership. Context References remain immutable occurrences:
+Show traverses only Context records retained in their snapshot package and
+does not substitute a same-named live Context.
+
+A selector remains direct-item targeting and therefore rejects recursive
+scope. This avoids turning an existing UID-prefix lookup into an implicit
+cross-Context search with new ambiguity and authority semantics. Selecting an
+embedded Context in direct mode continues to show that Context's direct
+contents because it is the selected value.
+
+Neither scope performs semantic inference, reads an analysis cache, creates a
+saved session, publishes a receipt or checkpoint, or mutates current state.
 
 ## Runtime and authority
 
 `memcommit.show_runtime` captures the Store's current pointer once, resolves
 explicit relative locators against that snapshot, and composes the existing
-Context/Grant infrastructure. Local Contexts are loaded through the selected
-Store. Active-Profile calls may resolve an effective READ Grant; resolution,
-projection, and snapshot construction run under one authority-registry read
-generation. Narrower QUERY grants remain opaque query-view rows.
+Context/Grant infrastructure. Recursive Profile-backed reads freeze one
+`ReadableContextCatalog`; ordinary local and effectively READ-granted public
+names therefore share one public lexical namespace while every name retains
+its exact access binding. Active-Profile resolution, attached-Grant projection,
+scope traversal, and snapshot construction run under one authority-registry
+read generation. Grant attachment is authorization metadata rather than a
+hierarchy or Embed edge. Narrower QUERY grants remain opaque query-view rows.
 
 An explicit-root `MemCommitClient` is an already selected Store boundary. It
 does not consult process-global Profile grants. A Profile-backed client uses
@@ -56,10 +70,14 @@ content.
 
 ## Interface projections
 
-The existing `mem show` syntax and text are preserved by a plain CLI presenter
-under `memcommit.interfaces.cli.show`. The command module now constructs one
-typed request, invokes the runtime, maps errors, and renders the result. Show
-currently has no interactive TUI route; this extraction does not invent one.
+The existing direct `mem show` syntax and text are preserved by a plain CLI
+presenter under `memcommit.interfaces.cli.show`. Recursive output begins with
+aggregate direct-item counts, then renders the same full direct Context form
+once per scoped Context. Reach is shown separately from access so a granted
+descendant or embedded Context does not collapse authorization and traversal
+into one label. The command module constructs one typed request, invokes the
+runtime, maps errors, and renders the result. Show currently has no interactive
+TUI route; this scope extension does not invent one.
 The Find dialogue's exact read-only `mem show` subprocess follow-up continues
 through the same CLI boundary.
 
@@ -88,7 +106,8 @@ distinguish a Memory from an opaque query view.
 
 - Show does not grant QUERY execution; the separate Query operation owns that
   provider and publication lifecycle.
-- Show does not add recursive, descendant, history, or search semantics.
+- Show does not search for a selector across recursive Contexts or add history
+  semantics.
 - Show does not cache live Context content; each call reads its authorized
   current Store snapshot.
 - The public and agent result can legitimately contain complete readable

@@ -29,9 +29,31 @@ class _Port:
         self.context = context
         self.calls = []
 
-    def load_context(self, context_name, *, current_context_name):
-        self.calls.append((context_name, current_context_name))
-        return self.context
+    def load_contexts(
+        self,
+        context_name,
+        *,
+        current_context_name,
+        include_descendants,
+        follow_embeds,
+    ):
+        self.calls.append(
+            (
+                context_name,
+                current_context_name,
+                include_descendants,
+                follow_embeds,
+            )
+        )
+        if include_descendants or follow_embeds:
+            child = next(
+                item.context
+                for item in self.context.items
+                if isinstance(item, ShowEmbeddedContext)
+            )
+            assert child is not None
+            return (self.context, child)
+        return (self.context,)
 
 
 def _context() -> ShowContextSnapshot:
@@ -78,7 +100,31 @@ def test_whole_context_uses_one_frozen_current_snapshot():
     )
     assert embedded.context is None
     assert result.resolved_context_name == "root"
-    assert port.calls == [(None, "root")]
+    assert port.calls == [(None, "root", False, False)]
+
+
+def test_recursive_scope_returns_every_context_as_a_direct_snapshot():
+    port = _Port(_context())
+
+    result = show(
+        ShowRequest(
+            current_context_name="root",
+            include_descendants=True,
+            follow_embeds=True,
+        ),
+        port=port,
+    )
+
+    assert [context.name for context in result.contexts] == ["root", "root/child"]
+    assert result.include_descendants is True
+    assert result.follow_embeds is True
+    assert all(
+        item.context is None
+        for context in result.contexts
+        for item in context.items
+        if isinstance(item, ShowEmbeddedContext)
+    )
+    assert port.calls == [(None, "root", True, True)]
 
 
 def test_embedded_context_name_selects_its_direct_snapshot():
@@ -128,5 +174,19 @@ def test_non_request_value_is_rejected():
     [{"context_name": ""}, {"selector": "   "}],
 )
 def test_blank_request_fields_are_rejected(arguments):
+    with pytest.raises(ShowInputError):
+        ShowRequest(**arguments)
+
+
+@pytest.mark.parametrize(
+    "arguments",
+    [
+        {"include_descendants": 1},
+        {"follow_embeds": None},
+        {"selector": "aaaa1111", "include_descendants": True},
+        {"selector": "aaaa1111", "follow_embeds": True},
+    ],
+)
+def test_invalid_scope_requests_fail_closed(arguments):
     with pytest.raises(ShowInputError):
         ShowRequest(**arguments)

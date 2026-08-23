@@ -212,7 +212,7 @@
           "docs/show-application-boundary-matrix.md",
           "docs/show-application-design-rationale.md"
         ],
-        "reason": "CLI, Python, agent, MCP, and Find follow-up routes share one live direct-inspection application boundary with one-snapshot targeting, READ-Grant projection, and structural query-only concealment."
+        "reason": "CLI direct/recursive scope, Python, agent, MCP, and Find follow-up routes share one live typed inspection application boundary with one-snapshot targeting, readable-catalog traversal, READ-Grant projection, and structural query-only concealment."
       },
       "status": {
         "evidence": [

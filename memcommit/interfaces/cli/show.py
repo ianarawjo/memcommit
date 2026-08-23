@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import shlex
+from dataclasses import replace
 
 import typer
 
@@ -20,7 +21,7 @@ from memcommit.source_projection.console import (
     styled_source_object_label,
     styled_source_relationship_label,
 )
-from memcommit.source_projection.model import SourceForm
+from memcommit.source_projection.model import SourceForm, SourceReach
 from memcommit.source_projection.presentation import (
     source_annotation_text,
     source_display_text,
@@ -54,8 +55,7 @@ def _render_memory_ref(
         title=True,
     )
     typer.secho(
-        f"{relationship_label}: "
-        f"{display_escape_text(memory_ref.uid)}",
+        f"{relationship_label}: " f"{display_escape_text(memory_ref.uid)}",
         bold=True,
     )
     typer.echo(f"Context: {display_escape_text(context_name)}")
@@ -64,9 +64,7 @@ def _render_memory_ref(
         f"Source: {display_escape_text(memory_ref.target_context_name)} "
         f"[{display_escape_text(memory_ref.target_context_uid[:8])}]"
     )
-    typer.echo(
-        "Target Memory: " + display_escape_text(memory_ref.target_memory_uid)
-    )
+    typer.echo("Target Memory: " + display_escape_text(memory_ref.target_memory_uid))
     typer.echo()
     if memory_ref.content is None:
         typer.secho(
@@ -94,17 +92,19 @@ def _render_context(context: ShowContextSnapshot) -> None:
     references = [
         item for item in context.items if isinstance(item, ShowMemoryReference)
     ]
-    query_views = [
-        item for item in context.items if isinstance(item, ShowQueryView)
-    ]
-    embedded = [
-        item for item in context.items if isinstance(item, ShowEmbeddedContext)
-    ]
+    query_views = [item for item in context.items if isinstance(item, ShowQueryView)]
+    embedded = [item for item in context.items if isinstance(item, ShowEmbeddedContext)]
 
     typer.secho(f"Context: {display_escape_text(context.name)}", bold=True)
-    annotation = source_display_text(context.source)
+    direct_source = replace(context.source, reach=SourceReach.DIRECT)
+    annotation = source_display_text(direct_source)
     if annotation:
         typer.echo(f"Access: {annotation}")
+    if context.source.reach is not SourceReach.DIRECT:
+        typer.echo(
+            "Reach: "
+            + display_escape_text(context.source.reach.value.replace("_", " "))
+        )
     typer.echo(
         f"  Memories {len(memories)}"
         f"  |  Memory Refs {len(references)}"
@@ -156,9 +156,45 @@ def _render_context(context: ShowContextSnapshot) -> None:
                 typer.echo(f"    {annotation}")
 
 
+def _context_counts(context: ShowContextSnapshot) -> tuple[int, int, int, int]:
+    return (
+        sum(isinstance(item, ShowMemory) for item in context.items),
+        sum(isinstance(item, ShowMemoryReference) for item in context.items),
+        sum(isinstance(item, ShowQueryView) for item in context.items),
+        sum(isinstance(item, ShowEmbeddedContext) for item in context.items),
+    )
+
+
+def _render_recursive_scope(result: ShowResult) -> None:
+    totals = tuple(
+        sum(values)
+        for values in zip(
+            *(_context_counts(context) for context in result.contexts),
+            strict=True,
+        )
+    )
+    typer.secho(
+        "Recursive scope: " + display_escape_text(result.resolved_context_name),
+        bold=True,
+    )
+    typer.echo(
+        f"  Contexts {len(result.contexts)}"
+        f"  |  Memories {totals[0]}"
+        f"  |  Memory Refs {totals[1]}"
+        f"  |  Query Views {totals[2]}"
+        f"  |  Embedded Contexts {totals[3]}"
+    )
+    for context in result.contexts:
+        typer.echo()
+        _render_context(context)
+
+
 def render_show(result: ShowResult) -> None:
     """Preserve established ``mem show`` output over one typed result."""
 
+    if result.include_descendants or result.follow_embeds:
+        _render_recursive_scope(result)
+        return
     value = result.value
     if isinstance(value, ShowContextSnapshot):
         _render_context(value)
