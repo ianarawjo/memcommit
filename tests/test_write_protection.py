@@ -136,7 +136,7 @@ def test_explicit_target_options_cover_short_memory_prefix_and_profile(
     assert not store.write_protection_state().profile_is_protected()
 
 
-def test_auto_memory_target_fails_closed_on_multiple_direct_owners(
+def test_auto_memory_target_remains_unique_after_branch(
     isolated_store,
 ):
     assert invoke("init", "source").exit_code == 0
@@ -145,16 +145,17 @@ def test_auto_memory_target_fails_closed_on_multiple_direct_owners(
     memory = _first_memory(store, "source")
     assert invoke("branch", "working").exit_code == 0
 
-    ambiguous = invoke("lock", memory.uid[:8])
-    assert ambiguous.exit_code == 1
-    assert "multiple local matches" in _all_output(ambiguous)
-    assert store.write_protection_state().is_empty
-
-    qualified = invoke("lock", f"working:{memory.uid[:8]}")
-    assert qualified.exit_code == 0
+    locked = invoke("lock", memory.uid[:8])
+    assert locked.exit_code == 0, _all_output(locked)
+    source = store.load_direct("source")
     working = store.load_direct("working")
+    working_memory = _first_memory(store, "working")
+    assert working_memory.uid != memory.uid
     assert memory.uid in store.write_protection_state().protected_memory_uids(
-        working.uid
+        source.uid
+    )
+    assert working_memory.uid not in (
+        store.write_protection_state().protected_memory_uids(working.uid)
     )
 
 
@@ -413,10 +414,12 @@ def test_memory_lock_does_not_follow_uid_copy_into_branch(isolated_store):
     assert invoke("lock", "memory", memory.uid).exit_code == 0
 
     assert invoke("branch", "working").exit_code == 0
-    # Branching deliberately duplicates the Memory UID, so the shared direct-
-    # Memory grammar requires an owner-qualified selector after the copy exists.
-    assert invoke("edit", f"working:{memory.uid}", "branch edit").exit_code == 0
-    assert store.load_direct("working").memories[memory.uid].content == "branch edit"
+    working_memory = _first_memory(store, "working")
+    assert working_memory.uid != memory.uid
+    assert invoke("edit", working_memory.uid, "branch edit").exit_code == 0
+    assert store.load_direct("working").memories[working_memory.uid].content == (
+        "branch edit"
+    )
 
     assert invoke("switch", "source").exit_code == 0
     assert invoke("edit", f"source:{memory.uid}", "source edit").exit_code == 1

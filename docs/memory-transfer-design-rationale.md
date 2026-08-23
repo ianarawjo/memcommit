@@ -69,10 +69,12 @@ The earlier `PRESERVE` option was removed from the TUI, editable command, CLI,
 Python facade, typed receipt, agent schema, and MCP projection. A Copy that
 keeps the Source UID creates two independently editable Memories that appear
 to share one identity without any synchronization, branch owner, or later
-reconciliation contract. That ambiguity belongs in a future explicit Branch
-operation, not in ordinary Copy. Existing stores that already contain
-same-UID Memories in different Contexts remain readable; this change does not
-rewrite historical data, but Copy can no longer create another such pair.
+reconciliation contract. Branch now avoids the same ambiguity: it allocates a
+fresh occurrence UID and records Source-to-target ancestry in its checkpoint
+receipt, which structural Merge can follow without making two writable objects
+share an address. Existing stores that already contain same-UID Memories in
+different Contexts remain readable; this change does not rewrite historical
+data, but neither Copy nor new Branch/Merge additions create another such pair.
 
 Removing the field is an intentional callable-contract break. The strict
 Memory-transfer agent schema advances to version 2 so a version-1 caller
@@ -88,7 +90,7 @@ already retain the exact values.
 Move preserves every selected Memory UID and content while changing its direct
 owner. Target must be distinct from every selected Source owner, and no Target
 direct item may already use a selected UID. Same-UID copies from different
-branch Contexts cannot be moved into one Target because one Context cannot own
+legacy Contexts cannot be moved into one Target because one Context cannot own
 two direct items with the same key.
 
 A live Memory Embed binds both Source Context identity and Memory identity. Its

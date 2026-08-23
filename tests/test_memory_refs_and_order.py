@@ -9,7 +9,7 @@ import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef
 from memcommit.semantic.changes import parse_proposals
-from memcommit.store import MemoryStore
+from memcommit.store import MemoryStore, context_record_digest
 
 
 runner = CliRunner()
@@ -238,6 +238,31 @@ def test_reverting_an_inherited_checkpoint_keeps_branch_identity(isolated_store)
     assert feature_contents == ["shared baseline"]
 
 
+def test_branch_revert_does_not_resurrect_an_unmapped_source_uid(isolated_store):
+    assert runner.invoke(app, ["init", "main"]).exit_code == 0
+    assert runner.invoke(app, ["add", "removed before branch"]).exit_code == 0
+    store = MemoryStore()
+    source_memory = next(
+        item
+        for item in store.load_current_direct().iter_items()
+        if isinstance(item, Memory)
+    )
+    historical_checkpoint_uid = store.list_checkpoints("main")[0]["uid"]
+    assert runner.invoke(app, ["remove", source_memory.uid[:8]]).exit_code == 0
+    assert runner.invoke(app, ["branch", "feature"]).exit_code == 0
+    before = store.load_direct("feature")
+    history_before = store.list_checkpoints("feature")
+
+    result = runner.invoke(app, ["revert", historical_checkpoint_uid[:8]])
+
+    assert result.exit_code == 1
+    assert "has no recorded Branch occurrence" in result.output
+    assert context_record_digest(store.load_direct("feature")) == (
+        context_record_digest(before)
+    )
+    assert store.list_checkpoints("feature") == history_before
+
+
 def test_reference_has_independent_uid_and_is_selected_by_that_uid():
     source = ops.init("source")
     memory = ops.add(source, "target")
@@ -386,7 +411,10 @@ def test_branch_and_merge_preserve_explicit_order():
     source.order = [second.uid, first.uid]
 
     branched = ops.branch(source, "branch")
-    assert branched.ordered_uids() == [second.uid, first.uid]
+    assert [
+        item.content for item in branched.iter_items() if isinstance(item, Memory)
+    ] == ["second", "first"]
+    assert set(branched.ordered_uids()).isdisjoint({first.uid, second.uid})
 
     target = ops.init("target")
     existing = ops.add(target, "existing")

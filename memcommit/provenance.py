@@ -19,6 +19,11 @@ from memcommit.chunking import chunk_content
 from memcommit.command_history import CommandHistoryError, branch_tree_receipt
 from memcommit.context import Context, Memory
 from memcommit.history import HistoryError, flatten_checkpoint_entries
+from memcommit.memory_lineage import (
+    MemoryLineageEdge,
+    memory_content_sha256,
+    parse_memory_lineage_receipt,
+)
 from memcommit.store import (
     MemoryStore,
     canonical_context_record,
@@ -156,7 +161,7 @@ class TraceCommandOperation:
 
 @dataclass(frozen=True)
 class TraceContextTransition:
-    """One recorded movement of stable Memory identity between Contexts."""
+    """One recorded ancestry transition between Context-bound occurrences."""
 
     source: TraceCommandContext
     target: TraceCommandContext
@@ -3011,6 +3016,7 @@ class _RecordedBranchTransition:
     source: TraceCommandContext
     target: TraceCommandContext
     command_operation: TraceCommandOperation
+    memory_edges: tuple[MemoryLineageEdge, ...]
 
 
 def _recorded_branch_transition(
@@ -3046,6 +3052,33 @@ def _recorded_branch_transition(
             f"Checkpoint [{checkpoint_uid[:8]}] has invalid Branch creation "
             "ownership; inherited lineage could not be connected to its target.",
         )
+    try:
+        memory_edges = parse_memory_lineage_receipt(args)
+    except (TypeError, ValueError):
+        return (
+            None,
+            f"Checkpoint [{checkpoint_uid[:8]}] has invalid Branch Memory "
+            "lineage metadata; inherited lineage could not be connected to "
+            "its target.",
+        )
+    target_memory_edges = tuple(
+        edge
+        for edge in memory_edges
+        if edge.source_context_uid == mapping.source_uid
+        and edge.target_context_uid == mapping.target_uid
+    )
+    for edge in target_memory_edges:
+        target_state = frame.memories.get(edge.target_memory_uid)
+        if (
+            target_state is None
+            or target_state.content_digest != edge.target_content_sha256
+        ):
+            return (
+                None,
+                f"Checkpoint [{checkpoint_uid[:8]}] has invalid Branch Memory "
+                "lineage evidence; inherited lineage could not be connected "
+                "to its target.",
+            )
     operation_uid = f"branch:{receipt.operation_uid}"
     return (
         _RecordedBranchTransition(
@@ -3066,6 +3099,7 @@ def _recorded_branch_transition(
                     for item in receipt.contexts
                 ),
             ),
+            memory_edges=target_memory_edges,
         ),
         None,
     )
@@ -3090,17 +3124,39 @@ def _branch_transition_events(
         target=transition.target,
     )
     events: list[TraceEvent] = []
+    edge_by_target_uid = {
+        edge.target_memory_uid: edge for edge in transition.memory_edges
+    }
     for uid in after.order:
         target_state = after.memories[uid]
-        source_state = before.memories.get(uid) if source_is_preceding_frame else None
-        # Branch preserves Memory identity and content. If the copied Source had
-        # uncheckpointed changes, the target snapshot proves the copied result
-        # but the older inherited frame must not be presented as its exact input.
-        retained_source = (
-            (source_state,)
-            if source_state is not None and source_state.content == target_state.content
-            else ()
+        edge = edge_by_target_uid.get(uid)
+        source_uid = edge.source_memory_uid if edge is not None else uid
+        source_state = (
+            before.memories.get(source_uid) if source_is_preceding_frame else None
         )
+        # Branch preserves content across distinct occurrence identities. If
+        # the copied Source had uncheckpointed changes, the target snapshot
+        # proves the copied result but the older inherited frame must not be
+        # presented as its exact input.
+        if source_state is not None and source_state.content == target_state.content:
+            retained_source = (source_state,)
+        elif (
+            edge is not None
+            and edge.source_content_sha256
+            == memory_content_sha256(target_state.content)
+        ):
+            # The Branch receipt is written while the Source record is locked.
+            # It therefore proves the copied Source value even when that value
+            # had not received its own earlier checkpoint.
+            retained_source = (
+                MemoryState(
+                    uid=edge.source_memory_uid,
+                    content=target_state.content,
+                    position=target_state.position,
+                ),
+            )
+        else:
+            retained_source = ()
         events.append(
             TraceEvent(
                 kind="BRANCHED",
@@ -3234,10 +3290,18 @@ def _history(
 
         if command == "revert":
             target_uid = args.get("target_uid")
+            recorded_restoration = entry.get("restored_snapshot")
             target = (
-                frames_by_checkpoint.get(target_uid)
-                if isinstance(target_uid, str)
-                else None
+                _frame_from_snapshot(
+                    recorded_restoration,
+                    label=f"Checkpoint [{entry['uid'][:8]}] restored post-image",
+                )
+                if isinstance(recorded_restoration, dict)
+                else (
+                    frames_by_checkpoint.get(target_uid)
+                    if isinstance(target_uid, str)
+                    else None
+                )
             )
             if target is None:
                 warnings.append(
@@ -3336,7 +3400,7 @@ def _resolve_historical_uid(
 def _lineage_component(selected_uid: str, events: Iterable[TraceEvent]) -> set[str]:
     adjacency: dict[str, set[str]] = {}
     for event in events:
-        if event.kind not in {"SPLIT", "ABSORBED", "TRANSLATED"}:
+        if event.kind not in {"SPLIT", "ABSORBED", "TRANSLATED", "BRANCHED"}:
             continue
         sources = {state.uid for state in event.before}
         results = {state.uid for state in event.after}
@@ -3364,7 +3428,7 @@ def _original_states(
     parented = {
         state.uid
         for event in events
-        if event.kind in {"SPLIT", "ABSORBED", "TRANSLATED"}
+        if event.kind in {"SPLIT", "ABSORBED", "TRANSLATED", "BRANCHED"}
         for state in event.after
         if state.uid not in {item.uid for item in event.before}
     }
@@ -3511,7 +3575,7 @@ def _lineage_operation_counts(
         for uid in event_uids:
             operations_by_uid.setdefault(uid, set()).add(key)
             adjacency.setdefault(uid, set())
-        if event.kind in {"SPLIT", "ABSORBED", "TRANSLATED"}:
+        if event.kind in {"SPLIT", "ABSORBED", "TRANSLATED", "BRANCHED"}:
             related = tuple(event_uids)
             for uid in related:
                 adjacency[uid].update(

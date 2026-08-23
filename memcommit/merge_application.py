@@ -147,12 +147,17 @@ class MergeAddition:
 
     uid: str
     kind: MergeItemKind
+    target_uid: str | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.uid, str) or not self.uid:
             raise ValueError("Merge addition UID must be nonempty text.")
         if not isinstance(self.kind, MergeItemKind):
             raise TypeError("Merge addition kind must be a MergeItemKind.")
+        if self.target_uid is not None and (
+            not isinstance(self.target_uid, str) or not self.target_uid
+        ):
+            raise ValueError("Merge addition Target UID must be nonempty text.")
 
 
 @dataclass(frozen=True)
@@ -271,7 +276,7 @@ def merge_resolution_case(plan: FrozenMergePlan) -> ResolutionCase:
                 "target_uid": context.target_uid,
                 "target_created": context.target_created,
                 "additions": [
-                    [addition.uid, addition.kind.value]
+                    [addition.uid, addition.kind.value, addition.target_uid]
                     for addition in context.additions
                 ],
                 "unchanged": [item.uid for item in context.unchanged],

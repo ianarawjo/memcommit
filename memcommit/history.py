@@ -505,10 +505,15 @@ def build_history(
         if command != "revert":
             continue
         target_uid = args.get("target_uid") if isinstance(args, dict) else None
+        recorded_restoration = entry.get("restored_snapshot")
         target_record = (
-            records_by_uid.get(target_uid)
-            if isinstance(target_uid, str)
-            else None
+            recorded_restoration
+            if isinstance(recorded_restoration, dict)
+            else (
+                records_by_uid.get(target_uid)
+                if isinstance(target_uid, str)
+                else None
+            )
         )
         if target_record is None:
             warnings.append(

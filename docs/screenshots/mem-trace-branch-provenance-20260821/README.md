@@ -2,9 +2,10 @@
 
 This ordered capture demonstrates the exact boundary fixed for Branch-inherited
 Memories. A real `mem checkout -b practice/2` records a Branch receipt, and
-Trace projects that receipt as one typed, unchanged Context transition instead
-of claiming that Branch creation was missing. A receipt-free legacy copy remains
-explicitly uncertain and receives one owner-level warning.
+Trace projects that receipt as one typed Source-occurrence to fresh
+Target-occurrence transition instead of claiming that Branch creation was
+missing. A receipt-free legacy same-UID copy remains explicitly uncertain and
+receives one owner-level warning.
 
 ## Reproduction frame
 
@@ -24,8 +25,8 @@ explicitly uncertain and receives one owner-level warning.
 
 | Image | Input | Visible state | Durable mutation |
 | --- | --- | --- | --- |
-| `01-checkout-branch-receipt.png` | Setup runs `mem checkout -b practice/2` | Actual success output plus the retained Branch checkpoint, stable Memory UID, and `practice/1 → practice/2` route | New `practice/2` in the temporary fixture |
-| `02-recorded-branch-trace.png` | `T`, `Enter` | Trace Viewer shows `[branch]`, Source/Target Contexts, and an unchanged `=` Memory row; no missing-Branch warning | None |
+| `01-checkout-branch-receipt.png` | Setup runs `mem checkout -b practice/2` | Actual success output plus the retained Branch checkpoint, fresh Source/Target Memory UIDs, and `practice/1 → practice/2` lineage | New `practice/2` in the temporary fixture |
+| `02-recorded-branch-trace.png` | `T`, `Enter` | Trace Viewer shows `[branch]`, Source/Target Contexts and occurrence UIDs, and an unchanged-content `=` Memory row; no missing-Branch warning | None |
 | `03-read-only-verification.png` | `q` | Viewer closes and the complete temporary-store digest is unchanged | None |
 | `04-legacy-receipt-limit.png` | `L`, `Enter` | A receipt-free copied history emits exactly one owner-level warning and no fabricated Branch event | None |
 

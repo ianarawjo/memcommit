@@ -1,5 +1,5 @@
 COMMAND · mem checkout -b practice/2                                                                                                                                                
 Branched 'practice/1' → 'practice/2' and switched to it.                                                                                                                            
-RECORDED · BRANCH CHECKPOINT [b0391b7d] · MEMORY [40fc5b17] · practice/1 → practice/2 · UID + CONTENT STABLE                                                                        
+RECORDED · BRANCH CHECKPOINT [cc6df2ee] · MEMORY [06eb5842] → [660e676a] · practice/1 → practice/2 · FRESH UID + LINEAGE                                                            
 PTY · os.get_terminal_size=180×52 · stty=52 180                                                                                                                                     
 PRESS T · OPEN RECORDED BRANCH TRACE (READ ONLY)

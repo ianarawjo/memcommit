@@ -50,6 +50,14 @@ from memcommit.write_protection import (
     WriteProtectionRegistryError,
     WriteProtectionState,
 )
+from memcommit.memory_lineage import (
+    MemoryLineageEdge,
+    checkpoint_memory_lineage_edges,
+    memory_content_sha256,
+    memory_lineage_record,
+    remap_restoration_snapshot,
+)
+
 
 class _ActiveStorePath(os.PathLike[str]):
     """Compatibility path that defers active-Profile I/O until path use."""
@@ -226,6 +234,16 @@ class ConcurrentGroundUpdateError(RuntimeError):
 
 
 @dataclass(frozen=True)
+class ContextBranchMemoryBinding:
+    """One exact Source-to-target Memory occurrence created by Branch."""
+
+    source_uid: str
+    target_uid: str
+    source_content_sha256: str
+    target_content_sha256: str
+
+
+@dataclass(frozen=True)
 class ContextBranchBinding:
     """One freshness-bound Source and its newly identified Branch Context."""
 
@@ -234,6 +252,7 @@ class ContextBranchBinding:
     expected_source_digest: str
     expected_history_digest: str
     target: Context
+    memories: tuple[ContextBranchMemoryBinding, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -533,6 +552,20 @@ def _rewrite_checkpoint_record(
         changed += count
         collisions.update(found)
 
+    restored_snapshot = rewritten.get("restored_snapshot")
+    if isinstance(restored_snapshot, dict):
+        next_restored_snapshot, count, found = _rewrite_context_pointers(
+            restored_snapshot,
+            moved_names_by_uid=moved_names_by_uid,
+            # A projected Revert post-image is live-restorable state even
+            # though the selected inherited snapshot remains Source evidence.
+            rewrite_owner_name=False,
+            require_current_pointer_names=False,
+        )
+        rewritten["restored_snapshot"] = next_restored_snapshot
+        changed += count
+        collisions.update(found)
+
     args = rewritten.get("args")
     if isinstance(args, dict) and "log_snapshot" in args:
         log_snapshot = args["log_snapshot"]
@@ -678,7 +711,7 @@ def _rewrite_branched_checkpoint_record(
 ) -> dict[str, object]:
     """Retarget every future-restorable Context frame in a copied history."""
     rewritten = copy.deepcopy(value)
-    for field in ("snapshot", "command_before"):
+    for field in ("snapshot", "command_before", "restored_snapshot"):
         frame = rewritten.get(field)
         if isinstance(frame, dict):
             rewritten[field] = _rewrite_branched_context_pointers(
@@ -5054,6 +5087,22 @@ class MemoryStore:
         expected_current: str | None,
     ) -> None:
         """Create, inherit history, and select one exact branch atomically."""
+        source = self.load_direct(source_name)
+        source_memories = tuple(
+            item for item in source.iter_items() if isinstance(item, Memory)
+        )
+        target_memories = tuple(
+            item for item in ctx.iter_items() if isinstance(item, Memory)
+        )
+        if len(source_memories) != len(target_memories) or any(
+            source_item.content != target_item.content
+            for source_item, target_item in zip(
+                source_memories,
+                target_memories,
+                strict=True,
+            )
+        ):
+            raise ValueError("Branch target Memories do not match the Source frame.")
         self.create_branch_contexts(
             (
                 ContextBranchBinding(
@@ -5062,6 +5111,23 @@ class MemoryStore:
                     expected_source_digest=expected_source_digest,
                     expected_history_digest=expected_history_digest,
                     target=ctx,
+                    memories=tuple(
+                        ContextBranchMemoryBinding(
+                            source_uid=source_item.uid,
+                            target_uid=target_item.uid,
+                            source_content_sha256=memory_content_sha256(
+                                source_item.content
+                            ),
+                            target_content_sha256=memory_content_sha256(
+                                target_item.content
+                            ),
+                        )
+                        for source_item, target_item in zip(
+                            source_memories,
+                            target_memories,
+                            strict=True,
+                        )
+                    ),
                 ),
             ),
             source_root=source_name,
@@ -5110,6 +5176,33 @@ class MemoryStore:
         if not include_descendants and len(records) != 1:
             raise ValueError("An exact Branch must create exactly one Context.")
 
+        for binding in records:
+            source_memory_uids = tuple(item.source_uid for item in binding.memories)
+            target_memory_uids = tuple(item.target_uid for item in binding.memories)
+            target_memories = {
+                item.uid: item
+                for item in binding.target.iter_items()
+                if isinstance(item, Memory)
+            }
+            if (
+                len(source_memory_uids) != len(set(source_memory_uids))
+                or len(target_memory_uids) != len(set(target_memory_uids))
+                or set(source_memory_uids) & set(target_memory_uids)
+                or set(target_memory_uids) != set(target_memories)
+            ):
+                raise ValueError("Branch Memory occurrence mapping is invalid.")
+            for item in binding.memories:
+                target_memory = target_memories.get(item.target_uid)
+                if (
+                    not isinstance(target_memory, Memory)
+                    or memory_content_sha256(target_memory.content)
+                    != item.target_content_sha256
+                    or item.source_content_sha256 != item.target_content_sha256
+                ):
+                    raise ValueError(
+                        "Branch Memory occurrence mapping does not match its target."
+                    )
+
         expected_targets = {
             source_name: target_root + source_name[len(source_root) :]
             for source_name in source_names
@@ -5157,6 +5250,21 @@ class MemoryStore:
                 for binding in records
             ],
         }
+        branch_memory_lineage = memory_lineage_record(
+            operation_uid,
+            (
+                MemoryLineageEdge(
+                    source_context_uid=binding.expected_source_uid,
+                    source_memory_uid=memory.source_uid,
+                    target_context_uid=binding.target.uid,
+                    target_memory_uid=memory.target_uid,
+                    source_content_sha256=memory.source_content_sha256,
+                    target_content_sha256=memory.target_content_sha256,
+                )
+                for binding in records
+                for memory in binding.memories
+            ),
+        )
         branch_description = (
             f"Branched subtree '{source_root}' to '{target_root}'."
             if include_descendants
@@ -5200,6 +5308,29 @@ class MemoryStore:
                         source_receipts,
                         result_label="branch",
                     )
+                    for binding in records:
+                        live_source = self.load_direct(binding.source_name)
+                        live_memories = {
+                            item.uid: item
+                            for item in live_source.iter_items()
+                            if isinstance(item, Memory)
+                        }
+                        if set(live_memories) != {
+                            item.source_uid for item in binding.memories
+                        }:
+                            raise ConcurrentContextUpdateError(
+                                "The Branch Source Memory membership changed before "
+                                "publication."
+                            )
+                        for item in binding.memories:
+                            source_memory = live_memories[item.source_uid]
+                            if (
+                                memory_content_sha256(source_memory.content)
+                                != item.source_content_sha256
+                            ):
+                                raise ConcurrentContextUpdateError(
+                                    "A Branch Source Memory changed before publication."
+                                )
 
                     checkpoint_files: dict[
                         str,
@@ -5317,6 +5448,7 @@ class MemoryStore:
                                         args={
                                             "branch_tree": branch_tree,
                                             "command_contexts": command_contexts,
+                                            "memory_lineage": branch_memory_lineage,
                                         },
                                         description=branch_description,
                                     ),
@@ -8980,6 +9112,22 @@ class MemoryStore:
                 raise ValueError(f"Checkpoint history for '{ctx_name}' is invalid.")
             physical_records[path.name] = record
 
+        restoration_snapshot = target_data["snapshot"]
+        if restoration_snapshot.get("uid") != ctx.uid:
+            lineage_edges = checkpoint_memory_lineage_edges((entries,))
+            restoration_snapshot = remap_restoration_snapshot(
+                restoration_snapshot,
+                target=ctx,
+                edges=lineage_edges,
+            )
+        restored = self._context_for_restoration(
+            restoration_snapshot,
+            context_uid=ctx.uid,
+            context_name=ctx.name,
+            expected_context_digest=context_record_digest(ctx),
+        )
+        restored_snapshot = restored.to_dict()
+
         # Strip nested log snapshots so the recovery frame remains bounded.
         thin_entries: list[dict] = []
         for entry in entries:
@@ -9025,6 +9173,12 @@ class MemoryStore:
             "description": pre_cp.description,
             "auto": pre_cp.auto,
         }
+        if restored_snapshot != target_data["snapshot"]:
+            # The selected inherited checkpoint remains authentic Source
+            # evidence. Retain the exact Branch-namespace post-image beside
+            # the Revert receipt so History, Trace, Undo, Rename, and a later
+            # Revert all reconstruct the state that was actually published.
+            pre_record["restored_snapshot"] = restored_snapshot
 
         desired_records: dict[str, dict[str, object]]
         if keep_history:
@@ -9060,17 +9214,6 @@ class MemoryStore:
         if pre_name in desired_records:
             raise ValueError("Recovery checkpoint filename collided with history.")
         desired_records[pre_name] = pre_record
-
-        # A branch inherits checkpoint files whose snapshots still carry the
-        # source Context identity. Restore their contents into the Context the
-        # caller requested instead of writing back to the source Context. A
-        # non-resolving parse preserves unavailable context_ref pointers.
-        restored = self._context_for_restoration(
-            target_data["snapshot"],
-            context_uid=ctx.uid,
-            context_name=ctx.name,
-            expected_context_digest=context_record_digest(ctx),
-        )
 
         context_path = self._context_file(ctx_name)
         original_context_bytes = context_path.read_bytes()
@@ -9128,7 +9271,7 @@ class MemoryStore:
             uid=target_data["uid"],
             message=target_data.get("message", ""),
             timestamp=datetime.fromisoformat(target_data["timestamp"]),
-            snapshot=target_data["snapshot"],
+            snapshot=restored_snapshot,
             command=target_data.get("command"),
             args=target_data.get("args"),
             description=target_data.get("description"),

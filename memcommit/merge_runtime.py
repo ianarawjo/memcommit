@@ -47,6 +47,13 @@ from memcommit.merge_tree import (
     project_context_for_tree_merge,
 )
 from memcommit.merge_tree_persistence import MergeTreeWrite, commit_merge_tree
+from memcommit.memory_lineage import (
+    MemoryLineageEdge,
+    checkpoint_memory_lineage_edges,
+    memory_content_sha256,
+    memory_lineage_record,
+    resolve_lineage_target_uids,
+)
 from memcommit.store import MemoryStore, context_record_digest
 from memcommit.write_protection import WriteProtectionError
 
@@ -184,10 +191,63 @@ class _RecursiveTargetFrame:
     source: Context
     context_plan: PlannedContextMerge
     expected_digest: str | None
+    records_memory_lineage: bool
 
     @property
     def created(self) -> bool:
         return self.expected_digest is None
+
+
+def _lineage_target_uids(
+    source_access: ContextAccess,
+    target_access: ContextAccess,
+    source: Context,
+    target: Context,
+) -> dict[str, str]:
+    """Resolve only same-Store ordinary lineage retained by both histories."""
+
+    if (
+        source_access.is_granted
+        or target_access.is_granted
+        or source_access.store.store_dir != target_access.store.store_dir
+    ):
+        return {}
+    edges = checkpoint_memory_lineage_edges(
+        (
+            source_access.store.list_checkpoints(source_access.context_name),
+            target_access.store.list_checkpoints(target_access.context_name),
+        )
+    )
+    return resolve_lineage_target_uids(source, target, edges)
+
+
+def _merge_memory_lineage_record(
+    operation_uid: str,
+    source: Context,
+    candidate: Context,
+    context_plan: PlannedContextMerge,
+) -> dict[str, object]:
+    """Bind every structural Memory transfer to the exact post-image."""
+
+    edges: list[MemoryLineageEdge] = []
+    for mapping in context_plan.memory_mappings:
+        source_memory = source.memories.get(mapping.source_uid)
+        target_memory = candidate.memories.get(mapping.target_uid)
+        if not isinstance(source_memory, Memory) or not isinstance(
+            target_memory, Memory
+        ):
+            raise ValueError("Merge Memory lineage mapping is not materializable.")
+        edges.append(
+            MemoryLineageEdge(
+                source_context_uid=source.uid,
+                source_memory_uid=source_memory.uid,
+                target_context_uid=candidate.uid,
+                target_memory_uid=target_memory.uid,
+                source_content_sha256=memory_content_sha256(source_memory.content),
+                target_content_sha256=memory_content_sha256(target_memory.content),
+            )
+        )
+    return memory_lineage_record(operation_uid, edges)
 
 
 @dataclass(frozen=True)
@@ -339,6 +399,12 @@ class MemoryStoreMergePort(MergePort):
             take_source_allowed=_take_source_allowed(target_access),
             target_context_mutable=target_context_mutable,
             protected_target_uids=protected_target_uids,
+            lineage_target_uids=_lineage_target_uids(
+                source_access,
+                target_access,
+                merge_source,
+                target,
+            ),
         )
         _require_planned_additions_mutable(
             target=target,
@@ -509,6 +575,16 @@ class MemoryStoreMergePort(MergePort):
                 take_source_allowed=_take_source_allowed(authorization_target),
                 target_context_mutable=target_context_mutable,
                 protected_target_uids=protected_target_uids,
+                lineage_target_uids=(
+                    _lineage_target_uids(
+                        frame.access,
+                        target_access,
+                        projected,
+                        target,
+                    )
+                    if target_access is not None and not cross_profile
+                    else {}
+                ),
             )
             _require_planned_additions_mutable(
                 target=target,
@@ -525,6 +601,11 @@ class MemoryStoreMergePort(MergePort):
                     source=projected,
                     context_plan=context_plan,
                     expected_digest=expected_digest,
+                    records_memory_lineage=(
+                        not cross_profile
+                        and not frame.access.is_granted
+                        and not authorization_target.is_granted
+                    ),
                 )
             )
             context_results.append(
@@ -594,6 +675,20 @@ class MemoryStoreMergePort(MergePort):
             resolutions=decisions,
         )
         contexts = [{"uid": candidate.uid, "name": candidate.name}]
+        lineage_args = (
+            {
+                "memory_lineage": _merge_memory_lineage_record(
+                    token.operation_uid,
+                    token.source,
+                    candidate,
+                    token.context_plan,
+                )
+            }
+            if not plan.cross_profile_memory_only
+            and not source_access.is_granted
+            and not target_access.is_granted
+            else {}
+        )
         checkpoint = AutoCheckpoint(
             command="merge",
             args={
@@ -611,6 +706,7 @@ class MemoryStoreMergePort(MergePort):
                     plan.conflicts,
                     resolutions,
                 ),
+                **lineage_args,
                 **grant_checkpoint_args(target_access),
             },
             description=_merge_checkpoint_description(
@@ -748,6 +844,18 @@ class MemoryStoreMergePort(MergePort):
             strict=True,
         ):
             access = frame.access or token.target_root_access
+            lineage_args = (
+                {
+                    "memory_lineage": _merge_memory_lineage_record(
+                        token.operation_uid,
+                        frame.source,
+                        candidate,
+                        frame.context_plan,
+                    )
+                }
+                if frame.records_memory_lineage
+                else {}
+            )
             writes.append(
                 MergeTreeWrite(
                     context=candidate,
@@ -772,6 +880,7 @@ class MemoryStoreMergePort(MergePort):
                                 result.conflicts,
                                 resolutions,
                             ),
+                            **lineage_args,
                             **grant_checkpoint_args(access),
                         },
                         description=_merge_checkpoint_description(

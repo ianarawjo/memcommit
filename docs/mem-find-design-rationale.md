@@ -153,7 +153,7 @@ name and a `mem query` usage hint.
 ## Logical identity and provenance
 
 Per-run candidate IDs such as `c000001` avoid ambiguity when the same Memory
-UID exists in multiple branch Contexts.
+UID exists in multiple legacy or independently imported Contexts.
 
 Logical deduplication uses:
 
@@ -161,10 +161,10 @@ Logical deduplication uses:
 - resolved MemoryRef: target Context UID plus target Memory UID;
 - QueryContextRef: provider key plus target source UID.
 
-Branch Contexts have different Context UIDs, so their independently editable
-copies remain distinct candidates even when a Memory UID was inherited.
-Repeated occurrences of one logical candidate retain their visible Context
-names as provenance.
+Branch Contexts and their direct Memories now both have fresh occurrence UIDs,
+so independently editable copies remain distinct candidates while their
+ancestry stays in checkpoint lineage. Repeated occurrences of one logical
+candidate retain their visible Context names as provenance.
 
 ## Retained compatibility controller
 

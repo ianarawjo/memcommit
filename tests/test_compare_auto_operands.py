@@ -149,7 +149,7 @@ def test_compare_mixes_context_and_memory_positionals(
     assert _contents(frames[1], "PRIMARY") == [compared_focus.content]
 
 
-def test_compare_bare_branch_memory_is_ambiguous_and_qualified_owner_is_exact(
+def test_compare_bare_branch_memory_uid_is_unique_and_qualified_owner_is_exact(
     isolated_store,
     monkeypatch,
 ):
@@ -164,7 +164,7 @@ def test_compare_bare_branch_memory_is_ambiguous_and_qualified_owner_is_exact(
     provider = _CapturingSummaryProvider()
     _patch_summary_provider(monkeypatch, provider)
 
-    ambiguous = runner.invoke(
+    bare = runner.invoke(
         app,
         ["compare", shared.uid[:8], peer_memory.uid[:8]],
     )
@@ -173,11 +173,11 @@ def test_compare_bare_branch_memory_is_ambiguous_and_qualified_owner_is_exact(
         ["compare", f"{source.name}:{shared.uid[:8]}", peer_memory.uid[:8]],
     )
 
-    assert ambiguous.exit_code == 1
-    assert "multiple local matches" in ambiguous.output
+    assert bare.exit_code == 0, bare.output
+    assert f"Compare · {source.name} ↔ {peer.name}" in bare.output
     assert qualified.exit_code == 0, qualified.output
     assert f"Compare · {source.name} ↔ {peer.name}" in qualified.output
-    assert len(provider.payloads) == 1
+    assert len(provider.payloads) == 2
 
 
 def test_compare_rejects_duplicate_or_recursive_auto_memory_roles(

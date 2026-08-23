@@ -1487,19 +1487,19 @@ def test_atomize_save_as_does_not_overwrite_concurrent_destination(
         lambda: AtomizeProvider(_all_atomic),
     )
     assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
-    original_branch = ops.branch
+    original_projection = ops._atomize_projection
     competitor = None
 
     def create_competitor(context, name):
         nonlocal competitor
-        result = original_branch(context, name)
+        result = original_projection(context, name)
         competitor = ops.init(name)
         ops.add(competitor, "concurrent owner")
         store.create_context(competitor)
         return result
 
     monkeypatch.setattr(
-        "memcommit.atomize_runtime.ops.branch",
+        "memcommit.atomize_runtime.ops._atomize_projection",
         create_competitor,
     )
 

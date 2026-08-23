@@ -843,7 +843,11 @@ class MemoryStoreAtomizeSaveAsOutputPort:
             raise AtomizeApplicationError(
                 "The Atomize Source changed before Save As. Reopen the review."
             )
-        output = ops.branch(source, destination_name)
+        # Atomize applies a source-UID-keyed reviewed analysis to this
+        # process-local projection before assigning its result identities.
+        # This is not the durable Branch command: its final Save As receipt
+        # owns the independently materialized output and provenance.
+        output = ops._atomize_projection(source, destination_name)
         output_fields: dict[str, object] = {
             "context_uid": output.uid,
             "context_name": output.name,

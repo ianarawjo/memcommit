@@ -38,11 +38,11 @@ application boundary.
 | Write protection | Store policy frozen during planning and revalidated during persistence | A protected Target Memory or Context removes `TAKE SOURCE` before the decision UI; a protected Context blocks unconditional additions before review; concurrent policy changes still fail closed at Store save. |
 | Source projection | Store runtime | A cross-Profile Source exposes direct Memory values only; pointers are not copied across Profiles. |
 | Domain planning | `merge_planning` | Classify every direct Source item without mutation and materialize only a complete validated decision set. No descendant traversal occurs here. |
-| Existing UID | `merge_planning` | Equal type/value is `UNCHANGED`; different Memory content is `CONTENT_DIVERGENCE`; unlike types are `TYPE_COLLISION`. Target no longer wins silently. |
+| Existing occurrence or lineage | `merge_planning` plus checkpoint lineage | An equal UID or one-to-one validated same-Store Branch/Merge lineage selects the existing Target occurrence. Equal type/value is `UNCHANGED`; different Memory content is `CONTENT_DIVERGENCE`; unlike types are `TYPE_COLLISION`. A genuinely new Memory is added under a fresh Target UID. Target no longer wins silently. |
 | Source absence | `ops.merge` | Never removes a Target item. Deletions are not propagated. |
 | Pointer collisions | `merge_planning` | Duplicate/incompatible logical references become `REFERENCE_COLLISION`; incompatible Context-like names become `PLACEMENT_COLLISION`. |
 | Freshness | Store runtime and Store transaction | Source name, UID, and direct-record digest are revalidated; Target save uses UID/digest compare-and-set. |
-| Persistence | `save_context_with_sources` | One Target Context and one automatic checkpoint are published under the Source/Target lock set. |
+| Persistence | `save_context_with_sources` | One Target Context and one automatic checkpoint are published under the Source/Target lock set. Same-Store ordinary transfers also record exact Source-to-result Memory lineage under the Merge operation UID. |
 | Result | typed application receipt and adapters | Separately reports `NEW`, `ALREADY PRESENT`, `KEPT TARGET`, `TOOK SOURCE`, created Contexts, whether the Target changed, and checkpoint boundaries; verified no-ops still record a receipt. |
 
 ## Extracted ownership
@@ -105,7 +105,8 @@ checkpoint and Undo/Redo contract intact.
 The implementation preserves and verifies all of the following:
 
 - local Memory, MemoryRef, QueryContextRef, and embedded-Context union;
-- exact equality as `UNCHANGED` and explicit resolution for divergent equal UIDs;
+- exact equality as `UNCHANGED` and explicit resolution for divergent equal or
+  checkpoint-related occurrence UIDs;
 - non-propagation of Source deletion and lexical descendants;
 - idempotent repeated execution with one checkpoint per successful command;
 - required reference/placement conflicts without partial mutation;
@@ -135,8 +136,9 @@ share the Store command lock, exclusive graph lock, and deterministic Context
 lock set. An exception restores prior Context bytes, removes new checkpoints,
 and deletes only the fresh Context identities created by the transaction.
 
-Source-only Contexts receive fresh Context identities. Same-Store internal
-Context and MemoryRef pointers are remapped to corresponding Target identities;
+Source-only Contexts receive fresh Context identities, and their direct Memory
+additions receive fresh Target occurrence UIDs. Same-Store internal Context and
+MemoryRef pointers are remapped to corresponding Target identities;
 cross-Profile recursive Merge copies direct Memory values only, matching the
 existing direct transfer boundary. A granted Target may update existing
 CREATE-authorized descendants but cannot create a missing authority Context.
@@ -202,9 +204,12 @@ PTY.
 The focused Source-only replay under
 `docs/screenshots/mem-merge-source-only-actual-20260820/` starts with an empty
 Target, runs the explicit real Merge command, and then uses `mem show` to
-verify that the Target contains the exact Source UID and all Source lines with
-one checkpoint. This distinguishes content copied by Merge from synthetic
-scroll-boundary fixture text.
+verify that the Target contains all Source lines with one checkpoint. That
+capture predates fresh Target occurrence UIDs and therefore remains UI-flow
+evidence, not evidence for the current identity rule. Current automated
+coverage verifies that a new addition has a distinct Target UID and a recorded
+lineage edge. This distinguishes content copied by Merge from synthetic
+scroll-boundary fixture text without treating identity as ancestry.
 
 The scale replay under
 `docs/screenshots/mem-merge-150-conflicts-actual-20260820/` lets the real Merge
@@ -249,7 +254,14 @@ Every affected Context retains a normal Merge checkpoint for Diff, History,
 and provenance. Version-2 Merge checkpoint metadata binds every direct or
 recursive member to one operation UID and records which Target Contexts were
 created. Its sibling version-1 `merge_decisions` record retains every reviewed
-conflict disposition without duplicating Memory content. Undo validates the complete post-image, restores every updated
+conflict disposition without duplicating Memory content. For ordinary
+same-Store transfer, a sibling version-1 `memory_lineage` record binds each
+Source occurrence to its exact Target post-image using Context/Memory UIDs and
+content digests. Merge validates retained receipts against their owning
+automatic checkpoint and resolves only a one-to-one current mapping; malformed,
+copied, one-to-many, or many-to-one evidence fails before Target publication.
+Grant-derived and cross-Profile transfers deliberately do not publish this
+local lineage because their authority and disclosure boundaries differ. Undo validates the complete post-image, restores every updated
 Context, and moves every created Context plus its history into private
 validated lifecycle archives under one command/graph/lock boundary. Redo
 validates the complete pre-image, restores the archived identities and

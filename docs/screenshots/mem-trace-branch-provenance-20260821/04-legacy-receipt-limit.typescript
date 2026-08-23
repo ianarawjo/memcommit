@@ -1,35 +1,36 @@
 COMMAND · mem checkout -b practice/2
 [32mBranched 'practice/1' → 'practice/2' and switched to it.[0m
-RECORDED · BRANCH CHECKPOINT [b0391b7d] · MEMORY [40fc5b17] · practice/1 → practice/2 · UID + CONTENT STABLE
+RECORDED · BRANCH CHECKPOINT [cc6df2ee] · MEMORY [06eb5842] → [660e676a] · practice/1 → practice/2 · FRESH UID + LINEAGE
 PTY · os.get_terminal_size=180×52 · stty=52 180
 PRESS T · OPEN RECORDED BRANCH TRACE (READ ONLY)
 t
 [6n[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ LINEAGE ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
 [0;38;5;117;1m┃[0;38;5;231;1mTRACE[0;38;5;231m · practice/2[0m                                                                                                                                                               [0;1m^[179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;189m[MEMORY 40fc5b17][0;38;5;231m · 2 OPERATIONS · LATEST FIRST[0m                                                                                                                                  [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;189m[MEMORY 660e676a][0;38;5;231m · 2 OPERATIONS · LATEST FIRST[0m                                                                                                                                  [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;111;1m[branch][0;38;5;231m [CHECKPOINT b0391b7d] [0;38;5;231;1m[COMMAND eef4a261][0;38;5;231m [0;38;5;189m[MEMORY 40fc5b17][0;38;5;231m  2026-08-21 12:31 · practice/1 → practice/2 · Memory content unchanged[0m                                       [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;111;1m[branch][0;38;5;231m [CHECKPOINT cc6df2ee] [0;38;5;231;1m[COMMAND d7b7539f][0;38;5;231m [0;38;5;189m[MEMORIES 2][0;38;5;231m  2026-08-23 11:03 · practice/1 → practice/2 · Memory content unchanged[0m                                            [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0;38;5;231;1m  Source Context: [0;38;5;231mpractice/1[0m                                                                                                                                                     [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0;38;5;231;1m  Target Context: [0;38;5;231mpractice/2[0m                                                                                                                                                     [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;231;1m  = [0;38;5;189m[40fc5b17]@1 a is apple[0m                                                                                                                                                      [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231;1m  = [0;38;5;189m[660e676a]@1 a is apple[0m                                                                                                                                                      [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;111;1m[add][0;38;5;231m [CHECKPOINT 08cef948] [0;38;5;189m[MEMORY 40fc5b17][0;38;5;231m  2026-08-21 12:31 · created "a is apple"[0m                                                                                           [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;111;1m[add][0;38;5;231m [CHECKPOINT c882a056] [0;38;5;189m[MEMORY 06eb5842][0;38;5;231m  2026-08-23 11:03 · created "a is apple"[0m                                                                                           [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0;38;5;231;1mATTACHMENTS[0m                                                                                                                                                                      [0;48;5;248m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0;38;5;231m  none[0m                                                                                                                                                                           [0;1mv[179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
-[0m TRACE REPORT · ↑/↓ scroll · PgUp/PgDn page · Home/End · Esc/Backspace/Q close · read-only[90D[13A[C[?7h[0m[?12l[?25h[A[J[0m[?7h[?2004lTRACE CLOSED · TARGET [40fc5b17] · CONTEXT practice/2 [6b08bf94] · STORE DIGEST UNCHANGED
+[0m TRACE REPORT · ↑/↓ scroll · PgUp/PgDn page · Home/End · Esc/Backspace/Q close · read-only[90D[13A[C[?7h[0m[?12l[?25h[A[J[0m[?7h[?2004lTRACE CLOSED · SOURCE [06eb5842] · TARGET [660e676a] · CONTEXT practice/2 [9411c56b] · STORE DIGEST UNCHANGED
 PRESS L · VERIFY RECEIPT-FREE LEGACY LIMIT
 l
-[2J[HCOMMAND · mem trace --context legacy/target --plain a63f9b70
+[2J[HCOMMAND · mem trace --context legacy/target --plain 9bd66687
 TRACE · legacy/target
-[MEMORY a63f9b70] · 1 OPERATION · LATEST FIRST
+[MEMORY 9bd66687] · 1 OPERATION · LATEST FIRST
 
-[add] [CHECKPOINT c9fa3349] [MEMORY a63f9b70]  2026-08-21 12:31 · created "legacy inherited fact"
+[add] [CHECKPOINT 18b08b49] [MEMORY 9bd66687]  2026-08-23 11:03 · created "legacy inherited fact"
 
 ATTACHMENTS
   none
 
 LIMITS
-  − Checkpoint [7c2d37e5] was inherited from 'legacy/source'; the branch creation event was not recorded.
+  − Checkpoint [ba14338e] was inherited from 'legacy/source'; the branch creation event was not recorded.
+  − Saved atomize analysis could not be read: Invalid atomize analysis Context uid.
 LEGACY VERIFIED · ONE OWNER WARNING · NO FABRICATED BRANCH EVENT

@@ -67,7 +67,14 @@ def test_explicit_subtree_branch_clones_hierarchy_and_internal_pointers(
     branch_child = store.load_direct("experiment/child")
     assert branch_root.uid != source_root.uid
     assert branch_child.uid != source_child.uid
-    assert child_memory.uid in branch_child.memories
+    branch_child_memory = next(
+        item for item in branch_child.iter_items() if isinstance(item, Memory)
+    )
+    branch_root_memory = next(
+        item for item in branch_root.iter_items() if isinstance(item, Memory)
+    )
+    assert branch_child_memory.uid != child_memory.uid
+    assert branch_child_memory.content == child_memory.content
     embedded = next(
         item for item in branch_root.iter_items() if isinstance(item, Context)
     )
@@ -81,6 +88,7 @@ def test_explicit_subtree_branch_clones_hierarchy_and_internal_pointers(
         branch_child.uid,
         branch_child.name,
     )
+    assert reference.target_memory_uid == branch_child_memory.uid
     branch_root_history = store.list_checkpoints("experiment")
     assert branch_root_history[0]["command"] == "branch"
     assert [entry["uid"] for entry in branch_root_history[1:]] == [
@@ -98,7 +106,7 @@ def test_explicit_subtree_branch_clones_hierarchy_and_internal_pointers(
     branch_child_history = store.list_checkpoints("experiment/child")
     assert branch_child_history[0]["command"] == "branch"
     assert branch_child_history[1:] == child_history
-    child_trace = build_trace(store, branch_child, child_memory.uid)
+    child_trace = build_trace(store, branch_child, branch_child_memory.uid)
     assert child_trace.warnings == ()
     branch_event = next(
         event for event in child_trace.events if event.kind == "BRANCHED"
@@ -129,6 +137,11 @@ def test_explicit_subtree_branch_clones_hierarchy_and_internal_pointers(
         keep_history=True,
     )
     restored_root = store.load_direct("experiment")
+    restored_root_memory = next(
+        item for item in restored_root.iter_items() if isinstance(item, Memory)
+    )
+    assert restored_root_memory.uid == branch_root_memory.uid
+    assert restored_root_memory.uid not in source_root.memories
     restored_embed = next(
         item for item in restored_root.iter_items() if isinstance(item, Context)
     )
@@ -136,6 +149,9 @@ def test_explicit_subtree_branch_clones_hierarchy_and_internal_pointers(
         branch_child.uid,
         branch_child.name,
     )
+    restored_reference = restored_root.memories["child-memory-ref"]
+    assert isinstance(restored_reference, MemoryRef)
+    assert restored_reference.target_memory_uid == branch_child_memory.uid
 
 
 def test_recursive_branch_undo_cancels_the_complete_created_tree_and_redo_restores_it(

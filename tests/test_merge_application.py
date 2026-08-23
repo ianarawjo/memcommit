@@ -141,10 +141,13 @@ def test_store_runtime_merges_without_terminal_output(isolated_store, capsys):
     assert capsys.readouterr() == ("", "")
     assert result.source_name == "source"
     assert result.target_name == "target"
-    assert result.additions == (
-        MergeAddition(uid=novel.uid, kind=MergeItemKind.MEMORY),
-    )
+    assert len(result.additions) == 1
+    addition = result.additions[0]
+    assert addition.uid == novel.uid
+    assert addition.kind is MergeItemKind.MEMORY
+    assert addition.target_uid is not None
+    assert addition.target_uid != novel.uid
     assert result.checkpoint_uid
     merged = store.load_direct("target")
     assert merged.memories[shared_uid].content == "target revision"
-    assert merged.memories[novel.uid].content == "new fact"
+    assert merged.memories[addition.target_uid].content == "new fact"

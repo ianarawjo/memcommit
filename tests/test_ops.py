@@ -155,7 +155,7 @@ def test_remove_ambiguous_prefix_raises_value_error():
 # ---------------------------------------------------------------------------
 
 
-def test_branch_creates_new_context_with_same_memories():
+def test_branch_creates_new_context_with_fresh_memory_occurrences():
     ctx = make_ctx("main")
     m1 = ops.add(ctx, "alpha")
     m2 = ops.add(ctx, "beta")
@@ -163,7 +163,11 @@ def test_branch_creates_new_context_with_same_memories():
     branched = ops.branch(ctx, "feature")
     assert branched.name == "feature"
     assert branched.uid != ctx.uid
-    assert set(branched.memories.keys()) == {m1.uid, m2.uid}
+    branched_memories = tuple(
+        item for item in branched.iter_items() if isinstance(item, Memory)
+    )
+    assert [item.content for item in branched_memories] == ["alpha", "beta"]
+    assert {item.uid for item in branched_memories}.isdisjoint({m1.uid, m2.uid})
 
 
 def test_branch_memories_are_independent_objects():
@@ -171,9 +175,12 @@ def test_branch_memories_are_independent_objects():
     mem = ops.add(ctx, "original")
     branched = ops.branch(ctx, "copy")
 
-    # Same uid but different Memory instance — mutating one should not affect the other.
-    branched_mem = branched.memories[mem.uid]
+    # A branch owns a fresh occurrence rather than sharing a writable address.
+    (branched_mem,) = tuple(
+        item for item in branched.iter_items() if isinstance(item, Memory)
+    )
     assert branched_mem is not mem
+    assert branched_mem.uid != mem.uid
     assert branched_mem.content == mem.content
 
 
@@ -183,7 +190,23 @@ def test_branch_of_empty_context():
     assert branched.memories == {}
 
 
-def test_branch_subtree_regenerates_contexts_but_preserves_memory_lineage():
+def test_branch_rejects_incomplete_reused_or_extra_memory_identity_maps():
+    ctx = make_ctx()
+    memory = ops.add(ctx, "original")
+
+    with pytest.raises(ValueError, match="cover exactly"):
+        ops.branch(ctx, "missing", memory_uid_map={})
+    with pytest.raises(ValueError, match="cover exactly"):
+        ops.branch(
+            ctx,
+            "extra",
+            memory_uid_map={memory.uid: "fresh", "not-owned": "also-fresh"},
+        )
+    with pytest.raises(ValueError, match="invalid"):
+        ops.branch(ctx, "reused", memory_uid_map={memory.uid: memory.uid})
+
+
+def test_branch_subtree_regenerates_context_and_memory_occurrences():
     root = make_ctx("task")
     child = make_ctx("task/child")
     root_memory = ops.add(root, "root fact")
@@ -211,8 +234,14 @@ def test_branch_subtree_regenerates_contexts_but_preserves_memory_lineage():
     )
     assert branch_root.uid != root.uid
     assert branch_child.uid != child.uid
-    assert branch_root.memories[root_memory.uid].uid == root_memory.uid
-    assert branch_child.memories[child_memory.uid].uid == child_memory.uid
+    branch_root_memory = next(
+        item for item in branch_root.iter_items() if isinstance(item, Memory)
+    )
+    branch_child_memory = next(
+        item for item in branch_child.iter_items() if isinstance(item, Memory)
+    )
+    assert branch_root_memory.uid != root_memory.uid
+    assert branch_child_memory.uid != child_memory.uid
     embedded = next(
         item for item in branch_root.iter_items() if isinstance(item, Context)
     )
@@ -224,6 +253,7 @@ def test_branch_subtree_regenerates_contexts_but_preserves_memory_lineage():
         branch_child.uid,
         branch_child.name,
     )
+    assert reference.target_memory_uid == branch_child_memory.uid
 
 
 def test_branch_subtree_retains_external_live_references():

@@ -40,7 +40,11 @@ def test_direct_merge_keeps_target_revision_for_an_existing_uid(isolated_store):
     assert "KEPT TARGET 1" in result.output
     merged = store.load_direct(target.name)
     assert merged.memories[shared_uid].content == "target revision"
-    assert merged.memories[novel.uid].content == "source-only addition"
+    assert novel.uid not in merged.memories
+    assert any(
+        isinstance(item, Memory) and item.content == "source-only addition"
+        for item in merged.iter_items()
+    )
 
 
 def test_direct_merge_does_not_propagate_source_absence(isolated_store):

@@ -99,14 +99,16 @@ baseline and does not win a disagreement.
 
 Each positional endpoint uses the shared Context/direct-Memory shape
 classifier. A bare positional Memory searches one strict ordinary-local
-direct-owner snapshot and must have exactly one owner; branch copies with the
-same UID therefore fail closed and require `CONTEXT:UID`. Qualified Memory
-owners use the same Context resolver and may name an authorized public Grant
-Context. Bare Memory lookup never enumerates Grant contents. Short prefixes
-remain available through qualification or the explicit `--reference-memory`
-and `--compared-memory` options. Existing UUID-shaped Contexts remain
-accessible through the explicitly Context-typed `--from` and `--to`
-compatibility routes.
+direct-owner snapshot and must have exactly one owner. New Branch copies have
+fresh occurrence UIDs, so Branch alone no longer makes the immediately visible
+selector ambiguous. Legacy stores or independently imported data may still
+contain the same UID under several owners; those cases fail closed and require
+`CONTEXT:UID`. Qualified Memory owners use the same Context resolver and may
+name an authorized public Grant Context. Bare Memory lookup never enumerates
+Grant contents. Short prefixes remain available through qualification or the
+explicit `--reference-memory` and `--compared-memory` options. Existing
+UUID-shaped Contexts remain accessible through the explicitly Context-typed
+`--from` and `--to` compatibility routes.
 
 Automatic classification changes only command entry. It freezes each derived
 owner and exact Memory UID, then enters Compare's existing focused-frame path:

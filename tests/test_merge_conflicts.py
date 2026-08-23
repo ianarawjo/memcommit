@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import replace
+import json
 
 import pytest
 from typer.testing import CliRunner
@@ -176,8 +177,9 @@ def test_keep_target_only_receipt_explains_the_zero_delta(isolated_store):
     assert "TOOK SOURCE 0" in kept.output
     assert "TARGET CHANGED NO" in kept.output
     (checkpoint,) = store.list_checkpoints("target")
-    assert "new 0; already present 0; kept Target 1; took Source 0" in (
-        checkpoint["description"]
+    assert (
+        "new 0; already present 0; kept Target 1; took Source 0"
+        in (checkpoint["description"])
     )
 
 
@@ -233,6 +235,136 @@ def test_noop_merge_remains_an_undoable_boundary(isolated_store):
     undone = runner.invoke(app, ["undo"])
     assert undone.exit_code == 0, undone.output + undone.stderr
     assert store.load_direct("target").memories["same"].content == "same"
+
+
+def test_branch_fresh_uid_edits_unambiguously_and_merges_by_checkpoint_lineage(
+    isolated_store,
+):
+    assert runner.invoke(app, ["init", "practice/greetings"]).exit_code == 0
+    assert runner.invoke(app, ["add", "bonjour"]).exit_code == 0
+    store = MemoryStore()
+    source = store.load_current_direct()
+    source_memory = next(
+        item for item in source.iter_items() if isinstance(item, Memory)
+    )
+
+    branched = runner.invoke(app, ["branch", "practice/greetings2"])
+
+    assert branched.exit_code == 0, branched.output
+    branch = store.load_current_direct()
+    branch_memory = next(
+        item for item in branch.iter_items() if isinstance(item, Memory)
+    )
+    assert branch_memory.uid != source_memory.uid
+    branch_checkpoint = store.list_checkpoints(branch.name)[0]
+    [branch_edge] = branch_checkpoint["args"]["memory_lineage"]["edges"]
+    assert branch_edge["source_memory_uid"] == source_memory.uid
+    assert branch_edge["target_memory_uid"] == branch_memory.uid
+
+    edited = runner.invoke(app, ["edit", branch_memory.uid[:4], "bonsoir"])
+
+    assert edited.exit_code == 0, edited.output
+    assert store.load_direct(source.name).memories[source_memory.uid].content == (
+        "bonjour"
+    )
+    assert store.load_direct(branch.name).memories[branch_memory.uid].content == (
+        "bonsoir"
+    )
+
+    assert runner.invoke(app, ["switch", source.name]).exit_code == 0
+    unresolved = runner.invoke(app, ["merge", branch.name])
+    assert unresolved.exit_code == 1
+    assert "CONTENT_DIVERGENCE" in unresolved.output
+    assert "SOURCE CONTENT · bonsoir" in unresolved.output
+    assert "TARGET CONTENT · bonjour" in unresolved.output
+
+    accepted = runner.invoke(app, ["merge", branch.name, "--take-source-all"])
+
+    assert accepted.exit_code == 0, accepted.output + accepted.stderr
+    merged = store.load_direct(source.name)
+    assert list(merged.memories) == [source_memory.uid]
+    assert merged.memories[source_memory.uid].content == "bonsoir"
+    merge_checkpoint = store.list_checkpoints(source.name)[0]
+    [merge_edge] = merge_checkpoint["args"]["memory_lineage"]["edges"]
+    assert merge_edge["source_memory_uid"] == branch_memory.uid
+    assert merge_edge["target_memory_uid"] == source_memory.uid
+
+    repeated = runner.invoke(app, ["merge", branch.name])
+    assert repeated.exit_code == 0, repeated.output + repeated.stderr
+    assert "ALREADY PRESENT 1" in repeated.output
+    assert len(store.load_direct(source.name).memories) == 1
+
+
+def test_nested_branch_lineage_resolves_transitively_for_merge(isolated_store):
+    assert runner.invoke(app, ["init", "main"]).exit_code == 0
+    assert runner.invoke(app, ["add", "baseline"]).exit_code == 0
+    store = MemoryStore()
+    main = store.load_current_direct()
+    main_memory = next(item for item in main.iter_items() if isinstance(item, Memory))
+
+    assert runner.invoke(app, ["branch", "feature"]).exit_code == 0
+    feature = store.load_current_direct()
+    feature_memory = next(
+        item for item in feature.iter_items() if isinstance(item, Memory)
+    )
+    assert runner.invoke(app, ["branch", "experiment"]).exit_code == 0
+    experiment = store.load_current_direct()
+    experiment_memory = next(
+        item for item in experiment.iter_items() if isinstance(item, Memory)
+    )
+    assert len({main_memory.uid, feature_memory.uid, experiment_memory.uid}) == 3
+
+    assert (
+        runner.invoke(
+            app, ["edit", experiment_memory.uid[:8], "experiment revision"]
+        ).exit_code
+        == 0
+    )
+    assert runner.invoke(app, ["switch", main.name]).exit_code == 0
+
+    unresolved = runner.invoke(app, ["merge", experiment.name])
+
+    assert unresolved.exit_code == 1
+    assert "CONTENT_DIVERGENCE" in unresolved.output
+    accepted = runner.invoke(app, ["merge", experiment.name, "--take-source-all"])
+    assert accepted.exit_code == 0, accepted.output + accepted.stderr
+    merged = store.load_direct(main.name)
+    assert list(merged.memories) == [main_memory.uid]
+    assert merged.memories[main_memory.uid].content == "experiment revision"
+
+
+def test_merge_rejects_tampered_branch_lineage_before_target_write(
+    isolated_store,
+):
+    assert runner.invoke(app, ["init", "main"]).exit_code == 0
+    assert runner.invoke(app, ["add", "baseline"]).exit_code == 0
+    store = MemoryStore()
+    main = store.load_current_direct()
+    main_digest = context_record_digest(main)
+    assert runner.invoke(app, ["branch", "feature"]).exit_code == 0
+    branch_checkpoint = store.list_checkpoints("feature")[0]
+    checkpoint_path = next(
+        (isolated_store / "contexts" / "feature" / "checkpoints").glob(
+            f"*-{branch_checkpoint['uid'][:8]}.json"
+        )
+    )
+    record = json.loads(checkpoint_path.read_text(encoding="utf-8"))
+    record["args"]["memory_lineage"]["edges"][0]["target_content_sha256"] = "0" * 64
+    checkpoint_path.write_text(
+        json.dumps(record, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    store.set_current(main.name)
+
+    with pytest.raises(
+        ValueError,
+        match="does not match its target snapshot",
+    ):
+        execute_merge(MergeRequest(source_locator="feature"), store=store)
+
+    unchanged = store.load_direct(main.name)
+    assert context_record_digest(unchanged) == main_digest
+    assert store.list_checkpoints(main.name)[0]["command"] == "add"
 
 
 def test_conflict_identity_changes_when_frozen_content_changes(isolated_store):

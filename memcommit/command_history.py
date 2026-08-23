@@ -639,7 +639,20 @@ def _context_parts(
 
         if command == "revert":
             target_uid = args.get("target_uid")
-            target = records.get(target_uid) if isinstance(target_uid, str) else None
+            recorded_restoration = entry.get("restored_snapshot")
+            target = (
+                _normalized_record(
+                    recorded_restoration,
+                    context_uid=context.uid,
+                    context_name=context.name,
+                )
+                if isinstance(recorded_restoration, dict)
+                else (
+                    records.get(target_uid)
+                    if isinstance(target_uid, str)
+                    else None
+                )
+            )
             if target is None:
                 raise CommandHistoryError(
                     f"Revert checkpoint [{uid[:8]}] does not retain its target."

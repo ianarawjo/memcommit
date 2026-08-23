@@ -18,8 +18,11 @@ from memcommit.context_targeting.presets import (
 )
 from memcommit.context_targeting.resolution import expand_lexical_context_names
 from memcommit.context_targeting.tui.name_editor import suggest_fresh_context_name
+from memcommit.context import Memory
+from memcommit.memory_lineage import memory_content_sha256
 from memcommit.store import (
     ContextBranchBinding,
+    ContextBranchMemoryBinding,
     MemoryStore,
     checkpoint_history_digest,
     context_record_digest,
@@ -188,6 +191,31 @@ def cmd(
                     histories[source.name]
                 ),
                 target=target,
+                memories=tuple(
+                    ContextBranchMemoryBinding(
+                        source_uid=source_memory.uid,
+                        target_uid=target_memory.uid,
+                        source_content_sha256=memory_content_sha256(
+                            source_memory.content
+                        ),
+                        target_content_sha256=memory_content_sha256(
+                            target_memory.content
+                        ),
+                    )
+                    for source_memory, target_memory in zip(
+                        (
+                            item
+                            for item in source.iter_items()
+                            if isinstance(item, Memory)
+                        ),
+                        (
+                            item
+                            for item in target.iter_items()
+                            if isinstance(item, Memory)
+                        ),
+                        strict=True,
+                    )
+                ),
             )
             for source, target in zip(sources, targets, strict=True)
         )

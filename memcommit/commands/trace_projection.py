@@ -217,9 +217,13 @@ def _trace_row_summary(row: TraceOperationRow) -> str:
     transitions = _unique_context_transitions(row)
     if action == "branch" and len(transitions) == 1:
         transition = transitions[0]
-        before_by_uid = {state.uid: state.content for state in row.before}
-        unchanged = bool(row.after) and all(
-            before_by_uid.get(state.uid) == state.content for state in row.after
+        # A Branch now gives independently writable occurrences fresh UIDs;
+        # the recorded event order, not address equality, proves which copied
+        # Source value corresponds to each Target value.
+        unchanged = bool(row.after) and tuple(
+            state.content for state in row.before
+        ) == tuple(
+            state.content for state in row.after
         )
         suffix = "Memory content unchanged" if unchanged else "copied target state"
         return f"{transition.source.name} → {transition.target.name} · {suffix}"

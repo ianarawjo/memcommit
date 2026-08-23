@@ -56,7 +56,7 @@ def _store_digest() -> str:
     return digest.hexdigest()
 
 
-def _prepare_recorded_branch() -> tuple[str, str]:
+def _prepare_recorded_branch() -> tuple[str, str, str]:
     from typer.testing import CliRunner
 
     from memcommit.cli import _checkout, app
@@ -80,25 +80,28 @@ def _prepare_recorded_branch() -> tuple[str, str]:
     target = store.load_current_direct()
     copied = next(item for item in target.iter_items() if isinstance(item, Memory))
     assert target.name == "practice/2"
-    assert copied.uid == memory.uid and copied.content == memory.content
+    assert copied.uid != memory.uid and copied.content == memory.content
     checkpoint = next(
         entry
         for entry in store.list_checkpoints(target.name)
         if entry["command"] == "branch"
     )
+    [lineage] = checkpoint["args"]["memory_lineage"]["edges"]
+    assert lineage["source_memory_uid"] == memory.uid
+    assert lineage["target_memory_uid"] == copied.uid
     print(
         f"RECORDED · BRANCH CHECKPOINT [{checkpoint['uid'][:8]}] · "
-        f"MEMORY [{memory.uid[:8]}] · practice/1 → practice/2 · UID + CONTENT STABLE"
+        f"MEMORY [{memory.uid[:8]}] → [{copied.uid[:8]}] · "
+        "practice/1 → practice/2 · FRESH UID + LINEAGE"
     )
-    return memory.uid, target.uid
+    return memory.uid, copied.uid, target.uid
 
 
 def _prepare_legacy_copy() -> str:
     from typer.testing import CliRunner
 
-    import memcommit.ops as ops
     from memcommit.cli import app
-    from memcommit.context import Memory
+    from memcommit.context import Context, Memory
     from memcommit.store import MemoryStore
 
     runner = CliRunner()
@@ -109,7 +112,10 @@ def _prepare_legacy_copy() -> str:
     store = MemoryStore()
     source = store.load_current_direct()
     memory = next(item for item in source.iter_items() if isinstance(item, Memory))
-    target = ops.branch(source, "legacy/target")
+    # Model a receipt-free pre-lineage store explicitly. New Branch cannot
+    # create this same-UID shape, but Trace must keep it readable and uncertain.
+    target = Context(uid="legacy-target-context", name="legacy/target")
+    target.add(Memory(uid=memory.uid, content=memory.content))
     store.save(target)
     target_checkpoints = store._checkpoints_dir(target.name)
     target_checkpoints.mkdir(parents=True, exist_ok=True)
@@ -124,7 +130,7 @@ def _run_child() -> None:
 
     with tempfile.TemporaryDirectory(prefix="memcommit-trace-branch-") as temp:
         _isolate_store(Path(temp))
-        memory_uid, target_uid = _prepare_recorded_branch()
+        source_memory_uid, target_memory_uid, target_uid = _prepare_recorded_branch()
         legacy_uid = _prepare_legacy_copy()
         before = _store_digest()
         print(
@@ -135,10 +141,15 @@ def _run_child() -> None:
         print("PRESS T · OPEN RECORDED BRANCH TRACE (READ ONLY)")
         input()
 
-        trace.cmd(selector=memory_uid, context_name="practice/2")
+        trace.cmd(
+            selector=target_memory_uid,
+            context_name="practice/2",
+            tui=True,
+        )
         assert _store_digest() == before
         print(
-            f"TRACE CLOSED · TARGET [{memory_uid[:8]}] · CONTEXT practice/2 "
+            f"TRACE CLOSED · SOURCE [{source_memory_uid[:8]}] · "
+            f"TARGET [{target_memory_uid[:8]}] · CONTEXT practice/2 "
             f"[{target_uid[:8]}] · STORE DIGEST UNCHANGED"
         )
         print("PRESS L · VERIFY RECEIPT-FREE LEGACY LIMIT")

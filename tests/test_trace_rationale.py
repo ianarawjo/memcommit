@@ -109,7 +109,11 @@ def test_trace_records_unchanged_memory_route_for_branch_entry_points(
 
     assert branched.exit_code == 0, branched.output
     target = store.load_direct("practice/2")
-    report = build_trace(store, target, memory.uid)
+    target_memory = next(
+        item for item in target.iter_items() if isinstance(item, Memory)
+    )
+    assert target_memory.uid != memory.uid
+    report = build_trace(store, target, target_memory.uid)
     assert [event.kind for event in report.events] == ["CREATED", "BRANCHED"]
     assert report.warnings == ()
     branch_event = report.events[-1]
@@ -122,7 +126,7 @@ def test_trace_records_unchanged_memory_route_for_branch_entry_points(
         "target": {"uid": target.uid, "name": "practice/2"},
     }
     assert [state.uid for state in branch_event.before] == [memory.uid]
-    assert [state.uid for state in branch_event.after] == [memory.uid]
+    assert [state.uid for state in branch_event.after] == [target_memory.uid]
     assert branch_event.before[0].content == branch_event.after[0].content
     rationale_request = rationale_provenance_payload(report)["request"]
     assert rationale_request["selected_context"] == "practice/2"
@@ -132,7 +136,7 @@ def test_trace_records_unchanged_memory_route_for_branch_entry_points(
         "target": "practice/2",
     }
 
-    rendered = invoke("trace", f"practice/2:{memory.uid}", "--plain")
+    rendered = invoke("trace", f"practice/2:{target_memory.uid}", "--plain")
     assert rendered.exit_code == 0, rendered.output
     assert "[branch]" in rendered.output
     assert "practice/1 → practice/2 · Memory content unchanged" in rendered.output
@@ -140,7 +144,7 @@ def test_trace_records_unchanged_memory_route_for_branch_entry_points(
     assert "Target Context: practice/2" in rendered.output
     assert "branch creation event was not recorded" not in rendered.output
 
-    structured = invoke("trace", f"practice/2:{memory.uid}", "--json")
+    structured = invoke("trace", f"practice/2:{target_memory.uid}", "--json")
     assert structured.exit_code == 0, structured.output
     assert json.loads(structured.output)["events"][-1]["context_transition"] == {
         "source": {"uid": source.uid, "name": "practice/1"},
@@ -156,7 +160,9 @@ def test_trace_keeps_one_legacy_warning_when_no_branch_receipt_exists(
     store = MemoryStore()
     source = store.load_current_direct()
     memory = next(item for item in source.iter_items() if isinstance(item, Memory))
-    target = ops.branch(source, "legacy/target")
+    # Model a pre-lineage-receipt Branch that retained the Source UID.
+    target = ops.init("legacy/target")
+    target.add(Memory(uid=memory.uid, content=memory.content))
     store.save(target)
     source_checkpoints = store._checkpoints_dir(source.name)
     target_checkpoints = store._checkpoints_dir(target.name)
@@ -178,15 +184,26 @@ def test_trace_retains_each_recorded_context_route_across_nested_branches(
     assert invoke("init", "nested/0").exit_code == 0
     assert invoke("add", "stable through both branches").exit_code == 0
     store = MemoryStore()
-    memory = next(
+    source_memory = next(
         item
         for item in store.load_current_direct().iter_items()
         if isinstance(item, Memory)
     )
     assert invoke("branch", "nested/1").exit_code == 0
+    middle_memory = next(
+        item
+        for item in store.load_current_direct().iter_items()
+        if isinstance(item, Memory)
+    )
     assert invoke("branch", "nested/2").exit_code == 0
+    target_memory = next(
+        item
+        for item in store.load_current_direct().iter_items()
+        if isinstance(item, Memory)
+    )
+    assert len({source_memory.uid, middle_memory.uid, target_memory.uid}) == 3
 
-    report = build_trace(store, store.load_direct("nested/2"), memory.uid)
+    report = build_trace(store, store.load_direct("nested/2"), target_memory.uid)
 
     assert report.warnings == ()
     routes = [

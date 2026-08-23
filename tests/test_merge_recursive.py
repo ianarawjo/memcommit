@@ -214,13 +214,14 @@ def test_recursive_merge_aligns_paths_and_clones_source_only_contexts(
     merged_root = store.load_direct("target")
     merged_shared = store.load_direct("target/shared")
     merged_source_only = store.load_direct("target/source-only")
-    assert root_memory.uid in merged_root.memories
+    assert root_memory.uid not in merged_root.memories
+    assert "root source addition" in _contents(merged_root)
     assert merged_shared.memories[shared_uid].content == "target revision"
-    assert merged_shared.memories[new_shared.uid].content == ("shared source addition")
+    assert new_shared.uid not in merged_shared.memories
+    assert "shared source addition" in _contents(merged_shared)
     assert merged_source_only.uid != source_only.uid
-    assert merged_source_only.memories[source_only_memory.uid].content == (
-        "source-only fact"
-    )
+    assert source_only_memory.uid not in merged_source_only.memories
+    assert _contents(merged_source_only) == ["source-only fact"]
     remapped = merged_root.memories[merged_source_only.uid]
     assert isinstance(remapped, Context)
     assert (remapped.uid, remapped.name) == (
@@ -257,7 +258,9 @@ def test_recursive_merge_matches_complete_relative_path_not_leaf_name(
         store=store,
     )
 
-    assert source_memory.uid in store.load_direct("target/alpha/leaf").memories
+    merged_leaf = store.load_direct("target/alpha/leaf")
+    assert source_memory.uid not in merged_leaf.memories
+    assert _contents(merged_leaf) == ["alpha source"]
     assert different_memory.uid in store.load_direct("target/beta/leaf").memories
 
 
@@ -423,9 +426,12 @@ def test_recursive_merge_copies_a_read_granted_subtree_as_local_values(
     )
 
     assert result.cross_profile_memory_only is True
-    assert root_memory.uid in active.load_direct("accumulator").memories
+    local_root = active.load_direct("accumulator")
+    assert root_memory.uid not in local_root.memories
+    assert _contents(local_root) == ["advisor root fact"]
     local_child = active.load_direct("accumulator/child")
-    assert child_memory.uid in local_child.memories
+    assert child_memory.uid not in local_child.memories
+    assert _contents(local_child) == ["advisor child fact"]
     assert local_child.uid != child.uid
     assert not any(
         isinstance(item, Context)

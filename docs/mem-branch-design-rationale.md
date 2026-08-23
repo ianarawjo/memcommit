@@ -85,11 +85,13 @@ is current later.
 ## Exact Branch compatibility
 
 `THIS CONTEXT ONLY` retains the existing contract. It creates one new Context
-identity, copies direct Memories as independent objects with stable Memory
-UIDs, retains Memory and query references, and carries embedded Contexts as
-live references. Only the selected Source history is inherited. Existing
-scripts and `mem checkout -b NEW` therefore remain shallow unless descendant
-scope is requested explicitly.
+identity, copies each direct Memory value into a new independently owned
+occurrence with a fresh Memory UID, retains Memory and query references, and
+carries embedded Contexts as live references. Only the selected Source history
+is inherited. Existing scripts and `mem checkout -b NEW` therefore remain
+shallow unless descendant scope is requested explicitly; their copied Memory
+selectors no longer collide with selectors in the Source merely because the
+Branch exists.
 
 ## Lexical-subtree Branch
 
@@ -104,12 +106,13 @@ source/routes/live  -> experiment/routes/live
 ```
 
 Each target Context receives a new Context UID because the hierarchy must be
-independently editable. Direct Memory UIDs remain stable so Merge and Meld can
-recognize common lineage. An embedded Context or MemoryRef targeting a member
-of the frozen Source set is rewritten to the corresponding target name and
-new Context UID. Pointers outside the selected set retain ordinary shallow
-Branch live-reference semantics. Query-only Context pointers are never treated
-as lexical hierarchy edges.
+independently editable. Each direct Memory also receives a fresh target UID;
+identity denotes one writable occurrence, not an ancestry label. An embedded
+Context or MemoryRef targeting a member of the frozen Source set is rewritten
+to the corresponding target name, new Context UID, and new target Memory UID.
+Pointers outside the selected set retain ordinary shallow Branch live-reference
+semantics. Query-only Context pointers are never treated as lexical hierarchy
+edges.
 
 The same internal-pointer rewrite applies to inherited checkpoint snapshots,
 their `command_before` frames, and nested checkpoint-log snapshots. Otherwise
@@ -135,6 +138,22 @@ history is copied. The shared version-1 `branch_tree` receipt freezes:
 - every Source and target Context UID and canonical name; and
 - the current Context value observed before Branch selected its target root.
 
+Its sibling version-1 `memory_lineage` receipt uses the same operation UID and
+records one exact edge for every direct Memory copied at the Branch boundary:
+
+```text
+(source Context UID, source Memory UID, source content digest)
+    ->
+(target Context UID, target Memory UID, target content digest)
+```
+
+The Store derives and validates the complete mapping while all Source and
+Target records are locked. A subtree Branch repeats that complete edge set on
+every target checkpoint, while the checkpoint's own post-image authenticates
+the target occurrences it owns. This repetition is deliberate: reverting a
+Root checkpoint may need to retarget a live MemoryRef into a sibling target
+Context without opening that sibling as mutable state.
+
 Inherited checkpoints are lineage, not evidence that the target existed
 before Branch. Command-history reconstruction may assign an absent target
 pre-image only to an owned automatic Branch checkpoint whose complete receipt
@@ -144,15 +163,34 @@ Context actions. The additional direct Branch checkpoint intentionally raises
 the target's physical checkpoint count by one and makes the creation boundary
 visible ahead of its inherited history in Log and Status.
 
-Trace consumes that same validated receipt instead of treating every copied
-Source checkpoint as evidence that Branch was unrecorded. For each direct
-Memory present in the target snapshot it emits one recorded `BRANCHED` event
-that retains the Source and target Context identities while preserving the
-Memory UID. Equal before/after content therefore means Context movement without
-an Edit. A recursive Branch repeats the complete command membership on every
-target, while each per-Memory Trace projects only its exact Source-to-target
-Context route. Receipt-free legacy histories retain one warning per unexplained
-Source owner and do not receive a fabricated Branch event.
+Trace consumes both validated receipts instead of treating every copied Source
+checkpoint as evidence that Branch was unrecorded. For each direct Memory in
+the target post-image it emits one recorded `BRANCHED` event from the Source
+occurrence UID to the fresh target occurrence UID. Equal before/after content
+therefore means copied ancestry without an Edit. A recursive Branch repeats the
+complete command membership on every target, while each per-Memory Trace
+projects only its exact Source-to-target route. Receipt-free legacy histories
+retain one warning per unexplained Source owner and do not receive a fabricated
+Branch event.
+
+Merge reads retained same-Store Branch and Merge lineage as a graph. It follows
+that graph transitively, so `main -> feature -> experiment` can still identify
+the one current `main` occurrence related to an `experiment` Memory. Equal
+content is `UNCHANGED`; divergent content is a normal `CONTENT_DIVERGENCE`;
+`TAKE SOURCE` replaces the target value while preserving the target occurrence
+UID. A genuinely new Source Memory receives a fresh Target UID, and the Merge
+checkpoint records that new edge. Repeating the Merge therefore recognizes the
+published target occurrence instead of appending another copy. One-to-many or
+many-to-one structural mappings fail closed; semantic combination remains
+Meld's separate contract.
+
+Copied Source checkpoints remain authentic historical evidence and retain
+their Source-side Memory UIDs. Revert of an inherited checkpoint projects its
+Memory values and internal MemoryRef targets into the Branch occurrence
+namespace through validated lineage before publication. The Revert receipt
+retains the original selected snapshot for history and records the exact
+projected restoration post-image separately, so Undo, History, and Trace all
+describe the state that was actually written.
 
 Undo freshness-checks every target against the recorded creation post-image
 and validates deletion protection before moving any target. It then moves the
@@ -210,9 +248,11 @@ durable crash-recovery journal for a host failure between filesystem writes.
 - Following embedded edges recursively was rejected because lexical placement
   and embedded graph traversal are independent axes. It could pull unrelated
   Contexts into the result and make a bounded Source range difficult to review.
-- Preserving Context UIDs was rejected because two independently editable
-  ordinary Contexts must not claim one Context identity. Stable Memory UIDs
-  provide the needed Merge/Meld lineage instead.
+- Preserving Context or Memory UIDs was rejected because two independently
+  editable ordinary occurrences must not share one writable identity. It also
+  makes a bare UID selector unexpectedly ambiguous immediately after Branch.
+  Operation-owned checkpoint lineage provides ancestry without conflating
+  addresses.
 - Copying checkpoint bytes unchanged was rejected for subtree mode because
   future Revert would restore Source-side internal pointers.
 - Re-running Branch during Redo was rejected because it would allocate new
@@ -236,4 +276,12 @@ durable crash-recovery journal for a host failure between filesystem writes.
 
 The target root and every mapped descendant must be new. Branch does not merge
 into an existing target hierarchy, copy derived analysis/session artifacts, or
-promise synchronization with later Source changes.
+promise synchronization with later Source changes. Lineage is recorded only
+for Memories present at the Branch boundary. Reverting a Branch to an inherited
+checkpoint containing a Memory that had already disappeared before Branch has
+no target occurrence to restore and fails closed instead of resurrecting the
+Source UID. Legacy receipt-free same-UID Branch histories remain readable and
+retain a narrow Revert compatibility fallback, but new Branch and Merge
+operations do not create such duplicate writable identities. Cross-Profile or
+Grant-derived Merge does not publish local lineage, because its authority and
+disclosure boundary is different from ordinary same-Store ancestry.

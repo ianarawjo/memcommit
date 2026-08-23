@@ -13,6 +13,7 @@ from typer.testing import CliRunner
 import memcommit.ops as ops
 import memcommit.interfaces.tui.operations.merge.adapter as merge_tui_adapter
 from memcommit.cli import app
+from memcommit.context import Memory
 from memcommit.interfaces.tui.operations.merge import (
     MergeTuiSetup,
     build_merge_tui_setup,
@@ -866,7 +867,11 @@ def test_cli_recursive_merge_creates_path_aligned_target_descendant(
     assert "MERGE RECORDED · 'source' → 'target' · DESCENDANTS" in result.output
     assert "CREATED CONTEXTS 1" in result.output
     assert "CHECKPOINTS 2" in result.output
-    assert child_memory.uid in store.load_direct("target/child").memories
+    merged_child = store.load_direct("target/child")
+    assert child_memory.uid not in merged_child.memories
+    assert [
+        item.content for item in merged_child.iter_items() if isinstance(item, Memory)
+    ] == ["recursive child fact"]
 
 
 def test_cli_recursive_root_only_receipt_uses_singular_counts(isolated_store) -> None:
@@ -897,7 +902,12 @@ def test_cli_merge_into_explicit_target_without_a_current_context(
     result = runner.invoke(app, ["merge", "source", "--into", "target"])
 
     assert result.exit_code == 0, result.output + result.stderr
-    assert addition.uid in store.load_direct("target").memories
+    merged = store.load_direct("target")
+    assert addition.uid not in merged.memories
+    assert any(
+        isinstance(item, Memory) and item.content == "explicit target fact"
+        for item in merged.iter_items()
+    )
     assert store.current_context_name() is None
 
 
@@ -917,7 +927,12 @@ def test_cli_merge_accepts_a_positional_target_and_rejects_a_duplicate_alias(
     )
 
     assert result.exit_code == 0, result.output + result.stderr
-    assert addition.uid in store.load_direct("target").memories
+    merged = store.load_direct("target")
+    assert addition.uid not in merged.memories
+    assert any(
+        isinstance(item, Memory) and item.content == "positional target fact"
+        for item in merged.iter_items()
+    )
     assert store.current_context_name() is None
     assert duplicate.exit_code == 2
     assert "Target was supplied both positionally and with --into" in duplicate.stderr
@@ -936,7 +951,12 @@ def test_cli_merge_accepts_directional_aliases_and_relative_source(
     result = runner.invoke(app, ["merge", "--from", "../1"])
 
     assert result.exit_code == 0, result.output + result.stderr
-    assert addition.uid in store.load_direct("practice/2").memories
+    merged = store.load_direct("practice/2")
+    assert addition.uid not in merged.memories
+    assert any(
+        isinstance(item, Memory) and item.content == "directional alias fact"
+        for item in merged.iter_items()
+    )
     assert "'practice/1' → 'practice/2'" in result.output
 
 
@@ -955,7 +975,12 @@ def test_cli_merge_accepts_complete_from_to_pair_without_current(
     )
 
     assert result.exit_code == 0, result.output + result.stderr
-    assert addition.uid in store.load_direct("target").memories
+    merged = store.load_direct("target")
+    assert addition.uid not in merged.memories
+    assert any(
+        isinstance(item, Memory) and item.content == "complete directional pair"
+        for item in merged.iter_items()
+    )
     assert store.current_context_name() is None
 
 
