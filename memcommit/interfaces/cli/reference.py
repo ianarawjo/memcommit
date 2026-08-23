@@ -18,7 +18,7 @@ from memcommit.context_targeting.presets import (
 from memcommit.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
 )
-from memcommit.interfaces.console.text import display_escape_text
+from memcommit.interfaces.console.text import display_escape_text, safe_terminal_text
 from memcommit.interfaces.console.terminal import is_interactive_terminal
 from memcommit.interfaces.tui.operations.reference import choose_reference_setup
 from memcommit.reference_application import (
@@ -213,7 +213,7 @@ def cmd(
                 memory_target = None
         except (FileNotFoundError, OSError, TypeError, ValueError) as error:
             typer.secho(
-                f"Error: {display_escape_text(str(error))}",
+                f"Error: {safe_terminal_text(str(error))}",
                 fg=typer.colors.RED,
                 err=True,
             )

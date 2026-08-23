@@ -179,10 +179,47 @@ def test_profile_search_requires_context_qualified_locator_when_uid_is_duplicate
 
     assert result.exit_code == 1
     assert "multiple local matches" in result.output
-    assert f"branch/a:{shared_uid}" in result.output
-    assert f"branch/b:{shared_uid}" in result.output
+    assert f'  branch/a:{shared_uid} "branch/a"' in result.output
+    assert f'  branch/b:{shared_uid} "branch/b"' in result.output
+    assert (
+        "To select one, rerun with its CONTEXT:UID value shown above."
+        in result.output
+    )
     assert store.load_direct("branch/a").memories[shared_uid].content == "branch/a"
     assert store.load_direct("branch/b").memories[shared_uid].content == "branch/b"
+
+
+def test_eight_character_collision_requires_a_longer_unique_prefix(isolated_store):
+    store = MemoryStore()
+    context = ops.init("notes")
+    first = Memory(
+        uid="deadbeef-1111-1111-1111-111111111111",
+        content='first "quoted" line\nsecond line',
+    )
+    second = Memory(
+        uid="deadbeef-2222-2222-2222-222222222222",
+        content="두 번째 메모리",
+    )
+    context.add(first)
+    context.add(second)
+    store.save(context)
+
+    ambiguous = invoke("edit", "deadbeef", "replacement")
+
+    assert ambiguous.exit_code == 1
+    assert (
+        f'  notes:{first.uid} "first \\"quoted\\" line\\nsecond line"'
+        in ambiguous.output
+    )
+    assert f'  notes:{second.uid} "두 번째 메모리"' in ambiguous.output
+    assert store.load_direct("notes").memories[first.uid].content == first.content
+    assert store.load_direct("notes").memories[second.uid].content == second.content
+
+    resolved = invoke("edit", "deadbeef-1", "replacement")
+
+    assert resolved.exit_code == 0, resolved.output
+    assert store.load_direct("notes").memories[first.uid].content == "replacement"
+    assert store.load_direct("notes").memories[second.uid].content == second.content
 
 
 def test_qualified_selector_cannot_be_combined_with_context_option(isolated_store):

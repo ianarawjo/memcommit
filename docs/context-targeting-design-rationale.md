@@ -90,7 +90,11 @@ that direct owner. Bare selectors scan every ordinary local direct record in a
 single strict load and require exactly one matching Memory. They never prefer
 the current Context, traverse embeds, treat a MemoryRef as ownership, or inspect
 Grant/query content. Ambiguity reports every canonical `CONTEXT:FULL_UID`
-candidate so the next request can state its owner explicitly.
+candidate together with its JSON-quoted exact content so a person can recognize
+the intended Memory without probing candidates one at a time. Control characters
+remain escaped onto that single candidate line. The final instruction says to
+rerun with the chosen candidate's displayed `CONTEXT:UID` value rather than using
+the less explicit phrase "one qualified locator."
 
 The overloaded positional grammar is now one typed pipeline rather than a
 collection of command-local boolean branches. `parse_auto_typed_context_memory_operand`

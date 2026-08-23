@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 import shutil
 from typing import Annotated, Literal, Optional
 
@@ -31,7 +32,12 @@ from memcommit.authority.access import (
     resolve_context_access,
     revalidate_granted_context_binding,
 )
-from memcommit.commands.readable_context_catalog import freeze_readable_context_catalog
+from memcommit.commands.readable_context_catalog import (
+    ReadableContextCatalog,
+    freeze_profile_readable_context_catalog,
+    freeze_readable_context_catalog,
+)
+from memcommit.interfaces.console.identity import collision_safe_uid_prefixes
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
@@ -60,8 +66,8 @@ from memcommit.source_projection.presentation import (
 )
 
 
-_LIST_SNAPSHOT_VERSION = 2
-_GRANTED_LIST_RECEIPT_VERSION = 1
+_LIST_SNAPSHOT_VERSION = 3
+_GRANTED_LIST_RECEIPT_VERSION = 2
 _MemoryLayout = Literal["hanging", "inline"]
 _MIN_HANGING_CONTENT_WIDTH = 20
 
@@ -349,21 +355,28 @@ def _snapshot_context(
     store: MemoryStore,
     context_names: tuple[str, ...],
     recursive: bool,
+    readable_uids: Iterable[str] = (),
 ) -> dict[str, object]:
     """Freeze the exact navigation scope represented by one list invocation."""
+    items = _snapshot_visible_items(
+        ctx,
+        store=store,
+        context_names=context_names,
+        recursive=recursive,
+        ancestors=frozenset({ctx.uid}),
+    )
+    visible_uids = tuple(dict.fromkeys(_snapshot_display_uids(items)))
+    all_prefixes = collision_safe_uid_prefixes((*readable_uids, *visible_uids))
     return {
         "schema_version": _LIST_SNAPSHOT_VERSION,
         "context": {"uid": ctx.uid, "name": ctx.name},
         "recursive": recursive,
+        # Store only visible projections, not the UIDs of unrelated readable
+        # Contexts that caused a prefix to grow.
+        "uid_prefixes": {uid: all_prefixes[uid] for uid in visible_uids},
         # Persisted object order is preserved within the logical items.
         # Namespace children precede them as deterministic navigation rows.
-        "items": _snapshot_visible_items(
-            ctx,
-            store=store,
-            context_names=context_names,
-            recursive=recursive,
-            ancestors=frozenset({ctx.uid}),
-        ),
+        "items": items,
     }
 
 
@@ -418,6 +431,98 @@ def _group_snapshot_items(
     return contexts, memories
 
 
+def _snapshot_display_uids(
+    items: list[dict[str, object]],
+) -> tuple[str, ...]:
+    """Collect every UID rendered in one already-frozen list snapshot."""
+
+    values: list[str] = []
+    for item in items:
+        kind = _require_string(item, "kind")
+        values.append(_require_string(item, "uid"))
+        if kind in {"memory_ref", "memory_snapshot_ref"}:
+            values.append(_require_string(item, "target_memory_uid"))
+        elif kind in {"context", "context_snapshot_ref", "namespace_context"}:
+            children = item.get("children")
+            if children is not None:
+                values.extend(_snapshot_display_uids(_require_items(children)))
+        elif kind not in {"memory", "query_context_ref"}:
+            raise _snapshot_error()
+    return tuple(values)
+
+
+def _context_record_display_uids(context: Context) -> tuple[str, ...]:
+    """Return compact identities exposed by one readable Context record."""
+
+    values: list[str] = []
+    visited: set[int] = set()
+
+    def visit(current: Context) -> None:
+        object_id = id(current)
+        if object_id in visited:
+            return
+        visited.add(object_id)
+        values.append(current.uid)
+        for item in current.iter_items():
+            if isinstance(item, Context):
+                # A direct live Context pointer is only an empty shell here,
+                # while a retained Context snapshot owns readable descendants
+                # that have no separate Context record in the Profile catalog.
+                visit(item)
+            else:
+                values.append(item.uid)
+                if isinstance(item, MemoryRef):
+                    values.append(item.target_memory_uid)
+
+    visit(context)
+    return tuple(values)
+
+
+def _readable_catalog_display_uids(
+    catalog: ReadableContextCatalog,
+) -> tuple[str, ...]:
+    """Freeze the Profile-wide UID namespace without opening QUERY-only routes."""
+
+    values: list[str] = []
+    for name in catalog.list_context_names():
+        values.extend(_context_record_display_uids(catalog.load_direct(name)))
+    return tuple(dict.fromkeys(values))
+
+
+def _profile_readable_display_uids(
+    active_store: MemoryStore,
+    selected_access: ContextAccess,
+) -> tuple[str, ...]:
+    catalog = freeze_profile_readable_context_catalog(
+        active_store,
+        selected_access,
+        include_query_routes=False,
+    )
+    return _readable_catalog_display_uids(catalog)
+
+
+def _require_uid_prefixes(
+    snapshot: dict[str, object],
+    visible_uids: tuple[str, ...],
+) -> dict[str, str]:
+    raw = _require_record(snapshot.get("uid_prefixes"))
+    distinct_uids = tuple(dict.fromkeys(visible_uids))
+    if set(raw) != set(distinct_uids):
+        raise _snapshot_error()
+    visible_minimums = collision_safe_uid_prefixes(distinct_uids)
+    prefixes: dict[str, str] = {}
+    for uid in distinct_uids:
+        prefix = raw.get(uid)
+        if (
+            not isinstance(prefix, str)
+            or prefix != uid[: len(prefix)]
+            or len(prefix) < len(visible_minimums[uid])
+        ):
+            raise _snapshot_error()
+        prefixes[uid] = prefix
+    return prefixes
+
+
 def _render_snapshot_item(
     item: dict[str, object],
     *,
@@ -429,6 +534,7 @@ def _render_snapshot_item(
     terminal_width: int,
     separate_context_blocks: bool,
     style_relationships: bool,
+    uid_prefixes: dict[str, str],
 ) -> None:
     prefix = " " * indent
     kind = _require_string(item, "kind")
@@ -496,7 +602,7 @@ def _render_snapshot_item(
             )
             if with_ids:
                 lines.append(
-                    f"{prefix}[{relationship_label} {uid[:8]}] "
+                    f"{prefix}[{relationship_label} {uid_prefixes[uid]}] "
                     f"{name}  {context_annotation}"
                 )
             else:
@@ -517,7 +623,7 @@ def _render_snapshot_item(
             if with_ids:
                 lines.append(
                     f"{prefix}{reach_label} · "
-                    f"[{context_label} {uid[:8]}] {name}"
+                    f"[{context_label} {uid_prefixes[uid]}] {name}"
                     + (f"  {state_annotation}" if state_annotation else "")
                 )
             else:
@@ -539,6 +645,7 @@ def _render_snapshot_item(
                     terminal_width=terminal_width,
                     separate_context_blocks=separate_context_blocks,
                     style_relationships=style_relationships,
+                    uid_prefixes=uid_prefixes,
                 )
         return
     if kind == "query_context_ref":
@@ -557,7 +664,7 @@ def _render_snapshot_item(
         query_facts = SourceDisplayFacts(form=SourceForm.QUERY_VIEW)
         query_label = source_object_label(query_facts)
         if with_ids:
-            lines.append(f"{prefix}[{query_label} {uid[:8]}] {name}")
+            lines.append(f"{prefix}[{query_label} {uid_prefixes[uid]}] {name}")
         else:
             lines.append(f"{prefix}{name}/ · {query_label}")
         return
@@ -594,8 +701,9 @@ def _render_snapshot_item(
             annotation = source_annotation_text(reference_facts)
             if with_ids:
                 lines.append(
-                    f"{prefix}[{relationship_label} {uid[:8]}] "
-                    f"[{target_context_name}][memory {target_memory_uid[:8]}]  "
+                    f"{prefix}[{relationship_label} {uid_prefixes[uid]}] "
+                    f"[{target_context_name}]"
+                    f"[memory {uid_prefixes[target_memory_uid]}]  "
                     f"{annotation}"
                 )
             else:
@@ -620,8 +728,9 @@ def _render_snapshot_item(
             annotation = source_annotation_text(reference_facts)
             if with_ids:
                 lines.append(
-                    f"{prefix}[{relationship_label} {uid[:8]}] "
-                    f"[{target_context_name}][memory {target_memory_uid[:8]}] "
+                    f"{prefix}[{relationship_label} {uid_prefixes[uid]}] "
+                    f"[{target_context_name}]"
+                    f"[memory {uid_prefixes[target_memory_uid]}] "
                     f"{_one_line(content)}  {annotation}"
                 )
             else:
@@ -638,7 +747,7 @@ def _render_snapshot_item(
         content = _require_string(item, "content")
         if with_ids:
             memory_label = source_object_label(SourceForm.MEMORY)
-            label = f"{prefix}[{memory_label} {uid[:8]}]"
+            label = f"{prefix}[{memory_label} {uid_prefixes[uid]}]"
             if memory_layout == "hanging":
                 lines.extend(
                     _hanging_memory_lines(
@@ -667,6 +776,7 @@ def _render_snapshot_items(
     terminal_width: int,
     separate_context_blocks: bool,
     style_relationships: bool,
+    uid_prefixes: dict[str, str],
 ) -> None:
     contexts, memories = _group_snapshot_items(items)
     for index, item in enumerate(contexts):
@@ -684,6 +794,7 @@ def _render_snapshot_items(
             terminal_width=terminal_width,
             separate_context_blocks=separate_context_blocks,
             style_relationships=style_relationships,
+            uid_prefixes=uid_prefixes,
         )
     for item in memories:
         _render_snapshot_item(
@@ -696,6 +807,7 @@ def _render_snapshot_items(
             terminal_width=terminal_width,
             separate_context_blocks=separate_context_blocks,
             style_relationships=style_relationships,
+            uid_prefixes=uid_prefixes,
         )
 
 
@@ -719,7 +831,13 @@ def _render_snapshot(
         raise _snapshot_error()
     if terminal_width < 1:
         raise _snapshot_error()
-    expected = {"schema_version", "context", "recursive", "items"}
+    expected = {
+        "schema_version",
+        "context",
+        "recursive",
+        "uid_prefixes",
+        "items",
+    }
     if set(snapshot) != expected:
         raise _snapshot_error()
     if snapshot.get("schema_version") != _LIST_SNAPSHOT_VERSION:
@@ -731,6 +849,7 @@ def _render_snapshot(
     name = _require_string(context, "name")
     recursive = _require_bool(snapshot, "recursive")
     items = _require_items(snapshot.get("items"))
+    uid_prefixes = _require_uid_prefixes(snapshot, _snapshot_display_uids(items))
 
     contexts, memories = _group_snapshot_items(items)
     lines = [
@@ -752,6 +871,7 @@ def _render_snapshot(
             terminal_width=terminal_width,
             separate_context_blocks=recursive,
             style_relationships=style_relationships,
+            uid_prefixes=uid_prefixes,
         )
     return "\n".join(lines) + "\n"
 
@@ -781,6 +901,18 @@ def _occurrence_count_text(memory_count: int, subcontext_count: int) -> str:
     )
 
 
+def _snapshot_source_digest(snapshot: dict[str, object]) -> str:
+    """Digest source state without treating a display-prefix change as content."""
+
+    return selection_digest(
+        {
+            key: value
+            for key, value in snapshot.items()
+            if key != "uid_prefixes"
+        }
+    )
+
+
 def _granted_list_receipt(
     snapshot: dict[str, object],
     *,
@@ -795,7 +927,7 @@ def _granted_list_receipt(
         "binding": binding.to_dict(),
         "recursive": _require_bool(snapshot, "recursive"),
         "with_ids": with_ids,
-        "snapshot_sha256": selection_digest(snapshot),
+        "snapshot_sha256": _snapshot_source_digest(snapshot),
     }
 
 
@@ -828,7 +960,12 @@ def _restore_granted_list_receipt(
         raise ClipboardError("The granted list receipt is invalid.")
     try:
         binding = GrantedUpdateTarget.from_dict(receipt.get("binding"))
-        access = revalidate_granted_context_binding(binding)
+        active_store = MemoryStore(create=False)
+        access = revalidate_granted_context_binding(
+            binding,
+            active_store=active_store,
+        )
+        readable_uids = _profile_readable_display_uids(active_store, access)
         granted_store = GrantedReadStore(access)
         context_names = tuple(granted_store.list_context_names())
         context = (
@@ -841,12 +978,13 @@ def _restore_granted_list_receipt(
             store=granted_store,
             context_names=context_names,
             recursive=recursive,
+            readable_uids=readable_uids,
         )
     except (FileNotFoundError, OSError, ProfileConfigError, ProfileError, ValueError) as error:
         raise ClipboardError(
             "The granted list source is no longer available under its exact grant."
         ) from error
-    if selection_digest(snapshot) != expected_digest:
+    if _snapshot_source_digest(snapshot) != expected_digest:
         raise ClipboardError(
             "The granted list source changed after it was copied."
         )
@@ -970,6 +1108,11 @@ def _emit_grant_notes(attachment_name: str) -> None:
 def render_index(ctx: Context, *, recursive: bool = False) -> None:
     """Print a compact index of a Context's visible navigation children."""
     store = MemoryStore(create=False)
+    readable_uids = tuple(
+        uid
+        for context in store.load_direct_context_graph_strict()
+        for uid in _context_record_display_uids(context)
+    )
     _emit_snapshot_text(
         _render_snapshot(
             _snapshot_context(
@@ -977,6 +1120,7 @@ def render_index(ctx: Context, *, recursive: bool = False) -> None:
                 store=store,
                 context_names=tuple(store.list_context_names()),
                 recursive=recursive,
+                readable_uids=readable_uids,
             ),
             memory_layout="hanging",
             terminal_width=shutil.get_terminal_size(fallback=(100, 24)).columns,
@@ -1153,6 +1297,7 @@ def cmd(
             current_name=current_context_name,
             required_permission="READ",
         )
+        readable_uids = _profile_readable_display_uids(active_store, access)
         store = freeze_readable_context_catalog(active_store, access)
         context_names = tuple(store.list_context_names())
         if (
@@ -1185,6 +1330,7 @@ def cmd(
         store=store,
         context_names=context_names,
         recursive=recursive,
+        readable_uids=readable_uids,
     )
     annotated_text = _render_snapshot(
         snapshot,

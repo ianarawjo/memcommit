@@ -2,8 +2,10 @@ LIVE COLOR PTY · 180 columns × 52 rows
 STORE · isolated disposable Profile                                                                                                                                                 
                                                                                                                                                                                     
 $ mem embed aaaaaaaa                                                                                                                                                                
-Error: Memory prefix 'aaaaaaaa' has multiple local matches (2): practice/3:aaaaaaaa-0000-0000-0000-000000000000; practice/4:aaaaaaaa-0000-0000-0000-000000000000. Use one qualified 
-CONTEXT:UID locator.                                                                                                                                                                
+Error: Memory prefix 'aaaaaaaa' has multiple local matches (2):                                                                                                                     
+  practice/3:aaaaaaaa-0000-0000-0000-000000000000 "source duplicate"                                                                                                                
+  practice/4:aaaaaaaa-0000-0000-0000-000000000000 "target duplicate"                                                                                                                
+To select one, rerun with its CONTEXT:UID value shown above.                                                                                                                        
                                                                                                                                                                                     
 BLOCKED · both owners displayed                                                                                                                                                     
 TARGET RECORD UNCHANGED · YES                                                                                                                                                       

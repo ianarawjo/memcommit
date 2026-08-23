@@ -19,6 +19,7 @@ from memcommit.edit_application import (
 )
 from memcommit.edit_runtime import MemoryStoreEditPort
 from memcommit.interfaces.console.terminal import is_interactive_terminal
+from memcommit.interfaces.console.text import safe_terminal_text
 from memcommit.interfaces.tui.operations.edit import choose_edit_setup
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
@@ -107,7 +108,11 @@ def cmd(
                 TypeError,
                 ValueError,
             ) as error:
-                typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
+                typer.secho(
+                    f"Error: {safe_terminal_text(str(error))}",
+                    fg=typer.colors.RED,
+                    err=True,
+                )
                 raise typer.Exit(1)
             if interactive_plan is None:
                 annotate_command_outcome("CANCELLED")
@@ -130,7 +135,11 @@ def cmd(
                 TypeError,
                 ValueError,
             ) as error:
-                typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
+                typer.secho(
+                    f"Error: {safe_terminal_text(str(error))}",
+                    fg=typer.colors.RED,
+                    err=True,
+                )
                 raise typer.Exit(1)
             _render_edit_result(result)
             return
@@ -178,7 +187,11 @@ def cmd(
             TypeError,
             ValueError,
         ) as error:
-            typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
+            typer.secho(
+                f"Error: {safe_terminal_text(str(error))}",
+                fg=typer.colors.RED,
+                err=True,
+            )
             raise typer.Exit(1)
         _render_edit_result(result)
         return
@@ -208,7 +221,11 @@ def cmd(
         edits = parse_edit_lines(read_text_input(input_source))
         changes = ops.edit_many(ctx, edits)
     except (KeyError, TypeError, ValueError) as error:
-        typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
+        typer.secho(
+            f"Error: {safe_terminal_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
         raise typer.Exit(1)
 
     if not changes:
@@ -243,7 +260,11 @@ def cmd(
                 ),
             )
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
-        typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
+        typer.secho(
+            f"Error: {safe_terminal_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
         raise typer.Exit(1)
 
     typer.secho(

@@ -168,9 +168,12 @@ def test_cli_reference_blocks_duplicate_bare_uid_and_lists_every_owner(
     result = runner.invoke(app, ["reference", shared_uid[:8]])
 
     assert result.exit_code == 1
-    assert f"branch/source:{shared_uid}" in result.stderr
-    assert f"branch/target:{shared_uid}" in result.stderr
-    assert "Use one qualified CONTEXT:UID locator" in result.stderr
+    assert f'  branch/source:{shared_uid} "source copy"' in result.stderr
+    assert f'  branch/target:{shared_uid} "target copy"' in result.stderr
+    assert (
+        "To select one, rerun with its CONTEXT:UID value shown above."
+        in result.stderr
+    )
     assert store.load_direct(target.name).to_dict() == before
 
 

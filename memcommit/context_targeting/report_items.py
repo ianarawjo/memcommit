@@ -120,7 +120,8 @@ def resolve_local_memory_report_target(
         )
         raise ValueError(
             f"Report selector {selector!r} has multiple local matches "
-            f"({len(matches)}): {choices}. Use one qualified CONTEXT:UID locator."
+            f"({len(matches)}): {choices}. To select one, rerun with its "
+            "CONTEXT:UID value shown above."
         )
     return matches[0]
 

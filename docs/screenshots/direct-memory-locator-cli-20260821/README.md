@@ -5,7 +5,7 @@ for Embed and Reference: an unqualified UID searches every ordinary local
 direct Context and succeeds only when unique; `CONTEXT:UID` fixes the owner;
 relative owner locators use the command-start current Context; omitted
 `--into` uses that current Context; ambiguity fails before publication and
-shows every canonical owner candidate.
+shows every canonical owner candidate with its exact quoted content.
 
 ## Reproduction frame
 
@@ -41,7 +41,7 @@ shows every canonical owner candidate.
 | `04-qualified-context-uid-embed.png` | `mem embed practice/3:11111111` | Canonical `CONTEXT:UID` selects only the explicit direct owner | One Memory Embed |
 | `05-relative-qualified-reference.png` | `mem reference ../3:22222222` | Relative owner resolves from captured current `practice/4` to `practice/3` | One immutable Memory Reference |
 | `06-read-only-target-verification.png` | `mem list` | Current Target contains exactly two live Embeds and two immutable References, all retaining `practice/3` Source identity | None |
-| `07-duplicate-uid-blocked-with-all-owners.png` | Separate ambiguity fixture; `mem embed aaaaaaaa` | Command exits `1`, displays both full `practice/3:UID` and `practice/4:UID` candidates, and requests a qualified locator | None; Target record digest and checkpoint count are verified unchanged |
+| `07-duplicate-uid-blocked-with-all-owners.png` | Separate ambiguity fixture; `mem embed aaaaaaaa` | Command exits `1`, displays both full `practice/3:UID` and `practice/4:UID` candidates with exact quoted content, and tells the person to rerun with the chosen displayed `CONTEXT:UID` value | None; Target record digest and checkpoint count are verified unchanged |
 
 The capture script asserts every command exit status and durable postcondition.
 The final ambiguity check deliberately includes a match in the current Context,

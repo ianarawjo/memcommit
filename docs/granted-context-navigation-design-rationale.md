@@ -94,6 +94,11 @@ revoked afterward. The participant Profile's private structured clipboard is
 different: for a granted list it stores only the exact grant binding, copy
 mode, recursive flag, and snapshot digests. `mem ls --paste` must re-resolve
 the same grant and unchanged authority projection before replaying the text.
+It also rebuilds the current Profile-readable UID-prefix namespace without
+opening QUERY-only routes; no unrelated readable UID catalog or authority
+Memory text is retained in the receipt. A changed prefix projection is caught
+by the system-clipboard rendering check, while the authority Source digest
+remains about Source state rather than unrelated display identities.
 It therefore fails after revocation, grant revision, Profile change, or source
 drift instead of retaining a hidden durable copy of authority Memories.
 

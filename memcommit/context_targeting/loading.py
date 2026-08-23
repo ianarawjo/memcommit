@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from typing import Protocol
 
 from memcommit.context import Context, Information, Memory
@@ -50,6 +51,18 @@ class DirectItemAmbiguityError(DirectItemLocatorError):
     """More than one ordinary local direct-item coordinate matched."""
 
 
+class DirectMemoryLocatorError(ValueError):
+    """One ordinary-local direct-Memory locator could not be resolved."""
+
+
+class DirectMemoryNotFoundError(DirectMemoryLocatorError):
+    """No ordinary local direct Memory matched the requested selector."""
+
+
+class DirectMemoryAmbiguityError(DirectMemoryLocatorError):
+    """More than one ordinary local direct-Memory coordinate matched."""
+
+
 def _direct_memory_matches(
     context: Context,
     selector: str,
@@ -69,26 +82,27 @@ def _resolved_direct_memory_target(
 ) -> DirectMemoryTarget:
     if not matches:
         if context_name is not None:
-            raise ValueError(
+            raise DirectMemoryNotFoundError(
                 f"No directly owned Memory with uid starting with {selector!r} "
                 f"exists in Context {context_name!r}."
             )
-        raise ValueError(
+        raise DirectMemoryNotFoundError(
             f"No directly owned Memory with uid starting with {selector!r} "
             "was found in any local Context."
         )
     if len(matches) > 1:
-        choices = "; ".join(
-            f"{context.name}:{memory.uid}"
+        choices = "\n".join(
+            f"  {context.name}:{memory.uid} "
+            f"{json.dumps(memory.content, ensure_ascii=False)}"
             for context, memory in sorted(
                 matches,
                 key=lambda match: (match[0].name.casefold(), match[1].uid),
             )
         )
-        raise ValueError(
+        raise DirectMemoryAmbiguityError(
             f"Memory prefix {selector!r} has multiple local matches "
-            f"({len(matches)}): {choices}. "
-            "Use one qualified CONTEXT:UID locator."
+            f"({len(matches)}):\n{choices}\n"
+            "To select one, rerun with its CONTEXT:UID value shown above."
         )
     context, memory = matches[0]
     return DirectMemoryTarget(context.name, memory.uid)
@@ -182,7 +196,8 @@ def _resolved_direct_item_target(
         )
         raise DirectItemAmbiguityError(
             f"Direct-item prefix {selector!r} has multiple local matches "
-            f"({len(matches)}): {choices}. Use one qualified CONTEXT:UID locator."
+            f"({len(matches)}): {choices}. To select one, rerun with its "
+            "CONTEXT:UID value shown above."
         )
     context, item = matches[0]
     return DirectItemTarget(context.name, item.uid)

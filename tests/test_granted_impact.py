@@ -30,6 +30,7 @@ from memcommit.commands.endpoint_setup_flows import (
 )
 from memcommit.commands.meld_setup import MeldSetupReceipt
 from memcommit.context import AutoCheckpoint, Context, Memory
+from memcommit.context_targeting.readable_catalog import ReadableContextCatalog
 from memcommit.derived_policy import analysis_retention, authorize_analysis_save
 from memcommit.granted_comparison_store import (
     granted_comparison_analysis_path,
@@ -1177,6 +1178,7 @@ def test_granted_list_copy_stages_no_source_text_and_paste_requires_live_grant(
     assert record["schema_version"] == 2
     assert record["plain_text"] is None
     assert record["selection"]["kind"] == "GRANTED_LIST_RECEIPT"
+    assert "uid_prefixes" not in record["selection"]
     assert "west lobby" not in serialized
     assert "open on weekdays" not in serialized
 
@@ -1189,6 +1191,59 @@ def test_granted_list_copy_stages_no_source_text_and_paste_requires_live_grant(
     blocked = runner.invoke(app, ["ls", "--paste"])
     assert blocked.exit_code == 1
     assert "no longer available under its exact grant" in blocked.stderr
+
+
+def test_list_uid_prefixes_span_local_and_all_readable_granted_contexts(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, authority, source, wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+        parent_permissions=("READ",),
+    )
+    local = active.load_direct(source.name)
+    local.add(
+        Memory(
+            uid="deadbeef-1111-1111-1111-111111111111",
+            content="Visible local collision.",
+        )
+    )
+    active.save(local)
+    granted = authority.load_direct(wiki.name)
+    granted.add(
+        Memory(
+            uid="deadbeef-2222-2222-2222-222222222222",
+            content="Visible granted collision.",
+        )
+    )
+    authority.save(granted)
+    opened_public_names: list[str] = []
+    original_load_direct = ReadableContextCatalog.load_direct
+
+    def record_load_direct(self, public_name):
+        opened_public_names.append(public_name)
+        return original_load_direct(self, public_name)
+
+    monkeypatch.setattr(
+        ReadableContextCatalog,
+        "load_direct",
+        record_load_direct,
+    )
+
+    local_listed = runner.invoke(app, ["ls", source.name])
+    granted_listed = runner.invoke(app, ["ls", wiki.name])
+
+    assert local_listed.exit_code == 0, local_listed.output
+    assert "[memory deadbeef-1] Visible local collision." in local_listed.output
+    assert "Visible granted collision." not in local_listed.output
+    assert granted_listed.exit_code == 0, granted_listed.output
+    assert "[memory deadbeef-2] Visible granted collision." in granted_listed.output
+    assert "Visible local collision." not in granted_listed.output
+    assert DETAIL_SECRET not in local_listed.output + granted_listed.output
+    assert wiki.name + "/construction-details" not in opened_public_names
 
 
 def test_compare_reads_recursive_grant_excludes_query_override_and_saves_nothing(

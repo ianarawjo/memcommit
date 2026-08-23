@@ -284,8 +284,11 @@ def main() -> None:
     assert "Referenced snapshot [22222222] from 'practice/3'" in plain_05
     assert "Context: practice/4" in plain_06
     assert "2 live Embeds · 2 immutable References" in plain_06
-    assert f"practice/3:{DUPLICATE_UID}" in plain_07
-    assert f"practice/4:{DUPLICATE_UID}" in plain_07
+    assert f'practice/3:{DUPLICATE_UID} "source duplicate"' in plain_07
+    assert f'practice/4:{DUPLICATE_UID} "target duplicate"' in plain_07
+    assert (
+        "To select one, rerun with its CONTEXT:UID value shown above." in plain_07
+    )
     assert "TARGET RECORD UNCHANGED · YES" in plain_07
     assert "CHECKPOINT COUNT UNCHANGED · YES" in plain_07
     assert "NO_COLOR" not in combined_plain

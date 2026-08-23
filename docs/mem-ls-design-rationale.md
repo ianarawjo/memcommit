@@ -196,7 +196,38 @@ Therefore, `mem list` uses the Memory's content as its human-readable name:
 ```
 
 The short UID remains visible because it is the selector used by commands such
-as `mem show`, `mem remove`, and `mem reference`.
+as `mem show`, `mem remove`, and `mem reference`. At command start, List freezes
+a separate Profile-wide identity catalog containing every Context and direct
+item UID in ordinary local and effectively READ-granted Contexts. Self-contained
+Context snapshot descendants and visible MemoryRef Source UIDs participate as
+well. QUERY-only routes are excluded: a
+compact display requirement never authorizes their concealed Source content to
+be opened. Every annotated rendering starts at eight characters. Only prefixes
+that collide in that readable catalog grow one character at a time until they
+differ, so `deadbeef-1111...` and
+`deadbeef-2222...` appear as `deadbeef-1` and `deadbeef-2`, while unrelated
+eight-character prefixes stay compact. Relationship-object UIDs and their
+displayed Source Memory UIDs participate in the same screen-wide calculation.
+
+List deliberately opens each readable Context's direct record once to freeze
+that catalog. It walks content already retained inside an immutable Context
+snapshot, but does not resolve live embedded Context pointers or open checkpoint
+history. The shared projector sorts the distinct UIDs and compares
+each value only with its adjacent prefix competitors, avoiding a quadratic
+all-pairs scan after those reads. This makes a displayed prefix collision-safe
+against an unlisted readable Context as well as the visible list. Distinct
+owners that preserve the exact same full UID still require `CONTEXT:UID`, since
+no longer UID prefix can separate them; command resolution continues to fail
+closed and reports those full owner coordinates.
+
+The ordinary structured clipboard stores only the chosen prefix for each UID
+already visible in its frozen snapshot, not the unrelated readable UIDs that
+caused it to grow. This preserves exact `--copy --with-ids` and later `--paste`
+text even if an unlisted Context changes. A granted copy retains no authority
+Memory text or UID catalog in the participant receipt: Paste revalidates the
+grant, reloads the current Profile-readable UID namespace, and then verifies
+the system clipboard rendering. A relevant prefix-namespace drift therefore
+fails closed instead of silently replaying a differently identified row.
 
 Normal terminal output begins the Memory content beside its selector. Long
 content is wrapped to the current terminal width, and every continuation row
@@ -263,7 +294,7 @@ produces exactly the same text. A dangling relationship has no content to use
 as a name, so the same leading identities are followed by `DANGLING`.
 
 The Source identity is also an executable owner locator for
-`mem edit source-context#abcdef12 CONTENT`; the relationship row's first UID
+`mem edit source-context:abcdef12 CONTENT`; the relationship row's first UID
 remains read-only. Detailed relationship metadata remains the responsibility
 of `mem show <relationship-uid>`.
 
@@ -420,8 +451,10 @@ metadata and its frozen resolved display content, embedded Context pointer
 identity, QueryContextRef routing metadata, and canonical object order.
 Namespace-derived rows use a distinct `namespace_context` kind so a frozen
 navigation edge is never later mistaken for a persisted embed. Snapshot schema
-version 2 introduces that kind; incompatible older staged list records fail
-closed. Replay also verifies that each typed namespace row is exactly one
+version 2 introduced that kind; version 3 adds the visible-only UID-prefix
+projection derived from the command's complete readable identity catalog.
+Incompatible older staged list records fail closed. Replay also verifies that
+each typed namespace row is exactly one
 segment below its containing Context, so a validly rehashed malformed stage
 cannot move an unrelated Context under that parent. Rendering reapplies the
 Context-first presentation rule. A

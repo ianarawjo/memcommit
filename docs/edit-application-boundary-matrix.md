@@ -35,7 +35,10 @@ in the current Context; a current match never hides another owner.
 
 Profile search ignores MemoryRef records and embedded Context bodies. It
 deduplicates nothing across owners: copied branch identities are deliberately
-ambiguous and the error prints canonical `CONTEXT:FULL_UID` choices. Granted
+ambiguous and the error prints each canonical `CONTEXT:FULL_UID` choice with
+its JSON-quoted exact content, followed by an instruction to rerun with the
+chosen displayed value. This recognition aid remains limited to the ordinary
+local direct-Memory catalog already searched by the command. Granted
 mutation remains explicitly named with a public `CONTEXT:UID` or `--context`
 instead of silently enumerating authority content. Freeze then records the
 canonical Context UID, record digest, full Memory UID, and original content.

@@ -16,7 +16,8 @@ from typer.testing import CliRunner
 import memcommit.clipboard as clipboard
 from memcommit.cli import app
 from memcommit.clipboard import ClipboardError, ClipboardPayload
-from memcommit.context import QueryContextRef
+from memcommit.context import Context, Memory, QueryContextRef
+from memcommit.context_snapshot import ContextSnapshotRef, context_snapshot_digest
 from memcommit.interfaces.console.theme import (
     SemanticColorRole,
     semantic_color_rgb,
@@ -97,6 +98,108 @@ def test_ls_copy_uses_clean_text_while_preserving_output_and_full_objects(
         }
     ]
     assert os.stat(stage_path).st_mode & 0o777 == 0o600
+
+
+def test_list_uses_profile_readable_uid_prefixes_beyond_the_visible_snapshot(
+    isolated_store,
+    fake_system_clipboard,
+):
+    store = MemoryStore()
+    visible = Context(uid="visible-context-uid", name="notes")
+    visible_collision = Memory(
+        uid="deadbeef-1111-1111-1111-111111111111",
+        content="Visible colliding Memory.",
+    )
+    hidden = Context(uid="hidden-context-uid", name="archive")
+    hidden_collision = Memory(
+        uid="deadbeef-2222-2222-2222-222222222222",
+        content="Unlisted colliding Memory.",
+    )
+    unique = Memory(
+        uid="cafebabe-3333-3333-3333-333333333333",
+        content="Already unique Memory.",
+    )
+    visible.add(visible_collision)
+    visible.add(unique)
+    hidden.add(hidden_collision)
+    store.save(visible)
+    store.save(hidden)
+    store.set_current(visible.name)
+
+    copied = invoke("list", "--copy", "--with-ids")
+
+    assert copied.exit_code == 0, copied.output
+    assert "[memory deadbeef-1] Visible colliding Memory." in copied.stdout
+    assert "Unlisted colliding Memory." not in copied.stdout
+    assert "[memory cafebabe] Already unique Memory." in copied.stdout
+    assert "[memory deadbeef]" not in copied.stdout
+    assert fake_system_clipboard["text"] == copied.stdout
+    stage = json.loads(
+        (Path(isolated_store) / "clipboard.json").read_text(encoding="utf-8")
+    )
+    assert stage["selection"]["uid_prefixes"] == {
+        visible_collision.uid: "deadbeef-1",
+        unique.uid: "cafebabe",
+    }
+    assert hidden_collision.uid not in json.dumps(stage)
+    store.delete(hidden.name)
+
+    pasted = invoke("list", "--paste")
+
+    assert pasted.exit_code == 0, pasted.output
+    assert "[memory deadbeef-1] Visible colliding Memory." in pasted.stdout
+
+
+def test_list_uid_prefixes_include_retained_snapshot_descendants(isolated_store):
+    store = MemoryStore()
+    visible = Context(uid="visible-context-uid", name="notes")
+    visible.add(
+        Memory(
+            uid="deadbeef-1111-1111-1111-111111111111",
+            content="Visible colliding Memory.",
+        )
+    )
+    retained_record = {
+        "uid": "retained-source-context-uid",
+        "name": "retired/source",
+        "memories": {
+            "deadbeef-2222-2222-2222-222222222222": {
+                "type": "memory",
+                "uid": "deadbeef-2222-2222-2222-222222222222",
+                "content": "Retained colliding Memory.",
+            }
+        },
+        "order": ["deadbeef-2222-2222-2222-222222222222"],
+    }
+    package = {
+        "schema_version": 1,
+        "root": {
+            "uid": retained_record["uid"],
+            "name": retained_record["name"],
+        },
+        "recursive": False,
+        "lexical_context_names": [retained_record["name"]],
+        "contexts": [retained_record],
+    }
+    archive = Context(uid="archive-context-uid", name="archive")
+    archive.add(
+        ContextSnapshotRef(
+            uid="snapshot-reference-uid",
+            target_context_uid=retained_record["uid"],
+            target_context_name=retained_record["name"],
+            snapshot_package=package,
+            snapshot_content_sha256=context_snapshot_digest(package),
+        )
+    )
+    store.save(visible)
+    store.save(archive)
+    store.set_current(visible.name)
+
+    listed = invoke("list")
+
+    assert listed.exit_code == 0, listed.stderr or listed.output
+    assert "[memory deadbeef-1] Visible colliding Memory." in listed.stdout
+    assert "Retained colliding Memory." not in listed.stdout
 
 
 def test_list_copy_with_ids_uses_inline_clipboard_and_hanging_stdout(
@@ -294,7 +397,7 @@ def test_copy_freezes_a_typed_namespace_child_for_later_paste(
     record = json.loads(
         (Path(isolated_store) / "clipboard.json").read_text(encoding="utf-8")
     )
-    assert record["selection"]["schema_version"] == 2
+    assert record["selection"]["schema_version"] == 3
     assert record["selection"]["items"][0] == {
         "kind": "namespace_context",
         "uid": child.uid,

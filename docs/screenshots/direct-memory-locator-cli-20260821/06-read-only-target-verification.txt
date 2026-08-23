@@ -5,9 +5,9 @@ $ mem list
 Context: practice/4                                                                                                                                                                 
   4 items                                                                                                                                                                           
                                                                                                                                                                                     
-  [embedded 85ec346b] [practice/3][memory ca562047] a is apple  READ ONLY                                                                                                           
-  [reference 3d6d5bfb] [practice/3][memory dbdb4436] b is banana  READ ONLY                                                                                                         
-  [embedded 12dba268] [practice/3][memory 11111111] c is cherry  READ ONLY                                                                                                          
-  [reference 939604fe] [practice/3][memory 22222222] d is date  READ ONLY                                                                                                           
+  [embedded ed822fee] [practice/3][memory ca562047] a is apple  READ ONLY                                                                                                           
+  [reference 17c93097] [practice/3][memory dbdb4436] b is banana  READ ONLY                                                                                                         
+  [embedded 94d2f905] [practice/3][memory 11111111] c is cherry  READ ONLY                                                                                                          
+  [reference 86d49da5] [practice/3][memory 22222222] d is date  READ ONLY                                                                                                           
                                                                                                                                                                                     
 READ-ONLY VERIFIED · 2 live Embeds · 2 immutable References

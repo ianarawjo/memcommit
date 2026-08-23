@@ -2,6 +2,6 @@ LIVE COLOR PTY · 180 columns × 52 rows
 STORE · isolated disposable Profile                                                                                                                                                 
                                                                                                                                                                                     
 $ mem embed ca562047                                                                                                                                                                
-Embedded Memory [ca562047] from 'practice/3' as [85ec346b] in 'practice/4' as the only direct item.                                                                                 
+Embedded Memory [ca562047] from 'practice/3' as [ed822fee] in 'practice/4' as the only direct item.                                                                                 
                                                                                                                                                                                     
 VERIFIED · bare UID found practice/3 · omitted --into used practice/4
