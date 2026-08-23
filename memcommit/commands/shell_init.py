@@ -14,7 +14,8 @@ function mem {
   emulate -L zsh
   if [[ -o interactive && $ZSH_SUBSHELL -eq 0
         && -t 0 && -t 1 && -t 2
-        && $# -ge 1 && $1 == init-study ]]; then
+        && $# -ge 1
+        && ( $1 == init-study || $1 == initstudy ) ]]; then
     local _mem_arg _mem_init_study_help=0
     for _mem_arg in "$@"; do
       if [[ $_mem_arg == --help ]]; then

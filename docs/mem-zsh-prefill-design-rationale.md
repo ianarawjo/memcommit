@@ -20,9 +20,9 @@ are consumed before the picker closes. The user can replace placeholders or add
 options and separately decides whether to execute the resulting command.
 
 The same parent-shell boundary also prevents accidental cross-participant
-history disclosure. On an interactive top-level invocation of
-`mem init-study`, the wrapper pushes the existing zsh history and switches to
-an empty, non-persisted list before the Study command starts. Up-arrow recall
+history disclosure. On an interactive top-level invocation of canonical
+`mem init-study` or its supported `mem initstudy` alias, the wrapper pushes the
+existing zsh history and switches to an empty, non-persisted list before the Study command starts. Up-arrow recall
 therefore contains only commands subsequently entered by the current
 participant. The previous list is not erased and can be deliberately restored
 with zsh's `fc -P`; the protection addresses accidental recall rather than a
@@ -32,9 +32,9 @@ hostile user with access to the same operating-system account.
 
 The generated zsh function intercepts interactive `mem help` with no
 additional arguments. It also performs one shell-owned action immediately
-before an interactive top-level `mem init-study`: zsh's `fc -p` pushes the
-prior list and activates an empty history. `mem init-study --help`, nested
-shells, and non-interactive invocations do not change history. Every CLI
+before an interactive top-level `mem init-study` or `mem initstudy`: zsh's
+`fc -p` pushes the prior list and activates an empty history. The `--help` form
+of either spelling, nested shells, and non-interactive invocations do not change history. Every CLI
 invocation still delegates to the installed executable with
 `command mem "$@"`.
 

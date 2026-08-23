@@ -171,7 +171,11 @@ mem status
 
 
 @pytest.mark.skipif(shutil.which("zsh") is None, reason="zsh is unavailable")
-def test_init_study_pushes_prior_history_without_deleting_it(tmp_path):
+@pytest.mark.parametrize("entered_command", ("init-study", "initstudy"))
+def test_init_study_pushes_prior_history_without_deleting_it(
+    tmp_path,
+    entered_command,
+):
     executable = tmp_path / "mem"
     executable.write_text(
         """#!/bin/zsh
@@ -183,10 +187,10 @@ print -r -- "delegated:$*"
     environment = os.environ.copy()
     environment["PATH"] = f"{tmp_path}{os.pathsep}{environment['PATH']}"
     environment["MEMCOMMIT_ZSH_INIT"] = render_zsh_init()
-    script = """\
+    script = f"""\
 eval "$MEMCOMMIT_ZSH_INIT"
 print -s -- 'mem prior-participant-secret'
-mem init-study participant-run
+mem {entered_command} participant-run
 print -s -- 'mem participant-status'
 print -r -- 'CURRENT-BEGIN'
 fc -l -10
@@ -227,14 +231,15 @@ print -r -- 'ORIGINAL-END'
     current = output.split("CURRENT-BEGIN\n", 1)[1].split("CURRENT-END\n", 1)[0]
     original = output.split("ORIGINAL-BEGIN\n", 1)[1].split("ORIGINAL-END\n", 1)[0]
     assert returncode == 0, output
-    assert "delegated:init-study participant-run" in output
+    assert f"delegated:{entered_command} participant-run" in output
     assert "mem participant-status" in current
     assert "prior-participant-secret" not in current
     assert "mem prior-participant-secret" in original
 
 
 @pytest.mark.skipif(shutil.which("zsh") is None, reason="zsh is unavailable")
-def test_init_study_help_does_not_push_shell_history(tmp_path):
+@pytest.mark.parametrize("entered_command", ("init-study", "initstudy"))
+def test_init_study_help_does_not_push_shell_history(tmp_path, entered_command):
     executable = tmp_path / "mem"
     executable.write_text(
         """#!/bin/zsh
@@ -246,10 +251,10 @@ print -r -- "delegated:$*"
     environment = os.environ.copy()
     environment["PATH"] = f"{tmp_path}{os.pathsep}{environment['PATH']}"
     environment["MEMCOMMIT_ZSH_INIT"] = render_zsh_init()
-    script = """\
+    script = f"""\
 eval "$MEMCOMMIT_ZSH_INIT"
 print -s -- 'mem retained-before-help'
-mem init-study --help
+mem {entered_command} --help
 fc -l -10
 """
 
@@ -262,5 +267,5 @@ fc -l -10
     )
 
     assert checked.returncode == 0, checked.stderr
-    assert "delegated:init-study --help" in checked.stdout
+    assert f"delegated:{entered_command} --help" in checked.stdout
     assert "mem retained-before-help" in checked.stdout
