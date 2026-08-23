@@ -6415,6 +6415,7 @@ class MemoryStore:
         description: Optional[str] = None,
         auto: bool = False,
         expected_context_catalog: Iterable[str] | None = None,
+        checkpoint_uids: Iterable[str] | None = None,
     ) -> tuple[Checkpoint, ...]:
         """Append one exception-atomic checkpoint set to existing Contexts.
 
@@ -6437,6 +6438,20 @@ class MemoryStore:
         names = tuple(context.name for context, _expected_digest in records)
         if len(names) != len(set(names)):
             raise ValueError("Context checkpoint batch contains duplicate names.")
+        planned_uids = (
+            None if checkpoint_uids is None else tuple(checkpoint_uids)
+        )
+        if planned_uids is not None:
+            try:
+                canonical_uids = tuple(str(uuid.UUID(value)) for value in planned_uids)
+            except (AttributeError, TypeError, ValueError) as error:
+                raise ValueError("Context checkpoint batch uid plan is invalid.") from error
+            if (
+                len(planned_uids) != len(records)
+                or len(planned_uids) != len(set(planned_uids))
+                or planned_uids != canonical_uids
+            ):
+                raise ValueError("Context checkpoint batch uid plan is invalid.")
         for name in names:
             validate_context_name(name)
         expected_catalog = (
@@ -6486,7 +6501,7 @@ class MemoryStore:
 
                     created: list[tuple[str, Checkpoint]] = []
                     try:
-                        for context, _expected_digest in records:
+                        for index, (context, _expected_digest) in enumerate(records):
                             checkpoint = self._checkpoint_locked(
                                 context,
                                 message=message,
@@ -6494,6 +6509,11 @@ class MemoryStore:
                                 args=args,
                                 description=description,
                                 auto=auto,
+                                checkpoint_uid=(
+                                    None
+                                    if planned_uids is None
+                                    else planned_uids[index]
+                                ),
                             )
                             created.append((context.name, checkpoint))
                     except Exception:
@@ -6523,11 +6543,21 @@ class MemoryStore:
         description: Optional[str] = None,
         auto: bool = False,
         command_before: dict[str, object] | None = None,
+        checkpoint_uid: str | None = None,
     ) -> Checkpoint:
         """Write one checkpoint while the caller holds the Context lock."""
         self._assert_profile_write_allowed()
+        if checkpoint_uid is None:
+            checkpoint_uid = str(uuid.uuid4())
+        else:
+            try:
+                canonical_uid = str(uuid.UUID(checkpoint_uid))
+            except (AttributeError, TypeError, ValueError) as error:
+                raise ValueError("Checkpoint uid plan is invalid.") from error
+            if checkpoint_uid != canonical_uid:
+                raise ValueError("Checkpoint uid plan is invalid.")
         cp = Checkpoint(
-            uid=str(uuid.uuid4()),
+            uid=checkpoint_uid,
             message=message,
             timestamp=datetime.now(),
             snapshot=ctx.to_dict(),
@@ -6545,10 +6575,9 @@ class MemoryStore:
         cp_dir = self._checkpoints_dir(ctx.name)
         cp_dir.mkdir(parents=True, exist_ok=True)
         cp_file = cp_dir / f"{ts}-{slug}-{cp.uid[:8]}.json"
-        if cp_file.is_symlink():
+        if cp_file.exists() or cp_file.is_symlink():
             raise ValueError(
-                f"Refusing to write checkpoint for '{ctx.name}' through a "
-                "symbolic link."
+                f"Refusing to replace an existing checkpoint for '{ctx.name}'."
             )
         checkpoint_record = {
             "uid": cp.uid,
@@ -9066,7 +9095,161 @@ class MemoryStore:
                     expected_context_uid=expected_context_uid,
                     expected_context_digest=expected_context_digest,
                     expected_history_digest=expected_history_digest,
+                    revert_unit=None,
                 )
+
+    def revert_checkpoint_unit(
+        self,
+        unit,
+        keep_history: bool = True,
+    ):
+        """Atomically restore every physical member of one checkpoint set.
+
+        The globally resolved unit is freshness-bound, but selection happens
+        before the write locks are held.  Revalidate every member before the
+        first publication, retain exact Context/history bytes for the outer
+        exception rollback, and record one shared Revert command identity so
+        Undo/Redo cannot split the recovery unit later.
+        """
+
+        from memcommit.checkpoint_catalog import (
+            CheckpointUnitRevertMember,
+            CheckpointUnitRevertResult,
+            ResolvedCheckpointUnit,
+        )
+
+        if not isinstance(unit, ResolvedCheckpointUnit) or not unit.is_recursive_set:
+            raise TypeError("Expected one resolved recursive checkpoint unit.")
+        if not unit.members:
+            raise ValueError("Recursive checkpoint unit has no members.")
+        names = tuple(member.context_name for member in unit.members)
+        if len(names) != len(set(names)):
+            raise ValueError("Recursive checkpoint unit repeats a Context owner.")
+
+        receipt_uid = str(uuid.uuid4())
+        command_contexts = [
+            {"uid": member.context_uid, "name": member.context_name}
+            for member in unit.members
+        ]
+        revert_unit = {
+            "version": 1,
+            "receipt_uid": receipt_uid,
+            "checkpoint_unit_uid": unit.canonical_uid,
+            "checkpoint_set_uid": unit.checkpoint_set_uid,
+            "root_context_uid": unit.root_context_uid,
+            "root_context_name": unit.root_context_name,
+            "contexts": command_contexts,
+        }
+
+        with self._command_write_lock():
+            self._assert_profile_write_allowed()
+            with self._context_graph_lock(exclusive=False):
+                with self._context_write_locks(names):
+                    original_context_bytes: dict[str, bytes] = {}
+                    original_checkpoint_bytes: dict[str, dict[str, bytes]] = {}
+                    for member in unit.members:
+                        current = self.load_direct(member.context_name)
+                        entries = self.list_checkpoints(member.context_name)
+                        if (
+                            current.uid != member.context_uid
+                            or context_record_digest(current)
+                            != member.expected_context_digest
+                            or checkpoint_history_digest(entries)
+                            != member.expected_history_digest
+                        ):
+                            raise ConcurrentContextUpdateError(
+                                "A recursive checkpoint member changed after "
+                                "the recovery unit was selected."
+                            )
+                        matches = [
+                            entry
+                            for entry in entries
+                            if entry.get("uid") == member.checkpoint_uid
+                        ]
+                        if len(matches) != 1 or matches[0] != member.checkpoint:
+                            raise ConcurrentContextUpdateError(
+                                "A recursive checkpoint member changed after "
+                                "the recovery unit was selected."
+                            )
+                        context_path = self._context_file(member.context_name)
+                        checkpoint_dir = self._checkpoints_dir(member.context_name)
+                        checkpoint_paths = tuple(sorted(checkpoint_dir.glob("*.json")))
+                        if any(
+                            path.is_symlink() or not path.is_file()
+                            for path in checkpoint_paths
+                        ):
+                            raise ValueError(
+                                f"Checkpoint history for '{member.context_name}' "
+                                "is unsafe."
+                            )
+                        original_context_bytes[member.context_name] = (
+                            context_path.read_bytes()
+                        )
+                        original_checkpoint_bytes[member.context_name] = {
+                            path.name: path.read_bytes() for path in checkpoint_paths
+                        }
+
+                    published: list[CheckpointUnitRevertMember] = []
+                    try:
+                        for member in unit.members:
+                            recovery, target = self._revert_locked(
+                                member.context_name,
+                                member.checkpoint_uid,
+                                keep_history=keep_history,
+                                expected_context_uid=member.context_uid,
+                                expected_context_digest=(
+                                    member.expected_context_digest
+                                ),
+                                expected_history_digest=(
+                                    member.expected_history_digest
+                                ),
+                                revert_unit=revert_unit,
+                            )
+                            published.append(
+                                CheckpointUnitRevertMember(
+                                    context_name=member.context_name,
+                                    target=target,
+                                    recovery=recovery,
+                                )
+                            )
+                    except Exception as error:
+                        rollback_error: Exception | None = None
+                        for member in unit.members:
+                            name = member.context_name
+                            checkpoint_dir = self._checkpoints_dir(name)
+                            originals = original_checkpoint_bytes[name]
+                            try:
+                                for path in checkpoint_dir.glob("*.json"):
+                                    if path.is_symlink() or not path.is_file():
+                                        raise ValueError(
+                                            f"Checkpoint rollback for '{name}' "
+                                            "encountered an unsafe path."
+                                        )
+                                    if path.name not in originals:
+                                        path.unlink()
+                                for filename, content in originals.items():
+                                    _write_bytes_atomic(
+                                        checkpoint_dir / filename,
+                                        content,
+                                    )
+                                _write_bytes_atomic(
+                                    self._context_file(name),
+                                    original_context_bytes[name],
+                                )
+                            except Exception as candidate:
+                                rollback_error = rollback_error or candidate
+                        if rollback_error is not None:
+                            raise RuntimeError(
+                                "Recursive Revert failed and its complete "
+                                "Context/history unit could not be restored."
+                            ) from rollback_error
+                        raise error
+
+        return CheckpointUnitRevertResult(
+            unit=unit,
+            receipt_uid=receipt_uid,
+            members=tuple(published),
+        )
 
     def _revert_locked(
         self,
@@ -9077,6 +9260,7 @@ class MemoryStore:
         expected_context_uid: str | None,
         expected_context_digest: str | None,
         expected_history_digest: str | None,
+        revert_unit: dict[str, object] | None,
     ) -> tuple[Checkpoint, Checkpoint]:
         """Revert context to a checkpoint. Returns (pre_revert_cp, target_cp).
 
@@ -9174,17 +9358,24 @@ class MemoryStore:
             thin_entries.append(entry)
 
         message = f"Pre-revert to [{target_data['uid'][:8]}] — revert here to undo"
+        pre_args: dict[str, object] = {
+            "target_uid": target_data["uid"],
+            "keep_history": keep_history,
+            "log_snapshot": thin_entries,
+        }
+        if revert_unit is not None:
+            pre_args["revert_unit"] = copy.deepcopy(revert_unit)
+            contexts = revert_unit.get("contexts")
+            if not isinstance(contexts, list):
+                raise ValueError("Recursive Revert membership is invalid.")
+            pre_args["command_contexts"] = copy.deepcopy(contexts)
         pre_cp = Checkpoint(
             uid=str(uuid.uuid4()),
             message=message,
             timestamp=datetime.now(),
             snapshot=ctx.to_dict(),
             command="revert",
-            args={
-                "target_uid": target_data["uid"],
-                "keep_history": keep_history,
-                "log_snapshot": thin_entries,
-            },
+            args=pre_args,
             description=message,
             auto=True,
         )

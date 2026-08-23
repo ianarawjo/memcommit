@@ -1,0 +1,7 @@
+52 180
+READ-ONLY GROUP UNDO VERIFICATION
+PTY 180 52
+Current Context: demo/recovery
+demo/recovery: ['root baseline', 'root newer']
+demo/recovery/child: ['child baseline', 'child newer']
+BOTH CONTEXTS NEWER: True

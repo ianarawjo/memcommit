@@ -217,6 +217,7 @@
       "docs/resolution-lifecycle-design-rationale.md"
     ],
     "revert": [
+      "docs/checkpoint-targeting-design-rationale.md",
       "docs/checkpoint-revision-diff-design-rationale.md",
       "docs/mem-history-search-design-rationale.md"
     ],

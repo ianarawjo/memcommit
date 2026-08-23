@@ -1,0 +1,3 @@
+52 180                                                                                                                                                                              
+PTY 180 52                                                                                                                                                                          
+Undid command: mem revert 3a76ef2e-c348-4152-99d3-226d25de23a3 --keep · Affected Contexts: 2 · Affected Memories: 2 · + 2 added

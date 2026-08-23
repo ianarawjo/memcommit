@@ -14,6 +14,14 @@ The command also had no lexical-subtree form. Repeating one direct checkpoint
 per descendant would expose partial history if a later append failed and would
 not retain which Contexts belonged to the originally selected scope.
 
+The first recursive implementation did retain that membership, but printed a
+new receipt-only set UID instead of any physical checkpoint UID. Revert searched
+only the selected Context's physical checkpoint UIDs, so the successful receipt
+could not be reused: a displayed set such as `777af68d` failed while separately
+rediscovered member checkpoint UIDs worked. Treating that set UID as a second
+user-visible selector kind would duplicate the Profile-wide checkpoint lookup
+contract and leave History, Diff, and Revert with different identity rules.
+
 ## Operand contract
 
 Checkpoint preserves the established one-positional message form while adding
@@ -66,11 +74,49 @@ membership and every Context before the first checkpoint append. An exception
 during a later append removes every provisional checkpoint already written by
 the batch. No Context bytes are rewritten.
 
-Each recursive checkpoint remains manual (`auto: false`) and records the same
-version-1 `checkpoint_set` metadata: one set UID, canonical root, recursive
-scope, and complete Context UID/name membership. This retained membership
-supports inspection and a future grouped restore contract without making the
-no-content-change checkpoint set enter the Undo/Redo mutation stack.
+Each recursive checkpoint remains manual (`auto: false`). Before publication,
+Checkpoint plans one physical checkpoint UID per member. Version-2
+`checkpoint_set` metadata records the root Context identity, recursive scope,
+and every Context UID/name/checkpoint-UID mapping. The root's physical
+checkpoint UID is also the canonical recovery-unit UID; the command does not
+mint a receipt-only identity beside the global checkpoint catalog. The success
+receipt prints that real UID and a directly executable Revert command.
+
+The no-content-change checkpoint set still does not enter the Undo/Redo mutation
+stack. Its shared command identity is nevertheless visible to common History
+and location projections, so one recursive command is not counted as unrelated
+per-Context checkpoint commands.
+
+## Global resolution and grouped Revert
+
+One command-local `CheckpointCatalog` freezes every ordinary local Context and
+its retained history. A UID-like explicit Revert selector first prefers the
+command-start current Context so inherited Branch behavior remains compatible;
+if that location has no match, it resolves the unique directly owned checkpoint
+across the Profile. An explicit `--context` remains an exact location constraint.
+Natural-language selection stays scoped to its selected Context.
+
+The catalog returns one typed recovery unit rather than making Revert inspect
+raw `checkpoint_set` arguments. An ordinary checkpoint produces one member. A
+version-2 recursive member UID produces the complete manifest, including when a
+child member UID was selected. Version-1 receipt-only set UIDs remain read-only
+catalog aliases: the catalog locates the corresponding member records, validates
+their identical retained membership, and canonicalizes the unit to the root's
+real physical checkpoint UID. New receipts never create that legacy alias form.
+
+Revert freezes every affected Context in its exact-command review and renders
+each Context/member checkpoint in the Viewer before Apply. Apply holds the
+global command-order lock, shared Context-graph lock, and all member write locks
+in deterministic order. It revalidates every current Context digest, history
+digest, physical checkpoint, and manifest before the first write. Each member
+retains the ordinary pre-Revert recovery checkpoint and `--keep` versus
+`--discard-newer` behavior. An outer byte-for-byte Context/history rollback
+restores all previously written members if any later member fails.
+
+All pre-Revert checkpoints share one typed Revert receipt and complete
+`command_contexts` membership. Global command history therefore groups the
+result as one command unit: one `mem undo` or `mem redo` restores every member
+rather than consuming the Revert one Context at a time.
 
 ## Alternatives and limitations
 
@@ -89,9 +135,11 @@ records or fabricating automatic mutation checkpoints would misstate the
 operation.
 
 Exception rollback is not a durable crash journal. A machine failure can still
-interrupt several filesystem replacements. Recursive checkpointing also does
-not currently make `mem revert` restore the complete set at once: each member
-is an independently selectable recovery point, and Revert remains exact to one
-Context. The common set metadata is retained for a later explicitly reviewed
-multi-Context restore design; the current command receipt promises an atomic
-history append, not an atomic future subtree restoration.
+interrupt several filesystem replacements. Grouped Revert restores the recorded
+member Contexts only: it does not delete descendants created after the
+checkpoint or recreate a member whose Context identity was deleted. A missing,
+recreated, incomplete, or inconsistent member fails the whole operation before
+publication. Rename is tolerated when the same Context UID has one unambiguous
+current ordinary owner. An inherited recursive checkpoint is not allowed to
+retarget its Source unit through a Branch copy; it fails closed until an
+explicit cross-lineage group-mapping contract exists.

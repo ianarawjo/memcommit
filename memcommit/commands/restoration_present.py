@@ -696,6 +696,14 @@ def _restored_command(unit: ContextCommandUnit) -> str:
         # Legacy Revert receipts predate the keep-all default, so a missing
         # policy still describes the old explicit discard behavior faithfully.
         policy = "--keep" if args.get("keep_history") is True else "--discard-newer"
+        revert_unit = args.get("revert_unit")
+        if isinstance(revert_unit, Mapping) and isinstance(
+            revert_unit.get("checkpoint_unit_uid"), str
+        ):
+            return (
+                "mem revert "
+                f"{_command_arg(revert_unit['checkpoint_unit_uid'])} {policy}"
+            )
         return f"mem revert {_command_arg(args['target_uid'])} {policy}"
     if unit.command == "atomize":
         if context_name is not None:
@@ -911,3 +919,69 @@ def render_revert_receipt(
         )
         + typer.style(f" {recovery.uid[:8]} --discard-newer", dim=True)
     )
+
+
+def render_checkpoint_unit_revert_receipt(
+    result,
+    *,
+    resolved_memory_ref_contents: Mapping[
+        str, Mapping[MemoryRefTargetKey, str | None]
+    ]
+    | None = None,
+) -> None:
+    """Report one atomic recursive Checkpoint recovery unit."""
+
+    resolved_by_context = resolved_memory_ref_contents or {}
+    typer.secho(
+        f"Reverted checkpoint unit: [{result.unit.canonical_uid[:8]}] · "
+        f"Affected Contexts: {len(result.members)}",
+        fg=semantic_color_rgb(SemanticColorRole.UNDO),
+        bold=True,
+    )
+    for index, member in enumerate(result.members):
+        if index:
+            typer.echo()
+        typer.echo(
+            "Context: "
+            + _short(member.context_name, limit=_MAX_CONTENT_CODEPOINTS)
+        )
+        typer.echo(
+            "Restored state recorded by: "
+            + _styled_action_name(member.target.command, fallback="manual checkpoint")
+        )
+        _render_action_detail(member.target.description or member.target.message)
+        _render_impact(
+            context_name=member.context_name,
+            before_snapshot=member.recovery.snapshot,
+            after_snapshot=member.target.snapshot,
+            resolved_memory_ref_contents=resolved_by_context.get(
+                member.context_name,
+                {},
+            ),
+        )
+        target_ts = member.target.timestamp.strftime("%Y-%m-%d %H:%M")
+        typer.echo(
+            typer.style("Restored checkpoint: ", dim=True)
+            + typer.style(
+                f"[{member.target.uid[:8]}]",
+                fg=semantic_color_rgb(SemanticColorRole.HISTORY),
+                bold=True,
+            )
+            + typer.style(f" ({target_ts})", dim=True)
+        )
+    typer.echo()
+    typer.echo(
+        typer.style("Undo complete unit: ", dim=True)
+        + typer.style(
+            "mem undo",
+            fg=semantic_color_rgb(SemanticColorRole.UNDO),
+            bold=True,
+        )
+    )
+    typer.echo("Exact member recovery checkpoints:")
+    for member in result.members:
+        command = (
+            f"mem revert {member.recovery.uid} --context "
+            f"{_command_arg(member.context_name)} --discard-newer"
+        )
+        typer.echo("  " + command)

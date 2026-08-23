@@ -1,0 +1,21 @@
+Reverted checkpoint unit: [3a76ef2e] · Affected Contexts: 2                                                                                                                         
+Context: demo/recovery                                                                                                                                                              
+Restored state recorded by: mem checkpoint                                                                                                                                          
+Action detail: recursive baseline                                                                                                                                                   
+Affected Context: demo/recovery                                                                                                                                                     
+Affected content: 1 Memory removed                                                                                                                                                  
+  - [memory 4023105b] "root newer"                                                                                                                                                  
+Restored checkpoint: [3a76ef2e] (2026-08-23 15:21)                                                                                                                                  
+                                                                                                                                                                                    
+Context: demo/recovery/child                                                                                                                                                        
+Restored state recorded by: mem checkpoint                                                                                                                                          
+Action detail: recursive baseline                                                                                                                                                   
+Affected Context: demo/recovery/child                                                                                                                                               
+Affected content: 1 Memory removed                                                                                                                                                  
+  - [memory e1088dc1] "child newer"                                                                                                                                                 
+Restored checkpoint: [3b93f3f9] (2026-08-23 15:21)                                                                                                                                  
+                                                                                                                                                                                    
+Undo complete unit: mem undo                                                                                                                                                        
+Exact member recovery checkpoints:                                                                                                                                                  
+  mem revert ef22a3cd-afc0-48b4-b155-75a7cfb73e6a --context demo/recovery --discard-newer                                                                                           
+  mem revert 87d691f5-0889-4f82-a23f-2eba9621ae59 --context demo/recovery/child --discard-newer

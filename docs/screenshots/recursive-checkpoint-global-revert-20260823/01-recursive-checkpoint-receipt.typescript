@@ -1,0 +1,4 @@
+52 180
+PTY 180 52
+[32m[3a76ef2e] 2026-08-23 15:21:20  Checkpoint set · 2 Context(s) under 'demo/recovery'  'recursive baseline'[0m
+Revert: mem revert 3a76ef2e-c348-4152-99d3-226d25de23a3 --keep

@@ -2514,7 +2514,7 @@ class TestCheckpoint:
         )
 
         assert result.exit_code == 0
-        assert "[set " in result.output
+        assert "Checkpoint set" in result.output
         assert "2 Context(s) under 'tree'" in result.output
         root = store.list_checkpoints("tree")[0]
         child = store.list_checkpoints("tree/child")[0]
@@ -2529,10 +2529,25 @@ class TestCheckpoint:
         assert root["command"] == child["command"] == "checkpoint"
         assert root["args"] == child["args"]
         assert root["args"]["checkpoint_set"] == {
-            "version": 1,
-            "uid": root["args"]["checkpoint_set"]["uid"],
-            "root": "tree",
+            "version": 2,
+            "uid": root["uid"],
+            "root": {
+                "uid": store.load_direct("tree").uid,
+                "name": "tree",
+            },
             "include_descendants": True,
+            "members": [
+                {
+                    "context_uid": store.load_direct("tree").uid,
+                    "context_name": "tree",
+                    "checkpoint_uid": root["uid"],
+                },
+                {
+                    "context_uid": store.load_direct("tree/child").uid,
+                    "context_name": "tree/child",
+                    "checkpoint_uid": child["uid"],
+                },
+            ],
         }
         assert root["args"]["command_contexts"] == [
             {"uid": store.load_direct("tree").uid, "name": "tree"},

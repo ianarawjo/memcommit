@@ -25,6 +25,7 @@ from memcommit.commands.history_picker import (
     HistoryPickerMode,
     HistorySelectionReceipt,
     choose_history,
+    revert_exact_command_review,
 )
 from memcommit.commands.history_present import checkpoint_picker_entries
 from memcommit.commands.update_checkpoint_history import (
@@ -32,6 +33,10 @@ from memcommit.commands.update_checkpoint_history import (
     choose_update_checkpoint_subtree,
 )
 from memcommit.context_locator import resolve_context_locator
+from memcommit.checkpoint_catalog import (
+    ResolvedCheckpointUnit,
+    freeze_checkpoint_catalog,
+)
 from memcommit.history_display import (
     HistoryDisplayRow,
     checkpoint_command_identity,
@@ -57,6 +62,7 @@ class ReviewedCheckpointSelection:
     history_digest: str
     checkpoint_uid: str
     keep_history: bool
+    checkpoint_unit: ResolvedCheckpointUnit
 
 
 def _update_locations(session: UpdateSession | None) -> tuple[str, ...]:
@@ -346,6 +352,22 @@ def _browse_local_checkpoints(
     detail_renderer = None
     if checkpoints and show_diffs:
         detail_renderer = checkpoint_revision_detail_renderer(all_checkpoints)
+    catalog = freeze_checkpoint_catalog(store) if mode == "revert" else None
+    reviewed_units: dict[str, ResolvedCheckpointUnit] = {}
+
+    def revert_review_factory(uid: str, keep: bool):
+        assert catalog is not None
+        unit = catalog.resolve(uid, context_name=context_name)
+        reviewed_units[uid] = unit
+        return revert_exact_command_review(
+            context_name=context_name,
+            checkpoint_uid=uid,
+            keep_history=keep,
+            affected_checkpoints=tuple(
+                (member.context_name, member.checkpoint_uid) for member in unit.members
+            ),
+        )
+
     result = choose_history(
         [projected[checkpoint["uid"]] for checkpoint in checkpoints],
         context_name=context_name,
@@ -361,8 +383,16 @@ def _browse_local_checkpoints(
         keep_history=keep_history,
         staged_checkpoint_uid=staged_checkpoint_uid,
         title=title,
+        revert_review_factory=(revert_review_factory if mode == "revert" else None),
     )
     if isinstance(result, HistorySelectionReceipt):
+        assert catalog is not None
+        checkpoint_unit = reviewed_units.get(result.checkpoint_uid)
+        if checkpoint_unit is None:
+            checkpoint_unit = catalog.resolve(
+                result.checkpoint_uid,
+                context_name=context_name,
+            )
         return ReviewedCheckpointSelection(
             context_name=context_name,
             context_uid=context.uid,
@@ -370,6 +400,7 @@ def _browse_local_checkpoints(
             history_digest=checkpoint_history_digest(all_checkpoints),
             checkpoint_uid=result.checkpoint_uid,
             keep_history=result.keep_history,
+            checkpoint_unit=checkpoint_unit,
         )
     return result if isinstance(result, HistoryBackNavigation) else None
 

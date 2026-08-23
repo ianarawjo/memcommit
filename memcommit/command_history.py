@@ -7,6 +7,7 @@ operation identity, while explicit Undo/Redo receipts share a restoration
 identity. No referenced Context or Memory content is opened while building the
 stacks.
 """
+
 from __future__ import annotations
 
 import uuid
@@ -191,14 +192,10 @@ def _entry_fields(
         )
     raw_command = entry.get("command")
     command = (
-        raw_command
-        if isinstance(raw_command, str) and raw_command
-        else "checkpoint"
+        raw_command if isinstance(raw_command, str) and raw_command else "checkpoint"
     )
     raw_description = entry.get("description") or entry.get("message")
-    description = (
-        raw_description if isinstance(raw_description, str) else ""
-    )
+    description = raw_description if isinstance(raw_description, str) else ""
     raw_args = entry.get("args")
     args = raw_args if isinstance(raw_args, dict) else {}
     return uid, timestamp, command, description, args, bool(entry.get("auto"))
@@ -277,6 +274,30 @@ def command_unit_uid(
     command: str,
     args: dict[str, Any],
 ) -> str:
+    if command == "checkpoint":
+        record = args.get("checkpoint_set")
+        if isinstance(record, dict):
+            operation_uid = record.get("uid")
+            try:
+                canonical_uid = str(uuid.UUID(operation_uid))
+            except (AttributeError, TypeError, ValueError) as error:
+                raise CommandHistoryError(
+                    "Recursive Checkpoint identity is invalid."
+                ) from error
+            if (
+                record.get("version") not in {1, 2}
+                or operation_uid != canonical_uid
+                or record.get("include_descendants") is not True
+            ):
+                raise CommandHistoryError("Recursive Checkpoint identity is invalid.")
+            # Version 2 deliberately uses the root's real checkpoint UID as
+            # the complete recovery-unit handle. Legacy version 1 retains its
+            # receipt-only set UID as a catalog alias.
+            return (
+                f"checkpoint:{operation_uid}"
+                if record.get("version") == 2
+                else f"checkpoint-set:{operation_uid}"
+            )
     if command == "update":
         session_uid = args.get("update_session_uid")
         operation_digest = args.get("operation_digest")
@@ -446,6 +467,55 @@ def _command_contexts(
     return tuple(result)
 
 
+def _revert_unit(
+    args: dict[str, Any],
+) -> tuple[str, str, tuple[tuple[str, str], ...]] | None:
+    """Validate one shared multi-Context Revert command receipt."""
+
+    record = args.get("revert_unit")
+    if record is None:
+        return None
+    expected_fields = {
+        "version",
+        "receipt_uid",
+        "checkpoint_unit_uid",
+        "checkpoint_set_uid",
+        "root_context_uid",
+        "root_context_name",
+        "contexts",
+    }
+    if not isinstance(record, dict) or set(record) != expected_fields:
+        raise CommandHistoryError("Recursive Revert receipt is invalid.")
+    receipt_uid = record.get("receipt_uid")
+    checkpoint_unit_uid = record.get("checkpoint_unit_uid")
+    checkpoint_set_uid = record.get("checkpoint_set_uid")
+    try:
+        canonical_receipt_uid = str(uuid.UUID(receipt_uid))
+        canonical_checkpoint_uid = str(uuid.UUID(checkpoint_unit_uid))
+        canonical_set_uid = str(uuid.UUID(checkpoint_set_uid))
+    except (AttributeError, TypeError, ValueError) as error:
+        raise CommandHistoryError("Recursive Revert receipt is invalid.") from error
+    root_context_uid = record.get("root_context_uid")
+    root_context_name = record.get("root_context_name")
+    contexts = _command_contexts(record.get("contexts"))
+    command_contexts = _command_contexts(args.get("command_contexts"))
+    if (
+        record.get("version") != 1
+        or receipt_uid != canonical_receipt_uid
+        or checkpoint_unit_uid != canonical_checkpoint_uid
+        or checkpoint_set_uid != canonical_set_uid
+        or not isinstance(root_context_uid, str)
+        or not root_context_uid
+        or not isinstance(root_context_name, str)
+        or not root_context_name
+        or contexts is None
+        or command_contexts != contexts
+        or (root_context_uid, root_context_name) not in contexts
+    ):
+        raise CommandHistoryError("Recursive Revert receipt is invalid.")
+    return canonical_receipt_uid, canonical_checkpoint_uid, contexts
+
+
 def branch_tree_receipt(args: dict[str, Any]) -> BranchTreeReceipt:
     """Validate and normalize one complete Branch creation receipt.
 
@@ -518,9 +588,7 @@ def branch_tree_receipt(args: dict[str, Any]) -> BranchTreeReceipt:
         assert isinstance(source_name, str)
         assert isinstance(target_uid, str)
         assert isinstance(target_name, str)
-        if source_name != source_root and not source_name.startswith(
-            source_root + "/"
-        ):
+        if source_name != source_root and not source_name.startswith(source_root + "/"):
             raise CommandHistoryError(
                 "Branch Context receipt escapes its Source subtree."
             )
@@ -639,6 +707,7 @@ def _context_parts(
 
         if command == "revert":
             target_uid = args.get("target_uid")
+            revert_unit = _revert_unit(args)
             recorded_restoration = entry.get("restored_snapshot")
             target = (
                 _normalized_record(
@@ -647,11 +716,7 @@ def _context_parts(
                     context_name=context.name,
                 )
                 if isinstance(recorded_restoration, dict)
-                else (
-                    records.get(target_uid)
-                    if isinstance(target_uid, str)
-                    else None
-                )
+                else (records.get(target_uid) if isinstance(target_uid, str) else None)
             )
             if target is None:
                 raise CommandHistoryError(
@@ -659,13 +724,24 @@ def _context_parts(
                 )
             before = snapshot
             if owned and before != target:
+                unit_uid = (
+                    f"revert:{revert_unit[0]}"
+                    if revert_unit is not None
+                    else f"revert:{uid}"
+                )
                 originals.append(
                     _OriginalPart(
-                        unit_uid=f"revert:{uid}",
+                        unit_uid=unit_uid,
                         command="revert",
-                        description=f"Reverted to checkpoint [{target_uid[:8]}]",
+                        description=(
+                            f"Reverted checkpoint unit [{revert_unit[1][:8]}]"
+                            if revert_unit is not None
+                            else f"Reverted to checkpoint [{target_uid[:8]}]"
+                        ),
                         timestamp=timestamp,
-                        expected_contexts=None,
+                        expected_contexts=(
+                            revert_unit[2] if revert_unit is not None else None
+                        ),
                         args=args,
                         change=CommandContextChange(
                             context_uid=context.uid,
@@ -694,13 +770,9 @@ def _context_parts(
             if command == "branch" and "branch_tree" in args
             else None
         )
-        is_branch_creation = (
-            branch_receipt is not None
-            and any(
-                item.target_uid == context.uid
-                and item.target_name == context.name
-                for item in branch_receipt.contexts
-            )
+        is_branch_creation = branch_receipt is not None and any(
+            item.target_uid == context.uid and item.target_name == context.name
+            for item in branch_receipt.contexts
         )
         if branch_receipt is not None and not is_branch_creation:
             raise CommandHistoryError(
@@ -721,9 +793,7 @@ def _context_parts(
                     command=command,
                     description=description,
                     timestamp=timestamp,
-                    expected_contexts=_command_contexts(
-                        args.get("command_contexts")
-                    ),
+                    expected_contexts=_command_contexts(args.get("command_contexts")),
                     args=args,
                     change=CommandContextChange(
                         context_uid=context.uid,
@@ -851,9 +921,7 @@ def _context_parts(
                 command=command,
                 description=description,
                 timestamp=timestamp,
-                expected_contexts=_command_contexts(
-                    args.get("command_contexts")
-                ),
+                expected_contexts=_command_contexts(args.get("command_contexts")),
                 args=args,
                 change=CommandContextChange(
                     context_uid=context.uid,
@@ -888,10 +956,7 @@ def _group_originals(parts: list[_OriginalPart]) -> dict[str, ContextCommandUnit
             len(commands) != 1
             or len(identities) != len(set(identities))
             or len(expected_sets) > 1
-            or (
-                expected_sets
-                and set(next(iter(expected_sets))) != set(identities)
-            )
+            or (expected_sets and set(next(iter(expected_sets))) != set(identities))
         ):
             raise CommandHistoryError(
                 f"Command unit '{uid}' has inconsistent checkpoint metadata."
@@ -906,9 +971,7 @@ def _group_originals(parts: list[_OriginalPart]) -> dict[str, ContextCommandUnit
         units[uid] = ContextCommandUnit(
             uid=uid,
             command=next(iter(commands)),
-            description=(
-                next(iter(descriptions)) if len(descriptions) == 1 else ""
-            ),
+            description=(next(iter(descriptions)) if len(descriptions) == 1 else ""),
             started_at=min(member.timestamp for member in members),
             completed_at=max(member.timestamp for member in members),
             changes=tuple(member.change for member in ordered),
@@ -930,10 +993,7 @@ def _restore_events(
         sources = {member.source_unit_uid for member in members}
         source_commands = {member.source_command for member in members}
         expected_sets = {member.expected_contexts for member in members}
-        actual = {
-            (member.context_uid, member.context_name)
-            for member in members
-        }
+        actual = {(member.context_uid, member.context_name) for member in members}
         if (
             len(directions) != 1
             or len(sources) != 1

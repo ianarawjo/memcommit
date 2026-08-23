@@ -840,10 +840,11 @@ COMMAND_FORMS = {
     "revert": (
         "mem revert (open the current Context's checkpoint revision and history-policy review)",
         "mem revert --context [context] (open one Context's checkpoint and history-policy review)",
-        "mem revert [checkpoint] (restore exact and discard newer checkpoints)",
-        "mem revert [checkpoint] --context [context] (restore an exact checkpoint in one Context)",
-        "mem revert [checkpoint] --keep (restore exact and preserve newer checkpoints)",
-        'mem revert "[description]" (semantic lookup; discard newer when applied)',
+        "mem revert [checkpoint] (globally resolve and restore one complete checkpoint unit)",
+        "mem revert [checkpoint] --context [context] (resolve a checkpoint at one exact history location)",
+        "mem revert [checkpoint] --discard-newer (restore exact and remove newer active checkpoints)",
+        "mem revert [checkpoint] --keep (explicit compatibility spelling for the keep-all default)",
+        'mem revert "[description]" (semantic lookup; keep all by default when applied)',
     ),
     "review": (
         "mem review (enter the interactive Review session)",

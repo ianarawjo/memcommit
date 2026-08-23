@@ -19,12 +19,20 @@ from memcommit.commands.diff_browser import browse_checkpoint_locations
 from memcommit.commands.history_picker import (
     HistorySelectionReceipt,
     choose_history,
+    revert_exact_command_review,
 )
 from memcommit.commands.history_present import checkpoint_picker_entries
 from memcommit.commands.restoration_present import (
     MemoryRefTargetKey,
     memory_ref_target_key,
+    render_checkpoint_unit_revert_receipt,
     render_revert_receipt,
+)
+from memcommit.checkpoint_catalog import (
+    CheckpointCatalogError,
+    CheckpointNotFoundError,
+    ResolvedCheckpointUnit,
+    freeze_checkpoint_catalog,
 )
 from memcommit.context import Memory
 from memcommit.history import HistoryError, build_history
@@ -112,12 +120,26 @@ def _semantic_selection(
         raise ValueError("No currently restorable checkpoint matched that description.")
     projected = {entry.uid: entry for entry in checkpoint_picker_entries(entries)}
     options = [projected[uid] for uid in selected_uids if uid is not None]
+    catalog = freeze_checkpoint_catalog(store)
+
+    def revert_review_factory(uid: str, selected_keep: bool):
+        unit = catalog.resolve(uid, context_name=name)
+        return revert_exact_command_review(
+            context_name=name,
+            checkpoint_uid=uid,
+            keep_history=selected_keep,
+            affected_checkpoints=tuple(
+                (member.context_name, member.checkpoint_uid) for member in unit.members
+            ),
+        )
+
     return choose_history(
         options,
         context_name=name,
         mode="revert",
         detail_renderer=checkpoint_revision_detail_renderer(entries),
         keep_history=keep,
+        revert_review_factory=revert_review_factory,
     )
 
 
@@ -258,13 +280,52 @@ def _apply_revert(
     )
 
 
+def _apply_resolved_checkpoint_unit(
+    store: MemoryStore,
+    unit: ResolvedCheckpointUnit,
+    *,
+    keep: bool,
+) -> None:
+    """Apply one globally resolved direct or recursive recovery unit."""
+
+    if not unit.is_recursive_set:
+        member = unit.members[0]
+        _apply_revert(
+            store,
+            member.context_name,
+            member.checkpoint_uid,
+            keep=keep,
+            expected_context_uid=member.context_uid,
+            expected_context_digest=member.expected_context_digest,
+            expected_history_digest=member.expected_history_digest,
+        )
+        return
+    try:
+        result = store.revert_checkpoint_unit(unit, keep_history=keep)
+    except (KeyError, OSError, RuntimeError, TypeError, ValueError) as error:
+        typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(1)
+    resolved_by_context = {
+        member.context_name: _resolved_memory_ref_contents(
+            store,
+            member.recovery.snapshot,
+            member.target.snapshot,
+        )
+        for member in result.members
+    }
+    render_checkpoint_unit_revert_receipt(
+        result,
+        resolved_memory_ref_contents=resolved_by_context,
+    )
+
+
 def cmd(
     selector: Annotated[
         Optional[str],
         typer.Argument(
             help=(
-                "Checkpoint UID/prefix, or a natural-language description; "
-                "omit to inspect the current Context's checkpoint history"
+                "Globally resolved checkpoint UID/prefix, or a natural-language "
+                "description; omit to inspect the current Context's history"
             )
         ),
     ] = None,
@@ -285,8 +346,9 @@ def cmd(
             "--context",
             "-c",
             help=(
-                "Context whose checkpoint should be restored; omit to use "
-                "the command-start current Context"
+                "Exact checkpoint location for interactive or semantic selection; "
+                "an explicit UID otherwise prefers the command-start current "
+                "location and falls back to the global checkpoint catalog"
             ),
         ),
     ] = None,
@@ -294,10 +356,44 @@ def cmd(
     store = MemoryStore()
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
-        name = context_snapshot.resolve_or_current(context_name)
+        explicit_name = (
+            context_snapshot.resolve(context_name) if context_name is not None else None
+        )
+        name = explicit_name or context_snapshot.current_name
     except ValueError as error:
         typer.secho(f"Context error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
+
+    if selector is not None:
+        selector = selector.strip()
+        if not selector:
+            typer.secho(
+                "Error: checkpoint selector must be non-empty.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        if _looks_like_missing_uid(selector):
+            try:
+                catalog = freeze_checkpoint_catalog(store)
+                if explicit_name is not None:
+                    unit = catalog.resolve(selector, context_name=explicit_name)
+                elif name is not None:
+                    try:
+                        # Preserve inherited-Branch behavior by preferring the
+                        # command-start current Context when it contains this
+                        # UID. Fall back to the global direct owner only when
+                        # the current location has no matching checkpoint.
+                        unit = catalog.resolve(selector, context_name=name)
+                    except CheckpointNotFoundError:
+                        unit = catalog.resolve(selector)
+                else:
+                    unit = catalog.resolve(selector)
+            except CheckpointCatalogError as error:
+                typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
+                raise typer.Exit(1)
+            _apply_resolved_checkpoint_unit(store, unit, keep=keep)
+            return
 
     if not name:
         typer.secho(
@@ -327,14 +423,10 @@ def cmd(
         if reviewed is None:
             typer.echo("Revert cancelled.")
             return
-        _apply_revert(
+        _apply_resolved_checkpoint_unit(
             store,
-            reviewed.context_name,
-            reviewed.checkpoint_uid,
+            reviewed.checkpoint_unit,
             keep=reviewed.keep_history,
-            expected_context_uid=reviewed.context_uid,
-            expected_context_digest=reviewed.context_digest,
-            expected_history_digest=reviewed.history_digest,
         )
         return
 
@@ -357,14 +449,6 @@ def cmd(
     expected_history_digest = checkpoint_history_digest(entries)
 
     if selector is not None:
-        selector = selector.strip()
-        if not selector:
-            typer.secho(
-                "Error: checkpoint selector must be non-empty.",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
         try:
             exact = _matching_checkpoint(entries, selector)
         except ValueError as error:
@@ -425,12 +509,13 @@ def cmd(
         typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
 
-    _apply_revert(
+    try:
+        unit = freeze_checkpoint_catalog(store).resolve(uid, context_name=name)
+    except CheckpointCatalogError as error:
+        typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(1)
+    _apply_resolved_checkpoint_unit(
         store,
-        name,
-        uid,
+        unit,
         keep=receipt.keep_history,
-        expected_context_uid=expected_context_uid,
-        expected_context_digest=expected_context_digest,
-        expected_history_digest=expected_history_digest,
     )

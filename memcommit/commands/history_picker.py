@@ -228,6 +228,7 @@ def revert_exact_command_review(
     context_name: str,
     checkpoint_uid: str,
     keep_history: bool,
+    affected_checkpoints: Sequence[tuple[str, str]] | None = None,
 ) -> ExactCommandReview:
     """Project the final editable Revert boundary as one explicit command."""
 
@@ -242,6 +243,29 @@ def revert_exact_command_review(
             "retains their supported recovery metadata."
         )
     )
+    affected = tuple(affected_checkpoints or ((context_name, checkpoint_uid),))
+    if (
+        not affected
+        or len({name for name, _uid in affected}) != len(affected)
+        or any(not name or not uid for name, uid in affected)
+    ):
+        raise ValueError("Revert review received invalid checkpoint membership.")
+    effects = (
+        (
+            f"Only Context '{context_name}' may be restored.",
+            f"The exact target is checkpoint [{checkpoint_uid[:8]}].",
+            retention,
+        )
+        if len(affected) == 1
+        else (
+            f"The complete checkpoint unit will restore {len(affected)} Contexts.",
+            *tuple(
+                f"Context '{name}' uses checkpoint [{uid[:8]}]."
+                for name, uid in affected
+            ),
+            retention,
+        )
+    )
     return ExactCommandReview(
         argv=(
             "mem",
@@ -251,11 +275,7 @@ def revert_exact_command_review(
             context_name,
             policy,
         ),
-        effects=(
-            f"Only Context '{context_name}' may be restored.",
-            f"The exact target is checkpoint [{checkpoint_uid[:8]}].",
-            retention,
-        ),
+        effects=effects,
     )
 
 
@@ -456,6 +476,7 @@ def choose_history(
     workbench_navigation: SessionWorkbenchNavigation | None = None,
     keep_history: bool = True,
     staged_checkpoint_uid: str | None = None,
+    revert_review_factory: Callable[[str, bool], ExactCommandReview] | None = None,
 ) -> HistorySelectionReceipt | HistoryBackNavigation | None:
     """Inspect history or return one exact checkpoint selection.
 
@@ -493,6 +514,12 @@ def choose_history(
         raise ValueError("History initial detail state must be boolean.")
     if not isinstance(keep_history, bool):
         raise ValueError("History preservation state must be boolean.")
+    if revert_review_factory is not None and (
+        mode != "revert" or not callable(revert_review_factory)
+    ):
+        raise ValueError(
+            "A custom Revert review requires the Revert history mode."
+        )
     if staged_checkpoint_uid is not None and (
         mode != "revert"
         or staged_checkpoint_uid not in {entry.uid for entry in options}
@@ -557,6 +584,20 @@ def choose_history(
         if mode == "revert" and options
         else None
     )
+
+    def proposed_revert_review() -> ExactCommandReview:
+        uid = selected_checkpoint["uid"]
+        if uid is None or history_policy is None:
+            raise ValueError("Select a checkpoint before reviewing Revert.")
+        keep = history_policy.selected_uid == "KEEP_ALL"
+        if revert_review_factory is not None:
+            return revert_review_factory(uid, keep)
+        return revert_exact_command_review(
+            context_name=context_name,
+            checkpoint_uid=uid,
+            keep_history=keep,
+        )
+
     bindings = KeyBindings()
     app_ref: dict[
         str, Application[HistorySelectionReceipt | HistoryBackNavigation | None]
@@ -612,6 +653,42 @@ def choose_history(
                 if detail_renderer is not None
                 else _render_detail(entry)
             )
+            if (
+                mode == "revert"
+                and entry.uid == selected_checkpoint["uid"]
+            ):
+                review = proposed_revert_review()
+                unit_review = "\n".join(
+                    (
+                        "",
+                        "AFFECTED CHECKPOINT UNIT · REVIEW BEFORE APPLY",
+                        *(
+                            "  " + display_escape_text(effect)
+                            for effect in review.effects
+                        ),
+                    )
+                )
+                if isinstance(rendered, HistoryDetailView):
+                    content = rendered.content
+                    rendered = HistoryDetailView(
+                        content=(
+                            content.rstrip() + "\n" + unit_review
+                            if isinstance(content, str)
+                            else [
+                                *content,
+                                ("class:report-neutral", "\n" + unit_review),
+                            ]
+                        ),
+                        unit_start_lines=rendered.unit_start_lines,
+                        unit_label=rendered.unit_label,
+                    )
+                elif isinstance(rendered, str):
+                    rendered = rendered.rstrip() + "\n" + unit_review
+                else:
+                    rendered = [
+                        *rendered,
+                        ("class:report-neutral", "\n" + unit_review),
+                    ]
         if isinstance(rendered, HistoryDetailView):
             detail_view["value"] = rendered
             content = rendered.content
@@ -702,16 +779,6 @@ def choose_history(
     def sync_detail(*, anchor: Literal["preserve", "start", "end"]) -> None:
         detail_pane.set_formatted_text(render_detail(), anchor=anchor)
 
-    def proposed_revert_review() -> ExactCommandReview:
-        uid = selected_checkpoint["uid"]
-        if uid is None or history_policy is None:
-            raise ValueError("Select a checkpoint before reviewing Revert.")
-        return revert_exact_command_review(
-            context_name=context_name,
-            checkpoint_uid=uid,
-            keep_history=history_policy.selected_uid == "KEEP_ALL",
-        )
-
     def apply_command_argv(argv: tuple[str, ...]) -> None:
         if history_policy is None:
             raise ValueError("Revert history policy is unavailable.")
@@ -770,6 +837,7 @@ def choose_history(
         if mode == "revert":
             selected_checkpoint["uid"] = options[navigation.row_index].uid
             command_control.sync_from_review(event.app)
+            sync_detail(anchor="start")
             # Selecting the exact row completes target staging, so final
             # review starts immediately. History remains one Tab away for an
             # explicit policy revision.
@@ -798,6 +866,7 @@ def choose_history(
 
     def activate_policy(event) -> SurfaceActionResult:
         command_control.sync_from_review(event.app)
+        sync_detail(anchor="start")
         surface_focus.focus_relative(event.app, 1, wrap=False)
         return "HANDLED"
 

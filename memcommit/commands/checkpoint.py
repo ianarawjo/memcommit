@@ -168,21 +168,39 @@ def cmd(
             root if name == context_name else store.load_direct(name)
             for name in context_names
         )
-        checkpoint_set_uid = str(uuid.uuid4())
         membership = [
             {"uid": context.uid, "name": context.name} for context in contexts
         ]
+        checkpoint_uids = tuple(str(uuid.uuid4()) for _context in contexts)
+        checkpoint_uid_by_name = {
+            context.name: checkpoint_uid
+            for context, checkpoint_uid in zip(contexts, checkpoint_uids)
+        }
+        root_checkpoint_uid = checkpoint_uid_by_name[context_name]
+        checkpoint_set = {
+            "version": 2,
+            # A recursive recovery unit must be reachable through the same
+            # globally searchable identity as an ordinary checkpoint.  The
+            # root's physical checkpoint is therefore the canonical handle;
+            # no receipt-only UID is minted beside the checkpoint catalog.
+            "uid": root_checkpoint_uid,
+            "root": {"uid": root.uid, "name": root.name},
+            "include_descendants": True,
+            "members": [
+                {
+                    "context_uid": context.uid,
+                    "context_name": context.name,
+                    "checkpoint_uid": checkpoint_uid_by_name[context.name],
+                }
+                for context in contexts
+            ],
+        }
         checkpoints = store.checkpoint_context_batch(
             ((context, context_record_digest(context)) for context in contexts),
             message=operands.message or "",
             command="checkpoint",
             args={
-                "checkpoint_set": {
-                    "version": 1,
-                    "uid": checkpoint_set_uid,
-                    "root": context_name,
-                    "include_descendants": True,
-                },
+                "checkpoint_set": checkpoint_set,
                 "command_contexts": membership,
             },
             description=(
@@ -193,6 +211,7 @@ def cmd(
                 )
             ),
             expected_context_catalog=catalog_names,
+            checkpoint_uids=checkpoint_uids,
         )
     except (FileNotFoundError, OSError, RuntimeError, ValueError) as error:
         typer.secho(
@@ -204,8 +223,9 @@ def cmd(
 
     ts = checkpoints[0].timestamp.strftime("%Y-%m-%d %H:%M:%S")
     typer.secho(
-        f"[set {checkpoint_set_uid[:8]}] {ts}  "
+        f"[{root_checkpoint_uid[:8]}] {ts}  Checkpoint set · "
         f"{len(checkpoints)} Context(s) under "
         f"'{display_escape_text(context_name)}'  {_label(operands.message)}",
         fg=typer.colors.GREEN,
     )
+    typer.echo(f"Revert: mem revert {root_checkpoint_uid} --keep")

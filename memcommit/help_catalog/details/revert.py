@@ -12,16 +12,20 @@ REVERT_DETAILS = (
         id="selection-routes",
         operation="revert",
         title="REVERT ROUTES",
-        use_when="Choosing how to identify and restore one checkpoint.",
+        use_when="Choosing how to identify and restore one checkpoint unit.",
         discovery=DetailDiscovery.ON_DEMAND,
         explanation=(
-            "Every route restores one local Context. Exact checkpoint selection "
-            "is deterministic; natural-language selection uses semantic lookup."
+            "Every route restores one globally identified checkpoint unit. A "
+            "recursive manual Checkpoint restores all of its recorded local "
+            "members atomically; natural-language selection uses semantic lookup."
         ),
         options=(
             OperationComparisonOption(
                 label="EXACT CHECKPOINT",
-                guidance="Restore an exact checkpoint UID or unique prefix directly.",
+                guidance=(
+                    "Resolve an exact checkpoint UID or unique prefix across the "
+                    "local Profile and restore its complete recovery unit."
+                ),
             ),
             OperationComparisonOption(
                 label="INTERACTIVE",
