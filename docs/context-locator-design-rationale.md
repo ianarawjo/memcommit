@@ -32,6 +32,8 @@ mem find [QUERY] --context LOCATOR
 mem audit [LOCATOR]
 mem dedun [LOCATOR]
 mem find-{ambiguities,duplicates,redundancies,conflicts} [LOCATOR]
+mem resolve [LOCATOR | MEMORY | LOCATOR:MEMORY ...]
+mem resolve [--context LOCATOR] [--memory [LOCATOR:]MEMORY ...]
 mem query SELECTOR --context LOCATOR
 mem review [KIND] --context LOCATOR
 mem impact atomize [LOCATOR]
@@ -141,6 +143,7 @@ grammar. The rollout uses this table as the authored cross-operation rule:
 | --- | --- | --- | --- |
 | `atomize`, `impact atomize` | Use current Context | `[CONTEXT]` | `--context CONTEXT` |
 | `audit`, `dedun`, `find-{ambiguities,duplicates,redundancies,conflicts}` | Use current Context | `[CONTEXT]` | `--context CONTEXT` |
+| `resolve` | Use current Context, unless bare Memory operands uniquely locate one local owner | mixed `CONTEXT`, UUID-shaped `MEMORY`, and `CONTEXT:MEMORY`; every owner must canonicalize to one Context | `--context CONTEXT`, repeatable `--memory [CONTEXT:]UID`; short Memory prefixes require `--memory` or qualification |
 | `compare` | Open saved-session launcher | `PEER` uses current as Reference; `REFERENCE PEER` is fully explicit | `--from REFERENCE`, `--to PEER` |
 | `update` | Open saved Update work | `SOURCE TARGET` only | `--from SOURCE`, `--to TARGET`; one omitted option endpoint uses current |
 | `impact update` | Inspect saved Update Impact | `SOURCE TARGET` starts a new preview | same `--from`/`--to` endpoint aliases |
@@ -148,11 +151,14 @@ grammar. The rollout uses this table as the authored cross-operation rule:
 | `forget`, `impact forget` | Context defaults to current; instruction is still required outside the setup TTY | the position is reserved for `INSTRUCTION` | `--context CONTEXT` |
 | `impact meld`, `impact sever` | Inspect saved operation work | none | `--session UID` only |
 
-For the unary families, supplying both the positional Context and `--context`
-is a usage error rather than a precedence rule. For Update, exactly one
-positional Context is also a usage error because it does not say whether the
-operand is Source or Target. The established one-sided current-filled forms
-remain unambiguous through `--from` and `--to`.
+For the ordinary unary families, supplying both the positional Context and
+`--context` is a usage error rather than a precedence rule. Resolve is the
+deliberate mixed-target exception: it collapses repeated spellings of the same
+canonical Context because positional Memory qualifiers and explicit options
+may independently carry the same owner, while rejecting distinct owners. For
+Update, exactly one positional Context is also a usage error because it does
+not say whether the operand is Source or Target. The established one-sided
+current-filled forms remain unambiguous through `--from` and `--to`.
 
 This table changes only command entry. The no-operand unary route keeps its
 existing current-Context behavior, and every mutation, Grant, provider,

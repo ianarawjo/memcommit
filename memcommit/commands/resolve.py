@@ -33,6 +33,7 @@ from memcommit.resolve_application import (
 )
 from memcommit.resolve_runtime import MemoryStoreResolvePort
 from memcommit.resolve_semantic import ProviderResolveSemanticPort
+from memcommit.resolve_targeting import normalize_resolve_cli_targets
 from memcommit.quality_finding_handoff import (
     QualityFindingHandoffError,
     conflict_handoff_to_resolve_request,
@@ -42,12 +43,12 @@ from memcommit.store import MemoryStore
 
 
 def cmd(
-    memory_selectors: Annotated[
+    auto_operands: Annotated[
         Optional[list[str]],
         typer.Argument(
             help=(
-                "Direct Memory UID prefixes allowed to change; omit to use "
-                "the initial Fit judgment's material Memories"
+                "Auto operand: existing Context locator, Memory UID prefix, "
+                "or CONTEXT:UID; omit to use the current Context"
             )
         ),
     ] = None,
@@ -57,6 +58,17 @@ def cmd(
             "--context",
             "-c",
             help="Exact local Context or readable granted Context to repair",
+        ),
+    ] = None,
+    memory_operands: Annotated[
+        Optional[list[str]],
+        typer.Option(
+            "--memory",
+            metavar="[CONTEXT:]UID_OR_PREFIX",
+            help=(
+                "Repeatable direct Memory restriction; short prefixes are "
+                "accepted because --memory makes their role explicit"
+            ),
         ),
     ] = None,
     allow_create: Annotated[
@@ -158,7 +170,7 @@ def cmd(
         store = MemoryStore(create=False)
         snapshot = ContextOperandSnapshot.capture(store)
         if finding_handoff is not None:
-            if context_name is not None or memory_selectors:
+            if context_name is not None or auto_operands or memory_operands:
                 raise ResolveError(
                     "Resolve --finding-handoff cannot be combined with a Context "
                     "or Memory selector."
@@ -171,9 +183,16 @@ def cmd(
                 target_fit="YES" if yes else "MAY",
             )
         else:
+            targets = normalize_resolve_cli_targets(
+                store,
+                tuple(auto_operands or ()),
+                context_locator=context_name,
+                memory_operands=tuple(memory_operands or ()),
+                current_context_name=snapshot.current_name,
+            )
             request = ResolveRequest(
-                context_name=snapshot.resolve_or_current(context_name),
-                memory_selectors=tuple(memory_selectors or ()),
+                context_name=targets.context_name,
+                memory_selectors=targets.memory_selectors,
                 allow_create=allow_create,
                 allow_delete=allow_delete,
                 guidance=guidance or "",

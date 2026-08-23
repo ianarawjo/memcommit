@@ -1154,6 +1154,214 @@ def test_resolve_plain_cli_automatically_applies_one_grounded_plan(
     ]
 
 
+def test_resolve_plain_cli_auto_classifies_positional_context(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    context, _first, _second = _context(store)
+    provider = ResolveFixtureProvider()
+    monkeypatch.setattr(
+        resolve_command,
+        "connect_semantic_provider",
+        lambda: provider,
+    )
+
+    result = runner.invoke(app, ["resolve", context.name, "--plain"])
+
+    assert result.exit_code == 0, result.output
+    assert "RESOLVE APPLIED" in result.stdout
+    assert "CONTEXT · resolve/test" in result.stdout
+    assert len(store.list_checkpoints(context.name)) == 1
+
+
+def test_resolve_plain_cli_mixes_context_and_memory_auto_operands(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    context, _first, second = _context(store)
+    provider = ResolveFixtureProvider()
+    monkeypatch.setattr(
+        resolve_command,
+        "connect_semantic_provider",
+        lambda: provider,
+    )
+
+    result = runner.invoke(
+        app,
+        ["resolve", second.uid[:8], context.name, "--plain"],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert "RESOLVE APPLIED" in result.stdout
+    assert "UPDATED · 1" in result.stdout
+    assert len(store.list_checkpoints(context.name)) == 1
+
+
+def test_resolve_plain_cli_finds_unique_owner_for_bare_memory_operand(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    context, _first, second = _context(store)
+    provider = ResolveFixtureProvider()
+    monkeypatch.setattr(
+        resolve_command,
+        "connect_semantic_provider",
+        lambda: provider,
+    )
+
+    assert store.current_context_name() is None
+    result = runner.invoke(app, ["resolve", second.uid[:8], "--plain"])
+
+    assert result.exit_code == 0, result.output
+    assert "RESOLVE APPLIED" in result.stdout
+    assert "CONTEXT · resolve/test" in result.stdout
+    assert len(store.list_checkpoints(context.name)) == 1
+
+
+def test_resolve_plain_cli_accepts_explicit_short_memory_operand(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    context, _first, second = _context(store)
+    provider = ResolveFixtureProvider()
+    monkeypatch.setattr(
+        resolve_command,
+        "connect_semantic_provider",
+        lambda: provider,
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "resolve",
+            context.name,
+            "--memory",
+            second.uid[:6],
+            "--plain",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert "RESOLVE APPLIED" in result.stdout
+    assert "UPDATED · 1" in result.stdout
+
+
+def test_resolve_plain_cli_combines_same_explicit_and_qualified_context(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    context, _first, second = _context(store)
+    provider = ResolveFixtureProvider()
+    monkeypatch.setattr(
+        resolve_command,
+        "connect_semantic_provider",
+        lambda: provider,
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "resolve",
+            f"{context.name}:{second.uid[:8]}",
+            "--context",
+            context.name,
+            "--plain",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert "RESOLVE APPLIED" in result.stdout
+    assert "UPDATED · 1" in result.stdout
+
+
+def test_resolve_cli_rejects_distinct_context_operands_before_provider(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    context, _first, _second = _context(store)
+    other = ops.init("resolve/other")
+    other_memory = ops.add(other, "The office opens at 10.")
+    ops.add(other, "The office opens at 11.")
+    store.save(other)
+    calls = 0
+
+    def provider_factory():
+        nonlocal calls
+        calls += 1
+        return ResolveFixtureProvider()
+
+    monkeypatch.setattr(
+        resolve_command,
+        "connect_semantic_provider",
+        provider_factory,
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "resolve",
+            context.name,
+            f"{other.name}:{other_memory.uid[:8]}",
+            "--plain",
+        ],
+    )
+
+    assert result.exit_code == 1
+    assert "select multiple Contexts" in result.stderr
+    assert "resolve/test" in result.stderr
+    assert "resolve/other" in result.stderr
+    assert calls == 0
+
+
+def test_resolve_cli_rejects_two_prefixes_for_same_memory_before_provider(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    context, _first, second = _context(store)
+    calls = 0
+
+    def provider_factory():
+        nonlocal calls
+        calls += 1
+        return ResolveFixtureProvider()
+
+    monkeypatch.setattr(
+        resolve_command,
+        "connect_semantic_provider",
+        provider_factory,
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "resolve",
+            context.name,
+            second.uid[:8],
+            second.uid[:12],
+            "--plain",
+        ],
+    )
+
+    assert result.exit_code == 1
+    assert "selectors repeat Memory" in result.stderr
+    assert calls == 0
+
+
+def test_resolve_help_exposes_mixed_context_memory_operands() -> None:
+    result = runner.invoke(app, ["resolve", "--help"])
+
+    assert result.exit_code == 0, result.output
+    assert "Auto operand" in result.output
+    assert "--memory" in result.output
+
+
 def test_resolve_plain_cli_can_replay_an_external_exact_plan(
     isolated_store,
     monkeypatch,

@@ -432,8 +432,10 @@ COMMAND_FORMS = {
     ),
     "resolve": (
         "mem resolve (automatically apply one grounded full-frame plan, or show a non-applicable outcome)",
-        "mem resolve --context [context] --plain (apply a grounded plan or print ASSUMED / ALREADY_FIT)",
-        "mem resolve [memory_uid] --context [context] (limit edits, while every turn still reads the complete frame)",
+        "mem resolve [context] --plain (apply a grounded plan or print ASSUMED / ALREADY_FIT)",
+        "mem resolve [context] [memory_uid] (auto-classify one Context and optional edit restrictions)",
+        "mem resolve [context] --memory [memory_uid] (explicitly accept a short Memory prefix)",
+        "mem resolve [context]:[memory_uid] (bind one Memory restriction to its exact Context)",
         "mem resolve --context [context] --no-create (limit the automatic plan to existing-Memory edits)",
         'mem resolve --context [context] --allow-delete --guidance "[grounds]" (exceptionally permit grounded retirement)',
         "mem resolve --context [context] --candidate [full_id] --expected-revision [revision] --apply (replay an externally reviewed exact plan)",

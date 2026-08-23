@@ -55,12 +55,34 @@ freeze exact direct-Memory frame and authority
 The execution and exact-replay forms are:
 
 ```text
-mem resolve [MEMORY_UID_PREFIX ...] --context NAME [--no-create] [--yes]
-  [--allow-delete --guidance TEXT] [--plain | --tui]
+mem resolve [CONTEXT | MEMORY_UID_PREFIX | CONTEXT:MEMORY_UID_PREFIX ...]
+  [--context CONTEXT] [--memory [CONTEXT:]UID_OR_PREFIX ...]
+  [--no-create] [--yes] [--allow-delete --guidance TEXT] [--plain | --tui]
 
 mem resolve [FULL_MEMORY_UID ...] --context CANONICAL_NAME [same effect flags]
   --candidate FULL_CANDIDATE_UID --expected-revision REVISION --apply --plain
 ```
+
+Resolve uses the shared mixed Context/direct-Memory operand grammar before it
+constructs an operation request. A positional eight-or-more-character
+UUID-shaped value is a Memory selector, `CONTEXT:UID` is an owner-qualified
+Memory selector, and any other positional value is an existing Context
+locator. `--memory` makes the Memory role explicit and therefore also accepts
+short prefixes; `--context` preserves explicit legacy UUID-shaped Context
+names. Every Context spelling, including relative qualifiers, resolves against
+one command-start current-Context snapshot.
+
+A bare Memory selector with no named Context searches the strict local direct-
+ownership catalog and must have exactly one owner; current Context has no
+hidden priority. This global lookup never enumerates Grant contents. A granted
+Memory restriction therefore names its readable public Context through either
+`PUBLIC_CONTEXT:UID` or `--context PUBLIC_CONTEXT --memory UID`, after which
+the existing Grant-aware Resolve port authorizes and freezes the full frame.
+All positional, qualified, and option-derived Contexts must canonicalize to
+one target. Repeated spellings of that same Context collapse, different
+Contexts fail before provider construction, and repeated selectors for one
+resolved Memory remain an error. These entry rules narrow the mutable set only;
+they never narrow the complete semantic evidence frame.
 
 The CLI form is an execution command: after all semantic gates and freshness
 checks, one grounded plan applies without a model-choice or approval turn.
