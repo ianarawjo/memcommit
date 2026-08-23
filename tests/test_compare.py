@@ -1,4 +1,5 @@
 """Contracts for targetless, durable peer-Context comparison."""
+
 from __future__ import annotations
 
 from concurrent.futures import ThreadPoolExecutor
@@ -38,7 +39,10 @@ from memcommit.commands.compare_sessions import (
     comparison_session_entries,
 )
 from memcommit.context import Context, Memory, MemoryRef
-from memcommit.interfaces.tui.components.operation_launcher.session import SessionNewReceipt, SessionOpenReceipt
+from memcommit.interfaces.tui.components.operation_launcher.session import (
+    SessionNewReceipt,
+    SessionOpenReceipt,
+)
 from memcommit.store import MemoryStore
 from memcommit.query_provider import CodexChatGPTProvider
 from memcommit.reference_application import ContextReferenceRequest
@@ -204,8 +208,7 @@ class ExhaustiveCompareProvider:
             ),
             "reports": {
                 "both": (
-                    "Both advisors require a concise proposal under the "
-                    "same scope."
+                    "Both advisors require a concise proposal under the " "same scope."
                 ),
                 "differences": "",
                 "reference_only": (
@@ -228,32 +231,48 @@ class ExhaustiveCompareProvider:
         response: dict[str, object],
     ) -> dict[str, object]:
         assignments: list[dict[str, str]] = []
-        for relation in response["relations"]:
+        paired_relations: list[dict[str, object]] = []
+        distinct_relations: list[dict[str, object]] = []
+        for relation in response.pop("relations"):
             relation_key = relation["relation_key"]
-            for source_id in relation.pop("reference_memory_ids"):
+            reference_ids = relation.pop("reference_memory_ids")
+            compared_ids = relation.pop("compared_memory_ids")
+            for source_id in reference_ids:
                 assignments.append(
                     {
                         "source_memory_id": source_id,
                         "relation_key": relation_key,
                     }
                 )
-            for source_id in relation.pop("compared_memory_ids"):
+            for source_id in compared_ids:
                 assignments.append(
                     {
                         "source_memory_id": source_id,
                         "relation_key": relation_key,
                     }
                 )
+            if relation["kind"] == "DISTINCT":
+                distinct_relations.append(
+                    {
+                        **relation,
+                        "side": ("REFERENCE" if reference_ids else "COMPARED"),
+                    }
+                )
+            else:
+                paired_relations.append(relation)
+        response["paired_relations"] = paired_relations
+        response["distinct_relations"] = distinct_relations
         response["source_assignments"] = assignments
         return response
 
     def complete(self, prompt, *, operation, output_schema=None):
-        assert operation == "compare_contexts"
+        assert operation in {"compare_contexts", "compare_contexts_repair"}
         assert output_schema is not None
         assert set(output_schema["required"]) == {
             "overview",
             "reports",
-            "relations",
+            "paired_relations",
+            "distinct_relations",
             "source_assignments",
             "issues",
         }
@@ -262,6 +281,7 @@ class ExhaustiveCompareProvider:
         assert "uniqueItems" not in json.dumps(output_schema)
         assert "target" not in json.dumps(output_schema).lower()
         assert "miscellaneous bucket" in prompt
+        assert "Every one-sided relation MUST be DISTINCT" in prompt
         assert "Do not state relation counts in overview" in prompt
         assert "roughly 40-50 words at most" in prompt
         assert "within roughly 150 English words at most" in prompt
@@ -275,9 +295,7 @@ class ExhaustiveCompareProvider:
                 "description"
             ]
         )
-        payload = json.loads(
-            prompt.split(COMPARISON_PAYLOAD_MARKER, 1)[1]
-        )
+        payload = json.loads(prompt.split(COMPARISON_PAYLOAD_MARKER, 1)[1])
         assert payload["mode"] == "SYMMETRIC_PEER_COMPARISON"
         assert [frame["authority"] for frame in payload["frames"]] == [
             "PEER",
@@ -301,11 +319,93 @@ def test_compare_output_schema_requires_one_assignment_per_frozen_source():
     assert assignments["items"]["properties"]["source_memory_id"]["enum"] == list(
         source_ids
     )
-    relation_properties = schema["properties"]["relations"]["items"][
-        "properties"
+    paired = schema["properties"]["paired_relations"]["items"]
+    assert "DISTINCT" not in paired["properties"]["kind"]["enum"]
+    distinct = schema["properties"]["distinct_relations"]["items"]
+    assert distinct["properties"]["kind"]["enum"] == ["DISTINCT"]
+    assert distinct["properties"]["side"]["enum"] == [
+        "REFERENCE",
+        "COMPARED",
     ]
-    assert "reference_memory_ids" not in relation_properties
-    assert "compared_memory_ids" not in relation_properties
+
+
+def test_compare_repairs_one_sided_paired_relation_once(isolated_store):
+    store = MemoryStore()
+    reference, compared = _task2_contexts(store)
+
+    class RepairingProvider:
+        def __init__(self):
+            self.operations: list[str] = []
+            self.repair_payload: dict[str, object] | None = None
+
+        def complete(self, prompt, *, operation, output_schema=None):
+            assert output_schema is not None
+            payload = json.loads(prompt.split(COMPARISON_PAYLOAD_MARKER, 1)[1])
+            self.operations.append(operation)
+            response = ExhaustiveCompareProvider.default_response(payload)
+            if operation == "compare_contexts":
+                moved = response["relations"][0]["compared_memory_ids"].pop()
+                response["relations"][-1]["compared_memory_ids"].append(moved)
+            else:
+                self.repair_payload = payload
+            return json.dumps(
+                ExhaustiveCompareProvider.source_indexed_response(response)
+            )
+
+    provider = RepairingProvider()
+
+    analysis = analyze_comparison(
+        ComparisonInput.from_contexts(reference, compared),
+        provider,
+    )
+
+    assert provider.operations == ["compare_contexts", "compare_contexts_repair"]
+    assert provider.repair_payload is not None
+    assert "rejected_response" in provider.repair_payload
+    assert (
+        "cross-source relation without both PEER sides"
+        in provider.repair_payload["validation_error"]
+    )
+    assert [relation.kind for relation in analysis.relations] == [
+        "EQUIVALENT",
+        "DISTINCT",
+        "DISTINCT",
+    ]
+
+
+def test_compare_fails_closed_when_bounded_repair_is_still_invalid(
+    isolated_store,
+):
+    store = MemoryStore()
+    reference, compared = _task2_contexts(store)
+
+    class PersistentlyInvalidProvider:
+        def __init__(self):
+            self.operations: list[str] = []
+
+        def complete(self, prompt, *, operation, output_schema=None):
+            assert output_schema is not None
+            payload = json.loads(prompt.split(COMPARISON_PAYLOAD_MARKER, 1)[1])
+            self.operations.append(operation)
+            response = ExhaustiveCompareProvider.default_response(payload)
+            moved = response["relations"][0]["compared_memory_ids"].pop()
+            response["relations"][-1]["compared_memory_ids"].append(moved)
+            return json.dumps(
+                ExhaustiveCompareProvider.source_indexed_response(response)
+            )
+
+    provider = PersistentlyInvalidProvider()
+
+    with pytest.raises(
+        ComparisonProviderError,
+        match="Codex compare repair remained invalid",
+    ):
+        analyze_comparison(
+            ComparisonInput.from_contexts(reference, compared),
+            provider,
+        )
+
+    assert provider.operations == ["compare_contexts", "compare_contexts_repair"]
 
 
 def _task2_contexts(store: MemoryStore):
@@ -369,9 +469,10 @@ def test_focused_compare_relates_only_selected_memories_and_keeps_neighbors_cont
         compared_neighbor.content
     )
     assert "context_id" not in json.dumps(provider.schemas[0])
-    assert {
-        member.memory_uid for member in analysis.relations[0].members
-    } == {reference_focus.uid, compared_focus.uid}
+    assert {member.memory_uid for member in analysis.relations[0].members} == {
+        reference_focus.uid,
+        compared_focus.uid,
+    }
 
 
 def _memory_embed_pair(store: MemoryStore):
@@ -578,9 +679,7 @@ def test_compare_creates_durable_read_only_analysis_and_resumes_provider_free(
         compared.name,
     ]
     expected_members = {
-        (frame.uid, memory.uid)
-        for frame in saved.frames
-        for memory in frame.memories
+        (frame.uid, memory.uid) for frame in saved.frames for memory in frame.memories
     }
     observed_members = {
         (member.frame_uid, member.memory_uid)
@@ -604,9 +703,7 @@ def test_compare_creates_durable_read_only_analysis_and_resumes_provider_free(
     assert "\n      WHY ·" in ledger.output
     assert "\nWHAT DIFFERS\n  (none)" in ledger.output
     assert "\nPOTENTIAL CONFLICTS · 0\n  (none)" in ledger.output
-    assert "complete source-linked relation ledger is saved" not in (
-        ledger.output
-    )
+    assert "complete source-linked relation ledger is saved" not in (ledger.output)
     assert len(provider.payloads) == 1
 
     resumed = runner.invoke(
@@ -744,10 +841,13 @@ def test_refresh_and_source_change_each_replace_the_ordered_latest_slot(
     provider = ExhaustiveCompareProvider()
     _patch_provider(monkeypatch, provider)
 
-    assert runner.invoke(
-        app,
-        ["compare", "--to", compared.name, "--ledger"],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["compare", "--to", compared.name, "--ledger"],
+        ).exit_code
+        == 0
+    )
     first = load_comparison_analysis(reference.uid, compared.uid)
     assert first is not None
 
@@ -882,8 +982,7 @@ def test_relative_peer_locator_errors_before_provider(
 
     assert missing.exit_code == 1
     assert (
-        "Compared Context '../missing' "
-        "(resolved to 'task2/missing') does not exist"
+        "Compared Context '../missing' " "(resolved to 'task2/missing') does not exist"
     ) in missing.output
     assert same.exit_code == 1
     assert "two distinct Contexts" in same.output
@@ -966,12 +1065,9 @@ def test_provider_accepts_one_to_many_relation_and_required_conflict_issue(
             "reports": {
                 "both": "",
                 "differences": (
-                    "The advisors give incompatible directions for the "
-                    "same case."
+                    "The advisors give incompatible directions for the " "same case."
                 ),
-                "reference_only": (
-                    "Only the reference supplies a heading policy."
-                ),
+                "reference_only": ("Only the reference supplies a heading policy."),
                 "compared_only": "",
             },
             "relations": [
@@ -1029,9 +1125,7 @@ def test_provider_accepts_one_to_many_relation_and_required_conflict_issue(
     ]
     assert len(analysis.relations[0].members) == 3
     assert analysis.issues[0].priority == "REQUIRED"
-    assert analysis.issues[0].relation_uids == (
-        analysis.relations[0].uid,
-    )
+    assert analysis.issues[0].relation_uids == (analysis.relations[0].uid,)
     rendered = render_comparison(analysis, reused=False)
     assert "WHAT DIFFERS · 1" in rendered
     assert "POTENTIAL CONFLICTS · 1" in rendered
@@ -1137,10 +1231,13 @@ def test_failed_refresh_preserves_previous_analysis(
     reference, compared = _task2_contexts(store)
     provider = ExhaustiveCompareProvider()
     _patch_provider(monkeypatch, provider)
-    assert runner.invoke(
-        app,
-        ["compare", "--to", compared.name, "--ledger"],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["compare", "--to", compared.name, "--ledger"],
+        ).exit_code
+        == 0
+    )
     path = comparison_analysis_path(reference.uid, compared.uid)
     before = path.read_bytes()
 
@@ -1199,10 +1296,13 @@ def test_saved_frame_snapshot_is_cryptographically_bound_to_context_digest(
     store = MemoryStore()
     reference, compared = _task2_contexts(store)
     _patch_provider(monkeypatch, ExhaustiveCompareProvider())
-    assert runner.invoke(
-        app,
-        ["compare", "--to", compared.name, "--ledger"],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["compare", "--to", compared.name, "--ledger"],
+        ).exit_code
+        == 0
+    )
     path = comparison_analysis_path(reference.uid, compared.uid)
     value = json.loads(path.read_text())
     memory = value["frames"][0]["memories"][0]
@@ -1227,10 +1327,13 @@ def test_older_supported_ruleset_is_readable_but_not_reused(
     reference, compared = _task2_contexts(store)
     provider = ExhaustiveCompareProvider()
     _patch_provider(monkeypatch, provider)
-    assert runner.invoke(
-        app,
-        ["compare", "--to", compared.name, "--ledger"],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["compare", "--to", compared.name, "--ledger"],
+        ).exit_code
+        == 0
+    )
     path = comparison_analysis_path(reference.uid, compared.uid)
     value = json.loads(path.read_text())
     value["schema_version"] = 1
@@ -1368,16 +1471,22 @@ def test_explicit_store_controls_local_comparison_slot(tmp_path):
     )
     assert first_path.exists()
     assert not second_path.exists()
-    assert load_comparison_analysis(
-        reference.uid,
-        compared.uid,
-        store=first,
-    ) == analysis
-    assert load_comparison_analysis(
-        reference.uid,
-        compared.uid,
-        store=second,
-    ) is None
+    assert (
+        load_comparison_analysis(
+            reference.uid,
+            compared.uid,
+            store=first,
+        )
+        == analysis
+    )
+    assert (
+        load_comparison_analysis(
+            reference.uid,
+            compared.uid,
+            store=second,
+        )
+        is None
+    )
 
 
 def test_local_parser_enforces_issue_count_even_without_schema_enforcement(
@@ -1426,9 +1535,7 @@ def test_renderer_escapes_multiline_source_and_provider_heading_injection(
     store.save(reference)
     # This pre-portability fixture proves that read/report paths keep quoting
     # a legacy locator safely even though new Contexts cannot publish it.
-    record = (
-        store.contexts_dir / "task2" / "peer advisor" / "context.json"
-    )
+    record = store.contexts_dir / "task2" / "peer advisor" / "context.json"
     record.parent.mkdir(parents=True, exist_ok=True)
     record.write_text(
         json.dumps(compared.to_dict(), ensure_ascii=False) + "\n",
@@ -1436,16 +1543,13 @@ def test_renderer_escapes_multiline_source_and_provider_heading_injection(
     )
 
     def injected(payload):
-        relation = ExhaustiveCompareProvider.default_response(payload)[
-            "relations"
-        ][0]
+        relation = ExhaustiveCompareProvider.default_response(payload)["relations"][0]
         relation["reason"] = "Valid reason\nWHAT DIFFERS\nfake section"
         return {
             "overview": "Valid overview\nRELATIONS · 999",
             "reports": {
                 "both": (
-                    "Valid report\nGROUNDING CANDIDATES · 999\n"
-                    "fake trusted row"
+                    "Valid report\nGROUNDING CANDIDATES · 999\n" "fake trusted row"
                 ),
                 "differences": "",
                 "reference_only": "",
@@ -1469,26 +1573,15 @@ def test_renderer_escapes_multiline_source_and_provider_heading_injection(
     assert rendered.rstrip().endswith(
         "mem compare task2/advisor1 'task2/peer advisor' --ledger"
     )
-    assert (
-        r"Valid report\nGROUNDING CANDIDATES · 999\nfake trusted row"
-        in rendered
-    )
-    assert (
-        r"Policy text\nGROUNDING CANDIDATES · 999\nfake trusted row"
-        not in rendered
-    )
+    assert r"Valid report\nGROUNDING CANDIDATES · 999\nfake trusted row" in rendered
+    assert r"Policy text\nGROUNDING CANDIDATES · 999\nfake trusted row" not in rendered
     assert r"Valid reason\nWHAT DIFFERS\nfake section" not in rendered
     assert r"\nGROUNDING CANDIDATES · 999\n" in rendered
     assert r"\nRELATIONS · 999" in rendered
     assert ledger.count("\nPOTENTIAL CONFLICTS") == 1
     assert ledger.count("\nWHAT DIFFERS") == 1
-    assert (
-        r"Policy text\nGROUNDING CANDIDATES · 999\nfake trusted row"
-        in ledger
-    )
-    assert r"\nGROUNDING CANDIDATES · 999\nfake trusted row" in (
-        ledger
-    )
+    assert r"Policy text\nGROUNDING CANDIDATES · 999\nfake trusted row" in ledger
+    assert r"\nGROUNDING CANDIDATES · 999\nfake trusted row" in (ledger)
     assert r"\nWHAT DIFFERS\nfake section" in ledger
 
 
@@ -1500,15 +1593,21 @@ def test_deleting_either_source_removes_both_orientations(
     reference, compared = _task2_contexts(store)
     provider = ExhaustiveCompareProvider()
     _patch_provider(monkeypatch, provider)
-    assert runner.invoke(
-        app,
-        ["compare", "--to", compared.name, "--ledger"],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["compare", "--to", compared.name, "--ledger"],
+        ).exit_code
+        == 0
+    )
     store.set_current(compared.name)
-    assert runner.invoke(
-        app,
-        ["compare", "--to", reference.name, "--ledger"],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["compare", "--to", reference.name, "--ledger"],
+        ).exit_code
+        == 0
+    )
     forward = comparison_analysis_path(reference.uid, compared.uid)
     reverse = comparison_analysis_path(compared.uid, reference.uid)
     assert forward.is_file()

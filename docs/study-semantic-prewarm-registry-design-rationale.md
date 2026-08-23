@@ -536,6 +536,17 @@ published and 5 evidence-identical existing rows were reused. The checked
 summary is
 [`outputs/study-compare-exact-matrix/20260813-exact-718/summary.json`](../outputs/study-compare-exact-matrix/20260813-exact-718/summary.json).
 
+That paragraph is historical generation evidence. Current v4 setup rebinds the
+same declared coordinates in the fresh staged participant/authority topology.
+The actual init manifest contains all 718 rows (`56` Task 1, `289` Task 2,
+`373` Task 3). A prior 711-row read-only estimate came from an already-used
+Study topology and is not the fresh-init declaration. The exact compatibility,
+provider-contract repair, xhigh generation, and publication boundary are recorded in
+[`init-study-prewarm-regeneration-design-rationale.md`](init-study-prewarm-regeneration-design-rationale.md).
+The 2026-08-23 v2/xhigh init materially published all 718 rows with zero final
+failures under one immutable shared bundle; a provider-forbidden preparation
+audit then reused the complete matrix with `regenerated=0`.
+
 The two Meld rows are intentionally distinct cache families. Symmetric
 `A + B → C` treats A and B as equal-authority read-only peers and materializes
 a complete new C. Directional `INCOMING A → BASELINE B` keeps A read-only,
@@ -807,7 +818,7 @@ earlier all-pairs graph sidecars.
 | Work item | Implementation | Required verification |
 | --- | --- | --- |
 | Registry and lookup | Persist one immutable content-addressed baseline bundle. `init-study` pins its digest and baseline UID; participant operations materialize only requested run-local state. Lookup is an optimization decision, never operation authorization. | Two runs share one bundle but have separate local sessions; a changed baseline creates a new digest; stale/tampered artifacts fail closed; copied legacy registries remain readable. |
-| Compare | Store one ordinary Compare artifact per declared named pair; no participant-facing parent projection. The frozen current matrix contains 718 pairs. | Exact hit, truthful pair-specific report, no provider on hit, missing pair live call, add/edit/config miss, and no partial publication. Generate and publish every matrix row before claiming complete coverage. |
+| Compare | Store one ordinary Compare artifact per executable declared named pair; no participant-facing parent projection. The fresh staged v4 matrix contains all 718 declared symmetric coordinates. Provider contract v2 separates paired and one-sided relations and permits one bounded complete-response validation repair; offline generation uses `gpt-5.6-sol` at `xhigh`, which dominates the participant's frozen `none` request. | Exact hit, truthful pair-specific report, no provider on hit, missing pair regeneration or live call, add/edit/config/contract miss, repair fail-closed after one invalid repaired response, and no partial publication. Generate and atomically publish every executable matrix row before claiming complete coverage. |
 | Update | **Task 1 equal-frame reuse and unchanged-subset projection implemented.** Store an ordered Source-to-Target action proposal keyed by both complete evidence ledgers, task description, provider identity, and operation contract; regenerate run-local authority bindings during setup. Retain only actions with complete surviving support and owner routing. | All `224/224` active Task 1 locator/descendant combinations hit without a provider: `6` equal and `218` projected, including `134` valid zero-action projections. Additions, edits, cross-task inputs, reversal, and insufficient/incomparable cached quality remain live misses. |
 | Symmetric Meld | Require the exact Compare seed for each declared named pair, bind only to a valid empty new C, and keep participant-authored synthesis turns live. | Every prepared pair opens without a provider; an unprepared pair runs the ordinary complete Compare prerequisite. Same-side, cross-task, added, edited, or ambiguous inputs still miss. |
 | Directional Meld | **Task 1 equal-frame reuse and unchanged-subset action projection implemented.** The operation-owned action ledger preserves direction, complete Source support, baseline identity, and writable owner routing independently of the projected Compare prerequisite. | All `182/182` executable active Task 1 products hit without a provider; the other `42` raw products have an empty Source or baseline and are outside Meld's request domain. Participant comments and fresh-partial semantic comparison remain separate work. |

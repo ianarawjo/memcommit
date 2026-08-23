@@ -38,6 +38,28 @@ def _is_interactive_terminal() -> bool:
     return sys.stdin.isatty() and sys.stdout.isatty()
 
 
+def _show_prewarm_progress(event: str) -> None:
+    fields = event.split()
+    if not fields:
+        return
+    if fields[0] == "CHECK":
+        typer.echo("Checking shared Study cache compatibility...")
+    elif fields[0] == "READY" and len(fields) == 2 and fields[1] != "0":
+        typer.echo("Shared Study caches verified.")
+    elif fields[0] == "REFRESH_START" and len(fields) == 2:
+        typer.echo(
+            "Refreshing incompatible shared Study caches "
+            f"with {fields[1]} workers..."
+        )
+    elif fields[0] == "REFRESH_PROGRESS" and len(fields) == 3:
+        completed = int(fields[1])
+        total = int(fields[2])
+        percentage = min(100, (completed * 100) // total) if total else 100
+        typer.echo(f"Shared Study cache refresh {percentage}%.")
+    elif fields[0] == "REFRESH_COMPLETE" and len(fields) == 2:
+        typer.echo("Shared Study cache refresh complete.")
+
+
 def cmd(
     name: Annotated[
         Optional[str],
@@ -55,6 +77,27 @@ def cmd(
             help=("Editable Study baseline whose Task/grant topology will be copied"),
         ),
     ] = STUDY_BASELINE_PROFILE_NAME,
+    prewarm_workers: Annotated[
+        int,
+        typer.Option(
+            "--prewarm-workers",
+            min=1,
+            help=(
+                "Maximum parallel workers used only when declared Study caches "
+                "must be regenerated"
+            ),
+        ),
+    ] = 96,
+    prewarm_reasoning: Annotated[
+        str,
+        typer.Option(
+            "--prewarm-reasoning",
+            help=(
+                "Codex reasoning effort used only to regenerate shared Study "
+                "Compare caches"
+            ),
+        ),
+    ] = "xhigh",
 ) -> None:
     """Clone one live Study baseline and restore its real grants."""
 
@@ -70,6 +113,9 @@ def cmd(
             name=name,
             provider_policy_version=STUDY_PROVIDER_POLICY_VERSION,
             provider_policy_digest=STUDY_PROVIDER_POLICY_DIGEST,
+            prewarm_workers=prewarm_workers,
+            prewarm_reasoning=prewarm_reasoning,
+            prewarm_progress=_show_prewarm_progress,
         )
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
         typer.secho(

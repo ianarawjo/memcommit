@@ -316,8 +316,11 @@ The provider receives call-local opaque frame and Memory IDs, full bounded
 evidence content, source order, and equal-authority instructions. Context names,
 source forms, and ownership remain local presentation metadata: sending them is
 unnecessary for comparison and could introduce identity or ordering bias. The
-provider may return only `overview`, `reports`, `relations`,
-`source_assignments`, and `issues` under a strict JSON schema.
+provider may return only `overview`, `reports`, `paired_relations`,
+`distinct_relations`, `source_assignments`, and `issues` under the current
+strict JSON schema. `paired_relations` excludes `DISTINCT` by construction;
+each `distinct_relations` row declares `DISTINCT` plus its exact
+`REFERENCE`-or-`COMPARED` side.
 
 Relation definitions carry semantic judgment and prose but no nested member-ID
 arrays. `source_assignments` instead contains exactly one
@@ -327,7 +330,10 @@ alias enum. This source-indexed shape was selected after a 300-Memory Task 2
 frame repeatedly returned structurally valid relation JSON that omitted or
 duplicated at least one member. It gives structured generation one uniform
 coverage task instead of asking the model to maintain a global partition across
-variable-size nested arrays.
+variable-size nested arrays. Separating paired and one-sided relation records
+also gives structured generation the same side-shape vocabulary already used
+by Meld. JSON Schema still cannot prove that the source rows assigned to one
+paired relation include both sides, so the host remains authoritative.
 
 The repaired contract was verified live against the same Task 2 route that had
 failed twice under the nested-array contract. The provider completed a
@@ -337,7 +343,7 @@ unique `(frame_uid, memory_uid)` pairs for the frozen 150+150 frame. Symmetric
 Meld opened the imported result workbench, and closing it without acceptance
 left the target Context at zero Memories and zero checkpoints.
 
-The four reports are produced in the same one-shot call as the exhaustive
+The four reports are produced in the same complete response as the exhaustive
 ledger. They are not presentation-layer concatenations of relation summaries.
 Joining a few ledger rows would silently turn truncation into semantic
 synthesis and make a compact screen look more complete than it is. Local
@@ -383,6 +389,25 @@ arrays remain parser-compatible for tests and older provider adapters; all new
 schema-constrained turns use source assignments. The provider response schema
 does not expose or reproduce host provenance; the host attaches and validates
 that metadata independently.
+
+Provider contract `exhaustive-validation-repair-v2` permits at most one
+explicit validation-repair call after a complete response fails a local
+cross-record invariant. The repair payload contains the unchanged complete
+frame payload, the complete rejected response, and one trusted structural
+validation error. The error is not semantic evidence and cannot ground a new
+claim or resolve uncertainty. Repair returns another complete response under
+the same schema, never a patch, and the host validates it from the beginning.
+A second invalid response still fails closed, and nothing is saved from the
+rejected response. Transport retries remain an outer execution concern rather
+than permission to weaken the decoder.
+
+This bounded repair was added after the 718-row Study regeneration using the
+v1 provider contract completed 711 rows but repeatedly left seven rows with a
+non-`DISTINCT` relation whose assignments came from only one PEER side. Each
+surviving row failed six provider attempts across three resumable init runs.
+The v2 split schema, explicit side instruction, and validation feedback repair
+the generation contract at the shared Compare boundary instead of special
+casing Study prewarm or rewriting an invalid relation locally.
 
 Local validation rejects:
 

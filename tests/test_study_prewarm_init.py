@@ -9,6 +9,7 @@ import memcommit.config as config_module
 import memcommit.ops as ops
 import memcommit.profiles as profiles_module
 import memcommit.study_prewarm.atomize as atomize_prewarm_module
+import memcommit.study_prewarm.prepare as prewarm_prepare_module
 from memcommit.cli import app
 from memcommit.atomize import create_atomize_analysis, impact_atomize
 from memcommit.commands.comparison_execution import load_comparison_context
@@ -165,8 +166,7 @@ def test_init_study_copies_and_rebinds_declared_compare_and_atomize(
         for name in ("task-2/advisor1", "task-2/advisor2")
     )
     contexts = tuple(
-        load_comparison_context(access, include_descendants=True)
-        for access in accesses
+        load_comparison_context(access, include_descendants=True) for access in accesses
     )
     description_access = resolve_context_access(
         first_store,
@@ -203,9 +203,7 @@ def test_init_study_copies_and_rebinds_declared_compare_and_atomize(
         overview = value.memories[
             profiles_module._STUDY_PRACTICE_DESCRIPTION_OVERVIEW_UID
         ]
-        task = value.memories[
-            profiles_module._STUDY_PRACTICE_DESCRIPTION_TASK_UID
-        ]
+        task = value.memories[profiles_module._STUDY_PRACTICE_DESCRIPTION_TASK_UID]
         assert isinstance(overview, Memory)
         assert isinstance(task, Memory)
         overview.content = (
@@ -248,9 +246,24 @@ def test_init_study_copies_and_rebinds_declared_compare_and_atomize(
         artifact=atomize_artifact,
     )
 
+    preparation_calls = []
+    real_prepare = prewarm_prepare_module.prepare_study_prewarms
+
+    def observed_prepare(**kwargs):
+        preparation_calls.append(kwargs)
+        return real_prepare(**kwargs)
+
+    monkeypatch.setattr(
+        prewarm_prepare_module,
+        "prepare_study_prewarms",
+        observed_prepare,
+    )
     initialized = runner.invoke(app, ["init-study", "seed-target"])
 
     assert initialized.exit_code == 0, initialized.stderr or initialized.output
+    assert len(preparation_calls) == 1
+    assert preparation_calls[0]["workers"] == 96
+    assert preparation_calls[0]["reasoning"] == "xhigh"
     assert initialized.output.count("Shared Study prewarm bundle attached.") == 1
     assert "Compare prewarms" not in initialized.output
     assert "Atomize prewarms" not in initialized.output
@@ -292,11 +305,14 @@ def test_init_study_copies_and_rebinds_declared_compare_and_atomize(
     )
     assert opened_atomize.materialized_prepared is True
     assert comparison_session_entries(second_store) == ()
-    assert load_granted_comparison_artifact(
-        second_store,
-        analysis.frames[0].context_uid,
-        analysis.frames[1].context_uid,
-    ) is None
+    assert (
+        load_granted_comparison_artifact(
+            second_store,
+            analysis.frames[0].context_uid,
+            analysis.frames[1].context_uid,
+        )
+        is None
+    )
 
     current_name = second_store.current_context_name()
     compare_accesses = tuple(

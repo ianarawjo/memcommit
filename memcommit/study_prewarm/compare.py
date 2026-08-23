@@ -87,8 +87,8 @@ class EquivalentComparePrewarmMatch:
 def _same_or_descendant_name(name: str, parent: str) -> bool:
     # The selected locator may sit above or below the prepared root.  The
     # Memory ledger below, rather than depth, decides whether it is reusable.
-    return name == parent or name.startswith(parent + "/") or parent.startswith(
-        name + "/"
+    return (
+        name == parent or name.startswith(parent + "/") or parent.startswith(name + "/")
     )
 
 
@@ -338,12 +338,10 @@ def _projection_reports(
 ) -> ComparisonReports:
     reference_uid, compared_uid = (frame.uid for frame in frames)
     both_count = sum(
-        relation.kind in {"EQUIVALENT", "COMPATIBLE"}
-        for relation in relations
+        relation.kind in {"EQUIVALENT", "COMPATIBLE"} for relation in relations
     )
     differences_count = sum(
-        relation.kind in {"SCOPED", "CONFLICT", "UNCLEAR"}
-        for relation in relations
+        relation.kind in {"SCOPED", "CONFLICT", "UNCLEAR"} for relation in relations
     )
     reference_count = sum(
         relation.kind == "DISTINCT"
@@ -395,8 +393,7 @@ def _project_analysis(
             requested_frame = requested_by_parent.get(member.frame_uid)
             if (
                 requested_frame is None
-                or member.memory_uid
-                not in requested_memory_uids[requested_frame.uid]
+                or member.memory_uid not in requested_memory_uids[requested_frame.uid]
             ):
                 continue
             projected_members.append(
@@ -414,12 +411,9 @@ def _project_analysis(
             # one-sided primary disposition, but cannot recover another
             # semantic relation that the parent partition may have hidden.
             kind = "DISTINCT"
-        status = (
-            "UNRESOLVED" if kind in {"CONFLICT", "UNCLEAR"} else "RESOLVED"
-        )
+        status = "UNRESOLVED" if kind in {"CONFLICT", "UNCLEAR"} else "RESOLVED"
         members_key = ",".join(
-            f"{member.frame_uid}:{member.memory_uid}"
-            for member in projected_members
+            f"{member.frame_uid}:{member.memory_uid}" for member in projected_members
         )
         relation_uid = str(
             uuid.uuid5(
@@ -427,9 +421,8 @@ def _project_analysis(
                 f"projected-relation:{relation.uid}:{kind}:{members_key}",
             )
         )
-        unchanged = (
-            kind == relation.kind
-            and len(projected_members) == len(relation.members)
+        unchanged = kind == relation.kind and len(projected_members) == len(
+            relation.members
         )
         projected_relation = ComparisonRelation.from_dict(
             {
@@ -516,6 +509,8 @@ def _compare_key_material(
     provider: object,
     model: object,
     reasoning: object,
+    ruleset_version: str = COMPARISON_RULESET_VERSION,
+    provider_contract_version: str = COMPARISON_PROVIDER_CONTRACT_VERSION,
 ) -> dict[str, object]:
     return {
         "operation": "COMPARE",
@@ -523,8 +518,8 @@ def _compare_key_material(
         "provider": provider,
         "model": model,
         "reasoning": reasoning,
-        "provider_contract_version": COMPARISON_PROVIDER_CONTRACT_VERSION,
-        "ruleset_version": COMPARISON_RULESET_VERSION,
+        "provider_contract_version": provider_contract_version,
+        "ruleset_version": ruleset_version,
         "task_description": description,
         "frames": [
             {
@@ -564,9 +559,8 @@ def build_compare_prewarm_artifact(
 
     if task not in {"tutorial", "task-1", "task-2", "task-3"}:
         raise StudyPrewarmRegistryError("Unknown Study task for Compare prewarm.")
-    if (
-        analysis.ruleset_version != COMPARISON_RULESET_VERSION
-        or any(_task_root(frame.context_name) != task for frame in analysis.frames)
+    if analysis.ruleset_version != COMPARISON_RULESET_VERSION or any(
+        _task_root(frame.context_name) != task for frame in analysis.frames
     ):
         raise StudyPrewarmRegistryError("Compare analysis does not belong to the task.")
     if (
@@ -635,6 +629,8 @@ def _validate_artifact(
     *,
     entry_key: str,
     entry_task: str,
+    expected_ruleset_version: str = COMPARISON_RULESET_VERSION,
+    expected_provider_contract_version: str = COMPARISON_PROVIDER_CONTRACT_VERSION,
 ) -> tuple[ComparisonAnalysis, dict[str, object]]:
     expected = {
         "kind",
@@ -658,9 +654,8 @@ def _validate_artifact(
         or value.get("key") != entry_key
         or value.get("task") != entry_task
         or value.get("operation") != "COMPARE"
-        or value.get("provider_contract_version")
-        != COMPARISON_PROVIDER_CONTRACT_VERSION
-        or value.get("ruleset_version") != COMPARISON_RULESET_VERSION
+        or value.get("provider_contract_version") != expected_provider_contract_version
+        or value.get("ruleset_version") != expected_ruleset_version
     ):
         raise StudyPrewarmRegistryError("Declared Compare prewarm is invalid.")
     provider = value.get("provider")
@@ -686,9 +681,8 @@ def _validate_artifact(
             "Declared Compare analysis is invalid."
         ) from error
     if (
-        value.get("analysis_digest")
-        != comparison_canonical_digest(analysis.to_dict())
-        or analysis.ruleset_version != COMPARISON_RULESET_VERSION
+        value.get("analysis_digest") != comparison_canonical_digest(analysis.to_dict())
+        or analysis.ruleset_version != expected_ruleset_version
     ):
         raise StudyPrewarmRegistryError("Declared Compare analysis digest is stale.")
     description = value.get("task_description")
@@ -708,6 +702,8 @@ def _validate_artifact(
             provider=provider,
             model=model,
             reasoning=reasoning,
+            ruleset_version=expected_ruleset_version,
+            provider_contract_version=expected_provider_contract_version,
         )
     )
     if expected_key != entry_key:
@@ -736,19 +732,12 @@ def find_declared_equivalent_compare_analysis(
         ):
             return None
     task = _task_root(comparison_input.frames[0].context_name)
-    if (
-        task is None
-        or _task_root(comparison_input.frames[1].context_name) != task
-    ):
+    if task is None or _task_root(comparison_input.frames[1].context_name) != task:
         return None
     requested_identity = _configured_semantic_identity()
     candidates: list[tuple[SemanticIdentity, EquivalentComparePrewarmMatch]] = []
     for entry in registry.entries:
-        if (
-            not entry.enabled
-            or entry.operation != "COMPARE"
-            or entry.task != task
-        ):
+        if not entry.enabled or entry.operation != "COMPARE" or entry.task != task:
             continue
         artifact = load_artifact(store.store_dir, entry)
         prepared, description = _validate_artifact(
@@ -761,17 +750,14 @@ def find_declared_equivalent_compare_analysis(
             artifact.get("model"),
             artifact.get("reasoning"),
         )
-        if (
-            not prewarm_quality_satisfies(
-                cached_identity,  # type: ignore[arg-type]
-                requested_identity,
-            )
-            or not _declared_compare_installation_matches(
-                store,
-                entry=entry,
-                analysis=prepared,
-                description=description,
-            )
+        if not prewarm_quality_satisfies(
+            cached_identity,  # type: ignore[arg-type]
+            requested_identity,
+        ) or not _declared_compare_installation_matches(
+            store,
+            entry=entry,
+            analysis=prepared,
+            description=description,
         ):
             continue
         description_access = resolve_context_access(
@@ -819,11 +805,7 @@ def find_declared_equivalent_compare_analysis(
                         prepared.frames[0].context_name,
                         prepared.frames[1].context_name,
                     ),
-                    origin=(
-                        "EXACT_PREWARM"
-                        if exact
-                        else "EQUIVALENT_SCOPE_PREWARM"
-                    ),
+                    origin=("EXACT_PREWARM" if exact else "EQUIVALENT_SCOPE_PREWARM"),
                 ),
             )
         )
@@ -861,10 +843,7 @@ def find_declared_projected_compare_analysis(
     ):
         return None
     task = _task_root(comparison_input.frames[0].context_name)
-    if (
-        task is None
-        or _task_root(comparison_input.frames[1].context_name) != task
-    ):
+    if task is None or _task_root(comparison_input.frames[1].context_name) != task:
         return None
     requested_identity = _configured_semantic_identity()
     candidates: list[
@@ -877,11 +856,7 @@ def find_declared_projected_compare_analysis(
         ]
     ] = []
     for entry in registry.entries:
-        if (
-            not entry.enabled
-            or entry.operation != "COMPARE"
-            or entry.task != task
-        ):
+        if not entry.enabled or entry.operation != "COMPARE" or entry.task != task:
             continue
         artifact = load_artifact(store.store_dir, entry)
         parent, description = _validate_artifact(
@@ -894,17 +869,14 @@ def find_declared_projected_compare_analysis(
             artifact.get("model"),
             artifact.get("reasoning"),
         )
-        if (
-            not prewarm_quality_satisfies(
-                cached_identity,  # type: ignore[arg-type]
-                requested_identity,
-            )
-            or not _declared_compare_installation_matches(
-                store,
-                entry=entry,
-                analysis=parent,
-                description=description,
-            )
+        if not prewarm_quality_satisfies(
+            cached_identity,  # type: ignore[arg-type]
+            requested_identity,
+        ) or not _declared_compare_installation_matches(
+            store,
+            entry=entry,
+            analysis=parent,
+            description=description,
         ):
             continue
         description_access = resolve_context_access(
@@ -931,8 +903,7 @@ def find_declared_projected_compare_analysis(
             continue
         if (
             orientation == (0, 1)
-            and parent.include_descendants
-            == comparison_input.include_descendants
+            and parent.include_descendants == comparison_input.include_descendants
             and all(
                 requested.context_uid == original.context_uid
                 and requested.context_name == original.context_name
@@ -1096,9 +1067,7 @@ def record_equivalent_compare_prewarm(
             "analysis_uid": analysis.uid,
             "analysis_digest": comparison_canonical_digest(analysis.to_dict()),
             "prepared_context_names": list(prepared_context_names),
-            "current_context_names": [
-                frame.context_name for frame in analysis.frames
-            ],
+            "current_context_names": [frame.context_name for frame in analysis.frames],
         },
     )
 
@@ -1126,9 +1095,7 @@ def record_projected_compare_prewarm(
             "analysis_uid": analysis.uid,
             "analysis_digest": comparison_canonical_digest(analysis.to_dict()),
             "prepared_context_names": list(prepared_context_names),
-            "current_context_names": [
-                frame.context_name for frame in analysis.frames
-            ],
+            "current_context_names": [frame.context_name for frame in analysis.frames],
         },
     )
 
@@ -1199,7 +1166,9 @@ def installed_compare_prewarm_origin(
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as error:
-        raise StudyPrewarmRegistryError("Compare prewarm receipt is invalid.") from error
+        raise StudyPrewarmRegistryError(
+            "Compare prewarm receipt is invalid."
+        ) from error
     if not isinstance(value, dict):
         return None
     if (
@@ -1316,9 +1285,11 @@ def install_declared_compare_prewarms(
                 "Declared Compare prewarm does not match the current Sources."
             )
         authorize_combination(accesses)
-        retention = analysis_retention(accesses) if any(
-            access.is_granted for access in accesses
-        ) else None
+        retention = (
+            analysis_retention(accesses)
+            if any(access.is_granted for access in accesses)
+            else None
+        )
         if any(access.is_granted for access in accesses) and retention is None:
             raise StudyPrewarmRegistryError(
                 "Declared Compare prewarm cannot be retained under current Grants."

@@ -24,7 +24,7 @@ from pathlib import Path
 import shutil
 import stat
 import uuid
-from typing import Iterator
+from typing import Callable, Iterator
 
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.context_naming import validate_portable_context_name
@@ -2575,9 +2575,7 @@ def resolve_granted_context_view(
     bindings = {binding.name: binding.uid for binding in grant.contexts}
     authority_uid = bindings.get(authority_name)
     if authority_uid is None:
-        raise ProfileError(
-            f"Context {requested_name!r} is not included in this Grant."
-        )
+        raise ProfileError(f"Context {requested_name!r} is not included in this Grant.")
     if permission not in grant.permissions:
         raise ProfileError(
             f"Grant {grant.uid[:8]} does not allow {permission.lower()} access "
@@ -3706,7 +3704,10 @@ def _publish_study_profile_batch(
             for profile, inspection in zip(profiles, grant_aware, strict=True)
         )
         return StudyImportResult(profiles, final_inspections)
-    except Exception:
+    except BaseException:
+        # First-generation cache work can run for minutes. Cancellation must
+        # roll the already-moved private stores back just like provider failure
+        # instead of leaving unregistered run directories behind.
         if not committed:
             for destination, source in reversed(published):
                 if destination.exists() and not source.exists():
@@ -4680,9 +4681,11 @@ def _compose_study_run_pair(
             sources.append(
                 replace(
                     source,
-                    store=authority_root
-                    if source.role == "AUTHORITY"
-                    else participant_root,
+                    store=(
+                        authority_root
+                        if source.role == "AUTHORITY"
+                        else participant_root
+                    ),
                     inspection=inspection,
                 )
             )
@@ -4735,6 +4738,9 @@ def _publish_study_run_pair(
     baseline_digest: str,
     provider_policy_version: str,
     provider_policy_digest: str,
+    prewarm_workers: int,
+    prewarm_reasoning: str,
+    prewarm_progress: Callable[[str], None] | None,
 ) -> StudyInitializationResult:
     """Publish the run's two stores and grants as one registry transaction."""
 
@@ -4781,10 +4787,6 @@ def _publish_study_run_pair(
             packages,
             participant_root=participant_staging,
             authority_root=authority_staging,
-        )
-        _attach_declared_study_prewarms(
-            profile_store_dir(baseline),
-            participant_staging,
         )
         profiles_by_name: dict[str, ProfileEntry] = {}
         roots_by_name: dict[str, Path] = {}
@@ -4835,6 +4837,34 @@ def _publish_study_run_pair(
                 raise ProfileError("Managed profile destination is occupied.")
             os.replace(source, destination)
             published.append((destination, source))
+        # Cache compatibility is checked only after the complete staged grant
+        # topology can be resolved, but before the Profile registry advertises
+        # the new run. Provider or publication failure therefore rolls both
+        # run stores back without exposing a half-initialized participant.
+        from memcommit.study_prewarm.prepare import prepare_study_prewarms
+        from memcommit.store import MemoryStore
+
+        try:
+            prepare_study_prewarms(
+                baseline=baseline,
+                baseline_store_root=profile_store_dir(baseline),
+                participant_store=MemoryStore(
+                    root=profile_store_dir(participant),
+                    create=False,
+                ),
+                registry_snapshot=updated,
+                workers=prewarm_workers,
+                reasoning=prewarm_reasoning,
+                progress=prewarm_progress,
+            )
+            _attach_declared_study_prewarms(
+                profile_store_dir(baseline),
+                profile_store_dir(participant),
+            )
+        except Exception as error:
+            raise ProfileError(
+                f"Study semantic prewarm could not be prepared: {error}"
+            ) from error
         # The participant pins a digest-checked immutable bundle, but no
         # operation artifact or hidden receipt is installed during setup.
         # Operation-specific evidence and authority validation happen only
@@ -4888,6 +4918,9 @@ def init_study_profile(
     name: str | None = None,
     provider_policy_version: str,
     provider_policy_digest: str,
+    prewarm_workers: int = 96,
+    prewarm_reasoning: str = "xhigh",
+    prewarm_progress: Callable[[str], None] | None = None,
 ) -> StudyInitializationResult:
     """Create one isolated participant Profile and one authority Profile."""
 
@@ -4964,6 +4997,9 @@ def init_study_profile(
                 baseline_digest=before,
                 provider_policy_version=provider_policy_version,
                 provider_policy_digest=provider_policy_digest,
+                prewarm_workers=prewarm_workers,
+                prewarm_reasoning=prewarm_reasoning,
+                prewarm_progress=prewarm_progress,
             )
         finally:
             if staging.exists() and not staging.is_symlink():

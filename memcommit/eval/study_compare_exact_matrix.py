@@ -21,21 +21,36 @@ import threading
 import time
 
 from memcommit.authority.access import resolve_context_access
+from memcommit.commands.comparison_execution import load_comparison_context
 from memcommit.commands.readable_context_catalog import (
+    ReadableContextCatalog,
     freeze_profile_readable_context_catalog,
 )
-from memcommit.comparison import ComparisonAnalysis, ComparisonInput
-from memcommit.comparison_provider import analyze_comparison
+from memcommit.comparison import (
+    COMPARISON_RULESET_VERSION,
+    SUPPORTED_COMPARISON_RULESET_VERSIONS,
+    ComparisonAnalysis,
+    ComparisonInput,
+)
+from memcommit.comparison_evidence import ComparisonEvidenceError
+from memcommit.comparison_provider import (
+    COMPARISON_PROVIDER_CONTRACT_VERSION,
+    SUPPORTED_COMPARISON_PROVIDER_CONTRACT_VERSIONS,
+    analyze_comparison,
+)
 from memcommit.config import Config
 from memcommit.eval.study_compare_graph_prewarm import (
     GraphPair,
+    GraphView,
     TaskGraphPlan,
+    _view,
     build_graph_plan,
 )
 from memcommit.infrastructure.providers.policy import (
     resolve_codex_evaluation_policy,
 )
 from memcommit.profile_config import (
+    ProfileRegistry,
     load_profile_registry,
     profile_store_dir,
     study_run_identity,
@@ -105,6 +120,8 @@ def _pair_plan_key(pair: GraphPair, *, model: str, reasoning: str) -> str:
                 "digest": pair.right.context_digest,
             },
             "include_descendants": [True, True],
+            "ruleset_version": COMPARISON_RULESET_VERSION,
+            "provider_contract_version": COMPARISON_PROVIDER_CONTRACT_VERSION,
             "provider": CODEX_CHATGPT_PROVIDER,
             "model": model,
             "reasoning": reasoning,
@@ -133,7 +150,10 @@ def declared_exact_plans(
         task_parents = tuple(
             parent
             for parent in parents
-            if all(frame.context_name.split("/", 1)[0] == plan.task for frame in parent.frames)
+            if all(
+                frame.context_name.split("/", 1)[0] == plan.task
+                for frame in parent.frames
+            )
         )
         for pair in plan.pairs:
             # Ordinary Compare rejects an empty side before provider
@@ -150,28 +170,163 @@ def declared_exact_plans(
     return tuple(selected)
 
 
+def plans_from_declared_exact_coordinates(
+    catalog: ReadableContextCatalog,
+    *,
+    parents: Sequence[ComparisonAnalysis],
+    model: str,
+    reasoning: str,
+    registry_snapshot: ProfileRegistry | None = None,
+) -> tuple[tuple[TaskGraphPlan, ...], int]:
+    """Rebind a legacy exact declaration to the current readable frames.
+
+    Coordinates, not old semantic output, are the declaration. Reversed copies
+    collapse to one symmetric pair. A coordinate whose current ordinary
+    Compare input is itself invalid is disabled instead of being sent to a
+    provider that production Compare could never reach.
+    """
+
+    coordinates: dict[str, set[tuple[str, str]]] = {task: set() for task in TASKS}
+    for parent in parents:
+        task = parent.frames[0].context_name.split("/", 1)[0]
+        if (
+            task not in coordinates
+            or parent.frames[1].context_name.split("/", 1)[0] != task
+            or parent.include_descendants != (True, True)
+        ):
+            raise StudyCompareExactMatrixError(
+                "Legacy Compare declaration has unsupported coordinates."
+            )
+        names = tuple(
+            sorted(
+                (parent.frames[0].context_name, parent.frames[1].context_name),
+                key=str.casefold,
+            )
+        )
+        if names[0] == names[1]:
+            raise StudyCompareExactMatrixError(
+                "Legacy Compare declaration repeats one Context."
+            )
+        coordinates[task].add(names)
+
+    plans: list[TaskGraphPlan] = []
+    skipped = 0
+    for task in TASKS:
+        description_name = f"{task}/description"
+        description = load_comparison_context(
+            catalog.access_for(description_name),
+            registry=registry_snapshot,
+        )
+        description_view = _view(task, description)
+        views: dict[str, GraphView] = {description_name: description_view}
+        pairs: list[GraphPair] = []
+        for left_name, right_name in sorted(coordinates[task]):
+            try:
+                for name in (left_name, right_name):
+                    if name not in views:
+                        views[name] = _view(
+                            task,
+                            load_comparison_context(
+                                catalog.access_for(name),
+                                include_descendants=True,
+                                registry=registry_snapshot,
+                            ),
+                        )
+            except (FileNotFoundError, ComparisonEvidenceError):
+                skipped += 1
+                continue
+            left = views[left_name]
+            right = views[right_name]
+            if not left.memory_uids or not right.memory_uids:
+                skipped += 1
+                continue
+            pairs.append(
+                GraphPair(
+                    task=task,
+                    description_digest=description_view.context_digest,
+                    left=left,
+                    right=right,
+                    key="",
+                )
+            )
+        plans.append(
+            TaskGraphPlan(
+                task=task,
+                description_name=description_name,
+                description_digest=description_view.context_digest,
+                views=tuple(views[name] for name in sorted(views)),
+                pairs=tuple(pairs),
+            )
+        )
+    return tuple(plans), skipped
+
+
 def _existing_exact_artifacts(
-    store: MemoryStore,
-) -> tuple[tuple[ComparisonAnalysis, dict[str, object]], ...]:
-    registry = load_registry(store.store_dir)
+    store_root: Path,
+    *,
+    allow_legacy_parents: bool,
+) -> tuple[
+    tuple[tuple[ComparisonAnalysis, dict[str, object]], ...],
+    tuple[ComparisonAnalysis, ...],
+]:
+    registry = load_registry(store_root)
     if registry is None:
-        return ()
+        return (), ()
     result: list[tuple[ComparisonAnalysis, dict[str, object]]] = []
+    legacy_parents: list[ComparisonAnalysis] = []
     for entry in registry.entries:
-        if not entry.enabled or entry.operation != "COMPARE":
+        if entry.operation != "COMPARE":
             continue
-        artifact = load_artifact(store.store_dir, entry)
+        artifact = load_artifact(store_root, entry)
+        ruleset = artifact.get("ruleset_version")
+        provider_contract = artifact.get("provider_contract_version")
+        if (
+            ruleset != COMPARISON_RULESET_VERSION
+            or provider_contract != COMPARISON_PROVIDER_CONTRACT_VERSION
+        ):
+            if (
+                not allow_legacy_parents
+                or not isinstance(ruleset, str)
+                or ruleset not in SUPPORTED_COMPARISON_RULESET_VERSIONS
+                or not isinstance(provider_contract, str)
+                or provider_contract
+                not in SUPPORTED_COMPARISON_PROVIDER_CONTRACT_VERSIONS
+            ):
+                _validate_artifact(
+                    artifact,
+                    entry_key=entry.key,
+                    entry_task=entry.task,
+                )
+                raise AssertionError("unreachable")
+            analysis, _ = _validate_artifact(
+                artifact,
+                entry_key=entry.key,
+                entry_task=entry.task,
+                expected_ruleset_version=ruleset,
+                expected_provider_contract_version=provider_contract,
+            )
+            legacy_parents.append(analysis)
+            continue
+        if not entry.enabled:
+            continue
         analysis, _ = _validate_artifact(
             artifact,
             entry_key=entry.key,
             entry_task=entry.task,
         )
         result.append((analysis, artifact))
-    return tuple(result)
+    return tuple(result), tuple(legacy_parents)
 
 
-def _pair_output_path(root: Path, pair: GraphPair, *, model: str, reasoning: str) -> Path:
-    return root / pair.task / "pairs" / f"{_pair_plan_key(pair, model=model, reasoning=reasoning)}.json"
+def _pair_output_path(
+    root: Path, pair: GraphPair, *, model: str, reasoning: str
+) -> Path:
+    return (
+        root
+        / pair.task
+        / "pairs"
+        / f"{_pair_plan_key(pair, model=model, reasoning=reasoning)}.json"
+    )
 
 
 def _validate_pair_output(
@@ -258,25 +413,45 @@ def run_exact_matrix(
     workers: int = DEFAULT_WORKERS,
     retries: int = DEFAULT_RETRIES,
     progress: Callable[[str], None] | None = None,
+    registry_snapshot: ProfileRegistry | None = None,
+    artifact_store_root: Path | None = None,
+    allow_legacy_parents: bool = False,
+    expected_pair_count: int = 718,
+    use_declared_plan_pairs: bool = False,
+    publish_batch: (
+        Callable[[tuple[tuple[str, str, dict[str, object]], ...]], int] | None
+    ) = None,
 ) -> dict[str, object]:
     if workers < 1 or retries < 0 or timeout <= 0:
         raise StudyCompareExactMatrixError("Invalid matrix execution settings.")
-    profile_registry = load_profile_registry()
+    profile_registry = registry_snapshot or load_profile_registry()
     identity = study_run_identity(profile_registry.active)
     if identity is None or identity.role != "PARTICIPANT":
         raise StudyCompareExactMatrixError("Active Profile is not a Study participant.")
     baseline = profile_registry.by_name(baseline_profile_name)
     if baseline is None or baseline.uid != identity.baseline_profile_uid:
-        raise StudyCompareExactMatrixError("Study baseline does not match the active run.")
-    existing = _existing_exact_artifacts(store)
-    parents = tuple(analysis for analysis, _ in existing)
-    pairs = declared_exact_plans(plans, parents=parents)
-    if len(pairs) != 718:
         raise StudyCompareExactMatrixError(
-            f"Frozen exact Compare matrix has {len(pairs)} pairs instead of 718."
+            "Study baseline does not match the active run."
+        )
+    existing, legacy_parents = _existing_exact_artifacts(
+        artifact_store_root or store.store_dir,
+        allow_legacy_parents=allow_legacy_parents,
+    )
+    parents = (*tuple(analysis for analysis, _ in existing), *legacy_parents)
+    pairs = (
+        tuple(pair for plan in plans for pair in plan.pairs)
+        if use_declared_plan_pairs
+        else declared_exact_plans(plans, parents=parents)
+    )
+    if len(pairs) != expected_pair_count:
+        raise StudyCompareExactMatrixError(
+            "Frozen exact Compare matrix has "
+            f"{len(pairs)} pairs instead of {expected_pair_count}."
         )
     descriptions = {
-        plan.task: next(view.context for view in plan.views if view.name == plan.description_name)
+        plan.task: next(
+            view.context for view in plan.views if view.name == plan.description_name
+        )
         for plan in plans
     }
     output_root.mkdir(parents=True, exist_ok=True)
@@ -290,12 +465,11 @@ def run_exact_matrix(
             "profile_uid": profile_registry.active.uid,
             "baseline_profile_uid": baseline.uid,
             "provider": CODEX_CHATGPT_PROVIDER,
+            "provider_contract_version": COMPARISON_PROVIDER_CONTRACT_VERSION,
             "model": model,
             "reasoning": reasoning,
             "pair_count": len(pairs),
-            "tasks": {
-                task: sum(pair.task == task for pair in pairs) for task in TASKS
-            },
+            "tasks": {task: sum(pair.task == task for pair in pairs) for task in TASKS},
             "pairs": [
                 {
                     "pair_key": _pair_plan_key(pair, model=model, reasoning=reasoning),
@@ -397,7 +571,9 @@ def run_exact_matrix(
                     )
                     outputs[key] = value
                     if progress is not None:
-                        progress(f"COMPLETE {len(outputs)}/{len(pairs)} {pair.left.name} <> {pair.right.name}")
+                        progress(
+                            f"COMPLETE {len(outputs)}/{len(pairs)} {pair.left.name} <> {pair.right.name}"
+                        )
                 except Exception as error:
                     if attempts[key] <= retries:
                         submit(pair)
@@ -428,27 +604,41 @@ def run_exact_matrix(
             f"Exact Compare matrix has {len(failures)} failed pairs."
         )
 
+    ordered_values = tuple(
+        outputs[_pair_plan_key(pair, model=model, reasoning=reasoning)]
+        for pair in pairs
+    )
+    records = tuple(
+        (
+            str(value["task"]),
+            str(value["artifact"]["key"]),
+            value["artifact"],
+        )
+        for value in ordered_values
+    )
     published = 0
     baseline_root = profile_store_dir(baseline)
-    existing_keys = {
-        entry.key
-        for entry in (load_registry(baseline_root).entries if load_registry(baseline_root) else ())
-    }
-    for value in outputs.values():
-        artifact = value["artifact"]
-        artifact_key = str(artifact["key"])
-        if artifact_key in existing_keys:
-            continue
-        publish_artifact(
-            baseline_root,
-            baseline_profile_uid=baseline.uid,
-            operation="COMPARE",
-            task=str(value["task"]),
-            key=artifact_key,
-            artifact=artifact,
-        )
-        existing_keys.add(artifact_key)
-        published += 1
+    if publish_batch is not None:
+        published = publish_batch(records)
+    else:
+        existing_registry = load_registry(baseline_root)
+        existing_keys = {
+            entry.key
+            for entry in (existing_registry.entries if existing_registry else ())
+        }
+        for task, artifact_key, artifact in records:
+            if artifact_key in existing_keys:
+                continue
+            publish_artifact(
+                baseline_root,
+                baseline_profile_uid=baseline.uid,
+                operation="COMPARE",
+                task=task,
+                key=artifact_key,
+                artifact=artifact,
+            )
+            existing_keys.add(artifact_key)
+            published += 1
     summary = {
         "kind": KIND + "_SUMMARY",
         "schema_version": SCHEMA_VERSION,
@@ -456,12 +646,12 @@ def run_exact_matrix(
         "pair_count": len(pairs),
         "completed_count": len(outputs),
         "reused_existing_count": sum(
-            bool(value.get("reused_existing")) for value in outputs.values()
+            bool(value.get("reused_existing")) for value in ordered_values
         ),
         "published_count": published,
         "provider_seconds": sum(
             float(value.get("provider_seconds", 0.0))
-            for value in outputs.values()
+            for value in ordered_values
             if not value.get("reused_existing")
         ),
         "failures": [],
