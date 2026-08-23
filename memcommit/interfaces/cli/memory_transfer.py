@@ -86,7 +86,7 @@ def render_copy_plain(result: CopyMemoriesResult) -> None:
     typer.echo(
         f"{action} · {result.count} "
         f"{'Memory' if result.count == 1 else 'Memories'} → '{target}' · "
-        f"{result.uid_policy} UIDs · {_placement_text(result)}"
+        f"NEW UIDs · {_placement_text(result)}"
     )
     for item in result.items:
         source = display_escape_text(item.source_context_name)
@@ -202,16 +202,6 @@ def copy_cmd(
             help="Insert the copied batch after this Target direct item",
         ),
     ] = None,
-    preserve_uids: Annotated[
-        bool,
-        typer.Option(
-            "--preserve-uids",
-            help=(
-                "Keep Source Memory UIDs; default Copy creates fresh independent "
-                "identities"
-            ),
-        ),
-    ] = False,
 ) -> None:
     try:
         store = MemoryStore()
@@ -226,7 +216,6 @@ def copy_cmd(
                 to,
                 before,
                 after,
-                preserve_uids,
             )
         )
         if bare:
@@ -249,7 +238,6 @@ def copy_cmd(
                 into_locator=target,
                 before=before,
                 after=after,
-                uid_policy="PRESERVE" if preserve_uids else "FRESH",
             )
         result = run_copy(
             request,

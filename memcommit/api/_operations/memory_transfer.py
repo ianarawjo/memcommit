@@ -114,12 +114,9 @@ def copy_memories(
     source_context: str | None = None,
     before: str | None = None,
     after: str | None = None,
-    preserve_uids: bool = False,
 ) -> CopyMemoriesReceipt:
     """Copy one exact ordered batch into an existing local Context."""
 
-    if not isinstance(preserve_uids, bool):
-        raise MemoryTransferInputError("preserve_uids must be a boolean.")
     try:
         result = run_copy(
             CopyMemoriesRequest(
@@ -128,7 +125,6 @@ def copy_memories(
                 source_locator=source_context,
                 before=before,
                 after=after,
-                uid_policy="PRESERVE" if preserve_uids else "FRESH",
             ),
             port=MemoryStoreMemoryTransferPort.capture(runtime.store),
         )
@@ -138,7 +134,6 @@ def copy_memories(
     return CopyMemoriesReceipt(
         into_context_name=result.into_name,
         into_context_uid=result.into_uid,
-        uid_policy=result.uid_policy,
         placement=_placement(result.placement),
         items=_items(result.items),
         plan_digest=result.plan_digest,

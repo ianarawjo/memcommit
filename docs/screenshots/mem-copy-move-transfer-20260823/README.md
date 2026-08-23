@@ -1,11 +1,11 @@
 # `mem copy` and `mem move` Embed-shaped TUI capture log
 
 These images render the actual color-preserving PTY stream from bare
-`mem copy` and `mem move`. Copy checks two direct Memories, changes the identity
-policy, selects one Target and one interleaved `POSITION` line, approves the
-compact editable command, and verifies the Store. Move follows the same source,
-target, placement, and exact-command grammar without a normal link-policy
-frame. Separate disposable runs verify default live-Embed retargeting, locked
+`mem copy` and `mem move`. Copy checks two direct Memories, selects one Target
+and one interleaved `POSITION` line, approves the compact editable command, and
+verifies that every output has a new UID. Move follows the same source, target,
+placement, and exact-command grammar without a normal link-policy frame.
+Separate disposable runs verify default live-Embed retargeting, locked
 link-owner rejection, Target self-link rejection, and the advanced
 `--break-links` path. Snapshot References remain unchanged in every Move run.
 
@@ -46,14 +46,14 @@ Break verifies a dangling live Embed.
 
 | Image | Exact input since preceding image | Visible state | Durable mutation in disposable Store |
 | --- | --- | --- | --- |
-| `01-copy-entry.png` | Launch bare `mem copy` | Source Memories are visible under current `inbox/notes`; FRESH and append are defaults; command is invalid until a Memory is checked | None |
+| `01-copy-entry.png` | Launch bare `mem copy` | Source Memories are visible under current `inbox/notes`; Copy has no identity-policy frame, append is staged, and the command is invalid until a Memory is checked | None |
 | `02-copy-multiple-source-selected.png` | `Down`, `Enter`, `Down`, `Enter` | `[9ef031a2]` and `[ea713f91]` are both checked while the cursor remains on the second Memory; the command is now runnable | None |
-| `03-copy-preserve-selected.png` | `Tab`, `Right` | PRESERVE is selected and states that any UID collision blocks the complete Copy | None |
-| `04-copy-target-selected.png` | `Tab`, `Up`, `Enter` | `archive/decisions` is checked as Target; its two direct Memories and one checked append line appear inside the same tree row | None |
-| `05-copy-position-hover.png` | `Tab`, `Up` | The sole position line moves between the two Target Memories while append remains staged | None |
+| `03-copy-target-selected.png` | `Tab`, `Up`, `Enter` | `archive/decisions` is checked as Target; its two direct Memories and one checked append line appear inside the same tree row | None |
+| `04-copy-position-default.png` | `Tab` | Position editing begins on the single checked append line without opening another policy surface | None |
+| `05-copy-position-hover.png` | `Up` | The sole position line moves between the two Target Memories while append remains staged | None |
 | `06-copy-position-staged.png` | `Enter` | The middle `POSITION · 2/3` line becomes checked; there are no duplicated BEFORE/AFTER gap rows | None |
-| `07-copy-exact-command.png` | `Tab` | Compact blue `COMMAND · RUNNABLE` shows both qualified Source selectors, exact Target, adjacent `--before` selector, and `--preserve-uids` | None |
-| `08-copy-success-receipt.png` | `Enter` | TUI closes; plain receipt reports two preserved-UID copies at the exact middle gap and one Target checkpoint | First durable mutation: Target only |
+| `07-copy-exact-command.png` | `Tab` | Compact blue `COMMAND · RUNNABLE` shows both qualified Source selectors, exact Target, and adjacent `--before` selector with no identity flag | None |
+| `08-copy-success-receipt.png` | `Enter` | TUI closes; plain receipt reports two new-UID copies at the exact middle gap and one Target checkpoint | First durable mutation: Target only |
 | `09-copy-read-only-verification.png` | `Enter` at capture-only pause | Direct Store inspection shows Source unchanged and both copied Memories inserted between Target markers | None after Copy |
 | `10-move-entry.png` | Separate launch of bare `mem move` | Same multi-Memory Source and `INTO + POSITION` grammar; no redundant normal link-policy frame; command awaits a checked Source | None |
 | `11-move-source-selected.png` | `Down`, `Enter` | `[9ef031a2]` is checked as the exact directly owned Memory to move | None |

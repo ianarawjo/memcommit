@@ -410,7 +410,6 @@ COMMAND_FORMS = {
         "mem copy --memory [context]:[UID] --memory [context]:[UID] --into [target_context] (repeatable batch)",
         "mem copy [UID] --into [target_context] --before [item] (insert before an exact Target item)",
         "mem copy [UID] --into [target_context] --after [item] (insert after an exact Target item)",
-        "mem copy [UID] --into [target_context] --preserve-uids (retain Source identity when no Target UID collides)",
     ),
     "audit": (
         "mem audit (audit the current Context and save a reviewable receipt)",

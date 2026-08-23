@@ -35,7 +35,9 @@ def test_memory_transfer_agent_schemas_are_strict_and_separate():
     assert move_schema["name"] == MOVE_MEMORIES_AGENT_TOOL_NAME
     assert copy_schema["parameters"]["additionalProperties"] is False
     assert move_schema["parameters"]["additionalProperties"] is False
-    assert "preserve_uids" in copy_schema["parameters"]["properties"]
+    assert copy_schema["parameters"]["properties"]["version"]["const"] == 2
+    assert move_schema["parameters"]["properties"]["version"]["const"] == 2
+    assert "preserve_uids" not in copy_schema["parameters"]["properties"]
     assert "retarget_links" in move_schema["parameters"]["properties"]
     assert "break_links" in move_schema["parameters"]["properties"]
 
@@ -49,7 +51,7 @@ def test_memory_transfer_agent_calls_public_facade_and_returns_typed_receipts(
 
     copied = adapter.copy(
         {
-            "version": 1,
+            "version": 2,
             "memory_locators": [first.uid[:8]],
             "source_context": source.name,
             "into_context": target.name,
@@ -57,7 +59,7 @@ def test_memory_transfer_agent_calls_public_facade_and_returns_typed_receipts(
     )
     moved = adapter.move(
         {
-            "version": 1,
+            "version": 2,
             "memory_locators": [second.uid[:8]],
             "source_context": source.name,
             "into_context": target.name,
@@ -66,7 +68,7 @@ def test_memory_transfer_agent_calls_public_facade_and_returns_typed_receipts(
 
     assert copied["ok"] is True
     assert copied["result"]["effect"] == "CHECKPOINTED_MEMORY_COPY"
-    assert copied["result"]["uid_policy"] == "FRESH"
+    assert "uid_policy" not in copied["result"]
     assert copied["result"]["provider_used"] is False
     assert moved["ok"] is True
     assert moved["result"]["effect"] == "CHECKPOINTED_MEMORY_MOVE"
@@ -84,15 +86,15 @@ def test_memory_transfer_agent_rejects_unknown_fields_and_conflicting_policies(
 
     unknown = adapter.copy(
         {
-            "version": 1,
+            "version": 2,
             "memory_locators": [first.uid],
             "into_context": target.name,
-            "unknown": True,
+            "preserve_uids": True,
         }
     )
     conflicting = adapter.move(
         {
-            "version": 1,
+            "version": 2,
             "memory_locators": [first.uid],
             "source_context": source.name,
             "into_context": target.name,
@@ -102,7 +104,7 @@ def test_memory_transfer_agent_rejects_unknown_fields_and_conflicting_policies(
     )
     oversized = adapter.copy(
         {
-            "version": 1,
+            "version": 2,
             "memory_locators": [first.uid],
             "into_context": "x" * 1001,
         }

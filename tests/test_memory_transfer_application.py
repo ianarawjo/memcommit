@@ -85,32 +85,32 @@ def test_cli_copy_batch_uses_fresh_uids_preserves_order_and_source(isolated_stor
     ] == [*copied_uids, marker.uid]
 
 
-def test_copy_can_preserve_uids_but_rejects_a_target_collision(isolated_store):
+def test_cli_copy_rejects_removed_preserve_uids_flag_without_mutation(
+    isolated_store,
+):
     store = MemoryStore()
     source, (memory,) = _context(store, "source", "value")
     target, _ = _context(store, "target")
-    port = MemoryStoreMemoryTransferPort.capture(store)
-
-    copied = run_copy(
-        CopyMemoriesRequest(
-            (f"source:{memory.uid[:8]}",),
-            into_locator="target",
-            uid_policy="PRESERVE",
-        ),
-        port=port,
+    result = runner.invoke(
+        app,
+        [
+            "copy",
+            f"source:{memory.uid[:8]}",
+            "--into",
+            target.name,
+            "--preserve-uids",
+        ],
     )
 
-    assert copied.items[0].into_memory_uid == memory.uid
-    assert store.load_direct(target.name).memories[memory.uid].content == "value"
-
-    second_port = MemoryStoreMemoryTransferPort.capture(store)
-    with pytest.raises(MemoryTransferError, match="already present"):
-        second_port.freeze_copy(
-            CopyMemoriesRequest(
-                (f"source:{memory.uid[:8]}",),
-                into_locator="target",
-                uid_policy="PRESERVE",
-            )
+    assert result.exit_code == 2
+    assert "No such option: --preserve-uids" in result.stderr
+    assert list(store.load_direct(source.name).memories) == [memory.uid]
+    assert store.load_direct(target.name).memories == {}
+    with pytest.raises(TypeError, match="uid_policy"):
+        CopyMemoriesRequest(
+            (f"source:{memory.uid[:8]}",),
+            into_locator=target.name,
+            uid_policy="PRESERVE",
         )
 
 

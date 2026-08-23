@@ -1,6 +1,6 @@
 MOVED · 1 Memory → 'archive/decisions' · BREAK LINKS · before [ab120001] at the start                                                                                               
   REMOVE 'inbox/notes' [9ef031a2] · ADD 'archive/decisions' [9ef031a2]                                                                                                              
 Left 1 live Memory Embed(s) dangling as explicitly requested.                                                                                                                       
-Checkpoints 'archive/decisions' [80f100a5], 'inbox/notes' [b634bcc3].                                                                                                               
+Checkpoints 'archive/decisions' [805dd8f8], 'inbox/notes' [988ef658].                                                                                                               
 COMMAND EXIT · 0                                                                                                                                                                    
 CAPTURE PAUSE · press Enter for read-only verification

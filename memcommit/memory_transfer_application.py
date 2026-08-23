@@ -7,7 +7,6 @@ from typing import Literal, Protocol
 
 
 MemoryTransferKind = Literal["COPY", "MOVE"]
-CopyUidPolicy = Literal["FRESH", "PRESERVE"]
 MoveLinkPolicy = Literal["BLOCK", "RETARGET", "BREAK"]
 
 
@@ -47,7 +46,6 @@ class CopyMemoriesRequest:
     source_locator: str | None = None
     before: str | None = None
     after: str | None = None
-    uid_policy: CopyUidPolicy = "FRESH"
 
 
 @dataclass(frozen=True, slots=True)
@@ -133,7 +131,6 @@ class MemoryTransferCheckpoint:
 class CopyMemoriesResult:
     into_name: str
     into_uid: str
-    uid_policy: CopyUidPolicy
     placement: MemoryTransferPlacement
     items: tuple[MemoryTransferItemResult, ...]
     plan_digest: str
@@ -210,8 +207,6 @@ def validate_copy_request(request: CopyMemoriesRequest) -> CopyMemoriesRequest:
         before=request.before,
         after=request.after,
     )
-    if request.uid_policy not in {"FRESH", "PRESERVE"}:
-        raise MemoryTransferError("Copy uid_policy must be FRESH or PRESERVE.")
     return request
 
 
@@ -338,7 +333,6 @@ def run_copy(
     if (
         result.into_name != plan.into_name
         or result.into_uid != plan.into_uid
-        or result.uid_policy != request.uid_policy
         or result.placement != plan.placement
         or result.items != expected
         or result.plan_digest != plan.plan_digest
@@ -406,7 +400,6 @@ def run_move(
 __all__ = [
     "CopyMemoriesRequest",
     "CopyMemoriesResult",
-    "CopyUidPolicy",
     "FrozenCopyMemoriesPlan",
     "FrozenInboundMemoryLink",
     "FrozenMoveMemoriesPlan",

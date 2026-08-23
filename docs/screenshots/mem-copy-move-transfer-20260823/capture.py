@@ -18,7 +18,6 @@ COLUMNS = 180
 ROWS = 52
 UP = "\x1b[A"
 DOWN = "\x1b[B"
-RIGHT = "\x1b[C"
 
 _BASE_PATH = (
     ROOT / "docs/screenshots/context-endpoint-memory-preview-20260810/capture.py"
@@ -277,15 +276,15 @@ def _capture_copy() -> None:
             _BASE._settle(child)
             _snapshot(recorder, "02-copy-multiple-source-selected")
 
-            child.send("\t" + RIGHT)
-            _BASE._settle(child)
-            _snapshot(recorder, "03-copy-preserve-selected")
-
             child.send("\t" + UP + "\r")
             _BASE._settle(child)
-            _snapshot(recorder, "04-copy-target-selected")
+            _snapshot(recorder, "03-copy-target-selected")
 
-            child.send("\t" + UP)
+            child.send("\t")
+            _BASE._settle(child)
+            _snapshot(recorder, "04-copy-position-default")
+
+            child.send(UP)
             _BASE._settle(child)
             _snapshot(recorder, "05-copy-position-hover")
 
@@ -431,6 +430,12 @@ def _capture_break() -> None:
 
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
+    for stale_stem in (
+        "03-copy-preserve-selected",
+        "04-copy-target-selected",
+    ):
+        for suffix in (".png", ".txt", ".typescript"):
+            (OUT / f"{stale_stem}{suffix}").unlink(missing_ok=True)
     _capture_copy()
     _capture_move()
     _capture_locked()

@@ -1,15 +1,15 @@
-COPIED · 2 Memories → 'archive/decisions' · PRESERVE UIDs · between [ab120001] and [cd340002]                                                                                       
-  'inbox/notes' [9ef031a2] → [9ef031a2]                                                                                                                                             
-  'inbox/notes' [ea713f91] → [ea713f91]                                                                                                                                             
-Checkpoint 'archive/decisions' [e449d548].                                                                                                                                          
+COPIED · 2 Memories → 'archive/decisions' · NEW UIDs · between [ab120001] and [cd340002]                                                                                            
+  'inbox/notes' [9ef031a2] → [418be018]                                                                                                                                             
+  'inbox/notes' [ea713f91] → [6d7116d6]                                                                                                                                             
+Checkpoint 'archive/decisions' [63b4a655].                                                                                                                                          
 COMMAND EXIT · 0                                                                                                                                                                    
 CAPTURE PAUSE · press Enter for read-only verification                                                                                                                              
                                                                                                                                                                                     
 COPY · READ-ONLY STORE VERIFICATION                                                                                                                                                 
 CONTEXT · archive/decisions                                                                                                                                                         
   MEMORY [ab120001] · Archived decision: bounded recovery needs an owner.                                                                                                           
-  MEMORY [9ef031a2] · Prefer bounded retries over unbounded recovery loops.                                                                                                         
-  MEMORY [ea713f91] · Operational decisions require an owner.                                                                                                                       
+  MEMORY [418be018] · Prefer bounded retries over unbounded recovery loops.                                                                                                         
+  MEMORY [6d7116d6] · Operational decisions require an owner.                                                                                                                       
   MEMORY [cd340002] · Archived decision: verify every operational handoff.                                                                                                          
 CONTEXT · inbox/notes                                                                                                                                                               
   MEMORY [9ef031a2] · Prefer bounded retries over unbounded recovery loops.                                                                                                         

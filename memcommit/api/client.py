@@ -1087,7 +1087,6 @@ class MemCommitClient:
         source_context: str | None = None,
         before: str | None = None,
         after: str | None = None,
-        preserve_uids: bool = False,
     ) -> CopyMemoriesReceipt:
         """Copy one ordered direct-Memory batch into an existing local Context."""
 
@@ -1100,7 +1099,6 @@ class MemCommitClient:
             source_context=source_context,
             before=before,
             after=after,
-            preserve_uids=preserve_uids,
         )
 
     def move_memories(

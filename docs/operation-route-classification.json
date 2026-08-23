@@ -39,7 +39,7 @@
           "docs/copy-callable-boundary-matrix.md",
           "docs/memory-transfer-design-rationale.md"
         ],
-        "reason": "CLI, Embed-shaped multi-Memory TUI, Python, agent, and MCP routes share one provider-free ordered direct-Memory plan, Source binding, exact Target placement, FRESH/PRESERVE identity policy, atomic checkpoint, and Undo/Redo boundary."
+        "reason": "CLI, Embed-shaped multi-Memory TUI, Python, agent, and MCP routes share one provider-free ordered direct-Memory plan, Source binding, exact Target placement, mandatory store-wide fresh output UIDs, atomic checkpoint, and Undo/Redo boundary."
       },
       "distill": {
         "evidence": [

@@ -24,7 +24,7 @@ from memcommit.interfaces.agent.contract import (
 )
 
 
-MEMORY_TRANSFER_AGENT_CONTRACT_VERSION = 1
+MEMORY_TRANSFER_AGENT_CONTRACT_VERSION = 2
 COPY_MEMORIES_AGENT_TOOL_NAME = "memcommit_copy_memories"
 MOVE_MEMORIES_AGENT_TOOL_NAME = "memcommit_move_memories"
 
@@ -86,7 +86,7 @@ def _bool(value: Mapping[str, object], field: str) -> bool:
     return candidate
 
 
-def _result(receipt) -> JsonObject:
+def _result(receipt, *, kind: str) -> JsonObject:
     result: JsonObject = {
         "into_context_name": receipt.into_context_name,
         "into_context_uid": receipt.into_context_uid,
@@ -117,10 +117,9 @@ def _result(receipt) -> JsonObject:
         "undoable": receipt.undoable,
         "provider_used": False,
     }
-    if hasattr(receipt, "uid_policy"):
-        result["uid_policy"] = receipt.uid_policy
+    if kind == "copy":
         result["effect"] = "CHECKPOINTED_MEMORY_COPY"
-    else:
+    elif kind == "move":
         result.update(
             {
                 "link_policy": receipt.link_policy,
@@ -130,6 +129,8 @@ def _result(receipt) -> JsonObject:
                 "effect": "CHECKPOINTED_MEMORY_MOVE",
             }
         )
+    else:
+        raise ValueError(f"Unknown Memory transfer result kind '{kind}'.")
     return result
 
 
@@ -216,7 +217,7 @@ class MemoryTransferAgentAdapter:
             value, locators = _common_request(
                 payload,
                 label="Copy Memories request",
-                extra_optional=frozenset({"preserve_uids"}),
+                extra_optional=frozenset(),
             )
             arguments = {
                 "memory_locators": locators,
@@ -224,7 +225,6 @@ class MemoryTransferAgentAdapter:
                 "into_context": _optional_text(value, "into_context"),
                 "before": _optional_text(value, "before"),
                 "after": _optional_text(value, "after"),
-                "preserve_uids": _bool(value, "preserve_uids"),
             }
         except AgentRequestError as error:
             return error_response(
@@ -235,7 +235,7 @@ class MemoryTransferAgentAdapter:
                 retryable=False,
             )
         try:
-            result = _result(self._client.copy_memories(**arguments))
+            result = _result(self._client.copy_memories(**arguments), kind=kind)
         except MemoryTransferError as error:
             return self._error(error, kind=kind)
         except Exception:
@@ -279,7 +279,7 @@ class MemoryTransferAgentAdapter:
                 retryable=False,
             )
         try:
-            result = _result(self._client.move_memories(**arguments))
+            result = _result(self._client.move_memories(**arguments), kind=kind)
         except MemoryTransferError as error:
             return self._error(error, kind=kind)
         except Exception:
@@ -333,7 +333,7 @@ def copy_memories_agent_tool_schema() -> JsonObject:
             "type": "object",
             "additionalProperties": False,
             "required": ["version", "memory_locators"],
-            "properties": _properties({"preserve_uids": {"type": "boolean"}}),
+            "properties": _properties({}),
         },
     }
 

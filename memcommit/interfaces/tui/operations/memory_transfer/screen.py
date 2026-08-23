@@ -54,11 +54,6 @@ from memcommit.interfaces.tui.components.frame import (
     build_focused_frame,
     build_tui_frame,
 )
-from memcommit.interfaces.tui.components.horizontal_choice import (
-    HorizontalChoiceOption,
-    HorizontalChoiceState,
-    render_horizontal_choice,
-)
 from memcommit.interfaces.tui.core.keybindings import (
     bind_tui_interrupt,
     dispatch_tui_back,
@@ -83,10 +78,7 @@ from memcommit.interfaces.tui.operations.memory_transfer.model import (
 
 COPY_COMMAND_FORM = ExactCommandForm(
     command=("mem", "copy"),
-    usage=(
-        "mem copy MEMORY... --into TARGET [--before ITEM | --after ITEM] "
-        "[--preserve-uids]"
-    ),
+    usage="mem copy MEMORY... --into TARGET [--before ITEM | --after ITEM]",
     fields=(
         ExactCommandFormField(
             "MEMORY... | -m MEMORY...",
@@ -103,10 +95,6 @@ COPY_COMMAND_FORM = ExactCommandForm(
         ExactCommandFormField(
             "--before ITEM | --after ITEM",
             "choose one adjacent direct-item gap; omit to append",
-        ),
-        ExactCommandFormField(
-            "--preserve-uids",
-            "retain Source identities instead of the default fresh Copy identities",
         ),
     ),
 )
@@ -165,10 +153,11 @@ def parse_memory_transfer_command_argv(
     options: dict[str, str] = {}
     switches: set[str] = set()
     value_flags = {"--memory", "-m", "--from", "--into", "--to", "--before", "--after"}
-    switch_flags = {"--preserve-uids"} if operation == "COPY" else {
-        "--retarget-links",
-        "--break-links",
-    }
+    switch_flags = (
+        set()
+        if operation == "COPY"
+        else {"--retarget-links", "--break-links"}
+    )
     index = 2
     while index < len(values):
         value = values[index]
@@ -217,9 +206,6 @@ def parse_memory_transfer_command_argv(
                 into_locator=into,
                 before=options.get("--before"),
                 after=options.get("--after"),
-                uid_policy=(
-                    "PRESERVE" if "--preserve-uids" in switches else "FRESH"
-                ),
             )
         )
     if "--retarget-links" in switches and "--break-links" in switches:
@@ -275,11 +261,7 @@ def memory_transfer_exact_command_review(
     if isinstance(request, CopyMemoriesRequest):
         effects = (
             f"Copy {count} directly owned {noun} into '{request.into_locator}'.",
-            (
-                "Sources stay unchanged; outputs receive fresh independent UIDs."
-                if request.uid_policy == "FRESH"
-                else "Sources stay unchanged; output UIDs are preserved exactly."
-            ),
+            "Sources stay unchanged; outputs receive new independent UIDs.",
             _gap_effect(gap, item_count),
         )
         argv = (
@@ -289,7 +271,6 @@ def memory_transfer_exact_command_review(
             "--into",
             request.into_locator,
             *placement,
-            *(("--preserve-uids",) if request.uid_policy == "PRESERVE" else ()),
         )
     else:
         effects = (
@@ -369,37 +350,6 @@ def run_memory_transfer_tui(
         height=min(7, max(3, len(names))),
         row_projector=placement.project,
     )
-    identity = HorizontalChoiceState(
-        (
-            HorizontalChoiceOption(
-                "FRESH",
-                "FRESH",
-                "Create independent Memory identities in the Target.",
-            ),
-            HorizontalChoiceOption(
-                "PRESERVE",
-                "PRESERVE",
-                "Keep exact Source UIDs; collisions block the whole Copy.",
-            ),
-        ),
-        selected_uid="FRESH",
-    )
-    identity_control = FormattedTextControl(
-        lambda: render_horizontal_choice(
-            identity,
-            title="COPY IDENTITY",
-            focused=get_app().layout.has_focus(identity_control),
-            show_description=True,
-        ),
-        focusable=True,
-        show_cursor=False,
-    )
-    identity_frame = build_focused_frame(
-        Window(identity_control, wrap_lines=True),
-        title="COPY IDENTITY",
-        is_focused=lambda: get_app().layout.has_focus(identity_control),
-        height=Dimension.exact(4),
-    )
     move_break = {"value": False}
     status = {"value": ""}
     bindings = KeyBindings()
@@ -448,7 +398,6 @@ def run_memory_transfer_tui(
                     into_locator=selected_into_name(),
                     before=before,
                     after=after,
-                    uid_policy=identity.selected_uid,
                 )
             )
         return validate_move_request(
@@ -552,9 +501,7 @@ def run_memory_transfer_tui(
         target_snapshot["value"] = target
         placement.replace_context(into_name, rows)
         placement.state.select_position(position)
-        if isinstance(request, CopyMemoriesRequest):
-            identity.choose(request.uid_policy)
-        else:
+        if isinstance(request, MoveMemoriesRequest):
             move_break["value"] = request.link_policy == "BREAK"
         status["value"] = ""
 
@@ -626,8 +573,6 @@ def run_memory_transfer_tui(
                 " ↑/↓ move in Context tree · Enter/Space choose target · "
                 "Tab edit position · Esc cancel"
             )
-        if operation == "COPY" and get_app().layout.has_focus(identity_control):
-            return " ←/→ choose Copy identity · Tab target · Esc cancel"
         return (
             " ↑/↓ move · ←/→ expand · Enter/Space check Memory · "
             "Tab continue · Esc cancel"
@@ -752,15 +697,6 @@ def run_memory_transfer_tui(
                 activate=choose_source,
             )
         ]
-        if operation == "COPY":
-            surfaces.append(
-                FocusSurface(
-                    "COPY_IDENTITY",
-                    identity_control,
-                    move_vertical=lambda _event, _delta: "BOUNDARY",
-                    activate=lambda _event: "HANDLED",
-                )
-            )
         surfaces.extend(
             (
                 FocusSurface(
@@ -815,7 +751,6 @@ def run_memory_transfer_tui(
         lambda: get_app().layout.has_focus(into_selector.control)
         and not placement.editing
     )
-    identity_focus = Condition(lambda: get_app().layout.has_focus(identity_control))
     command_focus = Condition(lambda: get_app().layout.has_focus(command_control.input))
 
     @bindings.add("left", filter=source_focus, eager=True)
@@ -832,20 +767,6 @@ def run_memory_transfer_tui(
     @bindings.add("A", filter=source_focus, eager=True)
     def _toggle_all_sources(event) -> None:
         source_selector.toggle_expand_all()
-        event.app.invalidate()
-
-    @bindings.add("left", filter=identity_focus, eager=True)
-    def _previous_identity(event) -> None:
-        identity.move(-1)
-        status["value"] = ""
-        command_control.sync_from_review()
-        event.app.invalidate()
-
-    @bindings.add("right", filter=identity_focus, eager=True)
-    def _next_identity(event) -> None:
-        identity.move(1)
-        status["value"] = ""
-        command_control.sync_from_review()
         event.app.invalidate()
 
     @bindings.add("left", filter=target_focus, eager=True)
@@ -894,8 +815,6 @@ def run_memory_transfer_tui(
         dispatch_tui_back(event, close=close)
 
     regions = [TuiRegion(header), TuiRegion(source_selector.frame)]
-    if operation == "COPY":
-        regions.append(TuiRegion(identity_frame))
     regions.extend(
         (
             TuiRegion(into_position_frame),

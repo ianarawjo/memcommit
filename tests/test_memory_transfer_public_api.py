@@ -52,7 +52,7 @@ def test_public_copy_and_move_return_typed_undoable_receipts(tmp_path):
 
     assert isinstance(copied, CopyMemoriesReceipt)
     assert copied.undoable is True
-    assert copied.uid_policy == "FRESH"
+    assert not hasattr(copied, "uid_policy")
     assert copied.items[0].source_memory_uid == first.uid
     assert copied.items[0].into_memory_uid != first.uid
     assert isinstance(moved, MoveMemoriesReceipt)
@@ -77,6 +77,12 @@ def test_public_transfer_rejects_string_sequence_and_conflicting_link_policy(
 
     with pytest.raises(MemoryTransferInputError, match="sequence"):
         client.copy_memories(first.uid, into_context=target.name)
+    with pytest.raises(TypeError, match="preserve_uids"):
+        client.copy_memories(
+            (first.uid,),
+            into_context=target.name,
+            preserve_uids=True,
+        )
     with pytest.raises(MemoryTransferInputError, match="only one"):
         client.move_memories(
             (first.uid,),

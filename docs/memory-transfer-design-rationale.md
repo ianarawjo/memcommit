@@ -45,8 +45,9 @@ in explicit check order, and a valid exact-command edit replaces that order
 atomically. The Target frame composes the
 shared Context tree with Embed's direct-item placement projection, so exactly
 one movable `POSITION · n/total` line represents the current gap instead of a
-duplicated BEFORE/AFTER row for every item. Copy adds one small FRESH/PRESERVE
-choice; Move adds no normal link-policy frame.
+duplicated BEFORE/AFTER row for every item. Neither operation adds a normal
+policy frame: Copy has one fixed new-identity meaning, while Move follows live
+Embeds unless Break is explicitly typed into the exact command.
 
 The last frame is the same compact editable `COMMAND · RUNNABLE` control used
 by Embed. Edits are parsed and resolved completely before the Source checks,
@@ -58,22 +59,29 @@ publishes storage itself. Outside a TTY, bare Copy and Move return stable
 ## Copy identity
 
 Copy leaves every Source unchanged and creates ordinary editable Memories in
-the existing Target. The default `FRESH` policy assigns a fresh UID to every
-output, matching the meaning of an independently editable duplicate and the
-existing Search Save As Copy contract. `--preserve-uids` selects `PRESERVE`
-explicitly for workflows that need branch-like identity continuity. Preserve
-fails if any output UID already identifies any Target direct item; Copy never
-silently replaces an item.
+the existing Target. Every output receives a store-wide fresh UID, matching
+the meaning of an independently editable duplicate and the existing Search
+Save As Copy contract. Copy permits Source and Target to be the same Context,
+which is an explicit duplicate operation. Exact duplicate content is allowed;
+content deduplication remains the separate Dedup/Dedun concern.
 
-Copy permits Source and Target to be the same Context under `FRESH`, which is
-an explicit duplicate operation. `PRESERVE` naturally fails there because the
-UID is already present. Exact duplicate content is otherwise allowed; content
-deduplication remains the separate Dedup/Dedun concern.
+The earlier `PRESERVE` option was removed from the TUI, editable command, CLI,
+Python facade, typed receipt, agent schema, and MCP projection. A Copy that
+keeps the Source UID creates two independently editable Memories that appear
+to share one identity without any synchronization, branch owner, or later
+reconciliation contract. That ambiguity belongs in a future explicit Branch
+operation, not in ordinary Copy. Existing stores that already contain
+same-UID Memories in different Contexts remain readable; this change does not
+rewrite historical data, but Copy can no longer create another such pair.
+
+Removing the field is an intentional callable-contract break. The strict
+Memory-transfer agent schema advances to version 2 so a version-1 caller
+cannot mistake the narrower Copy contract for the former policy-bearing one.
 
 The checkpoint retains only Source/Target identities, UID mappings, placement,
-policy, and plan digest. It does not duplicate Memory content into searchable
-command metadata because the Context pre/post images already retain the exact
-values.
+the fixed `NEW_UIDS` invariant, and plan digest. It does not duplicate Memory
+content into searchable command metadata because the Context pre/post images
+already retain the exact values.
 
 ## Move identity and live links
 

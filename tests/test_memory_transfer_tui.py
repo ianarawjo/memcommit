@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
+import pytest
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
@@ -36,7 +37,7 @@ def _context(store: MemoryStore, name: str, *contents: str) -> tuple[Context, tu
     return context, memories
 
 
-def test_editable_memory_transfer_parser_preserves_batch_and_policies() -> None:
+def test_editable_memory_transfer_parser_keeps_copy_simple_and_move_explicit() -> None:
     assert parse_memory_transfer_command_argv(
         (
             "mem",
@@ -47,15 +48,25 @@ def test_editable_memory_transfer_parser_preserves_batch_and_policies() -> None:
             "target",
             "--before",
             "ccccccc",
-            "--preserve-uids",
         ),
         kind="COPY",
     ) == CopyMemoriesRequest(
         ("source:aaaaaaa", "other:bbbbbbb"),
         "target",
         before="ccccccc",
-        uid_policy="PRESERVE",
     )
+    with pytest.raises(ValueError, match="Unknown Copy flag '--preserve-uids'"):
+        parse_memory_transfer_command_argv(
+            (
+                "mem",
+                "copy",
+                "source:aaaaaaa",
+                "--into",
+                "target",
+                "--preserve-uids",
+            ),
+            kind="COPY",
+        )
     assert parse_memory_transfer_command_argv(
         ("mem", "move", "aaaaaaa", "--from", "source", "--into", "target"),
         kind="MOVE",
@@ -115,11 +126,9 @@ def test_copy_tui_checks_multiple_memories_and_freezes_one_exact_gap(
     }
 
     with create_pipe_input() as pipe_input:
-        # Check both nested Memories, pass FRESH, choose Target, stage the gap
-        # before its marker, then approve the compact exact command.
-        pipe_input.send_text(
-            "\x1b[B\r\x1b[B\r\t\t\x1b[B\r\t\x1b[A\r\t\r"
-        )
+        # Check both nested Memories, choose Target, stage the gap before its
+        # marker, then approve the compact exact command.
+        pipe_input.send_text("\x1b[B\r\x1b[B\r\t\x1b[B\r\t\x1b[A\r\t\r")
         plan = choose_memory_transfer_setup(
             port,
             kind="COPY",
@@ -129,7 +138,6 @@ def test_copy_tui_checks_multiple_memories_and_freezes_one_exact_gap(
         )
 
     assert plan is not None
-    assert plan.request.uid_policy == "FRESH"
     assert [item.source_memory_uid for item in plan.memories] == [first.uid, second.uid]
     assert plan.into_name == target.name
     assert plan.placement.position == 0
@@ -159,7 +167,7 @@ def test_copy_editable_command_replaces_the_visible_batch_order_atomically(
     with create_pipe_input() as pipe_input:
         # Reach the compact command with no checked Source, then replace its
         # arguments. One complete parse moves every upper control together.
-        pipe_input.send_text("\t\t\t\t\x15" + command + "\r")
+        pipe_input.send_text("\t\t\t\x15" + command + "\r")
         plan = choose_memory_transfer_setup(
             MemoryStoreMemoryTransferPort.capture(store),
             kind="COPY",

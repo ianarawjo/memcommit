@@ -259,6 +259,6 @@ CAPTURE COMMAND · mem move
 [C[0mEnter run · live Embeds follow atomic[Clly · snapshots stay · Esc can[Cel[0m[K[3A[C[0m[?12l[?25h[73D[48A[J[0m[?7h[?1049l[?2004lMOVED · 1 Memory → 'archive/decisions' · RETARGET LINKS · between [ab120001] and [cd340002]
   [38;2;237;135;150m[1mREMOVE[0m 'inbox/notes' [9ef031a2] · [38;2;138;173;244m[1mADD[0m 'archive/decisions' [9ef031a2]
 Retargeted 1 live Memory Embed(s).
-Checkpoints 'archive/decisions' [380964ae], 'inbox/notes' [51dd206b], 'watchers/live' [2ca464b0].
+Checkpoints 'archive/decisions' [48830a73], 'inbox/notes' [4e9e9575], 'watchers/live' [f73474f2].
 COMMAND EXIT · 0
 CAPTURE PAUSE · press Enter for read-only verification

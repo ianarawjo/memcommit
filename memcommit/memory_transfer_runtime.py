@@ -379,7 +379,7 @@ class MemoryStoreMemoryTransferPort(MemoryTransferPort):
             raise MemoryTransferError("Memory transfer frozen plan was modified.")
         kind = "COPY" if isinstance(plan, FrozenCopyMemoriesPlan) else "MOVE"
         policy = (
-            plan.request.uid_policy
+            "NEW_UIDS"
             if isinstance(plan, FrozenCopyMemoriesPlan)
             else plan.request.link_policy
         )
@@ -430,55 +430,26 @@ class MemoryStoreMemoryTransferPort(MemoryTransferPort):
             request.into_locator,
             current_name=self._current_name,
         )
-        if request.uid_policy == "FRESH":
-            # FRESH means a new direct-item identity in the complete local
-            # store, not merely a key absent from this Target. Same-UID branch
-            # copies remain an explicit PRESERVE concern.
-            occupied = {
-                uid
-                for frame in frames
-                for uid in frame.context.memories
-            }
-            generated: list[str] = []
-            while len(generated) < len(request.memory_locators):
-                candidate = str(uuid.uuid4())
-                if candidate not in occupied and candidate not in generated:
-                    generated.append(candidate)
-            output_uids = tuple(generated)
-        else:
-            # Resolve first using temporary one-to-one placeholders; the exact
-            # Source UIDs become the reviewed Copy outputs below.
-            output_uids = tuple("pending" for _ in request.memory_locators)
+        # Copy is deliberately not a branching primitive. Every output gets a
+        # store-wide fresh identity so two independently editable Memories can
+        # never imply synchronization merely because they share a UID.
+        occupied = {
+            uid
+            for frame in frames
+            for uid in frame.context.memories
+        }
+        generated: list[str] = []
+        while len(generated) < len(request.memory_locators):
+            candidate = str(uuid.uuid4())
+            if candidate not in occupied and candidate not in generated:
+                generated.append(candidate)
+        output_uids = tuple(generated)
         memories = self._resolved_sources(
             request.memory_locators,
             source_locator=request.source_locator,
             frames=frames,
             output_uids=output_uids,
         )
-        if request.uid_policy == "PRESERVE":
-            memories = tuple(
-                FrozenTransferMemory(
-                    source_context_name=item.source_context_name,
-                    source_context_uid=item.source_context_uid,
-                    source_context_digest=item.source_context_digest,
-                    source_memory_uid=item.source_memory_uid,
-                    content=item.content,
-                    output_memory_uid=item.source_memory_uid,
-                )
-                for item in memories
-            )
-        collisions = tuple(
-            item.output_memory_uid
-            for item in memories
-            if item.output_memory_uid in into.context.memories
-        )
-        if collisions:
-            raise MemoryTransferError(
-                "Copy would reuse direct-item UID(s) already present in Target "
-                f"'{into.context.name}': "
-                + ", ".join(f"[{uid[:8]}]" for uid in collisions)
-                + ". Use the default fresh-UID policy."
-            )
         placement = _placement_for_context(
             into.context,
             before=request.before,
@@ -491,7 +462,7 @@ class MemoryStoreMemoryTransferPort(MemoryTransferPort):
             into_uid=into.context.uid,
             into_digest=into.expected_digest,
             placement=placement,
-            policy=request.uid_policy,
+            policy="NEW_UIDS",
         )
         return FrozenCopyMemoriesPlan(
             request=request,
@@ -664,14 +635,14 @@ class MemoryStoreMemoryTransferPort(MemoryTransferPort):
         affected = (into,)
         description = (
             f"Copied {len(plan.memories)} Memory/ies into "
-            f"'{plan.into_name}' with {plan.request.uid_policy.lower()} UIDs."
+            f"'{plan.into_name}' with new UIDs."
         )
         args = _checkpoint_args(
             kind="COPY",
             operation_uid=token.operation_uid,
             plan_digest=plan.plan_digest,
-            policy_name="uid_policy",
-            policy=plan.request.uid_policy,
+            policy_name="copy_identity",
+            policy="NEW_UIDS",
             into=into,
             placement=plan.placement,
             memories=plan.memories,
@@ -715,7 +686,6 @@ class MemoryStoreMemoryTransferPort(MemoryTransferPort):
         return CopyMemoriesResult(
             into_name=plan.into_name,
             into_uid=plan.into_uid,
-            uid_policy=plan.request.uid_policy,
             placement=plan.placement,
             items=self._items(plan.memories),
             plan_digest=plan.plan_digest,

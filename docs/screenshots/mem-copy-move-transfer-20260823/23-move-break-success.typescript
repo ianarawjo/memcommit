@@ -297,6 +297,6 @@ CAPTURE COMMAND · mem move
 [13C[0mBREAK LINKS[Cmay dangle live Embeds · snapshots[Cstay · Es[C cancel[3A[10C[0m[?12l[?25h[?25l[0m[?12l[?25h[87D[48A[J[0m[?7h[?1049l[?2004lMOVED · 1 Memory → 'archive/decisions' · BREAK LINKS · before [ab120001] at the start
   [38;2;237;135;150m[1mREMOVE[0m 'inbox/notes' [9ef031a2] · [38;2;138;173;244m[1mADD[0m 'archive/decisions' [9ef031a2]
 Left 1 live Memory Embed(s) dangling as explicitly requested.
-Checkpoints 'archive/decisions' [80f100a5], 'inbox/notes' [b634bcc3].
+Checkpoints 'archive/decisions' [805dd8f8], 'inbox/notes' [988ef658].
 COMMAND EXIT · 0
 CAPTURE PAUSE · press Enter for read-only verification

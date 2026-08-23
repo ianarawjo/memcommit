@@ -72,7 +72,6 @@ __all__ = [
     "ComparisonReportsResult",
     "ComparisonResult",
     "CopyMemoriesReceipt",
-    "CopyUidPolicyResult",
     "DedupApplyResult",
     "DedupComponentResult",
     "DedupEvidenceResult",
@@ -255,7 +254,6 @@ _LAZY_EXPORTS = {
         name: ("memcommit.api.memory_transfer", name)
         for name in (
             "CopyMemoriesReceipt",
-            "CopyUidPolicyResult",
             "MemoryTransferCheckpointResult",
             "MemoryTransferItemResult",
             "MemoryTransferPlacementResult",

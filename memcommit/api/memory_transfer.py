@@ -6,7 +6,6 @@ from dataclasses import dataclass
 from typing import Literal
 
 
-CopyUidPolicyResult = Literal["FRESH", "PRESERVE"]
 MoveLinkPolicyResult = Literal["BLOCK", "RETARGET", "BREAK"]
 
 
@@ -36,7 +35,6 @@ class MemoryTransferCheckpointResult:
 class CopyMemoriesReceipt:
     into_context_name: str
     into_context_uid: str
-    uid_policy: CopyUidPolicyResult
     placement: MemoryTransferPlacementResult
     items: tuple[MemoryTransferItemResult, ...]
     plan_digest: str
@@ -69,7 +67,6 @@ class MoveMemoriesReceipt:
 
 __all__ = [
     "CopyMemoriesReceipt",
-    "CopyUidPolicyResult",
     "MemoryTransferCheckpointResult",
     "MemoryTransferItemResult",
     "MemoryTransferPlacementResult",
