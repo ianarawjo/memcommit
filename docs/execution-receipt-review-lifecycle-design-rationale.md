@@ -91,6 +91,13 @@ the operation's report. Update, Meld, Sever, and Atomize already have durable
 operation-owned session/analysis identities; Review opens only their terminal
 application projection.
 
+A plain or `--snapshot` Review projection must render every typed Memory row in
+an operation-authored detail block, including its ordinal, complete content,
+and evidence spans. Compact execution receipts may bound their immediate proof,
+but snapshot rendering cannot treat structured rows as empty merely because the
+block's fallback text field is blank. Interactive and noninteractive Review are
+two projections of the same durable evidence, not different evidence sets.
+
 The compact receipt is not reconstructed by parsing rendered text. It is
 projected from the typed application/session receipt. Likewise, Review reads
 typed persisted evidence and never treats the receipt's display label as
