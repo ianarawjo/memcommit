@@ -26,26 +26,41 @@ _BASE.COLUMNS = COLUMNS
 _BASE.ROWS = ROWS
 
 
-def _source():
+def _source(kind: str):
     from memcommit.context import Context, Memory
 
     context = Context(
         uid="00000000-0000-4000-8000-000000000701",
         name="study/reporting",
     )
-    memories = (
-        Memory(
-            uid="a31f02c1-0000-4000-8000-000000000711",
-            content="Report the incident within 30 days.",
+    contents = {
+        "ambiguities": (
+            "Report the incident within 30 days.",
+            "Keep the confirmation number.",
+            "The accessible entrance remains open during office hours.",
         ),
-        Memory(
-            uid="5ce891d4-0000-4000-8000-000000000712",
-            content="Notify the office no later than one month after discovery.",
+        "conflicts": (
+            "The main entrance opens at 08:00.",
+            "The main entrance remains closed until 09:00.",
+            "The entrance opens at 08:00.",
         ),
-        Memory(
-            uid="7b94ee10-0000-4000-8000-000000000713",
-            content="The accessible entrance remains open during office hours.",
+        "duplicates": (
+            "Report the incident to the office within 30 days of discovery.",
+            "Notify the office no later than 30 days after discovering the incident.",
+            "The incident must be reported to the office within thirty days of discovery.",
         ),
+    }[kind]
+    memories = tuple(
+        Memory(uid=uid, content=content)
+        for uid, content in zip(
+            (
+                "a31f02c1-0000-4000-8000-000000000711",
+                "5ce891d4-0000-4000-8000-000000000712",
+                "7b94ee10-0000-4000-8000-000000000713",
+            ),
+            contents,
+            strict=True,
+        )
     )
     for memory in memories:
         context.add(memory)
@@ -63,32 +78,32 @@ def _session(kind: str, *, empty: bool = False):
     )
     from memcommit.quality_find_workbench import create_quality_find_workbench
 
-    context, (first, second, third) = _source()
+    context, (first, second, third) = _source(kind)
     if kind == "ambiguities":
-        findings = () if empty else (
-            AmbiguityFinding(
-                memory=first,
-                interpretation="DOMINANT",
-                clarification="REQUIRED",
-                ordinary_readings=(
-                    "Thirty days after the incident.",
-                    "Thirty days after discovery.",
-                    "Thirty days after notification.",
+        findings = (
+            ()
+            if empty
+            else (
+                AmbiguityFinding(
+                    memory=first,
+                    interpretation="SINGLE",
+                    clarification="REQUIRED",
+                    ordinary_readings=("Report within a 30-day period.",),
+                    reason="The deadline does not identify which event starts the clock.",
+                    question="Which event starts the 30-day period?",
                 ),
-                reason="The deadline does not identify which event starts the clock.",
-                question="Which event starts the 30-day period?",
-            ),
-            AmbiguityFinding(
-                memory=third,
-                interpretation="COMPETING",
-                clarification="HELPFUL",
-                ordinary_readings=(
-                    "The staffed entrance schedule.",
-                    "The published office schedule.",
+                AmbiguityFinding(
+                    memory=third,
+                    interpretation="COMPETING",
+                    clarification="HELPFUL",
+                    ordinary_readings=(
+                        "The staffed entrance schedule.",
+                        "The published office schedule.",
+                    ),
+                    reason="Office hours can refer to two different schedules.",
+                    question="Which schedule defines office hours?",
                 ),
-                reason="Office hours can refer to two different schedules.",
-                question="Which schedule defines office hours?",
-            ),
+            )
         )
         report = AmbiguityReport(memory_count=3, findings=findings)
     elif kind == "conflicts":
@@ -99,19 +114,17 @@ def _session(kind: str, *, empty: bool = False):
                 ConflictFinding(
                     left=first,
                     right=second,
-                    conflict="MAY",
-                    scope_dimensions=("TIME",),
-                    reason="The deadlines can disagree when discovery occurs after the incident.",
-                    question="Which event governs the reporting deadline?",
+                    conflict="YES",
+                    reason="The main entrance cannot be open at 08:00 and closed until 09:00.",
+                    question="Which main-entrance opening time is authoritative?",
                 ),
                 ConflictFinding(
                     left=second,
                     right=third,
                     conflict="MAY",
-                    scope_dimensions=("ACCESS",),
                     reason=(
-                        "The two entrance schedules may govern the same public "
-                        "access window."
+                        "The unnamed entrance may be the main entrance or a "
+                        "different entrance."
                     ),
                     question="Do both statements govern the same entrance?",
                 ),
@@ -125,13 +138,13 @@ def _session(kind: str, *, empty: bool = False):
                     left=first,
                     right=second,
                     relation="SEMANTIC_EQUIVALENT",
-                    reason="Both Memories impose the same reporting window in this frame.",
+                    reason="Both Memories impose the same recipient and reporting window.",
                 ),
                 DuplicateFinding(
                     left=second,
                     right=third,
-                    relation="OVERLAP",
-                    reason="The Memories share operational context but are not substitutes.",
+                    relation="SEMANTIC_EQUIVALENT",
+                    reason="Both Memories impose the same recipient and reporting window.",
                 ),
             ),
         )
@@ -240,7 +253,10 @@ def _capture_handoff(
         if kind == "conflicts":
             child.expect("CONFLICTS .* 2/3 PAIRS FLAGGED")
         else:
-            child.expect("REDUNDANCIES .* 2/3 PAIRS FLAGGED")
+            child.expect(
+                "REDUNDANCIES .* 3 MEMORIES CHECKED .* 1 GROUP .* "
+                "2 PROPOSED ABSORPTIONS"
+            )
         _BASE._settle(child)
         _BASE._snapshot(recorder, stems[0])
 
@@ -295,9 +311,7 @@ def main() -> None:
         move_to_second=True,
     )
     _capture_empty()
-    raw = "".join(
-        path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript")
-    )
+    raw = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript"))
     if "38;2;" not in raw and "48;2;" not in raw:
         raise RuntimeError("PTY stream did not contain expected true-color ANSI.")
     for red, green, blue, label in (

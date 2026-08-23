@@ -17,6 +17,8 @@ from memcommit.interfaces.tui.viewers.semantic import (
 from memcommit.quality_find_report import (
     QualityFindReportView,
     QualityFindingReportItem,
+    quality_find_category_label,
+    quality_find_report_summary_text,
     quality_finding_label_parts,
 )
 
@@ -91,7 +93,7 @@ def quality_finding_compact_fragments(
 
     # Redundancy is understandable from the relation and exact pair alone.
     # Ambiguity keeps possible readings, but folds them into the rationale
-    # instead of presenting answer-looking numbered choices or a question.
+    # instead of presenting answer-looking numbered choices.
     if item.category != "duplicates":
         rationale = _inline(item.reason)
         if item.category == "ambiguities" and item.readings:
@@ -106,6 +108,15 @@ def quality_finding_compact_fragments(
                 ),
                 (styled("class:report-neutral"), " · "),
                 (styled("class:viewer-body"), rationale),
+            ]
+        )
+    if item.follow_up:
+        fragments.extend(
+            [
+                (styled("class:report-neutral"), " · "),
+                (styled("class:report-label"), "QUESTION"),
+                (styled("class:report-neutral"), " · "),
+                (styled("class:viewer-body"), _inline(item.follow_up)),
             ]
         )
     fragments.append((styled("class:report-neutral"), "\n"))
@@ -136,17 +147,11 @@ def quality_find_report_header_text(
     """Return the one-line finder summary shared by Find and saved Audit."""
 
     resolved_label = (
-        {
-            "ambiguities": "AMBIGUITIES",
-            "conflicts": "CONFLICTS",
-            "duplicates": "REDUNDANCIES",
-        }[view.kind]
-        if label is None
-        else _inline(label)
+        quality_find_category_label(view.kind) if label is None else _inline(label)
     )
     return (
-        f"{resolved_label} · {len(view.items)}/{view.candidate_count} "
-        f"{view.candidate_unit} FLAGGED · [SOURCE {_inline(view.route)}]"
+        f"{resolved_label} · {quality_find_report_summary_text(view)} · "
+        f"[SOURCE {_inline(view.route)}]"
     )
 
 

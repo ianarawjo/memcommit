@@ -39,7 +39,7 @@ QUALITY_READING_LIMIT = 5
 QUALITY_RULESET_VERSIONS = {
     "find_duplicates": "duplicates-v1-draft",
     "find_ambiguities": "ambiguity-v1-draft",
-    "find_conflicts": "conflict-v1-draft",
+    "find_conflicts": "conflict-v2-draft",
 }
 
 DuplicateRelation = Literal[
@@ -54,19 +54,6 @@ ConflictLabel = Literal["YES", "MAY"]
 _INTERPRETATIONS = {"SINGLE", "DOMINANT", "COMPETING"}
 _CLARIFICATIONS = {"NONE", "HELPFUL", "REQUIRED"}
 _CONFLICT_LABELS = {"YES", "MAY"}
-_SCOPE_DIMENSIONS = {
-    "SUBJECT",
-    "PREDICATE",
-    "OBJECT",
-    "PLACE",
-    "AUDIENCE",
-    "TIME",
-    "MODALITY",
-    "ACCESS_METHOD",
-    "CONDITION",
-    "EXCEPTION",
-    "OTHER",
-}
 
 
 def _findings_execution_policy(operation: str) -> SemanticExecutionPolicy:
@@ -124,6 +111,17 @@ class DuplicateFinding:
     relation: DuplicateRelation
     reason: str
 
+    def __post_init__(self) -> None:
+        # Negative calibration boundaries are never positive cleanup evidence.
+        # Reject them at the typed edge so a fixture or adapter cannot render an
+        # OVERLAP/UNKNOWN/DISTINCT pair as a removable redundancy.
+        if self.relation not in {
+            "EXACT",
+            "SURFACE_EQUIVALENT",
+            "SEMANTIC_EQUIVALENT",
+        }:
+            raise ValueError("Duplicate finding requires a positive DUN relation.")
+
 
 @dataclass(frozen=True)
 class AmbiguityFinding:
@@ -140,7 +138,6 @@ class ConflictFinding:
     left: Memory
     right: Memory
     conflict: ConflictLabel
-    scope_dimensions: tuple[str, ...]
     reason: str
     question: str
 
@@ -787,6 +784,7 @@ def find_ambiguities(
             },
             "question": {
                 "type": "string",
+                "minLength": 1,
                 "maxLength": QUALITY_QUESTION_CHAR_LIMIT,
             },
         },
@@ -976,14 +974,6 @@ def find_conflicts(
                 "type": "string",
                 "enum": sorted(_CONFLICT_LABELS),
             },
-            "scope_dimensions": {
-                "type": "array",
-                "maxItems": 6,
-                "items": {
-                    "type": "string",
-                    "enum": sorted(_SCOPE_DIMENSIONS),
-                },
-            },
             "reason": {
                 "type": "string",
                 "minLength": 1,
@@ -997,7 +987,6 @@ def find_conflicts(
         "required": [
             "pair_id",
             "conflict",
-            "scope_dimensions",
             "reason",
             "question",
         ],
@@ -1018,8 +1007,10 @@ def find_conflicts(
             "and jointly explainable under others. MAY is semantic "
             "indeterminacy, never low model confidence. Omit NO pairs that are "
             "jointly explainable. Do not invent exotic assumptions to force "
-            "compatibility. Give at least one scope dimension and the smallest "
-            "missing-scope question for MAY."
+            "compatibility. For every emitted pair, give the smallest question "
+            "that would resolve which rule applies. For MAY, ask for the "
+            "missing distinction; the reason must state which readings conflict "
+            "and which remain jointly explainable."
         ),
         payload={
             "operation": "find_conflicts",
@@ -1037,7 +1028,6 @@ def find_conflicts(
             {
                 "pair_id",
                 "conflict",
-                "scope_dimensions",
                 "reason",
                 "question",
             },
@@ -1045,20 +1035,11 @@ def find_conflicts(
         )
         pair_id = record["pair_id"]
         conflict = record["conflict"]
-        dimensions = record["scope_dimensions"]
         if (
             not isinstance(pair_id, str)
             or pair_id not in by_id
             or pair_id in findings
             or conflict not in _CONFLICT_LABELS
-            or not isinstance(dimensions, list)
-            or len(dimensions) > 6
-            or len(set(value for value in dimensions if isinstance(value, str)))
-            != len(dimensions)
-            or any(
-                not isinstance(dimension, str) or dimension not in _SCOPE_DIMENSIONS
-                for dimension in dimensions
-            )
         ):
             raise FindingsError(
                 "Codex find_conflicts returned an unknown, duplicate, or "
@@ -1069,22 +1050,12 @@ def find_conflicts(
             operation="find_conflicts",
             label="question",
             limit=QUALITY_QUESTION_CHAR_LIMIT,
-            empty=True,
         )
-        if conflict == "MAY" and not dimensions:
-            raise FindingsError(
-                "Codex find_conflicts omitted the scope dimension for MAY."
-            )
-        if conflict == "MAY" and not question.strip():
-            raise FindingsError(
-                "Codex find_conflicts omitted the clarifying question for MAY."
-            )
         pair = by_id[pair_id]
         findings[pair_id] = ConflictFinding(
             left=pair.left.memory,
             right=pair.right.memory,
             conflict=conflict,  # type: ignore[arg-type]
-            scope_dimensions=tuple(dimensions),
             reason=_short_string(
                 record["reason"],
                 operation="find_conflicts",

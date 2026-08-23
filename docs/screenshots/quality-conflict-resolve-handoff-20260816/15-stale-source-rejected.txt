@@ -1,4 +1,0 @@
-Find conflicts error: The quality finding source no longer matches the frozen Resolve Context. Run the finder again before resolving it.                                            
-COMMAND EXIT · 1                                                                                                                                                                    
-STALE VERIFICATION · MEMORIES ['The main entrance opens at 8:00 every day.', 'The main entrance remains closed until 9:00 every day.', 'A concurrent holiday schedule arrived.'] · C
-HECKPOINTS 0 · COMMANDS [] · PROVIDER OPERATIONS ['find_conflicts']

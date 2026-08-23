@@ -18,8 +18,12 @@ OUT = ROOT / "docs/screenshots/quality-conflict-resolve-handoff-20260816"
 COLUMNS = 180
 ROWS = 52
 
-_BASE_PATH = ROOT / "docs/screenshots/context-endpoint-memory-preview-20260810/capture.py"
-_SPEC = importlib.util.spec_from_file_location("quality_handoff_capture_base", _BASE_PATH)
+_BASE_PATH = (
+    ROOT / "docs/screenshots/context-endpoint-memory-preview-20260810/capture.py"
+)
+_SPEC = importlib.util.spec_from_file_location(
+    "quality_handoff_capture_base", _BASE_PATH
+)
 assert _SPEC is not None and _SPEC.loader is not None
 _BASE = importlib.util.module_from_spec(_SPEC)
 _SPEC.loader.exec_module(_BASE)
@@ -74,6 +78,12 @@ def _initialize() -> None:
             content="The main entrance remains closed until 9:00 every day.",
         )
     )
+    context.add(
+        Memory(
+            uid="20000000-0000-4000-8000-000000000030",
+            content="On weekends, the main entrance opens at 9:00.",
+        )
+    )
     store = MemoryStore()
     store.create_context(context)
     store.set_current(context.name)
@@ -94,7 +104,6 @@ class _Provider:
                         {
                             "pair_id": payload["pairs"][0]["pair_id"],
                             "conflict": "YES",
-                            "scope_dimensions": ["TIME"],
                             "reason": (
                                 "Both Memories govern the same entrance every day "
                                 "but require incompatible opening times."
@@ -138,6 +147,29 @@ class _Provider:
                     "candidates": [
                         {
                             "summary": "Qualify the later opening time as a weekend rule.",
+                            "classification": "EXACT_GROUNDING",
+                            "resolution_level": "YES",
+                            "rule_ids": [
+                                "R04_EXACT_GROUNDING",
+                                "R09_PRESERVE_UNAFFECTED",
+                                "R11_EXACT_POSTCHECK",
+                            ],
+                            "issues": [
+                                {
+                                    "issue_id": "opening-time-scope",
+                                    "kind": "TEMPORAL",
+                                    "memory_ids": ["m1", "m2", "m3"],
+                                    "selected_interpretation": (
+                                        "The 9:00 opening is the weekend schedule."
+                                    ),
+                                    "basis_ids": ["m1", "m2", "m3"],
+                                    "assumptions": [],
+                                    "reason": (
+                                        "The third Memory explicitly grounds the "
+                                        "weekend qualification."
+                                    ),
+                                }
+                            ],
                             "effects": [
                                 {
                                     "kind": "UPDATE",
@@ -145,7 +177,7 @@ class _Provider:
                                     "new_content": (
                                         "The main entrance remains closed until 9:00 on weekends."
                                     ),
-                                    "source_ids": ["m1", "m2"],
+                                    "source_ids": ["m1", "m2", "m3"],
                                     "reason": (
                                         "One scope qualification preserves both supplied times."
                                     ),
@@ -231,7 +263,7 @@ def _run_child(kind: str) -> None:
         exit_code = 0
         try:
             returned = app(
-                args=["find-conflicts"],
+                args=["find-conflicts", "--select"],
                 prog_name="mem",
                 standalone_mode=False,
             )
@@ -281,6 +313,7 @@ def _enter_finder(child: pexpect.spawn) -> None:
     child.expect("MEM FIND CONFLICTS · SETUP")
     _BASE._settle(child)
     child.send("\t\t\r")
+    child.expect("CONFLICTS .* 1/3 PAIRS FLAGGED")
     _BASE._settle(child, seconds=0.8)
 
 
@@ -297,42 +330,24 @@ def _capture_success() -> None:
         _BASE._settle(child)
         _snapshot(recorder, "03-finder-run-approval")
         child.send("\r")
+        child.expect("CONFLICTS .* 1/3 PAIRS FLAGGED")
         _BASE._settle(child, seconds=0.8)
         _snapshot(recorder, "04-conflict-report")
-        assert "PROCESS LOCAL" in (
-            OUT / "04-conflict-report.txt"
-        ).read_text(encoding="utf-8")
-        child.send("\t\x1b[B")
-        _BASE._settle(child)
-        _snapshot(recorder, "05-conflict-item")
+        report = (OUT / "04-conflict-report.txt").read_text(encoding="utf-8")
+        assert "2/3 MEMORIES INVOLVED · 1/3 PAIRS FLAGGED" in report
+        assert "QUESTION" in report
+        assert "SCOPE DIMENSIONS" not in report
         child.send("\r")
-        _BASE._settle(child)
-        _snapshot(recorder, "06-conflict-detail")
-        child.send("\t\t\t")
-        _BASE._settle(child)
-        _snapshot(recorder, "07-resolve-handoff")
-        child.send("\r")
-        child.expect("MEM RESOLVE · RESOLUTION SESSION")
+        child.expect("RESOLVE NEEDS INPUT")
         _BASE._settle(child, seconds=0.8)
-        _snapshot(recorder, "08-resolve-analysis")
-        child.send("\t\r")
+        _snapshot(recorder, "05-resolve-analysis")
+        child.send("\x1b[B")
         _BASE._settle(child)
-        _snapshot(recorder, "09-verified-repair-detail")
-        child.send("\t\r")
-        _BASE._settle(child)
-        _snapshot(recorder, "10-repair-selected")
-        child.send("\t\t")
-        _BASE._settle(child)
-        _snapshot(recorder, "11-ready-for-exact-review")
-        child.send("\r")
-        _BASE._settle(child)
-        _snapshot(recorder, "12-exact-apply-review")
-        child.send("\r")
-        _BASE._settle(child, seconds=0.8)
-        _snapshot(recorder, "13-success-receipt")
+        _snapshot(recorder, "06-apply-row-ready")
         child.send("\r")
         child.expect("SUCCESS VERIFICATION")
-        _snapshot(recorder, "14-read-only-store-verification")
+        _BASE._settle(child, seconds=0.8)
+        _snapshot(recorder, "07-success-receipt-and-store-verification")
         child.send("\r")
         child.expect(pexpect.EOF)
     finally:
@@ -344,11 +359,11 @@ def _capture_stale() -> None:
     child, recorder = _spawn("stale")
     try:
         _enter_finder(child)
-        child.send("\t\t\r")
+        child.send("\r")
         child.expect("Find conflicts error")
         child.expect("STALE VERIFICATION")
         _BASE._settle(child)
-        _snapshot(recorder, "15-stale-source-rejected")
+        _snapshot(recorder, "08-stale-source-rejected")
         child.send("\r")
         child.expect(pexpect.EOF)
     finally:
@@ -358,23 +373,22 @@ def _capture_stale() -> None:
 
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
+    for suffix in ("*.png", "*.txt", "*.typescript"):
+        for path in OUT.glob(suffix):
+            path.unlink()
     _capture_success()
     _capture_stale()
-    assert "STATUS · SUCCESS" in (
-        OUT / "13-success-receipt.txt"
-    ).read_text(encoding="utf-8")
-    verification = (OUT / "14-read-only-store-verification.txt").read_text(
+    verification = (OUT / "07-success-receipt-and-store-verification.txt").read_text(
         encoding="utf-8"
     )
+    assert "APPLIED · UPDATE 1 · FIT YES" in verification
     assert "CHECKPOINTS 1" in verification
     assert "COMMANDS ['resolve']" in verification
-    stale = (OUT / "15-stale-source-rejected.txt").read_text(encoding="utf-8")
+    stale = (OUT / "08-stale-source-rejected.txt").read_text(encoding="utf-8")
     assert "source no longer matches" in stale
     assert "CHECKPOINTS 0" in stale
     assert "PROVIDER OPERATIONS ['find_conflicts']" in stale
-    raw = "".join(
-        path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript")
-    )
+    raw = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript"))
     assert "PTY 180 52" in raw
     assert "\x1b[" in raw
     assert "38;" in raw

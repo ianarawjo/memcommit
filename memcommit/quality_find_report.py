@@ -18,6 +18,19 @@ class QualityFindReportError(ValueError):
     """Invalid read-only quality finding projection."""
 
 
+def quality_find_category_label(kind: QualityFindReportKind) -> str:
+    """Return the stable user-facing category name for one finder."""
+
+    try:
+        return {
+            "ambiguities": "AMBIGUITIES",
+            "conflicts": "CONFLICTS",
+            "duplicates": "REDUNDANCIES",
+        }[kind]
+    except KeyError as error:
+        raise QualityFindReportError("Unsupported quality finding category.") from error
+
+
 def _text(value: object, label: str, *, empty: bool = False) -> str:
     if not isinstance(value, str) or (not empty and not value.strip()):
         raise QualityFindReportError(f"Invalid {label}.")
@@ -96,16 +109,26 @@ def quality_finding_label_parts(
     """Return the shared marker, category label, and compact classification."""
 
     if item.category == "ambiguities":
-        return "?", "AMBIGUOUS", ""
-    if item.category == "conflicts":
-        parts = [part.strip() for part in item.classification.split("·")]
-        classification = " · ".join(
-            part for part in parts if part.upper() not in {"YES", "MAY", "NO"}
+        label = (
+            "UNDERSPECIFIED"
+            if item.classification.startswith("SINGLE ·")
+            else "AMBIGUOUS"
         )
-        return "!", "CONFLICT", classification
-    if item.classification == "EXACT":
-        return "=", "DUPLICATE", item.classification
-    return "≈", "REDUNDANT", item.classification
+        return "?", label, ""
+    if item.category == "conflicts":
+        label = "POSSIBLE CONFLICT" if item.classification == "MAY" else "CONFLICT"
+        return "!", label, ""
+    relation_labels = {
+        "EXACT": ("=", "DUPLICATE", "EXACT"),
+        "SURFACE_EQUIVALENT": ("≈", "REDUNDANT", "SURFACE EQUIVALENT"),
+        "SEMANTIC_EQUIVALENT": ("≈", "REDUNDANT", "SEMANTIC EQUIVALENT"),
+    }
+    try:
+        return relation_labels[item.classification]
+    except KeyError as error:
+        raise QualityFindReportError(
+            "Unsupported positive redundancy classification."
+        ) from error
 
 
 @dataclass(frozen=True)
@@ -119,8 +142,9 @@ class QualityFindReportView:
     route: str
     source_count: int
     memory_count: int
-    candidate_count: int
-    candidate_unit: Literal["MEMORIES", "PAIRS"]
+    pair_count: int | None
+    group_count: int | None
+    redundant_item_count: int | None
     items: tuple[QualityFindingReportItem, ...]
     empty_message: str
     handoff_label: str | None = None
@@ -139,23 +163,81 @@ class QualityFindReportView:
         for value, label in (
             (self.source_count, "finding Source count"),
             (self.memory_count, "finding Memory count"),
-            (self.candidate_count, "finding candidate count"),
         ):
             if not isinstance(value, int) or isinstance(value, bool) or value < 0:
                 raise QualityFindReportError(f"Invalid {label}.")
-        if self.candidate_unit not in {"MEMORIES", "PAIRS"}:
-            raise QualityFindReportError("Invalid finding candidate unit.")
-        expected_unit = "MEMORIES" if self.kind == "ambiguities" else "PAIRS"
-        if self.candidate_unit != expected_unit:
-            raise QualityFindReportError("Finding candidate unit does not match kind.")
-        if len(self.items) > self.candidate_count:
-            raise QualityFindReportError("Finding count exceeds candidate count.")
+        for value, label in (
+            (self.pair_count, "finding pair count"),
+            (self.group_count, "finding group count"),
+            (self.redundant_item_count, "redundant item count"),
+        ):
+            if value is not None and (
+                not isinstance(value, int) or isinstance(value, bool) or value < 0
+            ):
+                raise QualityFindReportError(f"Invalid {label}.")
+        if self.kind == "ambiguities":
+            if (
+                any(
+                    value is not None
+                    for value in (
+                        self.pair_count,
+                        self.group_count,
+                        self.redundant_item_count,
+                    )
+                )
+                or len(self.items) > self.memory_count
+            ):
+                raise QualityFindReportError("Invalid Ambiguity report counts.")
+        elif self.kind == "conflicts":
+            if (
+                self.pair_count is None
+                or self.group_count is not None
+                or self.redundant_item_count is not None
+                or len(self.items) > self.pair_count
+            ):
+                raise QualityFindReportError("Invalid Conflict report counts.")
+        elif (
+            self.pair_count is not None
+            or self.group_count is None
+            or self.redundant_item_count is None
+        ):
+            raise QualityFindReportError("Invalid Redundancy report counts.")
         if any(item.category != self.kind for item in self.items):
             raise QualityFindReportError("Finding item category does not match report.")
         if len({item.uid for item in self.items}) != len(self.items):
             raise QualityFindReportError("Duplicate quality finding uid.")
         if self.handoff_label is not None:
             _text(self.handoff_label, "finding handoff label")
+
+    @property
+    def involved_memory_count(self) -> int:
+        """Return distinct Memory identities represented by positive findings."""
+
+        return len(
+            {source.memory_uid for item in self.items for source in item.sources}
+        )
+
+
+def quality_find_report_summary_text(view: QualityFindReportView) -> str:
+    """Return counts whose denominators match each finder's execution unit."""
+
+    if view.kind == "ambiguities":
+        return f"{len(view.items)}/{view.memory_count} MEMORIES FLAGGED"
+    if view.kind == "conflicts":
+        assert view.pair_count is not None
+        return (
+            f"{view.involved_memory_count}/{view.memory_count} MEMORIES INVOLVED · "
+            f"{len(view.items)}/{view.pair_count} PAIRS FLAGGED"
+        )
+    assert view.group_count is not None
+    assert view.redundant_item_count is not None
+    group_label = "GROUP" if view.group_count == 1 else "GROUPS"
+    absorption_label = "ABSORPTION" if view.redundant_item_count == 1 else "ABSORPTIONS"
+    return (
+        f"{view.memory_count} MEMORIES CHECKED · "
+        f"{view.group_count} {group_label} · "
+        f"{view.redundant_item_count} PROPOSED {absorption_label}"
+    )
 
 
 @dataclass(frozen=True)
@@ -184,5 +266,7 @@ __all__ = [
     "QualityFindingReading",
     "QualityFindingReportItem",
     "QualityFindingSource",
+    "quality_find_category_label",
+    "quality_find_report_summary_text",
     "quality_finding_label_parts",
 ]

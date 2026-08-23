@@ -16,12 +16,10 @@ from memcommit.commands.context_operand import (
 )
 from memcommit.authority.access import GrantedReadStore, resolve_context_access
 from memcommit.commands.findings_render import (
-    render_finding_outcome,
     render_heading,
     render_memory,
     render_question,
     render_reason,
-    render_values,
 )
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.quality_find_workbench import (
@@ -33,6 +31,7 @@ from memcommit.commands.quality_find_workbench import (
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
+from memcommit.interfaces.console.identity import collision_safe_uid_prefixes
 from memcommit.findings import FindingsError
 from memcommit.fit_judgment import FitJudgmentError
 from memcommit.query_provider import (
@@ -245,6 +244,11 @@ def cmd(
             typer.echo(quality_finding_handoff_json(handoff))
         return
 
+    involved_uids = {
+        memory.uid
+        for finding in report.findings
+        for memory in (finding.left, finding.right)
+    }
     render_heading(
         operation_label="Find Conflicts",
         context_name=(
@@ -252,43 +256,36 @@ def cmd(
             if all_contexts
             else display_escape_text(source.context_names[0])
         ),
-        memory_count=report.memory_count,
-        pair_count=report.pair_count,
-    )
-    render_finding_outcome(
-        finding_count=len(report.findings),
-        singular="conflict finding",
-        plural_form="conflict findings",
-        empty_message="No conflicts found",
+        facts=(
+            f"{len(involved_uids)}/{report.memory_count} direct memories involved",
+            f"{len(report.findings)}/{report.pair_count} pairs flagged",
+        ),
     )
     if not report.findings:
         return
 
-    for finding in report.findings:
+    uid_prefixes = collision_safe_uid_prefixes(involved_uids)
+    for index, finding in enumerate(report.findings, start=1):
         typer.echo()
+        label = "POSSIBLE CONFLICT" if finding.conflict == "MAY" else "CONFLICT"
         typer.secho(
-            f"  CONFLICT  {finding.conflict}",
+            f"  {label} {index}/{len(report.findings)}",
             fg=_CONFLICT_COLORS.get(finding.conflict, typer.colors.YELLOW),
             bold=True,
         )
         render_memory(
-            "LEFT",
             finding.left,
+            uid_prefix=uid_prefixes[finding.left.uid],
             context_name=(
-                source.memory_context_names[finding.left.uid]
-                if all_contexts
-                else None
+                source.memory_context_names[finding.left.uid] if all_contexts else None
             ),
         )
         render_memory(
-            "RIGHT",
             finding.right,
+            uid_prefix=uid_prefixes[finding.right.uid],
             context_name=(
-                source.memory_context_names[finding.right.uid]
-                if all_contexts
-                else None
+                source.memory_context_names[finding.right.uid] if all_contexts else None
             ),
         )
-        render_values("Scope dimensions", finding.scope_dimensions)
         render_reason(finding.reason)
         render_question(finding.question)

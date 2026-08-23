@@ -1,16 +1,11 @@
 PTY 180 52
-MEM FIND REDUNDANCIES · 1/1 · ANALYZING DIRECT MEMORIES . · 0sMEM FIND REDUNDANCIES · 1/1 · ANALYZING DIRECT MEMORIES .. · 0sMEM FIND REDUNDANCIES · 1/1 · ANALYZING DIRECT MEMORIES … · 0s                                                               [1mContext: quality/direct-find[0m
-  3 direct memories, 1 finding
-
-[1m  DUN = DUP / EXACT + SEMANTIC DUN[0m
-    EVIDENCE  1 link = 0 DUP / EXACT links + 1 SEMANTIC DUN link
-    CLEANUP   1 connected group · 1 redundant Memory
+MEM FIND REDUNDANCIES · 1/1 · ANALYZING DIRECT MEMORIES . · 0sMEM FIND REDUNDANCIES · 1/1 · ANALYZING DIRECT MEMORIES .. · 0sMEM FIND REDUNDANCIES · 1/1 · ANALYZING DIRECT MEMORIES … · 0s                                                               [1mFind Redundancies[0m · quality/direct-find · 3 direct memories checked · 1 group · 1 proposed absorption
 
 [1m  DUN GROUP  1/1 · 2 Memories · SEMANTIC DUN[0m
-    CLEANUP MAP · PROPOSED · NOT APPLIED
+    CLEANUP MAP · READY FOR REVIEW
     [38;2;138;173;244m[1mSURVIVOR[0m  [memory 20000000]  The parking garage is unavailable after 10 p.m.
     [38;2;237;135;150m[1mABSORB[0m    [memory 20000001]  Do not enter the parking garage after 22:00.
-    EVIDENCE 1 · [33m[1mSEMANTIC_EQUIVALENT[0m · Both Memories prohibit garage access after the same 10 p.m. boundary.
+    EVIDENCE 1 · [33m[1mSEMANTIC EQUIVALENT[0m · Both Memories prohibit garage access after the same 10 p.m. boundary.
 COMMAND EXIT · 0
 VERIFICATION · CONTEXT quality/direct-find · MEMORIES 3 · CHECKPOINT COMMANDS [] · CURRENT quality/direct-find · PROVIDER ['find_duplicates']
 FIND REPORT READY

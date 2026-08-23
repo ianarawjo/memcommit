@@ -1014,6 +1014,10 @@ This run demonstrates that the commands execute on the intended data and that
 the conflict boundary can expose a material access-method disagreement. It is
 not a quality benchmark or immutable ground truth:
 
+The `scope dimension` line above records the historical v1 experiment. The
+current conflict-v2 contract no longer asks the provider to force causes into
+that enum; it preserves the exact distinction in the reason and question.
+
 - the raw 51 lines have not been semantically atomized;
 - many ambiguity findings reflect incomplete drafting such as “시간 이후,”
   `june xx - aug xx`, or missing destinations and contact routes;

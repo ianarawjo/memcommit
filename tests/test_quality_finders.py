@@ -407,16 +407,14 @@ def test_find_conflicts_sends_every_pair_once_and_sorts_findings():
                 {
                     "pair_id": may_pair,
                     "conflict": "MAY",
-                    "scope_dimensions": ["PLACE"],
                     "reason": "The named entrance may or may not be the same.",
                     "question": "Do both Memories concern the staff entrance?",
                 },
                 {
                     "pair_id": yes_pair,
                     "conflict": "YES",
-                    "scope_dimensions": [],
                     "reason": "The same entrance is both closed and permitted.",
-                    "question": "",
+                    "question": "Which main-entrance rule is authoritative?",
                 },
             ]
         }
@@ -432,6 +430,10 @@ def test_find_conflicts_sends_every_pair_once_and_sorts_findings():
     ]
     assert [finding.conflict for finding in report.findings] == ["YES", "MAY"]
     assert len(provider.calls) == 1
+    schema = provider.calls[0][2]
+    item_properties = schema["properties"]["findings"]["items"]["properties"]
+    assert "scope_dimensions" not in item_properties
+    assert set(item_properties) == {"pair_id", "conflict", "reason", "question"}
     payload = provider.calls[0][3]
     assert [pair["pair_id"] for pair in payload["pairs"]] == [
         "p000001",
@@ -510,9 +512,8 @@ def test_empty_and_singleton_inputs_do_not_connect_provider():
                         {
                             "pair_id": "unknown",
                             "conflict": "YES",
-                            "scope_dimensions": [],
                             "reason": "reason",
-                            "question": "",
+                            "question": "Which rule applies?",
                         }
                     ]
                 }
@@ -561,13 +562,33 @@ def test_find_conflicts_rejects_duplicate_pair_findings():
         finding = {
             "pair_id": payload["pairs"][0]["pair_id"],
             "conflict": "YES",
-            "scope_dimensions": [],
             "reason": "reason",
-            "question": "",
+            "question": "Which rule applies?",
         }
         return {"findings": [finding, finding]}
 
     with pytest.raises(FindingsError, match="duplicate"):
+        find_conflicts(ctx, lambda: PayloadProvider(respond))
+
+
+def test_find_conflicts_requires_question_for_every_positive_pair():
+    ctx = ops.init("missing-conflict-question")
+    ops.add(ctx, "The main entrance opens at 08:00.")
+    ops.add(ctx, "The main entrance remains closed until 09:00.")
+
+    def respond(operation, payload):
+        return {
+            "findings": [
+                {
+                    "pair_id": payload["pairs"][0]["pair_id"],
+                    "conflict": "YES",
+                    "reason": "The same entrance cannot be open and closed.",
+                    "question": "",
+                }
+            ]
+        }
+
+    with pytest.raises(FindingsError, match="invalid question"):
         find_conflicts(ctx, lambda: PayloadProvider(respond))
 
 
@@ -676,8 +697,8 @@ def test_cli_redundancy_report_groups_members_once_without_left_right_labels(
     assert "CLEANUP MAP · READY FOR REVIEW" in plain
     assert plain.count("SURVIVOR") == 1
     assert plain.count("ABSORB") == 2
-    assert "EVIDENCE 1 · SEMANTIC_EQUIVALENT" in plain
-    assert "EVIDENCE 2 · SEMANTIC_EQUIVALENT" in plain
+    assert "EVIDENCE 1 · SEMANTIC EQUIVALENT" in plain
+    assert "EVIDENCE 2 · SEMANTIC EQUIVALENT" in plain
     assert all(plain.count(content) == 1 for content in contents)
     assert "FIRST" not in plain
     assert "LATER" not in plain
@@ -693,6 +714,105 @@ def test_cli_redundancy_report_groups_members_once_without_left_right_labels(
         fg=semantic_color_rgb(SemanticColorRole.REMOVE),
         bold=True,
     ) in result.output
+
+
+def test_cli_ambiguity_and_conflict_reports_use_truthful_compact_units(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    context = ops.init("quality/compact-report")
+    first = ops.add(context, "Call the coordinator before entering.")
+    second = ops.add(context, "The main entrance opens at 08:00.")
+    third = ops.add(context, "The main entrance remains closed until 09:00.")
+    store.save(context)
+    store.set_current(context.name)
+
+    def respond(operation, payload):
+        if operation == "find_ambiguities":
+            return {
+                "findings": [
+                    {
+                        "candidate_id": _candidate_id_for_content(
+                            payload,
+                            first.content,
+                        ),
+                        "interpretation": "SINGLE",
+                        "clarification": "REQUIRED",
+                        "ordinary_readings": [
+                            "Call the event coordinator before entering."
+                        ],
+                        "reason": "No contact route is provided.",
+                        "question": "How can the coordinator be contacted?",
+                    }
+                ]
+            }
+        assert operation == "find_conflicts"
+        return {
+            "findings": [
+                {
+                    "pair_id": _pair_id_for_contents(
+                        payload,
+                        second.content,
+                        third.content,
+                    ),
+                    "conflict": "YES",
+                    "reason": "The same entrance cannot have both opening times.",
+                    "question": "Which opening time is authoritative?",
+                },
+                {
+                    "pair_id": _pair_id_for_contents(
+                        payload,
+                        first.content,
+                        second.content,
+                    ),
+                    "conflict": "MAY",
+                    "reason": (
+                        "The coordinator instruction may govern a different "
+                        "entrance procedure."
+                    ),
+                    "question": "Does the coordinator instruction govern this entrance?",
+                },
+            ]
+        }
+
+    provider = PayloadProvider(respond)
+    monkeypatch.setattr(
+        "memcommit.commands.find_ambiguities.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.find_conflicts.connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+
+    ambiguity = click.unstyle(runner.invoke(app, ["find-ambiguities"]).output)
+    conflict = click.unstyle(runner.invoke(app, ["find-conflicts"]).output)
+
+    assert (
+        "Find Ambiguities · quality/compact-report · 1/3 direct memories flagged"
+    ) in ambiguity
+    assert "UNDERSPECIFIED 1/1" in ambiguity
+    assert f"[{first.uid[:8]}] {first.content}" in ambiguity
+    assert "Reading: Call the event coordinator before entering." in ambiguity
+    assert "Reason: No contact route is provided." in ambiguity
+    assert "Question: How can the coordinator be contacted?" in ambiguity
+    assert "SINGLE" not in ambiguity
+    assert "REQUIRED" not in ambiguity
+    assert "finding" not in ambiguity.casefold()
+
+    assert (
+        "Find Conflicts · quality/compact-report · "
+        "3/3 direct memories involved · 2/3 pairs flagged"
+    ) in conflict
+    assert "POSSIBLE CONFLICT 1/2" in conflict
+    assert "CONFLICT 2/2" in conflict
+    assert f"[{second.uid[:8]}] {second.content}" in conflict
+    assert "Question: Which opening time is authoritative?" in conflict
+    assert "LEFT" not in conflict
+    assert "RIGHT" not in conflict
+    assert "Scope" not in conflict
+    assert "finding" not in conflict.casefold()
 
 
 def test_cli_exact_duplicate_report_keeps_each_disposition_row_self_contained(
@@ -778,19 +898,17 @@ def test_cli_finders_are_read_only_and_each_use_one_provider_call(
         "Find Redundancies · quality · 2 direct memories checked"
         in redundancy_result.output
     )
-    assert "No redundancies found" in redundancy_result.output
-    assert "0 findings" not in redundancy_result.output
+    assert "0 groups · 0 proposed absorptions" in redundancy_result.output
+    assert "findings" not in redundancy_result.output
     assert "No redundancies in 'quality'." in dedun_result.output
     assert (
-        "Find Ambiguities · quality · 2 direct memories checked"
+        "Find Ambiguities · quality · 0/2 direct memories flagged"
         in ambiguity_result.output
     )
-    assert "No ambiguities found" in ambiguity_result.output
     assert (
-        "Find Conflicts · quality · 2 direct memories checked · 1 pair checked"
-        in conflict_result.output
+        "Find Conflicts · quality · 0/2 direct memories involved · "
+        "0/1 pairs flagged" in conflict_result.output
     )
-    assert "No conflicts found" in conflict_result.output
     assert [call[1] for call in provider.calls] == [
         "find_duplicates",
         "find_duplicates",
@@ -834,7 +952,6 @@ def test_quality_finder_all_aliases_freeze_one_profile_wide_source(
                 {
                     "pair_id": payload["pairs"][0]["pair_id"],
                     "conflict": "MAY",
-                    "scope_dimensions": ["ACCESS_METHOD"],
                     "reason": "The access rule may distinguish staff.",
                     "question": "Does the closure apply to staff?",
                 }
@@ -974,10 +1091,8 @@ def test_cli_positional_context_does_not_switch_current(
             "Find Redundancies · target · 2 direct memories checked"
             in result.output
         )
-        assert "1 redundancy finding" in result.output
-        assert "DUN = DUP / EXACT + SEMANTIC DUN" in result.output
-        assert "1 link = 1 DUP / EXACT link + 0 SEMANTIC DUN links" in result.output
-        assert "1 connected group" in result.output
+        assert "1 group · 1 proposed absorption" in result.output
+        assert "redundancy finding" not in result.output
         assert "DUN GROUP  1/1 · 2 Memories · DUP / EXACT" in result.output
         assert "CLEANUP MAP · READY FOR REVIEW" in result.output
         assert "SURVIVOR" in result.output
@@ -987,8 +1102,10 @@ def test_cli_positional_context_does_not_switch_current(
         assert "LEFT" not in result.output
         assert "RIGHT" not in result.output
     elif command_name == "find-duplicates":
-        assert "Context: target" in result.output
-        assert "1 exact duplicate group(s)" in result.output
+        assert (
+            "Find Duplicates · target · 2 direct items checked · "
+            "1 exact group · 1 proposed absorption"
+        ) in result.output
         assert result.output.count("same") == 2
         assert "SURVIVOR" in result.output
         assert "ABSORB" in result.output
@@ -997,13 +1114,14 @@ def test_cli_positional_context_does_not_switch_current(
         assert "FIRST" not in result.output
         assert "LATER" not in result.output
         assert "Apply exact cleanup with mem dedup" in result.output
-    else:
-        title = (
-            "Find Ambiguities"
-            if command_name == "find-ambiguities"
-            else "Find Conflicts"
+    elif command_name == "find-ambiguities":
+        assert (
+            "Find Ambiguities · target · 0/2 direct memories flagged" in result.output
         )
-        assert f"{title} · target · 2 direct memories checked" in result.output
+    else:
+        assert (
+            "Find Conflicts · target · 0/2 direct memories involved · 0/1 pairs flagged"
+        ) in result.output
     assert store.current_context_name() == active.name
 
 
@@ -1264,10 +1382,7 @@ def test_conflict_and_duplicate_fixtures_cover_all_calibration_boundaries():
         "MAY",
         "NO",
     }
-    assert all(
-        set(case["expected"]["scope_dimensions"]) <= {"PLACE"}
-        for case in conflict["cases"]
-    )
+    assert all("scope_dimensions" not in case["expected"] for case in conflict["cases"])
     assert {case["expected"]["relation"] for case in duplicates["cases"]} == {
         "EXACT",
         "SURFACE_EQUIVALENT",

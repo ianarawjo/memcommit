@@ -1,10 +1,10 @@
 $ mem find-redundancies --context study/reporting                                                                                                                                   
 PTY · 180 COLUMNS × 52 ROWS                                                                                                                                                         
- REDUNDANCIES · 2/3 PAIRS FLAGGED · [SOURCE study/reporting]                                                                                                                        
-  ≈ REDUNDANT · SEMANTIC_EQUIVALENT · [MEMORY a31f02c1] “Report the incident within 30 days.” ↔ [MEMORY 5ce891d4] “Notify the office no later than one month after discovery.”     ^
-› ≈ REDUNDANT · OVERLAP · [MEMORY 5ce891d4] “Notify the office no later than one month after discovery.” ↔ [MEMORY 7b94ee10] “The accessible entrance remains open during office ho 
-urs.”                                                                                                                                                                               
-                                                                                                                                                                                    
+ REDUNDANCIES · 3 MEMORIES CHECKED · 1 GROUP · 2 PROPOSED ABSORPTIONS · [SOURCE study/reporting]                                                                                    
+  ≈ REDUNDANT · SEMANTIC EQUIVALENT · [MEMORY a31f02c1] “Report the incident to the office within 30 days of discovery.” ↔ [MEMORY 5ce891d4] “Notify the office no later than 30 da^
+ys after discovering the incident.”                                                                                                                                                 
+› ≈ REDUNDANT · SEMANTIC EQUIVALENT · [MEMORY 5ce891d4] “Notify the office no later than 30 days after discovering the incident.” ↔ [MEMORY 7b94ee10] “The incident must be reporte 
+d to the office within thirty days of discovery.”                                                                                                                                   
                                                                                                                                                                                     
                                                                                                                                                                                     
                                                                                                                                                                                     

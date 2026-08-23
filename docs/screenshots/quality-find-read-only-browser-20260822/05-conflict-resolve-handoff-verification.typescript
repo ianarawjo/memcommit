@@ -1,10 +1,10 @@
 $ mem find-conflicts --context study/reporting
 PTY · 180 COLUMNS × 52 ROWS
-[6n[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;2;244;245;247;1m CONFLICTS · 2/3 PAIRS FLAGGED · [SOURCE study/reporting][0m
-[0;1;7m› ! CONFLICT · TIME · [MEMORY a31f02c1] “Report the incident within 30 days.” ↔ [MEMORY 5ce891d4] “Notify the office no later than one month after discovery.” · WHY · The deadline[179C[0;1m^[0m
-[0;1;7ms can disagree when discovery occurs after the incident.[123C[0;48;2;68;68;68m [0m
-[0m  [0;38;2;244;245;247m! [0;38;2;237;135;150;1mCONFLICT[0;38;2;244;245;247m · [0;38;2;244;245;247;1mACCESS[0;38;2;244;245;247m · [0;38;2;244;245;247;1m[MEMORY 5ce891d4] [0;38;2;202;211;245m“Notify the office no later than one month after discovery.”[0;38;2;244;245;247m ↔ [0;38;2;244;245;247;1m[MEMORY 7b94ee10] [0;38;2;202;211;245m“The accessible entrance remains open during office hour[179C[0;48;2;68;68;68m [0m
-[0;38;2;202;211;245ms.”[0;38;2;244;245;247m · [0;38;2;145;215;227;1mWHY[0;38;2;244;245;247m · The two entrance schedules may govern the same public access window.[99C[0;48;2;68;68;68m [0m
+[6n[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;2;244;245;247;1m CONFLICTS · 3/3 MEMORIES INVOLVED · 2/3 PAIRS FLAGGED · [SOURCE study/reporting][0m
+[0;1;7m› ! CONFLICT · [MEMORY a31f02c1] “The main entrance opens at 08:00.” ↔ [MEMORY 5ce891d4] “The main entrance remains closed until 09:00.” · WHY · The main entrance cannot be open a[179C[0;1m^[0m
+[0;1;7mt 08:00 and closed until 09:00. · QUESTION · Which main-entrance opening time is authoritative?[84C[0;48;2;68;68;68m [0m
+[0m  [0;38;2;244;245;247m! [0;38;2;237;135;150;1mPOSSIBLE CONFLICT[0;38;2;244;245;247m · [0;38;2;244;245;247;1m[MEMORY 5ce891d4] [0;38;2;202;211;245m“The main entrance remains closed until 09:00.”[0;38;2;244;245;247m ↔ [0;38;2;244;245;247;1m[MEMORY 7b94ee10] [0;38;2;202;211;245m“The entrance opens at 08:00.”[0;38;2;244;245;247m · [0;38;2;145;215;227;1mWHY[0;38;2;244;245;247m · The unnamed entrance may be th[179C[0;48;2;68;68;68m [0m
+[0;38;2;244;245;247me main entrance or a different entrance. · [0;38;2;244;245;247;1mQUESTION[0;38;2;244;245;247m · Do both statements govern the same entrance?[81C[0;48;2;68;68;68m [0m
 [179C[0;48;2;68;68;68m [0m
 [179C[0;48;2;68;68;68m [0m
 [179C[0;48;2;68;68;68m [0m
@@ -25,11 +25,11 @@ PTY · 180 COLUMNS × 52 ROWS
 [179C[0;48;2;68;68;68m [0m
 [179C[0;48;2;68;68;68m [0m
 [0m                                                                                                                                                                                   [179C[0;1mv[0m
-[0m ↑/↓ finding · Enter open Resolve · Esc close · READ-ONLY[57D[24A[?7h[0m[?25l[?7l[A[0m[J[0;38;2;244;245;247;1m CONFLICTS · 2/3 PAIRS FLAGGED · [SOURCE study/reporting][0m
-[0;1;7m› ! CONFLICT · TIME · [MEMORY a31f02c1] “Report the incident within 30 days.” ↔ [MEMORY 5ce891d4] “Notify the office no later than one month after discovery.” · WHY · The deadline[179C[0;1m^[0m
-[0;1;7ms can disagree when discovery occurs after the incident.[123C[0;48;2;68;68;68m [0m
-[0m  [0;38;2;244;245;247m! [0;38;2;237;135;150;1mCONFLICT[0;38;2;244;245;247m · [0;38;2;244;245;247;1mACCESS[0;38;2;244;245;247m · [0;38;2;244;245;247;1m[MEMORY 5ce891d4] [0;38;2;202;211;245m“Notify the office no later than one month after discovery.”[0;38;2;244;245;247m ↔ [0;38;2;244;245;247;1m[MEMORY 7b94ee10] [0;38;2;202;211;245m“The accessible entrance remains open during office hour[179C[0;48;2;68;68;68m [0m
-[0;38;2;202;211;245ms.”[0;38;2;244;245;247m · [0;38;2;145;215;227;1mWHY[0;38;2;244;245;247m · The two entrance schedules may govern the same public access window.[99C[0;48;2;68;68;68m [0m
+[0m ↑/↓ finding · Enter open Resolve · Esc close · READ-ONLY[57D[24A[?7h[0m[?25l[?7l[A[0m[J[0;38;2;244;245;247;1m CONFLICTS · 3/3 MEMORIES INVOLVED · 2/3 PAIRS FLAGGED · [SOURCE study/reporting][0m
+[0;1;7m› ! CONFLICT · [MEMORY a31f02c1] “The main entrance opens at 08:00.” ↔ [MEMORY 5ce891d4] “The main entrance remains closed until 09:00.” · WHY · The main entrance cannot be open a[179C[0;1m^[0m
+[0;1;7mt 08:00 and closed until 09:00. · QUESTION · Which main-entrance opening time is authoritative?[84C[0;48;2;68;68;68m [0m
+[0m  [0;38;2;244;245;247m! [0;38;2;237;135;150;1mPOSSIBLE CONFLICT[0;38;2;244;245;247m · [0;38;2;244;245;247;1m[MEMORY 5ce891d4] [0;38;2;202;211;245m“The main entrance remains closed until 09:00.”[0;38;2;244;245;247m ↔ [0;38;2;244;245;247;1m[MEMORY 7b94ee10] [0;38;2;202;211;245m“The entrance opens at 08:00.”[0;38;2;244;245;247m · [0;38;2;145;215;227;1mWHY[0;38;2;244;245;247m · The unnamed entrance may be th[179C[0;48;2;68;68;68m [0m
+[0;38;2;244;245;247me main entrance or a different entrance. · [0;38;2;244;245;247;1mQUESTION[0;38;2;244;245;247m · Do both statements govern the same entrance?[81C[0;48;2;68;68;68m [0m
 [179C[0;48;2;68;68;68m [0m
 [179C[0;48;2;68;68;68m [0m
 [179C[0;48;2;68;68;68m [0m

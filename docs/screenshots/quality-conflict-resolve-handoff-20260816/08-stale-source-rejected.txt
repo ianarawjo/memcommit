@@ -1,0 +1,30 @@
+ CONFLICTS · 2/3 MEMORIES INVOLVED · 1/3 PAIRS FLAGGED · [SOURCE quality/capture]                                                                                                   
+› ! CONFLICT · [MEMORY 20000000-0000-4000-8000-00000000001] “The main entrance opens at 8:00 every day.” ↔ [MEMORY 20000000-0000-4000-8000-00000000002] “The main entrance remains ^
+closed until 9:00 every day.” · WHY · Both Memories govern the same entrance every day but require incompatible opening times. · QUESTION · Which opening time should govern every  
+day?                                                                                                                                                                                
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+ ↑/↓ finding · Enter open Resolve · Esc close · READ-ONLY                                                                                                                           
+Find conflicts error: The quality finding source no longer matches the frozen Resolve Context. Run the finder again before resolving it.                                            
+COMMAND EXIT · 1                                                                                                                                                                    
+STALE VERIFICATION · MEMORIES ['The main entrance opens at 8:00 every day.', 'The main entrance remains closed until 9:00 every day.', 'On weekends, the main entrance opens at 9:00
+.', 'A concurrent holiday schedule arrived.'] · CHECKPOINTS 0 · COMMANDS [] · PROVIDER OPERATIONS ['find_conflicts']

@@ -3,8 +3,9 @@
 Audit is an orchestration boundary, not a fourth semantic judge. It freezes one
 direct Context frame, runs the existing Duplicate, Ambiguity, and Conflict
 finders independently, and may retain one separately typed Conformance check
-against an explicit Rules Context. Version-1/2 response fields remain readable
-as historical annotations, but the Audit Review route no longer edits them.
+against an explicit Rules Context. Version-1/2 records remain readable, but
+version 3 drops Conflict's unused scope-dimension tags. Historical response
+fields remain annotations; the Audit Review route no longer edits them.
 """
 
 from __future__ import annotations
@@ -32,10 +33,15 @@ from memcommit.findings import (
     find_redundancies,
 )
 from memcommit.provider_types import CompletionRun, ProviderIdentity
+from memcommit.quality_find_report import (
+    quality_find_category_label,
+    quality_find_report_summary_text,
+)
 from memcommit.quality_find_workbench import (
     QualityFindResponse,
     QualityFindSourceFrame,
     QualityFindWorkbenchSession,
+    quality_find_report_view,
     quality_find_resolution_view,
 )
 from memcommit.resolution_workbench import (
@@ -48,8 +54,9 @@ from memcommit.resolution_workbench import (
 from memcommit.review import REVIEW_RESPONSE_CHAR_LIMIT, direct_context_digest
 
 
-QUALITY_AUDIT_SCHEMA_VERSION = 2
+QUALITY_AUDIT_SCHEMA_VERSION = 3
 QUALITY_AUDIT_LEGACY_SCHEMA_VERSION = 1
+QUALITY_AUDIT_PREVIOUS_SCHEMA_VERSION = 2
 QUALITY_AUDIT_KINDS = ("duplicates", "ambiguities", "conflicts")
 QUALITY_AUDIT_RULESETS = {
     "duplicates": QUALITY_RULESET_VERSIONS["find_duplicates"],
@@ -342,7 +349,6 @@ def _report_to_dict(
                 "left_uid": item.left.uid,
                 "right_uid": item.right.uid,
                 "conflict": item.conflict,
-                "scope_dimensions": list(item.scope_dimensions),
                 "reason": item.reason,
                 "question": item.question,
             }
@@ -360,6 +366,8 @@ def _report_from_dict(
     kind: QualityAuditKind,
     value: object,
     source_by_uid: dict[str, Memory],
+    *,
+    schema_version: int,
 ) -> QualityAuditReport:
     keys = {"memory_count", "findings"}
     if kind == "conflicts":
@@ -451,31 +459,38 @@ def _report_from_dict(
 
     conflict_findings: list[ConflictFinding] = []
     for raw in raw_findings:
+        item_keys = {
+            "left_uid",
+            "right_uid",
+            "conflict",
+            "reason",
+            "question",
+        }
+        if schema_version <= QUALITY_AUDIT_PREVIOUS_SCHEMA_VERSION:
+            item_keys.add("scope_dimensions")
         item = _exact_dict(
             raw,
-            {
-                "left_uid",
-                "right_uid",
-                "conflict",
-                "scope_dimensions",
-                "reason",
-                "question",
-            },
+            item_keys,
             "Conflict Audit finding",
         )
         conflict = item["conflict"]
-        dimensions = item["scope_dimensions"]
-        if conflict not in {"YES", "MAY"} or not isinstance(dimensions, list):
+        if conflict not in {"YES", "MAY"}:
             raise QualityAuditError("Invalid Conflict Audit finding.")
+        if schema_version <= QUALITY_AUDIT_PREVIOUS_SCHEMA_VERSION:
+            # Old records retain these tags as historical bytes only. They did
+            # not affect Resolve and do not re-enter the version-3 model.
+            dimensions = item["scope_dimensions"]
+            if not isinstance(dimensions, list):
+                raise QualityAuditError("Invalid Conflict Audit finding.")
+            tuple(
+                _string(dimension, "legacy Audit scope dimension", limit=100)
+                for dimension in dimensions
+            )
         conflict_findings.append(
             ConflictFinding(
                 left=memory(item["left_uid"]),
                 right=memory(item["right_uid"]),
                 conflict=conflict,
-                scope_dimensions=tuple(
-                    _string(dimension, "Audit scope dimension", limit=100)
-                    for dimension in dimensions
-                ),
                 reason=_string(item["reason"], "Conflict Audit reason", limit=1_000),
                 question=_string(
                     item["question"],
@@ -514,6 +529,8 @@ class QualityAuditCheck:
         cls,
         value: object,
         source_by_uid: dict[str, Memory],
+        *,
+        schema_version: int,
     ) -> "QualityAuditCheck":
         data = _exact_dict(
             value,
@@ -528,7 +545,12 @@ class QualityAuditCheck:
             ruleset_version=_string(
                 data["ruleset_version"], "Audit ruleset", limit=100
             ),
-            report=_report_from_dict(kind, data["report"], source_by_uid),
+            report=_report_from_dict(
+                kind,
+                data["report"],
+                source_by_uid,
+                schema_version=schema_version,
+            ),
             provenance=QualityAuditProvenance.from_dict(data["provenance"]),
         )
 
@@ -579,9 +601,7 @@ class QualityAuditSession:
             "source": self.source.to_dict(),
             "checks": [check.to_dict() for check in self.checks],
             "conformance": (
-                self.conformance.to_dict()
-                if self.conformance is not None
-                else None
+                self.conformance.to_dict() if self.conformance is not None else None
             ),
         }
 
@@ -611,18 +631,30 @@ class QualityAuditSession:
             data = _exact_dict(
                 value,
                 {
-                    "schema_version", "uid", "created_at", "source", "checks",
+                    "schema_version",
+                    "uid",
+                    "created_at",
+                    "source",
+                    "checks",
                     "responses",
                 },
                 "legacy Audit session",
             )
             raw_conformance = None
-        elif schema_version == QUALITY_AUDIT_SCHEMA_VERSION:
+        elif schema_version in {
+            QUALITY_AUDIT_PREVIOUS_SCHEMA_VERSION,
+            QUALITY_AUDIT_SCHEMA_VERSION,
+        }:
             data = _exact_dict(
                 value,
                 {
-                    "schema_version", "uid", "created_at", "source", "checks",
-                    "conformance", "responses",
+                    "schema_version",
+                    "uid",
+                    "created_at",
+                    "source",
+                    "checks",
+                    "conformance",
+                    "responses",
                 },
                 "Audit session",
             )
@@ -639,7 +671,12 @@ class QualityAuditSession:
         if not isinstance(raw_checks, list):
             raise QualityAuditError("Invalid Audit checks.")
         checks = tuple(
-            QualityAuditCheck.from_dict(check, source_by_uid) for check in raw_checks
+            QualityAuditCheck.from_dict(
+                check,
+                source_by_uid,
+                schema_version=schema_version,
+            )
+            for check in raw_checks
         )
         if tuple(check.kind for check in checks) != QUALITY_AUDIT_KINDS:
             raise QualityAuditError(
@@ -649,7 +686,22 @@ class QualityAuditSession:
         for check in checks:
             if check.report.memory_count != expected_memory_count:
                 raise QualityAuditError("Audit check does not match its frozen Source.")
-            if check.ruleset_version != QUALITY_AUDIT_RULESETS[check.kind]:
+            expected_ruleset = QUALITY_AUDIT_RULESETS[check.kind]
+            if (
+                schema_version <= QUALITY_AUDIT_PREVIOUS_SCHEMA_VERSION
+                and check.kind == "conflicts"
+            ):
+                expected_ruleset = "conflict-v1-draft"
+            valid_rulesets = {expected_ruleset}
+            if (
+                schema_version == QUALITY_AUDIT_SCHEMA_VERSION
+                and check.kind == "conflicts"
+            ):
+                # Normalized historical records retain truthful v1 provenance
+                # even though their discarded display-only tags are not
+                # rewritten into the version-3 body.
+                valid_rulesets.add("conflict-v1-draft")
+            if check.ruleset_version not in valid_rulesets:
                 raise QualityAuditError("Unsupported Audit finder ruleset.")
             if check.provenance.operation != f"find_{check.kind}":
                 raise QualityAuditError(
@@ -672,9 +724,7 @@ class QualityAuditSession:
             conformance_subjects = {
                 item.uid: item.content for item in conformance.subjects
             }
-            source_subjects = {
-                item.uid: item.content for item in source.memories
-            }
+            source_subjects = {item.uid: item.content for item in source.memories}
             if conformance_subjects != source_subjects or any(
                 item.expected is not None for item in conformance.subjects
             ):
@@ -858,6 +908,7 @@ def quality_audit_resolution_view(
     source_frame = QualityFindSourceFrame.create((ctx,))
     items = []
     counts: dict[str, int] = {}
+    summaries: dict[str, str] = {}
     for check in session.checks:
         sub_session = QualityFindWorkbenchSession(
             uid=session.uid,
@@ -869,17 +920,17 @@ def quality_audit_resolution_view(
         projected = quality_find_resolution_view(sub_session, ctx)
         items.extend(projected.items)
         counts[check.kind] = len(projected.items)
-
-    total = len(items)
-    check_lines = [
-        (
-            f"{kind.upper()} · FINISHED · {counts[kind]} "
-            f"{'finding' if counts[kind] == 1 else 'findings'}"
+        summaries[check.kind] = quality_find_report_summary_text(
+            quality_find_report_view(sub_session, ctx)
         )
+
+    check_lines = [
+        f"{quality_find_category_label(kind)} · FINISHED · {summaries[kind]}"
         for kind in QUALITY_AUDIT_KINDS
     ]
     provenance_lines = [
-        f"{check.kind.upper()} · {check.ruleset_version} · {check.provenance.display_name()}"
+        f"{quality_find_category_label(check.kind)} · {check.ruleset_version} · "
+        f"{check.provenance.display_name()}"
         for check in session.checks
     ]
     conformance = session.conformance
@@ -894,8 +945,7 @@ def quality_audit_resolution_view(
         identity = conformance.provider_identity
         assert identity is not None
         provenance_lines.append(
-            "CONFORMANCE · "
-            f"{conformance.ruleset_version} · {identity.display_name()}"
+            f"CONFORMANCE · {conformance.ruleset_version} · {identity.display_name()}"
         )
     checks_text = "\n".join(check_lines)
     provenance_text = "\n".join(provenance_lines)
@@ -905,8 +955,8 @@ def quality_audit_resolution_view(
             "AUDIT SUMMARY",
             (
                 "All quality finders completed over the same saved direct "
-                f"Context snapshot. Reported {total} total "
-                f"{'finding' if total == 1 else 'findings'}."
+                "Context snapshot. Each section retains its own Memory, pair, "
+                "group, or absorption unit."
                 + (
                     " Conformance evaluated the same Source against "
                     f"{len(conformance.rules)} frozen Rules."
@@ -952,7 +1002,7 @@ def quality_audit_resolution_view(
     sections = tuple(sections_list)
     metrics = [
         ResolutionMetric("SOURCE MEMORIES", str(len(session.source.memories))),
-        ResolutionMetric("DUPLICATES", str(counts["duplicates"])),
+        ResolutionMetric("REDUNDANCIES", str(counts["duplicates"])),
         ResolutionMetric("AMBIGUITIES", str(counts["ambiguities"])),
         ResolutionMetric("CONFLICTS", str(counts["conflicts"])),
     ]
@@ -974,7 +1024,7 @@ def quality_audit_resolution_view(
         overview=resolution_overview_text(sections),
         overview_sections=sections,
         list_label=(
-            "AUDIT FINDINGS · DUPLICATES → AMBIGUITIES → CONFLICTS"
+            "AUDIT CHECKS · REDUNDANCIES → AMBIGUITIES → CONFLICTS"
             + (" · CONFORMANCE IN OVERVIEW" if conformance is not None else "")
         ),
         items=tuple(items),

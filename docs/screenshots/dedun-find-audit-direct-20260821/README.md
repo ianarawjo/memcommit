@@ -20,7 +20,7 @@ report and returns its Review receipt without opening a result workbench.
   PNG retains matching `.typescript` and plain `.txt` evidence
 - Color verification: raw streams must contain the real green success, yellow
   semantic-result, shared ADD-blue `SURVIVOR`, shared REMOVE-red `ABSORB`, and
-  shared lavender/yellow/red `DUPLICATES`/`AMBIGUITIES`/`CONFLICTS` foreground
+  shared lavender/yellow/red `REDUNDANCIES`/`AMBIGUITIES`/`CONFLICTS` foreground
   styles; these line-oriented routes have no focused-control background
 
 ## Ordered interaction log
@@ -35,12 +35,12 @@ report and returns its Review receipt without opening a result workbench.
 | `05-dedun-no-change-progress` | `mem dedun` | launch in no-change Context | compact one-line analysis progress | none |
 | `06-dedun-no-change-receipt` | same process | provider returns | no redundancies; three Memories and zero checkpoints | none |
 | `07-find-direct-progress` | `mem find-redundancies` | launch | compact current-Context analysis progress; no setup | none |
-| `08-find-read-only-report` | same process | provider returns | one proposed connected cleanup group with blue `SURVIVOR`, red `ABSORB`, and typed evidence; zero checkpoints | none |
-| `08b-find-duplicates-exact-report` | `mem find-duplicates` | launch | provider-free exact-DUP group with two self-contained colored member rows and collision-safe identities; zero checkpoints | none |
-| `09-audit-duplicates-progress` | `mem audit` | launch | compact `1/3` Duplicate stage | none |
+| `08-find-read-only-report` | same process | provider returns | three checked Memories, one proposed connected cleanup group, and one proposed absorption with blue `SURVIVOR`, red `ABSORB`, and typed evidence; zero checkpoints | none |
+| `08b-find-duplicates-exact-report` | `mem find-duplicates` | launch | three checked direct items, one provider-free exact-DUP group, and one proposed absorption with two self-contained colored member rows; zero checkpoints | none |
+| `09-audit-duplicates-progress` | `mem audit` | launch | compact `1/3` Redundancy stage | none |
 | `10-audit-ambiguities-progress` | same process | provider returns | compact `2/3` Ambiguity stage | none |
 | `11-audit-conflicts-progress` | same process | provider returns | compact `3/3` Conflict stage | none |
-| `12-audit-saved-receipt` | same process | provider returns | saved Source scope, colored per-finder numerator/denominator summary, up to three source-linked finding previews plus `… N more`, session UID, and exact Review command | saved Audit artifact only |
+| `12-audit-saved-receipt` | same process | provider returns | saved Source scope and truthful per-check units: Redundancy groups/absorptions, Ambiguity flagged/direct Memories, and Conflict involved/direct Memories plus flagged/checked pairs; up to three source-linked previews plus `… N more`, session UID, and exact Review command | saved Audit artifact only |
 | `13-audit-saved-review` | `mem review audit --session UID --snapshot` | `Enter` | exact durable three-check report with compact `SOURCE` and direct-Memory `SNAPSHOT` rows | none |
 | `14-audit-read-only-verification` | same process | `Enter` | unchanged Source and zero Context checkpoints | none |
 

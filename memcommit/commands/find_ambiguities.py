@@ -13,12 +13,11 @@ from memcommit.commands.context_operand import (
 )
 from memcommit.authority.access import GrantedReadStore, resolve_context_access
 from memcommit.commands.findings_render import (
-    render_finding_outcome,
     render_heading,
     render_memory,
     render_question,
+    render_readings,
     render_reason,
-    render_values,
 )
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.quality_find_workbench import (
@@ -30,6 +29,11 @@ from memcommit.commands.quality_find_workbench import (
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
+from memcommit.interfaces.console.identity import collision_safe_uid_prefixes
+from memcommit.interfaces.console.theme import (
+    SemanticColorRole,
+    semantic_color_rgb,
+)
 from memcommit.findings import FindingsError
 from memcommit.query_provider import (
     QueryProviderError,
@@ -39,13 +43,6 @@ from memcommit.store import MemoryStore
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
 from memcommit.quality_find_workbench import QualityFindSourceFrame
-
-
-_CLARIFICATION_COLORS = {
-    "NONE": typer.colors.GREEN,
-    "HELPFUL": typer.colors.YELLOW,
-    "REQUIRED": typer.colors.RED,
-}
 
 
 def cmd(
@@ -223,36 +220,33 @@ def cmd(
             if all_contexts
             else display_escape_text(source.context_names[0])
         ),
-        memory_count=report.memory_count,
-    )
-    render_finding_outcome(
-        finding_count=len(report.findings),
-        singular="ambiguity finding",
-        plural_form="ambiguity findings",
-        empty_message="No ambiguities found",
+        facts=(
+            f"{len(report.findings)}/{report.memory_count} direct memories flagged",
+        ),
     )
     if not report.findings:
         return
 
-    for finding in report.findings:
+    uid_prefixes = collision_safe_uid_prefixes(
+        finding.memory.uid for finding in report.findings
+    )
+    for index, finding in enumerate(report.findings, start=1):
         typer.echo()
+        label = "UNDERSPECIFIED" if finding.interpretation == "SINGLE" else "AMBIGUITY"
         typer.secho(
-            f"  AMBIGUITY  {finding.interpretation} / {finding.clarification}",
-            fg=_CLARIFICATION_COLORS.get(
-                finding.clarification,
-                typer.colors.YELLOW,
-            ),
+            f"  {label} {index}/{len(report.findings)}",
+            fg=semantic_color_rgb(SemanticColorRole.QUALITY_AMBIGUITY),
             bold=True,
         )
         render_memory(
-            "MEMORY",
             finding.memory,
+            uid_prefix=uid_prefixes[finding.memory.uid],
             context_name=(
                 source.memory_context_names[finding.memory.uid]
                 if all_contexts
                 else None
             ),
         )
-        render_values("Ordinary readings", finding.ordinary_readings)
+        render_readings(finding.ordinary_readings)
         render_reason(finding.reason)
         render_question(finding.question)

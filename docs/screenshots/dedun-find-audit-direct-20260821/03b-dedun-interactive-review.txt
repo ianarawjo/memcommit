@@ -1,8 +1,8 @@
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃STATUS · APPLIED · RECEIPT c9d2b104-28e5-4ed1-81fd-19b886a4d3fa                                                                                                                  ^┃
+┃STATUS · APPLIED · RECEIPT e526ff38-2dab-454b-b7e1-3dbb16aaaa9e                                                                                                                  ^┃
 ┃CONTEXT · quality/direct-dedun                                                                                                                                                    ┃
-┃COMPLETED · 2026-08-21T12:01:18.007033                                                                                                                                            ┃
-┃OUTCOME · Resolved 1 redundancy group(s); absorbed 1 Memory item(s)                                                                                                               ┃
+┃COMPLETED · 2026-08-23T09:31:00.861054                                                                                                                                            ┃
+┃OUTCOME · Resolved 1 redundancy group(s); absorbed 1 direct item(s)                                                                                                               ┃
 ┃                                                                                                                                                                                  ┃
 ┃RESOLVED GROUPS · 1                                                                                                                                                               ┃
 ┃1. SURVIVOR · [20000000] The parking garage is unavailable after 10 p.m.                                                                                                          ┃
@@ -49,4 +49,4 @@
 ┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
 │[ READ ONLY ]  No action available · This saved session can only be inspected.                                                                                                    │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
- READ ONLY · REVIEW REPORT · READ ONLY · ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter inspect  Esc/Backspace close H Help  y/Y copy  Q close
+ READ ONLY · REVIEW REPORT · ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter inspect  Esc/Backspace close H Help  y/Y copy  Q close

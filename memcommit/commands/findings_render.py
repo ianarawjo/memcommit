@@ -1,4 +1,5 @@
 """Shared terminal rendering for read-only semantic finding commands."""
+
 from __future__ import annotations
 
 from collections.abc import Iterable
@@ -23,55 +24,30 @@ def render_heading(
     *,
     operation_label: str,
     context_name: str,
-    memory_count: int,
-    pair_count: int | None = None,
+    facts: Iterable[str],
 ) -> None:
-    """Render operation, target, and frozen scan scope as one report header."""
+    """Render operation, target, and exact result units as one report header."""
     typer.secho(operation_label, bold=True, nl=False)
-    parts = [
-        context_name,
-        plural(memory_count, "direct memory", "direct memories") + " checked",
-    ]
-    if pair_count is not None:
-        parts.append(plural(pair_count, "pair") + " checked")
-    typer.echo(" · " + " · ".join(parts))
-
-
-def render_finding_outcome(
-    *,
-    finding_count: int,
-    singular: str,
-    plural_form: str,
-    empty_message: str,
-) -> None:
-    """Give the report conclusion its own line without repeating zero counts."""
-    typer.echo()
-    message = (
-        empty_message
-        if finding_count == 0
-        else plural(finding_count, singular, plural_form)
-    )
-    typer.secho(message, bold=True)
+    typer.echo(" · " + " · ".join((context_name, *facts)))
 
 
 def render_memory(
-    label: str,
     memory: Memory,
     *,
+    uid_prefix: str,
     context_name: str | None = None,
 ) -> None:
-    """Render a Memory without abbreviating its content."""
-    heading = f"  {label:<6} [{memory.uid[:8]}]"
+    """Render one complete Memory reference as a single safe logical line."""
+    heading = "  "
     if context_name is not None:
-        heading += " · CONTEXT " + display_escape_text(context_name)
-    typer.secho(heading, bold=True)
-    for line in memory.content.splitlines() or [""]:
-        typer.echo(f"         {line}")
+        heading += f"[CONTEXT {display_escape_text(context_name)}] "
+    heading += f"[{display_escape_text(uid_prefix)}] "
+    typer.echo(heading + display_escape_text(memory.content))
 
 
 def render_reason(reason: str) -> None:
     """Render model rationale as data, not as trusted terminal markup."""
-    typer.secho(f"  Reason: {reason}", dim=True)
+    typer.secho(f"  Reason: {display_escape_text(reason)}", dim=True)
 
 
 def render_cleanup_member(
@@ -103,11 +79,15 @@ def render_cleanup_member(
 def render_question(question: str | None) -> None:
     """Render the smallest proposed clarification when one was returned."""
     if question:
-        typer.secho(f"  Question: {question}", fg=typer.colors.CYAN)
+        typer.secho(
+            f"  Question: {display_escape_text(question)}",
+            fg=typer.colors.CYAN,
+        )
 
 
-def render_values(label: str, values: Iterable[str]) -> None:
-    """Render zero or more short structured values on one line."""
+def render_readings(values: Iterable[str]) -> None:
+    """Render provider readings with boundaries that survive embedded commas."""
     materialized = list(values)
-    if materialized:
-        typer.echo(f"  {label}: {', '.join(materialized)}")
+    for index, value in enumerate(materialized, start=1):
+        label = "Reading" if len(materialized) == 1 else f"Reading {index}"
+        typer.echo(f"  {label}: {display_escape_text(value)}")

@@ -554,7 +554,6 @@ def quality_finding_handoffs(
                 route="RESOLVE",
                 memory_uids=(finding.left.uid, finding.right.uid),
                 classification=finding.conflict,
-                qualifiers=finding.scope_dimensions,
                 reason=finding.reason,
                 question=finding.question,
             )

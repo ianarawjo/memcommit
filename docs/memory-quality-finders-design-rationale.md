@@ -94,7 +94,11 @@ with a positional or `--context` operand and with `--select`. Before provider
 construction, every READ-granted contributor must authorize the applicable
 `DERIVE` and cross-domain `COMBINE` use.
 The line-oriented report prints each finding Memory's frozen public Context
-name so a Profile-wide result never loses owner provenance.
+name so a Profile-wide result never loses owner provenance. Within one result,
+each member is the single logical line `[uid-prefix] content`; `LEFT` and
+`RIGHT` are deliberately absent. A multi-Context report prepends
+`[CONTEXT name]` to that same line. This keeps the immediate CLI output at the
+smallest unambiguous form while retaining complete content.
 
 The finder kind is fixed by the command and therefore is not another setup
 choice. Embedded Context edges remain excluded: descendant reach follows the
@@ -122,9 +126,13 @@ source. The temporary aggregate is process-local, has a deterministic frame
 identity, and is never saved or exposed as a new Context.
 
 The validated report is projected into a compact read-only finding browser.
-Its one-line header reports flagged Memories or pairs against the complete
-candidate count and freezes the owner as `[SOURCE <Context>]` for a
-single-Context frame. Every finding is one source-linked logical line and may
+Its one-line header preserves each operation's real judgment unit instead of
+adding a heterogeneous `N findings` total. Ambiguity reports flagged/direct
+Memories. Conflict reports both involved/direct Memories and flagged/checked
+pairs. Redundancy reports checked Memories, connected cleanup groups, and
+proposed absorptions because its whole-frame discovery does not enumerate a
+candidate-pair denominator. The owner is frozen as `[SOURCE <Context>]` for a
+single-Context frame. Every result is one source-linked logical line and may
 soft-wrap with the terminal width. References follow the repository's typed
 grammar: `[MEMORY <uid-prefix>]` under the header's single Source, or
 `[CONTEXT <name>] [MEMORY <uid-prefix>]` per member in a multi-Context frame.
@@ -133,13 +141,19 @@ would collide, so the compact display never makes a pair look self-referential.
 The rejected `context@uid` spelling conflated two identities, had no shared
 escaping contract, and differed from Fit and Conformance evidence rows.
 
-Ambiguity keeps its exact Memory, reason, and all ordinary readings, but folds
-the readings into the `WHY` rationale instead of showing a Question or
-answer-looking labelled alternatives. Conflict keeps scope dimensions, both
-exact Memories, and `WHY`, while omitting its follow-up question and the
-provider's positive `YES` emission marker. Redundancy keeps its exact relation
-and pair but omits `WHY`: the relation plus complete members is the compact
-read-only evidence needed for this list. There is no preview/detail split:
+Ambiguity keeps its exact Memory, reason, question, and all ordinary readings,
+but folds the readings into the `WHY` rationale instead of showing
+answer-looking labelled alternatives. A `SINGLE` interpretation is rendered
+as `UNDERSPECIFIED`, not exposed as a raw internal classifier. Conflict keeps
+both exact Memories, `WHY`, and the smallest follow-up question. `MAY` is
+rendered as `POSSIBLE CONFLICT`; `YES` is rendered as `CONFLICT`. The former
+`scope_dimensions` enum was removed from the current provider schema and
+public report because it was neither exhaustive nor reliably classifiable and
+did not control any behavior. Any meaningful subject, time, audience, or other
+distinction belongs in the natural-language reason and question. Redundancy
+keeps its exact relation and pair but omits `WHY`: the relation plus complete
+members is the compact read-only evidence needed for this list. There is no
+preview/detail split:
 `Up`/`Down` changes the focused line, while an Ambiguity `Enter` is inert
 because Find has no answer or inspection action. Escape or Backspace closes;
 navigation and closing cannot create response state.
@@ -203,12 +217,15 @@ Grant authority.
 ## Durable three-finder Audit
 
 The three quality finders remain the unconditional Audit base. Audit schema
-version 2 may additionally retain one typed Context Conformance report when an
+version 3 may additionally retain one typed Context Conformance report when an
 explicit Rules Context is supplied with `--against`. Conformance is not a
 fourth quality finder: it has a Rule-versus-Target frame, its own exhaustive
 coverage contract, and no fabricated quality-review items. The standalone
 `mem check-conformance` adapter and Audit call the same core. Legacy schema
-version 1 records remain readable as exact three-check snapshots. See
+versions 1 and 2 remain readable as exact snapshots. Version 2 Conflict
+records require their historical `scope_dimensions` field while decoding,
+then discard it and rewrite as version 3; no old classification is silently
+reinterpreted as a current result. See
 `docs/mem-check-conformance-design-rationale.md`.
 
 `mem audit` is the user-facing orchestration operation for running Duplicate,
@@ -271,12 +288,14 @@ its own focus stop.
 The comprehensive Viewer preserves the stable group order Duplicate,
 Ambiguity, Conflict. A zero-finding check remains visible; every positive
 result uses the same one-line issue projection as its one-shot finder.
-Questions, labelled alternatives, redundancy reasons, and historical response
-notes are not part of the default review document because they read as active
-review controls or repeat information already conveyed by the compact issue.
-The immutable typed reports and legacy response map remain decodable; this is
-a presentation reduction, not a stored-data migration. No `REQUIRED` or
-`OPTIONAL` answer obligation is created.
+Questions are retained as report evidence beside Ambiguity and Conflict
+reasons, but they are plain read-only prose rather than response controls.
+Labelled alternatives, redundancy reasons, and historical response notes are
+not part of the default review document because they either look selectable or
+repeat information already conveyed by the compact result. The immutable typed
+reports and legacy response map remain decodable; this is a presentation
+reduction, not a stored-data migration. No `REQUIRED` or `OPTIONAL` answer
+obligation is created.
 
 Saved Audits appear in the aggregate `mem review` launcher and reopen exactly
 through `mem review audit --session UID`. Review renders the saved audited
@@ -287,12 +306,11 @@ never mutate a Context, Memory, or checkpoint.
 
 Ordinary `mem audit` does not open Review automatically. After saving, its
 compact receipt identifies the frozen Source and direct-Memory count, then
-shows the finding numerator beside the frame denominator for each finder:
-Duplicate and Conflict use the possible unordered Memory-pair count, while
-Ambiguity uses direct Memories. The Duplicate denominator describes frame
-cardinality rather than claiming the group-preserving finder exposed every pair
-to the provider; Conflict retains its complete pair target. This exposes what
-contributed to the aggregate total without automatically flooding the terminal
+shows the same truthful per-check summaries as the individual finders:
+Redundancy reports connected groups and proposed absorptions, Ambiguity reports
+flagged/direct Memories, and Conflict reports involved/direct Memories plus
+flagged/checked pairs. There is no aggregate total across those incompatible
+units. This exposes each result without automatically flooding the terminal
 with a potentially quadratic Conflict report. The category labels reuse the
 shared quality palette, while the counts, Source, and exact Review command
 remain neutral and retain identical ANSI-free text in a pipe or `NO_COLOR`
@@ -343,10 +361,12 @@ competing readings without needing clarification.
 For conflict, `MAY` is a semantic result, not model confidence. It means that
 ordinary readings supported by the current Context include both a conflicting
 and a jointly explainable interpretation. A missing entrance, audience, time,
-or other scope coordinate is a typical cause. The judge returns `YES` when all
+or other distinction is a typical cause. The judge returns `YES` when all
 materially ordinary scope-aligned readings conflict, `NO` when all such
 readings are jointly explainable, and `MAY` only when both outcomes occur
-among those readings.
+among those readings. The persisted result does not force this cause into a
+fixed semantic-coordinate taxonomy; the reason and question carry the exact
+distinction needed for that pair.
 
 Duplicate relations likewise preserve boundaries that a removal stage needs:
 
@@ -519,8 +539,9 @@ into removal.
 `find-ambiguities` and `find-conflicts` remain separately callable because one
 is unary and the other pairwise, and because their labels answer different
 questions. A later `reconcile` operation may consume both result sets,
-identify a shared missing scope dimension, and propose the smallest
-clarification or edit. Reconciliation is combined reasoning over findings; it
+identify a shared missing distinction from their reasons and questions, and
+propose the smallest clarification or edit. Reconciliation is combined
+reasoning over findings; it
 does not replace their detection and does not silently apply a resolution.
 The shared review-shell design may later render both finding types, but visual
 reuse does not merge their semantic units.

@@ -14,7 +14,6 @@ from memcommit.commands.context_operand import (
 from memcommit.authority.access import GrantedReadStore, resolve_context_access
 from memcommit.commands.findings_render import (
     render_cleanup_member,
-    render_finding_outcome,
     render_heading,
 )
 from memcommit.commands.command_progress import CommandProgress
@@ -59,7 +58,12 @@ _RELATION_COLORS = {
     "EXACT": typer.colors.GREEN,
     "SURFACE_EQUIVALENT": typer.colors.GREEN,
     "SEMANTIC_EQUIVALENT": typer.colors.YELLOW,
-    "OVERLAP": typer.colors.CYAN,
+}
+
+_RELATION_LABELS = {
+    "EXACT": "EXACT",
+    "SURFACE_EQUIVALENT": "SURFACE EQUIVALENT",
+    "SEMANTIC_EQUIVALENT": "SEMANTIC EQUIVALENT",
 }
 
 
@@ -145,7 +149,7 @@ def _render_redundancy_groups(
         for evidence_index, finding in enumerate(evidence, start=1):
             typer.echo(f"    EVIDENCE {evidence_index} · ", nl=False)
             typer.secho(
-                finding.relation,
+                _RELATION_LABELS[finding.relation],
                 fg=_RELATION_COLORS.get(finding.relation, typer.colors.YELLOW),
                 bold=True,
                 nl=False,
@@ -305,34 +309,16 @@ def _run(
     render_heading(
         operation_label="Find Redundancies",
         context_name=display_escape_text(ctx.name),
-        memory_count=report.memory_count,
-    )
-    render_finding_outcome(
-        finding_count=report.redundancy_count,
-        singular="redundancy finding",
-        plural_form="redundancy findings",
-        empty_message="No redundancies found",
+        facts=(
+            _count(report.memory_count, "direct memory", "direct memories")
+            + " checked",
+            _count(report.group_count, "group"),
+            _count(report.redundancy_count, "proposed absorption"),
+        ),
     )
     if not report.findings and not report.exact_item_groups:
         return
-    else:
-        typer.echo()
-        typer.secho(
-            "  DUN = DUP / EXACT + SEMANTIC DUN",
-            bold=True,
-        )
-        typer.echo(
-            "    EVIDENCE  "
-            f"{_count(report.redundancy_count, 'link')} = "
-            f"{_count(report.exact_duplicate_count, 'DUP / EXACT link')} + "
-            f"{_count(report.semantic_redundancy_count, 'SEMANTIC DUN link')}"
-        )
-        typer.echo(
-            "    CLEANUP   "
-            f"{_count(report.group_count, 'connected group')} · "
-            f"{_count(report.redundancy_count, 'redundant direct item')}"
-        )
-        _render_redundancy_groups(report)
+    _render_redundancy_groups(report)
 
 
 def cmd(

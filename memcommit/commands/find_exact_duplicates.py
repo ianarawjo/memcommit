@@ -13,7 +13,11 @@ from memcommit.commands.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
 )
-from memcommit.commands.findings_render import render_cleanup_member
+from memcommit.commands.findings_render import (
+    plural,
+    render_cleanup_member,
+    render_heading,
+)
 from memcommit.interfaces.console.identity import collision_safe_uid_prefixes
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.profile_config import ProfileConfigError
@@ -94,14 +98,16 @@ def cmd(
         raise typer.Exit(1)
 
     context_label = display_escape_text(access.display_name)
-    typer.echo(f"Context: {context_label}")
-    typer.echo(
-        f"  {report.item_count} direct items ({report.memory_count} Memories), "
-        f"{len(report.groups)} exact duplicate group(s), "
-        f"{report.duplicate_count} later duplicate direct item(s)"
+    render_heading(
+        operation_label="Find Duplicates",
+        context_name=context_label,
+        facts=(
+            plural(report.item_count, "direct item") + " checked",
+            plural(len(report.groups), "exact group"),
+            plural(report.duplicate_count, "proposed absorption"),
+        ),
     )
     if not report.groups:
-        typer.echo("\n  (no exact duplicate groups)")
         return
 
     for index, group in enumerate(report.groups, start=1):

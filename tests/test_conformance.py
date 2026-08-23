@@ -983,6 +983,9 @@ def test_audit_still_reads_legacy_three_check_records_without_conformance():
     legacy = session.to_dict()
     legacy["schema_version"] = QUALITY_AUDIT_LEGACY_SCHEMA_VERSION
     legacy.pop("conformance")
+    for check in legacy["checks"]:
+        if check["kind"] == "conflicts":
+            check["ruleset_version"] = "conflict-v1-draft"
 
     restored = QualityAuditSession.from_dict(legacy)
 

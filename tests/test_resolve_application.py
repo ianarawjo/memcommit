@@ -221,7 +221,6 @@ class ResolveFindingFixtureProvider(ResolveFixtureProvider):
                         {
                             "pair_id": payload["pairs"][0]["pair_id"],
                             "conflict": "YES",
-                            "scope_dimensions": ["TIME"],
                             "reason": "The schedules state incompatible times.",
                             "question": "Which schedule is authoritative?",
                         }

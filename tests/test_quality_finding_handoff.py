@@ -48,7 +48,6 @@ def _conflict_session():
                 left=first,
                 right=second,
                 conflict="YES",
-                scope_dimensions=("PLACE", "TIME"),
                 reason="Both Memories govern the same entrance at overlapping times.",
                 question="Which opening time is authoritative?",
             ),
@@ -113,7 +112,7 @@ def test_quality_finders_share_one_typed_route_contract():
         "The public entrance opens at 8:00.",
         "The staff entrance opens at 8:00.",
     )
-    assert handoffs[2].qualifiers == ("PLACE", "TIME")
+    assert handoffs[2].qualifiers == ()
     assert handoffs[2].sources[0].direct_memory_digest == direct_context_digest(
         sessions[2].source.contexts[0]
     )
@@ -179,7 +178,6 @@ def test_cross_context_conflict_does_not_silently_enter_resolve_v1():
                     memories[0],
                     memories[1],
                     "YES",
-                    ("TIME",),
                     "The opening states conflict.",
                     "Which schedule applies?",
                 ),

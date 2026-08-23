@@ -20,6 +20,7 @@ from memcommit.quality_audit import (
     QualityAuditSession,
     quality_audit_resolution_view,
 )
+from memcommit.quality_find_report import quality_find_category_label
 from memcommit.quality_find_workbench import (
     QualityFindSourceFrame,
     QualityFindWorkbenchSession,
@@ -58,6 +59,8 @@ def _report_section(
             anchor=anchor,
         ),
     )
+
+
 def quality_audit_review_document(
     session: QualityAuditSession,
 ) -> SemanticViewerDocument:
@@ -70,9 +73,6 @@ def quality_audit_review_document(
         section.uid: section for section in compatibility_view.overview_sections
     }
     check_total = 4 if session.conformance is not None else 3
-    counts = {
-        check.kind: len(check.report.findings) for check in session.checks
-    }
     overview_fragments: list[tuple[str, str]] = [
         ("class:report-label", " MEM AUDIT\n"),
         (
@@ -82,8 +82,7 @@ def quality_audit_review_document(
         (
             "class:report-neutral",
             f" SESSION [{safe_terminal_text(session.uid[:8])}] · "
-            f"CREATED {safe_terminal_text(session.created_at)} · "
-            f"{session.finding_count} FINDING(S)\n",
+            f"CREATED {safe_terminal_text(session.created_at)}\n",
         ),
         ("class:report-label", " SUMMARY · "),
         ("class:viewer-body", _inline(overview_by_uid["summary"].text) + "\n"),
@@ -121,6 +120,7 @@ def quality_audit_review_document(
     context = session.source.context()
     source_frame = QualityFindSourceFrame.create((context,))
     for check in session.checks:
+        header_label = quality_find_category_label(check.kind)
         sub_session = QualityFindWorkbenchSession(
             uid=session.uid,
             kind=check.kind,
@@ -131,10 +131,9 @@ def quality_audit_review_document(
         report_view = quality_find_report_view(
             sub_session,
             context,
-            operation_label=f"AUDIT · {check.kind.upper()}",
+            operation_label=f"AUDIT · {header_label}",
         )
-        count = counts[check.kind]
-        header_label = check.kind.upper()
+        count = len(check.report.findings)
         header_text = quality_find_report_header_text(
             report_view,
             label=header_label,

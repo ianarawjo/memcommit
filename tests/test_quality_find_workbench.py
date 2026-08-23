@@ -378,7 +378,7 @@ def test_ambiguity_projection_keeps_readings_and_process_local_response():
     assert updated.response_text == "It applies to staff."
 
 
-def test_conflict_projection_keeps_pair_scope_and_no_fabricated_choices():
+def test_conflict_projection_keeps_pair_question_and_no_fabricated_choices():
     ctx, first, second = _context()
     report = ConflictReport(
         memory_count=2,
@@ -388,7 +388,6 @@ def test_conflict_projection_keeps_pair_scope_and_no_fabricated_choices():
                 left=first,
                 right=second,
                 conflict="YES",
-                scope_dimensions=("PLACE", "TIME"),
                 reason="Both Memories govern the same entrance at overlapping times.",
                 question="Which opening time is authoritative?",
             ),
@@ -408,7 +407,7 @@ def test_conflict_projection_keeps_pair_scope_and_no_fabricated_choices():
         first.content,
         second.content,
     ]
-    assert evidence.classification == "YES · PLACE · TIME"
+    assert evidence.classification == "YES"
 
 
 def test_cross_context_finding_keeps_each_memorys_source_context():
@@ -430,7 +429,6 @@ def test_cross_context_finding_keeps_each_memorys_source_context():
                 aggregate_memories[0],
                 aggregate_memories[1],
                 "YES",
-                ("TIME",),
                 "The opening states conflict.",
                 "Which schedule applies?",
             ),
@@ -541,11 +539,11 @@ def test_redundancy_view_includes_exact_dup_inside_complete_dun_report():
     assert view.items[0].effective_obligation == "NONE"
     assert view.status.endswith("0/0 ANSWERED")
     assert response_target_from_item(view, view.items[0], read_only=False) is None
-    assert ("DUP / EXACT", "1") in {
+    assert ("PROPOSED ABSORPTIONS", "1") in {
         (metric.label, metric.value) for metric in view.metrics
     }
-    assert "DUN = DUP / EXACT + SEMANTIC DUN" in view.overview
-    assert "1 DUP / EXACT link" in view.overview
+    assert "REDUNDANCIES" in view.overview
+    assert "1 cleanup group and 1 proposed absorption" in view.overview
 
 
 def test_process_local_workbench_fails_closed_when_context_changes():
@@ -605,7 +603,6 @@ def test_conflict_workbench_hands_off_the_selected_typed_finding():
                     first,
                     second,
                     "YES",
-                    ("TIME",),
                     "The entrance hours conflict.",
                     "Which opening time is authoritative?",
                 ),
@@ -646,7 +643,6 @@ def test_conflict_workbench_legacy_handoff_letter_is_inert():
                     first,
                     second,
                     "YES",
-                    ("TIME",),
                     "The entrance hours conflict.",
                     "Which opening time is authoritative?",
                 ),
@@ -741,7 +737,7 @@ def test_find_redundancies_has_no_initial_selector_route(
 
     assert result.exit_code == 0, result.output
     assert observed == [ctx.name]
-    assert "0 findings" in result.output
+    assert "0 groups · 0 proposed absorptions" in result.output
     assert select_result.exit_code == 2
     assert "No such option: --select" in select_result.output
 

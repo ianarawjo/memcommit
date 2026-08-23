@@ -1,10 +1,10 @@
 $ mem find-redundancies --context study/reporting
 PTY · 180 COLUMNS × 52 ROWS
-[6n[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;2;244;245;247;1m REDUNDANCIES · 2/3 PAIRS FLAGGED · [SOURCE study/reporting][0m
-[0;1;7m› ≈ REDUNDANT · SEMANTIC_EQUIVALENT · [MEMORY a31f02c1] “Report the incident within 30 days.” ↔ [MEMORY 5ce891d4] “Notify the office no later than one month after discovery.”[5C[0;1m^[0m
-[0m  [0;38;2;244;245;247m≈ [0;38;2;183;189;248;1mREDUNDANT[0;38;2;244;245;247m · [0;38;2;244;245;247;1mOVERLAP[0;38;2;244;245;247m · [0;38;2;244;245;247;1m[MEMORY 5ce891d4] [0;38;2;202;211;245m“Notify the office no later than one month after discovery.”[0;38;2;244;245;247m ↔ [0;38;2;244;245;247;1m[MEMORY 7b94ee10] [0;38;2;202;211;245m“The accessible entrance remains open during office ho[179C[0;48;2;68;68;68m [0m
-[0;38;2;202;211;245murs.”[174C[0;48;2;68;68;68m [0m
-[179C[0;48;2;68;68;68m [0m
+[6n[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;2;244;245;247;1m REDUNDANCIES · 3 MEMORIES CHECKED · 1 GROUP · 2 PROPOSED ABSORPTIONS · [SOURCE study/reporting][0m
+[0;1;7m› ≈ REDUNDANT · SEMANTIC EQUIVALENT · [MEMORY a31f02c1] “Report the incident to the office within 30 days of discovery.” ↔ [MEMORY 5ce891d4] “Notify the office no later than 30 da[179C[0;1m^[0m
+[0;1;7mys after discovering the incident.”[144C[0;48;2;68;68;68m [0m
+[0m  [0;38;2;244;245;247m≈ [0;38;2;183;189;248;1mREDUNDANT[0;38;2;244;245;247m · [0;38;2;244;245;247;1mSEMANTIC EQUIVALENT[0;38;2;244;245;247m · [0;38;2;244;245;247;1m[MEMORY 5ce891d4] [0;38;2;202;211;245m“Notify the office no later than 30 days after discovering the incident.”[0;38;2;244;245;247m ↔ [0;38;2;244;245;247;1m[MEMORY 7b94ee10] [0;38;2;202;211;245m“The incident must be reporte[179C[0;48;2;68;68;68m [0m
+[0;38;2;202;211;245md to the office within thirty days of discovery.”[130C[0;48;2;68;68;68m [0m
 [179C[0;48;2;68;68;68m [0m
 [179C[0;48;2;68;68;68m [0m
 [179C[0;48;2;68;68;68m [0m
@@ -25,6 +25,7 @@ PTY · 180 COLUMNS × 52 ROWS
 [179C[0;48;2;68;68;68m [0m
 [179C[0;48;2;68;68;68m [0m
 [0m                                                                                                                                                                                   [179C[0;1mv[0m
-[0m ↑/↓ finding · Enter open Dedun · Esc close · READ-ONLY[55D[24A[?7h[0m[?25l[?7l[0m  [0;38;2;244;245;247m≈ [0;38;2;183;189;248;1mREDUNDANT[0;38;2;244;245;247m · [0;38;2;244;245;247;1mSEMANTIC_EQUIVALENT[0;38;2;244;245;247m · [0;38;2;244;245;247;1m[MEMORY a31f02c1] [0;38;2;202;211;245m“Report the incident within 30 days.”[0;38;2;244;245;247m ↔ [0;38;2;244;245;247;1m[MEMORY 5ce891d4] [0;38;2;202;211;245m“Notify the office no later than one month after discovery.”[0m
-[0;1;7m› ≈ REDUNDANT · OVERLAP · [MEMORY 5ce891d4] “Notify the office no later than one month after discovery.” ↔ [MEMORY 7b94ee10] “The accessible entrance remains open during office ho[0m
-[0;1;7murs.”[A[5D[?7h[0m
+[0m ↑/↓ finding · Enter open Dedun · Esc close · READ-ONLY[55D[24A[?7h[0m[?25l[?7l[0m  [0;38;2;244;245;247m≈ [0;38;2;183;189;248;1mREDUNDANT[0;38;2;244;245;247m · [0;38;2;244;245;247;1mSEMANTIC EQUIVALENT[0;38;2;244;245;247m · [0;38;2;244;245;247;1m[MEMORY a31f02c1] [0;38;2;202;211;245m“Report the incident to the office within 30 days of discovery.”[0;38;2;244;245;247m ↔ [0;38;2;244;245;247;1m[MEMORY 5ce891d4] [0;38;2;202;211;245m“Notify the office no later than 30 da[0m
+[0;38;2;202;211;245mys after discovering the incident.”[0m
+[0;1;7m› ≈ REDUNDANT · SEMANTIC EQUIVALENT · [MEMORY 5ce891d4] “Notify the office no later than 30 days after discovering the incident.” ↔ [MEMORY 7b94ee10] “The incident must be reporte[0m
+[0;1;7md to the office within thirty days of discovery.”[A[49D[?7h[0m

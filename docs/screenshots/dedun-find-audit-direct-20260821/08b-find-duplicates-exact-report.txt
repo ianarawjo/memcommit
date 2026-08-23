@@ -1,8 +1,7 @@
 PTY 180 52                                                                                                                                                                          
-Context: quality/direct-find-exact                                                                                                                                                  
-  3 direct memories, 1 exact duplicate group(s), 1 later duplicate Memory item(s)                                                                                                   
+Find Duplicates · quality/direct-find-exact · 3 direct items checked · 1 exact group · 1 proposed absorption                                                                        
                                                                                                                                                                                     
-  DUP / EXACT  1/1                                                                                                                                                                  
+  DUP / EXACT  1/1 · MEMORY                                                                                                                                                         
     SURVIVOR  [memory 30000000]  Badge access is required.                                                                                                                          
     ABSORB    [memory 30000001]  Badge access is required.                                                                                                                          
                                                                                                                                                                                     

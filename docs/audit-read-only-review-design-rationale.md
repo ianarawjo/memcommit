@@ -20,24 +20,25 @@ contains, in order:
    Source scope, and every frozen direct Source Memory in one wrapping snapshot
    line;
 2. one header section per Duplicate, Ambiguity, and Conflict check, followed by
-   one independently navigable section for every finding, represented as the
+   one independently navigable section for every positive result, represented as the
    same source-linked logical line used by Find;
 3. optional Conformance, then provider/ruleset provenance; and
 4. the explicit model-assistance and no-effect boundary.
 
 Source bodies remain complete, including Memories with no positive finding,
 but they no longer become one focus stop and heading per Memory. A positive
-finding then repeats only the evidence needed to understand its issue:
-Ambiguity folds ordinary readings into `WHY`, Conflict keeps its scoped pair
-and `WHY`, and Duplicate keeps its relation and pair without a repeated reason.
-Question and reading field labels are absent because Audit Review does not ask
-for an answer. This preserves the typed historical report while making section
+result then repeats only the evidence needed to understand its issue:
+Ambiguity folds ordinary readings into `WHY`, Conflict keeps its pair and
+`WHY`, and Duplicate keeps its relation and pair without a repeated reason.
+Ambiguity and Conflict keep their smallest follow-up question as read-only
+evidence; there is no response field or selectable choice. This preserves the
+typed historical report while making section
 navigation track real Audit concepts rather than serialized fields.
 Each finding is deliberately the smallest scroll stop: its source Memory or
 pair and rationale remain together, while a category containing many findings
 cannot become one indivisible focused block. Splitting a finding again into
 field-sized stops was rejected because it would separate one judgment from the
-evidence needed to understand it. Each quality header colors its `DUPLICATES`,
+evidence needed to understand it. Each quality header colors its `REDUNDANCIES`,
 `AMBIGUITIES`, or `CONFLICTS` token with the same typed semantic role used by
 the finding token below it. Counts, `FLAGGED`, Source identity, relation values,
 and prose remain neutral, so the color links category to evidence without
@@ -73,8 +74,11 @@ review contract.
 ## Compatibility boundary
 
 Audit schema versions 1 and 2 may contain response records written by the
-earlier UI. Removing those fields would make saved research artifacts
-unreadable, so decoding and validation remain. The compact default Viewer does
+earlier UI. Version 2 Conflict records also contain the retired
+`scope_dimensions` classifier. Removing those fields without a migration would
+make saved research artifacts unreadable, so strict legacy decoding remains;
+the current version 3 form discards only that unused classifier while retaining
+reason and question verbatim. The compact default Viewer does
 not show those old dispositions or notes: they are neither current Audit
 findings nor instructions for a downstream operation. The new Review route
 never creates, edits, or saves one. A future explicit historical-record export

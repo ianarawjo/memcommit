@@ -50,16 +50,39 @@ def _session(*, empty: bool):
         uid="00000000-0000-4000-8000-000000000801",
         name="study/audit-source",
     )
-    first = Memory(
+    duplicate_first = Memory(
         uid="a31f02c1-0000-4000-8000-000000000811",
+        content="Report the incident to the office within 30 days of discovery.",
+    )
+    duplicate_second = Memory(
+        uid="5ce891d4-0000-4000-8000-000000000812",
+        content="Notify the office no later than 30 days after discovering the incident.",
+    )
+    underspecified = Memory(
+        uid="7b94ee10-0000-4000-8000-000000000813",
+        content="Contact the coordinator before entering.",
+    )
+    ambiguous = Memory(
+        uid="32c71f88-0000-4000-8000-000000000814",
+        content="The accessible entrance remains open during office hours.",
+    )
+    conflict_first = Memory(
+        uid="f58d1a77-0000-4000-8000-000000000815",
         content="The main entrance opens at 08:00.",
     )
-    second = Memory(
-        uid="5ce891d4-0000-4000-8000-000000000812",
+    conflict_second = Memory(
+        uid="ce683206-0000-4000-8000-000000000816",
         content="The main entrance remains closed until 09:00.",
     )
-    context.add(first)
-    context.add(second)
+    for memory in (
+        duplicate_first,
+        duplicate_second,
+        underspecified,
+        ambiguous,
+        conflict_first,
+        conflict_second,
+    ):
+        context.add(memory)
 
     def provenance(kind: str) -> QualityAuditProvenance:
         return QualityAuditProvenance(
@@ -68,44 +91,55 @@ def _session(*, empty: bool):
             identity=ProviderIdentity(provider="capture", model="audit-model"),
         )
 
-    duplicate_findings = () if empty else (
-        DuplicateFinding(
-            first,
-            second,
-            "SEMANTIC_EQUIVALENT",
-            "Both Memories govern the same entrance schedule in this frame.",
-        ),
-    )
-    ambiguity_findings = () if empty else (
-        AmbiguityFinding(
-            first,
-            "DOMINANT",
-            "HELPFUL",
-            (
-                "The public entrance opens at 08:00.",
-                "A staff entrance opens at 08:00.",
+    duplicate_findings = (
+        ()
+        if empty
+        else (
+            DuplicateFinding(
+                duplicate_first,
+                duplicate_second,
+                "SEMANTIC_EQUIVALENT",
+                "Both Memories impose the same recipient and reporting window.",
             ),
-            "The audience for the entrance schedule is not explicit.",
-            "Which audience uses this schedule?",
-        ),
-        AmbiguityFinding(
-            second,
-            "SINGLE",
-            "HELPFUL",
-            ("The public entrance remains closed until 09:00.",),
-            "The audience affected by the closure is not explicit.",
-            "Which audience is affected by the closure?",
-        ),
+        )
     )
-    conflict_findings = () if empty else (
-        ConflictFinding(
-            first,
-            second,
-            "YES",
-            ("TIME",),
-            "The same entrance cannot be open at 08:00 and closed until 09:00.",
-            "Which opening time is authoritative?",
-        ),
+    ambiguity_findings = (
+        ()
+        if empty
+        else (
+            AmbiguityFinding(
+                underspecified,
+                "SINGLE",
+                "REQUIRED",
+                ("Contact the responsible coordinator before entering.",),
+                "No coordinator identity or contact route is provided.",
+                "Who is the coordinator and how can they be contacted?",
+            ),
+            AmbiguityFinding(
+                ambiguous,
+                "COMPETING",
+                "HELPFUL",
+                (
+                    "The entrance follows the staffed office schedule.",
+                    "The entrance follows the published public-office schedule.",
+                ),
+                "Office hours can refer to two different schedules.",
+                "Which schedule defines office hours?",
+            ),
+        )
+    )
+    conflict_findings = (
+        ()
+        if empty
+        else (
+            ConflictFinding(
+                conflict_first,
+                conflict_second,
+                "YES",
+                "The same entrance cannot be open at 08:00 and closed until 09:00.",
+                "Which opening time is authoritative?",
+            ),
+        )
     )
     session = create_quality_audit(
         context,
@@ -113,19 +147,19 @@ def _session(*, empty: bool):
             QualityAuditCheck(
                 "duplicates",
                 QUALITY_AUDIT_RULESETS["duplicates"],
-                DuplicateReport(2, duplicate_findings),
+                DuplicateReport(6, duplicate_findings),
                 provenance("duplicates"),
             ),
             QualityAuditCheck(
                 "ambiguities",
                 QUALITY_AUDIT_RULESETS["ambiguities"],
-                AmbiguityReport(2, ambiguity_findings),
+                AmbiguityReport(6, ambiguity_findings),
                 provenance("ambiguities"),
             ),
             QualityAuditCheck(
                 "conflicts",
                 QUALITY_AUDIT_RULESETS["conflicts"],
-                ConflictReport(2, 1, conflict_findings),
+                ConflictReport(6, 15, conflict_findings),
                 provenance("conflicts"),
             ),
         ),
@@ -155,7 +189,9 @@ def _run_child(kind: str, store_root: Path) -> None:
     )
     run_quality_audit_review(MemoryStore(root=store_root), session)
     print("AUDIT REVIEW CLOSED · READ-ONLY")
-    print(f"  RECORD DIGEST UNCHANGED · {quality_audit_record_digest(session) == before}")
+    print(
+        f"  RECORD DIGEST UNCHANGED · {quality_audit_record_digest(session) == before}"
+    )
     print(f"  HISTORICAL NOTES · {session.answered_count}")
     print("  RESPONSE WRITES · 0")
     print("  PROVIDER CALLS · 0")
@@ -248,7 +284,7 @@ def _capture_full(store_root: Path) -> None:
 def _capture_empty(store_root: Path) -> None:
     child, recorder = _spawn("empty", store_root)
     try:
-        child.expect("0 FINDING")
+        child.expect("0/6 MEMORIES FLAGGED")
         _BASE._settle(child)
         _BASE._snapshot(recorder, "12-zero-finding-complete-report")
         child.send("q")
@@ -270,9 +306,7 @@ def main() -> None:
         root = Path(directory)
         _capture_full(root / "full-store")
         _capture_empty(root / "empty-store")
-    raw = "".join(
-        path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript")
-    )
+    raw = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript"))
     if "38;2;" not in raw and "48;2;" not in raw:
         raise RuntimeError("PTY stream did not contain expected true-color ANSI.")
     verification = (OUT / "11-close-no-write-verification.txt").read_text(

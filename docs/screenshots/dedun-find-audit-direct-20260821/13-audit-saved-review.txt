@@ -1,19 +1,14 @@
-PTY 180 52                                                                                                                                                                          
-Audit saved: 6 findings across 3 quality checks.                                                                                                                                    
-Source: quality/direct-audit · 4 memories                                                                                                                                           
-                                                                                                                                                                                    
-DUPLICATES   0/6 pairs                                                                                                                                                              
-AMBIGUITIES  2/4 memories                                                                                                                                                           
-  ? AMBIGUOUS · [MEMORY 20000000] “The lobby opens at eight.”                                                                                                                       
-  ? AMBIGUOUS · [MEMORY 20000003] “The side entrance opens at seven.”                                                                                                               
-CONFLICTS    4/6 pairs                                                                                                                                                              
-  ! CONFLICT · TIME · [MEMORY 20000000] “The lobby opens at eight.” ↔ [MEMORY 20000001] “The loading dock closes at six.”                                                           
-  ! CONFLICT · TIME · [MEMORY 20000000] “The lobby opens at eight.” ↔ [MEMORY 20000002] “Emergency exits remain unlocked.”                                                          
-  ! CONFLICT · TIME · [MEMORY 20000000] “The lobby opens at eight.” ↔ [MEMORY 20000003] “The side entrance opens at seven.”                                                         
+AMBIGUITIES    2/4 MEMORIES FLAGGED                                                                                                                                                 
+  ? UNDERSPECIFIED · [MEMORY 20000000] “The main entrance opens at 08:00 every day.”                                                                                                
+  ? UNDERSPECIFIED · [MEMORY 20000002] “The main entrance opens at 07:00 every day.”                                                                                                
+CONFLICTS      4/4 MEMORIES INVOLVED · 4/6 PAIRS FLAGGED                                                                                                                            
+  ! CONFLICT · [MEMORY 20000000] “The main entrance opens at 08:00 every day.” ↔ [MEMORY 20000001] “The main entrance remains closed until 09:00 ev…”                               
+  ! CONFLICT · [MEMORY 20000000] “The main entrance opens at 08:00 every day.” ↔ [MEMORY 20000003] “The main entrance remains closed until 10:00 ev…”                               
+  ! CONFLICT · [MEMORY 20000001] “The main entrance remains closed until 09:00 ev…” ↔ [MEMORY 20000002] “The main entrance opens at 07:00 every day.”                               
   … 1 more                                                                                                                                                                          
                                                                                                                                                                                     
-Review all findings:                                                                                                                                                                
-mem review audit --session 82427166-369b-4df0-8c7b-21bd2331eaf4                                                                                                                     
+Review full audit:                                                                                                                                                                  
+mem review audit --session 81b87040-5f10-424e-b291-bc88b48644a0                                                                                                                     
 COMMAND EXIT · 0                                                                                                                                                                    
 VERIFICATION · CONTEXT quality/direct-audit · MEMORIES 4 · CHECKPOINT COMMANDS [] · CURRENT quality/direct-audit · PROVIDER ['find_duplicates', 'find_ambiguities', 'find_conflicts'
 ]                                                                                                                                                                                   
@@ -21,26 +16,32 @@ AUDIT RECEIPT READY
                                                                                                                                                                                     
 MEM AUDIT                                                                                                                                                                           
  SAVED · 3/3 CHECKS · READ-ONLY REPORT                                                                                                                                              
- SESSION [82427166] · CREATED 2026-08-23T12:41:45+00:00 · 6 FINDING(S)                                                                                                              
- SUMMARY · All quality finders completed over the same saved direct Context snapshot. Reported 6 total findings.                                                                    
- CHECKS · DUPLICATES · FINISHED · 0 findings / AMBIGUITIES · FINISHED · 2 findings / CONFLICTS · FINISHED · 4 findings                                                              
+ SESSION [81b87040] · CREATED 2026-08-23T13:31:10+00:00                                                                                                                             
+ SUMMARY · All quality finders completed over the same saved direct Context snapshot. Each section retains its own Memory, pair, group, or absorption unit.                         
+ CHECKS · REDUNDANCIES · FINISHED · 4 MEMORIES CHECKED · 0 GROUPS · 0 PROPOSED ABSORPTIONS / AMBIGUITIES · FINISHED · 2/4 MEMORIES FLAGGED / CONFLICTS · FINISHED · 4/4 MEMORIES INV
+OLVED · 4/6 PAIRS FLAGGED                                                                                                                                                           
  SOURCE · quality/direct-audit · 4 direct Memories as captured when this Audit ran. Descendants and embedded Contexts were not analyzed.                                            
- SNAPSHOT · [20000000] The lobby opens at eight. / [20000001] The loading dock closes at six. / [20000002] Emergency exits remain unlocked. / [20000003] The side entrance opens at 
-seven.                                                                                                                                                                              
- DUPLICATES · 0/6 PAIRS FLAGGED · [SOURCE quality/direct-audit]                                                                                                                     
+ SNAPSHOT · [20000000] The main entrance opens at 08:00 every day. / [20000001] The main entrance remains closed until 09:00 every day. / [20000002] The main entrance opens at 07:0
+0 every day. / [20000003] The main entrance remains closed until 10:00 every day.                                                                                                   
+ REDUNDANCIES · 4 MEMORIES CHECKED · 0 GROUPS · 0 PROPOSED ABSORPTIONS · [SOURCE quality/direct-audit]                                                                              
  No redundancy evidence in this analysis.                                                                                                                                           
  AMBIGUITIES · 2/4 MEMORIES FLAGGED · [SOURCE quality/direct-audit]                                                                                                                 
- ? AMBIGUOUS · [MEMORY 20000000] “The lobby opens at eight.” · WHY · The intended audience is not explicit. — The lobby opens at eight.                                             
- ? AMBIGUOUS · [MEMORY 20000003] “The side entrance opens at seven.” · WHY · The intended audience is not explicit. — The side entrance opens at seven.                             
- CONFLICTS · 4/6 PAIRS FLAGGED · [SOURCE quality/direct-audit]                                                                                                                      
- ! CONFLICT · TIME · [MEMORY 20000000] “The lobby opens at eight.” ↔ [MEMORY 20000001] “The loading dock closes at six.” · WHY · The two statements prescribe different schedules.  
- ! CONFLICT · TIME · [MEMORY 20000000] “The lobby opens at eight.” ↔ [MEMORY 20000002] “Emergency exits remain unlocked.” · WHY · The two statements prescribe different schedules. 
- ! CONFLICT · TIME · [MEMORY 20000000] “The lobby opens at eight.” ↔ [MEMORY 20000003] “The side entrance opens at seven.” · WHY · The two statements prescribe different schedules.
- ! CONFLICT · TIME · [MEMORY 20000001] “The loading dock closes at six.” ↔ [MEMORY 20000002] “Emergency exits remain unlocked.” · WHY · The two statements prescribe different sched
-ules.                                                                                                                                                                               
+ ? UNDERSPECIFIED · [MEMORY 20000000] “The main entrance opens at 08:00 every day.” · WHY · The schedule does not identify its time zone. — The main entrance opens at 08:00 every d
+ay. · QUESTION · Which time zone governs this schedule?                                                                                                                             
+ ? UNDERSPECIFIED · [MEMORY 20000002] “The main entrance opens at 07:00 every day.” · WHY · The schedule does not identify its time zone. — The main entrance opens at 07:00 every d
+ay. · QUESTION · Which time zone governs this schedule?                                                                                                                             
+ CONFLICTS · 4/4 MEMORIES INVOLVED · 4/6 PAIRS FLAGGED · [SOURCE quality/direct-audit]                                                                                              
+ ! CONFLICT · [MEMORY 20000000] “The main entrance opens at 08:00 every day.” ↔ [MEMORY 20000001] “The main entrance remains closed until 09:00 every day.” · WHY · The two statemen
+ts prescribe different schedules. · QUESTION · Which schedule should govern?                                                                                                        
+ ! CONFLICT · [MEMORY 20000000] “The main entrance opens at 08:00 every day.” ↔ [MEMORY 20000003] “The main entrance remains closed until 10:00 every day.” · WHY · The two statemen
+ts prescribe different schedules. · QUESTION · Which schedule should govern?                                                                                                        
+ ! CONFLICT · [MEMORY 20000001] “The main entrance remains closed until 09:00 every day.” ↔ [MEMORY 20000002] “The main entrance opens at 07:00 every day.” · WHY · The two statemen
+ts prescribe different schedules. · QUESTION · Which schedule should govern?                                                                                                        
+ ! CONFLICT · [MEMORY 20000002] “The main entrance opens at 07:00 every day.” ↔ [MEMORY 20000003] “The main entrance remains closed until 10:00 every day.” · WHY · The two statemen
+ts prescribe different schedules. · QUESTION · Which schedule should govern?                                                                                                        
  PROVENANCE                                                                                                                                                                         
- DUPLICATES · duplicates-v1-draft · capture:deterministic-quality-receipt / AMBIGUITIES · ambiguity-v1-draft · capture:deterministic-quality-receipt / CONFLICTS · conflict-v1-draft
- · capture:deterministic-quality-receipt                                                                                                                                            
+ REDUNDANCIES · duplicates-v1-draft · capture:deterministic-quality-receipt / AMBIGUITIES · ambiguity-v1-draft · capture:deterministic-quality-receipt / CONFLICTS · conflict-v2-dra
+ft · capture:deterministic-quality-receipt                                                                                                                                          
  BOUNDARY                                                                                                                                                                           
  This saved Audit is a model-assisted finding record, not proof that the Source is free of quality problems. Saved historical review notes do not alter the snapshot, Context, or Me
 mories. This Viewer cannot select a reading, write a response, rerun a finder, or apply a Memory change.                                                                            

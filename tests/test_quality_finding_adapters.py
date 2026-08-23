@@ -39,7 +39,6 @@ class FindingResolveProvider:
                         {
                             "pair_id": payload["pairs"][0]["pair_id"],
                             "conflict": "YES",
-                            "scope_dimensions": ["TIME"],
                             "reason": "The same entrance has incompatible hours.",
                             "question": "Which opening time is authoritative?",
                         }

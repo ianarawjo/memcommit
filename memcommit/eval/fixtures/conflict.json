@@ -1,7 +1,7 @@
 {
   "operation": "find-conflicts",
   "schema_version": 1,
-  "ruleset_version": "conflict-v1-draft",
+  "ruleset_version": "conflict-v2-draft",
   "description": "Initial calibration cases for pairwise semantic conflict detection. YES, MAY, and NO use one shared entrance frame so that MAY denotes an unresolved ordinary reading rather than model confidence.",
   "labels": [
     "YES",
@@ -24,7 +24,6 @@
       ],
       "expected": {
         "conflict": "YES",
-        "scope_dimensions": [],
         "question": "Which after-hours rule for the main entrance is authoritative?",
         "rationale": "The same entrance, time, and staff audience are explicit. One Memory denies all use while the other permits staff use, so both cannot govern simultaneously under the shared frame."
       }
@@ -44,9 +43,6 @@
       ],
       "expected": {
         "conflict": "MAY",
-        "scope_dimensions": [
-          "PLACE"
-        ],
         "question": "Does \"the entrance\" mean the main entrance or the separate staff entrance?",
         "rationale": "The pair conflicts if the unspecified entrance is the main entrance and remains compatible if it is the staff entrance. MAY records this unresolved ordinary reading, not uncertainty in the judge."
       }
@@ -66,9 +62,6 @@
       ],
       "expected": {
         "conflict": "NO",
-        "scope_dimensions": [
-          "PLACE"
-        ],
         "question": "",
         "rationale": "The Memories govern different entrances. Closing the main entrance is compatible with allowing staff through the separately identified staff entrance."
       }

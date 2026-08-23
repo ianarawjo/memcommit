@@ -1,10 +1,10 @@
 $ mem find-conflicts --context study/reporting                                                                                                                                      
 PTY · 180 COLUMNS × 52 ROWS                                                                                                                                                         
- CONFLICTS · 2/3 PAIRS FLAGGED · [SOURCE study/reporting]                                                                                                                           
-› ! CONFLICT · TIME · [MEMORY a31f02c1] “Report the incident within 30 days.” ↔ [MEMORY 5ce891d4] “Notify the office no later than one month after discovery.” · WHY · The deadline^
-s can disagree when discovery occurs after the incident.                                                                                                                            
-  ! CONFLICT · ACCESS · [MEMORY 5ce891d4] “Notify the office no later than one month after discovery.” ↔ [MEMORY 7b94ee10] “The accessible entrance remains open during office hour 
-s.” · WHY · The two entrance schedules may govern the same public access window.                                                                                                    
+ CONFLICTS · 3/3 MEMORIES INVOLVED · 2/3 PAIRS FLAGGED · [SOURCE study/reporting]                                                                                                   
+› ! CONFLICT · [MEMORY a31f02c1] “The main entrance opens at 08:00.” ↔ [MEMORY 5ce891d4] “The main entrance remains closed until 09:00.” · WHY · The main entrance cannot be open a^
+t 08:00 and closed until 09:00. · QUESTION · Which main-entrance opening time is authoritative?                                                                                     
+  ! POSSIBLE CONFLICT · [MEMORY 5ce891d4] “The main entrance remains closed until 09:00.” ↔ [MEMORY 7b94ee10] “The entrance opens at 08:00.” · WHY · The unnamed entrance may be th 
+e main entrance or a different entrance. · QUESTION · Do both statements govern the same entrance?                                                                                  
                                                                                                                                                                                     
                                                                                                                                                                                     
                                                                                                                                                                                     

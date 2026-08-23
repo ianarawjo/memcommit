@@ -45,9 +45,12 @@ from memcommit.interfaces.console.theme import (
 from memcommit.interfaces.tui.core.theme import semantic_role_style
 from memcommit.interfaces.tui.viewers.semantic import semantic_document_plain_text
 from memcommit.quality_audit import (
+    QUALITY_AUDIT_PREVIOUS_SCHEMA_VERSION,
     QUALITY_AUDIT_RULESETS,
+    QUALITY_AUDIT_SCHEMA_VERSION,
     QualityAuditCheck,
     QualityAuditProvenance,
+    QualityAuditSession,
     create_quality_audit,
     quality_audit_record_digest,
     quality_audit_resolution_view,
@@ -143,7 +146,6 @@ def _finding_session(ctx, first, second):
                             first,
                             second,
                             "YES",
-                            ("TIME",),
                             "The opening states cannot both hold.",
                             "Which time is authoritative?",
                         ),
@@ -153,6 +155,31 @@ def _finding_session(ctx, first, second):
             ),
         ),
     )
+
+
+def test_version_two_audit_drops_legacy_conflict_scope_tags_on_read():
+    ctx, first, second = _context()
+    value = _finding_session(ctx, first, second).to_dict()
+    value["schema_version"] = QUALITY_AUDIT_PREVIOUS_SCHEMA_VERSION
+    for check in value["checks"]:
+        if check["kind"] != "conflicts":
+            continue
+        check["ruleset_version"] = "conflict-v1-draft"
+        for finding in check["report"]["findings"]:
+            finding["scope_dimensions"] = ["TIME"]
+
+    restored = QualityAuditSession.from_dict(value)
+    rewritten = restored.to_dict()
+
+    assert rewritten["schema_version"] == QUALITY_AUDIT_SCHEMA_VERSION
+    conflict_check = next(
+        check for check in rewritten["checks"] if check["kind"] == "conflicts"
+    )
+    assert all(
+        "scope_dimensions" not in finding
+        for finding in conflict_check["report"]["findings"]
+    )
+    assert QualityAuditSession.from_dict(rewritten).to_dict() == rewritten
 
 
 def test_audit_setup_is_one_context_and_one_run_action():
@@ -248,8 +275,8 @@ def test_audit_initial_checks_never_supply_a_full_screen_return_view(monkeypatch
         "find_conflicts",
     ]
     assert stages == [
-        ("WAIT", "AUDIT", "finding duplicates", 3),
-        ("UPDATE", "finding duplicates", 1),
+        ("WAIT", "AUDIT", "finding redundancies", 3),
+        ("UPDATE", "finding redundancies", 1),
         ("UPDATE", "finding ambiguities", 2),
         ("UPDATE", "finding conflicts", 3),
     ]
@@ -263,7 +290,7 @@ def test_audit_report_keeps_three_sections_and_type_specific_items():
 
     assert [metric.label for metric in view.metrics] == [
         "SOURCE MEMORIES",
-        "DUPLICATES",
+        "REDUNDANCIES",
         "AMBIGUITIES",
         "CONFLICTS",
     ]
@@ -273,9 +300,14 @@ def test_audit_report_keeps_three_sections_and_type_specific_items():
         "AMBIGUITY",
         "CONFLICT",
     ]
-    assert "DUPLICATES · FINISHED · 1 finding" in view.overview
-    assert "AMBIGUITIES · FINISHED · 1 finding" in view.overview
-    assert "CONFLICTS · FINISHED · 1 finding" in view.overview
+    assert (
+        "REDUNDANCIES · FINISHED · 2 MEMORIES CHECKED · 1 GROUP · 1 PROPOSED ABSORPTION"
+    ) in view.overview
+    assert "AMBIGUITIES · FINISHED · 1/2 MEMORIES FLAGGED" in view.overview
+    assert (
+        "CONFLICTS · FINISHED · 2/2 MEMORIES INVOLVED · 1/1 PAIRS FLAGGED"
+        in view.overview
+    )
     assert "AUDITED SOURCE" in view.overview
     assert "FROZEN SOURCE" not in view.overview
     assert [location.role for location in view.context_locations] == [
@@ -308,16 +340,19 @@ def test_audit_review_is_one_complete_answer_free_document():
     assert first.content in rendered
     assert second.content in rendered
     assert "= DUPLICATE · SEMANTIC_EQUIVALENT" not in rendered
-    assert "≈ REDUNDANT · SEMANTIC_EQUIVALENT" in rendered
-    assert "? AMBIGUOUS" in rendered
-    assert "! CONFLICT · TIME" in rendered
+    assert "≈ REDUNDANT · SEMANTIC EQUIVALENT" in rendered
+    assert "? UNDERSPECIFIED" in rendered
+    assert "! CONFLICT" in rendered
     assert "SAVED REVIEW NOTE · HISTORICAL" not in rendered
     assert "Retained from an earlier review version." not in rendered
-    assert "DUPLICATES · 1/1 PAIRS FLAGGED" in rendered
+    assert (
+        "REDUNDANCIES · 2 MEMORIES CHECKED · 1 GROUP · 1 PROPOSED ABSORPTION"
+    ) in rendered
     assert "AMBIGUITIES · 1/2 MEMORIES FLAGGED" in rendered
-    assert "CONFLICTS · 1/1 PAIRS FLAGGED" in rendered
+    assert "CONFLICTS · 2/2 MEMORIES INVOLVED · 1/1 PAIRS FLAGGED" in rendered
     assert "WHY THESE MEMORIES ARE SEMANTICALLY REDUNDANT" not in rendered
-    assert "QUESTION" not in rendered
+    assert "QUESTION · Which audience uses this schedule?" in rendered
+    assert "QUESTION · Which time is authoritative?" in rendered
     assert "READINGS" not in rendered
     assert "RESPONSES" not in rendered
     assert "TO DO" not in rendered
@@ -343,7 +378,7 @@ def test_audit_review_is_one_complete_answer_free_document():
     ]
     assert (
         semantic_role_style(SemanticColorRole.QUALITY_DUPLICATE),
-        "DUPLICATES",
+        "REDUNDANCIES",
     ) in check_fragments[0]
     assert (
         semantic_role_style(SemanticColorRole.QUALITY_AMBIGUITY),
@@ -364,7 +399,7 @@ def test_audit_review_is_one_complete_answer_free_document():
             SemanticColorRole.QUALITY_AMBIGUITY,
             SemanticColorRole.QUALITY_CONFLICT,
         ),
-        ("REDUNDANT", "AMBIGUOUS", "CONFLICT"),
+        ("REDUNDANT", "UNDERSPECIFIED", "CONFLICT"),
         strict=True,
     ):
         assert ("class:finding-marker", marker) in section.block.fragments
@@ -530,9 +565,9 @@ def test_review_audit_snapshot_reopens_exact_saved_report(isolated_store):
     assert result.exit_code == 0
     assert "MEM AUDIT" in result.stdout
     assert "SAVED · 3/3 CHECKS" in result.stdout
-    assert "DUPLICATES · FINISHED · 1 finding" in result.stdout
-    assert "AMBIGUITIES · FINISHED · 1 finding" in result.stdout
-    assert "CONFLICTS · FINISHED · 1 finding" in result.stdout
+    assert "REDUNDANCIES · FINISHED · 2 MEMORIES CHECKED" in result.stdout
+    assert "AMBIGUITIES · FINISHED · 1/2 MEMORIES FLAGGED" in result.stdout
+    assert "CONFLICTS · FINISHED · 2/2 MEMORIES INVOLVED" in result.stdout
 
 
 def test_audit_help_names_all_three_finders():
@@ -566,24 +601,24 @@ def test_audit_receipt_colors_only_quality_labels_and_preserves_plain_text():
     assert no_color.exit_code == 0, no_color.output
     assert click.unstyle(colored.output) == plain.output == no_color.output
     assert plain.output == (
-        "Audit saved: 3 findings across 3 quality checks.\n"
+        "Audit saved: 3 quality checks.\n"
         "Source: audit/source · 2 memories\n"
         "\n"
-        "DUPLICATES   1/1 pairs\n"
-        f"  ≈ REDUNDANT · SEMANTIC_EQUIVALENT · "
+        "REDUNDANCIES   2 MEMORIES CHECKED · 1 GROUP · 1 PROPOSED ABSORPTION\n"
+        f"  ≈ REDUNDANT · SEMANTIC EQUIVALENT · "
         f"[MEMORY {first.uid[:8]}] “{first.content}” ↔ "
         f"[MEMORY {second.uid[:8]}] “{second.content}”\n"
-        "AMBIGUITIES  1/2 memories\n"
-        f"  ? AMBIGUOUS · [MEMORY {first.uid[:8]}] “{first.content}”\n"
-        "CONFLICTS    1/1 pairs\n"
-        f"  ! CONFLICT · TIME · [MEMORY {first.uid[:8]}] “{first.content}” ↔ "
+        "AMBIGUITIES    1/2 MEMORIES FLAGGED\n"
+        f"  ? UNDERSPECIFIED · [MEMORY {first.uid[:8]}] “{first.content}”\n"
+        "CONFLICTS      2/2 MEMORIES INVOLVED · 1/1 PAIRS FLAGGED\n"
+        f"  ! CONFLICT · [MEMORY {first.uid[:8]}] “{first.content}” ↔ "
         f"[MEMORY {second.uid[:8]}] “{second.content}”\n"
         "\n"
-        "Review all findings:\n"
+        "Review full audit:\n"
         f"mem review audit --session {session.uid}\n"
     )
     for label, role in (
-        ("DUPLICATES", SemanticColorRole.QUALITY_DUPLICATE),
+        ("REDUNDANCIES", SemanticColorRole.QUALITY_DUPLICATE),
         ("AMBIGUITIES", SemanticColorRole.QUALITY_AMBIGUITY),
         ("CONFLICTS", SemanticColorRole.QUALITY_CONFLICT),
     ):
@@ -594,7 +629,7 @@ def test_audit_receipt_colors_only_quality_labels_and_preserves_plain_text():
         ) in colored.output
     for label, role in (
         ("REDUNDANT", SemanticColorRole.QUALITY_DUPLICATE),
-        ("AMBIGUOUS", SemanticColorRole.QUALITY_AMBIGUITY),
+        ("UNDERSPECIFIED", SemanticColorRole.QUALITY_AMBIGUITY),
         ("CONFLICT", SemanticColorRole.QUALITY_CONFLICT),
     ):
         assert click.style(
@@ -655,7 +690,7 @@ def test_audit_receipt_previews_three_findings_then_reports_the_remainder():
     result = ClickCliRunner().invoke(receipt, color=False)
 
     assert result.exit_code == 0, result.output
-    assert "AMBIGUITIES  4/4 memories" in result.output
+    assert "AMBIGUITIES    4/4 MEMORIES FLAGGED" in result.output
     for memory in memories[:3]:
         assert memory.content in result.output
     assert memories[3].content not in result.output
@@ -739,12 +774,14 @@ def test_flagless_audit_uses_current_context_and_prints_saved_session_receipt(
     result = runner.invoke(app, ["audit"])
 
     assert result.exit_code == 0, result.output
-    assert "Audit saved: 0 findings across 3 quality checks." in result.output
+    assert "Audit saved: 3 quality checks." in result.output
     assert "Source: audit/source · 2 memories" in result.output
-    assert "DUPLICATES   0/1 pairs" in result.output
-    assert "AMBIGUITIES  0/2 memories" in result.output
-    assert "CONFLICTS    0/1 pairs" in result.output
-    assert "Review all findings:\nmem review audit --session" in result.output
+    assert (
+        "REDUNDANCIES   2 MEMORIES CHECKED · 0 GROUPS · 0 PROPOSED ABSORPTIONS"
+    ) in result.output
+    assert "AMBIGUITIES    0/2 MEMORIES FLAGGED" in result.output
+    assert "CONFLICTS      0/2 MEMORIES INVOLVED · 0/1 PAIRS FLAGGED" in result.output
+    assert "Review full audit:\nmem review audit --session" in result.output
     assert "Source unchanged. No checkpoint created." not in result.output
     saved = QualityAuditStore(store).list()
     assert len(saved) == 1

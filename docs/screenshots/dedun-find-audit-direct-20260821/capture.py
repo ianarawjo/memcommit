@@ -22,6 +22,9 @@ ROWS = 52
 QUALITY_MARKER = "QUALITY FIND PAYLOAD:\n"
 _SGR_PATTERN = re.compile(r"\x1b\[[0-9;]*m")
 
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
 _SUPPORT_PATH = (
     ROOT / "docs/screenshots/quality-conflict-resolve-handoff-20260816/capture.py"
 )
@@ -63,13 +66,13 @@ def _initialize(
         )
         if redundant
         else (
-            "The lobby opens at eight.",
-            "The loading dock closes at six.",
-            "Emergency exits remain unlocked.",
+            "The main entrance opens at 08:00 every day.",
+            "The main entrance remains closed until 09:00 every day.",
+            "The main entrance opens at 07:00 every day.",
         )
     )
     if audit_preview:
-        contents += ("The side entrance opens at seven.",)
+        contents += ("The main entrance remains closed until 10:00 every day.",)
     suffix = 310 if redundant else 320
     for offset, content in enumerate(contents):
         context.add(
@@ -104,8 +107,7 @@ def _initialize_exact_duplicates(context_name: str) -> None:
         context.add(
             Memory(
                 uid=(
-                    f"{30_000_000 + offset:08d}-0000-4000-8000-"
-                    f"000000000{330 + offset}"
+                    f"{30_000_000 + offset:08d}-0000-4000-8000-000000000{330 + offset}"
                 ),
                 content=content,
             )
@@ -172,14 +174,14 @@ class _Provider:
                         {
                             "candidate_id": candidate["candidate_id"],
                             "interpretation": "SINGLE",
-                            "clarification": "HELPFUL",
+                            "clarification": "REQUIRED",
                             "ordinary_readings": [candidate["content"]],
-                            "reason": "The intended audience is not explicit.",
-                            "question": "Which audience should use this statement?",
+                            "reason": "The schedule does not identify its time zone.",
+                            "question": "Which time zone governs this schedule?",
                         }
                         for candidate in (
                             payload["memories"][0],
-                            payload["memories"][3],
+                            payload["memories"][2],
                         )
                     ]
                 }
@@ -192,11 +194,15 @@ class _Provider:
                         {
                             "pair_id": pair["pair_id"],
                             "conflict": "YES",
-                            "scope_dimensions": ["TIME"],
                             "reason": "The two statements prescribe different schedules.",
                             "question": "Which schedule should govern?",
                         }
-                        for pair in payload["pairs"][:4]
+                        for pair in (
+                            payload["pairs"][0],
+                            payload["pairs"][2],
+                            payload["pairs"][3],
+                            payload["pairs"][5],
+                        )
                     ]
                 }
             )
@@ -382,11 +388,7 @@ def _last_token_styles(stream: str, token: str) -> tuple[str, ...]:
     matches = tuple(_SGR_PATTERN.finditer(stream, 0, token_offset))
     assert matches, f"missing ANSI style before rendered token: {token}"
     reset_offset = max(
-        (
-            index
-            for index, match in enumerate(matches)
-            if match.group() == "\x1b[0m"
-        ),
+        (index for index, match in enumerate(matches) if match.group() == "\x1b[0m"),
         default=-1,
     )
     return tuple(match.group() for match in matches[reset_offset + 1 :])
@@ -400,7 +402,7 @@ def _capture_dedun() -> None:
         _snapshot(recorder, "01-dedun-direct-progress")
         child.expect("DEDUN RECEIPT READY")
         receipt = _snapshot(recorder, "02-dedun-applied-receipt")
-        assert "absorbed 1 redundant Memory item" in receipt
+        assert "absorbed 1 redundant direct item(s)" in receipt
         assert "mem review dedun --receipt" in receipt
         child.send("\r")
         child.expect("DEDUN REVIEW READY")
@@ -456,7 +458,7 @@ def _capture_find() -> None:
         child.expect("FIND REPORT READY")
         report = _snapshot(recorder, "08-find-read-only-report")
         assert "DUN GROUP  1/1 · 2 Memories · SEMANTIC DUN" in report
-        assert "CLEANUP MAP · PROPOSED · NOT APPLIED" in report
+        assert "CLEANUP MAP · READY FOR REVIEW" in report
         assert "SURVIVOR" in report and "ABSORB" in report
         assert "FIRST" not in report and "LATER" not in report
         assert "LEFT" not in report and "RIGHT" not in report
@@ -473,7 +475,7 @@ def _capture_find_exact() -> None:
     try:
         child.expect("FIND EXACT REPORT READY")
         report = _snapshot(recorder, "08b-find-duplicates-exact-report")
-        assert "1 exact duplicate group(s)" in report
+        assert "1 exact group · 1 proposed absorption" in report
         assert "SHARED CONTENT" not in report
         assert "CLEANUP MAP" not in report
         assert report.count("Badge access is required.") == 2
@@ -492,7 +494,7 @@ def _capture_find_exact() -> None:
 def _capture_audit() -> None:
     child, recorder = _spawn("audit")
     try:
-        child.expect("MEM AUDIT · 1/3 · FINDING DUPLICATES")
+        child.expect("MEM AUDIT · 1/3 · FINDING REDUNDANCIES")
         _BASE._settle(child, seconds=0.15)
         _snapshot(recorder, "09-audit-duplicates-progress")
         child.expect("MEM AUDIT · 2/3 · FINDING AMBIGUITIES")
@@ -503,15 +505,15 @@ def _capture_audit() -> None:
         _snapshot(recorder, "11-audit-conflicts-progress")
         child.expect("AUDIT RECEIPT READY")
         receipt = _snapshot(recorder, "12-audit-saved-receipt")
-        assert "Audit saved: 6 findings across 3 quality checks" in receipt
+        assert "Audit saved: 3 quality checks" in receipt
         assert "Source: quality/direct-audit · 4 memories" in receipt
-        assert "DUPLICATES   0/6 pairs" in receipt
-        assert "AMBIGUITIES  2/4 memories" in receipt
-        assert "? AMBIGUOUS · [MEMORY 20000000]" in receipt
-        assert "CONFLICTS    4/6 pairs" in receipt
-        assert receipt.count("! CONFLICT · TIME") == 3
+        assert "REDUNDANCIES   4 MEMORIES CHECKED · 0 GROUPS" in receipt
+        assert "AMBIGUITIES    2/4 MEMORIES FLAGGED" in receipt
+        assert "? UNDERSPECIFIED · [MEMORY 20000000]" in receipt
+        assert "CONFLICTS      4/4 MEMORIES INVOLVED · 4/6 PAIRS FLAGGED" in receipt
+        assert receipt.count("! CONFLICT · [MEMORY") == 3
         assert "… 1 more" in receipt
-        assert "Review all findings:" in receipt
+        assert "Review full audit:" in receipt
         assert "mem review audit --session" in receipt
         from memcommit.interfaces.console.theme import (
             SemanticColorRole,
@@ -519,13 +521,11 @@ def _capture_audit() -> None:
             semantic_color_rgb,
         )
 
-        stream = (OUT / "12-audit-saved-receipt.typescript").read_text(
-            encoding="utf-8"
-        )
+        stream = (OUT / "12-audit-saved-receipt.typescript").read_text(encoding="utf-8")
         for role, token in (
-            (SemanticColorRole.QUALITY_DUPLICATE, "DUPLICATES"),
+            (SemanticColorRole.QUALITY_DUPLICATE, "REDUNDANCIES"),
             (SemanticColorRole.QUALITY_AMBIGUITY, "AMBIGUITIES"),
-            (SemanticColorRole.QUALITY_AMBIGUITY, "AMBIGUOUS"),
+            (SemanticColorRole.QUALITY_AMBIGUITY, "UNDERSPECIFIED"),
             (SemanticColorRole.QUALITY_CONFLICT, "CONFLICTS"),
             (SemanticColorRole.QUALITY_CONFLICT, "CONFLICT"),
         ):
@@ -533,10 +533,7 @@ def _capture_audit() -> None:
             expected_style = f"\x1b[38;2;{red};{green};{blue}m"
             assert expected_style in _last_token_styles(stream, token)
         memory_red, memory_green, memory_blue = memory_object_color_rgb()
-        assert (
-            f"\x1b[38;2;{memory_red};{memory_green};{memory_blue}m"
-            in stream
-        )
+        assert f"\x1b[38;2;{memory_red};{memory_green};{memory_blue}m" in stream
         child.send("\r")
         child.expect("AUDIT REVIEW READY")
         review = _snapshot(recorder, "13-audit-saved-review")
@@ -601,9 +598,9 @@ def main() -> None:
     # prompt-toolkit may lower shared RGB values to terminal-palette indexes.
     # Verify the final Viewer render itself owns two distinct non-reset styles;
     # unit tests separately prove their impact.add/impact.remove classification.
-    interactive_stream = (
-        OUT / "03b-dedun-interactive-review.typescript"
-    ).read_text(encoding="utf-8")
+    interactive_stream = (OUT / "03b-dedun-interactive-review.typescript").read_text(
+        encoding="utf-8"
+    )
     survivor_styles = _last_token_styles(interactive_stream, "SURVIVOR")
     absorb_styles = _last_token_styles(interactive_stream, "ABSORB")
     assert survivor_styles

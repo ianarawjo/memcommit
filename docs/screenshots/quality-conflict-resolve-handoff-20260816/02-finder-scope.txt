@@ -1,5 +1,5 @@
  MEM FIND CONFLICTS · SETUP                                                                                                                                                         
- MULTIPLE TARGETS · THIS CONTEXT ONLY · 1 CONTEXT(S) · SOURCE UNCHANGED                                                                                                             
+ MULTIPLE TARGETS · THIS CONTEXT ONLY · 1 CONTEXT(S)                                                                                                                                
 ┌────────────────────────────────────────────────────────| TARGETS · PROFILE/CONTEXT · * CURRENT · ENTER/SPACE TO SELECT |─────────────────────────────────────────────────────────┐
 │  ·   PROFILE  ALL READABLE CONTEXTS                                                                                                                                             ^│
 │› ✓ * · quality/capture                                                                                                                                                           │
@@ -11,6 +11,6 @@
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 ┌─────────────────────────────────────────────────────────────────────────────| TO DO · ENTER TO RUN |─────────────────────────────────────────────────────────────────────────────┐
 │  RUN FIND CONFLICTS                                                                                                                                                              │
-│  Analyze direct Memories across 1 selected Context as one frame; Sources unchanged.                                                                                              │
+│  Analyze direct Memories across 1 selected Context as one frame.                                                                                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
  ↑/↓ setting/cross · ←/→ choose · Tab/Shift-Tab pane · Esc/Q cancel

@@ -1,6 +1,6 @@
 # Conflict finding → Resolve typed handoff
 
-These snapshots record the public, flagless `mem find-conflicts` path entering
+These snapshots record the explicit `mem find-conflicts --select` path entering
 ordinary Resolve through one typed finding receipt. The capture uses the real
 prompt-toolkit applications in a color-capable `180×52` PTY with
 `TERM=xterm-256color`, `COLORTERM=truecolor`, and `NO_COLOR` removed. The
@@ -9,10 +9,11 @@ provider is deterministic and process-local; the store is isolated per path.
 Fixture orientation:
 
 - current Context: `quality/capture`
-- Source: two direct Memories that give incompatible daily opening times
+- Source: two direct Memories that give incompatible daily opening times plus
+  one exact weekend schedule that grounds the later Resolve repair
 - finder result: one `YES` conflict over the exact pair
 - Resolve proposal: one verified `UPDATE` that scopes the later time to weekends
-- public command: `mem find-conflicts`
+- public command: `mem find-conflicts --select`
 
 ## Ordered success path
 
@@ -23,37 +24,24 @@ Fixture orientation:
 3. `03-finder-run-approval.png` — `Tab`; exact finder run action is focused; no
    provider or durable mutation.
 4. `04-conflict-report.png` — `Enter`; `find_conflicts` has inspected the frozen
-   two-Memory Source and the complete process-local report is focused; Source is
-   unchanged.
-5. `05-conflict-item.png` — `Tab`, `Down`; the exact conflict row is selected;
-   no provider or durable mutation.
-6. `06-conflict-detail.png` — `Enter`; the conflict classification, source-linked
-   evidence, reason, and question are open; no provider or durable mutation.
-7. `07-resolve-handoff.png` — `Tab`, `Tab`, `Tab`; `TO DO` offers Resolve for
-   the selected conflict. This is still a process-local handoff; no provider or
-   durable mutation.
-8. `08-resolve-analysis.png` — `Enter`; the typed handoff has been revalidated,
+   three-Memory Source. The compact browser reports `2/3` Memories involved and
+   `1/3` pairs flagged, keeps the reason and question, and exposes no scope
+   taxonomy; Source is unchanged.
+5. `05-resolve-analysis.png` — `Enter`; the typed handoff has been revalidated,
    Resolve has run Fit/candidate/grounding/post-Fit analysis over the complete
-   frozen Source, and ordinary Resolve review is open; no mutation yet.
-9. `09-verified-repair-detail.png` — `Tab`, `Enter`; the required Resolve item
-   and verified candidate detail are open; no mutation.
-10. `10-repair-selected.png` — `Tab`, `Enter`; the update candidate is selected;
-    no mutation.
-11. `11-ready-for-exact-review.png` — `Tab`, `Tab`; `TO DO` exposes one exact
-    final review action; no mutation.
-12. `12-exact-apply-review.png` — `Enter`; the full command, frozen revision,
-    selected candidate, exact update, Fit guarantee, checkpoint, and recovery
-    boundary are displayed; the command is not run yet.
-13. `13-success-receipt.png` — `Enter`; the exact update is applied and a durable
-    success receipt reports one update and one checkpoint.
-14. `14-read-only-store-verification.png` — `Enter`; after the TUI closes, a
-    read-only store check shows the weekend-qualified Memory, exactly one
-    `resolve` checkpoint, and the ordered provider operations.
+   frozen Source, and the single verified plan is focused in the compact
+   execution surface; no mutation yet.
+6. `06-apply-row-ready.png` — `Down`; `APPLY VERIFIED PLAN · 1/1 READY` is the
+   focused exact action; no second report or confirmation screen intervenes.
+7. `07-success-receipt-and-store-verification.png` — `Enter`; the exact update
+   is applied, the durable receipt reports one update and one checkpoint, and
+   the same terminal canvas includes the read-only check of the
+   weekend-qualified Memory and ordered provider operations.
 
 ## Stale-source safety branch
 
-15. `15-stale-source-rejected.png` — fresh launch, `Tab`, `Tab`, `Enter` runs
-    the finder; then `Tab`, `Tab`, `Enter` requests the conflict handoff. The
+8. `08-stale-source-rejected.png` — fresh launch, `Tab`, `Tab`, `Enter` runs
+    the finder; then `Enter` requests the conflict handoff. The
     harness inserts one concurrent Source change between those stages. Resolve
     rejects the stale finding before opening its provider: the operation list
     contains only `find_conflicts`, there is no Resolve checkpoint, and the only

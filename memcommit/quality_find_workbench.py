@@ -465,9 +465,8 @@ def _conflict_item(
             ordinal_by_uid=ordinal_by_uid,
         ),
     )
-    dimensions = " · ".join(finding.scope_dimensions) or "NO SCOPE DIMENSION"
     question = finding.question or (
-        "Record any correction or scope distinction needed for this pair."
+        "Record any correction or decision needed for this pair."
     )
     return ResolutionItem(
         uid=item_uid,
@@ -487,7 +486,7 @@ def _conflict_item(
                 ResolutionIssueEvidence(
                     group_heading="",
                     sources_heading="SOURCE MEMORIES",
-                    classification=f"{finding.conflict} · {dimensions}",
+                    classification=finding.conflict,
                     reason_heading="WHY THESE MEMORIES CONFLICT",
                     reason=finding.reason,
                     sources=sources,
@@ -630,8 +629,7 @@ def quality_find_report_view(
         assert isinstance(session.report, AmbiguityReport)
         for finding in session.report.findings:
             classification = (
-                f"{finding.interpretation} · "
-                f"CLARIFICATION {finding.clarification}"
+                f"{finding.interpretation} · CLARIFICATION {finding.clarification}"
             )
             items.append(
                 QualityFindingReportItem(
@@ -657,16 +655,12 @@ def quality_find_report_view(
     elif session.kind == "conflicts":
         assert isinstance(session.report, ConflictReport)
         for finding in session.report.findings:
-            dimensions = " · ".join(finding.scope_dimensions)
-            classification = finding.conflict
-            if dimensions:
-                classification += f" · {dimensions}"
             items.append(
                 QualityFindingReportItem(
                     uid=_pair_item_uid("conflict", finding.left, finding.right),
                     category="conflicts",
                     kind="CONFLICT",
-                    classification=classification,
+                    classification=finding.conflict,
                     title=(
                         f"{_preview(finding.left.content)} ↔ "
                         f"{_preview(finding.right.content)}"
@@ -739,18 +733,21 @@ def quality_find_report_view(
         route=session.source.route,
         source_count=len(session.source.contexts),
         memory_count=session.report.memory_count,
-        candidate_count=(
-            session.report.memory_count
-            if session.kind == "ambiguities"
-            else (
-                session.report.pair_count
-                if isinstance(session.report, ConflictReport)
-                else session.report.memory_count
-                * (session.report.memory_count - 1)
-                // 2
-            )
+        pair_count=(
+            session.report.pair_count
+            if isinstance(session.report, ConflictReport)
+            else None
         ),
-        candidate_unit=("MEMORIES" if session.kind == "ambiguities" else "PAIRS"),
+        group_count=(
+            session.report.group_count
+            if isinstance(session.report, DuplicateReport)
+            else None
+        ),
+        redundant_item_count=(
+            session.report.redundancy_count
+            if isinstance(session.report, DuplicateReport)
+            else None
+        ),
         items=tuple(items),
         empty_message=empty_message,
         handoff_label=handoff_label,
@@ -820,21 +817,35 @@ def quality_find_resolution_view(
     metrics = [
         ResolutionMetric("CONTEXTS", str(len(session.source.contexts))),
         ResolutionMetric("SOURCE MEMORIES", str(report.memory_count)),
-        ResolutionMetric("FINDINGS", str(len(items))),
-        ResolutionMetric("ANSWERED", str(session.answered_count)),
     ]
     if isinstance(report, ConflictReport):
-        metrics.insert(2, ResolutionMetric("PAIRS", str(report.pair_count)))
+        involved_memory_count = len(
+            {
+                memory.uid
+                for finding in report.findings
+                for memory in (finding.left, finding.right)
+            }
+        )
+        metrics.extend(
+            (
+                ResolutionMetric("MEMORIES INVOLVED", str(involved_memory_count)),
+                ResolutionMetric("PAIRS CHECKED", str(report.pair_count)),
+                ResolutionMetric("PAIRS FLAGGED", str(len(items))),
+            )
+        )
     elif isinstance(report, DuplicateReport):
-        metrics[2:2] = [
-            ResolutionMetric("DUN GROUPS", str(report.group_count)),
-            ResolutionMetric("DUN EVIDENCE", str(report.redundancy_count)),
-            ResolutionMetric("DUP / EXACT", str(report.exact_duplicate_count)),
-            ResolutionMetric(
-                "SEMANTIC DUN",
-                str(report.semantic_redundancy_count),
-            ),
-        ]
+        metrics.extend(
+            (
+                ResolutionMetric("GROUPS", str(report.group_count)),
+                ResolutionMetric(
+                    "PROPOSED ABSORPTIONS",
+                    str(report.redundancy_count),
+                ),
+            )
+        )
+    else:
+        metrics.append(ResolutionMetric("MEMORIES FLAGGED", str(len(items))))
+    metrics.append(ResolutionMetric("ANSWERED", str(session.answered_count)))
     reach = (
         "INCLUDE DESCENDANTS"
         if session.source.include_descendants
@@ -845,28 +856,26 @@ def quality_find_resolution_view(
         if session.source.profile_selected
         else f"{session.source.selection_mode} TARGET SELECTION"
     )
-    dun_composition = (
-        (
-            f" DUN = DUP / EXACT + SEMANTIC DUN: {report.redundancy_count} "
-            f"evidence {'link' if report.redundancy_count == 1 else 'links'} = "
-            f"{report.exact_duplicate_count} "
-            f"DUP / EXACT {'link' if report.exact_duplicate_count == 1 else 'links'} "
-            f"+ {report.semantic_redundancy_count} SEMANTIC DUN "
-            f"{'link' if report.semantic_redundancy_count == 1 else 'links'}, "
-            f"forming {report.group_count} connected cleanup "
-            f"{'group' if report.group_count == 1 else 'groups'}."
+    if isinstance(report, DuplicateReport):
+        result_heading = "REDUNDANCIES"
+        result_summary = (
+            f"Reported {report.group_count} cleanup "
+            f"{'group' if report.group_count == 1 else 'groups'} and "
+            f"{report.redundancy_count} proposed "
+            f"{'absorption' if report.redundancy_count == 1 else 'absorptions'}."
         )
-        if isinstance(report, DuplicateReport)
-        else ""
-    )
-    findings_summary = (
-        f"Reported {len(items)} DUN evidence {'link' if len(items) == 1 else 'links'}."
-        if isinstance(report, DuplicateReport)
-        else (
-            f"Reported {len(items)} actionable {finding_label} "
-            f"{'finding' if len(items) == 1 else 'findings'}."
+    elif isinstance(report, ConflictReport):
+        result_heading = "CONFLICTS"
+        result_summary = (
+            f"Flagged {len(items)} of {report.pair_count} checked "
+            f"{'pair' if report.pair_count == 1 else 'pairs'}."
         )
-    )
+    else:
+        result_heading = "AMBIGUITIES"
+        result_summary = (
+            f"Flagged {len(items)} of {report.memory_count} checked "
+            f"{'Memory' if report.memory_count == 1 else 'Memories'}."
+        )
     sections = (
         ResolutionOverviewSection(
             "scope",
@@ -881,15 +890,13 @@ def quality_find_resolution_view(
         ),
         ResolutionOverviewSection(
             "findings",
-            "FINDINGS",
-            findings_summary + dun_composition,
+            result_heading,
+            result_summary,
         ),
         ResolutionOverviewSection(
             "boundary",
             "BOUNDARY",
-            (
-                "Responses are review notes for this report."
-            ),
+            ("Responses are review notes for this report."),
         ),
     )
     default_operation_label = (
@@ -927,14 +934,12 @@ def quality_find_resolution_view(
         ),
         overview=resolution_overview_text(sections),
         overview_sections=sections,
-        list_label=(
-            "DUN EVIDENCE" if session.kind == "duplicates" else "ACTIONABLE FINDINGS"
-        ),
+        list_label=("REDUNDANCIES" if session.kind == "duplicates" else result_heading),
         items=items,
         empty_message=(
             "No redundancy evidence in this analysis."
             if session.kind == "duplicates"
-            else f"No actionable {finding_label} findings in this analysis."
+            else f"No {finding_label} results in this analysis."
         ),
         results_label="EXACT RESULTS",
         results=(),

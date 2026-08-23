@@ -1,7 +1,7 @@
 PTY 180 52
-MEM DEDUN · 1/1 · ANALYZING DIRECT MEMORIES . · 0sMEM DEDUN · 1/1 · ANALYZING DIRECT MEMORIES .. · 0sMEM DEDUN · 1/1 · ANALYZING DIRECT MEMORIES … · 0s                                                   [32mDedun 'quality/direct-dedun': absorbed 1 redundant Memory item(s); kept 1 original UID(s).[0m
+MEM DEDUN · 1/1 · ANALYZING DIRECT MEMORIES . · 0sMEM DEDUN · 1/1 · ANALYZING DIRECT MEMORIES .. · 0sMEM DEDUN · 1/1 · ANALYZING DIRECT MEMORIES … · 0s                                                   [32mDedun 'quality/direct-dedun': absorbed 1 redundant direct item(s); kept 1 original UID(s).[0m
 DUN COMPOSITION · 1 evidence link = 0 DUP / EXACT links + 1 SEMANTIC DUN link
-Checkpoint [c9d2b104] · review: mem review dedun --receipt c9d2b104-28e5-4ed1-81fd-19b886a4d3fa · recovery: mem undo
+Checkpoint [e526ff38] · review: mem review dedun --receipt e526ff38-2dab-454b-b7e1-3dbb16aaaa9e · recovery: mem undo
 COMMAND EXIT · 0
 VERIFICATION · CONTEXT quality/direct-dedun · MEMORIES 2 · CHECKPOINT COMMANDS ['dedun'] · CURRENT quality/direct-dedun · PROVIDER ['find_duplicates']
 DEDUN RECEIPT READY
@@ -9,10 +9,10 @@ DEDUN RECEIPT READY
 MEM REVIEW · DEDUN
 Completed operation evidence. This Review is read-only and cannot change or apply the recorded result.
 
-STATUS · APPLIED · RECEIPT c9d2b104-28e5-4ed1-81fd-19b886a4d3fa
+STATUS · APPLIED · RECEIPT e526ff38-2dab-454b-b7e1-3dbb16aaaa9e
 CONTEXT · quality/direct-dedun
-COMPLETED · 2026-08-21T12:01:18.007033
-OUTCOME · Resolved 1 redundancy group(s); absorbed 1 Memory item(s)
+COMPLETED · 2026-08-23T09:31:00.861054
+OUTCOME · Resolved 1 redundancy group(s); absorbed 1 direct item(s)
 
 RESOLVED GROUPS · 1
 1. [38;2;138;173;244m[1mSURVIVOR[0m · [20000000] The parking garage is unavailable after 10 p.m.
@@ -23,10 +23,10 @@ VERIFICATION · CONTEXT quality/direct-dedun · MEMORIES 2 · CHECKPOINT COMMAND
 DEDUN REVIEW READY
 
 [?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
-[0;38;5;117;1m┃[0mSTATUS · APPLIED · RECEIPT c9d2b104-28e5-4ed1-81fd-19b886a4d3fa                                                                                                                  [0;1m^[179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0mSTATUS · APPLIED · RECEIPT e526ff38-2dab-454b-b7e1-3dbb16aaaa9e                                                                                                                  [0;1m^[179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0mCONTEXT · quality/direct-dedun                                                                                                                                                   [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0mCOMPLETED · 2026-08-21T12:01:18.007033                                                                                                                                           [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0mOUTCOME · Resolved 1 redundancy group(s); absorbed 1 Memory item(s)                                                                                                              [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0mCOMPLETED · 2026-08-23T09:31:00.861054                                                                                                                                           [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0mOUTCOME · Resolved 1 redundancy group(s); absorbed 1 direct item(s)                                                                                                              [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0mRESOLVED GROUPS · 1                                                                                                                                                              [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m1. [0;38;5;111;1mSURVIVOR[0m · [20000000] The parking garage is unavailable after 10 p.m.                                                                                                         [0;48;5;238m [179C[0;38;5;117;1m┃[0m
@@ -73,4 +73,4 @@ DEDUN REVIEW READY
 [0m┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│[ READ ONLY ]  No action available · This saved session can only be inspected.                                                                                                    [179C│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
-[0m READ ONLY · REVIEW REPORT · READ ONLY · ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter inspect  Esc/Backspace close H Help  y/Y copy  Q close[169D[50A[C[0m
+[0m READ ONLY · REVIEW REPORT · ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter inspect  Esc/Backspace close H Help  y/Y copy  Q close[157D[50A[C[0m

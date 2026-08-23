@@ -1,19 +1,19 @@
 PTY 180 52                                                                                                                                                                          
-Audit saved: 6 findings across 3 quality checks.                                                                                                                                    
+Audit saved: 3 quality checks.                                                                                                                                                      
 Source: quality/direct-audit · 4 memories                                                                                                                                           
                                                                                                                                                                                     
-DUPLICATES   0/6 pairs                                                                                                                                                              
-AMBIGUITIES  2/4 memories                                                                                                                                                           
-  ? AMBIGUOUS · [MEMORY 20000000] “The lobby opens at eight.”                                                                                                                       
-  ? AMBIGUOUS · [MEMORY 20000003] “The side entrance opens at seven.”                                                                                                               
-CONFLICTS    4/6 pairs                                                                                                                                                              
-  ! CONFLICT · TIME · [MEMORY 20000000] “The lobby opens at eight.” ↔ [MEMORY 20000001] “The loading dock closes at six.”                                                           
-  ! CONFLICT · TIME · [MEMORY 20000000] “The lobby opens at eight.” ↔ [MEMORY 20000002] “Emergency exits remain unlocked.”                                                          
-  ! CONFLICT · TIME · [MEMORY 20000000] “The lobby opens at eight.” ↔ [MEMORY 20000003] “The side entrance opens at seven.”                                                         
+REDUNDANCIES   4 MEMORIES CHECKED · 0 GROUPS · 0 PROPOSED ABSORPTIONS                                                                                                               
+AMBIGUITIES    2/4 MEMORIES FLAGGED                                                                                                                                                 
+  ? UNDERSPECIFIED · [MEMORY 20000000] “The main entrance opens at 08:00 every day.”                                                                                                
+  ? UNDERSPECIFIED · [MEMORY 20000002] “The main entrance opens at 07:00 every day.”                                                                                                
+CONFLICTS      4/4 MEMORIES INVOLVED · 4/6 PAIRS FLAGGED                                                                                                                            
+  ! CONFLICT · [MEMORY 20000000] “The main entrance opens at 08:00 every day.” ↔ [MEMORY 20000001] “The main entrance remains closed until 09:00 ev…”                               
+  ! CONFLICT · [MEMORY 20000000] “The main entrance opens at 08:00 every day.” ↔ [MEMORY 20000003] “The main entrance remains closed until 10:00 ev…”                               
+  ! CONFLICT · [MEMORY 20000001] “The main entrance remains closed until 09:00 ev…” ↔ [MEMORY 20000002] “The main entrance opens at 07:00 every day.”                               
   … 1 more                                                                                                                                                                          
                                                                                                                                                                                     
-Review all findings:                                                                                                                                                                
-mem review audit --session 82427166-369b-4df0-8c7b-21bd2331eaf4                                                                                                                     
+Review full audit:                                                                                                                                                                  
+mem review audit --session 81b87040-5f10-424e-b291-bc88b48644a0                                                                                                                     
 COMMAND EXIT · 0                                                                                                                                                                    
 VERIFICATION · CONTEXT quality/direct-audit · MEMORIES 4 · CHECKPOINT COMMANDS [] · CURRENT quality/direct-audit · PROVIDER ['find_duplicates', 'find_ambiguities', 'find_conflicts'
 ]                                                                                                                                                                                   

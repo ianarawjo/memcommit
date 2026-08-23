@@ -88,7 +88,7 @@ def test_ambiguity_report_exposes_readings_without_answer_contract() -> None:
     assert "Reports are due within 30 days." in paragraph
     assert "WHY · The starting event is not named." in paragraph
     assert "Thirty days after the event. / Thirty days after discovery." in paragraph
-    assert "QUESTION" not in paragraph
+    assert "QUESTION · Which event starts the deadline?" in paragraph
     assert "READINGS" not in paragraph
     assert "@" not in paragraph
     assert paragraph.count("\n") == 1
@@ -134,7 +134,8 @@ def test_duplicate_issue_line_uses_typed_refs_and_omits_rationale() -> None:
     assert "WHY" not in paragraph
     assert "The stored content is identical." not in paragraph
     assert quality_find_report_header_text(view) == (
-        "REDUNDANCIES · 1/1 PAIRS FLAGGED · [SOURCE quality/report]"
+        "REDUNDANCIES · 2 MEMORIES CHECKED · 1 GROUP · "
+        "1 PROPOSED ABSORPTION · [SOURCE quality/report]"
     )
 
 
@@ -213,8 +214,8 @@ def test_dedun_handoff_receives_all_eligible_report_evidence_without_confirmatio
                 DuplicateFinding(
                     second,
                     third,
-                    "OVERLAP",
-                    "The delivery statements overlap but are not substitutes.",
+                    "SURFACE_EQUIVALENT",
+                    "The delivery statements normalize to the same wording.",
                 ),
             ),
         ),
@@ -234,9 +235,22 @@ def test_dedun_handoff_receives_all_eligible_report_evidence_without_confirmatio
 
     assert len(received) == 1
     assert [item.classification for item in received[0]] == [
-        "SEMANTIC_EQUIVALENT"
+        "SEMANTIC_EQUIVALENT",
+        "SURFACE_EQUIVALENT",
     ]
     assert session.responses == {}
+
+
+def test_negative_duplicate_boundary_cannot_be_rendered_as_redundancy() -> None:
+    context, first, second = _source()
+
+    with pytest.raises(ValueError, match="positive DUN relation"):
+        DuplicateFinding(
+            first,
+            second,
+            "OVERLAP",  # type: ignore[arg-type]
+            "The pair shares content but is not substitutable.",
+        )
 
 
 def test_compact_finding_browser_never_enters_the_alternate_screen() -> None:

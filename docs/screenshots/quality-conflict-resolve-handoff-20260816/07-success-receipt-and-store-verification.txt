@@ -1,0 +1,9 @@
+RESOLVE · quality/capture                                                                                                                                                           
+APPLIED · UPDATE 1 · FIT YES                                                                                                                                                        
+CHECKPOINT · e654441d-dfbf-4bb3-8196-805d1056e79e                                                                                                                                   
+REVIEW · mem review resolve --receipt e654441d-dfbf-4bb3-8196-805d1056e79e                                                                                                          
+RECOVERY · mem undo                                                                                                                                                                 
+COMMAND EXIT · 0                                                                                                                                                                    
+SUCCESS VERIFICATION · MEMORIES ['The main entrance opens at 8:00 every day.', 'The main entrance remains closed until 9:00 on weekends.', 'On weekends, the main entrance opens at 
+9:00.'] · CHECKPOINTS 1 · COMMANDS ['resolve'] · PROVIDER OPERATIONS ['find_conflicts', 'fit_propositions', 'resolve_candidates', 'resolve_candidate_verification', 'fit_proposition
+s']

@@ -1,10 +1,10 @@
 $ mem find-ambiguities --context study/reporting                                                                                                                                    
 PTY · 180 COLUMNS × 52 ROWS                                                                                                                                                         
  AMBIGUITIES · 2/3 MEMORIES FLAGGED · [SOURCE study/reporting]                                                                                                                      
-  ? AMBIGUOUS · [MEMORY a31f02c1] “Report the incident within 30 days.” · WHY · The deadline does not identify which event starts the clock. — Thirty days after the incident. / Th^
-irty days after discovery. / Thirty days after notification.                                                                                                                        
+  ? UNDERSPECIFIED · [MEMORY a31f02c1] “Report the incident within 30 days.” · WHY · The deadline does not identify which event starts the clock. — Report within a 30-day period. ^
+· QUESTION · Which event starts the 30-day period?                                                                                                                                  
 › ? AMBIGUOUS · [MEMORY 7b94ee10] “The accessible entrance remains open during office hours.” · WHY · Office hours can refer to two different schedules. — The staffed entrance sch 
-edule. / The published office schedule.                                                                                                                                             
+edule. / The published office schedule. · QUESTION · Which schedule defines office hours?                                                                                           
                                                                                                                                                                                     
                                                                                                                                                                                     
                                                                                                                                                                                     

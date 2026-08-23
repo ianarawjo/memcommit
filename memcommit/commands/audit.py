@@ -61,7 +61,9 @@ from memcommit.quality_audit import (
 from memcommit.quality_audit_store import QualityAuditStore
 from memcommit.quality_find_report import (
     QualityFindingReportItem,
+    quality_find_category_label,
     quality_finding_label_parts,
+    quality_find_report_summary_text,
 )
 from memcommit.quality_find_workbench import (
     QualityFindSourceFrame,
@@ -97,7 +99,10 @@ def _run_quality_audit_checks(
 
     def work(progress: CommandWaitProgress) -> QualityAuditSession:
         def update_progress(kind: QualityAuditKind, step: int, _total: int) -> None:
-            progress.update(f"finding {kind}", step=step)
+            progress.update(
+                f"finding {quality_find_category_label(kind).casefold()}",
+                step=step,
+            )
 
         session = run_quality_audit(
             ctx,
@@ -125,7 +130,7 @@ def _run_quality_audit_checks(
 
     return run_command_wait(
         "AUDIT",
-        "finding duplicates",
+        "finding redundancies",
         total=total_checks,
         work=work,
         app_input=app_input,
@@ -208,14 +213,10 @@ def _render_quality_audit_finding_preview(
 
 
 def render_quality_audit_receipt(session: QualityAuditSession) -> None:
-    """Print the saved artifact and enough scope to interpret its total."""
+    """Print the saved artifact with each finder's truthful result unit."""
 
-    finding_label = "finding" if session.finding_count == 1 else "findings"
     typer.secho("Audit saved:", bold=True, nl=False)
-    typer.echo(
-        f" {session.finding_count} {finding_label} across "
-        f"{len(session.checks)} quality checks."
-    )
+    typer.echo(f" {len(session.checks)} quality checks.")
     memory_count = len(session.source.memories)
     memory_label = "memory" if memory_count == 1 else "memories"
     typer.secho("Source:", bold=True, nl=False)
@@ -224,11 +225,6 @@ def render_quality_audit_receipt(session: QualityAuditSession) -> None:
         f"{memory_count} {memory_label}"
     )
 
-    # Audit freezes one direct frame for all three finders. The pair denominator
-    # is frame cardinality: Conflict exhausts it, while Duplicate retains its
-    # group-preserving discovery strategy. Either way, the denominator makes
-    # the aggregate legible without expanding a potentially quadratic report.
-    pair_count = memory_count * (memory_count - 1) // 2
     context = session.source.context()
     source_frame = QualityFindSourceFrame.create((context,))
     uid_prefixes = collision_safe_uid_prefixes(
@@ -236,22 +232,10 @@ def render_quality_audit_receipt(session: QualityAuditSession) -> None:
     )
     typer.echo()
     for check in session.checks:
-        label = check.kind.upper()
+        label = quality_find_category_label(check.kind)
         role = semantic_quality_role(check.kind)
         if role is None:  # pragma: no cover - Audit validates this union.
             raise ValueError("Unsupported Audit quality check kind.")
-        denominator = memory_count if check.kind == "ambiguities" else pair_count
-        unit = "memories" if check.kind == "ambiguities" else "pairs"
-        typer.secho(
-            label,
-            fg=semantic_color_rgb(role),
-            bold=True,
-            nl=False,
-        )
-        typer.echo(
-            f"{' ' * (13 - len(label))}"
-            f"{len(check.report.findings)}/{denominator} {unit}"
-        )
         report_view = quality_find_report_view(
             QualityFindWorkbenchSession(
                 uid=session.uid,
@@ -263,6 +247,15 @@ def render_quality_audit_receipt(session: QualityAuditSession) -> None:
             source_frame,
             operation_label=f"AUDIT · {label}",
         )
+        typer.secho(
+            label,
+            fg=semantic_color_rgb(role),
+            bold=True,
+            nl=False,
+        )
+        typer.echo(
+            f"{' ' * (15 - len(label))}{quality_find_report_summary_text(report_view)}"
+        )
         for item in report_view.items[:_AUDIT_RECEIPT_PREVIEW_LIMIT]:
             _render_quality_audit_finding_preview(
                 item,
@@ -273,7 +266,7 @@ def render_quality_audit_receipt(session: QualityAuditSession) -> None:
             typer.echo(f"  … {remaining} more")
 
     typer.echo()
-    typer.secho("Review all findings:", bold=True)
+    typer.secho("Review full audit:", bold=True)
     typer.echo(f"mem review audit --session {session.uid}")
 
 

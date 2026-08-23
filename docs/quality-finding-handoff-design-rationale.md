@@ -30,6 +30,12 @@ Audit checks the resulting state. No stage implicitly performs a later one.
 - classification, qualifiers, reason, question, and proposed readings; and
 - the intended next-operation route.
 
+`qualifiers` remains a version-1 envelope field for adapter compatibility, but
+current Conflict handoffs leave it empty. The retired `scope_dimensions`
+taxonomy is not reconstructed from prose and is not required by Resolve;
+Conflict's exact classification, reason, and question carry the semantic
+evidence used at the handoff boundary.
+
 The routes are deliberately explicit:
 
 | Finding | Route | Current execution status |
