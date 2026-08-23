@@ -48,6 +48,11 @@ changes from neutral white to the shared focus blue. The adjacent `DUPLICATE`,
 `REDUNDANT`, `AMBIGUOUS`, or `CONFLICT` label deliberately retains its semantic
 color. This makes the left edge advertise the active keyboard stop without
 erasing the finding category; leaving the row restores the marker to neutral.
+Finding labels are non-bold at rest and become bold only with their finding's
+keyboard focus. Check headers remain bold, so `CONFLICTS` continues to identify
+the category boundary while each subordinate `CONFLICT` is visually quieter
+until it is the active reading unit. The same hierarchy applies to Duplicate,
+Redundancy, and Ambiguity findings.
 The Memory and rationale fragments retain their existing blue focus treatment,
 so the marker and evidence identify one active logical paragraph.
 

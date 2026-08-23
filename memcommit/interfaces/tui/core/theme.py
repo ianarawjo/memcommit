@@ -82,6 +82,10 @@ SEMANTIC_VIEWER_STYLE = Style.from_dict(
         "report-neutral": f"fg:{REPORT_HEX}",
         "finding-marker": f"fg:{REPORT_HEX}",
         "finding-marker.focused": f"fg:{FOCUS_HEX} bold",
+        # The semantic class before this presentation class owns foreground;
+        # hierarchy is quiet at rest and becomes emphatic only at focus.
+        "finding-label": "nobold",
+        "finding-label.focused": "bold",
         "report-label": f"fg:{REPORT_HEX} bold",
         "report-label.focused": f"fg:{FOCUS_HEX} bold",
         "viewer-section": f"fg:{FOCUS_HEX} bold",

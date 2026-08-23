@@ -68,6 +68,25 @@ def test_console_and_tui_resolve_the_same_semantic_foregrounds():
         assert attrs.color == semantic_color_hex(role)[1:]
 
 
+def test_finding_labels_gain_bold_only_while_focused():
+    for role in (
+        SemanticColorRole.QUALITY_DUPLICATE,
+        SemanticColorRole.QUALITY_AMBIGUITY,
+        SemanticColorRole.QUALITY_CONFLICT,
+    ):
+        semantic = semantic_role_style(role)
+        resting = SEMANTIC_VIEWER_STYLE.get_attrs_for_style_str(
+            f"{semantic} class:finding-label"
+        )
+        focused = SEMANTIC_VIEWER_STYLE.get_attrs_for_style_str(
+            f"{semantic} class:finding-label.focused"
+        )
+
+        assert resting.color == focused.color == semantic_color_hex(role)[1:]
+        assert resting.bold is False
+        assert focused.bold is True
+
+
 def test_source_access_and_capabilities_share_teal_but_grant_stays_neutral():
     capability = semantic_color_hex(SemanticColorRole.CAPABILITY)[1:]
     grant = semantic_color_hex(SemanticColorRole.GRANT)[1:]

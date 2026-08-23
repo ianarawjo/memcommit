@@ -167,13 +167,20 @@ def quality_audit_review_document(
                 item,
                 show_context=report_view.source_count > 1,
             )
-            # The compact projector always begins with the typed =/≈/?/!
-            # marker.  Give only that glyph a focus-aware class: the adjacent
-            # category label must retain its semantic color while focused.
+            # The compact projector begins with the typed =/≈/?/! marker and
+            # its category label.  The marker changes color at focus; the
+            # label keeps semantic color and gains emphasis only at focus.
             marker_style, marker_text = compact_fragments[0]
             if marker_style != "class:report-neutral":  # pragma: no cover
                 raise ValueError("Audit finding marker projection changed.")
             compact_fragments[0] = ("class:finding-marker", marker_text)
+            label_style, label_text = compact_fragments[1]
+            if label_style != semantic_role_style(header_role):  # pragma: no cover
+                raise ValueError("Audit finding label projection changed.")
+            compact_fragments[1] = (
+                f"{label_style} class:finding-label",
+                label_text,
+            )
             finding_fragments.extend(compact_fragments)
             sections.append(
                 SemanticViewerSection(

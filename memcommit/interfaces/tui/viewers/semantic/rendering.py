@@ -32,6 +32,20 @@ _RESTING_STYLE = {
 }
 
 
+def _resting_style(style: str) -> str:
+    """Remove transient focus without discarding composed semantic color."""
+
+    tokens = style.split()
+    if "class:finding-label.focused" in tokens:
+        style = " ".join(
+            "class:finding-label"
+            if token == "class:finding-label.focused"
+            else token
+            for token in tokens
+        )
+    return _RESTING_STYLE.get(style, style)
+
+
 def semantic_viewer_block_fragments(
     fragments: ViewerFragments,
     *,
@@ -50,4 +64,4 @@ def semantic_viewer_block_fragments(
 def deactivate_semantic_viewer_fragments(
     fragments: ViewerFragments,
 ) -> list[tuple[str, str]]:
-    return [(_RESTING_STYLE.get(style, style), text) for style, text in fragments]
+    return [(_resting_style(style), text) for style, text in fragments]

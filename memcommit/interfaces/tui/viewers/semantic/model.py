@@ -38,6 +38,20 @@ _FOCUSED_STYLE = {
 }
 
 
+def _focused_style(style: str) -> str:
+    """Apply focus while preserving any composed semantic foreground."""
+
+    tokens = style.split()
+    if "class:finding-label" in tokens:
+        return " ".join(
+            "class:finding-label.focused"
+            if token == "class:finding-label"
+            else token
+            for token in tokens
+        )
+    return _FOCUSED_STYLE.get(style, style)
+
+
 @dataclass(frozen=True)
 class SemanticViewerBlock:
     """One independently focusable rendered block."""
@@ -70,12 +84,12 @@ class SemanticViewerBlock:
             else {
                 index
                 for index, (style, _text) in enumerate(self.fragments)
-                if style in _FOCUSED_STYLE
+                if _focused_style(style) != style
             }
         )
         for index, (style, text) in enumerate(self.fragments):
             if visibly_focused and index in focus_indices:
-                style = _FOCUSED_STYLE.get(style, style)
+                style = _focused_style(style)
             fragments.append((style, text))
         if visibly_focused and self.anchor in {"end", "both"}:
             fragments.append(("[SetCursorPosition]", ""))

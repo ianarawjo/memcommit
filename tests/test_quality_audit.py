@@ -368,10 +368,15 @@ def test_audit_review_is_one_complete_answer_free_document():
         strict=True,
     ):
         assert ("class:finding-marker", marker) in section.block.fragments
+        resting_label_style = f"{semantic_role_style(role)} class:finding-label"
+        focused_label_style = (
+            f"{semantic_role_style(role)} class:finding-label.focused"
+        )
+        assert (resting_label_style, label) in section.block.fragments
         focused_fragments = section.block.render(active=True)
         assert ("class:finding-marker.focused", marker) in focused_fragments
-        # Focus is shown by the marker while the category keeps its meaning.
-        assert (semantic_role_style(role), label) in focused_fragments
+        # Focus adds emphasis while the semantic class keeps category color.
+        assert (focused_label_style, label) in focused_fragments
 
 
 def test_audit_review_scrolls_each_finding_in_one_check_independently():

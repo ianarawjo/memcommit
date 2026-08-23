@@ -39,6 +39,10 @@ def test_inactive_viewer_keeps_content_and_durable_selection_without_focus():
             ("[SetCursorPosition]", ""),
             ("class:viewer-section", "WHAT MEM UNDERSTOOD"),
             ("class:finding-marker.focused", "? "),
+            (
+                "class:semantic.quality-ambiguity class:finding-label.focused",
+                "AMBIGUOUS",
+            ),
             ("class:report-label.focused", "Focused finding"),
             ("class:viewer-body.focused", "Focused explanation"),
             ("class:detail-card.focused", "Focused card heading"),
@@ -52,6 +56,10 @@ def test_inactive_viewer_keeps_content_and_durable_selection_without_focus():
         ("[SetCursorPosition]", ""),
         ("class:section", "WHAT MEM UNDERSTOOD"),
         ("class:finding-marker", "? "),
+        (
+            "class:semantic.quality-ambiguity class:finding-label",
+            "AMBIGUOUS",
+        ),
         ("class:report-label", "Focused finding"),
         ("class:viewer-body", "Focused explanation"),
         ("class:detail-card", "Focused card heading"),
