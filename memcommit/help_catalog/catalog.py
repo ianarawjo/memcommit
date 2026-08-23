@@ -270,8 +270,8 @@ _OPERATIONS = (
         "redundancies (dun), retaining the first existing UID in each group.",
         "Direct Context items -> role-aware DUP + Memory semantic DUN groups -> atomic Apply -> receipt",
         ExecutionKind.SEMANTIC,
-        "The invocation expresses Apply intent and publishes at most one checkpoint",
-        "One exact direct Context; inbound references block version 1 Apply",
+        "The invocation expresses Apply intent and publishes one atomic command unit",
+        "Exact root or local lexical subtree; Contexts never combine and inbound references block version 1 Apply",
     ),
     _operation(
         "find-ambiguities",

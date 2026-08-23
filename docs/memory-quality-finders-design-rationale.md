@@ -114,14 +114,17 @@ choice. Embedded Context edges remain excluded: descendant reach follows the
 public lexical namespace only. The explicit `--context NAME` forms retain
 their original exact, direct, one-Context behavior.
 
-Dedun does not yet expose recursive reach or the multi-target selector because
-its current Apply owns one exact Context. Its flagless route uses the current
-Context; `--context` selects another exact readable Context. Eligible EXACT, SURFACE_EQUIVALENT,
-and SEMANTIC_EQUIVALENT evidence is grouped; the earliest stored UID survives each
-group, and the operation applies one checkpoint immediately. OVERLAP stays
-unchanged. If no eligible group exists, Dedun prints a no-change receipt and
-creates no checkpoint. Detailed terminal evidence is recovered later through
-the checkpoint-backed `mem review dedun --receipt UID` route.
+Dedun does not expose the multi-target selector. Its flagless and `-d` routes
+own one exact Context; `--context` selects another exact readable Context.
+`-r` freezes one local lexical subtree, analyzes every Context independently,
+prepares every deterministic earliest-UID survivor, and only then publishes
+all changed Contexts in one rollback-safe and Undoable command unit. It rejects
+granted roots or descendants because version 1 has no cross-Store transaction.
+Eligible EXACT, SURFACE_EQUIVALENT, and SEMANTIC_EQUIVALENT evidence is grouped;
+OVERLAP stays unchanged. If no eligible group exists, Dedun prints a no-change
+receipt and creates no checkpoint. Each changed Context has its own immutable
+checkpoint evidence for `mem review dedun --receipt UID`, while `mem undo`
+restores the complete recursive command unit.
 
 After Ambiguity or Conflict setup, every effective Context is loaded directly through the same
 frozen readable catalog. Its directly owned Memories are copied into one

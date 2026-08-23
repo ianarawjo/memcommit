@@ -11,7 +11,7 @@ participates in DUN.
 
 | Route | Public input | Application entry | Review/effect |
 | --- | --- | --- | --- |
-| CLI | `mem dedun [--context CONTEXT]` | shared redundancy finder plus role-aware exact detector, then `prepare_dedup` / `apply_dedup` compatibility-named core | one immediate checkpoint or a no-change receipt in every terminal mode |
+| CLI | `mem dedun [CONTEXT] [-d\| -r]` | shared per-Context redundancy analyzer plus role-aware exact detector, then direct Apply or recursive scope preparation and batch Apply | one direct checkpoint, one atomic multi-Context command unit, or a no-change receipt in every terminal mode |
 | Exact CLI replay | hidden evidence/revision/survivor fields emitted by the final review | the same core | one checkpoint or no write |
 | Public Python | `plan_dedun` / `apply_dedun` over reviewed redundancy evidence | `api._operations.dedup` | `DedunPlanResult` and `DedunApplyResult` |
 | Agent/MCP | `memcommit_dedun` | the same public Python routes | JSON-safe plan or checkpoint result |
@@ -41,8 +41,19 @@ Every applying route:
   supplies a separately reviewed survivor;
 - preserves survivor wording and unrelated direct-item order;
 - blocks inbound References to absorbed owned Memory UIDs; and
-- publishes every removal in one `dedun-v3` checkpoint or publishes
-  nothing.
+- publishes a direct removal in one `dedun-v3` checkpoint; recursive reach
+  publishes one such evidence checkpoint per changed Context inside one
+  operation-UID-bound Undo/Redo unit, or publishes nothing.
+
+Recursive CLI reach is deliberately one local lexical subtree. It rejects a
+granted root or readable granted descendant before provider connection because
+the Store batch has no cross-authority durable transaction. It freezes the
+local catalog before analysis, runs each Context as an independent semantic
+frame, prepares every survivor projection, scans the complete local graph for
+inbound References, and binds unchanged graph records plus namespace membership
+through the final batch. A later-frame provider failure, stale Context, new
+namespace member, blocked Reference, or write exception therefore exposes no
+partial command.
 
 The earlier reviewed-resolution capture remains historical evidence for the
 hidden replay adapter. The direct execution capture records compact progress,

@@ -178,7 +178,7 @@
           "docs/quality-finding-handoff-design-rationale.md",
           "docs/resolution-lifecycle-design-rationale.md"
         ],
-        "reason": "Dedun reuses the closed exact-plus-semantic Memory analysis, includes same-role exact Embed and Reference groups, forbids cross-role edges, applies deterministic earliest-UID survivors, and shares Grant revalidation, reference blocking, exact replay, and one checkpointed Apply across exposed routes."
+        "reason": "Dedun reuses the closed exact-plus-semantic analysis, keeps every recursive Context as an independent direct frame, prepares all deterministic earliest-UID survivors before publication, and applies a local lexical subtree as one reference-safe rollback-safe Undoable command unit; direct Grant and exact replay routes retain their existing boundary."
       },
       "dedup": {
         "evidence": [

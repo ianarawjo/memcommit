@@ -41,9 +41,12 @@ mem dedun
   -> print a compact receipt
 ```
 
-The default invocation uses the current Context and expresses immediate Apply
-intent in both TTY and non-TTY environments. `--context NAME` chooses another
-exact Context without changing the global current Context. The survivor rule
+The default invocation and `-d/--direct` use the current exact Context and
+express immediate Apply intent in both TTY and non-TTY environments.
+`--context NAME` chooses another exact Context without changing the global
+current Context. `-r/--recursive` freezes that local lexical subtree and keeps
+every Context as an independent DUN frame; it never forms a cleanup group
+across Contexts or follows embedded Contexts. The survivor rule
 matches exact Dedup's stored-order rule: retain the earliest existing UID in
 each connected group. The detailed provider evidence, members, selections,
 and reasons are stored inside the same checkpoint and reopen through
@@ -86,8 +89,29 @@ not another discovery operation.
   group identities, Grant binding, and reviewed revision are checked at Apply.
 - Granted Apply requires `READ + DERIVE + DELETE`.
 - Inbound References to absorbed owned Memory UIDs block the complete Apply.
-- All deletions publish in one `dedun` / `dedun-v3` checkpoint, or
-  nothing is published. Recovery is `mem undo`.
+- Direct deletions publish in one `dedun` / `dedun-v3` checkpoint. Recursive
+  deletions publish one evidence checkpoint per changed Context, all carrying
+  one validated operation UID and membership list so Undo/Redo treats them as
+  one command unit. Otherwise nothing is published. Recovery is `mem undo`.
+
+## Recursive application boundary
+
+Recursive Dedun is broader in namespace reach, not in semantic relation. The
+command freezes the local Context catalog before any provider turn, analyzes
+each lexical Context separately, and prepares every deterministic survivor
+projection before the first mutation. It then scans the complete local Context
+graph for inbound Memory References and publishes all changed Context records
+with `save_context_command_batch`. Unchanged graph records and the catalog are
+bound through the locked batch so a new child, new Reference, or unrelated
+record change cannot race the safety scan. Expected Context digests protect
+each write, and exception rollback removes provisional records and checkpoints.
+
+Version 1 rejects granted roots and granted descendants before provider
+connection. A cross-Store or authority-domain Apply would need a durable
+transaction and a joint recovery receipt; sequentially applying each Grant was
+rejected because a later revocation or write failure could leave a half-Dedun
+tree. Read-only Find Redundancies may still enumerate readable granted lexical
+names because it has no publication boundary.
 
 ## Presentation boundary and limits
 
@@ -104,7 +128,8 @@ Dedun may remove a fragment from a stored Memory.
 
 The current Dedun contract does not synthesize canonical wording, migrate
 inbound references, deduplicate query-only views, atomize compound Memories,
-or apply one group across multiple Contexts. Rewriting belongs to Normalize,
+or apply one group across multiple Contexts. Recursive reach applies multiple
+independent groups, never one cross-Context group. Rewriting belongs to Normalize,
 Meld, Update, or Fit Resolve; claim-boundary decomposition belongs to Atomize;
 reference migration needs its own reviewed identity contract.
 

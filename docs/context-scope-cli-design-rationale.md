@@ -96,13 +96,16 @@ selected Context record.
 | `find` / ordinary `query` / `summarize` | both traversal axes false | lexical descendants and embedded traversal | operation-specific axis flags override the preset |
 | `find-duplicates` / `dedup` | one exact direct Context | each lexical Context in the frozen subtree, judged independently | recursive Dedup remains within one local Store and never follows embeds |
 | `find-redundancies` | one exact direct Context | each readable lexical Context in the frozen subtree, judged independently | no cross-Context DUN edges and no embedded traversal |
+| `dedun` | one exact direct Context | analyze each local lexical Context independently, then publish all effects as one command unit | recursive Apply rejects granted boundaries and never follows embeds |
 | `compare` / `meld` / `update` / `sever` | every endpoint root | every endpoint subtree | role-qualified long flags override individual endpoints |
 | directional Update `impact` | both endpoint roots | both endpoint subtrees | role-qualified flags; saved-session and Atomize routes reject presets |
 
-Atomize, Forget, Dedun, Ambiguity, and Conflict remain direct-only rather than
+Atomize, Forget, Ambiguity, and Conflict remain direct-only rather than
 recognizing a recursive option that has no executable meaning. Find Duplicates,
-Find Redundancies, and Dedup can enumerate a lexical subtree without changing
-the direct identity or semantic judgment frame used for each Context.
+Find Redundancies, Dedup, and Dedun can enumerate a lexical subtree without
+changing the direct identity or semantic judgment frame used for each Context.
+Applying recursive operations additionally bind namespace membership and
+publish the changed Contexts as one Undoable command unit.
 
 ## Safety and compatibility boundaries
 

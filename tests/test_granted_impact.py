@@ -905,6 +905,39 @@ def test_find_and_quality_finders_read_granted_current_projection(
         assert quality.exit_code == 0, quality.output + quality.stderr
 
 
+def test_recursive_dedun_rejects_granted_boundaries_before_provider(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, _authority, _source, _wiki, _grant = _setup_granted_target(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+        parent_permissions=("READ", "DERIVE", "DELETE"),
+        attachment_name="task-root/participant",
+        public_name="task-root/campus-wiki",
+    )
+    active.set_current("task-root")
+    monkeypatch.setattr(
+        "memcommit.commands.find_duplicates.connect_codex_chatgpt_provider",
+        lambda: (_ for _ in ()).throw(
+            AssertionError("authority rejection must precede provider connection")
+        ),
+    )
+
+    crossing = runner.invoke(app, ["dedun", "task-root", "--recursive"])
+    granted_root = runner.invoke(
+        app,
+        ["dedun", "task-root/campus-wiki", "--recursive"],
+    )
+
+    assert crossing.exit_code == 1
+    assert "cannot cross granted Context boundaries" in crossing.stderr
+    assert granted_root.exit_code == 1
+    assert "cannot start from a granted Context" in granted_root.stderr
+
+
 def test_temporal_find_rejects_granted_view_without_history_access(
     isolated_store,
     tmp_path,

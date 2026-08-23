@@ -475,6 +475,14 @@ def _restored_command(unit: ContextCommandUnit) -> str:
             and isinstance(tree.get("root"), str)
         ):
             return f"mem dedup {_command_arg(tree['root'])} --recursive"
+    if unit.command == "dedun":
+        tree = args.get("dedun_tree")
+        if (
+            isinstance(tree, Mapping)
+            and tree.get("include_descendants") is True
+            and isinstance(tree.get("root"), str)
+        ):
+            return f"mem dedun {_command_arg(tree['root'])} --recursive"
     if unit.command == "embed" and isinstance(args.get("child"), str) and isinstance(
         args.get("into"), str
     ):

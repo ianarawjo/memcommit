@@ -45,6 +45,12 @@ from memcommit.dedup_application import (
     recommended_dedup_selections,
 )
 from memcommit.dedup_runtime import MemoryStoreDedupPort
+from memcommit.dedun_scope import (
+    DedunScopeReceipt,
+    apply_recursive_dedun_scope,
+    freeze_recursive_dedun_scope,
+    prepare_recursive_dedun_scope,
+)
 from memcommit.quality_finding_handoff import (
     QualityFindingSource,
 )
@@ -201,6 +207,7 @@ def _run(
     operation_label = "Dedun" if dedun_handoff else "Find Redundancies"
     progress_label = "DEDUN" if dedun_handoff else "FIND REDUNDANCIES"
     store = MemoryStore(create=False)
+    recursive_dedun = None
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
         access = resolve_context_access(
@@ -209,11 +216,15 @@ def _run(
             current_name=context_snapshot.current_name,
             required_permission="READ",
         )
-        source = freeze_redundancy_scope(
-            store,
-            access,
-            include_descendants=include_descendants,
-        )
+        if dedun_handoff and include_descendants:
+            recursive_dedun = freeze_recursive_dedun_scope(store, access)
+            source = recursive_dedun.source
+        else:
+            source = freeze_redundancy_scope(
+                store,
+                access,
+                include_descendants=include_descendants,
+            )
     except (
         FileNotFoundError,
         OSError,
@@ -261,10 +272,20 @@ def _run(
 
     if dedun_handoff:
         if source.include_descendants:
-            raise ValueError(
-                "Recursive Dedun Apply is not available through the read-only "
-                "Finder stage."
+            assert recursive_dedun is not None
+            port = MemoryStoreDedupPort(
+                store,
+                current_name=context_snapshot.current_name,
+                allow_grants=False,
             )
+            prepared = prepare_recursive_dedun_scope(
+                recursive_dedun,
+                analysis,
+                port=port,
+            )
+            receipt = apply_recursive_dedun_scope(store, prepared)
+            _render_recursive_dedun_receipt(receipt)
+            return
         frame = analysis.contexts[0]
         report = frame.report
         ctx = frame.source.contexts[0]
@@ -377,6 +398,36 @@ def _render_redundancy_scope(analysis: RedundancyScopeAnalysis) -> None:
             typer.echo("  No redundancies.")
 
 
+def _render_recursive_dedun_receipt(receipt: DedunScopeReceipt) -> None:
+    root = display_escape_text(receipt.root_name)
+    if not receipt.absorbed_uids:
+        typer.echo(
+            f"No redundancies under '{root}' "
+            f"({_count(len(receipt.contexts), 'Context')} checked)."
+        )
+        return
+    changed = tuple(frame for frame in receipt.contexts if frame.checkpoint_uid)
+    typer.secho(
+        f"Dedun '{root}' recursively: absorbed "
+        f"{len(receipt.absorbed_uids)} redundant direct item(s) in "
+        f"{len(changed)}/{len(receipt.contexts)} Context(s); kept "
+        f"{len(receipt.survivor_uids)} original UID(s).",
+        fg=typer.colors.GREEN,
+    )
+    for frame in changed:
+        typer.echo(
+            f"CONTEXT · {display_escape_text(frame.context_name)} · "
+            f"{len(frame.absorbed_uids)} absorbed · checkpoint "
+            f"[{frame.checkpoint_uid[:8]}] · review: "
+            f"mem review dedun --receipt {frame.checkpoint_uid}"
+        )
+    assert receipt.operation_uid is not None
+    typer.echo(
+        f"Operation [{receipt.operation_uid[:8]}] · recovery: "
+        "mem undo (one command unit)"
+    )
+
+
 def cmd(
     context_operand: Annotated[
         Optional[str],
@@ -460,6 +511,7 @@ def run_dedun(
     *,
     context_name: str | None,
     evidence_json: bool,
+    include_descendants: bool = False,
 ) -> None:
     """Analyze and immediately apply complete exact-plus-semantic DUN groups."""
 
@@ -467,7 +519,7 @@ def run_dedun(
         context_name=context_name,
         evidence_json=evidence_json,
         dedun_handoff=True,
-        include_descendants=False,
+        include_descendants=include_descendants,
     )
 
 

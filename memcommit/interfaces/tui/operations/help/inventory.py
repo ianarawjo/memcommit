@@ -456,6 +456,8 @@ COMMAND_FORMS = {
         "mem dedun (immediately resolve exact plus semantic DUN groups in the current Context)",
         "mem dedun [context] (immediately resolve one explicit Context)",
         "mem dedun --context [context] (compatibility alias)",
+        "mem dedun -d (apply to the exact Context root; default)",
+        "mem dedun -r (atomically apply independent DUN groups across a local lexical subtree)",
     ),
     "atomize": (
         "mem atomize (atomize the current Context now; inspect the saved analysis with mem review)",

@@ -8,6 +8,10 @@ import typer
 
 from memcommit.commands import consolidate, find_duplicates
 from memcommit.commands.context_operand import choose_context_operand
+from memcommit.context_targeting.presets import (
+    ContextScopePreset,
+    resolve_scope_preset,
+)
 from memcommit.interfaces.console.text import display_escape_text
 
 
@@ -55,6 +59,22 @@ def cmd(
         bool,
         typer.Option("--tui", hidden=True),
     ] = False,
+    direct: Annotated[
+        bool,
+        typer.Option(
+            "--direct",
+            "-d",
+            help="Dedun the exact Context root only (default)",
+        ),
+    ] = False,
+    recursive: Annotated[
+        bool,
+        typer.Option(
+            "--recursive",
+            "-r",
+            help="Atomically Dedun each local lexical Context independently",
+        ),
+    ] = False,
 ) -> None:
     """Find and resolve complete DUN groups while preserving one existing UID."""
 
@@ -62,6 +82,11 @@ def cmd(
         context_name = choose_context_operand(
             context_operand,
             option=context_name,
+        )
+        preset = resolve_scope_preset(
+            direct=direct,
+            recursive=recursive,
+            default=ContextScopePreset.DIRECT,
         )
     except ValueError as error:
         typer.secho(
@@ -80,7 +105,7 @@ def cmd(
         or tui
     )
     if replay_requested:
-        if context_name is not None or evidence_json:
+        if context_name is not None or evidence_json or direct or recursive:
             typer.secho(
                 "Dedun error: discovery options cannot be combined with an exact "
                 "review replay.",
@@ -101,6 +126,7 @@ def cmd(
         find_duplicates.run_dedun(
             context_name=context_name,
             evidence_json=evidence_json,
+            include_descendants=preset is ContextScopePreset.RECURSIVE,
         )
     except typer.Exit:
         raise

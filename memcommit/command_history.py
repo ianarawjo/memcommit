@@ -394,6 +394,33 @@ def command_unit_uid(
         ):
             raise CommandHistoryError("Recursive exact Dedup receipt is invalid.")
         return f"dedup:{operation_uid}"
+    if command == "dedun" and "dedun_tree" in args:
+        record = args.get("dedun_tree")
+        expected_fields = {
+            "version",
+            "operation_uid",
+            "root",
+            "include_descendants",
+        }
+        if not isinstance(record, dict) or set(record) != expected_fields:
+            raise CommandHistoryError("Recursive Dedun receipt is invalid.")
+        operation_uid = record.get("operation_uid")
+        root = record.get("root")
+        try:
+            canonical_uid = str(uuid.UUID(operation_uid))
+        except (AttributeError, TypeError, ValueError) as error:
+            raise CommandHistoryError(
+                "Recursive Dedun operation identity is invalid."
+            ) from error
+        if (
+            record.get("version") != 1
+            or operation_uid != canonical_uid
+            or not isinstance(root, str)
+            or not root
+            or record.get("include_descendants") is not True
+        ):
+            raise CommandHistoryError("Recursive Dedun receipt is invalid.")
+        return f"dedun:{operation_uid}"
     return f"checkpoint:{checkpoint_uid}"
 
 
