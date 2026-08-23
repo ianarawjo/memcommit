@@ -144,7 +144,9 @@
       "docs/context-listing-design-rationale.md",
       "docs/mem-ls-design-rationale.md"
     ],
-    "lock": [],
+    "lock": [
+      "docs/mem-write-protection-design-rationale.md"
+    ],
     "log": [
       "docs/command-attempt-ledger-design-rationale.md",
       "docs/mem-history-search-design-rationale.md"
@@ -247,7 +249,9 @@
     ],
     "translate": [],
     "undo": [],
-    "unlock": [],
+    "unlock": [
+      "docs/mem-write-protection-design-rationale.md"
+    ],
     "update": [
       "docs/context-locator-design-rationale.md",
       "docs/update-application-boundary-matrix.md",

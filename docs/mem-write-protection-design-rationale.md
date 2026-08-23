@@ -11,21 +11,36 @@ The user-facing protection surface is:
 
 ```text
 mem lock | mem unlock
-mem lock --recursive | mem unlock --recursive
-mem lock context [CONTEXT] [--recursive]
-mem unlock context [CONTEXT] [--recursive]
-mem lock memory SELECTOR [--context CONTEXT]
-mem unlock memory SELECTOR [--context CONTEXT]
-mem lock profile | mem unlock profile
+mem lock TARGET [--recursive] | mem unlock TARGET [--recursive]
+mem lock --context CONTEXT [--recursive]
+mem unlock --context CONTEXT [--recursive]
+mem lock --memory SELECTOR [--context CONTEXT]
+mem unlock --memory SELECTOR [--context CONTEXT]
+mem lock --profile | mem unlock --profile
 ```
 
-Bare lock and unlock target the current Context. Context subcommands also
-default to that target. Explicit operands use the ordinary existing-Context
-locator contract, including `.`, `..`, `./...`, and `../...`, resolved against
-one current-name snapshot captured at command start. Memory selectors resolve
-only a directly owned `Memory` by exact UID or unambiguous UID prefix. Embedded
-Contexts, `MemoryRef` pointers, and query-only references are not lockable as
-Memories.
+Bare lock and unlock target the current Context. A positional `TARGET` uses the
+shared direct-Memory locator grammar: an eight-or-more-character UUID-shaped
+operand or `CONTEXT:UID` selects Memory, and every other operand selects an
+existing Context. A bare Memory selector scans one strict snapshot of every
+ordinary local direct Context and must have exactly one owner; a qualified
+selector searches only its canonical owner. `--memory` explicitly types a
+shorter prefix, while `--context` qualifies its owner or, without `--memory`,
+selects an explicit Context. All Context locators, including `.`, `..`,
+`./...`, and `../...`, resolve against one current-name snapshot captured at
+command start.
+
+Profile is deliberately explicit through `--profile`: `profile` is otherwise a
+valid existing Context name and cannot safely participate in Context/Memory
+shape classification. The former `context`, `memory`, and `profile` subcommand
+forms remain compatibility routes. Consequently `mem lock profile` retains its
+historical active-Profile meaning, while `mem lock --context profile` selects a
+Context literally named `profile`.
+
+Memory targets resolve only a directly owned `Memory`. Embedded Contexts,
+`MemoryRef` pointers, and query-only references are not lockable as Memories.
+`--direct` and `--recursive` are rejected for Memory and Profile targets before
+protection metadata changes.
 
 Lock and unlock are explicit, reversible policy changes and therefore do not
 ask for an additional confirmation. Repeating the same operation is an
@@ -158,3 +173,19 @@ policy and must retain their own explicit safety checks.
   enforcement.
 - Query-only sources remain governed by their existing authority and privacy
   boundary; ordinary `mem lock` does not open or convert them.
+
+## Operand alternatives considered
+
+- **Keep resource-kind subcommands as the primary grammar:** rejected because
+  Context and direct-Memory operands already have a shared, storage-independent
+  classifier. Requiring `context` or `memory` only for protection made the same
+  locator change meaning at the command boundary and prevented the ordinary
+  `mem lock CONTEXT` form.
+- **Resolve every nonempty target by searching both Context and Memory
+  storage:** rejected because operand meaning would then depend on unrelated
+  namespace occupancy. The shared UUID-shape and `CONTEXT:UID` grammar keeps
+  classification deterministic before storage lookup.
+- **Treat bare `profile` as part of automatic resource classification:**
+  rejected because it collides with a valid Context name. `--profile` is the
+  canonical explicit spelling; the bare word remains only as a compatibility
+  command.

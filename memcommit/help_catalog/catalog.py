@@ -370,7 +370,10 @@ _OPERATIONS = (
     ),
     _operation(
         "lock",
-        "Lock the current Context, a recursive Context set, Memory, or Profile.",
+        (
+            "Lock the current Context, an auto-typed Context or direct Memory "
+            "target, a recursive Context set, or the explicit Profile."
+        ),
         "Resource -> write-protected resource",
         ExecutionKind.DETERMINISTIC,
         "Changes protection metadata",
@@ -585,7 +588,10 @@ _OPERATIONS = (
     ),
     _operation(
         "unlock",
-        "Unlock the current Context, a recursive set, Memory, or Profile.",
+        (
+            "Unlock the current Context, an auto-typed Context or direct Memory "
+            "target, a recursive Context set, or the explicit Profile."
+        ),
         "Protected resource -> writable resource",
         ExecutionKind.DETERMINISTIC,
         "Changes protection metadata",

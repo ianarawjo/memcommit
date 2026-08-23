@@ -380,16 +380,24 @@ Memory, or the active Profile from later writes:
 mem lock
 mem unlock
 mem lock --recursive
-mem lock context
-mem lock context CONTEXT [--recursive]
-mem unlock context CONTEXT [--recursive]
-mem lock memory MEMORY_UID [--context CONTEXT]
-mem unlock memory MEMORY_UID [--context CONTEXT]
-mem lock profile
-mem unlock profile
+mem lock CONTEXT [--recursive]
+mem unlock CONTEXT [--recursive]
+mem lock MEMORY_UID
+mem unlock CONTEXT:MEMORY_UID
+mem lock --memory SHORT_PREFIX [--context CONTEXT]
+mem unlock --memory SHORT_PREFIX [--context CONTEXT]
+mem lock --profile
+mem unlock --profile
 ```
 
-Bare `lock` and `unlock` target the current Context. A Context lock blocks
+Bare `lock` and `unlock` target the current Context. A positional target uses
+the shared locator grammar: a Context name selects that Context, while a
+UUID-shaped Memory selector or `CONTEXT:UID` selects one directly owned Memory.
+A bare Memory selector scans every ordinary local Context and must have one
+unique direct owner; `--memory` explicitly types a shorter prefix, and
+`--context` qualifies its owner. The former `context`, `memory`, and `profile`
+subcommand forms remain accepted for compatibility, while `--profile` is the
+unambiguous active-Profile spelling. A Context lock blocks
 record changes, rename, and deletion but still permits reads, checkpoints,
 switching, and branching to a new writable Context identity. `--recursive`
 atomically applies that policy to the root and its existing lexical descendants;

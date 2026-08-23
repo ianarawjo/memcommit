@@ -1,4 +1,5 @@
 """Persistent Context and direct-Memory write-protection contracts."""
+
 from __future__ import annotations
 
 import json
@@ -50,12 +51,126 @@ def test_help_exposes_bare_recursive_context_memory_and_profile_targets():
         for line in inventory.output.splitlines()
     )
     assert lock_help.exit_code == 0
+    assert "[TARGET]" in lock_help.output
     assert "--recursive" in lock_help.output
+    assert "--memory" in lock_help.output
+    assert "--profile" in lock_help.output
     assert "context" in lock_help.output
     assert "memory" in lock_help.output
     assert "profile" in lock_help.output
     assert context_help.exit_code == 0
     assert "--recursive" in context_help.output
+
+
+def test_auto_target_cli_classifies_context_and_unique_direct_memory(
+    isolated_store,
+):
+    assert invoke("init", "target/context").exit_code == 0
+    assert invoke("add", "protected memory").exit_code == 0
+    store = MemoryStore()
+    context = store.load_direct("target/context")
+    memory = _first_memory(store, "target/context")
+    assert invoke("init", "other").exit_code == 0
+
+    locked_context = invoke("lock", "target/context")
+    assert locked_context.exit_code == 0
+    assert "Locked Context 'target/context'" in locked_context.output
+    assert store.write_protection_state().context_is_protected(context.uid)
+    assert invoke("unlock", "target/context").exit_code == 0
+
+    locked_memory = invoke("lock", memory.uid[:8])
+    assert locked_memory.exit_code == 0
+    assert "Locked Memory" in locked_memory.output
+    assert memory.uid in store.write_protection_state().protected_memory_uids(
+        context.uid
+    )
+    assert (
+        invoke(
+            "unlock",
+            f"target/context:{memory.uid[:8]}",
+        ).exit_code
+        == 0
+    )
+
+
+def test_explicit_target_options_cover_short_memory_prefix_and_profile(
+    isolated_store,
+):
+    assert invoke("init", "protected").exit_code == 0
+    assert invoke("add", "keep").exit_code == 0
+    store = MemoryStore()
+    context = store.load_direct("protected")
+    memory = _first_memory(store, "protected")
+
+    assert (
+        invoke(
+            "lock",
+            "--memory",
+            memory.uid[:4],
+            "--context",
+            "protected",
+        ).exit_code
+        == 0
+    )
+    assert memory.uid in store.write_protection_state().protected_memory_uids(
+        context.uid
+    )
+    assert (
+        invoke(
+            "unlock",
+            "--memory",
+            memory.uid[:4],
+            "--context",
+            "protected",
+        ).exit_code
+        == 0
+    )
+
+    assert invoke("lock", "--context", "protected").exit_code == 0
+    assert store.write_protection_state().context_is_protected(context.uid)
+    assert invoke("unlock", "--context", "protected").exit_code == 0
+
+    assert invoke("lock", "--profile").exit_code == 0
+    assert store.write_protection_state().profile_is_protected()
+    assert invoke("unlock", "--profile").exit_code == 0
+    assert not store.write_protection_state().profile_is_protected()
+
+
+def test_auto_memory_target_fails_closed_on_multiple_direct_owners(
+    isolated_store,
+):
+    assert invoke("init", "source").exit_code == 0
+    assert invoke("add", "shared lineage").exit_code == 0
+    store = MemoryStore()
+    memory = _first_memory(store, "source")
+    assert invoke("branch", "working").exit_code == 0
+
+    ambiguous = invoke("lock", memory.uid[:8])
+    assert ambiguous.exit_code == 1
+    assert "multiple local matches" in _all_output(ambiguous)
+    assert store.write_protection_state().is_empty
+
+    qualified = invoke("lock", f"working:{memory.uid[:8]}")
+    assert qualified.exit_code == 0
+    working = store.load_direct("working")
+    assert memory.uid in store.write_protection_state().protected_memory_uids(
+        working.uid
+    )
+
+
+def test_context_scope_flags_reject_auto_memory_target_without_mutation(
+    isolated_store,
+):
+    assert invoke("init", "protected").exit_code == 0
+    assert invoke("add", "keep").exit_code == 0
+    store = MemoryStore()
+    memory = _first_memory(store, "protected")
+
+    result = invoke("lock", memory.uid[:8], "--recursive")
+    assert result.exit_code == 2
+    assert "apply only to a Context target" in _all_output(result)
+    assert "_target" not in _all_output(result)
+    assert store.write_protection_state().is_empty
 
 
 def test_context_lock_cli_blocks_changes_but_allows_checkpoint_and_branch(
@@ -142,7 +257,7 @@ def test_recursive_context_lock_uses_a_frozen_existing_namespace_snapshot(
     assert not store.write_protection_state().context_is_protected(later.uid)
 
     assert invoke("switch", "tree").exit_code == 0
-    unlocked = invoke("unlock", "context", "tree", "-r")
+    unlocked = invoke("unlock", "tree", "-r")
     assert unlocked.exit_code == 0
     assert "4 Contexts, 3 changed" in unlocked.output
     assert not store.write_protection_state().context_uids
@@ -246,9 +361,7 @@ def test_memory_lock_blocks_only_that_direct_occurrence(isolated_store):
     assert invoke("add", "second").exit_code == 0
     store = MemoryStore()
     context = store.load_direct("memories")
-    first, second = [
-        item for item in context.iter_items() if isinstance(item, Memory)
-    ]
+    first, second = [item for item in context.iter_items() if isinstance(item, Memory)]
 
     locked = invoke("lock", "memory", first.uid[:8])
     assert locked.exit_code == 0
@@ -300,11 +413,13 @@ def test_memory_lock_does_not_follow_uid_copy_into_branch(isolated_store):
     assert invoke("lock", "memory", memory.uid).exit_code == 0
 
     assert invoke("branch", "working").exit_code == 0
-    assert invoke("edit", memory.uid, "branch edit").exit_code == 0
+    # Branching deliberately duplicates the Memory UID, so the shared direct-
+    # Memory grammar requires an owner-qualified selector after the copy exists.
+    assert invoke("edit", f"working:{memory.uid}", "branch edit").exit_code == 0
     assert store.load_direct("working").memories[memory.uid].content == "branch edit"
 
     assert invoke("switch", "source").exit_code == 0
-    assert invoke("edit", memory.uid, "source edit").exit_code == 1
+    assert invoke("edit", f"source:{memory.uid}", "source edit").exit_code == 1
     assert store.load_direct("source").memories[memory.uid].content == (
         "shared lineage"
     )
@@ -355,9 +470,7 @@ def test_relocation_cannot_rewrite_a_locked_inbound_reference_owner(
         WriteProtectionError,
         match="Context 'locked-owner' is locked against changes",
     ):
-        store.rename_contexts(
-            store.plan_context_rename(target.name, "renamed-target")
-        )
+        store.rename_contexts(store.plan_context_rename(target.name, "renamed-target"))
     assert store.context_exists(target.name)
     assert not store.context_exists("renamed-target")
 
