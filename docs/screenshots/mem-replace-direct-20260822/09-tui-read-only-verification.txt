@@ -1,0 +1,10 @@
+PTY 180 52                                                                                                                                                                          
+COMMAND · mem replace --context replace/demo                                                                                                                                        
+Replaced 3 occurrences in 2 Memories across 2 Contexts.                                                                                                                             
+Undo can restore this command.                                                                                                                                                      
+COMMAND EXIT · 0                                                                                                                                                                    
+                                                                                                                                                                                    
+TUI · READ-ONLY STORE VERIFICATION                                                                                                                                                  
+replace/demo [20000000] · The author signs contracts; every author revises drafts.                                                                                                  
+replace/demo/child [20000000] · A author reviews the child draft.                                                                                                                   
+CHECKPOINTS · 2

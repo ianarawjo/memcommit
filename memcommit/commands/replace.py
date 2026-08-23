@@ -1,4 +1,4 @@
-"""CLI bootstrap for reviewed, deterministic multi-Context Replace."""
+"""CLI bootstrap for direct, deterministic multi-Context Replace."""
 
 from __future__ import annotations
 
@@ -13,10 +13,7 @@ from memcommit.context_targeting.presets import (
     resolve_context_traversal,
     resolve_scope_preset,
 )
-from memcommit.interfaces.cli.replace import (
-    render_replace_apply_result,
-    render_replace_plan,
-)
+from memcommit.interfaces.cli.replace import render_replace_apply_result
 from memcommit.interfaces.console import (
     ConsoleMode,
     ConsoleModeError,
@@ -30,15 +27,8 @@ from memcommit.interfaces.tui.operations.replace import (
 )
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
-from memcommit.replace_application import (
-    FrozenReplacePlan,
-    ReplaceError,
-    ReplaceRequest,
-)
-from memcommit.replace_runtime import (
-    MemoryStoreReplacePort,
-    execute_replace_plan,
-)
+from memcommit.replace_application import ReplaceError, ReplaceRequest
+from memcommit.replace_runtime import execute_replace_with_store
 from memcommit.store import MemoryStore
 
 
@@ -110,37 +100,25 @@ def cmd(
             help="Replace each match with empty text",
         ),
     ] = False,
-    apply_digest: Annotated[
-        Optional[str],
-        typer.Option(
-            "--apply",
-            metavar="PLAN_DIGEST",
-            help="Reviewed plan digest required to apply",
-        ),
-    ] = None,
     plain: Annotated[
         bool,
-        typer.Option("--plain", help="Print the plan instead of opening the TUI"),
+        typer.Option("--plain", help="Print an ANSI-free execution receipt"),
     ] = False,
     tui: Annotated[
         bool,
-        typer.Option("--tui", help="Require the interactive Replace workbench"),
+        typer.Option("--tui", help="Edit the request in compact interactive Replace"),
     ] = False,
 ) -> None:
-    """Preview exact replacements, then apply one reviewed atomic command."""
+    """Replace exact matches immediately as one atomic Undoable command."""
 
     try:
         mode = resolve_console_mode(plain=plain, tui=tui)
         if delete_match and replacement is not None:
             raise ValueError("REPLACEMENT and --delete-match cannot be used together.")
-        if apply_digest is not None and tui:
-            raise ValueError("--apply executes the reviewed plan and cannot use --tui.")
 
         terminal = SystemTerminalCapabilities()
         if pattern is None and (
-            mode is ConsoleMode.PLAIN
-            or apply_digest is not None
-            or not terminal.is_interactive()
+            mode is ConsoleMode.PLAIN or not terminal.is_interactive()
         ):
             raise ValueError(
                 "PATTERN is required outside a terminal. In a terminal, run "
@@ -150,11 +128,7 @@ def cmd(
             pattern is not None
             and replacement is None
             and not delete_match
-            and (
-                mode is ConsoleMode.PLAIN
-                or apply_digest is not None
-                or not terminal.is_interactive()
-            )
+            and (mode is ConsoleMode.PLAIN or not terminal.is_interactive())
         ):
             raise ValueError(
                 "REPLACEMENT or --delete-match is required outside the TUI."
@@ -199,37 +173,13 @@ def cmd(
             )
         )
 
-        ports: dict[int, MemoryStoreReplacePort] = {}
-
-        def prepare(next_request: ReplaceRequest) -> FrozenReplacePlan:
-            port = MemoryStoreReplacePort(store)
-            from memcommit.replace_application import plan_replace
-
-            plan = plan_replace(next_request, port=port)
-            ports[id(plan)] = port
-            return plan
-
-        def apply(plan: FrozenReplacePlan):
-            port = ports.pop(id(plan), None)
-            if port is None:
-                raise RuntimeError("Replace plan is no longer owned by this command.")
-            return execute_replace_plan(plan, port=port)
-
-        if apply_digest is not None:
-            assert request is not None
-            plan = prepare(request)
-            if plan.plan_digest != apply_digest:
-                raise ValueError(
-                    "Replace plan digest does not match the reviewed plan; preview again."
-                )
-            result = apply(plan)
-            if not result.applied:
-                annotate_command_outcome("NO_CHANGE")
-            typer.echo(render_replace_apply_result(result))
-            return
+        def execute(next_request: ReplaceRequest):
+            return execute_replace_with_store(next_request, store=store)
 
         if mode is ConsoleMode.TUI or (
-            mode is ConsoleMode.AUTO and terminal.is_interactive()
+            mode is ConsoleMode.AUTO
+            and terminal.is_interactive()
+            and (pattern is None or (replacement is None and not delete_match))
         ):
             names = tuple(store.list_context_names())
             current = snapshot.current_name
@@ -241,20 +191,22 @@ def cmd(
                     current_name=current_name,
                     initial_targets=canonical_targets,
                 ),
-                prepare=prepare,
-                apply=apply,
+                execute=execute,
             )
             if outcome is None:
                 annotate_command_outcome("CANCELLED")
                 typer.echo("Replace closed.")
-            elif outcome.apply_result is None:
-                annotate_command_outcome("CANCELLED")
-            elif not outcome.apply_result.applied:
-                annotate_command_outcome("NO_CHANGE")
+            else:
+                if not outcome.applied:
+                    annotate_command_outcome("NO_CHANGE")
+                typer.echo(render_replace_apply_result(outcome))
             return
 
         assert request is not None
-        typer.echo(render_replace_plan(prepare(request)))
+        result = execute(request)
+        if not result.applied:
+            annotate_command_outcome("NO_CHANGE")
+        typer.echo(render_replace_apply_result(result))
     except (
         ConsoleModeError,
         FileNotFoundError,

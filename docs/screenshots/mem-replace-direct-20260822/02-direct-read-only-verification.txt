@@ -1,0 +1,10 @@
+PTY 180 52                                                                                                                                                                          
+COMMAND · mem replace writer author --context replace/demo                                                                                                                          
+Replaced 2 occurrences in 1 Memory in 'replace/demo'.                                                                                                                               
+Undo can restore this command.                                                                                                                                                      
+COMMAND EXIT · 0                                                                                                                                                                    
+                                                                                                                                                                                    
+DIRECT · READ-ONLY STORE VERIFICATION                                                                                                                                               
+replace/demo [20000000] · The author signs contracts; every author revises drafts.                                                                                                  
+replace/demo/child [20000000] · A writer reviews the child draft.                                                                                                                   
+CHECKPOINTS · 1

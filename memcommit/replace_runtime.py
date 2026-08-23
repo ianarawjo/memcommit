@@ -141,7 +141,7 @@ class MemoryStoreReplacePort(ReplacePort):
     def _revalidate_without_write(self, token: _StoreReplaceToken) -> None:
         if tuple(self._store.list_context_names()) != token.context_catalog:
             raise ReplaceStalePlanError(
-                "The local Context namespace changed after Replace review."
+                "The local Context namespace changed during Replace execution."
             )
         for frame in token.frames:
             try:
@@ -155,7 +155,7 @@ class MemoryStoreReplacePort(ReplacePort):
                 or context_record_digest(current) != frame.expected_digest
             ):
                 raise ReplaceStalePlanError(
-                    f"Replace Context '{frame.context.name}' changed after review."
+                    f"Replace Context '{frame.context.name}' changed during execution."
                 )
 
     def apply(self, plan: FrozenReplacePlan) -> ReplaceApplyResult:
@@ -185,9 +185,12 @@ class MemoryStoreReplacePort(ReplacePort):
             frame = frames[context_plan.context_name]
             for change in context_plan.changed_matches:
                 current = frame.context.memories.get(change.memory_uid)
-                if not isinstance(current, Memory) or current.content != change.before_content:
+                if (
+                    not isinstance(current, Memory)
+                    or current.content != change.before_content
+                ):
                     raise ReplaceError(
-                        "Replace opaque source does not match its reviewed Memory."
+                        "Replace opaque source changed during execution."
                     )
                 frame.context.replace(
                     Memory(uid=change.memory_uid, content=change.after_content)
@@ -234,7 +237,11 @@ class MemoryStoreReplacePort(ReplacePort):
                 expected_context_catalog=token.context_catalog,
             )
         except ConcurrentContextUpdateError as error:
-            raise ReplaceStalePlanError(str(error)) from error
+            message = str(error).replace(
+                "after the command was reviewed",
+                "during Replace execution",
+            )
+            raise ReplaceStalePlanError(message) from error
         receipts = tuple(
             ReplaceCheckpoint(
                 context_name=context.context_name,
@@ -280,8 +287,25 @@ def execute_replace_plan(
     return apply_replace(plan, port=port)
 
 
+def execute_replace_with_store(
+    request: ReplaceRequest,
+    *,
+    store: MemoryStore,
+) -> ReplaceApplyResult:
+    """Freeze and atomically apply one deterministic request in one turn.
+
+    The frozen plan remains an internal concurrency boundary. Human command
+    adapters do not need to expose a second approval step for an exact,
+    provider-free operation whose complete effect is immediately Undoable.
+    """
+
+    plan, port = plan_replace_with_store(request, store=store)
+    return execute_replace_plan(plan, port=port)
+
+
 __all__ = [
     "MemoryStoreReplacePort",
     "execute_replace_plan",
+    "execute_replace_with_store",
     "plan_replace_with_store",
 ]

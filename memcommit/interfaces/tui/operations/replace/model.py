@@ -4,8 +4,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.replace_application import FrozenReplacePlan, ReplaceApplyResult
-
 
 @dataclass(frozen=True, slots=True)
 class ReplaceTuiSetup:
@@ -30,10 +28,4 @@ class ReplaceTuiSetup:
             raise ValueError("Replace TUI targets are outside the local catalog.")
 
 
-@dataclass(frozen=True, slots=True)
-class ReplaceTuiOutcome:
-    plan: FrozenReplacePlan
-    apply_result: ReplaceApplyResult | None = None
-
-
-__all__ = ["ReplaceTuiOutcome", "ReplaceTuiSetup"]
+__all__ = ["ReplaceTuiSetup"]

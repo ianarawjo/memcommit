@@ -1,5 +1,11 @@
 # `mem replace` interactive evidence
 
+> Historical capture: this plan/review/Apply interface was replaced on
+> 2026-08-22 by direct CLI execution and the compact primary-screen form in
+> [`../mem-replace-direct-20260822/`](../mem-replace-direct-20260822/). The
+> files below preserve the superseded interaction for design-history study;
+> they do not describe the current command contract.
+
 Captured on 2026-08-16 from the repository command adapter in a real
 color-capable `180×52` PTY (`TERM=xterm-256color`, `COLORTERM=truecolor`, and
 `NO_COLOR` removed). Every run used a fresh temporary `MemoryStore`; no Study

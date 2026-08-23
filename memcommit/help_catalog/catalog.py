@@ -182,10 +182,10 @@ _OPERATIONS = (
     ),
     _operation(
         "replace",
-        "Preview and replace every literal or explicit regular-expression match in ordinary local Memories.",
-        "Text pattern + replacement + local Context scope -> reviewed exact changes -> atomic Apply",
+        "Immediately replace every literal or explicit regular-expression match in ordinary local Memories as one Undoable command.",
+        "Text pattern + replacement + local Context scope -> atomic replacement receipt",
         ExecutionKind.DETERMINISTIC,
-        "Read-only preview; Apply changes matched local Memories in one Undo/Redo command unit",
+        "Immediately changes matched local Memories in one Undo/Redo command unit",
         "One or more local roots; lexical descendants and embedded owners are independent",
     ),
     _operation(

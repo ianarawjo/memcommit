@@ -1,14 +1,14 @@
-"""Public command route tests for reviewed deterministic Replace."""
+"""Public command route tests for direct deterministic Replace."""
 
 from __future__ import annotations
 
-import re
-
 from typer.testing import CliRunner
 
+import memcommit.commands.replace as replace_command
 import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.context import Memory
+from memcommit.replace_application import ReplaceRequest
 from memcommit.store import MemoryStore
 
 
@@ -23,13 +23,30 @@ def _memory_contents(store: MemoryStore, name: str) -> tuple[str, ...]:
     )
 
 
-def _digest(output: str) -> str:
-    matched = re.search(r"^PLAN DIGEST · ([0-9a-f]{64})$", output, re.MULTILINE)
-    assert matched is not None, output
-    return matched.group(1)
+def test_replace_executes_immediately_and_is_one_undoable_command(
+    isolated_store,
+) -> None:
+    context = ops.init("replace/source")
+    ops.add(context, "old and old")
+    store = MemoryStore()
+    store.save(context)
+    store.set_current(context.name)
+
+    result = runner.invoke(app, ["replace", "old", "new"])
+
+    assert result.exit_code == 0, result.output + result.stderr
+    assert result.output == (
+        "Replaced 2 occurrences in 1 Memory in 'replace/source'.\n"
+        "Undo can restore this command.\n"
+    )
+    assert _memory_contents(store, context.name) == ("new and new",)
+
+    undone = runner.invoke(app, ["undo"])
+    assert undone.exit_code == 0, undone.output + undone.stderr
+    assert _memory_contents(store, context.name) == ("old and old",)
 
 
-def test_replace_plain_previews_every_change_without_mutating(isolated_store) -> None:
+def test_replace_plain_is_execution_format_not_preview(isolated_store) -> None:
     context = ops.init("replace/source")
     ops.add(context, "Needle one; needle two.")
     store = MemoryStore()
@@ -42,77 +59,73 @@ def test_replace_plain_previews_every_change_without_mutating(isolated_store) ->
     )
 
     assert result.exit_code == 0, result.output + result.stderr
-    assert "REPLACE PLAN · READY FOR REVIEW" in result.output
-    assert "MATCHED 1 · CHANGED 1 · OCCURRENCES 2" in result.output
-    assert "+ pin one; pin two." in result.output
-    assert _memory_contents(store, context.name) == ("Needle one; needle two.",)
+    assert "PLAN" not in result.output
+    assert "Replaced 2 occurrences in 1 Memory" in result.output
+    assert _memory_contents(store, context.name) == ("pin one; pin two.",)
 
 
-def test_replace_apply_requires_and_consumes_exact_reviewed_digest(
-    isolated_store,
-) -> None:
+def test_replace_no_match_reports_no_change_without_checkpoint(isolated_store) -> None:
     context = ops.init("replace/source")
-    ops.add(context, "old and old")
+    ops.add(context, "Nothing relevant.")
     store = MemoryStore()
     store.save(context)
     store.set_current(context.name)
 
-    preview = runner.invoke(app, ["replace", "--plain", "old", "new"])
-    assert preview.exit_code == 0, preview.output + preview.stderr
+    result = runner.invoke(app, ["replace", "writer", "author"])
 
-    applied = runner.invoke(
-        app,
-        ["replace", "old", "new", "--apply", _digest(preview.output)],
-    )
-
-    assert applied.exit_code == 0, applied.output + applied.stderr
-    assert "REPLACE APPLIED" in applied.output
-    assert "STATUS · APPLIED · MATCHED 1 · CHANGED 1 · OCCURRENCES 2" in applied.output
-    assert _memory_contents(store, context.name) == ("new and new",)
+    assert result.exit_code == 0, result.output + result.stderr
+    assert result.output == "No matches. Nothing changed.\n"
+    assert store.list_checkpoints(context.name) == []
+    assert _memory_contents(store, context.name) == ("Nothing relevant.",)
 
 
-def test_replace_rejects_unreviewed_or_stale_digest_without_mutation(
-    isolated_store,
-) -> None:
-    context = ops.init("replace/source")
-    ops.add(context, "old")
+def test_replace_delete_match_and_regex_execute_explicitly(isolated_store) -> None:
+    literal_context = ops.init("replace/literal")
+    ops.add(literal_context, "token-12 and token-34")
+    regex_context = ops.init("replace/regex")
+    ops.add(regex_context, "token-12 and token-34")
+    delete_context = ops.init("replace/delete")
+    ops.add(delete_context, "token-12 and token-34")
     store = MemoryStore()
-    store.save(context)
-    store.set_current(context.name)
-
-    result = runner.invoke(app, ["replace", "old", "new", "--apply", "0" * 64])
-
-    assert result.exit_code == 1
-    assert "does not match the reviewed plan" in result.stderr
-    assert _memory_contents(store, context.name) == ("old",)
-
-
-def test_replace_delete_match_and_regex_are_explicit(isolated_store) -> None:
-    context = ops.init("replace/source")
-    ops.add(context, "token-12 and token-34")
-    store = MemoryStore()
-    store.save(context)
-    store.set_current(context.name)
+    for context in (literal_context, regex_context, delete_context):
+        store.save(context)
+    store.set_current(literal_context.name)
 
     literal = runner.invoke(
         app,
-        ["replace", "--plain", r"token-\d+", "value"],
+        ["replace", "--context", literal_context.name, r"token-\d+", "value"],
     )
     regex = runner.invoke(
         app,
-        ["replace", "--plain", "--regex", r"token-\d+", "value"],
+        [
+            "replace",
+            "--context",
+            regex_context.name,
+            "--regex",
+            r"token-\d+",
+            "value",
+        ],
     )
     delete = runner.invoke(
         app,
-        ["replace", "--plain", "token-", "--delete-match"],
+        [
+            "replace",
+            "--context",
+            delete_context.name,
+            "token-",
+            "--delete-match",
+        ],
     )
 
     assert literal.exit_code == 0, literal.output + literal.stderr
-    assert "MATCHED 0" in literal.output
+    assert literal.output == "No matches. Nothing changed.\n"
     assert regex.exit_code == 0, regex.output + regex.stderr
-    assert "MATCHED 1 · CHANGED 1 · OCCURRENCES 2" in regex.output
+    assert "Replaced 2 occurrences in 1 Memory" in regex.output
     assert delete.exit_code == 0, delete.output + delete.stderr
-    assert "REPLACEMENT · (empty · remove matched text)" in delete.output
+    assert "Replaced 2 occurrences in 1 Memory" in delete.output
+    assert _memory_contents(store, literal_context.name) == ("token-12 and token-34",)
+    assert _memory_contents(store, regex_context.name) == ("value and value",)
+    assert _memory_contents(store, delete_context.name) == ("12 and 34",)
 
 
 def test_replace_resolves_all_relative_roots_from_one_current_snapshot(
@@ -131,7 +144,6 @@ def test_replace_resolves_all_relative_roots_from_one_current_snapshot(
         app,
         [
             "replace",
-            "--plain",
             "--context",
             ".",
             "--context",
@@ -142,5 +154,84 @@ def test_replace_resolves_all_relative_roots_from_one_current_snapshot(
     )
 
     assert result.exit_code == 0, result.output + result.stderr
-    assert "CONTEXT · replace/source" in result.output
-    assert "CONTEXT · replace" in result.output
+    assert "Replaced 2 occurrences in 2 Memories across 2 Contexts." in result.output
+    assert _memory_contents(store, child.name) == ("pin child",)
+    assert _memory_contents(store, parent.name) == ("pin parent",)
+
+
+def test_replace_complete_request_defaults_to_direct_execution_in_tty(
+    isolated_store,
+    monkeypatch,
+) -> None:
+    context = ops.init("replace/source")
+    ops.add(context, "writer")
+    store = MemoryStore()
+    store.save(context)
+    store.set_current(context.name)
+
+    class InteractiveTerminal:
+        def is_interactive(self) -> bool:
+            return True
+
+    monkeypatch.setattr(
+        replace_command,
+        "SystemTerminalCapabilities",
+        InteractiveTerminal,
+    )
+    monkeypatch.setattr(
+        replace_command,
+        "run_replace_tui",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            AssertionError("a complete Replace request must not open the TUI")
+        ),
+    )
+
+    result = runner.invoke(app, ["replace", "writer", "author"])
+
+    assert result.exit_code == 0, result.output + result.stderr
+    assert _memory_contents(store, context.name) == ("author",)
+
+
+def test_replace_tui_flag_opens_compact_editor_with_prefilled_request(
+    isolated_store,
+    monkeypatch,
+) -> None:
+    context = ops.init("replace/source")
+    store = MemoryStore()
+    store.save(context)
+    store.set_current(context.name)
+    captured = {}
+
+    class InteractiveTerminal:
+        def is_interactive(self) -> bool:
+            return True
+
+    def run_tui(request, **_kwargs):
+        captured["request"] = request
+        return None
+
+    monkeypatch.setattr(
+        replace_command,
+        "SystemTerminalCapabilities",
+        InteractiveTerminal,
+    )
+    monkeypatch.setattr(replace_command, "run_replace_tui", run_tui)
+
+    result = runner.invoke(app, ["replace", "writer", "author", "--tui"])
+
+    assert result.exit_code == 0, result.output + result.stderr
+    assert captured["request"] == ReplaceRequest(
+        "writer",
+        "author",
+        ("replace/source",),
+    )
+    assert result.output == "Replace closed.\n"
+
+
+def test_replace_help_has_no_plan_or_apply_contract() -> None:
+    result = runner.invoke(app, ["replace", "--help"])
+
+    assert result.exit_code == 0, result.output + result.stderr
+    assert "--apply" not in result.output
+    assert "PLAN_DIGEST" not in result.output
+    assert "Immediately" in result.output

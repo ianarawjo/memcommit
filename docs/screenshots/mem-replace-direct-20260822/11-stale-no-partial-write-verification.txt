@@ -1,0 +1,9 @@
+PTY 180 52                                                                                                                                                                          
+COMMAND · mem replace writer author --context replace/demo --tui                                                                                                                    
+Replace closed.                                                                                                                                                                     
+COMMAND EXIT · 0                                                                                                                                                                    
+                                                                                                                                                                                    
+STALE · READ-ONLY STORE VERIFICATION                                                                                                                                                
+replace/demo [20000000] · The writer signs contracts; every writer revises drafts.                                                                                                  
+replace/demo/child [20000000] · A writer reviews the child draft.                                                                                                                   
+CHECKPOINTS · 0

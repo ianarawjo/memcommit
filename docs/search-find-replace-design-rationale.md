@@ -78,12 +78,15 @@ typed result and Replace planning but are omitted from the default human row.
 
 ## Deterministic Replace
 
-Replace is a plan/review/Apply operation over directly owned ordinary Memories.
-The plan freezes every Context and Memory identity, content digest, exact match
-span, match mode, and replacement. Apply revalidates that complete boundary,
-preserves Memory UIDs and order, and publishes all affected Contexts as one
-command unit. A stale Context, lost authority, lock, malformed expression, or
-write failure publishes no partial replacement or checkpoint.
+Replace is a direct deterministic operation over directly owned ordinary
+Memories. One execution internally freezes every Context and Memory identity,
+content digest, exact match span, match mode, and replacement, then revalidates
+that complete boundary before publishing. The frozen plan is a concurrency
+primitive, not a human approval artifact: the CLI and compact TUI never expose
+its digest or require a second Apply gesture. Execution preserves Memory UIDs
+and order and publishes all affected Contexts as one Undoable command unit. A
+stale Context, lost authority, lock, malformed expression, or write failure
+publishes no partial replacement or checkpoint.
 
 Literal replacement is the default. Regex, case-insensitive matching, and
 match deletion are opt-in behaviors whose exact values enter the frozen plan.
@@ -102,6 +105,17 @@ adapter can rebuild the same plan from exact request values and compare the
 digest before Apply. The token binds one in-process Apply to the Store instance,
 all scanned Context identities and digests, and one operation UID used only to
 group checkpoints for Undo/Redo.
+
+`mem replace PATTERN REPLACEMENT` is a complete command and executes
+immediately in both interactive and noninteractive terminals. `--plain`
+changes only receipt styling; it is not a preview mode. Operand-free Replace,
+an incomplete interactive request, and explicit `--tui` use a primary-screen
+compact `SCOPE → FIND → REPLACE WITH` form. Enter on `REPLACE WITH` executes
+the same direct application path, closes the form, and leaves only the concise
+success or no-change receipt in terminal history. The form deliberately has no
+Review, To Do, plan digest, or exact-command approval surface. Machine adapters
+may retain typed plan/apply handles for compatibility and remote review, but
+that two-call protocol does not broaden or delay the human command contract.
 
 Completeness includes Contexts that contained no match during planning. Apply
 holds those read-only source bindings through every changed-Context write, so
@@ -130,7 +144,8 @@ The rollout is intentionally staged:
    its result meaning;
 2. add provider-free Find and verify it never constructs a provider (complete;
    see `find-application-boundary-matrix.md`);
-3. add frozen-plan Replace and its atomic Apply/Undo boundary (complete);
+3. add direct Replace over an internal frozen-plan atomic Apply/Undo boundary
+   (complete);
 4. expose and verify every adapter, Help projection, and real-terminal flow
    (complete; see `replace-callable-boundary-matrix.md`).
 

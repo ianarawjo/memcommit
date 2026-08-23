@@ -545,12 +545,12 @@ COMMAND_FORMS = {
         "mem edit --input [batch_file] --context [context] (batch-edit an explicit Context)",
     ),
     "replace": (
-        "mem replace (choose text, local scope, and review exact changes interactively)",
-        'mem replace "[text]" "[replacement]" --plain (preview literal replacements)',
-        'mem replace "[text]" --delete-match --plain (preview exact text removal)',
-        'mem replace "[expression]" "[replacement]" --regex --plain (explicit regex matching with literal replacement)',
-        'mem replace "[text]" "[replacement]" --context [context1] --context [context2] --descendants (multiple local roots)',
-        'mem replace "[text]" "[replacement]" --apply [plan_digest] (re-freeze and atomically Apply the reviewed plan)',
+        "mem replace (enter text and local scope in a compact direct-execution form)",
+        'mem replace "[text]" "[replacement]" (immediately replace literal matches as one Undoable command)',
+        'mem replace "[text]" --delete-match (immediately remove exact matched text)',
+        'mem replace "[expression]" "[replacement]" --regex (explicit regex matching with literal replacement)',
+        'mem replace "[text]" "[replacement]" --context [context1] --context [context2] --descendants (execute across multiple local roots)',
+        'mem replace "[text]" "[replacement]" --tui (edit the complete request in the compact Replace form)',
     ),
     "embed": (
         "mem embed (choose Context or Memory link, target, and insertion gap interactively)",

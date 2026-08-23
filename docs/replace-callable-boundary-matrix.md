@@ -1,6 +1,6 @@
 # Replace callable boundary matrix
 
-Last reviewed: 2026-08-16.
+Last reviewed: 2026-08-22.
 
 ## Closure statement
 
@@ -11,21 +11,14 @@ and the local namespace, and publishes all changed Contexts as one Undo/Redo
 command unit or publishes nothing.
 
 ```text
-mem replace PATTERN REPLACEMENT --------\
-interactive Replace workbench -----------+--> ReplaceRequest
-MemCommitClient.plan_replace ------------+          |
-agent/MCP memcommit_replace(kind=plan) --/          v
-                                                plan_replace
-                                                    |
-                                           MemoryStoreReplacePort
-                                                    |
-                                           FrozenReplacePlan
-                                                    |
-                         reviewed plan/digest ------+
-                                                    v
-                                               apply_replace
-                                                    |
-                                      atomic Store command batch
+mem replace PATTERN REPLACEMENT --\
+compact Replace form --------------+--> ReplaceRequest --> internal plan/apply
+                                    |                          |
+                                    |                          v
+                                    |               atomic Store command batch
+                                    |
+MemCommitClient.plan_replace ------+--> typed remote-review compatibility
+agent/MCP kind=plan/apply ----------/        plan handle --> apply_replace
 ```
 
 ## Boundary matrix
@@ -36,13 +29,13 @@ agent/MCP memcommit_replace(kind=plan) --/          v
 | Existing Context locators | CLI/public composition adapters | Current is captured once; every relative operand resolves against that snapshot; targets must be ordinary local Contexts rather than Grants or query-only views |
 | Frozen scope | `MemoryStoreReplacePort.freeze` | Every selected lexical/embedded owner is loaded directly; every ordinary Memory is frozen; references are never treated as writable owners |
 | Plan | `plan_replace` | Every non-overlapping span has exact start/end/text and one before/after Memory value; regex selects spans but never interprets replacement backreferences |
-| Review identity | `FrozenReplacePlan.plan_digest` | Digest covers exact request values, all scanned Context identities/digests/counts, matches, spans, and before/after text; the process-local token separately binds one Store adapter and operation UID |
+| Internal execution identity | `FrozenReplacePlan.plan_digest` | Digest covers exact request values, all scanned Context identities/digests/counts, matches, spans, and before/after text; human CLI/TUI routes keep it internal while the process-local token binds one Store adapter and operation UID |
 | Freshness | runtime Apply | Every scanned Context, including a no-match Context, and the complete local Context-name catalog must remain unchanged |
 | Publication | `MemoryStore.save_context_command_batch` | Source bindings and catalog are revalidated under the write boundary; all changed Contexts and checkpoints publish atomically or none do |
 | No-op | application/runtime | No match or identical before/after still revalidates the complete scope and returns an explicit no-op receipt without a checkpoint |
 | Recovery | command history | Per-Context checkpoints share one operation UID, so one Undo or Redo restores the complete multi-Context command unit |
-| CLI | `memcommit.commands.replace` | Plain mode previews only; `--apply PLAN_DIGEST` re-freezes the exact request and rejects a different digest before mutation |
-| TUI | `interfaces.tui.operations.replace` | Pattern, replacement, local target set, lexical/embedded reach, mode, and case are editable; Review exposes exact before/after changes; a separate exact-command To Do requires Enter to Apply |
+| CLI | `memcommit.commands.replace` | A complete request executes immediately in any terminal; `--plain` changes only receipt styling and does not suppress mutation |
+| TUI | `interfaces.tui.operations.replace` | The primary-screen compact form edits pattern, replacement, local target set, lexical/embedded reach, mode, and case; Enter on Replace With executes directly, closes the form, and prints one concise receipt without Review or To Do |
 | Python | `MemCommitClient.plan_replace` / `apply_replace` | A typed immutable plan carries an opaque client-local handle; Apply rejects plans from another client or modified digests |
 | Agent/MCP | `memcommit_replace` version 1 | `plan` returns JSON-safe complete changes; `apply` recomputes from exact request values and requires the previously reviewed digest; provider use is always false |
 
@@ -54,17 +47,19 @@ agent/MCP memcommit_replace(kind=plan) --/          v
 - `tests/test_replace_runtime.py` proves lexical and embedded scope,
   reference exclusion, no-match freshness, namespace freshness, atomic
   multi-Context Apply, failure rollback, and operation-unit Undo/Redo.
-- `tests/test_replace_cli.py` proves preview-only defaults, exact-digest Apply,
-  relative-locator snapshots, literal/regex distinction, and deletion syntax.
-- `tests/test_replace_tui.py` proves plan-before-Apply, cancellation,
-  focused/whole copy, and visible descendant projection.
+- `tests/test_replace_cli.py` proves immediate atomic execution, Undo,
+  receipt-only plain mode, relative-locator snapshots, literal/regex
+  distinction, and deletion syntax.
+- `tests/test_replace_tui.py` proves direct execution, cancellation,
+  primary-screen cleanup, and visible descendant projection.
 - `tests/test_replace_public_api.py` and
   `tests/test_replace_agent_adapter.py` prove stable Python and machine
   contracts, client ownership, stale-plan rejection, and provider isolation.
 - Agent registry, MCP projection, package-import, and installed-wheel smoke
   tests cover the exposed callable route.
-- `docs/screenshots/mem-replace-20260816/` records the actual color-capable
-  interactive entry, scope, review, approval, receipt, and verification path.
+- `docs/screenshots/mem-replace-direct-20260822/` records the actual
+  color-capable compact entry, scope, input, direct receipt, stale failure, and
+  read-only verification paths.
 
 ## Intentional boundaries
 
