@@ -1,4 +1,5 @@
 """Inspect, edit, and probe the active Profile's semantic-provider routes."""
+
 from __future__ import annotations
 
 import json
@@ -10,6 +11,7 @@ import typer
 from memcommit.commands.command_group import CanonicalCommandGroup
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.config import Config
+from memcommit.interfaces.console.terminal import is_interactive_terminal
 from memcommit.infrastructure.providers.policy import (
     POLICY_VERSION,
     ProviderRoute,
@@ -22,6 +24,12 @@ from memcommit.infrastructure.providers.profile_routes import (
     reset_active_profile_route,
     resolve_active_provider_policy,
     set_active_profile_route,
+)
+from memcommit.interfaces.tui.operations.provider import (
+    ProviderRouteView,
+    ProviderTuiAction,
+    ProviderTuiSetup,
+    run_provider_tui,
 )
 from memcommit.profile_config import load_profile_registry
 from memcommit.provider_types import (
@@ -50,9 +58,7 @@ app = typer.Typer(
 def _provider_name(value: str) -> str:
     normalized = value.strip().lower()
     if normalized not in SEMANTIC_PROVIDER_IDS:
-        raise typer.BadParameter(
-            "choose one of: " + ", ".join(SEMANTIC_PROVIDER_IDS)
-        )
+        raise typer.BadParameter("choose one of: " + ", ".join(SEMANTIC_PROVIDER_IDS))
     return normalized
 
 
@@ -82,8 +88,7 @@ def _render_provider_overview(config: Config) -> None:
     typer.echo("PROFILE PROVIDER ROUTES")
     typer.echo(f"profile: {scope.profile.name}")
     typer.echo(
-        "mode: "
-        + ("general · editable" if scope.editable else "study · locked")
+        "mode: " + ("general · editable" if scope.editable else "study · locked")
     )
     typer.echo("contact_status: not_contacted")
     typer.echo(f"policy_version: {POLICY_VERSION}")
@@ -136,13 +141,108 @@ def _report_provider_configuration_error(error: Exception) -> None:
     )
 
 
+def _provider_route_view(
+    route: ProviderRoute | ResolvedProviderPolicy,
+) -> ProviderRouteView:
+    return ProviderRouteView(
+        provider_id=route.provider_id,
+        model=route.model,
+        reasoning_effort=route.reasoning_effort,
+        timeout_seconds=route.timeout_seconds,
+    )
+
+
+def _provider_tui_setup(
+    config: Config,
+) -> ProviderTuiSetup:
+    """Freeze one Profile scope before the interactive screen opens."""
+
+    registry = load_profile_registry()
+    scope = load_active_provider_scope(machine_config=config, registry=registry)
+    thinking = config.semantic_thinking()
+    thinking_label = "auto" if thinking is None else ("on" if thinking else "off")
+    known_models = tuple(
+        (provider, config.model_for_provider(provider))
+        for provider in SEMANTIC_PROVIDER_IDS
+    )
+    if scope.mode == "STUDY":
+        study = study_provider_config(scope.study_policy_version)
+        return ProviderTuiSetup(
+            profile_name=scope.profile.name,
+            mode="STUDY",
+            default_route=_provider_route_view(study.default),
+            route_source="STUDY_POLICY",
+            operation_routes=tuple(
+                (operation, _provider_route_view(route))
+                for operation, route in study.operations.items()
+            ),
+            known_models=known_models,
+            ollama_thinking=thinking_label,
+            openrouter_zdr=config.openrouter_zdr(),
+            study_policy_version=scope.study_policy_version,
+            study_policy_digest=scope.study_policy_digest,
+        )
+
+    default, _ = resolve_active_provider_policy(
+        "semantic_default",
+        machine_config=config,
+        registry=registry,
+    )
+    assert scope.routes is not None
+    return ProviderTuiSetup(
+        profile_name=scope.profile.name,
+        mode="GENERAL",
+        default_route=_provider_route_view(default),
+        route_source=default.source,
+        operation_routes=tuple(
+            (operation, _provider_route_view(route))
+            for operation, route in sorted(scope.routes.operations.items())
+        ),
+        has_profile_default=scope.routes.default is not None,
+        known_models=known_models,
+        ollama_thinking=thinking_label,
+        openrouter_zdr=config.openrouter_zdr(),
+    )
+
+
+def _run_provider_tui_action(action: ProviderTuiAction) -> None:
+    """Re-enter the existing command boundary after exact TUI review."""
+
+    if action.kind == "USE":
+        assert action.draft is not None
+        draft = action.draft
+        use_provider(
+            draft.provider_id,
+            model=draft.model,
+            preset=None,
+            reasoning=draft.reasoning_effort,
+            operation=draft.operation,
+            timeout_seconds=None,
+            context_tokens=None,
+            max_output_tokens=None,
+            thinking=draft.ollama_thinking,
+            zdr=draft.openrouter_zdr,
+        )
+        return
+    if action.kind == "RESET":
+        reset_provider(action.operation)
+        return
+    provider_probe(action.operation)
+
+
 @app.callback(invoke_without_command=True)
 def provider_group(ctx: typer.Context) -> None:
-    """Show active-Profile routes when no explicit action is selected."""
+    """Edit routes in a TTY, or show the stable overview outside one."""
     if ctx.invoked_subcommand is not None:
         return
     try:
-        _render_provider_overview(Config())
+        config = Config()
+        if not is_interactive_terminal():
+            _render_provider_overview(config)
+            return
+        action = run_provider_tui(_provider_tui_setup(config))
+        if action is not None:
+            _run_provider_tui_action(action)
     except (RuntimeError, ValueError) as error:
         _report_provider_configuration_error(error)
         raise typer.Exit(1)
@@ -233,8 +333,7 @@ def use_provider(
             and selected_reasoning not in CODEX_REASONING_EFFORTS
         ):
             raise typer.BadParameter(
-                "--reasoning must be one of: "
-                + ", ".join(CODEX_REASONING_EFFORTS)
+                "--reasoning must be one of: " + ", ".join(CODEX_REASONING_EFFORTS)
             )
         if selected_provider != CODEX_CHATGPT_PROVIDER and (
             selected_preset is not None or selected_reasoning is not None
@@ -339,8 +438,7 @@ def _render_transport_status(config: Config, provider: str) -> None:
         typer.echo(f"context_tokens: {config.semantic_context_tokens()}")
         thinking = config.semantic_thinking()
         typer.echo(
-            "thinking: "
-            + ("auto" if thinking is None else str(thinking).lower())
+            "thinking: " + ("auto" if thinking is None else str(thinking).lower())
         )
     elif provider == OPENROUTER_PROVIDER:
         typer.echo(
@@ -447,6 +545,11 @@ def provider_probe(
         )
         typer.echo(f"route_source: {policy.source.lower()}")
         typer.echo(f"route_digest: {policy.digest}")
-    except (QueryProviderError, RuntimeError, ValueError, json.JSONDecodeError) as error:
+    except (
+        QueryProviderError,
+        RuntimeError,
+        ValueError,
+        json.JSONDecodeError,
+    ) as error:
         typer.secho(f"Provider probe failed: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)

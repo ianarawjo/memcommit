@@ -1,0 +1,14 @@
+PTY 180 52
+scope: profile_default
+profile: authoring
+profile_mode: general
+route_source: profile_default
+policy_version: semantic-provider-policy-v2
+route_digest: 58a512e7916317e1c5a9b927c5b4c4b2263bbcd391608c211c59553c76b35554
+provider: ollama
+model: qwen3.6:35b-a3b
+timeout_seconds: 600
+max_output_tokens: 16384
+endpoint: http://127.0.0.1:11434
+context_tokens: 65536
+thinking: auto

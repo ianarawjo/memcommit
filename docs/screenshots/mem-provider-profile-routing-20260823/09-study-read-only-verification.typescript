@@ -1,0 +1,15 @@
+PTY 180 52
+scope: profile_default
+profile: provider-study
+profile_mode: study
+route_source: study_policy
+policy_version: semantic-provider-policy-v2
+study_config: study-provider-config-v1
+study_config_digest: 9faa8cea3634d393e3b2f724077b1db14f8628ee7243de2ab75c93d22c816702
+route_digest: 9643f0390706cf2f1b0925ea4da4634484e722dee69a5f24eb5c58bfc59019aa
+provider: codex_chatgpt
+model: gpt-5.6-sol
+timeout_seconds: 600
+reasoning: none
+max_output_tokens: 16384
+PROFILE ROUTE SIDECARS · 0

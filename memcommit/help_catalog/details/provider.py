@@ -15,10 +15,17 @@ PROVIDER_DETAILS = (
         use_when="Choosing whether to inspect, select, or contact a provider.",
         discovery=DetailDiscovery.ON_DEMAND,
         explanation=(
-            "Provider configuration and readiness checking are separate actions. "
-            "Neither action changes Context content."
+            "Provider inspection, configuration, reset, and readiness checking "
+            "are separate actions. None changes Context content."
         ),
         options=(
+            OperationComparisonOption(
+                label="OVERVIEW",
+                guidance=(
+                    "Use bare mem provider to edit an ordinary Profile in a TTY, "
+                    "inspect a locked Study Profile, or print stable non-TTY routes."
+                ),
+            ),
             OperationComparisonOption(
                 label="STATUS",
                 guidance=(
@@ -29,6 +36,13 @@ PROVIDER_DETAILS = (
             OperationComparisonOption(
                 label="USE",
                 guidance="Store the provider and model selection for later commands.",
+            ),
+            OperationComparisonOption(
+                label="RESET",
+                guidance=(
+                    "Remove one authored Profile route and resume its inherited "
+                    "default without contacting a provider."
+                ),
             ),
             OperationComparisonOption(
                 label="PROBE",

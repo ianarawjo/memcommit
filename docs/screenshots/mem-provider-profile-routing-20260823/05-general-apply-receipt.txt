@@ -1,0 +1,4 @@
+Profile provider route: authoring · default                                                                                                                                         
+  ollama · model qwen3.6:35b-a3b · timeout 600s                                                                                                                                     
+Machine transport settings were updated separately.                                                                                                                                 
+Verify with 'mem provider probe'.

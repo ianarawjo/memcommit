@@ -81,12 +81,38 @@ the shared completion factory all use this boundary. Explicit evaluation
 arguments and authorized query-only source routes remain separate: they must
 not rewrite Profile configuration or be silently rerouted by it.
 
-Bare `mem provider` is a provider-free inspection of the active Profile. A
-general Profile is labelled `general · editable` and shows its effective
-default plus only the operation routes the person configured. A Study Profile
-is labelled `study · locked` and shows the pinned version, digest, and complete
-Study matrix. The output intentionally contains no `rule` or “fixed by
-operation” explanation; editability and ownership are first-class fields.
+Entering bare `mem provider` does not itself contact a provider. Outside a TTY
+it is a provider-free inspection of the active Profile, retaining the stable
+line-oriented overview for piping, scripting, and captured status. In a TTY,
+an ordinary Profile instead opens an editable Profile-aware screen. It is
+labelled `general · editable` and shows its effective default plus only the
+operation routes the person configured. A Study Profile is labelled
+`study · locked` and shows the pinned version, digest, and complete Study
+matrix. Its TTY screen exposes only read-only inspection and an explicit Probe
+action. The output intentionally contains no `rule` or “fixed by operation”
+explanation; editability and ownership are first-class fields.
+
+The general TTY composes the shared flat selection state, focused frames,
+surface focus controller, and exact-command review. Provider, model, Codex
+reasoning, and an optional operation key remain process-local while editing.
+The To Do frame renders the exact `mem provider use ...` or
+`mem provider reset ...` command and its effects; Enter returns that typed
+selection to the command adapter, which re-enters the existing `use` or
+`reset` boundary and revalidates the active Profile before writing. Editing
+does not contact a provider. `P` exits to the existing explicit Probe route,
+and Escape publishes no configuration change.
+
+Provider-specific transport state that is not directly edited remains
+explicit in the reviewed command. Ollama retains its current thinking mode and
+OpenRouter retains its current zero-data-retention choice, so entering the TTY
+does not silently reset either machine-local value. Context-window and output
+budgets remain available through the explicit CLI flags rather than expanding
+the initial screen into a generic key/value editor.
+
+The ordered [180×52 Provider interaction evidence](screenshots/mem-provider-profile-routing-20260823/README.md)
+records general entry, provider and model selection, exact review, Apply,
+provider-free status verification, Study lock presentation, rejected Study
+mutation, and the zero-sidecar no-partial-write check.
 
 `mem provider use PROVIDER` edits the active general Profile default.
 `--operation OPERATION` edits one operation combination. `mem provider reset`

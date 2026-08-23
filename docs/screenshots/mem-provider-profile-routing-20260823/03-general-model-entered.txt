@@ -1,0 +1,41 @@
+ MEM PROVIDER · PROFILE-AWARE ROUTING                                                                                                                                               
+ PROFILE · authoring · GENERAL · EDITABLE · NOT CONTACTED                                                                                                                           
+┌────────────────────────────────────────────────────────────────────────| DEFAULT PROVIDER · ↑/↓ SELECT |─────────────────────────────────────────────────────────────────────────┐
+│  CODEX CHATGPT                                                                                                                                                                   │
+│  Managed Codex session; an empty model keeps model selection managed.                                                                                                            │
+│✓ OLLAMA                                                                                                                                                                          │
+│  Local Ollama runtime; an exact model name is required.                                                                                                                          │
+│  OPENROUTER                                                                                                                                                                      │
+│  OpenRouter route; an exact provider/model slug is required.                                                                                                                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ MODEL · REQUIRED ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃› qwen3.6:35b-a3b                                                                                                                                                                 ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────| OPERATION · OPTIONAL · EMPTY = PROFILE DEFAULT |────────────────────────────────────────────────────────────────┐
+│›                                                                                                                                                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────────| CURRENT EFFECTIVE ROUTES · NOT CONTACTED |───────────────────────────────────────────────────────────────────┐
+│DEFAULT · codex_chatgpt · model gpt-5.6-sol · reasoning none · timeout 600s                                                                                                       │
+│SOURCE · global_default                                                                                                                                                           │
+│                                                                                                                                                                                  │
+│OPERATION ROUTES                                                                                                                                                                  │
+│none configured · all operations use the default                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────| TO DO · EXACT USE COMMAND |───────────────────────────────────────────────────────────────────────────┐
+│PROPOSED COMMAND · NOT RUN                                                                                                                                                        │
+│  mem provider use ollama --model qwen3.6:35b-a3b --thinking auto                                                                                                                 │
+│                                                                                                                                                                                  │
+│EFFECTS · ONE COMMAND                                                                                                                                                             │
+│  Update the Profile default for Profile 'authoring'.                                                                                                                             │
+│  Store provider, model, reasoning, and timeout as one complete route.                                                                                                            │
+│  Do not contact the provider; mem provider probe remains a separate action.                                                                                                      │
+│  Retain the selected Ollama model and thinking mode as machine-local transport settings.                                                                                         │
+│                                                                                                                                                                                  │
+│Approval applies only to the exact command shown above.                                                                                                                           │
+│                                                                                                                                                                                  │
+│[ PRESS ENTER TO APPLY THE EXACT ROUTE ]                                                                                                                                          │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ Type exact model · Enter/Tab continue · Esc back · Backspace deletes

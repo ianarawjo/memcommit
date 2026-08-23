@@ -1,4 +1,5 @@
 """mem config — read and write global configuration."""
+
 import typer
 
 from memcommit.commands.command_group import CanonicalCommandGroup
@@ -6,8 +7,26 @@ from memcommit.config import Config
 
 app = typer.Typer(
     cls=CanonicalCommandGroup,
+    invoke_without_command=True,
+    no_args_is_help=False,
     help="Read and write global mem configuration.",
 )
+
+
+def _render_config() -> None:
+    data = Config().all()
+    if not data:
+        typer.echo("(no configuration set)")
+        return
+    for k, v in data.items():
+        typer.echo(f"  {k} = {v!r}")
+
+
+@app.callback(invoke_without_command=True)
+def config_group(ctx: typer.Context) -> None:
+    """Show current values when no explicit configuration action is selected."""
+    if ctx.invoked_subcommand is None:
+        _render_config()
 
 
 @app.command("set")
@@ -37,9 +56,4 @@ def config_set(
 @app.command("show")
 def config_show() -> None:
     """Show all current configuration values."""
-    data = Config().all()
-    if not data:
-        typer.echo("(no configuration set)")
-        return
-    for k, v in data.items():
-        typer.echo(f"  {k} = {v!r}")
+    _render_config()
