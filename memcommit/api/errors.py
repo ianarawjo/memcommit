@@ -89,6 +89,34 @@ class ReplaceExecutionError(ReplaceError):
     """Replace failed before a complete atomic result was published."""
 
 
+class DeleteError(MemCommitError):
+    """Base class for public direct-item and Context deletion failures."""
+
+
+class DeleteInputError(DeleteError):
+    """The caller supplied an invalid selector or reviewed deletion plan."""
+
+
+class DeleteContextError(DeleteError):
+    """A requested Delete Context or direct-item owner is unavailable."""
+
+
+class DeleteAuthorityError(DeleteError):
+    """The active Profile, Grant, or protection policy denies Delete."""
+
+
+class DeleteConflictError(DeleteError):
+    """The exact Delete target changed before its mutation committed."""
+
+
+class DeleteStorageError(DeleteError):
+    """Delete could not safely read or publish local durable state."""
+
+
+class DeleteExecutionError(DeleteError):
+    """Delete failed without a complete checkpoint or lifecycle receipt."""
+
+
 class AddError(MemCommitError):
     """Base class for public Add failures."""
 
@@ -115,6 +143,34 @@ class AddStorageError(AddError):
 
 class AddExecutionError(AddError):
     """An authorized Add failed without publishing a complete receipt."""
+
+
+class MemoryTransferError(MemCommitError):
+    """Base class for public direct-Memory Copy and Move failures."""
+
+
+class MemoryTransferInputError(MemoryTransferError):
+    """The caller supplied invalid locators, placement, identity, or link policy."""
+
+
+class MemoryTransferContextError(MemoryTransferError):
+    """A requested local Source owner or Target Context is unavailable."""
+
+
+class MemoryTransferAuthorityError(MemoryTransferError):
+    """The active Profile or write-protection policy denies the transfer."""
+
+
+class MemoryTransferConflictError(MemoryTransferError):
+    """A frozen Source, Target, or inbound-link graph changed before Apply."""
+
+
+class MemoryTransferStorageError(MemoryTransferError):
+    """Copy or Move could not safely read or publish local durable state."""
+
+
+class MemoryTransferExecutionError(MemoryTransferError):
+    """Copy or Move failed without publishing one complete command unit."""
 
 
 class ReferenceError(MemCommitError):
@@ -393,6 +449,13 @@ __all__ = [
     "AddExecutionError",
     "AddInputError",
     "AddStorageError",
+    "DeleteAuthorityError",
+    "DeleteConflictError",
+    "DeleteContextError",
+    "DeleteError",
+    "DeleteExecutionError",
+    "DeleteInputError",
+    "DeleteStorageError",
     "EmbedAuthorityError",
     "EmbedConflictError",
     "EmbedContextError",
@@ -433,6 +496,13 @@ __all__ = [
     "ForgetProviderFailure",
     "ForgetStorageError",
     "MemCommitError",
+    "MemoryTransferAuthorityError",
+    "MemoryTransferConflictError",
+    "MemoryTransferContextError",
+    "MemoryTransferError",
+    "MemoryTransferExecutionError",
+    "MemoryTransferInputError",
+    "MemoryTransferStorageError",
     "MeldAuthorityError",
     "MeldConflictError",
     "MeldContextError",

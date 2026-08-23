@@ -72,6 +72,18 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
     assert "memcommit.interfaces.tui.operations.summarize.screen" in by_operation["summarize"].tui_modules
     assert "query_ordinary" in by_operation["query"].public_methods
     assert "memcommit.interfaces.agent.query" in by_operation["query"].agent_modules
+    for operation, public_method in (
+        ("copy", "copy_memories"),
+        ("move", "move_memories"),
+    ):
+        route = by_operation[operation]
+        assert "memcommit.memory_transfer_application" in route.application_modules
+        assert "memcommit.memory_transfer_runtime" in route.application_modules
+        assert route.public_methods == (public_method,)
+        assert route.agent_modules == (
+            "memcommit.interfaces.agent.memory_transfer",
+        )
+        assert route.curated_state == "CLOSED"
     assert by_operation["query"].curated_state == "CLOSED"
     assert by_operation["resolve"].curated_state == "CLOSED"
     assert by_operation["dedun"].curated_state == "CLOSED"

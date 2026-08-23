@@ -28,6 +28,15 @@ from memcommit.interfaces.agent.compare import (
     CompareAgentAdapter,
     compare_agent_tool_schema,
 )
+from memcommit.interfaces.agent.delete import (
+    APPLY_CONTEXT_DELETE_AGENT_TOOL_NAME,
+    PLAN_CONTEXT_DELETE_AGENT_TOOL_NAME,
+    REMOVE_ITEM_AGENT_TOOL_NAME,
+    DeleteAgentAdapter,
+    apply_context_delete_agent_tool_schema,
+    plan_context_delete_agent_tool_schema,
+    remove_item_agent_tool_schema,
+)
 from memcommit.interfaces.agent.contract import JsonObject, error_response
 from memcommit.interfaces.agent.distill import (
     DISTILL_AGENT_TOOL_NAME,
@@ -109,6 +118,13 @@ from memcommit.interfaces.agent.meld import (
     MeldAgentAdapter,
     meld_agent_tool_schema,
 )
+from memcommit.interfaces.agent.memory_transfer import (
+    COPY_MEMORIES_AGENT_TOOL_NAME,
+    MOVE_MEMORIES_AGENT_TOOL_NAME,
+    MemoryTransferAgentAdapter,
+    copy_memories_agent_tool_schema,
+    move_memories_agent_tool_schema,
+)
 
 
 AGENT_TOOL_REGISTRY_VERSION = 1
@@ -121,6 +137,34 @@ class AgentToolRegistrationError(ValueError):
 
 
 @dataclass(frozen=True)
+class AgentToolEffect:
+    """Host-neutral effect hints projected into transport safety metadata."""
+
+    read_only: bool
+    destructive: bool
+    idempotent: bool
+    open_world: bool = False
+
+    def __post_init__(self) -> None:
+        if any(
+            type(value) is not bool
+            for value in (
+                self.read_only,
+                self.destructive,
+                self.idempotent,
+                self.open_world,
+            )
+        ):
+            raise AgentToolRegistrationError(
+                "Agent tool effect hints must be booleans."
+            )
+        if self.read_only and self.destructive:
+            raise AgentToolRegistrationError(
+                "A read-only agent tool cannot also be destructive."
+            )
+
+
+@dataclass(frozen=True)
 class AgentToolBinding:
     """One schema factory and decoded-payload handler owned by a host."""
 
@@ -129,6 +173,7 @@ class AgentToolBinding:
     handler: AgentToolHandler
     use_when: str | None = None
     help_details: tuple[HelpDetailReferenceResult, ...] = ()
+    effect: AgentToolEffect | None = None
 
 
 @dataclass(frozen=True)
@@ -138,6 +183,7 @@ class AgentToolDefinition:
     tool_schema: JsonObject
     use_when: str | None = None
     help_details: tuple[HelpDetailReferenceResult, ...] = ()
+    effect: AgentToolEffect | None = None
 
 
 @dataclass(frozen=True)
@@ -146,6 +192,7 @@ class _FrozenAgentTool:
     schema_json: str
     use_when: str | None
     help_details: tuple[HelpDetailReferenceResult, ...]
+    effect: AgentToolEffect | None
     handler: AgentToolHandler
 
 
@@ -162,7 +209,12 @@ def _has_only_text_object_keys(value: object) -> bool:
 
 def _registration_schema(
     binding: AgentToolBinding,
-) -> tuple[str, str | None, tuple[HelpDetailReferenceResult, ...]]:
+) -> tuple[
+    str,
+    str | None,
+    tuple[HelpDetailReferenceResult, ...],
+    AgentToolEffect | None,
+]:
     if not isinstance(binding.name, str) or not binding.name.strip():
         raise AgentToolRegistrationError("Agent tool name must be nonblank text.")
     if not callable(binding.schema_factory):
@@ -206,6 +258,13 @@ def _registration_schema(
         raise AgentToolRegistrationError(
             f"Agent tool {binding.name!r} help_details must be a typed tuple."
         )
+    if binding.effect is not None and not isinstance(
+        binding.effect,
+        AgentToolEffect,
+    ):
+        raise AgentToolRegistrationError(
+            f"Agent tool {binding.name!r} effect must be an AgentToolEffect."
+        )
     detail_ids = [item.id for item in binding.help_details]
     if len(detail_ids) != len(set(detail_ids)):
         raise AgentToolRegistrationError(
@@ -229,6 +288,7 @@ def _registration_schema(
             ),
             use_when,
             binding.help_details,
+            binding.effect,
         )
     except (TypeError, ValueError) as error:
         raise AgentToolRegistrationError(
@@ -260,12 +320,13 @@ class AgentToolRegistry:
                 raise AgentToolRegistrationError(
                     f"Agent tool {binding.name!r} is registered more than once."
                 )
-            schema_json, use_when, help_details = _registration_schema(binding)
+            schema_json, use_when, help_details, effect = _registration_schema(binding)
             frozen[binding.name] = _FrozenAgentTool(
                 name=binding.name,
                 schema_json=schema_json,
                 use_when=use_when,
                 help_details=help_details,
+                effect=effect,
                 handler=binding.handler,
             )
         self._tools = MappingProxyType(frozen)
@@ -289,6 +350,7 @@ class AgentToolRegistry:
                 tool_schema=json.loads(tool.schema_json),
                 use_when=tool.use_when,
                 help_details=tool.help_details,
+                effect=tool.effect,
             )
             for tool in self._tools.values()
         )
@@ -344,6 +406,7 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
         name: str,
         schema_factory: AgentToolSchemaFactory,
         handler: AgentToolHandler,
+        effect: AgentToolEffect | None = None,
     ) -> AgentToolBinding:
         guidance = client.describe_operation(operation_name)
         return AgentToolBinding(
@@ -352,6 +415,7 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
             handler=handler,
             use_when=guidance.use_when,
             help_details=guidance.details,
+            effect=effect,
         )
 
     help_adapter = HelpAgentAdapter(client)
@@ -359,9 +423,11 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
     search = SearchAgentAdapter(client)
     find = FindAgentAdapter(client)
     replace = ReplaceAgentAdapter(client)
+    delete = DeleteAgentAdapter(client)
     query = QueryAgentAdapter(client)
     quality_find = QualityFindAgentAdapter(client)
     add = AddAgentAdapter(client)
+    memory_transfer = MemoryTransferAgentAdapter(client)
     reference = ReferenceAgentAdapter(client)
     embed = EmbedAgentAdapter(client)
     compare = CompareAgentAdapter(client)
@@ -401,6 +467,39 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
                 handler=replace.invoke,
             ),
             operation_binding(
+                "delete",
+                name=REMOVE_ITEM_AGENT_TOOL_NAME,
+                schema_factory=remove_item_agent_tool_schema,
+                handler=delete.remove_item,
+                effect=AgentToolEffect(
+                    read_only=False,
+                    destructive=False,
+                    idempotent=False,
+                ),
+            ),
+            operation_binding(
+                "delete",
+                name=PLAN_CONTEXT_DELETE_AGENT_TOOL_NAME,
+                schema_factory=plan_context_delete_agent_tool_schema,
+                handler=delete.plan_context,
+                effect=AgentToolEffect(
+                    read_only=True,
+                    destructive=False,
+                    idempotent=True,
+                ),
+            ),
+            operation_binding(
+                "delete",
+                name=APPLY_CONTEXT_DELETE_AGENT_TOOL_NAME,
+                schema_factory=apply_context_delete_agent_tool_schema,
+                handler=delete.apply_context,
+                effect=AgentToolEffect(
+                    read_only=False,
+                    destructive=True,
+                    idempotent=False,
+                ),
+            ),
+            operation_binding(
                 "search",
                 name=SEARCH_AGENT_TOOL_NAME,
                 schema_factory=search_agent_tool_schema,
@@ -426,6 +525,28 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
                 name=ADD_AGENT_TOOL_NAME,
                 schema_factory=add_agent_tool_schema,
                 handler=add.invoke,
+            ),
+            operation_binding(
+                "copy",
+                name=COPY_MEMORIES_AGENT_TOOL_NAME,
+                schema_factory=copy_memories_agent_tool_schema,
+                handler=memory_transfer.copy,
+                effect=AgentToolEffect(
+                    read_only=False,
+                    destructive=False,
+                    idempotent=False,
+                ),
+            ),
+            operation_binding(
+                "move",
+                name=MOVE_MEMORIES_AGENT_TOOL_NAME,
+                schema_factory=move_memories_agent_tool_schema,
+                handler=memory_transfer.move,
+                effect=AgentToolEffect(
+                    read_only=False,
+                    destructive=False,
+                    idempotent=False,
+                ),
             ),
             operation_binding(
                 "reference",
@@ -509,6 +630,8 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
 __all__ = [
     "AGENT_TOOL_REGISTRY_VERSION",
     "AgentToolBinding",
+    "AgentToolDefinition",
+    "AgentToolEffect",
     "AgentToolHandler",
     "AgentToolRegistrationError",
     "AgentToolRegistry",

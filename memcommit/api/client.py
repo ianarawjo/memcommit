@@ -25,6 +25,11 @@ from memcommit.api.atomize import (
     AtomizeStructuralApplyResult,
 )
 from memcommit.api.compare import ComparisonResult
+from memcommit.api.delete import (
+    ContextDeletePlanResult,
+    ContextDeleteReceipt,
+    DirectItemDeleteReceipt,
+)
 from memcommit.api.dedup import (
     DedunApplyResult,
     DedunPlanResult,
@@ -50,6 +55,7 @@ from memcommit.api.meld import (
     MeldApplyResult as PublicMeldApplyResult,
     MeldSessionResult,
 )
+from memcommit.api.memory_transfer import CopyMemoriesReceipt, MoveMemoriesReceipt
 from memcommit.api.query import (
     GrantedQueryResult,
     OrdinaryQueryResult,
@@ -304,6 +310,35 @@ class MemCommitClient:
         from memcommit.api._operations.replace import apply_replace
 
         return apply_replace(self._runtime, reviewed)
+
+    def remove_item(
+        self,
+        selector: str,
+        *,
+        context_name: str | None = None,
+    ) -> DirectItemDeleteReceipt:
+        """Remove one direct item through a normal Undoable checkpoint."""
+
+        from memcommit.api._operations.delete import remove_item
+
+        return remove_item(self._runtime, selector, context_name=context_name)
+
+    def plan_context_delete(self, context_name: str) -> ContextDeletePlanResult:
+        """Freeze one permanent Context deletion without changing the Store."""
+
+        from memcommit.api._operations.delete import plan_context_delete
+
+        return plan_context_delete(self._runtime, context_name)
+
+    def apply_context_delete(
+        self,
+        reviewed: ContextDeletePlanResult,
+    ) -> ContextDeleteReceipt:
+        """Permanently delete the exact Context identity in a reviewed plan."""
+
+        from memcommit.api._operations.delete import apply_context_delete
+
+        return apply_context_delete(self._runtime, reviewed)
 
     def fit(
         self,
@@ -1042,6 +1077,56 @@ class MemCommitClient:
             self._runtime,
             contents,
             context_name=context_name,
+        )
+
+    def copy_memories(
+        self,
+        memory_locators: Sequence[str],
+        *,
+        into_context: str | None = None,
+        source_context: str | None = None,
+        before: str | None = None,
+        after: str | None = None,
+        preserve_uids: bool = False,
+    ) -> CopyMemoriesReceipt:
+        """Copy one ordered direct-Memory batch into an existing local Context."""
+
+        from memcommit.api._operations.copy import copy_memories
+
+        return copy_memories(
+            self._runtime,
+            memory_locators,
+            into_context=into_context,
+            source_context=source_context,
+            before=before,
+            after=after,
+            preserve_uids=preserve_uids,
+        )
+
+    def move_memories(
+        self,
+        memory_locators: Sequence[str],
+        *,
+        into_context: str | None = None,
+        source_context: str | None = None,
+        before: str | None = None,
+        after: str | None = None,
+        retarget_links: bool = False,
+        break_links: bool = False,
+    ) -> MoveMemoriesReceipt:
+        """Move one ordered direct-Memory batch as one Undoable command unit."""
+
+        from memcommit.api._operations.move import move_memories
+
+        return move_memories(
+            self._runtime,
+            memory_locators,
+            into_context=into_context,
+            source_context=source_context,
+            before=before,
+            after=after,
+            retarget_links=retarget_links,
+            break_links=break_links,
         )
 
     def reference_memory(

@@ -51,15 +51,25 @@ def project_sdk_tools(projection: McpRegistryProjection) -> list[Any]:
     """Create official SDK Tool values from fresh projected definitions."""
 
     _anyio, types, _server_type, _stdio_server = _load_mcp_sdk()
-    return [
-        types.Tool(
-            name=tool.name,
-            description=tool.description,
-            inputSchema=tool.input_schema,
-            _meta=tool.to_dict().get("_meta"),
+    projected = []
+    for tool in projection.list_tools():
+        wire = tool.to_dict()
+        raw_annotations = wire.get("annotations")
+        annotations = (
+            types.ToolAnnotations(**raw_annotations)
+            if raw_annotations is not None
+            else None
         )
-        for tool in projection.list_tools()
-    ]
+        projected.append(
+            types.Tool(
+                name=tool.name,
+                description=tool.description,
+                inputSchema=tool.input_schema,
+                annotations=annotations,
+                _meta=wire.get("_meta"),
+            )
+        )
+    return projected
 
 
 def project_sdk_call_result(result: McpToolCallResult) -> Any:

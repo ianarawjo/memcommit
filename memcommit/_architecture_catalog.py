@@ -605,6 +605,11 @@ def _client_methods(repository: Path) -> dict[str, set[str]]:
 
 _OPERATION_DISCOVERY_TOKENS = {
     "checkout": ("checkout", "branch", "switch"),
+    # Copy and Move deliberately share one direct-Memory transfer application,
+    # runtime, and machine adapter. Their public client entry modules remain
+    # operation-specific so the generated catalog does not attribute both
+    # methods to each Help operation.
+    "copy": ("copy", "memory_transfer"),
     # Complete Dedun retains legacy finder, Consolidate, and Dedup module
     # names while exact Dedup owns explicit exact_dedup modules. Keeping the
     # mapping authored prevents the evidence ledger from conflating the routes.
@@ -626,6 +631,7 @@ _OPERATION_DISCOVERY_TOKENS = {
     "init": ("init", "context_init"),
     "list": ("list", "list_memories"),
     "lock": ("lock", "write_protection"),
+    "move": ("move", "memory_transfer"),
     "pwd": ("pwd", "current_context"),
     "unlock": ("unlock", "write_protection"),
 }

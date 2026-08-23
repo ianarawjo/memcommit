@@ -12,12 +12,15 @@ import memcommit.ops as ops
 from memcommit.api import MemCommitClient
 from memcommit.interfaces.agent import (
     ADD_AGENT_TOOL_NAME,
+    APPLY_CONTEXT_DELETE_AGENT_TOOL_NAME,
     ATOMIZE_AGENT_TOOL_NAME,
     ATOMIZE_GROUNDING_AGENT_TOOL_NAME,
     COMPARE_AGENT_TOOL_NAME,
+    COPY_MEMORIES_AGENT_TOOL_NAME,
     DEDUP_AGENT_TOOL_NAME,
     EMBED_AGENT_TOOL_NAME,
     MELD_AGENT_TOOL_NAME,
+    MOVE_MEMORIES_AGENT_TOOL_NAME,
     DISTILL_AGENT_TOOL_NAME,
     ELABORATE_AGENT_TOOL_NAME,
     FIT_AGENT_TOOL_NAME,
@@ -25,9 +28,12 @@ from memcommit.interfaces.agent import (
     FIND_AGENT_TOOL_NAME,
     QUALITY_FIND_AGENT_TOOL_NAME,
     HELP_AGENT_TOOL_NAME,
+    PLAN_CONTEXT_DELETE_AGENT_TOOL_NAME,
     QUERY_AGENT_TOOL_NAME,
+    QUERY_AGENT_CONTRACT_VERSION,
     REFERENCE_AGENT_TOOL_NAME,
     REPLACE_AGENT_TOOL_NAME,
+    REMOVE_ITEM_AGENT_TOOL_NAME,
     RESOLVE_AGENT_TOOL_NAME,
     SEARCH_AGENT_TOOL_NAME,
     SHOW_AGENT_TOOL_NAME,
@@ -88,10 +94,15 @@ def test_default_registry_discovers_fresh_frozen_shipped_schemas(tmp_path):
         SHOW_AGENT_TOOL_NAME,
         FIND_AGENT_TOOL_NAME,
         REPLACE_AGENT_TOOL_NAME,
+        REMOVE_ITEM_AGENT_TOOL_NAME,
+        PLAN_CONTEXT_DELETE_AGENT_TOOL_NAME,
+        APPLY_CONTEXT_DELETE_AGENT_TOOL_NAME,
         SEARCH_AGENT_TOOL_NAME,
         QUERY_AGENT_TOOL_NAME,
         QUALITY_FIND_AGENT_TOOL_NAME,
         ADD_AGENT_TOOL_NAME,
+        COPY_MEMORIES_AGENT_TOOL_NAME,
+        MOVE_MEMORIES_AGENT_TOOL_NAME,
         REFERENCE_AGENT_TOOL_NAME,
         EMBED_AGENT_TOOL_NAME,
         COMPARE_AGENT_TOOL_NAME,
@@ -128,12 +139,13 @@ def test_default_registry_discovers_fresh_frozen_shipped_schemas(tmp_path):
     json.dumps(first)
 
     first[0]["name"] = "changed"
-    first[7]["parameters"]["required"].clear()
+    add_index = registry.tool_names.index(ADD_AGENT_TOOL_NAME)
+    first[add_index]["parameters"]["required"].clear()
     definitions = registry.tool_definitions()
     definitions[0].tool_schema["name"] = "changed-definition"
     third = registry.tool_schemas()
     assert third[0]["name"] == HELP_AGENT_TOOL_NAME
-    assert third[7]["parameters"]["required"] == [
+    assert third[add_index]["parameters"]["required"] == [
         "version",
         "kind",
         "contents",
@@ -358,7 +370,7 @@ def test_add_then_query_runs_through_one_real_registry_and_public_client(
     query_response = registry.invoke(
         QUERY_AGENT_TOOL_NAME,
         {
-            "version": 1,
+            "version": QUERY_AGENT_CONTRACT_VERSION,
             "kind": "ordinary",
             "question": "What did the registry add?",
             "context_names": ["notes"],

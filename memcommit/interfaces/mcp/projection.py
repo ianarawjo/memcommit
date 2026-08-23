@@ -7,7 +7,11 @@ from dataclasses import dataclass
 import json
 
 from memcommit.api import HelpDetailReferenceResult
-from memcommit.interfaces.agent import AgentToolDefinition, AgentToolRegistry
+from memcommit.interfaces.agent import (
+    AgentToolDefinition,
+    AgentToolEffect,
+    AgentToolRegistry,
+)
 from memcommit.interfaces.agent.contract import JsonObject
 
 
@@ -54,6 +58,7 @@ class McpToolDefinition:
     input_schema: JsonObject
     use_when: str | None = None
     help_details: tuple[HelpDetailReferenceResult, ...] = ()
+    effect: AgentToolEffect | None = None
 
     def to_dict(self) -> JsonObject:
         value: JsonObject = {
@@ -73,6 +78,13 @@ class McpToolDefinition:
             ]
         if metadata:
             value["_meta"] = metadata
+        if self.effect is not None:
+            value["annotations"] = {
+                "readOnlyHint": self.effect.read_only,
+                "destructiveHint": self.effect.destructive,
+                "idempotentHint": self.effect.idempotent,
+                "openWorldHint": self.effect.open_world,
+            }
         return value
 
 
@@ -92,6 +104,7 @@ class _FrozenMcpTool:
     input_schema_json: str
     use_when: str | None
     help_details: tuple[HelpDetailReferenceResult, ...]
+    effect: AgentToolEffect | None
 
 
 def _help_detail_reference(detail: HelpDetailReferenceResult) -> JsonObject:
@@ -158,6 +171,7 @@ def _project_tool(definition: AgentToolDefinition) -> _FrozenMcpTool:
         ),
         use_when=use_when,
         help_details=help_details,
+        effect=definition.effect,
     )
 
 
@@ -189,6 +203,7 @@ class McpRegistryProjection:
                 input_schema=json.loads(tool.input_schema_json),
                 use_when=tool.use_when,
                 help_details=tool.help_details,
+                effect=tool.effect,
             )
             for tool in self._tools
         )

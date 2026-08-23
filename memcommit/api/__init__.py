@@ -71,11 +71,26 @@ __all__ = [
     "ComparisonRelationResult",
     "ComparisonReportsResult",
     "ComparisonResult",
+    "CopyMemoriesReceipt",
+    "CopyUidPolicyResult",
     "DedupApplyResult",
     "DedupComponentResult",
     "DedupEvidenceResult",
     "DedupMemberResult",
     "DedupPlanResult",
+    "ContextDeletePlanResult",
+    "ContextDeleteReceipt",
+    "ContextDeleteStatus",
+    "DeletedDirectItemResult",
+    "DeletedItemKind",
+    "DirectItemDeleteReceipt",
+    "DeleteAuthorityError",
+    "DeleteConflictError",
+    "DeleteContextError",
+    "DeleteError",
+    "DeleteExecutionError",
+    "DeleteInputError",
+    "DeleteStorageError",
     "DedunApplyResult",
     "DedunComponentResult",
     "DedunEvidenceResult",
@@ -109,6 +124,18 @@ __all__ = [
     "MeldProviderFailure",
     "MeldSessionResult",
     "MeldStorageError",
+    "MemoryTransferAuthorityError",
+    "MemoryTransferCheckpointResult",
+    "MemoryTransferConflictError",
+    "MemoryTransferContextError",
+    "MemoryTransferError",
+    "MemoryTransferExecutionError",
+    "MemoryTransferInputError",
+    "MemoryTransferItemResult",
+    "MemoryTransferPlacementResult",
+    "MemoryTransferStorageError",
+    "MoveLinkPolicyResult",
+    "MoveMemoriesReceipt",
     "MemoryReferenceResult",
     "ContextReferenceResult",
     "OrdinaryQueryResult",
@@ -225,6 +252,18 @@ _LAZY_EXPORTS = {
         "ContextReferenceResult",
     ),
     **{
+        name: ("memcommit.api.memory_transfer", name)
+        for name in (
+            "CopyMemoriesReceipt",
+            "CopyUidPolicyResult",
+            "MemoryTransferCheckpointResult",
+            "MemoryTransferItemResult",
+            "MemoryTransferPlacementResult",
+            "MoveLinkPolicyResult",
+            "MoveMemoriesReceipt",
+        )
+    },
+    **{
         name: ("memcommit.api.atomize", name)
         for name in (
             "AtomizeAnalysisResult",
@@ -335,6 +374,17 @@ _LAZY_EXPORTS = {
             "ReplaceMemoryPlanResult",
             "ReplacePlanResult",
             "ReplaceSpanResult",
+        )
+    },
+    **{
+        name: ("memcommit.api.delete", name)
+        for name in (
+            "ContextDeletePlanResult",
+            "ContextDeleteReceipt",
+            "ContextDeleteStatus",
+            "DeletedDirectItemResult",
+            "DeletedItemKind",
+            "DirectItemDeleteReceipt",
         )
     },
     "FindMatchResult": ("memcommit.api.find", "FindMatchResult"),
