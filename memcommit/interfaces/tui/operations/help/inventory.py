@@ -2403,7 +2403,7 @@ def run_help_selector(
         detail_action = (
             f"H hide Help  Q return to {explore_return_label}"
             if mode == "EXPLORE"
-            else "H full help"
+            else "H full help  Q/Esc close"
         )
         tab_hint = (
             "Tab next kind" if view_state.selected_uid == "CATEGORY" else "Tab surface"

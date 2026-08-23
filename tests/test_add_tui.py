@@ -124,3 +124,19 @@ def test_tui_escape_cancels_without_calling_application() -> None:
 
     assert returned is None
     assert requests == []
+
+
+def test_tui_ctrl_c_cancels_without_calling_application() -> None:
+    requests: list[AddRequest] = []
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("eUncommitted draft.\x03")
+        returned = run_add_tui(
+            setup=_setup(),
+            execute=lambda request: requests.append(request) or _result(request),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert returned is None
+    assert requests == []

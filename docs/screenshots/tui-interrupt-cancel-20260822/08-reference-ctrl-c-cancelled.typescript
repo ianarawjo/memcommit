@@ -1,0 +1,68 @@
+CAPTURE PTY · 180x52
+PROFILE · disposable authoring fixture
+CURRENT CONTEXT · beta
+COMMAND · mem reference
+[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM REFERENCE · IMMUTABLE SNAPSHOT → INTO[0m
+[0m CHOOSE ONE SOURCE CONTEXT, SCOPE, AND TARGET[0m
+[0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ SNAPSHOT UNIT ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;5;117;1m┃[0m› SNAPSHOT UNIT · [0;38;5;234;48;5;117;1m[ CONTEXT ][0m  [ MEMORY ] · ←/→ SELECT                                                                                                                            [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m  MEANING · Retain one direct or recursive Context scope by value.                                                                                                                [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+[0m┌───────────────────────────────────────────────────────────────| SOURCE CONTEXT · SNAPSHOT THIS SCOPE · * CURRENT |───────────────────────────────────────────────────────────────[179C┐[0m
+[0m│› ✓   · [0;38;5;234;48;5;117malpha[0m                                                                                                                                                                    [0;1m^[179C[0m│[0m
+[0m│  · * ▸ beta                                                                                                                                                                     [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────| CONTEXT SCOPE |─────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│  CONTEXT SCOPE · [0;38;5;234;48;5;117m[ DIRECT · -d ][0m  [ RECURSIVE · -r ] · ←/→ SELECT                                                                                                                [179C│[0m
+[0m│  MEANING · Freeze only the selected Context's direct frame.                                                                                                                      [179C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m┌─────────────────────────────────────────────────────────────────| TARGET · ADD IMMUTABLE SNAPSHOT · * CURRENT |──────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│  ·   · alpha                                                                                                                                                                    [0;1m^[179C[0m│[0m
+[0m│› ✓ * ▸ [0;38;5;234;48;5;117mbeta[0m                                                                                                                                                                     [0;48;5;238m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m┌────────────────────────────────────────────────────────────────────────────| TO DO · EXACT COMMAND |─────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│PROPOSED COMMAND · NOT RUN                                                                                                                                                        [179C│[0m
+[0m│  mem reference alpha --into beta --direct                                                                                                                                        [179C│[0m
+[0m│                                                                                                                                                                                  [179C│[0m
+[0m│EFFECTS · ONE COMMAND                                                                                                                                                             [179C│[0m
+[0m│  Only Context 'beta' changes.                                                                                                                                                    [179C│[0m
+[0m│  Context 'alpha' remains independently owned; the Target retains only the Source Context's direct frame; embedded rows stay opaque.                                              [179C│[0m
+[0m│  The new snapshot is read-only and does not follow later Source edits.                                                                                                           [179C│[0m
+[0m│                                                                                                                                                                                  [179C│[0m
+[0m│Approval applies only to the exact command shown above.                                                                                                                           [179C│[0m
+[0m│                                                                                                                                                                                  [179C│[0m
+[0m│[ PRESS ENTER TO RETAIN THE REVIEWED SNAPSHOT ]                                                                                                                                   [179C│[0m
+[0m│                                                                                                                                                                                  [179C│[0m
+[0m│                                                                                                                                                                                  [179C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m ←/→ choose Context or Memory · Tab continue · Esc cancel[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[0m [48A[C[0m[3A[J[0m[?7h[?1049l[?2004lReference cancelled — no Context was changed.
+CTRL-C CANCELLATION VERIFICATION · READ-ONLY
+COMMAND RETURNED · mem reference
+CTRL-C CLOSED THE ACTIVE TUI · YES
+COMPLETE STORE UNCHANGED · YES
+CURRENT CONTEXT · beta
+VERIFICATION COMMAND · mem show --context beta
+[1mContext: beta[0m
+  Memories 2  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+[1m
+Items (in context order):[0m
+  [memory 2a73baba] [2mFirst beta Memory remains unchanged after cancellation.[0m
+  [memory 9c53fcf9] [2mSecond beta Memory remains unchanged after cancellation.[0m

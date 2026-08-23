@@ -1,0 +1,52 @@
+Reference cancelled — no Context was changed.                                                                                                                                       
+CTRL-C CANCELLATION VERIFICATION · READ-ONLY                                                                                                                                        
+COMMAND RETURNED · mem reference                                                                                                                                                    
+CTRL-C CLOSED THE ACTIVE TUI · YES                                                                                                                                                  
+COMPLETE STORE UNCHANGED · YES                                                                                                                                                      
+CURRENT CONTEXT · beta                                                                                                                                                              
+VERIFICATION COMMAND · mem show --context beta                                                                                                                                      
+Context: beta                                                                                                                                                                       
+  Memories 2  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0                                                                                                            
+                                                                                                                                                                                    
+Items (in context order):                                                                                                                                                           
+  [memory 2a73baba] First beta Memory remains unchanged after cancellation.                                                                                                         
+  [memory 9c53fcf9] Second beta Memory remains unchanged after cancellation.                                                                                                        
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    

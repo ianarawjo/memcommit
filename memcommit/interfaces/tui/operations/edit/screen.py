@@ -51,7 +51,10 @@ from memcommit.interfaces.tui.components.frame import (
 from memcommit.interfaces.tui.components.multiline_input import (
     build_framed_multiline_input,
 )
-from memcommit.interfaces.tui.core.keybindings import dispatch_tui_back
+from memcommit.interfaces.tui.core.keybindings import (
+    bind_tui_interrupt,
+    dispatch_tui_back,
+)
 from memcommit.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
@@ -384,6 +387,11 @@ def run_edit_tui(
     @bindings.add("escape", eager=True)
     def _cancel(event) -> None:
         dispatch_tui_back(event, close=lambda current: current.app.exit(result=None))
+
+    bind_tui_interrupt(
+        bindings,
+        lambda event: event.app.exit(result=None),
+    )
 
     return app.run()
 

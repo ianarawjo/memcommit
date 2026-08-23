@@ -62,7 +62,10 @@ from memcommit.interfaces.tui.components.horizontal_choice import (
     HorizontalChoiceState,
     render_horizontal_choice,
 )
-from memcommit.interfaces.tui.core.keybindings import dispatch_tui_back
+from memcommit.interfaces.tui.core.keybindings import (
+    bind_tui_interrupt,
+    dispatch_tui_back,
+)
 from memcommit.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
@@ -887,6 +890,8 @@ def run_embed_tui(
 
     def close(event) -> None:
         event.app.exit(result=None)
+
+    bind_tui_interrupt(bindings, close)
 
     @bindings.add("escape", eager=True)
     def _cancel(event) -> None:

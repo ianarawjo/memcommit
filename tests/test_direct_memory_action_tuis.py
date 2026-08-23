@@ -301,3 +301,38 @@ def test_direct_memory_action_tuis_cancel_without_freezing() -> None:
     assert edit is None
     assert reference_requests == []
     assert edit_requests == []
+
+
+def test_direct_memory_action_tuis_ctrl_c_without_freezing() -> None:
+    reference_requests: list[ReferenceRequest] = []
+    edit_requests: list[EditRequest] = []
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x03")
+        reference = run_reference_tui(
+            ReferenceTuiSetup(("source",), "source", "source"),
+            memory_loader=_memory_rows,
+            prepare=lambda request: reference_requests.append(request),  # type: ignore[arg-type,return-value]
+            prepare_context=lambda _request: (_ for _ in ()).throw(
+                AssertionError("cancel reached Context preparation")
+            ),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[B\r\tUncommitted replacement.\x03")
+        edit = run_edit_tui(
+            EditTuiSetup(("source",), frozenset({"source"}), "source"),
+            memory_loader=_memory_rows,
+            content_loader=lambda _target: "old content",
+            prepare=lambda request: edit_requests.append(request),  # type: ignore[arg-type,return-value]
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert reference is None
+    assert edit is None
+    assert reference_requests == []
+    assert edit_requests == []

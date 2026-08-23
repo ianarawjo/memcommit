@@ -744,6 +744,24 @@ def test_atomize_setup_does_not_apply_an_unconfirmed_new_output(isolated_store):
     assert receipt is None
 
 
+def test_atomize_setup_ctrl_c_cancels_without_a_receipt(isolated_store):
+    store = MemoryStore()
+    context = ops.init("atomize/input")
+    ops.add(context, "One direct Memory.")
+    store.create_context(context)
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\t\x1b[Batomize/unfinished\x03")
+        receipt = choose_atomize_setup(
+            store,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert receipt is None
+
+
 def test_atomize_setup_allows_explicit_in_place_output(isolated_store):
     store = MemoryStore()
     context = ops.init("atomize/input")

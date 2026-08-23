@@ -45,6 +45,7 @@ from memcommit.interfaces.tui.components.scrollable_pane import (
 )
 from memcommit.interfaces.tui.core.keybindings import (
     bind_case_insensitive_key,
+    bind_tui_interrupt,
     dispatch_tui_back,
 )
 from memcommit.interfaces.tui.core.text_layout import (
@@ -438,6 +439,8 @@ def run_add_tui(
 
     def close(event) -> None:
         event.app.exit(result=result)
+
+    bind_tui_interrupt(bindings, close)
 
     @bindings.add("escape", filter=read_only_focus, eager=True)
     @bindings.add("backspace", filter=read_only_focus, eager=True)

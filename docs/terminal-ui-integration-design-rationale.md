@@ -49,6 +49,16 @@ and mutation check. The detailed contract and remaining Sever-shell rollout
 are recorded in
 `session-endpoint-setup-design-rationale.md`.
 
+Interactive entry surfaces also share one narrow interrupt binding. Both the
+literal `Ctrl-C` key sequence and prompt-toolkit's translated `SIGINT` event
+delegate to the operation-owned safe-close callback; the shared helper does
+not decide whether a draft, request, or result exists. Add, Edit, Embed,
+Reference, and endpoint setup use this path so an interrupt before explicit
+execution returns no typed request and performs no durable write. The ordered
+180×52 evidence in
+[`docs/screenshots/tui-interrupt-cancel-20260822/`](screenshots/tui-interrupt-cancel-20260822/)
+records that boundary and the Help close-key guidance.
+
 Impact and Review are already partially composable:
 
 - directional `mem impact` projects an Update plan into the shared Resolution

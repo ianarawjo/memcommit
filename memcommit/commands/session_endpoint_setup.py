@@ -66,6 +66,7 @@ from memcommit.interfaces.tui.core.theme import (
 )
 from memcommit.interfaces.tui.core.keybindings import (
     bind_case_insensitive_key,
+    bind_tui_interrupt,
 )
 from memcommit.interfaces.tui.components.frame import (
     bind_focused_frame_style,
@@ -1219,6 +1220,8 @@ def choose_session_endpoints(
     )
     def _cancel(event) -> None:
         event.app.exit(result=None)
+
+    bind_tui_interrupt(bindings, _cancel)
 
     def render_header() -> str:
         return f" {display_escape_text(title)} · {active_mode().label}"

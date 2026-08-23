@@ -9,6 +9,7 @@ from typing import Callable
 
 from prompt_toolkit.filters import FilterOrBool
 from prompt_toolkit.key_binding import KeyBindings, KeyPressEvent
+from prompt_toolkit.keys import Keys
 
 
 def bind_case_insensitive_key(
@@ -35,6 +36,16 @@ def bind_case_insensitive_key(
         return handler
 
     return decorator
+
+
+def bind_tui_interrupt(
+    bindings: KeyBindings,
+    close: Callable[[KeyPressEvent], None],
+) -> None:
+    """Bind terminal interrupt input to an operation-owned safe close."""
+
+    bindings.add("c-c", eager=True)(close)
+    bindings.add(Keys.SIGINT, eager=True)(close)
 
 
 @dataclass
