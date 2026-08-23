@@ -161,7 +161,7 @@ class ContextSelectionState:
             or any(name not in self.catalog for name in group)
         ):
             raise ValueError(
-                "This Context group is no longer available. "
+                "The selected Context group is no longer available. "
                 "Reopen the operation and select it again."
             )
         if not self.multiple:

@@ -105,7 +105,7 @@ def context_subtree_names(tree: ContextTree, name: str) -> tuple[str, ...]:
 
     if name not in tree.parent_by_name:
         raise ValueError(
-            "The selected Context is no longer available. "
+            "The selected Context subtree is no longer available. "
             "Reopen the operation and select it again."
         )
     names: list[str] = []

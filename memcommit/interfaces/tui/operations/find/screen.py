@@ -254,13 +254,22 @@ def run_literal_find_tui(
                 app.layout.focus(scope.input)
             return "HANDLED"
         result_index = 0
-        memory_count = len(result.matches)
-        occurrence_count = result.occurrence_count
-        status = (
-            f"{memory_count} {'MEMORY' if memory_count == 1 else 'MEMORIES'}"
-            f" · {occurrence_count} "
-            f"{'OCCURRENCE' if occurrence_count == 1 else 'OCCURRENCES'}"
-        )
+        if result.matches:
+            memory_label = "MEMORY" if len(result.matches) == 1 else "MEMORIES"
+            occurrence_label = (
+                "OCCURRENCE" if result.occurrence_count == 1 else "OCCURRENCES"
+            )
+            status = (
+                f"{len(result.matches)} {memory_label}"
+                f" · {result.occurrence_count} {occurrence_label}"
+            )
+        else:
+            memory_label = (
+                "MEMORY" if result.scanned_item_count == 1 else "MEMORIES"
+            )
+            status = (
+                f"NO MATCHES · {result.scanned_item_count} {memory_label} SCANNED"
+            )
         app.layout.focus(results_control)
         return "HANDLED"
 

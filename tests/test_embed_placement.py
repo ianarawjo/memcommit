@@ -652,6 +652,25 @@ def test_embed_escape_cancels_before_freeze_or_application(isolated_store) -> No
     assert store.list_checkpoints(parent.name) == []
 
 
+def test_embed_ctrl_c_cancels_before_freeze_or_application(isolated_store) -> None:
+    store, _child, parent, _first, _second = _ordered_store()
+    port = MemoryStoreEmbedPort.capture(store)
+    before = store.load_direct(parent.name).to_dict()
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x03")
+        plan = choose_embed_setup(
+            port,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert plan is None
+    assert store.load_direct(parent.name).to_dict() == before
+    assert store.list_checkpoints(parent.name) == []
+
+
 def test_flagless_embed_applies_only_the_exact_reviewed_gap(
     isolated_store,
     monkeypatch,

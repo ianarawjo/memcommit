@@ -11,8 +11,8 @@ from typing import Annotated, Callable, Optional
 import typer
 
 from memcommit.command_attempts import current_command_attempt_uid
-from memcommit.commands.command_group import CanonicalCommandGroup
 from memcommit.commands.command_progress import CommandProgress
+from memcommit.commands.command_group import CanonicalCommandGroup
 from memcommit.commands.profile_group import ProfileAliasGroup
 from memcommit.commands.profile_picker import (
     ProfilePickerAction,
@@ -236,14 +236,10 @@ def _pick_profile(
             query_source_names=inspection.query_source_names,
             uid=profile.uid,
             study_uid=(
-                memberships[profile.uid].uid
-                if profile.uid in memberships
-                else None
+                memberships[profile.uid].uid if profile.uid in memberships else None
             ),
             study_name=(
-                memberships[profile.uid].name
-                if profile.uid in memberships
-                else None
+                memberships[profile.uid].name if profile.uid in memberships else None
             ),
             study_created_at=(
                 memberships[profile.uid].created_at
@@ -251,14 +247,10 @@ def _pick_profile(
                 else None
             ),
             study_task=(
-                memberships[profile.uid].task
-                if profile.uid in memberships
-                else None
+                memberships[profile.uid].task if profile.uid in memberships else None
             ),
             study_role=(
-                memberships[profile.uid].role
-                if profile.uid in memberships
-                else None
+                memberships[profile.uid].role if profile.uid in memberships else None
             ),
             study_profile_count=(
                 memberships[profile.uid].profile_count
@@ -275,8 +267,7 @@ def _pick_profile(
                 if profile.kind == "AUTHORING"
                 else (
                     "The fixed study-baseline Profile cannot be removed"
-                    if profile.name.casefold()
-                    == STUDY_BASELINE_PROFILE_NAME.casefold()
+                    if profile.name.casefold() == STUDY_BASELINE_PROFILE_NAME.casefold()
                     else None
                 )
             ),
@@ -285,8 +276,7 @@ def _pick_profile(
                 if profile.kind == "AUTHORING"
                 else (
                     "The fixed study-baseline Profile cannot be renamed"
-                    if profile.name.casefold()
-                    == STUDY_BASELINE_PROFILE_NAME.casefold()
+                    if profile.name.casefold() == STUDY_BASELINE_PROFILE_NAME.casefold()
                     else (
                         "Legacy Study members cannot be renamed individually"
                         if profile.uid in memberships
@@ -303,9 +293,7 @@ def _pick_profile(
         )
     )
     try:
-        picker_kwargs = (
-            {"initial_status": initial_status} if initial_status else {}
-        )
+        picker_kwargs = {"initial_status": initial_status} if initial_status else {}
         if apply_removal is not None:
             picker_kwargs["apply_removal"] = apply_removal
         if initial_row_index is not None:
@@ -355,8 +343,7 @@ def _print_profile_removal(result) -> None:
             + f"{result.study_removed_count} removed"
         )
     typer.echo(
-        "Active Profile unchanged: "
-        + display_escape_text(result.active_profile_name)
+        "Active Profile unchanged: " + display_escape_text(result.active_profile_name)
     )
 
 
@@ -377,8 +364,7 @@ def _print_study_removal(result) -> None:
         "cannot be recovered."
     )
     typer.echo(
-        "Active Profile unchanged: "
-        + display_escape_text(result.active_profile_name)
+        "Active Profile unchanged: " + display_escape_text(result.active_profile_name)
     )
 
 
@@ -485,8 +471,7 @@ def _print_profile_rename(result) -> None:
         "Store data, Contexts, Memories, grants, and provenance were not modified."
     )
     typer.echo(
-        "Use it with: mem profile use "
-        + display_escape_text(result.profile.name)
+        "Use it with: mem profile use " + display_escape_text(result.profile.name)
     )
 
 
@@ -511,8 +496,7 @@ def _print_study_rename(result) -> None:
         typer.echo("Member Profile display names unchanged.")
     typer.echo("Profile UIDs, stores, Contexts, Memories, and Grants unchanged.")
     typer.echo(
-        "Active Profile unchanged: "
-        + display_escape_text(result.active_profile_name)
+        "Active Profile unchanged: " + display_escape_text(result.active_profile_name)
     )
 
 
@@ -553,7 +537,9 @@ def _apply_profile_picker_action(
             )
         elif action.kind == "RENAME_STUDY":
             if action.new_name is None:
-                raise ProfileError("Profile picker Study rename is missing its new name.")
+                raise ProfileError(
+                    "Profile picker Study rename is missing its new name."
+                )
             result = rename_study(
                 action.name,
                 action.new_name,
@@ -635,11 +621,14 @@ def _run_profile_selector() -> None:
         # A completed destructive action must never reuse the catalog or
         # registry generation that was frozen for its review. Re-entering the
         # picker reloads both while keeping the person in the selector flow.
-        status = _apply_profile_picker_action(
-            action,
-            print_receipt=False,
-            propagate_errors=False,
-        ) or "Profile mutation completed"
+        status = (
+            _apply_profile_picker_action(
+                action,
+                print_receipt=False,
+                propagate_errors=False,
+            )
+            or "Profile mutation completed"
+        )
         preferred_row_index = action.row_index
         completed_mutation = True
 
@@ -855,7 +844,7 @@ def grant_create_cmd(
         typer.Option(
             "-r",
             "--recursive",
-            help="Freeze the resource's current descendants into this grant",
+            help="Include the resource's current descendants in this grant",
         ),
     ] = False,
     direct: Annotated[
@@ -863,7 +852,7 @@ def grant_create_cmd(
         typer.Option(
             "-d",
             "--direct",
-            help="Freeze only the selected resource root into this grant",
+            help="Include only the selected resource root in this grant",
         ),
     ] = False,
 ) -> None:
@@ -913,7 +902,7 @@ def grant_update_cmd(
             "-r",
             "--recursive",
             "--refresh-scope",
-            help="Include all current descendants",
+            help="Replace the grant scope with all current descendants",
         ),
     ] = False,
     root_only: Annotated[
@@ -922,7 +911,7 @@ def grant_update_cmd(
             "-d",
             "--direct",
             "--root-only",
-            help="Include only the current root Context",
+            help="Replace the grant scope with only its root Context",
         ),
     ] = False,
 ) -> None:
@@ -1032,9 +1021,7 @@ def use_cmd(
 def remove_cmd(
     name: Annotated[
         str,
-        typer.Argument(
-            help="Managed Profile whose complete store will be deleted"
-        ),
+        typer.Argument(help="Managed Profile whose complete store will be deleted"),
     ],
     force: Annotated[
         bool,
@@ -1109,7 +1096,7 @@ def rename_cmd(
             help=(
                 "New name for the current Profile, or existing Profile when "
                 "NEW is also supplied"
-            )
+            ),
         ),
     ],
     new_name: Annotated[
@@ -1256,9 +1243,7 @@ def migrate_context_cmd(
         expected_profile_uid is None or expected_graph_digest is None
     ):
         _fail(
-            ValueError(
-                "Preview this migration first and run its exact Apply command."
-            )
+            ValueError("Preview this migration first and run its exact Apply command.")
         )
     if not apply_migration and (
         expected_profile_uid is not None or expected_graph_digest is not None
@@ -1321,10 +1306,7 @@ def migrate_context_cmd(
         f"Meld {plan.meld_session_count}"
     )
     if blockers:
-        typer.echo(
-            "  Grant blockers: "
-            + ", ".join(item.uid for item in blockers)
-        )
+        typer.echo("  Grant blockers: " + ", ".join(item.uid for item in blockers))
         typer.echo(
             "Revoke each listed Grant with 'mem profile grant delete GRANT', "
             "run the migration, then recreate the Grant with portable names."
@@ -1332,7 +1314,7 @@ def migrate_context_cmd(
         if apply_migration:
             _fail(
                 ProfileError(
-                    "Context migration is blocked because cross-Profile Grants "
+                    "Context migration is blocked by cross-Profile Grants that "
                     "still reference the current name."
                 )
             )
@@ -1448,8 +1430,7 @@ def import_study_cmd(
         + display_escape_text(STUDY_BASELINE_PROFILE_NAME)
     )
     typer.echo(
-        "Clone it as an isolated participant/authority run with: "
-        "mem init-study NAME"
+        "Clone it as an isolated participant/authority run with: mem init-study NAME"
     )
 
 
@@ -1519,12 +1500,9 @@ def archive_study_cmd(
     )
     typer.echo(f"Profiles removed from selector: {len(result.profiles)}")
     typer.echo(f"Internal grants recorded in archive: {len(result.grants)}")
+    typer.echo("Archive manifest: " + display_escape_text(str(result.manifest_path)))
     typer.echo(
-        "Archive manifest: " + display_escape_text(str(result.manifest_path))
-    )
-    typer.echo(
-        "Active Profile unchanged: "
-        + display_escape_text(result.active_profile_name)
+        "Active Profile unchanged: " + display_escape_text(result.active_profile_name)
     )
     typer.echo("No Memory data was moved or deleted.")
     typer.echo("To create a merged replacement from an available Study baseline:")

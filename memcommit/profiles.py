@@ -636,9 +636,7 @@ def study_run_profile_pairs(
             raise ProfileError("Study run names must be unique.")
         seen_names.add(name.casefold())
         participant = next(
-            profile
-            for profile, identity in members
-            if identity.role == "PARTICIPANT"
+            profile for profile, identity in members if identity.role == "PARTICIPANT"
         )
         authority = next(
             profile
@@ -1773,13 +1771,10 @@ def rename_study(
                 None,
             )
             if generated_collision is not None:
-                raise ProfileError(
-                    f"Profile {generated_collision!r} already exists."
-                )
+                raise ProfileError(f"Profile {generated_collision!r} already exists.")
 
         updated_profiles = tuple(
-            renamed_by_uid.get(profile.uid, profile)
-            for profile in registry.profiles
+            renamed_by_uid.get(profile.uid, profile) for profile in registry.profiles
         )
         updated = ProfileRegistry(
             generation=max(1, registry.generation + 1),
@@ -2224,9 +2219,7 @@ def archive_legacy_study(name: str) -> LegacyStudyArchiveResult:
                 if grant.uid not in internal_grant_uids
             ),
             removed_profile_uids=tuple(
-                uid
-                for uid in registry.removed_profile_uids
-                if uid not in grouped_uids
+                uid for uid in registry.removed_profile_uids if uid not in grouped_uids
             ),
         )
         try:
@@ -3825,13 +3818,10 @@ def _canonicalize_study_practice_description(
         _PRE_SPLIT_STUDY_PRACTICE_DESCRIPTION_CONTENT,
         _LEGACY_PRE_SPLIT_STUDY_PRACTICE_DESCRIPTION_CONTENT,
     }
-    needs_copy = (
-        _LEGACY_STUDY_PRACTICE_PROVENANCE_UID in description.memories
-        or any(
-            isinstance(item, Memory)
-            and (item.content in replacements or item.content in pre_split_contents)
-            for item in description.iter_items()
-        )
+    needs_copy = _LEGACY_STUDY_PRACTICE_PROVENANCE_UID in description.memories or any(
+        isinstance(item, Memory)
+        and (item.content in replacements or item.content in pre_split_contents)
+        for item in description.iter_items()
     )
     if not needs_copy:
         return contexts
@@ -4729,7 +4719,9 @@ def _attach_declared_study_prewarms(
             participant_store_root=participant_root,
         )
     except StudyPrewarmRegistryError as error:
-        raise ProfileError(f"Study semantic prewarm could not be attached: {error}") from error
+        raise ProfileError(
+            f"Study semantic prewarm could not be attached: {error}"
+        ) from error
 
 
 def _publish_study_run_pair(

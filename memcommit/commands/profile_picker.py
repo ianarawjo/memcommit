@@ -169,8 +169,7 @@ def _validate_entries(
                     )
                     or (
                         entry.study_task is None
-                        and entry.study_role
-                        in {"PARTICIPANT", "GRANTED_MEMORY"}
+                        and entry.study_role in {"PARTICIPANT", "GRANTED_MEMORY"}
                     )
                 )
             )
@@ -554,21 +553,6 @@ def choose_profile(
         input_name="profile-picker-rename",
         frame_style="class:profile-rename-field",
     )
-    create_field = ExactNameFieldControl.create(
-        ExactNameFieldView(
-            value="",
-            label="NEW PROFILE NAME",
-            state="NOT CREATED",
-            detail="Enter to review this exact empty Profile creation.",
-            validate=validate_profile_name,
-            value_label="Profile name",
-            # Creation must preserve the exact reviewed registry key; padding
-            # cannot be normalized into a different Profile identity.
-            strip_candidate=False,
-        ),
-        input_name="profile-picker-create",
-        frame_style="class:profile-create-field",
-    )
     study_rename_field = ExactNameFieldControl.create(
         ExactNameFieldView(
             value="",
@@ -584,6 +568,21 @@ def choose_profile(
         input_name="profile-picker-study-rename",
         frame_style="class:profile-rename-field",
     )
+    create_field = ExactNameFieldControl.create(
+        ExactNameFieldView(
+            value="",
+            label="NEW PROFILE NAME",
+            state="NOT CREATED",
+            detail="Enter to review this exact empty Profile creation.",
+            validate=validate_profile_name,
+            value_label="Profile name",
+            # Creation must preserve the exact reviewed registry key; padding
+            # cannot be normalized into a different Profile identity.
+            strip_candidate=False,
+        ),
+        input_name="profile-picker-create",
+        frame_style="class:profile-create-field",
+    )
 
     def active_rename_field() -> ExactNameFieldControl:
         action = rename_target["action"]
@@ -596,8 +595,8 @@ def choose_profile(
             status_is_error["value"] = False
 
     rename_field.input.buffer.on_text_changed += clear_stale_rename_error
-    create_field.input.buffer.on_text_changed += clear_stale_rename_error
     study_rename_field.input.buffer.on_text_changed += clear_stale_rename_error
+    create_field.input.buffer.on_text_changed += clear_stale_rename_error
 
     def move(delta: int) -> None:
         selected["index"] = max(
@@ -773,8 +772,7 @@ def choose_profile(
                 event.app.invalidate()
                 return
         elif any(
-            entry.study_name == row.name and entry.name == current
-            for entry in options
+            entry.study_name == row.name and entry.name == current for entry in options
         ):
             status["text"] = "Study contains CURRENT Profile · switch first"
             status_is_error["value"] = True
@@ -796,11 +794,12 @@ def choose_profile(
         assert isinstance(action, ProfilePickerAction)
         reviewed_row_index = selected["index"]
         # Create and rename are short registry mutations. Return their frozen
-        # Profile command so the picker is rebuilt from the next generation.
-        if (
-            action.kind in {"CREATE_PROFILE", "RENAME_PROFILE", "RENAME_STUDY"}
-            or apply_removal is None
-        ):
+        # receipts so the picker is rebuilt from the next generation.
+        if action.kind in {
+            "CREATE_PROFILE",
+            "RENAME_PROFILE",
+            "RENAME_STUDY",
+        } or apply_removal is None:
             event.app.exit(result=action)
             return
 
@@ -862,10 +861,10 @@ def choose_profile(
                 status["text"] = "Create review cancelled"
                 status_is_error["value"] = False
                 event.app.layout.focus(create_field.input)
-            elif (
-                isinstance(action, ProfilePickerAction)
-                and action.kind in {"RENAME_PROFILE", "RENAME_STUDY"}
-            ):
+            elif isinstance(action, ProfilePickerAction) and action.kind in {
+                "RENAME_PROFILE",
+                "RENAME_STUDY",
+            }:
                 rename_target["action"] = ProfilePickerAction(
                     kind=action.kind,
                     name=action.name,
@@ -929,10 +928,10 @@ def choose_profile(
         if isinstance(action, ProfilePickerAction):
             if action.kind == "CREATE_PROFILE":
                 return " Review exact Profile creation"
-            if action.kind == "RENAME_PROFILE":
-                return " Review exact Profile rename"
             if action.kind == "RENAME_STUDY":
                 return " Review exact Study rename"
+            if action.kind == "RENAME_PROFILE":
+                return " Review exact Profile rename"
         return " Review irreversible deletion"
 
     def footer_text():
@@ -954,10 +953,10 @@ def choose_profile(
                 and action.kind == "CREATE_PROFILE"
             ):
                 return " Enter/A create empty Profile  Esc back"
-            if (
-                isinstance(action, ProfilePickerAction)
-                and action.kind in {"RENAME_PROFILE", "RENAME_STUDY"}
-            ):
+            if isinstance(action, ProfilePickerAction) and action.kind in {
+                "RENAME_PROFILE",
+                "RENAME_STUDY",
+            }:
                 target_kind = "Study" if action.kind == "RENAME_STUDY" else "Profile"
                 return f" Enter/A rename {target_kind}  Esc back"
             return (
@@ -1001,9 +1000,7 @@ def choose_profile(
                 ("class:semantic.create", "N new Profile"),
                 ("", suffix),
             ]
-        message_style = (
-            "class:error" if status_is_error["value"] else "class:success"
-        )
+        message_style = "class:error" if status_is_error["value"] else "class:success"
         return [
             ("", prefix),
             ("class:semantic.create", "N new Profile"),
@@ -1026,9 +1023,7 @@ def choose_profile(
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
-    app: Application[
-        ProfilePickerAction | ProfilePickerRefresh | None
-    ] = Application(
+    app: Application[ProfilePickerAction | ProfilePickerRefresh | None] = Application(
         layout=Layout(
             HSplit(
                 [

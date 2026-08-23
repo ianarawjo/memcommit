@@ -1169,7 +1169,7 @@ def _ground_action_proposal(
         )
         effects = (
             (
-                "Ground binding: SET explicit Task and frozen Context "
+                "Ground binding: SET explicit Task and selected Context "
                 "versions"
             ),
             "Goal: unchanged",
@@ -2949,7 +2949,7 @@ def cmd(
         bool,
         typer.Option(
             "--snapshot",
-            help="Print the complete stable session frame",
+            help="Print the saved session view",
         ),
     ] = False,
     replace_ground: Annotated[

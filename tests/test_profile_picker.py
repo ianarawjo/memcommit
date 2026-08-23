@@ -1,4 +1,5 @@
 """Contracts for the interactive whole-store Profile selector."""
+
 from __future__ import annotations
 
 import threading
@@ -49,9 +50,7 @@ ENTRIES = (
 
 
 def _visible_text(fragments: list[tuple[str, str]]) -> str:
-    return "".join(
-        text for style, text in fragments if style != "[SetCursorPosition]"
-    )
+    return "".join(text for style, text in fragments if style != "[SetCursorPosition]")
 
 
 def test_profile_picker_marks_current_and_selected_use_action():
@@ -68,9 +67,7 @@ def test_profile_picker_marks_current_and_selected_use_action():
     assert "Contexts 14 owned + 2 granted" in lines[1]
     assert "Memories 375 owned + 12 granted" in lines[1]
     assert "query=construction-details" in lines[1]
-    assert lines[1].index("query=construction-details") < lines[1].index(
-        "current="
-    )
+    assert lines[1].index("query=construction-details") < lines[1].index("current=")
     assert "USE" not in lines[2]
 
 

@@ -774,7 +774,7 @@ def run_find_search_workbench(
                 raise ValueError("Find controller returned an invalid response.")
             if next_response.request != request:
                 raise ValueError(
-                    "Search inputs changed while the result was being prepared. "
+                    "Search inputs changed while the request was running. "
                     "Run the search again."
                 )
             return next_response

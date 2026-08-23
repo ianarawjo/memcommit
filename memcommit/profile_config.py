@@ -5,6 +5,7 @@ imports it while establishing its immutable process-local root, so importing
 the two modules in the opposite direction would make profile selection depend
 on import order.
 """
+
 from __future__ import annotations
 
 import json
@@ -142,7 +143,10 @@ def study_run_identity(profile: ProfileEntry) -> StudyRunIdentity | None:
     if parsed_created_at.tzinfo is None or parsed_created_at.utcoffset() is None:
         raise ProfileConfigError("Study creation timestamp must include a timezone.")
     baseline_sha256 = source.get("baseline_sha256")
-    if not isinstance(baseline_sha256, str) or _SHA256.fullmatch(baseline_sha256) is None:
+    if (
+        not isinstance(baseline_sha256, str)
+        or _SHA256.fullmatch(baseline_sha256) is None
+    ):
         raise ProfileConfigError("Study baseline digest is invalid.")
     baseline_profile_uid = _canonical_uid(
         source.get("baseline_profile_uid"),
@@ -229,8 +233,7 @@ def canonical_grant_permissions(value: object) -> tuple[str, ...]:
             "Derive and accept-derived grants require READ permission."
         )
     if (
-        normalized
-        & {"COMBINE", "EXPORT", "SAVE_BOUND_ANALYSIS", "SAVE_ANALYSIS"}
+        normalized & {"COMBINE", "EXPORT", "SAVE_BOUND_ANALYSIS", "SAVE_ANALYSIS"}
         and "DERIVE" not in normalized
     ):
         raise ProfileConfigError(
@@ -321,7 +324,9 @@ class ProfileRegistry:
 
     @property
     def active(self) -> ProfileEntry:
-        return next(profile for profile in self.profiles if profile.uid == self.active_uid)
+        return next(
+            profile for profile in self.profiles if profile.uid == self.active_uid
+        )
 
     def by_name(self, name: str) -> ProfileEntry | None:
         canonical = validate_profile_name(name)
@@ -452,7 +457,11 @@ def load_profile_registry() -> ProfileRegistry:
     }:
         raise ProfileConfigError("Unsupported profile registry schema version.")
     generation = value.get("generation")
-    if not isinstance(generation, int) or isinstance(generation, bool) or generation < 1:
+    if (
+        not isinstance(generation, int)
+        or isinstance(generation, bool)
+        or generation < 1
+    ):
         raise ProfileConfigError("Profile registry generation is invalid.")
     raw_profiles = value.get("profiles")
     if not isinstance(raw_profiles, list) or not raw_profiles:
@@ -539,11 +548,7 @@ def load_profile_registry() -> ProfileRegistry:
         }:
             raise ProfileConfigError("Profile grant entry is invalid.")
         revision = raw.get("revision")
-        if (
-            not isinstance(revision, int)
-            or isinstance(revision, bool)
-            or revision < 1
-        ):
+        if not isinstance(revision, int) or isinstance(revision, bool) or revision < 1:
             raise ProfileConfigError("Profile grant revision is invalid.")
         authority_uid = _canonical_uid(
             raw.get("authority_profile_uid"),
@@ -589,13 +594,11 @@ def load_profile_registry() -> ProfileRegistry:
         )
         resource_name = validate_grant_resource_name(raw.get("resource_name"))
         if not any(
-            item.uid == resource_uid and item.name == resource_name
-            for item in contexts
+            item.uid == resource_uid and item.name == resource_name for item in contexts
         ):
             raise ProfileConfigError("Grant scope does not contain its root Context.")
         if any(
-            item.name != resource_name
-            and not item.name.startswith(resource_name + "/")
+            item.name != resource_name and not item.name.startswith(resource_name + "/")
             for item in contexts
         ):
             raise ProfileConfigError(
@@ -633,7 +636,9 @@ def load_profile_registry() -> ProfileRegistry:
         for grant in grants
     ]
     if len(set(public_keys)) != len(public_keys):
-        raise ProfileConfigError("Granted public view names must be unique per Profile.")
+        raise ProfileConfigError(
+            "Granted public view names must be unique per Profile."
+        )
     return ProfileRegistry(
         generation=generation,
         active_uid=active_uid,
