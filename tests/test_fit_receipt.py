@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import replace
+from types import SimpleNamespace
 
 import click
 from click.testing import CliRunner
@@ -15,7 +16,12 @@ from memcommit.fit_judgment import (
     FitProposition,
     FitQuestion,
 )
-from memcommit.fit_coherence import FitCoherenceFinding
+from memcommit.fit_coherence import (
+    FitCoherenceFinding,
+    FitCoherenceSubject,
+    FitContextFrame,
+    FitContextMemory,
+)
 from memcommit.interfaces.cli.fit import (
     render_fit_plain,
     render_proposition_fit_plain,
@@ -25,6 +31,7 @@ from memcommit.interfaces.console.theme import (
     semantic_color_rgb,
 )
 from memcommit.interfaces.fit import (
+    _coherence_issue_lines,
     _coherence_participant_label,
     fit_result_text,
     proposition_fit_result_text,
@@ -103,9 +110,11 @@ def test_fit_receipt_prints_only_may_and_no_details() -> None:
     assert text.splitlines() == [
         "FIT · NO · [TARGETS: GROUND ticker] · 1/3",
         "? MAY · [RULE r1] [MEMORY 11111111] Use one stable abbreviation. ↔ "
-        "[EXAMPLE e2] [MEMORY 33333333] Axiom AI Technologies may be AAT or AAIT.",
+        "[EXAMPLE e2] [MEMORY 33333333] Axiom AI Technologies may be AAT or AAIT. "
+        "· WHY · The Rule does not choose between the two abbreviations.",
         "! NO · [RULE r1] [MEMORY 11111111] Use one stable abbreviation. ↔ "
-        "[EXAMPLE e3] [MEMORY 44444444] The same symbol must be both AAT and AXAI.",
+        "[EXAMPLE e3] [MEMORY 44444444] The same symbol must be both AAT and AXAI. "
+        "· WHY · One exact symbol cannot have both values.",
     ]
     assert "e1" not in text
     assert "AAPL" not in text
@@ -168,7 +177,8 @@ def _proposition_result(verdict: str) -> FitPropositionsResult:
 
 def test_general_no_receipt_groups_both_proposition_targets() -> None:
     assert proposition_fit_result_text(_proposition_result("NO")) == (
-        "FIT · NO · [TARGETS: PROPOSITION p1, p2]"
+        "FIT · NO · [TARGETS: PROPOSITION p1, p2] · WHY · "
+        "The ordinary readings conflict unless entrance scope changes."
     )
 
 
@@ -176,7 +186,8 @@ def test_general_may_receipt_is_one_line_but_typed_readings_remain() -> None:
     result = _proposition_result("MAY")
 
     assert proposition_fit_result_text(result) == (
-        "FIT · MAY · [TARGETS: PROPOSITION p1, p2]"
+        "FIT · MAY · [TARGETS: PROPOSITION p1, p2] · WHY · "
+        "The ordinary readings conflict unless entrance scope changes."
     )
     assert result.analysis.assessment.consistent_reading
     assert result.analysis.assessment.inconsistent_reading
@@ -301,3 +312,50 @@ def test_coherence_heading_keeps_both_check_sides_when_material_is_one() -> None
     )
 
     assert _coherence_participant_label(finding) == "e1 ↔ k1"
+
+
+def test_coherence_issue_keeps_evidence_and_why_on_one_logical_line() -> None:
+    subject = FitCoherenceSubject(
+        uid="55555555-5555-5555-5555-555555555555",
+        alias="e1",
+        layer="EXAMPLE",
+        statement="One reviewed Example.",
+        context_aliases=("k1",),
+    )
+    memory = FitContextMemory(
+        uid="66666666-6666-6666-6666-666666666666",
+        alias="m1",
+        content="Supporting Context Memory.",
+    )
+    context = FitContextFrame(
+        uid="77777777-7777-7777-7777-777777777777",
+        alias="k1",
+        name="context/one",
+        role="GROUND_CONTEXT",
+        digest="b" * 64,
+        memories=(memory,),
+    )
+    finding = FitCoherenceFinding(
+        check_id="context:e1",
+        axis="CONTEXT",
+        relation="CONTEXT_EXAMPLE",
+        status="UNDERDETERMINED",
+        subject_aliases=("e1",),
+        context_aliases=("k1",),
+        material_aliases=("e1", "m1"),
+        reason="The Context relation remains undecidable.",
+    )
+    report = SimpleNamespace(
+        brief="One Ground brief.",
+        subjects=(subject,),
+        contexts=(context,),
+    )
+
+    lines = _coherence_issue_lines(report, finding)
+
+    assert tuple(line.text for line in lines) == (
+        "? MAY · CONTEXT · e1 ↔ k1 · [EXAMPLE e1] One reviewed Example. · "
+        "[CONTEXT k1] context/one · GROUND_CONTEXT · "
+        "[MEMORY m1] Supporting Context Memory. · WHY · "
+        "The Context relation remains undecidable.",
+    )

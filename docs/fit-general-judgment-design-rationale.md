@@ -158,6 +158,7 @@ omission, provider-side mutation, or automatic application.
 The general CLI form is:
 
 ```text
+mem fit
 mem fit [UID_OR_PREFIX] [CONTEXT] "[literal proposition]"
 mem fit [CONTEXT:UID_OR_PREFIX] [CONTEXT] text:[forced literal]
 mem fit "[proposition A]" "[proposition B]" ["[proposition C]" ...]
@@ -184,8 +185,12 @@ selected Memories retain their individual UID prefixes. The compact line
 therefore does not repeat exact bodies, Context-to-Memory provenance, or the
 original interleaved argv order. The typed result still retains every expanded
 Memory origin, exact proposition body, reason, material alias, and both
-required ordinary readings for `MAY`. In a color-capable TTY, only the typed
-`YES`, `MAY`, or `NO`
+required ordinary readings for `MAY`. A `YES` receipt ends after the target
+group because no issue needs explanation. `MAY` and `NO` append their compact
+reason to that same logical line as `· WHY · REASON`; they never create a
+second explanation row. Display escaping keeps an embedded provider newline or
+control from fabricating another receipt line. In a color-capable TTY, only the
+typed `YES`, `MAY`, or `NO`
 token uses its shared judgment role: green, yellow, or red respectively.
 Operation chrome, punctuation, source labels, Context/Ground names, counts,
 and Memory bodies remain neutral. `--plain` remains accepted for compatibility
@@ -215,6 +220,13 @@ ordinary Memories in stored order. It does not follow lexical descendants,
 embedded Contexts, live or snapshot Memory references, or QUERY-only routes.
 Those axes require separate operation review rather than a hidden widening of
 one selected set.
+
+With no proposition, Memory, or Context operand, the CLI treats the
+command-start current Context as one implicit Context source. This is the
+convenience spelling of selecting that Context's direct ordinary Memories, not
+a request to widen into descendants or embedded content. The same minimum of
+two effective propositions applies after expansion, so an empty or one-Memory
+current Context fails locally before provider construction.
 
 Automatic operands retain their positional order, with a Context expanding its
 direct Memories in place and stored order. Explicit `--memory` values follow
@@ -260,14 +272,15 @@ and retain their historic receipt vocabulary for compatibility.
 The Ground adapter projects the complete stored analysis as a small receipt:
 one `FIT · YES|MAY|NO|STALE · [TARGETS: GROUND <name>] · <fitted>/<total>` whole-operation
 summary followed only by current non-fitting checks.
-A Rule–Example issue is exactly one line: `! NO · [RULE r1] [MEMORY <uid-prefix>] <content> ↔ [EXAMPLE e3] [MEMORY <uid-prefix>] <content>`.
-It has no alias-only heading, blank separator, or expanded `WHY`; the immutable
-typed receipt retains the reason. The public line spends its space only on
-classification, both Ground roles, both Memory identities, and both exact
-bodies. A coherence issue uses the frozen check participants rather than only
-the provider-selected material subset, so a Context, vertical, or peer
-relation cannot collapse visually to one side; additional material Context
-Memories remain visible as evidence.
+A Rule–Example issue is exactly one line: `! NO · [RULE r1] [MEMORY <uid-prefix>] <content> ↔ [EXAMPLE e3] [MEMORY <uid-prefix>] <content> · WHY · <reason>`.
+It has no alias-only heading, blank separator, or expanded `WHY` row; the same
+logical line ends with `· WHY · REASON`. The public line preserves
+classification, both Ground roles, both Memory identities, both exact bodies,
+and the decisive explanation without turning one judgment into a block. A
+coherence issue follows the same rule: its axis, frozen check participants,
+additional material Context Memories, and reason remain visible on one
+display-escaped logical line rather than a heading-plus-evidence-plus-`WHY`
+stack.
 `UNDERDETERMINED` becomes `? MAY`, `CONTRADICTS` becomes `! NO`, and a legacy
 `NOT_APPLICABLE` check becomes `· N/A`. Fitting Example and graph details are
 omitted; they remain counted and retained in the immutable Ground receipt.

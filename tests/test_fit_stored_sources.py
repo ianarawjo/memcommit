@@ -219,6 +219,58 @@ def test_mem_fit_accepts_multiple_current_memory_selectors(
     ]
 
 
+def test_mem_fit_without_operands_uses_current_context(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    current, memories = _context(
+        store,
+        "fit/current",
+        "The lobby closes at five.",
+        "The side entrance remains open.",
+    )
+    store.set_current(current.name)
+    provider = _FitProvider()
+    monkeypatch.setattr(fit_command, "connect_semantic_provider", lambda: provider)
+
+    result = CliRunner().invoke(app, ["fit", "--plain"])
+
+    assert result.exit_code == 0, result.output
+    assert result.output == f"FIT · YES · [TARGETS: CONTEXT {current.name}]\n"
+    question = provider.payload["questions"][0]
+    assert [item["content"] for item in question["propositions"]] == [
+        memory.content for memory in memories
+    ]
+    assert [item["role"] for item in question["propositions"]] == [
+        "MEMORY",
+        "MEMORY",
+    ]
+
+
+def test_mem_fit_without_operands_rejects_one_memory_before_provider(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    current, _memories = _context(store, "fit/current", "Only one stored claim.")
+    store.set_current(current.name)
+    calls = 0
+
+    def provider_factory():
+        nonlocal calls
+        calls += 1
+        return _FitProvider()
+
+    monkeypatch.setattr(fit_command, "connect_semantic_provider", provider_factory)
+
+    result = CliRunner().invoke(app, ["fit", "--plain"])
+
+    assert result.exit_code == 1
+    assert "at least two propositions" in result.output
+    assert calls == 0
+
+
 def test_mem_fit_auto_resolves_memory_context_and_literal_in_operand_order(
     isolated_store,
     monkeypatch,
@@ -456,6 +508,7 @@ def test_mem_fit_help_exposes_repeatable_stored_sources() -> None:
     assert "Repeatable readable Context" in result.output
     assert "Auto operand" in result.output
     assert "text:VALUE" in result.output
+    assert "current Context's direct Memories" in result.output
 
 
 def test_stored_fit_rejects_empty_context_before_provider(isolated_store):

@@ -65,7 +65,8 @@ def cmd(
         typer.Argument(
             help=(
                 "Auto operand: readable Context, Memory UID/prefix, or literal "
-                "proposition; use text:VALUE to force literal text"
+                "proposition; use text:VALUE to force literal text; when "
+                "omitted, use the current Context's direct Memories"
             )
         ),
     ] = None,
@@ -190,9 +191,13 @@ def cmd(
                 context_locators=raw_context_sources,
             )
         else:
-            general_request = FitPropositionsRequest(
+            # A bare Fit command is the Context-level convenience form. Keep
+            # the default as an explicit relative locator so the stored-source
+            # runtime freezes the command-start current Context exactly once.
+            general_request = FitStoredSourcesRequest(
                 propositions=(),
                 background=background_propositions,
+                context_locators=(".",),
             )
 
         def execute_propositions(

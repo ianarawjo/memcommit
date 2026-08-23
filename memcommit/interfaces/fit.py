@@ -68,11 +68,11 @@ def _proposition_fit_receipt_line(
         escaped = ", ".join(display_escape_text(value) for value in values)
         target_groups.append(f"{label} {escaped}")
     targets = ", ".join(target_groups)
-    return FitReceiptLine(
-        "FIT · ",
-        result.analysis.assessment.verdict,
-        f" · [TARGETS: {targets}]",
-    )
+    assessment = result.analysis.assessment
+    suffix = f" · [TARGETS: {targets}]"
+    if assessment.verdict != "YES":
+        suffix += f" · WHY · {display_escape_text(assessment.reason)}"
+    return FitReceiptLine("FIT · ", assessment.verdict, suffix)
 
 
 def proposition_fit_summary_line(result: FitPropositionsResult) -> str:
@@ -255,7 +255,8 @@ def _ground_judgment_lines(result: FitResult) -> tuple[FitReceiptLine, ...]:
                 f" · {rule_side} ↔ "
                 f"[EXAMPLE {display_escape_text(example.alias)}] "
                 f"[MEMORY {example.uid[:8]}] "
-                f"{display_escape_text(example.statement)}",
+                f"{display_escape_text(example.statement)} · WHY · "
+                f"{display_escape_text(judgment.reason)}",
             )
         )
     return tuple(lines)
@@ -309,41 +310,32 @@ def _coherence_issue_lines(
             )
         )
     )
-    lines = [
-        FitReceiptLine(
-            f"{mark} ",
-            label,
-            f" · {finding.axis} · {_coherence_participant_label(finding)}",
-        )
-    ]
+    evidence: list[str] = []
     for alias in aliases:
         if alias in subject_by_alias:
             subject = subject_by_alias[alias]
             statement = subject.statement or report.brief
-            lines.append(
-                FitReceiptLine(
-                    f"  {subject.layer} {display_escape_text(alias)} · "
-                    f"{display_escape_text(statement)}"
-                )
+            evidence.append(
+                f"[{subject.layer} {display_escape_text(alias)}] "
+                f"{display_escape_text(statement)}"
             )
         elif alias in context_by_alias:
             context = context_by_alias[alias]
-            lines.append(
-                FitReceiptLine(
-                    f"  CONTEXT {display_escape_text(alias)} · "
-                    f"{display_escape_text(context.name)} · {context.role}"
-                )
+            evidence.append(
+                f"[CONTEXT {display_escape_text(alias)}] "
+                f"{display_escape_text(context.name)} · {context.role}"
             )
         else:
             memory = memory_by_alias[alias]
-            lines.append(
-                FitReceiptLine(
-                    f"  MEMORY {display_escape_text(alias)} · "
-                    f"{display_escape_text(memory.content)}"
-                )
+            evidence.append(
+                f"[MEMORY {display_escape_text(alias)}] "
+                f"{display_escape_text(memory.content)}"
             )
-    lines.append(FitReceiptLine(f"  WHY · {display_escape_text(finding.reason)}"))
-    return tuple(lines)
+    suffix = f" · {finding.axis} · {_coherence_participant_label(finding)}"
+    if evidence:
+        suffix += " · " + " · ".join(evidence)
+    suffix += f" · WHY · {display_escape_text(finding.reason)}"
+    return (FitReceiptLine(f"{mark} ", label, suffix),)
 
 
 def fit_receipt_lines(result: FitResult) -> tuple[FitReceiptLine, ...]:
