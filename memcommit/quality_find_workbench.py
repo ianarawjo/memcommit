@@ -542,7 +542,8 @@ def _duplicate_item(
                 (
                     "reject",
                     "REJECT LINK",
-                    "Reject this semantic evidence link; keep the two Memories distinct.",
+                    "Reject this semantic evidence link; keep the two Memories "
+                    "distinct.",
                 ),
                 (
                     "defer",

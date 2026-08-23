@@ -122,7 +122,8 @@ def test_finding_browser_root_close_never_creates_response_state() -> None:
     assert session.responses == {}
 
 
-def test_dedun_handoff_receives_all_eligible_report_evidence_without_confirmation() -> None:
+def test_dedun_handoff_receives_all_eligible_report_evidence_without_confirmation(
+) -> None:
     context, first, second = _source()
     third = ops.add(context, "Reports can be delivered whenever convenient.")
     session = create_quality_find_workbench(
