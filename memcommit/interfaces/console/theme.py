@@ -55,6 +55,9 @@ class SemanticColorRole(str, Enum):
     NAVIGATION_GRANT = "navigation-grant"
     CAPABILITY = "capability"
     REFERENCE = "reference"
+    PROFILE_CURRENT = "profile-current"
+    PROFILE_USE = "profile-use"
+    PROFILE_STUDY = "profile-study"
     JUDGMENT_YES = "judgment-yes"
     JUDGMENT_MAY = "judgment-may"
     JUDGMENT_NO = "judgment-no"
@@ -77,6 +80,9 @@ SEMANTIC_COLOR_HEX = {
     SemanticColorRole.NAVIGATION_GRANT: GREEN_HEX,
     SemanticColorRole.CAPABILITY: TEAL_HEX,
     SemanticColorRole.REFERENCE: MAUVE_HEX,
+    SemanticColorRole.PROFILE_CURRENT: GREEN_HEX,
+    SemanticColorRole.PROFILE_USE: TEAL_HEX,
+    SemanticColorRole.PROFILE_STUDY: TEAL_HEX,
     SemanticColorRole.JUDGMENT_YES: GREEN_HEX,
     SemanticColorRole.JUDGMENT_MAY: YELLOW_HEX,
     SemanticColorRole.JUDGMENT_NO: RED_HEX,

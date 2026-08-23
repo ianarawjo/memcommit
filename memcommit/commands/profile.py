@@ -122,6 +122,23 @@ def _grant_permissions_label(permissions: tuple[str, ...]) -> str:
     return ",".join(permission.lower() for permission in permissions)
 
 
+_PROFILE_INVENTORY_ACTION_ROLES = {
+    "CURRENT": SemanticColorRole.PROFILE_CURRENT,
+    "USE": SemanticColorRole.PROFILE_USE,
+    "STUDY": SemanticColorRole.PROFILE_STUDY,
+}
+
+
+def _styled_profile_inventory_action(action: str) -> str:
+    """Color one typed inventory token without changing its text or width."""
+
+    return typer.style(
+        action,
+        fg=semantic_color_rgb(_PROFILE_INVENTORY_ACTION_ROLES[action]),
+        bold=True,
+    )
+
+
 @dataclass(frozen=True)
 class _ProfileStudyMembership:
     uid: str
@@ -199,6 +216,55 @@ def _study_memberships(registry) -> dict[str, _ProfileStudyMembership]:
                 removed_count=len(pair_members) - len(visible_members),
             )
     return memberships
+
+
+def _study_role_label(membership: _ProfileStudyMembership) -> str:
+    if membership.role == "PARTICIPANT":
+        return "Participant"
+    if membership.role == "GRANTED_MEMORY":
+        return "Granted memory"
+    role_name = "Task" if membership.role == "TASK" else "Authority"
+    return f"{role_name} {membership.task}"
+
+
+def _profile_inventory_identity_width(
+    registry: ProfileRegistry,
+    memberships: dict[str, _ProfileStudyMembership],
+) -> int:
+    """Freeze one action column across ordinary, Study, and child rows."""
+
+    identities: list[str] = []
+    displayed_studies: set[str] = set()
+    for profile in registry.visible_profiles:
+        membership = memberships.get(profile.uid)
+        if membership is None:
+            identities.append("  " + display_escape_text(profile.name))
+            continue
+        if membership.uid not in displayed_studies:
+            identities.append("  " + display_escape_text(membership.name))
+            displayed_studies.add(membership.uid)
+        branch = "└─" if membership.last else "├─"
+        identities.append(f"    {branch}   {_study_role_label(membership)}")
+    return max(len(identity) for identity in identities)
+
+
+def _echo_profile_inventory_row(
+    identity: str,
+    action: str,
+    detail: str,
+    *,
+    identity_width: int,
+) -> None:
+    """Render one stable row while styling only its trusted action token."""
+
+    action_padding = " " * (7 - len(action))
+    typer.echo(
+        f"{identity:<{identity_width}}  "
+        + _styled_profile_inventory_action(action)
+        + action_padding
+        + " "
+        + detail
+    )
 
 
 def _print_grant(registry, grant, *, prefix: str = "") -> None:
@@ -704,6 +770,7 @@ def list_cmd() -> None:
 
     registry, inspections = _profile_rows()
     memberships = _study_memberships(registry)
+    identity_width = _profile_inventory_identity_width(registry, memberships)
     for profile, inspection in zip(
         registry.visible_profiles,
         inspections,
@@ -747,34 +814,31 @@ def list_cmd() -> None:
                     if membership.removed_count
                     else ""
                 )
-                typer.echo(
-                    "  "
-                    + display_escape_text(membership.name)
-                    + "  STUDY   created="
+                _echo_profile_inventory_row(
+                    "  " + display_escape_text(membership.name),
+                    "STUDY",
+                    "created="
                     + display_escape_text(membership.created_at)
-                    + removal_note
+                    + removal_note,
+                    identity_width=identity_width,
                 )
             branch = "└─" if membership.last else "├─"
-            if membership.role == "PARTICIPANT":
-                role_label = "Participant"
-            elif membership.role == "GRANTED_MEMORY":
-                role_label = "Granted memory"
-            else:
-                role_name = "Task" if membership.role == "TASK" else "Authority"
-                role_label = f"{role_name} {membership.task}"
-            typer.echo(
-                f"    {branch} {marker} {role_label}  "
-                f"{action:<7} profile={profile_label} · "
+            _echo_profile_inventory_row(
+                f"    {branch} {marker} {_study_role_label(membership)}",
+                action,
+                f"profile={profile_label} · "
                 f"{profile.kind.lower()} · {_inventory_label(inspection)}"
-                f"{query_note}{view_note} · current={current}"
+                f"{query_note}{view_note} · current={current}",
+                identity_width=identity_width,
             )
             continue
-        typer.echo(
-            f"{marker} {profile_label:<12} "
-            f"{action:<7} "
+        _echo_profile_inventory_row(
+            f"{marker} {profile_label}",
+            action,
             f"{profile.kind.lower():<9} "
             f"{_inventory_label(inspection)}"
-            f"{query_note}{view_note} · current={current}"
+            f"{query_note}{view_note} · current={current}",
+            identity_width=identity_width,
         )
     typer.echo("Granted views are permission projections, not copied Profiles.")
     typer.echo("Authority Profiles are ordinary switchable owners of source data.")

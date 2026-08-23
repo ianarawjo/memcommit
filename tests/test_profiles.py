@@ -13,6 +13,7 @@ import subprocess
 import sys
 import uuid
 
+import click
 import pytest
 from typer.testing import CliRunner
 
@@ -25,6 +26,10 @@ from memcommit.eval.study_bundle import build_all_study_bundles
 from memcommit.infrastructure.providers.policy import (
     STUDY_PROVIDER_POLICY_DIGEST,
     STUDY_PROVIDER_POLICY_VERSION,
+)
+from memcommit.interfaces.console.theme import (
+    SemanticColorRole,
+    semantic_color_rgb,
 )
 from memcommit.profile_config import (
     GRANT_RESOURCE_CONTEXT_TREE,
@@ -655,10 +660,18 @@ def test_init_study_selects_the_initialized_complete_profile(
 
     profile_list = runner.invoke(app, ["profile", "list"])
     assert profile_list.exit_code == 0
-    assert "├─ * Participant  CURRENT profile=profile-view" in profile_list.output
+    assert re.search(
+        r"^    ├─ \* Participant\s+CURRENT profile=profile-view",
+        profile_list.output,
+        re.MULTILINE,
+    )
     assert "profile-view-granted-memory" in profile_list.output
     assert "43 granted" in profile_list.output
-    assert "profile-view  STUDY" in profile_list.output
+    assert re.search(
+        r"^  profile-view\s+STUDY\s+created=",
+        profile_list.output,
+        re.MULTILINE,
+    )
     assert "authoring" in profile_list.output
 
 
@@ -1245,7 +1258,11 @@ def test_init_study_creates_isolated_participant_and_authority_profiles(
 
     profile_list = _subprocess_mem(tmp_path, "profile", "list")
     assert profile_list.returncode == 0, profile_list.stderr
-    assert "pilot-001  STUDY" in profile_list.stdout
+    assert re.search(
+        r"^  pilot-001\s+STUDY\s+created=",
+        profile_list.stdout,
+        re.MULTILINE,
+    )
     assert "Participant" in profile_list.stdout
     assert "Granted memory" in profile_list.stdout
     actions = _subprocess_mem(tmp_path, "log", "--actions")
@@ -1585,9 +1602,54 @@ def test_profile_inventory_shows_run_pair_and_real_granted_counts(
     )
     assert "Contexts 75 owned + 0 granted" in authority_line
     assert "Memories 853 owned + 0 granted" in authority_line
-    assert "pilot-002  STUDY" in result.output
+    assert re.search(
+        r"^  pilot-002\s+STUDY\s+created=",
+        result.output,
+        re.MULTILINE,
+    )
     assert "pilot-002-task-" not in result.output
     assert "Authority 1" not in result.output
+
+    inventory_rows = [
+        line
+        for line in result.output.splitlines()
+        if any(
+            token in line
+            for token in (
+                " authoring",
+                " study-baseline",
+                " pilot-002 ",
+                " Participant ",
+                " Granted memory ",
+            )
+        )
+    ]
+    action_columns = [
+        next(
+            line.index(token)
+            for token in ("CURRENT", "USE", "STUDY")
+            if token in line
+        )
+        for line in inventory_rows
+    ]
+    assert len(set(action_columns)) == 1
+    assert profile_line.startswith("    ├─ * Participant")
+    assert authority_line.startswith("    └─   Granted memory")
+
+    colored = runner.invoke(app, ["profile", "list"], color=True)
+    plain = runner.invoke(app, ["profile", "list"])
+    assert colored.exit_code == plain.exit_code == 0
+    assert click.unstyle(colored.output) == plain.output
+    for token, role in (
+        ("CURRENT", SemanticColorRole.PROFILE_CURRENT),
+        ("USE", SemanticColorRole.PROFILE_USE),
+        ("STUDY", SemanticColorRole.PROFILE_STUDY),
+    ):
+        assert click.style(
+            token,
+            fg=semantic_color_rgb(role),
+            bold=True,
+        ) in colored.output
 
 
 def test_initialized_study_picker_shows_participant_and_authority_profiles(

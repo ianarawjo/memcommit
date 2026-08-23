@@ -312,7 +312,10 @@ def test_cli_child_remove_keeps_study_header_and_reports_permanent_deletion(
     assert "content cannot be recovered" in removed.output
     assert "1 active · 1 removed" in removed.output
     assert listing.exit_code == 0, listing.output
-    assert "removal-study  STUDY" in listing.output
+    assert any(
+        "removal-study" in line and "STUDY" in line
+        for line in listing.output.splitlines()
+    )
     assert "1 removed" in listing.output
     assert f"profile={participant.name}" in listing.output
     assert authority.name not in listing.output

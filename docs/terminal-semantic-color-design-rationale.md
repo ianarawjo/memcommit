@@ -40,6 +40,9 @@ The stable role mapping is:
 | NAVIGATION_GRANT | Switch Context-category `GRANT` marker | green `#a6da95` |
 | CAPABILITY | READ/QUERY/EDIT capability cluster | teal `#8bd5ca` |
 | REFERENCE | durable Reference kind | mauve `#c6a0f6` |
+| PROFILE_CURRENT | Profile inventory `CURRENT` token | green `#a6da95` |
+| PROFILE_USE | Profile inventory `USE` token | teal `#8bd5ca` |
+| PROFILE_STUDY | Profile inventory `STUDY` token | teal `#8bd5ca` |
 | JUDGMENT_YES | semantic judgment `YES` | green `#a6da95` |
 | JUDGMENT_MAY | semantic judgment `MAY` | yellow `#eed49f` |
 | JUDGMENT_NO | semantic judgment `NO` | red `#ed8796` |
@@ -132,6 +135,16 @@ neither screen owns a raw green value.
 The exact stored permission atoms remain authoritative. Color does not grant
 access and does not collapse CREATE and UPDATE authority into a new persisted
 EDIT permission.
+
+Profile inventory uses three narrow roles because `CURRENT`, `USE`, and
+`STUDY` describe catalog orientation rather than Memory effects. Only those
+tokens are colored. Profile and Study names, hierarchy branches, physical and
+granted counts, current Context names, and explanatory footers remain neutral.
+`PROFILE_USE` and `PROFILE_STUDY` intentionally share teal while their required
+text distinguishes an available Profile action from a Study grouping. The
+plain report freezes one action column across ordinary Profiles, Study headers,
+and indented Study children before styling, so ANSI escapes cannot alter
+alignment and stripping ANSI preserves the exact inventory.
 
 ## Plain and interactive adapters
 
