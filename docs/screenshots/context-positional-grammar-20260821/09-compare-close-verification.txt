@@ -3,8 +3,8 @@ $ mem compare capture/compare/reference capture/compare/peer --snapshot
 Compare · capture/compare/reference ↔ capture/compare/peer                                                                                                                          
                                                                                                                                                                                     
 COMPARISON                                                                                                                                                                          
-  Both rules require publication review within a fixed deadline. The decisive difference is timing: the reference requires review within seven days, while the compared rule allows 
-fourteen days.                                                                                                                                                                      
+  Both rules require publication review within a fixed deadline. The decisive difference is the permitted review period: the reference allows seven days, while the compared rule al
+lows fourteen days.                                                                                                                                                                 
 COMPARE REPORT PAUSE                                                                                                                                                                
                                                                                                                                                                                     
 COMPARE VERIFICATION · EXIT 0 · CURRENT capture/orientation · SAVED 0

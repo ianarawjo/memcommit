@@ -4,8 +4,8 @@ $ mem sever capture/sever/source capture/sever/criteria capture/sever/result --a
 SAVE MODE · OTHER-SAVE
 DECISIONS · KEEP 1 · FORGET 0
 RESULT · CREATED SEPARATELY
-RECEIPT · 59b0b6da-66b6-4ede-b47b-12085c1f7745
-CHECKPOINT · ec8adff9-45ba-46d9-8f47-bc3035eed468
-REVIEW · mem review sever --session 59b0b6da-66b6-4ede-b47b-12085c1f7745
+RECEIPT · af964f79-7754-4da3-8fda-3ef22ac513e8
+CHECKPOINT · 8e4b8adb-d619-4161-b3b2-37e45b5499d4
+REVIEW · mem review sever --session af964f79-7754-4da3-8fda-3ef22ac513e8
 RECOVERY · mem undo
 OTHER-SAVE VERIFICATION · EXIT 0 · CURRENT capture/orientation · SOURCE UID PRESERVED True · MEMORY UID PRESERVED True · SOURCE MEMORIES 1 · SOURCE CHANGED False · OTHER RESULT True · CHECKPOINTS 0 · PROVIDER CALLS 1
