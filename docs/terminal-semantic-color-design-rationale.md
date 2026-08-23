@@ -65,6 +65,16 @@ operand labels, Ground and Context names, counts, relation marks, and Memory
 bodies remain neutral. `STALE` and legacy `N/A` remain explicit neutral text
 until their meanings receive separately reviewed semantic roles.
 
+Compact quality issue rows likewise classify their typed category before
+rendering. Only `DUPLICATE`/`REDUNDANT`, `AMBIGUOUS`, or `CONFLICT` receives its
+shared quality role: lavender for redundancy evidence, yellow for ambiguity,
+and red for conflict. The `WHY` token has a separate soft-Sky `RATIONALE` role.
+It deliberately does not reuse the brighter focus blue, because explanatory
+structure must remain distinguishable from the keyboard target. Relation
+values, Context and Memory references, punctuation, and rationale prose remain
+neutral; individual Memory bodies retain the shared Memory lavender. Focus
+temporarily overrides the complete active row.
+
 Read-only Duplicate and Redundancy cleanup maps use the same child-disposition
 rule without implying execution. `SURVIVOR` is ADD blue because that existing
 member remains in the proposed resulting set; `ABSORB` is REMOVE red because

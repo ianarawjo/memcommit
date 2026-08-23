@@ -636,6 +636,7 @@ def quality_find_report_view(
             items.append(
                 QualityFindingReportItem(
                     uid=_ambiguity_item_uid(finding),
+                    category="ambiguities",
                     kind="AMBIGUITY",
                     classification=classification,
                     title=_preview(finding.memory.content),
@@ -663,6 +664,7 @@ def quality_find_report_view(
             items.append(
                 QualityFindingReportItem(
                     uid=_pair_item_uid("conflict", finding.left, finding.right),
+                    category="conflicts",
                     kind="CONFLICT",
                     classification=classification,
                     title=(
@@ -687,6 +689,7 @@ def quality_find_report_view(
             items.append(
                 QualityFindingReportItem(
                     uid=_pair_item_uid("duplicate", finding.left, finding.right),
+                    category="duplicates",
                     kind="DUP / EXACT" if exact else "SEMANTIC DUN",
                     classification=finding.relation,
                     title=(
@@ -736,6 +739,18 @@ def quality_find_report_view(
         route=session.source.route,
         source_count=len(session.source.contexts),
         memory_count=session.report.memory_count,
+        candidate_count=(
+            session.report.memory_count
+            if session.kind == "ambiguities"
+            else (
+                session.report.pair_count
+                if isinstance(session.report, ConflictReport)
+                else session.report.memory_count
+                * (session.report.memory_count - 1)
+                // 2
+            )
+        ),
+        candidate_unit=("MEMORIES" if session.kind == "ambiguities" else "PAIRS"),
         items=tuple(items),
         empty_message=empty_message,
         handoff_label=handoff_label,

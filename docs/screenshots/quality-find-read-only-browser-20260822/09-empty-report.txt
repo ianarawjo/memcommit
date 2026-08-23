@@ -1,7 +1,6 @@
 $ mem find-ambiguities --context study/reporting                                                                                                                                    
 PTY · 180 COLUMNS × 52 ROWS                                                                                                                                                         
- FIND AMBIGUITIES · NO FINDINGS                                                                                                                                                     
- 1 CONTEXT(S) · 3 SOURCE MEMORIES · study/reporting                                                                                                                                 
+ AMBIGUITIES · 0/3 MEMORIES FLAGGED · [SOURCE study/reporting]                                                                                                                      
  No ambiguity findings in this analysis.                                                                                                                                           ^
                                                                                                                                                                                     
                                                                                                                                                                                     
@@ -26,4 +25,4 @@ PTY · 180 COLUMNS × 52 ROWS
                                                                                                                                                                                     
                                                                                                                                                                                     
                                                                                                                                                                                    v
- ↑/↓ finding · Home/End · Esc/Backspace/Q close · read-only
+ ↑/↓ finding · Esc close · READ-ONLY

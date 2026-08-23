@@ -5,12 +5,12 @@
 ┃ SUMMARY · All quality finders completed over the same saved direct Context snapshot. Reported 0 total findings.                                                                  ┃
 ┃ CHECKS · DUPLICATES · COMPLETE · 0 findings / AMBIGUITIES · COMPLETE · 0 findings / CONFLICTS · COMPLETE · 0 findings                                                            ┃
 ┃ SOURCE · study/audit-source · 2 direct Memories as captured when this Audit ran. Descendants and embedded Contexts were not analyzed.                                            ┃
-┃ SNAPSHOT · [00000000] The main entrance opens at 08:00. / [00000000] The main entrance remains closed until 09:00.                                                               ┃
-┃ DUPLICATES · COMPLETE · 0 FINDINGS                                                                                                                                               ┃
+┃ SNAPSHOT · [a31f02c1] The main entrance opens at 08:00. / [5ce891d4] The main entrance remains closed until 09:00.                                                               ┃
+┃ DUPLICATES · 0/1 PAIRS FLAGGED · [SOURCE study/audit-source]                                                                                                                     ┃
 ┃ No redundancy evidence in this analysis.                                                                                                                                         ┃
-┃ AMBIGUITIES · COMPLETE · 0 FINDINGS                                                                                                                                              ┃
+┃ AMBIGUITIES · 0/2 MEMORIES FLAGGED · [SOURCE study/audit-source]                                                                                                                 ┃
 ┃ No ambiguity findings in this analysis.                                                                                                                                          ┃
-┃ CONFLICTS · COMPLETE · 0 FINDINGS                                                                                                                                                ┃
+┃ CONFLICTS · 0/1 PAIRS FLAGGED · [SOURCE study/audit-source]                                                                                                                      ┃
 ┃ No conflict findings in this analysis.                                                                                                                                           ┃
 ┃ PROVENANCE                                                                                                                                                                       ┃
 ┃ DUPLICATES · duplicates-v1-draft · capture:audit-model / AMBIGUITIES · ambiguity-v1-draft · capture:audit-model / CONFLICTS · conflict-v1-draft · capture:audit-model            ┃

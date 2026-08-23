@@ -5,23 +5,23 @@
 ┃ SUMMARY · All quality finders completed over the same saved direct Context snapshot. Reported 3 total findings.                                                                  ┃
 ┃ CHECKS · DUPLICATES · COMPLETE · 1 finding / AMBIGUITIES · COMPLETE · 1 finding / CONFLICTS · COMPLETE · 1 finding                                                               ┃
 ┃ SOURCE · study/audit-source · 2 direct Memories as captured when this Audit ran. Descendants and embedded Contexts were not analyzed.                                            ┃
-┃ SNAPSHOT · [00000000] The main entrance opens at 08:00. / [00000000] The main entrance remains closed until 09:00.                                                               ┃
-┃ DUPLICATES · COMPLETE · 1 FINDING                                                                                                                                                ┃
-┃ SEMANTIC DUN · SEMANTIC_EQUIVALENT — SOURCE 1 · study/audit-source [00000000]: “The main entrance opens at 08:00.” / SOURCE 2 · study/audit-source [00000000]: “The main entranc ┃
-┃e remains closed until 09:00.” · WHY THESE MEMORIES ARE SEMANTICALLY REDUNDANT · Both Memories govern the same entrance schedule in this frame. · SAVED REVIEW NOTE · HISTORICAL  ┃
-┃· DISPOSITION · CONFIRM LINK: Retain this pair as positive semantic-DUN evidence. · NOTE · Earlier reviewer retained this evidence for follow-up.                                 ┃
-┃ AMBIGUITIES · COMPLETE · 1 FINDING                                                                                                                                               ┃
-┃ AMBIGUITY · DOMINANT · CLARIFICATION HELPFUL — SOURCE MEMORY · study/audit-source [00000000]: “The main entrance opens at 08:00.” · WHY THIS IS UNCLEAR · The audience for the e ┃
-┃ntrance schedule is not explicit. · QUESTION · Which audience uses this schedule? · READINGS · DOMINANT: The public entrance opens at 08:00. / ALTERNATIVE: A staff entrance open ┃
-┃s at 08:00.                                                                                                                                                                       ┃
-┃ CONFLICTS · COMPLETE · 1 FINDING                                                                                                                                                 ┃
-┃ CONFLICT · YES · TIME — SOURCE 1 · study/audit-source [00000000]: “The main entrance opens at 08:00.” / SOURCE 2 · study/audit-source [00000000]: “The main entrance remains clo ┃
-┃sed until 09:00.” · WHY THESE MEMORIES CONFLICT · The same entrance cannot be open at 08:00 and closed until 09:00. · QUESTION · Which opening time is authoritative?             ┃
+┃ SNAPSHOT · [a31f02c1] The main entrance opens at 08:00. / [5ce891d4] The main entrance remains closed until 09:00.                                                               ┃
+┃ DUPLICATES · 1/1 PAIRS FLAGGED · [SOURCE study/audit-source]                                                                                                                     ┃
+┃ ≈ REDUNDANT · SEMANTIC_EQUIVALENT · [MEMORY a31f02c1] “The main entrance opens at 08:00.” ↔ [MEMORY 5ce891d4] “The main entrance remains closed until 09:00.”                    ┃
+┃ AMBIGUITIES · 1/2 MEMORIES FLAGGED · [SOURCE study/audit-source]                                                                                                                 ┃
+┃ ? AMBIGUOUS · [MEMORY a31f02c1] “The main entrance opens at 08:00.” · WHY · The audience for the entrance schedule is not explicit. — The public entrance opens at 08:00. / A st ┃
+┃aff entrance opens at 08:00.                                                                                                                                                      ┃
+┃ CONFLICTS · 1/1 PAIRS FLAGGED · [SOURCE study/audit-source]                                                                                                                      ┃
+┃ ! CONFLICT · TIME · [MEMORY a31f02c1] “The main entrance opens at 08:00.” ↔ [MEMORY 5ce891d4] “The main entrance remains closed until 09:00.” · WHY · The same entrance cannot b ┃
+┃e open at 08:00 and closed until 09:00.                                                                                                                                           ┃
 ┃ PROVENANCE                                                                                                                                                                       ┃
 ┃ DUPLICATES · duplicates-v1-draft · capture:audit-model / AMBIGUITIES · ambiguity-v1-draft · capture:audit-model / CONFLICTS · conflict-v1-draft · capture:audit-model            ┃
 ┃ BOUNDARY                                                                                                                                                                         ┃
 ┃ This saved Audit is a model-assisted finding record, not proof that the Source is free of quality problems. Saved historical review notes do not alter the snapshot, Context, or ┃
 ┃ Memories. This Viewer cannot select a reading, write a response, rerun a finder, or apply a Memory change.                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃

@@ -108,14 +108,27 @@ source. The temporary aggregate is process-local, has a deterministic frame
 identity, and is never saved or exposed as a new Context.
 
 The validated report is projected into a compact read-only finding browser.
-Its header records Context count, direct-Memory count, and the exact Source
-route. Every finding is one complete wrapping paragraph containing its
-classification, exact source identities and Memory bodies, reason, follow-up
-question when present, and possible readings when present. There is no
-preview/detail split: `Up`/`Down` changes the focused paragraph, while an
-Ambiguity `Enter` is inert because Find has no answer or inspection action.
-Escape or Backspace closes; navigation and closing cannot create response
-state.
+Its one-line header reports flagged Memories or pairs against the complete
+candidate count and freezes the owner as `[SOURCE <Context>]` for a
+single-Context frame. Every finding is one source-linked logical line and may
+soft-wrap with the terminal width. References follow the repository's typed
+grammar: `[MEMORY <uid-prefix>]` under the header's single Source, or
+`[CONTEXT <name>] [MEMORY <uid-prefix>]` per member in a multi-Context frame.
+Prefixes expand against the exact members of a row when eight characters
+would collide, so the compact display never makes a pair look self-referential.
+The rejected `context@uid` spelling conflated two identities, had no shared
+escaping contract, and differed from Fit and Conformance evidence rows.
+
+Ambiguity keeps its exact Memory, reason, and all ordinary readings, but folds
+the readings into the `WHY` rationale instead of showing a Question or
+answer-looking labelled alternatives. Conflict keeps scope dimensions, both
+exact Memories, and `WHY`, while omitting its follow-up question and the
+provider's positive `YES` emission marker. Redundancy keeps its exact relation
+and pair but omits `WHY`: the relation plus complete members is the compact
+read-only evidence needed for this list. There is no preview/detail split:
+`Up`/`Down` changes the focused line, while an Ambiguity `Enter` is inert
+because Find has no answer or inspection action. Escape or Backspace closes;
+navigation and closing cannot create response state.
 
 On an eligible single-Context Conflict, `Enter` may leave the browser for
 Resolve, and the complete-DUN report may leave for Dedun through the same
@@ -243,12 +256,13 @@ its own focus stop.
 
 The comprehensive Viewer preserves the stable group order Duplicate,
 Ambiguity, Conflict. A zero-finding check remains visible; every positive
-result is one complete wrapping paragraph with its exact Sources. Ambiguity
-readings and clarification questions are report evidence, while Conflict keeps
-its exact pair, scope dimensions, reason, and question. None is selectable and
-no `REQUIRED` or `OPTIONAL` answer obligation is created. Historical response
-records from earlier schemas are appended inline to their exact finding rather
-than becoming response controls or separate focus stops.
+result uses the same one-line issue projection as its one-shot finder.
+Questions, labelled alternatives, redundancy reasons, and historical response
+notes are not part of the default review document because they read as active
+review controls or repeat information already conveyed by the compact issue.
+The immutable typed reports and legacy response map remain decodable; this is
+a presentation reduction, not a stored-data migration. No `REQUIRED` or
+`OPTIONAL` answer obligation is created.
 
 Saved Audits appear in the aggregate `mem review` launcher and reopen exactly
 through `mem review audit --session UID`. Review renders the saved audited

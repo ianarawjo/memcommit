@@ -1,10 +1,10 @@
 $ mem find-ambiguities --context study/reporting
 PTY · 180 COLUMNS × 52 ROWS
-[6n[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;2;244;245;247;1m AMBIGUITIES · 0/3 MEMORIES FLAGGED · [SOURCE study/reporting][0m
-[0;38;2;244;245;247m No ambiguity findings in this analysis.[139C[0;1m^[0m
-[179C[0;48;2;68;68;68m [0m
-[179C[0;48;2;68;68;68m [0m
-[179C[0;48;2;68;68;68m [0m
+[6n[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;2;244;245;247;1m AMBIGUITIES · 2/3 MEMORIES FLAGGED · [SOURCE study/reporting][0m
+[0;1;7m› ? AMBIGUOUS · [MEMORY a31f02c1] “Report the incident within 30 days.” · WHY · The deadline does not identify which event starts the clock. — Thirty days after the incident. / Th[179C[0;1m^[0m
+[0;1;7mirty days after discovery. / Thirty days after notification.[119C[0;48;2;68;68;68m [0m
+[0m  [0;38;2;244;245;247m? [0;38;2;238;212;159;1mAMBIGUOUS[0;38;2;244;245;247m · [0;38;2;244;245;247;1m[MEMORY 7b94ee10] [0;38;2;202;211;245m“The accessible entrance remains open during office hours.”[0;38;2;244;245;247m · [0;38;2;145;215;227;1mWHY[0;38;2;244;245;247m · Office hours can refer to two different schedules. — The staffed entrance sch[179C[0;48;2;68;68;68m [0m
+[0;38;2;244;245;247medule. / The published office schedule.[140C[0;48;2;68;68;68m [0m
 [179C[0;48;2;68;68;68m [0m
 [179C[0;48;2;68;68;68m [0m
 [179C[0;48;2;68;68;68m [0m

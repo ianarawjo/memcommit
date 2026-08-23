@@ -1,11 +1,10 @@
 $ mem find-conflicts --context study/reporting                                                                                                                                      
 PTY · 180 COLUMNS × 52 ROWS                                                                                                                                                         
- FIND CONFLICTS · 1/1                                                                                                                                                               
- 1 CONTEXT(S) · 3 SOURCE MEMORIES · study/reporting                                                                                                                                 
-› CONFLICT · MAY · TIME — SOURCE 1 · study/reporting [00000000]: “Report the incident within 30 days.” / SOURCE 2 · study/reporting [00000000]: “Notify the office no later than on^
-e month after discovery.” · WHY THESE MEMORIES CONFLICT · The deadlines can disagree when discovery occurs after the incident. · QUESTION · Which event governs the reporting deadl 
-ine?                                                                                                                                                                                
-                                                                                                                                                                                    
+ CONFLICTS · 2/3 PAIRS FLAGGED · [SOURCE study/reporting]                                                                                                                           
+› ! CONFLICT · TIME · [MEMORY a31f02c1] “Report the incident within 30 days.” ↔ [MEMORY 5ce891d4] “Notify the office no later than one month after discovery.” · WHY · The deadline^
+s can disagree when discovery occurs after the incident.                                                                                                                            
+  ! CONFLICT · ACCESS · [MEMORY 5ce891d4] “Notify the office no later than one month after discovery.” ↔ [MEMORY 7b94ee10] “The accessible entrance remains open during office hour 
+s.” · WHY · The two entrance schedules may govern the same public access window.                                                                                                    
                                                                                                                                                                                     
                                                                                                                                                                                     
                                                                                                                                                                                     
@@ -26,9 +25,9 @@ ine?
                                                                                                                                                                                     
                                                                                                                                                                                     
                                                                                                                                                                                    v
- ↑/↓ finding · Home/End · Enter open Resolve · Esc/Backspace/Q close · read-only                                                                                                    
+ ↑/↓ finding · Enter open Resolve · Esc close · READ-ONLY                                                                                                                           
                                                                                                                                                                                     
-BROWSER RECEIPT · HANDOFF · conflict:00000000-0000-4000-8000-000000000711:00000000-0000-4000-8000-000000000712                                                                      
+BROWSER RECEIPT · HANDOFF · conflict:a31f02c1-0000-4000-8000-000000000711:5ce891d4-0000-4000-8000-000000000712                                                                      
 READ-ONLY VERIFICATION                                                                                                                                                              
   RESPONSE STATE · 0                                                                                                                                                                
   SOURCE DIGEST UNCHANGED · True                                                                                                                                                    

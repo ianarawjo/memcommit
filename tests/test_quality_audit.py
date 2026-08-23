@@ -299,11 +299,18 @@ def test_audit_review_is_one_complete_answer_free_document():
     assert "SOURCE MEMORY 1/2" not in rendered
     assert first.content in rendered
     assert second.content in rendered
-    assert "DUPLICATES · COMPLETE · 1 FINDING" in rendered
-    assert "AMBIGUITY · SINGLE · CLARIFICATION HELPFUL" in rendered
-    assert "CONFLICT · YES · TIME" in rendered
-    assert "SAVED REVIEW NOTE · HISTORICAL" in rendered
-    assert "Retained from an earlier review version." in rendered
+    assert "= DUPLICATE · SEMANTIC_EQUIVALENT" not in rendered
+    assert "≈ REDUNDANT · SEMANTIC_EQUIVALENT" in rendered
+    assert "? AMBIGUOUS" in rendered
+    assert "! CONFLICT · TIME" in rendered
+    assert "SAVED REVIEW NOTE · HISTORICAL" not in rendered
+    assert "Retained from an earlier review version." not in rendered
+    assert "DUPLICATES · 1/1 PAIRS FLAGGED" in rendered
+    assert "AMBIGUITIES · 1/2 MEMORIES FLAGGED" in rendered
+    assert "CONFLICTS · 1/1 PAIRS FLAGGED" in rendered
+    assert "WHY THESE MEMORIES ARE SEMANTICALLY REDUNDANT" not in rendered
+    assert "QUESTION" not in rendered
+    assert "READINGS" not in rendered
     assert "RESPONSES" not in rendered
     assert "TO DO" not in rendered
     assert "[Enter] select" not in rendered

@@ -1,15 +1,13 @@
 $ mem find-ambiguities --context study/reporting                                                                                                                                    
 PTY · 180 COLUMNS × 52 ROWS                                                                                                                                                         
-WARNING: your terminal doesn't support cursor position requests (CPR).                                                                                                              
- FIND AMBIGUITIES · 2/2                                                                                                                                                             
- 1 CONTEXT(S) · 3 SOURCE MEMORIES · study/reporting                                                                                                                                 
-  AMBIGUITY · DOMINANT · CLARIFICATION REQUIRED — SOURCE MEMORY · study/reporting [00000000]: “Report the incident within 30 days.” · WHY THIS IS UNCLEAR · The deadline does not i^
-dentify which event starts the clock. · QUESTION · Which event starts the 30-day period? · READINGS · DOMINANT: Thirty days after the incident. / ALTERNATIVE: Thirty days after di 
-scovery. / ALTERNATIVE: Thirty days after notification.                                                                                                                             
+ AMBIGUITIES · 2/3 MEMORIES FLAGGED · [SOURCE study/reporting]                                                                                                                      
+  ? AMBIGUOUS · [MEMORY a31f02c1] “Report the incident within 30 days.” · WHY · The deadline does not identify which event starts the clock. — Thirty days after the incident. / Th^
+irty days after discovery. / Thirty days after notification.                                                                                                                        
+› ? AMBIGUOUS · [MEMORY 7b94ee10] “The accessible entrance remains open during office hours.” · WHY · Office hours can refer to two different schedules. — The staffed entrance sch 
+edule. / The published office schedule.                                                                                                                                             
                                                                                                                                                                                     
-› AMBIGUITY · COMPETING · CLARIFICATION HELPFUL — SOURCE MEMORY · study/reporting [00000000]: “The accessible entrance remains open during office hours.” · WHY THIS IS UNCLEAR · O 
-ffice hours can refer to two different schedules. · QUESTION · Which schedule defines office hours? · READINGS · COMPETING: The staffed entrance schedule. / COMPETING: The publish 
-ed office schedule.                                                                                                                                                                 
+                                                                                                                                                                                    
+                                                                                                                                                                                    
                                                                                                                                                                                     
                                                                                                                                                                                     
                                                                                                                                                                                     
@@ -27,7 +25,8 @@ ed office schedule.
                                                                                                                                                                                     
                                                                                                                                                                                     
                                                                                                                                                                                    v
- ↑/↓ finding · Home/End · Esc/Backspace/Q close · read-only                                                                                                                         
+ ↑/↓ finding · Esc close · READ-ONLY                                                                                                                                                
+WARNING: your terminal doesn't support cursor position requests (CPR).                                                                                                              
                                                                                                                                                                                     
 BROWSER RECEIPT · CLOSE · NO TARGET                                                                                                                                                 
 READ-ONLY VERIFICATION                                                                                                                                                              

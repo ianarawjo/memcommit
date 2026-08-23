@@ -6,6 +6,7 @@ from memcommit.interfaces.console.theme import (
     semantic_color_hex,
     semantic_color_rgb,
     semantic_judgment_role,
+    semantic_quality_role,
 )
 from memcommit.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
@@ -41,6 +42,17 @@ def test_judgments_have_distinct_roles_without_reusing_action_meaning():
     assert semantic_judgment_role("may") is SemanticColorRole.JUDGMENT_MAY
     assert semantic_judgment_role(" NO ") is SemanticColorRole.JUDGMENT_NO
     assert semantic_judgment_role("STALE") is None
+
+
+def test_quality_findings_and_rationale_have_narrow_shared_roles():
+    assert semantic_quality_role("duplicates") is SemanticColorRole.QUALITY_DUPLICATE
+    assert semantic_quality_role("AMBIGUITIES") is SemanticColorRole.QUALITY_AMBIGUITY
+    assert semantic_quality_role(" conflicts ") is SemanticColorRole.QUALITY_CONFLICT
+    assert semantic_quality_role("conformance") is None
+    assert (
+        semantic_color_hex(SemanticColorRole.RATIONALE)
+        != semantic_color_hex(SemanticColorRole.QUALITY_AMBIGUITY)
+    )
 
 
 def test_console_and_tui_resolve_the_same_semantic_foregrounds():

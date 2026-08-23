@@ -12,6 +12,7 @@ from memcommit.interfaces.tui.viewers.semantic import (
 )
 from memcommit.interfaces.tui.workbenches.findings import (
     quality_finding_compact_fragments,
+    quality_find_report_header_text,
 )
 from memcommit.quality_audit import (
     QualityAuditSession,
@@ -21,7 +22,6 @@ from memcommit.quality_find_workbench import (
     QualityFindSourceFrame,
     QualityFindWorkbenchSession,
     quality_find_report_view,
-    quality_find_resolution_view,
 )
 
 
@@ -135,60 +135,26 @@ def quality_audit_review_document(
         fragments: list[tuple[str, str]] = [
             (
                 "class:report-label",
-                f" {check.kind.upper()} · COMPLETE · {count} "
-                f"{'FINDING' if count == 1 else 'FINDINGS'}\n",
+                " "
+                + quality_find_report_header_text(
+                    report_view,
+                    label=check.kind.upper(),
+                )
+                + "\n",
             )
         ]
         if count == 0:
             fragments.append(
                 ("class:viewer-body", f" {_inline(report_view.empty_message)}\n")
             )
-        legacy_items = {
-            item.uid: item
-            for item in quality_find_resolution_view(sub_session, context).items
-        }
         for item in report_view.items:
-            item_fragments = quality_finding_compact_fragments(item)
             fragments.append(("class:report-neutral", " "))
-            response = session.responses.get(item.uid)
-            if response is None or not response.answered:
-                fragments.extend(item_fragments)
-                continue
-            # Historical annotations belong beside the exact finding that
-            # once owned them; keeping them inline avoids reviving a response
-            # surface or adding another focus stop.
-            item_fragments[-1] = ("class:report-neutral", " · ")
-            item_fragments.append(
-                ("class:report-label", "SAVED REVIEW NOTE · HISTORICAL")
+            fragments.extend(
+                quality_finding_compact_fragments(
+                    item,
+                    show_context=report_view.source_count > 1,
+                )
             )
-            if response.selected_option_uid is not None:
-                option = legacy_items[item.uid].option(response.selected_option_uid)
-                item_fragments.extend(
-                    [
-                        ("class:report-neutral", " · "),
-                        (
-                            "class:report-label",
-                            f"DISPOSITION · {_inline(option.label)}: ",
-                        ),
-                        (
-                            "class:viewer-body",
-                            _inline(option.text),
-                        ),
-                    ]
-                )
-            if response.text.strip():
-                item_fragments.extend(
-                    [
-                        ("class:report-neutral", " · "),
-                        ("class:report-label", "NOTE · "),
-                        (
-                            "class:viewer-body",
-                            _inline(response.text),
-                        ),
-                    ]
-                )
-            item_fragments.append(("class:report-neutral", "\n"))
-            fragments.extend(item_fragments)
         sections.append(
             SemanticViewerSection(
                 f"AUDIT:CHECK:{check.kind}",

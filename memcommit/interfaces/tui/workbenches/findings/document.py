@@ -2,13 +2,22 @@
 
 from __future__ import annotations
 
+from memcommit.interfaces.console.identity import collision_safe_uid_prefixes
 from memcommit.interfaces.console.text import safe_terminal_text
+from memcommit.interfaces.console.theme import (
+    SemanticColorRole,
+    semantic_quality_role,
+)
+from memcommit.interfaces.tui.core.theme import semantic_role_style
 from memcommit.interfaces.tui.viewers.semantic import (
     SemanticViewerBlock,
     SemanticViewerDocument,
     SemanticViewerSection,
 )
-from memcommit.quality_find_report import QualityFindingReportItem
+from memcommit.quality_find_report import (
+    QualityFindReportView,
+    QualityFindingReportItem,
+)
 
 
 def _inline(value: str) -> str:
@@ -21,8 +30,14 @@ def quality_finding_compact_fragments(
     item: QualityFindingReportItem,
     *,
     focused: bool = False,
+    show_context: bool = True,
 ) -> list[tuple[str, str]]:
-    """Render one complete finding as a single source-linked paragraph."""
+    """Render one issue as one source-linked logical line.
+
+    The Context and Memory identifiers deliberately use separate typed
+    brackets.  ``context@uid`` is not a public reference grammar and becomes
+    ambiguous as soon as a Context name itself needs escaping.
+    """
 
     focus_style = "class:memcommit.table.selected" if focused else ""
 
@@ -31,73 +46,121 @@ def quality_finding_compact_fragments(
         # semantic Memory/report foregrounds across this one paragraph.
         return focus_style or base
 
-    fragments: list[tuple[str, str]] = [
-        (
-            styled("class:report-label"),
-            f"{_inline(item.kind)} · {_inline(item.classification)} — ",
+    role = semantic_quality_role(item.category)
+    if role is None:  # pragma: no cover - the typed report validates the union.
+        raise ValueError("Unsupported quality finding category.")
+    if item.category == "ambiguities":
+        marker, finding_label = "?", "AMBIGUOUS"
+        classification = ""
+    elif item.category == "conflicts":
+        marker, finding_label = "!", "CONFLICT"
+        parts = [part.strip() for part in item.classification.split("·")]
+        classification = " · ".join(
+            part for part in parts if part.upper() not in {"YES", "MAY", "NO"}
         )
+    elif item.classification == "EXACT":
+        marker, finding_label = "=", "DUPLICATE"
+        classification = item.classification
+    else:
+        marker, finding_label = "≈", "REDUNDANT"
+        classification = item.classification
+
+    fragments: list[tuple[str, str]] = [
+        (styled("class:report-neutral"), f"{marker} "),
+        (styled(semantic_role_style(role)), finding_label),
     ]
+    if classification:
+        fragments.extend(
+            [
+                (styled("class:report-neutral"), " · "),
+                (styled("class:report-label"), _inline(classification)),
+            ]
+        )
+    fragments.append((styled("class:report-neutral"), " · "))
+    uid_prefixes = collision_safe_uid_prefixes(
+        source.memory_uid for source in item.sources
+    )
     for index, source in enumerate(item.sources):
         if index:
-            fragments.append((styled("class:report-neutral"), " / "))
-        fragments.extend(
-            [
-                (
-                    styled("class:report-label"),
-                    f"{_inline(source.label)} · {_inline(source.context_name)} "
-                    f"[{_inline(source.memory_uid[:8])}]: ",
-                ),
-                (
-                    styled("class:memory-object"),
-                    f"“{_inline(source.content)}”",
-                ),
-            ]
-        )
-    fragments.extend(
-        [
-            (styled("class:report-neutral"), " · "),
-            (
-                styled("class:report-label"),
-                f"{_inline(item.reason_heading)} · ",
-            ),
-            (styled("class:viewer-body"), _inline(item.reason)),
-        ]
-    )
-    if item.follow_up:
-        fragments.extend(
-            [
-                (styled("class:report-neutral"), " · "),
-                (styled("class:report-label"), "QUESTION · "),
-                (styled("class:viewer-body"), _inline(item.follow_up)),
-            ]
-        )
-    if item.readings:
-        fragments.extend(
-            [
-                (styled("class:report-neutral"), " · "),
-                (styled("class:report-label"), "READINGS · "),
-            ]
-        )
-        for index, reading in enumerate(item.readings):
-            if index:
-                fragments.append((styled("class:report-neutral"), " / "))
+            fragments.append((styled("class:report-neutral"), " ↔ "))
+        if show_context:
             fragments.extend(
                 [
                     (
                         styled("class:report-label"),
-                        f"{_inline(reading.label)}: ",
+                        f"[CONTEXT {_inline(source.context_name)}] ",
                     ),
-                    (styled("class:viewer-body"), _inline(reading.text)),
                 ]
             )
+        fragments.extend(
+            [
+                (
+                    styled("class:report-label"),
+                    f"[MEMORY {_inline(uid_prefixes[source.memory_uid])}] ",
+                ),
+                (styled("class:memory-object"), f"“{_inline(source.content)}”"),
+            ]
+        )
+
+    # Redundancy is understandable from the relation and exact pair alone.
+    # Ambiguity keeps possible readings, but folds them into the rationale
+    # instead of presenting answer-looking numbered choices or a question.
+    if item.category != "duplicates":
+        rationale = _inline(item.reason)
+        if item.category == "ambiguities" and item.readings:
+            readings = " / ".join(_inline(reading.text) for reading in item.readings)
+            rationale = f"{rationale.rstrip()} — {readings}"
+        fragments.extend(
+            [
+                (styled("class:report-neutral"), " · "),
+                (
+                    styled(semantic_role_style(SemanticColorRole.RATIONALE)),
+                    "WHY",
+                ),
+                (styled("class:report-neutral"), " · "),
+                (styled("class:viewer-body"), rationale),
+            ]
+        )
     fragments.append((styled("class:report-neutral"), "\n"))
     return fragments
 
 
-def quality_finding_compact_text(item: QualityFindingReportItem) -> str:
+def quality_finding_compact_text(
+    item: QualityFindingReportItem,
+    *,
+    show_context: bool = True,
+) -> str:
     """Return the ANSI-free equivalent of the compact finding paragraph."""
 
-    return "".join(text for _style, text in quality_finding_compact_fragments(item))
+    return "".join(
+        text
+        for _style, text in quality_finding_compact_fragments(
+            item,
+            show_context=show_context,
+        )
+    )
+
+
+def quality_find_report_header_text(
+    view: QualityFindReportView,
+    *,
+    label: str | None = None,
+) -> str:
+    """Return the one-line finder summary shared by Find and saved Audit."""
+
+    resolved_label = (
+        {
+            "ambiguities": "AMBIGUITIES",
+            "conflicts": "CONFLICTS",
+            "duplicates": "REDUNDANCIES",
+        }[view.kind]
+        if label is None
+        else _inline(label)
+    )
+    return (
+        f"{resolved_label} · {len(view.items)}/{view.candidate_count} "
+        f"{view.candidate_unit} FLAGGED · [SOURCE {_inline(view.route)}]"
+    )
 
 
 def quality_finding_item_sections(
@@ -220,6 +283,7 @@ def quality_finding_item_document(
 __all__ = [
     "quality_finding_compact_fragments",
     "quality_finding_compact_text",
+    "quality_find_report_header_text",
     "quality_finding_item_document",
     "quality_finding_item_sections",
 ]

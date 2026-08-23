@@ -1,29 +1,0 @@
-$ mem find-conflicts --context study/reporting
-PTY · 180 COLUMNS × 52 ROWS
-[6n[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;2;244;245;247;1m FIND CONFLICTS · 1/1[0m
-[0;38;2;244;245;247m 1 CONTEXT(S) · 3 SOURCE MEMORIES · study/reporting[0m
-[0;1;7m› CONFLICT · MAY · TIME — SOURCE 1 · study/reporting [00000000]: “Report the incident within 30 days.” / SOURCE 2 · study/reporting [00000000]: “Notify the office no later than on[179C[0;1m^[0m
-[0;1;7me month after discovery.” · WHY THESE MEMORIES CONFLICT · The deadlines can disagree when discovery occurs after the incident. · QUESTION · Which event governs the reporting deadl[179C[0;48;2;68;68;68m [0m
-[0;1;7mine?[175C[0;48;2;68;68;68m [0m
-[179C[0;48;2;68;68;68m [0m
-[179C[0;48;2;68;68;68m [0m
-[179C[0;48;2;68;68;68m [0m
-[179C[0;48;2;68;68;68m [0m
-[179C[0;48;2;68;68;68m [0m
-[179C[0;48;2;68;68;68m [0m
-[179C[0;48;2;68;68;68m [0m
-[179C[0;48;2;68;68;68m [0m
-[179C[0;48;2;68;68;68m [0m
-[179C[0;48;2;68;68;68m [0m
-[179C[0;48;2;68;68;68m [0m
-[179C[0;48;2;68;68;68m [0m
-[179C[0;48;2;68;68;68m [0m
-[179C[0;48;2;68;68;68m [0m
-[179C[0;48;2;68;68;68m [0m
-[179C[0;48;2;68;68;68m [0m
-[179C[0;48;2;68;68;68m [0m
-[179C[0;48;2;68;68;68m [0m
-[179C[0;48;2;68;68;68m [0m
-[179C[0;48;2;68;68;68m [0m
-[0m                                                                                                                                                                                   [179C[0;1mv[0m
-[0m ↑/↓ finding · Home/End · Enter open Resolve · Esc/Backspace/Q close · read-only[80D[24A[?7h[0m

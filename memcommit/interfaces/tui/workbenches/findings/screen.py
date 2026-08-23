@@ -20,6 +20,7 @@ from memcommit.interfaces.tui.core.theme import (
 )
 from memcommit.interfaces.tui.workbenches.findings.document import (
     quality_finding_compact_fragments,
+    quality_find_report_header_text,
 )
 from memcommit.quality_find_report import (
     QualityFindBrowserReceipt,
@@ -51,21 +52,10 @@ def run_quality_find_browser(
         return view.items[cursor["index"]] if view.items else None
 
     def render_header() -> list[tuple[str, str]]:
-        position = (
-            "NO FINDINGS"
-            if not view.items
-            else f"{cursor['index'] + 1}/{len(view.items)}"
-        )
         return [
             (
                 "class:report-label",
-                f" {safe_terminal_text(view.operation)} · {position}\n",
-            ),
-            (
-                "class:report-neutral",
-                f" {view.source_count} CONTEXT(S) · "
-                f"{view.memory_count} SOURCE MEMORIES · "
-                f"{safe_terminal_text(view.route)}\n",
+                f" {quality_find_report_header_text(view)}\n",
             ),
         ]
 
@@ -88,9 +78,13 @@ def run_quality_find_browser(
                     "› " if focused else "  ",
                 )
             )
-            fragments.extend(quality_finding_compact_fragments(item, focused=focused))
-            if index < len(view.items) - 1:
-                fragments.append(("", "\n"))
+            fragments.extend(
+                quality_finding_compact_fragments(
+                    item,
+                    focused=focused,
+                    show_context=view.source_count > 1,
+                )
+            )
         return fragments
 
     def render_footer() -> str:
@@ -99,14 +93,11 @@ def run_quality_find_browser(
             if view.handoff_label is None
             else f" · Enter {safe_terminal_text(view.handoff_label)}"
         )
-        return (
-            f" ↑/↓ finding · Home/End{handoff} · "
-            "Esc/Backspace/Q close · read-only"
-        )
+        return f" ↑/↓ finding{handoff} · Esc close · READ-ONLY"
 
     header = Window(
         FormattedTextControl(render_header),
-        height=Dimension.exact(2),
+        height=Dimension.exact(1),
         dont_extend_height=True,
     )
     body_control = FormattedTextControl(render_body, focusable=True, show_cursor=False)

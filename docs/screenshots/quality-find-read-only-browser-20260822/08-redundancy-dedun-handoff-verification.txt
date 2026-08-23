@@ -1,13 +1,11 @@
 $ mem find-redundancies --context study/reporting                                                                                                                                   
 PTY · 180 COLUMNS × 52 ROWS                                                                                                                                                         
-WARNING: your terminal doesn't support cursor position requests (CPR).                                                                                                              
- FIND REDUNDANCIES · 2/2                                                                                                                                                            
- 1 CONTEXT(S) · 3 SOURCE MEMORIES · study/reporting                                                                                                                                 
-  SEMANTIC DUN · SEMANTIC_EQUIVALENT — SOURCE 1 · study/reporting [00000000]: “Report the incident within 30 days.” / SOURCE 2 · study/reporting [00000000]: “Notify the office no ^
-later than one month after discovery.” · WHY THESE MEMORIES ARE SEMANTICALLY REDUNDANT · Both Memories impose the same reporting window in this frame.                              
+ REDUNDANCIES · 2/3 PAIRS FLAGGED · [SOURCE study/reporting]                                                                                                                        
+  ≈ REDUNDANT · SEMANTIC_EQUIVALENT · [MEMORY a31f02c1] “Report the incident within 30 days.” ↔ [MEMORY 5ce891d4] “Notify the office no later than one month after discovery.”     ^
+› ≈ REDUNDANT · OVERLAP · [MEMORY 5ce891d4] “Notify the office no later than one month after discovery.” ↔ [MEMORY 7b94ee10] “The accessible entrance remains open during office ho 
+urs.”                                                                                                                                                                               
                                                                                                                                                                                     
-› SEMANTIC DUN · OVERLAP — SOURCE 1 · study/reporting [00000000]: “Notify the office no later than one month after discovery.” / SOURCE 2 · study/reporting [00000000]: “The access 
-ible entrance remains open during office hours.” · WHY THESE MEMORIES ARE SEMANTICALLY REDUNDANT · The Memories share operational context but are not substitutes.                  
+                                                                                                                                                                                    
                                                                                                                                                                                     
                                                                                                                                                                                     
                                                                                                                                                                                     
@@ -27,9 +25,10 @@ ible entrance remains open during office hours.” · WHY THESE MEMORIES ARE SEM
                                                                                                                                                                                     
                                                                                                                                                                                     
                                                                                                                                                                                    v
- ↑/↓ finding · Home/End · Enter open Dedun · Esc/Backspace/Q close · read-only                                                                                                      
+ ↑/↓ finding · Enter open Dedun · Esc close · READ-ONLY                                                                                                                             
+WARNING: your terminal doesn't support cursor position requests (CPR).                                                                                                              
                                                                                                                                                                                     
-BROWSER RECEIPT · HANDOFF · duplicate:00000000-0000-4000-8000-000000000712:00000000-0000-4000-8000-000000000713                                                                     
+BROWSER RECEIPT · HANDOFF · duplicate:5ce891d4-0000-4000-8000-000000000712:7b94ee10-0000-4000-8000-000000000713                                                                     
 READ-ONLY VERIFICATION                                                                                                                                                              
   RESPONSE STATE · 0                                                                                                                                                                
   SOURCE DIGEST UNCHANGED · True                                                                                                                                                    

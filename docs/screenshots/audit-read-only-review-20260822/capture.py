@@ -51,11 +51,11 @@ def _session(*, empty: bool):
         name="study/audit-source",
     )
     first = Memory(
-        uid="00000000-0000-4000-8000-000000000811",
+        uid="a31f02c1-0000-4000-8000-000000000811",
         content="The main entrance opens at 08:00.",
     )
     second = Memory(
-        uid="00000000-0000-4000-8000-000000000812",
+        uid="5ce891d4-0000-4000-8000-000000000812",
         content="The main entrance remains closed until 09:00.",
     )
     context.add(first)
@@ -194,15 +194,15 @@ def _capture_full(store_root: Path) -> None:
 
         child.send(DOWN)
         _BASE._settle(child)
-        _BASE._snapshot(recorder, "02-duplicate-and-historical-note")
+        _BASE._snapshot(recorder, "02-duplicate-one-line-evidence")
 
         child.send(DOWN)
         _BASE._settle(child)
-        _BASE._snapshot(recorder, "03-ambiguity-evidence-not-answer")
+        _BASE._snapshot(recorder, "03-ambiguity-one-line-rationale")
 
         child.send(DOWN)
         _BASE._settle(child)
-        _BASE._snapshot(recorder, "04-conflict-evidence-not-action")
+        _BASE._snapshot(recorder, "04-conflict-one-line-evidence")
 
         child.send(DOWN)
         _BASE._settle(child)

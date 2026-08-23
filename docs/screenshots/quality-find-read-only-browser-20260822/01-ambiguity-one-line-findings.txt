@@ -1,12 +1,11 @@
-$ mem find-redundancies --context study/reporting                                                                                                                                   
+$ mem find-ambiguities --context study/reporting                                                                                                                                    
 PTY · 180 COLUMNS × 52 ROWS                                                                                                                                                         
- FIND REDUNDANCIES · 1/2                                                                                                                                                            
- 1 CONTEXT(S) · 3 SOURCE MEMORIES · study/reporting                                                                                                                                 
-› SEMANTIC DUN · SEMANTIC_EQUIVALENT — SOURCE 1 · study/reporting [00000000]: “Report the incident within 30 days.” / SOURCE 2 · study/reporting [00000000]: “Notify the office no ^
-later than one month after discovery.” · WHY THESE MEMORIES ARE SEMANTICALLY REDUNDANT · Both Memories impose the same reporting window in this frame.                              
+ AMBIGUITIES · 2/3 MEMORIES FLAGGED · [SOURCE study/reporting]                                                                                                                      
+› ? AMBIGUOUS · [MEMORY a31f02c1] “Report the incident within 30 days.” · WHY · The deadline does not identify which event starts the clock. — Thirty days after the incident. / Th^
+irty days after discovery. / Thirty days after notification.                                                                                                                        
+  ? AMBIGUOUS · [MEMORY 7b94ee10] “The accessible entrance remains open during office hours.” · WHY · Office hours can refer to two different schedules. — The staffed entrance sch 
+edule. / The published office schedule.                                                                                                                                             
                                                                                                                                                                                     
-  SEMANTIC DUN · OVERLAP — SOURCE 1 · study/reporting [00000000]: “Notify the office no later than one month after discovery.” / SOURCE 2 · study/reporting [00000000]: “The access 
-ible entrance remains open during office hours.” · WHY THESE MEMORIES ARE SEMANTICALLY REDUNDANT · The Memories share operational context but are not substitutes.                  
                                                                                                                                                                                     
                                                                                                                                                                                     
                                                                                                                                                                                     
@@ -26,4 +25,4 @@ ible entrance remains open during office hours.” · WHY THESE MEMORIES ARE SEM
                                                                                                                                                                                     
                                                                                                                                                                                     
                                                                                                                                                                                    v
- ↑/↓ finding · Home/End · Enter open Dedun · Esc/Backspace/Q close · read-only
+ ↑/↓ finding · Esc close · READ-ONLY

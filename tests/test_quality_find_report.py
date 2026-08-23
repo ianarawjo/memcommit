@@ -20,8 +20,12 @@ from memcommit.findings import (
     DuplicateReport,
 )
 from memcommit.interfaces.tui.workbenches.findings.document import (
+    quality_finding_compact_fragments,
     quality_finding_compact_text,
+    quality_find_report_header_text,
 )
+from memcommit.interfaces.console.theme import SemanticColorRole
+from memcommit.interfaces.tui.core.theme import semantic_role_style
 from memcommit.quality_find_workbench import (
     create_quality_find_workbench,
     quality_find_report_view,
@@ -78,13 +82,81 @@ def test_ambiguity_report_exposes_readings_without_answer_contract() -> None:
     assert session.responses == {}
 
     paragraph = quality_finding_compact_text(item)
-    assert "SOURCE MEMORY · quality/report" in paragraph
+    assert "? AMBIGUOUS" in paragraph
+    assert "[CONTEXT quality/report]" in paragraph
+    assert f"[MEMORY {first.uid[:8]}]" in paragraph
     assert "Reports are due within 30 days." in paragraph
-    assert "WHY THIS IS UNCLEAR · The starting event is not named." in paragraph
-    assert "QUESTION · Which event starts the deadline?" in paragraph
-    assert "DOMINANT: Thirty days after the event." in paragraph
-    assert "ALTERNATIVE: Thirty days after discovery." in paragraph
+    assert "WHY · The starting event is not named." in paragraph
+    assert "Thirty days after the event. / Thirty days after discovery." in paragraph
+    assert "QUESTION" not in paragraph
+    assert "READINGS" not in paragraph
+    assert "@" not in paragraph
     assert paragraph.count("\n") == 1
+
+    fragments = quality_finding_compact_fragments(item)
+    assert (
+        semantic_role_style(SemanticColorRole.QUALITY_AMBIGUITY),
+        "AMBIGUOUS",
+    ) in fragments
+    assert (
+        semantic_role_style(SemanticColorRole.RATIONALE),
+        "WHY",
+    ) in fragments
+    assert quality_find_report_header_text(view) == (
+        "AMBIGUITIES · 1/2 MEMORIES FLAGGED · [SOURCE quality/report]"
+    )
+
+
+def test_duplicate_issue_line_uses_typed_refs_and_omits_rationale() -> None:
+    context, first, second = _source()
+    session = create_quality_find_workbench(
+        "duplicates",
+        context,
+        DuplicateReport(
+            memory_count=2,
+            findings=(
+                DuplicateFinding(
+                    first,
+                    second,
+                    "EXACT",
+                    "The stored content is identical.",
+                ),
+            ),
+        ),
+    )
+
+    view = quality_find_report_view(session, context)
+    paragraph = quality_finding_compact_text(view.items[0], show_context=False)
+
+    assert paragraph.startswith("= DUPLICATE · EXACT · [MEMORY ")
+    assert " ↔ [MEMORY " in paragraph
+    assert "[CONTEXT" not in paragraph
+    assert "WHY" not in paragraph
+    assert "The stored content is identical." not in paragraph
+    assert quality_find_report_header_text(view) == (
+        "REDUNDANCIES · 1/1 PAIRS FLAGGED · [SOURCE quality/report]"
+    )
+
+
+def test_pair_issue_refs_expand_colliding_uid_prefixes() -> None:
+    context, first, second = _source()
+    first.uid = "a31f02c1-0000-0000-0000-000000000001"
+    second.uid = "a31f02c1-0000-0000-0000-000000000002"
+    session = create_quality_find_workbench(
+        "duplicates",
+        context,
+        DuplicateReport(
+            memory_count=2,
+            findings=(DuplicateFinding(first, second, "EXACT", "Identical."),),
+        ),
+    )
+
+    paragraph = quality_finding_compact_text(
+        quality_find_report_view(session, context).items[0]
+    )
+
+    assert "[MEMORY a31f02c1-0000-0000-0000-000000000001]" in paragraph
+    assert "[MEMORY a31f02c1-0000-0000-0000-000000000002]" in paragraph
 
 
 def test_finding_browser_root_close_never_creates_response_state() -> None:

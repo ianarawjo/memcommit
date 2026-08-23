@@ -35,6 +35,9 @@ YELLOW_HEX = "#eed49f"
 MAUVE_HEX = "#c6a0f6"
 TEAL_HEX = "#8bd5ca"
 LAVENDER_HEX = "#b7bdf8"
+# A rationale label is explanatory report structure, not keyboard focus.  Keep
+# the softer Sky color distinct from the brighter blue reserved for focus.
+RATIONALE_HEX = "#91d7e3"
 
 
 class SemanticColorRole(str, Enum):
@@ -55,6 +58,10 @@ class SemanticColorRole(str, Enum):
     JUDGMENT_YES = "judgment-yes"
     JUDGMENT_MAY = "judgment-may"
     JUDGMENT_NO = "judgment-no"
+    QUALITY_DUPLICATE = "quality-duplicate"
+    QUALITY_AMBIGUITY = "quality-ambiguity"
+    QUALITY_CONFLICT = "quality-conflict"
+    RATIONALE = "rationale"
 
 
 SEMANTIC_COLOR_HEX = {
@@ -73,6 +80,10 @@ SEMANTIC_COLOR_HEX = {
     SemanticColorRole.JUDGMENT_YES: GREEN_HEX,
     SemanticColorRole.JUDGMENT_MAY: YELLOW_HEX,
     SemanticColorRole.JUDGMENT_NO: RED_HEX,
+    SemanticColorRole.QUALITY_DUPLICATE: LAVENDER_HEX,
+    SemanticColorRole.QUALITY_AMBIGUITY: YELLOW_HEX,
+    SemanticColorRole.QUALITY_CONFLICT: RED_HEX,
+    SemanticColorRole.RATIONALE: RATIONALE_HEX,
 }
 
 
@@ -138,6 +149,18 @@ def semantic_judgment_role(value: str) -> SemanticColorRole | None:
     if not isinstance(value, str):
         raise TypeError("Semantic judgment labels must be text.")
     return _JUDGMENT_ROLES.get(value.strip().upper())
+
+
+def semantic_quality_role(value: str) -> SemanticColorRole | None:
+    """Classify one typed quality-finding category, not its report prose."""
+
+    if not isinstance(value, str):
+        raise TypeError("Quality finding categories must be text.")
+    return {
+        "duplicates": SemanticColorRole.QUALITY_DUPLICATE,
+        "ambiguities": SemanticColorRole.QUALITY_AMBIGUITY,
+        "conflicts": SemanticColorRole.QUALITY_CONFLICT,
+    }.get(value.strip().casefold())
 
 
 def semantic_source_role(

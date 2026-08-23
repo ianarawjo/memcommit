@@ -35,15 +35,15 @@ def _source():
     )
     memories = (
         Memory(
-            uid="00000000-0000-4000-8000-000000000711",
+            uid="a31f02c1-0000-4000-8000-000000000711",
             content="Report the incident within 30 days.",
         ),
         Memory(
-            uid="00000000-0000-4000-8000-000000000712",
+            uid="5ce891d4-0000-4000-8000-000000000712",
             content="Notify the office no later than one month after discovery.",
         ),
         Memory(
-            uid="00000000-0000-4000-8000-000000000713",
+            uid="7b94ee10-0000-4000-8000-000000000713",
             content="The accessible entrance remains open during office hours.",
         ),
     )
@@ -103,6 +103,17 @@ def _session(kind: str, *, empty: bool = False):
                     scope_dimensions=("TIME",),
                     reason="The deadlines can disagree when discovery occurs after the incident.",
                     question="Which event governs the reporting deadline?",
+                ),
+                ConflictFinding(
+                    left=second,
+                    right=third,
+                    conflict="MAY",
+                    scope_dimensions=("ACCESS",),
+                    reason=(
+                        "The two entrance schedules may govern the same public "
+                        "access window."
+                    ),
+                    question="Do both statements govern the same entrance?",
                 ),
             ),
         )
@@ -199,14 +210,13 @@ def _spawn(kind: str) -> tuple[pexpect.spawn, io.StringIO]:
 def _capture_ambiguity() -> None:
     child, recorder = _spawn("ambiguities")
     try:
-        child.expect("FIND AMBIGUITIES .* 1/2")
+        child.expect("AMBIGUITIES .* 2/3 MEMORIES FLAGGED")
         _BASE._settle(child)
-        _BASE._snapshot(recorder, "01-ambiguity-complete-paragraphs")
+        _BASE._snapshot(recorder, "01-ambiguity-one-line-findings")
 
         child.send("\x1b[B")
-        child.expect("FIND AMBIGUITIES .* 2/2")
         _BASE._settle(child)
-        _BASE._snapshot(recorder, "02-ambiguity-second-paragraph-focused")
+        _BASE._snapshot(recorder, "02-ambiguity-second-finding-focused")
 
         # Enter is deliberately inert: Find ambiguity has no detail or answer.
         child.send("\r\x1b")
@@ -226,17 +236,18 @@ def _capture_handoff(
     move_to_second: bool = False,
 ) -> None:
     child, recorder = _spawn(kind)
-    label = "FIND CONFLICTS" if kind == "conflicts" else "FIND REDUNDANCIES"
     try:
-        child.expect(label + " .* 1/")
+        if kind == "conflicts":
+            child.expect("CONFLICTS .* 2/3 PAIRS FLAGGED")
+        else:
+            child.expect("REDUNDANCIES .* 2/3 PAIRS FLAGGED")
         _BASE._settle(child)
         _BASE._snapshot(recorder, stems[0])
 
         if move_to_second:
             child.send("\x1b[B")
-            child.expect(label + " .* 2/2")
             _BASE._settle(child)
-            _BASE._snapshot(recorder, "07-redundancy-second-paragraph-focused")
+            _BASE._snapshot(recorder, "07-redundancy-second-finding-focused")
 
         child.send("\r")
         child.expect("BROWSER RECEIPT .* HANDOFF")
@@ -250,7 +261,7 @@ def _capture_handoff(
 def _capture_empty() -> None:
     child, recorder = _spawn("empty")
     try:
-        child.expect("NO FINDINGS")
+        child.expect("AMBIGUITIES .* 0/3 MEMORIES FLAGGED")
         _BASE._settle(child)
         _BASE._snapshot(recorder, "09-empty-report")
         child.send("q")
@@ -271,14 +282,14 @@ def main() -> None:
     _capture_handoff(
         "conflicts",
         (
-            "04-conflict-complete-paragraph",
+            "04-conflict-one-line-finding",
             "05-conflict-resolve-handoff-verification",
         ),
     )
     _capture_handoff(
         "duplicates",
         (
-            "06-redundancy-complete-paragraphs",
+            "06-redundancy-one-line-findings",
             "08-redundancy-dedun-handoff-verification",
         ),
         move_to_second=True,
@@ -289,6 +300,14 @@ def main() -> None:
     )
     if "38;2;" not in raw and "48;2;" not in raw:
         raise RuntimeError("PTY stream did not contain expected true-color ANSI.")
+    for red, green, blue, label in (
+        (183, 189, 248, "Duplicate"),
+        (238, 212, 159, "Ambiguity"),
+        (237, 135, 150, "Conflict"),
+        (145, 215, 227, "WHY rationale"),
+    ):
+        if f"38;2;{red};{green};{blue}" not in raw:
+            raise RuntimeError(f"PTY stream did not contain {label} semantic color.")
     for stem in (
         "03-ambiguity-close-verification",
         "05-conflict-resolve-handoff-verification",

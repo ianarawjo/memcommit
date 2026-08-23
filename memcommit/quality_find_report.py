@@ -64,6 +64,7 @@ class QualityFindingReportItem:
     """One immutable finding and its complete source-linked explanation."""
 
     uid: str
+    category: QualityFindReportKind
     kind: str
     classification: str
     title: str
@@ -75,6 +76,8 @@ class QualityFindingReportItem:
 
     def __post_init__(self) -> None:
         _text(self.uid, "finding uid")
+        if self.category not in {"ambiguities", "conflicts", "duplicates"}:
+            raise QualityFindReportError("Unsupported quality finding category.")
         _text(self.kind, "finding kind")
         _text(self.classification, "finding classification")
         _text(self.title, "finding title")
@@ -98,6 +101,8 @@ class QualityFindReportView:
     route: str
     source_count: int
     memory_count: int
+    candidate_count: int
+    candidate_unit: Literal["MEMORIES", "PAIRS"]
     items: tuple[QualityFindingReportItem, ...]
     empty_message: str
     handoff_label: str | None = None
@@ -116,9 +121,19 @@ class QualityFindReportView:
         for value, label in (
             (self.source_count, "finding Source count"),
             (self.memory_count, "finding Memory count"),
+            (self.candidate_count, "finding candidate count"),
         ):
             if not isinstance(value, int) or isinstance(value, bool) or value < 0:
                 raise QualityFindReportError(f"Invalid {label}.")
+        if self.candidate_unit not in {"MEMORIES", "PAIRS"}:
+            raise QualityFindReportError("Invalid finding candidate unit.")
+        expected_unit = "MEMORIES" if self.kind == "ambiguities" else "PAIRS"
+        if self.candidate_unit != expected_unit:
+            raise QualityFindReportError("Finding candidate unit does not match kind.")
+        if len(self.items) > self.candidate_count:
+            raise QualityFindReportError("Finding count exceeds candidate count.")
+        if any(item.category != self.kind for item in self.items):
+            raise QualityFindReportError("Finding item category does not match report.")
         if len({item.uid for item in self.items}) != len(self.items):
             raise QualityFindReportError("Duplicate quality finding uid.")
         if self.handoff_label is not None:

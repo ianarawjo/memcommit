@@ -1,11 +1,13 @@
 # Quality Find read-only browser capture log
 
-This ordered set records the complete-paragraph report browser used by
+This ordered set records the one-line issue browser used by
 `find-ambiguities`, `find-conflicts`, and the complete-DUN finding projection.
-Every list row contains its classification, exact Source evidence, reason,
-question when present, and readings when present. Questions and readings remain
-evidence: no image contains a detail mode, answer control, checked reading,
-obligation, draft, or Apply action.
+Each header freezes the Source and reports the flagged/total Memory or pair
+count. Rows use typed `[CONTEXT ...] [MEMORY ...]` references where needed;
+they never join the identities with `@`. Ambiguity folds its readings into a
+natural `WHY` rationale, Conflict keeps a scoped `WHY`, and Redundancy omits
+its repeated rationale. No image contains a detail mode, answer control,
+checked reading, obligation, draft, or Apply action.
 
 ## Reproduction frame
 
@@ -26,13 +28,13 @@ obligation, draft, or Apply action.
 
 | Image | Preceding input | Visible state | Following input | Durable mutation |
 | --- | --- | --- | --- | --- |
-| `01-ambiguity-complete-paragraphs.png` | fresh Ambiguity report | Both findings are understandable in the list; item 1 is focused | `Down` | None |
-| `02-ambiguity-second-paragraph-focused.png` | `Down` | Item 2 is focused without opening another layer; both complete paragraphs remain visible | `Enter`, `Esc` | None |
+| `01-ambiguity-one-line-findings.png` | fresh Ambiguity report | Both source-linked findings are understandable as compact logical lines; item 1 is focused | `Down` | None |
+| `02-ambiguity-second-finding-focused.png` | `Down` | Item 2 is focused without opening another layer; both issue rows remain visible | `Enter`, `Esc` | None |
 | `03-ambiguity-close-verification.png` | inert `Enter`, then `Esc` | Close receipt and explicit no-answer/no-write verification | process exit | None |
-| `04-conflict-complete-paragraph.png` | fresh Conflict report | Both exact Sources, conflict reason, question, and `Enter open Resolve` are visible together | `Enter` | None |
+| `04-conflict-one-line-finding.png` | fresh Conflict report | Both exact Sources, scope, rationale, and `Enter open Resolve` are visible on one logical line | `Enter` | None |
 | `05-conflict-resolve-handoff-verification.png` | `Enter` | Typed Resolve handoff receipt; Find response and write counts remain zero | process exit | None |
-| `06-redundancy-complete-paragraphs.png` | fresh complete-DUN report | Both relation paragraphs and `Enter open Dedun` are visible | `Down` | None |
-| `07-redundancy-second-paragraph-focused.png` | `Down` | The second full evidence paragraph is focused | `Enter` | None |
+| `06-redundancy-one-line-findings.png` | fresh complete-DUN report | Both typed relation rows appear without repeated `WHY` prose; `Enter open Dedun` remains visible | `Down` | None |
+| `07-redundancy-second-finding-focused.png` | `Down` | The second evidence row is focused | `Enter` | None |
 | `08-redundancy-dedun-handoff-verification.png` | `Enter` | Typed Dedun handoff receipt; Find itself still has no mutation | process exit | None |
 | `09-empty-report.png` | fresh zero-finding Ambiguity report | Stable compact empty result with a close-only footer | `Q` | None |
 
