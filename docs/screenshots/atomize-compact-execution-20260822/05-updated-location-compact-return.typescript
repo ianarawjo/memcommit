@@ -5,11 +5,11 @@ PTY 180 52
 
 [0m AMBIGUITY · Meaning of ‘the same NFC’[0m
 [0;38;2;244;245;247m Which credential should the atomic Memory name?[0m
-[0;38;2;16;36;47;48;2;139;213;255;1m   [1] Prior credential · Name the previously described NFC credential. (Recommended)[0m
-[0m   [2] Staff credential · Limit the reading to the staff entrance credential.[0m
-[0m   [L] Change save location[0m
-[0m   [A] Apply reviewed Atomize[0m
+[0;38;2;16;36;47;48;2;139;213;255;1m✓ Prior credential · Name the previously described NFC credential. · Recommended[0m
+[0m  Staff credential · Limit the reading to the staff entrance credential.[0m
+[0m  Change save location[0m
 
+[0m  APPLY ALL · 1/1 READY[0m
 
 
 
@@ -51,12 +51,7 @@ PTY 180 52
 
 
 [0m [0m
-[0m ←/→ issue · ↑/↓ choice/action · Enter select · 1–9 choose · A continue · D defer · L location · Esc save & close[113D[51A[0m[?25l[0m
-
-
-
-
-[C[0;38;2;16;36;47;48;2;139;213;255;1m✓[0m
+[0m ←/→ issue · ↑/↓ move · Enter select/apply · Esc close[54D[51A[0m[?25l[0m
 
 
 
@@ -102,7 +97,12 @@ PTY 180 52
 
 
 
-[C[0mSelected · Prior cred[Cntial[0m[K[51A[28D[0m[?25l[0m
+
+
+
+
+
+[C[0mSelected · Prior cr[Cdential[0m[K[51A[28D[0m[?25l[0m
 [0m› atomized/draft[0m[K[0m
 [0m Enter use exact name · Esc return · Ctrl-C cancel[0m
 [0m [0m[K[0m
@@ -110,8 +110,8 @@ PTY 180 52
 [0m [0m[K[0m
 [0m [0m[K[0m
 [0m [0m[K[0m
-[0m [0m[K[0m
 
+[0m [0m[K[0m
 
 
 
@@ -160,11 +160,11 @@ PTY 180 52
 
 [0m AMBIGUITY · Meaning of ‘the same NFC’[0m
 [0;38;2;244;245;247m Which credential should the atomic Memory name?[0m
-[0;38;2;16;36;47;48;2;139;213;255;1m ✓ [1] Prior credential · Name the previously described NFC credential. (Recommended)[0m
-[0m   [2] Staff credential · Limit the reading to the staff entrance credential.[0m
-[0m   [L] Change save location[0m
-[0m   [A] Apply reviewed Atomize[0m
+[0;38;2;16;36;47;48;2;139;213;255;1m✓ Prior credential · Name the previously described NFC credential. · Recommended[0m
+[0m  Staff credential · Limit the reading to the staff entrance credential.[0m
+[0m  Change save location[0m
 
+[0m  APPLY ALL · 1/1 READY[0m
 
 
 
@@ -206,4 +206,4 @@ PTY 180 52
 
 
 [0m [0m
-[0m ←/→ issue · ↑/↓ choice/action · Enter select · 1–9 choose · A continue · D defer · L location · Esc save & close[113D[51A[0m
+[0m ←/→ issue · ↑/↓ move · Enter select/apply · Esc close[54D[51A[0m

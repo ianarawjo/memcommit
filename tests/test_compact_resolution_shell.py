@@ -6,6 +6,9 @@ from prompt_toolkit.output import DummyOutput
 from memcommit.interfaces.tui.workbenches.resolution.compact_shell import (
     run_compact_resolution_decisions,
 )
+from memcommit.interfaces.tui.workbenches.resolution.session_shell import (
+    run_resolution_workbench_shell,
+)
 from memcommit.interfaces.tui.components.save_location import SaveLocationView
 from memcommit.resolution_workbench import (
     ResolutionItem,
@@ -135,6 +138,26 @@ def test_old_choice_and_action_shortcuts_have_no_compact_action():
         "access": "access:recommended",
     }
     assert actions == []
+
+
+def test_compact_choice_is_discarded_on_close_instead_of_saved_as_a_draft():
+    saved: list[tuple[str, str | None, str]] = []
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[B\r\x1b")
+        action = run_resolution_workbench_shell(
+            _view(),
+            compact_decisions=True,
+            draft_saver=lambda uid, option_uid, comment: saved.append(
+                (uid, option_uid, comment)
+            ),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "CLOSE"
+    assert saved == []
 
 
 def test_compact_decisions_edit_the_exact_save_location_inline():

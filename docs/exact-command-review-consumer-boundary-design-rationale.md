@@ -48,7 +48,7 @@ typing or synchronization alone never applies work. See the
 | Reference | Focused `Enter` on the reviewed immutable copy command | Applies the adjacent frozen Source/Target snapshot |
 | Merge | Focused `Enter` through the plan review or common Resolution workbench | Applies the same `FrozenMergePlan` and, for conflicts, the reviewed resolution set |
 | Replace | Focused `Enter` on the exact digest-bound replacement plan | Applies the same complete frozen multi-Context plan |
-| Dedup and Resolve | Focused `Enter` through the deterministic Resolution workbench | Applies the reviewed frozen case without introducing a semantic turn |
+| Dedup | Focused `Enter` through the deterministic Resolution workbench | Applies the reviewed frozen case without introducing a semantic turn |
 | Meld, Update, and Sever setup | Focused `Enter` on a rebuilt `START` command | Returns the same typed setup receipt to the owning application boundary; analysis/session start occurs in process and final Apply remains separate |
 | Meld, Update, and Sever semantic/session turns | Focused `Enter` on a rebuilt `TURN` command | Executes the same typed response against the displayed `--expect-session` revision; it rebuilds review state and never performs final Apply |
 | Find SHOW | None: this is a receipt for the read-only action authorized by the submitted Find turn | Immediately dispatches only `mem show UID --context NAME` without a shell and leaves Find results and durable Context state unchanged |
@@ -58,6 +58,13 @@ person can trace what ran.  Labeling it as receipt-only is important: adding an
 approval prompt would turn an already-submitted read request into a redundant
 second confirmation, while treating it as a mutation approval would overstate
 its effects.  The allowlist and actual-output receipt are its safety boundary.
+
+Verified-plan Resolve and the shared semantic compact execution shell do not
+consume this component. Their selected, revision-bound plan remains adjacent
+to a separated Apply row; Enter on that row is the sole approval, followed by
+the operation's normal freshness validation. The compatibility
+`resolve_candidate_exact_review` value remains available to non-compact
+callers, but the terminal compact route does not insert it as a second screen.
 
 Semantic-session commands are a deliberately narrower use of this value. The
 global START/TURN/NONE classification, revision binding, rebuilding rule, and

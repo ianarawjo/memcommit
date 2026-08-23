@@ -111,8 +111,7 @@ def _run_child() -> None:
             build_continue_action=lambda _uid: (
                 ResolutionWorkbenchAction(kind="ACCEPT") if selected else None
             ),
-            build_simple_action=lambda kind: ResolutionWorkbenchAction(kind=kind),
-            continue_label=lambda: "Apply reviewed Atomize",
+            continue_label=lambda: "Apply",
             destination=SaveLocationView(
                 value=destination,
                 state="NOT CREATED",
@@ -196,11 +195,11 @@ def main() -> None:
         _settle(child)
         _snapshot(recorder, "01-entry-compact-decision")
 
-        child.send("1")
+        child.send("\r")
         _settle(child)
         _snapshot(recorder, "02-choice-staged")
 
-        child.send("l")
+        child.send("\x1b[B" * 2 + "\r")
         _settle(child)
         _snapshot(recorder, "03-save-location-input")
 
@@ -212,7 +211,7 @@ def main() -> None:
         _settle(child, seconds=0.8)
         _snapshot(recorder, "05-updated-location-compact-return")
 
-        child.send("a")
+        child.send("\x1b[B" * 3 + "\r")
         _settle(child, seconds=0.8)
         _snapshot(recorder, "06-applied-receipt")
 

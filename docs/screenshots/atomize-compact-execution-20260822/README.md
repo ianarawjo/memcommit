@@ -20,12 +20,12 @@ and Sever.
 
 | Image | Input since preceding image | Visible state | Durable mutation |
 | --- | --- | --- | --- |
-| `01-entry-compact-decision.png` | Launch | One Atomize ambiguity decision; retained report absent; exact Output visible | None |
-| `02-choice-staged.png` | `1` | Recommended reading receives the durable `✓` selection marker | Draft selection only |
-| `03-save-location-input.png` | `L` | Shared exact one-line Save Location input replaces the decision body | None |
+| `01-entry-compact-decision.png` | Launch | One Atomize ambiguity decision; typed Recommended reading already checked; retained report absent; exact Output visible | None |
+| `02-choice-staged.png` | `Enter` | The Recommended reading remains checked for this execution only | None |
+| `03-save-location-input.png` | `Down`, `Down`, `Enter` | Arrow-only navigation opens the shared exact one-line Save Location input | None |
 | `04-invalid-location-retained.png` | replace with `wrong/place`, `Enter` | Operation validator rejects the name without closing the editor | None |
 | `05-updated-location-compact-return.png` | replace with `atomized/final`, `Enter` | Controller accepts the process-local destination change and returns to the compact decision | Destination plan only |
-| `06-applied-receipt.png` | `A` | Compact Atomize receipt identifies Source, Output, checkpoint, and retained Review route | Output checkpoint (fixture receipt) |
+| `06-applied-receipt.png` | `Down` ×3, `Enter` on separated Apply | Compact Atomize receipt identifies Source, Output, checkpoint, and retained Review route; no second confirmation appears | Output checkpoint (fixture receipt) |
 | `07-read-only-verification.png` | `V` | Read-only verification shows the reviewed choice, final Output, zero required findings, and no additional provider turn | None |
 
 Backspace and printable-key behavior inside the exact name field, invalid-name

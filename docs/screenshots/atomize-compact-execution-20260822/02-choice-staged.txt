@@ -3,11 +3,11 @@
 
  AMBIGUITY · Meaning of ‘the same NFC’
  Which credential should the atomic Memory name?
- ✓ [1] Prior credential · Name the previously described NFC credential. (Recommended)
-   [2] Staff credential · Limit the reading to the staff entrance credential.
-   [L] Change save location
-   [A] Apply reviewed Atomize
+✓ Prior credential · Name the previously described NFC credential. · Recommended
+  Staff credential · Limit the reading to the staff entrance credential.
+  Change save location
 
+  APPLY ALL · 1/1 READY
 
 
 

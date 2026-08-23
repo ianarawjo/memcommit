@@ -61,17 +61,22 @@ surface rather than embedding the complete Impact document above its controls.
 The surface shows one issue's kind, title, question, and operation-authored
 choices at a time. `Left`/`Right` wraps across issues, so the person may answer
 them in any order; it is not a forced one-item wizard. `Up`/`Down` moves the
-visible keyboard target, `Enter` stages that row, and `1` through `9` are direct
-choice accelerators. The blue target makes arrow movement visible, while `✓`
-is the complete non-color channel for a staged value.
+visible keyboard target, and `Enter` stages that row. Number keys are inert so
+issue ordinals cannot be mistaken for a second choice grammar. The blue target
+makes arrow movement visible, while `✓` is the complete non-color channel for
+a selected value.
 
-Staging is process-local or saved through the operation's existing draft port.
-It does not call a provider or mutate a Context. One Continue action may submit
-all staged required choices together. `D` remains a first-class Defer action,
-and a consequential semantic turn still receives the adjacent exact-command
-review required by its operation. The compact surface may mark
-`(Recommended)` only when the operation's typed option identity or label says
-so; choice order alone is not a recommendation.
+New compact staging is process-local and closing does not save it through an
+operation draft port. It does not call a provider or mutate a Context. A blank
+line separates the current issue's choices from one navigable
+`APPLY ALL · n/n READY` row; Enter there consumes the complete selected set
+without an `A` shortcut or a second exact-command confirmation. Defer and
+Preserve-all remain compatible domain/CLI actions where an operation already
+supports them, but they are not compact decision rows. The surface selects and
+marks `· Recommended` only when the operation's typed option identity or label
+says so; choice order alone is not a recommendation. Existing durable
+responses may still seed a resumed operation, but compact edits remain
+ephemeral until the operation consumes them.
 
 The complete report remains durable. Execution receipts name the exact Impact
 or Review route that opens it, but execution itself does not render the report

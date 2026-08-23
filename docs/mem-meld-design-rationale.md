@@ -1544,12 +1544,11 @@ receipt outside a TTY. In a terminal, unresolved judgments open the shared
 compact decision surface, not the complete report Viewer. `Left`/`Right`
 navigates issues in either order, `Up`/`Down` exposes the current row target,
 and `Enter` alone stages a choice or activates Apply. Choices are unnumbered;
-numeric keys may remain undisclosed choice accelerators, and `L` may open the
-same visible Location row without becoming a printed grammar. The former
-direct `A`, `D`, and `P` actions are inert. A unique typed recommendation may
-start checked process-locally, new compact choices are not saved as drafts on
-close, and the separate Apply row submits the complete ready vector without a
-second review screen. Explicit `--defer-all` and `--preserve-all` CLI forms
+numeric keys and the former direct `L`, `A`, `D`, and `P` actions are inert. A
+unique typed recommendation may start checked process-locally, new compact
+choices are not saved as drafts on close, and the separate Apply row submits
+the complete ready vector without a second review screen. Explicit
+`--defer-all` and `--preserve-all` CLI forms
 remain compatible for scripts and saved-session recovery. The report remains
 available through the receipt's exact `mem impact meld --session UID` route;
 `--expand ISSUE` is an explicit detailed projection.
