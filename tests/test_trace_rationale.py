@@ -657,12 +657,10 @@ def test_task1_rationale_keeps_structured_evidence_but_renders_only_provenance(
     lines[4] = "안 되고 급한 용무면 전화해라."
     lines[5] = "직원들 출입구는 평소처럼 계속 출입 가능하다."
     lines[6] = "학생들 - 안내해야 한다 - 실물 카드를 받고나 앱으로."
-    lines[13] = (
-        "같은 nfc 쓰는데 교직원들만 출입가능하다, " "학생들은 여전히 못 들어온다."
-    )
+    lines[13] = "같은 nfc 쓰는데 교직원들만 출입가능하다, 학생들은 여전히 못 들어온다."
     payload = "\n".join(lines)
     monkeypatch.setattr(add_command, "capture_paste", lambda: payload)
-    assert invoke("add", "--paste", stdin="y\n").exit_code == 0
+    assert invoke("add", "--paste").exit_code == 0
 
     store = MemoryStore()
     ctx = store.load_current_direct()
@@ -718,7 +716,7 @@ def test_trace_degrades_corrupt_add_source_or_uid_order_to_reconstructed(
         "capture_paste",
         lambda: "first raw line\nsecond raw line",
     )
-    assert invoke("add", "--paste", stdin="y\n").exit_code == 0
+    assert invoke("add", "--paste").exit_code == 0
     store = MemoryStore()
     ctx = store.load_current_direct()
     memories = [item for item in ctx.iter_items() if isinstance(item, Memory)]

@@ -118,9 +118,12 @@ def test_bare_rationale_selects_provenance_target(
     target = _direct_memories(MemoryStore())[0]
     monkeypatch.setattr(
         "memcommit.commands.rationale.choose_memory_report_target",
-        lambda items, *, context_name, operation, initial_include_descendants, **kwargs: (
-            _target_selection(context_name, context_name, target.uid)
-        ),
+        lambda items,
+        *,
+        context_name,
+        operation,
+        initial_include_descendants,
+        **kwargs: (_target_selection(context_name, context_name, target.uid)),
     )
     result = invoke("rationale")
 
@@ -144,6 +147,7 @@ def test_trace_descendant_range_opens_the_selected_owner_history(
     assert invoke("edit", target.uid, "current child wording").exit_code == 0
     assert invoke("switch", "notes").exit_code == 0
     observed: dict[str, object] = {}
+
     def select(
         items,
         *,
@@ -186,6 +190,7 @@ def test_rationale_picker_groups_memories_under_their_public_context(
     child_target = _direct_memories(MemoryStore())[0]
     assert invoke("switch", "notes").exit_code == 0
     observed: dict[str, object] = {}
+
     def select(
         items,
         *,
@@ -265,9 +270,12 @@ def test_interactive_trace_opens_vertical_viewer_only_when_requested(
     )
     monkeypatch.setattr(
         "memcommit.commands.trace.choose_memory_report_target",
-        lambda items, *, context_name, operation, initial_include_descendants, **kwargs: (
-            _target_selection(context_name, context_name, target.uid)
-        ),
+        lambda items,
+        *,
+        context_name,
+        operation,
+        initial_include_descendants,
+        **kwargs: (_target_selection(context_name, context_name, target.uid)),
     )
     monkeypatch.setattr(
         "memcommit.commands.trace.choose_memory_report_recent",
@@ -363,7 +371,12 @@ def test_bare_rationale_cancel_returns_without_report(
     assert invoke("add", "portable note").exit_code == 0
     monkeypatch.setattr(
         "memcommit.commands.rationale.choose_memory_report_target",
-        lambda items, *, context_name, operation, initial_include_descendants, **kwargs: None,
+        lambda items,
+        *,
+        context_name,
+        operation,
+        initial_include_descendants,
+        **kwargs: None,
     )
     result = invoke("rationale")
 
