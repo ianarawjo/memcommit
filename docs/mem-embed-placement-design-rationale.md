@@ -6,9 +6,9 @@ Implemented for both public entry routes:
 
 ```text
 mem embed
-mem embed CHILD [--into CONTEXT] [--before ITEM | --after ITEM]
-mem embed MEMORY [--into CONTEXT] [--before ITEM | --after ITEM]
-mem embed SOURCE:MEMORY [--into CONTEXT] [--before ITEM | --after ITEM]
+mem embed CHILD [--into CONTEXT | --to CONTEXT] [--before ITEM | --after ITEM]
+mem embed MEMORY [--into CONTEXT | --to CONTEXT] [--before ITEM | --after ITEM]
+mem embed SOURCE:MEMORY [--into CONTEXT | --to CONTEXT] [--before ITEM | --after ITEM]
 ```
 
 The flagless form first selects Context or Memory link type. Context mode
@@ -19,7 +19,8 @@ non-interactive and scripting routes. `SOURCE:MEMORY` names an exact owner;
 a bare public UID/prefix searches every ordinary local direct Context and must
 be unique. Existing `MEMORY --from SOURCE` scripts remain supported. Omitting
 `--into` uses the command-start current Context; an explicit `--into` overrides
-it.
+it. `--to` is accepted as a compatibility alias for `--into`, while generated
+commands and receipts keep `--into` as the canonical spelling.
 
 The implementation now enters through `memcommit.embed_application`, with
 `memcommit.embed_runtime` owning Store loading, concurrency checks, checkpoint
@@ -64,6 +65,12 @@ mem embed examples --into guide --before 7cc52c10
 mem embed examples --into guide --after 191884c4
 mem embed examples:a94c120e --into guide --before 7cc52c10
 ```
+
+`--into TARGET` and `--to TARGET` select the same target role, but a command
+must use only one spelling. Even identical values supplied through both flags
+are rejected before any Context is loaded or changed. Treating them as one
+ordinary Click alias would silently let the last occurrence win, which is an
+unsafe ambiguity for a mutating command.
 
 - `--before ITEM` inserts immediately before the direct item resolved by an
   exact UID, unambiguous UID prefix, or an exact embedded/query Context name.

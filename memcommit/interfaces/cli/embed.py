@@ -91,6 +91,13 @@ def cmd(
             help="Target Context whose direct order changes (defaults to current)",
         ),
     ] = None,
+    to: Annotated[
+        Optional[str],
+        typer.Option(
+            "--to",
+            help="Compatibility alias for --into",
+        ),
+    ] = None,
     before: Annotated[
         Optional[str],
         typer.Option(
@@ -106,6 +113,18 @@ def cmd(
         ),
     ] = None,
 ) -> None:
+    if into is not None and to is not None:
+        typer.secho(
+            "Error: use only one of --into or --to.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+
+    # Resolve spelling ambiguity before capturing even the current Context:
+    # a mutating command must never inherit Click's silent last-option-wins rule.
+    target_option = into or to
+
     if before is not None and after is not None:
         typer.secho(
             "Error: pass only one of --before or --after.",
@@ -121,6 +140,7 @@ def cmd(
         if (
             source_name is not None
             or into is not None
+            or to is not None
             or before is not None
             or after is not None
         ):
@@ -154,10 +174,11 @@ def cmd(
             return
         request = frozen_plan.request
     else:
-        target_locator = into or port.current_context_name
+        target_locator = target_option or port.current_context_name
         if target_locator is None:
             typer.secho(
-                "Error: no current Context. Pass --into or initialize a Context first.",
+                "Error: no current Context. Pass --into (or --to) or initialize "
+                "a Context first.",
                 fg=typer.colors.RED,
                 err=True,
             )

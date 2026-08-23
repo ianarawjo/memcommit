@@ -118,7 +118,7 @@ def parse_embed_command_argv(
     operands: list[str] = []
     options: dict[str, str] = {}
     index = 2
-    known = {"--from", "--into", "--before", "--after"}
+    known = {"--from", "--into", "--to", "--before", "--after"}
     while index < len(values):
         value = values[index]
         if value.startswith("--"):
@@ -135,8 +135,14 @@ def parse_embed_command_argv(
         index += 1
     if len(operands) != 1:
         raise ValueError("Editable Embed commands require exactly one ITEM operand.")
-    if "--into" not in options:
-        raise ValueError("Editable Embed commands require --into TARGET.")
+    if "--into" in options and "--to" in options:
+        raise ValueError("Use only one of --into or --to.")
+    into_locator = options.get("--into") or options.get("--to")
+    if into_locator is None:
+        raise ValueError(
+            "Editable Embed commands require --into TARGET "
+            "(or compatibility --to TARGET)."
+        )
     if "--before" in options and "--after" in options:
         raise ValueError("Pass only one of --before or --after.")
     if "--from" in options:
@@ -144,7 +150,7 @@ def parse_embed_command_argv(
             MemoryEmbedRequest(
                 memory_selector=operands[0],
                 source_locator=options["--from"],
-                into_locator=options["--into"],
+                into_locator=into_locator,
                 before=options.get("--before"),
                 after=options.get("--after"),
             )
@@ -152,7 +158,7 @@ def parse_embed_command_argv(
     return validate_embed_request(
         EmbedRequest(
             child_locator=operands[0],
-            into_locator=options["--into"],
+            into_locator=into_locator,
             before=options.get("--before"),
             after=options.get("--after"),
         )

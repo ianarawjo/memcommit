@@ -127,6 +127,31 @@ def test_editable_embed_command_parser_preserves_context_and_memory_modes() -> N
     )
 
 
+def test_editable_embed_command_parser_accepts_to_as_into_alias() -> None:
+    assert parse_embed_command_argv(
+        ("mem", "embed", "examples", "--to", "guide")
+    ) == EmbedRequest("examples", "guide")
+
+
+def test_editable_embed_command_parser_rejects_both_target_spellings() -> None:
+    try:
+        parse_embed_command_argv(
+            (
+                "mem",
+                "embed",
+                "examples",
+                "--into",
+                "guide",
+                "--to",
+                "other",
+            )
+        )
+    except ValueError as error:
+        assert "only one of --into or --to" in str(error)
+    else:
+        raise AssertionError("two Embed target spellings were accepted together")
+
+
 def test_gap_state_defaults_to_the_explicit_last_choice() -> None:
     parent = ops.init("parent")
     ops.add(parent, "first")
@@ -301,6 +326,54 @@ def test_cli_embed_can_choose_the_explicit_first_gap(isolated_store) -> None:
         second.uid,
     ]
     assert f"before [{first.uid[:8]}] at the start" in result.output
+
+
+def test_cli_embed_accepts_to_as_into_alias(isolated_store) -> None:
+    store, child, parent, first, second = _ordered_store()
+
+    result = runner.invoke(
+        app,
+        ["embed", child.name, "--to", parent.name],
+    )
+
+    assert result.exit_code == 0, result.output + result.stderr
+    assert store.load_direct(parent.name).ordered_uids() == [
+        first.uid,
+        second.uid,
+        child.uid,
+    ]
+    assert f"into '{parent.name}'" in result.output
+
+
+def test_cli_embed_help_keeps_into_canonical_and_lists_to_alias() -> None:
+    result = runner.invoke(app, ["embed", "--help"])
+
+    assert result.exit_code == 0, result.output + result.stderr
+    assert "--into" in result.output
+    assert "--to" in result.output
+    assert "Compatibility alias for --into" in result.output
+
+
+def test_cli_embed_rejects_into_and_to_without_mutation(isolated_store) -> None:
+    store, child, parent, _first, _second = _ordered_store()
+    before = store.load_direct(parent.name).to_dict()
+
+    result = runner.invoke(
+        app,
+        [
+            "embed",
+            child.name,
+            "--into",
+            parent.name,
+            "--to",
+            parent.name,
+        ],
+    )
+
+    assert result.exit_code == 2
+    assert "only one of --into or --to" in result.stderr
+    assert store.load_direct(parent.name).to_dict() == before
+    assert store.list_checkpoints(parent.name) == []
 
 
 def test_cli_embed_defaults_to_current_target_and_last_gap(
