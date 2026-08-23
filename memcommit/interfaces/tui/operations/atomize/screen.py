@@ -488,6 +488,7 @@ def run_atomize_workbench_shell(
             )
             if workflow_actions
             else (),
+            compact_decisions=workflow_actions,
         )
         first_round = False
         session.cursor_uid = navigation.selected_item_uid

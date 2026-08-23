@@ -7,6 +7,7 @@ from memcommit.exact_command_review import ExactCommandReview
 from memcommit.interfaces.tui.workbenches.resolution.compact_shell import (
     run_compact_resolution_decisions,
 )
+from memcommit.interfaces.tui.components.save_location import SaveLocationView
 from memcommit.resolution_workbench import (
     ResolutionItem,
     ResolutionOption,
@@ -133,3 +134,95 @@ def test_exact_command_review_stays_adjacent_to_compact_decisions():
 
     assert result is action
     assert selected == {"retention": "retention:a", "access": "access:a"}
+
+
+def test_compact_decisions_edit_the_exact_save_location_inline():
+    selected: dict[str, str] = {}
+
+    def validate(value: str) -> None:
+        if not value.startswith("result/"):
+            raise ValueError("Use result/ namespace.")
+
+    with create_pipe_input() as pipe_input:
+        # The first invalid Enter must retain the editor; the second exact
+        # candidate leaves it through a typed destination-change action.
+        pipe_input.send_text(
+            "l\x15wrong/place\r\x15result/reviewed\r"
+        )
+        result = run_compact_resolution_decisions(
+            _view,
+            selected_option=selected.get,
+            stage_option=selected.__setitem__,
+            build_continue_action=lambda _uid: ResolutionWorkbenchAction(
+                kind="ACCEPT"
+            ),
+            build_simple_action=lambda kind: ResolutionWorkbenchAction(kind=kind),
+            continue_label=lambda: "Apply",
+            destination=SaveLocationView(
+                value="result/draft",
+                state="NOT CREATED",
+                validate=validate,
+            ),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+        )
+
+    assert result.kind == "CHANGE_DESTINATION"
+    assert result.destination == "result/reviewed"
+    assert selected == {}
+
+
+def test_compact_destination_backspace_remains_text_deletion():
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("l\x7f\r")
+        result = run_compact_resolution_decisions(
+            _view,
+            selected_option=lambda _uid: None,
+            stage_option=lambda _uid, _option_uid: None,
+            build_continue_action=lambda _uid: None,
+            build_simple_action=lambda kind: ResolutionWorkbenchAction(kind=kind),
+            continue_label=lambda: "Apply",
+            destination=SaveLocationView(value="result/draft"),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+        )
+
+    assert result.kind == "CHANGE_DESTINATION"
+    assert result.destination == "result/draf"
+
+
+def test_compact_destination_keeps_printable_q_as_name_input():
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("lq\r")
+        result = run_compact_resolution_decisions(
+            _view,
+            selected_option=lambda _uid: None,
+            stage_option=lambda _uid, _option_uid: None,
+            build_continue_action=lambda _uid: None,
+            build_simple_action=lambda kind: ResolutionWorkbenchAction(kind=kind),
+            continue_label=lambda: "Apply",
+            destination=SaveLocationView(value="result/draft"),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+        )
+
+    assert result.kind == "CHANGE_DESTINATION"
+    assert result.destination == "result/draftq"
+
+
+def test_compact_destination_escape_returns_before_root_close():
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("l\x1b\x1b")
+        result = run_compact_resolution_decisions(
+            _view,
+            selected_option=lambda _uid: None,
+            stage_option=lambda _uid, _option_uid: None,
+            build_continue_action=lambda _uid: None,
+            build_simple_action=lambda kind: ResolutionWorkbenchAction(kind=kind),
+            continue_label=lambda: "Apply",
+            destination=SaveLocationView(value="result/draft"),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+        )
+
+    assert result.kind == "CLOSE"

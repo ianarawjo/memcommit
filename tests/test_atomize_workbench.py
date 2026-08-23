@@ -1532,8 +1532,9 @@ def test_shared_atomize_review_can_incorporate_and_apply_in_one_action():
             workbench.response_for(issue.uid).text = "Use the reviewed local meaning."
 
     with create_pipe_input() as pipe_input:
-        # To Do opens Review and Apply; End reaches the compound final action.
-        pipe_input.send_text("\x1b[Z\r\x1b[F\r")
+        # Execution decisions skip the retained report and expose one compact
+        # continue action for the already reviewed responses.
+        pipe_input.send_text("a")
         action = run_atomize_workbench_shell(
             workbench,
             analysis,
@@ -1581,6 +1582,7 @@ def test_applied_atomize_workbench_keeps_comments_but_removes_reapply_actions(
     assert view.capabilities == frozenset({"SUBMIT_ITEM"})
     assert view.accept_enabled is False
     assert kwargs["review_and_apply"] is False
+    assert kwargs["compact_decisions"] is False
     assert kwargs["decision_free_behavior"] == "REPORT_FIRST"
     assert kwargs["global_strategies"] == ()
 
@@ -1616,6 +1618,7 @@ def test_actionable_atomize_auto_accepts_when_no_response_is_required(
     assert all(item.effective_obligation == "OPTIONAL" for item in view.items)
     assert view.accept_enabled is True
     assert kwargs["review_and_apply"] is True
+    assert kwargs["compact_decisions"] is True
     assert kwargs["decision_free_behavior"] == "AUTO_ACCEPT"
 
 
@@ -1634,9 +1637,9 @@ def test_atomize_uses_shared_save_location_frame_before_final_review():
     workbench.response_for(issue.uid).selected_choice_uid = issue.choice_uids[0]
 
     with create_pipe_input() as pipe_input:
-        # Viewer starts on Report. Two Tabs reach the compact frame between
-        # Items and To Do, and Enter opens its own exact-name editor.
-        pipe_input.send_text("\t\t\r\x15workbench/destination-final\r")
+        # L opens the shared exact-name field without restoring the retained
+        # report workbench around this execution decision.
+        pipe_input.send_text("l\x15workbench/destination-final\r")
         action = run_atomize_workbench_shell(
             workbench,
             analysis,

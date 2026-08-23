@@ -1,0 +1,7 @@
+
+ATOMIZE APPLIED · source/policy → atomized/final
+DECISIONS · 1 STAGED · 1 APPLIED
+SOURCE · source/policy · UNCHANGED
+OUTPUT · atomized/final · CREATED · CHECKPOINT CREATED
+REVIEW · RETAINED · mem review atomize --context source/policy
+CAPTURE GATE · PRESS V FOR READ-ONLY VERIFICATION

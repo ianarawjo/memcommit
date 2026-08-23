@@ -432,13 +432,20 @@ records those findings as `UNRESOLVED AT APPLY` rather than `RESOLVED`,
 The report also names its operation frame independently of this semantic
 summary. A typed `CONTEXT LOCATIONS` block identifies Source and Output above
 `WHAT MEM UNDERSTOOD`, marking an unchanged Output as `IN PLACE` and a planned
-fresh Output as `NOT CREATED`. For a fresh Output, the shared focusable
-`SAVE LOCATION` frame sits between `ITEMS` and `TO DO`; Enter expands the frame
-with the shared local parent-Context tree above the still-prefilled exact-name
-field. Direct input keeps initial focus, and the Atomize controller validates
-and persists the resulting exact name before reopening the same revision. This
-keeps destination editing outside the report Viewer, leaves final Apply in To
-Do, and avoids a redundant post-review location prompt.
+fresh Output as `NOT CREATED`. That complete report remains available through
+Impact and Review, but applying Atomize does not wrap a pending decision in the
+report workbench. The execution surface shows only the current finding,
+operation-authored choices, the exact Output, and compact actions. `L` opens
+the shared one-line exact-name input; validation failure retains that input,
+Escape returns one level, and a valid change is persisted by the Atomize
+controller before the same compact revision reopens. This keeps Output editing
+adjacent to the applying decision without restoring a second large viewer or a
+redundant post-review location prompt.
+
+The ordered 180×52 color-PTY evidence in
+[`docs/screenshots/atomize-compact-execution-20260822/`](screenshots/atomize-compact-execution-20260822/)
+records entry, selection, valid and invalid exact-name transitions, Apply
+receipt, and read-only result verification.
 
 As with the understanding block, each of these two sections is its own concise,
 traceable natural-language report paragraph. The shared 40-50-word soft target

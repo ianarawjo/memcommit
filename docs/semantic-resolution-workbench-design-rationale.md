@@ -180,6 +180,17 @@ re-export deleted private renderers or become a second implementation. Static
 boundary tests count the live host definitions so a future compatibility edit
 cannot silently restore a shadow application.
 
+Execution and report inspection are separate hosts over the same typed view.
+Meld, Update, Forget, Sever, and Atomize use the report-free compact decision
+surface when the current command can advance or apply semantic state. Explicit
+Review and Impact retain the complete Viewer, evidence, Items, and Responses
+topology. The compact host may receive an operation-owned Save Location. It
+renders the frozen exact value beside the decision and uses the shared
+single-line exact-name control for `L`; it returns a typed destination-change
+action and never persists or validates operation meaning itself. Backspace and
+printable keys remain editor input, invalid values keep the editor open, and
+Escape retreats from the editor before it can close the decision surface.
+
 ## Common contract
 
 `ResolutionWorkbenchView` is a complete immutable projection of one operation

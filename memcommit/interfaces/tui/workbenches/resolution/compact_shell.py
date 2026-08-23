@@ -5,19 +5,29 @@ from __future__ import annotations
 from collections.abc import Callable
 
 from prompt_toolkit.application import Application
+from prompt_toolkit.application.current import get_app
+from prompt_toolkit.filters import Condition
 from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.keys import Keys
-from prompt_toolkit.layout import Dimension, FormattedTextControl, Layout, Window
+from prompt_toolkit.layout import (
+    Dimension,
+    DynamicContainer,
+    FormattedTextControl,
+    Layout,
+    Window,
+)
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
 from memcommit.exact_command_review import ExactCommandReview
 from memcommit.interfaces.console.text import safe_terminal_text
+from memcommit.interfaces.tui.components.exact_name import ExactNameInputControl
 from memcommit.interfaces.tui.components.exact_command_review.rendering import (
     render_exact_command_review,
 )
 from memcommit.interfaces.tui.components.frame import TuiRegion, build_tui_frame
+from memcommit.interfaces.tui.components.save_location import SaveLocationView
 from memcommit.interfaces.tui.core.keybindings import bind_case_insensitive_key
 from memcommit.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
@@ -59,6 +69,7 @@ def run_compact_resolution_decisions(
     build_continue_action: Callable[[str | None], ResolutionWorkbenchAction | None],
     build_simple_action: Callable[[str], ResolutionWorkbenchAction | None],
     continue_label: Callable[[], str],
+    destination: SaveLocationView | None = None,
     turn_command_review: (
         Callable[[ResolutionWorkbenchAction], ExactCommandReview | None] | None
     ) = None,
@@ -95,7 +106,18 @@ def run_compact_resolution_decisions(
     pending_action: dict[str, ResolutionWorkbenchAction | None] = {"value": None}
     pending_review: dict[str, ExactCommandReview | None] = {"value": None}
     status = {"value": ""}
+    destination_editing = {"value": False}
     bindings = KeyBindings()
+    destination_field = (
+        ExactNameInputControl.create(destination, input_name="compact-save-location")
+        if destination is not None
+        else None
+    )
+    decision_keys_active = Condition(lambda: not destination_editing["value"])
+    destination_keys_active = Condition(lambda: destination_editing["value"])
+    location_key_active = Condition(
+        lambda: destination is not None and not destination_editing["value"]
+    )
 
     def active_item() -> ResolutionItem | None:
         return items[item_index["value"]] if items else None
@@ -107,6 +129,8 @@ def run_compact_resolution_decisions(
             rows.append(("P", "Preserve all"))
         if "DEFER" in capabilities:
             rows.append(("D", "Defer"))
+        if destination is not None:
+            rows.append(("L", f"Change {destination.label.lower()}"))
         rows.append(("A", continue_label()))
         return tuple(rows)
 
@@ -153,6 +177,20 @@ def run_compact_resolution_decisions(
             ]
 
         fragments: list[tuple[str, str]] = []
+        if destination is not None:
+            fragments.append(
+                (
+                    "class:report-neutral",
+                    f" {safe_terminal_text(destination.label)} · "
+                    f"{safe_terminal_text(destination.value)}"
+                    + (
+                        f" · {safe_terminal_text(destination.state)}"
+                        if destination.state
+                        else ""
+                    )
+                    + "\n\n",
+                )
+            )
         item = active_item()
         option_count = len(item.options) if item is not None else 0
         if item is not None:
@@ -201,14 +239,23 @@ def run_compact_resolution_decisions(
             return " " + safe_terminal_text(status["value"])
         if pending_review["value"] is not None:
             return " Enter run · Esc/Backspace return · Q cancel"
+        if destination_editing["value"]:
+            return " Enter use exact name · Esc return · Ctrl-C cancel"
+        location_hint = " · L location" if destination is not None else ""
         return (
             " ←/→ issue · ↑/↓ choice/action · Enter select · "
-            "1–9 choose · A continue · D defer · Esc save & close"
+            f"1–9 choose · A continue · D defer{location_hint} · Esc save & close"
         )
 
     header_control = FormattedTextControl(render_header)
     body_control = FormattedTextControl(render_body, focusable=True, show_cursor=False)
     footer_control = FormattedTextControl(render_footer)
+
+    def active_body():
+        if destination_editing["value"] and destination_field is not None:
+            return destination_field.input
+        return Window(body_control, wrap_lines=True)
+
     root = build_tui_frame(
         TuiRegion(
             Window(
@@ -217,7 +264,7 @@ def run_compact_resolution_decisions(
                 dont_extend_height=True,
             )
         ),
-        TuiRegion(Window(body_control, wrap_lines=True)),
+        TuiRegion(DynamicContainer(active_body)),
         TuiRegion(
             Window(
                 footer_control,
@@ -298,27 +345,55 @@ def run_compact_resolution_decisions(
         else:
             finish_or_review(build_simple_action("DEFER"))
 
-    @bindings.add("left", eager=True)
+    def open_destination() -> None:
+        if destination is None or destination_field is None:
+            return
+        destination_field.set_text(destination.value)
+        destination_editing["value"] = True
+        status["value"] = ""
+        get_app().layout.focus(destination_field.input)
+
+    def close_destination() -> None:
+        destination_editing["value"] = False
+        status["value"] = ""
+        get_app().layout.focus(body_control)
+
+    def submit_destination() -> None:
+        if destination_field is None:
+            return
+        try:
+            value = destination_field.validate_candidate()
+        except ValueError as error:
+            status["value"] = str(error)
+            return
+        app.exit(
+            result=ResolutionWorkbenchAction(
+                kind="CHANGE_DESTINATION",
+                destination=value,
+            )
+        )
+
+    @bindings.add("left", filter=decision_keys_active, eager=True)
     def _left(event) -> None:
         move_item(-1)
         event.app.invalidate()
 
-    @bindings.add("right", eager=True)
+    @bindings.add("right", filter=decision_keys_active, eager=True)
     def _right(event) -> None:
         move_item(1)
         event.app.invalidate()
 
-    @bindings.add("up", eager=True)
+    @bindings.add("up", filter=decision_keys_active, eager=True)
     def _up(event) -> None:
         move_row(-1)
         event.app.invalidate()
 
-    @bindings.add("down", eager=True)
+    @bindings.add("down", filter=decision_keys_active, eager=True)
     def _down(event) -> None:
         move_row(1)
         event.app.invalidate()
 
-    @bindings.add("enter", eager=True)
+    @bindings.add("enter", filter=decision_keys_active, eager=True)
     def _enter(event) -> None:
         activate()
         event.app.invalidate()
@@ -326,13 +401,18 @@ def run_compact_resolution_decisions(
     for number in range(1, 10):
         key = str(number)
 
-        @bindings.add(key, eager=True)
+        @bindings.add(key, filter=decision_keys_active, eager=True)
         def _number(event, index: int = number - 1) -> None:
             if pending_review["value"] is None:
                 select_choice(index)
             event.app.invalidate()
 
-    @bind_case_insensitive_key(bindings, "a", eager=True)
+    @bind_case_insensitive_key(
+        bindings,
+        "a",
+        filter=decision_keys_active,
+        eager=True,
+    )
     def _continue(event) -> None:
         if pending_review["value"] is None:
             item = active_item()
@@ -341,7 +421,12 @@ def run_compact_resolution_decisions(
             )
         event.app.invalidate()
 
-    @bind_case_insensitive_key(bindings, "p", eager=True)
+    @bind_case_insensitive_key(
+        bindings,
+        "p",
+        filter=decision_keys_active,
+        eager=True,
+    )
     def _preserve(event) -> None:
         if (
             pending_review["value"] is None
@@ -350,10 +435,25 @@ def run_compact_resolution_decisions(
             finish_or_review(build_simple_action("PRESERVE_ALL"))
         event.app.invalidate()
 
-    @bind_case_insensitive_key(bindings, "d", eager=True)
+    @bind_case_insensitive_key(
+        bindings,
+        "d",
+        filter=decision_keys_active,
+        eager=True,
+    )
     def _defer(event) -> None:
         if pending_review["value"] is None and "DEFER" in supplier().capabilities:
             finish_or_review(build_simple_action("DEFER"))
+        event.app.invalidate()
+
+    @bind_case_insensitive_key(
+        bindings,
+        "l",
+        filter=location_key_active,
+        eager=True,
+    )
+    def _location(event) -> None:
+        open_destination()
         event.app.invalidate()
 
     def close_or_back(event) -> None:
@@ -365,14 +465,29 @@ def run_compact_resolution_decisions(
             return
         event.app.exit(result=ResolutionWorkbenchAction(kind="CLOSE"))
 
-    @bindings.add("escape", eager=True)
-    @bindings.add("backspace", eager=True)
+    @bindings.add("escape", filter=decision_keys_active, eager=True)
+    @bindings.add("backspace", filter=decision_keys_active, eager=True)
     def _back(event) -> None:
         close_or_back(event)
 
+    @bindings.add("escape", filter=destination_keys_active, eager=True)
+    def _destination_back(event) -> None:
+        close_destination()
+        event.app.invalidate()
+
+    @bindings.add("enter", filter=destination_keys_active, eager=True)
+    def _destination_submit(event) -> None:
+        submit_destination()
+        event.app.invalidate()
+
     @bindings.add("c-c", eager=True)
     @bindings.add(Keys.SIGINT, eager=True)
-    @bind_case_insensitive_key(bindings, "q", eager=True)
+    @bind_case_insensitive_key(
+        bindings,
+        "q",
+        filter=decision_keys_active,
+        eager=True,
+    )
     def _close(event) -> None:
         event.app.exit(result=ResolutionWorkbenchAction(kind="CLOSE"))
 

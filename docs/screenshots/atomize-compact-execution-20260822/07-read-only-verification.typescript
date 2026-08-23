@@ -1,0 +1,222 @@
+$ mem atomize --context source/policy --save-as atomized/draft
+PTY 180 52
+[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;2;244;245;247;1m ATOMIZE NEEDS INPUT · < 1/1 >[0m
+[0;38;2;244;245;247m SAVE LOCATION · atomized/draft · NOT CREATED[0m
+
+[0m AMBIGUITY · Meaning of ‘the same NFC’[0m
+[0;38;2;244;245;247m Which credential should the atomic Memory name?[0m
+[0;38;2;16;36;47;48;2;139;213;255;1m   [1] Prior credential · Name the previously described NFC credential. (Recommended)[0m
+[0m   [2] Staff credential · Limit the reading to the staff entrance credential.[0m
+[0m   [L] Change save location[0m
+[0m   [A] Apply reviewed Atomize[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[0m [0m
+[0m ←/→ issue · ↑/↓ choice/action · Enter select · 1–9 choose · A continue · D defer · L location · Esc save & close[113D[51A[0m[?25l[0m
+
+
+
+
+[C[0;38;2;16;36;47;48;2;139;213;255;1m✓[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[C[0mSelected · Prior cred[Cntial[0m[K[51A[28D[0m[?25l[0m
+[0m› atomized/draft[0m[K[0m
+[0m Enter use exact name · Esc return · Ctrl-C cancel[0m
+[0m [0m[K[0m
+[0m [0m[K[0m
+[0m [0m[K[0m
+[0m [0m[K[0m
+[0m [0m[K[0m
+[0m [0m[K[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[0m [0m
+[0m [0m[K[50A[15C[0m[?12l[?25h[?25l[14D[0mwr[Cng/place[0m[K[0m
+[C[0mOu[Cput must stay in the atomized/[Cnamespace.[0m[K[A[32D[0m[?12l[?25h[13D[A[J[0m[?7h[?1049l[?2004lOUTPUT PLAN UPDATED · atomized/final · NOT CREATED
+[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;2;244;245;247;1m ATOMIZE NEEDS INPUT · < 1/1 >[0m
+[0;38;2;244;245;247m SAVE LOCATION · atomized/final · NOT CREATED[0m
+
+[0m AMBIGUITY · Meaning of ‘the same NFC’[0m
+[0;38;2;244;245;247m Which credential should the atomic Memory name?[0m
+[0;38;2;16;36;47;48;2;139;213;255;1m ✓ [1] Prior credential · Name the previously described NFC credential. (Recommended)[0m
+[0m   [2] Staff credential · Limit the reading to the staff entrance credential.[0m
+[0m   [L] Change save location[0m
+[0m   [A] Apply reviewed Atomize[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[0m [0m
+[0m ←/→ issue · ↑/↓ choice/action · Enter select · 1–9 choose · A continue · D defer · L location · Esc save & close[113D[51A[0m[J[0m[?7h[?1049l[?2004l
+ATOMIZE APPLIED · source/policy → atomized/final
+DECISIONS · 1 STAGED · 1 APPLIED
+SOURCE · source/policy · UNCHANGED
+OUTPUT · atomized/final · CREATED · CHECKPOINT CREATED
+REVIEW · RETAINED · mem review atomize --context source/policy
+CAPTURE GATE · PRESS V FOR READ-ONLY VERIFICATION
+v
+
+READ-ONLY RESULT VERIFICATION
+  AMBIGUITY · Prior credential · REVIEWED
+  OUTPUT · atomized/final
+  UNRESOLVED REQUIRED · 0
+  ADDITIONAL PROVIDER CALLS · 0

@@ -5016,6 +5016,7 @@ def run_resolution_workbench_shell(
             build_simple_action=lambda kind: semantic_action(kind),
             continue_label=compact_continue_label,
             turn_command_review=turn_command_review,
+            destination=destination,
             app_input=app_input,
             app_output=app_output,
         )
