@@ -9,6 +9,10 @@ removed; `TERM=xterm-256color`, `COLORTERM=truecolor`, and prompt-toolkit
 foreground and background ANSI, and each PNG is a full-size `pyte`/Pillow
 render of the actual stream.
 
+The Compare help step was refreshed again on 2026-08-23 when its positional
+endpoints gained shared Context/Memory auto-typing; the other steps remain the
+same captures from the directional-alias refresh.
+
 All execution paths used an isolated temporary MemoryStore and deterministic
 local providers. They did not read or change the user's Profile. Run
 `python docs/screenshots/context-positional-grammar-20260821/capture.py` from
@@ -19,7 +23,7 @@ the repository root to reproduce the complete set.
 | Image | Exact command / preceding input | Visible state | Durable mutation in isolated Store |
 | --- | --- | --- | --- |
 | `01-merge-help.png` | `mem merge -h` | Usage exposes `[source] [target]`; `--from` selects Source and `--into`/`--to` select Target | None |
-| `02-compare-help.png` | `mem compare -h` | One positional Context means PEER; two mean REFERENCE PEER | None |
+| `02-compare-help.png` | `mem compare -h` | One or two positional endpoints auto-type Context, UUID-shaped Memory, or `CONTEXT:MEMORY`; `--from`/`--to` remain explicitly Context-typed | None |
 | `03-sever-help.png` | `mem sever -h` | Usage exposes `SOURCE CRITERIA [RESULT]`; `--source`/`--from`, `--criteria`/`--against`, and `--save-as`/`--to` expose the same roles | None |
 | `04-merge-positional-conflict.png` | `mem merge`, then `Tab` ×3, `Enter` in setup | Complete selected Source/Target conflict entry; setup itself publishes nothing | None |
 | `05-merge-positional-exact-review.png` | `Tab`, `Enter` | Whole-set KEEP TARGET review shows the portable positional command | None |

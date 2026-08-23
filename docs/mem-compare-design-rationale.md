@@ -9,6 +9,9 @@ mem compare
 mem compare --sessions
 mem compare PEER
 mem compare REFERENCE PEER
+mem compare PEER_MEMORY
+mem compare REFERENCE_MEMORY PEER_MEMORY
+mem compare REFERENCE:MEMORY PEER:MEMORY
 mem compare ../PEER
 mem compare REFERENCE PEER --refresh
 mem compare REFERENCE PEER --snapshot
@@ -23,10 +26,13 @@ Choosing New there delegates to the same endpoint setup but retains the
 launcher's explicit exhaustive saved-analysis contract, so it produces a row
 that the launcher can reopen. One positional operand is
 the peer and retains the active Context as reference; two positional operands
-explicitly name reference and peer. `--from` and `--to` remain compatibility
-aliases, but positional endpoints and endpoint options cannot be mixed in one
-invocation. `--refresh` still requires an explicit peer and is rejected on the
-picker route.
+explicitly name reference and peer. Each positional endpoint uses the shared
+Context/direct-Memory classifier: an eight-or-more-character UUID-shaped value
+is a bare Memory selector, `CONTEXT:UID` is an owner-qualified Memory selector,
+and every other value is an existing Context locator. `--from` and `--to`
+remain explicitly typed Context compatibility aliases, but positional
+endpoints and endpoint options cannot be mixed in one invocation. `--refresh`
+still requires an explicit peer and is rejected on the picker route.
 
 The unqualified explicit-pair route is now a transient lightweight summary.
 It returns exactly one bounded source-linked relation paragraph under the
@@ -86,6 +92,26 @@ Both sources have equal
 authority. `REFERENCE` controls layout and navigation only; it is not a
 baseline and does not win a disagreement.
 
+### Auto-typed positional endpoints
+
+Each positional endpoint uses the shared Context/direct-Memory shape
+classifier. A bare positional Memory searches one strict ordinary-local
+direct-owner snapshot and must have exactly one owner; branch copies with the
+same UID therefore fail closed and require `CONTEXT:UID`. Qualified Memory
+owners use the same Context resolver and may name an authorized public Grant
+Context. Bare Memory lookup never enumerates Grant contents. Short prefixes
+remain available through qualification or the explicit `--reference-memory`
+and `--compared-memory` options. Existing UUID-shaped Contexts remain
+accessible through the explicitly Context-typed `--from` and `--to`
+compatibility routes.
+
+Automatic classification changes only command entry. It freezes each derived
+owner and exact Memory UID, then enters Compare's existing focused-frame path:
+the selected Memory is actionable and the rest of its loaded Context remains
+context-only evidence. Memory selection is still incompatible with descendant
+expansion on that side, and the two resolved owners must remain distinct. Both
+roles use the same command-start current-name and Grant-registry snapshot.
+
 ### Why Compare has asymmetric positional arity
 
 Compare is the strongest positional-operand case because it is read-only and
@@ -103,7 +129,7 @@ position belongs to the natural-language instruction. The complete table,
 including named Impact routes and compatibility aliases, is maintained in
 [`context-locator-design-rationale.md`](context-locator-design-rationale.md#cli-operand-grammar).
 
-Both positional endpoints and their `--from`/`--to` aliases are
+Both positional Context endpoints and their `--from`/`--to` aliases are
 existing-Context locators. A canonical name remains global, while an explicit
 `.` or `..` spelling is resolved lexically against the same active-Context
 snapshot captured at command start. The resolved canonical names are used for

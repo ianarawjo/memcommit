@@ -141,9 +141,11 @@ mem compare --from ../from --to ../to
 ```
 
 identify the same ordered comparison slot and the second spelling can reuse
-the first analysis. A single positional locator is the peer and uses current as
-the reference; two positional locators explicitly supply reference and peer.
-The option aliases retain the same roles for compatibility.
+the first analysis. A single positional endpoint is the peer and uses current
+as the reference; two positional endpoints explicitly supply reference and
+peer. Positional Compare endpoints use the shared Context/direct-Memory shape
+classifier, while `--from` and `--to` remain explicitly typed Context routes
+for compatibility and legacy UUID-shaped Context names.
 
 ## CLI operand grammar
 
@@ -162,7 +164,7 @@ table as the authored cross-operation rule:
 | `atomize`, `impact atomize` | Use current Context | `[CONTEXT]` | `--context CONTEXT` |
 | `audit`, `dedun`, `find-{ambiguities,duplicates,redundancies,conflicts}` | Use current Context | `[CONTEXT]` | `--context CONTEXT` |
 | `resolve` | Use current Context, unless bare Memory operands uniquely locate one local owner | mixed `CONTEXT`, UUID-shaped `MEMORY`, and `CONTEXT:MEMORY`; every owner must canonicalize to one Context | `--context CONTEXT`, repeatable `--memory [CONTEXT:]UID`; short Memory prefixes require `--memory` or qualification |
-| `compare` | Open saved-session launcher | `PEER` uses current as Reference; `REFERENCE PEER` is fully explicit | `--from REFERENCE`, `--to PEER` |
+| `compare` | Open saved-session launcher | auto-typed `PEER` uses current as Reference; auto-typed `REFERENCE PEER` is fully explicit; each endpoint accepts Context, UUID-shaped Memory, or `CONTEXT:MEMORY` | explicitly Context-typed `--from REFERENCE`, `--to PEER`; `--reference-memory`/`--compared-memory` retain short-prefix focus |
 | `branch` | Open compact Source/new-target setup | `RESULT_NAME` creates from current | `--from SOURCE` chooses one existing local Source; Result remains a new identifier |
 | `merge` | Open Source/Target setup | `SOURCE [TARGET]`; omitted Target is current | `--from SOURCE`; `--to TARGET` and `--into TARGET` are equivalent |
 | `update` | Open saved Update work | `SOURCE TARGET` only | `--from SOURCE`, `--to TARGET`; one omitted option endpoint uses current |
@@ -221,6 +223,17 @@ identity or freshness checks. Switch still compare-and-sets current state and
 the selected Context UID/digest. Compare still binds the exact source
 snapshots and ordered analysis slot. A later mutating command must retain its
 own locks, UID/digest checks, and canonical-target confirmation.
+
+Compare classifies positional endpoints before storage lookup. Bare Memory
+selectors scan only the strict ordinary-local direct-owner catalog and must be
+unique across branch copies; an owner-qualified `CONTEXT:MEMORY` may instead
+resolve an authorized public Grant Context. Both sides share one command-start
+current-name and Grant-registry snapshot. The resulting exact owner and Memory
+UID feed the existing focused-Compare contract, so automatic typing neither
+widens descendants nor promotes neighboring Memories from context-only
+evidence. Existing UUID-shaped Contexts use `--from`/`--to`, and prefixes
+shorter than the public eight-character Memory shape use the explicit Memory
+options or a qualified locator.
 
 ## Reuse rule and rollout boundary
 

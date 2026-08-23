@@ -32,10 +32,6 @@ from memcommit.commands.comparison_execution import (
     ensure_comparison_analysis,
     load_comparison_context,
 )
-from memcommit.authority.access import (
-    resolve_context_access,
-)
-from memcommit.context_locator import resolve_context_locator
 from memcommit.derived_policy import AnalysisRetention
 from memcommit.commands.compare_sessions import (
     choose_comparison_session,
@@ -44,6 +40,7 @@ from memcommit.commands.compare_sessions import (
 )
 from memcommit.commands.command_wait import run_command_wait
 from memcommit.commands.compare_setup import choose_compare_setup
+from memcommit.commands.compare_targeting import resolve_compare_cli_targets
 from memcommit.commands.rationale import render_rationale
 from memcommit.interfaces.tui.components.operation_launcher.session import SessionNewReceipt
 from memcommit.interfaces.console.text import (
@@ -54,6 +51,9 @@ from memcommit.context_targeting.presets import (
     legacy_root_only_option_alias,
     resolve_descendant_scopes,
     resolve_scope_preset,
+)
+from memcommit.context_targeting.resolution import (
+    is_direct_memory_locator_operand,
 )
 from memcommit.query_provider import (
     QueryProviderError,
@@ -259,11 +259,11 @@ def _resolve_endpoint_syntax(
     positional = tuple(endpoints or ())
     if len(positional) > 2:
         raise CompareCommandError(
-            "expected PEER or REFERENCE PEER (at most two positional Contexts)."
+            "expected PEER or REFERENCE PEER (at most two positional endpoints)."
         )
     if positional and (from_ is not None or to is not None):
         raise CompareCommandError(
-            "positional Contexts cannot be combined with --from or --to."
+            "positional endpoints cannot be combined with --from or --to."
         )
     if len(positional) == 1:
         # A single operand preserves the established current-as-reference
@@ -278,9 +278,10 @@ def cmd(
     contexts: Annotated[
         list[str] | None,
         typer.Argument(
+            metavar="[ENDPOINT]...",
             help=(
-                "One PEER Context (REFERENCE defaults to current), or explicit "
-                "REFERENCE and PEER Contexts"
+                "One auto-typed PEER Context/Memory (REFERENCE defaults to "
+                "current), or explicit REFERENCE and PEER endpoints"
             ),
         ),
     ] = None,
@@ -394,6 +395,27 @@ def cmd(
             from_=from_,
             to=to,
         )
+        auto_type_positionals = bool(contexts)
+        reference_is_auto_memory = bool(
+            auto_type_positionals
+            and from_ is not None
+            and is_direct_memory_locator_operand(from_)
+        )
+        compared_is_auto_memory = bool(
+            auto_type_positionals
+            and to is not None
+            and is_direct_memory_locator_operand(to)
+        )
+        if reference_is_auto_memory and reference_memory is not None:
+            raise CompareCommandError(
+                "REFERENCE Memory was supplied both positionally and with "
+                "--reference-memory."
+            )
+        if compared_is_auto_memory and compared_memory is not None:
+            raise CompareCommandError(
+                "PEER Memory was supplied both positionally and with "
+                "--compared-memory."
+            )
     except CompareCommandError as error:
         typer.secho(
             f"Compare error: {display_escape_text(str(error))}",
@@ -460,17 +482,21 @@ def cmd(
             err=True,
         )
         raise typer.Exit(2)
-    if reference_memory is not None and reference_descendants:
+    if (
+        reference_memory is not None or reference_is_auto_memory
+    ) and reference_descendants:
         typer.secho(
-            "Compare error: --reference-memory cannot be combined with "
-            "--reference-descendants.",
+            "Compare error: REFERENCE Memory selection cannot be combined "
+            "with --reference-descendants.",
             fg=typer.colors.RED,
             err=True,
         )
         raise typer.Exit(2)
-    if compared_memory is not None and compared_descendants:
+    if (
+        compared_memory is not None or compared_is_auto_memory
+    ) and compared_descendants:
         typer.secho(
-            "Compare error: --compared-memory cannot be combined with "
+            "Compare error: PEER Memory selection cannot be combined with "
             "--compared-descendants.",
             fg=typer.colors.RED,
             err=True,
@@ -517,52 +543,23 @@ def cmd(
             )
             return
         current_name = store.current_context_name()
-        if from_ is None and not current_name:
-            raise CompareCommandError(
-                "No current reference Context. Run 'mem switch NAME' first."
-            )
-        reference_name = (
-            resolve_context_locator(from_, current=current_name)
-            if from_ is not None
-            else current_name
-        )
-        assert reference_name is not None
-        compared_name = resolve_context_locator(to, current=current_name)
+        assert to is not None
         with authority_grant_snapshot_lock() as registry:
-            try:
-                reference_access = resolve_context_access(
-                    store,
-                    reference_name,
-                    current_name=current_name,
-                    required_permission="READ",
-                    registry=registry,
-                )
-            except FileNotFoundError as error:
-                resolution = (
-                    ""
-                    if from_ is None or reference_name == from_
-                    else f" (resolved to '{reference_name}')"
-                )
-                raise CompareCommandError(
-                    f"Reference Context '{from_}'{resolution} does not exist."
-                ) from error
-            try:
-                compared_access = resolve_context_access(
-                    store,
-                    to,
-                    current_name=current_name,
-                    required_permission="READ",
-                    registry=registry,
-                )
-            except FileNotFoundError as error:
-                resolution = (
-                    ""
-                    if compared_name == to
-                    else f" (resolved to '{compared_name}')"
-                )
-                raise CompareCommandError(
-                    f"Compared Context '{to}'{resolution} does not exist."
-                ) from error
+            targets = resolve_compare_cli_targets(
+                store,
+                reference_operand=from_,
+                compared_operand=to,
+                reference_is_auto_memory=reference_is_auto_memory,
+                compared_is_auto_memory=compared_is_auto_memory,
+                reference_memory_selector=reference_memory,
+                compared_memory_selector=compared_memory,
+                current_name=current_name,
+                registry=registry,
+            )
+            reference_access = targets.reference_access
+            compared_access = targets.compared_access
+            reference_memory = targets.reference_memory_uid
+            compared_memory = targets.compared_memory_uid
             reference = load_comparison_context(
                 reference_access,
                 include_descendants=reference_descendants,

@@ -521,7 +521,7 @@ def test_compare_rejects_mixed_or_overfull_positional_endpoint_syntax(
     )
 
     assert mixed.exit_code == 2
-    assert "positional Contexts cannot be combined with --from or --to" in (
+    assert "positional endpoints cannot be combined with --from or --to" in (
         mixed.output
     )
     assert overfull.exit_code == 2

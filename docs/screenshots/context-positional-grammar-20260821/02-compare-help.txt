@@ -2,12 +2,12 @@ PTY 180 52
 PTY 180 52                                                                                                                                                                          
 $ mem compare -h                                                                                                                                                                    
                                                                                                                                                                                     
- Usage: mem compare [OPTIONS] [CONTEXTS]...                                                                                                                                         
+ Usage: mem compare [OPTIONS] [ENDPOINT]...                                                                                                                                         
                                                                                                                                                                                     
  Compare Memories in two Contexts and report what they share, what differs, and what appears only on one side.                                                                      
                                                                                                                                                                                     
 ╭─ Arguments ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│   contexts      [CONTEXTS]...  One PEER Context (REFERENCE defaults to current), or explicit REFERENCE and PEER Contexts [default: None]                                         │
+│   contexts      [ENDPOINT]...  One auto-typed PEER Context/Memory (REFERENCE defaults to current), or explicit REFERENCE and PEER endpoints [default: None]                      │
 ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │ --from                                                                 TEXT        Compatibility alias for an explicit REFERENCE Context locator [default: None]                 │
@@ -27,7 +27,8 @@ $ mem compare -h
 │ --help                   -h                                                        Show this message and exit.                                                                   │
 ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
                                                                                                                                                                                     
- Positional forms: 'mem compare PEER' uses the current REFERENCE; 'mem compare REFERENCE PEER' names both peers. --from and --to remain compatibility aliases.                      
+ Positional endpoints auto-type Context, UUID-shaped Memory, and CONTEXT:MEMORY. One PEER uses the current REFERENCE; REFERENCE PEER names both sides. --from and --to remain       
+ explicitly Context-typed compatibility aliases.                                                                                                                                    
                                                                                                                                                                                     
                                                                                                                                                                                     
 HELP EXIT · 0

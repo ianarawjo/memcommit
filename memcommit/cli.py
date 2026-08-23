@@ -156,9 +156,10 @@ app.command(
     "compare",
     help=operation_summary("compare"),
     epilog=(
-        "Positional forms: 'mem compare PEER' uses the current REFERENCE; "
-        "'mem compare REFERENCE PEER' names both peers. --from and --to "
-        "remain compatibility aliases."
+        "Positional endpoints auto-type Context, UUID-shaped Memory, and "
+        "CONTEXT:MEMORY. One PEER uses the current REFERENCE; REFERENCE PEER "
+        "names both sides. --from and --to remain explicitly Context-typed "
+        "compatibility aliases."
     ),
 )(compare.cmd)
 
