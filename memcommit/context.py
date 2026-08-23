@@ -31,6 +31,103 @@ class Memory:
         return cls(uid=data["uid"], content=data["content"])
 
 
+@dataclass(frozen=True)
+class GrantedMemorySource:
+    """Exact authority provenance behind a granted Memory relationship.
+
+    Snapshot Reference retains this value as historical provenance. Live Embed
+    additionally reauthorizes the same binding whenever its target is opened.
+    Keeping the binding separate from ``MemoryRef`` time semantics prevents an
+    exported snapshot from accidentally becoming revocable and prevents a live
+    pointer from being mistaken for retained content.
+    """
+
+    context_uid: str
+    public_name: str
+    authority_context_name: str
+    authority_profile_uid: str
+    grantee_profile_uid: str
+    attachment_context_uid: str
+    attachment_context_name: str
+    grant_uid: str
+    grant_revision_at_creation: int
+    resource_uid: str
+    resource_name: str
+    memory_uid: str
+
+    def __post_init__(self) -> None:
+        text_fields = (
+            self.context_uid,
+            self.public_name,
+            self.authority_context_name,
+            self.authority_profile_uid,
+            self.grantee_profile_uid,
+            self.attachment_context_uid,
+            self.attachment_context_name,
+            self.grant_uid,
+            self.resource_uid,
+            self.resource_name,
+            self.memory_uid,
+        )
+        if any(not isinstance(value, str) or not value for value in text_fields):
+            raise ValueError("Granted Memory Source fields must be nonempty text.")
+        if (
+            isinstance(self.grant_revision_at_creation, bool)
+            or not isinstance(self.grant_revision_at_creation, int)
+            or self.grant_revision_at_creation < 1
+        ):
+            raise ValueError("Granted Memory Source revision must be positive.")
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "context_uid": self.context_uid,
+            "public_name": self.public_name,
+            "authority_context_name": self.authority_context_name,
+            "authority_profile_uid": self.authority_profile_uid,
+            "grantee_profile_uid": self.grantee_profile_uid,
+            "attachment_context_uid": self.attachment_context_uid,
+            "attachment_context_name": self.attachment_context_name,
+            "grant_uid": self.grant_uid,
+            "grant_revision_at_creation": self.grant_revision_at_creation,
+            "resource_uid": self.resource_uid,
+            "resource_name": self.resource_name,
+            "memory_uid": self.memory_uid,
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "GrantedMemorySource":
+        expected = {
+            "context_uid",
+            "public_name",
+            "authority_context_name",
+            "authority_profile_uid",
+            "grantee_profile_uid",
+            "attachment_context_uid",
+            "attachment_context_name",
+            "grant_uid",
+            "grant_revision_at_creation",
+            "resource_uid",
+            "resource_name",
+            "memory_uid",
+        }
+        if set(data) != expected:
+            raise ValueError("Granted Memory Source fields are invalid.")
+        return cls(
+            context_uid=data["context_uid"],
+            public_name=data["public_name"],
+            authority_context_name=data["authority_context_name"],
+            authority_profile_uid=data["authority_profile_uid"],
+            grantee_profile_uid=data["grantee_profile_uid"],
+            attachment_context_uid=data["attachment_context_uid"],
+            attachment_context_name=data["attachment_context_name"],
+            grant_uid=data["grant_uid"],
+            grant_revision_at_creation=data["grant_revision_at_creation"],
+            resource_uid=data["resource_uid"],
+            resource_name=data["resource_name"],
+            memory_uid=data["memory_uid"],
+        )
+
+
 class MemoryRef:
     """Read-only live embed or immutable snapshot of one Source Memory.
 
@@ -50,12 +147,30 @@ class MemoryRef:
         target: Memory | None = None,
         *,
         snapshot_content_sha256: str | None = None,
+        granted_source: GrantedMemorySource | None = None,
     ):
+        relation_fields = (
+            uid,
+            target_context_uid,
+            target_context_name,
+            target_memory_uid,
+        )
+        if any(not isinstance(value, str) or not value for value in relation_fields):
+            raise ValueError("Memory relationship fields must be nonempty text.")
         self.uid = uid
         self.target_context_uid = target_context_uid
         self.target_context_name = target_context_name
         self.target_memory_uid = target_memory_uid
         self.snapshot_content_sha256 = snapshot_content_sha256
+        self.granted_source = granted_source
+        if granted_source is not None and (
+            granted_source.context_uid != target_context_uid
+            or granted_source.public_name != target_context_name
+            or granted_source.memory_uid != target_memory_uid
+        ):
+            raise ValueError(
+                "Granted Memory Source does not match its relationship target."
+            )
         if snapshot_content_sha256 is not None:
             if target is None:
                 raise ValueError("A Memory snapshot reference requires content.")
@@ -83,10 +198,20 @@ class MemoryRef:
     def is_live(self) -> bool:
         return not self.is_snapshot
 
+    @property
+    def is_granted(self) -> bool:
+        return self.granted_source is not None
+
     def to_dict(self) -> dict[str, Any]:
         """Serialize one live identity link or exact immutable snapshot."""
         record: dict[str, Any] = {
-            "type": "memory_snapshot_ref" if self.is_snapshot else "memory_ref",
+            "type": (
+                "memory_snapshot_ref"
+                if self.is_snapshot
+                else "granted_memory_ref"
+                if self.is_granted
+                else "memory_ref"
+            ),
             "uid": self.uid,
             "target_context": {
                 "uid": self.target_context_uid,
@@ -102,6 +227,8 @@ class MemoryRef:
                 raise ValueError("Memory snapshot content digest does not match.")
             record["content"] = self.target.content
             record["content_sha256"] = self.snapshot_content_sha256
+        if self.granted_source is not None:
+            record["grant_source"] = self.granted_source.to_dict()
         return record
 
     @classmethod
@@ -111,7 +238,16 @@ class MemoryRef:
         target: Memory | None = None,
     ) -> MemoryRef:
         target_context = data["target_context"]
-        if data.get("type") == "memory_snapshot_ref":
+        kind = data.get("type")
+        if kind not in {
+            "memory_ref",
+            "memory_snapshot_ref",
+            "granted_memory_ref",
+        }:
+            raise ValueError("Memory relationship type is invalid.")
+        if not isinstance(target_context, dict):
+            raise ValueError("Memory relationship target Context is invalid.")
+        if kind == "memory_snapshot_ref":
             content = data.get("content")
             digest = data.get("content_sha256")
             if not isinstance(content, str) or not isinstance(digest, str):
@@ -119,6 +255,20 @@ class MemoryRef:
             target = Memory(uid=data["target_memory_uid"], content=content)
         else:
             digest = None
+        raw_granted_source = data.get("grant_source")
+        if raw_granted_source is not None and not isinstance(
+            raw_granted_source, dict
+        ):
+            raise ValueError("Memory relationship Grant Source is invalid.")
+        granted_source = (
+            GrantedMemorySource.from_dict(raw_granted_source)
+            if isinstance(raw_granted_source, dict)
+            else None
+        )
+        if kind == "granted_memory_ref" and granted_source is None:
+            raise ValueError("Granted Memory reference has no Grant Source.")
+        if kind == "memory_ref" and granted_source is not None:
+            raise ValueError("Local Memory Embed cannot carry Grant provenance.")
         return cls(
             uid=data["uid"],
             target_context_uid=target_context["uid"],
@@ -126,6 +276,7 @@ class MemoryRef:
             target_memory_uid=data["target_memory_uid"],
             target=target,
             snapshot_content_sha256=digest,
+            granted_source=granted_source,
         )
 
     def copy(self) -> MemoryRef:
@@ -137,6 +288,7 @@ class MemoryRef:
             target_memory_uid=self.target_memory_uid,
             target=self.target,
             snapshot_content_sha256=self.snapshot_content_sha256,
+            granted_source=self.granted_source,
         )
 
 
@@ -399,6 +551,8 @@ class Context:
         data: dict[str, Any],
         loader: Callable[[str], Context | None] | None = None,
         memory_loader: Callable[[str, str, str], Memory | None] | None = None,
+        granted_memory_loader: Callable[[GrantedMemorySource], Memory | None]
+        | None = None,
         granted_loader: Callable[[GrantedContextLink], Context | None] | None = None,
     ) -> Context:
         """
@@ -432,7 +586,16 @@ class Context:
             item = serialized[uid]
             if item["type"] == "memory":
                 ctx.add(Memory.from_dict(item))
-            elif item["type"] in {"memory_ref", "memory_snapshot_ref"}:
+            elif item["type"] in {
+                "memory_ref",
+                "memory_snapshot_ref",
+                "granted_memory_ref",
+            }:
+                # Validate the complete relationship and Grant-to-target
+                # identity binding before any live loader can open Source
+                # bytes. A malformed durable pointer must fail closed without
+                # turning one tampered field into an external read request.
+                reference = MemoryRef.from_dict(item)
                 target_context = item["target_context"]
                 target = None
                 if item["type"] == "memory_ref" and memory_loader is not None:
@@ -441,7 +604,17 @@ class Context:
                         target_context["uid"],
                         item["target_memory_uid"],
                     )
-                ctx.add(MemoryRef.from_dict(item, target=target))
+                elif (
+                    item["type"] == "granted_memory_ref"
+                    and granted_memory_loader is not None
+                ):
+                    assert reference.granted_source is not None
+                    target = granted_memory_loader(reference.granted_source)
+                ctx.add(
+                    reference
+                    if target is None
+                    else MemoryRef.from_dict(item, target=target)
+                )
             elif item["type"] == "query_context_ref":
                 ctx.add(QueryContextRef.from_dict(item))
             elif item["type"] == "context_ref":

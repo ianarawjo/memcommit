@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import json
+import uuid
+
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 import pytest
@@ -12,10 +15,21 @@ from memcommit.cli import app
 from memcommit.context import Context, Memory, MemoryRef
 from memcommit.interfaces.tui.components.direct_item_placement import DirectItemGap
 from memcommit.interfaces.tui.operations.memory_transfer import (
+    build_memory_transfer_tui_setup,
     choose_memory_transfer_setup,
     memory_transfer_exact_command_review,
     parse_memory_transfer_command_argv,
 )
+from memcommit.profile_config import (
+    AUTHORING_PROFILE_NAME,
+    AUTHORING_PROFILE_UID,
+    ProfileEntry,
+    ProfileRegistry,
+    profile_registry_file,
+    profile_store_dir,
+)
+from memcommit.profiles import create_authority_grant
+from memcommit.source_projection.presentation import source_display_text
 from memcommit.memory_transfer_application import (
     CopyMemoriesRequest,
     MoveMemoriesRequest,
@@ -35,6 +49,60 @@ def _context(store: MemoryStore, name: str, *contents: str) -> tuple[Context, tu
     memories = tuple(ops.add(context, content) for content in contents)
     store.save(context)
     return context, memories
+
+
+def _granted_copy_fixture(isolated_store, tmp_path, monkeypatch):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    store = MemoryStore()
+    workspace, _ = _context(store, "workspace")
+    local_source, _ = _context(store, "local-source", "owned source")
+    target, (marker,) = _context(store, "target", "target marker")
+    store.set_current(workspace.name)
+
+    grantee = ProfileEntry(
+        uid=AUTHORING_PROFILE_UID,
+        name=AUTHORING_PROFILE_NAME,
+        kind="AUTHORING",
+    )
+    authority = ProfileEntry(
+        uid=str(uuid.uuid4()),
+        name="copy-authority",
+        kind="MANAGED",
+    )
+    authority_store = MemoryStore(root=profile_store_dir(authority))
+    source = ops.init("authority/source")
+    memory = ops.add(source, "Export-authorized source")
+    no_retention = ops.init("authority/no-retention")
+    ops.add(no_retention, "Readable but not retainable")
+    authority_store.save(source)
+    authority_store.save(no_retention)
+
+    registry = ProfileRegistry(
+        generation=1,
+        active_uid=grantee.uid,
+        profiles=(grantee, authority),
+        grants=(),
+    )
+    path = profile_registry_file()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(registry.to_dict(), indent=2) + "\n")
+    create_authority_grant(
+        authority_name=authority.name,
+        grantee_name=grantee.name,
+        resource_name=source.name,
+        attachment_name=workspace.name,
+        public_name="shared/source",
+        permissions=("READ", "DERIVE", "EXPORT", "SAVE_ANALYSIS"),
+    )
+    create_authority_grant(
+        authority_name=authority.name,
+        grantee_name=grantee.name,
+        resource_name=no_retention.name,
+        attachment_name=workspace.name,
+        public_name="shared/no-retention",
+        permissions=("READ", "DERIVE", "EXPORT"),
+    )
+    return store, source, memory, target, marker, local_source
 
 
 def test_editable_memory_transfer_parser_keeps_copy_simple_and_move_explicit() -> None:
@@ -184,6 +252,191 @@ def test_copy_editable_command_replaces_the_visible_batch_order_atomically(
     assert store.load_direct(target.name).memories == {}
 
 
+def test_granted_copy_tui_separates_readable_sources_from_local_roles(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+) -> None:
+    store, _source, _memory, target, _marker, local_source = (
+        _granted_copy_fixture(isolated_store, tmp_path, monkeypatch)
+    )
+    port = MemoryStoreMemoryTransferPort.capture(
+        store,
+        allow_granted_sources=True,
+    )
+
+    copy_setup = build_memory_transfer_tui_setup(port, kind="COPY")
+    move_setup = build_memory_transfer_tui_setup(port, kind="MOVE")
+    copy_annotations = dict(copy_setup.source_annotations)
+
+    assert "shared/source" in copy_setup.source_names
+    assert "shared/no-retention" not in copy_setup.source_names
+    assert "shared/source" not in copy_setup.local_source_names
+    assert "shared/source" not in copy_setup.into_names
+    assert set(copy_setup.into_names) == {
+        "workspace",
+        local_source.name,
+        target.name,
+    }
+    assert "GRANT" in source_display_text(copy_annotations["shared/source"])
+    assert "COPY + RETAIN" in source_display_text(
+        copy_annotations["shared/source"]
+    )
+    assert "shared/source" not in move_setup.source_names
+    assert move_setup.source_names == move_setup.local_source_names
+    assert move_setup.source_names == move_setup.into_names
+
+
+def test_local_only_copy_tui_does_not_consult_active_profile_grants(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+) -> None:
+    store, _source, _memory, target, _marker, local_source = (
+        _granted_copy_fixture(isolated_store, tmp_path, monkeypatch)
+    )
+    port = MemoryStoreMemoryTransferPort.capture(store)
+
+    setup = build_memory_transfer_tui_setup(port, kind="COPY")
+
+    assert port.allows_granted_sources is False
+    assert set(setup.source_names) == {
+        "workspace",
+        local_source.name,
+        target.name,
+    }
+    assert setup.source_names == setup.local_source_names
+    assert setup.source_annotations == ()
+    assert "shared/source" not in setup.source_names
+    with pytest.raises(FileNotFoundError):
+        port.inspect_local_context("shared/source")
+
+
+def test_granted_copy_exact_command_requires_an_explicit_public_owner(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+) -> None:
+    store, source, memory, target, marker, _local_source = (
+        _granted_copy_fixture(isolated_store, tmp_path, monkeypatch)
+    )
+    port = MemoryStoreMemoryTransferPort.capture(
+        store,
+        allow_granted_sources=True,
+    )
+    command = (
+        f"shared/source:{memory.uid[:7]} --into {target.name} "
+        f"--before {marker.uid[:7]}"
+    )
+
+    with create_pipe_input() as pipe_input:
+        # Source → Into Context → position → exact command. Replacing the
+        # command proves the edited public owner is resolved only in the
+        # frozen Copy Source role and never in the local Target role.
+        pipe_input.send_text("\t\t\t\x15" + command + "\r")
+        plan = choose_memory_transfer_setup(
+            port,
+            kind="COPY",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert plan is not None
+    assert plan.request.memory_locators == (
+        f"shared/source:{memory.uid[:7]}",
+    )
+    assert plan.memories[0].source_context_name == "shared/source"
+    assert plan.memories[0].source_context_uid == source.uid
+    assert plan.into_name == target.name
+    assert plan.placement.next_uid == marker.uid
+
+
+def test_granted_copy_exact_command_keeps_source_and_target_role_catalogs(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+) -> None:
+    store, source, memory, target, _marker, local_source = (
+        _granted_copy_fixture(isolated_store, tmp_path, monkeypatch)
+    )
+    port = MemoryStoreMemoryTransferPort.capture(
+        store,
+        allow_granted_sources=True,
+    )
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text(
+            "\t\t\t\x15"
+            f"{memory.uid[:7]} --from shared/source --into {target.name}"
+            "\r"
+        )
+        plan = choose_memory_transfer_setup(
+            port,
+            kind="COPY",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert plan is not None
+    assert plan.request.memory_locators == (
+        f"shared/source:{memory.uid[:7]}",
+    )
+    assert plan.memories[0].source_context_uid == source.uid
+
+    local_uid = next(iter(local_source.memories))
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text(
+            "\t\t\t\x15"
+            f"{local_source.name}:{local_uid[:7]} --into shared/source"
+            "\r\x1b"
+        )
+        rejected = choose_memory_transfer_setup(
+            port,
+            kind="COPY",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert rejected is None
+    assert not any(
+        item["command"] == "copy" for item in store.list_checkpoints(target.name)
+    )
+
+
+def test_granted_copy_tui_does_not_scan_grants_for_a_bare_uid(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+) -> None:
+    store, _source, memory, target, _marker, _local_source = (
+        _granted_copy_fixture(isolated_store, tmp_path, monkeypatch)
+    )
+    port = MemoryStoreMemoryTransferPort.capture(
+        store,
+        allow_granted_sources=True,
+    )
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text(
+            "\t\t\t\x15"
+            f"{memory.uid[:7]} --into {target.name}"
+            "\r\x1b"
+        )
+        plan = choose_memory_transfer_setup(
+            port,
+            kind="COPY",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert plan is None
+    assert store.load_direct(target.name).ordered_uids()
+
+
 def test_move_tui_defaults_to_atomic_live_embed_retarget(isolated_store) -> None:
     store = MemoryStore()
     source, (memory,) = _context(store, "source", "move me")
@@ -259,7 +512,7 @@ def test_bare_copy_cli_applies_only_the_tui_returned_frozen_plan(
     monkeypatch.setattr(
         transfer_command.MemoryStoreMemoryTransferPort,
         "capture",
-        lambda _store: port,
+        lambda _store, **_kwargs: port,
     )
     monkeypatch.setattr(
         transfer_command,
@@ -294,7 +547,7 @@ def test_bare_move_cli_applies_only_the_tui_returned_frozen_plan(
     monkeypatch.setattr(
         transfer_command.MemoryStoreMemoryTransferPort,
         "capture",
-        lambda _store: port,
+        lambda _store, **_kwargs: port,
     )
     monkeypatch.setattr(
         transfer_command,

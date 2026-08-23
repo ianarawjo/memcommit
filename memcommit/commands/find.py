@@ -479,6 +479,7 @@ def _load_find_frame_roots(
         (root.name,),
         include_descendants=recursive,
         follow_embeds=resolve_embeds,
+        include_attached_reads=False,
     )
 
 

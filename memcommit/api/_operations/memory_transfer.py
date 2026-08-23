@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections.abc import Sequence
 
 from memcommit.api._runtime import ClientRuntime
+from memcommit.api._support.readable import active_client_registry
 from memcommit.api._support.errors import raise_public
 from memcommit.api.errors import (
     MemoryTransferAuthorityError,
@@ -24,6 +25,7 @@ from memcommit.api.memory_transfer import (
 )
 from memcommit.memory_transfer_application import (
     CopyMemoriesRequest,
+    MemoryTransferAuthorityError as InternalMemoryTransferAuthorityError,
     MemoryTransferError as InternalMemoryTransferError,
     MemoryTransferStalePlanError,
     MoveMemoriesRequest,
@@ -89,6 +91,8 @@ def _raise(error: Exception) -> None:
         raise error
     if isinstance(error, MemoryTransferStalePlanError):
         raise_public(MemoryTransferConflictError, error)
+    if isinstance(error, InternalMemoryTransferAuthorityError):
+        raise_public(MemoryTransferAuthorityError, error)
     if isinstance(error, FileNotFoundError):
         raise_public(MemoryTransferContextError, error)
     if isinstance(error, (ProfileConfigError, ProfileError, WriteProtectionError)):
@@ -126,7 +130,10 @@ def copy_memories(
                 before=before,
                 after=after,
             ),
-            port=MemoryStoreMemoryTransferPort.capture(runtime.store),
+            port=MemoryStoreMemoryTransferPort.capture(
+                runtime.store,
+                allow_granted_sources=active_client_registry(runtime) is not None,
+            ),
         )
     except Exception as error:
         _raise(error)
@@ -176,7 +183,10 @@ def move_memories(
                 after=after,
                 link_policy=policy,
             ),
-            port=MemoryStoreMemoryTransferPort.capture(runtime.store),
+            port=MemoryStoreMemoryTransferPort.capture(
+                runtime.store,
+                allow_granted_sources=active_client_registry(runtime) is not None,
+            ),
         )
     except Exception as error:
         _raise(error)

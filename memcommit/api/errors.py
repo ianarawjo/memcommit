@@ -182,7 +182,11 @@ class ReferenceInputError(ReferenceError):
 
 
 class ReferenceContextError(ReferenceError):
-    """A requested local Reference Source or Target is unavailable."""
+    """A requested Reference Source or local Target is unavailable."""
+
+
+class ReferenceAuthorityError(ReferenceError):
+    """The active Profile or Grant does not authorize this Reference."""
 
 
 class ReferenceConflictError(ReferenceError):
@@ -519,6 +523,7 @@ __all__ = [
     "QueryInputError",
     "QueryProviderFailure",
     "QueryStorageError",
+    "ReferenceAuthorityError",
     "ReferenceConflictError",
     "ReferenceContextError",
     "ReferenceError",

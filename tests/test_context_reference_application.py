@@ -6,6 +6,7 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
+import memcommit.reference_runtime as reference_runtime
 from memcommit.cli import app
 from memcommit.context import Context, Memory, MemoryRef
 from memcommit.context_snapshot import ContextSnapshotRef
@@ -242,6 +243,53 @@ def test_context_reference_apply_rejects_source_drift(isolated_store):
     with pytest.raises(RuntimeError, match="source Context changed"):
         port.apply_context(plan)
     assert list(store.load("target").iter_items()) == []
+
+
+def test_context_reference_memory_embed_bytes_and_binding_share_one_owner_frame(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    owner = ops.init("owner")
+    memory = ops.add(owner, "version one")
+    source = ops.init("source")
+    link = ops.embed_memory(memory, owner, source)
+    target = ops.init("target")
+    for context in (owner, source, target):
+        store.save(context)
+
+    original_snapshot = reference_runtime.snapshot_record_with_frozen_memory_embeds
+    changed_after_snapshot = False
+
+    def mutate_owner_after_snapshot(direct, resolved):
+        nonlocal changed_after_snapshot
+        record = original_snapshot(direct, resolved)
+        if direct.name == source.name and not changed_after_snapshot:
+            changed_after_snapshot = True
+            changed = store.load_for_update(owner.name)
+            changed.replace(Memory(uid=memory.uid, content="version two"))
+            store.save(changed)
+        return record
+
+    monkeypatch.setattr(
+        reference_runtime,
+        "snapshot_record_with_frozen_memory_embeds",
+        mutate_owner_after_snapshot,
+    )
+    port = MemoryStoreReferencePort.capture(store)
+    plan = port.freeze_context(
+        ContextReferenceRequest(source.name, target.name)
+    )
+
+    [record] = plan.snapshot_package["contexts"]
+    frozen_link = record["memories"][link.uid]
+    assert frozen_link["type"] == "memory_snapshot_ref"
+    assert frozen_link["content"] == "version one"
+    assert store.load_direct(owner.name).memories[memory.uid].content == "version two"
+    with pytest.raises(RuntimeError, match="source Context changed"):
+        port.apply_context(plan)
+    assert store.load_direct(target.name).ordered_uids() == []
+    assert store.list_checkpoints(target.name) == []
 
 
 def test_context_reference_undo_redo_restores_self_contained_package(

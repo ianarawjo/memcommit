@@ -44,10 +44,7 @@ def _interactive_terminal() -> bool:
 
 def _gap_description(placement: EmbedPlacement) -> str:
     if placement.previous_uid is not None and placement.next_uid is not None:
-        return (
-            f"between [{placement.previous_uid[:8]}] "
-            f"and [{placement.next_uid[:8]}]"
-        )
+        return f"between [{placement.previous_uid[:8]}] and [{placement.next_uid[:8]}]"
     if placement.next_uid is not None:
         return f"before [{placement.next_uid[:8]}] at the start"
     if placement.previous_uid is not None:
@@ -148,17 +145,15 @@ def cmd(
         raise typer.Exit(2)
 
     store = MemoryStore()
-    port = MemoryStoreEmbedPort.capture(store)
+    # The CLI runs in the active Profile and may therefore resolve its reviewed
+    # public Grant namespace. Explicit-root library clients opt in separately.
+    port = MemoryStoreEmbedPort.capture(store, allow_granted_sources=True)
     frozen_plan = None
     source_from_option = a is None and source_name is not None
     source_item = source_name if source_from_option else a
     memory_owner = None if source_from_option else source_name
     if source_item is None:
-        if (
-            target_option is not None
-            or before is not None
-            or after is not None
-        ):
+        if target_option is not None or before is not None or after is not None:
             typer.secho(
                 "Error: run 'mem embed' with no operands for interactive setup, "
                 "or pass an item for the non-interactive form.",
@@ -177,7 +172,13 @@ def cmd(
             raise typer.Exit(1)
         try:
             frozen_plan = choose_embed_setup(port)
-        except (FileNotFoundError, OSError, RuntimeError, TypeError, ValueError) as error:
+        except (
+            FileNotFoundError,
+            OSError,
+            RuntimeError,
+            TypeError,
+            ValueError,
+        ) as error:
             typer.secho(
                 f"Error: {display_escape_text(str(error))}",
                 fg=typer.colors.RED,
@@ -208,9 +209,8 @@ def cmd(
                 else None
             )
             auto_target = None
-            if (
-                parsed_source is not None
-                and not isinstance(parsed_source, DirectMemoryLocator)
+            if parsed_source is not None and not isinstance(
+                parsed_source, DirectMemoryLocator
             ):
                 exact_access = None
                 if is_memory_uid_prefix(source_item):
@@ -241,20 +241,41 @@ def cmd(
                 auto_target,
                 DirectMemoryTarget,
             ):
-                memory_operand = (
-                    source_item
-                    if isinstance(parsed_source, DirectMemoryLocator)
-                    else auto_target.memory_uid
-                )
-                memory_target = resolve_local_direct_memory_locator(
-                    port.store,
-                    memory_operand,
-                    current=port.current_context_name,
-                    explicit_context=(
-                        memory_owner
-                        if isinstance(parsed_source, DirectMemoryLocator)
-                        else auto_target.context_name
-                    ),
+                granted_memory_source = None
+                if (
+                    isinstance(parsed_source, DirectMemoryLocator)
+                    and parsed_source.context_locator is not None
+                ):
+                    access = resolve_context_access(
+                        port.store,
+                        parsed_source.context_locator,
+                        current_name=port.current_context_name,
+                        required_permission="EMBED",
+                    )
+                    if access.is_granted:
+                        # An explicit public owner is the only Grant-aware
+                        # Memory form. Bare UID lookup remains a complete,
+                        # unambiguous ordinary-local scan and never enumerates
+                        # authority content merely to guess an owner.
+                        granted_memory_source = DirectMemoryTarget(
+                            access.display_name,
+                            parsed_source.memory_selector,
+                        )
+                memory_target = granted_memory_source or (
+                    resolve_local_direct_memory_locator(
+                        port.store,
+                        (
+                            source_item
+                            if isinstance(parsed_source, DirectMemoryLocator)
+                            else auto_target.memory_uid
+                        ),
+                        current=port.current_context_name,
+                        explicit_context=(
+                            memory_owner
+                            if isinstance(parsed_source, DirectMemoryLocator)
+                            else auto_target.context_name
+                        ),
+                    )
                 )
                 request = MemoryEmbedRequest(
                     memory_selector=memory_target.memory_uid,
@@ -274,7 +295,13 @@ def cmd(
                     before=before,
                     after=after,
                 )
-        except (FileNotFoundError, OSError, TypeError, ValueError) as error:
+        except (
+            FileNotFoundError,
+            OSError,
+            RuntimeError,
+            TypeError,
+            ValueError,
+        ) as error:
             typer.secho(
                 f"Error: {safe_terminal_text(str(error))}",
                 fg=typer.colors.RED,

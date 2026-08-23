@@ -81,6 +81,7 @@ _OBJECT_TITLE_LABELS = {
 }
 _STATE_LABELS = {
     SourceState.READ_ONLY: "READ ONLY",
+    SourceState.OPAQUE: "OPAQUE",
     SourceState.UNAVAILABLE: "UNAVAILABLE",
     SourceState.DANGLING: "DANGLING",
     SourceState.CYCLE: "CYCLE",

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from memcommit.api._runtime import ClientRuntime
+from memcommit.api._support.readable import active_client_registry
 from memcommit.api._support.errors import raise_public
 from memcommit.api.embed import (
     EmbeddedContextResult,
@@ -56,6 +57,7 @@ def embed_context(
                 after=after,
             ),
             store=runtime.store,
+            allow_granted_sources=active_client_registry(runtime) is not None,
         )
     except FileNotFoundError as error:
         raise_public(EmbedContextError, error)
@@ -103,9 +105,12 @@ def embed_memory(
                 after=after,
             ),
             store=runtime.store,
+            allow_granted_sources=active_client_registry(runtime) is not None,
         )
     except FileNotFoundError as error:
         raise_public(EmbedContextError, error)
+    except (ProfileConfigError, ProfileError, PermissionError) as error:
+        raise_public(EmbedAuthorityError, error)
     except ConcurrentContextUpdateError as error:
         raise_public(EmbedConflictError, error)
     except OSError as error:

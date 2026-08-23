@@ -1,0 +1,6 @@
+COPIED · 1 Memory → 'target' · NEW UIDs · before [fe30fa21] at the start                                                                                                            
+  'shared/source' [4d9ba642] → [840dcf54]                                                                                                                                           
+Checkpoint 'target' [04a3bd87].                                                                                                                                                     
+COPY VERIFICATION GATE · PRESS V                                                                                                                                                    
+v                                                                                                                                                                                   
+COPY READ-ONLY VERIFICATION · TARGET COPIES 1 · AUTHORITY SOURCE UNCHANGED 1 · COPY CHECKPOINTS 1 · CONTENT 'Export-authorized guidance from the authority.'

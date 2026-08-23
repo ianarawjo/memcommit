@@ -158,6 +158,7 @@ __all__ = [
     "QualityFindingReviewDraft",
     "QualityFindingSource",
     "ReferenceQueryResult",
+    "ReferenceAuthorityError",
     "ReferenceConflictError",
     "ReferenceContextError",
     "ReferenceError",

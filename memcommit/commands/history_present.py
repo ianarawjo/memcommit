@@ -54,6 +54,8 @@ def _kind_counts(snapshot: object) -> dict[str, int]:
     }
     for item in items.values():
         kind = item.get("type")
+        if kind in {"memory_snapshot_ref", "granted_memory_ref"}:
+            kind = "memory_ref"
         if kind in counts:
             counts[kind] += 1
     return counts

@@ -690,7 +690,7 @@ def test_flagless_embed_applies_only_the_exact_reviewed_gap(
     monkeypatch.setattr(
         embed_command.MemoryStoreEmbedPort,
         "capture",
-        lambda _store: port,
+        lambda _store, **_kwargs: port,
     )
     monkeypatch.setattr(embed_command, "choose_embed_setup", lambda _port: receipt)
 
@@ -730,7 +730,7 @@ def test_flagless_embed_rejects_target_order_drift_after_review(
     monkeypatch.setattr(
         embed_command.MemoryStoreEmbedPort,
         "capture",
-        lambda _store: port,
+        lambda _store, **_kwargs: port,
     )
     monkeypatch.setattr(embed_command, "choose_embed_setup", choose_and_race)
 

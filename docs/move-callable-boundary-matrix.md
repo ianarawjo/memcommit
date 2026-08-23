@@ -17,7 +17,7 @@ and Store runtime.
 | CLI | `memcommit.interfaces.cli.memory_transfer` | Positional or repeatable batch, `--from`, `--into/--to`, `--before/--after`, default live-Embed retarget, compatibility `--retarget-links`, explicit `--break-links`, mixed-effect rendering |
 | TUI | `memcommit.interfaces.tui.operations.memory_transfer` | Shared MULTIPLE direct-Memory checks, Embed-style `INTO + POSITION`, no redundant normal policy frame, compact editable exact command, frozen-plan handoff without direct publication |
 | Public Python | `MemCommitClient.move_memories` | Sequence and mutually exclusive policy validation with operation-specific public errors |
-| Agent | `memcommit.interfaces.agent.memory_transfer` | Strict version-1 JSON schema, public-client-only execution, typed JSON receipt, no provider |
+| Agent | `memcommit.interfaces.agent.memory_transfer` | Strict version-2 JSON schema, public-client-only execution, typed JSON receipt, no provider |
 | MCP | registry projection | Mechanical projection of the frozen agent schema and handler |
 | History | `memcommit.command_history` | Shared Move operation UID plus complete affected membership restore removals, additions, and retargets together |
 
@@ -31,10 +31,19 @@ typed BLOCK policy remains input-compatible but is not selected by a current
 route. Immutable snapshot References never change.
 
 All selected owners, Target, and RETARGET link owners are ordinary local
-Contexts. Move binds the complete scanned catalog and every direct record
-through publication because absence of another inbound link is part of its
-safety claim. Store-level Context, Profile, and Memory protection remains
-authoritative.
+Contexts. A public Grant name is never treated as a movable owner: moving it
+would delete authority-owned state and therefore requires explicit `DELETE`
+plus a durable cross-Profile transaction journal and recovery protocol.
+`READ` or `EXPORT` cannot supply either contract. A detected granted Source
+fails before planning or publication with an operation-specific explanation
+and directs the caller to Copy first, then Move the resulting local Memory.
+
+Move binds the complete scanned local catalog and every direct record through
+publication because absence of another inbound link is part of its safety
+claim. The TUI continues to expose only ordinary local Source and Target rows;
+Python, agent, and MCP routes reach the same typed rejection instead of
+silently reporting an authorized public Source as an unknown local Context.
+Store-level Context, Profile, and Memory protection remains authoritative.
 
 ## Evidence
 
@@ -42,6 +51,9 @@ authoritative.
   preserved identity/order, default RETARGET, BREAK, compatible BLOCK,
   self/collision boundaries,
   full-graph drift, no partial publication, and one-unit Undo/Redo.
+- Granted-transfer tests prove that a readable or exportable public Source is
+  still rejected without Source or Target mutation and that an authorized
+  retained Copy can subsequently enter the ordinary local Move contract.
 - `tests/test_memory_transfer_tui.py` covers multi-Memory selection, exact gap
   review, default live-Embed following, cancellation, frozen-plan handoff, and
   the bare CLI route.

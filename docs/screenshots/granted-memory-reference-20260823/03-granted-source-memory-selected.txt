@@ -1,0 +1,52 @@
+ MEM REFERENCE · IMMUTABLE SNAPSHOT → INTO                                                                                                                                          
+ CHOOSE ONE EXACT SOURCE MEMORY AND TARGET                                                                                                                                          
+┌────────────────────────────────────────────────────────────────────────────────| SNAPSHOT UNIT |─────────────────────────────────────────────────────────────────────────────────┐
+│  SNAPSHOT UNIT · [ CONTEXT ]  [ MEMORY ] · ←/→ SELECT                                                                                                                            │
+│  MEANING · Retain one exact direct Source Memory version by value.                                                                                                               │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ SOURCE MEMORY · OWNED OR GRANTED FOR RETAINED REFERENCE ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃  ✓   ▾ GRANT shared/source  READ + EXPORT · REFERENCE                                                                                                                           ^┃
+┃  › ✓ [memory f3bbd257] Retain this exact export-authorized version.                                                                                                              ┃
+┃  · * ▸ workspace                                                                                                                                                                 ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌─────────────────────────────────────────────────────────────────| TARGET · ADD IMMUTABLE SNAPSHOT · * CURRENT |──────────────────────────────────────────────────────────────────┐
+│› ✓ * · workspace                                                                                                                                                                ^│
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────| TO DO · EXACT COMMAND |─────────────────────────────────────────────────────────────────────────────┐
+│PROPOSED COMMAND · NOT RUN                                                                                                                                                        │
+│  mem reference f3bbd257-bb8e-4031-9998-2d5283496bf9 --from shared/source --into workspace                                                                                        │
+│                                                                                                                                                                                  │
+│EFFECTS · ONE COMMAND                                                                                                                                                             │
+│  Only Context 'workspace' changes.                                                                                                                                               │
+│  Memory [f3bbd257] remains owned by 'shared/source'; the Target retains this exact version.                                                                                      │
+│  The new snapshot is read-only and does not follow later Source edits.                                                                                                           │
+│                                                                                                                                                                                  │
+│Approval applies only to the exact command shown above.                                                                                                                           │
+│                                                                                                                                                                                  │
+│[ PRESS ENTER TO RETAIN THE REVIEWED SNAPSHOT ]                                                                                                                                   │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ move · ←/→ expand · Enter choose direct Memory · Tab target · Esc cancel                                                                                                       
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    

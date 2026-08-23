@@ -22,6 +22,10 @@ from memcommit.semantic_execution import (
     plan_semantic_execution,
     run_partitioned,
 )
+from memcommit.semantic_disclosure import (
+    SemanticDisclosureError,
+    require_semantic_disclosure_authority,
+)
 
 
 FIND_CORPUS_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
@@ -153,6 +157,14 @@ def collect_candidates_from_roots(
     identity, including when a materialized namespace Context is also reached
     through an explicit embed.
     """
+    try:
+        require_semantic_disclosure_authority(
+            roots,
+            operation="Search",
+            follow_contexts=recursive,
+        )
+    except SemanticDisclosureError as error:
+        raise FindError(str(error)) from error
     candidates: list[SearchCandidate] = []
     visited_contexts: set[str] = set()
     by_logical_identity: dict[tuple[str, str, str], int] = {}

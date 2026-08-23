@@ -2,22 +2,23 @@
 
 ## Decision
 
-Reference retains one exact direct Source Memory version or one direct/
-recursive Context scope as an immutable, self-contained snapshot in a local
-Target. It is not the live-link operation; that contract belongs to Embed.
-Every implemented Reference route enters the same typed application/runtime
-boundary.
+Reference retains one exact direct local or READ-granted Source Memory version,
+or one local direct/recursive Context scope, as an immutable, self-contained
+snapshot in a local Target. Grant support is deliberately Memory-exact; whole
+granted Context retention remains outside this version. Reference is not the
+live-link operation; that contract belongs to Embed. Every implemented
+Reference route enters the same typed application/runtime boundary.
 
 ## Route and ownership matrix
 
 | Concern or route | Owner | Invariant |
 | --- | --- | --- |
 | Snapshot requests, frozen plans, and durable receipts | `memcommit.reference_application` | Memory and Context units are explicitly typed independently of terminal, Store, provider, and adapter state. |
-| Locator snapshot, Source package, content digest, Source locks, Target CAS, checkpoint | `memcommit.reference_runtime` | Every contributing local Context binding and the Target are frozen from one current-name snapshot and publish atomically. |
+| Locator snapshot, Source package, authority binding, content digest, Source locks, Target CAS, checkpoint | `memcommit.reference_runtime` | Every contributing local Context or exact Grant/authority Memory binding and the Target are frozen from one current-name snapshot and publish atomically. |
 | Immutable stored values | `memcommit.context.MemoryRef`, `memcommit.context_snapshot.ContextSnapshotRef`, `memcommit.ops` | `memory_snapshot_ref` stores one Memory; `context_snapshot_ref` stores a validated versioned Context package. Neither dereferences live storage after publication. |
-| CLI composition | `memcommit.interfaces.cli.reference` | `CONTEXT:UID` explicitly names one Memory owner; a bare public UID/prefix selects Memory mode and must have exactly one ordinary local direct owner. With no ITEM, `--from` names a Context Source; with a Memory ITEM, it remains the owner qualifier. `--into` and `--to` are equivalent Target spellings and duplicates fail before Store access. Other operands are Context locators and `-d/-r` controls their scope. |
-| Interactive setup | `memcommit.interfaces.tui.operations.reference` | Explicit Context/Memory unit -> unit-owned Source control -> Context scope when applicable -> Target -> reviewed exact command; the TUI owns no persistence. |
-| Stable Python API | `memcommit.api._operations.reference`, `memcommit.api.client` | `reference_memory` and `reference_context` return unit-specific typed receipts and share the public Reference error taxonomy. |
+| CLI composition | `memcommit.interfaces.cli.reference` | `CONTEXT:UID` explicitly names one local or public Grant Memory owner; a bare UID/prefix searches ordinary-local direct owners only. With no ITEM, `--from` names a local Context Source; with a Memory ITEM, it remains an explicit local-or-public owner qualifier. `--into` and `--to` are equivalent Target spellings and duplicates fail before Store access. Other operands are local Context locators and `-d/-r` controls their scope. |
+| Interactive setup | `memcommit.interfaces.tui.operations.reference` | Explicit Context/Memory unit -> unit-owned Source control -> Context scope when applicable -> local Target -> reviewed exact command; Memory mode admits authorized public Sources while Context mode remains local, and the TUI owns no persistence. |
+| Stable Python API | `memcommit.api._operations.reference`, `memcommit.api.client` | `reference_memory` and `reference_context` return unit-specific typed receipts and share the public Reference error taxonomy; only an active-Profile client may consult Grants, while an explicitly rooted client remains local-only. |
 | Agent and MCP | `memcommit.interfaces.agent.reference`, registry projection | Version 2 is a strict tagged `memory`/`context` union; MCP exposes the same schema and result envelope. |
 | Read-only inspection | Show/List source projection | Snapshot and live Embed labels differ; snapshot content remains readable after Source change or deletion. |
 
@@ -32,24 +33,33 @@ short prefixes directly. An omitted ITEM plus `--from SOURCE_CONTEXT` selects
 Context mode instead, so the same explicit endpoint vocabulary works without
 changing the established Memory form.
 
-The shared direct-Memory resolver searches only ordinary local direct records.
-A qualified locator resolves its owner against the command-start current
-Context and searches only that frame. A bare locator scans one strict complete
-local snapshot and requires exactly one match, with no current-Context
-preference. Ambiguity fails before Target loading and prints every canonical
-`CONTEXT:FULL_UID` candidate. MemoryRef, Context snapshots, embedded traversal,
-Grant content, and query-only content never become implicit owners.
+The shared direct-Memory resolver searches ordinary local direct records. A
+qualified locator or Memory `--from` owner may resolve one exact authorized
+public Grant frame; the operation does not enumerate Grant content to guess an
+owner from a UID. A bare locator scans one strict complete ordinary-local
+snapshot and requires exactly one match, with no current-Context preference.
+Ambiguity fails before Target loading and prints every canonical
+`CONTEXT:FULL_UID` candidate. The interactive picker may display authorized
+Grant rows, but every selected row becomes an owner-qualified request.
+MemoryRef, Context snapshots, embedded traversal, and query-only content never
+become implicit owners.
 
 ## Freeze, authority, and publication contract
 
-Reference captures the active Context name once, resolves relative Source and
-Target locators against that snapshot, and currently accepts only ordinary
-local Sources. Memory Freeze binds one direct Memory. Context Freeze binds the
-root and every local record contributing bytes to the direct or recursive
-package. Recursive means lexical descendants plus ordinary local Embed edges;
-query-only and granted content remain opaque. Apply revalidates every binding
-under Source locks through one Target checkpoint publication, so drift
-produces no partial snapshot.
+Reference captures the active Context name once and resolves relative Source
+and Target locators against that snapshot. Memory Freeze binds one direct local
+or granted Memory; Context Freeze remains local and binds the root and every
+local record contributing bytes to the direct or recursive package. Recursive
+means lexical descendants plus ordinary local Embed edges; query-only and
+granted content reached incidentally through that graph remain opaque.
+
+Retaining an exact granted Memory requires the complete
+`READ + DERIVE + EXPORT + SAVE_ANALYSIS` set. The frozen binding includes
+public/authority names, authority and grantee Profiles, attachment, resource,
+Grant UID and revision, Source Context/Memory UIDs, and content digest. Apply
+holds the registry and authority Source locks through one local Target
+checkpoint publication, so revocation, permission or Source drift, and Target
+drift produce no partial snapshot.
 That checkpoint is the operation-unit Undo/Redo boundary: Undo removes only
 the Target snapshot, and Redo restores the same retained bytes and identity.
 Restoration presentation classifies both snapshot and live records as Memory
@@ -57,9 +67,25 @@ references and renders only their pointer identity; it must not fall back to
 printing the snapshot record because that record contains the retained bytes.
 
 The operation is deterministic. It constructs no provider, reads or writes no
-semantic cache or analysis session, and changes only the Target. The snapshot
-is read-only as a direct item: it may be removed by an owning mutation, but its
-stored content cannot be edited through the live Source.
+semantic cache or analysis session, and changes only the local Target. The
+snapshot is read-only as a direct item: it may be removed by an owning
+mutation, but its stored content cannot be edited through the live Source. A
+successful granted snapshot is a retained export and therefore remains
+readable after later Grant revision or revocation; the creation-time binding
+stays as immutable provenance rather than a live authorization dependency.
+
+## Nested composition boundary
+
+A Memory snapshot or live Memory Embed is a relationship record, not a directly
+owned Source Memory. Memory-level Reference and Embed therefore reject either
+relationship as another Memory relationship Source, preserving the
+intermediate UID, time semantics, and provenance instead of flattening a
+pointer-to-pointer chain. The containing Context is the supported composition
+unit: a Context Reference may retain nested snapshot records as typed values,
+and recursive Context Reference may freeze a local multi-hop Embed graph while
+recording each canonical Context once. A granted live edge remains opaque
+unless the exact operation separately authorizes retention; Embed authority
+cannot be laundered into Reference authority.
 
 ## Compatibility and deliberate limits
 
@@ -69,9 +95,11 @@ not silently reinterpreted as snapshots. New Reference results serialize as
 live pointer forms. Source names and identities remain historical provenance,
 while retained content survives Source rename, change, or deletion.
 
-Version 2 does not reference granted or query-only Source content and does not
-silently make snapshots eligible for every semantic operation. Each consumer
-continues to own its disclosure and inclusion policy.
+Version 2 references only an exact direct granted Memory after the explicit
+retention permission check above. Whole granted Context scopes and query-only
+Source content remain unsupported, and a retained snapshot is not silently
+eligible for every semantic operation. Each consumer continues to own its
+disclosure and inclusion policy.
 
 ## Executable evidence
 
@@ -79,6 +107,9 @@ continues to own its disclosure and inclusion policy.
   qualified and globally unique Memory locators, ambiguity diagnostics,
   compatibility and interactive CLI entry, checkpoint and Undo/Redo behavior,
   and fixed content after Source change.
+- `tests/test_granted_reference.py` verifies permission intersection, exact Grant and
+  authority binding, revocation before and after publication, immutable
+  provenance retention, public/API/agent error parity, and no-partial failure.
 - `tests/test_context_reference_application.py` verifies direct and recursive
   scope, lexical and Embed retention, Source deletion survival, Context/Memory
   CLI discrimination, Target-inside-scope rejection, and Source drift.
@@ -89,6 +120,10 @@ continues to own its disclosure and inclusion policy.
   `docs/screenshots/reference-context-memory-20260820/`; the shared direct
   Memory selector remains covered under
   `docs/screenshots/direct-memory-selector-actions-20260820/`.
+- `tests/test_granted_reference_tui.py` verifies the granted-Memory/local-role
+  split, complete retention permission filter, local-only fallback, and frozen
+  public owner. Its ordered 180×52 color PTY flow is recorded under
+  `docs/screenshots/granted-memory-reference-20260823/`.
 - `tests/test_reference_embed_public_api.py` verifies the public snapshot/live
   distinction and operation-specific error projection.
 - `tests/test_reference_embed_agent_adapter.py` verifies strict versioned

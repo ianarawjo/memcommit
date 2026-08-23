@@ -141,7 +141,10 @@ def cmd(
         )
         raise typer.Exit(2)
     store = MemoryStore()
-    port = MemoryStoreReferencePort.capture(store)
+    port = MemoryStoreReferencePort.capture(
+        store,
+        allow_granted_sources=True,
+    )
     frozen_plan: FrozenReferencePlan | FrozenContextReferencePlan | None = None
     source_from_option = item is None and source_name is not None
     source_item = source_name if source_from_option else item
@@ -184,6 +187,7 @@ def cmd(
             return
         request = frozen_plan.request
     else:
+        explicit_memory_request: ReferenceRequest | None = None
         try:
             parsed_source = (
                 parse_auto_typed_context_memory_operand(
@@ -222,20 +226,35 @@ def cmd(
                         err=True,
                     )
                     raise typer.Exit(2)
-                memory_target = resolve_local_direct_memory_locator(
-                    store,
-                    (
-                        source_item
-                        if isinstance(parsed_source, DirectMemoryLocator)
-                        else auto_target.memory_uid
-                    ),
-                    current=port.current_context_name,
-                    explicit_context=(
-                        memory_owner
-                        if isinstance(parsed_source, DirectMemoryLocator)
-                        else auto_target.context_name
-                    ),
-                )
+                if (
+                    isinstance(parsed_source, DirectMemoryLocator)
+                    and parsed_source.context_locator is not None
+                ):
+                    # An explicit owner is the safe Grant boundary. Let the
+                    # Reference runtime resolve that exact public Context and
+                    # authorize retention. Bare UID lookup remains confined to
+                    # the complete ordinary-local catalog below.
+                    explicit_memory_request = ReferenceRequest(
+                        memory_selector=parsed_source.memory_selector,
+                        source_locator=parsed_source.context_locator,
+                        into_locator=target_option,
+                    )
+                    memory_target = None
+                else:
+                    memory_target = resolve_local_direct_memory_locator(
+                        store,
+                        (
+                            source_item
+                            if isinstance(parsed_source, DirectMemoryLocator)
+                            else auto_target.memory_uid
+                        ),
+                        current=port.current_context_name,
+                        explicit_context=(
+                            memory_owner
+                            if isinstance(parsed_source, DirectMemoryLocator)
+                            else auto_target.context_name
+                        ),
+                    )
             else:
                 memory_target = None
         except (FileNotFoundError, OSError, TypeError, ValueError) as error:
@@ -246,7 +265,9 @@ def cmd(
             )
             raise typer.Exit(1)
 
-        if memory_target is not None:
+        if explicit_memory_request is not None:
+            request = explicit_memory_request
+        elif memory_target is not None:
             request = ReferenceRequest(
                 memory_selector=memory_target.memory_uid,
                 source_locator=memory_target.context_name,

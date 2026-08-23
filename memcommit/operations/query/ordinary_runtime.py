@@ -37,6 +37,8 @@ class OrdinaryQueryReadableCatalog(Protocol):
 
     def load(self, name: str) -> Context: ...
 
+    def load_without_attached_reads(self, name: str) -> Context: ...
+
     def access_for(self, name: str) -> OrdinaryQueryReadableAccess: ...
 
 
@@ -57,6 +59,7 @@ class MemoryStoreOrdinaryQuerySourcePort(OrdinaryQuerySourcePort):
             request.target_names,
             include_descendants=request.include_descendants,
             follow_embeds=request.follow_embeds,
+            include_attached_reads=False,
         )
         # Profile-local artifacts never cross a READ Grant. Granted Contexts
         # contribute only the Memories and public routes exposed by the catalog.

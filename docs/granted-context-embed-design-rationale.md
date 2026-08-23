@@ -70,11 +70,14 @@ Grant revision may remain valid when all those identities and EMBED authority
 survive; the live relationship should not break merely because another
 permission was added.
 
-If authorization is revoked, recursive load fails closed. Direct load retains
-the opaque typed pointer, so a revocation never silently deletes the
-relationship or shifts the target order. Direct local edits can continue and
-must serialize that pointer unchanged. Removal remains an explicit target-side
-operation.
+If the embedded root binding is revoked or stale, recursive load fails closed.
+Within an otherwise valid granted root, every effective nested override must
+also retain `READ + EMBED`; an override that no longer permits traversal is
+omitted from that live projection rather than inheriting the parent's broader
+Grant. Direct load retains every opaque typed pointer, so either case never
+silently deletes durable topology or shifts target order. Direct local edits
+can continue and must serialize those pointers unchanged. Removal remains an
+explicit target-side operation.
 
 ## Alternatives and limits
 
@@ -88,7 +91,9 @@ operation.
   authorization.
 - Multiple public Grant aliases to the same authority Context cannot coexist as
   distinct direct items in one target because Context UID remains the item key.
-  Supporting alias-distinct relationships would require a wrapper item model
-  and a deliberate traversal identity contract.
+  A second Embed resolving to the same Context UID is rejected before Apply and
+  must never replace the existing link or create a checkpoint. Supporting
+  alias-distinct relationships would require a wrapper item model and a
+  deliberate traversal identity contract.
 - Granted targets, QUERY-only embedding, cached content, and provider-mediated
   dereference are non-goals of this version.

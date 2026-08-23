@@ -140,7 +140,11 @@ def _hydrate_package(package: Mapping[str, object]) -> Context:
             kind = item.get("type")
             if kind == "memory":
                 shell.add(Memory.from_dict(item))
-            elif kind in {"memory_ref", "memory_snapshot_ref"}:
+            elif kind in {
+                "memory_ref",
+                "memory_snapshot_ref",
+                "granted_memory_ref",
+            }:
                 shell.add(MemoryRef.from_dict(item))
             elif kind == "query_context_ref":
                 shell.add(QueryContextRef.from_dict(item))
@@ -291,6 +295,12 @@ def snapshot_record_with_frozen_memory_embeds(
         raise ValueError("Context snapshot Source record is invalid.")
     for uid, direct_item in direct.iter_entries():
         if not isinstance(direct_item, MemoryRef) or direct_item.is_snapshot:
+            continue
+        if direct_item.is_granted:
+            # A recursive Context Reference has only traversal authority for
+            # this live edge. Freezing its resolved bytes here would turn
+            # EMBED into retained EXPORT, so keep the content-free binding
+            # opaque and revocable inside the retained package.
             continue
         resolved_item = resolved.memories.get(uid)
         if not isinstance(resolved_item, MemoryRef) or resolved_item.target is None:

@@ -248,6 +248,9 @@ def test_execute_temporal_find_rejects_granted_history_before_provider(
         def load(self, _name):
             return granted
 
+        def load_without_attached_reads(self, _name):
+            return granted
+
         def access_for(self, _name):
             return Access()
 

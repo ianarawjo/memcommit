@@ -43,6 +43,7 @@ from memcommit.context_targeting.tui.direct_memory_selector import (
     DirectMemorySelectorView,
 )
 from memcommit.context_targeting.tui.picker import ContextMemoryRow
+from memcommit.context_targeting.resolution import parse_direct_memory_locator
 from memcommit.interfaces.console.terminal import require_interactive_terminal
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.interfaces.tui.components.focus import (
@@ -86,8 +87,7 @@ from memcommit.interfaces.tui.operations.embed.model import EmbedTuiSetup
 EMBED_COMMAND_FORM = ExactCommandForm(
     command=("mem", "embed"),
     usage=(
-        "mem embed [ITEM] [--from SOURCE] --into TARGET "
-        "[--before ITEM | --after ITEM]"
+        "mem embed [ITEM] [--from SOURCE] --into TARGET [--before ITEM | --after ITEM]"
     ),
     fields=(
         ExactCommandFormField(
@@ -154,10 +154,26 @@ def parse_embed_command_argv(
     if "--before" in options and "--after" in options:
         raise ValueError("Pass only one of --before or --after.")
     if operands and "--from" in options:
+        locator = parse_direct_memory_locator(
+            operands[0],
+            explicit_context=options["--from"],
+        )
         return validate_memory_embed_request(
             MemoryEmbedRequest(
-                memory_selector=operands[0],
-                source_locator=options["--from"],
+                memory_selector=locator.memory_selector,
+                source_locator=locator.context_locator or options["--from"],
+                into_locator=into_locator,
+                before=options.get("--before"),
+                after=options.get("--after"),
+            )
+        )
+    if operands and ":" in operands[0]:
+        locator = parse_direct_memory_locator(operands[0])
+        assert locator.context_locator is not None
+        return validate_memory_embed_request(
+            MemoryEmbedRequest(
+                memory_selector=locator.memory_selector,
+                source_locator=locator.context_locator,
                 into_locator=into_locator,
                 before=options.get("--before"),
                 after=options.get("--after"),
@@ -239,16 +255,21 @@ def memory_embed_exact_command_review(
     item_count: int,
     memory_selector: str | None = None,
     placement_selector: str | None = None,
+    qualified_locator: bool = False,
 ) -> ExactCommandReview:
     """Build the exact live-Memory command and its mutation boundary."""
 
+    selector = memory_selector or memory_uid
+    source_argv = (
+        (f"{source_name}:{selector}",)
+        if qualified_locator
+        else (selector, "--from", source_name)
+    )
     return ExactCommandReview(
         argv=(
             "mem",
             "embed",
-            memory_selector or memory_uid,
-            "--from",
-            source_name,
+            *source_argv,
             "--into",
             into_name,
             *_placement_argv(gap, selector=placement_selector),
@@ -331,8 +352,10 @@ def run_embed_tui(
         DirectMemorySelectorView(
             names=memory_source_names,
             selected_context=initial_memory_source,
-            label="SOURCE MEMORY · DIRECTLY OWNED",
+            label="SOURCE MEMORY · DIRECT ITEM · LIVE LINK",
             current_context=current,
+            selectable_names=setup.memory_source_selectable_names,
+            annotations=setup.memory_source_annotations,
         ),
         memory_loader=memory_loader,
         height=min(6, max(3, len(memory_source_names))),
@@ -347,7 +370,7 @@ def run_embed_tui(
             HorizontalChoiceOption(
                 "MEMORY",
                 "MEMORY",
-                "Keep one directly owned Source Memory live inside the Target.",
+                "Keep one direct Source Memory live inside the Target.",
             ),
         ),
         selected_uid="CONTEXT",
@@ -395,7 +418,7 @@ def run_embed_tui(
     def selected_memory_target():
         target = memory_source_selector.selected
         if target is None:
-            raise ValueError("Select one directly owned Source Memory first.")
+            raise ValueError("Select one direct Source Memory first.")
         return target
 
     def command_gap_selector(gap: DirectItemGap) -> str | None:
@@ -410,9 +433,7 @@ def run_embed_tui(
 
     def command_memory_selector(context_name: str, memory_uid: str) -> str:
         rows = memory_source_selector.preview.memory_cache.get(context_name, ())
-        candidates = tuple(
-            row.selector for row in rows if row.selector is not None
-        )
+        candidates = tuple(row.selector for row in rows if row.selector is not None)
         return shortest_unique_identifier_prefix(
             memory_uid,
             candidates,
@@ -435,6 +456,9 @@ def run_embed_tui(
                     target.memory_uid,
                 ),
                 placement_selector=gap_selector,
+                qualified_locator=(
+                    target.context_name in setup.memory_source_granted_names
+                ),
             )
         return embed_exact_command_review(
             selected_child_name(),
@@ -485,9 +509,7 @@ def run_embed_tui(
             child_name = resolve_displayed_command_value(
                 request.child_locator,
                 tuple(
-                    name
-                    for name in child_names
-                    if name in setup.child_selectable_names
+                    name for name in child_names if name in setup.child_selectable_names
                 ),
                 label="Child ITEM",
             )
@@ -719,6 +741,9 @@ def run_embed_tui(
                         frozen.memory_uid,
                     ),
                     placement_selector=command_gap_selector(frozen_gap),
+                    qualified_locator=(
+                        frozen.source_name in setup.memory_source_granted_names
+                    ),
                 )
             else:
                 frozen = freeze_exact_gap(

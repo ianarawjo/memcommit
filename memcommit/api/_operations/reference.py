@@ -3,14 +3,18 @@
 from __future__ import annotations
 
 from memcommit.api._runtime import ClientRuntime
+from memcommit.api._support.readable import active_client_registry
 from memcommit.api._support.errors import raise_public
 from memcommit.api.errors import (
+    ReferenceAuthorityError,
     ReferenceConflictError,
     ReferenceContextError,
     ReferenceExecutionError,
     ReferenceInputError,
     ReferenceStorageError,
 )
+from memcommit.profile_config import ProfileConfigError
+from memcommit.profiles import ProfileError
 from memcommit.api.reference import ContextReferenceResult, MemoryReferenceResult
 from memcommit.reference_application import (
     ContextReferenceRequest,
@@ -36,9 +40,15 @@ def reference_memory(
             source_locator=source_context,
             into_locator=into_context,
         )
-        result = execute_reference(request, store=runtime.store)
+        result = execute_reference(
+            request,
+            store=runtime.store,
+            allow_granted_sources=active_client_registry(runtime) is not None,
+        )
     except FileNotFoundError as error:
         raise_public(ReferenceContextError, error)
+    except (ProfileConfigError, ProfileError, PermissionError) as error:
+        raise_public(ReferenceAuthorityError, error)
     except ConcurrentContextUpdateError as error:
         raise_public(ReferenceConflictError, error)
     except OSError as error:
@@ -83,6 +93,8 @@ def reference_context(
         )
     except FileNotFoundError as error:
         raise_public(ReferenceContextError, error)
+    except (ProfileConfigError, ProfileError, PermissionError) as error:
+        raise_public(ReferenceAuthorityError, error)
     except ConcurrentContextUpdateError as error:
         raise_public(ReferenceConflictError, error)
     except OSError as error:

@@ -21,6 +21,10 @@ from memcommit.semantic_execution import (
     json_budget,
     plan_semantic_execution,
 )
+from memcommit.semantic_disclosure import (
+    SemanticDisclosureError,
+    require_semantic_disclosure_authority,
+)
 from memcommit.understanding import (
     UnderstandingError,
     UnderstandingSummary,
@@ -103,6 +107,14 @@ def collect_summary_scope(
     roots = tuple(contexts)
     if not roots or roots[0].uid != root_context_uid:
         raise ValueError("Summary scope must begin with its selected root Context.")
+    try:
+        require_semantic_disclosure_authority(
+            roots,
+            operation="Summarize",
+            follow_contexts=follow_embeds,
+        )
+    except SemanticDisclosureError as error:
+        raise SummarizeError(str(error)) from error
     sources: list[SummarySource] = []
     visited_contexts: set[str] = set()
     content_by_memory_uid: dict[str, str] = {}

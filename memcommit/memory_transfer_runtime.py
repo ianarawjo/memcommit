@@ -5,19 +5,33 @@ from __future__ import annotations
 import hashlib
 import json
 import uuid
+from contextlib import ExitStack
 from dataclasses import dataclass
 
 import memcommit.ops as ops
+from memcommit.authority.access import (
+    ContextAccess,
+    authorized_context_operation,
+    freeze_granted_context_binding,
+    resolve_context_access,
+)
 from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef
 from memcommit.context_locator import resolve_context_locator
 from memcommit.context_targeting.resolution import parse_direct_memory_locator
+from memcommit.derived_policy import (
+    authorize_analysis_save,
+    authorize_combination,
+    authorize_derived_transfer,
+)
 from memcommit.memory_transfer_application import (
     CopyMemoriesRequest,
     CopyMemoriesResult,
     FrozenCopyMemoriesPlan,
     FrozenInboundMemoryLink,
     FrozenMoveMemoriesPlan,
+    FrozenTransferAuthority,
     FrozenTransferMemory,
+    MemoryTransferAuthorityError,
     MemoryTransferCheckpoint,
     MemoryTransferError,
     MemoryTransferItemResult,
@@ -31,6 +45,8 @@ from memcommit.memory_transfer_application import (
     validate_copy_request,
     validate_move_request,
 )
+from memcommit.profile_config import profile_store_dir
+from memcommit.profiles import authority_grant_snapshot_lock
 from memcommit.store import (
     ConcurrentContextUpdateError,
     MemoryStore,
@@ -42,6 +58,8 @@ from memcommit.store import (
 class _StoreTransferFrame:
     context: Context
     expected_digest: str
+    display_name: str
+    access: ContextAccess
 
 
 @dataclass(frozen=True, slots=True)
@@ -51,6 +69,7 @@ class _StoreTransferToken:
     plan_digest: str
     frames: tuple[_StoreTransferFrame, ...]
     context_catalog: tuple[str, ...]
+    authority_checks: tuple[tuple[ContextAccess, tuple[str, ...]], ...] = ()
 
 
 def _placement_for_context(
@@ -111,6 +130,11 @@ def _plan_digest(
                     item.content.encode("utf-8")
                 ).hexdigest(),
                 "output_memory_uid": item.output_memory_uid,
+                "source_authority": (
+                    item.source_authority.to_dict()
+                    if item.source_authority is not None
+                    else None
+                ),
             }
             for item in memories
         ],
@@ -142,9 +166,9 @@ def _memory_matches(
     owner_name: str | None,
 ) -> tuple[tuple[_StoreTransferFrame, Memory], ...]:
     candidates = (
-        frames
+        tuple(frame for frame in frames if not frame.access.is_granted)
         if owner_name is None
-        else tuple(frame for frame in frames if frame.context.name == owner_name)
+        else tuple(frame for frame in frames if frame.display_name == owner_name)
     )
     if owner_name is not None and not candidates:
         raise FileNotFoundError(f"Context '{owner_name}' does not exist locally.")
@@ -192,10 +216,10 @@ def _resolve_one_memory(
         )
     if len(matches) > 1:
         choices = "; ".join(
-            f"{frame.context.name}:{memory.uid}"
+            f"{frame.display_name}:{memory.uid}"
             for frame, memory in sorted(
                 matches,
-                key=lambda value: (value[0].context.name.casefold(), value[1].uid),
+                key=lambda value: (value[0].display_name.casefold(), value[1].uid),
             )
         )
         raise MemoryTransferError(
@@ -220,7 +244,11 @@ def _target_frame(
     else:
         name = resolve_context_locator(locator, current=current_name)
     try:
-        return next(frame for frame in frames if frame.context.name == name)
+        return next(
+            frame
+            for frame in frames
+            if not frame.access.is_granted and frame.display_name == name
+        )
     except StopIteration as error:
         raise FileNotFoundError(
             f"Memory transfer Target Context '{name}' does not exist locally."
@@ -232,7 +260,11 @@ def _unique_source_frames(
     frames_by_name: dict[str, _StoreTransferFrame],
 ) -> tuple[_StoreTransferFrame, ...]:
     names = tuple(dict.fromkeys(item.source_context_name for item in memories))
-    return tuple(frames_by_name[name] for name in names)
+    return tuple(
+        frames_by_name[name]
+        for name in names
+        if not frames_by_name[name].access.is_granted
+    )
 
 
 def _checkpoint_args(
@@ -268,8 +300,14 @@ def _checkpoint_args(
                 {
                     "source_context_name": item.source_context_name,
                     "source_context_uid": item.source_context_uid,
+                    "source_context_digest": item.source_context_digest,
                     "source_memory_uid": item.source_memory_uid,
                     "output_memory_uid": item.output_memory_uid,
+                    "source_authority": (
+                        item.source_authority.to_dict()
+                        if item.source_authority is not None
+                        else None
+                    ),
                 }
                 for item in memories
             ],
@@ -291,23 +329,117 @@ def _checkpoint_args(
     }
 
 
+def _frozen_transfer_authority(access: ContextAccess) -> FrozenTransferAuthority | None:
+    if not access.is_granted:
+        return None
+    binding = freeze_granted_context_binding(access)
+    return FrozenTransferAuthority(
+        public_name=binding.public_name,
+        grantee_profile_uid=binding.grantee_profile_uid,
+        authority_profile_uid=binding.authority_profile_uid,
+        attachment_context_uid=binding.attachment_context_uid,
+        attachment_context_name=binding.attachment_context_name,
+        grant_uid=binding.grant_uid,
+        grant_revision=binding.grant_revision,
+        grant_digest=binding.grant_digest,
+        resource_uid=binding.resource_uid,
+        resource_name=binding.resource_name,
+        authority_context_name=binding.authority_context_name,
+        permissions=binding.permissions,
+    )
+
+
+def _unique_source_accesses(
+    memories: tuple[FrozenTransferMemory, ...],
+    frames_by_name: dict[str, _StoreTransferFrame],
+) -> tuple[ContextAccess, ...]:
+    accesses: list[ContextAccess] = []
+    seen: set[tuple[str, str, str]] = set()
+    for item in memories:
+        access = frames_by_name[item.source_context_name].access
+        key = (
+            str(access.store.store_dir),
+            access.context_name,
+            access.view.grant.uid if access.view is not None else "",
+        )
+        if key not in seen:
+            seen.add(key)
+            accesses.append(access)
+    return tuple(accesses)
+
+
+def _access_domain(access: ContextAccess) -> tuple[str, ...]:
+    if access.is_granted and access.view is not None:
+        return (
+            "grant",
+            access.view.grant.uid,
+            access.view.grant.resource_uid,
+        )
+    return ("local", str(access.store.store_dir), access.context_name)
+
+
+def _authority_checks(
+    accesses: tuple[ContextAccess, ...],
+) -> tuple[tuple[ContextAccess, tuple[str, ...]], ...]:
+    multiple_domains = len({_access_domain(access) for access in accesses}) > 1
+    checks: list[tuple[ContextAccess, tuple[str, ...]]] = []
+    for access in accesses:
+        if not access.is_granted:
+            continue
+        permissions = ["READ", "DERIVE", "EXPORT", "SAVE_ANALYSIS"]
+        if multiple_domains:
+            permissions.append("COMBINE")
+        checks.append((access, tuple(permissions)))
+    return tuple(checks)
+
+
 class MemoryStoreMemoryTransferPort(MemoryTransferPort):
     """Freeze a strict local graph and publish one Copy or Move command unit."""
 
-    def __init__(self, store: MemoryStore, *, current_name: str | None):
+    def __init__(
+        self,
+        store: MemoryStore,
+        *,
+        current_name: str | None,
+        allow_granted_sources: bool = False,
+    ):
+        if type(allow_granted_sources) is not bool:
+            raise TypeError("allow_granted_sources must be a boolean.")
         self._store = store
         self._current_name = current_name
+        self._allow_granted_sources = allow_granted_sources
         self._owner = object()
 
     @classmethod
-    def capture(cls, store: MemoryStore) -> "MemoryStoreMemoryTransferPort":
-        return cls(store, current_name=store.current_context_name())
+    def capture(
+        cls,
+        store: MemoryStore,
+        *,
+        allow_granted_sources: bool = False,
+    ) -> "MemoryStoreMemoryTransferPort":
+        return cls(
+            store,
+            current_name=store.current_context_name(),
+            allow_granted_sources=allow_granted_sources,
+        )
 
     @property
     def local_context_names(self) -> tuple[str, ...]:
         """Expose the frozen-role catalog needed by interactive adapters."""
 
         return tuple(self._store.list_context_names())
+
+    @property
+    def store(self) -> MemoryStore:
+        """Expose the active Store for frozen read-only Source catalogs."""
+
+        return self._store
+
+    @property
+    def allows_granted_sources(self) -> bool:
+        """Report whether this runtime may consult active Profile Grants."""
+
+        return self._allow_granted_sources
 
     @property
     def current_context_name(self) -> str | None:
@@ -326,9 +458,94 @@ class MemoryStoreMemoryTransferPort(MemoryTransferPort):
                 expected_digest=(
                     context._store_digest or context_record_digest(context)
                 ),
+                display_name=context.name,
+                access=ContextAccess(
+                    store=self._store,
+                    context_name=context.name,
+                    display_name=context.name,
+                    attachment_name=None,
+                    permission="READ",
+                ),
             )
             for context in contexts
         )
+
+    def _source_owner_names(
+        self,
+        request: CopyMemoriesRequest | MoveMemoriesRequest,
+    ) -> tuple[str, ...]:
+        names: list[str] = []
+        for operand in request.memory_locators:
+            try:
+                locator = parse_direct_memory_locator(
+                    operand,
+                    explicit_context=request.source_locator,
+                )
+            except ValueError as error:
+                raise MemoryTransferError(str(error)) from error
+            if locator.context_locator is None:
+                continue
+            name = resolve_context_locator(
+                locator.context_locator,
+                current=self._current_name,
+            )
+            if name not in names:
+                names.append(name)
+        return tuple(names)
+
+    def _with_granted_source_frames(
+        self,
+        request: CopyMemoriesRequest | MoveMemoriesRequest,
+        frames: tuple[_StoreTransferFrame, ...],
+        *,
+        kind: str,
+    ) -> tuple[_StoreTransferFrame, ...]:
+        local_names = {frame.display_name for frame in frames}
+        external_names = tuple(
+            name
+            for name in self._source_owner_names(request)
+            if name not in local_names
+        )
+        if not external_names or not self._allow_granted_sources:
+            return frames
+
+        with authority_grant_snapshot_lock() as registry:
+            if self._store.store_dir.resolve() != profile_store_dir(
+                registry.active
+            ).resolve():
+                # An explicitly rooted Store must not inherit the host Profile's
+                # Grants merely because a public-looking locator was supplied.
+                return frames
+            additions: list[_StoreTransferFrame] = []
+            for public_name in external_names:
+                access = resolve_context_access(
+                    self._store,
+                    public_name,
+                    current_name=self._current_name,
+                    required_permission="READ",
+                    registry=registry,
+                )
+                if not access.is_granted:
+                    raise MemoryTransferStalePlanError(
+                        "Memory transfer Source ownership changed during selection."
+                    )
+                if kind == "MOVE":
+                    raise MemoryTransferAuthorityError(
+                        f"Move cannot use granted Source {public_name!r}: EXPORT "
+                        "permits a retained Copy, not deletion or cross-Profile "
+                        "ownership transfer. Copy it into a local Context first, "
+                        "then move the local copy."
+                    )
+                context = access.store.load_direct(access.context_name)
+                additions.append(
+                    _StoreTransferFrame(
+                        context=context,
+                        expected_digest=context_record_digest(context),
+                        display_name=public_name,
+                        access=access,
+                    )
+                )
+        return (*frames, *additions)
 
     def _resolved_sources(
         self,
@@ -350,18 +567,19 @@ class MemoryStoreMemoryTransferPort(MemoryTransferPort):
             identity = (frame.context.uid, memory.uid)
             if identity in seen:
                 raise MemoryTransferError(
-                    f"Memory '{frame.context.name}:{memory.uid}' was selected "
+                    f"Memory '{frame.display_name}:{memory.uid}' was selected "
                     "more than once."
                 )
             seen.add(identity)
             resolved.append(
                 FrozenTransferMemory(
-                    source_context_name=frame.context.name,
+                    source_context_name=frame.display_name,
                     source_context_uid=frame.context.uid,
                     source_context_digest=frame.expected_digest,
                     source_memory_uid=memory.uid,
                     content=memory.content,
                     output_memory_uid=output_uid,
+                    source_authority=_frozen_transfer_authority(frame.access),
                 )
             )
         return tuple(resolved)
@@ -399,7 +617,7 @@ class MemoryStoreMemoryTransferPort(MemoryTransferPort):
         )
         if expected_plan_digest != plan.plan_digest:
             raise MemoryTransferError("Memory transfer frozen plan was modified.")
-        frames = {frame.context.name: frame for frame in token.frames}
+        frames = {frame.display_name: frame for frame in token.frames}
         try:
             into = frames[plan.into_name]
         except KeyError as error:
@@ -424,9 +642,14 @@ class MemoryStoreMemoryTransferPort(MemoryTransferPort):
 
     def freeze_copy(self, request: CopyMemoriesRequest) -> FrozenCopyMemoriesPlan:
         request = validate_copy_request(request)
-        frames = self._frames()
+        local_frames = self._frames()
+        frames = self._with_granted_source_frames(
+            request,
+            local_frames,
+            kind="COPY",
+        )
         into = _target_frame(
-            frames,
+            local_frames,
             request.into_locator,
             current_name=self._current_name,
         )
@@ -435,7 +658,7 @@ class MemoryStoreMemoryTransferPort(MemoryTransferPort):
         # never imply synchronization merely because they share a UID.
         occupied = {
             uid
-            for frame in frames
+            for frame in local_frames
             for uid in frame.context.memories
         }
         generated: list[str] = []
@@ -450,6 +673,14 @@ class MemoryStoreMemoryTransferPort(MemoryTransferPort):
             frames=frames,
             output_uids=output_uids,
         )
+        frames_by_name = {frame.display_name: frame for frame in frames}
+        accesses = _unique_source_accesses(memories, frames_by_name)
+        target_access = into.access
+        authorize_combination(accesses)
+        authorize_analysis_save(accesses, retention="RETAINED")
+        for access in accesses:
+            authorize_derived_transfer(access, target_access)
+        authority_checks = _authority_checks(accesses)
         placement = _placement_for_context(
             into.context,
             before=request.before,
@@ -477,7 +708,10 @@ class MemoryStoreMemoryTransferPort(MemoryTransferPort):
                 operation_uid=str(uuid.uuid4()),
                 plan_digest=digest,
                 frames=frames,
-                context_catalog=tuple(frame.context.name for frame in frames),
+                context_catalog=tuple(
+                    frame.context.name for frame in local_frames
+                ),
+                authority_checks=authority_checks,
             ),
         )
 
@@ -511,9 +745,14 @@ class MemoryStoreMemoryTransferPort(MemoryTransferPort):
 
     def freeze_move(self, request: MoveMemoriesRequest) -> FrozenMoveMemoriesPlan:
         request = validate_move_request(request)
-        frames = self._frames()
+        local_frames = self._frames()
+        frames = self._with_granted_source_frames(
+            request,
+            local_frames,
+            kind="MOVE",
+        )
         into = _target_frame(
-            frames,
+            local_frames,
             request.into_locator,
             current_name=self._current_name,
         )
@@ -532,6 +771,7 @@ class MemoryStoreMemoryTransferPort(MemoryTransferPort):
                 source_memory_uid=item.source_memory_uid,
                 content=item.content,
                 output_memory_uid=item.source_memory_uid,
+                source_authority=item.source_authority,
             )
             for item in memories
         )
@@ -605,7 +845,9 @@ class MemoryStoreMemoryTransferPort(MemoryTransferPort):
                 operation_uid=str(uuid.uuid4()),
                 plan_digest=digest,
                 frames=frames,
-                context_catalog=tuple(frame.context.name for frame in frames),
+                context_catalog=tuple(
+                    frame.context.name for frame in local_frames
+                ),
             ),
         )
 
@@ -625,7 +867,7 @@ class MemoryStoreMemoryTransferPort(MemoryTransferPort):
 
     def apply_copy(self, plan: FrozenCopyMemoriesPlan) -> CopyMemoriesResult:
         token = self._token(plan)
-        frames = {frame.context.name: frame for frame in token.frames}
+        frames = {frame.display_name: frame for frame in token.frames}
         into = frames[plan.into_name]
         for offset, item in enumerate(plan.memories):
             into.context.add(
@@ -650,28 +892,82 @@ class MemoryStoreMemoryTransferPort(MemoryTransferPort):
             affected_frames=affected,
         )
         source_frames = _unique_source_frames(plan.memories, frames)
+        external_frames: dict[tuple[str, str], _StoreTransferFrame] = {}
+        for item in plan.memories:
+            frame = frames[item.source_context_name]
+            if not frame.access.is_granted:
+                continue
+            key = (str(frame.access.store.store_dir), frame.access.context_name)
+            existing = external_frames.get(key)
+            if existing is not None and (
+                existing.context.uid != frame.context.uid
+                or existing.expected_digest != frame.expected_digest
+            ):
+                raise MemoryTransferError(
+                    "Granted Copy has inconsistent aliases for one authority Source."
+                )
+            external_frames[key] = frame
         try:
-            checkpoints = self._store.save_context_command_batch(
-                (
-                    (
-                        into.context,
-                        AutoCheckpoint(
-                            command="copy",
-                            args=args,
-                            description=description,
+            with authorized_context_operation(token.authority_checks):
+                with ExitStack() as stack:
+                    # Hold every external Source record through the local Target
+                    # commit. Grant revalidation alone cannot close a concurrent
+                    # authority-content change after the reviewed Copy plan.
+                    grouped: dict[str, list[_StoreTransferFrame]] = {}
+                    for (store_dir, _context_name), frame in external_frames.items():
+                        grouped.setdefault(store_dir, []).append(frame)
+                    for store_dir in sorted(grouped):
+                        group = sorted(
+                            grouped[store_dir],
+                            key=lambda value: value.access.context_name,
+                        )
+                        first, *remaining = group
+                        # One locked snapshot holds that authority Store's global
+                        # command lock. Validate the remaining Contexts while the
+                        # same lock prevents every cooperative Store write; taking
+                        # locked_context_snapshot twice on one Store would attempt
+                        # to reacquire its non-reentrant command lock.
+                        stack.enter_context(
+                            first.access.store.locked_context_snapshot(
+                                first.access.context_name,
+                                expected_uid=first.context.uid,
+                                expected_digest=first.expected_digest,
+                            )
+                        )
+                        for frame in remaining:
+                            current = frame.access.store.load_direct(
+                                frame.access.context_name
+                            )
+                            if (
+                                current.uid != frame.context.uid
+                                or context_record_digest(current)
+                                != frame.expected_digest
+                            ):
+                                raise ConcurrentContextUpdateError(
+                                    f"Context {frame.access.context_name!r} changed "
+                                    "before it could be published."
+                                )
+                    checkpoints = self._store.save_context_command_batch(
+                        (
+                            (
+                                into.context,
+                                AutoCheckpoint(
+                                    command="copy",
+                                    args=args,
+                                    description=description,
+                                ),
+                                into.expected_digest,
+                            ),
                         ),
-                        into.expected_digest,
-                    ),
-                ),
-                source_bindings=tuple(
-                    (
-                        frame.context.name,
-                        frame.context.uid,
-                        frame.expected_digest,
+                        source_bindings=tuple(
+                            (
+                                frame.context.name,
+                                frame.context.uid,
+                                frame.expected_digest,
+                            )
+                            for frame in source_frames
+                        ),
                     )
-                    for frame in source_frames
-                ),
-            )
         except ConcurrentContextUpdateError as error:
             raise MemoryTransferStalePlanError(
                 "Copy Source or Target changed before publication; nothing was copied."
@@ -694,7 +990,7 @@ class MemoryStoreMemoryTransferPort(MemoryTransferPort):
 
     def apply_move(self, plan: FrozenMoveMemoriesPlan) -> MoveMemoriesResult:
         token = self._token(plan)
-        frames = {frame.context.name: frame for frame in token.frames}
+        frames = {frame.display_name: frame for frame in token.frames}
         into = frames[plan.into_name]
         for item in plan.memories:
             frames[item.source_context_name].context.remove(item.source_memory_uid)

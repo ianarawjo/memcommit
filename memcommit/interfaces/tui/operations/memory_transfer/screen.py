@@ -260,8 +260,11 @@ def memory_transfer_exact_command_review(
     placement = _placement_argv(gap, selector=placement_selector)
     if isinstance(request, CopyMemoriesRequest):
         effects = (
-            f"Copy {count} directly owned {noun} into '{request.into_locator}'.",
-            "Sources stay unchanged; outputs receive new independent UIDs.",
+            f"Copy {count} direct Source {noun} into '{request.into_locator}'.",
+            (
+                "Owned or export-authorized Sources stay unchanged; outputs "
+                "receive new independent local UIDs."
+            ),
             _gap_effect(gap, item_count),
         )
         argv = (
@@ -298,7 +301,8 @@ def run_memory_transfer_tui(
     setup: MemoryTransferTuiSetup,
     *,
     kind: str,
-    inspect_context: Callable[[str], Context],
+    inspect_source_context: Callable[[str], Context],
+    inspect_into_context: Callable[[str], Context],
     memory_loader: Callable[[str], Sequence[ContextMemoryRow]],
     freeze_copy: Callable[[CopyMemoriesRequest], FrozenCopyMemoriesPlan],
     freeze_move: Callable[[MoveMemoriesRequest], FrozenMoveMemoriesPlan],
@@ -321,33 +325,37 @@ def run_memory_transfer_tui(
             ),
         )
 
-    names = setup.context_names
+    source_names = setup.source_names
+    local_source_names = setup.local_source_names
+    into_names = setup.into_names
     current = setup.current_context
-    initial_context = current if current in names else names[0]
+    initial_source = current if current in source_names else source_names[0]
+    initial_into = current if current in into_names else into_names[0]
     source_selector = DirectMemorySelectorControl(
         DirectMemorySelectorView(
-            names=names,
-            selected_context=initial_context,
+            names=source_names,
+            selected_context=initial_source,
             label=f"SOURCE MEMORIES · {operation} THESE DIRECT ITEMS · * CURRENT",
             current_context=current,
+            annotations=setup.source_annotations,
             mode="MULTIPLE",
         ),
         memory_loader=memory_loader,
-        height=min(13, max(7, len(names) + 4)),
+        height=min(13, max(7, len(source_names) + 4)),
     )
-    target_snapshot = {"value": inspect_context(initial_context)}
+    target_snapshot = {"value": inspect_into_context(initial_into)}
     placement = DirectItemPlacementTreeProjection.create(
-        initial_context,
+        initial_into,
         direct_item_placement_rows(target_snapshot["value"]),
     )
     into_selector = ContextSelectorControl(
         ContextSelectorView(
-            names=names,
-            selected=(initial_context,),
+            names=into_names,
+            selected=(initial_into,),
             label="INTO + POSITION · CHANGE THIS CONTEXT · * CURRENT",
             current_context=current,
         ),
-        height=min(7, max(3, len(names))),
+        height=min(7, max(3, len(into_names))),
         row_projector=placement.project,
     )
     move_break = {"value": False}
@@ -382,7 +390,7 @@ def run_memory_transfer_tui(
     def selected_request() -> CopyMemoriesRequest | MoveMemoriesRequest:
         selected = source_selector.selected_many
         if not selected:
-            raise ValueError("Select one or more directly owned Source Memories first.")
+            raise ValueError("Select one or more direct Source Memories first.")
         gap = placement.state.selected_gap
         placement_argv = _placement_argv(
             gap,
@@ -440,12 +448,16 @@ def run_memory_transfer_tui(
         if parsed.context_locator is not None:
             context_name = resolve_displayed_command_value(
                 parsed.context_locator,
-                names,
+                source_names,
                 label="Source Context",
             )
             return source_selector.resolve_target(context_name, parsed.memory_selector)
+        # A bare UID is intentionally local-only. Grant content becomes a
+        # Source only through its reviewed public owner (`PUBLIC:UID` or
+        # `--from PUBLIC`) so editing the exact command cannot silently widen
+        # the authority namespace that was searched.
         matches: list[DirectMemoryTarget] = []
-        for context_name in names:
+        for context_name in local_source_names:
             try:
                 matches.append(
                     source_selector.resolve_target(context_name, parsed.memory_selector)
@@ -472,13 +484,13 @@ def run_memory_transfer_tui(
         assert request.into_locator is not None
         into_name = resolve_displayed_command_value(
             request.into_locator,
-            names,
+            into_names,
             label="--into Target",
         )
         explicit_source = (
             resolve_displayed_command_value(
                 request.source_locator,
-                names,
+                source_names,
                 label="--from Source",
             )
             if request.source_locator is not None
@@ -490,7 +502,7 @@ def run_memory_transfer_tui(
         )
         if len(set(targets)) != len(targets):
             raise ValueError("A Source Memory may be selected only once.")
-        target = inspect_context(into_name)
+        target = inspect_into_context(into_name)
         rows = direct_item_placement_rows(target)
         position = parsed_gap_position(target, request)
 
@@ -536,11 +548,11 @@ def run_memory_transfer_tui(
         FormattedTextControl(
             (
                 f" MEM {operation} · DIRECT MEMORIES → INTO\n"
-                " CHECK ONE OR MORE SOURCE MEMORIES, THEN CHOOSE ONE TARGET GAP"
+                " CHECK ONE OR MORE SOURCE MEMORIES, THEN CHOOSE ONE LOCAL TARGET GAP"
                 + (
                     " · LIVE EMBEDS FOLLOW"
                     if operation == "MOVE"
-                    else ""
+                    else " · GRANTED SOURCES REQUIRE EXPLICIT PUBLIC OWNERS"
                 )
             )
         ),
@@ -611,7 +623,7 @@ def run_memory_transfer_tui(
             changed = into_selector.choose_cursor()
             if changed:
                 name = selected_into_name()
-                snapshot = inspect_context(name)
+                snapshot = inspect_into_context(name)
                 target_snapshot["value"] = snapshot
                 placement.replace_context(name, direct_item_placement_rows(snapshot))
         except (FileNotFoundError, OSError, RuntimeError, ValueError) as error:

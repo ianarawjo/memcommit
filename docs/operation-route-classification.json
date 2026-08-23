@@ -37,9 +37,10 @@
       "copy": {
         "evidence": [
           "docs/copy-callable-boundary-matrix.md",
+          "docs/granted-derived-ownership-design-rationale.md",
           "docs/memory-transfer-design-rationale.md"
         ],
-        "reason": "CLI, Embed-shaped multi-Memory TUI, Python, agent, and MCP routes share one provider-free ordered direct-Memory plan, Source binding, exact Target placement, mandatory store-wide fresh output UIDs, atomic checkpoint, and Undo/Redo boundary."
+        "reason": "CLI, Embed-shaped multi-Memory TUI, Python, agent, and MCP routes share one provider-free ordered direct-Memory plan, including explicit export-and-retain Grant bindings, local-only Target placement, mandatory fresh output UIDs, atomic checkpoint, and Undo/Redo boundary."
       },
       "distill": {
         "evidence": [
@@ -60,10 +61,12 @@
       "embed": {
         "evidence": [
           "docs/embed-application-boundary-matrix.md",
+          "docs/granted-context-embed-design-rationale.md",
+          "docs/granted-derived-ownership-design-rationale.md",
           "docs/mem-embed-placement-design-rationale.md",
           "docs/memory-reference-embed-semantics-design-rationale.md"
         ],
-        "reason": "Context and Memory live-link CLI/TUI, Python, agent, and MCP routes share typed placement, Source freeze, CAS Apply, and checkpoint contracts through one terminal-independent operation boundary."
+        "reason": "Context and Memory live-link CLI/TUI, Python, agent, and MCP routes share typed placement, local or READ+EMBED Grant Source freeze, content-free live authority bindings, CAS Apply, and checkpoint contracts through one terminal-independent operation boundary."
       },
       "find": {
         "evidence": [
@@ -115,10 +118,11 @@
       },
       "move": {
         "evidence": [
+          "docs/granted-derived-ownership-design-rationale.md",
           "docs/move-callable-boundary-matrix.md",
           "docs/memory-transfer-design-rationale.md"
         ],
-        "reason": "CLI, Embed-shaped multi-Memory TUI, Python, agent, and MCP routes share one provider-free ownership-transfer plan, complete local inbound-link freeze, default atomic live-Embed retargeting with explicit Break, atomic multi-Context Apply, and one-unit Undo/Redo boundary."
+        "reason": "CLI, Embed-shaped multi-Memory TUI, Python, agent, and MCP routes share one provider-free local ownership-transfer plan, complete inbound-link freeze, default atomic live-Embed retargeting with explicit Break, and one-unit Undo/Redo boundary; explicit granted Sources fail with the Copy-then-local-Move boundary."
       },
       "meld": {
         "evidence": [
@@ -148,10 +152,11 @@
       },
       "reference": {
         "evidence": [
+          "docs/granted-derived-ownership-design-rationale.md",
           "docs/memory-reference-embed-semantics-design-rationale.md",
           "docs/reference-callable-boundary-matrix.md"
         ],
-        "reason": "CLI, Python, agent, and MCP routes share one provider-free frozen Source/Target snapshot, content-digest revalidation, atomic checkpoint, and immutable stored-value contract."
+        "reason": "CLI, TUI, Python, agent, and MCP routes share one provider-free frozen local or explicit export-and-retain Grant Memory Source, local Target snapshot, content-digest revalidation, atomic checkpoint, and immutable stored-value contract."
       },
       "replace": {
         "evidence": [

@@ -272,6 +272,17 @@ class ReadableContextCatalog:
             self._active_store.load_direct(public_name)
         )
 
+    def load_without_attached_reads(self, public_name: str) -> Context:
+        """Resolve persisted refs while excluding process-local READ sources."""
+
+        binding = self._bindings.get(public_name)
+        if binding is None:
+            raise FileNotFoundError(f"Context '{public_name}' is outside the view.")
+        access = binding.access
+        if access.is_granted:
+            return self._granted_store(access).load(public_name)
+        return self._project_local_query_routes(self._active_store.load(public_name))
+
     def load(self, public_name: str, _loading=frozenset()) -> Context:
         binding = self._bindings.get(public_name)
         if binding is None:

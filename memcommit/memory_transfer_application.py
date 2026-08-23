@@ -18,6 +18,10 @@ class MemoryTransferStalePlanError(MemoryTransferError):
     """Raised when frozen Source, Target, or link evidence changed before Apply."""
 
 
+class MemoryTransferAuthorityError(MemoryTransferError):
+    """Raised when a readable Source does not authorize the requested effect."""
+
+
 @dataclass(frozen=True, slots=True)
 class MemoryTransferPlacement:
     """One exact gap in a frozen Target direct-item order."""
@@ -39,7 +43,7 @@ class MemoryTransferPlacement:
 
 @dataclass(frozen=True, slots=True)
 class CopyMemoriesRequest:
-    """Copy directly owned local Memories into one existing local Context."""
+    """Copy exact local or export-authorized Memories into one local Context."""
 
     memory_locators: tuple[str, ...]
     into_locator: str | None = None
@@ -64,6 +68,81 @@ class MoveMemoriesRequest:
 
 
 @dataclass(frozen=True, slots=True)
+class FrozenTransferAuthority:
+    """Path-free Grant identity retained with one exported Source binding."""
+
+    public_name: str
+    grantee_profile_uid: str
+    authority_profile_uid: str
+    attachment_context_uid: str
+    attachment_context_name: str
+    grant_uid: str
+    grant_revision: int
+    grant_digest: str
+    resource_uid: str
+    resource_name: str
+    authority_context_name: str
+    permissions: tuple[str, ...]
+
+    def __post_init__(self) -> None:
+        text_values = (
+            self.public_name,
+            self.grantee_profile_uid,
+            self.authority_profile_uid,
+            self.attachment_context_uid,
+            self.attachment_context_name,
+            self.grant_uid,
+            self.grant_digest,
+            self.resource_uid,
+            self.resource_name,
+            self.authority_context_name,
+        )
+        if any(not isinstance(value, str) or not value for value in text_values):
+            raise ValueError("A frozen transfer authority binding is incomplete.")
+        if (
+            isinstance(self.grant_revision, bool)
+            or not isinstance(self.grant_revision, int)
+            or self.grant_revision < 1
+        ):
+            raise ValueError("A frozen transfer Grant revision is invalid.")
+        if (
+            not isinstance(self.permissions, tuple)
+            or not self.permissions
+            or len(set(self.permissions)) != len(self.permissions)
+            or any(
+                not isinstance(permission, str) or not permission
+                for permission in self.permissions
+            )
+        ):
+            raise ValueError("Frozen transfer Grant permissions are invalid.")
+
+    def to_dict(self) -> dict[str, object]:
+        """Project stable checkpoint and digest provenance without Store paths."""
+
+        return {
+            "kind": "GRANTED_CONTEXT",
+            "public_name": self.public_name,
+            "grantee_profile_uid": self.grantee_profile_uid,
+            "authority_profile_uid": self.authority_profile_uid,
+            "attachment": {
+                "uid": self.attachment_context_uid,
+                "name": self.attachment_context_name,
+            },
+            "grant": {
+                "uid": self.grant_uid,
+                "revision": self.grant_revision,
+                "digest": self.grant_digest,
+                "permissions": list(self.permissions),
+            },
+            "resource": {
+                "uid": self.resource_uid,
+                "name": self.resource_name,
+            },
+            "authority_context_name": self.authority_context_name,
+        }
+
+
+@dataclass(frozen=True, slots=True)
 class FrozenTransferMemory:
     """One exact Source Memory and its direct owner binding."""
 
@@ -73,6 +152,7 @@ class FrozenTransferMemory:
     source_memory_uid: str
     content: str
     output_memory_uid: str
+    source_authority: FrozenTransferAuthority | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -240,6 +320,14 @@ def _validate_plan_common(
         (item.source_context_uid, item.source_memory_uid) for item in memories
     }) != len(memories):
         raise MemoryTransferError("Memory transfer plan has duplicate Sources.")
+    if any(
+        item.source_authority is not None
+        and item.source_authority.public_name != item.source_context_name
+        for item in memories
+    ):
+        raise MemoryTransferError(
+            "Memory transfer plan has a mismatched Grant Source binding."
+        )
     if not all((into_name, into_uid, into_digest, plan_digest)):
         raise MemoryTransferError("Memory transfer plan has an incomplete binding.")
     if not isinstance(placement, MemoryTransferPlacement):
@@ -291,6 +379,11 @@ def prepare_move(
     )
     if any(item.output_memory_uid != item.source_memory_uid for item in plan.memories):
         raise MemoryTransferError("Move must preserve every selected Memory UID.")
+    if any(item.source_authority is not None for item in plan.memories):
+        raise MemoryTransferAuthorityError(
+            "Move cannot use granted Source Memories; Copy them into a local "
+            "Context first, then move the local copies."
+        )
     if len({item.output_memory_uid for item in plan.memories}) != len(plan.memories):
         raise MemoryTransferError(
             "Move cannot place same-UID branch copies in one Target Context."
@@ -362,6 +455,11 @@ def run_move(
     )
     if any(item.output_memory_uid != item.source_memory_uid for item in plan.memories):
         raise MemoryTransferError("Move must preserve every selected Memory UID.")
+    if any(item.source_authority is not None for item in plan.memories):
+        raise MemoryTransferAuthorityError(
+            "Move cannot use granted Source Memories; Copy them into a local "
+            "Context first, then move the local copies."
+        )
     if len({item.output_memory_uid for item in plan.memories}) != len(plan.memories):
         raise MemoryTransferError(
             "Move cannot place same-UID branch copies in one Target Context."
@@ -403,8 +501,10 @@ __all__ = [
     "FrozenCopyMemoriesPlan",
     "FrozenInboundMemoryLink",
     "FrozenMoveMemoriesPlan",
+    "FrozenTransferAuthority",
     "FrozenTransferMemory",
     "MemoryTransferCheckpoint",
+    "MemoryTransferAuthorityError",
     "MemoryTransferError",
     "MemoryTransferItemResult",
     "MemoryTransferKind",

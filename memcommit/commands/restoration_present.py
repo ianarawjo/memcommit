@@ -25,13 +25,18 @@ from memcommit.source_projection.console import (
     styled_source_relationship_label,
 )
 from memcommit.source_projection.model import (
+    SourceAccess,
     SourceDisplayFacts,
     SourceForm,
     SourceReach,
     SourceState,
 )
 from memcommit.source_projection.presentation import (
+    SourceDisplayToken,
+    SourceTokenRole,
+    source_annotation_tokens,
     source_annotation_text,
+    source_display_text,
     source_object_label,
 )
 
@@ -162,6 +167,9 @@ def _item_kind(item: Mapping[str, Any] | None) -> str:
         # Classify them as pointers so restoration receipts never fall back to
         # rendering the raw record and disclosing that content.
         "memory_snapshot_ref": _MEMORY_REF_KIND,
+        # Granted Memory Embed records are content-free live pointers. Keep
+        # their authority metadata out of restoration receipt prose.
+        "granted_memory_ref": _MEMORY_REF_KIND,
         "query_context_ref": _QUERY_VIEW_KIND,
         "context_ref": _EMBEDDED_CONTEXT_KIND,
     }.get(raw, "direct item")
@@ -179,6 +187,7 @@ def _item_source(
         "memory": SourceForm.MEMORY,
         "memory_ref": SourceForm.MEMORY_REF,
         "memory_snapshot_ref": SourceForm.MEMORY_REFERENCE,
+        "granted_memory_ref": SourceForm.MEMORY_EMBED,
         "query_context_ref": SourceForm.QUERY_VIEW,
     }.get(raw)
 
@@ -208,13 +217,39 @@ def _memory_ref_description_parts(
         + ":"
         + _short(target_memory_uid, limit=64)[:8]
     )
-    if item.get("type") == "memory_snapshot_ref":
+    kind = item.get("type")
+    if kind == "memory_snapshot_ref":
         retained = item.get("content")
         content = retained if isinstance(retained, str) else None
         form = SourceForm.MEMORY_REFERENCE
     else:
         content = resolved_memory_ref_contents.get(key) if key is not None else None
         form = SourceForm.MEMORY_EMBED
+    if kind == "granted_memory_ref":
+        if content is not None:
+            annotation = source_annotation_text(
+                SourceDisplayFacts(
+                    access=SourceAccess.READ_GRANT,
+                    form=form,
+                    states=(SourceState.READ_ONLY,),
+                )
+            )
+        else:
+            # Restoration receipts deliberately do not reauthorize external
+            # Grants after mutation. The persisted relationship is still a
+            # live, read-only Grant link; lack of receipt-preview content is
+            # therefore OPAQUE, not evidence that the link is DANGLING.
+            facts = SourceDisplayFacts(
+                form=form,
+                states=(SourceState.READ_ONLY, SourceState.OPAQUE),
+            )
+            annotation = source_display_text(
+                (
+                    SourceDisplayToken("GRANT", SourceTokenRole.OWNERSHIP),
+                    *source_annotation_tokens(facts),
+                )
+            )
+        return locator, content, annotation
     state = SourceState.READ_ONLY if content is not None else SourceState.DANGLING
     annotation = source_annotation_text(SourceDisplayFacts(form=form, states=(state,)))
     return locator, content, annotation
@@ -228,7 +263,7 @@ def _item_description(
     kind = item.get("type")
     if kind == "memory":
         return _quoted_content(item.get("content", ""))
-    if kind in {"memory_ref", "memory_snapshot_ref"}:
+    if kind in {"memory_ref", "memory_snapshot_ref", "granted_memory_ref"}:
         locator, content, annotation = _memory_ref_description_parts(
             item,
             resolved_memory_ref_contents=resolved_memory_ref_contents,
@@ -246,7 +281,11 @@ def _styled_item_description(
     resolved_memory_ref_contents: Mapping[MemoryRefTargetKey, str | None],
     effect_role: SemanticColorRole | None = None,
 ) -> str:
-    if item.get("type") in {"memory_ref", "memory_snapshot_ref"}:
+    if item.get("type") in {
+        "memory_ref",
+        "memory_snapshot_ref",
+        "granted_memory_ref",
+    }:
         locator, content, annotation = _memory_ref_description_parts(
             item,
             resolved_memory_ref_contents=resolved_memory_ref_contents,

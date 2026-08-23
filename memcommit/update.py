@@ -25,6 +25,10 @@ from memcommit.semantic_execution import (
     json_budget,
     plan_semantic_execution,
 )
+from memcommit.semantic_disclosure import (
+    SemanticDisclosureError,
+    require_semantic_disclosure_authority,
+)
 
 
 UPDATE_CORPUS_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
@@ -1098,6 +1102,13 @@ def collect_update_inputs(
     target_memory_selector: str | None = None,
 ) -> UpdateInputs:
     """Collect readable source facts and directly writable target Memories."""
+    try:
+        require_semantic_disclosure_authority(
+            (source, target),
+            operation="Update",
+        )
+    except SemanticDisclosureError as error:
+        raise UpdateError(str(error)) from error
     source_contexts = _walk_contexts(source)
     target_contexts = _walk_contexts(target)
     overlap = {context.uid for context in source_contexts} & {

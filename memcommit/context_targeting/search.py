@@ -30,6 +30,8 @@ class SearchScopeStore(Protocol):
 
     def load(self, name: str) -> Context: ...
 
+    def load_without_attached_reads(self, name: str) -> Context: ...
+
 
 def load_readable_search_roots(
     store: SearchScopeStore,
@@ -37,6 +39,7 @@ def load_readable_search_roots(
     *,
     include_descendants: bool,
     follow_embeds: bool,
+    include_attached_reads: bool = True,
 ) -> tuple[Context, ...]:
     """Freeze ordinary roots with lexical and embedded reach kept independent."""
 
@@ -51,7 +54,26 @@ def load_readable_search_roots(
                 f"Context '{target_name}' is outside the readable search scope."
             )
     selected_names = expand_lexical_context_names(scope, catalog_names)
-    load = store.load if follow_embeds else store.load_direct
+    if follow_embeds:
+        load = store.load
+        if not include_attached_reads:
+            without_attached_reads = getattr(
+                store,
+                "load_without_attached_reads",
+                None,
+            )
+            if not callable(without_attached_reads):
+                raise RuntimeError(
+                    "Provider-facing readable Context loading requires an "
+                    "attached-READ-free loader."
+                )
+            # Attached READ projections are useful for browsing but carry no
+            # relationship marker into the returned Context graph. A provider-
+            # facing caller must omit that implicit edge and use an explicitly
+            # selected granted catalog root instead.
+            load = without_attached_reads
+    else:
+        load = store.load_direct
     roots: list[Context] = []
     seen_uids: set[str] = set()
     for name in selected_names:

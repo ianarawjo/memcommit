@@ -191,6 +191,7 @@ class MemoryTransferAgentAdapter:
                         (
                             MemoryTransferInputError,
                             MemoryTransferContextError,
+                            MemoryTransferAuthorityError,
                             MemoryTransferConflictError,
                         ),
                     )

@@ -4,29 +4,60 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from memcommit.source_projection.presentation import SourceDisplayValue
+
 
 @dataclass(frozen=True)
 class MemoryTransferTuiSetup:
-    """Frozen ordinary-local Source and Target catalog for one launch."""
+    """Frozen role-specific Source and Target catalogs for one launch.
 
-    context_names: tuple[str, ...]
+    ``source_names`` may contain explicitly export-authorized public Grant
+    names for Copy. ``local_source_names`` is the only catalog searched for an
+    unqualified Memory UID and is also the complete Move Source catalog. The
+    Target catalog stays independently owned and local for both operations.
+    """
+
+    source_names: tuple[str, ...]
+    local_source_names: tuple[str, ...]
+    into_names: tuple[str, ...]
     current_context: str | None = None
+    source_annotations: tuple[tuple[str, SourceDisplayValue], ...] = ()
 
     def __post_init__(self) -> None:
-        if (
-            not self.context_names
-            or len(set(self.context_names)) != len(self.context_names)
-            or any(not isinstance(name, str) or not name for name in self.context_names)
+        catalogs = (
+            self.source_names,
+            self.local_source_names,
+            self.into_names,
+        )
+        if any(
+            not names
+            or len(set(names)) != len(names)
+            or any(not isinstance(name, str) or not name for name in names)
+            for names in catalogs
         ):
             raise ValueError(
-                "Interactive Memory transfer requires distinct local Contexts."
+                "Interactive Memory transfer requires distinct nonempty role catalogs."
+            )
+        source_set = set(self.source_names)
+        local_set = set(self.local_source_names)
+        if not local_set <= source_set:
+            raise ValueError(
+                "Memory transfer local Sources must be present in the Source catalog."
             )
         if (
             self.current_context is not None
-            and self.current_context not in self.context_names
+            and self.current_context not in self.into_names
         ):
             raise ValueError(
                 "Memory transfer current Context is outside the local catalog."
+            )
+        annotation_names = tuple(name for name, _value in self.source_annotations)
+        if (
+            len(set(annotation_names)) != len(annotation_names)
+            or any(name not in source_set for name in annotation_names)
+        ):
+            raise ValueError(
+                "Memory transfer Source annotations must name distinct visible rows."
             )
 
 

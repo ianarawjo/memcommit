@@ -5,9 +5,16 @@ from __future__ import annotations
 import copy
 from contextlib import contextmanager
 from dataclasses import dataclass
-from typing import Iterator
+from typing import Iterator, Literal
 
-from memcommit.context import Context, GrantedContextLink, MemoryRef, QueryContextRef
+from memcommit.context import (
+    Context,
+    GrantedContextLink,
+    GrantedMemorySource,
+    Memory,
+    MemoryRef,
+    QueryContextRef,
+)
 from memcommit.context_locator import resolve_context_locator
 from memcommit.profile_config import AuthorityGrant, ProfileRegistry, load_profile_registry
 from memcommit.profiles import (
@@ -108,6 +115,33 @@ def granted_context_link(
     )
 
 
+def granted_memory_source(
+    access: ContextAccess,
+    *,
+    context_uid: str,
+    memory_uid: str,
+) -> GrantedMemorySource:
+    """Capture exact Grant provenance for a retained or live Memory relation."""
+
+    view = access.view
+    if view is None or access.attachment_name is None:
+        raise ValueError("Granted Memory Sources require granted access.")
+    return GrantedMemorySource(
+        context_uid=context_uid,
+        public_name=access.display_name,
+        authority_context_name=access.context_name,
+        authority_profile_uid=view.authority.uid,
+        grantee_profile_uid=view.grantee.uid,
+        attachment_context_uid=view.grant.attachment_context_uid,
+        attachment_context_name=access.attachment_name,
+        grant_uid=view.grant.uid,
+        grant_revision_at_creation=view.grant.revision,
+        resource_uid=view.grant.resource_uid,
+        resource_name=view.grant.resource_name,
+        memory_uid=memory_uid,
+    )
+
+
 def load_granted_context_link(
     link: GrantedContextLink,
     *,
@@ -139,6 +173,7 @@ def load_granted_context_link(
     )
     view = access.view
     assert view is not None
+    _require_granted_permissions(access, ("READ", "EMBED"))
     grant = view.grant
     if (
         grant.uid != link.grant_uid
@@ -156,10 +191,65 @@ def load_granted_context_link(
         )
     if link.public_name in loading:
         return Context(uid=link.context_uid, name=link.public_name)
-    context = GrantedReadStore(access, registry=registry).load(link.public_name)
+    context = GrantedReadStore(
+        access,
+        registry=registry,
+        traversal_mode="EMBED",
+    ).load(link.public_name)
     if context.uid != link.context_uid:
         raise ProfileError("Granted embedded Context identity changed.")
     return context
+
+
+def load_granted_memory_source(
+    source: GrantedMemorySource,
+    *,
+    active_store: MemoryStore,
+) -> Memory:
+    """Reauthorize one content-free granted Memory Embed and load its value."""
+
+    if not isinstance(source, GrantedMemorySource):
+        raise TypeError("Granted Memory Source is invalid.")
+    registry = load_profile_registry()
+    if registry.active.uid != source.grantee_profile_uid:
+        raise ProfileError(
+            "The active Profile no longer matches the granted Memory link."
+        )
+    access = _resolve_bound_granted_context(
+        active_store,
+        source.public_name,
+        attachment_name=source.attachment_context_name,
+        attachment_uid=source.attachment_context_uid,
+        required_permission="EMBED",
+        registry=registry,
+    )
+    view = access.view
+    assert view is not None
+    _require_granted_permissions(access, ("READ", "EMBED"))
+    grant = view.grant
+    if (
+        grant.uid != source.grant_uid
+        or grant.revision < source.grant_revision_at_creation
+        or view.authority.uid != source.authority_profile_uid
+        or view.grantee.uid != source.grantee_profile_uid
+        or grant.attachment_context_uid != source.attachment_context_uid
+        or grant.attachment_context_name != source.attachment_context_name
+        or grant.resource_uid != source.resource_uid
+        or grant.resource_name != source.resource_name
+        or access.context_name != source.authority_context_name
+    ):
+        raise ProfileError(
+            "The authority Grant binding behind an embedded Memory changed."
+        )
+    context = GrantedReadStore(access, registry=registry).load_direct(
+        source.public_name
+    )
+    if context.uid != source.context_uid:
+        raise ProfileError("Granted embedded Memory owner identity changed.")
+    memory = context.memories.get(source.memory_uid)
+    if not isinstance(memory, Memory):
+        raise ProfileError("Granted embedded Memory is no longer available.")
+    return memory
 
 
 def context_access_display_facts(
@@ -495,22 +585,34 @@ def _authority_name(grant: AuthorityGrant, public_name: str) -> str:
     return grant.resource_name + public_name[len(grant.public_name) :]
 
 
+GrantedTraversalMode = Literal["READ", "EMBED"]
+
+
 class GrantedReadStore:
-    """A read-only, name-remapping store constrained to one effective READ view."""
+    """A read-only, name-remapping store constrained to one effective view."""
 
     def __init__(
         self,
         access: ContextAccess,
         *,
         registry: ProfileRegistry | None = None,
+        traversal_mode: GrantedTraversalMode = "READ",
     ):
         if access.view is None or access.attachment_name is None:
             raise ValueError("GrantedReadStore requires a granted Context access.")
+        if traversal_mode not in {"READ", "EMBED"}:
+            raise ValueError("Granted traversal mode must be READ or EMBED.")
         self._access = access
         self._store = access.store
         self._grant = access.view.grant
         self._attachment = access.attachment_name
         self._registry = registry or load_profile_registry()
+        # Ordinary browsing follows every effective READ edge. A durable live
+        # Embed is a narrower relationship contract: every recursively crossed
+        # override must independently retain both visibility and Embed consent.
+        self._required_traversal_permissions = (
+            ("READ", "EMBED") if traversal_mode == "EMBED" else ("READ",)
+        )
         self._all_grants = grants_for_attachment(
             attachment_name=self._attachment,
             registry=self._registry,
@@ -538,14 +640,18 @@ class GrantedReadStore:
                 candidates,
                 key=lambda grant: len(grant.public_name.split("/")),
             )
-            if "READ" not in effective.permissions:
+            if any(
+                permission not in effective.permissions
+                for permission in self._required_traversal_permissions
+            ):
                 continue
-            resolve_granted_context_view(
-                public,
-                attachment_name=self._attachment,
-                required_permission="READ",
-                registry=self._registry,
-            )
+            for permission in self._required_traversal_permissions:
+                resolve_granted_context_view(
+                    public,
+                    attachment_name=self._attachment,
+                    required_permission=permission,
+                    registry=self._registry,
+                )
             self._allowed_uids[public] = binding.uid
             allowed.append(public)
         return tuple(sorted(allowed))
@@ -565,10 +671,10 @@ class GrantedReadStore:
                 if candidate in self._allowed_names:
                     item.name = candidate
                 else:
-                    # A persisted parent pointer is not independent READ
-                    # authority.  Remove it before adding any narrower QUERY
-                    # projection so the concealed Context cannot appear as a
-                    # second, apparently readable child.
+                    # A persisted parent pointer is not independent traversal
+                    # authority. Remove it before adding any narrower QUERY
+                    # projection so a restricted Context cannot appear as a
+                    # second child reached under the parent's broader Grant.
                     projected.remove(item_uid)
             elif isinstance(item, MemoryRef):
                 candidate = _public_name(self._grant, item.target_context_name)
@@ -602,7 +708,7 @@ class GrantedReadStore:
         return self._project(context, public_name)
 
     def load(self, public_name: str, _loading=frozenset()) -> Context:
-        """Resolve only embedded Contexts that remain inside the READ view."""
+        """Resolve only embedded Contexts allowed by this traversal mode."""
 
         context = self.load_direct(public_name)
         loading = _loading | {public_name}

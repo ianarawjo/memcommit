@@ -153,31 +153,33 @@ def run_reference_tui(
 
     memory_source = DirectMemorySelectorControl(
         DirectMemorySelectorView(
-            names=setup.names,
-            selected_context=setup.selected_source,
-            label="SOURCE MEMORY · DIRECTLY OWNED",
+            names=setup.memory_source_names,
+            selected_context=setup.selected_memory_source,
+            label="SOURCE MEMORY · OWNED OR GRANTED FOR RETAINED REFERENCE",
             current_context=setup.current_context,
+            selectable_names=setup.memory_source_selectable_names,
+            annotations=setup.memory_source_annotations,
         ),
         memory_loader=memory_loader,
-        height=min(10, max(4, len(setup.names) + 2)),
+        height=min(10, max(4, len(setup.memory_source_names) + 2)),
     )
     context_source = ContextSelectorControl(
         ContextSelectorView(
-            names=setup.names,
+            names=setup.context_source_names,
             selected=(setup.selected_source,),
             label="SOURCE CONTEXT · SNAPSHOT THIS SCOPE · * CURRENT",
             current_context=setup.current_context,
         ),
-        height=min(8, max(3, len(setup.names))),
+        height=min(8, max(3, len(setup.context_source_names))),
     )
     target = ContextSelectorControl(
         ContextSelectorView(
-            names=setup.names,
+            names=setup.target_names,
             selected=(setup.selected_target,),
             label="TARGET · ADD IMMUTABLE SNAPSHOT · * CURRENT",
             current_context=setup.current_context,
         ),
-        height=min(8, max(3, len(setup.names))),
+        height=min(8, max(3, len(setup.target_names))),
     )
     bindings = KeyBindings()
     status = {"value": ""}
@@ -192,7 +194,7 @@ def run_reference_tui(
             HorizontalChoiceOption(
                 "MEMORY",
                 "MEMORY",
-                "Retain one exact directly owned Memory version by value.",
+                "Retain one exact direct Source Memory version by value.",
             ),
         ),
         selected_uid="CONTEXT",
@@ -256,7 +258,7 @@ def run_reference_tui(
             )
         memory = memory_source.selected
         if memory is None:
-            raise ValueError("Select one directly owned Source Memory first.")
+            raise ValueError("Select one direct Source Memory first.")
         return ReferenceRequest(
             memory_selector=memory.memory_uid,
             source_locator=memory.context_name,

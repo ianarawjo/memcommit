@@ -14,7 +14,13 @@ import memcommit.commands.update_render as update_render
 from memcommit.cli import app
 from memcommit.commands.endpoint_setup_flows import UpdateSetupReceipt
 from memcommit.interfaces.tui.components.operation_launcher.session import SessionOpenReceipt
-from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.context import (
+    Context,
+    GrantedMemorySource,
+    Memory,
+    MemoryRef,
+    QueryContextRef,
+)
 from memcommit.context_targeting.loading import load_context_scope
 from memcommit.provenance import build_trace
 from memcommit.resolution_workbench import ResolutionWorkbenchAction
@@ -547,6 +553,52 @@ def test_resolved_source_ref_is_evidence_and_target_refs_are_not_writable():
     assert candidate.memory_uid == origin_memory.uid
     assert candidate.content == origin_memory.content
     assert inputs.target_memories == ()
+
+
+def test_update_rejects_granted_live_embed_before_provider_construction():
+    authority = Context(uid="authority-context", name="public/advisor")
+    memory = Memory(uid="authority-memory", content="Granted update secret.")
+    authority.add(memory)
+    source = Context(uid="source-context", name="source")
+    source.add(
+        MemoryRef(
+            uid="granted-memory-embed",
+            target_context_uid=authority.uid,
+            target_context_name=authority.name,
+            target_memory_uid=memory.uid,
+            target=memory,
+            granted_source=GrantedMemorySource(
+                context_uid=authority.uid,
+                public_name=authority.name,
+                authority_context_name="authority/advisor",
+                authority_profile_uid="authority-profile",
+                grantee_profile_uid="grantee-profile",
+                attachment_context_uid=source.uid,
+                attachment_context_name=source.name,
+                grant_uid="grant",
+                grant_revision_at_creation=1,
+                resource_uid=authority.uid,
+                resource_name="authority/advisor",
+                memory_uid=memory.uid,
+            ),
+        )
+    )
+    target = Context(uid="target-context", name="target")
+    target.add(Memory(uid="target-memory", content="Local target fact."))
+    provider_connections = 0
+
+    def provider_factory():
+        nonlocal provider_connections
+        provider_connections += 1
+        return PlanProvider({"edits": [], "additions": []})
+
+    with pytest.raises(
+        UpdateError,
+        match="EMBED authorizes live reading, not provider disclosure",
+    ):
+        plan_update(source, target, provider_factory)
+
+    assert provider_connections == 0
 
 
 def test_query_only_items_are_excluded_without_opening_hidden_source(

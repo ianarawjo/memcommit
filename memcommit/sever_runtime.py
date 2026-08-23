@@ -26,6 +26,10 @@ from memcommit.derived_policy import (
     authorize_derived_transfer,
 )
 from memcommit.query_provider import QueryProviderError, QueryProviderTimeoutError
+from memcommit.semantic_disclosure import (
+    SemanticDisclosureError,
+    require_semantic_disclosure_authority,
+)
 from memcommit.profile_config import ProfileRegistry
 from memcommit.profiles import ProfileError, authority_grant_snapshot_lock
 from memcommit.sever import (
@@ -163,6 +167,15 @@ def capture_sever_binding(
                 continue
             seen_root_uids.add(descendant.uid)
             roots.append(descendant)
+
+    try:
+        require_semantic_disclosure_authority(
+            roots,
+            operation="Sever",
+            follow_contexts=include_descendants,
+        )
+    except SemanticDisclosureError as error:
+        raise SeverApplicationError(str(error)) from error
 
     contexts: list[tuple[str, str, str]] = []
     memories: list[SeverMemory] = []

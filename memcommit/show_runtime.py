@@ -97,6 +97,8 @@ def _snapshot_context(
                         states=(
                             (SourceState.READ_ONLY,)
                             if item.is_resolved
+                            else (SourceState.OPAQUE,)
+                            if item.is_granted
                             else (SourceState.DANGLING,)
                         ),
                     ),

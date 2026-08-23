@@ -1,0 +1,52 @@
+Embedded Memory [9b8d2ce9] from 'advisor' as [ff6f527f] in 'guide' between [3373b086] and [2a00d286].                                                                               
+CAPTURE PAUSE · press Enter for live read-only verification                                                                                                                         
+                                                                                                                                                                                    
+AUTHORITY UPDATE · same Memory UID, new content                                                                                                                                     
+CAPTURE VERIFICATION COMMAND · mem ls -R guide                                                                                                                                      
+Context: guide                                                                                                                                                                      
+  3 memories                                                                                                                                                                        
+  1 subcontext                                                                                                                                                                      
+                                                                                                                                                                                    
+  VIA EMBED · [context e9dce7a0] advisor                                                                                                                                            
+    [memory 9b8d2ce9] UPDATED live guidance loaded after the Embed completed.                                                                                                       
+  [memory 3373b086] Owned opening marker in the local Target.                                                                                                                       
+  [embedded ff6f527f] [advisor][memory 9b8d2ce9] UPDATED live guidance loaded after the Embed completed.  READ ONLY                                                                 
+  [memory 2a00d286] Owned closing marker in the local Target.                                                                                                                       
+Authority views:                                                                                                                                                                    
+  advisor/ · from advisor-authority · grant 5970fdb1 revision 1                                                                                                                     
+    Permissions: READ + EMBED                                                                                                                                                       
+    Analysis: RATIONALE SUBTREE + TRACE BLOCKED                                                                                                                                     
+    Source boundary: DERIVE blocked · COMBINE blocked · EXPORT blocked                                                                                                              
+    Target/artifact boundary: ACCEPT_DERIVED blocked · SAVE_BOUND_ANALYSIS blocked · SAVE_ANALYSIS blocked                                                                          
+CAPTURE LINK PAUSE · press Enter for raw link verification                                                                                                                          
+                                                                                                                                                                                    
+LINK TYPE · granted_memory_ref                                                                                                                                                      
+LINK GRANT · 5970fdb1                                                                                                                                                               
+LINK CONTENT CACHED · NO                                                                                                                                                            
+GRANT MATCH · YES                                                                                                                                                                   
+CURRENT CONTEXT · guide                                                                                                                                                             
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    

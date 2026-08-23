@@ -645,15 +645,14 @@ def _directional_impact(
                 "connecting provider",
                 total=2,
             ) as progress:
-                # Live planning authenticates the provider before opening any
-                # authority-owned content for disclosure. Hidden receipts need
-                # no provider connection and remain within local authority.
-                provider = connect_codex_chatgpt_provider()
                 progress.update("planning memory changes", step=2)
                 session = plan_update(
                     source,
                     target,
-                    lambda: provider,
+                    # Keep connection lazy so Update's complete authority and
+                    # semantic-disclosure preflight runs first. A nested live
+                    # Grant must fail without contacting a provider at all.
+                    connect_codex_chatgpt_provider,
                     status="impact",
                     source_include_descendants=source_descendants,
                     target_include_descendants=target_descendants,

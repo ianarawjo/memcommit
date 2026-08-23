@@ -381,6 +381,20 @@ def validate_embed(
     if child.uid == parent.uid:
         raise ValueError("Cannot embed a context into itself.")
     for info in parent.iter_items():
+        # Context.add() deliberately replaces an existing direct item with the
+        # same UID.  Embed must reject that generic update behavior because two
+        # public Grant aliases can identify one authority Context: accepting the
+        # second alias would silently replace the first durable relationship.
+        if info.uid == child.uid:
+            if isinstance(info, Context):
+                raise ValueError(
+                    f"'{child.name}' has the same Context identity as already "
+                    f"embedded '{info.name}' in '{parent.name}'."
+                )
+            raise ValueError(
+                f"Cannot embed '{child.name}' in '{parent.name}': its Context "
+                f"identity [{child.uid[:8]}] is already used by a direct item."
+            )
         if isinstance(info, (Context, QueryContextRef)) and info.name == child.name:
             raise ValueError(f"'{child.name}' is already embedded in '{parent.name}'.")
 

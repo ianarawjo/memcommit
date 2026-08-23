@@ -9,8 +9,10 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
+from memcommit.authority.access import GrantedReadStore, resolve_context_access
 from memcommit.cli import app
 from memcommit.context import Context, Memory
+from memcommit.context_snapshot import ContextSnapshotRef
 from memcommit.embed_runtime import MemoryStoreEmbedPort
 from memcommit.interfaces.tui.operations.embed import build_embed_tui_setup
 from memcommit.profile_config import (
@@ -20,14 +22,18 @@ from memcommit.profile_config import (
     ProfileEntry,
     ProfileRegistry,
     canonical_grant_permissions,
+    load_profile_registry,
     profile_registry_file,
     profile_store_dir,
 )
 from memcommit.profiles import (
     ProfileError,
     create_authority_grant,
+    delete_authority_grant,
     update_authority_grant,
 )
+from memcommit.reference_application import ContextReferenceRequest
+from memcommit.reference_runtime import execute_context_reference
 from memcommit.source_projection.presentation import source_display_text
 from memcommit.store import MemoryStore
 
@@ -142,6 +148,102 @@ def test_granted_embed_persists_only_a_live_reauthorizing_link(
     assert [
         item.content for item in reloaded.iter_items() if isinstance(item, Memory)
     ] == ["Use the revised live advisor guidance."]
+
+
+def test_context_reference_keeps_revoked_granted_context_edge_opaque(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+) -> None:
+    store, authority_store, workspace, advisor, advice, grant = _fixture(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+    destination = ops.init("destination")
+    store.save(destination)
+    embedded = runner.invoke(app, ["embed", advisor.name, "--into", workspace.name])
+    assert embedded.exit_code == 0, embedded.output + embedded.stderr
+    delete_authority_grant(grant.uid)
+
+    authority_reads: list[str] = []
+    authority_root = authority_store.store_dir.resolve()
+    original_load_direct = MemoryStore.load_direct
+
+    def track_authority_reads(self, name):
+        if self.store_dir.resolve() == authority_root:
+            authority_reads.append(name)
+        return original_load_direct(self, name)
+
+    monkeypatch.setattr(MemoryStore, "load_direct", track_authority_reads)
+    result = execute_context_reference(
+        ContextReferenceRequest(workspace.name, destination.name),
+        store=store,
+    )
+
+    assert authority_reads == []
+    snapshot = store.load_direct(destination.name).memories[result.reference_uid]
+    assert isinstance(snapshot, ContextSnapshotRef)
+    [record] = snapshot.snapshot_package["contexts"]
+    opaque = record["memories"][advisor.uid]
+    assert opaque["type"] == "granted_context_ref"
+    assert advice.content not in json.dumps(snapshot.to_dict())
+    retained_edge = snapshot.memories[advisor.uid]
+    assert isinstance(retained_edge, Context)
+    assert retained_edge._granted_link is not None
+    assert tuple(retained_edge.iter_items()) == ()
+
+
+def test_live_context_embed_does_not_cross_nested_read_only_override(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+) -> None:
+    store, authority_store, workspace, advisor, advice, _grant = _fixture(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+    nested_grant = next(
+        grant
+        for grant in load_profile_registry().grants
+        if grant.public_name == "advisor/private"
+    )
+    update_authority_grant(nested_grant.uid, permissions=("READ",))
+
+    # Ordinary granted browsing is still allowed to follow the narrower READ
+    # override and see its contents.
+    read_access = resolve_context_access(
+        store,
+        advisor.name,
+        current_name=workspace.name,
+        required_permission="READ",
+    )
+    readable = GrantedReadStore(read_access).load(advisor.name)
+    authority_parent = authority_store.load_direct(advisor.name)
+    private_pointer = next(
+        item for item in authority_parent.iter_items() if isinstance(item, Context)
+    )
+    readable_private = readable.memories[private_pointer.uid]
+    assert isinstance(readable_private, Context)
+    assert [
+        item.content
+        for item in readable_private.iter_items()
+        if isinstance(item, Memory)
+    ] == ["Concealed review note."]
+
+    embedded = runner.invoke(app, ["embed", advisor.name, "--into", workspace.name])
+    assert embedded.exit_code == 0, embedded.output + embedded.stderr
+
+    # Loading the durable live Embed uses the stricter traversal mode. The
+    # parent remains readable, but its READ-only nested edge cannot inherit the
+    # parent's EMBED permission.
+    resolved = store.load(workspace.name).memories[advisor.uid]
+    assert isinstance(resolved, Context)
+    assert private_pointer.uid not in resolved.memories
+    assert [
+        item.content for item in resolved.iter_items() if isinstance(item, Memory)
+    ] == [advice.content]
 
 
 def test_granted_embed_revocation_fails_recursive_load_but_keeps_pointer(
@@ -264,7 +366,9 @@ def test_granted_embed_tui_catalog_exposes_authority_without_broadening_target(
         monkeypatch,
     )
 
-    setup = build_embed_tui_setup(MemoryStoreEmbedPort.capture(store))
+    setup = build_embed_tui_setup(
+        MemoryStoreEmbedPort.capture(store, allow_granted_sources=True)
+    )
     annotations = dict(setup.child_annotations)
 
     assert "advisor" in setup.child_names

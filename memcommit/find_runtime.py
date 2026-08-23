@@ -40,6 +40,8 @@ class FindReadableCatalog(Protocol):
 
     def load(self, name: str) -> Context: ...
 
+    def load_without_attached_reads(self, name: str) -> Context: ...
+
     def access_for(self, name: str) -> FindReadableAccess: ...
 
 
@@ -85,6 +87,7 @@ class MemoryStoreFindSearchSourcePort(FindSearchSourcePort):
             request.target_names,
             include_descendants=request.include_descendants,
             follow_embeds=request.follow_embeds,
+            include_attached_reads=False,
         )
 
     def freeze_current(self, request: FindSearchRequest) -> FrozenFindCurrentSource:

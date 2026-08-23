@@ -26,11 +26,14 @@ mem copy [CONTEXT:]UID... [--from SOURCE] [--into TARGET | --to TARGET]
 mem move [CONTEXT:]UID... [--from SOURCE] [--into TARGET | --to TARGET]
 ```
 
-A bare UID or prefix is resolved against one strict snapshot of every ordinary
-local Context and must have exactly one direct owner. `CONTEXT:UID` chooses an
-explicit owner. `--from SOURCE` applies one owner to every unqualified selector
-and cannot be combined with a qualified selector. Source and Target relative
-locators share the current Context captured once at command start.
+A bare UID or prefix is resolved against the strict ordinary-local Source
+catalog and must have exactly one direct owner. A granted Copy Source is
+available only through an explicit public owner in `CONTEXT:UID` or
+`--from SOURCE`; Move recognizes that same explicit form only to report why
+external deletion is forbidden. `--from SOURCE` applies one owner to every
+unqualified selector and cannot be combined with a qualified selector. Source
+and Target relative locators share the current Context captured once at command
+start. An existing local Target is required for both operations.
 
 The positional list and repeatable `--memory/-m` form are equivalent ordered
 batch inputs but cannot be combined. Target defaults to the command-start
@@ -40,14 +43,17 @@ Source binding, and Target binding is validated before publication.
 
 In a TTY, bare Copy and Move open one full-screen setup shaped by the current
 Embed workbench rather than a compact endpoint form. The Source frame extends
-the shared direct-Memory selector to `MULTIPLE`; checked Memories are projected
-in explicit check order, and a valid exact-command edit replaces that order
-atomically. The Target frame composes the
-shared Context tree with Embed's direct-item placement projection, so exactly
-one movable `POSITION · n/total` line represents the current gap instead of a
-duplicated BEFORE/AFTER row for every item. Neither operation adds a normal
-policy frame: Copy has one fixed new-identity meaning, while Move follows live
-Embeds unless Break is explicitly typed into the exact command.
+the shared direct-Memory selector to `MULTIPLE`; Copy exposes effectively
+local and retained-Copy-authorized granted direct Memories while Move exposes
+only ordinary local owners. A granted TUI selection is projected with its
+public owner, so it never broadens the bare-UID lookup contract. Checked
+Memories are projected in explicit check order, and a
+valid exact-command edit replaces that order atomically. The Target frame
+composes the shared Context tree with Embed's direct-item placement projection,
+so exactly one movable `POSITION · n/total` line represents the current gap
+instead of a duplicated BEFORE/AFTER row for every item. Neither operation adds
+a normal policy frame: Copy has one fixed new-identity meaning, while Move
+follows live Embeds unless Break is explicitly typed into the exact command.
 
 The last frame is the same compact editable `COMMAND · RUNNABLE` control used
 by Embed. Edits are parsed and resolved completely before the Source checks,
@@ -85,6 +91,29 @@ the fixed `NEW_UIDS` invariant, and plan digest. It does not duplicate Memory
 content into searchable command metadata because the Context pre/post images
 already retain the exact values.
 
+## Granted Copy and retained ownership
+
+Copy may select an exact direct Memory from a READ-granted public Context. That
+use is a permanent value transfer, not a live relationship, so every granted
+contributor requires `READ + DERIVE + EXPORT + SAVE_ANALYSIS`. A batch spanning
+more than one ownership or provenance domain additionally requires `COMBINE`
+from every granted contributor. The permission set is intersected; one
+permissive Grant never waives a restriction on another Source.
+
+The frozen Source binding records the public and authority Context names,
+authority and grantee Profiles, attachment and resource identities, Grant UID
+and revision, Source Context/Memory UIDs, and reviewed content digest. Apply
+holds the registry and exact authority Source locks through the local Target
+compare-and-set. Revocation, permission drift, Source replacement, content
+drift, or Target drift therefore publishes no partial Memory or checkpoint.
+
+A successful Copy creates a fresh ordinary local UID. Its receipt and
+checkpoint retain the Source-to-output provenance mapping, while the new
+Memory remains independently editable and available after the Grant is later
+changed or revoked. Copy neither creates a live pointer nor claims branch or
+merge lineage; it copies selected values into an existing local Context and
+does not create a new Context.
+
 ## Move identity and live links
 
 Move preserves every selected Memory UID and content while changing its direct
@@ -113,18 +142,20 @@ already constructed internal requests; no current CLI, TUI, Python, agent, or
 MCP route chooses it by default. A normal Move that cannot write one known live
 Embed owner fails the complete Store batch before its first durable write.
 
-Immutable Memory snapshot References never change. Cross-Profile or concealed
-query-only links do not enter the local graph and are not inferred as writable
-transfer targets.
+Immutable Memory snapshot References never change. Cross-Profile, granted, or
+concealed query-only links do not enter Move's local graph and are not inferred
+as writable transfer targets.
 
 ## Atomicity, protection, and history
 
-Copy binds every selected Source and the Target through publication. Move binds
-the complete scanned local graph so a new or changed inbound Embed cannot race
-the reviewed link policy. The Store locks affected Contexts in deterministic
-name order, validates all record digests and write-protection rules before the
-first write, then publishes one checkpoint per affected Context with exception
-rollback.
+Copy binds every selected Source and the Target through publication. Local
+Sources use ordinary Store locks; granted Sources additionally retain the
+registry and exact authority record locks through local Target publication.
+Move binds the complete scanned local graph so a new or changed inbound Embed
+cannot race the reviewed link policy. The Store locks affected Contexts in
+deterministic name order, validates all record digests and write-protection
+rules before the first write, then publishes one checkpoint per affected
+Context with exception rollback.
 
 Every checkpoint in one operation carries the same generated operation UID,
 plan digest, complete affected-Context membership, UID mapping, placement, and
@@ -135,9 +166,14 @@ journaling remains the same deferred boundary as the Store's existing
 multi-Context command batch primitive; exception atomicity is implemented.
 
 Write protection remains authoritative at Store commit. Copy changes only the
-Target, while Move changes every Source owner, Target, and RETARGET link owner.
-Version 1 accepts ordinary local Sources and one ordinary local Target only;
-it does not infer Grant permissions for cross-Profile ownership transfer.
+local Target, while Move changes every Source owner, Target, and RETARGET link
+owner. Copy's granted Source is read-only and therefore does not require a
+cross-Store write transaction. Move remains ordinary-local: deleting an
+authority-owned Source would require explicit `DELETE` plus a durable
+cross-Profile transaction journal and recovery protocol, neither of which is
+inferred from `READ` or `EXPORT`. A detected granted Move fails with that
+specific boundary and directs the caller to Copy first, then Move the new local
+Memory.
 
 ## Callable and presentation boundaries
 
@@ -161,10 +197,13 @@ would make the first screen denser without adding a distinct review boundary.
 ## Deliberate limits
 
 - Copy and Move do not accept MemoryRef, snapshot Reference, query view, or
-  embedded Context rows as Source Memories.
+  embedded Context rows as Source Memories. Copy alone accepts exact direct
+  ordinary Memories reached through an authorized READ Grant.
 - Move does not implement same-Context reordering.
 - Version 1 has no recursive Context scope, content filter, stdin locator file,
-  cross-Profile transfer, or new-Target creation.
+  granted Move, granted Target, or new-Target creation. Granted Copy is a
+  read-only cross-Profile Source followed by one local Target write, not a
+  cross-Profile ownership move.
 - Copy does not retain a structured Source relation in the Memory model; its
   provenance is the operation checkpoint and UID mapping.
 - Move retargets only ordinary local live Memory Embeds. A later cross-Profile

@@ -9,6 +9,7 @@ from memcommit.api import (
     ContextReferenceResult,
     MemCommitClient,
     MemoryReferenceResult,
+    ReferenceAuthorityError,
     ReferenceConflictError,
     ReferenceContextError,
     ReferenceError,
@@ -126,6 +127,12 @@ _PUBLIC_ERRORS: tuple[tuple[type[ReferenceError], str, str, bool], ...] = (
         ReferenceContextError,
         "context_unavailable",
         "A requested Reference Context is unavailable.",
+        True,
+    ),
+    (
+        ReferenceAuthorityError,
+        "authority_denied",
+        "The active Profile does not authorize this Reference.",
         True,
     ),
     (

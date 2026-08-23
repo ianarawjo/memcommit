@@ -40,8 +40,10 @@ snapshot, not background synchronization.
 
 Snapshot retention is a disclosure boundary. A granted Source therefore needs
 an operation-owned permission decision before its content may be copied into a
-local Target. The first implementation keeps Reference local-only rather than
-inferring retention authority from READ visibility.
+local Target. Whole-Context Reference remains local-only, while an exact
+granted Memory Source is supported only through an explicit public owner and
+the complete retained-value permission set; READ visibility alone never
+implies retention authority.
 
 ## Context snapshot scope
 
@@ -65,6 +67,32 @@ content. Apply holds those bindings through the Target compare-and-set and
 checkpoint, publishing the complete package or no item. The Target may not be
 inside the recursive Source scope, avoiding a Context acting as both immutable
 Source and mutation Target in one command.
+
+## Nested composition contract
+
+Nesting is defined at two different units. A direct Memory Reference or Memory
+Embed is a relationship record, not a second directly owned Memory. Reference
+and Embed therefore both reject a `MemoryRef` as the Source of another Memory
+relationship before Target publication. Following the pointer implicitly would
+flatten away the intermediate relationship UID, its live-versus-snapshot time
+contract, and its Source provenance. A caller that wants to retain that
+relationship as an item can instead Reference or Embed its containing Context.
+
+Context composition preserves the intermediate topology. Referencing a Context
+that contains a Memory or Context snapshot retains the nested typed record,
+snapshot bytes, digest, and Source identities without consulting those original
+Sources later. Embedding a Context that already embeds another Context retains
+both live edges; a later load resolves each edge in order, so changes in the
+leaf remain visible without pretending that the outer Context directly owns
+the leaf. Recursive Context Reference may freeze a multi-hop local Embed graph,
+including an indirect cycle, but records each canonical Context once and
+hydrates the retained package without live Store access.
+
+This contract does not introduce an arbitrary nesting-depth or serialized-byte
+ceiling. Those resource limits require separately chosen public bounds; the
+current invariant is semantic and atomic: typed topology is preserved, cycles
+terminate through identity tracking, and a failed direct pointer re-wrap writes
+neither a Target item nor a checkpoint.
 
 ## Live Memory Embed contract
 
@@ -98,14 +126,15 @@ The single `:` is reserved because it has always been invalid in ordinary
 Context names; `#` already has a separate view-handle role elsewhere, and `::`
 would add punctuation without adding an ambiguity boundary.
 
-A bare public UID/prefix scans one strict snapshot of every ordinary local
+A bare UID/prefix scans one strict snapshot of every ordinary local
 Context's direct frame. There is deliberately no current-Context preference:
 exactly one directly owned ordinary Memory must match across the complete
 catalog. Zero matches fail as a Memory lookup; multiple matches fail before
 publication and print every canonical `CONTEXT:FULL_UID` candidate. MemoryRef,
 Context snapshot, embedded-Context traversal, Grant content, and query-only
-content are not owners in this scan. A qualified locator searches only its
-resolved canonical owner, including relative spellings such as `../3:UID`.
+content are not owners in this scan. A qualified locator or Memory `--from`
+owner searches only its resolved canonical local or authorized public owner,
+including relative local spellings such as `../3:UID`.
 
 Because Embed and Reference also accept a Context in the same operand slot,
 the storage-independent bare-Memory classification starts at the public
@@ -137,6 +166,14 @@ use distinct `memory_snapshot_ref` and `context_snapshot_ref` discriminators.
 Existing live records may be shown as Memory or Context Embeds at public
 surfaces without rewriting historical bytes.
 
+Restoration receipts inspect persisted relationship records after the mutation
+without reopening an external authority Store. A `granted_memory_ref` whose
+content was deliberately not reauthorized is therefore reported as a
+`GRANT · READ ONLY · OPAQUE` live relationship, never as `DANGLING`; only an
+actual failed resolution may make an ordinary local live pointer dangling.
+Undo and Redo keep their compact relationship counts while Revert exposes this
+typed state without printing Grant metadata or Source content.
+
 The existing Context Embed application contract remains valid. Memory Embed
 reuses its placement and exact-Target publication mechanics but owns a
 different Source binding and request type. Reference receives its own typed
@@ -165,16 +202,24 @@ content/digest for Reference or the exact resolved Source binding for live
 Embed in its evidence identity. A later cache hit must mean the same visible
 evidence even after Source state changes.
 
-Compare deliberately admits all readable content-bearing forms through one
-typed projection. It sends their unmodified content as ordinary peer claims,
-keeps placement, source form, Source Memory, owner, and live-versus-snapshot
-freshness as host-only provenance, and shows that provenance only in its exact
-ledger. A Reference remains bound to retained content; a live Embed is
-revalidated against its external owner and a same-content retarget is still a
-different evidence identity. Compare Summary reuses the same projection.
-Query-only rows fail explicitly because their hidden content is not ordinary
-readable Memory input. None of this grants Compare or a downstream mutation
-operation write-through authority over the Source.
+Compare deliberately admits owned content, retained References, local live
+Memory Embeds, and Context-level readable forms through one typed projection.
+It sends their unmodified content as ordinary peer claims, keeps placement,
+source form, Source Memory, owner, and live-versus-snapshot freshness as
+host-only provenance, and shows that provenance only in its exact ledger. A
+Reference remains bound to retained content; a local live Embed is revalidated
+against its external owner and a same-content retarget is still a different
+evidence identity. Compare Summary reuses the same projection.
+
+A granted live Memory or Context Embed inside a local Context is intentionally
+excluded from that semantic projection for now. `READ + EMBED` permits
+ordinary live inspection but does not authorize provider disclosure or derived
+work, and the local wrapper cannot erase the embedded `GrantedMemorySource` or
+`GrantedContextLink`. Compare, Meld, Search, Update, Summarize, and Sever
+therefore fail before provider connection until their operation contracts can
+propagate and authorize that contributor explicitly. Query-only rows fail for
+the corresponding hidden-content reason. None of this grants Compare or a
+downstream mutation operation write-through authority over the Source.
 
 ## Callable adapters
 
@@ -184,14 +229,21 @@ application/runtime graph. The agent registry exposes tagged
 `memory`/`context` Reference and Embed tools; MCP is a mechanical projection of
 those frozen schemas. These routes return typed receipts rather than parsing
 CLI output. The no-argument Reference TUI explicitly chooses Context or
-Memory. Context mode composes the common Context tree, direct/recursive scope,
-Target tree, and exact command review; Memory mode reuses the common direct
-Memory selector. Both return a typed frozen plan, and Apply remains in the same
-runtime used by explicit CLI and callable adapters.
+Memory. Context mode composes the common local Context tree,
+direct/recursive scope, Target tree, and exact command review; Memory mode
+reuses the common direct-Memory selector and admits exact public Sources only
+when their Grant authorizes export and retention. Both return a typed frozen
+plan, and Apply remains in the same runtime used by explicit CLI and callable
+adapters.
 The no-argument Embed TUI explicitly chooses Context or Memory and prepares
 the corresponding frozen plan. Its Memory mode reuses the same direct-Memory
-selector as Reference and Edit, then composes the shared placement/exact-review
-components; it does not own a second mutation path.
+selector as Reference and Edit, including `READ + EMBED` public rows, then
+composes the shared placement/exact-review components; it does not own a second
+mutation path.
+An explicitly rooted `MemCommitClient` additionally disables live Grant
+resolution on its Store instance: Show can report the opaque relationship but
+cannot inherit and dereference the host Profile's active Grants. Active-Profile
+clients retain the normal reauthorizing read behavior.
 
 ## Migration and non-goals
 
@@ -201,5 +253,12 @@ components; it does not own a second mutation path.
 - Do not add write-through mutation to either Embed form.
 - Do not make arbitrary documents or Skills importable as a side effect of
   this change.
-- Do not broaden Reference beyond local ordinary Sources until retention
-  authority for granted content is separately specified and tested.
+- Do not infer a granted Memory owner from a bare UID or broaden Reference to a
+  whole granted Context; granted retention remains exact-Memory and
+  explicit-owner only.
+
+The focused executable contract lives in
+`tests/test_nested_reference_embed_contract.py`. It covers live and snapshot
+Memory-pointer re-wrap rejection, nested Context snapshot identity retention,
+two-hop live Context Embed, recursive freezing of a two-hop graph, and finite
+freezing of an indirect Embed cycle.

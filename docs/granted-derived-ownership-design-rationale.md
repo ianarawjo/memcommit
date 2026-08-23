@@ -50,6 +50,61 @@ of parties does not change the rule: every source must consent to derivation
 and combination; every exporting source must consent to export; and the one
 written target must consent to receipt and concrete mutation effects.
 
+## Retained values and live relationships
+
+Direct Copy and immutable Memory Reference are retained value transfers. An
+exact granted Memory used by either operation requires the complete
+`READ + DERIVE + EXPORT + SAVE_ANALYSIS` set; a Copy batch spanning ownership or
+provenance domains also requires `COMBINE` from every granted contributor.
+Apply freezes the exact Grant and authority Memory binding and holds its locks
+through the local Target commit. A successful Copy becomes a fresh editable
+local Memory, while a successful Reference remains an immutable local
+snapshot. Both retain their creation-time authority provenance and remain
+usable after later revocation because permanent retention was explicitly
+authorized.
+
+Context or Memory Embed is different. It requires `READ + EMBED`, stores no
+authority content, and reauthorizes the exact Grant and Source binding on every
+recursive load. Revocation therefore closes the live projection while leaving
+the opaque relationship available for explicit repair or removal. `EMBED`
+never implies derivation, export, or retention: a later Copy or Reference must
+return to the underlying granted Source and independently satisfy its complete
+retained-value permission contract.
+
+Placing that live edge in a local Context does not make the local Context its
+authority owner. Until a semantic operation can propagate each embedded
+`GrantedMemorySource` or `GrantedContextLink` into its complete contributor set
+and authorize the operation's provider disclosure, derivation, combination,
+and retention, the shared semantic-disclosure preflight rejects the edge
+before provider connection. Compare/Meld projection, Search candidate
+collection, Update input collection, recursive Summarize, and recursive Sever
+use this boundary. Ordinary recursive read, List, and Show remain valid under
+`READ + EMBED`; the fail-closed rule applies specifically when content would
+cross into semantic/provider work through a misleadingly local wrapper.
+Even a currently observed `DERIVE`/`COMBINE` tuple does not waive this guard:
+without the exact contributor binding in the request and retained result, the
+operation cannot prove which Grant authorized that use or revalidate it later.
+An explicitly selected granted root remains available to an operation adapter
+that does freeze and authorize its `ContextAccess`.
+Provider-facing Search, ordinary Query, and Summarize also load local roots
+without the catalog's process-local attached-READ projection. That browsing
+projection has no durable Grant marker inside its child Context, so admitting
+it would bypass the same contributor check; the granted public name must be
+selected as an explicit catalog root instead.
+
+Store-root selection is also separate from Grant-resolution authority. A
+public client constructed with an explicit filesystem root keeps persisted
+granted Memory and Context links opaque and never consults the host process's
+active Profile registry. It can inspect the relationship metadata, but only an
+active-Profile client may dereference the live authority content.
+
+Granted Move remains outside this model. Moving authority-owned material would
+delete from an authority Store and write another Store, requiring explicit
+`DELETE` and a durable cross-Profile transaction journal. The supported path is
+an authorized retained Copy followed by an ordinary local Move. Likewise, a
+grantee cannot re-Grant a live view it does not own; it must first create an
+authorized local value and then Grant that newly owned resource.
+
 ## Ownership and atomicity
 
 Version 1 stores an exact Compare snapshot, analysis, and both frozen grant
@@ -95,8 +150,9 @@ shows the same details for every attached authority view, including blocked
 capabilities on query-only or read-only grants.
 
 These lines are display metadata, not Memory content. `mem ls --copy` keeps its
-canonical content-only clipboard representation, while a granted copy remains
-bound to the existing redacted receipt and live grant revalidation path.
+canonical content-only clipboard representation; the separate `mem copy`
+operation freezes and revalidates its Grant provenance at publication, then
+produces an independently retained local value.
 
 ## Rejected alternatives and limits
 

@@ -88,7 +88,11 @@ def _load_frame(
         ),
         sorted(store.list_context_names(), key=str.casefold),
     )
-    load = store.load if follow_embeds else store.load_direct
+    # A local catalog row may project attached READ grants as marker-free child
+    # Contexts for browsing. Summary cannot carry those contributors into its
+    # authority token, so provider-facing recursive loads omit that implicit
+    # edge; an explicitly selected granted public name remains loadable here.
+    load = store.load_without_attached_reads if follow_embeds else store.load_direct
     contexts = tuple(load(name) for name in names)
     context_identities: list[tuple[str, str]] = []
     visited_contexts: set[str] = set()

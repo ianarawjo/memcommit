@@ -11,6 +11,7 @@ from memcommit.comparison import ComparisonError, ComparisonFrame, ComparisonInp
 from memcommit.context import (
     Context,
     GrantedContextLink,
+    GrantedMemorySource,
     Memory,
     MemoryRef,
     QueryContextRef,
@@ -52,6 +53,42 @@ def test_live_memory_embed_content_is_ordinary_comparison_evidence() -> None:
     assert evidence.source.owner_context_name == owner.name
     assert evidence.source.source_memory_uid == source.uid
     assert evidence.source.placement_path == (embed.uid,)
+
+
+def test_granted_live_memory_embed_is_not_local_semantic_evidence() -> None:
+    owner = Context(uid=_uid(), name="public/owner")
+    source = Memory(uid=_uid(), content="Granted live claim.")
+    owner.add(source)
+    containing = Context(uid=_uid(), name="containing")
+    containing.add(
+        MemoryRef(
+            uid=_uid(),
+            target_context_uid=owner.uid,
+            target_context_name=owner.name,
+            target_memory_uid=source.uid,
+            target=source,
+            granted_source=GrantedMemorySource(
+                context_uid=owner.uid,
+                public_name=owner.name,
+                authority_context_name="authority/owner",
+                authority_profile_uid=_uid(),
+                grantee_profile_uid=_uid(),
+                attachment_context_uid=_uid(),
+                attachment_context_name="workspace",
+                grant_uid=_uid(),
+                grant_revision_at_creation=1,
+                resource_uid=owner.uid,
+                resource_name="authority/owner",
+                memory_uid=source.uid,
+            ),
+        )
+    )
+
+    with pytest.raises(
+        ComparisonError,
+        match="EMBED authorizes live reading, not provider disclosure",
+    ):
+        ComparisonInput.from_contexts(containing, _peer())
 
 
 def test_memory_snapshot_reference_uses_retained_content_without_live_source() -> None:
@@ -165,6 +202,32 @@ def test_context_embed_content_is_not_rewritten_with_a_name_prefix() -> None:
     assert evidence.source is not None
     assert evidence.source.source_form == "CONTEXT_GRAPH"
     assert evidence.source.owner_context_name == "child"
+
+
+def test_granted_live_context_embed_is_not_local_semantic_evidence() -> None:
+    granted = Context(uid=_uid(), name="public/shared")
+    granted.add(Memory(uid=_uid(), content="Granted live claim."))
+    granted._granted_link = GrantedContextLink(
+        context_uid=granted.uid,
+        public_name=granted.name,
+        authority_context_name="authority/shared",
+        authority_profile_uid=_uid(),
+        grantee_profile_uid=_uid(),
+        attachment_context_uid=_uid(),
+        attachment_context_name="workspace",
+        grant_uid=_uid(),
+        grant_revision_at_creation=1,
+        resource_uid=granted.uid,
+        resource_name="authority/shared",
+    )
+    containing = Context(uid=_uid(), name="containing")
+    containing.add(granted)
+
+    with pytest.raises(
+        ComparisonError,
+        match="granted Context Embed.*EMBED authorizes live reading",
+    ):
+        ComparisonInput.from_contexts(containing, _peer())
 
 
 def test_granted_root_keeps_grant_provenance_outside_the_claim_text() -> None:

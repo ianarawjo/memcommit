@@ -32,7 +32,14 @@ from memcommit.commands.find_search_workbench import (
     FindSearchRequest,
     FindSearchResponse,
 )
-from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.context import (
+    Context,
+    GrantedContextLink,
+    GrantedMemorySource,
+    Memory,
+    MemoryRef,
+    QueryContextRef,
+)
 from memcommit.find_turn_dialogue import FindTurnAction
 from memcommit.search import (
     FindError,
@@ -499,6 +506,84 @@ def test_memory_refs_search_target_content_and_dedupe_logical_target():
     assert candidates[0].item is first_ref
     assert candidates[0].search_text == "latest referenced fact"
     assert candidates[0].context_names == ("parent", "source")
+
+
+def test_search_rejects_granted_live_embed_before_provider_construction():
+    authority = Context(uid=str(uuid.uuid4()), name="public/advisor")
+    memory = Memory(uid=str(uuid.uuid4()), content="Granted search secret.")
+    authority.add(memory)
+    containing = Context(uid=str(uuid.uuid4()), name="workspace")
+    containing.add(
+        MemoryRef(
+            uid=str(uuid.uuid4()),
+            target_context_uid=authority.uid,
+            target_context_name=authority.name,
+            target_memory_uid=memory.uid,
+            target=memory,
+            granted_source=GrantedMemorySource(
+                context_uid=authority.uid,
+                public_name=authority.name,
+                authority_context_name="authority/advisor",
+                authority_profile_uid=str(uuid.uuid4()),
+                grantee_profile_uid=str(uuid.uuid4()),
+                attachment_context_uid=containing.uid,
+                attachment_context_name=containing.name,
+                grant_uid=str(uuid.uuid4()),
+                grant_revision_at_creation=1,
+                resource_uid=authority.uid,
+                resource_name="authority/advisor",
+                memory_uid=memory.uid,
+            ),
+        )
+    )
+    provider_connections = 0
+
+    def provider_factory():
+        nonlocal provider_connections
+        provider_connections += 1
+        return KeywordProvider()
+
+    with pytest.raises(
+        FindError,
+        match="EMBED authorizes live reading, not provider disclosure",
+    ):
+        ops.find(containing, "secret", provider_factory)
+
+    assert provider_connections == 0
+
+
+def test_search_rejects_nested_granted_context_before_provider_construction():
+    granted = Context(uid=str(uuid.uuid4()), name="public/advisor")
+    granted.add(Memory(uid=str(uuid.uuid4()), content="Granted context secret."))
+    containing = Context(uid=str(uuid.uuid4()), name="workspace")
+    granted._granted_link = GrantedContextLink(
+        context_uid=granted.uid,
+        public_name=granted.name,
+        authority_context_name="authority/advisor",
+        authority_profile_uid=str(uuid.uuid4()),
+        grantee_profile_uid=str(uuid.uuid4()),
+        attachment_context_uid=containing.uid,
+        attachment_context_name=containing.name,
+        grant_uid=str(uuid.uuid4()),
+        grant_revision_at_creation=1,
+        resource_uid=granted.uid,
+        resource_name="authority/advisor",
+    )
+    containing.add(granted)
+    provider_connections = 0
+
+    def provider_factory():
+        nonlocal provider_connections
+        provider_connections += 1
+        return KeywordProvider()
+
+    with pytest.raises(
+        FindError,
+        match="granted Context Embed.*not provider disclosure",
+    ):
+        ops.find(containing, "secret", provider_factory)
+
+    assert provider_connections == 0
 
 
 def test_query_context_contributes_name_only_and_never_loads_source(

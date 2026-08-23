@@ -11,6 +11,7 @@ from memcommit.authority.access import (
     authorized_context_operation,
     grant_checkpoint_args,
     granted_context_link,
+    granted_memory_source,
     resolve_context_access,
 )
 from memcommit.context import AutoCheckpoint, Context, Memory, MemoryRef
@@ -42,9 +43,10 @@ class _LocalEmbedToken:
 
 @dataclass(frozen=True)
 class _LocalMemoryEmbedToken:
-    """Bind a local live-Memory plan to one captured runtime."""
+    """Bind a live-Memory plan to one captured runtime and Source authority."""
 
     owner: object
+    source_access: ContextAccess
 
 
 def _placement_for_context(
@@ -84,10 +86,7 @@ def _placement_selectors(
 
 def _gap_description(placement: EmbedPlacement) -> str:
     if placement.previous_uid is not None and placement.next_uid is not None:
-        return (
-            f"between [{placement.previous_uid[:8]}] "
-            f"and [{placement.next_uid[:8]}]"
-        )
+        return f"between [{placement.previous_uid[:8]}] and [{placement.next_uid[:8]}]"
     if placement.next_uid is not None:
         return f"before [{placement.next_uid[:8]}] at the start"
     if placement.previous_uid is not None:
@@ -98,15 +97,33 @@ def _gap_description(placement: EmbedPlacement) -> str:
 class MemoryStoreEmbedPort(EmbedPort):
     """Freeze and commit local or granted Child into one owned local target."""
 
-    def __init__(self, store: MemoryStore, *, current_name: str | None):
+    def __init__(
+        self,
+        store: MemoryStore,
+        *,
+        current_name: str | None,
+        allow_granted_sources: bool = False,
+    ):
+        if type(allow_granted_sources) is not bool:
+            raise TypeError("allow_granted_sources must be a boolean.")
         self._store = store
         # Relative Child and Into locators share one command-start snapshot.
         self._current_name = current_name
+        self._allow_granted_sources = allow_granted_sources
         self._owner = object()
 
     @classmethod
-    def capture(cls, store: MemoryStore) -> "MemoryStoreEmbedPort":
-        return cls(store, current_name=store.current_context_name())
+    def capture(
+        cls,
+        store: MemoryStore,
+        *,
+        allow_granted_sources: bool = False,
+    ) -> "MemoryStoreEmbedPort":
+        return cls(
+            store,
+            current_name=store.current_context_name(),
+            allow_granted_sources=allow_granted_sources,
+        )
 
     @property
     def local_context_names(self) -> tuple[str, ...]:
@@ -122,15 +139,48 @@ class MemoryStoreEmbedPort(EmbedPort):
     def current_context_name(self) -> str | None:
         return self._current_name
 
+    @property
+    def allows_granted_sources(self) -> bool:
+        """Whether this runtime may consult active Profile Grant routes."""
+
+        return self._allow_granted_sources
+
     def inspect_local_context(self, name: str) -> Context:
         """Load one local direct-order preview without changing it."""
 
         return self._store.load_direct(name)
 
+    def inspect_memory_source(self, name: str) -> Context:
+        """Load one direct Memory Source under the TUI's READ+EMBED role."""
+
+        access = self._source_access(name)
+        if access.is_granted:
+            # A selectable Grant row must not make authority bytes browseable
+            # under EMBED alone. Revalidate both atoms at every lazy preview.
+            with authorized_context_operation(((access, ("READ", "EMBED")),)):
+                source = access.store.load_direct(access.context_name)
+        else:
+            source = access.store.load_direct(access.context_name)
+        source.name = access.display_name
+        return source
+
     def _canonical_local_name(self, locator: str) -> str:
         return resolve_context_locator(locator, current=self._current_name)
 
     def _source_access(self, locator: str) -> ContextAccess:
+        if not self._allow_granted_sources:
+            local_name = self._canonical_local_name(locator)
+            if not self._store.context_exists(local_name):
+                raise FileNotFoundError(
+                    f"Context '{local_name}' does not exist locally."
+                )
+            return ContextAccess(
+                store=self._store,
+                context_name=local_name,
+                display_name=local_name,
+                attachment_name=None,
+                permission="EMBED",
+            )
         return resolve_context_access(
             self._store,
             locator,
@@ -150,8 +200,7 @@ class MemoryStoreEmbedPort(EmbedPort):
             ) from error
         if not isinstance(item, Memory):
             raise TypeError(
-                f"{selector!r} is not a directly owned Memory in "
-                f"{source.name!r}."
+                f"{selector!r} is not a directly owned Memory in {source.name!r}."
             )
         return item
 
@@ -159,7 +208,15 @@ class MemoryStoreEmbedPort(EmbedPort):
     def _source_snapshot(access: ContextAccess) -> tuple[Context, Context]:
         """Return raw identity bytes and the public Context used for validation."""
 
-        raw = access.store.load_direct(access.context_name)
+        if access.is_granted:
+            # EMBED is a relationship capability, not an alternative content
+            # visibility grant. Validate READ before opening even a direct
+            # authority record, including against a corrupted registry that
+            # bypassed permission-dependency validation.
+            with authorized_context_operation(((access, ("READ", "EMBED")),)):
+                raw = access.store.load_direct(access.context_name)
+        else:
+            raw = access.store.load_direct(access.context_name)
         public = Context(uid=raw.uid, name=access.display_name)
         return raw, public
 
@@ -177,9 +234,7 @@ class MemoryStoreEmbedPort(EmbedPort):
         expected = EmbedPlacement(
             position=placement.position,
             previous_uid=(
-                ordered_uids[placement.position - 1]
-                if placement.position
-                else None
+                ordered_uids[placement.position - 1] if placement.position else None
             ),
             next_uid=(
                 ordered_uids[placement.position]
@@ -265,6 +320,7 @@ class MemoryStoreEmbedPort(EmbedPort):
         self,
         *,
         request: MemoryEmbedRequest,
+        source_access: ContextAccess,
         source: Context,
         memory: Memory,
         parent: Context,
@@ -274,9 +330,7 @@ class MemoryStoreEmbedPort(EmbedPort):
         expected = EmbedPlacement(
             position=placement.position,
             previous_uid=(
-                ordered_uids[placement.position - 1]
-                if placement.position
-                else None
+                ordered_uids[placement.position - 1] if placement.position else None
             ),
             next_uid=(
                 ordered_uids[placement.position]
@@ -301,7 +355,7 @@ class MemoryStoreEmbedPort(EmbedPort):
             )
         return FrozenMemoryEmbedPlan(
             request=request,
-            source_name=source.name,
+            source_name=source_access.display_name,
             source_uid=source.uid,
             source_digest=context_record_digest(source),
             memory_uid=memory.uid,
@@ -314,7 +368,7 @@ class MemoryStoreEmbedPort(EmbedPort):
             into_digest=context_record_digest(parent),
             placement=placement,
             item_count=len(ordered_uids),
-            token=_LocalMemoryEmbedToken(self._owner),
+            token=_LocalMemoryEmbedToken(self._owner, source_access),
         )
 
     def freeze_memory(
@@ -322,16 +376,24 @@ class MemoryStoreEmbedPort(EmbedPort):
         request: MemoryEmbedRequest,
     ) -> FrozenMemoryEmbedPlan:
         request = validate_memory_embed_request(request)
-        source_name = self._canonical_local_name(request.source_locator)
+        source_access = self._source_access(request.source_locator)
         into_name = self._canonical_local_name(request.into_locator)
-        if source_name == into_name:
+        if not self._store.context_exists(into_name):
+            raise FileNotFoundError(
+                f"Embed target Context '{into_name}' does not exist locally."
+            )
+        if not source_access.is_granted and source_access.context_name == into_name:
             raise ValueError(
                 "Memory Embed Source and Target must be distinct Contexts."
             )
-        for name in (source_name, into_name):
-            if not self._store.context_exists(name):
-                raise FileNotFoundError(f"Context '{name}' does not exist locally.")
-        source = self._store.load_direct(source_name)
+        if source_access.is_granted:
+            # Freeze must not open authority bytes under an EMBED-only or stale
+            # view. Hold the exact Grant snapshot while capturing the raw
+            # direct Source record that the later Apply receipt will bind.
+            with authorized_context_operation(((source_access, ("READ", "EMBED")),)):
+                source = source_access.store.load_direct(source_access.context_name)
+        else:
+            source = source_access.store.load_direct(source_access.context_name)
         parent = self._store.load_for_update(into_name)
         memory = self._direct_memory(source, request.memory_selector)
         placement = _placement_for_context(
@@ -341,6 +403,7 @@ class MemoryStoreEmbedPort(EmbedPort):
         )
         return self._freeze_memory_loaded(
             request=request,
+            source_access=source_access,
             source=source,
             memory=memory,
             parent=parent,
@@ -364,17 +427,26 @@ class MemoryStoreEmbedPort(EmbedPort):
             before=before,
             after=after,
         )
-        source_name = self._canonical_local_name(source_name)
+        source_access = self._source_access(source_name)
         into_name = self._canonical_local_name(into_name)
-        if source_name == into_name:
+        if not self._store.context_exists(into_name):
+            raise FileNotFoundError(
+                f"Embed target Context '{into_name}' does not exist locally."
+            )
+        if not source_access.is_granted and source_access.context_name == into_name:
             raise ValueError(
                 "Memory Embed Source and Target must be distinct Contexts."
             )
-        source = self._store.load_direct(source_name)
+        if source_access.is_granted:
+            with authorized_context_operation(((source_access, ("READ", "EMBED")),)):
+                source = source_access.store.load_direct(source_access.context_name)
+        else:
+            source = source_access.store.load_direct(source_access.context_name)
         parent = self._store.load_for_update(into_name)
         memory = self._direct_memory(source, memory_selector)
         return self._freeze_memory_loaded(
             request=request,
+            source_access=source_access,
             source=source,
             memory=memory,
             parent=parent,
@@ -388,15 +460,7 @@ class MemoryStoreEmbedPort(EmbedPort):
             or token.owner is not self._owner
         ):
             raise ValueError("The frozen Memory Embed belongs to another runtime.")
-        source = self._store.load_direct(plan.source_name)
         parent = self._store.load_for_update(plan.into_name)
-        if (
-            source.uid != plan.source_uid
-            or context_record_digest(source) != plan.source_digest
-        ):
-            raise RuntimeError(
-                "The Source Context changed after the Memory Embed was reviewed."
-            )
         if (
             parent.uid != plan.into_uid
             or context_record_digest(parent) != plan.into_digest
@@ -410,49 +474,114 @@ class MemoryStoreEmbedPort(EmbedPort):
                 "The reviewed Memory Embed gap no longer resolves to the same "
                 "direct-item neighbors."
             )
-        memory = source.memories.get(plan.memory_uid)
-        if not isinstance(memory, Memory):
-            raise RuntimeError("The reviewed Source Memory is no longer available.")
-        if (
-            memory.content != plan.memory_content
-            or hashlib.sha256(memory.content.encode("utf-8")).hexdigest()
-            != plan.memory_content_sha256
-        ):
-            raise RuntimeError(
-                "The Source Memory changed after the Memory Embed was reviewed."
+        access = token.source_access
+
+        def add_link(source: Context, *, granted: bool) -> MemoryRef:
+            memory = source.memories.get(plan.memory_uid)
+            if not isinstance(memory, Memory):
+                raise RuntimeError("The reviewed Source Memory is no longer available.")
+            if (
+                memory.content != plan.memory_content
+                or hashlib.sha256(memory.content.encode("utf-8")).hexdigest()
+                != plan.memory_content_sha256
+            ):
+                raise RuntimeError(
+                    "The Source Memory changed after the Memory Embed was reviewed."
+                )
+            # The public Source name is the durable locator.  Build a detached
+            # direct-owner shell so the domain helper cannot persist the
+            # authority Store's private name into a grantee relationship.
+            public_source = Context(uid=source.uid, name=plan.source_name)
+            public_source.add(memory)
+            link = ops.embed_memory(
+                memory,
+                public_source,
+                parent,
+                position=plan.placement.position,
             )
-        link = ops.embed_memory(
-            memory,
-            source,
-            parent,
-            position=plan.placement.position,
-        )
-        checkpoint = self._store.save_context_with_sources(
-            parent,
-            AutoCheckpoint(
-                command="embed",
-                args={
-                    "kind": "memory",
-                    "embed_uid": link.uid,
-                    "source": plan.source_name,
-                    "source_uid": plan.source_uid,
-                    "memory_uid": plan.memory_uid,
-                    "into": plan.into_name,
-                    "position": plan.placement.position,
-                    "after_uid": plan.placement.previous_uid,
-                    "before_uid": plan.placement.next_uid,
-                },
-                description=(
-                    f"Embedded Memory [{plan.memory_uid[:8]}] from "
-                    f"'{plan.source_name}' as [{link.uid[:8]}] in "
-                    f"'{plan.into_name}' {_gap_description(plan.placement)}"
+            if granted:
+                # Reconstruct through the typed model so the Grant binding and
+                # Memory target identities are validated together.
+                bound = MemoryRef(
+                    uid=link.uid,
+                    target_context_uid=link.target_context_uid,
+                    target_context_name=link.target_context_name,
+                    target_memory_uid=link.target_memory_uid,
+                    target=memory,
+                    granted_source=granted_memory_source(
+                        access,
+                        context_uid=source.uid,
+                        memory_uid=memory.uid,
+                    ),
+                )
+                parent.memories[link.uid] = bound
+                return bound
+            return link
+
+        checkpoint_args = {
+            "kind": "memory",
+            "source": plan.source_name,
+            "source_uid": plan.source_uid,
+            "memory_uid": plan.memory_uid,
+            "into": plan.into_name,
+            "position": plan.placement.position,
+            "after_uid": plan.placement.previous_uid,
+            "before_uid": plan.placement.next_uid,
+            **grant_checkpoint_args(access),
+        }
+
+        if access.is_granted:
+            # Keep the Grant registry and exact authority Source locked until
+            # the local target CAS publishes the content-free relationship.
+            with authorized_context_operation(((access, ("READ", "EMBED")),)):
+                with access.store.locked_context_snapshot(
+                    access.context_name,
+                    expected_uid=plan.source_uid,
+                    expected_digest=plan.source_digest,
+                ) as source:
+                    link = add_link(source, granted=True)
+                    checkpoint_args["embed_uid"] = link.uid
+                    checkpoint = self._store.save(
+                        parent,
+                        AutoCheckpoint(
+                            command="embed",
+                            args=checkpoint_args,
+                            description=(
+                                f"Embedded Memory [{plan.memory_uid[:8]}] from "
+                                f"'{plan.source_name}' as [{link.uid[:8]}] in "
+                                f"'{plan.into_name}' "
+                                f"{_gap_description(plan.placement)}"
+                            ),
+                        ),
+                        expected_context_digest=plan.into_digest,
+                    )
+        else:
+            source = access.store.load_direct(access.context_name)
+            if (
+                source.uid != plan.source_uid
+                or context_record_digest(source) != plan.source_digest
+            ):
+                raise RuntimeError(
+                    "The Source Context changed after the Memory Embed was reviewed."
+                )
+            link = add_link(source, granted=False)
+            checkpoint_args["embed_uid"] = link.uid
+            checkpoint = self._store.save_context_with_sources(
+                parent,
+                AutoCheckpoint(
+                    command="embed",
+                    args=checkpoint_args,
+                    description=(
+                        f"Embedded Memory [{plan.memory_uid[:8]}] from "
+                        f"'{plan.source_name}' as [{link.uid[:8]}] in "
+                        f"'{plan.into_name}' {_gap_description(plan.placement)}"
+                    ),
                 ),
-            ),
-            expected_context_digest=plan.into_digest,
-            source_bindings=(
-                (plan.source_name, plan.source_uid, plan.source_digest),
-            ),
-        )
+                expected_context_digest=plan.into_digest,
+                source_bindings=(
+                    (access.context_name, plan.source_uid, plan.source_digest),
+                ),
+            )
         if checkpoint is None:
             raise RuntimeError("Memory Embed saved no checkpoint.")
         return MemoryEmbedResult(
@@ -506,7 +635,7 @@ class MemoryStoreEmbedPort(EmbedPort):
         if access.is_granted:
             # The registry lock closes revoke-after-check, while the authority
             # source lock keeps the reviewed identity exact through local CAS.
-            with authorized_context_operation(((access, ("EMBED",)),)):
+            with authorized_context_operation(((access, ("READ", "EMBED")),)):
                 with access.store.locked_context_snapshot(
                     access.context_name,
                     expected_uid=plan.child_uid,
@@ -518,7 +647,15 @@ class MemoryStoreEmbedPort(EmbedPort):
                         context_uid=source_record.uid,
                     )
                     ops.embed(child, parent, position=plan.placement.position)
-                    checkpoint = self._store.save(parent, checkpoint_record)
+                    checkpoint = self._store.save(
+                        parent,
+                        checkpoint_record,
+                        # The reviewed digest is the durable CAS contract. Do
+                        # not rely on the loaded Context's private helper state:
+                        # two aliases can freeze the same authority identity
+                        # against one Target revision and race at publication.
+                        expected_context_digest=plan.into_digest,
+                    )
         else:
             child = access.store.load_direct(access.context_name)
             if (
@@ -555,10 +692,14 @@ def execute_embed(
     request: EmbedRequest,
     *,
     store: MemoryStore,
+    allow_granted_sources: bool = False,
 ) -> EmbedResult:
     """Execute local Embed with no terminal or provider dependency."""
 
-    port = MemoryStoreEmbedPort.capture(store)
+    port = MemoryStoreEmbedPort.capture(
+        store,
+        allow_granted_sources=allow_granted_sources,
+    )
     return run_embed(request, port=port)
 
 
@@ -566,8 +707,12 @@ def execute_memory_embed(
     request: MemoryEmbedRequest,
     *,
     store: MemoryStore,
+    allow_granted_sources: bool = False,
 ) -> MemoryEmbedResult:
     """Execute one local live Memory Embed with no terminal dependency."""
 
-    port = MemoryStoreEmbedPort.capture(store)
+    port = MemoryStoreEmbedPort.capture(
+        store,
+        allow_granted_sources=allow_granted_sources,
+    )
     return run_memory_embed(request, port=port)

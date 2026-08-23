@@ -10,6 +10,17 @@ class ReferenceError(RuntimeError):
     """Raised when a snapshot Reference cannot be published exactly."""
 
 
+# A retained snapshot survives Grant revocation, so reading alone is not
+# sufficient authority. Keep the complete export-and-retain boundary explicit
+# at the operation contract instead of letting adapters choose weaker subsets.
+GRANTED_MEMORY_REFERENCE_PERMISSIONS = (
+    "READ",
+    "DERIVE",
+    "EXPORT",
+    "SAVE_ANALYSIS",
+)
+
+
 @dataclass(frozen=True)
 class ReferenceRequest:
     """One Source Memory and local Target independent of argv or terminal state."""
@@ -309,6 +320,7 @@ __all__ = [
     "FrozenContextReferencePlan",
     "FrozenMemoryReferencePlan",
     "FrozenReferencePlan",
+    "GRANTED_MEMORY_REFERENCE_PERMISSIONS",
     "MemoryReferenceRequest",
     "MemoryReferenceResult",
     "ReferenceError",

@@ -11,7 +11,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal
 
-from memcommit.context import Context, MemoryRef
+from memcommit.context import Context, GrantedMemorySource, MemoryRef
 from memcommit.provenance import ProvenanceError, TraceReport, build_trace
 from memcommit.store import MemoryStore
 
@@ -42,6 +42,7 @@ class MemoryReferenceState:
     position: int
     snapshot_content: str | None = None
     snapshot_content_sha256: str | None = None
+    grant_source: dict[str, object] | None = None
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -55,6 +56,7 @@ class MemoryReferenceState:
             "position": self.position,
             "snapshot_content": self.snapshot_content,
             "snapshot_content_sha256": self.snapshot_content_sha256,
+            "grant_source": self.grant_source,
         }
 
 
@@ -159,7 +161,11 @@ def _state_from_snapshot(
     if not isinstance(item, dict):
         return None
     item_type = item.get("type")
-    if item_type not in {"memory_ref", "memory_snapshot_ref"}:
+    if item_type not in {
+        "memory_ref",
+        "memory_snapshot_ref",
+        "granted_memory_ref",
+    }:
         return None
     item_uid = item.get("uid")
     target_context = item.get("target_context")
@@ -180,6 +186,17 @@ def _state_from_snapshot(
         not isinstance(content, str) or not isinstance(digest, str)
     ):
         raise ProvenanceError("Retained Memory snapshot reference is invalid.")
+    raw_grant_source = item.get("grant_source")
+    grant_source = None
+    if raw_grant_source is not None:
+        if not isinstance(raw_grant_source, dict):
+            raise ProvenanceError("Retained Grant provenance is invalid.")
+        try:
+            grant_source = GrantedMemorySource.from_dict(raw_grant_source).to_dict()
+        except (KeyError, TypeError, ValueError) as error:
+            raise ProvenanceError("Retained Grant provenance is invalid.") from error
+    if item_type == "granted_memory_ref" and grant_source is None:
+        raise ProvenanceError("Granted Memory Embed provenance is missing.")
     return MemoryReferenceState(
         uid=uid,
         mode="SNAPSHOT" if item_type == "memory_snapshot_ref" else "LIVE",
@@ -189,6 +206,7 @@ def _state_from_snapshot(
         position=position,
         snapshot_content=content,
         snapshot_content_sha256=digest,
+        grant_source=grant_source,
     )
 
 
@@ -203,7 +221,8 @@ def _reference_uids(snapshot: object) -> tuple[str, ...]:
         for uid, item in serialized.items()
         if isinstance(uid, str)
         and isinstance(item, dict)
-        and item.get("type") in {"memory_ref", "memory_snapshot_ref"}
+        and item.get("type")
+        in {"memory_ref", "memory_snapshot_ref", "granted_memory_ref"}
     )
 
 
@@ -226,12 +245,14 @@ def _event_kind(
         before.target_context_uid,
         before.target_memory_uid,
         before.snapshot_content_sha256,
+        before.grant_source,
     )
     after_target = (
         after.mode,
         after.target_context_uid,
         after.target_memory_uid,
         after.snapshot_content_sha256,
+        after.grant_source,
     )
     if before_target != after_target:
         return "RETARGETED"

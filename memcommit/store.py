@@ -23,7 +23,7 @@ from functools import wraps
 from pathlib import Path
 from typing import Any, Callable, Iterable, Iterator, Literal, Optional
 
-from memcommit.context import AutoCheckpoint, Checkpoint, Context, Memory
+from memcommit.context import AutoCheckpoint, Checkpoint, Context, Memory, MemoryRef
 from memcommit.context_naming import (
     RESERVED_CONTEXT_SEGMENTS,
     validate_portable_context_name,
@@ -485,6 +485,12 @@ def _rewrite_context_pointers(
             # Snapshot provenance is historical evidence, like a Memory
             # snapshot Source name, and is deliberately not rename-rewritten.
             selector_names[target_name] = "context_ref"
+        elif kind == "granted_memory_ref":
+            # A granted public locator is part of the external authority
+            # binding. Local namespace rename must preserve it byte-for-byte.
+            reference = MemoryRef.from_dict(item)
+            if not reference.is_granted or not reference.is_live:
+                raise ValueError("Granted Memory reference binding is invalid.")
         elif kind in {"memory_ref", "memory_snapshot_ref"}:
             target = item.get("target_context")
             if not isinstance(target, dict):
@@ -493,7 +499,14 @@ def _rewrite_context_pointers(
             target_name = target.get("name")
             if not isinstance(target_uid, str) or not isinstance(target_name, str):
                 raise ValueError("Memory reference has an invalid target Context.")
-            mapping = moved_names_by_uid.get(target_uid)
+            # A retained granted snapshot keeps the public Source alias as
+            # historical provenance; it is not a local namespace pointer.
+            reference = MemoryRef.from_dict(item)
+            mapping = (
+                None
+                if reference.is_granted
+                else moved_names_by_uid.get(target_uid)
+            )
             if mapping is not None:
                 old_name, new_name = mapping
                 if target_name == old_name:
@@ -657,6 +670,12 @@ def _rewrite_branched_context_pointers(
             )
             if target is not None:
                 target_context["uid"], target_context["name"] = target
+        elif kind == "granted_memory_ref":
+            reference = MemoryRef.from_dict(item)
+            if not reference.is_granted or not reference.is_live:
+                raise ValueError("Granted Memory reference binding is invalid.")
+            # Branch copies the external live binding unchanged. It must not
+            # be retargeted to a new local subtree identity.
         elif kind == "memory_snapshot_ref":
             target_context = item.get("target_context")
             if not isinstance(target_context, dict):
@@ -665,10 +684,14 @@ def _rewrite_branched_context_pointers(
                 item.get("content_sha256"), str
             ):
                 raise ValueError("Memory snapshot has invalid retained content.")
-            if hashlib.sha256(
-                item["content"].encode("utf-8")
-            ).hexdigest() != item["content_sha256"]:
+            if (
+                hashlib.sha256(item["content"].encode("utf-8")).hexdigest()
+                != item["content_sha256"]
+            ):
                 raise ValueError("Memory snapshot content digest does not match.")
+            # Parsing also validates optional retained Grant provenance. It is
+            # historical evidence and is deliberately not subtree-retargeted.
+            MemoryRef.from_dict(item)
         elif kind == "query_context_ref":
             name = item.get("name")
             if not isinstance(name, str):
@@ -980,6 +1003,7 @@ class MemoryStore:
         *,
         create: bool = True,
         root: Path | None = None,
+        resolve_granted_links: bool = True,
     ):
         """
         Open the store.
@@ -989,13 +1013,21 @@ class MemoryStore:
         checking absent state does not create ~/.mem or state.json.  ``root``
         is an explicit, already-authorized store boundary used by profile
         grants; omitting it resolves and freezes the active Profile now.
+        ``resolve_granted_links=False`` keeps live granted relationships opaque
+        and prevents this Store from consulting process-global Profile state.
         """
+        if type(resolve_granted_links) is not bool:
+            raise TypeError("resolve_granted_links must be a boolean.")
         # Explicit roots are already selected by the caller and must not touch
         # HOME Profile state. Profile-backed stores resolve exactly once here
         # so a later process-global Profile switch cannot retarget this object.
         self._store_dir = (
             Path(root).absolute() if root is not None else Path(STORE_DIR)
         )
+        # Store-root authority and Grant-resolution authority are independent.
+        # In particular, a public explicit-root client may inspect a persisted
+        # pointer but must not inherit the host process's active Profile Grants.
+        self._resolve_granted_links = resolve_granted_links
         if create:
             ensure_private_directory(self.store_dir, parents=True)
             ensure_private_directory(self.contexts_dir, parents=True)
@@ -3527,12 +3559,24 @@ class MemoryStore:
                 loading=_loading | {name},
             )
 
+        def granted_memory_loader(source):
+            # A granted Memory Embed is content-free on disk and must pass the
+            # same live Grant reauthorization boundary on every resolved load.
+            from memcommit.authority.access import load_granted_memory_source
+
+            return load_granted_memory_source(source, active_store=self)
+
         try:
             ctx = Context.from_dict(
                 data,
                 loader=loader,
                 memory_loader=self._load_direct_memory,
-                granted_loader=granted_loader,
+                granted_memory_loader=(
+                    granted_memory_loader if self._resolve_granted_links else None
+                ),
+                granted_loader=(
+                    granted_loader if self._resolve_granted_links else None
+                ),
             )
             # A loaded Context carries the exact logical version it was based
             # on. Every later ordinary save uses it for optimistic concurrency
@@ -3543,6 +3587,16 @@ class MemoryStore:
             raise ValueError(
                 f"Context file for '{name}' has an invalid memory structure: {e}"
             ) from e
+
+    def load_without_attached_reads(self, name: str) -> Context:
+        """Load recursive persisted edges without process-local READ projections.
+
+        A plain MemoryStore never synthesizes attachment projections, but this
+        explicit capability lets provider-facing adapters require the same
+        fail-closed interface from both ordinary and unified readable stores.
+        """
+
+        return self.load(name)
 
     def load_direct(self, name: str) -> Context:
         """

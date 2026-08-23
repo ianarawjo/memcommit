@@ -31,6 +31,10 @@ from memcommit.context_targeting.memory_focus import (
     MemoryFocusError,
     resolve_memory_focus,
 )
+from memcommit.semantic_disclosure import (
+    SemanticDisclosureError,
+    require_semantic_disclosure_authority,
+)
 from memcommit.store import context_record_digest
 from memcommit.update import ContextFingerprint, GrantedUpdateTarget
 
@@ -347,6 +351,14 @@ class MeldFrame:
     ) -> "MeldFrame":
         if not isinstance(ctx, Context):
             raise MeldError("Meld source must be a Context.")
+        try:
+            require_semantic_disclosure_authority(
+                (ctx,),
+                operation="Meld",
+                follow_contexts=owner_aware and include_descendants is True,
+            )
+        except SemanticDisclosureError as error:
+            raise MeldError(str(error)) from error
         contexts: list[Context] = []
         seen_contexts: set[str] = set()
 

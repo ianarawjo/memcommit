@@ -205,7 +205,13 @@ def copy_cmd(
 ) -> None:
     try:
         store = MemoryStore()
-        port = MemoryStoreMemoryTransferPort.capture(store)
+        # The CLI's default Store is the active Profile, so explicit public
+        # Source owners may resolve through that Profile's Grants. Bare UID
+        # lookup and every Target remain ordinary-local.
+        port = MemoryStoreMemoryTransferPort.capture(
+            store,
+            allow_granted_sources=True,
+        )
         frozen_plan = None
         bare = not any(
             (
@@ -344,7 +350,12 @@ def move_cmd(
                 "Pass only one of --retarget-links or --break-links."
             )
         store = MemoryStore()
-        port = MemoryStoreMemoryTransferPort.capture(store)
+        # Move still opts into Grant recognition so it can explain the
+        # ownership boundary instead of misreporting a public Source as absent.
+        port = MemoryStoreMemoryTransferPort.capture(
+            store,
+            allow_granted_sources=True,
+        )
         frozen_plan = None
         bare = not any(
             (

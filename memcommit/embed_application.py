@@ -76,7 +76,7 @@ ContextEmbedResult = EmbedResult
 
 @dataclass(frozen=True)
 class MemoryEmbedRequest:
-    """One live Source Memory link and exact local Target placement."""
+    """One local or granted live Source Memory and exact local Target placement."""
 
     memory_selector: str
     source_locator: str
@@ -129,7 +129,7 @@ class EmbedPort(Protocol):
 
 
 class MemoryEmbedPort(Protocol):
-    """Freeze and atomically apply one local live Memory relationship."""
+    """Freeze and atomically apply one authorized live Memory relationship."""
 
     def freeze_memory(self, request: MemoryEmbedRequest) -> FrozenMemoryEmbedPlan:
         """Resolve one direct Source Memory and exact Target gap."""

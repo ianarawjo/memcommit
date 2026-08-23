@@ -146,7 +146,20 @@ class MemCommitClient:
         except (OSError, ProfileConfigError, TypeError, ValueError) as error:
             raise_public(QueryConfigurationError, error)
 
-        self._store = MemoryStore(root=store_root, create=create)
+        # An explicit-root client owns a filesystem boundary, not the host
+        # process's active Profile authority. Keep persisted granted links
+        # inspectable but opaque instead of resolving them through global Grants.
+        resolve_granted_links = bool(
+            root is None
+            and registry is not None
+            and selected_profile is not None
+            and selected_profile.uid == registry.active.uid
+        )
+        self._store = MemoryStore(
+            root=store_root,
+            create=create,
+            resolve_granted_links=resolve_granted_links,
+        )
         self._store_root = self._store.store_dir.resolve()
         self._registry = registry
         self._profile = selected_profile

@@ -38,6 +38,7 @@ class SourceState(str, Enum):
     """Display-relevant availability state independent of authority."""
 
     READ_ONLY = "READ_ONLY"
+    OPAQUE = "OPAQUE"
     UNAVAILABLE = "UNAVAILABLE"
     DANGLING = "DANGLING"
     CYCLE = "CYCLE"

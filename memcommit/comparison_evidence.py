@@ -13,6 +13,10 @@ from typing import Literal
 import uuid
 
 from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.semantic_disclosure import (
+    SemanticDisclosureError,
+    require_semantic_disclosure_authority,
+)
 
 
 ComparisonSourceForm = Literal[
@@ -197,6 +201,10 @@ def project_comparison_context(root: Context) -> Context:
 
     if not isinstance(root, Context):
         raise ComparisonEvidenceError("Compare source must be a Context.")
+    try:
+        require_semantic_disclosure_authority((root,), operation="Compare")
+    except SemanticDisclosureError as error:
+        raise ComparisonEvidenceError(str(error)) from error
     projected = Context(uid=root.uid, name=root.name)
     seen_contexts: set[str] = set()
 

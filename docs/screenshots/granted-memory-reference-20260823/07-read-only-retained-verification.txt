@@ -1,0 +1,52 @@
+Referenced snapshot [f3bbd257] from 'shared/source' as [27f126bf] in 'workspace'.                                                                                                   
+CAPTURE PAUSE · press Enter for read-only retained verification                                                                                                                     
+                                                                                                                                                                                    
+CAPTURE VERIFICATION COMMAND · mem show 27f126bf --context workspace                                                                                                                
+Reference: 27f126bf-4514-4804-b376-4b45e04f363f                                                                                                                                     
+Context: workspace                                                                                                                                                                  
+State: READ ONLY                                                                                                                                                                    
+Source: shared/source [342793d0]                                                                                                                                                    
+Target Memory: f3bbd257-bb8e-4031-9998-2d5283496bf9                                                                                                                                 
+                                                                                                                                                                                    
+Retain this exact export-authorized version.                                                                                                                                        
+CAPTURE RETAINED VERIFIED · SOURCE shared/source · GRANT b7209f38 · AUTHORITY CONTEXT authority/source · READ ONLY SNAPSHOT                                                         
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    

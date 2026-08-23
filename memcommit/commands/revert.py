@@ -220,6 +220,7 @@ def _resolved_memory_ref_contents(
             if not isinstance(item, Mapping) or item.get("type") not in {
                 "memory_ref",
                 "memory_snapshot_ref",
+                "granted_memory_ref",
             }:
                 continue
             key = memory_ref_target_key(item)
@@ -228,6 +229,11 @@ def _resolved_memory_ref_contents(
             if item.get("type") == "memory_snapshot_ref":
                 content = item.get("content")
                 result[key] = content if isinstance(content, str) else None
+                continue
+            if item.get("type") == "granted_memory_ref":
+                # The raw checkpoint intentionally carries no Source bytes,
+                # and a local store lookup cannot authorize an external Grant.
+                result[key] = None
                 continue
             target_name, target_context_uid, target_memory_uid = key
             try:
