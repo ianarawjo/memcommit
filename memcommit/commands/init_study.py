@@ -11,6 +11,10 @@ from memcommit.command_attempts import current_command_attempt_uid
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
+from memcommit.infrastructure.providers.policy import (
+    STUDY_PROVIDER_POLICY_DIGEST,
+    STUDY_PROVIDER_POLICY_VERSION,
+)
 from memcommit.commands.study_name_dialog import choose_study_profile_name
 from memcommit.profile_config import (
     ProfileConfigError,
@@ -61,7 +65,12 @@ def cmd(
             if name is None:
                 typer.echo("Cancelled — no Study Profile was created.")
                 return
-        result = init_study_profile(baseline_profile, name=name)
+        result = init_study_profile(
+            baseline_profile,
+            name=name,
+            provider_policy_version=STUDY_PROVIDER_POLICY_VERSION,
+            provider_policy_digest=STUDY_PROVIDER_POLICY_DIGEST,
+        )
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
         typer.secho(
             f"Error: {display_escape_text(str(error))}",
@@ -127,6 +136,11 @@ def cmd(
     typer.echo("Participant Profile: " + display_escape_text(result.profile.name))
     typer.echo(
         "Granted-memory Profile: " + display_escape_text(result.authority_profile.name)
+    )
+    typer.echo(
+        "Provider config: "
+        f"{STUDY_PROVIDER_POLICY_VERSION} · locked · "
+        f"sha256 {STUDY_PROVIDER_POLICY_DIGEST}"
     )
     current = (
         display_escape_text(result.inspection.current_context)

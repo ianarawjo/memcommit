@@ -6,7 +6,8 @@ A git-like local memory store CLI.
 
 Semantic commands use Codex through the local ChatGPT login by default. Pin the
 subscription-backed Codex provider to GPT-5.6 Luna with low reasoning through
-the named option, then verify its strict structured-output path:
+the named option for the active ordinary Profile, then verify its strict
+structured-output path:
 
 ```zsh
 mem provider use codex_chatgpt --preset luna-low
@@ -15,9 +16,10 @@ mem provider probe
 ```
 
 The equivalent explicit spelling is
-`mem provider use codex_chatgpt --model gpt-5.6-luna --reasoning low`. Use bare
-`mem provider use codex_chatgpt` to restore Codex-managed model and reasoning
-selection.
+`mem provider use codex_chatgpt --model gpt-5.6-luna --reasoning low`. Add
+`--operation OPERATION` to configure one route while other operations keep the
+Profile default. `mem provider reset` removes the active Profile default;
+`--operation` removes only that operation route.
 
 Select an installed Ollama model for tool-less local execution:
 
@@ -47,6 +49,11 @@ Provider failure never silently falls back to another provider or makes a
 hidden repair completion. See
 [`docs/semantic-provider-design-rationale.md`](docs/semantic-provider-design-rationale.md)
 for privacy, query-only, provenance, and rollout boundaries.
+
+Provider routes are editable per ordinary Profile. Profiles created by
+`mem init-study` instead carry a versioned, digest-verified provider
+configuration and reject `mem provider use` or `reset`; switching back to an
+ordinary Profile restores editable routing.
 
 ## Semantic calibration campaigns
 

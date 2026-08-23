@@ -67,13 +67,12 @@ the exact model `gpt-5.6-luna` and Codex `model_reasoning_effort = "low"`.
 The equivalent `--model` and `--reasoning` options remain available for an
 explicit evaluation matrix.
 
-The preset is persisted as all three pieces—provider, model, and reasoning—so
-`status`, `probe`, and later provenance can distinguish it from Codex's managed
-selection. A bare `mem provider use codex_chatgpt` intentionally clears the
-Codex-specific model, reasoning, and preset values and restores the historical
-managed behavior. This reset is asymmetric with retained Ollama/OpenRouter
-model values because the bare Codex command was already the documented escape
-hatch back to the original behavior.
+The preset is expanded into provider, model, and reasoning in the active
+ordinary Profile's complete route. The receipt reports that expansion, while
+runtime behavior and later provenance depend only on the exact expanded axes.
+A bare `mem provider use codex_chatgpt` records Codex-managed model selection
+with explicit `none` reasoning. `mem provider reset` removes the Profile
+default and returns an ordinary Profile to the legacy machine fallback.
 
 ## Structured-output contract
 
@@ -104,18 +103,19 @@ selection have equal semantic quality across memcommit operations.
 
 ## Configuration and process snapshot
 
-`mem provider use` records an explicit global provider and optional model for
-operations that inherit the default; authored operation overrides remain
-unchanged. Bare `mem provider` shows the resolved default and every authored
-override without contact. `status` is local and provider-free. `probe` makes
-one synthetic strict-schema call against the default or an explicitly named
-operation policy and does not read a Context or save a semantic artifact.
+`mem provider use` records a complete default or operation route for the
+active ordinary Profile. Bare `mem provider` shows that Profile's editable
+routes, or the complete locked matrix for a Study Profile, without contact.
+`status` is local and provider-free. `probe` makes one synthetic strict-schema
+call against the active Profile default or an explicitly named operation and
+does not read a Context or save a semantic artifact.
 
-The provider factory reads configuration once when a command requests its
-provider. A Ground or other interactive process keeps that provider instance;
-it does not observe later edits to global config during the process. There is
-no automatic fallback. Codex remains the default when no provider is selected,
-preserving the earlier command behavior.
+The provider factory freezes the active Profile and route when a command
+requests its provider. A Ground or other interactive process keeps that
+provider instance; it does not observe later Profile switches or route edits.
+There is no automatic provider fallback. An ordinary Profile without its own
+route inherits the legacy machine default, preserving earlier installations;
+a Study Profile instead verifies and uses its versioned configuration pin.
 
 The timeout printed by `mem provider status` is also the transport timeout
 passed to every configured adapter, including the temporary Codex process.
@@ -128,8 +128,8 @@ and frozen frame counts when a provider call fails.
 
 During rollout the historical command connector name remains a compatibility
 seam because tests and downstream experiments patch it. Its implementation now
-performs provider selection. Query-only routing bypasses this seam and uses its
-persisted allowlisted provider instead.
+performs active-Profile provider selection. Query-only routing bypasses this
+seam and uses its persisted allowlisted provider instead.
 
 ## Local Ollama boundary
 
@@ -150,16 +150,16 @@ motivates the default but is not a general quality claim for every operation.
 
 ## Query-only boundary
 
-A persisted `QueryContextRef.provider` remains authoritative. Global semantic
-selection must never reroute a recorded `codex_chatgpt` source to Ollama or
-OpenRouter. Every supported query adapter authenticates or probes its service
-before the concealed source loader runs.
+A persisted `QueryContextRef.provider` remains authoritative. Active-Profile
+semantic selection must never reroute a recorded `codex_chatgpt` source to
+Ollama or OpenRouter. Every supported query adapter authenticates or probes its
+service before the concealed source loader runs.
 
 The newer authority-grant registry currently discards the provider named by
 the study bundle and its command path still uses the known Codex provider.
 Migrating that path requires a versioned grant-schema change that preserves the
 provider through validation and freshness binding. It is intentionally not
-reinterpreted from global config during the first provider rollout.
+reinterpreted from Profile configuration during this rollout.
 
 ## Rollout and evaluation
 

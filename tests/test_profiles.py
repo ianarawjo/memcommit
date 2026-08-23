@@ -22,6 +22,10 @@ from memcommit.cli import app
 from memcommit.commands.switch import _granted_picker_state, _granted_picker_views
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.eval.study_bundle import build_all_study_bundles
+from memcommit.infrastructure.providers.policy import (
+    STUDY_PROVIDER_POLICY_DIGEST,
+    STUDY_PROVIDER_POLICY_VERSION,
+)
 from memcommit.profile_config import (
     GRANT_RESOURCE_CONTEXT_TREE,
     AuthorityGrant,
@@ -1178,6 +1182,11 @@ def test_init_study_creates_isolated_participant_and_authority_profiles(
     assert "Participant Profile: pilot-001" in result.output
     assert "Granted-memory Profile: pilot-001-granted-memory" in result.output
     assert (
+        f"Provider config: {STUDY_PROVIDER_POLICY_VERSION} · locked · "
+        f"sha256 {STUDY_PROVIDER_POLICY_DIGEST}"
+        in result.output
+    )
+    assert (
         "Contexts 65 · Memories 471 · current=practice"
         in result.output
     )
@@ -1211,6 +1220,16 @@ def test_init_study_creates_isolated_participant_and_authority_profiles(
     assert copied.source["baseline_profile_uid"] == baseline.uid
     assert copied.source["baseline_profile_name"] == baseline.name
     assert re.fullmatch(r"[0-9a-f]{64}", copied.source["baseline_sha256"])
+    assert (
+        copied.source["provider_policy_version"]
+        == authority.source["provider_policy_version"]
+        == STUDY_PROVIDER_POLICY_VERSION
+    )
+    assert (
+        copied.source["provider_policy_digest"]
+        == authority.source["provider_policy_digest"]
+        == STUDY_PROVIDER_POLICY_DIGEST
+    )
     baseline_root = profile_store_dir(baseline)
     copied_root = profile_store_dir(copied)
     authority_root = profile_store_dir(authority)

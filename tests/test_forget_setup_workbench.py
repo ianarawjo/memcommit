@@ -19,63 +19,17 @@ from memcommit.store import MemoryStore
 runner = CliRunner()
 
 
-def test_forget_provider_policy_pins_sol_none_and_keeps_shared_timeout(
-    monkeypatch,
-):
-    captured = {}
-    completed = []
-
-    class _Settings:
-        @staticmethod
-        def semantic_timeout_seconds():
-            return 777.0
-
-    class _Identity:
-        provider = "codex_chatgpt"
-
-    class _Provider:
-        identity = _Identity()
-
-    def connect(**kwargs):
-        captured.update(kwargs)
-        return _Provider()
-
-    monkeypatch.setattr(forget_runtime, "Config", _Settings)
-    monkeypatch.setattr(
-        forget_runtime.CodexChatGPTProvider,
-        "connect",
-        staticmethod(connect),
-    )
+def test_forget_provider_follows_the_active_profile_route(monkeypatch):
+    provider = object()
+    operations: list[str] = []
     monkeypatch.setattr(
         forget_runtime,
-        "record_provider_connection_started",
-        lambda operation: completed.append(("started", operation)) or 1.0,
-    )
-    monkeypatch.setattr(
-        forget_runtime,
-        "record_provider_connection_finished",
-        lambda operation, started_at, **kwargs: completed.append(
-            ("finished", operation, started_at, kwargs)
-        ),
+        "connect_operation_provider",
+        lambda operation: operations.append(operation) or (provider, object()),
     )
 
-    provider = forget_command.connect_codex_chatgpt_provider()
-
-    assert provider is not None
-    assert captured == {
-        "timeout": 777.0,
-        "model": "gpt-5.6-sol",
-        "reasoning_effort": "none",
-    }
-    assert completed == [
-        ("started", "forget"),
-        (
-            "finished",
-            "forget",
-            1.0,
-            {"provider": "codex_chatgpt"},
-        ),
-    ]
+    assert forget_command.connect_codex_chatgpt_provider() is provider
+    assert operations == ["forget"]
 
 
 def test_forget_setup_enter_runs_the_current_direct_source():

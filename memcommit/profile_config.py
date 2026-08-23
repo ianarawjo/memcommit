@@ -94,6 +94,8 @@ class StudyRunIdentity:
     baseline_profile_uid: str
     baseline_profile_name: str
     baseline_sha256: str
+    provider_policy_version: str | None = None
+    provider_policy_digest: str | None = None
 
 
 def study_run_identity(profile: ProfileEntry) -> StudyRunIdentity | None:
@@ -111,7 +113,7 @@ def study_run_identity(profile: ProfileEntry) -> StudyRunIdentity | None:
         STUDY_RUN_AUTHORITY_SOURCE_KIND,
     }:
         return None
-    expected_fields = {
+    legacy_fields = {
         "kind",
         "study_uid",
         "study_name",
@@ -120,7 +122,15 @@ def study_run_identity(profile: ProfileEntry) -> StudyRunIdentity | None:
         "baseline_profile_uid",
         "baseline_profile_name",
     }
-    if set(source) != expected_fields or profile.kind != "MANAGED":
+    pinned_fields = legacy_fields | {
+        "provider_policy_version",
+        "provider_policy_digest",
+    }
+    source_fields = frozenset(source)
+    if source_fields not in {
+        frozenset(legacy_fields),
+        frozenset(pinned_fields),
+    } or profile.kind != "MANAGED":
         raise ProfileConfigError("Study run Profile provenance is invalid.")
     study_uid = _canonical_uid(source.get("study_uid"), field="Study uid")
     study_name = validate_profile_name(source.get("study_name"))
@@ -139,6 +149,23 @@ def study_run_identity(profile: ProfileEntry) -> StudyRunIdentity | None:
         field="Study baseline Profile uid",
     )
     baseline_profile_name = validate_profile_name(source.get("baseline_profile_name"))
+    provider_policy_version = source.get("provider_policy_version")
+    provider_policy_digest = source.get("provider_policy_digest")
+    if source_fields == pinned_fields:
+        if (
+            not isinstance(provider_policy_version, str)
+            or not provider_policy_version
+            or len(provider_policy_version) > 128
+        ):
+            raise ProfileConfigError("Study provider policy version is invalid.")
+        if (
+            not isinstance(provider_policy_digest, str)
+            or _SHA256.fullmatch(provider_policy_digest) is None
+        ):
+            raise ProfileConfigError("Study provider policy digest is invalid.")
+    else:
+        provider_policy_version = None
+        provider_policy_digest = None
     role = (
         "PARTICIPANT"
         if source.get("kind") == STUDY_RUN_PARTICIPANT_SOURCE_KIND
@@ -152,6 +179,8 @@ def study_run_identity(profile: ProfileEntry) -> StudyRunIdentity | None:
         baseline_profile_uid=baseline_profile_uid,
         baseline_profile_name=baseline_profile_name,
         baseline_sha256=baseline_sha256,
+        provider_policy_version=provider_policy_version,
+        provider_policy_digest=provider_policy_digest,
     )
 
 

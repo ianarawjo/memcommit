@@ -9,7 +9,7 @@ import urllib.parse
 import urllib.request
 from dataclasses import dataclass, field
 from threading import Lock
-from typing import Callable
+from typing import TYPE_CHECKING, Callable
 
 from memcommit.config import Config
 from memcommit.provider_types import (
@@ -36,6 +36,9 @@ from memcommit.infrastructure.providers.policy import (
     ResolvedProviderPolicy,
     resolve_operation_provider_policy,
 )
+
+if TYPE_CHECKING:
+    from memcommit.profile_config import ProfileRegistry
 
 
 OLLAMA_DEFAULT_BASE_URL = "http://127.0.0.1:11434"
@@ -518,10 +521,11 @@ def connect_provider(
 def connect_operation_provider(
     operation: str,
     *,
-    mode: ProviderPolicyMode = "PRODUCTION",
+    mode: ProviderPolicyMode | None = None,
     override: ProviderPolicyOverride | None = None,
     config: Config | None = None,
     env: dict[str, str] | None = None,
+    profile_registry: ProfileRegistry | None = None,
 ) -> tuple[SemanticProvider, ResolvedProviderPolicy]:
     """Connect the one centrally resolved policy for an operation.
 
@@ -531,12 +535,27 @@ def connect_operation_provider(
     """
 
     settings = config or Config()
-    resolved = resolve_operation_provider_policy(
-        operation,
-        config=settings,
-        mode=mode,
-        override=override,
-    )
+    if mode is None and config is None and override is None:
+        # Import lazily so the core provider adapter does not make Profile
+        # selection part of module import. One command freezes one active
+        # Profile route before any provider connection.
+        from memcommit.infrastructure.providers.profile_routes import (
+            resolve_active_provider_policy,
+        )
+
+        resolved, scope = resolve_active_provider_policy(
+            operation,
+            machine_config=settings,
+            registry=profile_registry,
+        )
+        settings = scope.config  # type: ignore[assignment]
+    else:
+        resolved = resolve_operation_provider_policy(
+            operation,
+            config=settings,
+            mode=mode or "PRODUCTION",
+            override=override,
+        )
     environment = os.environ if env is None else env
     started_at = record_provider_connection_started(operation)
     try:

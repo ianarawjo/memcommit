@@ -391,8 +391,8 @@ def connect_query_provider(provider: str) -> QueryProvider:
     if provider == CODEX_CHATGPT_PROVIDER:
         return connect_codex_subscription_provider()
     # A persisted query route remains authoritative and is never replaced by
-    # the global semantic-provider selection. Additional allowlisted adapters
-    # still perform their own authentication/service probe before source load.
+    # active-Profile semantic selection. Additional allowlisted adapters still
+    # perform their own authentication/service probe before source load.
     from memcommit.provider_types import OLLAMA_PROVIDER, OPENROUTER_PROVIDER
 
     if provider in {OLLAMA_PROVIDER, OPENROUTER_PROVIDER}:

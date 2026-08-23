@@ -37,12 +37,13 @@ from memcommit.interfaces.tui.operations.forget import (
 )
 from memcommit.profile_config import ProfileConfigError
 from memcommit.profiles import ProfileError
-from memcommit.query_provider import CodexChatGPTProvider, QueryProviderError
+from memcommit.provider_types import SemanticProvider
+from memcommit.query_provider import QueryProviderError
 from memcommit.semantic.changes import ProposedChange
 from memcommit.store import MemoryStore
 
 
-def connect_codex_chatgpt_provider() -> CodexChatGPTProvider:
+def connect_codex_chatgpt_provider() -> SemanticProvider:
     """Compatibility name for Forget's infrastructure-owned provider factory."""
 
     return connect_forget_provider()

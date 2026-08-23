@@ -616,12 +616,22 @@ def study_run_profile_pairs(
                 identity.baseline_profile_uid,
                 identity.baseline_profile_name,
                 identity.baseline_sha256,
+                identity.provider_policy_version,
+                identity.provider_policy_digest,
             )
             for identity in identities
         }
         if len(shared) != 1:
             raise ProfileError("Study run Profile provenance is inconsistent.")
-        name, created_at, _baseline_uid, _baseline_name, _digest = next(iter(shared))
+        (
+            name,
+            created_at,
+            _baseline_uid,
+            _baseline_name,
+            _digest,
+            _provider_policy_version,
+            _provider_policy_digest,
+        ) = next(iter(shared))
         if name.casefold() in seen_names:
             raise ProfileError("Study run names must be unique.")
         seen_names.add(name.casefold())
@@ -4731,6 +4741,8 @@ def _publish_study_run_pair(
     study_uid: str,
     created_at: str,
     baseline_digest: str,
+    provider_policy_version: str,
+    provider_policy_digest: str,
 ) -> StudyInitializationResult:
     """Publish the run's two stores and grants as one registry transaction."""
 
@@ -4751,6 +4763,8 @@ def _publish_study_run_pair(
         "baseline_sha256": baseline_digest,
         "baseline_profile_uid": baseline.uid,
         "baseline_profile_name": baseline.name,
+        "provider_policy_version": provider_policy_version,
+        "provider_policy_digest": provider_policy_digest,
     }
     participant = ProfileEntry(
         uid=str(uuid.uuid4()),
@@ -4880,6 +4894,8 @@ def init_study_profile(
     baseline_profile_name: str = STUDY_BASELINE_PROFILE_NAME,
     *,
     name: str | None = None,
+    provider_policy_version: str,
+    provider_policy_digest: str,
 ) -> StudyInitializationResult:
     """Create one isolated participant Profile and one authority Profile."""
 
@@ -4954,6 +4970,8 @@ def init_study_profile(
                 study_uid=str(generated_uid),
                 created_at=created.isoformat(),
                 baseline_digest=before,
+                provider_policy_version=provider_policy_version,
+                provider_policy_digest=provider_policy_digest,
             )
         finally:
             if staging.exists() and not staging.is_symlink():

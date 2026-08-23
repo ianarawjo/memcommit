@@ -1,4 +1,4 @@
-"""Pinned provider composition for Find, Query, and Help lookup."""
+"""Active-Profile provider composition for Find, Query, and Help."""
 
 from __future__ import annotations
 
@@ -12,7 +12,6 @@ from memcommit.infrastructure.providers.policy import (
     QUERY_PROVIDER_POLICY,
     OperationProviderPolicy,
     ProviderPolicyOverride,
-    operation_provider_policy,
     resolve_operation_provider_policy,
 )
 from memcommit.query_provider import (
@@ -23,6 +22,15 @@ from memcommit.study_action_log import (
     record_provider_connection_finished,
     record_provider_connection_started,
 )
+
+
+def _connect_active_operation(operation: str) -> SemanticProvider:
+    # semantic_provider imports this package's policy module while it starts;
+    # defer the reverse dependency so either public module can load first.
+    from memcommit.semantic_provider import connect_operation_provider
+
+    provider, _policy = connect_operation_provider(operation)
+    return provider
 
 
 def _configured_policy(
@@ -49,21 +57,15 @@ def _connect_pinned_codex_provider(
 ) -> CodexChatGPTProvider:
     """Connect one evaluated policy while retaining shared auth and logging."""
     config = Config()
-    authored = operation_provider_policy(policy.operation)
-    explicit = policy != authored or timeout_seconds is not None
     resolved = resolve_operation_provider_policy(
         policy.operation,
         config=config,
-        mode="EVALUATION" if explicit else "PRODUCTION",
-        override=(
-            ProviderPolicyOverride(
-                provider_id=CODEX_CHATGPT_PROVIDER,
-                model=policy.model,
-                reasoning_effort=policy.reasoning_effort,
-                timeout_seconds=timeout_seconds,
-            )
-            if explicit
-            else None
+        mode="EVALUATION",
+        override=ProviderPolicyOverride(
+            provider_id=CODEX_CHATGPT_PROVIDER,
+            model=policy.model,
+            reasoning_effort=policy.reasoning_effort,
+            timeout_seconds=timeout_seconds,
         ),
     )
     started_at = record_provider_connection_started(policy.operation)
@@ -93,8 +95,11 @@ def connect_find_provider(
     model: str | None = None,
     reasoning_effort: str | None = None,
     timeout_seconds: float | None = None,
-) -> CodexChatGPTProvider:
-    """Connect the evaluated Find policy, optionally from a frozen config."""
+) -> SemanticProvider:
+    """Connect active Find routing, or an explicit frozen Codex route."""
+
+    if model is reasoning_effort is timeout_seconds is None:
+        return _connect_active_operation("search")
 
     return _connect_pinned_codex_provider(
         _configured_policy(
@@ -111,8 +116,11 @@ def connect_ordinary_query_provider(
     model: str | None = None,
     reasoning_effort: str | None = None,
     timeout_seconds: float | None = None,
-) -> CodexChatGPTProvider:
-    """Connect the Query policy, optionally from a frozen public config."""
+) -> SemanticProvider:
+    """Connect active Query routing, or an explicit frozen Codex route."""
+
+    if model is reasoning_effort is timeout_seconds is None:
+        return _connect_active_operation("query")
 
     return _connect_pinned_codex_provider(
         _configured_policy(
@@ -129,8 +137,11 @@ def connect_help_provider(
     model: str | None = None,
     reasoning_effort: str | None = None,
     timeout_seconds: float | None = None,
-) -> CodexChatGPTProvider:
-    """Connect the pinned natural-language Help lookup policy."""
+) -> SemanticProvider:
+    """Connect active Help routing, or an explicit frozen Codex route."""
+
+    if model is reasoning_effort is timeout_seconds is None:
+        return _connect_active_operation("help")
 
     return _connect_pinned_codex_provider(
         _configured_policy(
@@ -149,14 +160,15 @@ def connect_query_route_provider(
     reasoning_effort: str | None = None,
     timeout_seconds: float | None = None,
 ) -> SemanticProvider:
-    """Pin Codex Query routes without overriding authorized other routes."""
+    """Honor one authorized query-only provider route."""
 
     if provider_id == CODEX_CHATGPT_PROVIDER:
-        if model is reasoning_effort is timeout_seconds is None:
-            return connect_ordinary_query_provider()
-        return connect_ordinary_query_provider(
-            model=model,
-            reasoning_effort=reasoning_effort,
+        return _connect_pinned_codex_provider(
+            _configured_policy(
+                QUERY_PROVIDER_POLICY,
+                model=model,
+                reasoning_effort=reasoning_effort,
+            ),
             timeout_seconds=timeout_seconds,
         )
     return _connect_configured_query_provider(provider_id)  # type: ignore[return-value]

@@ -11,7 +11,6 @@ from memcommit.authority.access import (
     grant_checkpoint_args,
     resolve_context_access,
 )
-from memcommit.config import Config
 from memcommit.context import AutoCheckpoint, Context
 from memcommit.forget_application import (
     ForgetAnalysisRequest,
@@ -30,7 +29,8 @@ from memcommit.forget_application import (
     run_forget_revision,
     run_forget_selection,
 )
-from memcommit.query_provider import CodexChatGPTProvider
+from memcommit.provider_types import SemanticProvider
+from memcommit.semantic_provider import connect_operation_provider
 from memcommit.semantic.changes import (
     EditChange,
     ProposedChange,
@@ -38,46 +38,17 @@ from memcommit.semantic.changes import (
     apply_changes,
 )
 from memcommit.store import MemoryStore
-from memcommit.infrastructure.providers.policy import (
-    FORGET_PROVIDER_POLICY,
-    resolve_operation_provider_policy,
-)
-from memcommit.study_action_log import (
-    record_provider_connection_finished,
-    record_provider_connection_started,
-)
+from memcommit.infrastructure.providers.policy import FORGET_PROVIDER_POLICY
 
 
 FORGET_PROVIDER_MODEL = FORGET_PROVIDER_POLICY.model
 FORGET_PROVIDER_REASONING_EFFORT = FORGET_PROVIDER_POLICY.reasoning_effort
 
 
-def connect_forget_provider() -> CodexChatGPTProvider:
-    """Connect Forget's benchmark-selected provisional provider policy."""
+def connect_forget_provider() -> SemanticProvider:
+    """Connect Forget through the active Profile's provider route."""
 
-    resolved = resolve_operation_provider_policy(
-        "forget",
-        config=Config(),
-    )
-    started_at = record_provider_connection_started("forget")
-    try:
-        provider = CodexChatGPTProvider.connect(
-            timeout=resolved.timeout_seconds,
-            model=resolved.model,
-            reasoning_effort=resolved.reasoning_effort,
-        )
-    except BaseException as error:
-        record_provider_connection_finished(
-            "forget",
-            started_at,
-            failure=error,
-        )
-        raise
-    record_provider_connection_finished(
-        "forget",
-        started_at,
-        provider=provider.identity.provider,
-    )
+    provider, _policy = connect_operation_provider("forget")
     return provider
 
 

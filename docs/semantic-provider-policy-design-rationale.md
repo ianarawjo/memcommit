@@ -1,133 +1,133 @@
-# Semantic provider policy design rationale
+# Profile provider routing design rationale
 
 ## Motivation
 
-Provider settings previously had one user configuration file but several
-independent effective-policy sites. Most operations inherited
-`~/.mem/config.json`; Find, Query, Help, and Forget pinned different Codex
-models or reasoning efforts; Compare and Meld raised a timeout by mutating a
-connected provider; Study prewarm compatibility rebuilt provider identity from
-`Config`; and some Study generation scripts defaulted silently to `medium`
-reasoning. Reading the configuration file alone could not answer which policy
-an operation would actually use.
+Semantic provider selection used to mix two different requirements. Ordinary
+work needed a convenient, editable provider/model/reasoning combination, while
+a Study run needed the exact experimental condition to remain reproducible.
+The earlier global configuration plus operation-pin model did neither cleanly:
+all Profiles shared one mutable default, yet a person could not tell from that
+configuration which hard-coded operation exceptions would replace it.
 
-## One resolution plane
+The user-visible symptom was output such as `rule: pinned identity`. That
+described an implementation rule rather than answering the useful questions:
+which Profile owns this route, can it be changed, and what will this operation
+actually execute?
 
-`memcommit.infrastructure.providers.policy` is now the sole authored source
-for effective provider identity. It resolves provider ID, model, Codex
-reasoning effort, transport timeout, policy source, mode, version, and digest.
+## Two configuration modes
 
-`Config` remains the sole persisted user-default store. Operation rules are
-version-controlled code because they are evaluated product constraints, not
-personal preferences. Unknown or ordinary operations explicitly inherit the
-global default through the same resolver; the shared
-`connect_semantic_provider()` path now resolves `semantic_default` instead of
-opening `Config` independently.
+Provider routing now has two deliberately asymmetric modes selected from the
+active Profile before provider contact.
 
-The current exceptions are:
+### General Profiles
 
-| Operation | Effective exception |
-| --- | --- |
-| Find (`search`) | Codex `gpt-5.6-terra`, reasoning `low` |
-| Query (`query`) | Codex `gpt-5.6-sol`, reasoning `none` |
-| Help (`help`) | Codex `gpt-5.6-sol`, reasoning `none` |
-| Forget (`forget`) | Codex `gpt-5.6-sol`, reasoning `none` |
-| deep Compare (`compare_contexts`) | inherited identity, timeout at least 900 seconds |
-| Meld (`meld_contexts`) | inherited identity, timeout at least 900 seconds |
+An ordinary Profile may own:
 
-All other production operations, including lightweight Compare, Summarize,
-Rationale, Atomize, Update, Sever, Distill, Elaborate, Resolve, Translate, and
-semantic quality reports, inherit the configured provider and model. For
-Codex, an omitted configured reasoning effort resolves explicitly to `none`.
-This is a reproducible latency baseline, not a claim that higher reasoning is
-never useful; an evaluated operation pin or explicit evaluation campaign may
-select another tier.
+- one complete default route; and
+- zero or more complete operation routes keyed by semantic operation name.
 
-`mem provider status --operation OPERATION` prints the complete effective
-policy without contacting a provider. `--study` resolves the participant-Study
-mode and exposes its policy digest. The ordinary `mem provider status` output
-shows the effective inherited global default and labels its scope explicitly.
+A route is the provider ID, model, Codex reasoning effort when applicable, and
+timeout. An operation route replaces the Profile default as one combination;
+unset operations use the default. This avoids half-inherited identities such
+as a model from one provider combined with reasoning intended for another.
 
-## CLI routing overview and scope
+The editable document is stored under
+`~/.mem-profiles/provider-routes/<profile-uid>.json`. It is keyed by immutable
+Profile UID rather than editable display name and repeats that UID inside the
+strict schema. Writes use a per-Profile advisory lock, a same-directory
+temporary file, `fsync`, and atomic replacement. Provider routes are control
+state, not Memory: they do not enter the Profile store, export, grant, or
+Context namespace.
 
-Provider configuration is global machine-local state in `~/.mem/config.json`;
-it is shared by every Profile. It is not a claim that every semantic operation
-will use the configured identity. Authored operation policies may pin a
-provider, model, or reasoning effort, or retain the global identity while
-raising an independent timeout floor.
+For migration, an ordinary Profile without a route document inherits the old
+machine default in `~/.mem/config.json`. The first `mem provider use` writes a
+Profile route without rewriting that legacy identity. Endpoint, credential,
+context-window, output-budget, thinking, and zero-data-retention settings
+remain machine-local transport configuration because they describe the local
+runtime rather than a portable Profile identity.
 
-Bare `mem provider` therefore renders a provider-free routing overview instead
-of Click's implicit missing-subcommand Help response or a single ambiguous
-"selected provider" value. The overview labels the configuration as global and
-all-Profile, shows the effective `semantic_default`, resolves every authored
-entry from `OPERATION_PROVIDER_POLICIES`, and states that all other operations
-inherit the default. The displayed routes are derived from the policy registry
-and resolver rather than copied into a command-local policy table. Rendering
-the overview never connects to a provider and exits successfully; explicit
-syntax remains under `mem provider --help`.
+### Study Profiles
 
-`mem provider use` changes only the global default and its receipt says that
-operation-specific policies remain unchanged. `mem provider status` labels
-whether it is showing `global_default` or an `effective_operation`, including
-the policy source, version, and digest in both cases. A pinned operation must
-not display an unrelated global Codex preset merely because the global config
-retains one.
+A Study Profile has no editable route document. `mem init-study` records both
+the Study provider-configuration version and its canonical SHA-256 digest in
+the participant and granted-memory Profile provenance as part of the same
+registry publication transaction. Runtime resolution loads the named
+version from code and verifies the digest before provider contact.
 
-The default `mem provider probe` verifies `semantic_default` only.
-`mem provider probe --operation OPERATION` resolves and connects the same
-effective production policy as that operation, then runs the existing
-synthetic strict-schema completion. Its receipt records the probe scope,
-policy source, and digest. This does not claim semantic quality or execute the
-operation's real prompt; it verifies transport and schema conformance for the
-route that would supply that operation.
+The first version, `study-provider-config-v1`, contains this complete matrix:
 
-## Production, participant Study, and evaluation
+| Route | Provider | Model | Reasoning | Timeout |
+| --- | --- | --- | --- | ---: |
+| default | `codex_chatgpt` | `gpt-5.6-sol` | `none` | 600 s |
+| `search` | `codex_chatgpt` | `gpt-5.6-terra` | `low` | 600 s |
+| `query` | `codex_chatgpt` | `gpt-5.6-sol` | `none` | 600 s |
+| `help` | `codex_chatgpt` | `gpt-5.6-sol` | `none` | 600 s |
+| `forget` | `codex_chatgpt` | `gpt-5.6-sol` | `none` | 600 s |
+| `compare_contexts` | `codex_chatgpt` | `gpt-5.6-sol` | `none` | 900 s |
+| `meld_contexts` | `codex_chatgpt` | `gpt-5.6-sol` | `none` | 900 s |
 
-Production and `STUDY_PARTICIPANT` use identical effective provider, model,
-reasoning, and timeout values. Study prewarm identity checks for Compare,
-Summarize, Atomize, Update, Sever, and directional Meld now call the resolver
-with their real provider operation names. A prepared artifact therefore cannot
-silently use a different default than the participant-facing operation whose
-latency it is intended to remove.
+Future Study changes add a new retained version rather than mutate this
+matrix. Existing Study Profiles therefore continue to name their original
+configuration. A Study Profile created before provider pinning, an unknown
+version, or a digest mismatch fails closed before semantic execution; silently
+substituting the newest condition would make the run look reproducible when it
+is not. Recreating the run through `mem init-study` is the explicit migration.
 
-`EVALUATION` is the only mode that accepts a process-local override. An
-override never writes global configuration. The shared semantic-eval connector
-and Study artifact generation utilities resolve their explicit provider,
-model, reasoning, and timeout through this mode and record the resulting
-identity in their existing campaign or artifact receipts. Former implicit
-`medium` defaults were removed; omitting the flag now inherits the central
-Codex baseline.
+## Runtime and CLI contract
 
-The policy digest includes the operation, mode, effective values, source, and
-policy version. Production and participant Study have different mode labels
-but must resolve the same execution identity; artifacts continue to key on the
-provider/model/reasoning tuple required by their existing schemas.
+Each ordinary semantic command freezes the active Profile and its route once,
+then connects the resolved provider. Find, ordinary Query, Help, Forget, and
+the shared completion factory all use this boundary. Explicit evaluation
+arguments and authorized query-only source routes remain separate: they must
+not rewrite Profile configuration or be silently rerouted by it.
 
-## Connection and timeout boundary
+Bare `mem provider` is a provider-free inspection of the active Profile. A
+general Profile is labelled `general · editable` and shows its effective
+default plus only the operation routes the person configured. A Study Profile
+is labelled `study · locked` and shows the pinned version, digest, and complete
+Study matrix. The output intentionally contains no `rule` or “fixed by
+operation” explanation; editability and ownership are first-class fields.
 
-`connect_operation_provider()` consumes one resolved policy and is the common
-provider-neutral connector for new operation adapters. It records connection
-events under the semantic operation and returns the immutable policy receipt
-beside the provider. Existing compatibility-named command factories remain in
-place for test and API stability, but their authored pin or inherited default
-now resolves centrally.
+`mem provider use PROVIDER` edits the active general Profile default.
+`--operation OPERATION` edits one operation combination. `mem provider reset`
+removes the Profile default and returns it to the legacy machine fallback;
+with `--operation`, it removes just that operation route. Both commands reject
+a Study Profile. `status` resolves one route without contact, and `probe`
+connects that exact active-Profile route for one synthetic strict-schema call.
 
-Timeout remains an independent policy axis. Raising the deep Compare/Meld
-transport window does not raise semantic input budgets or authorize prompt
-splitting. Lightweight Compare inherits the ordinary configured timeout
-because it does not promise exhaustive ledger completion.
+Resolved receipts retain the general policy version, configuration version
+when Study-owned, route source, full effective values, and digest. The digest
+distinguishes resolution receipts; the Study provenance digest separately
+protects the complete versioned matrix.
+
+## Evaluation and prewarm boundary
+
+`EVALUATION` remains the only mode that accepts a process-local provider
+override. Evaluation campaigns may select another model or reasoning tier
+without changing any Profile. Study prewarm generation selects the current
+Study configuration while constructing a new run; `init-study` then pins that
+version and digest. Participant runtime resolves the pin rather than a mutable
+machine default.
+
+Timeout is an independent route axis. A 900-second Study route for deep Compare
+or Meld does not increase semantic input budgets, authorize prompt splitting,
+or change the operation's validation and application boundary.
 
 ## Alternatives and limitations
 
-Moving every exception into `~/.mem/config.json` was rejected because it would
-turn tested operation contracts into hidden machine-local state. Making one
-global model mandatory for every operation was rejected because the measured
-Find and Query policies deliberately optimize different tasks. Inferring
-reasoning effort from model names was rejected because model selection and
-reasoning are independent, observable policy axes.
+Keeping every route in one global config was rejected because switching
+Profiles would not switch execution conditions. Keeping general operation
+routes hard-coded was rejected because normal, non-Study work is explicitly
+meant to compose provider/model/reasoning choices. Copying editable routes into
+Study stores was rejected because a participant could then alter or export the
+experimental condition as if it were Memory.
 
-This policy layer does not choose semantic execution strategy, prompt size,
-schema, retry, or batching. Those remain operation contracts under
-`memcommit.semantic_execution`. Historical standalone research scripts outside
-the participant Study setup may retain their explicit benchmark flags; they
-are evaluation artifacts rather than production or participant runtime.
+The compatibility machine default remains only as an unset-general-Profile
+migration fallback; it is not consulted by a pinned Study route. Removing a
+Profile does not yet garbage-collect its UID-keyed provider sidecar. That file
+is unreachable from a new Profile identity and contains configuration rather
+than Memory, but a later Profile-removal cleanup may delete it under the same
+registry transaction boundary.
+
+This layer does not choose execution strategy, prompt size, schema, retry, or
+batching. Those remain operation contracts under `memcommit.semantic_execution`.
