@@ -9,6 +9,7 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
+from memcommit.authority.access import resolve_context_access
 from memcommit.cli import app
 from memcommit.context import Context, Memory
 from memcommit.merge_application import (
@@ -27,7 +28,7 @@ from memcommit.profile_config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.profiles import create_authority_grant
+from memcommit.profiles import ProfileError, create_authority_grant
 from memcommit.store import MemoryStore
 
 
@@ -41,6 +42,126 @@ def _create(store: MemoryStore, context: Context) -> Context:
 
 def _contents(context: Context) -> list[str]:
     return [item.content for item in context.iter_items() if isinstance(item, Memory)]
+
+
+def _setup_read_granted_advisors(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    active = MemoryStore()
+    task = _create(active, ops.init("task-2"))
+    active.set_current(task.name)
+
+    authority_entry = ProfileEntry(
+        uid=str(uuid.uuid4()),
+        name="task-2-advisor-authority",
+        kind="MANAGED",
+    )
+    authoring = ProfileEntry(
+        uid=AUTHORING_PROFILE_UID,
+        name=AUTHORING_PROFILE_NAME,
+        kind="AUTHORING",
+    )
+    authority = MemoryStore(root=profile_store_dir(authority_entry))
+    for name in ("advisor1", "advisor2"):
+        context = ops.init(name)
+        ops.add(context, f"{name} recommendation")
+        authority.create_context(context)
+
+    registry = ProfileRegistry(
+        generation=1,
+        active_uid=authoring.uid,
+        profiles=(authoring, authority_entry),
+        grants=(),
+    )
+    path = profile_registry_file()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        json.dumps(registry.to_dict()) + "\n",
+        encoding="utf-8",
+    )
+    grants = []
+    for name in ("advisor1", "advisor2"):
+        _registry, grant = create_authority_grant(
+            authority_name=authority_entry.name,
+            grantee_name=authoring.name,
+            resource_name=name,
+            attachment_name=task.name,
+            public_name=f"task-2/{name}",
+            permissions=("READ",),
+        )
+        grants.append(grant)
+    return active, tuple(grants)
+
+
+def test_relative_granted_context_below_local_parent_uses_public_name(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    store, (source_grant, target_grant) = _setup_read_granted_advisors(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+
+    source = resolve_context_access(
+        store,
+        "./advisor1",
+        current_name="task-2",
+        required_permission="READ",
+    )
+
+    assert source.is_granted is True
+    assert source.display_name == "task-2/advisor1"
+    assert source.view is not None
+    assert source.view.grant.uid == source_grant.uid
+    with pytest.raises(
+        ProfileError,
+        match=(
+            rf"Grant {target_grant.uid[:8]} does not allow create access "
+            r"to 'task-2/advisor2'\."
+        ),
+    ):
+        resolve_context_access(
+            store,
+            "./advisor2",
+            current_name="task-2",
+            required_permission="CREATE",
+        )
+    with pytest.raises(
+        FileNotFoundError,
+        match=r"Context 'task-2/missing' does not exist\.",
+    ):
+        resolve_context_access(
+            store,
+            "./missing",
+            current_name="task-2",
+            required_permission="READ",
+        )
+
+
+def test_cli_merge_relative_granted_target_reports_permission_not_missing(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    _store, (_source_grant, target_grant) = _setup_read_granted_advisors(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+
+    result = runner.invoke(app, ["merge", "./advisor1", "./advisor2"])
+
+    assert result.exit_code == 1
+    assert (
+        f"Grant {target_grant.uid[:8]} does not allow create access "
+        "to 'task-2/advisor2'."
+    ) in result.stderr
+    assert "not found" not in result.stderr
 
 
 def test_recursive_merge_aligns_paths_and_clones_source_only_contexts(

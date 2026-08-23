@@ -57,6 +57,13 @@ Task 2 workflow.
   for the Profile, not only views attached directly to the current owned
   Context. If more than one distinct attachment resolves the same public name,
   the command rejects it as ambiguous rather than choosing one implicitly.
+- Explicitly relative Context locators first resolve lexically against the one
+  command-start current name, then use that canonical result for the same
+  public Grant lookup. Thus `./advisor1` from an owned `task-2` may resolve the
+  readable public view `task-2/advisor1` even though no local child record was
+  materialized. An exact ordinary local record still wins before Grant lookup;
+  relative spelling neither changes ownership nor treats the Grant attachment
+  as a hierarchy edge.
 - Lexical parent navigation continues to prefer owned Contexts. Within a
   granted tree, `..` may return to another READ-granted parent; it never opens a
   query-only override.
@@ -158,15 +165,17 @@ an operation by parsing `mem contexts`, picker text, color, or compact labels.
 
 Missing-name classification follows the same namespace boundary. A failed
 ordinary Context lookup becomes a Grant-specific error only when an effective
-Grant public name is an exact or lexical-prefix match for the requested name.
-The current local Context is orientation, not evidence that an unrelated
-operand names a granted view. This keeps missing local operands consistent
-across Switch, Embed, and every other consumer of the shared access resolver,
-while preserving permission, frozen-scope, and ambiguity errors for names that
-actually enter a Grant namespace. Persisted links and analysis receipts retain
-their exact attachment UID and Grant binding, so their revalidation bypasses
-general locator classification: loss of that route remains an explicit
-revocation failure rather than being downgraded to an ordinary missing input.
+Grant public name is an exact or lexical-prefix match for the canonical
+requested name, including a name produced from explicit relative syntax. The
+current local Context supplies lexical orientation only: it is not evidence
+that an unrelated operand names a granted view. This keeps unrelated missing
+local operands consistent across Switch, Embed, and every other consumer of
+the shared access resolver, while preserving permission, frozen-scope, and
+ambiguity errors for names that actually enter a Grant namespace. Persisted
+links and analysis receipts retain their exact attachment UID and Grant
+binding, so their revalidation bypasses general locator classification: loss
+of that route remains an explicit revocation failure rather than being
+downgraded to an ordinary missing input.
 
 This change does not grant query permission to Advisor content and does not
 make proposal guidelines readable. It also does not add authority history,

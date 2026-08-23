@@ -263,14 +263,11 @@ def resolve_context_access(
             attachment_name=None,
             permission=required_permission,
         )
-    relative = operand.startswith(".")
-    if (
-        relative
-        and current_name
-        and active_store.context_exists(current_name)
-    ):
-        raise FileNotFoundError(f"Context '{local_name}' not found.")
-    public_name = local_name if relative else operand
+    # Relative spelling selects one canonical public name; it must not make
+    # lookup local-only because a readable Grant may deliberately occupy the
+    # namespace below an ordinary local ancestor.  An exact local record has
+    # already won above, so Grant fallback cannot displace local ownership.
+    public_name = local_name
     registry = registry or load_profile_registry()
     attachment_names: list[str] = []
     for grant in registry.grants:
