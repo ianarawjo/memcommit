@@ -70,14 +70,20 @@ content.
 
 ## Interface projections
 
-The existing direct `mem show` text is preserved by a plain CLI
-presenter under `memcommit.interfaces.cli.show`. Recursive output begins with
-aggregate direct-item counts, then renders the same full direct Context form
-once per scoped Context. Reach is shown separately from access so a granted
-descendant or embedded Context does not collapse authorization and traversal
-into one label. The command module constructs one typed request, invokes the
-runtime, maps errors, and renders the result. Show currently has no interactive
-TUI route; this scope extension does not invent one.
+The plain CLI presenter under `memcommit.interfaces.cli.show` keeps a direct
+ordinary-Memory lookup compact as `[Memory CONTEXT:UID] CONTENT`. The owner and
+full durable identity remain visible, but the single selected object's metadata
+does not consume a separate header block. Structured detail remains appropriate
+for Memory references and query views because their relationship, state, or
+safe invocation metadata cannot be expressed by the ordinary-Memory line.
+Context and recursive output also retain their inventory structure; recursive
+output begins with aggregate direct-item counts, then renders the same full
+direct Context form once per scoped Context. Reach is shown separately from
+access so a granted descendant or embedded Context does not collapse
+authorization and traversal into one label. The command module constructs one
+typed request, invokes the runtime, maps errors, and renders the result. Show
+currently has no interactive TUI route; this scope extension does not invent
+one.
 The Find dialogue's exact read-only `mem show` subprocess follow-up continues
 through the same CLI boundary.
 

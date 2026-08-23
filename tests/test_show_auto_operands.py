@@ -60,8 +60,7 @@ def test_bare_uid_finds_one_direct_item_outside_current(isolated_store):
     result = runner.invoke(app, ["show", memory.uid[:8]])
 
     assert result.exit_code == 0, result.output
-    assert f"Memory: {memory.uid}" in result.output
-    assert "remote direct item" in result.output
+    assert result.output == f"[Memory owner:{memory.uid}] remote direct item\n"
 
 
 def test_qualified_item_operand_selects_its_exact_owner(isolated_store):
@@ -76,8 +75,9 @@ def test_qualified_item_operand_selects_its_exact_owner(isolated_store):
     result = runner.invoke(app, ["show", f"../owner:{memory.uid[:4]}"])
 
     assert result.exit_code == 0, result.output
-    assert f"Memory: {memory.uid}" in result.output
-    assert "qualified direct item" in result.output
+    assert result.output == (
+        f"[Memory branch/owner:{memory.uid}] qualified direct item\n"
+    )
 
 
 def test_bare_uid_fails_closed_when_multiple_local_owners_match(isolated_store):

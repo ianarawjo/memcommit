@@ -40,9 +40,14 @@ def _render_memory_content(content: str, *, prefix: str = "") -> None:
 
 def _render_memory(memory: ShowMemory, context_name: str) -> None:
     label = source_object_label(SourceForm.MEMORY, title=True)
-    typer.secho(f"{label}: {display_escape_text(memory.uid)}", bold=True)
-    typer.echo(f"Context: {display_escape_text(context_name)}")
-    typer.echo()
+    # A direct lookup already identifies one complete object, so keep its owner
+    # and durable identity adjacent to the body instead of spending a header
+    # block on metadata that does not need independent scanning.
+    typer.echo(
+        f"[{label} {display_escape_text(context_name)}:"
+        f"{display_escape_text(memory.uid)}] ",
+        nl=False,
+    )
     _render_memory_content(memory.content)
 
 

@@ -46,6 +46,9 @@ def test_show_exact_memory_uses_the_shared_memory_foreground() -> None:
 
     colored = _render(result, color=True)
 
+    assert click.unstyle(colored) == (
+        "[Memory notes:11111111-memory] Direct Memory body\n"
+    )
     assert click.style(
         "Direct Memory body",
         fg=memory_object_color_rgb(),
