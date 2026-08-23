@@ -35,23 +35,12 @@ class ConciseCompareProvider:
         compared_ids = [row["id"] for row in payload["frames"][1]["memories"]]
         return json.dumps(
             {
-                "overview": {
-                    "text": "Both peers constrain the same proposal in different ways.",
-                    "source_ids": [reference_ids[0], compared_ids[0]],
-                },
-                "both": {
-                    "text": "Both require a concise proposal.",
-                    "source_ids": [reference_ids[0], compared_ids[0]],
-                },
-                "differences": {"text": "", "source_ids": []},
-                "reference_only": {
-                    "text": "The reference also asks for headings.",
-                    "source_ids": [reference_ids[-1]],
-                },
-                "compared_only": {
-                    "text": "The peer also asks for active voice.",
-                    "source_ids": [compared_ids[-1]],
-                },
+                "text": (
+                    "Both peers require a concise proposal, while the reference "
+                    "also asks for descriptive headings and the peer prefers "
+                    "active voice."
+                ),
+                "source_ids": [*reference_ids, *compared_ids],
             }
         )
 
@@ -85,7 +74,7 @@ def test_summary_contract_has_no_relation_or_issue_output_shape():
     assert "relations" not in schema_text
     assert "issues" not in schema_text
     assert "assignments" not in schema_text
-    assert summary.overview.text.startswith("Both peers")
+    assert summary.paragraph.text.startswith("Both peers")
     assert summary.source_count == 2
 
 
@@ -103,14 +92,8 @@ def test_summary_rejects_one_sided_evidence_for_a_cross_frame_claim():
             reference_id = payload["frames"][0]["memories"][0]["id"]
             return json.dumps(
                 {
-                    "overview": {
-                        "text": "This claims to compare both sides.",
-                        "source_ids": [reference_id],
-                    },
-                    "both": {"text": "", "source_ids": []},
-                    "differences": {"text": "", "source_ids": []},
-                    "reference_only": {"text": "", "source_ids": []},
-                    "compared_only": {"text": "", "source_ids": []},
+                    "text": "This claims to compare both sides.",
+                    "source_ids": [reference_id],
                 }
             )
 
@@ -118,6 +101,33 @@ def test_summary_rejects_one_sided_evidence_for_a_cross_frame_claim():
         summarize_comparison(
             ComparisonInput.from_contexts(reference, compared),
             OneSidedProvider(),
+        )
+
+
+def test_summary_rejects_provider_authored_line_breaks():
+    reference = ops.init("summary/reference")
+    ops.add(reference, "Reference claim.")
+    compared = ops.init("summary/peer")
+    ops.add(compared, "Peer claim.")
+
+    class SectionedProvider(ConciseCompareProvider):
+        def complete(self, prompt, *, operation, output_schema=None):
+            payload = json.loads(
+                prompt.split("COMPARISON SUMMARY PAYLOAD:\n", 1)[1]
+            )
+            reference_id = payload["frames"][0]["memories"][0]["id"]
+            compared_id = payload["frames"][1]["memories"][0]["id"]
+            return json.dumps(
+                {
+                    "text": "BOTH\nThe claims overlap.",
+                    "source_ids": [reference_id, compared_id],
+                }
+            )
+
+    with pytest.raises(ComparisonSummaryError, match="exactly one prose paragraph"):
+        summarize_comparison(
+            ComparisonInput.from_contexts(reference, compared),
+            SectionedProvider(),
         )
 
 
@@ -151,10 +161,11 @@ def test_default_cli_is_transient_and_ledger_is_explicit(
     assert result.exit_code == 0, result.output
     assert "MEM COMPARE · SUMMARY" in result.output
     assert "READ-ONLY · TRANSIENT · NO RELATION LEDGER" in result.output
-    assert "Both peers constrain" in result.output
-    assert "Deep relation analysis is available with mem compare --ledger" in (
-        result.output.replace("\n", " ")
-    )
+    assert "Both peers require a concise proposal" in result.output
+    assert "\nOVERVIEW\n" not in result.output
+    assert "\nBOTH\n" not in result.output
+    assert "\nDIFFERENCES\n" not in result.output
+    assert "Deep relation analysis is available" not in result.output
     assert len(provider.prompts) == 1
     assert not comparison_analysis_path(reference.uid, compared.uid).exists()
 

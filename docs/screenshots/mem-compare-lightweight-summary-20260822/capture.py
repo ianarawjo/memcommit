@@ -73,26 +73,12 @@ class _Provider:
         time.sleep(2.5)
         return json.dumps(
             {
-                "overview": {
-                    "text": "Both peers constrain a concise proposal; each adds one distinct writing preference.",
-                    "source_ids": [reference[0], peer[0]],
-                },
-                "both": {
-                    "text": "Both require the proposal to remain concise.",
-                    "source_ids": [reference[0], peer[0]],
-                },
-                "differences": {
-                    "text": "The additional preferences address structure versus prose style.",
-                    "source_ids": [reference[1], peer[1]],
-                },
-                "reference_only": {
-                    "text": "REFERENCE alone asks for descriptive headings.",
-                    "source_ids": [reference[1]],
-                },
-                "compared_only": {
-                    "text": "PEER alone asks for active voice.",
-                    "source_ids": [peer[1]],
-                },
+                "text": (
+                    "Both peers require the proposal to remain concise, but "
+                    "the reference additionally asks for descriptive headings "
+                    "while the peer prefers active voice."
+                ),
+                "source_ids": [*reference, *peer],
             }
         )
 

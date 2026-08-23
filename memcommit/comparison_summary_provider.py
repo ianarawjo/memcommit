@@ -9,7 +9,6 @@ from memcommit.comparison import ComparisonInput
 from memcommit.comparison_summary import (
     ComparisonSummary,
     ComparisonSummaryError,
-    ComparisonSummaryReports,
 )
 from memcommit.semantic_execution import (
     BudgetLimits,
@@ -29,7 +28,7 @@ from memcommit.understanding import (
 
 
 COMPARISON_SUMMARY_OPERATION = "compare_summary"
-COMPARISON_SUMMARY_PROVIDER_CONTRACT_VERSION = "concise-source-linked-v1"
+COMPARISON_SUMMARY_PROVIDER_CONTRACT_VERSION = "single-paragraph-source-linked-v2"
 COMPARISON_SUMMARY_TEXT_LIMIT = 2_000
 
 COMPARISON_SUMMARY_EXECUTION_POLICY = SemanticExecutionPolicy(
@@ -85,66 +84,52 @@ def _provider_payload(
 def comparison_summary_output_schema(
     aliases: tuple[str, ...],
 ) -> dict[str, object]:
-    required = source_linked_understanding_schema(
+    schema = source_linked_understanding_schema(
         aliases,
         limit=COMPARISON_SUMMARY_TEXT_LIMIT,
     )
-    optional = source_linked_understanding_schema(
-        aliases,
-        limit=COMPARISON_SUMMARY_TEXT_LIMIT,
-        empty=True,
-        require_sources=False,
-    )
-    return {
-        "type": "object",
-        "properties": {
-            "overview": required,
-            "both": optional,
-            "differences": optional,
-            "reference_only": optional,
-            "compared_only": optional,
-        },
-        "required": [
-            "overview",
-            "both",
-            "differences",
-            "reference_only",
-            "compared_only",
-        ],
-        "additionalProperties": False,
-    }
+    properties = schema["properties"]
+    assert isinstance(properties, dict)
+    text_schema = properties["text"]
+    assert isinstance(text_schema, dict)
+    text_schema["pattern"] = r"^[^\r\n]+$"
+    return schema
 
 
 def _prompt(payload: dict[str, object]) -> str:
     return (
         "Compare the two equal-authority Memory frames for a person who needs "
-        "a concise read-only report. Return an overview and four short prose "
-        "sections: what both contain, what materially differs, what appears "
-        "only in REFERENCE, and what appears only in COMPARED. Cite only the "
-        "opaque source ids that directly support each statement. An absent "
-        "section must use empty text and no source ids. Do not build or imply "
-        "an exhaustive relation graph, assign every Memory to a group, create "
-        "grounding questions, recommend Meld dispositions, or repeat source "
-        "text. PRIMARY rows are the requested comparison subjects; CONTEXT "
-        "rows may clarify them but are not additional subjects. Keep the "
-        "overview under about 60 English words and all four sections together "
-        "under about 180 English words.\n\nCOMPARISON SUMMARY PAYLOAD:\n"
+        "one concise read-only summary. Return exactly one natural-language "
+        "prose paragraph that integrates the most important common ground, "
+        "material differences, and side-specific points where they are useful. "
+        "Do not use headings, labels, bullets, lists, line breaks, or a fixed "
+        "category-by-category template. Cite only opaque source ids that "
+        "directly support the paragraph. Do not build or imply an exhaustive "
+        "relation graph, assign every Memory to a group, create grounding "
+        "questions, recommend Meld dispositions, or repeat source text. PRIMARY "
+        "rows are the requested comparison subjects; CONTEXT rows may clarify "
+        "them but are not additional subjects. Keep the paragraph under about "
+        "140 English words.\n\nCOMPARISON SUMMARY PAYLOAD:\n"
         + json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
     )
 
 
-def _decode_section(
+def _decode_paragraph(
     value: object,
     *,
     aliases: dict[str, str],
-    allowed_aliases: set[str] | None = None,
-    require_both_sides: tuple[set[str], set[str]] | None = None,
+    reference_ids: set[str],
+    compared_ids: set[str],
 ) -> UnderstandingSummary:
     if not isinstance(value, dict) or set(value) != {"text", "source_ids"}:
-        raise ComparisonSummaryError("Invalid lightweight Compare section.")
+        raise ComparisonSummaryError("Invalid lightweight Compare paragraph.")
+    raw_text = value["text"]
+    if isinstance(raw_text, str) and any(mark in raw_text for mark in ("\r", "\n")):
+        raise ComparisonSummaryError(
+            "Lightweight Compare must return exactly one prose paragraph."
+        )
     text = normalize_understanding_text(
-        value["text"],
-        empty=True,
+        raw_text,
         limit=COMPARISON_SUMMARY_TEXT_LIMIT,
     )
     raw_ids = value["source_ids"]
@@ -152,21 +137,17 @@ def _decode_section(
         not isinstance(raw_ids, list)
         or any(not isinstance(alias, str) or alias not in aliases for alias in raw_ids)
         or len(set(raw_ids)) != len(raw_ids)
-        or (allowed_aliases is not None and any(alias not in allowed_aliases for alias in raw_ids))
-        or (not text and raw_ids)
-        or (text and not raw_ids)
+        or not raw_ids
     ):
         raise ComparisonSummaryError(
-            "Lightweight Compare section has invalid source evidence."
+            "Lightweight Compare paragraph has invalid source evidence."
         )
-    if text and require_both_sides is not None:
-        left, right = require_both_sides
-        if not any(alias in left for alias in raw_ids) or not any(
-            alias in right for alias in raw_ids
-        ):
-            raise ComparisonSummaryError(
-                "A cross-frame Compare section must cite both peer sides."
-            )
+    if not any(alias in reference_ids for alias in raw_ids) or not any(
+        alias in compared_ids for alias in raw_ids
+    ):
+        raise ComparisonSummaryError(
+            "A Compare paragraph must cite both peer sides."
+        )
     return UnderstandingSummary(
         text=text,
         source_uids=tuple(dict.fromkeys(aliases[alias] for alias in raw_ids)),
@@ -194,7 +175,7 @@ def summarize_comparison(
             payload,
             item_count=sum(len(frame.memories) for frame in comparison_input.frames),
             output_schema=schema,
-            expected_output_items=5,
+            expected_output_items=1,
         ),
     )
     if plan.mode is not ExecutionMode.ONE_SHOT:
@@ -213,51 +194,18 @@ def summarize_comparison(
         raise ComparisonSummaryError(
             "The provider returned an invalid lightweight Compare report."
         ) from error
-    if not isinstance(decoded, dict) or set(decoded) != {
-        "overview",
-        "both",
-        "differences",
-        "reference_only",
-        "compared_only",
-    }:
-        raise ComparisonSummaryError(
-            "The provider returned an invalid lightweight Compare shape."
-        )
-    cross = (reference_ids, compared_ids)
     try:
-        overview = _decode_section(
-            decoded["overview"],
+        paragraph = _decode_paragraph(
+            decoded,
             aliases=aliases,
-            require_both_sides=cross,
-        )
-        reports = ComparisonSummaryReports(
-            both=_decode_section(
-                decoded["both"],
-                aliases=aliases,
-                require_both_sides=cross,
-            ),
-            differences=_decode_section(
-                decoded["differences"],
-                aliases=aliases,
-                require_both_sides=cross,
-            ),
-            reference_only=_decode_section(
-                decoded["reference_only"],
-                aliases=aliases,
-                allowed_aliases=reference_ids,
-            ),
-            compared_only=_decode_section(
-                decoded["compared_only"],
-                aliases=aliases,
-                allowed_aliases=compared_ids,
-            ),
+            reference_ids=reference_ids,
+            compared_ids=compared_ids,
         )
     except UnderstandingError as error:
         raise ComparisonSummaryError(str(error)) from error
     return ComparisonSummary.from_input(
         comparison_input,
-        overview=overview,
-        reports=reports,
+        paragraph=paragraph,
     )
 
 

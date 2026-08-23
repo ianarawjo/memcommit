@@ -14,7 +14,7 @@ from memcommit.comparison import ComparisonFrame, ComparisonInput
 from memcommit.understanding import UnderstandingSummary
 
 
-COMPARISON_SUMMARY_RULESET_VERSION = "peer-summary-v1"
+COMPARISON_SUMMARY_RULESET_VERSION = "peer-paragraph-v2"
 
 
 class ComparisonSummaryError(ValueError):
@@ -22,37 +22,14 @@ class ComparisonSummaryError(ValueError):
 
 
 @dataclass(frozen=True)
-class ComparisonSummaryReports:
-    """Four human-facing slices without a hidden relation graph."""
-
-    both: UnderstandingSummary
-    differences: UnderstandingSummary
-    reference_only: UnderstandingSummary
-    compared_only: UnderstandingSummary
-
-    def __post_init__(self) -> None:
-        if any(
-            not isinstance(section, UnderstandingSummary)
-            for section in (
-                self.both,
-                self.differences,
-                self.reference_only,
-                self.compared_only,
-            )
-        ):
-            raise ComparisonSummaryError("Invalid lightweight Compare reports.")
-
-
-@dataclass(frozen=True)
 class ComparisonSummary:
-    """One transient comparison report over exact frozen source frames."""
+    """One transient comparison paragraph over exact frozen source frames."""
 
     uid: str
     created_at: str
     frames: tuple[ComparisonFrame, ComparisonFrame]
     include_descendants: tuple[bool, bool]
-    overview: UnderstandingSummary
-    reports: ComparisonSummaryReports
+    paragraph: UnderstandingSummary
     ruleset_version: str = COMPARISON_SUMMARY_RULESET_VERSION
 
     def __post_init__(self) -> None:
@@ -66,8 +43,7 @@ class ComparisonSummary:
             != ("REFERENCE", "COMPARED")
             or len(self.include_descendants) != 2
             or any(type(value) is not bool for value in self.include_descendants)
-            or not isinstance(self.overview, UnderstandingSummary)
-            or not isinstance(self.reports, ComparisonSummaryReports)
+            or not isinstance(self.paragraph, UnderstandingSummary)
             or self.ruleset_version != COMPARISON_SUMMARY_RULESET_VERSION
         ):
             raise ComparisonSummaryError("Invalid lightweight Compare summary.")
@@ -76,17 +52,10 @@ class ComparisonSummary:
             for frame in self.frames
             for memory in (*frame.memories, *frame.context_evidence)
         }
-        for section in (
-            self.overview,
-            self.reports.both,
-            self.reports.differences,
-            self.reports.reference_only,
-            self.reports.compared_only,
-        ):
-            if any(uid not in available for uid in section.source_uids):
-                raise ComparisonSummaryError(
-                    "Lightweight Compare cited evidence outside its frozen frames."
-                )
+        if any(uid not in available for uid in self.paragraph.source_uids):
+            raise ComparisonSummaryError(
+                "Lightweight Compare cited evidence outside its frozen frames."
+            )
 
     @property
     def source_count(self) -> int:
@@ -97,8 +66,7 @@ class ComparisonSummary:
         cls,
         comparison_input: ComparisonInput,
         *,
-        overview: UnderstandingSummary,
-        reports: ComparisonSummaryReports,
+        paragraph: UnderstandingSummary,
     ) -> "ComparisonSummary":
         if not isinstance(comparison_input, ComparisonInput):
             raise ComparisonSummaryError(
@@ -110,8 +78,7 @@ class ComparisonSummary:
             created_at=comparison_input.created_at,
             frames=comparison_input.frames,
             include_descendants=comparison_input.include_descendants,
-            overview=overview,
-            reports=reports,
+            paragraph=paragraph,
         )
 
     def matches_input(self, comparison_input: ComparisonInput) -> bool:
@@ -160,5 +127,4 @@ __all__ = [
     "COMPARISON_SUMMARY_RULESET_VERSION",
     "ComparisonSummary",
     "ComparisonSummaryError",
-    "ComparisonSummaryReports",
 ]

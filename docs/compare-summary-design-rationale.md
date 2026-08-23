@@ -21,8 +21,8 @@ result lifecycle both needed to become smaller.
 Default `mem compare REFERENCE PEER` now produces one transient
 `ComparisonSummary`:
 
-- one concise source-linked overview;
-- optional `BOTH`, `DIFFERENCES`, `REFERENCE ONLY`, and `PEER ONLY` prose;
+- exactly one concise source-linked prose paragraph with no authored line
+  breaks, headings, labels, bullets, or category template;
 - no relation objects, source assignments, Issues, Meld dispositions, or
   application proposal;
 - no comparison-analysis file, session row, checkpoint, or Context mutation;
@@ -48,16 +48,15 @@ coverage it requires.
 The summary request freezes the same exact ordered Context frames and optional
 Memory selectors as deep Compare. Provider aliases remain call-local and
 Context names remain presentation-only. The strict output schema contains
-only five `{text, source_ids}` sections. It has no field capable of carrying a
+only one `{text, source_ids}` paragraph. It has no field capable of carrying a
 relation ledger or review Issue.
 
-Every nonempty section must cite known frozen aliases. Cross-frame sections
-must cite at least one source from each peer; side-only sections may cite only
-their declared side. Empty sections must cite nothing. Evidence aliases are
-decoded to immutable Memory UIDs before presentation. The overview targets
-about 60 English words and the four sections together target about 180; these
-are generation instructions, while the existing bounded source-linked text
-validator remains the hard boundary.
+The paragraph must cite known frozen aliases from both peers. Evidence aliases
+are decoded to immutable Memory UIDs before presentation. The provider is
+instructed to integrate salient common ground, differences, and side-specific
+points naturally in under about 140 English words instead of mechanically
+enumerating categories. The schema and decoder reject provider-authored line
+breaks, while ordinary terminal wrapping remains presentation-only.
 
 The summary declares `HIERARCHICAL_REDUCE` but does not claim a staged
 reconciler. An over-budget pair fails before provider connection instead of

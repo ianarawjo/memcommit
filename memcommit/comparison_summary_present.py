@@ -26,26 +26,8 @@ def render_comparison_summary(summary: ComparisonSummary) -> str:
             f"SOURCES {summary.source_count:,}"
         ),
         "",
-        "OVERVIEW",
-        display_escape_text(summary.overview.text),
+        display_escape_text(summary.paragraph.text),
     ]
-    for label, section in (
-        ("BOTH", summary.reports.both),
-        ("DIFFERENCES", summary.reports.differences),
-        ("REFERENCE ONLY", summary.reports.reference_only),
-        ("PEER ONLY", summary.reports.compared_only),
-    ):
-        if section.text:
-            lines.extend(("", label, display_escape_text(section.text)))
-    lines.extend(
-        (
-            "",
-            (
-                "Deep relation analysis is available with mem compare --ledger "
-                "or when Meld requires an exhaustive basis."
-            ),
-        )
-    )
     return "\n".join(lines)
 
 

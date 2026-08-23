@@ -29,8 +29,8 @@ invocation. `--refresh` still requires an explicit peer and is rejected on the
 picker route.
 
 The unqualified explicit-pair route is now a transient lightweight summary.
-It returns an overview and four optional source-linked prose sections without
-constructing or saving relations, assignments, Issues, or a Meld basis.
+It returns exactly one source-linked prose paragraph without constructing or
+saving relations, assignments, Issues, or a Meld basis.
 `--ledger` explicitly selects the exhaustive saved analysis described by the
 remainder of this document; `--refresh` retains that deep replacement contract.
 The split and migration boundary are recorded in

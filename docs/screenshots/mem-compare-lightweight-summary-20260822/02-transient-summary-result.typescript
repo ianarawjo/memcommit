@@ -7,21 +7,6 @@ PEER · capture/peer
 STATUS · READ-ONLY · TRANSIENT · NO RELATION LEDGER
 SCOPE · REFERENCE CURRENT ONLY · PEER CURRENT ONLY · SOURCES 4
 
-OVERVIEW
-Both peers constrain a concise proposal; each adds one distinct writing preference.
-
-BOTH
-Both require the proposal to remain concise.
-
-DIFFERENCES
-The additional preferences address structure versus prose style.
-
-REFERENCE ONLY
-REFERENCE alone asks for descriptive headings.
-
-PEER ONLY
-PEER alone asks for active voice.
-
-Deep relation analysis is available with mem compare --ledger or when Meld requires an exhaustive basis.
+Both peers require the proposal to remain concise, but the reference additionally asks for descriptive headings while the peer prefers active voice.
 RESULT RETURNED TO CALLER · NO RESIDENT RESULT SCREEN
 CAPTURE GATE · PRESS V FOR READ-ONLY VERIFICATION

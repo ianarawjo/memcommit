@@ -3,8 +3,8 @@
 This ordered trace executes the actual CLI callback and application boundary
 for the new default Compare contract. The provider is a deterministic
 source-linked capture double so the terminal states are reproducible; a
-separate live Codex/none run over 52 Memories completed in 8.09 seconds with a
-7.67-second provider turn.
+separate live Codex/none run over 52 Memories completed in 7.87 seconds after
+the single-paragraph contract replaced the earlier sectioned response.
 
 - PTY: `180` columns × `52` rows, set by `pexpect` and reported by the child.
 - Color: `TERM=xterm-256color`, `COLORTERM=truecolor`, and
@@ -18,7 +18,7 @@ separate live Codex/none run over 52 Memories completed in 8.09 seconds with a
 | Image | State and preceding input | Durable mutation |
 | --- | --- | --- |
 | `01-provider-wait.png` | explicit Reference and Peer are frozen; the shared interactive wait shell shows summary inference | none |
-| `02-transient-summary-result.png` | provider returned one overview plus four bounded source-linked sections; output returned to the caller with no resident result screen | none |
+| `02-transient-summary-result.png` | provider returned exactly one bounded source-linked prose paragraph; output returned to the caller with no resident result screen | none |
 | `03-read-only-verification.png` | `V`; exact source digests unchanged, one provider call, zero checkpoints, no deep analysis, current Context unchanged | none |
 
 The explicit operands are the Source/peer selection for this representative
