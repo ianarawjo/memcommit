@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ MEM FIND AMBIGUITIES                                                                                                                                                            ^┃
+┃ SOURCE capture/source → RESULT capture/result                                                                                                                                    ┃
+┃ READ-ONLY · CAPTURE                                                                                                                                                              ┃
+┃                                                                                                                                                                                  ┃
+┃ SCOPE                                                                                                                                                                            ┃
+┃ Inspected three direct Memories in one frozen readable Context.                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃ FINDINGS                                                                                                                                                                         ┃
+┃ Reported one actionable ambiguity finding.                                                                                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃ BOUNDARY                                                                                                                                                                         ┃
+┃ No Context or Memory changes have been applied.                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃ REVIEW ITEMS                                                                                                                                                                     ┃
+┃  No item interaction is needed for this label capture.                                                                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ READ ONLY · READ-ONLY · CAPTURE · ↑/↓ item  Enter detail  Tab comment H Help  y/Y copy  Q close

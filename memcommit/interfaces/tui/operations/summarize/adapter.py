@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
-from memcommit.interfaces.console.text import safe_terminal_text
+from memcommit.interfaces.console.text import (
+    display_escape_text,
+    safe_terminal_text,
+)
 from memcommit.interfaces.summarize import summarize_scope_label
 from memcommit.interfaces.tui.operations.summarize.model import (
     SummarizeClipboardProjection,
@@ -13,7 +16,6 @@ from memcommit.interfaces.tui.viewers.semantic import (
     SemanticViewerDocument,
     SemanticViewerSection,
 )
-from memcommit.interfaces.understanding import understanding_lines
 from memcommit.summarize_application import SummarizeResult
 
 
@@ -36,7 +38,7 @@ def _clipboard_text(
             lines.append("")
         if include_scope_labels:
             lines.append(_clipboard_scope_label(result))
-        lines.extend(understanding_lines(result.understanding))
+        lines.append(display_escape_text(result.understanding.text))
     return "\n".join(lines)
 
 
@@ -124,16 +126,15 @@ def project_summarize_result(result: SummarizeResult) -> SemanticViewerDocument:
             ),
             SemanticViewerSection(
                 "SUMMARY:UNDERSTANDING",
-                "UNDERSTANDING",
+                "SUMMARY",
                 SemanticViewerBlock(
                     (
-                        ("class:section", "\n WHAT MEM UNDERSTOOD\n"),
                         (
                             "class:viewer-body",
-                            f" {safe_terminal_text(result.understanding.text)}\n",
+                            f"\n {safe_terminal_text(result.understanding.text)}\n",
                         ),
                     ),
-                    focus_indices=(0, 1),
+                    focus_indices=(0,),
                 ),
             ),
         )
@@ -204,17 +205,16 @@ def project_summarize_outcome(
                 ),
                 SemanticViewerSection(
                     f"SUMMARY:{uid}:UNDERSTANDING",
-                    "UNDERSTANDING",
+                    "SUMMARY",
                     SemanticViewerBlock(
                         (
-                            ("class:section", " WHAT MEM UNDERSTOOD\n"),
                             (
                                 "class:viewer-body",
                                 " "
                                 f"{safe_terminal_text(result.understanding.text)}\n",
                             ),
                         ),
-                        focus_indices=(0, 1),
+                        focus_indices=(0,),
                     ),
                 ),
             )

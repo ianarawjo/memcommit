@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ MEM AUDIT                                                                                                                                                                       ^┃
+┃ SOURCE capture/source → RESULT capture/result                                                                                                                                    ┃
+┃ READ-ONLY · CAPTURE                                                                                                                                                              ┃
+┃                                                                                                                                                                                  ┃
+┃ AUDIT SUMMARY                                                                                                                                                                    ┃
+┃ All requested quality checks completed over the same frozen Source.                                                                                                              ┃
+┃                                                                                                                                                                                  ┃
+┃ CHECKS                                                                                                                                                                           ┃
+┃ DUPLICATES · COMPLETE                                                                                                                                                            ┃
+┃AMBIGUITIES · COMPLETE                                                                                                                                                            ┃
+┃CONFLICTS · COMPLETE                                                                                                                                                              ┃
+┃                                                                                                                                                                                  ┃
+┃ AUDITED SOURCE                                                                                                                                                                   ┃
+┃ capture/source · 3 direct Memories.                                                                                                                                              ┃
+┃                                                                                                                                                                                  ┃
+┃ PROVENANCE                                                                                                                                                                       ┃
+┃ QUALITY RULESET 1 · Capture Provider                                                                                                                                             ┃
+┃                                                                                                                                                                                  ┃
+┃ BOUNDARY                                                                                                                                                                         ┃
+┃ This report is model-assisted evidence, not proof that no other issue exists.                                                                                                    ┃
+┃                                                                                                                                                                                  ┃
+┃ REVIEW ITEMS                                                                                                                                                                     ┃
+┃  No item interaction is needed for this label capture.                                                                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ READ ONLY · READ-ONLY · CAPTURE · ↑/↓ item  Enter detail  Tab comment H Help  y/Y copy  Q close

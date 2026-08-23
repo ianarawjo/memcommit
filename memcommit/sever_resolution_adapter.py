@@ -162,7 +162,13 @@ def _report_items_summary(session: SeverSession) -> str:
 
 
 def _overview_sections(session: SeverSession) -> tuple[ResolutionOverviewSection, ...]:
-    sections = [ResolutionOverviewSection("understood", "UNDERSTOOD", session.overview)]
+    sections = [
+        ResolutionOverviewSection(
+            "source-overview",
+            "SOURCE OVERVIEW",
+            session.overview,
+        )
+    ]
     excluded = tuple(
         dict.fromkeys(
             (

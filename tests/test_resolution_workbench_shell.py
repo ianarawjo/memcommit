@@ -231,7 +231,7 @@ def test_save_location_parent_tree_back_keys_restore_compact_frame(back_key):
     assert navigation.pane == "save_location"
 
 
-def test_report_places_context_locations_above_understanding_and_apply_last():
+def test_report_places_context_locations_above_overview_and_apply_last():
     view = replace(
         _view(
             replace(_item("optional"), priority="OPTIONAL"),
@@ -259,7 +259,8 @@ def test_report_places_context_locations_above_understanding_and_apply_last():
     assert "SOURCE · practice/source" in rendered
     assert "OUTPUT · practice/output · NOT CREATED" in rendered
     assert "incoming -> baseline" not in rendered
-    assert rendered.index("CONTEXT LOCATIONS") < rendered.index("WHAT MEM UNDERSTOOD")
+    assert rendered.index("CONTEXT LOCATIONS") < rendered.index("OVERVIEW")
+    assert "WHAT MEM UNDERSTOOD" not in rendered
     assert "SAVE LOCATION" not in rendered
     assert "APPLY CONFIRMATION" in rendered
 
@@ -298,6 +299,7 @@ def test_report_focuses_operation_declared_overview_units_not_the_group():
 
     for index, heading in enumerate(("UNDERSTOOD", "CHANGED", "UNRESOLVED")):
         fragments = resolution_report_fragments(view, focused_section=index)
+        assert "WHAT MEM UNDERSTOOD" not in "".join(text for _style, text in fragments)
         assert any(
             style == "class:viewer-section" and heading in text
             for style, text in fragments
@@ -597,7 +599,7 @@ def test_report_navigation_moves_once_per_complete_finding():
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
-    )
+        )
 
     assert action.kind == "CLOSE"
     assert navigation.section_uid == "ITEM:b"
@@ -1709,9 +1711,7 @@ def test_expanded_update_impact_comment_revises_the_same_change_draft():
     with create_pipe_input() as pipe_input:
         # Move through Viewer to the Impact change, expand it, and comment
         # without detouring through the separate Items detail.
-        pipe_input.send_text(
-            "\x1b[B" * 3 + "\x1b[CcKeep the date less specific.\rq"
-        )
+        pipe_input.send_text("\x1b[B" * 3 + "\x1b[CcKeep the date less specific.\rq")
         action = run_resolution_workbench_shell(
             view,
             split_viewer_items=True,
@@ -1790,9 +1790,7 @@ def test_commentable_change_response_is_included_in_revision_turn():
         )
 
     assert action.kind == "SUBMIT_ALL"
-    assert "Issue change: Response: Remove this proposed change." in (
-        action.comment
-    )
+    assert "Issue change: Response: Remove this proposed change." in (action.comment)
 
 
 def test_semantic_turn_command_is_built_for_review_and_rebuilt_at_approval():

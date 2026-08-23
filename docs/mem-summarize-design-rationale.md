@@ -7,8 +7,8 @@ Atomize and Compare and the standalone read-only `mem summarize` producer.
 
 ## Decision
 
-Only `WHAT MEM UNDERSTOOD` is common. Operation-specific accounts remain owned
-by their operation:
+Only the source-linked `UnderstandingSummary` semantic value is common.
+Its user-facing heading is owned by the operation that presents it:
 
 ```text
 UnderstandingSummary
@@ -17,18 +17,27 @@ UnderstandingSummary
 
 Atomize
   UnderstandingSummary
+  rendered as WHAT MEM UNDERSTOOD
   WHAT HAPPENED
   WHAT REMAINS UNRESOLVED
 
 Compare
   UnderstandingSummary
+  rendered as WHAT MEM UNDERSTOOD
   WHAT BOTH CONTAIN
   WHAT DIFFERS
   side-only reports
+
+Summarize
+  UnderstandingSummary
+  rendered directly as the Summary body
 ```
 
 `mem summarize [CONTEXT]` independently produces and renders only the shared
-unit. It does not run Atomize classifications, ambiguity or conflict scans, a
+semantic unit. Because that one paragraph is the requested Summary artifact,
+the `SUMMARY` command title already supplies its role and no nested
+`WHAT MEM UNDERSTOOD` heading is shown. It does not run Atomize
+classifications, ambiguity or conflict scans, a
 comparison ledger, or any Context mutation. It is comprehension, not
 distillation: no summary Memory or checkpoint is created.
 
@@ -76,10 +85,11 @@ fail closed. Two distinct authorized aliases may expose the same durable
 Memory UID; their citations collapse to that UID once in first-seen order.
 Output is terminal-escaped by the common renderer.
 
-`--copy` writes the verified `WHAT MEM UNDERSTOOD` heading and body to the
-operating-system plain-text clipboard after source revalidation. For an
-interactive `BOTH` result it keeps `[CURRENT ONLY]` and `[CURRENT +
-DESCENDANTS]` as two labelled sections instead of silently choosing one. It
+`--copy` writes the verified Summary body to the operating-system plain-text
+clipboard after source revalidation. For an interactive `BOTH` result it keeps
+`[CURRENT ONLY]` and `[CURRENT + DESCENDANTS]` as two labelled sections instead
+of silently choosing one, but it does not repeat a second Summary or
+understanding heading inside either scope. It
 omits the command header and execution status, creates no structured mutation
 clipboard stage, and performs no additional provider turn. A copy failure
 leaves the rendered result visible and exits with an explicit error. Copying prose derived
@@ -104,11 +114,10 @@ materialized only in the invoking process and is revalidated before return.
 
 ## Reuse boundary
 
-Common type, evidence binding, schema helpers, and rendering are reusable.
-Operation-specific prompt context and the resulting text are not automatically
-interchangeable. A summary may be reused as data only when its complete frame
-and operation-neutral understanding contract match; equal-looking headings do
-not prove equal evidence.
+Common type, evidence binding, and schema helpers are reusable. Presentation
+headings and operation-specific prompt context are not. A summary may be reused
+as data only when its complete frame and operation-neutral understanding
+contract match; equal-looking prose does not prove equal evidence.
 
 Physical provider batching is independent of this logical boundary. Atomize
 may continue returning its understanding, classifications, and quality results

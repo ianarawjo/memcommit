@@ -131,7 +131,7 @@ def cmd(
         typer.Option(
             "--copy",
             help=(
-                "Copy the verified WHAT MEM UNDERSTOOD document as plain "
+                "Copy the verified Summary document as plain "
                 "text without creating a structured mutation stage"
             ),
         ),
@@ -334,7 +334,7 @@ def cmd(
             )
             raise typer.Exit(1)
         typer.secho(
-            "Copied WHAT MEM UNDERSTOOD as plain text; no structured "
+            "Copied Summary as plain text; no structured "
             "clipboard stage was created.",
             fg=typer.colors.GREEN,
             err=True,

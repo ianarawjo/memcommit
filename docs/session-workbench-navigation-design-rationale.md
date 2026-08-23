@@ -58,11 +58,13 @@ Resolution sessions use three visible frames with separate responsibilities:
 
 The complete report begins with a non-focusable `CONTEXT LOCATIONS` block
 whenever the adapter supplies typed endpoints. This sits before
-`WHAT MEM UNDERSTOOD` because source, criteria, target, and result locations
-describe the operation frame, not the model's interpretation of its contents.
-One-source, two-source, and source/criteria/result operations share the same
-row shape; role labels remain operation-owned so the navigation shell never
-guesses semantics from an arrow string.
+the adapter's operation-owned overview sections because source, criteria,
+target, and result locations describe the operation frame, not the semantic
+interpretation of its contents. The navigation shell does not manufacture a
+generic comprehension group. One-source, two-source, and
+source/criteria/result operations share the same row shape; role labels remain
+operation-owned so the navigation shell never guesses semantics from an arrow
+string.
 
 `TO DO` first points to the earliest unresolved required conflict or item, and
 Enter opens that target in Viewer. Once every REQUIRED item has a staged

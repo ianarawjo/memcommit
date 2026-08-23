@@ -777,7 +777,7 @@ class ResolutionWorkbenchView:
 
     @property
     def semantic_overview_sections(self) -> tuple[ResolutionOverviewSection, ...]:
-        """Return typed stops, with one compatibility stop for legacy callers."""
+        """Return typed stops, with one neutral compatibility overview."""
 
         if self.overview_sections:
             return self.overview_sections
@@ -785,8 +785,8 @@ class ResolutionWorkbenchView:
             return ()
         return (
             ResolutionOverviewSection(
-                uid="understanding",
-                heading="UNDERSTOOD",
+                uid="overview",
+                heading="OVERVIEW",
                 text=self.overview,
             ),
         )

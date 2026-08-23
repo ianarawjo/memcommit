@@ -24,7 +24,7 @@ def distill_result_lines(result: DistillResult) -> tuple[str, ...]:
         "GOAL · RELEVANCE FOCUS ONLY",
         safe_terminal_text(analysis.goal or "(none)"),
         "",
-        "WHAT MEM UNDERSTOOD",
+        "SOURCE OVERVIEW",
         safe_terminal_text(analysis.overview),
         "",
         f"PROPOSED RULES · {len(analysis.rules)}",

@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ DISTILL · capture/examples                                                                                                                                                      ^┃
+┃ STATUS · REVIEW ONLY · SOURCE UNCHANGED · DIRECT · LIVE                                                                                                                          ┃
+┃                                                                                                                                                                                  ┃
+┃ GOAL · RELEVANCE FOCUS ONLY                                                                                                                                                      ┃
+┃ Preserve access exceptions.                                                                                                                                                      ┃
+┃                                                                                                                                                                                  ┃
+┃ SOURCE OVERVIEW                                                                                                                                                                  ┃
+┃ The Source demonstrates that a closure notice must retain a verified accessible alternative.                                                                                     ┃
+┃                                                                                                                                                                                  ┃
+┃ RULE 1                                                                                                                                                                           ┃
+┃ Confirm and preserve an accessible alternative before publishing a closure notice.                                                                                               ┃
+┃ SUPPORT · 00000000                                                                                                                                                               ┃
+┃ BOUNDARY · none                                                                                                                                                                  ┃
+┃ WHY · The Source explicitly couples publication with access verification.                                                                                                        ┃
+┃                                                                                                                                                                                  ┃
+┃ OUTSIDE PROPOSED RULES · 0 Memories                                                                                                                                              ┃
+┃ No Result Context or checkpoint has been created.                                                                                                                                ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ DISTILL · ↑/↓ section · PgUp/PgDn page · Home/End · Esc/Backspace/Q close · read-only

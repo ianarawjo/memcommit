@@ -19,6 +19,44 @@ cases remain immutable and digest-bound evidence-to-outcome traces, while
 actionable Resolution items use a source-linked quality-issue contract with
 operation-owned questions, proposed answers, and responses.
 
+The common Resolution renderer does not place every operation-declared
+overview inside a `WHAT MEM UNDERSTOOD` group. Each adapter supplies the exact
+role of each section, such as `AUDIT SUMMARY`, `SCOPE`, `PLAN`, `ASSESSMENT`,
+`SOURCE OVERVIEW`, or `UNDERSTOOD`, and those headings are rendered directly.
+This keeps locally computed state, provenance, verification, and counts from
+being mislabeled as model comprehension. A legacy untyped overview receives
+the neutral `OVERVIEW` heading. The explicit three-part Result workbench below
+retains `WHAT MEM UNDERSTOOD` only where source comprehension is genuinely one
+review dimension beside outcome and unresolved work.
+
+The ordered 180×52 color-PTY evidence set in
+[`docs/screenshots/semantic-overview-labels-20260822/`](screenshots/semantic-overview-labels-20260822/)
+records the singleton Summary, operation-owned Resolution sections, retained
+multi-dimensional cases, and the neutral legacy fallback through production
+renderers without opening provider or durable state.
+
+### Operation-wide heading audit
+
+The audit used the 64 canonical operations in the Help inventory as the
+closed command list, then followed every result adapter that can present
+generated semantic prose. The result is a presentation classification, not an
+operation route-state classification:
+
+| Surface class | Operations | Decision |
+| --- | --- | --- |
+| Requested singleton artifact | Summarize | Render the paragraph directly below the Summary identity and status. Do not repeat an understanding heading in the terminal or clipboard. |
+| Source, proposal, or assessment overview | Distill, Elaborate, Forget, Sever, Check Conformance | Use `SOURCE OVERVIEW`, `PROPOSAL OVERVIEW`, `ASSESSMENT`, or `ASSESSMENT OVERVIEW` according to what the paragraph actually describes. |
+| Shared Resolution report with heterogeneous sections | Audit, Dedun, Find Duplicates, Find Redundancies, Find Ambiguities, Find Conflicts, Update, Resolve, Impact, Review | Render adapter-declared sections such as Scope, Findings, Plan, Provenance, Verification, or Summary as peers. Do not wrap them in one comprehension group. |
+| Genuine multi-dimensional semantic review | Compare, Atomize, Meld | Retain an understanding dimension where it is independently reviewable beside differences, changes, unresolved work, or accounting. The common shell still does not add an extra outer group. |
+| No affected generic comprehension wrapper | The other 45 canonical operations, including Query, Translate, Rationale, deterministic changes, navigation, history, sharing, and system tools | Keep their existing answer, translation, reason, result, receipt, or deterministic report grammar. Do not add a heading merely for cross-operation visual uniformity. |
+
+The governing test is whether the heading adds information beyond the command
+identity and whether every child beneath it is genuinely a comprehension
+claim. Cardinality alone is a warning signal, not the rule: a one-paragraph
+requested artifact normally needs no nested role label, while a short report
+may still need a precise heading when it distinguishes Source, proposal,
+assessment, or verification semantics.
+
 The current demo renders the shared headings and Mem-authored semantic prose
 in English while preserving source evidence verbatim. English is a bounded
 demo convention, not a claim of cross-language semantic neutrality. The
@@ -291,7 +329,8 @@ universal semantic-operation engine.
 The shared layer may own:
 
 - compact metric and status presentation;
-- the three source-linked overview sections;
+- typed operation-declared overview sections and, for the Result workbench,
+  the three source-linked result overview sections;
 - representative and boundary case roles;
 - operation-neutral source/result reference containers;
 - overview-to-case navigation and detail expansion;

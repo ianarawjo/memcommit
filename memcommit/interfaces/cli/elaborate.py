@@ -23,7 +23,7 @@ def elaborate_result_lines(result: ElaborateResult) -> tuple[str, ...]:
         f"ELABORATE · {direction}",
         f"STATUS · REVIEW ONLY · SUGGESTED · UNVERIFIED · {result.origin.replace('_', ' ')}",
         "",
-        "WHAT MEM UNDERSTOOD",
+        "PROPOSAL OVERVIEW",
         safe_terminal_text(analysis.overview),
     ]
     if analysis.target_context is not None:

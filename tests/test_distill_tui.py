@@ -88,6 +88,8 @@ def test_distill_projects_operation_meaning_over_shared_viewer() -> None:
         text for _style, text in document.render(focused_uid="DISTILL:TITLE")
     )
     assert "GOAL · RELEVANCE FOCUS ONLY" in rendered
+    assert "SOURCE OVERVIEW" in rendered
+    assert "WHAT MEM UNDERSTOOD" not in rendered
     assert "Prefer a quiet setting" in rendered
     assert "STATUS · PROPOSAL" in rendered
 
@@ -106,7 +108,7 @@ def test_distill_clipboard_keeps_focused_rule_and_whole_proposal_distinct() -> N
     assert focused.text.startswith("RULE 1 · Prefer a quiet setting")
     assert "WHAT MEM UNDERSTOOD" not in focused.text
     assert complete.label == "complete Distill proposal"
-    assert "WHAT MEM UNDERSTOOD" in complete.text
+    assert "SOURCE OVERVIEW" in complete.text
 
 
 def test_distill_tui_executes_only_after_explicit_run() -> None:
@@ -283,4 +285,4 @@ def test_distill_tui_y_and_uppercase_y_copy_rule_then_all() -> None:
     assert returned == _result()
     assert copied[0].startswith("RULE 1 · Prefer a quiet setting")
     assert "WHAT MEM UNDERSTOOD" not in copied[0]
-    assert "WHAT MEM UNDERSTOOD" in copied[1]
+    assert "SOURCE OVERVIEW" in copied[1]

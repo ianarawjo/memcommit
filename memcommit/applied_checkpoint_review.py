@@ -146,7 +146,7 @@ def _distill_lines(payload: dict[str, object]) -> list[str]:
     ]
     overview = payload.get("overview")
     if overview:
-        lines.extend(("", "WHAT MEM UNDERSTOOD", _line(overview)))
+        lines.extend(("", "SOURCE OVERVIEW", _line(overview)))
     rules = payload.get("rules")
     if isinstance(rules, list):
         lines.extend(("", f"APPLIED RULES · {len(rules)}"))
@@ -169,7 +169,7 @@ def _elaborate_lines(payload: dict[str, object]) -> list[str]:
     ]
     overview = payload.get("overview")
     if overview:
-        lines.extend(("", "WHAT MEM UNDERSTOOD", _line(overview)))
+        lines.extend(("", "PROPOSAL OVERVIEW", _line(overview)))
     proposals = payload.get("proposals")
     if isinstance(proposals, list):
         lines.extend(("", f"APPLIED MEMORIES · {len(proposals)}"))

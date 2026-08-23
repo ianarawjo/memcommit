@@ -60,8 +60,8 @@ def project_distill_clipboard(
         )
     if focused_uid == "DISTILL:OVERVIEW":
         return DistillClipboardProjection(
-            "WHAT MEM UNDERSTOOD\n" + result.analysis.overview,
-            "Distill understanding",
+            "SOURCE OVERVIEW\n" + result.analysis.overview,
+            "Distill Source overview",
         )
     if focused_uid.startswith("DISTILL:RULE:"):
         try:
@@ -117,10 +117,10 @@ def project_distill_result(result: DistillResult) -> SemanticViewerDocument:
         ),
         SemanticViewerSection(
             "DISTILL:OVERVIEW",
-            "UNDERSTANDING",
+            "SOURCE OVERVIEW",
             SemanticViewerBlock(
                 (
-                    ("class:section", "\n WHAT MEM UNDERSTOOD\n"),
+                    ("class:section", "\n SOURCE OVERVIEW\n"),
                     ("class:viewer-body", f" {safe_terminal_text(analysis.overview)}\n"),
                 ),
                 focus_indices=(0, 1),

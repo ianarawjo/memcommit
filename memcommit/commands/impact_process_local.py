@@ -302,7 +302,11 @@ def distill_impact_presentation(
             if analysis.goal is not None
             else ()
         ),
-        ResolutionOverviewSection("assessment", "ASSESSMENT", analysis.overview),
+        ResolutionOverviewSection(
+            "source-overview",
+            "SOURCE OVERVIEW",
+            analysis.overview,
+        ),
     )
     view = ResolutionWorkbenchView(
         operation="distill",
@@ -618,7 +622,11 @@ def elaborate_impact_presentation(
         ),
         overview=analysis.overview,
         overview_sections=(
-            ResolutionOverviewSection("assessment", "ASSESSMENT", analysis.overview),
+            ResolutionOverviewSection(
+                "proposal-overview",
+                "PROPOSAL OVERVIEW",
+                analysis.overview,
+            ),
         ),
         list_label=("PROPOSED RULES" if rules_direction else "PROPOSED CASES"),
         items=items,

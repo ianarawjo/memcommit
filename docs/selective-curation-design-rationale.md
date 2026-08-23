@@ -59,10 +59,12 @@ that compatibility boundary. Sever retains its existing durable schema,
 session store, and workbench adapter; it maps the common decoded analysis into
 `SeverCandidate` records.
 
-Both reports identify their operation frame above `WHAT MEM UNDERSTOOD` using
-the shared typed `CONTEXT LOCATIONS` projection. Forget shows its Source.
-Sever shows Source, Criteria, and Result, including whether the Result is
-`NOT CREATED` or `CREATED`. An unapplied Sever Result also uses the shared
+Both reports identify their operation frame above their operation-owned
+overview using the shared typed `CONTEXT LOCATIONS` projection. Forget labels
+its batch prose `ASSESSMENT`; Sever labels its bounded Source account `SOURCE
+OVERVIEW`. Neither is placed inside a generic model-comprehension group.
+Forget shows its Source. Sever shows Source, Criteria, and Result, including
+whether the Result is `NOT CREATED` or `CREATED`. An unapplied Sever Result also uses the shared
 compact `SAVE LOCATION` frame between `ITEMS` and final Review and Apply;
 changing it updates the durable session but does not create the Context. Its
 expanded editor shares the local parent-Context tree and keeps exact direct

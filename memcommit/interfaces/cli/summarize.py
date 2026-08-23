@@ -6,7 +6,6 @@ import typer
 
 from memcommit.interfaces.console.text import display_escape_text
 from memcommit.interfaces.summarize import summarize_scope_label
-from memcommit.interfaces.understanding import understanding_lines
 from memcommit.summarize_application import SummarizeResult
 
 
@@ -19,5 +18,4 @@ def render_summarize_plain(result: SummarizeResult) -> None:
     )
     typer.echo("STATUS · " + summarize_scope_label(result))
     typer.echo()
-    for line in understanding_lines(result.understanding):
-        typer.echo(line)
+    typer.echo(display_escape_text(result.understanding.text))

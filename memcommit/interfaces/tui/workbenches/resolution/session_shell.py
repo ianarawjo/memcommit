@@ -744,7 +744,6 @@ def resolution_workbench_fragments(
         ("", status_line + "\n\n"),
     ]
     if view.semantic_overview_sections:
-        fragments.append(("class:section", " WHAT MEM UNDERSTOOD\n"))
         for section in view.semantic_overview_sections:
             fragments.extend(
                 [
@@ -1502,9 +1501,6 @@ def resolution_report_fragments(
             + "\n\n",
         )
     )
-    fragments.append(("class:section", " WHAT MEM UNDERSTOOD\n"))
-    if not overview_sections:
-        fragments.append(("", " (none)\n\n"))
     for overview_section in overview_sections:
         active = section_index == focused_section
         fragments.extend(

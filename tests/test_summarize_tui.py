@@ -43,7 +43,7 @@ def test_summarize_projects_typed_result_without_parsing_plain_output() -> None:
     rendered = "".join(text for _style, text in document.render(focused_uid=None))
     assert "SUMMARY · summary/context" in rendered
     assert "STATUS · RECURSIVE · SOURCES 3" in rendered
-    assert "WHAT MEM UNDERSTOOD" in rendered
+    assert "WHAT MEM UNDERSTOOD" not in rendered
     assert "closure and its staff exception" in rendered
 
 
@@ -309,12 +309,10 @@ def test_summarize_clipboard_projects_current_scope_and_complete_document() -> N
     complete = project_summarize_clipboard(outcome, whole_document=True)
 
     assert direct.label == "current-only summary"
-    assert direct.text.startswith("[CURRENT ONLY]\nWHAT MEM UNDERSTOOD\n")
+    assert direct.text.startswith("[CURRENT ONLY]\nThe Context records")
     assert "[CURRENT + DESCENDANTS]" not in direct.text
     assert recursive.label == "current + descendants summary"
-    assert recursive.text.startswith(
-        "[CURRENT + DESCENDANTS]\nWHAT MEM UNDERSTOOD\n"
-    )
+    assert recursive.text.startswith("[CURRENT + DESCENDANTS]\nThe Context records")
     assert "[CURRENT ONLY]" not in recursive.text
     assert header == complete
     assert status == complete
@@ -345,11 +343,9 @@ def test_summarize_y_and_uppercase_y_copy_scope_then_complete_document() -> None
     assert returned is not None
     assert "[CURRENT ONLY]" in copied[0]
     assert "[CURRENT + DESCENDANTS]" in copied[0]
-    assert copied[1].startswith("[CURRENT ONLY]\nWHAT MEM UNDERSTOOD\n")
+    assert copied[1].startswith("[CURRENT ONLY]\nThe Context records")
     assert "[CURRENT + DESCENDANTS]" not in copied[1]
-    assert copied[2].startswith(
-        "[CURRENT + DESCENDANTS]\nWHAT MEM UNDERSTOOD\n"
-    )
+    assert copied[2].startswith("[CURRENT + DESCENDANTS]\nThe Context records")
     assert "[CURRENT ONLY]" not in copied[2]
     assert "[CURRENT ONLY]" in copied[3]
     assert "[CURRENT + DESCENDANTS]" in copied[3]

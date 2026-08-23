@@ -138,7 +138,8 @@ def test_mem_summarize_recurses_and_renders_only_shared_understanding(
     assert result.exit_code == 0
     assert "SUMMARY · summary" in result.output
     assert "STATUS · RECURSIVE" in result.output
-    assert "WHAT MEM UNDERSTOOD" in result.output
+    assert "WHAT MEM UNDERSTOOD" not in result.output
+    assert "The Context describes a closure" in result.output
     assert "WHAT HAPPENED" not in result.output
     assert "WHAT BOTH CONTAIN" not in result.output
     payload = json.loads(
@@ -545,7 +546,6 @@ def test_mem_summarize_copy_writes_plain_understanding_without_typed_stage(
 
     assert result.exit_code == 0, result.output
     assert copied == [
-        "WHAT MEM UNDERSTOOD\n"
         "The Context describes a closure while preserving an explicit "
         "staff-access exception."
     ]
@@ -576,7 +576,8 @@ def test_mem_summarize_copy_failure_keeps_result_visible_and_fails_cleanly(
     result = runner.invoke(app, ["summarize", "summary", "--copy"])
 
     assert result.exit_code == 1
-    assert "WHAT MEM UNDERSTOOD" in result.stdout
+    assert "WHAT MEM UNDERSTOOD" not in result.stdout
+    assert "The Context describes a closure" in result.stdout
     assert "Copy error: clipboard unavailable" in result.output
 
 
@@ -605,10 +606,8 @@ def test_summarize_both_clipboard_keeps_scope_results_separate() -> None:
         SummarizeTuiOutcome((direct, recursive))
     ) == (
         "[CURRENT ONLY]\n"
-        "WHAT MEM UNDERSTOOD\n"
         "Direct understanding.\n\n"
         "[CURRENT + DESCENDANTS]\n"
-        "WHAT MEM UNDERSTOOD\n"
         "Recursive understanding."
     )
 

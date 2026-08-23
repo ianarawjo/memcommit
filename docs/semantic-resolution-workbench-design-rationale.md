@@ -254,10 +254,11 @@ assessment.
 
 When typed Context locations are present, the report renders one neutral,
 non-focusable `CONTEXT LOCATIONS` block directly below its title and before
-`WHAT MEM UNDERSTOOD`. The block answers where the operation reads and where
-it will write; it is orientation metadata, not part of the provider's
-understanding. Adapters therefore use semantic roles instead of parsing the
-display route: Atomize exposes Source and Output, directional Meld exposes
+the operation-owned overview sections. The block answers where the operation
+reads and where it will write; it is orientation metadata, not part of any
+semantic account. The shared shell does not add a generic comprehension
+heading around those sections. Adapters therefore use semantic roles instead
+of parsing the display route: Atomize exposes Source and Output, directional Meld exposes
 Incoming and Baseline/Target, symmetric Meld exposes both Sources and Result,
 Sever exposes Source, Criteria, and Result, Update exposes Source and Target,
 and Forget exposes Source. Legacy projections without typed endpoints may

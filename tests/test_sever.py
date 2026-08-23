@@ -957,6 +957,8 @@ def test_resolution_adapter_exposes_source_criteria_output_skeleton(isolated_sto
             review_and_apply=True,
         )
     )
+    assert "SOURCE OVERVIEW" in report
+    assert "WHAT MEM UNDERSTOOD" not in report
     assert "WHAT APPLIED" in report
     assert "Access-related needs were condensed" in report
     assert "Affected Source examples: “Source”" in report

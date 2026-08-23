@@ -50,10 +50,13 @@ rather than leaking persistence notation into the UI.
 between `Viewer`, `Items`, `To Do`, and an inline composer when one exists.
 `Up` and `Down` move
 only the currently focused surface, and closing the view never implies a
-response or application. The report reading surface consistently presents
-the operation title and identity, `WHAT MEM UNDERSTOOD`, `REVIEW ITEMS` and its
-count, individual adaptive item summaries, and the operation-owned result
-heading. Item details retain their operation-owned evidence blocks. The
+response or application. The report reading surface consistently presents the
+operation title and identity, operation-owned overview sections, `REVIEW
+ITEMS` and its count, individual adaptive item summaries, and the
+operation-owned result heading. An adapter may use an understanding heading
+when comprehension is a real review dimension, but the common shell does not
+add one around unrelated plans, counts, provenance, or verification. Item
+details retain their operation-owned evidence blocks. The
 `REVIEW ITEMS` label is applied only by the Review projection; adapters keep
 their native list labels for owning-operation screens.
 

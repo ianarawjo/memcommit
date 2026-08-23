@@ -74,8 +74,8 @@ def project_elaborate_clipboard(
         )
     if focused_uid == "ELABORATE:OVERVIEW":
         return ElaborateClipboardProjection(
-            "WHAT MEM UNDERSTOOD\n" + result.analysis.overview,
-            "Elaborate understanding",
+            "PROPOSAL OVERVIEW\n" + result.analysis.overview,
+            "Elaborate proposal overview",
         )
     if focused_uid == "ELABORATE:TARGET" and result.analysis.target_context is not None:
         target = result.analysis.target_context
@@ -139,10 +139,10 @@ def project_elaborate_result(result: ElaborateResult) -> SemanticViewerDocument:
         ),
         SemanticViewerSection(
             "ELABORATE:OVERVIEW",
-            "UNDERSTANDING",
+            "PROPOSAL OVERVIEW",
             SemanticViewerBlock(
                 (
-                    ("class:section", "\n WHAT MEM UNDERSTOOD\n"),
+                    ("class:section", "\n PROPOSAL OVERVIEW\n"),
                     ("class:viewer-body", f" {safe_terminal_text(analysis.overview)}\n"),
                 ),
                 focus_indices=(0, 1),

@@ -542,6 +542,8 @@ def test_elaborate_shared_viewer_copies_one_proposal_or_all() -> None:
     )
 
     assert "SUGGESTED · UNVERIFIED" in rendered
+    assert "PROPOSAL OVERVIEW" in rendered
+    assert "WHAT MEM UNDERSTOOD" not in rendered
     assert focused.text.startswith("[Suggested] [Unverified]")
     assert "WHAT MEM UNDERSTOOD" not in focused.text
 
@@ -557,7 +559,7 @@ def test_elaborate_shared_viewer_copies_one_proposal_or_all() -> None:
         )
     assert returned == result
     assert copied[0].startswith("[Suggested] [Unverified]")
-    assert "WHAT MEM UNDERSTOOD" in copied[1]
+    assert "PROPOSAL OVERVIEW" in copied[1]
 
 
 def _bound_ground(store: MemoryStore):
