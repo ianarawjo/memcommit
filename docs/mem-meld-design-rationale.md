@@ -54,8 +54,9 @@ Directional meld leaves the incoming Context read-only and applies only exact
 material `EDIT` and `ADD` changes to its baseline; a fully represented input
 may instead produce an accepted zero-change checkpoint.
 
-Saved Context Melds can also be entered through `mem meld` or
-`mem meld --sessions` without restating their Context operands. This is a
+Saved Context Melds can be entered through `mem meld --sessions` without
+restating their Context operands. Bare `mem meld` instead enters the new-Meld
+setup directly. Saved selection is a
 catalog and open operation, not a global `switch`: choosing an item does not
 install an active Meld that could leak across terminals or agents. The
 catalog's stable key is the persisted target Context UID, while its group is
@@ -390,7 +391,7 @@ difference as evidence that either side is false.
 
 Meld has two actual modes. They describe authority and target direction:
 
-The bare-New session TTY makes this distinction visible before either session
+The bare new-Meld setup makes this distinction visible before either session
 is prepared. A shared horizontal choice selects `A → B` directional
 or `A + B → C` symmetric mode, and a role-based setup shell embeds one
 independent Context namespace tree per active operand. Switching away from

@@ -157,22 +157,18 @@ def test_meld_catalog_reload_rejects_same_key_replacement(
         reload_selected_meld_session(store, entry)
 
 
-@pytest.mark.parametrize("argv", [[], ["--sessions"]])
 def test_meld_session_picker_reports_an_empty_catalog(
     isolated_store,
-    argv,
 ) -> None:
-    result = runner.invoke(app, ["meld", *argv])
+    result = runner.invoke(app, ["meld", "--sessions"])
 
     assert result.exit_code == 0, result.output
     assert result.output.strip() == "No saved Meld sessions."
 
 
-@pytest.mark.parametrize("argv", [[], ["--sessions"]])
 def test_meld_session_picker_reopens_without_provider_or_mutation(
     isolated_store,
     monkeypatch,
-    argv,
 ) -> None:
     store = MemoryStore()
     session = _save_directional_session(store, namespace="catalog/open")
@@ -206,10 +202,11 @@ def test_meld_session_picker_reopens_without_provider_or_mutation(
         ),
     )
 
-    result = runner.invoke(app, ["meld", *argv])
+    result = runner.invoke(app, ["meld", "--sessions"])
 
     assert result.exit_code == 0, result.output
-    assert "MEM MELD · DIRECTIONAL" in result.output
+    assert "MELD PENDING · DIRECTIONAL" in result.output
+    assert f"IMPACT · mem impact meld --session {session.uid}" in result.output
     assert "Resumed without calling the semantic provider" in result.output
     assert session_path.read_bytes() == session_before
     assert {

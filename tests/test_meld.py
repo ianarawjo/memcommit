@@ -127,13 +127,35 @@ def test_empty_meld_launcher_offers_new_session(isolated_store, monkeypatch):
     started = []
     monkeypatch.setattr(
         meld_command,
-        "_start_new_meld_from_picker",
+        "_start_new_meld_from_setup",
         lambda selected_store: started.append(selected_store),
     )
 
     meld_command._browse_saved_meld_sessions(store)
 
     assert started == [store]
+
+
+def test_bare_meld_enters_setup_without_session_launcher(
+    isolated_store,
+    monkeypatch,
+):
+    started = []
+    monkeypatch.setattr(
+        meld_command,
+        "_browse_saved_meld_sessions",
+        lambda _store: pytest.fail("bare Meld must not browse saved sessions"),
+    )
+    monkeypatch.setattr(
+        meld_command,
+        "_start_new_meld_from_setup",
+        lambda store: started.append(store),
+    )
+
+    result = runner.invoke(app, ["meld"])
+
+    assert result.exit_code == 0, result.output
+    assert len(started) == 1
 
 
 def test_new_meld_setup_routes_directional_a_into_b(isolated_store, monkeypatch):
@@ -150,7 +172,7 @@ def test_new_meld_setup_routes_directional_a_into_b(isolated_store, monkeypatch)
     calls = []
     monkeypatch.setattr(meld_command, "cmd", lambda **kwargs: calls.append(kwargs))
 
-    meld_command._start_new_meld_from_picker(store)
+    meld_command._start_new_meld_from_setup(store)
 
     assert calls == [
         {
@@ -181,7 +203,7 @@ def test_new_meld_setup_routes_exact_memories_into_directional_command(
     calls = []
     monkeypatch.setattr(meld_command, "cmd", lambda **kwargs: calls.append(kwargs))
 
-    meld_command._start_new_meld_from_picker(store)
+    meld_command._start_new_meld_from_setup(store)
 
     assert calls == [
         {

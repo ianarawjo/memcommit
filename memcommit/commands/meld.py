@@ -1212,7 +1212,7 @@ def _browse_saved_meld_sessions(store: MemoryStore) -> None:
     if isinstance(receipt, SessionNewReceipt):
         if receipt.kind != "meld" or receipt.argv != ("mem", "meld"):
             raise MeldCommandError("Meld session picker returned an invalid receipt.")
-        _start_new_meld_from_picker(store)
+        _start_new_meld_from_setup(store)
         return
     if not isinstance(receipt, SessionOpenReceipt) or receipt.kind != "meld":
         raise MeldCommandError("Meld session picker returned an invalid receipt.")
@@ -1225,8 +1225,8 @@ def _browse_saved_meld_sessions(store: MemoryStore) -> None:
     _resume_picked_meld(store=store, entry=entry)
 
 
-def _start_new_meld_from_picker(store: MemoryStore) -> None:
-    """Collect the complete mode and endpoint shape in one setup shell."""
+def _start_new_meld_from_setup(store: MemoryStore) -> None:
+    """Collect one new Meld request without browsing saved sessions."""
     receipt = choose_meld_setup(store)
     if receipt is None:
         typer.echo("New Meld cancelled; no session was created.")
@@ -1608,8 +1608,11 @@ def cmd(
 
     store = MemoryStore(create=False)
     try:
-        if sessions or browse_by_default:
+        if sessions:
             _browse_saved_meld_sessions(store)
+            return
+        if browse_by_default:
+            _start_new_meld_from_setup(store)
             return
         current_name = store.current_context_name()
         create_target = False
