@@ -44,3 +44,11 @@
    match.
 
 No failure may publish a partial relation ledger or mutate a source Context.
+
+The frozen projection includes ordinary local content and effectively
+READ-granted content only. A process-local `authority-grant` query row marks a
+narrower QUERY authorization route for navigation; it is not readable content
+or a hierarchy edge, so Compare excludes it without opening the concealed
+Context. An ordinary persisted `QueryContextRef` remains an explicit failure
+because silently omitting stored source structure would change the comparison
+frame.

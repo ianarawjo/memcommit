@@ -289,6 +289,13 @@ def project_comparison_context(root: Context) -> Context:
                     source_memory_uid=item.target_memory_uid,
                 )
             elif isinstance(item, QueryContextRef):
+                if item.provider == "authority-grant":
+                    # GrantedReadStore adds this process-local row so a
+                    # navigation surface can show a narrower QUERY grant. It
+                    # is authorization metadata, not readable content or a
+                    # Context hierarchy edge, so Compare must neither open it
+                    # nor treat it as a missing claim.
+                    continue
                 raise ComparisonEvidenceError(
                     "Compare cannot open query-only Context "
                     f"{item.name!r} [{item.uid[:8]}] as ordinary Memory content."

@@ -83,6 +83,10 @@ validation.
 - Source/target authority and frozen digests are rechecked before provider
   construction and again before durable publication where the operation spans
   a semantic turn.
+- Ordered Compare and Meld source projection exclude only process-local
+  `authority-grant` QUERY navigation rows. Those rows carry no readable Memory
+  content and do not widen descendant reach; persisted query references remain
+  rejected rather than silently changing a source frame.
 - Cache replay crosses the same strict decoder as a provider completion and
   cannot publish a partial assessment.
 - Follow-up callers compose one `MeldResolutionTurnRequest`; its exact saved

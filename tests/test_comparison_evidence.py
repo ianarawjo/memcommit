@@ -206,3 +206,21 @@ def test_query_only_context_is_never_silently_omitted() -> None:
 
     with pytest.raises(ComparisonError, match="query-only Context 'query/source'"):
         ComparisonInput.from_contexts(containing, _peer())
+
+
+def test_grant_navigation_query_route_is_not_comparison_content() -> None:
+    containing = Context(uid=_uid(), name="public/readable")
+    readable = Memory(uid=_uid(), content="Readable claim.")
+    containing.add(readable)
+    containing.add(
+        QueryContextRef(
+            uid=_uid(),
+            name="public/query-only-child",
+            target_source_uid=_uid(),
+            provider="authority-grant",
+        )
+    )
+
+    frame = ComparisonInput.from_contexts(containing, _peer()).frames[0]
+
+    assert [memory.uid for memory in frame.memories] == [readable.uid]
