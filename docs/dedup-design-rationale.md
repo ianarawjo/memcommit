@@ -63,7 +63,8 @@ owns the provider-free, read-only exact-DUP report. `mem find-redundancies`
 owns the complete exact-plus-semantic DUN report, and `mem dedun` reuses that
 analysis before applying the earliest-existing-UID survivor rule to all
 role-aware exact groups and eligible Memory `EXACT`, `SURFACE_EQUIVALENT`, and
-`SEMANTIC_EQUIVALENT` evidence. There is no singular `find-redundancy` command.
+`SEMANTIC_EQUIVALENT` evidence. There is no separate singular operation:
+`find-redundancy` resolves to the canonical `find-redundancies` operation.
 Hidden `consolidate` remains only the exact Dedun review replay route.
 
 ## Alternatives and limits

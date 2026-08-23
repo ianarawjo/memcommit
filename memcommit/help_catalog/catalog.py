@@ -124,6 +124,14 @@ _OPERATIONS = (
         "Each side exact or readable descendants",
     ),
     _operation(
+        "copy",
+        "Copy one or more directly owned Memories into an existing local Context.",
+        "Selected Source Memories -> independent Target Memories",
+        ExecutionKind.DETERMINISTIC,
+        "Adds exact content copies to Target; Source stays unchanged; Undo restores the batch",
+        "One or more exact local Memories and one existing local Target",
+    ),
+    _operation(
         "config",
         "Read or write stored global configuration values.",
         "Configuration key <-> value",
@@ -263,19 +271,19 @@ _OPERATIONS = (
     ),
     _operation(
         "find-ambiguities",
-        "Report ambiguous direct Memories in the current or explicit Context.",
+        "Report ambiguous direct Memories in the current, explicit, or all readable Contexts.",
         "Context Memories -> ambiguity report",
         ExecutionKind.SEMANTIC,
         "Creates an ambiguity report without editing the Source",
-        "One exact direct Context",
+        "One exact direct Context or one frozen Profile-readable frame",
     ),
     _operation(
         "find-conflicts",
-        "Report conflicting direct Memory pairs in the current or explicit Context.",
+        "Report conflicting direct Memory pairs in the current, explicit, or all readable Contexts.",
         "Context Memories -> conflict report",
         ExecutionKind.SEMANTIC,
         "Creates a conflict report without editing the Source",
-        "One exact direct Context",
+        "One exact direct Context or one frozen Profile-readable frame",
     ),
     _operation(
         "find-duplicates",
@@ -290,8 +298,8 @@ _OPERATIONS = (
         "Report same-role exact direct items and semantically redundant direct Memories.",
         "Direct Context items -> role-aware DUP + Memory semantic DUN evidence report",
         ExecutionKind.SEMANTIC,
-        "Creates a redundancy report; --select can review multiple readable targets",
-        "One exact direct Context by default; explicit --select enables readable multi-target scope",
+        "Creates a redundancy report without editing the Source",
+        "One exact direct Context",
     ),
     _operation(
         "forget",
@@ -407,6 +415,14 @@ _OPERATIONS = (
         "Exact roots or matching descendants by the same relative path",
     ),
     _operation(
+        "move",
+        "Move one or more directly owned Memories into another existing local Context.",
+        "Selected Source Memories -> new owning Target Context",
+        ExecutionKind.DETERMINISTIC,
+        "Atomically removes from Source owner(s) and adds to Target; Undo restores the complete batch",
+        "One or more exact local Memories and one distinct existing local Target",
+    ),
+    _operation(
         "profile",
         "Create, select, and manage local MemoryStore Profiles. Profiles "
         "can be renamed or permanently removed, and Study headings can be renamed "
@@ -469,10 +485,11 @@ _OPERATIONS = (
     ),
     _operation(
         "rename",
-        "Rename the current or an explicit managed Profile without moving or rewriting its store; mem profile rename is the explicit equivalent.",
-        "Managed Profile name -> new Profile name",
+        "Rename an ordinary Context namespace and all lexical descendants while preserving their stable identities.",
+        "Existing Context namespace -> fresh Context namespace",
         ExecutionKind.DETERMINISTIC,
-        "Changes registry metadata; store contents stay in place",
+        "Moves the namespace and locator-bound records; contents and stable UIDs stay unchanged",
+        "One exact local ordinary Context root and its lexical descendants",
     ),
     _operation(
         "revert",

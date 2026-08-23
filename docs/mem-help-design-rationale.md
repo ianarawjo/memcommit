@@ -272,8 +272,10 @@ prompt-toolkit selector:
   both spellings reach the same callback and the canonical Delete contract.
   `find-duplicates` and `find-redundancies` remain separate direct, one-Context read-only
   operations: the former reports provider-free exact DUP groups, while the
-  latter reports complete exact-plus-semantic DUN evidence. There is no
-  singular `find-redundancy` route.
+  latter reports complete exact-plus-semantic DUN evidence. Singular finder
+  spellings are accepted parser aliases but remain folded into those canonical
+  plural operations. Hyphen-omitted command spellings are likewise executable
+  without adding Help rows; underscore-separated spellings remain invalid.
   `A–Z` has no semantic categories, so its complete visible-operation
   projection occupies one `A–Z` box.
   Because that projection owns only one box, the box fills any spare list
@@ -436,8 +438,8 @@ the compact contract stable when a launcher's saved and New rows evolve, while
 avoiding the false implication that every interactive picker is durable
 session state.
 
-For example, Meld distinguishes its bare interactive session launcher,
-symmetric peers, a require-new symmetric Result, canonical
+For example, Meld distinguishes its bare new-operation setup from its explicit
+`--sessions` launcher, symmetric peers, a require-new symmetric Result, canonical
 `INCOMING --into BASELINE`, and the current-Baseline `--from` convenience form.
 Each form includes a short parenthesized semantic label when the operands alone
 would not explain the route. Bracketed lowercase values such as `[context1]`,
@@ -478,8 +480,8 @@ retain explicit operands. Group help alone is
 also not treated as an operation, while
 groups with real bare callbacks (`lock`, `unlock`, and `profile`) expose them.
 
-For example, `mem update` exposes its interactive Update session launcher
-before its three directional endpoint forms,
+For example, `mem update` exposes its bare Source/Target setup and separate
+`mem update --sessions` saved-work launcher before its directional endpoint forms,
 while `mem impact` omits bare invocation because it requires a directional or
 named operation route. Its expanded Forms enumerate `impact atomize`, the
 process-local `impact forget`, `impact distill`, and `impact resolve`

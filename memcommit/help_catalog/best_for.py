@@ -27,6 +27,10 @@ BEST_FOR_BY_OPERATION = {
     "compare": (
         "Comparing two Contexts as a whole to understand where they align and differ."
     ),
+    "copy": (
+        "Reusing selected directly owned Memories as independent editable values "
+        "inside another existing local Context."
+    ),
     "config": (
         "Inspecting or changing stored global settings through the legacy "
         "low-level interface."
@@ -115,6 +119,10 @@ BEST_FOR_BY_OPERATION = {
         "Appending Source-only items or bringing a copied or branched Context "
         "into a selected Target Context without semantic synthesis."
     ),
+    "move": (
+        "Changing which local Context directly owns selected Memories while "
+        "preserving their content and identity."
+    ),
     "profile": "Managing separate users, environments, or Memory stores.",
     "provider": (
         "Choosing which backend semantic operations should use, or checking "
@@ -137,7 +145,7 @@ BEST_FOR_BY_OPERATION = {
         "Correcting, renaming, or redacting exact text throughout a known local "
         "Context scope."
     ),
-    "rename": "Giving an existing managed Profile a clearer name.",
+    "rename": "Correcting the organizational name of an existing Context namespace.",
     "revert": "Restoring a Context to a deliberately saved recovery point.",
     "review": "Inspecting applied evidence or revisiting a saved report state.",
     "sever": (

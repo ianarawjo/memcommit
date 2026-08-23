@@ -63,7 +63,7 @@ from memcommit.commands import (
     update,
     write_protection,
 )
-from memcommit.interfaces.cli import embed, reference
+from memcommit.interfaces.cli import embed, memory_transfer, reference
 from memcommit.commands.clear import cmd as clear_cmd
 from memcommit.commands.config import app as config_app
 from memcommit.commands.dev import app as dev_app
@@ -103,6 +103,10 @@ app.command(
     "add",
     help=operation_summary("add"),
 )(add.cmd)
+app.command(
+    "copy",
+    help=operation_summary("copy"),
+)(memory_transfer.copy_cmd)
 app.command(
     "status",
     help=operation_summary("status"),
@@ -148,6 +152,10 @@ app.command(
     "delete",
     help=operation_summary("delete"),
 )(delete.cmd)
+app.command(
+    "move",
+    help=operation_summary("move"),
+)(memory_transfer.move_cmd)
 app.command(
     "diff",
     help=operation_summary("diff"),

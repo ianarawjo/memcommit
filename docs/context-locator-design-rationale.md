@@ -164,10 +164,10 @@ table as the authored cross-operation rule:
 | `atomize`, `impact atomize` | Use current Context | `[CONTEXT]` | `--context CONTEXT` |
 | `audit`, `dedun`, `find-{ambiguities,duplicates,redundancies,conflicts}` | Use current Context | `[CONTEXT]` | `--context CONTEXT` |
 | `resolve` | Use current Context, unless bare Memory operands uniquely locate one local owner | mixed `CONTEXT`, UUID-shaped `MEMORY`, and `CONTEXT:MEMORY`; every owner must canonicalize to one Context | `--context CONTEXT`, repeatable `--memory [CONTEXT:]UID`; short Memory prefixes require `--memory` or qualification |
-| `compare` | Open saved-session launcher | auto-typed `PEER` uses current as Reference; auto-typed `REFERENCE PEER` is fully explicit; each endpoint accepts Context, UUID-shaped Memory, or `CONTEXT:MEMORY` | explicitly Context-typed `--from REFERENCE`, `--to PEER`; `--reference-memory`/`--compared-memory` retain short-prefix focus |
+| `compare` | Open new A/B endpoint setup | auto-typed `PEER` uses current as Reference; auto-typed `REFERENCE PEER` is fully explicit; each endpoint accepts Context, UUID-shaped Memory, or `CONTEXT:MEMORY` | explicitly Context-typed `--from REFERENCE`, `--to PEER`; `--reference-memory`/`--compared-memory` retain short-prefix focus; `--sessions` opens saved analyses |
 | `branch` | Open compact Source/new-target setup | `RESULT_NAME` creates from current | `--from SOURCE` chooses one existing local Source; Result remains a new identifier |
 | `merge` | Open Source/Target setup | `SOURCE [TARGET]`; omitted Target is current | `--from SOURCE`; `--to TARGET` and `--into TARGET` are equivalent |
-| `update` | Open saved Update work | `SOURCE TARGET` only | `--from SOURCE`, `--to TARGET`; one omitted option endpoint uses current |
+| `update` | Open new Source/Target setup | `SOURCE TARGET` only | `--from SOURCE`, `--to TARGET`; one omitted option endpoint uses current; `--sessions` opens saved work |
 | `impact update` | Inspect saved Update Impact | `SOURCE TARGET` starts a new preview | same `--from`/`--to` endpoint aliases |
 | root `impact` | Error without a named route or endpoint | none, because the first token is a subcommand | retained `--from`/`--to` directional alias |
 | `forget`, `impact forget` | Context defaults to current; instruction is still required outside the setup TTY | the position is reserved for `INSTRUCTION` | `--context CONTEXT` |

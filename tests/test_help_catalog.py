@@ -350,8 +350,7 @@ def test_adjacent_command_records_use_connectors_without_background_bands():
 
     assert not any("help-zebra" in style for style, _text in fragments)
     assert any(
-        style == "class:help-connector" and text == "┬ "
-        for style, text in fragments
+        style == "class:help-connector" and text == "┬ " for style, text in fragments
     )
     assert any(style == "" and text == "WHEN" for style, text in fragments)
     assert any(
@@ -363,12 +362,12 @@ def test_adjacent_command_records_use_connectors_without_background_bands():
         for style, text in fragments
     )
     category_copy = [
-        (style, text)
-        for style, text in fragments
-        if "Check compatibility" in text
+        (style, text) for style, text in fragments if "Check compatibility" in text
     ]
     assert category_copy
-    assert all(style == "class:help-category-description bold" for style, _ in category_copy)
+    assert all(
+        style == "class:help-category-description bold" for style, _ in category_copy
+    )
 
 
 def test_every_help_category_explains_its_intent_and_execution_basis():
@@ -483,9 +482,7 @@ def test_collapsed_a_z_rows_use_the_same_connected_record():
         index for index, line in enumerate(lines) if "▸ mem compare" in line
     )
     command_line = lines[command_index]
-    when_line = next(
-        line for line in lines[command_index + 1 :] if "WHEN ·" in line
-    )
+    when_line = next(line for line in lines[command_index + 1 :] if "WHEN ·" in line)
 
     assert "─┬ Compare Memories" in command_line
     assert "└ WHEN · Comparing two Contexts" in when_line
@@ -570,9 +567,10 @@ def test_long_and_annotated_command_labels_use_both_record_rows():
         assert "─┬" in lines[command_index]
         assert second_row in lines[command_index + 1]
         assert "mem " not in lines[command_index + 1]
-        assert lines[command_index + 1].index(second_row) == lines[
-            command_index
-        ].index("mem") + 2
+        assert (
+            lines[command_index + 1].index(second_row)
+            == lines[command_index].index("mem") + 2
+        )
         assert lines[command_index].index("┬") == lines[command_index + 1].index(
             "│" if "│" in lines[command_index + 1] else "└"
         )
@@ -706,7 +704,8 @@ def test_expanded_add_explains_literal_content_and_copy_or_link_routes():
     assert "copy the Memory content and add it" in rendered
     assert "directly." in rendered
     assert (
-        "- EXACT MEMORY OR CONTEXT · Use mem reference to retain an immutable" in rendered
+        "- EXACT MEMORY OR CONTEXT · Use mem reference to retain an immutable"
+        in rendered
     )
     assert "- LIVE MEMORY · Use mem embed SOURCE:MEMORY" in rendered
     assert "- LIVE CONTEXT · Use mem embed." in rendered
@@ -881,10 +880,7 @@ def test_final_help_categories_match_their_reviewed_runtime_boundaries():
     assert diff.flow == "Context checkpoint or active Update -> diff report"
     assert undo.summary == "Undo the most recent recorded command as one unit."
     assert "every Context and Memory change" in undo.effect
-    assert revert.summary.startswith(
-        "Restore the current or an explicit local Context"
-    )
-    assert "Create, select, and manage" in profile.summary
+    assert revert.summary.startswith("Restore the current or an explicit local Context")
     assert "Study headings can be renamed" in profile.summary
     assert "backend semantic operations should use" in provider.best_for
     assert "legacy low-level interface" in config.best_for
@@ -924,7 +920,10 @@ def test_final_help_categories_expose_exact_on_demand_details():
         "REMOVE STUDY",
     ]
     assert provider_actions.title == "PROVIDER ACTIONS"
-    assert "synthetic strict-schema" in provider_actions.options[2].guidance
+    provider_options = {option.label: option for option in provider_actions.options}
+    assert "synthetic strict-schema" in provider_options["PROBE"].guidance
+    assert "ordinary Profile in a TTY" in provider_options["OVERVIEW"].guidance
+    assert "inherited" in provider_options["RESET"].guidance
     assert evaluation_scope.title == "EVALUATION SCOPE"
     assert "general evaluation interface remains future work" in (
         evaluation_scope.explanation

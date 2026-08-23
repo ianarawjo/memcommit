@@ -18,7 +18,7 @@ def test_client_lists_operations_without_store_or_provider_access(tmp_path):
         semantic_provider_factory=provider,
     ).list_operations()
 
-    assert len(result.operations) == 64
+    assert len(result.operations) == 66
     assert result.operations[0].name == "add"
     assert result.operations[-1].name == "update"
     assert not root.exists()
@@ -129,8 +129,10 @@ def test_client_projects_final_category_routes_as_typed_details(tmp_path):
         "STUDY ACTIONS",
     ]
     assert [option.label for option in profile.options] == [
+        "CREATE",
         "SELECT",
         "RENAME",
+        "RENAME STUDY",
         "REMOVE",
         "REMOVE STUDY",
     ]

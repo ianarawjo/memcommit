@@ -69,6 +69,10 @@ _FR = {
         "Comparer les Memories de deux Contexts et indiquer ce qu’ils partagent, ce qui diffère et ce qui n’apparaît que d’un côté.",
         "Comparer globalement deux Contexts afin de comprendre leurs convergences et leurs différences.",
     ),
+    "copy": _copy(
+        "Copier une ou plusieurs Memories directement possédées dans un Context local existant.",
+        "Réutiliser des Memories sélectionnées comme valeurs indépendantes et modifiables dans un autre Context.",
+    ),
     "config": _copy(
         "Lire ou écrire des valeurs de configuration globale enregistrées.",
         "Consulter ou modifier des réglages globaux via l’ancienne interface de bas niveau.",
@@ -177,6 +181,10 @@ _FR = {
         "Ajouter au Target sélectionné les éléments présents uniquement dans la Source, laisser les correspondances exactes inchangées et choisir Source ou Target lors des conflits d’éléments enregistrés.",
         "Ajouter les éléments propres à la Source ou intégrer dans un Target Context sélectionné un Context copié ou branché, sans synthèse sémantique.",
     ),
+    "move": _copy(
+        "Déplacer une ou plusieurs Memories directement possédées vers un autre Context local existant.",
+        "Changer le Context propriétaire de Memories sélectionnées tout en conservant leur contenu et leur identité.",
+    ),
     "profile": _copy(
         "Sélectionner et gérer des Profiles MemoryStore locaux complets ; ils peuvent aussi être renommés ou supprimés définitivement via le sélecteur ou mem profile rename/remove.",
         "Gérer des utilisateurs, environnements ou stores de Memory séparés.",
@@ -206,8 +214,8 @@ _FR = {
         "Conserver une preuve exacte de Memory ou de Context même si sa Source change ou disparaît ensuite.",
     ),
     "rename": _copy(
-        "Renommer le Profile géré courant ou indiqué sans déplacer ni réécrire son store ; mem profile rename est l’équivalent explicite.",
-        "Donner un nom plus clair à un Profile géré existant.",
+        "Renommer un namespace Context ordinaire et tous ses descendants lexicaux tout en préservant leurs identités stables.",
+        "Corriger le nom organisationnel d’un namespace Context existant.",
     ),
     "replace": _copy(
         "Prévisualiser et remplacer chaque correspondance littérale ou regex explicite dans les Memories locales ordinaires.",
@@ -320,6 +328,10 @@ _ZH = {
         "比较两个 Context 中的 Memory，报告共同点、差异以及仅存在于一侧的内容。",
         "整体比较两个 Context，以理解它们的一致与差异时。",
     ),
+    "copy": _copy(
+        "将一个或多个直接拥有的 Memory 复制到现有本地 Context。",
+        "在另一个 Context 中把选定 Memory 作为可独立编辑的值重复使用时。",
+    ),
     "config": _copy(
         "读取或写入已保存的全局配置值。", "通过旧版底层接口查看或修改全局设置时。"
     ),
@@ -426,6 +438,10 @@ _ZH = {
         "将 Source 独有项目添加到所选 Target，保持精确匹配不变，并在已存项目冲突时选择 Source 或 Target。",
         "追加 Source 独有项目，或将复制/分支的 Context 合入所选 Target Context，且不进行语义合成时。",
     ),
+    "move": _copy(
+        "将一个或多个直接拥有的 Memory 移动到另一个现有本地 Context。",
+        "在保留内容和身份的同时更改选定 Memory 的拥有 Context 时。",
+    ),
     "profile": _copy(
         "选择和管理完整的本地 MemoryStore Profile；还可通过选择器或 mem profile rename/remove 重命名或永久删除。",
         "管理相互独立的用户、环境或 Memory store 时。",
@@ -454,8 +470,8 @@ _ZH = {
         "即使 Source 后续改变或消失，也要保留精确的 Memory 或 Context 依据时。",
     ),
     "rename": _copy(
-        "重命名当前或指定的受管 Profile，而不移动或重写其 store；mem profile rename 是显式等价形式。",
-        "为现有受管 Profile 提供更清晰的名称时。",
+        "重命名普通 Context 命名空间及其所有词法后代，同时保留其稳定身份。",
+        "纠正现有 Context 命名空间的组织名称时。",
     ),
     "replace": _copy(
         "预览并替换普通本地 Memory 中每个文字或明确 regex 匹配。",
@@ -567,6 +583,10 @@ _KO = {
         "두 Context의 Memory를 비교하여 공통점, 차이점, 한쪽에만 있는 내용을 보고합니다.",
         "두 Context 전체가 어디에서 일치하고 다른지 이해하기 위해 비교할 때.",
     ),
+    "copy": _copy(
+        "직접 소유한 하나 이상의 Memory를 기존 로컬 Context에 복사합니다.",
+        "선택한 Memory를 다른 Context에서 독립적으로 편집 가능한 값으로 재사용할 때.",
+    ),
     "config": _copy(
         "저장된 전역 설정 값을 읽거나 씁니다.",
         "legacy 저수준 인터페이스로 저장된 전역 설정을 확인하거나 변경할 때.",
@@ -675,6 +695,10 @@ _KO = {
         "Source에만 있는 항목을 선택한 Target에 추가하고 정확히 일치하는 항목은 그대로 두며 저장 항목 충돌 시 Source 또는 Target을 선택합니다.",
         "의미적 합성 없이 Source 전용 항목을 덧붙이거나 복사·분기한 Context를 선택한 Target Context로 가져올 때.",
     ),
+    "move": _copy(
+        "직접 소유한 하나 이상의 Memory를 다른 기존 로컬 Context로 옮깁니다.",
+        "내용과 UID를 유지하면서 선택한 Memory의 소유 Context를 변경할 때.",
+    ),
     "profile": _copy(
         "완전한 로컬 MemoryStore Profile을 선택하고 관리합니다. picker 또는 mem profile rename/remove로 이름을 바꾸거나 영구 삭제할 수도 있습니다.",
         "서로 분리된 사용자, 환경 또는 Memory store를 관리할 때.",
@@ -704,8 +728,8 @@ _KO = {
         "Source가 나중에 변경되거나 사라져도 정확한 Memory 또는 Context 근거를 유지할 때.",
     ),
     "rename": _copy(
-        "store를 이동하거나 다시 쓰지 않고 현재 또는 지정한 managed Profile의 이름을 바꿉니다. mem profile rename은 명시적인 동일 기능입니다.",
-        "기존 managed Profile에 더 명확한 이름을 붙일 때.",
+        "일반 Context namespace와 모든 lexical descendant의 안정된 identity를 유지하면서 이름을 바꿉니다.",
+        "기존 Context namespace의 조직상 이름을 바로잡을 때.",
     ),
     "replace": _copy(
         "일반 로컬 Memory의 모든 literal 또는 명시적 regex 일치를 미리 보고 교체합니다.",
@@ -818,6 +842,10 @@ _MN = {
         "Хоёр Context-ийн Memory-г харьцуулж, нийтлэг, ялгаатай болон зөвхөн нэг талд буй зүйлсийг мэдээлнэ.",
         "Хоёр Context бүхэлдээ хаана нийцэж, хаана ялгаатайг ойлгохын тулд харьцуулах үед.",
     ),
+    "copy": _copy(
+        "Шууд эзэмшдэг нэг буюу хэд хэдэн Memory-г байгаа локал Context руу хуулна.",
+        "Сонгосон Memories-г өөр Context-д бие даан засварлах утга болгон дахин ашиглах үед.",
+    ),
     "config": _copy(
         "Хадгалсан глобал тохиргооны утгыг унших эсвэл бичнэ.",
         "Legacy доод түвшний интерфэйсээр глобал тохиргоог харах эсвэл өөрчлөх үед.",
@@ -926,6 +954,10 @@ _MN = {
         "Зөвхөн Source-д буй зүйлсийг сонгосон Target-д нэмээд яг таарсан зүйлсийг хэвээр үлдээж, хадгалсан зүйлсийн зөрчилд Source эсвэл Target-г сонгоно.",
         "Утгын нэгтгэлгүйгээр Source-д л буй зүйлсийг нэмэх эсвэл хуулсан/салбарласан Context-г сонгосон Target Context руу оруулах үед.",
     ),
+    "move": _copy(
+        "Шууд эзэмшдэг нэг буюу хэд хэдэн Memory-г өөр байгаа локал Context руу зөөнө.",
+        "Агуулга болон identity-г хадгалан сонгосон Memories-ийн эзэмшигч Context-ыг өөрчлөх үед.",
+    ),
     "profile": _copy(
         "Бүрэн локал MemoryStore Profile-г сонгож удирдана. Picker эсвэл mem profile rename/remove-оор нэрийг солих эсвэл бүрмөсөн устгаж болно.",
         "Тусдаа хэрэглэгч, орчин эсвэл Memory store удирдах үед.",
@@ -955,8 +987,8 @@ _MN = {
         "Source дараа нь өөрчлөгдөх эсвэл алга болсон ч яг Memory эсвэл Context нотолгоог хадгалах үед.",
     ),
     "rename": _copy(
-        "Store-г зөөх эсвэл дахин бичихгүйгээр одоогийн эсвэл заасан managed Profile-н нэрийг солино; mem profile rename нь илэрхий ижил хэлбэр.",
-        "Одоо байгаа managed Profile-д илүү ойлгомжтой нэр өгөх үед.",
+        "Ердийн Context namespace болон бүх lexical descendant-н тогтвортой identity-г хадгалан нэрийг солино.",
+        "Одоо байгаа Context namespace-н зохион байгуулалтын нэрийг засах үед.",
     ),
     "replace": _copy(
         "Ердийн локал Memory доторх бүх literal эсвэл тодорхой regex таарцыг урьдчилан харж солино.",

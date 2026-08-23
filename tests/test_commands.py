@@ -567,14 +567,14 @@ class TestHelp:
             'mem edit [UID_or_CONTEXT:UID] "[new_content]"'
         )
         assert help_inventory.COMMAND_FORMS["rename"] == (
-            "mem rename [new_name] (rename the active Profile)",
-            "mem rename [profile_name] [new_name] (rename an explicit Profile)",
+            "mem rename [old_context] [new_context] (review and rename a Context namespace)",
+            "mem rename [old_context] [new_context] --force "
+            "(skip confirmation; retain all safety checks)",
         )
-        assert help_inventory.COMMAND_RELATED_FORMS["rename"] == (
-            "mem profile rename [new_name] "
-            "(explicit equivalent for the active Profile)",
-            "mem profile rename [profile_name] [new_name] "
-            "(explicit equivalent for a named Profile)",
+        assert "rename" not in help_inventory.COMMAND_RELATED_FORMS
+        assert any(
+            form.startswith("mem profile rename")
+            for form in help_inventory.COMMAND_FORMS["profile"]
         )
 
     def test_direct_memory_forms_teach_canonical_and_compatibility_locators(self):

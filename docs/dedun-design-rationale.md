@@ -53,9 +53,10 @@ person wants to inspect evidence without accepting Apply intent.
 
 `find-duplicates` is the separate provider-free exact-DUP report, while
 `find-redundancies` reports the complete exact-plus-semantic DUN relation. There
-is no singular `find-redundancy` command. The exact-review `consolidate`
-spelling remains hidden for existing stateless receipts; it is a Dedun Apply
-adapter, not another discovery operation.
+is no separate singular operation: `find-redundancy` is an input alias for the
+canonical `find-redundancies` identity. The exact-review `consolidate` spelling
+remains hidden for existing stateless receipts; it is a Dedun Apply adapter,
+not another discovery operation.
 
 ## Invariants
 

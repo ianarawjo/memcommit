@@ -100,12 +100,7 @@ COMMAND_DISPLAY_ALIASES = {
 # Related spellings can live under another command group while remaining
 # visible in the canonical operation's detail. They are kept separate from
 # owned forms so parser-validation and shell-prefill semantics stay explicit.
-COMMAND_RELATED_FORMS = {
-    "rename": (
-        "mem profile rename [new_name] (explicit equivalent for the active Profile)",
-        "mem profile rename [profile_name] [new_name] (explicit equivalent for a named Profile)",
-    ),
-}
+COMMAND_RELATED_FORMS = {}
 
 HELP_CORE_CONCEPTS = (
     (
@@ -227,6 +222,7 @@ HELP_CATEGORY_GROUPS = (
             "show",
             "switch",
             "checkout",
+            "rename",
         ),
     ),
     (
@@ -234,6 +230,7 @@ HELP_CATEGORY_GROUPS = (
         (
             "init",
             "add",
+            "copy",
             "branch",
             "import",
             "reference",
@@ -253,6 +250,7 @@ HELP_CATEGORY_GROUPS = (
         "DETERMINISTIC CONTENT CHANGES",
         (
             "edit",
+            "move",
             "replace",
             "chunk",
             "delete",
@@ -310,7 +308,7 @@ HELP_CATEGORY_GROUPS = (
     ),
     (
         "PROFILES",
-        ("profile", "rename"),
+        ("profile",),
     ),
     (
         "SHARING & PROTECTION",
@@ -404,6 +402,16 @@ COMMAND_FORMS = {
         "mem add --input [file] --context [context] (batch-add to an explicit Context)",
         "mem add --paste --context [context] (paste into an explicit Context)",
     ),
+    "copy": (
+        "mem copy (show the required Memory locator error)",
+        "mem copy [UID] (copy one globally unique direct Memory into current)",
+        "mem copy [source_context]:[UID] --into [target_context] (copy one exact Memory)",
+        "mem copy [UID_A] [UID_B] --from [source_context] --to [target_context] (ordered batch)",
+        "mem copy --memory [context]:[UID] --memory [context]:[UID] --into [target_context] (repeatable batch)",
+        "mem copy [UID] --into [target_context] --before [item] (insert before an exact Target item)",
+        "mem copy [UID] --into [target_context] --after [item] (insert after an exact Target item)",
+        "mem copy [UID] --into [target_context] --preserve-uids (retain Source identity when no Target UID collides)",
+    ),
     "audit": (
         "mem audit (audit the current Context and save a reviewable receipt)",
         "mem audit [context] (run and save all checks for one explicit Context)",
@@ -424,7 +432,7 @@ COMMAND_FORMS = {
         "mem check-conformance --example [example_context] (use the current Context as Rules)",
     ),
     "fit": (
-        "mem fit (show the required two-proposition input error)",
+        "mem fit (judge the current Context's direct Memories)",
         'mem fit "[proposition A]" "[proposition B]" (judge the complete set as YES, MAY, or NO)',
         'mem fit "[A]" "[B]" --background "[K]" (judge under one explicit background proposition)',
         "mem fit --ground [ground] (run the revision-bound Ground adapter and save its receipt)",
@@ -498,6 +506,7 @@ COMMAND_FORMS = {
         "mem compare --from [reference] --to [peer] (compatibility aliases)",
     ),
     "config": (
+        "mem config (show global configuration)",
         "mem config show (show global configuration)",
         'mem config set [key] "[value]" (set one global value)',
     ),
@@ -576,6 +585,7 @@ COMMAND_FORMS = {
         'mem find -r "[text]" (lexical descendants and embedded Contexts)',
         'mem find --context [context1] --context [context2] "[text]" (multiple roots)',
         'mem find --descendants --exclude-embeds "[text]" (lexical subtrees only)',
+        'mem find -a "[text]" (all readable Contexts in the active Profile)',
     ),
     "search": (
         "mem search (interactive semantic search, checked COPY/REFERENCE, and Save Location)",
@@ -587,18 +597,21 @@ COMMAND_FORMS = {
         'mem search --context-only --follow-embeds "[query]" (exact lexical roots while following embedded Contexts)',
         'mem search --descendants --exclude-embeds "[query]" (lexical subtrees without embedded traversal)',
         'mem search -d "[query]" (direct preset: context-only plus exclude-embeds)',
+        'mem search -a "[query]" (all readable Contexts in the active Profile)',
     ),
     "find-ambiguities": (
         "mem find-ambiguities (current Context; no changes)",
         "mem find-ambiguities [context] (explicit Context; no changes)",
         "mem find-ambiguities --context [context] (compatibility alias)",
         "mem find-ambiguities --select (interactive readable target selection)",
+        "mem find-ambiguities -a (all readable Contexts in the active Profile)",
     ),
     "find-conflicts": (
         "mem find-conflicts (current Context; no changes)",
         "mem find-conflicts [context] (explicit Context; no changes)",
         "mem find-conflicts --context [context] (compatibility alias)",
         "mem find-conflicts --select (interactive readable target selection)",
+        "mem find-conflicts -a (all readable Contexts in the active Profile)",
     ),
     "find-duplicates": (
         "mem find-duplicates (report exact duplicates in the current Context)",
@@ -624,9 +637,12 @@ COMMAND_FORMS = {
     ),
     "help": ("mem help (enter the interactive command browser)",),
     "impact": (
+        "mem impact --sessions (browse every durable artifact inspectable through Impact)",
         "mem impact atomize (preview atomization of the current Context)",
         "mem impact atomize [context] (preview atomization of one Context)",
         "mem impact atomize --context [context] (compatibility alias)",
+        "mem impact atomize --sessions (browse saved Atomize analyses)",
+        "mem impact atomize --session [uid] (reopen one exact saved Atomize analysis)",
         'mem impact forget "[instruction]" (preview complete in-place decisions)',
         'mem impact forget "[instruction]" --context [context] (preview one exact direct Source)',
         "mem impact distill --from [source] --to [target] (preview the Rules Distill would add)",
@@ -703,6 +719,9 @@ COMMAND_FORMS = {
     "meld": (
         "mem meld (choose mode and endpoints for a new Meld)",
         "mem meld --sessions (enter the interactive Meld session launcher)",
+        "mem meld --memory [exact_text] (one process-local incoming Memory into current local Baseline)",
+        "mem meld --memory [exact_text] --into [baseline_context] (one process-local incoming Memory into an explicit local Baseline)",
+        "mem meld [non_context_sentence] (unambiguous inline-Memory shorthand into current local Baseline)",
         "mem meld [incoming_context] (directional into current Baseline)",
         "mem meld [incoming_context] [baseline_context] (directional)",
         "mem meld team/proposed-changes team/current-policy (example: directional Baseline)",
@@ -729,6 +748,17 @@ COMMAND_FORMS = {
         "mem merge [source_context] --take-source-all (resolve every structural conflict with exact Source values)",
         "mem merge [source_context] --resolve [conflict_id]=keep-target (repeat one reviewed decision per conflict)",
     ),
+    "move": (
+        "mem move (show the required Memory locator error)",
+        "mem move [UID] (move one globally unique direct Memory into current)",
+        "mem move [source_context]:[UID] --into [target_context] (move one exact Memory)",
+        "mem move [UID_A] [UID_B] --from [source_context] --to [target_context] (ordered atomic batch)",
+        "mem move --memory [context]:[UID] --memory [context]:[UID] --into [target_context] (repeatable batch)",
+        "mem move [UID] --into [target_context] --before [item] (insert before an exact Target item)",
+        "mem move [UID] --into [target_context] --after [item] (insert after an exact Target item)",
+        "mem move [UID] --into [target_context] --retarget-links (atomically update local live Embeds)",
+        "mem move [UID] --into [target_context] --break-links (explicitly leave live Embeds dangling)",
+    ),
     "profile": (
         "mem profile (enter the interactive Profile selector in a TTY; list otherwise)",
         "mem profile [profile_name] (select through the concise alias)",
@@ -747,17 +777,19 @@ COMMAND_FORMS = {
         "mem profile archive-study [study_name] (detach a legacy split Study)",
         "mem profile grant list (list cross-Profile views)",
         "mem profile grant create [authority_profile] [grantee_profile] [source_context] --into [attachment_context] --allow [permission]",
-        "mem profile grant create [authority_profile] [grantee_profile] [source_context] --into [attachment_context] --allow [permission] --recursive (freeze descendants)",
+        "mem profile grant create [authority_profile] [grantee_profile] [source_context] --into [attachment_context] --allow [permission] --recursive (include current descendants)",
         "mem profile grant update [grant] --allow [permission]",
-        "mem profile grant update [grant] --allow [permission] --refresh-scope (refreeze descendants)",
-        "mem profile grant update [grant] --allow [permission] --root-only (freeze only the root)",
+        "mem profile grant update [grant] --allow [permission] --refresh-scope (include all current descendants)",
+        "mem profile grant update [grant] --allow [permission] --root-only (include only the root)",
         "mem profile grant delete [grant] (revoke a view)",
     ),
     "provider": (
+        "mem provider (edit the active ordinary Profile in a TTY; show the route overview otherwise)",
         "mem provider status (inspect the selection without connecting)",
         "mem provider use codex_chatgpt (select managed Codex defaults)",
         "mem provider use ollama --model [model] (select a local model)",
         "mem provider use openrouter --model [model] (select a routed model)",
+        "mem provider reset --operation [operation] (return to the inherited route)",
         "mem provider probe (test the current selection)",
     ),
     "query": (
@@ -765,6 +797,7 @@ COMMAND_FORMS = {
         'mem query "[question]" (ask the direct current ordinary Context)',
         'mem query -r "[question]" (include descendants and embedded Contexts)',
         'mem query --context [context] "[question]" (ask an explicit ordinary Context)',
+        'mem query -a "[question]" (ask all readable Contexts in the active Profile)',
         "mem query [query_view] (browse opaque Memory handles)",
         'mem query [query_view] "[question]" (ask a query-only view)',
         'mem query [query_view]#[memory_handle] "[question]" (ask one opaque Memory)',
@@ -787,8 +820,8 @@ COMMAND_FORMS = {
         "mem reference [UID] --from [source_context] --into [target_context] (compatibility immutable snapshot)",
     ),
     "rename": (
-        "mem rename [new_name] (rename the active Profile)",
-        "mem rename [profile_name] [new_name] (rename an explicit Profile)",
+        "mem rename [old_context] [new_context] (review and rename a Context namespace)",
+        "mem rename [old_context] [new_context] --force (skip confirmation; retain all safety checks)",
     ),
     "redo": ("mem redo (redo the most recently undone Context command)",),
     "revert": (

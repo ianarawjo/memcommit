@@ -125,11 +125,11 @@ classification, and stale generated output.
   defines the shared `-d/--direct` and `-r/--recursive` presets, precise
   role/axis overrides, and the direct-only operation boundary.
 - [`mem-rename-design-rationale.md`](mem-rename-design-rationale.md) defines
-  the internal UID-preserving slash-subtree relocation primitive; typed
+  the public `mem rename` UID-preserving slash-subtree relocation; typed
   reference, current-state, checkpoint, Ground, and translation continuity;
   the query-only non-access boundary; graph freshness; exception rollback; and
-  the remaining crash-journal limitation. Public `mem rename` is the Profile
-  display-name operation described by the Profile rationale.
+  the remaining crash-journal limitation. Profile display-name rename stays
+  separately qualified as `mem profile rename` and in the Profile picker.
 
 ## Translation contract
 
@@ -296,6 +296,8 @@ classification, and stale generated output.
   implemented issue-scoped directional flow under
   `mem atomize --evaluate`; documents positional Context-wide directional
   `mem meld INCOMING BASELINE` and its one-operand current-baseline form;
+  documents exact inline-Memory `mem meld --memory TEXT` and the
+  unambiguous sentence shorthand without creating a temporary Context;
   retains `--into` and `--from` as directional aliases; and distinguishes both
   from symmetric `mem meld PEER_A PEER_B RESULT_C` and its `--to` alias.
 - [`mem-meld-design-rationale.md`](mem-meld-design-rationale.md) distills the
