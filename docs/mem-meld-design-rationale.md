@@ -320,10 +320,52 @@ Memory identities, so this adapter retains their source Memory and existing
 proposed-child metadata instead of pretending that proposed children are
 already stored Memories.
 
-This internal normalization does not add `mem meld --atomic`, expose a
-Memory-UID command, or create a second public workflow. `mem atomize
---evaluate` remains the owner of analysis identity, dialogue persistence,
-approval, and source-local provenance.
+This atomize-owned normalization does not add `mem meld --atomic` or create a
+second public atomize workflow. `mem atomize --evaluate` remains the owner of
+analysis identity, dialogue persistence, approval, and source-local
+provenance. Standalone inline-Memory Meld, described below, is a separate
+directional intake adapter: its raw user text is new evidence rather than a
+projection of an atomize artifact.
+
+### A standalone inline Memory is also an ephemeral frame
+
+`mem meld --memory TEXT` binds exact user-supplied text as a one-Memory
+`INCOMING` frame and uses the current local Context as `BASELINE / TARGET`.
+`--into BASELINE` selects that local baseline explicitly. A sole positional
+operand is the same inline form only when it is unambiguously not a portable
+Context locator; an absent portable-looking operand remains a Context lookup
+and fails as such. This asymmetric classification prevents a misspelled
+Context name from silently becoming semantic input. `--memory` is the explicit
+escape hatch for one-word or otherwise Context-shaped content.
+
+The display name `INLINE MEMORY`, synthetic Context UID, Memory UID, owner
+fingerprint, and content digest exist only inside schema-version-9 Meld state.
+No `Context` is created in `MemoryStore`, made current, listed, or locked. The
+runtime reconstructs the immutable one-Memory view from the saved session for
+every reassessment and Apply, verifies its exact Context fingerprint, and
+revalidates the ordinary BASELINE and target separately. The target-scoped
+session CAS binds the inline bytes; the accepted checkpoint retains the same
+source frame and relation-linked provenance.
+
+Punctuation has no Meld-level special meaning. Quotes, `!`, and leading or
+trailing spaces that survive shell argv parsing remain exact Memory content.
+Shell quoting remains the caller's boundary: single quotes safely contain
+double quotes and `!`, while embedded double quotes inside an outer
+double-quoted argument must be escaped.
+
+Inline intake does not add a distinct acceptance policy. Scripted or non-TTY
+runs retain the ready proposal for explicit `--accept`; a decision-free local
+TTY run may follow Meld's existing Undo-backed automatic-accept route.
+Unresolved decisions and granted targets retain their existing explicit
+review boundaries.
+
+Inline input is directional only. It cannot select INCOMING descendants,
+cannot combine with `--incoming-memory`, requires a local BASELINE/Target, and
+does not reuse a Context-pair Compare or directional prewarm. BASELINE
+descendant scope and `--baseline-memory` remain valid because they constrain
+the real writable side. These restrictions keep Grant authority, source locks,
+and cache identity from pretending that a raw process-local statement has a
+durable source Context.
 
 ## Conversation as repeated grounding and meld
 
@@ -463,8 +505,9 @@ and detail.
 
 ### Context-to-Context v1 boundary
 
-Public `mem meld` accepts two bounded direct-Memory Context frames under one of
-two explicit authority contracts. For Task 2, both sources have the `PEER`
+Public `mem meld` accepts bounded Memory-bearing frames under two explicit
+authority contracts. Named-Context forms bind two Context frames. For Task 2,
+both sources have the `PEER`
 role and a third positional operand names the result target:
 
 ```text
@@ -509,14 +552,16 @@ That separation permits genuine generalization:
   target.
 - Context + Context directional meld uses `INCOMING` and `BASELINE` frames and
   may propose a next state for the baseline.
+- Inline Memory + Context directional meld uses one ephemeral `INCOMING` frame
+  and one bound local `BASELINE` frame without creating a source Context.
 - Atomize grounding uses one ephemeral issue-bounded `INCOMING` frame and one
   bound containing-Context `BASELINE` frame through the same turn and proposal
   contract. `CLARIFICATION` is dialogue evidence attached to the turn, not a
   third frame.
 
-The v1 commands need not expose every adapter. Supporting both Context-wide
-authority modes does not require pretending that the issue-scoped atomize
-adapter has the same CLI syntax or persistence artifact.
+Supporting both Context-wide authority modes and the inline intake adapter
+does not require pretending that the issue-scoped atomize adapter has the same
+CLI syntax or persistence artifact.
 
 Initial Context-to-Context analysis is intentionally bounded:
 
@@ -895,17 +940,35 @@ review and applied study evidence is not reinterpreted retroactively.
 
 Schema version 7 is the comparison-backed Directional variant. It stores the
 exact ordered Compare snapshot while retaining the raw owner-aware Directional
-frames. Descendant Compare content is intentionally decorated with its public
-Context name, whereas a Directional proposal must preserve raw content and the
-exact writable owner. The implementation therefore maps Compare members onto
-the Directional frames by ordered Memory UID and locally proves equal scope and
-coverage. On initial materialization the provider must return the frozen
+frames. Compare content remains byte-for-byte ordinary claim text while typed
+host provenance retains its acquisition form and exact owner. The implementation
+maps directly owned root or lexical-descendant Compare members onto the
+Directional frames by ordered Memory UID and locally proves equal scope,
+coverage, and writable ownership. Evidence acquired through a Memory Embed,
+Memory Reference, Context Reference, Grant, or non-lexical Context graph is
+valid for symmetric analysis but is rejected as a Directional mutation basis;
+the person must choose a new symmetric Result or target the exact owning Context.
+On initial materialization the provider must return the frozen
 relation identities, grouping, judgments, prose, and imported issues unchanged;
 it may add only Directional-specific issues and exact result proposals. A local
 validator rejects relation drift before anything is saved. Later explicit user
 turns may still revise the complete ledger because they introduce new reviewed
 evidence. Schema-6 sessions and new runs with no saved Compare remain compatible
 with the original direct Directional analysis.
+
+Schema version 8 marks exact direct-Memory focus. It persists selection
+identity independently from the actionable Memory tuple so a one-Memory
+Context remains distinguishable from an unrestricted whole-Context frame.
+Neighbor Memories may remain context-only evidence, while only the selected
+BASELINE Memory is writable.
+
+Schema version 9 marks standalone inline-Memory Directional Meld. The
+INCOMING frame must contain exactly one Memory, one matching synthetic owner
+fingerprint, no neighbor evidence, no selected durable Memory UID, and no
+Grant or Compare binding. A BASELINE Memory selector may still be present.
+The schema marker is what authorizes reconstruction from the session rather
+than a Store lookup; older owner-aware versions must continue to resolve both
+frames as durable Contexts.
 
 Directional preservation is deliberately about materialization cardinality,
 not a second Atomize pass. Meld treats each frozen source Memory as an already

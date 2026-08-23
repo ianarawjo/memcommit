@@ -69,6 +69,19 @@ def test_start_command_builders_use_public_portable_grammar() -> None:
         "c",
         "--left-descendants",
     )
+    assert meld_start_command_review(
+        mode="DIRECTIONAL",
+        left_name="INLINE MEMORY",
+        right_name="baseline",
+        incoming_text='all greetings need "."!',
+    ).argv == (
+        "mem",
+        "meld",
+        "--memory",
+        'all greetings need "."!',
+        "--into",
+        "baseline",
+    )
     assert update_start_command_review(
         source_name="a",
         target_name="b",

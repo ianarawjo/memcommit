@@ -6,7 +6,11 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from memcommit.comparison import ComparisonAnalysis
-from memcommit.meld import MeldSession
+from memcommit.meld import (
+    INLINE_MELD_CONTEXT_NAME,
+    MELD_INLINE_MEMORY_SCHEMA_VERSION,
+    MeldSession,
+)
 from memcommit.meld_start_application import (
     MeldStartMode,
     MeldStartOrigin,
@@ -31,6 +35,7 @@ class MeldRestartRequest:
     right_descendants: bool = False
     incoming_memory: str | None = None
     baseline_memory: str | None = None
+    incoming_text: str | None = None
     comparison: ComparisonAnalysis | None = None
 
     def __post_init__(self) -> None:
@@ -52,11 +57,19 @@ class MeldRestartRequest:
             right_descendants=self.right_descendants,
             incoming_memory=self.incoming_memory,
             baseline_memory=self.baseline_memory,
+            incoming_text=self.incoming_text,
             comparison=self.comparison,
             error_type=MeldRestartError,
         )
         if self.left_name == self.right_name:
             raise MeldRestartError("Meld sources must be distinct Contexts.")
+        if (
+            self.incoming_text is not None
+            and self.left_name != INLINE_MELD_CONTEXT_NAME
+        ):
+            raise MeldRestartError(
+                "Inline Meld Memory input requires the reserved INCOMING frame name."
+            )
         if self.mode == "DIRECTIONAL" and self.target_name != self.right_name:
             raise MeldRestartError(
                 "Directional Meld must use the existing BASELINE as target."
@@ -115,11 +128,18 @@ def run_meld_restart(
             strict=True,
         )
     )
+    inline_scope_matches = request.incoming_text is None or (
+        getattr(session, "schema_version", None)
+        == MELD_INLINE_MEMORY_SCHEMA_VERSION
+        and len(session.frames[0].memories) == 1
+        and session.frames[0].memories[0].content == request.incoming_text
+    )
     if (
         session.mode != request.mode
         or frame_names != (request.left_name, request.right_name)
         or session.target.context_name != request.target_name
         or not memory_scope_matches
+        or not inline_scope_matches
         or session.state in {"APPLIED", "KEPT_REVIEW_ONLY"}
     ):
         raise MeldRestartError("Meld restart returned a session outside its request.")

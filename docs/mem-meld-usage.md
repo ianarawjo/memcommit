@@ -9,6 +9,7 @@ associated tests together whenever hands-on testing changes the workflow.
 | User-facing term | Technical contract | Command | Status |
 |---|---|---|---|
 | **Atomic meld** *(informal shorthand)* | An issue-scoped directional meld embedded in atomize grounding | `mem atomize --evaluate ISSUE` | Implemented |
+| **Inline-Memory meld** | One exact process-local Memory melded into an authoritative local baseline Context | `mem meld --memory TEXT`; an unambiguously non-Context one-operand sentence is shorthand | Implemented |
 | **Directional Context meld** | A read-only incoming Context melded into an authoritative baseline Context | `mem meld INCOMING BASELINE`; omit `BASELINE` to use the current Context | Implemented |
 | **Symmetric Context meld** | Two equal-authority Contexts combined into an explicit Result Context | `mem meld PEER_A PEER_B RESULT_C`; `--to RESULT_C` is an alias | Implemented |
 
@@ -30,10 +31,12 @@ listed, or checkpointed. It is reconstructed from the bound atomize session;
 only an explicitly accepted result can change and checkpoint the baseline
 Context.
 
-There is no `mem meld --atomic` command and no public command that accepts raw
-text strings or individual Memory UIDs as its two frames. The implemented
-atomic entry point remains under `mem atomize` because atomize owns the saved
-analysis, issue identity, and source evidence.
+There is no `mem meld --atomic` command. The implemented atomize-issue entry
+point remains under `mem atomize` because atomize owns the saved analysis,
+issue identity, and source evidence. Standalone Meld separately accepts one
+exact raw Memory through `--memory`; the existing `--incoming-memory` and
+`--baseline-memory` controls select durable Memories inside named Context
+frames and do not turn those durable Memories into raw input.
 
 ## Browse saved Context Meld sessions
 
@@ -61,11 +64,71 @@ session or a bound Context changed while the picker was open, reopening fails
 and the list must be opened again. Browsing, cancellation, and provider-free
 snapshot rendering create no Context, checkpoint, or replacement session.
 
-Explicit forms such as `mem meld INCOMING BASELINE`,
+Explicit forms such as `mem meld --memory TEXT`, `mem meld INCOMING BASELINE`,
 `mem meld PEER_A PEER_B RESULT_C`, and their `--into`, `--from`, and `--to`
 aliases retain target-bound create-or-resume behavior.
 `--sessions` cannot be combined with Context operands or semantic, terminal,
 restart, or expansion actions.
+
+## Inline-Memory meld: incorporate one exact idea
+
+Use the current local Context as the authoritative BASELINE/Target:
+
+```bash
+mem meld --memory 'all greetings need "."'
+```
+
+Or name the local BASELINE explicitly:
+
+```bash
+mem meld --memory 'all greetings need "."' --into policies/greetings
+```
+
+When the sole positional operand cannot be a portable Context locator, Meld
+uses it as the same exact inline Memory. This makes the natural sentence form
+work without hiding a plausible Context typo:
+
+```bash
+mem meld 'all greetings need "."'
+```
+
+An absent portable-looking value such as `hello` is still treated as a Context
+name and reports that the Context does not exist. Use `--memory hello` when a
+one-word or otherwise Context-shaped value is intended as content. An existing
+local Context always retains Context meaning.
+
+Memory content is preserved exactly, including ordinary punctuation, quotes,
+exclamation marks, and meaningful leading or trailing spaces supplied by the
+shell. Shell quoting is separate from Meld parsing. Single quotes are the
+safest form when the content contains double quotes or `!`:
+
+```bash
+mem meld --memory 'keep "" and ! literally'
+```
+
+With outer double quotes, escape embedded double quotes:
+
+```bash
+mem meld --memory "all greetings need \".\"!"
+```
+
+The inline source becomes one schema-version-9 `INCOMING` frame retained in
+the target-scoped Meld session. `INLINE MEMORY` is a display label, not a
+Context locator: Meld creates no temporary Context, never makes it current,
+and never adds it to `mem ls`. Resume and Apply reconstruct the exact source
+from the session, revalidate only the real BASELINE hierarchy, and retain the
+inline content in checkpoint provenance. Starting or resuming never mutates
+the BASELINE. A scripted or non-TTY run saves the ready proposal for explicit
+`--accept`; an ordinary local TTY run with no unresolved decision may use
+Meld's existing Undo-backed automatic acceptance. Unresolved or granted-target
+work still stops at its explicit review boundary.
+
+Inline input cannot be combined with an INCOMING subtree or
+`--incoming-memory`, and currently requires a local BASELINE/Target. A local
+BASELINE may still use `--right-descendants` or `--baseline-memory` to control
+its writable scope. Inline runs intentionally do not reuse Context-pair Compare
+or directional prewarm artifacts because there is no durable incoming Context
+binding to revalidate.
 
 ## Atomic meld (informal shorthand): resolve one atomize issue
 

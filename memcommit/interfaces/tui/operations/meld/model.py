@@ -33,8 +33,8 @@ class MeldTuiSetup:
             raise ValueError("Meld setup requires distinct available A/B defaults.")
         if not self.eligible_target_names <= set(self.names):
             raise ValueError(
-                "A selected Meld Result target is no longer available. "
-                "Reopen Meld and select it again."
+                "One or more Meld Result targets are no longer available. "
+                "Reopen Meld and select them again."
             )
         labels = dict(self.annotations)
         if len(labels) != len(self.annotations) or set(labels) - set(self.names):

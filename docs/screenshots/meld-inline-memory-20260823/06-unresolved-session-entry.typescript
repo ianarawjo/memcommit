@@ -1,0 +1,54 @@
+$ mem meld --memory … · unresolved inline-Memory review
+PTY 180 52
+[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;2;244;245;247;1m MELD NEEDS INPUT · < 1/1 >[0m
+[0m CONFLICT · Greeting punctuation scope[0m
+[0;38;2;244;245;247m Should every greeting use the exact period rule, or should named exceptions remain?[0m
+[0;38;2;16;36;47;48;2;139;213;255;1m  Apply exact period rule · Use the inline rule exactly, including ".", "", and ! examples.[0m
+[0m  Preserve scoped exceptions · Require "." by default while keeping named exception scopes.[0m
+[0m [0m
+[0;38;2;244;245;247m┌────────────────────────────────| DIRECTION OR NOTE · OPTIONAL |────────────────────────────────┐[0m
+[0;38;2;244;245;247m│›                                                                                               │[0m
+[0;38;2;244;245;247m└────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
+
+[0m  SUBMIT SELECTED · 0/1[0m
+[0m [0m
+[0m ←/→ issue · ↑/↓ move · Enter select/apply · Esc close[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[0m [47A[0m

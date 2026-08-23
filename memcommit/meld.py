@@ -19,9 +19,11 @@ from dataclasses import dataclass, replace
 from typing import Iterable, Literal
 
 from memcommit.comparison import (
+    COMPARISON_DESCENDANT_SCHEMA_VERSION,
     COMPARISON_RULESET_VERSION,
     COMPARISON_SCHEMA_VERSION,
     ComparisonAnalysis,
+    ComparisonMemory,
     comparison_canonical_digest,
 )
 from memcommit.context import Context, Memory, QueryContextRef
@@ -39,11 +41,13 @@ MELD_OWNER_AWARE_SCHEMA_VERSION = 5
 MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION = 6
 MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION = 7
 MELD_MEMORY_FOCUS_SCHEMA_VERSION = 8
+MELD_INLINE_MEMORY_SCHEMA_VERSION = 9
 MELD_COMPARISON_SCHEMA_VERSION = 2
 MELD_LEGACY_SCHEMA_VERSION = 1
 MELD_TEXT_LIMIT = 20_000
 MELD_NAME_LIMIT = 500
 MELD_ID_LIMIT = 240
+INLINE_MELD_CONTEXT_NAME = "INLINE MEMORY"
 
 MeldMode = Literal["DIRECTIONAL", "SYMMETRIC"]
 MeldRole = Literal["INCOMING", "BASELINE", "PEER"]
@@ -1508,15 +1512,36 @@ def _comparison_meld_frames(
     """Project ordered Compare frames without changing durable identities."""
     frames: list[MeldFrame] = []
     for index, frame in enumerate(analysis.frames):
+        owner_aware = (
+            analysis.schema_version >= COMPARISON_DESCENDANT_SCHEMA_VERSION
+            and analysis.include_descendants[index]
+        )
+        memories: list[dict[str, object]] = []
+        for memory in frame.memories:
+            item: dict[str, object] = {
+                "uid": memory.uid,
+                "content": memory.content,
+                "position": memory.position,
+                "content_digest": memory.content_digest,
+            }
+            if owner_aware and memory.source is not None:
+                item["owner_context"] = {
+                    "uid": memory.source.owner_context_uid,
+                    "name": memory.source.owner_context_name,
+                }
+            memories.append(item)
         value: dict[str, object] = {
                 "uid": frame.uid,
                 "context_uid": frame.context_uid,
                 "context_name": frame.context_name,
                 "context_digest": frame.context_digest,
                 "role": "PEER",
-                "memories": [memory.to_dict() for memory in frame.memories],
+                # Meld consumes the ordinary semantic content but must not
+                # parse Compare-only source forms as part of its Memory schema.
+                # Descendant scopes retain their established owner grouping.
+                "memories": memories,
             }
-        if analysis.schema_version == COMPARISON_SCHEMA_VERSION:
+        if analysis.schema_version >= COMPARISON_DESCENDANT_SCHEMA_VERSION:
             value["include_descendants"] = analysis.include_descendants[index]
         frames.append(MeldFrame.from_dict(value))
     return frames[0], frames[1]
@@ -1608,10 +1633,10 @@ def directional_comparison_basis_assessment(
 ) -> MeldAssessment:
     """Project one ordered Compare ledger onto owner-aware directional frames.
 
-    Recursive Compare snapshots intentionally decorate Memory content with its
-    public Context name, while Directional Meld must retain raw content and its
-    exact writable owner. Memory identity is therefore the stable bridge; the
-    Compare frame objects themselves are not safe Directional source frames.
+    Compare keeps content text untouched, but a directional Meld additionally
+    needs an exact writable owner. Memory identity and typed host provenance
+    bridge those contracts; the Compare frames themselves are not writable
+    source frames.
     """
     if tuple(analysis.include_descendants) != tuple(
         bool(frame.include_descendants) for frame in frames
@@ -1620,11 +1645,34 @@ def directional_comparison_basis_assessment(
             "Directional meld descendant scopes do not match their comparison seed."
         )
     frame_uid_map: dict[str, str] = {}
-    for comparison_frame, directional_frame in zip(
-        analysis.frames,
-        frames,
-        strict=True,
+    for frame_index, (comparison_frame, directional_frame) in enumerate(
+        zip(analysis.frames, frames, strict=True)
     ):
+        def is_directional_source(memory: ComparisonMemory) -> bool:
+            if memory.source is None:
+                # Older saved Compare analyses predate typed provenance. Their
+                # exact identity checks below remain the compatibility guard.
+                return True
+            source = memory.source
+            if source.source_form == "OWNED":
+                return source.owner_context_uid == comparison_frame.context_uid
+            return (
+                source.source_form == "CONTEXT_GRAPH"
+                and analysis.include_descendants[frame_index]
+                and source.owner_context_name.startswith(
+                    comparison_frame.context_name + "/"
+                )
+            )
+
+        if any(
+            not is_directional_source(memory)
+            for memory in comparison_frame.memories
+        ):
+            raise MeldError(
+                "Directional Meld cannot mutate through non-owned evidence "
+                "from its Compare basis; choose a symmetric Result Context "
+                "or target the owning Context explicitly."
+            )
         if (
             comparison_frame.context_uid != directional_frame.context_uid
             or comparison_frame.context_name != directional_frame.context_name
@@ -1811,6 +1859,41 @@ class MeldSession:
         return cls.from_dict(session.to_dict())
 
     @classmethod
+    def create_directional_from_memory(
+        cls,
+        content: str,
+        baseline: Context,
+        *,
+        baseline_descendants: bool | None = None,
+        baseline_memory_selector: str | None = None,
+    ) -> "MeldSession":
+        """Bind one process-local Memory frame to an existing BASELINE.
+
+        The synthetic Context shape exists only to reuse Meld's complete frame,
+        relation, and provenance contracts.  Its identity and content are
+        retained in the saved session; it is never a MemoryStore locator.
+        """
+
+        if not isinstance(content, str) or not content.strip():
+            raise MeldError("Inline Meld Memory content must be nonempty text.")
+        if len(content) > MELD_TEXT_LIMIT:
+            raise MeldError("Inline Meld Memory content is too long.")
+        incoming = Context(
+            uid=str(uuid.uuid4()),
+            name=INLINE_MELD_CONTEXT_NAME,
+        )
+        incoming.add(Memory(uid=str(uuid.uuid4()), content=content))
+        session = cls.create_directional(
+            incoming,
+            baseline,
+            incoming_descendants=False,
+            baseline_descendants=baseline_descendants,
+            baseline_memory_selector=baseline_memory_selector,
+        )
+        session.schema_version = MELD_INLINE_MEMORY_SCHEMA_VERSION
+        return cls.from_dict(session.to_dict())
+
+    @classmethod
     def create_directional_from_comparison(
         cls,
         analysis: ComparisonAnalysis,
@@ -1900,6 +1983,7 @@ class MeldSession:
             MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION,
             MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION,
             MELD_MEMORY_FOCUS_SCHEMA_VERSION,
+            MELD_INLINE_MEMORY_SCHEMA_VERSION,
         }:
             raise MeldError("Unsupported meld session schema version.")
         keys = {
@@ -2161,6 +2245,7 @@ class MeldSession:
             MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION,
             MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION,
             MELD_MEMORY_FOCUS_SCHEMA_VERSION,
+            MELD_INLINE_MEMORY_SCHEMA_VERSION,
         }:
             raise MeldError("Unsupported meld session schema version.")
         if self.schema_version == MELD_LEGACY_SCHEMA_VERSION:
@@ -2181,7 +2266,11 @@ class MeldSession:
             raise MeldError("Context meld requires exactly two source frames.")
         if any(frame.selected_memory_uid is not None for frame in self.frames) and (
             self.mode != "DIRECTIONAL"
-            or self.schema_version != MELD_MEMORY_FOCUS_SCHEMA_VERSION
+            or self.schema_version
+            not in {
+                MELD_MEMORY_FOCUS_SCHEMA_VERSION,
+                MELD_INLINE_MEMORY_SCHEMA_VERSION,
+            }
         ):
             raise MeldError(
                 "Context-only Meld evidence requires a focused directional session."
@@ -2200,6 +2289,36 @@ class MeldSession:
             raise MeldError(
                 "A focused Meld session must be directional and directly analyzed."
             )
+        if self.schema_version == MELD_INLINE_MEMORY_SCHEMA_VERSION:
+            incoming = self.frames[0]
+            fingerprints = incoming.contexts or ()
+            ephemeral = Context(uid=incoming.context_uid, name=incoming.context_name)
+            for memory in incoming.memories:
+                ephemeral.add(Memory(uid=memory.uid, content=memory.content))
+            if (
+                self.mode != "DIRECTIONAL"
+                or self.comparison_seed is not None
+                or self.granted_incoming is not None
+                or self.granted_target is not None
+                or incoming.context_name != INLINE_MELD_CONTEXT_NAME
+                or incoming.include_descendants is not False
+                or len(incoming.memories) != 1
+                or incoming.context_evidence
+                or incoming.selected_memory_uid is not None
+                or len(fingerprints) != 1
+                or fingerprints[0].uid != incoming.context_uid
+                or fingerprints[0].name != incoming.context_name
+                or incoming.memories[0].owner_context_uid != incoming.context_uid
+                or incoming.memories[0].owner_context_name != incoming.context_name
+                or (
+                    fingerprints
+                    and fingerprints[0].digest != context_record_digest(ephemeral)
+                )
+            ):
+                raise MeldError(
+                    "An inline-Memory Meld requires one process-local INCOMING "
+                    "Memory and one bound BASELINE."
+                )
         if len({frame.uid for frame in self.frames}) != len(self.frames):
             raise MeldError("Duplicate meld frame identity.")
         if len({frame.context_uid for frame in self.frames}) != len(self.frames) or len(
@@ -2783,6 +2902,27 @@ class MeldSession:
                 "A ready symmetric meld must represent every source Memory "
                 "and primary relation in its exact result proposal."
             )
+
+
+def inline_meld_context(session: MeldSession) -> Context:
+    """Reconstruct the immutable process-local INCOMING Context view."""
+
+    if (
+        not isinstance(session, MeldSession)
+        or session.schema_version != MELD_INLINE_MEMORY_SCHEMA_VERSION
+    ):
+        raise MeldError("Expected an inline-Memory Meld session.")
+    frame = session.frames[0]
+    context = Context(uid=frame.context_uid, name=frame.context_name)
+    for memory in frame.memories:
+        context.add(Memory(uid=memory.uid, content=memory.content))
+    fingerprints = frame.contexts or ()
+    if (
+        len(fingerprints) != 1
+        or fingerprints[0].digest != context_record_digest(context)
+    ):
+        raise MeldError("Inline Meld Memory evidence does not match its frame.")
+    return context
 
 
 @dataclass(frozen=True)

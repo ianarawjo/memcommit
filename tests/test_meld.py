@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import json
+import hashlib
 from dataclasses import replace
 from datetime import datetime, timezone
+import shlex
 import uuid
 
 import pytest
@@ -62,6 +64,7 @@ from memcommit.commands.resolution_workbench_shell import (
 from memcommit.meld import (
     MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION,
     MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION,
+    MELD_INLINE_MEMORY_SCHEMA_VERSION,
     MELD_MEMORY_FOCUS_SCHEMA_VERSION,
     MeldCheckpointReceipt,
     MeldError,
@@ -584,7 +587,9 @@ def test_symmetric_meld_reuses_scoped_compare_descendants(isolated_store):
         True,
     )
     assert any(
-        "[scope/left/child]" in memory.content for memory in restored.frames[0].memories
+        memory.content == "Use the short opening."
+        and memory.owner_context_name == "scope/left/child"
+        for memory in restored.frames[0].memories
     )
 
     started = runner.invoke(
@@ -967,6 +972,153 @@ class DirectionalProvider:
                 "ready_to_apply": True,
             }
         )
+
+
+class InlineMemoryProvider:
+    """Preserve one exact process-local INCOMING Memory as a baseline ADD."""
+
+    def __init__(self):
+        self.payloads: list[dict] = []
+
+    def complete(self, prompt, *, operation, output_schema=None):
+        assert operation == "meld_contexts"
+        payload = json.loads(prompt.split(MELD_PAYLOAD_MARKER, 1)[1])
+        self.payloads.append(payload)
+        incoming = payload["frames"][0]["memories"][0]
+        baseline = payload["frames"][1]["memories"][0]
+        return json.dumps(
+            {
+                "overview": (
+                    "The inline greeting rule is a new distinction and the "
+                    "existing baseline Memory remains unchanged."
+                ),
+                "relations": [
+                    {
+                        "relation_key": "inline_rule",
+                        "left_memory_ids": [incoming["memory_id"]],
+                        "right_memory_ids": [baseline["memory_id"]],
+                        "kind": "CONFLICT",
+                        "status": "RESOLVED",
+                        "summary": "The inline rule replaces the prior policy.",
+                        "reason": "The new exact punctuation rule is authoritative.",
+                    }
+                ],
+                "issues": [],
+                "results": [
+                    {
+                        "result_key": "inline_add",
+                        "operation": "EDIT",
+                        "target_memory_ids": [baseline["memory_id"]],
+                        "disposition": "SYNTHESIZE",
+                        "content": incoming["content"],
+                        "reason": "Preserves the exact new greeting distinction.",
+                        "relation_keys": ["inline_rule"],
+                        "source_memory_ids": [
+                            incoming["memory_id"],
+                            baseline["memory_id"],
+                        ],
+                        "grounded_turn_ids": [],
+                    }
+                ],
+                "ready_to_apply": True,
+            }
+        )
+
+
+def test_inline_memory_meld_preserves_punctuation_without_creating_source_context(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    baseline = ops.init("inline/meld/baseline")
+    ops.add(baseline, "Keep the existing greeting policy.")
+    store.save(baseline)
+    store.set_current(baseline.name)
+    before_names = tuple(store.list_context_names())
+    provider = InlineMemoryProvider()
+    _patch_provider(monkeypatch, provider)
+    content = 'all greetings need "."; keep "" and ! literal. '
+
+    started = runner.invoke(app, ["meld", content])
+
+    assert started.exit_code == 0, started.output
+    assert "INCOMING INLINE MEMORY" in started.output
+    assert len(provider.payloads) == 1
+    assert provider.payloads[0]["frames"][0]["memories"][0]["content"] == content
+    session = store.load_meld_session(baseline.uid)
+    assert session is not None
+    assert session.schema_version == MELD_INLINE_MEMORY_SCHEMA_VERSION
+    assert session.frames[0].memories[0].content == content
+    assert shlex.split(meld_command._session_command(session)) == [
+        "mem",
+        "meld",
+        "--memory",
+        content,
+        "--into",
+        baseline.name,
+    ]
+    assert tuple(store.list_context_names()) == before_names
+    assert not store.context_exists("INLINE MEMORY")
+
+    resumed = runner.invoke(app, ["meld", "--memory", content])
+    assert resumed.exit_code == 0, resumed.output
+    assert len(provider.payloads) == 1
+
+    applied = runner.invoke(
+        app,
+        ["meld", "--memory", content, "--into", baseline.name, "--accept"],
+    )
+    assert applied.exit_code == 0, applied.output
+    assert "MELD APPLIED" in applied.output
+    assert len(provider.payloads) == 1
+    current = store.load_direct(baseline.name)
+    assert [memory.content for memory in current.iter_items()] == [content]
+    trace = build_trace(store, current, next(iter(current.memories)))
+    meld_event = next(
+        event for event in trace.events if event.reason_codes[:1] == ("MELD",)
+    )
+    assert meld_event.kind == "EDITED"
+    assert meld_event.evidence == "RECORDED"
+    assert "INLINE MEMORY" in (meld_event.declared_frame or "")
+    assert content in (meld_event.declared_frame or "")
+
+
+def test_one_word_inline_memory_requires_explicit_memory_option(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    baseline = ops.init("inline/meld/explicit-baseline")
+    ops.add(baseline, "Keep the existing greeting policy.")
+    store.save(baseline)
+    store.set_current(baseline.name)
+    provider = InlineMemoryProvider()
+    _patch_provider(monkeypatch, provider)
+
+    missing_context = runner.invoke(app, ["meld", "hello"])
+    assert missing_context.exit_code == 1
+    assert "Context 'hello' does not exist" in missing_context.output
+    assert provider.payloads == []
+
+    explicit = runner.invoke(app, ["meld", "--memory", "hello"])
+    assert explicit.exit_code == 0, explicit.output
+    assert provider.payloads[0]["frames"][0]["memories"][0]["content"] == "hello"
+
+
+def test_inline_memory_session_binds_content_to_ephemeral_context_fingerprint():
+    baseline = ops.init("inline/meld/fingerprint-baseline")
+    ops.add(baseline, "Keep the existing greeting policy.")
+    session = MeldSession.create_directional_from_memory(
+        'all greetings need "."!',
+        baseline,
+    )
+    value = session.to_dict()
+    memory = value["frames"][0]["memories"][0]
+    memory["content"] = "Tampered."
+    memory["content_digest"] = hashlib.sha256(b"Tampered.").hexdigest()
+
+    with pytest.raises(MeldError, match="inline-Memory Meld"):
+        MeldSession.from_dict(value)
 
 
 def test_focused_directional_meld_keeps_neighbors_context_only_and_edits_selected_baseline():
@@ -2675,6 +2827,7 @@ def test_meld_positional_grammar_and_explicit_alias_boundaries(
     assert "--into" in help_result.output
     assert "--from" in help_result.output
     assert "--to" in help_result.output
+    assert "--memory" in help_result.output
     normalized_help = " ".join(help_result.output.replace("│", " ").split())
     assert "[LEFT] [RIGHT] [RESULT]" in normalized_help
     assert "mem meld INCOMING BASELINE" in normalized_help

@@ -15,8 +15,18 @@ def meld_start_command_review(
     right_descendants: bool = False,
     left_memory_uid: str | None = None,
     right_memory_uid: str | None = None,
+    incoming_text: str | None = None,
 ) -> ExactCommandReview:
-    argv = ["mem", "meld", left_name, right_name]
+    if incoming_text is not None:
+        if mode.upper() != "DIRECTIONAL":
+            raise ValueError("Inline Memory input requires directional Meld.")
+        if left_descendants or left_memory_uid is not None:
+            raise ValueError(
+                "Inline Memory input cannot use INCOMING descendants or focus."
+            )
+        argv = ["mem", "meld", "--memory", incoming_text, "--into", right_name]
+    else:
+        argv = ["mem", "meld", left_name, right_name]
     if mode.upper() == "SYMMETRIC":
         if target_name is None:
             raise ValueError("Symmetric Meld requires a result Context.")
@@ -100,6 +110,7 @@ def meld_turn_command_review(
     right_descendants: bool,
     left_memory_uid: str | None,
     right_memory_uid: str | None,
+    incoming_text: str | None = None,
     expected_session: str,
     issue_uid: str | None = None,
     option_number: int | None = None,
@@ -116,6 +127,7 @@ def meld_turn_command_review(
         right_descendants=right_descendants,
         left_memory_uid=left_memory_uid,
         right_memory_uid=right_memory_uid,
+        incoming_text=incoming_text,
     )
     argv = list(start.argv)
     if preserve_all:

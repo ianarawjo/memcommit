@@ -1,0 +1,4 @@
+$ mem meld 'all greetings need "."; keep "" and ! literal. '                                                                                                                        
+PTY 180 52                                                                                                                                                                          
+CURRENT BASELINE / TARGET · capture/greeting-policy                                                                                                                                 
+MEM MELD · 2/2 · ANALYZING MELD TURN .. · 0s

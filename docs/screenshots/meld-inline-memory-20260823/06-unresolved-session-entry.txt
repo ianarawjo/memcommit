@@ -1,0 +1,13 @@
+ MELD NEEDS INPUT · < 1/1 >                                                                                                                                                         
+ CONFLICT · Greeting punctuation scope                                                                                                                                              
+ Should every greeting use the exact period rule, or should named exceptions remain?                                                                                                
+  Apply exact period rule · Use the inline rule exactly, including ".", "", and ! examples.                                                                                         
+  Preserve scoped exceptions · Require "." by default while keeping named exception scopes.                                                                                         
+                                                                                                                                                                                    
+┌────────────────────────────────| DIRECTION OR NOTE · OPTIONAL |────────────────────────────────┐                                                                                  
+│›                                                                                               │                                                                                  
+└────────────────────────────────────────────────────────────────────────────────────────────────┘                                                                                  
+                                                                                                                                                                                    
+  SUBMIT SELECTED · 0/1                                                                                                                                                             
+                                                                                                                                                                                    
+ ←/→ issue · ↑/↓ move · Enter select/apply · Esc close

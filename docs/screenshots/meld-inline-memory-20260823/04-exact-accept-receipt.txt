@@ -1,0 +1,20 @@
+$ mem meld --memory 'all greetings need "."; keep "" and ! literal. ' --into capture/greeting-policy --accept                                                                       
+PTY 180 52                                                                                                                                                                          
+MELD APPLIED · DIRECTIONAL · capture/greeting-policy                                                                                                                                
+EFFECTS · ADD 0 · EDIT 1                                                                                                                                                            
+RESULT MEMORIES · 1                                                                                                                                                                 
+RECEIPT · 4794d009-68fa-49c5-bc0d-fc6d7b23cc54                                                                                                                                      
+CHECKPOINT · 0d44fdc7-25d1-42ee-99a0-d7fecb3d075d                                                                                                                                   
+REVIEW · mem review meld --session 4794d009-68fa-49c5-bc0d-fc6d7b23cc54                                                                                                             
+RECOVERY · mem undo                                                                                                                                                                 
+                                                                                                                                                                                    
+DURABLE VERIFICATION · INLINE-MEMORY MELD                                                                                                                                           
+  SESSION STATE · APPLIED                                                                                                                                                           
+  SESSION SCHEMA · 9                                                                                                                                                                
+  PROVIDER CALLS · 0                                                                                                                                                                
+  TARGET CHECKPOINTS · 1                                                                                                                                                            
+  CONTEXT NAMES · capture/greeting-policy                                                                                                                                           
+  INLINE MEMORY CONTEXT EXISTS · False                                                                                                                                              
+  TARGET MEMORIES · 1                                                                                                                                                               
+    1. [9b22f580] 'all greetings need "."; keep "" and ! literal. '                                                                                                                 
+  RETAINED INLINE CONTENT · 'all greetings need "."; keep "" and ! literal. '

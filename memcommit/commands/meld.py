@@ -50,12 +50,15 @@ from memcommit.granted_comparison_store import (
     recursive_comparison_projection,
 )
 from memcommit.meld import (
+    INLINE_MELD_CONTEXT_NAME,
+    MELD_INLINE_MEMORY_SCHEMA_VERSION,
     MELD_OWNER_AWARE_SCHEMA_VERSION,
     MELD_SCHEMA_VERSION,
     MeldError,
     MeldFrame,
     MeldIssue,
     MeldSession,
+    inline_meld_context,
     meld_accounting,
     meld_canonical_digest,
 )
@@ -110,7 +113,17 @@ class MeldCommandError(RuntimeError):
 def _session_command(session: MeldSession) -> str:
     """Return one explicit, portable command prefix for this saved meld."""
     left, right = session.frames
-    parts = ["mem", "meld", left.context_name, right.context_name]
+    if session.schema_version == MELD_INLINE_MEMORY_SCHEMA_VERSION:
+        parts = [
+            "mem",
+            "meld",
+            "--memory",
+            left.memories[0].content,
+            "--into",
+            right.context_name,
+        ]
+    else:
+        parts = ["mem", "meld", left.context_name, right.context_name]
     if left.include_descendants:
         parts.append("--left-descendants")
     if session.mode == "DIRECTIONAL":
@@ -125,8 +138,13 @@ def _session_command(session: MeldSession) -> str:
 
 def _session_route(session: MeldSession) -> str:
     if session.mode == "DIRECTIONAL":
+        incoming_label = (
+            "INLINE MEMORY"
+            if session.schema_version == MELD_INLINE_MEMORY_SCHEMA_VERSION
+            else session.frames[0].context_name
+        )
         return (
-            f"INCOMING {session.frames[0].context_name} → "
+            f"INCOMING {incoming_label} → "
             f"BASELINE / TARGET {session.frames[1].context_name}"
         )
     return (
@@ -435,17 +453,7 @@ def render_meld_incomplete_receipt(session: MeldSession) -> str:
         "KEPT_REVIEW_ONLY": "DEFERRED",
         "PENDING_ANALYSIS": "PENDING",
     }.get(session.state, session.state.replace("_", " "))
-    if session.mode == "DIRECTIONAL":
-        frame_by_role = {frame.role: frame for frame in session.frames}
-        route = (
-            f"INCOMING {frame_by_role['INCOMING'].context_name} → "
-            f"BASELINE / TARGET {session.target.context_name}"
-        )
-    else:
-        route = (
-            f"{session.frames[0].context_name} + {session.frames[1].context_name} "
-            f"→ {session.target.context_name}"
-        )
+    route = _session_route(session)
     return "\n".join(
         [
             f"MELD {state_label} · {session.mode} · {session.target.context_name}",
@@ -465,6 +473,15 @@ def _load_bound_contexts(
     *,
     registry=None,
 ) -> tuple[Context, Context, Context]:
+    if session.schema_version == MELD_INLINE_MEMORY_SCHEMA_VERSION:
+        left = inline_meld_context(session)
+        baseline = session.frames[1]
+        right = load_context_scope(
+            store,
+            baseline.context_name,
+            include_descendants=bool(baseline.include_descendants),
+        )
+        return left, right, right
     if session.mode == "DIRECTIONAL" and (
         session.granted_incoming is not None or session.granted_target is not None
     ):
@@ -555,6 +572,24 @@ def _resolve_meld_source(
         current_name=current_name,
         required_permission="READ",
     )
+
+
+def _is_inline_memory_operand(
+    store: MemoryStore,
+    value: str,
+    *,
+    current_name: str | None,
+) -> bool:
+    """Classify only unambiguously non-Context one-operand text as Memory."""
+
+    resolved = resolve_context_locator(value, current=current_name)
+    if store.context_exists(resolved):
+        return False
+    try:
+        validate_portable_context_name(value)
+    except ValueError:
+        return True
+    return False
 
 
 def _load_meld_source(
@@ -1264,7 +1299,8 @@ def cmd(
         typer.Argument(
             help=(
                 "Directional INCOMING A, or symmetric PEER A when RESULT/--to "
-                "is supplied"
+                "is supplied; an unambiguously non-Context sole sentence is "
+                "inline Memory content"
             )
         ),
     ] = None,
@@ -1437,6 +1473,16 @@ def cmd(
             ),
         ),
     ] = None,
+    memory: Annotated[
+        Optional[str],
+        typer.Option(
+            "--memory",
+            help=(
+                "Use exact text as one process-local INCOMING Memory; the "
+                "current Context or --into supplies BASELINE"
+            ),
+        ),
+    ] = None,
     incoming_memory: Annotated[
         Optional[str],
         typer.Option(
@@ -1460,7 +1506,7 @@ def cmd(
         ),
     ] = None,
 ) -> None:
-    """Meld INCOMING into BASELINE; add RESULT/--to for symmetric peers."""
+    """Meld INCOMING Context/Memory into BASELINE; add RESULT for peers."""
     scope_flags_supplied = (
         direct
         or recursive
@@ -1572,6 +1618,18 @@ def cmd(
             err=True,
         )
         raise typer.Exit(2)
+    if memory is not None and any(
+        value is not None
+        for value in (left, right, result, to, from_, incoming_memory)
+    ):
+        typer.secho(
+            "Meld error: --memory supplies INCOMING content and cannot be "
+            "combined with positional sources, symmetric RESULT, --from, or "
+            "--incoming-memory.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
 
     browse_by_default = (
         left is None
@@ -1591,6 +1649,7 @@ def cmd(
         and not right_descendants
         and incoming_memory is None
         and baseline_memory is None
+        and memory is None
         and revision is None
         and not revises_turn
         and expect_session is None
@@ -1599,7 +1658,7 @@ def cmd(
     )
     if sessions and not browse_by_default:
         typer.secho(
-            "Meld error: --sessions cannot be combined with Context operands "
+            "Meld error: --sessions cannot be combined with source operands "
             "or Meld actions.",
             fg=typer.colors.RED,
             err=True,
@@ -1617,7 +1676,28 @@ def cmd(
         current_name = store.current_context_name()
         create_target = False
         explicit_result = result if result is not None else to
-        if from_ is not None:
+        incoming_text = memory
+        if incoming_text is not None:
+            requested_mode = "DIRECTIONAL"
+            if left_descendants:
+                raise MeldCommandError(
+                    "Inline --memory cannot be combined with INCOMING descendants."
+                )
+            left_name = INLINE_MELD_CONTEXT_NAME
+            if into is not None:
+                right_name = resolve_context_locator(into, current=current_name)
+            else:
+                if not current_name:
+                    raise MeldCommandError(
+                        "Inline --memory uses the current Context as BASELINE, "
+                        "but no current Context is available. Supply --into BASELINE."
+                    )
+                right_name = current_name
+            target_name = right_name
+            start_command = shlex.join(
+                ["mem", "meld", "--memory", incoming_text, "--into", right_name]
+            )
+        elif from_ is not None:
             if not current_name:
                 raise MeldCommandError(
                     "No current BASELINE Context. Switch to the intended "
@@ -1690,10 +1770,27 @@ def cmd(
                     "'mem meld INCOMING BASELINE'."
                 )
             requested_mode = "DIRECTIONAL"
-            left_name = resolve_context_locator(left, current=current_name)
+            if _is_inline_memory_operand(
+                store,
+                left,
+                current_name=current_name,
+            ):
+                incoming_text = left
+                if left_descendants:
+                    raise MeldCommandError(
+                        "Inline Memory input cannot be combined with INCOMING "
+                        "descendants."
+                    )
+                left_name = INLINE_MELD_CONTEXT_NAME
+            else:
+                left_name = resolve_context_locator(left, current=current_name)
             right_name = current_name
             target_name = right_name
-            start_command = shlex.join(["mem", "meld", left_name])
+            start_command = shlex.join(
+                ["mem", "meld", "--memory", incoming_text]
+                if incoming_text is not None
+                else ["mem", "meld", left_name]
+            )
         else:
             raise MeldCommandError(
                 "Starting Meld requires INCOMING, INCOMING BASELINE, or "
@@ -1709,7 +1806,11 @@ def cmd(
                 raise MeldCommandError(
                     "--baseline-memory cannot be combined with --right-descendants."
                 )
-            start_parts = ["mem", "meld", left_name, right_name]
+            start_parts = (
+                ["mem", "meld", "--memory", incoming_text, "--into", right_name]
+                if incoming_text is not None
+                else ["mem", "meld", left_name, right_name]
+            )
             if left_descendants:
                 start_parts.append("--left-descendants")
             if right_descendants:
@@ -1750,28 +1851,35 @@ def cmd(
         left_access: ContextAccess | None = None
         right_access: ContextAccess | None = None
         if requested_mode == "DIRECTIONAL":
-            left_access = _resolve_meld_source(
-                store,
-                left_name,
-                current_name=current_name,
-            )
             right_access = _resolve_meld_source(
                 store,
                 right_name,
                 current_name=current_name,
             )
-            authorize_combination((left_access, right_access))
-            authorize_derived_transfer(left_access, right_access)
-            retention = analysis_retention((left_access, right_access))
-            if retention is None:
-                raise ProfileError(
-                    "The directional Meld cannot save analysis under the "
-                    "available Grants."
+            if incoming_text is not None:
+                if right_access.is_granted:
+                    raise MeldCommandError(
+                        "Inline-Memory Meld currently requires a local "
+                        "BASELINE/Target."
+                    )
+            else:
+                left_access = _resolve_meld_source(
+                    store,
+                    left_name,
+                    current_name=current_name,
                 )
-            authorize_analysis_save(
-                (left_access, right_access),
-                retention=retention,
-            )
+                authorize_combination((left_access, right_access))
+                authorize_derived_transfer(left_access, right_access)
+                retention = analysis_retention((left_access, right_access))
+                if retention is None:
+                    raise ProfileError(
+                        "The directional Meld cannot save analysis under the "
+                        "available Grants."
+                    )
+                authorize_analysis_save(
+                    (left_access, right_access),
+                    retention=retention,
+                )
 
         if requested_mode == "SYMMETRIC" and not store.context_exists(target_name):
             create_target = True
@@ -1847,6 +1955,7 @@ def cmd(
                 create_target=create_target,
                 incoming_memory=incoming_memory,
                 baseline_memory=baseline_memory,
+                incoming_text=incoming_text,
             )
             from memcommit.meld_runtime import (
                 execute_meld_start,
@@ -1937,6 +2046,7 @@ def cmd(
                 right_descendants=right_descendants,
                 incoming_memory=incoming_memory,
                 baseline_memory=baseline_memory,
+                incoming_text=incoming_text,
             )
             from memcommit.meld_runtime import (
                 execute_meld_restart,
@@ -2010,6 +2120,15 @@ def cmd(
         sources_match = sources_match and tuple(
             bool(frame.include_descendants) for frame in session.frames
         ) == (left_descendants, right_descendants)
+        sources_match = sources_match and (
+            (
+                session.schema_version == MELD_INLINE_MEMORY_SCHEMA_VERSION
+                and len(session.frames[0].memories) == 1
+                and session.frames[0].memories[0].content == incoming_text
+            )
+            if incoming_text is not None
+            else session.schema_version != MELD_INLINE_MEMORY_SCHEMA_VERSION
+        )
         for selector, frame, label in (
             (incoming_memory, session.frames[0], "INCOMING Memory"),
             (baseline_memory, session.frames[1], "BASELINE Memory"),

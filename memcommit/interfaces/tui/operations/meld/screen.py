@@ -21,7 +21,11 @@ from memcommit.interfaces.tui.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
 )
-from memcommit.meld import MeldSession, meld_canonical_digest
+from memcommit.meld import (
+    MELD_INLINE_MEMORY_SCHEMA_VERSION,
+    MeldSession,
+    meld_canonical_digest,
+)
 from memcommit.interactive_command_review import meld_turn_command_review
 from memcommit.resolution_workbench import ResolutionNavigation
 
@@ -324,6 +328,11 @@ def run_meld_shell(
             right_descendants=right_frame.include_descendants,
             left_memory_uid=left_frame.selected_memory_uid,
             right_memory_uid=right_frame.selected_memory_uid,
+            incoming_text=(
+                left_frame.memories[0].content
+                if session.schema_version == MELD_INLINE_MEMORY_SCHEMA_VERSION
+                else None
+            ),
             expected_session=meld_canonical_digest(session.to_dict()),
             issue_uid=action.item_uid,
             option_number=option_number,

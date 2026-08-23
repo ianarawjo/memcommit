@@ -6,6 +6,7 @@ from types import SimpleNamespace
 
 import pytest
 
+from memcommit.meld import INLINE_MELD_CONTEXT_NAME, MELD_INLINE_MEMORY_SCHEMA_VERSION
 from memcommit.meld_start_application import (
     MeldStartError,
     MeldStartRequest,
@@ -132,3 +133,45 @@ def test_run_meld_start_rejects_a_port_that_changes_the_source_order():
 
     with pytest.raises(MeldStartError, match="outside"):
         run_meld_start(request, port=port, provider_factory=object())
+
+
+def test_inline_start_request_and_result_bind_the_exact_memory_content():
+    content = 'all greetings need "."!'
+    request = MeldStartRequest(
+        mode="DIRECTIONAL",
+        left_name=INLINE_MELD_CONTEXT_NAME,
+        right_name="baseline",
+        target_name="baseline",
+        incoming_text=content,
+    )
+    session = SimpleNamespace(
+        mode="DIRECTIONAL",
+        schema_version=MELD_INLINE_MEMORY_SCHEMA_VERSION,
+        frames=(
+            SimpleNamespace(
+                context_name=INLINE_MELD_CONTEXT_NAME,
+                selected_memory_uid=None,
+                memories=(SimpleNamespace(content="changed"),),
+            ),
+            SimpleNamespace(
+                context_name="baseline",
+                selected_memory_uid=None,
+                memories=(),
+            ),
+        ),
+        target=SimpleNamespace(context_name="baseline"),
+        state="READY_TO_APPLY",
+    )
+
+    with pytest.raises(MeldStartError, match="outside"):
+        run_meld_start(
+            request,
+            port=_Port(
+                MeldStartResult(
+                    session=session,
+                    origin="PROVIDER",
+                    created_target=False,
+                )
+            ),
+            provider_factory=object(),
+        )

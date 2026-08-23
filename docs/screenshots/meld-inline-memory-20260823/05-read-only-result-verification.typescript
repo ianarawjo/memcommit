@@ -1,0 +1,13 @@
+$ mem context capture/greeting-policy · read-only reload
+PTY 180 52
+
+DURABLE VERIFICATION · INLINE-MEMORY MELD
+  SESSION STATE · APPLIED
+  SESSION SCHEMA · 9
+  PROVIDER CALLS · 0
+  TARGET CHECKPOINTS · 1
+  CONTEXT NAMES · capture/greeting-policy
+  INLINE MEMORY CONTEXT EXISTS · False
+  TARGET MEMORIES · 1
+    1. [9b22f580] 'all greetings need "."; keep "" and ! literal. '
+  RETAINED INLINE CONTENT · 'all greetings need "."; keep "" and ! literal. '

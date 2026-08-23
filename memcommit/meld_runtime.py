@@ -43,10 +43,12 @@ from memcommit.derived_policy import (
     authorize_derived_transfer,
 )
 from memcommit.meld import (
+    MELD_INLINE_MEMORY_SCHEMA_VERSION,
     MELD_OWNER_AWARE_SCHEMA_VERSION,
     MeldCheckpointReceipt,
     MeldFrame,
     MeldSession,
+    inline_meld_context,
     materialize_preservation_assessment,
     meld_canonical_digest,
 )
@@ -194,6 +196,16 @@ def load_bound_meld_contexts(
     registry=None,
 ) -> tuple[Context, Context, Context]:
     """Reload the exact frozen frames and application target for one session."""
+
+    if session.schema_version == MELD_INLINE_MEMORY_SCHEMA_VERSION:
+        left = inline_meld_context(session)
+        baseline = session.frames[1]
+        right = load_context_scope(
+            store,
+            baseline.context_name,
+            include_descendants=bool(baseline.include_descendants),
+        )
+        return left, right, right
 
     if session.mode == "DIRECTIONAL" and (
         session.granted_incoming is not None
@@ -377,6 +389,13 @@ def target_save_source_bindings(
             return ()
     bindings: list[tuple[str, str, str]] = []
     for index, frame in enumerate(session.frames):
+        if (
+            session.schema_version == MELD_INLINE_MEMORY_SCHEMA_VERSION
+            and index == 0
+        ):
+            # The frozen one-Memory source has no storage path or lock. Its
+            # exact bytes are already part of the session CAS and checkpoint.
+            continue
         if (
             frame.context_uid == session.target.context_uid
             and frame.context_name == session.target.context_name
@@ -966,7 +985,7 @@ class PreparedMeldExecution:
     request: MeldStartRequest | MeldRestartRequest
     store: MemoryStore
     current_name: str | None
-    left_access: ContextAccess
+    left_access: ContextAccess | None
     right_access: ContextAccess
     left: Context
     right: Context
@@ -990,11 +1009,16 @@ def _prepare_initial_meld(
     """Freeze one Start/Restart and resolve every provider-free cache route."""
 
     current_name = store.current_context_name()
-    left_access = resolve_context_access(
-        store,
-        request.left_name,
-        current_name=current_name,
-        required_permission="READ",
+    inline = request.incoming_text is not None
+    left_access = (
+        None
+        if inline
+        else resolve_context_access(
+            store,
+            request.left_name,
+            current_name=current_name,
+            required_permission="READ",
+        )
     )
     right_access = resolve_context_access(
         store,
@@ -1002,21 +1026,30 @@ def _prepare_initial_meld(
         current_name=current_name,
         required_permission="READ",
     )
-    authorize_combination((left_access, right_access))
+    if left_access is not None:
+        authorize_combination((left_access, right_access))
 
     if request.mode == "DIRECTIONAL":
-        authorize_derived_transfer(left_access, right_access)
-        retention = analysis_retention((left_access, right_access))
-        if retention is None:
-            raise error_type(
-                "The directional Meld cannot retain its reviewed analysis."
+        if inline:
+            if right_access.is_granted:
+                raise error_type(
+                    "Inline-Memory Meld currently requires a local BASELINE/Target."
+                )
+        else:
+            assert left_access is not None
+            authorize_derived_transfer(left_access, right_access)
+            retention = analysis_retention((left_access, right_access))
+            if retention is None:
+                raise error_type(
+                    "The directional Meld cannot retain its reviewed analysis."
+                )
+            authorize_analysis_save(
+                (left_access, right_access),
+                retention=retention,
             )
-        authorize_analysis_save(
-            (left_access, right_access),
-            retention=retention,
-        )
         target_access = right_access
     else:
+        assert left_access is not None
         if create_target:
             store.assert_context_creatable(request.target_name)
             target_access = ContextAccess(
@@ -1039,16 +1072,28 @@ def _prepare_initial_meld(
         authorize_derived_transfer(right_access, target_access)
 
     project = request.mode == "SYMMETRIC"
-    left = load_meld_source(
-        left_access,
-        include_descendants=request.left_descendants,
-        project=project,
-    )
     right = load_meld_source(
         right_access,
         include_descendants=request.right_descendants,
         project=project,
     )
+    provisional_session: MeldSession | None = None
+    if inline:
+        assert request.incoming_text is not None
+        provisional_session = MeldSession.create_directional_from_memory(
+            request.incoming_text,
+            right,
+            baseline_descendants=request.right_descendants,
+            baseline_memory_selector=request.baseline_memory,
+        )
+        left = inline_meld_context(provisional_session)
+    else:
+        assert left_access is not None
+        left = load_meld_source(
+            left_access,
+            include_descendants=request.left_descendants,
+            project=project,
+        )
 
     if request.mode == "DIRECTIONAL":
         target = right
@@ -1073,26 +1118,29 @@ def _prepare_initial_meld(
                 "The Meld session changed before restart."
             )
 
-    comparison = _start_comparison(
-        request,
-        store=store,
-        left_access=left_access,
-        right_access=right_access,
-        left=recursive_comparison_projection(left),
-        right=recursive_comparison_projection(right),
-        current_name=current_name,
-        provider_factory=lambda: (_ for _ in ()).throw(
-            AssertionError("Meld preparation connected a provider.")
-        ),
-        allow_provider=False,
-        error_type=error_type,
+    comparison = (
+        None
+        if inline
+        else _start_comparison(
+            request,
+            store=store,
+            left_access=left_access,
+            right_access=right_access,
+            left=recursive_comparison_projection(left),
+            right=recursive_comparison_projection(right),
+            current_name=current_name,
+            provider_factory=lambda: (_ for _ in ()).throw(
+                AssertionError("Meld preparation connected a provider.")
+            ),
+            allow_provider=False,
+            error_type=error_type,
+        )
     )
-    provisional_session: MeldSession | None = None
     directional_prewarm: DirectionalMeldPrewarmMatch | None = None
     if request.mode == "DIRECTIONAL":
         granted_incoming = (
             freeze_granted_context_binding(left_access)
-            if left_access.is_granted
+            if left_access is not None and left_access.is_granted
             else None
         )
         granted_target = (
@@ -1100,31 +1148,33 @@ def _prepare_initial_meld(
             if right_access.is_granted
             else None
         )
-        provisional_session = (
-            MeldSession.create_directional(
-                left,
-                right,
-                incoming_descendants=request.left_descendants,
-                baseline_descendants=request.right_descendants,
-                granted_incoming=granted_incoming,
-                granted_target=granted_target,
-                incoming_memory_selector=request.incoming_memory,
-                baseline_memory_selector=request.baseline_memory,
+        if provisional_session is None:
+            provisional_session = (
+                MeldSession.create_directional(
+                    left,
+                    right,
+                    incoming_descendants=request.left_descendants,
+                    baseline_descendants=request.right_descendants,
+                    granted_incoming=granted_incoming,
+                    granted_target=granted_target,
+                    incoming_memory_selector=request.incoming_memory,
+                    baseline_memory_selector=request.baseline_memory,
+                )
+                if comparison is None
+                else MeldSession.create_directional_from_comparison(
+                    comparison,
+                    left,
+                    right,
+                    granted_incoming=granted_incoming,
+                    granted_target=granted_target,
+                )
             )
-            if comparison is None
-            else MeldSession.create_directional_from_comparison(
-                comparison,
-                left,
-                right,
-                granted_incoming=granted_incoming,
-                granted_target=granted_target,
-            )
-        )
         provisional_session.start_initial_analysis()
-        directional_prewarm = find_installed_directional_meld_prewarm(
-            store=store,
-            current=provisional_session,
-        )
+        if not inline:
+            directional_prewarm = find_installed_directional_meld_prewarm(
+                store=store,
+                current=provisional_session,
+            )
     return PreparedMeldExecution(
         request=request,
         store=store,
@@ -1159,6 +1209,7 @@ def _execute_prepared_initial_meld(
     store = prepared.store
     comparison = prepared.comparison
     if request.mode == "SYMMETRIC" and comparison is None:
+        assert prepared.left_access is not None
         comparison_input = ComparisonInput.from_contexts(
             recursive_comparison_projection(prepared.left),
             recursive_comparison_projection(prepared.right),
@@ -1986,6 +2037,11 @@ class MemoryStoreMeldApplyPort(MeldApplyPort):
         }
         local_lock_names: set[str] = {name for _uid, name in owners}
         for index, frame in enumerate(session.frames):
+            if (
+                session.schema_version == MELD_INLINE_MEMORY_SCHEMA_VERSION
+                and index == 0
+            ):
+                continue
             if index == 0 and session.granted_incoming is not None:
                 continue
             local_lock_names.update(

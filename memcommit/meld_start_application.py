@@ -6,7 +6,12 @@ from dataclasses import dataclass
 from typing import Literal, Protocol
 
 from memcommit.comparison import ComparisonAnalysis
-from memcommit.meld import MeldSession
+from memcommit.meld import (
+    INLINE_MELD_CONTEXT_NAME,
+    MELD_INLINE_MEMORY_SCHEMA_VERSION,
+    MELD_TEXT_LIMIT,
+    MeldSession,
+)
 
 
 MeldStartMode = Literal["SYMMETRIC", "DIRECTIONAL"]
@@ -30,6 +35,7 @@ def validate_meld_start_scope(
     right_descendants: bool,
     incoming_memory: str | None,
     baseline_memory: str | None,
+    incoming_text: str | None,
     comparison: ComparisonAnalysis | None,
     error_type: type[RuntimeError],
 ) -> None:
@@ -56,6 +62,18 @@ def validate_meld_start_scope(
         raise error_type(
             "Meld Memory focus cannot reuse a whole-frame Compare analysis."
         )
+    if incoming_text is not None:
+        if not isinstance(incoming_text, str) or not incoming_text.strip():
+            raise error_type("Inline Meld Memory content must be nonempty text.")
+        if len(incoming_text) > MELD_TEXT_LIMIT:
+            raise error_type("Inline Meld Memory content is too long.")
+        if mode != "DIRECTIONAL":
+            raise error_type("Only directional Meld supports inline Memory input.")
+        if left_descendants or incoming_memory is not None or comparison is not None:
+            raise error_type(
+                "Inline Meld Memory input cannot be combined with INCOMING "
+                "descendants, an INCOMING Memory selector, or Compare evidence."
+            )
 
 
 @dataclass(frozen=True)
@@ -71,6 +89,7 @@ class MeldStartRequest:
     create_target: bool = False
     incoming_memory: str | None = None
     baseline_memory: str | None = None
+    incoming_text: str | None = None
     comparison: ComparisonAnalysis | None = None
 
     def __post_init__(self) -> None:
@@ -92,11 +111,19 @@ class MeldStartRequest:
             right_descendants=self.right_descendants,
             incoming_memory=self.incoming_memory,
             baseline_memory=self.baseline_memory,
+            incoming_text=self.incoming_text,
             comparison=self.comparison,
             error_type=MeldStartError,
         )
         if self.left_name == self.right_name:
             raise MeldStartError("Meld sources must be distinct Contexts.")
+        if (
+            self.incoming_text is not None
+            and self.left_name != INLINE_MELD_CONTEXT_NAME
+        ):
+            raise MeldStartError(
+                "Inline Meld Memory input requires the reserved INCOMING frame name."
+            )
         if self.mode == "DIRECTIONAL":
             if self.target_name != self.right_name or self.create_target:
                 raise MeldStartError(
@@ -154,12 +181,19 @@ def run_meld_start(
             strict=True,
         )
     )
+    inline_scope_matches = request.incoming_text is None or (
+        getattr(session, "schema_version", None)
+        == MELD_INLINE_MEMORY_SCHEMA_VERSION
+        and len(session.frames[0].memories) == 1
+        and session.frames[0].memories[0].content == request.incoming_text
+    )
     if (
         session.mode != request.mode
         or frame_names != (request.left_name, request.right_name)
         or session.target.context_name != request.target_name
         or result.created_target != request.create_target
         or not memory_scope_matches
+        or not inline_scope_matches
         or session.state in {"APPLIED", "KEPT_REVIEW_ONLY"}
     ):
         raise MeldStartError("Meld start returned a session outside its request.")
