@@ -870,10 +870,17 @@ def test_find_cli_labels_related_fallback_when_primary_matches_are_empty(
     assert result.exit_code == 0, result.output
     assert "task-3\n  (no primary matches)" in result.output
     assert "RELATED RESULTS" in result.output
+    assert "No matching results for: health insurance memories" in result.output
     assert "Broader search: health and healthcare memories" in result.output
-    assert "Related items do not satisfy the original query." in result.output
+    assert "Related results may not satisfy the original query." in result.output
     assert f"[memory {clinic.uid[:8]}] · RELATED" in result.output
     assert "parking permit" not in result.output
+    assert result.output.index("No matching results for:") < result.output.index(
+        "Broader search:"
+    )
+    assert result.output.index(f"[memory {clinic.uid[:8]}]") < result.output.index(
+        "Related results may not satisfy the original query."
+    )
 
 
 def test_initial_chat_state_preserves_related_tier_and_broader_query():

@@ -115,9 +115,11 @@ Primary and related relevance are deliberately separate from `--direct`.
 `--direct` controls which Contexts enter the candidate frame; `PRIMARY MATCH`
 describes relevance to the query. When the primary tier is empty and a
 defensible fallback exists, non-interactive output first prints
-`(no primary matches)`, then a `RELATED RESULTS` section with the provider's
-bounded broader query and rows labeled `related`. If neither tier has results,
-the established `(no matching items)` output remains.
+`(no primary matches)`, then a `RELATED RESULTS` section naming the original
+query with no matches and the provider's bounded broader query. Rows remain
+labeled `related`, and a final disclaimer after all rows makes clear that they
+may not satisfy the original query. If neither tier has results, the established
+`(no matching items)` output remains.
 
 ## Searchable item types
 

@@ -1079,9 +1079,12 @@ def _render_find_search_response(
             typer.echo()
         typer.secho("RELATED RESULTS", bold=True)
         typer.echo(
+            "  No matching results for: "
+            + display_escape_text(response.request.query)
+        )
+        typer.echo(
             "  Broader search: " + display_escape_text(response.related_query)
         )
-        typer.echo("  Related items do not satisfy the original query.")
         typer.echo()
     groups = group_search_items(
         response.results,
@@ -1100,6 +1103,9 @@ def _render_find_search_response(
                 f"[{result.kind} {result.uid[:8]}]{related}",
                 result.content,
             )
+    if response.related_query:
+        typer.echo()
+        typer.echo("Related results may not satisfy the original query.")
 
 
 def _open_find_search_workbench(
