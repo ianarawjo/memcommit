@@ -29,7 +29,8 @@
           "docs/compare-summary-design-rationale.md",
           "docs/compare-session-lifecycle-design-rationale.md",
           "docs/context-locator-design-rationale.md",
-          "docs/mem-compare-design-rationale.md"
+          "docs/mem-compare-design-rationale.md",
+          "docs/session-endpoint-setup-design-rationale.md"
         ],
         "reason": "The default CLI enters one transient source-revalidated summary application, while CLI, TUI, Python, agent, and MCP deep routes retain the targetless exhaustive Run, exact Open, and version-bound Refresh lifecycle with no Context Apply."
       },
@@ -110,7 +111,8 @@
           "docs/meld-application-boundary-matrix.md",
           "docs/meld-session-lifecycle-design-rationale.md",
           "docs/interactive-semantic-command-boundary-design-rationale.md",
-          "docs/execution-receipt-review-lifecycle-design-rationale.md"
+          "docs/execution-receipt-review-lifecycle-design-rationale.md",
+          "docs/session-endpoint-setup-design-rationale.md"
         ],
         "reason": "CLI, TUI, Python, and agent routes share typed Start, Restart, saved-turn, cache/provider, CAS, and Apply lifecycles with exact/equivalent/projected reuse and one reviewed-session version contract."
       },
@@ -249,7 +251,8 @@
           "docs/context-locator-design-rationale.md",
           "docs/update-application-boundary-matrix.md",
           "docs/interactive-semantic-command-boundary-design-rationale.md",
-          "docs/execution-receipt-review-lifecycle-design-rationale.md"
+          "docs/execution-receipt-review-lifecycle-design-rationale.md",
+          "docs/session-endpoint-setup-design-rationale.md"
         ],
         "reason": "Apply policy and recovery are verified, but the remaining Update routes have not been traced into one complete reviewed application boundary."
       }

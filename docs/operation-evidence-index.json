@@ -37,7 +37,8 @@
       "docs/compare-summary-design-rationale.md",
       "docs/compare-session-lifecycle-design-rationale.md",
       "docs/context-locator-design-rationale.md",
-      "docs/mem-compare-design-rationale.md"
+      "docs/mem-compare-design-rationale.md",
+      "docs/session-endpoint-setup-design-rationale.md"
     ],
     "config": [],
     "contexts": [
@@ -155,7 +156,8 @@
       "docs/meld-application-boundary-matrix.md",
       "docs/meld-session-lifecycle-design-rationale.md",
       "docs/interactive-semantic-command-boundary-design-rationale.md",
-      "docs/execution-receipt-review-lifecycle-design-rationale.md"
+      "docs/execution-receipt-review-lifecycle-design-rationale.md",
+      "docs/session-endpoint-setup-design-rationale.md"
     ],
     "merge": [
       "docs/merge-application-boundary-matrix.md",
@@ -256,7 +258,8 @@
       "docs/context-locator-design-rationale.md",
       "docs/update-application-boundary-matrix.md",
       "docs/interactive-semantic-command-boundary-design-rationale.md",
-      "docs/execution-receipt-review-lifecycle-design-rationale.md"
+      "docs/execution-receipt-review-lifecycle-design-rationale.md",
+      "docs/session-endpoint-setup-design-rationale.md"
     ]
   }
 }
