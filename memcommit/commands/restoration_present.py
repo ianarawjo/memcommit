@@ -381,9 +381,11 @@ def _branch_command(args: Mapping[str, object]) -> str | None:
     if not isinstance(record, Mapping):
         return None
     target = record.get("target_root")
-    if not isinstance(target, str):
+    source = record.get("source_root")
+    if not isinstance(target, str) or not isinstance(source, str):
         return None
     command = f"mem branch {_command_arg(target)}"
+    command += f" --from {_command_arg(source)}"
     command += (
         " --source-descendants"
         if record.get("include_descendants") is True

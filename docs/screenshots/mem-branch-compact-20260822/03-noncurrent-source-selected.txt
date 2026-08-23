@@ -1,0 +1,8 @@
+$ mem branch                                                                                                                                                                        
+PTY · 180 COLUMNS × 52 ROWS                                                                                                                                                         
+ MEM BRANCH · CHOOSE SOURCE AND NEW CONTEXT                                                                                                                                         
+› FROM › practice/task-1                         [ BROWSE ]                                   [   INCLUDE DESCENDANTS ]                                                             
+  TO   › practice/task-1/branch                  [ BROWSE PARENT ] NEW · CREATE ON START                                                                                            
+ COMMAND · RUNNABLE · ENTER TO APPLY                                                                                                                                                
+ mem branch practice/task-1/branch --from practice/task-1 --source-root-only                                                                                                        
+ ↑/↓ endpoint row · ←/→ row control · Enter browse all allowed Contexts · Tab next control · Esc cancel

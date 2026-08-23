@@ -32,6 +32,10 @@ from memcommit.context_targeting.tui.selector import (
     ContextSelectorView,
 )
 from memcommit.context_targeting.tui.reach import ContextReachState
+from memcommit.context_targeting.tui.name_draft import (
+    ContextNameDraftState,
+    infer_context_parent,
+)
 from memcommit.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,
@@ -105,6 +109,7 @@ def run_compact_endpoint_setup(
 
     status = {"value": ""}
     role_by_uid = {role.uid: role for role in spec.roles}
+    show_mode = len(spec.modes) > 1
     mode_state = HorizontalChoiceState(
         tuple(
             HorizontalChoiceOption(mode.uid, mode.label, mode.description)
@@ -149,7 +154,16 @@ def run_compact_endpoint_setup(
             if role.allow_new and role.prefer_new
             else role.selected_name
         )
-        candidates = tuple(name for name in role.names if name in role.selectable_names)
+        candidates = (
+            ()
+            if role.new_parent_locator
+            else tuple(name for name in role.names if name in role.selectable_names)
+        )
+        catalog_candidates = (
+            role.names
+            if role.new_parent_locator
+            else tuple(name for name in role.names if name in role.selectable_names)
+        )
         completer = WordCompleter(
             candidates,
             meta_dict=completion_metadata(role),
@@ -172,21 +186,27 @@ def run_compact_endpoint_setup(
         )
         role_name_controls[role.uid] = input_control
         role_inputs[role.uid] = input_control.input
-        if candidates:
-            selected = initial if initial in role.selectable_names else candidates[0]
+        if catalog_candidates:
+            selected = (
+                role.selected_name
+                if role.new_parent_locator
+                else initial
+                if initial in role.selectable_names
+                else catalog_candidates[0]
+            )
             selector = ContextSelectorControl(
                 ContextSelectorView(
-                    names=candidates,
+                    names=catalog_candidates,
                     selected=(selected,),
                     label=f"{role.label} · ALL ALLOWED",
                     current_context=role.current_context,
                     annotations=tuple(
                         (name, annotation)
                         for name, annotation in role.annotations
-                        if name in role.selectable_names
+                        if name in catalog_candidates
                     ),
                 ),
-                height=min(8, max(3, len(candidates))),
+                height=min(8, max(3, len(catalog_candidates))),
             )
             # This transient view promises the complete frozen role catalog,
             # so lexical branches start expanded instead of hiding candidates.
@@ -209,6 +229,23 @@ def run_compact_endpoint_setup(
     }
     memory_detail = {"role_uid": None}
     catalog_detail = {"role_uid": None}
+    updating_role_inputs: set[str] = set()
+    new_name_drafts = {
+        role.uid: ContextNameDraftState(
+            exact_name=role_inputs[role.uid].text,
+            parent_name=(
+                infer_context_parent(
+                    role_inputs[role.uid].text,
+                    role.names,
+                    fallback=role.selected_name,
+                )
+                if role.new_parent_locator
+                else None
+            ),
+        )
+        for role in spec.roles
+        if role.new_parent_locator or role.new_name_suggester is not None
+    }
 
     def clear_stale_memory(role_uid: str) -> None:
         memory_focus = memory_focuses.get(role_uid)
@@ -217,10 +254,50 @@ def run_compact_endpoint_setup(
         if memory_detail["role_uid"] == role_uid:
             memory_detail["role_uid"] = None
 
+    def set_role_text(role_uid: str, value: str) -> None:
+        """Synchronize one field without claiming a direct person edit."""
+
+        updating_role_inputs.add(role_uid)
+        try:
+            role_name_controls[role_uid].set_text(value)
+        finally:
+            updating_role_inputs.remove(role_uid)
+
+    def record_role_text_changed(role_uid: str) -> None:
+        clear_stale_memory(role_uid)
+        draft = new_name_drafts.get(role_uid)
+        if draft is not None and role_uid not in updating_role_inputs:
+            draft.record_direct_edit(role_inputs[role_uid].text)
+
     for role_uid, input_area in role_inputs.items():
         input_area.buffer.on_text_changed += (
-            lambda _buffer, uid=role_uid: clear_stale_memory(uid)
+            lambda _buffer, uid=role_uid: record_role_text_changed(uid)
         )
+
+    def refresh_new_name_suggestions() -> None:
+        """Refresh only untouched operation-owned new-name drafts."""
+
+        values = {uid: control.text.strip() for uid, control in role_inputs.items()}
+        for role in spec.roles:
+            if role.new_name_suggester is None:
+                continue
+            candidate = role.new_name_suggester(values)
+            draft = new_name_drafts[role.uid]
+            parent = (
+                infer_context_parent(
+                    candidate,
+                    role.names,
+                    fallback=role.selected_name,
+                )
+                if role.new_parent_locator
+                else None
+            )
+            inherited = draft.inherit_suggestion(
+                candidate,
+                parent_name=parent,
+            )
+            if role_inputs[role.uid].text != inherited:
+                set_role_text(role.uid, inherited)
 
     def resolve_role(role_uid: str) -> tuple[str, bool]:
         role = role_by_uid[role_uid]
@@ -229,6 +306,10 @@ def run_compact_endpoint_setup(
             raise ValueError(
                 f"{spec.role_label(selected_mode_uid(), role_uid)} needs a Context name."
             )
+        if role.new_parent_locator:
+            if role.new_name_validator is not None:
+                role.new_name_validator(candidate)
+            return candidate, True
         if candidate in role.selectable_names:
             return candidate, False
         if not role.allow_new:
@@ -337,6 +418,9 @@ def run_compact_endpoint_setup(
             else:
                 label = "TYPE CONTEXT"
             style = "class:source-state"
+        elif role.new_parent_locator:
+            label = "NEW · CREATE ON START"
+            style = "class:source-state"
         elif candidate in role.selectable_names:
             values = []
             if role.allow_new:
@@ -379,10 +463,13 @@ def run_compact_endpoint_setup(
 
     def render_browse(role_uid: str) -> StyleAndTextTuples:
         focused = get_app().layout.has_focus(browse_controls[role_uid])
+        label = (
+            "BROWSE PARENT" if role_by_uid[role_uid].new_parent_locator else "BROWSE"
+        )
         return [
             (
                 focused_control_style(focused=focused, selected=focused),
-                "[ BROWSE ]",
+                f"[ {label} ]",
             )
         ]
 
@@ -457,7 +544,7 @@ def run_compact_endpoint_setup(
             columns.append(
                 Window(
                     browse_controls[role.uid],
-                    width=Dimension.exact(11),
+                    width=Dimension.exact(18 if role.new_parent_locator else 11),
                     dont_extend_height=True,
                 )
             )
@@ -516,7 +603,8 @@ def run_compact_endpoint_setup(
             return [
                 (
                     focused_control_style(focused=focused, selected=focused),
-                    " COMMAND · RUNNABLE · ENTER TO START\n",
+                    " COMMAND · RUNNABLE · ENTER TO "
+                    f"{safe_terminal_text(spec.command_verb)}\n",
                 ),
                 ("class:report-neutral", f" {format_exact_command(review)}"),
             ]
@@ -548,9 +636,19 @@ def run_compact_endpoint_setup(
                         Window(
                             FormattedTextControl(
                                 lambda uid=role_uid: (
-                                    "  CONTEXTS · "
-                                    f"{safe_terminal_text(spec.role_label(selected_mode_uid(), uid))}"
-                                    " · ALL ALLOWED"
+                                    (
+                                        "  PARENT CONTEXTS · "
+                                        if role_by_uid[uid].new_parent_locator
+                                        else "  CONTEXTS · "
+                                    )
+                                    + safe_terminal_text(
+                                        spec.role_label(selected_mode_uid(), uid)
+                                    )
+                                    + (
+                                        " · LOCAL LOCATIONS"
+                                        if role_by_uid[uid].new_parent_locator
+                                        else " · ALL ALLOWED"
+                                    )
                                 )
                             ),
                             height=Dimension.exact(1),
@@ -624,7 +722,7 @@ def run_compact_endpoint_setup(
     body = HSplit(
         [
             header,
-            mode_line,
+            *([mode_line] if show_mode else []),
             *role_rows,
             action_line,
             *catalog_detail_containers,
@@ -689,10 +787,12 @@ def run_compact_endpoint_setup(
         if adjacent is not None:
             event.app.layout.focus(role_inputs[adjacent])
             return "CONSUMED"
-        if delta < 0:
+        if delta < 0 and show_mode:
             event.app.layout.focus(mode_control)
-        else:
+        elif delta > 0:
             event.app.layout.focus(action_control)
+        else:
+            return "BOUNDARY"
         return "CONSUMED"
 
     def move_role(event, role_uid: str, delta: int) -> SurfaceMoveResult:
@@ -720,6 +820,11 @@ def run_compact_endpoint_setup(
             status["value"] = str(error)
         else:
             status["value"] = ""
+            try:
+                refresh_new_name_suggestions()
+            except (TypeError, ValueError) as error:
+                status["value"] = str(error)
+                return "HANDLED"
             surfaces.focus_relative(event.app, 1, wrap=False)
             if role_uid in browse_controls:
                 # Enter confirms direct input and advances to the next semantic
@@ -738,7 +843,12 @@ def run_compact_endpoint_setup(
         buffer = role_inputs[role_uid].buffer
         if buffer.complete_state is not None:
             buffer.cancel_completion()
-        candidate = role_inputs[role_uid].text.strip()
+        role = role_by_uid[role_uid]
+        candidate = (
+            new_name_drafts[role_uid].parent_name
+            if role.new_parent_locator
+            else role_inputs[role_uid].text.strip()
+        )
         selected = (
             candidate if candidate in selector.selectable else selector.view.names[0]
         )
@@ -762,9 +872,23 @@ def run_compact_endpoint_setup(
         if choose:
             selector = catalog_selectors[role_uid]
             selector.choose_cursor()
-            role_name_controls[role_uid].set_text(selector.tree.selected_name)
+            selected_name = selector.tree.selected_name
+            role = role_by_uid[role_uid]
+            if role.new_parent_locator:
+                draft = new_name_drafts[role_uid]
+                candidate = draft.choose_parent(selected_name)
+                set_role_text(role_uid, candidate)
+                status["value"] = (
+                    "Parent selected; edited exact name preserved."
+                    if draft.edited
+                    else ""
+                )
+            else:
+                set_role_text(role_uid, selected_name)
+                refresh_new_name_suggestions()
         catalog_detail["role_uid"] = None
-        status["value"] = ""
+        if not role_by_uid[role_uid].new_parent_locator:
+            status["value"] = ""
         event.app.layout.focus(browse_controls[role_uid])
         return "HANDLED"
 
@@ -932,15 +1056,17 @@ def run_compact_endpoint_setup(
                     ),
                 ),
             )
-        values: list[FocusSurface] = [
-            FocusSurface(
-                "MODE",
-                mode_control,
-                move_vertical=lambda _event, _delta: "BOUNDARY",
-                activate=choose_mode,
-                on_focus=close_memory_detail,
+        values: list[FocusSurface] = []
+        if show_mode:
+            values.append(
+                FocusSurface(
+                    "MODE",
+                    mode_control,
+                    move_vertical=lambda _event, _delta: "BOUNDARY",
+                    activate=choose_mode,
+                    on_focus=close_memory_detail,
+                )
             )
-        ]
         for role_uid in spec.active_role_uids(selected_mode_uid()):
             values.append(
                 FocusSurface(
@@ -1179,7 +1305,11 @@ def run_compact_endpoint_setup(
         if status["value"]:
             return " " + safe_terminal_text(status["value"])
         if catalog_detail["role_uid"] is not None:
-            return " ↑/↓ Context · Enter use exact name · Esc close all"
+            return (
+                " ↑/↓ parent · Enter reparent exact name · Esc close all"
+                if role_by_uid[catalog_detail["role_uid"]].new_parent_locator
+                else " ↑/↓ Context · Enter use exact name · Esc close all"
+            )
         if get_app().layout.has_focus(mode_control):
             return " ←/→ mode · ↓ first endpoint row · Tab next control · Esc cancel"
         if input_focus():
@@ -1190,9 +1320,15 @@ def run_compact_endpoint_setup(
                 f"{movement} · Enter confirm · Tab next control · Esc cancel"
             )
         if browse_focus():
+            role_uid = focused_control_role(browse_controls)
+            browse_action = (
+                "Enter browse parent Contexts"
+                if role_uid is not None and role_by_uid[role_uid].new_parent_locator
+                else "Enter browse all allowed Contexts"
+            )
             return (
                 " ↑/↓ endpoint row · ←/→ row control · "
-                "Enter browse all allowed Contexts · "
+                f"{browse_action} · "
                 "Tab next control · Esc cancel"
             )
         if reach_focus():
@@ -1215,7 +1351,8 @@ def run_compact_endpoint_setup(
             )
         if get_app().layout.has_focus(action_control):
             return (
-                " Enter run exact START command · ↑ previous · Esc cancel"
+                " Enter run exact "
+                f"{safe_terminal_text(spec.command_verb)} command · ↑ previous · Esc cancel"
                 if command_review is not None
                 else f" Enter {safe_terminal_text(spec.action_label)} · ↑ previous · Esc cancel"
             )
@@ -1223,7 +1360,14 @@ def run_compact_endpoint_setup(
 
     footer_control.text = render_footer
     app: Application[EndpointSetupDraft | None] = Application(
-        layout=Layout(root, focused_element=mode_control),
+        layout=Layout(
+            root,
+            focused_element=(
+                mode_control
+                if show_mode
+                else role_inputs[spec.active_role_uids(selected_mode_uid())[0]]
+            ),
+        ),
         key_bindings=bindings,
         full_screen=False,
         erase_when_done=True,

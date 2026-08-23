@@ -1,0 +1,4 @@
+$ mem branch                                                                                                                                                                        
+PTY · 180 COLUMNS × 52 ROWS                                                                                                                                                         
+Branched subtree 'practice/task-1' → 'capture/branch-result' · 2 Context(s), 1 descendant(s); switched to its root.                                                                 
+CAPTURE GATE · PRESS V FOR READ-ONLY RESULT VERIFICATION

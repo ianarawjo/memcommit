@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from typing import Literal
 
@@ -110,6 +110,8 @@ class EndpointSetupRole:
     initial_new_name: str = ""
     prefer_new: bool = False
     new_name_validator: Callable[[str], object] | None = None
+    new_name_suggester: Callable[[Mapping[str, str]], str] | None = None
+    new_parent_locator: bool = False
 
     def __post_init__(self) -> None:
         if (
@@ -150,7 +152,11 @@ class EndpointSetupRole:
             )
         if type(self.allow_memory_focus) is not bool:
             raise TypeError("Endpoint role Memory-focus state must be boolean.")
-        if type(self.allow_new) is not bool or type(self.prefer_new) is not bool:
+        if (
+            type(self.allow_new) is not bool
+            or type(self.prefer_new) is not bool
+            or type(self.new_parent_locator) is not bool
+        ):
             raise TypeError("Endpoint role new-Context state must be boolean.")
         if (
             not isinstance(self.new_label, str)
@@ -169,6 +175,22 @@ class EndpointSetupRole:
         ):
             raise ValueError(
                 "Endpoint new-name validation requires a creatable role callback."
+            )
+        if self.new_name_suggester is not None and (
+            not self.allow_new or not callable(self.new_name_suggester)
+        ):
+            raise ValueError(
+                "Endpoint new-name suggestions require a creatable role callback."
+            )
+        if self.new_parent_locator and (
+            not self.allow_new
+            or not self.prefer_new
+            or not self.initial_new_name
+            or self.selectable_names
+        ):
+            raise ValueError(
+                "Endpoint parent location requires a preferred new-only role "
+                "with one initial exact name."
             )
         if self.selected_memory_uid is not None:
             if (
@@ -211,6 +233,7 @@ class EndpointSetupSpec:
     initial_mode_uid: str
     roles: tuple[EndpointSetupRole, ...]
     action_label: str = "CONTINUE TO PLAN REVIEW"
+    command_verb: str = "START"
     screen_layout: Literal["WORKBENCH", "COMPACT_FORM"] = "WORKBENCH"
 
     def __post_init__(self) -> None:
@@ -221,9 +244,12 @@ class EndpointSetupSpec:
             or not self.subtitle
             or not isinstance(self.action_label, str)
             or not self.action_label
+            or not isinstance(self.command_verb, str)
+            or not self.command_verb
             or self.screen_layout not in {"WORKBENCH", "COMPACT_FORM"}
             or any(
-                character in self.title + self.subtitle + self.action_label
+                character
+                in self.title + self.subtitle + self.action_label + self.command_verb
                 for character in "\r\n"
             )
         ):

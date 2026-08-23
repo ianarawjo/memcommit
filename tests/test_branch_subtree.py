@@ -163,9 +163,10 @@ def test_recursive_branch_undo_cancels_the_complete_created_tree_and_redo_restor
     undone = runner.invoke(app, ["undo"])
 
     assert undone.exit_code == 0, undone.output
-    assert "Undid command: mem branch experiment --source-descendants" in (
-        undone.output
+    undo_command = (
+        "Undid command: mem branch experiment --from source --source-descendants"
     )
+    assert undo_command in undone.output
     assert "Affected Contexts: 2" in undone.output
     assert not store.context_exists("experiment")
     assert not store.context_exists("experiment/child")
@@ -177,9 +178,10 @@ def test_recursive_branch_undo_cancels_the_complete_created_tree_and_redo_restor
     redone = runner.invoke(app, ["redo"])
 
     assert redone.exit_code == 0, redone.output
-    assert "Redid command: mem branch experiment --source-descendants" in (
-        redone.output
+    redo_command = (
+        "Redid command: mem branch experiment --from source --source-descendants"
     )
+    assert redo_command in redone.output
     assert store.current_context_name() == "experiment"
     assert {
         name: store.load_direct(name).to_dict() for name in branch_records

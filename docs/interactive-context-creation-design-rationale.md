@@ -54,33 +54,24 @@ above that field. Choosing a parent reparents the untouched suggestion. After
 the first direct edit, the complete exact input becomes authoritative: parent
 browsing may change the locator selection but cannot rewrite the edited name.
 
-Bare Branch uses the same full-screen endpoint composition as Atomize. Its B
-frame treats the tree only as a parent locator and keeps the exact new name in
-the field below it:
+Bare Branch uses the compact shared Endpoint Setup also used by Meld. Its B
+row treats the catalog only as a transient parent locator and keeps the exact
+new name directly editable:
 
 ```text
- MEM BRANCH · FROM A → TO B
-╭─ A · FROM CONTEXT ──────────────────────────╮
-│ ✓ * project/main                            │
-╰──────────────────────────────────────────────╯
-╭─ B · TO · NEW CONTEXT ──────────────────────╮
-│ ✓   project/main/                           │
-│ ──────────────────────────────────────────── │
-│ NEW · [ EXACT NEW CONTEXT NAME ]             │
-│ › project/main/branch                       │
-╰──────────────────────────────────────────────╯
-╭─ APPLY ─────────────────────────────────────╮
-│ [ PRESS ENTER TO APPLY ]                    │
-╰──────────────────────────────────────────────╯
+ MEM BRANCH · CHOOSE SOURCE AND NEW CONTEXT
+› FROM › project/main          [ BROWSE ] CURRENT [   INCLUDE DESCENDANTS ]
+  TO   › project/main/branch   [ BROWSE PARENT ] NEW · CREATE ON START
+ COMMAND · RUNNABLE · ENTER TO APPLY
+ mem branch project/main/branch --from project/main --source-root-only
 ```
 
-This is not a visual approximation of Atomize: Branch delegates to the same
-`choose_session_endpoints` shell. A and B therefore share its tree cursor,
-checked selection, separator, new-name confirmation, Surface traversal, Apply
-stop, and key grammar. Branch supplies only its role availability and receipt
-validation. Every B tree row is an existing parent location, displayed with a
-trailing slash; no row is itself a Branch target. Branch still does not need
-Switch's Memory preview or a separate Memory surface. The current
+The stable rows share the compact endpoint exact input, transient catalog,
+descendant reach, Surface traversal, exact-command review, and key grammar.
+`BROWSE` or `BROWSE PARENT` temporarily expands the relevant frozen tree below
+the form. Every B catalog row is an existing parent location; no row is itself
+a Branch target. Branch still does not need Switch's Memory preview or a
+separate Memory surface. The current
 ordinary local Context is the initial Source. If the current pointer is a
 granted view or is unset, the first frozen local Context is used for orientation
 instead; grant attachments are not branchable local Sources.
@@ -144,9 +135,9 @@ Branch configures the common endpoint shell used by Atomize. Neither names its
 field after Save Location.
 
 `ExactNameInputControl` is the smallest unframed, one-line input. Branch and
-Atomize reach that same primitive through the common endpoint frame. Branch
-opts its B role into the operation-neutral new-parent-locator mode; Atomize
-retains its existing-or-new output meaning.
+Meld reach that same primitive through compact Endpoint Setup. Branch opts its
+B role into the operation-neutral new-parent-locator and dependent-suggestion
+mode; Meld retains its eligible-existing-or-new Result meaning.
 `ExactNameFieldControl` composes it with the common focused Frame, and
 `ContextParentLocatorControl` independently owns the optional frozen parent
 tree. `ContextNameControl` composes the framed field and locator;
@@ -214,6 +205,9 @@ to the Source, new-name availability, or current pointer therefore aborts
 rather than branching from a stale screen, replacing an existing Context, or
 overwriting a later switch.
 
-No existing explicit command changes meaning. Bare interactive routes require
-a TTY and should fail with a direct instruction to pass a name outside one.
-The help inventory advertises the bare forms alongside their explicit forms.
+No existing explicit command changes meaning. Branch additionally accepts
+`mem branch NEW --from SOURCE`, where Source is resolved once as an existing
+ordinary Context locator and NEW remains a new canonical identifier. Bare
+interactive routes require a TTY and should fail with a direct instruction to
+pass a name outside one. The help inventory advertises the bare forms alongside
+their explicit forms.

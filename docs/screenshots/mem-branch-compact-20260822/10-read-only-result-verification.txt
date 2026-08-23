@@ -1,0 +1,14 @@
+$ mem branch                                                                                                                                                                        
+PTY · 180 COLUMNS × 52 ROWS                                                                                                                                                         
+Branched subtree 'practice/task-1' → 'capture/branch-result' · 2 Context(s), 1 descendant(s); switched to its root.                                                                 
+CAPTURE GATE · PRESS V FOR READ-ONLY RESULT VERIFICATION                                                                                                                            
+v                                                                                                                                                                                   
+                                                                                                                                                                                    
+READ-ONLY BRANCH RESULT VERIFICATION                                                                                                                                                
+  CURRENT CONTEXT · capture/branch-result                                                                                                                                           
+  TARGET ROOT · capture/branch-result · MEMORIES 1                                                                                                                                  
+  TARGET DESCENDANT · capture/branch-result/notes · MEMORIES 1                                                                                                                      
+  SOURCE ROOT BYTES UNCHANGED · True                                                                                                                                                
+  SOURCE DESCENDANT BYTES UNCHANGED · True                                                                                                                                          
+  TASK 2 COPIED · False                                                                                                                                                             
+  PROVIDER CALLS · 0

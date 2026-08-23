@@ -1,0 +1,8 @@
+$ mem branch                                                                                                                                                                        
+PTY · 180 COLUMNS × 52 ROWS                                                                                                                                                         
+ MEM BRANCH · CHOOSE SOURCE AND NEW CONTEXT                                                                                                                                         
+  FROM › practice/task-1                         [ BROWSE ]                                   [ ✓ INCLUDE DESCENDANTS ]                                                             
+  TO   › capture/branch-result                   [ BROWSE PARENT ] NEW · CREATE ON START                                                                                            
+ COMMAND · RUNNABLE · ENTER TO APPLY                                                                                                                                                
+ mem branch capture/branch-result --from practice/task-1 --source-descendants                                                                                                       
+ Enter run exact APPLY command · ↑ previous · Esc cancel

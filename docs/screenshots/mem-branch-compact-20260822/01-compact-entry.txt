@@ -1,0 +1,8 @@
+$ mem branch                                                                                                                                                                        
+PTY · 180 COLUMNS × 52 ROWS                                                                                                                                                         
+ MEM BRANCH · CHOOSE SOURCE AND NEW CONTEXT                                                                                                                                         
+› FROM › practice                                [ BROWSE ] CURRENT                           [   INCLUDE DESCENDANTS ]                                                             
+  TO   › practice/branch                         [ BROWSE PARENT ] NEW · CREATE ON START                                                                                            
+ COMMAND · RUNNABLE · ENTER TO APPLY                                                                                                                                                
+ mem branch practice/branch --from practice --source-root-only                                                                                                                      
+ Type exact Context · ←/→ caret · → at end next control · ↑/↓ endpoint row · Enter confirm · Tab next control · Esc cancel

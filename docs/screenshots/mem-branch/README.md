@@ -1,4 +1,10 @@
-# `mem branch` subtree TTY capture log
+# Historical full-height `mem branch` subtree TTY capture log
+
+This set is retained as the pre-migration visual baseline for the former
+persistent A/B tree workbench. It no longer describes the current bare Branch
+surface. The refreshed compact interaction, exact Apply review, success
+receipt, and collision-safety verification are recorded in
+[`../mem-branch-compact-20260822/README.md`](../mem-branch-compact-20260822/README.md).
 
 These images record a real 180-by-52 PTY run against the Task 1 study fixture.
 They are terminal-state captures rendered at 2572 pixels wide so that the full

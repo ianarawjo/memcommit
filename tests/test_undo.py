@@ -122,7 +122,10 @@ def test_undo_immediately_after_branch_cancels_the_created_context(
     undone = invoke("undo")
 
     assert undone.exit_code == 0, undone.output
-    assert "Undid command: mem branch feature --source-root-only" in undone.output
+    assert (
+        "Undid command: mem branch feature --from source --source-root-only"
+        in undone.output
+    )
     assert not store.context_exists("feature")
     assert store.current_context_name() == "source"
     assert store.load_direct("source").to_dict() == source_record
@@ -134,7 +137,10 @@ def test_undo_immediately_after_branch_cancels_the_created_context(
     redone = invoke("redo")
 
     assert redone.exit_code == 0, redone.output
-    assert "Redid command: mem branch feature --source-root-only" in redone.output
+    assert (
+        "Redid command: mem branch feature --from source --source-root-only"
+        in redone.output
+    )
     assert store.load_direct("feature").to_dict() == branch_record
     assert store.current_context_name() == "feature"
     restored_history_uids = [

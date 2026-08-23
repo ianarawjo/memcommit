@@ -9,92 +9,83 @@ from memcommit.commands.branch_dialog import (
     BranchCreationReceipt,
     choose_branch_creation,
 )
+from memcommit.interfaces.tui.components.endpoint_setup import (
+    EndpointSetupDraft,
+    EndpointSetupValue,
+)
+from memcommit.interfaces.tui.operations.branch import (
+    branch_endpoint_setup_spec,
+    branch_exact_command_review,
+)
 
 
-def test_branch_setup_uses_common_from_and_new_to_frames() -> None:
+def _choose(keys: str, *, validated: list[str] | None = None):
     with create_pipe_input() as pipe_input:
-        # FROM starts focused. Tab enters its range, then TO; a third Tab
-        # reaches APPLY while the preconfirmed new-name row stays staged.
-        pipe_input.send_text("\t\t\t\r")
-        result = choose_branch_creation(
-            ("alpha", "empty"),
+        pipe_input.send_text(keys)
+        return choose_branch_creation(
+            ("alpha", "beta"),
             current="alpha",
             suggest_name=lambda source: f"{source}/branch",
-            validate_name=lambda name: None,
+            validate_name=(
+                validated.append if validated is not None else lambda _name: None
+            ),
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
         )
+
+
+def test_branch_setup_uses_compact_shared_from_and_new_to_rows() -> None:
+    spec = branch_endpoint_setup_spec(
+        ("alpha", "beta"),
+        current="alpha",
+        suggest_name=lambda source: f"{source}/branch",
+        validate_name=lambda _name: None,
+    )
+
+    assert spec.screen_layout == "COMPACT_FORM"
+    assert len(spec.modes) == 1
+    assert spec.active_role_uids("BRANCH") == ("A", "B")
+    assert spec.role_label("BRANCH", "A") == "FROM"
+    assert spec.role_label("BRANCH", "B") == "TO"
+    assert spec.roles[1].new_parent_locator is True
+    assert spec.roles[1].selectable_names == frozenset()
+    assert spec.action_label == "CREATE BRANCH AND SWITCH"
+    assert spec.command_verb == "APPLY"
+
+
+def test_branch_setup_returns_the_initial_compact_plan() -> None:
+    # Tab traverses A Browse/range, B input/parent Browse, then exact Apply.
+    result = _choose("\t" * 5 + "\r")
 
     assert result == BranchCreationReceipt("alpha", "alpha/branch")
 
 
 def test_branch_setup_reparents_an_untouched_exact_name() -> None:
-    with create_pipe_input() as pipe_input:
-        # Two Tabs enter TO's parent tree. Choosing beta rewrites only the
-        # untouched alpha/ prefix, then Tab reaches Apply.
-        pipe_input.send_text("\t\t\x1b[B\r\t\r")
-        result = choose_branch_creation(
-            ("alpha", "beta"),
-            current="alpha",
-            suggest_name=lambda source: f"{source}/branch",
-            validate_name=lambda name: None,
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
+    # Down enters TO; Right crosses its field edge into Browse Parent.
+    result = _choose("\x1b[B\x1b[C\r\x1b[B\r\t\r")
 
     assert result == BranchCreationReceipt("alpha", "beta/branch")
 
 
 def test_branch_setup_new_name_uses_operation_validator() -> None:
     validated: list[str] = []
-    with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\t\t\t\r")
-        result = choose_branch_creation(
-            ("alpha", "beta"),
-            current="alpha",
-            suggest_name=lambda source: f"{source}/branch",
-            validate_name=validated.append,
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
+
+    result = _choose("\t" * 5 + "\r", validated=validated)
 
     assert result == BranchCreationReceipt("alpha", "alpha/branch")
-    assert validated == ["alpha/branch"]
+    assert validated
+    assert set(validated) == {"alpha/branch"}
 
 
 def test_branch_setup_cancel_returns_no_receipt() -> None:
-    with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\x1b")
-        result = choose_branch_creation(
-            ("alpha", "beta"),
-            current="alpha",
-            suggest_name=lambda source: f"{source}/branch",
-            validate_name=lambda name: None,
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-
-    assert result is None
+    assert _choose("\x1b") is None
 
 
 def test_branch_setup_rejects_an_existing_exact_name() -> None:
-    with create_pipe_input() as pipe_input:
-        # Open the exact-name field, enter an existing catalog name, Tab to
-        # Apply, and cancel after Apply rejects that currently visible value.
-        pipe_input.send_text("\t\t\x1b[B\x1b[B\x15beta\t\rq")
-        result = choose_branch_creation(
-            ("alpha", "beta"),
-            current="alpha",
-            suggest_name=lambda source: f"{source}/branch",
-            validate_name=lambda name: None,
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
+    # The parent-locator role is always require-new, so even a catalog spelling
+    # remains a new-name validation failure instead of selecting that Context.
+    result = _choose("\x1b[B\x15beta\x1b[B\rq")
 
     assert result is None
 
@@ -102,108 +93,63 @@ def test_branch_setup_rejects_an_existing_exact_name() -> None:
 def test_branch_setup_applies_the_visible_edited_path_without_hidden_confirmation() -> (
     None
 ):
-    with create_pipe_input() as pipe_input:
-        # The parent-locator variant treats the exact field as authoritative:
-        # Tab may leave it without restoring the earlier preconfirmed value.
-        pipe_input.send_text("\t\t\x1b[B\x1b[B\x15aaa/bbb\t\r")
-        result = choose_branch_creation(
-            ("alpha", "beta"),
-            current="alpha",
-            suggest_name=lambda source: f"{source}/branch",
-            validate_name=lambda name: None,
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
+    result = _choose("\x1b[B\x15aaa/bbb\x1b[B\r")
 
     assert result == BranchCreationReceipt("alpha", "aaa/bbb")
 
 
 def test_branch_setup_refreshes_untouched_name_from_selected_source() -> None:
-    with create_pipe_input() as pipe_input:
-        # Choose beta in FROM, then traverse TO to APPLY without editing its
-        # preconfirmed new-name suggestion.
-        pipe_input.send_text("\x1b[B\r\t\t\t\r")
-        result = choose_branch_creation(
-            ("alpha", "beta"),
-            current="alpha",
-            suggest_name=lambda source: f"{source}/branch",
-            validate_name=lambda name: None,
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
+    # Browse A, choose beta, then traverse range, B, parent Browse, and Apply.
+    result = _choose("\t\r\x1b[B\r" + "\t" * 4 + "\r")
 
     assert result == BranchCreationReceipt("beta", "beta/branch")
 
 
 def test_branch_setup_preserves_name_after_first_direct_edit() -> None:
-    with create_pipe_input() as pipe_input:
-        down = "\x1b[B"
-        shift_tab = "\x1b[Z"
-        # Enter TO's exact-name row, replace and confirm the whole path, return
-        # to its parent tree, choose beta, then Apply. Parent browsing must not
-        # replace a person-edited exact draft.
-        pipe_input.send_text(
-            "\t\t" + down * 2 + "\x15custom/aaa/bbb\r" + shift_tab + "\r\t\r"
-        )
-        result = choose_branch_creation(
-            ("alpha", "beta"),
-            current="alpha",
-            suggest_name=lambda source: f"{source}/branch",
-            validate_name=lambda name: None,
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
+    # Directly edit TO, then browse a different parent. Parent choice remains
+    # visible but cannot rewrite the person-owned exact path.
+    result = _choose("\x1b[B\x15custom/aaa/bbb\x1b[C\r\x1b[B\r\t\r")
 
     assert result == BranchCreationReceipt("alpha", "custom/aaa/bbb")
 
 
 def test_branch_setup_stops_source_inheritance_after_direct_edit() -> None:
-    with create_pipe_input() as pipe_input:
-        down = "\x1b[B"
-        shift_tab = "\x1b[Z"
-        # Edit and confirm B, return through its parent tree to A, then choose
-        # beta. Source changes, but the shared draft no longer inherits it.
-        pipe_input.send_text(
-            "\t\t"
-            + down * 2
-            + "\x15custom/path\r"
-            + shift_tab * 3
-            + down
-            + "\r\t\t\t\r"
-        )
-        result = choose_branch_creation(
-            ("alpha", "beta"),
-            current="alpha",
-            suggest_name=lambda source: f"{source}/branch",
-            validate_name=lambda name: None,
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
+    shift_tab = "\x1b[Z"
+    # Edit TO, return to A's Browse, select beta, then complete the form.
+    result = _choose(
+        "\x1b[B\x15custom/path" + shift_tab * 2 + "\r\x1b[B\r" + "\t" * 4 + "\r"
+    )
 
     assert result == BranchCreationReceipt("beta", "custom/path")
 
 
 def test_branch_setup_returns_the_visible_subtree_scope() -> None:
-    with create_pipe_input() as pipe_input:
-        # A tree → A range; Right chooses INCLUDE DESCENDANTS. TO and Apply
-        # retain the normal common-shell traversal.
-        pipe_input.send_text("\t\x1b[C\t\t\r")
-        result = choose_branch_creation(
-            ("alpha", "alpha/child", "beta"),
-            current="alpha",
-            suggest_name=lambda source: f"{source}/branch",
-            validate_name=lambda name: None,
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
+    # Right at A's input edge enters Browse, then range; Space toggles subtree.
+    result = _choose("\x1b[C\x1b[C \x1b[B\x1b[B\r")
 
     assert result == BranchCreationReceipt(
         "alpha",
         "alpha/branch",
         include_descendants=True,
+    )
+
+
+def test_branch_exact_review_includes_source_and_scope() -> None:
+    review = branch_exact_command_review(
+        EndpointSetupDraft(
+            "BRANCH",
+            (
+                EndpointSetupValue("A", "alpha", include_descendants=True),
+                EndpointSetupValue("B", "draft", create=True),
+            ),
+        )
+    )
+
+    assert review.argv == (
+        "mem",
+        "branch",
+        "draft",
+        "--from",
+        "alpha",
+        "--source-descendants",
     )

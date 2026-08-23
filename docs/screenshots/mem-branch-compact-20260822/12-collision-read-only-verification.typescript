@@ -1,0 +1,19 @@
+$ mem branch · EXISTING TARGET SAFETY
+PTY · 180 COLUMNS × 52 ROWS
+[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM BRANCH · CHOOSE SOURCE AND NEW CONTEXT[0m
+[0;1m› FROM[0m › practice                                [ BROWSE ] [0;38;2;139;213;202;1mCURRENT[0m                           [   INCLUDE DESCENDANTS ][0m
+[0m  TO   › practice/branch                         [ BROWSE PARENT ] [0;38;2;245;169;127;1mNEW · CREATE ON START[0m
+[0m COMMAND · RUNNABLE · ENTER TO APPLY[0m
+[0m mem branch practice/branch --from practice --source-root-only[0m
+[0m Type exact Context · ←/→ caret · → at end next control · ↑/↓ endpoint row · Enter confirm · Tab next control · Esc cancel[122D[4A[17C[?7h[0m[?12l[?25h[?25l[?7l[17D[0m  FROM[0m
+[9C[0mcapture/existing [0m
+[0m COMMAND · INVALID[0m[K[0m
+[0m Context 'capture/existing' already exists.[0m[K[0m
+[C[0mEnt[Cr run exac[C APPLY comm[Cnd · ↑ previous · Es[C cancel[0m[K[2A[56D[?7h[0m[3A[J[0m[?7h[?2004lBranch cancelled — no Context was changed.
+
+COLLISION CANCELLATION VERIFICATION
+  EXISTING TARGET BYTES UNCHANGED · True
+  CONTEXT NAMES UNCHANGED · True
+  CURRENT CONTEXT UNCHANGED · True
+  PARTIAL BRANCH TARGETS · 0
+  PROVIDER CALLS · 0

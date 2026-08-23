@@ -1,0 +1,10 @@
+$ mem branch · EXISTING TARGET SAFETY                                                                                                                                               
+PTY · 180 COLUMNS × 52 ROWS                                                                                                                                                         
+Branch cancelled — no Context was changed.                                                                                                                                          
+                                                                                                                                                                                    
+COLLISION CANCELLATION VERIFICATION                                                                                                                                                 
+  EXISTING TARGET BYTES UNCHANGED · True                                                                                                                                            
+  CONTEXT NAMES UNCHANGED · True                                                                                                                                                    
+  CURRENT CONTEXT UNCHANGED · True                                                                                                                                                  
+  PARTIAL BRANCH TARGETS · 0                                                                                                                                                        
+  PROVIDER CALLS · 0

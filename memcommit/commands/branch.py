@@ -4,8 +4,8 @@ import typer
 
 import memcommit.ops as ops
 from memcommit.commands.branch_dialog import choose_branch_creation
+from memcommit.context_locator import resolve_context_locator
 from memcommit.context_naming import validate_portable_context_name
-from memcommit.context_targeting.tui.picker import context_memory_rows
 from memcommit.interfaces.console.text import (
     display_escape_text,
 )
@@ -34,6 +34,13 @@ def cmd(
                 "Name for a new branch Context; omit in a terminal to choose "
                 "a local Source, parent location, and exact fresh name"
             )
+        ),
+    ] = None,
+    from_: Annotated[
+        Optional[str],
+        typer.Option(
+            "--from",
+            help="Existing local Source Context; defaults to the current Context",
         ),
     ] = None,
     source_descendants: Annotated[
@@ -78,9 +85,9 @@ def cmd(
     expected_current = store.current_context_name()
     local_names = tuple(store.list_context_names())
     if name is None:
-        if direct or recursive or source_descendants is not None:
+        if direct or recursive or source_descendants is not None or from_ is not None:
             typer.secho(
-                "Error: scope flags require an explicit branch NAME; "
+                "Error: --from and scope flags require an explicit branch NAME; "
                 "interactive setup owns its visible Source range.",
                 fg=typer.colors.RED,
                 err=True,
@@ -102,9 +109,6 @@ def cmd(
                     local_names,
                 ),
                 validate_name=store.assert_context_creatable,
-                memory_loader=lambda context_name: context_memory_rows(
-                    store.load(context_name)
-                ),
             )
         except (OSError, TypeError, ValueError) as error:
             typer.secho(
@@ -128,7 +132,19 @@ def cmd(
         name = receipt.target_name
         source_descendants = receipt.include_descendants
     else:
-        source_name = expected_current
+        try:
+            source_name = (
+                resolve_context_locator(from_, current=expected_current)
+                if from_ is not None
+                else expected_current
+            )
+        except ValueError as error:
+            typer.secho(
+                f"Error: {display_escape_text(str(error))}",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(2)
         source_descendants = resolved_source_descendants
     if not source_name:
         typer.secho(
@@ -139,7 +155,7 @@ def cmd(
         raise typer.Exit(1)
     if source_name not in local_names:
         typer.secho(
-            "Error: Branch requires a local Source; the current Context "
+            "Error: Branch requires a local Source; "
             f"'{display_escape_text(source_name)}' is not in the local catalog.",
             fg=typer.colors.RED,
             err=True,

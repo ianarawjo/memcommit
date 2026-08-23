@@ -1821,6 +1821,33 @@ class TestBranch:
         contents = [m.content for m in ctx.memories.values()]
         assert "important fact" in contents
 
+    def test_explicit_branch_can_choose_a_noncurrent_source(self, isolated_store):
+        invoke("init", "source")
+        invoke("add", "source-only")
+        invoke("init", "current")
+        invoke("add", "current-only")
+
+        result = invoke("branch", "experiment", "--from", "source")
+
+        assert result.exit_code == 0
+        assert "Branched 'source' → 'experiment'" in result.output
+        branched = MemoryStore().load("experiment")
+        assert [item.content for item in branched.memories.values()] == ["source-only"]
+
+    def test_explicit_branch_resolves_relative_source_once(self, isolated_store):
+        invoke("init", "project/source")
+        invoke("add", "relative source")
+        invoke("init", "project/current")
+
+        result = invoke("branch", "experiment", "--from", "../source")
+
+        assert result.exit_code == 0
+        assert "Branched 'project/source' → 'experiment'" in result.output
+        branched = MemoryStore().load("experiment")
+        assert [item.content for item in branched.memories.values()] == [
+            "relative source"
+        ]
+
     def test_fails_if_branch_name_exists(self, isolated_store):
         invoke("init", "main")
         invoke("init", "existing")

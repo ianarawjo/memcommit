@@ -1,0 +1,28 @@
+$ mem branch
+PTY · 180 COLUMNS × 52 ROWS
+[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM BRANCH · CHOOSE SOURCE AND NEW CONTEXT[0m
+[0;1m› FROM[0m › practice                                [ BROWSE ] [0;38;2;139;213;202;1mCURRENT[0m                           [   INCLUDE DESCENDANTS ][0m
+[0m  TO   › practice/branch                         [ BROWSE PARENT ] [0;38;2;245;169;127;1mNEW · CREATE ON START[0m
+[0m COMMAND · RUNNABLE · ENTER TO APPLY[0m
+[0m mem branch practice/branch --from practice --source-root-only[0m
+[0m Type exact Context · ←/→ caret · → at end next control · ↑/↓ endpoint row · Enter confirm · Tab next control · Esc cancel[122D[4A[17C[?7h[0m[?12l[?25h[?25l[?7l[17D[0m  FROM[0m
+
+
+
+[C[0m CONTEXTS · FROM ·[CALL ALLOWED[0m[K[0m
+[0m  ·   · archive[164C[0;1m^[0m
+[0;1;7m› ✓ * ▾ [0;38;2;16;36;47;48;2;139;213;255;1mpractice[163C[0;48;2;68;68;68m [0m
+[0m  ·     ▾ practice/task-1[154C[0;48;2;68;68;68m [0m
+[0m  ·       · practice/task-1/notes[146C[0;48;2;68;68;68m [0m
+[0m  ·     · practice/task-2                                                                                                                                                          [179C[0;1mv[0m
+[0m ↑/↓ Context · Enter use exact name · Esc close all[51D[4A[?7h[0m[?25l[?7l[6A[0;1m› FROM[11C[0m/task-1 [24C[0;38;2;16;36;47;48;2;139;213;255;1m[ BROWSE ][C[0m       [0m
+[18C[0mtask-1/branch [0m
+
+[21C[0mtask-1/branch[C--from practice/task-1 --source-root-only[0m
+[C[0m↑/↓ endpoint row[3C←/→[Crow control · Enter browse all allowed Contexts · Tab next control · Esc cancel[0m
+[0m [0m[K[0m
+[0m [0m[K[0m
+[0m [0m[K[0m
+[0m [0m[K[0m
+[0m [0m[K[0m
+[0m [0m[K[10A[48C[?7h[0m

@@ -23,6 +23,62 @@ mem branch NEW --source-root-only
 mem branch NEW --source-descendants
 ```
 
+Bare Branch now exposes that same request through the shared compact Endpoint
+Setup used by Meld. Only the persistent Source row, require-new target row,
+exact command review, and footer remain visible. Source and parent catalogs
+open transiently through `BROWSE` and `BROWSE PARENT`; they no longer reserve
+the unused remainder of a 180×52 terminal.
+
+```text
+ MEM BRANCH · CHOOSE SOURCE AND NEW CONTEXT
+› FROM › practice          [ BROWSE ] CURRENT [   INCLUDE DESCENDANTS ]
+  TO   › practice/branch   [ BROWSE PARENT ] NEW · CREATE ON START
+ COMMAND · RUNNABLE · ENTER TO APPLY
+ mem branch practice/branch --from practice --source-root-only
+```
+
+The single `BRANCH` shape is not rendered as a MODE row. A mode selector is an
+interaction only when an operation has multiple shapes; the stable mode UID
+still exists in the typed draft.
+
+## Compact setup and shared component boundary
+
+Branch's interface adapter lives under
+`memcommit.interfaces.tui.operations.branch`. It owns the A/B role labels,
+local-only availability, require-new validation, exact command review, and the
+typed `BranchEndpointSelection`. The command-layer `branch_dialog` remains a
+thin compatibility translation to `BranchCreationReceipt`; it no longer owns
+tree rendering or endpoint focus mechanics.
+
+The operation-neutral compact Endpoint Setup now supports a new-only role whose
+Context catalog is a parent locator. Selecting a parent reparents only an
+untouched suggested name. `ContextNameDraftState` records the first direct
+edit, after which Source changes and parent browsing preserve the complete
+person-authored target. This keeps the same ownership rule used by Init and
+Save Location instead of rebuilding it in Branch.
+
+The shared component also accepts an operation-owned new-name suggester. When
+A changes, Branch refreshes `<A>/branch` only while B is untouched. Other
+operations can reuse that dependency without importing Branch. Existing
+endpoint selection, descendant reach, exact input, transient catalog, focus,
+and exact-command rendering remain common controls.
+
+The exact review uses a newly explicit Source form:
+
+```text
+mem branch NEW --from SOURCE --source-root-only
+mem branch NEW --from SOURCE --source-descendants
+```
+
+`--from` is an existing ordinary Context locator and therefore resolves `.`,
+`..`, `./...`, and `../...` once against the command-start current Context.
+The new target remains a canonical new identifier and is never passed through
+the existing-Context resolver. Existing `mem branch NEW` behavior is unchanged:
+it still uses the captured current Context as Source. The Branch receipt
+already retained `source_root`, so Undo and Redo can now render the complete
+reproducible command with `--from` rather than depending on whichever Context
+is current later.
+
 `--source-only` remains accepted as a compatibility alias for the canonical
 `--source-root-only` spelling.
 
@@ -169,6 +225,14 @@ durable crash-recovery journal for a host failure between filesystem writes.
   rejected because equal wording is not lineage. Trace requires the validated
   owned `branch_tree` receipt before suppressing legacy warnings or emitting a
   recorded Context transition.
+- Keeping both Context trees permanently expanded was rejected because Branch
+  has only two endpoints and one range choice. Persistent empty canvas made a
+  creation dialog look like a session workbench; transient catalogs preserve
+  the complete frozen choices without hiding the compact reviewed plan.
+- Treating a B parent Browse row as an existing target was rejected because an
+  empty existing Context is still owned durable state. Parent selection may
+  reposition an untouched exact name but can never change the require-new
+  materialization contract.
 
 The target root and every mapped descendant must be new. Branch does not merge
 into an existing target hierarchy, copy derived analysis/session artifacts, or

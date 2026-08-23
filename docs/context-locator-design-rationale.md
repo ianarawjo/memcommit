@@ -6,6 +6,7 @@ The first shared rollout is implemented in:
 
 ```text
 mem switch LOCATOR
+mem branch RESULT_NAME --from LOCATOR
 mem compare LOCATOR
 mem compare LOCATOR LOCATOR
 mem compare --to LOCATOR
@@ -145,6 +146,7 @@ grammar. The rollout uses this table as the authored cross-operation rule:
 | `audit`, `dedun`, `find-{ambiguities,duplicates,redundancies,conflicts}` | Use current Context | `[CONTEXT]` | `--context CONTEXT` |
 | `resolve` | Use current Context, unless bare Memory operands uniquely locate one local owner | mixed `CONTEXT`, UUID-shaped `MEMORY`, and `CONTEXT:MEMORY`; every owner must canonicalize to one Context | `--context CONTEXT`, repeatable `--memory [CONTEXT:]UID`; short Memory prefixes require `--memory` or qualification |
 | `compare` | Open saved-session launcher | `PEER` uses current as Reference; `REFERENCE PEER` is fully explicit | `--from REFERENCE`, `--to PEER` |
+| `branch` | Open compact Source/new-target setup | `RESULT_NAME` creates from current | `--from SOURCE` chooses one existing local Source; Result remains a new identifier |
 | `update` | Open saved Update work | `SOURCE TARGET` only | `--from SOURCE`, `--to TARGET`; one omitted option endpoint uses current |
 | `impact update` | Inspect saved Update Impact | `SOURCE TARGET` starts a new preview | same `--from`/`--to` endpoint aliases |
 | root `impact` | Error without a named route or endpoint | none, because the first token is a subcommand | retained `--from`/`--to` directional alias |
@@ -208,8 +210,9 @@ canonical source name/UID/digest receipts under the final lock set.
 
 The resolver must not be applied indiscriminately:
 
-- `init NAME`, `branch NAME`, `checkout -b NAME`, and `--save-as` values define
-  new canonical identifiers; they are not existing-Context locators.
+- `init NAME`, the Branch Result `NAME`, `checkout -b NAME`, and `--save-as`
+  values define new canonical identifiers; they are not existing-Context
+  locators. Branch's separate `--from` value is an existing-Context locator.
 - Memory selectors, embedded-item selectors, requirement targets, and
   query-only source selectors have different namespaces.
 - Embed's `--before` and `--after` values select direct items inside the already

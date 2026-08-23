@@ -1,0 +1,14 @@
+$ mem branch                                                                                                                                                                        
+PTY · 180 COLUMNS × 52 ROWS                                                                                                                                                         
+ MEM BRANCH · CHOOSE SOURCE AND NEW CONTEXT                                                                                                                                         
+  FROM › practice                                [ BROWSE ] CURRENT                           [   INCLUDE DESCENDANTS ]                                                             
+  TO   › practice/branch                         [ BROWSE PARENT ] NEW · CREATE ON START                                                                                            
+ COMMAND · RUNNABLE · ENTER TO APPLY                                                                                                                                                
+ mem branch practice/branch --from practice --source-root-only                                                                                                                      
+  CONTEXTS · FROM · ALL ALLOWED                                                                                                                                                     
+  ·   · archive                                                                                                                                                                    ^
+› ✓ * ▾ practice                                                                                                                                                                    
+  ·     ▾ practice/task-1                                                                                                                                                           
+  ·       · practice/task-1/notes                                                                                                                                                   
+  ·     · practice/task-2                                                                                                                                                          v
+ ↑/↓ Context · Enter use exact name · Esc close all

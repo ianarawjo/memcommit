@@ -459,6 +459,7 @@ COMMAND_FORMS = {
     "branch": (
         "mem branch (choose a local Source, parent location, and fresh target)",
         "mem branch [new_context] (branch the current Context and switch)",
+        "mem branch [new_context] --from [source_context] (branch an exact local Source)",
         "mem branch [new_context] --source-root-only (explicit Source root)",
         "mem branch [new_context] -r (branch the current Context subtree)",
     ),

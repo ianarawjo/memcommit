@@ -1,0 +1,8 @@
+$ mem branch · EXISTING TARGET SAFETY                                                                                                                                               
+PTY · 180 COLUMNS × 52 ROWS                                                                                                                                                         
+ MEM BRANCH · CHOOSE SOURCE AND NEW CONTEXT                                                                                                                                         
+  FROM › practice                                [ BROWSE ] CURRENT                           [   INCLUDE DESCENDANTS ]                                                             
+  TO   › capture/existing                        [ BROWSE PARENT ] NEW · CREATE ON START                                                                                            
+ COMMAND · INVALID                                                                                                                                                                  
+ Context 'capture/existing' already exists.                                                                                                                                         
+ Enter run exact APPLY command · ↑ previous · Esc cancel
