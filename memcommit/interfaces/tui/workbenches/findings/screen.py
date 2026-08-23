@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import sys
-
 from prompt_toolkit.application import Application
 from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
@@ -21,13 +19,17 @@ from memcommit.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
 )
-from memcommit.interfaces.tui.viewers.semantic import SemanticViewerController
+from memcommit.interfaces.tui.viewers.semantic import (
+    SemanticViewerController,
+    SemanticViewerDocument,
+)
 from memcommit.interfaces.tui.workbenches.findings.document import (
     quality_finding_item_document,
 )
 from memcommit.quality_find_report import (
     QualityFindBrowserReceipt,
     QualityFindReportView,
+    QualityFindingReportItem,
 )
 from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
 
