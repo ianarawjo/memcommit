@@ -67,6 +67,13 @@ class _Provider:
         assert operation == "compare_summary"
         assert output_schema is not None
         payload = json.loads(prompt.split("COMPARISON SUMMARY PAYLOAD:\n", 1)[1])
+        assert payload["ruleset"]["ruleset_version"] == "compact-peer-relation-v3"
+        assert payload["length"] == {"limit": 80, "unit": "words"}
+        assert all(
+            row["role"] == "PRIMARY"
+            for frame in payload["frames"]
+            for row in frame["memories"]
+        )
         reference = [row["id"] for row in payload["frames"][0]["memories"]]
         peer = [row["id"] for row in payload["frames"][1]["memories"]]
         # Keep the real interactive wait shell visible long enough to capture.

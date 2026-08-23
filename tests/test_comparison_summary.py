@@ -159,9 +159,12 @@ def test_default_cli_is_transient_and_ledger_is_explicit(
     )
 
     assert result.exit_code == 0, result.output
-    assert "MEM COMPARE · SUMMARY" in result.output
-    assert "READ-ONLY · TRANSIENT · NO RELATION LEDGER" in result.output
+    assert f"Compare · {reference.name} ↔ {compared.name}" in result.output
+    assert "\nCOMPARISON\n" in result.output
     assert "Both peers require a concise proposal" in result.output
+    assert "MEM COMPARE · SUMMARY" not in result.output
+    assert "READ-ONLY · TRANSIENT · NO RELATION LEDGER" not in result.output
+    assert "SCOPE ·" not in result.output
     assert "\nOVERVIEW\n" not in result.output
     assert "\nBOTH\n" not in result.output
     assert "\nDIFFERENCES\n" not in result.output
@@ -208,5 +211,5 @@ def test_default_cli_suppresses_a_summary_when_a_source_changes_in_flight(
 
     assert result.exit_code == 1
     assert "changed while Compare was summarizing" in result.output
-    assert "MEM COMPARE · SUMMARY" not in result.output
+    assert "\nCOMPARISON\n" not in result.output
     assert not comparison_analysis_path(reference.uid, compared.uid).exists()

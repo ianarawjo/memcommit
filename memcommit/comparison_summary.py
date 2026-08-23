@@ -11,10 +11,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from memcommit.comparison import ComparisonFrame, ComparisonInput
+from memcommit.comparison_summary_rules import COMPARISON_SUMMARY_RULESET_VERSION
 from memcommit.understanding import UnderstandingSummary
-
-
-COMPARISON_SUMMARY_RULESET_VERSION = "peer-paragraph-v2"
 
 
 class ComparisonSummaryError(ValueError):

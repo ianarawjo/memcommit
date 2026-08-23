@@ -1,0 +1,220 @@
+{
+  "command": "compare",
+  "schema_version": 1,
+  "ruleset_version": "compact-peer-relation-v3",
+  "description": "Compact default Compare rules distilled from actual small, asymmetric, selected-Memory, and large task frames. Cases are production-visible calibration, not held-out evaluation data.",
+  "rules": [
+    {
+      "id": "C01_DOMINANT_RELATION",
+      "title": "Lead with the dominant relation",
+      "invariant": "Explain the one relation that best characterizes both complete PRIMARY frames, such as equivalence, rule-to-instances, conditional alternatives, temporary override to baseline, general policy to specialization, shared core with a decisive difference, or no material relation."
+    },
+    {
+      "id": "C02_DECISIVE_DIFFERENCE",
+      "title": "Spend the second sentence on the decisive difference",
+      "invariant": "After the dominant relation, preserve only the difference, condition, exception, or consequence most likely to change interpretation or action; do not inventory every common or side-only point."
+    },
+    {
+      "id": "C03_NUMBERS_WITH_CONDITIONS",
+      "title": "Keep discriminating numbers with their conditions",
+      "invariant": "Preserve an exact number, range, time, or date when it distinguishes the frames, and state the condition that makes the numeric difference meaningful rather than presenting two bare values."
+    },
+    {
+      "id": "C04_SEMANTIC_ASYMMETRY",
+      "title": "Describe asymmetry by semantic role",
+      "invariant": "When frame sizes differ, explain rule versus instances, temporary override versus baseline, or general policy versus specialization instead of reporting source counts or treating the larger frame as more authoritative."
+    },
+    {
+      "id": "C05_PRIMARY_SCOPE",
+      "title": "Keep Context evidence subordinate",
+      "invariant": "PRIMARY rows are the only comparison subjects. CONTEXT rows may disambiguate a PRIMARY row but must not introduce a second comparison topic, and the evidence set must cite PRIMARY material from both sides."
+    },
+    {
+      "id": "C06_COMPACT_COMPLETE",
+      "title": "Return one bounded natural paragraph",
+      "invariant": "Use one or two complete sentences in one paragraph, aim for roughly 45 words, and never exceed 80 whitespace-delimited words. Read the complete frozen frames, but keep output length independent of source count."
+    },
+    {
+      "id": "C07_PRIVATE_EVIDENCE_IDS",
+      "title": "Keep source aliases out of prose",
+      "invariant": "Put opaque evidence aliases only in the structured source_ids field. Never print a bare or bracketed provider alias, UID, source count, or internal evidence notation in the narrative."
+    },
+    {
+      "id": "C08_EQUAL_AUTHORITY",
+      "title": "Compare peers without a hidden winner",
+      "invariant": "Treat REFERENCE and COMPARED as equal-authority peers unless their content itself establishes baseline, override, general, specialized, rule, or instance roles; do not call one correct merely because of its side."
+    },
+    {
+      "id": "C09_NO_DEEP_ANALYSIS",
+      "title": "Do not impersonate the relation ledger",
+      "invariant": "Do not claim exhaustive disposition, assign every Memory, create Issues, recommend Meld actions, or turn the compact paragraph into a category-by-category report."
+    },
+    {
+      "id": "C10_EXPLANATION_LANGUAGE",
+      "title": "Keep the shared primary language",
+      "invariant": "Write in the language shared by the PRIMARY rows. If the PRIMARY sides use different languages, use the REFERENCE primary language without translating or rewriting quoted source text."
+    }
+  ],
+  "cases": [
+    {
+      "id": "selected-number-condition",
+      "description": "Two selected opening rules differ by an exact sentence bound, while unrelated neighboring structure rules remain context only.",
+      "frames": [
+        {
+          "side": "REFERENCE",
+          "memories": [
+            {"id": "A1", "role": "PRIMARY", "content": "Complete the problem framing within the first two sentences."},
+            {"id": "A2", "role": "CONTEXT", "content": "Use short descriptive subheadings."}
+          ]
+        },
+        {
+          "side": "COMPARED",
+          "memories": [
+            {"id": "B1", "role": "PRIMARY", "content": "Allow a third sentence when the person, setting, or consequence would otherwise remain abstract."},
+            {"id": "B2", "role": "CONTEXT", "content": "Use paragraph transitions instead of extra headings."}
+          ]
+        }
+      ],
+      "expected": {
+        "text": "Both rules establish the proposal's central issue immediately. The reference caps framing at two sentences, while the compared rule permits a third only when the person, setting, or consequence would otherwise remain abstract.",
+        "source_ids": ["A1", "B1"],
+        "rule_ids": ["C01_DOMINANT_RELATION", "C02_DECISIVE_DIFFERENCE", "C03_NUMBERS_WITH_CONDITIONS", "C05_PRIMARY_SCOPE", "C06_COMPACT_COMPLETE"]
+      },
+      "known_wrong": [
+        {
+          "text": "The reference also favors headings while the compared frame favors paragraph transitions.",
+          "violates": ["C05_PRIMARY_SCOPE"],
+          "reason": "It replaces the selected-Memory comparison with a second topic drawn only from neighboring Context evidence."
+        }
+      ]
+    },
+    {
+      "id": "rule-to-instances",
+      "description": "One frame states a syntax and the other supplies conforming instances.",
+      "frames": [
+        {
+          "side": "REFERENCE",
+          "memories": [
+            {"id": "A1", "role": "PRIMARY", "content": "Write each proposition as a lowercase letter, the exact separator is, and one lowercase word, with no terminal punctuation."}
+          ]
+        },
+        {
+          "side": "COMPARED",
+          "memories": [
+            {"id": "B1", "role": "PRIMARY", "content": "a is apple"},
+            {"id": "B2", "role": "PRIMARY", "content": "b is banana"},
+            {"id": "B3", "role": "PRIMARY", "content": "c is carrot"}
+          ]
+        }
+      ],
+      "expected": {
+        "text": "The reference defines the lowercase letter–is–word syntax, and every compared proposition conforms to it. Their difference is semantic role rather than format: one is the governing rule and the other is its concrete instance set.",
+        "source_ids": ["A1", "B1", "B2", "B3"],
+        "rule_ids": ["C01_DOMINANT_RELATION", "C04_SEMANTIC_ASYMMETRY", "C06_COMPACT_COMPLETE", "C07_PRIVATE_EVIDENCE_IDS"]
+      },
+      "known_wrong": [
+        {
+          "text": "The rule matches a is apple [B1], b is banana [B2], and c is carrot [B3].",
+          "violates": ["C04_SEMANTIC_ASYMMETRY", "C07_PRIVATE_EVIDENCE_IDS"],
+          "reason": "It inventories instances and exposes provider-only evidence aliases."
+        }
+      ]
+    },
+    {
+      "id": "temporary-override-baseline",
+      "description": "A small construction frame temporarily overrides a larger ordinary-access baseline.",
+      "frames": [
+        {
+          "side": "REFERENCE",
+          "memories": [
+            {"id": "A1", "role": "PRIMARY", "content": "During construction, the third-floor rear entrance is closed to general passage."},
+            {"id": "A2", "role": "PRIMARY", "content": "During construction, the main entrance closes at 5 p.m. rather than 10 p.m."},
+            {"id": "A3", "role": "PRIMARY", "content": "Use the temporary step-free route beside the main entrance."}
+          ]
+        },
+        {
+          "side": "COMPARED",
+          "memories": [
+            {"id": "B1", "role": "PRIMARY", "content": "The third-floor rear entrance is normally available during opening hours."},
+            {"id": "B2", "role": "PRIMARY", "content": "The main entrance normally closes at 10 p.m."},
+            {"id": "B3", "role": "PRIMARY", "content": "The ordinary accessible route is beside the main entrance."}
+          ]
+        }
+      ],
+      "expected": {
+        "text": "The reference temporarily overrides the compared frame's normal access rules during construction. It closes the normally usable rear entrance, moves main-entry closing from 10 p.m. to 5 p.m., and substitutes a temporary step-free route for the ordinary accessible path.",
+        "source_ids": ["A1", "A2", "A3", "B1", "B2", "B3"],
+        "rule_ids": ["C01_DOMINANT_RELATION", "C02_DECISIVE_DIFFERENCE", "C03_NUMBERS_WITH_CONDITIONS", "C04_SEMANTIC_ASYMMETRY"]
+      },
+      "known_wrong": [
+        {
+          "text": "The reference has three Memories and the compared frame also has three Memories about entrances.",
+          "violates": ["C01_DOMINANT_RELATION", "C04_SEMANTIC_ASYMMETRY"],
+          "reason": "Counts and topic labels hide the temporary override relationship."
+        }
+      ]
+    },
+    {
+      "id": "general-policy-specialization",
+      "description": "A broad disclosure policy and healthcare transmission guidance share a core but differ in breadth and one retention boundary.",
+      "frames": [
+        {
+          "side": "REFERENCE",
+          "memories": [
+            {"id": "A1", "role": "PRIMARY", "content": "Share only information necessary for the reviewed purpose and recipient."},
+            {"id": "A2", "role": "PRIMARY", "content": "A recipient may ordinarily retain or process a copy unless a restriction says otherwise."}
+          ]
+        },
+        {
+          "side": "COMPARED",
+          "memories": [
+            {"id": "B1", "role": "PRIMARY", "content": "Send only reviewed healthcare information after the user approves the recipient, purpose, and channel."},
+            {"id": "B2", "role": "PRIMARY", "content": "Silence alone establishes no permission for retention or internal processing."}
+          ]
+        }
+      ],
+      "expected": {
+        "text": "Both frames require purpose-limited disclosure and user review before transmission; the compared frame specializes that policy for healthcare. Their decisive tension is retention: the reference permits ordinary inference absent a restriction, while the healthcare guidance treats silence as no permission.",
+        "source_ids": ["A1", "A2", "B1", "B2"],
+        "rule_ids": ["C01_DOMINANT_RELATION", "C02_DECISIVE_DIFFERENCE", "C04_SEMANTIC_ASYMMETRY", "C08_EQUAL_AUTHORITY"]
+      },
+      "known_wrong": [
+        {
+          "text": "The larger reference policy is authoritative and the healthcare guidance should follow it.",
+          "violates": ["C04_SEMANTIC_ASYMMETRY", "C08_EQUAL_AUTHORITY"],
+          "reason": "Frame size and REFERENCE position do not establish authority."
+        }
+      ]
+    },
+    {
+      "id": "different-governance-directions",
+      "description": "Two single-Memory tasks share selection work but push it toward integration versus minimization.",
+      "frames": [
+        {
+          "side": "REFERENCE",
+          "memories": [
+            {"id": "A1", "role": "PRIMARY", "content": "Combine two equal-authority advisors' policies without favoring either source."}
+          ]
+        },
+        {
+          "side": "COMPARED",
+          "memories": [
+            {"id": "B1", "role": "PRIMARY", "content": "Select which personal memories to exclude before transfer to a government healthcare agent."}
+          ]
+        }
+      ],
+      "expected": {
+        "text": "Both tasks select stored information for a new purpose, but their governance directions differ. The reference maximizes fair integration across equal-authority sources, while the compared task minimizes disclosure of sensitive personal history before transfer.",
+        "source_ids": ["A1", "B1"],
+        "rule_ids": ["C01_DOMINANT_RELATION", "C02_DECISIVE_DIFFERENCE", "C06_COMPACT_COMPLETE", "C08_EQUAL_AUTHORITY"]
+      },
+      "known_wrong": [
+        {
+          "text": "Both tasks are about Memory and therefore have essentially the same goal.",
+          "violates": ["C01_DOMINANT_RELATION", "C02_DECISIVE_DIFFERENCE"],
+          "reason": "A generic topic overlap erases the opposing integration and minimization goals."
+        }
+      ]
+    }
+  ]
+}

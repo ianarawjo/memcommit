@@ -21,8 +21,10 @@ result lifecycle both needed to become smaller.
 Default `mem compare REFERENCE PEER` now produces one transient
 `ComparisonSummary`:
 
-- exactly one concise source-linked prose paragraph with no authored line
-  breaks, headings, labels, bullets, or category template;
+- exactly one concise source-linked prose paragraph under a minimal
+  `Compare · A ↔ B` / `COMPARISON` receipt;
+- one dominant semantic relationship and, when needed, one decisive
+  difference, condition, exception, or consequence;
 - no relation objects, source assignments, Issues, Meld dispositions, or
   application proposal;
 - no comparison-analysis file, session row, checkpoint, or Context mutation;
@@ -51,12 +53,33 @@ Context names remain presentation-only. The strict output schema contains
 only one `{text, source_ids}` paragraph. It has no field capable of carrying a
 relation ledger or review Issue.
 
-The paragraph must cite known frozen aliases from both peers. Evidence aliases
-are decoded to immutable Memory UIDs before presentation. The provider is
-instructed to integrate salient common ground, differences, and side-specific
-points naturally in under about 140 English words instead of mechanically
-enumerating categories. The schema and decoder reject provider-authored line
-breaks, while ordinary terminal wrapping remains presentation-only.
+The versioned `compact-peer-relation-v3` ruleset and its exact plus known-wrong
+cases enter every provider turn. They calibrate the shapes observed in real
+Study data: selected numeric conditions, one rule against many instances,
+temporary overrides against a larger baseline, a general policy against its
+domain specialization, and two tasks whose shared selection work leads toward
+opposite governance outcomes. These examples are consumed production
+calibration, not held-out evaluation evidence.
+
+The paragraph must cite known frozen aliases from both peers and must cite
+`PRIMARY` evidence from both sides. Neighboring `CONTEXT` rows may disambiguate
+a selected Memory but cannot become another comparison topic. Evidence aliases
+are decoded to immutable Memory UIDs before presentation, and the decoder
+rejects any alias that leaks back into prose. This separation matters because
+one actual 1-to-26 rule/instance run printed `[A1] [B1] ... [B26]`, while a
+selected 1-to-1 run expanded into unrelated heading guidance from neighboring
+Context rows.
+
+The provider reads both complete frames but aims for roughly 45 words in one
+or two sentences, with an 80-whitespace-word hard limit. It leads with the
+dominant relation—equivalence, conditional alternatives, rule/instances,
+override/baseline, general/specialized, shared core with one decisive delta,
+or no material relation. Exact numbers remain attached to the condition that
+makes them discriminating. Source-count asymmetry is expressed through these
+semantic roles rather than treated as authority. The paragraph uses the
+shared PRIMARY language, or the REFERENCE primary language when the sides
+differ. The schema and decoder reject provider-authored line breaks, while
+ordinary terminal wrapping remains presentation-only.
 
 The summary declares `HIERARCHICAL_REDUCE` but does not claim a staged
 reconciler. An over-budget pair fails before provider connection instead of
@@ -87,6 +110,13 @@ the lightweight summary was deferred: it would add lifecycle and provenance
 cost before there is evidence that this intentionally small, read-only result
 needs durable identity.
 
+Running one semantic comparison per child or Memory was also rejected. Actual
+pairwise month checks over the Study personal-memory tree took roughly 168
+seconds across eighteen serial calls, recreating the latency this contract is
+meant to remove. A future hierarchical result must use an explicit staged
+strategy with operation-owned reconciliation and atomic publication; a UI
+loop over independent provider calls is not a valid shortcut.
+
 ## Compatibility and limitations
 
 Existing deep analysis JSON, saved-session reopening, public deep Compare API,
@@ -100,3 +130,8 @@ turn. It reduces output obligations and review lifecycle, not input disclosure
 or the need for a model to understand both peers. Future latency work may add
 a validated hierarchical reconciler, but batching is not enabled by this
 change.
+
+The compact result is not an exhaustive coverage claim. A caller that needs
+every Memory disposition, issue, or application-ready relation must use
+`--ledger`. An empty direct frame still fails before provider connection rather
+than producing prose about absence.

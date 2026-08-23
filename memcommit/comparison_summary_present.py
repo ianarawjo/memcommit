@@ -6,27 +6,19 @@ from memcommit.comparison_summary import ComparisonSummary
 from memcommit.interfaces.console.text import display_escape_text
 
 
-def _scope_label(include_descendants: bool) -> str:
-    return "CURRENT + DESCENDANTS" if include_descendants else "CURRENT ONLY"
-
-
 def render_comparison_summary(summary: ComparisonSummary) -> str:
     if not isinstance(summary, ComparisonSummary):
         raise TypeError("Compare summary rendering requires a ComparisonSummary.")
     reference, compared = summary.frames
     lines = [
-        "MEM COMPARE · SUMMARY",
-        f"REFERENCE · {display_escape_text(reference.context_name)}",
-        f"PEER · {display_escape_text(compared.context_name)}",
-        "STATUS · READ-ONLY · TRANSIENT · NO RELATION LEDGER",
         (
-            "SCOPE · "
-            f"REFERENCE {_scope_label(summary.include_descendants[0])} · "
-            f"PEER {_scope_label(summary.include_descendants[1])} · "
-            f"SOURCES {summary.source_count:,}"
+            "Compare · "
+            f"{display_escape_text(reference.context_name)} ↔ "
+            f"{display_escape_text(compared.context_name)}"
         ),
         "",
-        display_escape_text(summary.paragraph.text),
+        "COMPARISON",
+        f"  {display_escape_text(summary.paragraph.text)}",
     ]
     return "\n".join(lines)
 

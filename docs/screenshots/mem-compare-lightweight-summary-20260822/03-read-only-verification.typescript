@@ -1,13 +1,10 @@
 $ mem compare capture/reference capture/peer
 PTY · 180 COLUMNS × 52 ROWS
 PROFILE · ISOLATED CAPTURE STORE · CURRENT capture/reference
-MEM COMPARE · 1/2 · CONNECTING PROVIDER . · 0sMEM COMPARE · 2/2 · SUMMARIZING · GPT-5.6-SOL · REASONING NONE . · 0sMEM COMPARE · 2/2 · SUMMARIZING · GPT-5.6-SOL · REASONING NONE .. · 0sMEM COMPARE · 2/2 · SUMMARIZING · GPT-5.6-SOL · REASONING NONE … · 0s MEM COMPARE · 2/2 · SUMMARIZING · GPT-5.6-SOL · REASONING NONE . · 1sMEM COMPARE · 2/2 · SUMMARIZING · GPT-5.6-SOL · REASONING NONE .. · 1sMEM COMPARE · 2/2 · SUMMARIZING · GPT-5.6-SOL · REASONING NONE … · 1s MEM COMPARE · 2/2 · SUMMARIZING · GPT-5.6-SOL · REASONING NONE . · 2sMEM COMPARE · 2/2 · SUMMARIZING · GPT-5.6-SOL · REASONING NONE .. · 2s                                                                      MEM COMPARE · SUMMARY
-REFERENCE · capture/reference
-PEER · capture/peer
-STATUS · READ-ONLY · TRANSIENT · NO RELATION LEDGER
-SCOPE · REFERENCE CURRENT ONLY · PEER CURRENT ONLY · SOURCES 4
+MEM COMPARE · 1/2 · CONNECTING PROVIDER . · 0sMEM COMPARE · 2/2 · SUMMARIZING · GPT-5.6-SOL · REASONING NONE . · 0sMEM COMPARE · 2/2 · SUMMARIZING · GPT-5.6-SOL · REASONING NONE .. · 0sMEM COMPARE · 2/2 · SUMMARIZING · GPT-5.6-SOL · REASONING NONE … · 0s MEM COMPARE · 2/2 · SUMMARIZING · GPT-5.6-SOL · REASONING NONE . · 1sMEM COMPARE · 2/2 · SUMMARIZING · GPT-5.6-SOL · REASONING NONE .. · 1sMEM COMPARE · 2/2 · SUMMARIZING · GPT-5.6-SOL · REASONING NONE … · 1s MEM COMPARE · 2/2 · SUMMARIZING · GPT-5.6-SOL · REASONING NONE . · 2sMEM COMPARE · 2/2 · SUMMARIZING · GPT-5.6-SOL · REASONING NONE .. · 2s                                                                      Compare · capture/reference ↔ capture/peer
 
-Both peers require the proposal to remain concise, but the reference additionally asks for descriptive headings while the peer prefers active voice.
+COMPARISON
+  Both peers require the proposal to remain concise, but the reference additionally asks for descriptive headings while the peer prefers active voice.
 RESULT RETURNED TO CALLER · NO RESIDENT RESULT SCREEN
 CAPTURE GATE · PRESS V FOR READ-ONLY VERIFICATION
 v
