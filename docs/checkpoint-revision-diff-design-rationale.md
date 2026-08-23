@@ -73,6 +73,16 @@ revision counts, raw emits provider-free direct-item unified diffs, and verbose
 retains full direct-item UIDs. With no Context or checkpoint target these flags
 continue to describe the active Update record for compatibility.
 
+A bare Diff operand is completed by the shared typed Context/checkpoint
+targeting layer. Relative forms remain Context-only. A bare eight-or-more
+character UUID-shaped value is checked against the frozen ordinary-local
+checkpoint catalog, so a printed checkpoint prefix can be passed directly as
+`mem diff CHECKPOINT`. Exact Context names remain available, but a spelling
+that matches both namespaces is rejected with the explicit `--context` and
+`--checkpoint` disambiguation forms rather than being guessed. A unique
+`--checkpoint` may likewise infer its owning local Context; ambiguity never
+prefers the current Context or the newest history.
+
 ## Revert target scope and approval
 
 Bare interactive `mem revert` captures the current Context name once and opens

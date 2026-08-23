@@ -2,11 +2,13 @@
 from __future__ import annotations
 
 import json
+import uuid
 
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
 from memcommit.cli import app
+from memcommit.context import Context
 from memcommit.store import MemoryStore
 from memcommit.update import plan_update
 
@@ -350,6 +352,59 @@ def test_diff_context_and_checkpoint_option_support_raw_output(isolated_store):
     assert "diff --mem campus-wiki#" in result.output
     assert "--- " in result.output
     assert "+++ " in result.output
+
+
+def test_diff_bare_checkpoint_prefix_infers_its_unique_context(isolated_store):
+    store = MemoryStore()
+    _stage(store)
+    checkpoint = store.checkpoint(
+        store.load("campus-wiki"),
+        command="checkpoint",
+    )
+
+    result = runner.invoke(app, ["diff", checkpoint.uid[:8], "--stat"])
+
+    assert result.exit_code == 0, result.output
+    assert f"CHECKPOINT  {checkpoint.uid}" in result.output
+    assert "CONTEXT     campus-wiki" in result.output
+
+
+def test_diff_checkpoint_option_infers_unique_owner_without_context(isolated_store):
+    store = MemoryStore()
+    _stage(store)
+    checkpoint = store.checkpoint(
+        store.load("campus-wiki"),
+        command="checkpoint",
+    )
+
+    result = runner.invoke(
+        app,
+        ["diff", "--checkpoint", checkpoint.uid[:8], "--stat"],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert f"CHECKPOINT  {checkpoint.uid}" in result.output
+
+
+def test_diff_bare_operand_rejects_context_checkpoint_collision(isolated_store):
+    store = MemoryStore()
+    _stage(store)
+    checkpoint = store.checkpoint(
+        store.load("campus-wiki"),
+        command="checkpoint",
+    )
+    # Existing legacy names may predate the portable-name rule that reserves
+    # the visible UUID-prefix shape for typed CLI operands.
+    collision = Context(uid=str(uuid.uuid4()), name=checkpoint.uid[:8])
+    collision_path = store._context_file(collision.name)
+    collision_path.parent.mkdir(parents=True)
+    collision_path.write_text(json.dumps(collision.to_dict()), encoding="utf-8")
+
+    result = runner.invoke(app, ["diff", checkpoint.uid[:8]])
+
+    assert result.exit_code == 1
+    assert "matches both Context" in result.stderr
+    assert "--context or --checkpoint" in result.stderr
 
 
 def test_diff_renders_empty_fresh_stage(isolated_store):

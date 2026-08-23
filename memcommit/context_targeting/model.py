@@ -39,6 +39,25 @@ class ContextTarget:
             raise ValueError("A Context target requires a canonical name.")
 
 
+@dataclass(frozen=True, slots=True)
+class CheckpointTarget:
+    """One exact retained checkpoint plus its canonical ordinary-local owner."""
+
+    context_name: str
+    checkpoint_uid: str
+
+    def __post_init__(self) -> None:
+        if (
+            not isinstance(self.context_name, str)
+            or not self.context_name
+            or not isinstance(self.checkpoint_uid, str)
+            or not self.checkpoint_uid
+        ):
+            raise ValueError(
+                "A checkpoint target requires a Context name and exact UID."
+            )
+
+
 @dataclass(frozen=True)
 class ContextScope:
     """One frozen set of Context names and its lexical descendant policy.

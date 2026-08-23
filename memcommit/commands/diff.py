@@ -25,6 +25,11 @@ from memcommit.commands.checkpoint_diff import render_checkpoint_revision_cli
 from memcommit.commands.history_present import checkpoint_picker_entries
 from memcommit.commands.update_render import render_plan
 from memcommit.context_locator import resolve_context_locator
+from memcommit.context_targeting.checkpoint import (
+    resolve_local_checkpoint_target,
+    resolve_local_context_checkpoint_target,
+)
+from memcommit.context_targeting.model import CheckpointTarget
 from memcommit.uid_locator import resolve_exact_or_unique_uid
 from memcommit.update import (
     AddOperation,
@@ -455,22 +460,55 @@ def cmd(
         raise typer.Exit(2)
 
     store = MemoryStore(create=False)
+    try:
+        current_context = store.current_context_name()
+    except FileNotFoundError:
+        # Read-only Diff must not create a Profile merely to discover that no
+        # active Update or current Context exists yet.
+        current_context = None
     checkpoint_selector = checkpoint_uid
     context_locator = context_name
     if context_name is not None and target is not None:
         checkpoint_selector = target
-    elif context_name is None and target is not None:
+    elif context_name is None and checkpoint_uid is not None and target is not None:
         context_locator = target
+    elif context_name is None and checkpoint_uid is None and target is not None:
+        try:
+            resolved_target = resolve_local_context_checkpoint_target(
+                store,
+                target,
+                current=current_context,
+            )
+        except ValueError as error:
+            typer.secho(f"Diff error: {error}", fg=typer.colors.RED, err=True)
+            raise typer.Exit(1)
+        if isinstance(resolved_target, CheckpointTarget):
+            context_locator = resolved_target.context_name
+            checkpoint_selector = resolved_target.checkpoint_uid
+        else:
+            context_locator = resolved_target.context_name
+    elif checkpoint_uid is not None and context_name is None:
+        try:
+            inferred_checkpoint = resolve_local_checkpoint_target(
+                store,
+                checkpoint_uid,
+            )
+        except ValueError as error:
+            typer.secho(f"Diff error: {error}", fg=typer.colors.RED, err=True)
+            raise typer.Exit(1)
+        context_locator = inferred_checkpoint.context_name
+        checkpoint_selector = inferred_checkpoint.checkpoint_uid
 
     history_requested = context_locator is not None or checkpoint_selector is not None
-    if checkpoint_selector is not None and context_locator is None:
-        typer.secho(
-            "Diff error: an explicit checkpoint requires its Context; pass "
-            "--context CONTEXT.",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(2)
+    if context_locator is not None:
+        try:
+            context_locator = resolve_context_locator(
+                context_locator,
+                current=current_context,
+            )
+        except ValueError as error:
+            typer.secho(f"Diff error: {error}", fg=typer.colors.RED, err=True)
+            raise typer.Exit(1)
 
     if history_requested and (
         checkpoint_selector is not None
@@ -482,7 +520,7 @@ def cmd(
         try:
             canonical_context = resolve_context_locator(
                 context_locator,
-                current=store.current_context_name(),
+                current=current_context,
             )
             checkpoints = store.list_checkpoints(canonical_context)
             entries = checkpoint_picker_entries(checkpoints)
