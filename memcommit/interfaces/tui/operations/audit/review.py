@@ -11,7 +11,7 @@ from memcommit.interfaces.tui.viewers.semantic import (
     semantic_document_plain_text,
 )
 from memcommit.interfaces.tui.workbenches.findings import (
-    quality_finding_item_sections,
+    quality_finding_compact_fragments,
 )
 from memcommit.quality_audit import (
     QualityAuditSession,
@@ -23,6 +23,18 @@ from memcommit.quality_find_workbench import (
     quality_find_report_view,
     quality_find_resolution_view,
 )
+
+
+def _inline(value: str) -> str:
+    return " ".join(safe_terminal_text(value).split())
+
+
+def _inline_lines(value: str) -> str:
+    return " / ".join(
+        compact
+        for line in safe_terminal_text(value).splitlines()
+        if (compact := " ".join(line.split()))
+    )
 
 
 def _report_section(
@@ -39,13 +51,11 @@ def _report_section(
         SemanticViewerBlock(
             (
                 ("class:report-label", f" {safe_terminal_text(heading)}\n"),
-                ("class:viewer-body", f" {safe_terminal_text(text)}\n"),
+                ("class:viewer-body", f" {_inline_lines(text)}\n"),
             ),
             anchor=anchor,
         ),
     )
-
-
 def quality_audit_review_document(
     session: QualityAuditSession,
 ) -> SemanticViewerDocument:
@@ -58,61 +68,132 @@ def quality_audit_review_document(
         section.uid: section for section in compatibility_view.overview_sections
     }
     check_total = 4 if session.conformance is not None else 3
+    counts = {
+        check.kind: len(check.report.findings) for check in session.checks
+    }
+    overview_fragments: list[tuple[str, str]] = [
+        ("class:report-label", " MEM AUDIT\n"),
+        (
+            "class:viewer-body",
+            f" SAVED · {check_total}/{check_total} CHECKS · READ-ONLY REPORT\n",
+        ),
+        (
+            "class:report-neutral",
+            f" SESSION [{safe_terminal_text(session.uid[:8])}] · "
+            f"CREATED {safe_terminal_text(session.created_at)} · "
+            f"{session.finding_count} FINDING(S)\n",
+        ),
+        ("class:report-label", " SUMMARY · "),
+        ("class:viewer-body", _inline(overview_by_uid["summary"].text) + "\n"),
+        ("class:report-label", " CHECKS · "),
+        (
+            "class:viewer-body",
+            _inline_lines(overview_by_uid["checks"].text) + "\n",
+        ),
+        ("class:report-label", " SOURCE · "),
+        ("class:viewer-body", _inline(overview_by_uid["scope"].text) + "\n"),
+        ("class:report-label", " SNAPSHOT · "),
+    ]
+    for ordinal, memory in enumerate(session.source.memories):
+        if ordinal:
+            overview_fragments.append(("class:report-neutral", " / "))
+        overview_fragments.extend(
+            [
+                (
+                    "class:report-label",
+                    f"[{safe_terminal_text(memory.uid[:8])}] ",
+                ),
+                ("class:memory-object", _inline(memory.content)),
+            ]
+        )
+    overview_fragments.append(("class:report-neutral", "\n"))
+
     sections: list[SemanticViewerSection] = [
         SemanticViewerSection(
-            "AUDIT:HEADER",
-            "HEADER",
-            SemanticViewerBlock(
-                (
-                    ("class:report-label", " MEM AUDIT\n"),
-                    (
-                        "class:viewer-body",
-                        f" SAVED · {check_total}/{check_total} CHECKS · "
-                        "READ-ONLY REPORT\n",
-                    ),
-                    (
-                        "class:report-neutral",
-                        f" SESSION [{safe_terminal_text(session.uid[:8])}] · "
-                        f"CREATED {safe_terminal_text(session.created_at)} · "
-                        f"{session.finding_count} FINDING(S)\n",
-                    ),
-                )
-            ),
+            "AUDIT:OVERVIEW",
+            "OVERVIEW",
+            SemanticViewerBlock(tuple(overview_fragments)),
         )
     ]
-    for uid, kind in (
-        ("summary", "SUMMARY"),
-        ("checks", "CHECKS"),
-        ("scope", "SCOPE"),
-    ):
-        overview = overview_by_uid[uid]
-        sections.append(
-            _report_section(
-                f"AUDIT:{uid.upper()}",
-                kind,
-                overview.heading,
-                overview.text,
-            )
-        )
 
-    for ordinal, memory in enumerate(session.source.memories, start=1):
-        sections.append(
-            SemanticViewerSection(
-                f"AUDIT:SOURCE:{memory.uid}",
-                "SOURCE_MEMORY",
-                SemanticViewerBlock(
-                    (
+    context = session.source.context()
+    source_frame = QualityFindSourceFrame.create((context,))
+    for check in session.checks:
+        sub_session = QualityFindWorkbenchSession(
+            uid=session.uid,
+            kind=check.kind,
+            source=source_frame,
+            report=check.report,
+            responses=session.responses,
+        )
+        report_view = quality_find_report_view(
+            sub_session,
+            context,
+            operation_label=f"AUDIT · {check.kind.upper()}",
+        )
+        count = counts[check.kind]
+        fragments: list[tuple[str, str]] = [
+            (
+                "class:report-label",
+                f" {check.kind.upper()} · COMPLETE · {count} "
+                f"{'FINDING' if count == 1 else 'FINDINGS'}\n",
+            )
+        ]
+        if count == 0:
+            fragments.append(
+                ("class:viewer-body", f" {_inline(report_view.empty_message)}\n")
+            )
+        legacy_items = {
+            item.uid: item
+            for item in quality_find_resolution_view(sub_session, context).items
+        }
+        for item in report_view.items:
+            item_fragments = quality_finding_compact_fragments(item)
+            fragments.append(("class:report-neutral", " "))
+            response = session.responses.get(item.uid)
+            if response is None or not response.answered:
+                fragments.extend(item_fragments)
+                continue
+            # Historical annotations belong beside the exact finding that
+            # once owned them; keeping them inline avoids reviving a response
+            # surface or adding another focus stop.
+            item_fragments[-1] = ("class:report-neutral", " · ")
+            item_fragments.append(
+                ("class:report-label", "SAVED REVIEW NOTE · HISTORICAL")
+            )
+            if response.selected_option_uid is not None:
+                option = legacy_items[item.uid].option(response.selected_option_uid)
+                item_fragments.extend(
+                    [
+                        ("class:report-neutral", " · "),
                         (
                             "class:report-label",
-                            f" SOURCE MEMORY {ordinal}/{len(session.source.memories)} "
-                            f"· [{safe_terminal_text(memory.uid[:8])}]\n",
+                            f"DISPOSITION · {_inline(option.label)}: ",
                         ),
                         (
-                            "class:memory-object",
-                            f" {safe_terminal_text(memory.content)}\n",
+                            "class:viewer-body",
+                            _inline(option.text),
                         ),
-                    )
-                ),
+                    ]
+                )
+            if response.text.strip():
+                item_fragments.extend(
+                    [
+                        ("class:report-neutral", " · "),
+                        ("class:report-label", "NOTE · "),
+                        (
+                            "class:viewer-body",
+                            _inline(response.text),
+                        ),
+                    ]
+                )
+            item_fragments.append(("class:report-neutral", "\n"))
+            fragments.extend(item_fragments)
+        sections.append(
+            SemanticViewerSection(
+                f"AUDIT:CHECK:{check.kind}",
+                "CHECK",
+                SemanticViewerBlock(tuple(fragments)),
             )
         )
 
@@ -135,84 +216,6 @@ def quality_audit_review_document(
             provenance.text,
         )
     )
-
-    context = session.source.context()
-    source_frame = QualityFindSourceFrame.create((context,))
-    for check in session.checks:
-        sub_session = QualityFindWorkbenchSession(
-            uid=session.uid,
-            kind=check.kind,
-            source=source_frame,
-            report=check.report,
-            responses=session.responses,
-        )
-        report_view = quality_find_report_view(
-            sub_session,
-            context,
-            operation_label=f"AUDIT · {check.kind.upper()}",
-        )
-        count = len(report_view.items)
-        sections.append(
-            _report_section(
-                f"AUDIT:CHECK:{check.kind}",
-                "CHECK",
-                f"{check.kind.upper()} · COMPLETE · {count} "
-                f"{'FINDING' if count == 1 else 'FINDINGS'}",
-                (
-                    report_view.empty_message
-                    if count == 0
-                    else "Complete source-linked findings follow."
-                ),
-            )
-        )
-        legacy_items = {
-            item.uid: item
-            for item in quality_find_resolution_view(sub_session, context).items
-        }
-        for item in report_view.items:
-            sections.extend(
-                quality_finding_item_sections(
-                    item,
-                    uid_prefix=f"AUDIT:{check.kind.upper()}:",
-                )
-            )
-            response = session.responses.get(item.uid)
-            if response is None or not response.answered:
-                continue
-            fragments: list[tuple[str, str]] = [
-                ("class:report-label", " SAVED REVIEW NOTE · HISTORICAL\n")
-            ]
-            if response.selected_option_uid is not None:
-                option = legacy_items[item.uid].option(response.selected_option_uid)
-                fragments.extend(
-                    [
-                        (
-                            "class:report-neutral",
-                            f" DISPOSITION · {safe_terminal_text(option.label)}\n",
-                        ),
-                        (
-                            "class:viewer-body",
-                            f" {safe_terminal_text(option.text)}\n",
-                        ),
-                    ]
-                )
-            if response.text.strip():
-                fragments.extend(
-                    [
-                        ("class:report-neutral", " NOTE\n"),
-                        (
-                            "class:viewer-body",
-                            f" {safe_terminal_text(response.text)}\n",
-                        ),
-                    ]
-                )
-            sections.append(
-                SemanticViewerSection(
-                    f"AUDIT:NOTE:{item.uid}",
-                    "SAVED_NOTE",
-                    SemanticViewerBlock(tuple(fragments)),
-                )
-            )
 
     boundary = overview_by_uid["boundary"]
     sections.append(

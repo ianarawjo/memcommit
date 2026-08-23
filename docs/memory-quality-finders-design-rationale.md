@@ -234,25 +234,21 @@ for the non-retained individual finder route.
 
 The report deliberately has no overall quality score and no `PASS` result.
 Absence of findings is a model-assisted production result, not proof that the
-Source is clean. The complete Viewer is composed from five neutral report
-sections:
-
-1. `AUDIT SUMMARY`, stating that all three checks completed over one saved
-   direct Context snapshot and giving the total positive finding count;
-2. `CHECKS`, listing Duplicate, Ambiguity, and Conflict separately as
-   `COMPLETE`, including an explicit zero count;
-3. `AUDITED SOURCE`, recording the exact direct Context snapshot captured when
-   the Audit ran;
-4. `PROVENANCE`, retaining each finder ruleset and provider/model identity; and
-5. `BOUNDARY`, stating the non-proof and non-mutation limits.
+Source is clean. The complete Viewer uses one compact overview for identity,
+all check counts, Source scope, and the complete frozen direct-Memory snapshot;
+one section for each of Duplicate, Ambiguity, and Conflict; optional
+Conformance; one provenance section; and one final boundary. The overview
+keeps every Source body but avoids turning each Memory or serialized field into
+its own focus stop.
 
 The comprehensive Viewer preserves the stable group order Duplicate,
-Ambiguity, Conflict. A zero-finding check remains visible in `CHECKS`; each
-positive result follows as complete source-linked detail. Ambiguity readings
-and clarification questions are report evidence, while Conflict keeps its
-exact pair, scope dimensions, reason, and question. None is selectable and no
-`REQUIRED` or `OPTIONAL` answer obligation is created. Every frozen direct
-Source Memory is also visible, including Memories that have no finding.
+Ambiguity, Conflict. A zero-finding check remains visible; every positive
+result is one complete wrapping paragraph with its exact Sources. Ambiguity
+readings and clarification questions are report evidence, while Conflict keeps
+its exact pair, scope dimensions, reason, and question. None is selectable and
+no `REQUIRED` or `OPTIONAL` answer obligation is created. Historical response
+records from earlier schemas are appended inline to their exact finding rather
+than becoming response controls or separate focus stops.
 
 Saved Audits appear in the aggregate `mem review` launcher and reopen exactly
 through `mem review audit --session UID`. Review renders the saved audited

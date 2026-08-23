@@ -295,7 +295,8 @@ def test_audit_review_is_one_complete_answer_free_document():
 
     assert "MEM AUDIT" in rendered
     assert "SAVED · 3/3 CHECKS · READ-ONLY REPORT" in rendered
-    assert "SOURCE MEMORY 1/2" in rendered
+    assert "SNAPSHOT ·" in rendered
+    assert "SOURCE MEMORY 1/2" not in rendered
     assert first.content in rendered
     assert second.content in rendered
     assert "DUPLICATES · COMPLETE · 1 FINDING" in rendered
@@ -306,6 +307,16 @@ def test_audit_review_is_one_complete_answer_free_document():
     assert "RESPONSES" not in rendered
     assert "TO DO" not in rendered
     assert "[Enter] select" not in rendered
+    assert [section.kind for section in document.sections] == [
+        "OVERVIEW",
+        "CHECK",
+        "CHECK",
+        "CHECK",
+        "PROVENANCE",
+        "BOUNDARY",
+    ]
+    assert all(section.kind != "SOURCE_MEMORY" for section in document.sections)
+    assert all(section.kind != "SAVED_NOTE" for section in document.sections)
     assert document.sections[-1].kind == "BOUNDARY"
 
 

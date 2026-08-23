@@ -190,31 +190,32 @@ def _capture_full(store_root: Path) -> None:
     try:
         child.expect("SAVED .* 3/3 CHECKS .* READ-ONLY REPORT")
         _BASE._settle(child)
-        _BASE._snapshot(recorder, "01-comprehensive-report-entry")
+        _BASE._snapshot(recorder, "01-compact-overview-and-source")
 
-        child.send(DOWN * 4)
+        child.send(DOWN)
         _BASE._settle(child)
-        _BASE._snapshot(recorder, "02-frozen-source-memory")
+        _BASE._snapshot(recorder, "02-duplicate-and-historical-note")
 
-        child.send("\x1b[6~")
-        child.expect("SAVED REVIEW NOTE .* HISTORICAL")
+        child.send(DOWN)
         _BASE._settle(child)
-        _BASE._snapshot(recorder, "03-historical-note-read-only")
+        _BASE._snapshot(recorder, "03-ambiguity-evidence-not-answer")
 
-        child.send(DOWN * 6)
-        child.expect("POSSIBLE READINGS")
+        child.send(DOWN)
         _BASE._settle(child)
-        _BASE._snapshot(recorder, "04-ambiguity-evidence-not-answer")
+        _BASE._snapshot(recorder, "04-conflict-evidence-not-action")
 
-        child.send(DOWN * 20)
-        child.expect("This Viewer cannot select a reading")
+        child.send(DOWN)
         _BASE._settle(child)
-        _BASE._snapshot(recorder, "05-explicit-read-only-boundary")
+        _BASE._snapshot(recorder, "05-compact-provenance")
+
+        child.send(DOWN)
+        _BASE._settle(child)
+        _BASE._snapshot(recorder, "06-explicit-read-only-boundary")
 
         child.send("q")
         child.expect("AUDIT REVIEW CLOSED .* READ-ONLY")
         child.expect(pexpect.EOF)
-        _BASE._snapshot(recorder, "06-close-no-write-verification")
+        _BASE._snapshot(recorder, "07-close-no-write-verification")
     finally:
         if child.isalive():
             child.close(force=True)
@@ -225,7 +226,7 @@ def _capture_empty(store_root: Path) -> None:
     try:
         child.expect("0 FINDING")
         _BASE._settle(child)
-        _BASE._snapshot(recorder, "07-zero-finding-complete-report")
+        _BASE._snapshot(recorder, "08-zero-finding-complete-report")
         child.send("q")
         child.expect("AUDIT REVIEW CLOSED .* READ-ONLY")
         child.expect(pexpect.EOF)
@@ -250,7 +251,7 @@ def main() -> None:
     )
     if "38;2;" not in raw and "48;2;" not in raw:
         raise RuntimeError("PTY stream did not contain expected true-color ANSI.")
-    verification = (OUT / "06-close-no-write-verification.txt").read_text(
+    verification = (OUT / "07-close-no-write-verification.txt").read_text(
         encoding="utf-8"
     )
     for expected in (
