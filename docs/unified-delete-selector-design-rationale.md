@@ -66,6 +66,32 @@ place under both command spellings. Direct-item deletion retains the historical
 noninteractive behavior of `mem remove`; `--force` matters only when the
 resolved target is a Context.
 
+## Application and callable boundary
+
+Both effects now enter `delete_application` through `delete_runtime` rather
+than being implemented by the command module. Direct-item removal freezes the
+authorized owner and full item UID before one normal checkpointed save. Context
+deletion first freezes a canonical local name, Context UID, record digest, and
+an effect-bound plan digest; Apply passes those values to the existing
+compare-and-delete Store primitive. The CLI/TUI, public Python, agent, and MCP
+routes project those same typed plans and receipts.
+
+Approval deliberately remains outside the application contract. A human CLI
+prints the exact frozen irreversible effects and asks y/N unless `--force` is
+present. Agent/MCP projection instead exposes read-only planning and destructive
+Apply as separate tools. MCP advertises standard effect annotations, allowing
+the host to request permission before the Apply call without making the server
+read terminal input. Host full-access or approval-never policy can skip that
+dialogue; exact target identity, authority, protection, and freshness checks
+still apply.
+
+Direct-item removal is advertised as mutable but non-destructive because it
+creates a normal Undoable checkpoint. Context Apply is destructive and
+non-Undoable. A deletion whose primary commit succeeded but whose ancillary
+cleanup failed returns `APPLIED_WITH_CLEANUP_WARNING`; it must not be retried as
+though no deletion occurred. The CLI keeps a nonzero operator-attention exit,
+while machine adapters preserve a committed success receipt and warning.
+
 ## Namespace directories
 
 No separate cleanup operation is required for an empty lexical path. Context

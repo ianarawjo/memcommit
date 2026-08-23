@@ -1,17 +1,28 @@
 from __future__ import annotations
 
 import click
+import json
 import pytest
+import uuid
 from typer.testing import CliRunner
 
 import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.commands.context_picker import ContextMemorySelection
-from memcommit.context import Memory
+from memcommit.context import Context, Memory
 from memcommit.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)
+
+
+def _write_legacy_context(store: MemoryStore, name: str) -> None:
+    """Install a pre-reservation Context name for compatibility coverage."""
+
+    context = Context(uid=str(uuid.uuid4()), name=name)
+    path = store._context_file(name)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(context.to_dict()), encoding="utf-8")
 
 
 @pytest.mark.parametrize("command", ("delete", "remove"))
@@ -64,6 +75,19 @@ def test_both_spellings_resolve_relative_context_locators(
     assert not store.context_exists("project/victim")
 
 
+def test_context_delete_keeps_human_confirmation_and_cancel_is_read_only(
+    isolated_store,
+):
+    store = MemoryStore()
+    store.create_context(ops.init("victim"))
+
+    result = runner.invoke(app, ["delete", "victim"], input="n\n")
+
+    assert result.exit_code == 1
+    assert "Continue? [y/N]" in result.output
+    assert store.context_exists("victim")
+
+
 @pytest.mark.parametrize("command", ("delete", "remove"))
 def test_explicit_context_scopes_selector_to_a_direct_item(
     isolated_store,
@@ -73,7 +97,6 @@ def test_explicit_context_scopes_selector_to_a_direct_item(
     owner = ops.init("owner")
     memory = ops.add(owner, "remove me")
     store.create_context(owner)
-    store.create_context(ops.init(memory.uid[:8]))
 
     result = runner.invoke(
         app,
@@ -81,7 +104,6 @@ def test_explicit_context_scopes_selector_to_a_direct_item(
     )
 
     assert result.exit_code == 0, result.output
-    assert store.context_exists(memory.uid[:8])
     assert memory.uid not in store.load_direct(owner.name).memories
 
 
@@ -98,7 +120,9 @@ def test_combined_selector_rejects_context_and_item_collision(
     )
     owner.add(memory)
     store.create_context(owner)
-    store.create_context(ops.init("deadbeef"))
+    # New UID-shaped root names are reserved, but a legacy Store may still
+    # contain one and must keep the combined-selector fail-closed behavior.
+    _write_legacy_context(store, "deadbeef")
     store.set_current(owner.name)
 
     result = runner.invoke(app, [command, "deadbeef", "--force"])
