@@ -558,6 +558,30 @@ The structured label should therefore be accompanied by ordinary readings, a
 reason, and the smallest useful question. The label alone is not an adequate
 explanation.
 
+### 3.8 Internal disposition of Context-dependent ticker chunks
+
+The ticker study retained a case in which intentional sentence Chunk output
+left adjacent Memories such as `suffix.`, `Remove Corp.`, and a leading
+`and map...` clause in one Context. Three one-shot ambiguity scans and two
+saved Audits returned no ambiguity findings, and Audit Review displayed those
+frozen Source bodies beside the saved zero-finding counts.
+
+This is **not a product defect**. Chunk does not promise that every resulting
+Memory is independently self-contained, and the ambiguity contract interprets
+each target against the complete selected Context. The adjacent ticker chunks
+supply one ordinary combined reading, so they are clean `SINGLE / NONE` and
+must be omitted from the positive finding set. Audit Review then correctly
+shows the immutable Source and the stored judgment together; it does not rerun
+or broaden that judgment.
+
+The result also does not certify standalone self-containment. A future product
+requirement for independently reusable chunks would need its own explicit
+contract rather than changing complete-frame ambiguity semantics. The study
+identifiers `TICK-CHUNK-ABBREVIATION-FRAGMENTATION`,
+`TICK-AMBIGUITY-FRAGMENT-BLIND`, and `TICK-XFORM-001` remain only as internal
+decision history and must not be promoted into an external issue list,
+priority count, or repair queue.
+
 ## 4. Conflict: pairwise fit under ordinary readings
 
 ### 4.1 From `fit` to the public `conflict` polarity
