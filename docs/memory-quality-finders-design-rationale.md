@@ -45,6 +45,8 @@ mem find-redundancies --context NAME
 mem dedun --context NAME
 mem find-ambiguities --context NAME
 mem find-conflicts --context NAME
+mem find-ambiguities -a
+mem find-conflicts -a
 ```
 
 In a TTY, invoking a read-only finder without flags immediately analyzes the
@@ -82,6 +84,17 @@ produce several effective Contexts. Execution freezes the exact visible
 checked set; it does not repeat a hidden descendant expansion that could
 re-include an independently unchecked row. Cancellation creates no provider
 connection, finding artifact, Context write, or checkpoint.
+
+The one-shot `-a/--all` form is the non-interactive spelling of the same
+`PROFILE · ALL READABLE CONTEXTS` target for Ambiguity and Conflict. It freezes
+the active Profile's concrete readable names at command start, analyzes the
+direct Memories from that exact set as one provenance-preserving frame, and
+never stores `PROFILE` as a Context locator. The flag is mutually exclusive
+with a positional or `--context` operand and with `--select`. Before provider
+construction, every READ-granted contributor must authorize the applicable
+`DERIVE` and cross-domain `COMBINE` use.
+The line-oriented report prints each finding Memory's frozen public Context
+name so a Profile-wide result never loses owner provenance.
 
 The finder kind is fixed by the command and therefore is not another setup
 choice. Embedded Context edges remain excluded: descendant reach follows the
@@ -422,8 +435,9 @@ MCP or internal-network provider later.
 The semantic finder commands:
 
 - accept the current or one explicit Context directly; Ambiguity and Conflict
-  additionally accept a frozen readable Context range through explicit
-  `--select`, while Redundancy remains one exact Context;
+  additionally accept all readable Contexts through `-a/--all` or a frozen
+  readable Context range through explicit `--select`, while Redundancy remains
+  one exact Context;
 - validate model-returned opaque IDs against locally generated candidate IDs;
 - return the affected UID or UID pair, its label, and a concise rationale;
 - include an ordinary reading or a smallest useful clarifying question where

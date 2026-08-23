@@ -36,6 +36,17 @@ range. It never truncates an oversized Memory, drops candidates, publishes a
 partial answer, or reconciles independently generated shards as if they were
 one global review.
 
+The one-shot CLI also accepts `-a/--all` as the ordinary Query spelling for
+`PROFILE · ALL READABLE CONTEXTS`. The command snapshots the active current
+Context, freezes the Profile-readable catalog, expands it to concrete canonical
+names, and places that exact tuple in `OrdinaryQueryRequest.target_names`.
+`PROFILE` is never passed to storage or persisted. This form is mutually
+exclusive with `--context` and with the two-positional query-only-view form;
+query-only Grant routes remain a distinct typed Source catalog. Because all
+frozen contributors enter one provider frame, granted Sources must authorize
+the applicable `DERIVE` and cross-domain `COMBINE` use before provider
+construction.
+
 ## Citation contract
 
 The model never owns display numbers. It may return only allowlisted temporary

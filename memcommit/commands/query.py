@@ -48,6 +48,7 @@ from memcommit.context_targeting.presets import (
     resolve_context_traversal,
     resolve_scope_preset,
 )
+from memcommit.derived_policy import authorize_combination
 from memcommit.find_answer_dialogue import FindAnswerCorpusTooLarge
 from memcommit.ordinary_query_answer import OrdinaryQueryCorpusTooLarge
 from memcommit.profile_config import ProfileConfigError, load_profile_registry
@@ -68,21 +69,33 @@ from memcommit.search import FindError
 def _query_ordinary_context(
     store: MemoryStore,
     *,
-    context_name: str,
+    context_name: str | None,
+    current_name: str | None,
     question: str,
     traversal: ContextTraversal,
+    all_contexts: bool = False,
 ) -> None:
     """Answer from the same frozen searchable frame used by ordinary Find."""
     access = resolve_context_access(
         store,
         context_name,
-        current_name=store.current_context_name(),
+        current_name=current_name,
         required_permission="READ",
     )
-    catalog = freeze_readable_context_catalog(store, access)
+    if all_contexts:
+        # PROFILE is only a process-local shortcut. Freeze the concrete public
+        # names once so provider work cannot reinterpret --all after current or
+        # Profile state changes.
+        catalog = freeze_profile_readable_context_catalog(store, access)
+        target_names = tuple(catalog.list_context_names())
+        accesses = tuple(catalog.access_for(name) for name in target_names)
+        authorize_combination(accesses)
+    else:
+        catalog = freeze_readable_context_catalog(store, access)
+        target_names = (access.display_name,)
     request = OrdinaryQueryRequest(
         question=question,
-        target_names=(access.display_name,),
+        target_names=target_names,
         include_descendants=traversal.include_descendants,
         follow_embeds=traversal.follow_embeds,
     )
@@ -136,17 +149,27 @@ def _open_query_workbench(
         for name in names
         if catalog.access_for(name).is_granted
     }
+
+    def run_ordinary(request: OrdinaryQueryRequest):
+        # The visible Profile/multi-target control combines Sources in one
+        # semantic frame. Recheck DERIVE/COMBINE at the execution boundary,
+        # after the exact checked names have been frozen.
+        accesses = tuple(catalog.access_for(name) for name in request.target_names)
+        if len(accesses) > 1:
+            authorize_combination(accesses)
+        return execute_ordinary_query(
+            request,
+            store=store,
+            catalog=catalog,
+            provider_factory=connect_codex_chatgpt_provider,
+        )
+
     run_query_workbench(
         names,
         current_context=displayed_current,
         initial_context=access.display_name,
         query_targets=freeze_granted_query_targets(store),
-        run_ordinary=lambda request: execute_ordinary_query(
-            request,
-            store=store,
-            catalog=catalog,
-            provider_factory=connect_codex_chatgpt_provider,
-        ),
+        run_ordinary=run_ordinary,
         run_granted=lambda request: execute_granted_query_request(
             request,
             store=store,
@@ -190,6 +213,14 @@ def cmd(
             ),
         ),
     ] = None,
+    all_contexts: Annotated[
+        bool,
+        typer.Option(
+            "--all",
+            "-a",
+            help="Query all readable Contexts in the active Profile",
+        ),
+    ] = False,
     language: Annotated[
         str,
         typer.Option(
@@ -229,7 +260,8 @@ def cmd(
     ] = False,
 ) -> None:
     scope_flags_supplied = (
-        direct
+        all_contexts
+        or direct
         or recursive
         or include_descendants is not None
         or follow_embeds is not None
@@ -253,6 +285,13 @@ def cmd(
         )
         raise typer.Exit(2)
     store = MemoryStore()
+    if all_contexts and context_name is not None:
+        typer.secho(
+            "Query error: --all/-a cannot be combined with --context/-c.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
     if selector is None:
         if scope_flags_supplied:
             typer.secho(
@@ -287,6 +326,51 @@ def cmd(
             ProfileError,
             QueryProviderError,
             GrantedQuerySourceError,
+            RuntimeError,
+            ValueError,
+        ) as error:
+            typer.secho(
+                f"Query error: {display_escape_text(str(error))}",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1)
+        return
+    if all_contexts:
+        if question is not None:
+            typer.secho(
+                "Query error: --all/-a applies only to the ordinary one-question "
+                "form, not a query-only view.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(2)
+        if language != "en":
+            typer.secho(
+                "Query error: --language applies only to a query-only view.",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(2)
+        try:
+            context_snapshot = ContextOperandSnapshot.capture(store)
+            _query_ordinary_context(
+                store,
+                context_name=None,
+                current_name=context_snapshot.current_name,
+                question=selector,
+                traversal=traversal,
+                all_contexts=True,
+            )
+        except (
+            FileNotFoundError,
+            FindAnswerCorpusTooLarge,
+            OrdinaryQueryCorpusTooLarge,
+            FindError,
+            OSError,
+            ProfileConfigError,
+            ProfileError,
+            QueryProviderError,
             RuntimeError,
             ValueError,
         ) as error:
@@ -459,6 +543,7 @@ def cmd(
                 _query_ordinary_context(
                     store,
                     context_name=selected_name,
+                    current_name=context_snapshot.current_name,
                     question=selector,
                     traversal=traversal,
                 )

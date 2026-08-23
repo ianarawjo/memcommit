@@ -99,7 +99,7 @@ remains a separate operation-owned policy over a complete typed result.
 The operation-neutral `paged_result` shell owns only focused index, discrete
 page range, `SHOWING a–b OF total`, navigation, and primary-screen close
 mechanics; it never owns Source identity or matching. Query's used-citation
-set, Find's complete span set, `--all`, and clipboard scope remain outside both
+set, Find's complete span set, `--all-results`, and clipboard scope remain outside both
 shared presentation components.
 
 Reusing Query's `FindAnswerEvidence` directly in literal Find was rejected.

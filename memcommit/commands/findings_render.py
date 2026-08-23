@@ -54,9 +54,17 @@ def render_finding_outcome(
     typer.secho(message, bold=True)
 
 
-def render_memory(label: str, memory: Memory) -> None:
+def render_memory(
+    label: str,
+    memory: Memory,
+    *,
+    context_name: str | None = None,
+) -> None:
     """Render a Memory without abbreviating its content."""
-    typer.secho(f"  {label:<6} [{memory.uid[:8]}]", bold=True)
+    heading = f"  {label:<6} [{memory.uid[:8]}]"
+    if context_name is not None:
+        heading += " · CONTEXT " + display_escape_text(context_name)
+    typer.secho(heading, bold=True)
     for line in memory.content.splitlines() or [""]:
         typer.echo(f"         {line}")
 

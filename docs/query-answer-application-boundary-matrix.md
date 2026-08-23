@@ -67,6 +67,9 @@ The extraction preserves the existing ordinary Query contract:
 - the same readable search-root and candidate collectors freeze the corpus;
 - a single selected target uses its public name as the empty/no-answer label;
 - multiple targets use `<n> selected Contexts`;
+- CLI `-a/--all` expands the frozen Profile-readable catalog to concrete exact
+  target names and authorizes their combined semantic use before provider
+  construction;
 - empty frames still render `(no grounded answer found)`;
 - grounded and no-answer strings retain their prior formatting;
 - the same whole-frame prompt, schema, decoder, artifact compaction, citation

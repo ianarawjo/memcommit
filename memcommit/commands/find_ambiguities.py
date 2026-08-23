@@ -23,6 +23,7 @@ from memcommit.commands.findings_render import (
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.quality_find_workbench import (
     annotate_quality_find_attempt,
+    freeze_all_readable_quality_find_source,
     interactive_quality_find_available,
     run_interactive_quality_find,
 )
@@ -63,6 +64,14 @@ def cmd(
             help="Context to inspect (defaults to current)",
         ),
     ] = None,
+    all_contexts: Annotated[
+        bool,
+        typer.Option(
+            "--all",
+            "-a",
+            help="Inspect all readable Contexts in the active Profile",
+        ),
+    ] = False,
     select_targets: Annotated[
         bool,
         typer.Option(
@@ -85,11 +94,19 @@ def cmd(
         )
         raise typer.Exit(2)
     store = MemoryStore(create=False)
+    if all_contexts and context_name is not None:
+        typer.secho(
+            "Find ambiguities error: --all/-a cannot be combined with an "
+            "explicit Context.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
     if select_targets:
-        if context_name is not None:
+        if context_name is not None or all_contexts:
             typer.secho(
                 "Find ambiguities error: --select cannot be combined with an "
-                "explicit Context.",
+                "explicit Context or --all/-a.",
                 fg=typer.colors.RED,
                 err=True,
             )
@@ -134,17 +151,27 @@ def cmd(
         return
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
-        access = resolve_context_access(
-            store,
-            context_name,
-            current_name=context_snapshot.current_name,
-            required_permission="READ",
-        )
-        ctx = (
-            GrantedReadStore(access).load_direct(access.display_name)
-            if access.is_granted
-            else store.load_direct(access.context_name)
-        )
+        if all_contexts:
+            source = freeze_all_readable_quality_find_source(
+                store,
+                current_name=context_snapshot.current_name,
+            )
+        else:
+            access = resolve_context_access(
+                store,
+                context_name,
+                current_name=context_snapshot.current_name,
+                required_permission="READ",
+            )
+            ctx = (
+                GrantedReadStore(access).load_direct(access.display_name)
+                if access.is_granted
+                else store.load_direct(access.context_name)
+            )
+            source = QualityFindSourceFrame.create(
+                (ctx,),
+                context_names=(access.display_name,),
+            )
     except (
         FileNotFoundError,
         OSError,
@@ -163,10 +190,19 @@ def cmd(
     try:
         with CommandProgress(
             "FIND AMBIGUITIES",
-            "analyzing direct memories",
+            (
+                f"analyzing {source.memory_count} direct memories across "
+                f"{len(source.contexts)} contexts"
+                if all_contexts
+                else "analyzing direct memories"
+            ),
             total=1,
         ):
-            report = ops.find_ambiguities(ctx, connect_codex_chatgpt_provider)
+            report = ops.find_ambiguities(
+                source.analysis_context(),
+                connect_codex_chatgpt_provider,
+                context_name_by_uid=source.memory_context_names,
+            )
     except (FindingsError, QueryProviderError) as error:
         typer.secho(
             "Find ambiguities error: " + display_escape_text(str(error)),
@@ -177,15 +213,16 @@ def cmd(
 
     annotate_quality_find_attempt(
         "ambiguities",
-        QualityFindSourceFrame.create(
-            (ctx,),
-            context_names=(access.display_name,),
-        ),
+        source,
     )
 
     render_heading(
         operation_label="Find Ambiguities",
-        context_name=display_escape_text(ctx.name),
+        context_name=(
+            "ALL READABLE CONTEXTS"
+            if all_contexts
+            else display_escape_text(source.context_names[0])
+        ),
         memory_count=report.memory_count,
     )
     render_finding_outcome(
@@ -207,7 +244,15 @@ def cmd(
             ),
             bold=True,
         )
-        render_memory("MEMORY", finding.memory)
+        render_memory(
+            "MEMORY",
+            finding.memory,
+            context_name=(
+                source.memory_context_names[finding.memory.uid]
+                if all_contexts
+                else None
+            ),
+        )
         render_values("Ordinary readings", finding.ordinary_readings)
         render_reason(finding.reason)
         render_question(finding.question)

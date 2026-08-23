@@ -198,10 +198,14 @@ Profile breadth and selected-Context breadth use separate catalog constructors.
 Profile's local attachment when the initial row is granted. This retains that
 public granted name as the initial selection while including ordinary local
 names and every other valid READ grant. `freeze_readable_context_catalog`
-retains its narrower selected-view behavior for explicit Query, explicit Find,
-List output and receipts, Rationale, and other operations whose operand defines
-their whole executable scope. Top-level `mem list` / `mem ls` and
-`mem contexts` are static reports and do not compose a Context tree. Bare
+retains its narrower selected-view behavior for ordinary explicit Query/Find
+roots, List output and receipts, Rationale, and other operations whose operand
+defines their whole executable scope. Explicit `mem find`, `mem search`, and
+ordinary `mem query` `-a/--all`, plus the Ambiguity/Conflict finder forms with
+that flag, instead opt into the Profile-wide constructor and freeze its concrete
+canonical names as the exact request target set. Top-level `mem list`,
+`mem ls`, and `mem contexts` are static reports and do not compose a Context
+tree. Bare
 `mem switch` and operation-owned setup screens retain the Profile-wide
 interactive navigation form; QUERY-only Grant routes remain visible but
 nonmaterialized wherever that form is used.

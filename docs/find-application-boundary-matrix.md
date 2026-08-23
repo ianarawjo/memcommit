@@ -42,7 +42,7 @@ agent/MCP memcommit_find ------------/          |
 | MemoryRef | runtime source collector | The selected owner and referenced Source identity are both retained; unresolved or unreadable references are skipped rather than opened through concealed authority |
 | Result | `LiteralFindResult` | Complete scanned-item, matched-item, and occurrence counts accompany immutable per-item spans |
 | Durable effect | none | No provider, cache, session, checkpoint, Context write, current switch, or materialization occurs |
-| Presentation | independent CLI/TUI adapters, neutral Source Reference projection, shared compact Scope, and shared compact pager mechanics | Rows use `N [UID] content, [Context mX]`, where `N` is match order and `mX` is frozen searchable-corpus position; Up to ten matches print inline; a longer supplied-pattern TTY result uses a primary-screen ten-row pager with `SHOWING a–b OF total`, row/page/boundary arrow navigation, wrapped complete rows, and a non-erasing close; `--plain` retains the bounded static projection and `--all` prints every row; Find never content-elides a Source row; operand-free `mem find` or explicit `--tui` opens a primary-screen `SCOPE → FIND → RESULTS` form whose direct exact Context input expands to Profile/multiple tree selection only while Browse is open; `y` copies the complete numbered focused row there, while `--copy` and TUI `Y` copy the complete typed result projection |
+| Presentation | independent CLI/TUI adapters, neutral Source Reference projection, shared compact Scope, and shared compact pager mechanics | Rows use `N [UID] content, [Context mX]`, where `N` is match order and `mX` is frozen searchable-corpus position; Up to ten matches print inline; a longer supplied-pattern TTY result uses a primary-screen ten-row pager with `SHOWING a–b OF total`, row/page/boundary arrow navigation, wrapped complete rows, and a non-erasing close; `--plain` retains the bounded static projection and `--all-results` prints every row; `-a/--all` instead freezes every readable Context as the exact target set; Find never content-elides a Source row; operand-free `mem find` or explicit `--tui` opens a primary-screen `SCOPE → FIND → RESULTS` form whose direct exact Context input expands to Profile/multiple tree selection only while Browse is open; `y` copies the complete numbered focused row there, while `--copy` and TUI `Y` copy the complete typed result projection |
 | Public adapters | Python and version-1 agent/MCP | Both call the same runtime/application boundary and return typed/JSON projections with `effect: NONE` and `provider_used: false` |
 
 The shared compact selector projects descendant choices into the exact visible
@@ -59,7 +59,7 @@ loader expansion.
 - `tests/test_literal_find_cli.py` checks actual Typer routes, repeated roots,
   descendants, literal defaults, regex rejection, non-TTY behavior, short
   inline TTY output, long-result compact-pager routing, bounded `--plain`
-  versus `--all`, complete clipboard output, and the explicit `--tui`
+  versus `--all-results`, complete clipboard output, and the explicit `--tui`
   override.
 - `tests/test_paged_result.py` checks the operation-neutral range/total state,
   stable discrete pages, retained row position, result boundaries, and actual

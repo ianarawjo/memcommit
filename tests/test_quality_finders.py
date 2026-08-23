@@ -26,6 +26,7 @@ from memcommit.interfaces.console.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )
+from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore
 
 
@@ -799,6 +800,128 @@ def test_cli_finders_are_read_only_and_each_use_one_provider_call(
     assert context_path.read_bytes() == context_before
     assert store.list_checkpoints(ctx.name) == checkpoints_before
     assert store.current_context_name() == ctx.name
+
+
+def test_quality_finder_all_aliases_freeze_one_profile_wide_source(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    first = ops.init("quality/first")
+    second = ops.init("quality/second")
+    ops.add(first, "The entrance closes at five.")
+    ops.add(second, "Staff may enter after five.")
+    for context in (first, second):
+        store.save(context)
+    store.set_current(first.name)
+
+    def respond(operation, payload):
+        if operation == "find_ambiguities":
+            return {
+                "findings": [
+                    {
+                        "candidate_id": payload["memories"][0]["candidate_id"],
+                        "interpretation": "SINGLE",
+                        "clarification": "REQUIRED",
+                        "ordinary_readings": ["The public entrance closes at five."],
+                        "reason": "The affected entrance needs clarification.",
+                        "question": "Which entrance closes?",
+                    }
+                ]
+            }
+        return {
+            "findings": [
+                {
+                    "pair_id": payload["pairs"][0]["pair_id"],
+                    "conflict": "MAY",
+                    "scope_dimensions": ["ACCESS_METHOD"],
+                    "reason": "The access rule may distinguish staff.",
+                    "question": "Does the closure apply to staff?",
+                }
+            ]
+        }
+
+    provider = PayloadProvider(respond)
+    for module_name in ("find_ambiguities", "find_conflicts"):
+        monkeypatch.setattr(
+            f"memcommit.commands.{module_name}.connect_codex_chatgpt_provider",
+            lambda: provider,
+        )
+    authorized = []
+    monkeypatch.setattr(
+        "memcommit.commands.quality_find_workbench.authorize_combination",
+        lambda accesses: authorized.append(
+            tuple(access.display_name for access in accesses)
+        ),
+    )
+
+    ambiguity = runner.invoke(app, ["find-ambiguities", "--all"])
+    conflict = runner.invoke(app, ["find-conflicts", "-a"])
+
+    assert ambiguity.exit_code == 0, ambiguity.output
+    assert conflict.exit_code == 0, conflict.output
+    assert "Find Ambiguities · ALL READABLE CONTEXTS" in ambiguity.output
+    assert "Find Conflicts · ALL READABLE CONTEXTS" in conflict.output
+    assert f"CONTEXT {first.name}" in ambiguity.output
+    assert f"CONTEXT {first.name}" in conflict.output
+    assert f"CONTEXT {second.name}" in conflict.output
+    expected_contents = [
+        "The entrance closes at five.",
+        "Staff may enter after five.",
+    ]
+    assert [call[1] for call in provider.calls] == [
+        "find_ambiguities",
+        "find_conflicts",
+    ]
+    assert [
+        [memory["content"] for memory in call[3]["memories"]] for call in provider.calls
+    ] == [expected_contents, expected_contents]
+    expected_names = (first.name, second.name)
+    assert authorized == [expected_names, expected_names]
+    assert store.current_context_name() == first.name
+
+
+@pytest.mark.parametrize("command_name", ["find-ambiguities", "find-conflicts"])
+def test_quality_finder_all_rejects_explicit_context(
+    isolated_store,
+    command_name,
+):
+    store = MemoryStore()
+    context = ops.init("quality/source")
+    store.save(context)
+    store.set_current(context.name)
+
+    result = runner.invoke(
+        app,
+        [command_name, "--all", "--context", context.name],
+    )
+
+    assert result.exit_code == 1
+    assert "--all/-a cannot be combined with an explicit Context" in result.output
+
+
+def test_quality_finder_all_authority_failure_precedes_provider_connection(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    context = ops.init("quality/source")
+    ops.add(context, "A provider-visible Memory.")
+    store.save(context)
+    store.set_current(context.name)
+    monkeypatch.setattr(
+        "memcommit.commands.quality_find_workbench.authorize_combination",
+        lambda _accesses: (_ for _ in ()).throw(ProfileError("combine denied")),
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.find_ambiguities.connect_codex_chatgpt_provider",
+        ForbiddenProvider(),
+    )
+
+    result = runner.invoke(app, ["find-ambiguities", "--all"])
+
+    assert result.exit_code == 1
+    assert "combine denied" in result.output
 
 
 @pytest.mark.parametrize(

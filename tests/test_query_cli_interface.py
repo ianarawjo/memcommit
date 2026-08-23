@@ -53,6 +53,16 @@ def test_query_cli_has_no_transcript_session_surface():
     assert "No such option" in (removed.output + removed.stderr)
 
 
+def test_query_help_exposes_profile_wide_all_alias():
+    result = runner.invoke(app, ["query", "--help"])
+
+    assert result.exit_code == 0
+    assert "--all" in result.output
+    assert "-a" in result.output
+    assert "all readable Contexts" in result.output
+    assert "active Profile" in result.output
+
+
 def test_query_memory_selector_split_is_interface_owned_and_exact():
     assert split_query_memory_selector("shared/view") == ("shared/view", None)
     assert split_query_memory_selector("shared/view#q-0123456789ab") == (

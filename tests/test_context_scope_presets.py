@@ -15,6 +15,8 @@ from memcommit.context_targeting.presets import (
     resolve_descendant_scopes,
     resolve_scope_preset,
 )
+from memcommit.operations.query.ordinary_application import OrdinaryQueryResponse
+from memcommit.profiles import ProfileError
 from memcommit.store import MemoryStore
 
 
@@ -266,3 +268,97 @@ def test_query_common_presets_reach_the_typed_ordinary_request(
         ContextTraversal(include_descendants=False, follow_embeds=False),
         ContextTraversal(include_descendants=True, follow_embeds=True),
     ]
+
+
+def test_query_all_and_short_alias_freeze_every_readable_context(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    first = ops.init("query/first")
+    second = ops.init("query/second")
+    for context in (first, second):
+        store.save(context)
+    store.set_current(first.name)
+    observed = []
+    authorized = []
+
+    def execute(request, *, catalog, **_kwargs):
+        observed.append((request, tuple(catalog.list_context_names())))
+        return OrdinaryQueryResponse(
+            request,
+            "SUMMARY\n  (no grounded answer found)",
+            False,
+        )
+
+    monkeypatch.setattr(query_command, "execute_ordinary_query", execute)
+    monkeypatch.setattr(query_command, "render_ordinary_query_response", lambda _r: None)
+    monkeypatch.setattr(
+        query_command,
+        "authorize_combination",
+        lambda accesses: authorized.append(
+            tuple(access.display_name for access in accesses)
+        ),
+    )
+
+    for option in ("--all", "-a"):
+        result = runner.invoke(app, ["query", option, "What is recorded?"])
+        assert result.exit_code == 0, result.output
+
+    expected_names = (first.name, second.name)
+    assert [entry[0].target_names for entry in observed] == [
+        expected_names,
+        expected_names,
+    ]
+    assert [entry[1] for entry in observed] == [expected_names, expected_names]
+    assert authorized == [expected_names, expected_names]
+
+
+def test_query_all_rejects_explicit_context_and_query_only_form(
+    isolated_store,
+):
+    store = MemoryStore()
+    context = ops.init("query/source")
+    store.save(context)
+    store.set_current(context.name)
+
+    explicit = runner.invoke(
+        app,
+        ["query", "--all", "--context", context.name, "What is recorded?"],
+    )
+    query_only = runner.invoke(
+        app,
+        ["query", "--all", "public/view", "What is recorded?"],
+    )
+
+    assert explicit.exit_code == 2
+    assert "--all/-a cannot be combined with --context/-c" in explicit.output
+    assert query_only.exit_code == 2
+    assert "ordinary one-question form" in query_only.output
+
+
+def test_query_all_authority_failure_precedes_provider_execution(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    context = ops.init("query/source")
+    store.save(context)
+    store.set_current(context.name)
+    monkeypatch.setattr(
+        query_command,
+        "authorize_combination",
+        lambda _accesses: (_ for _ in ()).throw(ProfileError("combine denied")),
+    )
+    monkeypatch.setattr(
+        query_command,
+        "execute_ordinary_query",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            AssertionError("provider execution must remain disconnected")
+        ),
+    )
+
+    result = runner.invoke(app, ["query", "--all", "What is recorded?"])
+
+    assert result.exit_code == 1
+    assert "combine denied" in result.output
