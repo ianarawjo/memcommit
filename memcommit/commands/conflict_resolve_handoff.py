@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from memcommit.clipboard import write_system_clipboard
 from memcommit.commands.command_progress import CommandProgress
-from memcommit.interfaces.tui.operations.resolve import run_resolve_tui
 from memcommit.interfaces.cli.resolve import render_resolve_receipt
+from memcommit.interfaces.tui.operations.resolve import run_resolve_tui
 from memcommit.quality_finding_handoff import (
     QualityFindingHandoff,
     conflict_handoff_to_resolve_request,
@@ -49,7 +49,15 @@ def run_conflict_resolve_handoff(
         clipboard_writer=write_system_clipboard,
     )
     if receipt is not None:
-        render_resolve_receipt(receipt)
+        candidate = next(
+            candidate
+            for candidate in analysis.candidates
+            if candidate.uid == receipt.candidate_uid
+        )
+        render_resolve_receipt(
+            receipt,
+            fit_verdict=candidate.fit.verdict,
+        )
 
 
 __all__ = ["run_conflict_resolve_handoff"]

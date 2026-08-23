@@ -391,3 +391,22 @@ was presentation duplication, not the source of those invariants. Supporting
 several Pareto-incomparable candidates would require an explicit typed design;
 the current route deliberately exposes exactly one independently verified
 candidate.
+
+Plain Resolve now reports observable outcomes instead of using `FIT REPAIR` as
+a status-independent report heading. Every route begins with `RESOLVE · NAME`.
+An `ALREADY_FIT` result adds only `FIT · YES|MAY · NO CHANGE`, using the actual
+initial verdict because the default target can already be met at MAY. A
+`NEEDS_INPUT` or `NEEDS_AUTHORITY` result adds its one actionable reason.
+`ASSUMED` remains slightly longer because hiding an unsupported premise would
+weaken the safety boundary: it retains the temporary interpretation, every
+named assumption, the question needing input, and the fact that no durable
+change occurred.
+
+An applied result reports its nonzero primitive effect counts and independently
+checked post-Fit verdict, followed by the checkpoint and `mem undo`. It omits
+zero counts, duplicate receipt/checkpoint identity, revision, and candidate ID.
+Those details, candidate reasoning, and exact effects remain in the immutable
+checkpoint for `mem review resolve --receipt UID`; removing them from the
+immediate receipt does not weaken Apply's authority, freshness, or atomicity
+checks. The explicit `--tui` inspection route and typed analysis remain
+detailed.

@@ -313,4 +313,4 @@ def test_cli_json_handoff_round_trips_into_plain_resolve(
         ["resolve", "--finding-handoff", receipt, "--plain"],
     )
     assert resolved.exit_code == 0, resolved.output
-    assert "STATUS · ALREADY_FIT" in resolved.output
+    assert resolved.output == (f"RESOLVE · {context.name}\nFIT · YES · NO CHANGE\n")

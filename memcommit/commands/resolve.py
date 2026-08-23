@@ -223,7 +223,15 @@ def cmd(
                 candidate_uid,
                 frame_port=port,
             )
-            render_resolve_receipt(receipt)
+            candidate = next(
+                candidate
+                for candidate in analysis.candidates
+                if candidate.uid == receipt.candidate_uid
+            )
+            render_resolve_receipt(
+                receipt,
+                fit_verdict=candidate.fit.verdict,
+            )
             return
 
         # A PROPOSAL is already the operation-owned, independently Fit-verified
@@ -237,7 +245,10 @@ def cmd(
                 candidate.uid,
                 frame_port=port,
             )
-            render_resolve_receipt(receipt)
+            render_resolve_receipt(
+                receipt,
+                fit_verdict=candidate.fit.verdict,
+            )
             return
 
         interactive = SystemTerminalCapabilities().is_interactive()

@@ -26,6 +26,7 @@ from memcommit.interfaces.agent import (
     RESOLVE_AGENT_TOOL_NAME,
     build_default_agent_tool_registry,
 )
+from memcommit.interfaces.cli.resolve import render_resolve_plain
 from memcommit.profile_config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
@@ -60,6 +61,24 @@ VERIFY_MARKER = "VERIFY PAYLOAD:\n"
 RESOLVE_MARKER = "RESOLVE PAYLOAD:\n"
 QUALITY_FIND_MARKER = "QUALITY FIND PAYLOAD:\n"
 runner = CliRunner(mix_stderr=False)
+
+
+def _assert_compact_applied_receipt(
+    result,
+    *,
+    context_name: str = "resolve/test",
+    effects: str = "UPDATE 1",
+    fit_verdict: str = "YES",
+) -> None:
+    lines = result.stdout.splitlines()
+    assert lines[:2] == [
+        f"RESOLVE · {context_name}",
+        f"APPLIED · {effects} · FIT {fit_verdict}",
+    ]
+    assert len(lines) == 4
+    checkpoint_uid = lines[2].removeprefix("CHECKPOINT · ")
+    assert str(uuid.UUID(checkpoint_uid)) == checkpoint_uid
+    assert lines[3] == "RECOVERY · mem undo"
 
 
 class ResolveFixtureProvider:
@@ -1143,8 +1162,7 @@ def test_resolve_plain_cli_automatically_applies_one_grounded_plan(
     )
 
     assert result.exit_code == 0, result.output
-    assert "RESOLVE APPLIED" in result.stdout
-    assert "UPDATED · 1" in result.stdout
+    _assert_compact_applied_receipt(result)
     assert len(store.list_checkpoints("resolve/test")) == 1
     assert provider.operations == [
         "fit_propositions",
@@ -1152,6 +1170,138 @@ def test_resolve_plain_cli_automatically_applies_one_grounded_plan(
         "resolve_candidate_verification",
         "fit_propositions",
     ]
+
+
+def test_resolve_plain_cli_reports_applied_post_fit_may(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    _context(store)
+    monkeypatch.setattr(
+        resolve_command,
+        "connect_semantic_provider",
+        ResolvePostMayProvider,
+    )
+
+    result = runner.invoke(
+        app,
+        ["resolve", "--context", "resolve/test", "--plain"],
+    )
+
+    assert result.exit_code == 0, result.output
+    _assert_compact_applied_receipt(result, fit_verdict="MAY")
+
+
+def test_resolve_plain_cli_compacts_needs_input_without_a_repair_report(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    _context(store)
+    monkeypatch.setattr(
+        resolve_command,
+        "connect_semantic_provider",
+        ResolveNoPlanProvider,
+    )
+
+    result = runner.invoke(
+        app,
+        ["resolve", "--context", "resolve/test", "--plain"],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert result.output == (
+        "RESOLVE · resolve/test\n"
+        "NEEDS INPUT · Which opening time has the narrower scope?\n"
+    )
+    assert store.list_checkpoints("resolve/test") == []
+
+
+def test_resolve_plain_cli_retains_assumption_boundary_compactly(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    _context(store)
+    monkeypatch.setattr(
+        resolve_command,
+        "connect_semantic_provider",
+        ResolveAssumptionProvider,
+    )
+
+    result = runner.invoke(
+        app,
+        ["resolve", "--context", "resolve/test", "--plain"],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert result.output == (
+        "RESOLVE · resolve/test\n"
+        "TEMPORARY INTERPRETATION · Treat the second time as a weekend schedule.\n"
+        "ASSUMPTION · The 9 o'clock schedule applies on weekends.\n"
+        "NEEDS INPUT · Continue with the most ordinary working reading?\n"
+        "NO CHANGE · Grounding is required before Apply\n"
+    )
+    assert store.list_checkpoints("resolve/test") == []
+
+
+def test_resolve_plain_cli_reports_actual_already_fit_may_verdict(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    _context(store)
+    provider = ResolveNoPlanProvider(initial_verdict="MAY")
+    monkeypatch.setattr(
+        resolve_command,
+        "connect_semantic_provider",
+        lambda: provider,
+    )
+
+    result = runner.invoke(
+        app,
+        ["resolve", "--context", "resolve/test", "--plain"],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert result.output == (
+        "RESOLVE · resolve/test\n"
+        "FIT · MAY · NO CHANGE\n"
+    )
+    assert store.list_checkpoints("resolve/test") == []
+
+
+def test_resolve_plain_cli_compacts_all_applied_effect_counts(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    _context(store)
+    monkeypatch.setattr(
+        resolve_command,
+        "connect_semantic_provider",
+        ResolveIntegratedEffectsProvider,
+    )
+
+    result = runner.invoke(
+        app,
+        [
+            "resolve",
+            "--context",
+            "resolve/test",
+            "--allow-delete",
+            "--guidance",
+            "The unscoped statement is obsolete after integration.",
+            "--plain",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    _assert_compact_applied_receipt(
+        result,
+        effects="CREATE 1 · UPDATE 1 · DELETE 1",
+    )
 
 
 def test_resolve_plain_cli_auto_classifies_positional_context(
@@ -1170,8 +1320,7 @@ def test_resolve_plain_cli_auto_classifies_positional_context(
     result = runner.invoke(app, ["resolve", context.name, "--plain"])
 
     assert result.exit_code == 0, result.output
-    assert "RESOLVE APPLIED" in result.stdout
-    assert "CONTEXT · resolve/test" in result.stdout
+    _assert_compact_applied_receipt(result)
     assert len(store.list_checkpoints(context.name)) == 1
 
 
@@ -1194,8 +1343,7 @@ def test_resolve_plain_cli_mixes_context_and_memory_auto_operands(
     )
 
     assert result.exit_code == 0, result.output
-    assert "RESOLVE APPLIED" in result.stdout
-    assert "UPDATED · 1" in result.stdout
+    _assert_compact_applied_receipt(result)
     assert len(store.list_checkpoints(context.name)) == 1
 
 
@@ -1216,8 +1364,7 @@ def test_resolve_plain_cli_finds_unique_owner_for_bare_memory_operand(
     result = runner.invoke(app, ["resolve", second.uid[:8], "--plain"])
 
     assert result.exit_code == 0, result.output
-    assert "RESOLVE APPLIED" in result.stdout
-    assert "CONTEXT · resolve/test" in result.stdout
+    _assert_compact_applied_receipt(result)
     assert len(store.list_checkpoints(context.name)) == 1
 
 
@@ -1246,8 +1393,7 @@ def test_resolve_plain_cli_accepts_explicit_short_memory_operand(
     )
 
     assert result.exit_code == 0, result.output
-    assert "RESOLVE APPLIED" in result.stdout
-    assert "UPDATED · 1" in result.stdout
+    _assert_compact_applied_receipt(result)
 
 
 def test_resolve_plain_cli_combines_same_explicit_and_qualified_context(
@@ -1275,8 +1421,7 @@ def test_resolve_plain_cli_combines_same_explicit_and_qualified_context(
     )
 
     assert result.exit_code == 0, result.output
-    assert "RESOLVE APPLIED" in result.stdout
-    assert "UPDATED · 1" in result.stdout
+    _assert_compact_applied_receipt(result)
 
 
 def test_resolve_cli_rejects_distinct_context_operands_before_provider(
@@ -1395,8 +1540,7 @@ def test_resolve_plain_cli_can_replay_an_external_exact_plan(
     )
 
     assert applied.exit_code == 0, applied.output
-    assert "RESOLVE APPLIED" in applied.stdout
-    assert "UPDATED · 1" in applied.stdout
+    _assert_compact_applied_receipt(applied)
     assert len(store.list_checkpoints("resolve/test")) == 1
 
 
@@ -1636,6 +1780,7 @@ def test_granted_resolve_without_derive_never_connects_provider(
     isolated_store,
     tmp_path,
     monkeypatch,
+    capsys,
 ):
     _authority_store, _grant = _granted_resolve_fixture(
         isolated_store,
@@ -1650,13 +1795,28 @@ def test_granted_resolve_without_derive_never_connects_provider(
         calls += 1
         return ResolveFixtureProvider()
 
-    analysis = MemCommitClient(
+    result = MemCommitClient(
         semantic_provider_factory=provider,
     ).resolve_context("shared/schedule")
 
-    assert analysis.status == "NEEDS_AUTHORITY"
-    assert analysis.allowed_effects == ("UPDATE",)
+    assert result.status == "NEEDS_AUTHORITY"
+    assert result.allowed_effects == ("UPDATE",)
     assert calls == 0
+    local = MemoryStore()
+    analysis = run_resolve(
+        ResolveRequest("shared/schedule"),
+        frame_port=MemoryStoreResolvePort(
+            local,
+            current_name=local.current_context_name(),
+        ),
+        semantic_port=ProviderResolveSemanticPort(),
+        provider_factory=provider,
+    )
+    render_resolve_plain(analysis)
+    assert capsys.readouterr().out == (
+        "RESOLVE · shared/schedule\n"
+        "NEEDS AUTHORITY · Grant authority is missing: DERIVE\n"
+    )
 
 
 def test_explicit_root_resolve_does_not_inherit_host_grants(

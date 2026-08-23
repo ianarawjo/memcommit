@@ -24,6 +24,22 @@ suffixes do not restate that the UI is interactive, one-shot, process-local,
 complete, or backed by a frozen input frame. Counts retain explicit nouns and
 correct singular/plural forms because they remain useful without color.
 
+The same rule applies to Resolve's semantic outcomes. Its ordinary plain
+projection uses `RESOLVE · NAME` once, then reports the actual result:
+
+- an already-sufficient frame is `FIT · YES|MAY · NO CHANGE`;
+- a blocked route is `NEEDS INPUT · reason` or `NEEDS AUTHORITY · reason`;
+- an ungrounded working view retains its temporary interpretation, every named
+  assumption, the question needing input, and an explicit no-change boundary;
+  and
+- a successful mutation reports only its nonzero CREATE, UPDATE, and DELETE
+  counts, independently checked post-Fit verdict, checkpoint, and recovery
+  command.
+
+These receipts do not repeat the internal status name, target, available
+effects, revision, candidate identifier, or initial judgment reason. The
+checkpoint retains the complete applied evidence for later Review.
+
 Safety review copy states the consequence instead of the implementation
 mechanism. For example, Apply screens say that Apply stops if a Context changed,
 and stale-selection errors tell the person to reopen the operation and select
@@ -58,8 +74,9 @@ reviewed by meaning rather than by a repository-wide ban on individual words.
 
 ## Verification
 
-Focused tests cover the affected CLI and TUI projections, progress text,
-selection errors, review safety lines, and receipts. The ordered
+Focused tests cover the affected CLI and TUI projections, every compact Resolve
+plain outcome, progress text, selection errors, review safety lines, and
+receipts. The ordered
 `docs/screenshots/participant-facing-copy-20260822/` capture set records Query,
 Search, and Find entry, active work, result, and read-only close states in a
 `180 × 52` true-color PTY.
