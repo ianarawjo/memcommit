@@ -46,6 +46,13 @@ from memcommit.query_provider import CodexChatGPTProvider
 runner = CliRunner()
 
 
+def test_compare_has_no_shadow_command_workbench() -> None:
+    source = Path(compare_command.__file__).read_text(encoding="utf-8")
+
+    assert "compare_workbench" not in source
+    assert not (Path(compare_command.__file__).parent / "compare_workbench.py").exists()
+
+
 def test_bare_compare_enters_setup_without_session_launcher(
     isolated_store,
     monkeypatch,

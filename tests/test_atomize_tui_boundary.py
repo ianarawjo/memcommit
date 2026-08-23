@@ -43,10 +43,8 @@ def test_atomize_tui_boundary_does_not_import_command_modules() -> None:
 def test_atomize_legacy_shell_paths_are_identity_preserving_facades() -> None:
     from memcommit.commands import atomize_render as legacy_cli
     from memcommit.commands import atomize_workbench_shell as legacy_atomize
-    from memcommit.commands import result_workbench_shell as legacy_result
     from memcommit.interfaces.cli import atomize as atomize_cli
     from memcommit.interfaces.tui.operations.atomize import screen as atomize_screen
-    from memcommit.interfaces.tui.workbenches.result import shell as result_screen
 
     assert (
         legacy_atomize.run_atomize_workbench_shell
@@ -55,10 +53,6 @@ def test_atomize_legacy_shell_paths_are_identity_preserving_facades() -> None:
     assert (
         legacy_atomize.render_atomize_workbench_snapshot
         is atomize_screen.render_atomize_workbench_snapshot
-    )
-    assert (
-        legacy_result.run_result_workbench_shell
-        is result_screen.run_result_workbench_shell
     )
     assert legacy_cli.render_atomize_impact is atomize_cli.render_atomize_impact
 
@@ -87,3 +81,10 @@ def test_atomize_screen_has_one_live_workbench_host() -> None:
     assert "_run_legacy_atomize_workbench_shell" not in INTERFACE_MODULES[
         1
     ].read_text(encoding="utf-8")
+
+
+def test_result_projection_has_no_orphan_live_shell() -> None:
+    source = INTERFACE_MODULES[2].read_text(encoding="utf-8")
+
+    assert "def run_result_workbench_shell" not in source
+    assert not (REPOSITORY / "memcommit/commands/result_workbench_shell.py").exists()

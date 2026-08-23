@@ -356,66 +356,20 @@ relation ledger. The read-only workbench described below belongs to explicit
 Review, so durable detail remains available without making every execution a
 second full-screen reading task.
 
-In that explicit workbench, the upper Viewer receives roughly seventy percent
-of the available content height and initially preserves the complete compact
-report. The lower item navigator is deliberately short: it contains individually selectable
-report sections, individual Potential Conflict items, one explicit Relation
-Ledger boundary, and every relation in that exact saved ledger as compact
-single-line rows. Relation count therefore increases scroll depth without
-taking the report's reading area away.
+Explicit Compare Review is hosted by the common Review report shell. It opens
+the complete saved report in Viewer and remains read-only: Compare has no
+response, Apply, or hidden transition capability. The Review controller binds
+the exact analysis UID and canonical digest to that projection, while the
+shared shell owns scrolling, focus, back navigation, terminal escaping, and
+close behavior. `mem compare --sessions` selects a saved artifact only; after
+selection, the normal compact receipt or explicit Review route is used.
 
-The Viewer is focused initially. `Tab` or `Shift-Tab` switches focus between
-the upper Viewer and lower item navigator. `Up`/`Down` scroll the Viewer when
-it is focused by jumping to the previous or next semantic section heading, and
-move the selected item when the navigator is focused. The Viewer retains the
-complete report and moves a hidden cursor anchor between semantic headings.
-While the next heading remains inside the visible viewport, only the blue
-focus line moves. Prompt-toolkit scrolls the Viewer by the minimum required
-amount only after that anchor crosses the upper or lower boundary. Upward
-navigation follows the same boundary behavior instead of forcing every focused
-heading to the first line;
-`PageUp`/`PageDown` scroll the Viewer by a larger step from either pane.
-The panes are titled `VIEWER` and `ITEMS`. Both use the same focused-frame
-border and label styling as Ground, so the active pane remains visually
-explicit in addition to the footer's textual `FOCUS` indicator. Within the
-Viewer, the current logical section identity is rendered in the common focus
-color without rewriting the report heading. The focus overlay and hidden
-viewport anchor identify the exact semantic section while leaving snapshot and
-persisted report text unchanged. Compare projects those blocks into the shared
-`SemanticViewerDocument`, so navigation order and rendering order come from the
-same stable section identities.
-Selecting a lower item replaces the Viewer content with that item's report or
-source-linked detail, while returning to the first `REPORT` item restores the
-whole report. `Left`/`Right` select an exact source frame when one is available,
-and `Enter` expands the selected section, conflict, or relation. The renderer
-escapes each untrusted line separately so trusted report layout newlines remain
-real terminal newlines rather than visible `\\n` text. Cursor, scroll, source,
-focus, and expansion state remain process-local and are never written into the
-analysis artifact.
-
-`B` is the explicit detail-back action: it selects the first `REPORT` item,
-collapses any source detail, and resets Viewer scroll. `Escape` performs the
-same back action while a detail item is selected, but closes Compare when the
-complete report is already selected. `Q` always closes Compare. Keeping Back
-and Close distinct prevents a person from losing the workbench merely while
-trying to leave one deeply inspected relation.
-
-`R` leaves the workbench and runs Rationale for the selected exact source
-Memory. It never invents a rationale for an aggregate report or relation: an
-issue first resolves to its linked relation, and the source selection supplies
-the exact Context name and Memory UID. The normal Rationale grant boundary
-still applies, so granted READ material exposes current readable-subtree
-inference but not authority Trace or checkpoint history.
-
-`L` leaves the workbench and prints the complete static ledger. `M` leaves and
-opens Meld's result-target picker. The picker can select an existing empty
-local Context or validate one new exact name; it creates nothing itself. Meld
-then revalidates the frozen Compare UID, both source bindings, grant/transfer
-policy, and the target before atomically creating any new result and its
-target-bound session. `Q` closes with no semantic or durable change. These
-actions deliberately exit rather than returning to a hidden cursor so their
-terminal output remains visible; `mem compare --sessions` is the stable resume
-route.
+The former `commands.compare_workbench` application duplicated Viewer/Items,
+relation expansion, and shortcut routing without any production caller. It
+was removed rather than retained as a second claimed Compare UI. Full ledger
+inspection remains `mem compare --ledger`, Rationale remains its own command
+over an exact source Memory, and Meld remains its own setup and execution
+boundary. Review does not synthesize those commands as report actions.
 
 Explicit `--snapshot` uses the compact report ordered by decision relevance:
 

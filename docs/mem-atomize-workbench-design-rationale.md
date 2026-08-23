@@ -807,6 +807,14 @@ compatibility, but both project to the same one-column frame sequence. Cursor,
 choices, and responses therefore survive old-session resume without reviving a
 second visual grammar.
 
+The older standalone `ResultWorkbench` application was also removed after its
+last production caller migrated here. `ResultWorkbenchView`, digest-bound case
+detail, and the pure snapshot/fragment renderers remain the exact result
+evidence contract embedded in Atomize Review and non-TTY output; they no longer
+claim an independent full-screen route. Keeping the projection while deleting
+the orphan host preserves evidence validation without leaving another large
+viewer for future callers to accidentally revive.
+
 A stable, non-interactive snapshot is part of the contract. It lets a remote
 or non-TTY controller show the current overview or selected detail without
 inventing a second textual representation. `mem impact atomize`,

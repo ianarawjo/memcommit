@@ -3,12 +3,9 @@ from __future__ import annotations
 from dataclasses import replace
 
 import pytest
-from prompt_toolkit.input.defaults import create_pipe_input
-from prompt_toolkit.output import DummyOutput
 
 from memcommit.interfaces.tui.workbenches.result import (
     render_result_workbench_snapshot,
-    run_result_workbench_shell,
 )
 from memcommit.result_workbench import (
     ResultCase,
@@ -23,25 +20,6 @@ from memcommit.result_workbench import (
 
 
 ARTIFACT_DIGEST = "a" * 64
-
-
-class RecordingAdapter:
-    def __init__(
-        self,
-        view: ResultWorkbenchView,
-        details: dict[str, ResultCaseDetail],
-    ) -> None:
-        self._view = view
-        self._details = details
-        self.calls: list[str] = []
-
-    def view(self) -> ResultWorkbenchView:
-        self.calls.append("view")
-        return self._view
-
-    def case_detail(self, case_uid: str) -> ResultCaseDetail:
-        self.calls.append(f"detail:{case_uid}")
-        return self._details[case_uid]
 
 
 def _fixture() -> tuple[
@@ -277,77 +255,6 @@ def test_snapshot_neutralizes_terminal_controls_without_rewriting_content():
     assert "Line one\nLine two�[31m�reversed" in snapshot
     assert "\x1b" not in snapshot
     assert "\u202e" not in snapshot
-
-
-def test_tty_navigation_fetches_only_the_case_explicitly_expanded():
-    view, details = _fixture()
-    adapter = RecordingAdapter(view, details)
-
-    with create_pipe_input() as pipe_input:
-        # The three typed overview sections are real Viewer stops. Move past
-        # them and the representative case to the boundary case.
-        pipe_input.send_text("\x1b[B" * 4 + "\rq")
-        result = run_result_workbench_shell(
-            adapter,
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-
-    assert result is view
-    assert adapter.calls == ["view", "detail:boundary-1"]
-
-
-@pytest.mark.parametrize("collapse_key", ["\x1b", "\x7f"])
-def test_tty_escape_and_backspace_collapse_without_another_detail_lookup(
-    collapse_key,
-):
-    view, details = _fixture()
-    adapter = RecordingAdapter(view, details)
-
-    with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\x1b[B" * 3 + f"\r{collapse_key}q")
-        run_result_workbench_shell(
-            adapter,
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-
-    assert adapter.calls == ["view", "detail:representative-1"]
-
-
-def test_tty_navigation_and_quit_remain_read_only_without_detail_lookup():
-    view, details = _fixture()
-    adapter = RecordingAdapter(view, details)
-
-    with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\x1b[B\x1b[Aq")
-        run_result_workbench_shell(
-            adapter,
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-
-    assert adapter.calls == ["view"]
-
-
-def test_tty_escape_closes_when_no_detail_layer_is_open():
-    view, details = _fixture()
-    adapter = RecordingAdapter(view, details)
-
-    with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\x1b")
-        result = run_result_workbench_shell(
-            adapter,
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-
-    assert result is view
-    assert adapter.calls == ["view"]
 
 
 def test_snapshot_handles_an_artifact_without_selected_cases():
