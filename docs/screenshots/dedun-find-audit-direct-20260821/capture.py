@@ -38,7 +38,12 @@ _BASE.COLUMNS = COLUMNS
 _BASE.ROWS = ROWS
 
 
-def _initialize(context_name: str, *, redundant: bool) -> None:
+def _initialize(
+    context_name: str,
+    *,
+    redundant: bool,
+    audit_preview: bool = False,
+) -> None:
     from memcommit.context import Context, Memory
     from memcommit.store import MemoryStore
 
@@ -63,6 +68,8 @@ def _initialize(context_name: str, *, redundant: bool) -> None:
             "Emergency exits remain unlocked.",
         )
     )
+    if audit_preview:
+        contents += ("The side entrance opens at seven.",)
     suffix = 310 if redundant else 320
     for offset, content in enumerate(contents):
         context.add(
@@ -109,7 +116,13 @@ def _initialize_exact_duplicates(context_name: str) -> None:
 
 
 class _Provider:
-    def __init__(self, *, redundant: bool, delay: float = 0.8) -> None:
+    def __init__(
+        self,
+        *,
+        redundant: bool,
+        delay: float = 0.8,
+        audit_findings: bool = False,
+    ) -> None:
         from memcommit.provider_types import ProviderIdentity
 
         self.identity = ProviderIdentity(
@@ -119,6 +132,7 @@ class _Provider:
         self.last_run = None
         self.redundant = redundant
         self.delay = delay
+        self.audit_findings = audit_findings
         self.operations: list[str] = []
 
     def complete(self, prompt: str, *, operation: str, output_schema=None) -> str:
@@ -147,6 +161,42 @@ class _Provider:
                                 "the same 10 p.m. boundary."
                             ),
                         }
+                    ]
+                }
+            )
+        if operation == "find_ambiguities" and self.audit_findings:
+            payload = json.loads(prompt.split(QUALITY_MARKER, 1)[1])
+            return json.dumps(
+                {
+                    "findings": [
+                        {
+                            "candidate_id": candidate["candidate_id"],
+                            "interpretation": "SINGLE",
+                            "clarification": "HELPFUL",
+                            "ordinary_readings": [candidate["content"]],
+                            "reason": "The intended audience is not explicit.",
+                            "question": "Which audience should use this statement?",
+                        }
+                        for candidate in (
+                            payload["memories"][0],
+                            payload["memories"][3],
+                        )
+                    ]
+                }
+            )
+        if operation == "find_conflicts" and self.audit_findings:
+            payload = json.loads(prompt.split(QUALITY_MARKER, 1)[1])
+            return json.dumps(
+                {
+                    "findings": [
+                        {
+                            "pair_id": pair["pair_id"],
+                            "conflict": "YES",
+                            "scope_dimensions": ["TIME"],
+                            "reason": "The two statements prescribe different schedules.",
+                            "question": "Which schedule should govern?",
+                        }
+                        for pair in payload["pairs"][:4]
                     ]
                 }
             )
@@ -268,8 +318,12 @@ def _run_audit_child() -> None:
     context_name = "quality/direct-audit"
     with tempfile.TemporaryDirectory(prefix="direct-audit-capture-") as directory:
         _SUPPORT._configure_isolated_store(Path(directory) / ".mem")
-        _initialize(context_name, redundant=False)
-        provider = _Provider(redundant=False, delay=1.0)
+        _initialize(context_name, redundant=False, audit_preview=True)
+        provider = _Provider(
+            redundant=False,
+            delay=1.0,
+            audit_findings=True,
+        )
         audit_command.connect_codex_chatgpt_provider = lambda: provider
         print("PTY", os.get_terminal_size().columns, os.get_terminal_size().lines)
         exit_code = _run_app(["audit"])
@@ -449,18 +503,51 @@ def _capture_audit() -> None:
         _snapshot(recorder, "11-audit-conflicts-progress")
         child.expect("AUDIT RECEIPT READY")
         receipt = _snapshot(recorder, "12-audit-saved-receipt")
-        assert "Audit saved: 0 finding(s) across 3 quality checks" in receipt
+        assert "Audit saved: 6 findings across 3 quality checks" in receipt
+        assert "Source: quality/direct-audit · 4 memories" in receipt
+        assert "DUPLICATES   0/6 pairs" in receipt
+        assert "AMBIGUITIES  2/4 memories" in receipt
+        assert "? AMBIGUOUS · [MEMORY 20000000]" in receipt
+        assert "CONFLICTS    4/6 pairs" in receipt
+        assert receipt.count("! CONFLICT · TIME") == 3
+        assert "… 1 more" in receipt
+        assert "Review all findings:" in receipt
         assert "mem review audit --session" in receipt
+        from memcommit.interfaces.console.theme import (
+            SemanticColorRole,
+            memory_object_color_rgb,
+            semantic_color_rgb,
+        )
+
+        stream = (OUT / "12-audit-saved-receipt.typescript").read_text(
+            encoding="utf-8"
+        )
+        for role, token in (
+            (SemanticColorRole.QUALITY_DUPLICATE, "DUPLICATES"),
+            (SemanticColorRole.QUALITY_AMBIGUITY, "AMBIGUITIES"),
+            (SemanticColorRole.QUALITY_AMBIGUITY, "AMBIGUOUS"),
+            (SemanticColorRole.QUALITY_CONFLICT, "CONFLICTS"),
+            (SemanticColorRole.QUALITY_CONFLICT, "CONFLICT"),
+        ):
+            red, green, blue = semantic_color_rgb(role)
+            expected_style = f"\x1b[38;2;{red};{green};{blue}m"
+            assert expected_style in _last_token_styles(stream, token)
+        memory_red, memory_green, memory_blue = memory_object_color_rgb()
+        assert (
+            f"\x1b[38;2;{memory_red};{memory_green};{memory_blue}m"
+            in stream
+        )
         child.send("\r")
         child.expect("AUDIT REVIEW READY")
         review = _snapshot(recorder, "13-audit-saved-review")
         assert "SAVED · 3/3 CHECKS" in review
-        assert "AUDITED SOURCE" in review
+        assert "SOURCE · quality/direct-audit · 4 direct Memories" in review
+        assert "SNAPSHOT · [20000000]" in review
         assert "FROZEN SOURCE" not in review
         child.send("\r")
         child.expect("AUDIT VERIFICATION READY")
         final = _snapshot(recorder, "14-audit-read-only-verification")
-        assert "MEMORIES 3" in final
+        assert "MEMORIES 4" in final
         assert "CHECKPOINT COMMANDS []" in final
         child.send("\r")
         child.expect(pexpect.EOF)

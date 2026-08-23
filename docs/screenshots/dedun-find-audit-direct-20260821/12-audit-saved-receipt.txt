@@ -1,8 +1,20 @@
 PTY 180 52                                                                                                                                                                          
-Audit saved: 0 finding(s) across 3 quality checks.                                                                                                                                  
-Session [ca557478] · review: mem review audit --session ca557478-3b0e-4615-b087-d52092630705                                                                                        
-Source unchanged. No checkpoint created.                                                                                                                                            
+Audit saved: 6 findings across 3 quality checks.                                                                                                                                    
+Source: quality/direct-audit · 4 memories                                                                                                                                           
+                                                                                                                                                                                    
+DUPLICATES   0/6 pairs                                                                                                                                                              
+AMBIGUITIES  2/4 memories                                                                                                                                                           
+  ? AMBIGUOUS · [MEMORY 20000000] “The lobby opens at eight.”                                                                                                                       
+  ? AMBIGUOUS · [MEMORY 20000003] “The side entrance opens at seven.”                                                                                                               
+CONFLICTS    4/6 pairs                                                                                                                                                              
+  ! CONFLICT · TIME · [MEMORY 20000000] “The lobby opens at eight.” ↔ [MEMORY 20000001] “The loading dock closes at six.”                                                           
+  ! CONFLICT · TIME · [MEMORY 20000000] “The lobby opens at eight.” ↔ [MEMORY 20000002] “Emergency exits remain unlocked.”                                                          
+  ! CONFLICT · TIME · [MEMORY 20000000] “The lobby opens at eight.” ↔ [MEMORY 20000003] “The side entrance opens at seven.”                                                         
+  … 1 more                                                                                                                                                                          
+                                                                                                                                                                                    
+Review all findings:                                                                                                                                                                
+mem review audit --session 82427166-369b-4df0-8c7b-21bd2331eaf4                                                                                                                     
 COMMAND EXIT · 0                                                                                                                                                                    
-VERIFICATION · CONTEXT quality/direct-audit · MEMORIES 3 · CHECKPOINT COMMANDS [] · CURRENT quality/direct-audit · PROVIDER ['find_duplicates', 'find_ambiguities', 'find_conflicts'
+VERIFICATION · CONTEXT quality/direct-audit · MEMORIES 4 · CHECKPOINT COMMANDS [] · CURRENT quality/direct-audit · PROVIDER ['find_duplicates', 'find_ambiguities', 'find_conflicts'
 ]                                                                                                                                                                                   
 AUDIT RECEIPT READY

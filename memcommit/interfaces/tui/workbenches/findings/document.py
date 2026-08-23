@@ -17,6 +17,7 @@ from memcommit.interfaces.tui.viewers.semantic import (
 from memcommit.quality_find_report import (
     QualityFindReportView,
     QualityFindingReportItem,
+    quality_finding_label_parts,
 )
 
 
@@ -49,21 +50,7 @@ def quality_finding_compact_fragments(
     role = semantic_quality_role(item.category)
     if role is None:  # pragma: no cover - the typed report validates the union.
         raise ValueError("Unsupported quality finding category.")
-    if item.category == "ambiguities":
-        marker, finding_label = "?", "AMBIGUOUS"
-        classification = ""
-    elif item.category == "conflicts":
-        marker, finding_label = "!", "CONFLICT"
-        parts = [part.strip() for part in item.classification.split("·")]
-        classification = " · ".join(
-            part for part in parts if part.upper() not in {"YES", "MAY", "NO"}
-        )
-    elif item.classification == "EXACT":
-        marker, finding_label = "=", "DUPLICATE"
-        classification = item.classification
-    else:
-        marker, finding_label = "≈", "REDUNDANT"
-        classification = item.classification
+    marker, finding_label, classification = quality_finding_label_parts(item)
 
     fragments: list[tuple[str, str]] = [
         (styled("class:report-neutral"), f"{marker} "),

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import sys
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from typing import Annotated, Optional
 
 from prompt_toolkit.input import Input
@@ -28,8 +28,15 @@ from memcommit.commands.help_inventory import CommandEntry
 from memcommit.commands.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
+from memcommit.interfaces.console.identity import collision_safe_uid_prefixes
 from memcommit.interfaces.console.text import (
     display_escape_text,
+    safe_terminal_text,
+)
+from memcommit.interfaces.console.theme import (
+    memory_object_color_rgb,
+    semantic_color_rgb,
+    semantic_quality_role,
 )
 from memcommit.interfaces.tui.operations.audit import (
     choose_audit_setup,
@@ -52,11 +59,24 @@ from memcommit.quality_audit import (
     run_quality_audit,
 )
 from memcommit.quality_audit_store import QualityAuditStore
+from memcommit.quality_find_report import (
+    QualityFindingReportItem,
+    quality_finding_label_parts,
+)
+from memcommit.quality_find_workbench import (
+    QualityFindSourceFrame,
+    QualityFindWorkbenchSession,
+    quality_find_report_view,
+)
 from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
 from memcommit.store import ConcurrentContextUpdateError, MemoryStore
+
+
+_AUDIT_RECEIPT_PREVIEW_LIMIT = 3
+_AUDIT_RECEIPT_MEMORY_PREVIEW_LIMIT = 48
 
 
 def _run_quality_audit_checks(
@@ -143,6 +163,118 @@ def run_quality_audit_review(
         require_tty=require_tty,
     )
     return session
+
+
+def _receipt_memory_preview(value: str) -> str:
+    compact = " ".join(safe_terminal_text(value).split()) or "(empty Memory)"
+    if len(compact) <= _AUDIT_RECEIPT_MEMORY_PREVIEW_LIMIT:
+        return compact
+    return compact[: _AUDIT_RECEIPT_MEMORY_PREVIEW_LIMIT - 1].rstrip() + "…"
+
+
+def _render_quality_audit_finding_preview(
+    item: QualityFindingReportItem,
+    *,
+    uid_prefixes: Mapping[str, str],
+) -> None:
+    marker, finding_label, classification = quality_finding_label_parts(item)
+    role = semantic_quality_role(item.category)
+    if role is None:  # pragma: no cover - the typed item validates this union.
+        raise ValueError("Unsupported Audit quality finding category.")
+    typer.echo(f"  {marker} ", nl=False)
+    typer.secho(
+        finding_label,
+        fg=semantic_color_rgb(role),
+        bold=True,
+        nl=False,
+    )
+    if classification:
+        typer.secho(f" · {classification}", bold=True, nl=False)
+    typer.echo(" · ", nl=False)
+    for index, source in enumerate(item.sources):
+        if index:
+            typer.echo(" ↔ ", nl=False)
+        typer.secho(
+            f"[MEMORY {uid_prefixes[source.memory_uid]}] ",
+            bold=True,
+            nl=False,
+        )
+        typer.secho(
+            f"“{_receipt_memory_preview(source.content)}”",
+            fg=memory_object_color_rgb(),
+            nl=False,
+        )
+    typer.echo()
+
+
+def render_quality_audit_receipt(session: QualityAuditSession) -> None:
+    """Print the saved artifact and enough scope to interpret its total."""
+
+    finding_label = "finding" if session.finding_count == 1 else "findings"
+    typer.secho("Audit saved:", bold=True, nl=False)
+    typer.echo(
+        f" {session.finding_count} {finding_label} across "
+        f"{len(session.checks)} quality checks."
+    )
+    memory_count = len(session.source.memories)
+    memory_label = "memory" if memory_count == 1 else "memories"
+    typer.secho("Source:", bold=True, nl=False)
+    typer.echo(
+        f" {display_escape_text(session.source.context_name)} · "
+        f"{memory_count} {memory_label}"
+    )
+
+    # Audit freezes one direct frame for all three finders. The pair denominator
+    # is frame cardinality: Conflict exhausts it, while Duplicate retains its
+    # group-preserving discovery strategy. Either way, the denominator makes
+    # the aggregate legible without expanding a potentially quadratic report.
+    pair_count = memory_count * (memory_count - 1) // 2
+    context = session.source.context()
+    source_frame = QualityFindSourceFrame.create((context,))
+    uid_prefixes = collision_safe_uid_prefixes(
+        memory.uid for memory in session.source.memories
+    )
+    typer.echo()
+    for check in session.checks:
+        label = check.kind.upper()
+        role = semantic_quality_role(check.kind)
+        if role is None:  # pragma: no cover - Audit validates this union.
+            raise ValueError("Unsupported Audit quality check kind.")
+        denominator = memory_count if check.kind == "ambiguities" else pair_count
+        unit = "memories" if check.kind == "ambiguities" else "pairs"
+        typer.secho(
+            label,
+            fg=semantic_color_rgb(role),
+            bold=True,
+            nl=False,
+        )
+        typer.echo(
+            f"{' ' * (13 - len(label))}"
+            f"{len(check.report.findings)}/{denominator} {unit}"
+        )
+        report_view = quality_find_report_view(
+            QualityFindWorkbenchSession(
+                uid=session.uid,
+                kind=check.kind,
+                source=source_frame,
+                report=check.report,
+                responses=session.responses,
+            ),
+            source_frame,
+            operation_label=f"AUDIT · {label}",
+        )
+        for item in report_view.items[:_AUDIT_RECEIPT_PREVIEW_LIMIT]:
+            _render_quality_audit_finding_preview(
+                item,
+                uid_prefixes=uid_prefixes,
+            )
+        remaining = len(report_view.items) - _AUDIT_RECEIPT_PREVIEW_LIMIT
+        if remaining > 0:
+            typer.echo(f"  … {remaining} more")
+
+    typer.echo()
+    typer.secho("Review all findings:", bold=True)
+    typer.echo(f"mem review audit --session {session.uid}")
 
 
 def _interactive_source(store: MemoryStore, *, current_name: str | None):
@@ -327,13 +459,4 @@ def cmd(
     if snapshot:
         typer.echo(render_quality_audit_review_snapshot(session))
         return
-    typer.secho(
-        f"Audit saved: {session.finding_count} finding(s) across "
-        f"{len(session.checks)} quality checks.",
-        fg=typer.colors.GREEN,
-        bold=True,
-    )
-    typer.echo(
-        f"Session [{session.uid[:8]}] · review: "
-        f"mem review audit --session {session.uid}"
-    )
+    render_quality_audit_receipt(session)

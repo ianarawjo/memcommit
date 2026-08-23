@@ -19,8 +19,9 @@ report and returns its Review receipt without opening a result workbench.
 - Rendering: actual cumulative ANSI PTY streams rendered at full canvas; every
   PNG retains matching `.typescript` and plain `.txt` evidence
 - Color verification: raw streams must contain the real green success, yellow
-  semantic-result, shared ADD-blue `SURVIVOR`, and shared REMOVE-red `ABSORB`
-  foreground styles; these line-oriented routes have no focused-control background
+  semantic-result, shared ADD-blue `SURVIVOR`, shared REMOVE-red `ABSORB`, and
+  shared lavender/yellow/red `DUPLICATES`/`AMBIGUITIES`/`CONFLICTS` foreground
+  styles; these line-oriented routes have no focused-control background
 
 ## Ordered interaction log
 
@@ -39,8 +40,8 @@ report and returns its Review receipt without opening a result workbench.
 | `09-audit-duplicates-progress` | `mem audit` | launch | compact `1/3` Duplicate stage | none |
 | `10-audit-ambiguities-progress` | same process | provider returns | compact `2/3` Ambiguity stage | none |
 | `11-audit-conflicts-progress` | same process | provider returns | compact `3/3` Conflict stage | none |
-| `12-audit-saved-receipt` | same process | provider returns | saved session UID and exact Review command | saved Audit artifact only |
-| `13-audit-saved-review` | `mem review audit --session UID --snapshot` | `Enter` | exact durable three-check report with its `AUDITED SOURCE` snapshot | none |
+| `12-audit-saved-receipt` | same process | provider returns | saved Source scope, colored per-finder numerator/denominator summary, up to three source-linked finding previews plus `… N more`, session UID, and exact Review command | saved Audit artifact only |
+| `13-audit-saved-review` | `mem review audit --session UID --snapshot` | `Enter` | exact durable three-check report with compact `SOURCE` and direct-Memory `SNAPSHOT` rows | none |
 | `14-audit-read-only-verification` | same process | `Enter` | unchanged Source and zero Context checkpoints | none |
 
 The explicit `--select` setup branches remain available for the read-only

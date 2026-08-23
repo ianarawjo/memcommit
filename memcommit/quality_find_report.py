@@ -90,6 +90,24 @@ class QualityFindingReportItem:
             raise QualityFindReportError("A finding repeats a Source Memory.")
 
 
+def quality_finding_label_parts(
+    item: QualityFindingReportItem,
+) -> tuple[str, str, str]:
+    """Return the shared marker, category label, and compact classification."""
+
+    if item.category == "ambiguities":
+        return "?", "AMBIGUOUS", ""
+    if item.category == "conflicts":
+        parts = [part.strip() for part in item.classification.split("·")]
+        classification = " · ".join(
+            part for part in parts if part.upper() not in {"YES", "MAY", "NO"}
+        )
+        return "!", "CONFLICT", classification
+    if item.classification == "EXACT":
+        return "=", "DUPLICATE", item.classification
+    return "≈", "REDUNDANT", item.classification
+
+
 @dataclass(frozen=True)
 class QualityFindReportView:
     """One bounded read-only finding browser projection."""
@@ -166,4 +184,5 @@ __all__ = [
     "QualityFindingReading",
     "QualityFindingReportItem",
     "QualityFindingSource",
+    "quality_finding_label_parts",
 ]

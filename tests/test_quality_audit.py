@@ -4,7 +4,9 @@ from __future__ import annotations
 
 from dataclasses import replace
 
+import click
 import pytest
+from click.testing import CliRunner as ClickCliRunner
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
@@ -35,7 +37,11 @@ from memcommit.interfaces.tui.operations.audit import (
     quality_audit_review_document,
     render_quality_audit_review_snapshot,
 )
-from memcommit.interfaces.console.theme import SemanticColorRole
+from memcommit.interfaces.console.theme import (
+    SemanticColorRole,
+    memory_object_color_rgb,
+    semantic_color_rgb,
+)
 from memcommit.interfaces.tui.core.theme import semantic_role_style
 from memcommit.interfaces.tui.viewers.semantic import semantic_document_plain_text
 from memcommit.quality_audit import (
@@ -534,6 +540,140 @@ def test_audit_help_names_all_three_finders():
     assert "conflict" in output
 
 
+def test_audit_receipt_colors_only_quality_labels_and_preserves_plain_text():
+    ctx, first, second = _context()
+    session = _finding_session(ctx, first, second)
+
+    @click.command()
+    def receipt():
+        audit_command.render_quality_audit_receipt(session)
+
+    colored = ClickCliRunner().invoke(receipt, color=True)
+    plain = ClickCliRunner().invoke(receipt, color=False)
+    no_color = ClickCliRunner().invoke(
+        receipt,
+        color=None,
+        env={"NO_COLOR": "1"},
+    )
+
+    assert colored.exit_code == 0, colored.output
+    assert plain.exit_code == 0, plain.output
+    assert no_color.exit_code == 0, no_color.output
+    assert click.unstyle(colored.output) == plain.output == no_color.output
+    assert plain.output == (
+        "Audit saved: 3 findings across 3 quality checks.\n"
+        "Source: audit/source · 2 memories\n"
+        "\n"
+        "DUPLICATES   1/1 pairs\n"
+        f"  ≈ REDUNDANT · SEMANTIC_EQUIVALENT · "
+        f"[MEMORY {first.uid[:8]}] “{first.content}” ↔ "
+        f"[MEMORY {second.uid[:8]}] “{second.content}”\n"
+        "AMBIGUITIES  1/2 memories\n"
+        f"  ? AMBIGUOUS · [MEMORY {first.uid[:8]}] “{first.content}”\n"
+        "CONFLICTS    1/1 pairs\n"
+        f"  ! CONFLICT · TIME · [MEMORY {first.uid[:8]}] “{first.content}” ↔ "
+        f"[MEMORY {second.uid[:8]}] “{second.content}”\n"
+        "\n"
+        "Review all findings:\n"
+        f"mem review audit --session {session.uid}\n"
+    )
+    for label, role in (
+        ("DUPLICATES", SemanticColorRole.QUALITY_DUPLICATE),
+        ("AMBIGUITIES", SemanticColorRole.QUALITY_AMBIGUITY),
+        ("CONFLICTS", SemanticColorRole.QUALITY_CONFLICT),
+    ):
+        assert click.style(
+            label,
+            fg=semantic_color_rgb(role),
+            bold=True,
+        ) in colored.output
+    for label, role in (
+        ("REDUNDANT", SemanticColorRole.QUALITY_DUPLICATE),
+        ("AMBIGUOUS", SemanticColorRole.QUALITY_AMBIGUITY),
+        ("CONFLICT", SemanticColorRole.QUALITY_CONFLICT),
+    ):
+        assert click.style(
+            label,
+            fg=semantic_color_rgb(role),
+            bold=True,
+        ) in colored.output
+    assert click.style(
+        f"“{first.content}”",
+        fg=memory_object_color_rgb(),
+    ) in colored.output
+    assert "\x1b[" not in plain.output
+    assert "\x1b[" not in no_color.output
+
+
+def test_audit_receipt_previews_three_findings_then_reports_the_remainder():
+    ctx = ops.init("audit/preview-limit")
+    memories = tuple(ops.add(ctx, f"Preview Memory {index}.") for index in range(4))
+    ambiguities = tuple(
+        AmbiguityFinding(
+            memory,
+            "SINGLE",
+            "HELPFUL",
+            (f"Reading {index}.",),
+            f"Reason {index}.",
+            f"Question {index}?",
+        )
+        for index, memory in enumerate(memories)
+    )
+    session = create_quality_audit(
+        ctx,
+        (
+            QualityAuditCheck(
+                "duplicates",
+                QUALITY_AUDIT_RULESETS["duplicates"],
+                DuplicateReport(memory_count=4, findings=()),
+                _provenance("duplicates"),
+            ),
+            QualityAuditCheck(
+                "ambiguities",
+                QUALITY_AUDIT_RULESETS["ambiguities"],
+                AmbiguityReport(memory_count=4, findings=ambiguities),
+                _provenance("ambiguities"),
+            ),
+            QualityAuditCheck(
+                "conflicts",
+                QUALITY_AUDIT_RULESETS["conflicts"],
+                ConflictReport(memory_count=4, pair_count=6, findings=()),
+                _provenance("conflicts"),
+            ),
+        ),
+    )
+
+    @click.command()
+    def receipt():
+        audit_command.render_quality_audit_receipt(session)
+
+    result = ClickCliRunner().invoke(receipt, color=False)
+
+    assert result.exit_code == 0, result.output
+    assert "AMBIGUITIES  4/4 memories" in result.output
+    for memory in memories[:3]:
+        assert memory.content in result.output
+    assert memories[3].content not in result.output
+    assert result.output.count("  … 1 more") == 1
+
+
+def test_audit_receipt_preview_expands_colliding_memory_uid_prefixes():
+    ctx, first, second = _context()
+    first.uid = "a31f02c1-0000-4000-8000-000000000001"
+    second.uid = "a31f02c1-0000-4000-8000-000000000002"
+    session = _finding_session(ctx, first, second)
+
+    @click.command()
+    def receipt():
+        audit_command.render_quality_audit_receipt(session)
+
+    result = ClickCliRunner().invoke(receipt, color=False)
+
+    assert result.exit_code == 0, result.output
+    assert f"[MEMORY {first.uid}]" in result.output
+    assert f"[MEMORY {second.uid}]" in result.output
+
+
 def test_audit_command_runs_all_three_and_saves_before_snapshot(
     isolated_store,
     monkeypatch,
@@ -594,8 +734,12 @@ def test_flagless_audit_uses_current_context_and_prints_saved_session_receipt(
     result = runner.invoke(app, ["audit"])
 
     assert result.exit_code == 0, result.output
-    assert "Audit saved: 0 finding(s) across 3 quality checks." in result.output
-    assert "mem review audit --session" in result.output
+    assert "Audit saved: 0 findings across 3 quality checks." in result.output
+    assert "Source: audit/source · 2 memories" in result.output
+    assert "DUPLICATES   0/1 pairs" in result.output
+    assert "AMBIGUITIES  0/2 memories" in result.output
+    assert "CONFLICTS    0/1 pairs" in result.output
+    assert "Review all findings:\nmem review audit --session" in result.output
     assert "Source unchanged. No checkpoint created." not in result.output
     saved = QualityAuditStore(store).list()
     assert len(saved) == 1

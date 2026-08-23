@@ -285,11 +285,32 @@ live Context later changes or disappears: the reviewed object is the
 historical snapshot, not a claim about the current Context. Review and Audit
 never mutate a Context, Memory, or checkpoint.
 
-Ordinary `mem audit` does not open Review automatically. It prints the Audit
-session UID and exact Review command. `--snapshot` explicitly prints the full
-typed report, and `mem review audit --session UID` opens the same document as a
-read-only full-screen Viewer. This keeps execution, durable evidence, and later
-inspection distinct.
+Ordinary `mem audit` does not open Review automatically. After saving, its
+compact receipt identifies the frozen Source and direct-Memory count, then
+shows the finding numerator beside the frame denominator for each finder:
+Duplicate and Conflict use the possible unordered Memory-pair count, while
+Ambiguity uses direct Memories. The Duplicate denominator describes frame
+cardinality rather than claiming the group-preserving finder exposed every pair
+to the provider; Conflict retains its complete pair target. This exposes what
+contributed to the aggregate total without automatically flooding the terminal
+with a potentially quadratic Conflict report. The category labels reuse the
+shared quality palette, while the counts, Source, and exact Review command
+remain neutral and retain identical ANSI-free text in a pipe or `NO_COLOR`
+environment.
+
+Each nonempty category also previews at most three findings in saved report
+order. A preview is one source-linked logical line containing the typed finding
+label and classification plus collision-safe Memory identities and bounded
+single-line Memory excerpts; it deliberately omits provider rationale and
+readings, which remain in the complete Review. When a category has more than
+three findings, one explicit `… N more` row accounts for the undisplayed
+remainder. The fixed per-category bound keeps a 22-Conflict Audit immediately
+diagnosable without turning the completion receipt back into the full report.
+
+`--snapshot` explicitly prints the full typed report, and
+`mem review audit --session UID` opens the same document as a read-only
+full-screen Viewer. The receipt therefore makes the completed result legible
+while execution, durable evidence, and later full inspection remain distinct.
 
 ## Units of judgment
 
