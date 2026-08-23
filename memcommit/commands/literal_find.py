@@ -107,7 +107,11 @@ def cmd(
     ] = False,
     show_all: Annotated[
         bool,
-        typer.Option("--all", help="Print every matching row instead of the preview"),
+        typer.Option(
+            "--all",
+            "-a",
+            help="Print every matching row instead of the preview",
+        ),
     ] = False,
     plain: Annotated[
         bool,

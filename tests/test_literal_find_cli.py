@@ -200,6 +200,22 @@ def test_find_inline_preview_and_all_keep_complete_match_count(isolated_store) -
     assert "needle row 11, [find/source m12]" in complete.output
 
 
+def test_find_short_all_alias_matches_long_option(isolated_store) -> None:
+    context = ops.init("find/source")
+    for index in range(12):
+        ops.add(context, f"needle row {index}")
+    store = MemoryStore()
+    store.save(context)
+    store.set_current("find/source")
+
+    long_option = runner.invoke(app, ["find", "--plain", "--all", "needle"])
+    short_option = runner.invoke(app, ["find", "--plain", "-a", "needle"])
+
+    assert long_option.exit_code == 0, long_option.output + long_option.stderr
+    assert short_option.exit_code == 0, short_option.output + short_option.stderr
+    assert short_option.output == long_option.output
+
+
 def test_find_copy_remains_complete_when_terminal_output_is_previewed(
     isolated_store,
     monkeypatch,
