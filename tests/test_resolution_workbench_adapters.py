@@ -432,7 +432,8 @@ def test_atomize_adapter_joins_findings_sources_children_and_saved_response() ->
     split_rendered = "".join(text for _style, text in split_fragments)
     assert "atomize-child:" not in split_rendered
     assert any(
-        style == "class:memory-object" and "[1] The north door closes." in text
+        style == "class:memory-object"
+        and "MEMORY 1 · The north door closes." in text
         for style, text in split_fragments
     )
 
@@ -481,6 +482,10 @@ def test_applied_atomize_adapter_is_read_only_review_evidence() -> None:
     assert view.accept_enabled is False
     assert view.unresolved_at_apply_count == 0
     assert view.input_locked is True
+    split = next(item for item in view.items if item.kind == "ATOMIZE_SPLIT")
+    assert [block.heading for block in split.blocks] == [
+        "APPLIED CHILD MEMORIES"
+    ]
 
 
 def test_unanswered_atomize_quality_finding_advances_to_apply_as_is() -> None:

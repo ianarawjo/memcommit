@@ -1,8 +1,26 @@
 52 180                                                                                                                                                                              
 ATOMIZE APPLIED · atomize/direct-current                                                                                                                                            
 EFFECTS · SPLIT 4 · CHILDREN 8 · KEEP 0                                                                                                                                             
-RECEIPT · b101ad45-b25f-43ea-b872-4cff1c9cbab6                                                                                                                                      
-CHECKPOINT · 52be83a2-7449-437f-9c44-1a6494404523                                                                                                                                   
+                                                                                                                                                                                    
+SPLIT 1                                                                                                                                                                             
+  REMOVE · [f484d431] The Main Building entrance accepts a physical NFC card. | Mobile-app authentication is not accepted at that entrance.                                         
+  ADD    · [bbb5f0bf] The Main Building entrance accepts a physical NFC card.                                                                                                       
+  ADD    · [256bcea8] Mobile-app authentication is not accepted at that entrance.                                                                                                   
+                                                                                                                                                                                    
+SPLIT 2                                                                                                                                                                             
+  REMOVE · [fbf54b77] The staff entrance uses the same physical NFC card. | Staff should not rely on mobile-app authentication.                                                     
+  ADD    · [77daf0d5] The staff entrance uses the same physical NFC card.                                                                                                           
+  ADD    · [a86a8286] Staff should not rely on mobile-app authentication.                                                                                                           
+                                                                                                                                                                                    
+SPLIT 3                                                                                                                                                                             
+  REMOVE · [192a0e70] The library opens at 10:00 on weekends. | The research desk closes at 16:00.                                                                                  
+  ADD    · [e27572e5] The library opens at 10:00 on weekends.                                                                                                                       
+  ADD    · [7922ed14] The research desk closes at 16:00.                                                                                                                            
+                                                                                                                                                                                    
+… 1 MORE SPLIT · see REVIEW                                                                                                                                                         
+                                                                                                                                                                                    
+RECEIPT · 827cb087-620f-4e65-8c9e-f26ee9b23bdf                                                                                                                                      
+CHECKPOINT · dfda0d16-a623-4076-a502-dfbbbe786317                                                                                                                                   
 REVIEW · mem review atomize --context atomize/direct-current                                                                                                                        
 RECOVERY · mem undo                                                                                                                                                                 
 DIRECT APPLY VERIFIED · MEMORIES 8 · CHECKPOINTS 1 · RECEIPT True

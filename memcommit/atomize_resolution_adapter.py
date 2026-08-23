@@ -109,6 +109,7 @@ class AtomizeResolutionWorkbenchAdapter:
         position_by_uid = {
             item.memory_uid: item.position + 1 for item in analysis.items
         }
+        application_complete = workbench.application is not None
         projected: list[ResolutionItem] = []
         for descriptor in workbench.ordered_issues():
             finding = findings[descriptor.uid]
@@ -200,7 +201,11 @@ class AtomizeResolutionWorkbenchAdapter:
                 )
                 blocks.append(
                     ResolutionDetailBlock(
-                        heading="PROPOSED CHILDREN",
+                        heading=(
+                            "APPLIED CHILD MEMORIES"
+                            if application_complete
+                            else "PROPOSED CHILDREN"
+                        ),
                         text="",
                         memory_rows=child_rows,
                     )
@@ -281,7 +286,6 @@ class AtomizeResolutionWorkbenchAdapter:
             for issue_uid, response in workbench.responses.items()
         )
         ready_to_apply = not incorporable_response_open
-        application_complete = workbench.application is not None
         unresolved_at_apply_count = sum(
             finding.kind
             in {

@@ -115,20 +115,14 @@ def render_review_report_snapshot(report: ReviewReport) -> str:
                     content_lines = (
                         safe_terminal_text(row.content).splitlines() or [""]
                     )
+                    row_prefix = f"    MEMORY {row.ordinal} · "
                     detail_lines.append(
-                        f"    [{row.ordinal}] {content_lines[0]}"
+                        row_prefix + content_lines[0]
                     )
                     detail_lines.extend(
-                        f"        {line}" for line in content_lines[1:]
+                        f"{' ' * len(row_prefix)}{line}"
+                        for line in content_lines[1:]
                     )
-                    if row.evidence:
-                        detail_lines.append(
-                            "        Evidence · "
-                            + " | ".join(
-                                safe_terminal_text(span)
-                                for span in row.evidence
-                            )
-                        )
         if detail_lines:
             parts.append("\n".join(detail_lines))
     return "\n\n".join(parts).rstrip()

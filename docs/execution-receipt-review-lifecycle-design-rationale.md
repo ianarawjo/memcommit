@@ -92,11 +92,14 @@ operation-owned session/analysis identities; Review opens only their terminal
 application projection.
 
 A plain or `--snapshot` Review projection must render every typed Memory row in
-an operation-authored detail block, including its ordinal, complete content,
-and evidence spans. Compact execution receipts may bound their immediate proof,
-but snapshot rendering cannot treat structured rows as empty merely because the
-block's fallback text field is blank. Interactive and noninteractive Review are
-two projections of the same durable evidence, not different evidence sets.
+an operation-authored detail block, including its explicit `MEMORY n` identity
+and complete content. It does not repeat supporting evidence spans by default;
+those remain typed evidence available to interactive expansion rather than
+looking like a second copy of the applied Memory. Compact execution receipts may
+bound their immediate proof, but snapshot rendering cannot treat structured rows
+as empty merely because the block's fallback text field is blank. Interactive
+and noninteractive Review are projections of the same durable evidence with
+different disclosure depth, not different stored evidence sets.
 
 The compact receipt is not reconstructed by parsing rendered text. It is
 projected from the typed application/session receipt. Likewise, Review reads

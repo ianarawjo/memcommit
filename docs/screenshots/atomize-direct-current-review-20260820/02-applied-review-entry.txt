@@ -4,7 +4,7 @@
 ┃CONTEXT LOCATIONS                                                                                                                                                                 ┃
 ┃  SOURCE · atomize/direct-current                                                                                                                                                 ┃
 ┃  OUTPUT · atomize/direct-current · IN PLACE                                                                                                                                      ┃
-┃ STATUS · APPLIED ANALYSIS · READ ONLY · sources=4 · projected=8 · splits=4 · children=8 · review issues=4                                                                        ┃
+┃ STATUS · APPLIED ANALYSIS · sources=4 · projected=8 · splits=4 · children=8 · review issues=4                                                                                    ┃
 ┃                                                                                                                                                                                  ┃
 ┃ WHAT MEM UNDERSTOOD                                                                                                                                                              ┃
 ┃ Each source records two independent claims.                                                                                                                                      ┃
@@ -38,10 +38,10 @@
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 ┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
 │› REPORT         Complete Atomize report                                                                                                                                         ^│
-│  SUGGESTED SPLIT [6792dd09] The Main Building entrance accepts a physical NFC card. | Mobile-app authentication is not accepted at that entrance.                                │
-│  SUGGESTED SPLIT [073cab22] The staff entrance uses the same physical NFC card. | Staff should not rely on mobile-app authentication.                                            │
-│  SUGGESTED SPLIT [ea8a1b56] The library opens at 10:00 on weekends. | The research desk closes at 16:00.                                                                         │
-│  SUGGESTED SPLIT [01952b82] The north elevator serves floors one through four. | The fifth floor requires the south elevator.                                                    │
+│  SUGGESTED SPLIT [f484d431] The Main Building entrance accepts a physical NFC card. | Mobile-app authentication is not accepted at that entrance.                                │
+│  SUGGESTED SPLIT [fbf54b77] The staff entrance uses the same physical NFC card. | Staff should not rely on mobile-app authentication.                                            │
+│  SUGGESTED SPLIT [192a0e70] The library opens at 10:00 on weekends. | The research desk closes at 16:00.                                                                         │
+│  SUGGESTED SPLIT [b2a2528f] The north elevator serves floors one through four. | The fifth floor requires the south elevator.                                                    │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                 v│

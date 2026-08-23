@@ -1255,7 +1255,8 @@ def test_proposed_memories_are_individual_stops_with_expandable_evidence():
     assert "first evidence" not in collapsed_text
     assert "second evidence" not in collapsed_text
     assert any(
-        style == "class:memory-object.focused" and "[1] First proposed Memory." in text
+        style == "class:memory-object.focused"
+        and "MEMORY 1 · First proposed Memory." in text
         for style, text in collapsed
     )
 
@@ -1265,7 +1266,8 @@ def test_proposed_memories_are_individual_stops_with_expandable_evidence():
         focused_section=4,
     )
     assert any(
-        style == "class:memory-object.focused" and "[2] Second proposed Memory." in text
+        style == "class:memory-object.focused"
+        and "MEMORY 2 · Second proposed Memory." in text
         for style, text in second
     )
 

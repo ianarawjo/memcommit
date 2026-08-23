@@ -7,7 +7,7 @@ available in read-only `mem review atomize`.
 
 ## Environment
 
-- Capture date: 2026-08-20
+- Capture date: 2026-08-23
 - Command: `python docs/screenshots/atomize-direct-current-review-20260820/capture.py`
 - PTY: real `pexpect` PTY, explicitly set and verified as `52 180`
 - Color: `TERM=xterm-256color`, `COLORTERM=truecolor`, and `NO_COLOR` removed
@@ -23,8 +23,9 @@ available in read-only `mem review atomize`.
    - Current Context: `atomize/direct-current`
    - Preceding input: none
    - Visible state: four splits are summarized as eight children with typed
-     effect counts, complete receipt/checkpoint identities, the exact Review
-     route, and recovery; no Memory body or post-success Viewer is printed
+     effect counts; three exact source-to-child effect groups are shown and one
+     explicitly hands off to Review, followed by complete receipt/checkpoint
+     identities, the exact Review route, and recovery
    - Durable mutation: one Context checkpoint and one terminal workbench
      receipt; four source Memories become eight children
 
@@ -39,7 +40,8 @@ available in read-only `mem review atomize`.
 3. `03-applied-split-detail.png`
    - Preceding keys: `Tab`, `Down`, `Enter`
    - Visible state: one saved split detail shows its exact Source Memory,
-     classification, reason, and proposed children
+     classification, reason, and `APPLIED CHILD MEMORIES` as explicit
+     `MEMORY n` rows rather than choice-like numeric markers
    - Durable mutation: none
 
 4. `04-read-only-verification.png`
@@ -47,8 +49,10 @@ available in read-only `mem review atomize`.
    - Precondition: the applied Review was closed with `q`
    - Invocation: separate diagnostic command; it does not appear automatically
      after closing the interactive Review
-   - Visible state: the complete non-interactive Review snapshot plus durable
-     verification of eight Memories, one checkpoint, and one terminal receipt
+   - Visible state: the complete non-interactive Review snapshot, including
+     applied child Memory contents without repeated source-span evidence, plus
+     durable verification of eight Memories, one checkpoint, and one terminal
+     receipt
    - Durable mutation: none
 
 The recorder fails if the terminal is not 180×52 and color-capable, bare

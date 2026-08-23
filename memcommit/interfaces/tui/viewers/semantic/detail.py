@@ -54,7 +54,7 @@ def semantic_detail_block_fragments(
         fragments.append(
             (
                 "class:memory-object",
-                f" [{row.ordinal}] {safe_terminal_text(row.content)}\n",
+                f" MEMORY {row.ordinal} · {safe_terminal_text(row.content)}\n",
             )
         )
         if row.evidence:
@@ -83,7 +83,7 @@ def semantic_memory_row_fragments(
     fragments: list[tuple[str, str]] = [
         (
             "class:memory-object",
-            f" [{row.ordinal}] {safe_terminal_text(row.content)}\n",
+            f" MEMORY {row.ordinal} · {safe_terminal_text(row.content)}\n",
         )
     ]
     if expanded and row.evidence:

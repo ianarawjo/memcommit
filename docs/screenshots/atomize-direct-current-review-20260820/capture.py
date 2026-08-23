@@ -264,7 +264,7 @@ def main() -> None:
         )
         HELPERS._snapshot(recorder, "02-applied-review-entry")
         child.send("\t\x1b[B\r")
-        _wait(child, recorder, "SOURCE MEMORY", "PROPOSED CHILDREN")
+        _wait(child, recorder, "SOURCE MEMORY", "APPLIED CHILD MEMORIES")
         HELPERS._snapshot(recorder, "03-applied-split-detail")
         child.send("q")
         try:

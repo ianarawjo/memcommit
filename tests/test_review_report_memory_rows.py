@@ -21,7 +21,7 @@ def test_review_report_snapshot_renders_typed_memory_rows() -> None:
         role="CHANGE",
         blocks=(
             ResolutionDetailBlock(
-                heading="PROPOSED CHILDREN",
+                heading="APPLIED CHILD MEMORIES",
                 text="",
                 memory_rows=(
                     ResolutionMemoryRow(
@@ -64,12 +64,8 @@ def test_review_report_snapshot_renders_typed_memory_rows() -> None:
 
     rendered = render_review_report_snapshot(report)
 
-    assert "  PROPOSED CHILDREN" in rendered
-    assert "    [1] First proposed Memory." in rendered
-    assert "        Evidence · First source span." in rendered
-    assert "    [2] Second proposed Memory." in rendered
-    assert "        Second line." in rendered
-    assert (
-        "        Evidence · Second source span. | Declared frame."
-        in rendered
-    )
+    assert "  APPLIED CHILD MEMORIES" in rendered
+    assert "    MEMORY 1 · First proposed Memory." in rendered
+    assert "Evidence ·" not in rendered
+    assert "    MEMORY 2 · Second proposed Memory." in rendered
+    assert "               Second line." in rendered

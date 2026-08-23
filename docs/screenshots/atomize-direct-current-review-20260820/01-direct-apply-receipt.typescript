@@ -1,8 +1,26 @@
 52 180
-MEM ATOMIZE · 1/2 · CONNECTING PROVIDER . · 0sMEM ATOMIZE · 2/2 · ANALYZING MEMORY STRUCTURE . · 0s                                                     [32m[1mATOMIZE APPLIED · atomize/direct-current[0m
+MEM ATOMIZE · 1/2 · CONNECTING PROVIDER . · 0sMEM ATOMIZE · 2/2 · ANALYZING MEMORY STRUCTURE . · 0s                                                     [1mATOMIZE APPLIED · atomize/direct-current[0m
 EFFECTS · SPLIT 4 · CHILDREN 8 · KEEP 0
-RECEIPT · b101ad45-b25f-43ea-b872-4cff1c9cbab6
-CHECKPOINT · 52be83a2-7449-437f-9c44-1a6494404523
+
+SPLIT 1
+  [38;2;237;135;150m[1mREMOVE[0m · [f484d431] [38;2;202;211;245mThe Main Building entrance accepts a physical NFC card. | Mobile-app authentication is not accepted at that entrance.[0m
+  [38;2;138;173;244m[1mADD   [0m · [bbb5f0bf] [38;2;202;211;245mThe Main Building entrance accepts a physical NFC card.[0m
+  [38;2;138;173;244m[1mADD   [0m · [256bcea8] [38;2;202;211;245mMobile-app authentication is not accepted at that entrance.[0m
+
+SPLIT 2
+  [38;2;237;135;150m[1mREMOVE[0m · [fbf54b77] [38;2;202;211;245mThe staff entrance uses the same physical NFC card. | Staff should not rely on mobile-app authentication.[0m
+  [38;2;138;173;244m[1mADD   [0m · [77daf0d5] [38;2;202;211;245mThe staff entrance uses the same physical NFC card.[0m
+  [38;2;138;173;244m[1mADD   [0m · [a86a8286] [38;2;202;211;245mStaff should not rely on mobile-app authentication.[0m
+
+SPLIT 3
+  [38;2;237;135;150m[1mREMOVE[0m · [192a0e70] [38;2;202;211;245mThe library opens at 10:00 on weekends. | The research desk closes at 16:00.[0m
+  [38;2;138;173;244m[1mADD   [0m · [e27572e5] [38;2;202;211;245mThe library opens at 10:00 on weekends.[0m
+  [38;2;138;173;244m[1mADD   [0m · [7922ed14] [38;2;202;211;245mThe research desk closes at 16:00.[0m
+
+… 1 MORE SPLIT · see REVIEW
+
+RECEIPT · 827cb087-620f-4e65-8c9e-f26ee9b23bdf
+CHECKPOINT · dfda0d16-a623-4076-a502-dfbbbe786317
 REVIEW · mem review atomize --context atomize/direct-current
 RECOVERY · mem undo
 DIRECT APPLY VERIFIED · MEMORIES 8 · CHECKPOINTS 1 · RECEIPT True

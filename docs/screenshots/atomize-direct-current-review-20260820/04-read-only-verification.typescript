@@ -1,6 +1,6 @@
 52 180
  RESULT · atomize · atomize/direct-current
- STATUS · APPLIED ANALYSIS · READ ONLY · sources=4 · projected=8 · splits=4 · children=8 · review issues=4
+ STATUS · APPLIED ANALYSIS · sources=4 · projected=8 · splits=4 · children=8 · review issues=4
 
  WHAT MEM UNDERSTOOD
  Each source records two independent claims.
@@ -22,75 +22,82 @@ The atomize analysis reported no unresolved finding in this bounded Context fram
    OUTPUT · atomize/direct-current · IN PLACE
  APPLIED · REVIEW · 4 SOURCE MEMORIES · 8 PROJECTED MEMORIES · 4 FINDINGS · 0 ANSWERED
 
- WHAT MEM UNDERSTOOD
  UNDERSTOOD
  Each source records two independent claims.
 
  CHANGED
- Each source is split into its two recorded claims.
+ Each source is split into its two recorded claims.
 
  UNRESOLVED
  (none)
 
  REVIEW ITEMS · 4
- SUGGESTED SPLIT 1 · [6792dd09] The Main Building entrance accepts a physical NFC card. | Mobile-app authentication is not accepted at that entrance.
+ SUGGESTED SPLIT 1 · [f484d431] The Main Building entrance accepts a physical NFC card. | Mobile-app authentication is not accepted at that entrance.
  [REVIEW] The source contains two independently revisable claims.
 
- SUGGESTED SPLIT 2 · [073cab22] The staff entrance uses the same physical NFC card. | Staff should not rely on mobile-app authentication.
+ SUGGESTED SPLIT 2 · [fbf54b77] The staff entrance uses the same physical NFC card. | Staff should not rely on mobile-app authentication.
  [REVIEW] The source contains two independently revisable claims.
 
- SUGGESTED SPLIT 3 · [ea8a1b56] The library opens at 10:00 on weekends. | The research desk closes at 16:00.
+ SUGGESTED SPLIT 3 · [192a0e70] The library opens at 10:00 on weekends. | The research desk closes at 16:00.
  [REVIEW] The source contains two independently revisable claims.
 
- SUGGESTED SPLIT 4 · [01952b82] The north elevator serves floors one through four. | The fifth floor requires the south elevator.
+ SUGGESTED SPLIT 4 · [b2a2528f] The north elevator serves floors one through four. | The fifth floor requires the south elevator.
  [REVIEW] The source contains two independently revisable claims.
 
-[6792dd09] The Main Building entrance accepts a physical NFC card. | Mobile-app authentication is not accepted at that entrance.
+[f484d431] The Main Building entrance accepts a physical NFC card. | Mobile-app authentication is not accepted at that entrance.
   CLASSIFICATION
     COMPOSITE · 2 CHILDREN
   SOURCE MEMORY
     SOURCE 1 · FROM atomize/direct-current
-      [6792dd09] The Main Building entrance accepts a physical NFC card. | Mobile-app authentication is not accepted at that entrance.
+      [f484d431] The Main Building entrance accepts a physical NFC card. | Mobile-app authentication is not accepted at that entrance.
   WHY THIS MEMORY SPLIT
     The source contains two independently revisable claims.
   RESPONSES
     RESPONSE
       (none)
-  PROPOSED CHILDREN
-[073cab22] The staff entrance uses the same physical NFC card. | Staff should not rely on mobile-app authentication.
+  APPLIED CHILD MEMORIES
+    MEMORY 1 · The Main Building entrance accepts a physical NFC card.
+    MEMORY 2 · Mobile-app authentication is not accepted at that entrance.
+[fbf54b77] The staff entrance uses the same physical NFC card. | Staff should not rely on mobile-app authentication.
   CLASSIFICATION
     COMPOSITE · 2 CHILDREN
   SOURCE MEMORY
     SOURCE 1 · FROM atomize/direct-current
-      [073cab22] The staff entrance uses the same physical NFC card. | Staff should not rely on mobile-app authentication.
+      [fbf54b77] The staff entrance uses the same physical NFC card. | Staff should not rely on mobile-app authentication.
   WHY THIS MEMORY SPLIT
     The source contains two independently revisable claims.
   RESPONSES
     RESPONSE
       (none)
-  PROPOSED CHILDREN
-[ea8a1b56] The library opens at 10:00 on weekends. | The research desk closes at 16:00.
+  APPLIED CHILD MEMORIES
+    MEMORY 1 · The staff entrance uses the same physical NFC card.
+    MEMORY 2 · Staff should not rely on mobile-app authentication.
+[192a0e70] The library opens at 10:00 on weekends. | The research desk closes at 16:00.
   CLASSIFICATION
     COMPOSITE · 2 CHILDREN
   SOURCE MEMORY
     SOURCE 1 · FROM atomize/direct-current
-      [ea8a1b56] The library opens at 10:00 on weekends. | The research desk closes at 16:00.
+      [192a0e70] The library opens at 10:00 on weekends. | The research desk closes at 16:00.
   WHY THIS MEMORY SPLIT
     The source contains two independently revisable claims.
   RESPONSES
     RESPONSE
       (none)
-  PROPOSED CHILDREN
-[01952b82] The north elevator serves floors one through four. | The fifth floor requires the south elevator.
+  APPLIED CHILD MEMORIES
+    MEMORY 1 · The library opens at 10:00 on weekends.
+    MEMORY 2 · The research desk closes at 16:00.
+[b2a2528f] The north elevator serves floors one through four. | The fifth floor requires the south elevator.
   CLASSIFICATION
     COMPOSITE · 2 CHILDREN
   SOURCE MEMORY
     SOURCE 1 · FROM atomize/direct-current
-      [01952b82] The north elevator serves floors one through four. | The fifth floor requires the south elevator.
+      [b2a2528f] The north elevator serves floors one through four. | The fifth floor requires the south elevator.
   WHY THIS MEMORY SPLIT
     The source contains two independently revisable claims.
   RESPONSES
     RESPONSE
       (none)
-  PROPOSED CHILDREN
+  APPLIED CHILD MEMORIES
+    MEMORY 1 · The north elevator serves floors one through four.
+    MEMORY 2 · The fifth floor requires the south elevator.
 READ-ONLY VERIFICATION · MEMORIES 8 · CHECKPOINTS 1 · RECEIPT True
