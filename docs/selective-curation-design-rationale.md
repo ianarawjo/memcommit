@@ -118,8 +118,23 @@ an omitted instruction fails with a stable usage error. Supplying
 `mem forget "INSTRUCTION"` preserves the existing current-Context fast path,
 non-TTY prompt compatibility, whole-frame provider turn, Resolution review,
 and checkpoint behavior. After a successful TTY Apply, the command prints the
-canonical public Source, effect counts, and checkpoint prefix as its durable
-success receipt; this appears only after the authorized save succeeds.
+canonical public Source, submitted instruction, exact applied change lines, and
+checkpoint identity as its durable success receipt; this appears only after the
+authorized save succeeds.
+
+The compact applied receipt deliberately projects changes as a diff instead of
+repeating an `EFFECTS · REMOVE n · EDIT n` summary. Each removed or edited
+Memory occupies exactly one logical line and is identified by its short UID. A
+whole-Memory removal uses `-` and colors the removed content with the shared
+REMOVE red. An in-place edit uses `~`, keeps mechanically equal words neutral,
+and interleaves removed words in REMOVE red with replacement words in EDIT
+green; it has no directional arrow. The submitted Forget instruction appears
+once above the diff, so per-change `WHY` prose is omitted from this immediate
+receipt while remaining available in the checkpoint-backed Review evidence.
+When color is unavailable, edit spans use the explicit
+`[-removed-][+added+]` fallback so redirected output does not hide which words
+left or entered the Memory. KEEP decisions are not change lines, and the
+accepted all-KEEP receipt remains the distinct no-change/no-checkpoint path.
 
 The TTY application surface is ownership-aware. Provider dispositions stage one
 answered treatment for every Source Memory. A local Source therefore applies

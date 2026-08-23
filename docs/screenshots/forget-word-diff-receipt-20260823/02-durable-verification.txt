@@ -1,0 +1,22 @@
+$ mem forget "Forget the obsolete desk location and normalize the merge wording." --context capture/forget-word-diff                                                                
+PTY 180 52                                                                                                                                                                          
+Consulting the configured Forget provider...                                                                                                                                        
+FORGET APPLIED · SOURCE capture/forget-word-diff                                                                                                                                    
+FORGET · Forget the obsolete desk location and normalize the merge wording.                                                                                                         
+DIFF · 2 CHANGES                                                                                                                                                                    
+- [10000000] The service desk was beside the west entrance.                                                                                                                         
+~ [20000000] Keep the merge rule for similar equivalent claims.                                                                                                                     
+RECEIPT · b1f1dbcf-8b34-4aa5-8fbd-fa1173433a2e                                                                                                                                      
+CHECKPOINT · b1f1dbcf-8b34-4aa5-8fbd-fa1173433a2e                                                                                                                                   
+REVIEW · mem review forget --receipt b1f1dbcf-8b34-4aa5-8fbd-fa1173433a2e                                                                                                           
+RECOVERY · mem undo                                                                                                                                                                 
+CAPTURE GATE · PRESS V FOR DURABLE VERIFICATION                                                                                                                                     
+v                                                                                                                                                                                   
+                                                                                                                                                                                    
+DURABLE VERIFICATION · FORGET WORD DIFF                                                                                                                                             
+  REMOVED UID ABSENT · True                                                                                                                                                         
+  EDITED CONTENT · Keep the merge rule for equivalent claims.                                                                                                                       
+  KEPT CONTENT · Never discard a unique general rule as a duplicate.                                                                                                                
+  DIRECT MEMORIES · 2                                                                                                                                                               
+  FORGET CHECKPOINTS · 1                                                                                                                                                            
+  PROVIDER CALLS · 1

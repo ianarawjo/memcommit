@@ -188,6 +188,15 @@ unchanged body text is white. An ADD action can consequently have a blue label
 and green newly present content without conflating operation identity with a
 textual diff direction.
 
+Forget's immediate applied receipt uses that same mechanical contract in a
+compact one-line form. A deleted Memory is one red `- [uid] content` line. An
+edited Memory is one `~ [uid]` line with equal words neutral, removed words red,
+and replacement words green; no arrow or repeated rationale is introduced.
+The mixed `FORGET APPLIED` heading remains neutral rather than implying one
+uniform child effect. Redirected or `NO_COLOR` edit spans spell the same
+distinction as `[-removed-][+added+]`, while the top-level `-` marker keeps a
+whole deletion complete without color.
+
 Trace composes the same palette without inheriting the checkpoint picker's
 two-surface topology. Each operation begins with the same adapter-neutral
 History row segments consumed by static Log: the action token uses its semantic

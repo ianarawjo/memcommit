@@ -1,0 +1,22 @@
+$ mem forget "Forget the obsolete desk location and normalize the merge wording." --context capture/forget-word-diff
+PTY 180 52
+[2mConsulting the configured Forget provider...[0m
+MEM FORGET · 1/1 · ANALYZING 3 SOURCE MEMORIES X 1 INSTRUCTION . · 0s                                                                     [1mFORGET APPLIED · SOURCE capture/forget-word-diff[0m
+FORGET · Forget the obsolete desk location and normalize the merge wording.
+DIFF · 2 CHANGES
+[38;2;237;135;150m[1m-[0m [10000000] [38;2;237;135;150m[4mThe service desk was beside the west entrance.[0m
+[38;2;166;218;149m[1m~[0m [20000000] Keep the merge rule for [38;2;237;135;150m[4msimilar[0m [38;2;166;218;149m[4mequivalent[0m claims.
+RECEIPT · b1f1dbcf-8b34-4aa5-8fbd-fa1173433a2e
+CHECKPOINT · b1f1dbcf-8b34-4aa5-8fbd-fa1173433a2e
+REVIEW · mem review forget --receipt b1f1dbcf-8b34-4aa5-8fbd-fa1173433a2e
+RECOVERY · mem undo
+CAPTURE GATE · PRESS V FOR DURABLE VERIFICATION
+v
+
+DURABLE VERIFICATION · FORGET WORD DIFF
+  REMOVED UID ABSENT · True
+  EDITED CONTENT · Keep the merge rule for equivalent claims.
+  KEPT CONTENT · Never discard a unique general rule as a duplicate.
+  DIRECT MEMORIES · 2
+  FORGET CHECKPOINTS · 1
+  PROVIDER CALLS · 1

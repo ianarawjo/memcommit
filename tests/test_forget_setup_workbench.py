@@ -247,7 +247,9 @@ def test_tty_forget_prints_a_receipt_only_after_the_checkpoint_succeeds(
 
     assert result.exit_code == 0, result.output + result.stderr
     assert "FORGET APPLIED · SOURCE forget/receipt" in result.output
-    assert "EFFECTS · REMOVE 1 · EDIT 0" in result.output
+    assert "FORGET · Forget the old desk location." in result.output
+    assert "DIFF · 1 CHANGE" in result.output
+    assert f"- [{memory.uid[:8]}] {memory.content}" in result.output
     assert "REVIEW · mem review forget --receipt" in result.output
     assert "RECOVERY · mem undo" in result.output
     assert memory.uid not in store.load_direct(context.name).memories

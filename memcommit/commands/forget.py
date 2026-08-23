@@ -13,7 +13,9 @@ from memcommit.authority.access import (
 from memcommit.commands.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
+from memcommit.interfaces.cli.forget import render_forget_change_lines
 from memcommit.interfaces.console.text import (
+    display_escape_text,
     safe_terminal_text,
 )
 from memcommit.context import Context
@@ -351,21 +353,16 @@ def cmd(
         typer.echo("OUTCOME · NO CHANGE · Context unchanged · no checkpoint")
         return
 
-    effects: list[str] = []
-    if apply_receipt.removed_count:
-        effects.append(f"{apply_receipt.removed_count} removed")
-    if apply_receipt.edited_count:
-        effects.append(f"{apply_receipt.edited_count} edited")
     typer.secho(
         "FORGET APPLIED · SOURCE "
         f"{safe_terminal_text(apply_receipt.source_name)}",
-        fg=typer.colors.GREEN,
         bold=True,
     )
-    typer.echo(
-        f"EFFECTS · REMOVE {apply_receipt.removed_count} · "
-        f"EDIT {apply_receipt.edited_count}"
-    )
+    typer.echo(f"FORGET · {display_escape_text(info)}")
+    change_count = len(reviewed_changes)
+    change_label = "CHANGE" if change_count == 1 else "CHANGES"
+    typer.echo(f"DIFF · {change_count} {change_label}")
+    render_forget_change_lines(reviewed_changes)
     if apply_receipt.checkpoint_uid is not None:
         typer.echo(f"RECEIPT · {apply_receipt.checkpoint_uid}")
         typer.echo(f"CHECKPOINT · {apply_receipt.checkpoint_uid}")
