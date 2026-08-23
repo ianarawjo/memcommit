@@ -13,7 +13,7 @@ import unicodedata
 from memcommit.provenance import EventKind
 
 
-RATIONALE_RULESET_VERSION = "rationale-natural-provenance-v3"
+RATIONALE_RULESET_VERSION = "rationale-natural-provenance-v4"
 RATIONALE_RULESET_FIXTURE = "rationale.json"
 DEFAULT_RATIONALE_PROVENANCE_LIMIT = 40
 MAX_RATIONALE_PROVENANCE_LIMIT = 100_000
@@ -162,10 +162,12 @@ def _validate_case(raw: object, *, rule_ids: set[str]) -> str:
             "before",
             "after",
         }
-        if not isinstance(raw_event, dict) or frozenset(raw_event) not in {
-            frozenset(event_fields),
-            frozenset((*event_fields, "context_transition")),
-        }:
+        optional_event_fields = {"context_transition", "reason_codes"}
+        if (
+            not isinstance(raw_event, dict)
+            or not event_fields <= set(raw_event)
+            or set(raw_event) - event_fields - optional_event_fields
+        ):
             raise RationaleRulesError(
                 f"Invalid Rationale ruleset case {case_id} event."
             )
@@ -189,6 +191,9 @@ def _validate_case(raw: object, *, rule_ids: set[str]) -> str:
                 raise RationaleRulesError(
                     f"Rationale case {case_id} Context transition is stationary."
                 )
+        reason_codes = event.get("reason_codes")
+        if reason_codes is not None:
+            _texts(reason_codes, f"case {case_id} event reason codes")
         known_ids |= _validate_states(event["before"], label="event before state")
         known_ids |= _validate_states(event["after"], label="event after state")
     _texts(input_value["warnings"], f"case {case_id} warnings")

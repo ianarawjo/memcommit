@@ -1,0 +1,31 @@
+LIVE PTY · 52 180
+Profile: study-long-audit-20260823
+Store: /Users/KimMunyeong/.mem-profiles/stores/39ce9847-0483-45ec-a35e-5f83b4e9d630
+Contexts 120 owned + 43 granted · Memories 890 owned + 625 granted
+Current Context: practice
+TRACE · task-1/participant/construction-updates/facility-updates
+[MEMORY cd518767] · 5 OPERATIONS · LATEST FIRST
+
+[merge] [CHECKPOINT 1a2abb98] [MEMORIES 2]  2026-08-23 13:24 · task-1/participant/construction-updates/facility-updates → task-1/participant/transform-scratch/source/facility-updates · Memory content unchanged
+  Source: [cd518767] Wiki update draft: Construction runs June 24 through August 23; update all affected campus-wiki areas.
+  Target: [3ec971b1] Wiki update draft: Construction runs June 24 through August 23; update all affected campus-wiki areas.
+
+[merge] [CHECKPOINT 4b0f1ce1] [MEMORIES 2]  2026-08-23 13:22 · task-1/participant/construction-updates/facility-updates → task-1/participant/transform-scratch/source · Memory content unchanged
+  Source: [cd518767] Wiki update draft: Construction runs June 24 through August 23; update all affected campus-wiki areas.
+  Target: [423582d8] Wiki update draft: Construction runs June 24 through August 23; update all affected campus-wiki areas.
+
+[merge] [CHECKPOINT 604759a1] [MEMORIES 2]  2026-08-23 13:14 · task-1/participant/construction-updates/facility-updates → task-1/participant/transform-scratch/source · Memory content unchanged
+  Source: [cd518767] Wiki update draft: Construction runs June 24 through August 23; update all affected campus-wiki areas.
+  Target: [423582d8] Wiki update draft: Construction runs June 24 through August 23; update all affected campus-wiki areas.
+
+[replace] [CHECKPOINT 1c513717] [MEMORY cd518767]  2026-08-23 12:25 · Replaced 1 occurrence(s) in 1 Memory/ies across 1 Context(s).
+  − [cd518767]@18 Audit draft: Construction runs June 24 through August 23; update all affected campus-wiki areas.
+  + [cd518767]@18 Wiki update draft: Construction runs June 24 through August 23; update all affected campus-wiki areas.
+
+[move] [CHECKPOINT d736546d] [MEMORY cd518767]  2026-08-23 12:25 · Moved 1 Memory/ies into 'task-1/participant/construction-updates/facility-updates' with retarget live-link policy.
+  − ∅
+  + [cd518767]@18 Audit draft: Construction runs June 24 through August 23; update all affected campus-wiki areas.
+
+ATTACHMENTS
+  none
+READ-ONLY VERIFIED · SOURCE AND TARGET UID TRACE CONNECTED · CURRENT CONTEXT UNCHANGED

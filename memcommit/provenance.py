@@ -3019,6 +3019,35 @@ class _RecordedBranchTransition:
     memory_edges: tuple[MemoryLineageEdge, ...]
 
 
+@dataclass(frozen=True)
+class _RecordedMergeEdge:
+    """One disposition-complete Source/Target occurrence mapping."""
+
+    edge: MemoryLineageEdge
+    disposition: Literal[
+        "NEW",
+        "ALREADY_PRESENT",
+        "TAKE_SOURCE",
+        "KEEP_TARGET",
+    ]
+
+
+@dataclass(frozen=True)
+class _RecordedMergeTransition:
+    """Validated same-Store Merge evidence anchored by its target checkpoint."""
+
+    checkpoint_uid: str
+    timestamp: str
+    description: str
+    operation_uid: str
+    source: TraceCommandContext
+    target: TraceCommandContext
+    command_operation: TraceCommandOperation
+    before: _Frame
+    after: _Frame
+    edges: tuple[_RecordedMergeEdge, ...]
+
+
 def _recorded_branch_transition(
     *,
     entry: dict,
@@ -3173,6 +3202,184 @@ def _branch_transition_events(
             )
         )
     return events
+
+
+def _merge_decisions(
+    args: dict[str, Any],
+) -> dict[tuple[str, str], Literal["TAKE_SOURCE", "KEEP_TARGET"]]:
+    """Validate the reviewed per-occurrence Merge dispositions."""
+
+    record = args.get("merge_decisions")
+    if not isinstance(record, dict) or set(record) != {"version", "decisions"}:
+        raise ValueError("Merge decision metadata is invalid.")
+    raw_decisions = record.get("decisions")
+    if record.get("version") != 1 or not isinstance(raw_decisions, list):
+        raise ValueError("Merge decision metadata is invalid.")
+    result: dict[tuple[str, str], Literal["TAKE_SOURCE", "KEEP_TARGET"]] = {}
+    expected = {
+        "conflict_uid",
+        "kind",
+        "decision",
+        "source_name",
+        "target_name",
+        "source_uid",
+        "target_uids",
+    }
+    for raw in raw_decisions:
+        if not isinstance(raw, dict) or set(raw) != expected:
+            raise ValueError("Merge decision metadata is invalid.")
+        decision = raw.get("decision")
+        source_uid = raw.get("source_uid")
+        target_uids = raw.get("target_uids")
+        if (
+            decision not in {"TAKE_SOURCE", "KEEP_TARGET"}
+            or not isinstance(source_uid, str)
+            or not source_uid
+            or not isinstance(target_uids, list)
+            or not target_uids
+            or any(not isinstance(uid, str) or not uid for uid in target_uids)
+            or len(target_uids) != len(set(target_uids))
+        ):
+            raise ValueError("Merge decision metadata is invalid.")
+        for target_uid in target_uids:
+            key = (source_uid, target_uid)
+            if key in result:
+                raise ValueError("Merge decision metadata repeats an occurrence.")
+            result[key] = decision
+    return result
+
+
+def _recorded_merge_transition(
+    entry: dict,
+) -> tuple[_RecordedMergeTransition | None, str | None]:
+    """Validate one Merge checkpoint before it can join two Trace owners."""
+
+    checkpoint_uid, timestamp, command, description, args = _checkpoint_fields(entry)
+    if command != "merge" or "memory_lineage" not in args:
+        return None, None
+    warning = (
+        f"Checkpoint [{checkpoint_uid[:8]}] has invalid Merge Memory lineage "
+        "metadata; Source and Target histories were not connected."
+    )
+    tree = args.get("merge_tree")
+    source_name = args.get("source")
+    contexts = args.get("command_contexts")
+    try:
+        after = _frame_from_snapshot(
+            entry.get("snapshot"),
+            label=f"Checkpoint [{checkpoint_uid[:8]}]",
+        )
+        command_before = entry.get("command_before")
+        before = (
+            _frame_from_snapshot(
+                command_before,
+                label=f"Checkpoint [{checkpoint_uid[:8]}] command pre-image",
+            )
+            if isinstance(command_before, dict)
+            else _empty_frame(after.context_uid, after.context_name)
+        )
+        memory_edges = parse_memory_lineage_receipt(args)
+        decisions = _merge_decisions(args)
+    except (ProvenanceError, TypeError, ValueError):
+        return None, warning
+    target_created = tree.get("target_created") if isinstance(tree, dict) else None
+    has_command_preimage = isinstance(command_before, dict)
+    if (
+        entry.get("auto") is not True
+        or not isinstance(tree, dict)
+        or tree.get("version") != 2
+        or type(target_created) is not bool
+        # Creation has no Target pre-image; an existing Target must retain one.
+        or target_created == has_command_preimage
+        or not isinstance(tree.get("operation_uid"), str)
+        or not isinstance(source_name, str)
+        or not source_name
+        or not isinstance(contexts, list)
+        or not any(
+            isinstance(item, dict)
+            and item.get("uid") == after.context_uid
+            and item.get("name") == after.context_name
+            for item in contexts
+        )
+        or before.context_uid != after.context_uid
+    ):
+        return None, warning
+    anchored = tuple(
+        edge for edge in memory_edges if edge.target_context_uid == after.context_uid
+    )
+    source_context_uids = {edge.source_context_uid for edge in anchored}
+    if not anchored or len(source_context_uids) != 1:
+        return None, warning
+
+    recorded_edges: list[_RecordedMergeEdge] = []
+    for edge in anchored:
+        target_after = after.memories.get(edge.target_memory_uid)
+        if (
+            target_after is None
+            or target_after.content_digest != edge.target_content_sha256
+        ):
+            return None, warning
+        target_before = before.memories.get(edge.target_memory_uid)
+        decision = decisions.get((edge.source_memory_uid, edge.target_memory_uid))
+        if target_before is None:
+            if decision is not None or (
+                edge.source_content_sha256 != edge.target_content_sha256
+            ):
+                return None, warning
+            disposition: Literal[
+                "NEW", "ALREADY_PRESENT", "TAKE_SOURCE", "KEEP_TARGET"
+            ] = "NEW"
+        elif decision == "TAKE_SOURCE":
+            if edge.source_content_sha256 != edge.target_content_sha256:
+                return None, warning
+            disposition = "TAKE_SOURCE"
+        elif decision == "KEEP_TARGET":
+            if target_before.content_digest != edge.target_content_sha256:
+                return None, warning
+            disposition = "KEEP_TARGET"
+        elif (
+            decision is None
+            and target_before.content_digest == edge.target_content_sha256
+            and edge.source_content_sha256 == edge.target_content_sha256
+        ):
+            disposition = "ALREADY_PRESENT"
+        else:
+            return None, warning
+        recorded_edges.append(_RecordedMergeEdge(edge=edge, disposition=disposition))
+
+    operation_uid = f"merge:{tree['operation_uid']}"
+    context_records: list[TraceCommandContext] = []
+    for item in contexts:
+        if not isinstance(item, dict):
+            return None, warning
+        uid = item.get("uid")
+        name = item.get("name")
+        if not isinstance(uid, str) or not uid or not isinstance(name, str) or not name:
+            return None, warning
+        context_records.append(TraceCommandContext(uid=uid, name=name))
+    source_context_uid = next(iter(source_context_uids))
+    return (
+        _RecordedMergeTransition(
+            checkpoint_uid=checkpoint_uid,
+            timestamp=timestamp,
+            description=description,
+            operation_uid=operation_uid,
+            source=TraceCommandContext(uid=source_context_uid, name=source_name),
+            target=TraceCommandContext(
+                uid=after.context_uid,
+                name=after.context_name,
+            ),
+            command_operation=TraceCommandOperation(
+                uid=operation_uid,
+                command="merge",
+                contexts=tuple(context_records),
+            ),
+            before=before,
+            after=after,
+            edges=tuple(recorded_edges),
+        ),
+        None,
+    )
 
 
 def _history(
@@ -3400,7 +3607,13 @@ def _resolve_historical_uid(
 def _lineage_component(selected_uid: str, events: Iterable[TraceEvent]) -> set[str]:
     adjacency: dict[str, set[str]] = {}
     for event in events:
-        if event.kind not in {"SPLIT", "ABSORBED", "TRANSLATED", "BRANCHED"}:
+        if event.kind not in {
+            "SPLIT",
+            "ABSORBED",
+            "TRANSLATED",
+            "BRANCHED",
+            "MERGED_IN",
+        }:
             continue
         sources = {state.uid for state in event.before}
         results = {state.uid for state in event.after}
@@ -3428,7 +3641,7 @@ def _original_states(
     parented = {
         state.uid
         for event in events
-        if event.kind in {"SPLIT", "ABSORBED", "TRANSLATED", "BRANCHED"}
+        if event.kind in {"SPLIT", "ABSORBED", "TRANSLATED", "BRANCHED", "MERGED_IN"}
         for state in event.after
         if state.uid not in {item.uid for item in event.before}
     }
@@ -3681,12 +3894,12 @@ def collect_trace_candidates(
     return (*current, *(candidate for _, _, candidate in historical))
 
 
-def build_trace(
+def _build_local_trace(
     store: MemoryStore,
     ctx: Context,
     selector: str,
 ) -> TraceReport:
-    """Reconstruct one selected Memory's retained content lineage."""
+    """Reconstruct lineage retained by one exact owner Context."""
     events, warnings, frames = _history(store, ctx)
     selected_uid = _resolve_historical_uid(selector, events, frames)
     component = _lineage_component(selected_uid, events)
@@ -3715,4 +3928,350 @@ def build_trace(
         events=relevant_events,
         analyses=analyses,
         warnings=tuple(dict.fromkeys((*warnings, *analysis_warnings))),
+    )
+
+
+def _merge_transition_catalog(
+    store: MemoryStore,
+) -> tuple[
+    tuple[_RecordedMergeTransition, ...],
+    dict[tuple[str, str], tuple[str, ...]],
+]:
+    """Freeze validated local Merge receipts without opening sibling content."""
+
+    transitions: list[_RecordedMergeTransition] = []
+    warnings_by_node: dict[tuple[str, str], list[str]] = {}
+    seen_checkpoints: set[str] = set()
+    for context_name in store.list_context_names():
+        try:
+            entries = _checkpoint_entries(store, context_name)
+        except ProvenanceError:
+            # An unrelated broken history must not make an exact Trace fail.
+            continue
+        for entry in entries:
+            checkpoint_uid = entry.get("uid")
+            if (
+                not isinstance(checkpoint_uid, str)
+                or checkpoint_uid in seen_checkpoints
+            ):
+                continue
+            seen_checkpoints.add(checkpoint_uid)
+            transition, warning = _recorded_merge_transition(entry)
+            if transition is not None:
+                transitions.append(transition)
+                continue
+            if warning is None:
+                continue
+            snapshot = entry.get("snapshot")
+            context_uid = snapshot.get("uid") if isinstance(snapshot, dict) else None
+            after_memories = (
+                snapshot.get("memories") if isinstance(snapshot, dict) else None
+            )
+            command_before = entry.get("command_before")
+            before_memories = (
+                command_before.get("memories")
+                if isinstance(command_before, dict)
+                else {}
+            )
+            if (
+                isinstance(context_uid, str)
+                and context_uid
+                and isinstance(after_memories, dict)
+                and isinstance(before_memories, dict)
+            ):
+                changed_uids = {
+                    uid
+                    for uid in set(after_memories) | set(before_memories)
+                    if isinstance(uid, str)
+                    and after_memories.get(uid) != before_memories.get(uid)
+                }
+                for uid in changed_uids:
+                    warnings_by_node.setdefault((context_uid, uid), []).append(warning)
+    return (
+        tuple(transitions),
+        {node: tuple(dict.fromkeys(items)) for node, items in warnings_by_node.items()},
+    )
+
+
+def _context_for_uid(
+    store: MemoryStore,
+    context_uid: str,
+    *,
+    hints: Iterable[str],
+    cache: dict[str, Context],
+) -> Context | None:
+    """Resolve a current local owner by identity, tolerating a later rename."""
+
+    cached = cache.get(context_uid)
+    if cached is not None:
+        return cached
+    names = tuple(dict.fromkeys((*hints, *store.list_context_names())))
+    for name in names:
+        try:
+            context = store.load_direct(name)
+        except (FileNotFoundError, ValueError):
+            continue
+        cache.setdefault(context.uid, context)
+        if context.uid == context_uid:
+            return context
+    return None
+
+
+def _matching_state(
+    report: TraceReport | None,
+    *,
+    uid: str,
+    content_digest: str,
+) -> MemoryState | None:
+    if report is None:
+        return None
+    candidates = (
+        *report.current,
+        *(
+            state
+            for event in reversed(report.events)
+            for state in (*event.after, *event.before)
+        ),
+        *report.originals,
+    )
+    return next(
+        (
+            state
+            for state in candidates
+            if state.uid == uid and state.content_digest == content_digest
+        ),
+        None,
+    )
+
+
+def _merge_transition_event(
+    transition: _RecordedMergeTransition,
+    mapping: _RecordedMergeEdge,
+    *,
+    source_report: TraceReport | None,
+) -> TraceEvent | None:
+    """Project one exact Merge mapping into the existing Trace event grammar."""
+
+    edge = mapping.edge
+    target_after = transition.after.memories[edge.target_memory_uid]
+    source_state = _matching_state(
+        source_report,
+        uid=edge.source_memory_uid,
+        content_digest=edge.source_content_sha256,
+    )
+    if source_state is None and (
+        edge.source_content_sha256 == edge.target_content_sha256
+    ):
+        # A same-value Merge receipt is written while Source and Target are
+        # locked, so the target post-image also proves the copied Source value.
+        source_state = MemoryState(
+            uid=edge.source_memory_uid,
+            content=target_after.content,
+            position=target_after.position,
+        )
+    if source_state is None:
+        return None
+    target_before = transition.before.memories.get(edge.target_memory_uid)
+    before = (source_state,) + ((target_before,) if target_before is not None else ())
+    return TraceEvent(
+        kind="MERGED_IN",
+        evidence="RECORDED",
+        timestamp=transition.timestamp,
+        checkpoint_uid=transition.checkpoint_uid,
+        command="merge",
+        description=transition.description,
+        before=before,
+        after=(target_after,),
+        reason_codes=("MERGE", mapping.disposition),
+        context_transition=TraceContextTransition(
+            source=transition.source,
+            target=transition.target,
+        ),
+    )
+
+
+def _deduplicated_events(events: Iterable[TraceEvent]) -> tuple[TraceEvent, ...]:
+    distinct: list[TraceEvent] = []
+    seen: set[str] = set()
+    for event in events:
+        identity = json.dumps(
+            event.to_dict(),
+            sort_keys=True,
+            ensure_ascii=False,
+            separators=(",", ":"),
+        )
+        if identity in seen:
+            continue
+        seen.add(identity)
+        distinct.append(event)
+    indexed = tuple(enumerate(distinct))
+    return tuple(
+        event
+        for _index, event in sorted(
+            indexed,
+            key=lambda item: (
+                item[1].timestamp is None,
+                item[1].timestamp or "",
+                item[0],
+            ),
+        )
+    )
+
+
+def build_trace(
+    store: MemoryStore,
+    ctx: Context,
+    selector: str,
+) -> TraceReport:
+    """Reconstruct one Memory's local history and recorded Merge uses."""
+
+    selected = _build_local_trace(store, ctx, selector)
+    transitions, merge_warnings = _merge_transition_catalog(store)
+    start_warning_key = (ctx.uid, selected.selected_uid)
+    if not transitions and start_warning_key not in merge_warnings:
+        return selected
+
+    adjacency: dict[
+        tuple[str, str],
+        set[tuple[str, str]],
+    ] = {}
+    recorded_mappings: list[
+        tuple[
+            tuple[str, str],
+            tuple[str, str],
+            _RecordedMergeTransition,
+            _RecordedMergeEdge,
+        ]
+    ] = []
+    for transition in transitions:
+        for mapping in transition.edges:
+            source_node = mapping.edge.source_node
+            target_node = mapping.edge.target_node
+            adjacency.setdefault(source_node, set()).add(target_node)
+            adjacency.setdefault(target_node, set()).add(source_node)
+            recorded_mappings.append((source_node, target_node, transition, mapping))
+
+    start = (ctx.uid, selected.selected_uid)
+    nodes = {start}
+    pending = [start]
+    while pending:
+        node = pending.pop()
+        for neighbor in adjacency.get(node, ()):
+            if neighbor in nodes:
+                continue
+            nodes.add(neighbor)
+            pending.append(neighbor)
+    if len(nodes) == 1:
+        extra_warnings = merge_warnings.get(start, ())
+        return replace(
+            selected,
+            warnings=tuple(dict.fromkeys((*selected.warnings, *extra_warnings))),
+        )
+
+    hints_by_uid: dict[str, list[str]] = {}
+    for transition in transitions:
+        hints_by_uid.setdefault(transition.source.uid, []).append(
+            transition.source.name
+        )
+        hints_by_uid.setdefault(transition.target.uid, []).append(
+            transition.target.name
+        )
+    context_cache = {ctx.uid: ctx}
+    reports: dict[tuple[str, str], TraceReport] = {start: selected}
+    for context_uid, memory_uid in sorted(nodes):
+        node = (context_uid, memory_uid)
+        if node in reports:
+            continue
+        owner = _context_for_uid(
+            store,
+            context_uid,
+            hints=hints_by_uid.get(context_uid, ()),
+            cache=context_cache,
+        )
+        if owner is None:
+            continue
+        try:
+            reports[node] = _build_local_trace(store, owner, memory_uid)
+        except ProvenanceError:
+            # The receipt still proves the immediate copied value. Older
+            # Source history remains absent rather than being guessed.
+            continue
+
+    merge_events: list[TraceEvent] = []
+    replacement_targets: set[tuple[str, str]] = set()
+    for source_node, target_node, transition, mapping in recorded_mappings:
+        if source_node not in nodes or target_node not in nodes:
+            continue
+        event = _merge_transition_event(
+            transition,
+            mapping,
+            source_report=reports.get(source_node),
+        )
+        if event is None:
+            continue
+        merge_events.append(event)
+        replacement_targets.add(
+            (transition.checkpoint_uid, mapping.edge.target_memory_uid)
+        )
+
+    local_events = [
+        event
+        for report in reports.values()
+        for event in report.events
+        if not (
+            event.command == "merge"
+            and event.checkpoint_uid is not None
+            and any(
+                (event.checkpoint_uid, state.uid) in replacement_targets
+                for state in (*event.before, *event.after)
+            )
+        )
+    ]
+    events = _deduplicated_events((*local_events, *merge_events))
+    component = {uid for report in reports.values() for uid in report.component_uids}
+    component.update(memory_uid for _context_uid, memory_uid in nodes)
+    current_by_uid: dict[str, MemoryState] = {}
+    for report in reports.values():
+        for state in report.current:
+            current_by_uid[state.uid] = state
+    current = tuple(
+        sorted(current_by_uid.values(), key=lambda state: (state.position, state.uid))
+    )
+    originals = _original_states(component, events, ())
+
+    analyses: list[TraceAnalysis] = []
+    analysis_ids: set[tuple[str, str]] = set()
+    for report in reports.values():
+        for analysis in report.analyses:
+            identity = (analysis.kind, analysis.analysis_uid)
+            if identity in analysis_ids:
+                continue
+            analysis_ids.add(identity)
+            analyses.append(analysis)
+    warnings = tuple(
+        dict.fromkeys(
+            (
+                *(
+                    warning
+                    for report in reports.values()
+                    for warning in report.warnings
+                ),
+                *(
+                    warning
+                    for node in nodes
+                    for warning in merge_warnings.get(node, ())
+                ),
+            )
+        )
+    )
+    return TraceReport(
+        context_uid=selected.context_uid,
+        context_name=selected.context_name,
+        selected_uid=selected.selected_uid,
+        component_uids=tuple(sorted(component)),
+        originals=originals,
+        current=current,
+        events=events,
+        analyses=tuple(analyses),
+        warnings=warnings,
     )

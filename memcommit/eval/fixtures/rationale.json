@@ -1,7 +1,7 @@
 {
   "command": "rationale",
   "schema_version": 2,
-  "ruleset_version": "rationale-natural-provenance-v3",
+  "ruleset_version": "rationale-natural-provenance-v4",
   "description": "Exact natural-language provenance rules and production calibration cases. Every case is prompt-visible and a regression contract; known-wrong narratives mark adjacent factual and presentation failures.",
   "rules": [
     {
@@ -62,12 +62,17 @@
     {
       "id": "R12_CONTEXT_MOVEMENT",
       "title": "Separate Context movement from content change",
-      "invariant": "When retained evidence says a Memory was copied, branched, or inherited into another Context, name the origin and destination and state separately whether its content changed; do not collapse that route into a direct Add in the destination."
+      "invariant": "When retained evidence says content was copied, branched, inherited, or merged into another Context, describe distinct Source and Target occurrences, name the origin and destination, and state separately whether content changed; do not collapse that route into a direct Add in the destination or imply that the Source occurrence moved away."
     },
     {
       "id": "R13_MATERIAL_PHASE_COMPRESSION",
       "title": "Compress long history into material phases",
       "invariant": "After reading every event, collapse consecutive or repeated edits that follow one semantic trajectory into one material chronological phase. Preserve the earliest content, the current content or its distinguishing additions, and every ordered disappearance/return cycle; mention an intermediate wording only when it introduces, removes, or reverses a material meaning rather than merely rephrasing it."
+    },
+    {
+      "id": "R14_MERGE_DISPOSITION",
+      "title": "Explain what Merge did to the Target occurrence",
+      "invariant": "Use the recorded Merge disposition exactly: NEW copied the Source into a fresh Target occurrence while retaining Source; ALREADY_PRESENT found the related Target occurrence already present and created no occurrence; TAKE_SOURCE replaced the existing Target content from Source; KEEP_TARGET retained the existing Target content and did not materialize the Source content there."
     }
   ],
   "cases": [
@@ -529,6 +534,179 @@
           "provenance": "This Memory originally appeared as “a is apple” and was added directly as a standalone Memory; it remains present and unchanged.",
           "violates": ["R02_ORIGIN_CONTEXT", "R07_COMPACT_COMPLETE", "R12_CONTEXT_MOVEMENT"],
           "reason": "The direct-Add account omits the retained practice/1-to-practice/2 branch inheritance route and spends the remaining budget on generic status prose."
+        }
+      ]
+    },
+    {
+      "id": "merge-source-copied-to-fresh-target",
+      "description": "A Source occurrence moves and is revised before Merge copies that recorded wording into a fresh Target occurrence without removing Source.",
+      "input": {
+        "selected_memory_id": "selected",
+        "context_name": "facility-updates",
+        "history_available": true,
+        "originals": [
+          {"id": "selected", "content": "Audit draft: …", "position": 17}
+        ],
+        "current": [
+          {"id": "selected", "content": "Wiki update draft: …", "position": 17},
+          {"id": "related_target", "content": "Wiki update draft: …", "position": 0}
+        ],
+        "events": [
+          {
+            "kind": "CREATED",
+            "command": "move",
+            "description": "Moved the Memory into facility-updates",
+            "reason": null,
+            "before": [],
+            "after": [
+              {"id": "selected", "content": "Audit draft: …", "position": 17}
+            ]
+          },
+          {
+            "kind": "EDITED",
+            "command": "replace",
+            "description": "Replaced Audit draft with Wiki update draft",
+            "reason": null,
+            "before": [
+              {"id": "selected", "content": "Audit draft: …", "position": 17}
+            ],
+            "after": [
+              {"id": "selected", "content": "Wiki update draft: …", "position": 17}
+            ]
+          },
+          {
+            "kind": "MERGED_IN",
+            "command": "merge",
+            "description": "Merged facility-updates into transform-scratch/source: new 1",
+            "reason": null,
+            "reason_codes": ["MERGE", "NEW"],
+            "before": [
+              {"id": "selected", "content": "Wiki update draft: …", "position": 17}
+            ],
+            "after": [
+              {"id": "related_target", "content": "Wiki update draft: …", "position": 0}
+            ],
+            "context_transition": {
+              "source": "facility-updates",
+              "target": "transform-scratch/source"
+            }
+          }
+        ],
+        "warnings": [],
+        "limit": 40,
+        "unit": "words"
+      },
+      "expected": {
+        "status": "AVAILABLE",
+        "provenance": "After moving into facility-updates as “Audit draft: …,” this Memory was revised to “Wiki update draft: ….” Merge later copied that wording unchanged into transform-scratch/source while retaining the Source occurrence.",
+        "rule_ids": [
+          "R01_COMPLETE_RETAINED_LINEAGE",
+          "R04_CHRONOLOGICAL_LIFECYCLE",
+          "R05_SELECTED_MEMORY_BOUNDARY",
+          "R06_NATURAL_NARRATIVE",
+          "R07_COMPACT_COMPLETE",
+          "R10_EXACT_EXCERPT_ANCHOR",
+          "R12_CONTEXT_MOVEMENT",
+          "R14_MERGE_DISPOSITION"
+        ]
+      },
+      "known_wrong": [
+        {
+          "provenance": "This Memory moved from facility-updates into transform-scratch/source during Merge.",
+          "violates": ["R01_COMPLETE_RETAINED_LINEAGE", "R12_CONTEXT_MOVEMENT", "R14_MERGE_DISPOSITION"],
+          "reason": "NEW creates a distinct Target occurrence and retains Source; it neither moves the Source away nor erases the earlier revision."
+        },
+        {
+          "provenance": "This Memory was revised from “Audit draft: …” to “Wiki update draft: ….”",
+          "violates": ["R01_COMPLETE_RETAINED_LINEAGE", "R12_CONTEXT_MOVEMENT", "R14_MERGE_DISPOSITION"],
+          "reason": "The Source-only edit account omits the recorded downstream Merge use."
+        }
+      ]
+    },
+    {
+      "id": "merge-target-inherits-source-history",
+      "description": "Selecting the fresh Merge Target still exposes the Source occurrence's earlier move and revision before the recorded copy.",
+      "input": {
+        "selected_memory_id": "selected",
+        "context_name": "transform-scratch/source",
+        "history_available": true,
+        "originals": [
+          {"id": "related_source", "content": "Audit draft: …", "position": 17}
+        ],
+        "current": [
+          {"id": "related_source", "content": "Wiki update draft: …", "position": 17},
+          {"id": "selected", "content": "Wiki update draft: …", "position": 0}
+        ],
+        "events": [
+          {
+            "kind": "CREATED",
+            "command": "move",
+            "description": "Moved the Source Memory into facility-updates",
+            "reason": null,
+            "before": [],
+            "after": [
+              {"id": "related_source", "content": "Audit draft: …", "position": 17}
+            ]
+          },
+          {
+            "kind": "EDITED",
+            "command": "replace",
+            "description": "Replaced Audit draft with Wiki update draft",
+            "reason": null,
+            "before": [
+              {"id": "related_source", "content": "Audit draft: …", "position": 17}
+            ],
+            "after": [
+              {"id": "related_source", "content": "Wiki update draft: …", "position": 17}
+            ]
+          },
+          {
+            "kind": "MERGED_IN",
+            "command": "merge",
+            "description": "Merged facility-updates into transform-scratch/source: new 1",
+            "reason": null,
+            "reason_codes": ["MERGE", "NEW"],
+            "before": [
+              {"id": "related_source", "content": "Wiki update draft: …", "position": 17}
+            ],
+            "after": [
+              {"id": "selected", "content": "Wiki update draft: …", "position": 0}
+            ],
+            "context_transition": {
+              "source": "facility-updates",
+              "target": "transform-scratch/source"
+            }
+          }
+        ],
+        "warnings": [],
+        "limit": 40,
+        "unit": "words"
+      },
+      "expected": {
+        "status": "AVAILABLE",
+        "provenance": "Its Source moved into facility-updates as “Audit draft: …” and was revised to “Wiki update draft: ….” Merge then copied that wording unchanged into transform-scratch/source as this fresh Target occurrence.",
+        "rule_ids": [
+          "R01_COMPLETE_RETAINED_LINEAGE",
+          "R02_ORIGIN_CONTEXT",
+          "R04_CHRONOLOGICAL_LIFECYCLE",
+          "R05_SELECTED_MEMORY_BOUNDARY",
+          "R06_NATURAL_NARRATIVE",
+          "R07_COMPACT_COMPLETE",
+          "R10_EXACT_EXCERPT_ANCHOR",
+          "R12_CONTEXT_MOVEMENT",
+          "R14_MERGE_DISPOSITION"
+        ]
+      },
+      "known_wrong": [
+        {
+          "provenance": "This Memory was added directly to transform-scratch/source as “Wiki update draft: ….”",
+          "violates": ["R01_COMPLETE_RETAINED_LINEAGE", "R02_ORIGIN_CONTEXT", "R12_CONTEXT_MOVEMENT", "R14_MERGE_DISPOSITION"],
+          "reason": "The direct-Add account hides both the Source history and the NEW Merge copy that created this occurrence."
+        },
+        {
+          "provenance": "The Target Memory changed from “Audit draft: …” to “Wiki update draft: …” before Merge.",
+          "violates": ["R05_SELECTED_MEMORY_BOUNDARY", "R12_CONTEXT_MOVEMENT"],
+          "reason": "The earlier move and revision belong to the distinct Source occurrence, not to the Target before it existed."
         }
       ]
     },

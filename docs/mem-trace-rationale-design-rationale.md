@@ -8,6 +8,7 @@ only the current text does not answer two provenance questions:
 
 1. What retained source occurrence did this Memory come from?
 2. Which recorded operations changed its content or identity?
+3. Which independently writable occurrence did a later Merge create or reuse?
 
 Rationale freezes retained Trace evidence, then asks one bounded semantic turn
 to express that evidence as compact natural-language provenance. The narrative
@@ -41,6 +42,43 @@ proposals, active state, or provider-derived caches. Rationale gives the exact
 whole retained Trace to one provider turn under the versioned natural-provenance
 ruleset and validates one bounded paragraph. Compare's source-row Rationale
 action enters the same ruleset, payload, schema, and decoder.
+
+### Recorded Merge UID handoff
+
+Merge deliberately gives a newly copied Target Memory a fresh UID, so the
+Source UID must remain valid for its owning Context while the Target UID names
+an independently writable occurrence. The existing version-1
+`memory_lineage` receipt records that exact Source Context/Memory coordinate,
+Target Context/Memory coordinate, and both content digests under the Merge
+lock. Trace now consumes that receipt bidirectionally: selecting either
+occurrence joins the Source's earlier retained operations to the Merge event,
+and selecting Source also exposes its recorded downstream Target uses.
+
+This handoff is part of the existing Trace, not a new UID-map command or a
+large Merge success receipt. The ordinary row remains compact:
+
+```text
+[merge] [CHECKPOINT 604759a1] [MEMORIES 2]  facility-updates → transform-scratch/source · Memory content unchanged
+  Source: [cd518767] Wiki update draft: ...
+  Target: [423582d8] Wiki update draft: ...
+```
+
+The relation is admitted only for an automatic, same-Store Merge checkpoint
+whose operation UID, target ownership, command pre-image, post-image, Target
+content digest, decision record, and Source/Target edge validate together.
+`NEW`, `ALREADY_PRESENT`, `TAKE_SOURCE`, and `KEEP_TARGET` remain distinct typed
+dispositions. A malformed receipt leaves the ordinary target-local diff
+visible, adds a limit for the affected Target occurrence, and never joins the
+owners. Cross-Profile and Grant transfers publish no local lineage receipt and
+therefore do not broaden through this path.
+
+Alternatives were rejected for contract and usability reasons. Printing every
+mapping plus follow-up commands after Merge makes the common receipt scale with
+the full frame; requiring Atomize failure or global re-search makes a durable
+relationship discoverable only by accident; and treating equal text as
+lineage would connect independent Memories. Reusing the retained typed receipt
+keeps bare and qualified UID lookup unchanged and makes both Trace and
+Rationale consume one provenance authority.
 
 ### Typed Reference and granted-current reports
 
@@ -392,8 +430,18 @@ provider then returned the exact 37-word canonical paragraph under the unchanged
 40-word default. Raising the default would have hidden the missing compression
 contract and was therefore rejected.
 
+Ruleset version 4 adds Source-selected and Target-selected Merge calibrations
+from the `facility-updates → transform-scratch/source` failure. Context movement
+now explicitly means distinct Source and Target occurrences, and a new Merge
+disposition rule prevents `NEW` from sounding like a move, `ALREADY_PRESENT`
+from sounding like a creation, `TAKE_SOURCE` from hiding replacement, or
+`KEEP_TARGET` from claiming that Source content was materialized. The provider
+receives the complete connected Trace with opaque Memory aliases and the typed
+disposition, while exact durable UIDs remain in Trace JSON and the human Trace
+row rather than being copied into generated prose.
+
 `tests/test_rationale_rules.py` proves that every authored item enters the
-production prompt, executes all six available-history canonical cases
+production prompt, executes all eight available-history canonical cases
 through the production payload/schema/decoder, carries Context and warnings,
 keeps all 15 long-history events provider-visible, and rejects raw event chains
 and over-limit prose.
@@ -412,6 +460,8 @@ they must not be counted as unseen evaluation evidence.
 | `rationale.provenance.atomize-parent-results` | whole Trace → semantic prompt/schema/decoder | copied compound instruction, selected child, sibling child | exact source excerpt → two-result contrast within 40 words | `PROVIDER_VISIBLE` | ruleset case `atomize-parent-to-selected-and-sibling`; actual-command re-execution |
 | `rationale.provenance.distill-edit` | whole Trace → semantic prompt/schema/decoder | Distill from named Source Context followed by Edit | exact first derived excerpt → current replacement | `PROVIDER_VISIBLE` | ruleset case `distilled-rule-then-edited`; actual-command re-execution |
 | `rationale.provenance.branch-inheritance` | whole Trace + recorded Context transition → semantic prompt/schema/decoder | Add retained unchanged across a validated Branch receipt | origin → destination separated from content change | `PROVIDER_VISIBLE` | ruleset case `branch-inherited-unchanged-memory`; actual-command re-execution |
+| `rationale.provenance.merge-source-use` | connected Source Trace + validated Merge edge → semantic prompt/schema/decoder | Move, Replace, then `NEW` Merge into a fresh Target UID | Source lifecycle followed by downstream copy while Source remains | `PROVIDER_VISIBLE` | ruleset case `merge-source-copied-to-fresh-target`; bidirectional Trace regression |
+| `rationale.provenance.merge-target-origin` | connected Target Trace + validated Merge edge → semantic prompt/schema/decoder | fresh Target UID selected after Source Move and Replace | Source history followed by this Target occurrence's creation | `PROVIDER_VISIBLE` | ruleset case `merge-target-inherits-source-history`; bidirectional Trace regression |
 | `rationale.provenance.long-material-phases` | 15-event whole Trace → semantic prompt/schema/decoder | Add, ten Edits, Remove/Undo/Redo/Undo | exact 37-word origin → material edit phase → presence-cycle narrative | `PROVIDER_VISIBLE` | ruleset case `long-edit-run-with-remove-undo-redo`; isolated actual-command re-execution |
 | `rationale.provenance.grant-hidden` | readable granted Memory → application receipt | owner history unavailable | `hidden by Grant`, zero provider calls | `HOST_ONLY` | ruleset case `grant-hidden-history`; authority test |
 | `rationale.provenance.decoder-chain-rejection` | provider response → strict decoder | raw event-label arrow chain | rejected as non-narrative | `HOST_ONLY` | `test_provider_output_must_be_complete_narrative_within_the_exact_bound` |
@@ -420,6 +470,11 @@ they must not be counted as unseen evaluation evidence.
 The [180×52 compact Rationale capture](screenshots/mem-rationale-compact-20260820/README.md)
 records target selection, the direct natural-provenance receipt, and read-only store
 verification.
+
+The [180×52 Merge lineage capture](screenshots/mem-merge-lineage-trace-20260823/README.md)
+records the actual task-1 Source and Target UID routes, the complete
+Move/Replace/Merge chain, and a plain read-only verification with the current
+Context unchanged.
 
 The focused capture verifies the 180×52 color selector, one semantic provider
 turn after target confirmation, the compact receipt, and read-only store
@@ -697,12 +752,15 @@ derived explanation shares the source Context's privacy lifetime.
 
 ## Readable subtree Rationale and Study Trace boundary
 
-Rationale does not perform an outbound search into arbitrary sibling or global
+Rationale does not perform a semantic search across arbitrary sibling or global
 Contexts. Exact-versus-descendant reach controls only which Memory may be
 selected from the shared readable public namespace. Once selected, report
-construction narrows to that exact owner and its allowed Trace projection; it
-does not analyze sibling or descendant Memory contents. The public name, not
-the Grant attachment, still determines picker hierarchy.
+construction starts from that exact owner. It may read same-Store local
+checkpoint receipts to follow a validated Branch or Merge edge, then includes
+only the owners and Memory occurrences in that connected Trace component; text
+similarity, namespace proximity, and an unrelated readable sibling never join
+the component. The public name, not the Grant attachment, still determines
+picker hierarchy.
 
 A granted READ view permits the current Memory projection but does not imply
 authority to inspect the source Profile's checkpoints, command receipts, saved
@@ -710,9 +768,11 @@ reviews, or atomize attachments. Granted Rationale therefore labels provenance
 `hidden by Grant` and never connects a provider. An explicit granted Trace may
 show only the current Memory and typed access route; its retained-history
 section remains hidden and its construction never calls the owner checkpoint
-API. A locally owned target sends only its exact owner Trace component after
-selection; it does not combine the picker's readable catalog or neighboring
-Contexts, so Rationale needs no `COMBINE` permission.
+API. A locally owned target sends only its receipt-connected Trace component
+after selection; it does not send the picker's readable catalog or unrelated
+neighboring Contexts. Same-Profile ordinary local history inspection is not a
+Grant-derived `COMBINE` route. Cross-Profile and granted Merge paths do not
+publish the local lineage receipt and therefore cannot use this expansion.
 
 Every locally owned ordinary Context may inspect its own retained history,
 including every task namespace in a composed participant Study run. Task names
@@ -727,8 +787,9 @@ separate presentation migration because its recorded interaction snapshots
 must change atomically with the visible flow.
 
 The executable request does not preserve the selected range as an inference
-scope. This deliberate narrowing prevents a provenance lookup from becoming a
-hidden multi-Context disclosure operation.
+scope. Its only multi-Context expansion is a validated occurrence graph, which
+prevents provenance lookup from becoming a hidden namespace-wide disclosure
+operation while still explaining an exact recorded Merge use.
 
 ## Query-only boundary
 

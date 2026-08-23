@@ -149,6 +149,11 @@ def _event_payload(
             "source": event.context_transition.source.name,
             "target": event.context_transition.target.name,
         }
+    if event.reason_codes:
+        # Merge disposition is operation evidence, not prose: the semantic
+        # layer needs the typed code to distinguish copy, replacement, and a
+        # reviewed decision that deliberately retained the Target.
+        payload["reason_codes"] = list(event.reason_codes)
     return payload
 
 

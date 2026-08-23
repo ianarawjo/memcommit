@@ -174,7 +174,7 @@ def test_natural_provenance_projection_uses_the_requested_word_limit(
     assert projection["unit"] == "words"
     assert projection["limit"] == 4
     assert projection["length"] <= 4
-    assert projection["ruleset_version"] == "rationale-natural-provenance-v3"
+    assert projection["ruleset_version"] == "rationale-natural-provenance-v4"
     lines = result.output.splitlines()
     heading = "PROVENANCE"
     provenance = lines[lines.index(heading) + 1].strip()

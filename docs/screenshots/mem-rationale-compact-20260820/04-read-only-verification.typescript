@@ -6,10 +6,10 @@ PTY 180 52
 [0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
 [0m┌─────────────────────────────────────────────────────────────────────────────| CONTEXTS & MEMORIES |──────────────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│[0;1;7m› * ▾ rationale/origin[0m                                                                                                                                                           [0;1m^[179C[0m│[0m
-[0m│[0;38;5;189m  · [4a73e769] [r5] When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected.[0m                   [0;48;5;238m [179C[0m│[0m
-[0m│[0;38;5;189m  · [59999b2c] [r5] for example, use distribute, not divide, when material is absorbed into two parts.[0m                                                                           [0;48;5;238m [179C[0m│[0m
-[0m│[0;38;5;189m  · [0;38;5;180m[historical][0;38;5;189m [976f5632] [r5] Um...[0m                                                                                                                                           [0;48;5;238m [179C[0m│[0m
-[0m│[0;38;5;189m  · [0;38;5;180m[historical][0;38;5;189m [b359a493] [r5] When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um...[0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m  · [dd7cc427] [r5] When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected.[0m                   [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m  · [3cd5df9d] [r5] for example, use distribute, not divide, when material is absorbed into two parts.[0m                                                                           [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m  · [0;38;5;180m[historical][0;38;5;189m [4a514f69] [r5] Um...[0m                                                                                                                                           [0;48;5;238m [179C[0m│[0m
+[0m│[0;38;5;189m  · [0;38;5;180m[historical][0;38;5;189m [375108c1] [r5] When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um...[0;48;5;238m [179C[0m│[0m
 [0m│[0;38;5;189m                                 for example, use distribute, not divide, when material is absorbed into two parts.[0m                                                              [0;48;5;238m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;5;238m [179C[0m│[0m
@@ -55,10 +55,10 @@ PTY 180 52
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
 [0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ CONTEXTS & MEMORIES ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
 [0;38;5;117;1m┃[0m› * ▾ rationale/origin                                                                                                                                                           [0;1m^[179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;189m  · [4a73e769] [r5] When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected.[0m                   [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;189m  · [59999b2c] [r5] for example, use distribute, not divide, when material is absorbed into two parts.[0m                                                                           [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;1;7m  › [historical] [976f5632] [r5] Um...[0m                                                                                                                                           [0;48;5;238m [179C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0;38;5;189m  · [0;38;5;180m[historical][0;38;5;189m [b359a493] [r5] When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um...[0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;189m  · [dd7cc427] [r5] When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected.[0m                   [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;189m  · [3cd5df9d] [r5] for example, use distribute, not divide, when material is absorbed into two parts.[0m                                                                           [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;1;7m  › [historical] [4a514f69] [r5] Um...[0m                                                                                                                                           [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;189m  · [0;38;5;180m[historical][0;38;5;189m [375108c1] [r5] When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um...[0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0;38;5;189m                                 for example, use distribute, not divide, when material is absorbed into two parts.[0m                                                              [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
@@ -99,13 +99,13 @@ PTY 180 52
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
-[C[0m↑↓ move[C ←→ expand  A restore tree  m THIS Context:[Chid[C items · M EVERY Contex[C: hide[Citems  y/Y copy item  Enter open rationale  q close · 4/5 · 1 Contexts[42A[157D[0m[9A[J[0m[?7h[?1049l[?2004lMEM RATIONALE · 1/2 · CONNECTING PROVIDER . · 0sMEM RATIONALE · 2/2 · SYNTHESIZING COMPLETE PROVENANCE . · 0s                                                             [1mRationale [976f5632] · rationale/origin[0m
+[C[0m↑↓ move[C ←→ expand  A restore tree  m THIS Context:[Chid[C items · M EVERY Contex[C: hide[Citems  y/Y copy item  Enter open rationale  q close · 4/5 · 1 Contexts[42A[157D[0m[9A[J[0m[?7h[?1049l[?2004lMEM RATIONALE · 1/2 · CONNECTING PROVIDER . · 0sMEM RATIONALE · 2/2 · WRITING RATIONALE . · 0s                                                [1mRationale [4a514f69] · rationale/origin[0m
 [1m
 MEMORY[0m
   Um...
 [1m
 PROVENANCE[0m
   “Um...” began as a hesitation between a minimal-change instruction and its “distribute, not divide” example. Sentence chunking made it a standalone Memory; undo removed it, redo restored it, and remove later deleted it.
-RATIONALE RECEIPT COMPLETE · TARGET [976f5632] · NATURAL ORIGIN + LIFECYCLE VISIBLE · PRESS V TO VERIFY
+RATIONALE RECEIPT COMPLETE · TARGET [4a514f69] · NATURAL ORIGIN + LIFECYCLE VISIBLE · PRESS V TO VERIFY
 v
-RATIONALE VERIFIED · TARGET [976f5632] · CURRENT rationale/origin · PROVIDER CALLS 1 · CACHE UNTOUCHED · STORE CONTENT UNCHANGED
+RATIONALE VERIFIED · TARGET [4a514f69] · CURRENT rationale/origin · PROVIDER CALLS 1 · CACHE UNTOUCHED · STORE CONTENT UNCHANGED

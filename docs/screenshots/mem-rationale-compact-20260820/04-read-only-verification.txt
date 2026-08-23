@@ -1,4 +1,4 @@
-Rationale [976f5632] · rationale/origin                                                                                                                                             
+Rationale [4a514f69] · rationale/origin                                                                                                                                             
                                                                                                                                                                                     
 MEMORY                                                                                                                                                                              
   Um...                                                                                                                                                                             
@@ -6,6 +6,6 @@ MEMORY
 PROVENANCE                                                                                                                                                                          
   “Um...” began as a hesitation between a minimal-change instruction and its “distribute, not divide” example. Sentence chunking made it a standalone Memory; undo removed it, redo 
 restored it, and remove later deleted it.                                                                                                                                           
-RATIONALE RECEIPT COMPLETE · TARGET [976f5632] · NATURAL ORIGIN + LIFECYCLE VISIBLE · PRESS V TO VERIFY                                                                             
+RATIONALE RECEIPT COMPLETE · TARGET [4a514f69] · NATURAL ORIGIN + LIFECYCLE VISIBLE · PRESS V TO VERIFY                                                                             
 v                                                                                                                                                                                   
-RATIONALE VERIFIED · TARGET [976f5632] · CURRENT rationale/origin · PROVIDER CALLS 1 · CACHE UNTOUCHED · STORE CONTENT UNCHANGED
+RATIONALE VERIFIED · TARGET [4a514f69] · CURRENT rationale/origin · PROVIDER CALLS 1 · CACHE UNTOUCHED · STORE CONTENT UNCHANGED

@@ -152,6 +152,165 @@ def test_trace_records_unchanged_memory_route_for_branch_entry_points(
     }
 
 
+def test_merge_lineage_connects_source_and_fresh_target_trace_both_directions(
+    isolated_store,
+):
+    assert invoke("init", "merge-lineage/source").exit_code == 0
+    assert invoke("add", "Audit draft: construction dates.").exit_code == 0
+    store = MemoryStore()
+    source = store.load_current_direct()
+    source_memory = next(
+        item for item in source.iter_items() if isinstance(item, Memory)
+    )
+    assert (
+        invoke(
+            "edit",
+            source_memory.uid,
+            "Wiki update draft: construction dates.",
+        ).exit_code
+        == 0
+    )
+    source = store.load_direct(source.name)
+    assert invoke("init", "merge-lineage/target").exit_code == 0
+
+    merged = invoke("merge", source.name)
+
+    assert merged.exit_code == 0, merged.output
+    target = store.load_current_direct()
+    target_memory = next(
+        item for item in target.iter_items() if isinstance(item, Memory)
+    )
+    assert target_memory.uid != source_memory.uid
+
+    for owner, selected_uid in (
+        (source, source_memory.uid),
+        (target, target_memory.uid),
+    ):
+        report = build_trace(store, owner, selected_uid)
+        assert [event.kind for event in report.events] == [
+            "CREATED",
+            "EDITED",
+            "MERGED_IN",
+        ]
+        merge_event = report.events[-1]
+        assert merge_event.evidence == "RECORDED"
+        assert merge_event.reason_codes == ("MERGE", "NEW")
+        assert merge_event.context_transition is not None
+        assert merge_event.context_transition.to_dict() == {
+            "source": {"uid": source.uid, "name": source.name},
+            "target": {"uid": target.uid, "name": target.name},
+        }
+        assert [state.uid for state in merge_event.before] == [source_memory.uid]
+        assert [state.uid for state in merge_event.after] == [target_memory.uid]
+        assert {state.uid for state in report.current} == {
+            source_memory.uid,
+            target_memory.uid,
+        }
+        request = rationale_provenance_payload(report)["request"]
+        assert request["events"][-1]["reason_codes"] == ["MERGE", "NEW"]
+        assert request["events"][-1]["context_transition"] == {
+            "source": source.name,
+            "target": target.name,
+        }
+
+    rendered = invoke("trace", source_memory.uid, "--plain", "--all")
+    assert rendered.exit_code == 0, rendered.output
+    assert "[merge] [CHECKPOINT " in rendered.output
+    assert "[MEMORIES 2]" in rendered.output
+    assert (
+        f"{source.name} → {target.name} · Memory content unchanged" in rendered.output
+    )
+    assert f"Source: [{source_memory.uid[:8]}] Wiki update draft" in rendered.output
+    assert f"Target: [{target_memory.uid[:8]}] Wiki update draft" in rendered.output
+
+
+def test_trace_does_not_connect_a_tampered_merge_lineage_receipt(
+    isolated_store,
+):
+    assert invoke("init", "invalid-merge/source").exit_code == 0
+    assert invoke("add", "Exact copied value.").exit_code == 0
+    store = MemoryStore()
+    source = store.load_current_direct()
+    source_memory = next(
+        item for item in source.iter_items() if isinstance(item, Memory)
+    )
+    assert invoke("init", "invalid-merge/target").exit_code == 0
+    assert invoke("merge", source.name).exit_code == 0
+    target = store.load_current_direct()
+    target_memory = next(
+        item for item in target.iter_items() if isinstance(item, Memory)
+    )
+    checkpoint = store.list_checkpoints(target.name)[0]
+    checkpoint_path = next(
+        store._checkpoints_dir(target.name).glob(f"*-{checkpoint['uid'][:8]}.json")
+    )
+    record = json.loads(checkpoint_path.read_text(encoding="utf-8"))
+    record["args"]["memory_lineage"]["edges"][0]["target_content_sha256"] = "0" * 64
+    checkpoint_path.write_text(
+        json.dumps(record, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+    source_report = build_trace(store, source, source_memory.uid)
+    target_report = build_trace(store, target, target_memory.uid)
+
+    assert not any(event.kind == "MERGED_IN" for event in source_report.events)
+    assert not any(
+        event.context_transition is not None for event in target_report.events
+    )
+    assert any(
+        "Source and Target histories were not connected" in warning
+        for warning in target_report.warnings
+    )
+
+
+def test_merge_trace_preserves_keep_target_and_take_source_dispositions(
+    isolated_store,
+):
+    assert invoke("init", "merge-decisions/main").exit_code == 0
+    assert invoke("add", "Main wording.").exit_code == 0
+    store = MemoryStore()
+    main = store.load_current_direct()
+    main_memory = next(item for item in main.iter_items() if isinstance(item, Memory))
+    assert invoke("branch", "merge-decisions/feature").exit_code == 0
+    feature = store.load_current_direct()
+    feature_memory = next(
+        item for item in feature.iter_items() if isinstance(item, Memory)
+    )
+    assert invoke("edit", feature_memory.uid, "Feature wording.").exit_code == 0
+    assert invoke("switch", main.name).exit_code == 0
+
+    kept = invoke("merge", feature.name, "--keep-target-all")
+    taken = invoke("merge", feature.name, "--take-source-all")
+
+    assert kept.exit_code == 0, kept.output
+    assert taken.exit_code == 0, taken.output
+    report = build_trace(store, store.load_direct(main.name), main_memory.uid)
+    dispositions = [
+        event.reason_codes[-1] for event in report.events if event.kind == "MERGED_IN"
+    ]
+    assert dispositions == ["KEEP_TARGET", "TAKE_SOURCE"]
+    kept_event, taken_event = [
+        event for event in report.events if event.kind == "MERGED_IN"
+    ]
+    assert [state.content for state in kept_event.before] == [
+        "Feature wording.",
+        "Main wording.",
+    ]
+    assert kept_event.after[0].content == "Main wording."
+    assert [state.content for state in taken_event.before] == [
+        "Feature wording.",
+        "Main wording.",
+    ]
+    assert taken_event.after[0].content == "Feature wording."
+
+    rendered = invoke("trace", main_memory.uid, "--plain", "--all")
+    assert rendered.exit_code == 0, rendered.output
+    assert "Target retained; Source not materialized" in rendered.output
+    assert "Target content replaced from Source" in rendered.output
+    assert "Target before:" in rendered.output
+
+
 def test_trace_keeps_one_legacy_warning_when_no_branch_receipt_exists(
     isolated_store,
 ):

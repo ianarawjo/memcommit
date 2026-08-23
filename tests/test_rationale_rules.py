@@ -75,6 +75,7 @@ def _case_trace(case: dict[str, object]) -> TraceReport:
                 before=tuple(_state(item) for item in raw_event["before"]),
                 after=tuple(_state(item) for item in raw_event["after"]),
                 reason=raw_event["reason"],
+                reason_codes=tuple(raw_event.get("reason_codes", ())),
                 context_transition=transition,
             )
         )
@@ -132,7 +133,7 @@ def test_every_rule_exact_case_and_known_wrong_enters_the_production_prompt():
     prompt = rationale_ruleset_prompt_payload()
 
     assert authored["ruleset_version"] == RATIONALE_RULESET_VERSION
-    assert len(authored["rules"]) == 13
+    assert len(authored["rules"]) == 14
     assert prompt == {
         "ruleset_version": RATIONALE_RULESET_VERSION,
         "rules": authored["rules"],
@@ -147,6 +148,8 @@ def test_every_rule_exact_case_and_known_wrong_enters_the_production_prompt():
         "atomize-parent-to-selected-and-sibling",
         "distilled-rule-then-edited",
         "branch-inherited-unchanged-memory",
+        "merge-source-copied-to-fresh-target",
+        "merge-target-inherits-source-history",
     ],
 )
 def test_refinement_cases_use_the_production_payload_schema_and_decoder(case_id):
@@ -185,6 +188,11 @@ def test_refinement_cases_encode_excerpt_operation_and_context_movement_rules():
     assert "Split or Atomize" in rules["R11_OPERATION_SHAPE"]["invariant"]
     assert "origin and destination" in rules["R12_CONTEXT_MOVEMENT"]["invariant"]
     assert (
+        "distinct Source and Target occurrences"
+        in rules["R12_CONTEXT_MOVEMENT"]["invariant"]
+    )
+    assert "KEEP_TARGET" in rules["R14_MERGE_DISPOSITION"]["invariant"]
+    assert (
         "this “don't edit the draft immediately” instruction"
         in cases["atomize-parent-to-selected-and-sibling"]["expected"]["provenance"]
     )
@@ -195,6 +203,10 @@ def test_refinement_cases_encode_excerpt_operation_and_context_movement_rules():
     assert (
         "inherited unchanged by practice/2"
         in cases["branch-inherited-unchanged-memory"]["expected"]["provenance"]
+    )
+    assert (
+        "copied that wording unchanged into transform-scratch/source"
+        in cases["merge-source-copied-to-fresh-target"]["expected"]["provenance"]
     )
 
 

@@ -215,17 +215,36 @@ def _trace_row_summary(row: TraceOperationRow) -> str:
         )
         return f'removed "{compact}"'
     transitions = _unique_context_transitions(row)
-    if action == "branch" and len(transitions) == 1:
+    if action in {"branch", "merge"} and len(transitions) == 1:
         transition = transitions[0]
-        # A Branch now gives independently writable occurrences fresh UIDs;
-        # the recorded event order, not address equality, proves which copied
-        # Source value corresponds to each Target value.
-        unchanged = bool(row.after) and tuple(
-            state.content for state in row.before
-        ) == tuple(
-            state.content for state in row.after
-        )
-        suffix = "Memory content unchanged" if unchanged else "copied target state"
+        if action == "merge":
+            dispositions = {
+                code
+                for event in row.events
+                for code in event.reason_codes
+                if code in {"NEW", "ALREADY_PRESENT", "TAKE_SOURCE", "KEEP_TARGET"}
+            }
+            suffix = (
+                "Memory content unchanged"
+                if dispositions <= {"NEW", "ALREADY_PRESENT"}
+                else (
+                    "Target content replaced from Source"
+                    if dispositions == {"TAKE_SOURCE"}
+                    else (
+                        "Target retained; Source not materialized"
+                        if dispositions == {"KEEP_TARGET"}
+                        else "recorded Source/Target dispositions"
+                    )
+                )
+            )
+        else:
+            # A Branch now gives independently writable occurrences fresh UIDs;
+            # the recorded event order, not address equality, proves which copied
+            # Source value corresponds to each Target value.
+            unchanged = bool(row.after) and tuple(
+                state.content for state in row.before
+            ) == tuple(state.content for state in row.after)
+            suffix = "Memory content unchanged" if unchanged else "copied target state"
         return f"{transition.source.name} → {transition.target.name} · {suffix}"
     descriptions = _unique_text(event.description for event in row.events)
     if descriptions:
@@ -316,7 +335,7 @@ def format_trace_operation(
     if not verbose and trace_row_action(row) in {"add", "remove"}:
         return header
     transitions = _unique_context_transitions(row)
-    if trace_row_action(row) == "branch" and len(transitions) == 1:
+    if trace_row_action(row) in {"branch", "merge"} and len(transitions) == 1:
         transition = transitions[0]
         return (
             f"{header} · CONTEXT {display_escape_text(transition.source.name)} → "
@@ -452,6 +471,66 @@ def _extend_branch_transition(
                 ("class:memory-object", display_escape_text(state.content) + "\n"),
             )
         )
+
+
+def _extend_merge_transition(
+    fragments: StyleAndTextTuples,
+    row: TraceOperationRow,
+    *,
+    verbose: bool,
+) -> None:
+    """Render each validated Merge edge as its Source and Target occurrence."""
+
+    for event in row.events:
+        if event.kind != "MERGED_IN" or event.context_transition is None:
+            continue
+        source_state = event.before[0] if event.before else None
+        target_after = event.after[0] if event.after else None
+        target_before = next(
+            (
+                state
+                for state in event.before[1:]
+                if target_after is not None and state.uid == target_after.uid
+            ),
+            None,
+        )
+        if source_state is not None:
+            fragments.extend(
+                (
+                    ("class:report-label", "  Source: "),
+                    (
+                        "class:memory-object",
+                        f"[{_state_uid(source_state, verbose=verbose)}] "
+                        f"{display_escape_text(source_state.content)}\n",
+                    ),
+                )
+            )
+        if (
+            target_before is not None
+            and target_after is not None
+            and target_before.content != target_after.content
+        ):
+            fragments.extend(
+                (
+                    ("class:report-label", "  Target before: "),
+                    (
+                        "class:memory-object",
+                        f"[{_state_uid(target_before, verbose=verbose)}] "
+                        f"{display_escape_text(target_before.content)}\n",
+                    ),
+                )
+            )
+        if target_after is not None:
+            fragments.extend(
+                (
+                    ("class:report-label", "  Target: "),
+                    (
+                        "class:memory-object",
+                        f"[{_state_uid(target_after, verbose=verbose)}] "
+                        f"{display_escape_text(target_after.content)}\n",
+                    ),
+                )
+            )
 
 
 def _extend_verbose_event_evidence(
@@ -673,7 +752,9 @@ def _extend_operation(
     # Direct Add/Remove rows already name their one content-bearing endpoint.
     # Edits and structural/restoration commands need the diff to communicate
     # their meaning; verbose inspection deliberately expands every operation.
-    if trace_row_action(row) == "branch" and _unique_context_transitions(row):
+    if trace_row_action(row) == "merge" and _unique_context_transitions(row):
+        _extend_merge_transition(fragments, row, verbose=verbose)
+    elif trace_row_action(row) == "branch" and _unique_context_transitions(row):
         _extend_branch_transition(fragments, row, verbose=verbose)
     elif verbose or trace_row_action(row) not in {"add", "remove"}:
         _extend_diff_states(fragments, row, verbose=verbose)
