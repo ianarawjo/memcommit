@@ -403,10 +403,12 @@ named assumption, the question needing input, and the fact that no durable
 change occurred.
 
 An applied result reports its nonzero primitive effect counts and independently
-checked post-Fit verdict, followed by the checkpoint and `mem undo`. It omits
-zero counts, duplicate receipt/checkpoint identity, revision, and candidate ID.
-Those details, candidate reasoning, and exact effects remain in the immutable
-checkpoint for `mem review resolve --receipt UID`; removing them from the
-immediate receipt does not weaken Apply's authority, freshness, or atomicity
+checked post-Fit verdict, followed by the checkpoint, its exact
+`mem review resolve --receipt UID` route, and `mem undo`. It omits zero counts,
+duplicate receipt/checkpoint identity, revision, and candidate ID. Those
+details, candidate reasoning, and exact effects remain in the immutable
+checkpoint; naming that checkpoint-backed Review route prevents a compact
+receipt from becoming a dead end without copying the report into terminal
+scrollback. This does not weaken Apply's authority, freshness, or atomicity
 checks. The explicit `--tui` inspection route and typed analysis remain
 detailed.

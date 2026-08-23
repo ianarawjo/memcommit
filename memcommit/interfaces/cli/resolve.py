@@ -91,6 +91,10 @@ def render_resolve_receipt(
     )
     _line("APPLIED", f"{effects} · FIT {fit_verdict}")
     _line("CHECKPOINT", receipt.checkpoint_uid)
+    _line(
+        "REVIEW",
+        f"mem review resolve --receipt {receipt.checkpoint_uid}",
+    )
     _line("RECOVERY", "mem undo")
 
 

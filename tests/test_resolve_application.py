@@ -75,10 +75,13 @@ def _assert_compact_applied_receipt(
         f"RESOLVE · {context_name}",
         f"APPLIED · {effects} · FIT {fit_verdict}",
     ]
-    assert len(lines) == 4
+    assert len(lines) == 5
     checkpoint_uid = lines[2].removeprefix("CHECKPOINT · ")
     assert str(uuid.UUID(checkpoint_uid)) == checkpoint_uid
-    assert lines[3] == "RECOVERY · mem undo"
+    assert lines[3] == (
+        f"REVIEW · mem review resolve --receipt {checkpoint_uid}"
+    )
+    assert lines[4] == "RECOVERY · mem undo"
 
 
 class ResolveFixtureProvider:
