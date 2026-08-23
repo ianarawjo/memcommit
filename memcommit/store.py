@@ -1725,13 +1725,46 @@ class MemoryStore:
     ) -> None:
         """Atomically save the active update, optionally using record CAS."""
         with self._update_session_write_lock():
+            current = self._load_update_session(self.staged_update_file)
             if expected_current is not _NO_UPDATE_SESSION_EXPECTATION:
-                current = self._load_update_session(self.staged_update_file)
                 if current != expected_current:
                     raise ConcurrentContextUpdateError(
                         "The active update record changed before it could be saved."
                     )
-            self._save_update_session(self.staged_update_file, session)
+            from memcommit.update_receipt_store import UpdateReceiptStore
+
+            receipts = UpdateReceiptStore(self)
+            if current is not None and current.status in {"applied", "undone"}:
+                # Migrate the last singleton receipt before any newer Update
+                # can replace it, including receipts created by older builds.
+                receipts.save_terminal(current)
+            if session.status in {"applied", "undone"}:
+                self._save_active_terminal_update(session, receipts=receipts)
+            else:
+                self._save_update_session(self.staged_update_file, session)
+
+    def _save_active_terminal_update(self, session, *, receipts=None) -> None:
+        """Publish the active terminal session and immutable receipt as a pair."""
+        from memcommit.update_receipt_store import UpdateReceiptStore
+
+        receipts = receipts or UpdateReceiptStore(self)
+        previous = self._load_update_session(self.staged_update_file)
+        self._save_update_session(self.staged_update_file, session)
+        try:
+            receipts.save_terminal(session)
+        except Exception:
+            try:
+                if previous is None:
+                    if self.staged_update_file.exists():
+                        self.staged_update_file.unlink()
+                else:
+                    self._save_update_session(self.staged_update_file, previous)
+            except Exception as rollback_error:
+                raise RuntimeError(
+                    "Update receipt save failed and the active session could not "
+                    "be restored."
+                ) from rollback_error
+            raise
 
     def apply_staged_update(self, session):
         """Apply one staged Update as one globally ordered command."""
@@ -1945,10 +1978,7 @@ class MemoryStore:
                         raise RuntimeError(
                             "Applied local fork does not match its receipt."
                         )
-                    self._save_update_session(
-                        self.staged_update_file,
-                        applied,
-                    )
+                    self._save_active_terminal_update(applied)
                 except Exception:
                     rollback_error: Exception | None = None
                     for name in written_owner_names:

@@ -198,16 +198,25 @@ def _run_update_report(
     snapshot: bool,
 ) -> None:
     from memcommit.review_report_adapters import update_review_report
+    from memcommit.update_receipt_store import UpdateReceiptStore
 
-    session = store.load_staged_update() or store.load_impact_plan()
-    if session is None:
+    current = store.load_staged_update() or store.load_impact_plan()
+    retained = UpdateReceiptStore(store).list()
+    if current is None and not retained:
         raise ReviewError(
             "No saved Update or Impact plan exists. Run 'mem impact' first."
         )
-    if session_uid is not None:
+    if session_uid is None:
+        session = current or retained[0]
+    else:
+        candidates = retained
+        if current is not None and current.uid not in {
+            candidate.uid for candidate in retained
+        }:
+            candidates = (*retained, current)
         try:
             session = resolve_exact_or_unique_uid(
-                (session,),
+                candidates,
                 session_uid,
                 uid=lambda candidate: candidate.uid,
                 label="Saved Update artifact",

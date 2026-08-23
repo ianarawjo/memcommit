@@ -23,6 +23,7 @@ from memcommit.interfaces.tui.components.operation_launcher.session import (
 )
 from memcommit.sever_store import SeverSessionStore
 from memcommit.store import MemoryStore
+from memcommit.update_receipt_store import UpdateReceiptStore
 
 
 IMPACT_SESSION_KINDS = ("atomize", "meld", "sever", "update")
@@ -128,6 +129,46 @@ def _update_entry(store: MemoryStore) -> SessionPickerEntry | None:
     )
 
 
+def _retained_update_entries(store: MemoryStore) -> tuple[SessionPickerEntry, ...]:
+    receipts = UpdateReceiptStore(store)
+    current = store.load_staged_update() or store.load_impact_plan()
+    current_uid = current.uid if current is not None else None
+    return tuple(
+        _impact_entry(
+            SessionPickerEntry(
+                kind="update",
+                key=session.uid,
+                title=f"{session.source_name} → {session.target_name}",
+                status=session.status.upper(),
+                subtitle=(
+                    f"{len(session.operations)} retained "
+                    f"{'change' if len(session.operations) == 1 else 'changes'}"
+                ),
+                group=session.target_name,
+                sort_timestamp=_artifact_timestamp(
+                    receipts.path(session.uid),
+                    fallback=session.application.applied_at,
+                ),
+                detail=(
+                    f"Session {session.uid}\n"
+                    f"Source {session.source_name}\n"
+                    f"Target {session.target_name}\n"
+                    "Immutable completed Update evidence."
+                ),
+                reopen_argv=(
+                    "mem",
+                    "impact",
+                    "update",
+                    "--session",
+                    session.uid,
+                ),
+            )
+        )
+        for session in receipts.list()
+        if session.uid != current_uid
+    )
+
+
 def impact_session_entries(store: MemoryStore) -> tuple[SessionPickerEntry, ...]:
     """Return every durable artifact currently inspectable by Impact."""
 
@@ -138,6 +179,7 @@ def impact_session_entries(store: MemoryStore) -> tuple[SessionPickerEntry, ...]
         _impact_entry(entry.picker_entry)
         for entry in list_sever_session_catalog(SeverSessionStore(store))
     )
+    entries.extend(_retained_update_entries(store))
     update_entry = _update_entry(store)
     if update_entry is not None:
         entries.append(update_entry)

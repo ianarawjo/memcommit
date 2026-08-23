@@ -28,6 +28,7 @@ from memcommit.commands.sever_sessions import list_sever_session_catalog
 from memcommit.sever_store import SeverSessionStore
 from memcommit.quality_audit_store import QualityAuditStore
 from memcommit.store import MemoryStore
+from memcommit.update_receipt_store import UpdateReceiptStore
 
 
 SAVED_REVIEW_KIND = "saved-review"
@@ -113,6 +114,44 @@ def _saved_update_entry(store: MemoryStore) -> SessionPickerEntry | None:
         reopen_argv=("mem", "review", "update", "--session", session.uid),
     )
     return _review_entry(entry)
+
+
+def _retained_update_entries(
+    store: MemoryStore,
+) -> tuple[SessionPickerEntry, ...]:
+    """Project immutable completed receipts not already represented as active."""
+
+    receipts = UpdateReceiptStore(store)
+    current = store.load_staged_update() or store.load_impact_plan()
+    current_uid = current.uid if current is not None else None
+    entries: list[SessionPickerEntry] = []
+    for session in receipts.list():
+        if session.uid == current_uid:
+            continue
+        entry = SessionPickerEntry(
+            kind="update",
+            key=session.uid,
+            title=f"{session.source_name} → {session.target_name}",
+            status=session.status.upper(),
+            subtitle=(
+                f"{len(session.operations)} retained "
+                f"{'change' if len(session.operations) == 1 else 'changes'}"
+            ),
+            group=session.target_name,
+            sort_timestamp=_artifact_timestamp(
+                receipts.path(session.uid),
+                fallback=session.application.applied_at,
+            ),
+            detail=(
+                f"Session {session.uid}\n"
+                f"Source {session.source_name}\n"
+                f"Target {session.target_name}\n"
+                "Immutable completed Update evidence."
+            ),
+            reopen_argv=("mem", "review", "update", "--session", session.uid),
+        )
+        entries.append(_review_entry(entry))
+    return tuple(entries)
 
 
 def _checkpoint_review_entries(store: MemoryStore) -> tuple[SessionPickerEntry, ...]:
@@ -226,6 +265,7 @@ def review_session_entries(store: MemoryStore) -> tuple[SessionPickerEntry, ...]
         for catalog_entry in list_meld_session_catalog(store)
         if catalog_entry.status == "APPLIED"
     )
+    entries.extend(_retained_update_entries(store))
     update_entry = _saved_update_entry(store)
     if update_entry is not None:
         entries.append(update_entry)

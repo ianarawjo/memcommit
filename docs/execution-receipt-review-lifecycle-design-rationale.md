@@ -95,6 +95,23 @@ the operation's report. Update, Meld, Sever, and Atomize already have durable
 operation-owned session/analysis identities; Review opens only their terminal
 application projection.
 
+Update separates its mutable active slot from terminal evidence. The active
+`staged-update.json` remains the one resumable plan or current command state.
+On successful application, the validated terminal session is also written to
+`update-receipts/FULL_UID.json`; a later plan may replace the active slot
+without invalidating the receipt's advertised Review and Impact commands.
+No-change applications are retained even though they create no Context
+checkpoint. Existing terminal singletons are migrated into the ledger before
+the next staged plan replaces them.
+
+The first retained application projection is immutable. Undo and Redo may
+change the active session's status, but they do not rewrite what the original
+Update receipt proved at application time. Review is read-only and cannot use
+a retained receipt to reactivate Apply. Publishing a terminal active session
+and its receipt is exception-atomic: a failed receipt write restores the prior
+active session so Context application rollback cannot leave a falsely terminal
+singleton.
+
 A plain or `--snapshot` Review projection must render every typed Memory row in
 an operation-authored detail block, including its explicit `MEMORY n` identity
 and complete content. It does not repeat supporting evidence spans by default;
@@ -146,4 +163,7 @@ universal proposal schema or one universal Review document model. A compact
 execution surface does not replace custom free-form response routes when an
 operation requires them; those remain operation-owned. Legacy staged artifacts
 may still be resumed through their owning operation, but the Review launcher
-must not expose them as terminal evidence.
+must not expose them as terminal evidence. Receipts created before the ledger
+existed remain reviewable while they occupy the active slot and are migrated on
+its next normal replacement; already-replaced historical singletons cannot be
+reconstructed without external evidence.

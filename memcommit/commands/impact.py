@@ -284,21 +284,33 @@ def _saved_update_impact(
     session_uid: str | None,
 ) -> None:
     from memcommit.commands.impact_sessions import update_impact_presentation
+    from memcommit.update_receipt_store import UpdateReceiptStore
 
-    session = store.load_staged_update() or store.load_impact_plan()
-    if session is None:
+    current = store.load_staged_update() or store.load_impact_plan()
+    receipts = UpdateReceiptStore(store)
+    retained = receipts.list()
+    if current is None and not retained:
         raise ValueError(
             "No saved Update or directional Impact plan exists. Run "
             "'mem impact --from SOURCE --to TARGET' first."
         )
-    if session_uid is not None:
+    retained_uids = {candidate.uid for candidate in retained}
+    if session_uid is None:
+        session = current or retained[0]
+    else:
+        candidates = retained
+        if current is not None and current.uid not in retained_uids:
+            candidates = (*retained, current)
         session = resolve_exact_or_unique_uid(
-            (session,),
+            candidates,
             session_uid,
             uid=lambda candidate: candidate.uid,
             label="Saved Update Impact artifact",
         )
+    selected_is_retained = session.uid in retained_uids
     def load_presentation() -> ImpactSessionPresentation:
+        if selected_is_retained:
+            return update_impact_presentation(receipts.load(session.uid))
         current = store.load_staged_update() or store.load_impact_plan()
         if current is None or current.uid != session.uid:
             raise ValueError(

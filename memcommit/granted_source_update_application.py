@@ -204,10 +204,7 @@ def apply_granted_source_staged_update(
                                 raise RuntimeError(
                                     "Applied local target does not match its receipt."
                                 )
-                            active_store._save_update_session(
-                                active_store.staged_update_file,
-                                applied,
-                            )
+                            active_store._save_active_terminal_update(applied)
                         except Exception:
                             rollback_error = None
                             for name in written_names:
