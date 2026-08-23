@@ -24,7 +24,10 @@ from memcommit.commands.ground_session_picker import (
 )
 from memcommit.context import Context
 from memcommit.store import MemoryStore
-from memcommit.uid_locator import resolve_exact_or_unique_uid
+from memcommit.uid_locator import (
+    UidLocatorUnavailableError,
+    resolve_exact_or_unique_uid,
+)
 
 
 _FINAL_ANALYSIS_NAME = re.compile(r"^([0-9a-f-]{36})\.json$")
@@ -181,12 +184,19 @@ def load_saved_atomize_analysis(
         analysis
         for analysis, _path in _canonical_saved_atomize_analyses(store)
     )
-    return resolve_exact_or_unique_uid(
-        candidates,
-        analysis_uid,
-        uid=lambda analysis: analysis.uid,
-        label="Saved Atomize analysis",
-    )
+    try:
+        return resolve_exact_or_unique_uid(
+            candidates,
+            analysis_uid,
+            uid=lambda analysis: analysis.uid,
+            label="Saved Atomize analysis",
+        )
+    except UidLocatorUnavailableError as error:
+        # Preserve the established recovery diagnostic while sharing selector
+        # mechanics with every other saved-artifact route.
+        raise ValueError(
+            f"Saved atomize analysis '{analysis_uid}' is no longer available."
+        ) from error
 
 
 def revalidate_saved_atomize_analysis(
