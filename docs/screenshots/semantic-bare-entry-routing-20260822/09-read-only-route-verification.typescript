@@ -1,0 +1,31 @@
+[38;2;139;213;255;1mBARE ENTRY ROUTING · READ-ONLY VERIFICATION[0m
+PTY · 180 COLUMNS × 52 ROWS
+PROFILE · ISOLATED EXPLICIT STORE · HOST GRANTS EXCLUDED
+CURRENT CONTEXT · capture/reference
+
+[38;2;139;213;202;1mPASS[0m · $ mem compare            · NEW SETUP
+       Escape cancelled · Store digest unchanged · checkpoints unchanged
+       provider calls 0 · current Context unchanged
+[38;2;139;213;202;1mPASS[0m · $ mem compare --sessions · SAVED LAUNCHER
+       Escape cancelled · Store digest unchanged · checkpoints unchanged
+       provider calls 0 · current Context unchanged
+[38;2;139;213;202;1mPASS[0m · $ mem meld               · NEW SETUP
+       Escape cancelled · Store digest unchanged · checkpoints unchanged
+       provider calls 0 · current Context unchanged
+[38;2;139;213;202;1mPASS[0m · $ mem meld --sessions    · SAVED LAUNCHER
+       Escape cancelled · Store digest unchanged · checkpoints unchanged
+       provider calls 0 · current Context unchanged
+[38;2;139;213;202;1mPASS[0m · $ mem sever              · NEW SETUP
+       Escape cancelled · Store digest unchanged · checkpoints unchanged
+       provider calls 0 · current Context unchanged
+[38;2;139;213;202;1mPASS[0m · $ mem sever --sessions   · SAVED LAUNCHER
+       Escape cancelled · Store digest unchanged · checkpoints unchanged
+       provider calls 0 · current Context unchanged
+[38;2;139;213;202;1mPASS[0m · $ mem update             · NEW SETUP
+       Escape cancelled · Store digest unchanged · checkpoints unchanged
+       provider calls 0 · current Context unchanged
+[38;2;139;213;202;1mPASS[0m · $ mem update --sessions  · SAVED LAUNCHER
+       Escape cancelled · Store digest unchanged · checkpoints unchanged
+       provider calls 0 · current Context unchanged
+
+[38;2;139;213;202;1mVERIFICATION COMPLETE · 8/8 ROUTES PASS[0m

@@ -1,0 +1,31 @@
+BARE ENTRY ROUTING · READ-ONLY VERIFICATION
+PTY · 180 COLUMNS × 52 ROWS
+PROFILE · ISOLATED EXPLICIT STORE · HOST GRANTS EXCLUDED
+CURRENT CONTEXT · capture/reference
+
+PASS · $ mem compare            · NEW SETUP
+       Escape cancelled · Store digest unchanged · checkpoints unchanged
+       provider calls 0 · current Context unchanged
+PASS · $ mem compare --sessions · SAVED LAUNCHER
+       Escape cancelled · Store digest unchanged · checkpoints unchanged
+       provider calls 0 · current Context unchanged
+PASS · $ mem meld               · NEW SETUP
+       Escape cancelled · Store digest unchanged · checkpoints unchanged
+       provider calls 0 · current Context unchanged
+PASS · $ mem meld --sessions    · SAVED LAUNCHER
+       Escape cancelled · Store digest unchanged · checkpoints unchanged
+       provider calls 0 · current Context unchanged
+PASS · $ mem sever              · NEW SETUP
+       Escape cancelled · Store digest unchanged · checkpoints unchanged
+       provider calls 0 · current Context unchanged
+PASS · $ mem sever --sessions   · SAVED LAUNCHER
+       Escape cancelled · Store digest unchanged · checkpoints unchanged
+       provider calls 0 · current Context unchanged
+PASS · $ mem update             · NEW SETUP
+       Escape cancelled · Store digest unchanged · checkpoints unchanged
+       provider calls 0 · current Context unchanged
+PASS · $ mem update --sessions  · SAVED LAUNCHER
+       Escape cancelled · Store digest unchanged · checkpoints unchanged
+       provider calls 0 · current Context unchanged
+
+VERIFICATION COMPLETE · 8/8 ROUTES PASS

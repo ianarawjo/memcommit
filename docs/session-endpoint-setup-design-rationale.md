@@ -348,6 +348,34 @@ setup shell composes them rather than copying `mem switch` key logic.
 `SessionPicker` remains the saved-work launcher and does not absorb new session
 setup.
 
+## Bare entry and saved-work boundary
+
+Compare, Meld, Sever, and Update treat a bare interactive invocation as a
+request to compose one new operation. Bare entry therefore opens endpoint
+setup directly; it never discovers or focuses a saved session first. Saved
+work is a separate, explicit route under `--sessions`.
+
+Compare, Meld, and Update use the role-based endpoint shell described above.
+Sever enters its existing typed Source–Criteria–Output setup, which already
+shares the Context reach control but has not yet migrated to the full role-pane
+shell. Choosing **New** from any of the four `--sessions` launchers delegates
+to the same operation-owned setup used by bare entry. The launcher cannot own
+a parallel creation flow.
+
+Setup remains process-local until it returns a typed receipt. Only then does
+the operation re-enter its normal explicit-operand boundary, where authority,
+freshness, provider, persistence, and Apply checks remain authoritative. This
+also prevents a retained singleton or most-recent session from redirecting a
+bare invocation. Outside a TTY, callers continue to use explicit operands;
+`--sessions` retains each operation's provider-free saved-work listing or
+launcher behavior.
+
+Ground is intentionally outside this boundary because its blank conversational
+entry and exact creation approval have a different contract. Review is also
+outside it: bare Review is a read-only union of operation-owned saved evidence
+and has no new-operation setup to bypass to. Atomize and Query already keep
+their ordinary bare work routes separate from explicit `--sessions` browsing.
+
 ## Rollout
 
 1. **Completed:** extract and test the horizontal choice and Context reach

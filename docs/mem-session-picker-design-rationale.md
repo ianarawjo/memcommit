@@ -123,23 +123,20 @@ store.
 
 ### Meld
 
-Bare `mem meld`, which previously had no complete no-operand operation, and
-`mem meld --sessions` show target-bound Meld sessions. The adapter reloads the
-selected target slot, checks session identity and digest, and revalidates its
-persisted source and target Context frames before opening it. Explicit source,
-target, and action forms retain their existing behavior. `N` asks for the Meld
-mode and two distinct ordinary Contexts. Directional setup enters the normal
-INCOMING-to-BASELINE path; symmetric setup additionally requires an existing
-ordered Compare analysis and the existing reviewed result-target picker.
+Bare `mem meld` opens the role-based new-Meld setup directly. It does not
+browse target-bound Meld sessions or let a retained target slot choose the new
+request. `mem meld --sessions` is the explicit saved-work launcher. Its adapter
+reloads the selected target slot, checks session identity and digest, and
+revalidates its persisted source and target Context frames before opening it.
+Explicit source, target, and action forms retain their existing behavior. The
+launcher's `N` action delegates to the same role-based setup as bare entry.
 
 ### Atomize
 
-In an interactive terminal, bare `mem atomize` and
-`mem atomize --sessions` open the cross-Context session launcher. A person
-chooses an existing session or the pinned New Session row instead of being
-dropped directly into the current Context's result. Explicit
-`mem atomize --context INPUT` remains the direct create-or-resume route, and
-non-TTY bare invocation retains that stable automation-compatible behavior.
+In an interactive terminal, `mem atomize --sessions` opens the cross-Context
+session launcher. Bare `mem atomize` remains the direct create-or-resume route
+for the current Context, matching its non-TTY automation-compatible behavior.
+Explicit `mem atomize --context INPUT` names that direct route's input.
 Saved selection may render or resume only a still-current
 analysis/workbench/grounding artifact; it must not silently regenerate stale
 work or switch the current Context.
@@ -160,25 +157,24 @@ launcher.
 
 ### Compare
 
-Bare `mem compare` and `mem compare --sessions` browse saved ordered-pair
-analyses; explicit `--to` behavior is unchanged. Compare entries are labelled
-as saved analyses rather than conversations. Selection reloads both Contexts
-and renders the existing analysis only if its source frames and ruleset remain
-current. The detail preview embeds the same complete compact report shown after
-opening and omits the generic metadata envelope, so entering the workbench is
-progressive disclosure rather than a replacement of the result the person just
-inspected. Refresh remains an
-explicit `mem compare --to ... --refresh` action.
-
-`N` selects one ordinary peer for the frozen current reference Context, then
-hands that exact pair to the normal Compare path. Cancelling peer selection
-creates no analysis.
+Bare `mem compare` opens the role-based A/B endpoint setup for a new analysis.
+`mem compare --sessions` alone browses saved ordered-pair analyses; explicit
+`--to` behavior is unchanged. Compare entries are labelled as saved analyses
+rather than conversations. Selection reloads both Contexts and renders the
+existing analysis only if its source frames and ruleset remain current. The
+detail preview embeds the same complete compact report shown after opening and
+omits the generic metadata envelope, so entering the workbench is progressive
+disclosure rather than a replacement of the result the person just inspected.
+Refresh remains an explicit `mem compare --to ... --refresh` action. The
+launcher's `N` action delegates to the same two-endpoint setup as bare entry;
+cancelling setup creates no analysis.
 
 ### Update
 
-Bare `mem update` opens the singleton saved Update receipt, or an empty
-launcher before the first receipt exists. `N` collects distinct ordinary
-source and target Contexts and then invokes the normal explicit-endpoint
+Bare `mem update` opens the role-based Source/Target setup for one new Update.
+`mem update --sessions` opens the singleton saved Update receipt, or an empty
+launcher before the first receipt exists. Its `N` action delegates to the same
+setup as bare entry. The typed receipt then invokes the normal explicit-endpoint
 Update path; provider planning, replacement checks, application, and receipts
 remain authoritative there. Opening a saved row reloads the singleton and
 requires its complete serialized value to remain unchanged before opening the
@@ -190,12 +186,13 @@ the Workbench with a long static operation dump in a TTY.
 
 ### Sever
 
-Bare `mem sever` and interactive `mem sever --sessions` browse retained Sever
-reviews through the shared launcher. `N` leaves the launcher for Sever's
-Source–Criteria–Output setup. Opening a saved row reloads the exact session and
-compares its complete digest before entering the provider-free Resolution
-Workbench. Outside a terminal, bare Sever retains its explicit-operand guidance
-and `--sessions` retains the stable plain listing for automation.
+Bare `mem sever` enters Sever's Source–Criteria–Output setup directly.
+Interactive `mem sever --sessions` browses retained Sever reviews through the
+shared launcher, whose `N` action delegates to that same setup. Opening a saved
+row reloads the exact session and compares its complete digest before entering
+the provider-free Resolution Workbench. Outside a terminal, bare Sever retains
+its explicit-operand guidance and `--sessions` retains the stable plain listing
+for automation.
 
 ## Time and grouping semantics
 

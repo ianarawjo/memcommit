@@ -214,7 +214,7 @@ Viewer returns to Items first, and only the next back action leaves History for
 the owning Context selector. The shared focused-frame chrome communicates this
 layering without changing the checkpoint or operation projection.
 
-Selecting the singleton receipt from the interactive bare `mem update`
+Selecting the singleton receipt from the explicit `mem update --sessions`
 launcher uses this same state-aware workbench instead of printing the complete
 operation list as terminal prose. Applied and undone receipts have no handoff;
 an impact or staged receipt may hand control to the normal Update command, but

@@ -17,13 +17,13 @@ target, not a reason to make the first integration slice larger.
 There are already two different common terminal layers. They must not be
 described as one TUI:
 
-| Operation | Bare saved-work launcher | Active work surface |
+| Operation | Bare entry / saved-work route | Active work surface |
 | --- | --- | --- |
 | Ground | Shared `SessionPicker` when saved Grounds exist; otherwise the new-Ground flow | Dedicated blank and named Ground shells |
-| Meld | Shared `SessionPicker` | Shared `ResolutionWorkbench` through the Meld adapter |
-| Compare | Shared `SessionPicker` | Dedicated read-only Compare workbench |
-| Update | Shared `SessionPicker` over one singleton receipt | Update adapter and shared `ResolutionWorkbench`; saved receipt rendering is currently snapshot-oriented |
-| Sever | Shared `SessionPicker` in a TTY; stable plain `--sessions` listing outside one; dedicated new-session setup | Shared `ResolutionWorkbench` through the Sever adapter |
+| Meld | Bare role-based setup; shared `SessionPicker` only with `--sessions` | Shared `ResolutionWorkbench` through the Meld adapter |
+| Compare | Bare A/B setup; shared `SessionPicker` only with `--sessions` | Dedicated read-only Compare workbench |
+| Update | Bare Source/Target setup; shared singleton `SessionPicker` only with `--sessions` | Update adapter and shared `ResolutionWorkbench`; saved receipt rendering is currently snapshot-oriented |
+| Sever | Bare dedicated setup; shared `SessionPicker` with `--sessions` in a TTY and stable plain listing outside one | Shared `ResolutionWorkbench` through the Sever adapter |
 | Atomize | Shared picker only with `--sessions`; bare invocation is current-Context create/resume | Shared `ResolutionWorkbench`, plus operation-specific result and grounding surfaces |
 
 The shared picker is a read-only launcher, not an active-session pointer. The
@@ -202,10 +202,11 @@ result, clarification, and grounding artifacts or compatibility tokens.
 
 ## First completion criterion
 
-The first slice is complete: bare Sever uses the same saved-work launcher
-grammar as Ground, Meld, Compare, and Update; new Sever setup remains explicit;
-opening a saved Sever session is provider-free and freshness-checked; and the
-existing Sever Resolution Workbench and non-TTY behavior remain unchanged.
+The first slice is complete: Sever has the same explicit `--sessions`
+saved-work grammar as Meld, Compare, and Update, while bare entry goes straight
+to new setup. Opening a saved Sever session is provider-free and
+freshness-checked; the existing Sever Resolution Workbench and non-TTY behavior
+remain unchanged. Ground retains its separate conversational entry contract.
 
 ## Impact completion criterion
 

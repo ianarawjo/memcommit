@@ -1,0 +1,10 @@
+$ mem meld
+PTY · 180 COLUMNS × 52 ROWS
+ NEW MELD · CHOOSE MODE AND ENDPOINTS
+› MODE · [ ✓ SYMMETRIC · CREATE SEPARATE RESULT ]  [   DIRECTIONAL · UPDATE EXISTING ] · ←/→ TO SELECT
+  FROM › capture/reference                       [ BROWSE ] CURRENT                           [   INCLUDE DESCENDANTS ]
+  WITH › capture/criteria                        [ BROWSE ]                                   [   INCLUDE DESCENDANTS ]
+  TO   ›                                         ENTER NEW NAME
+ COMMAND · INVALID
+ TO needs a Context name.
+ ←/→ mode · ↓ first endpoint row · Tab next control · Esc cancel

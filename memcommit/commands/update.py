@@ -90,8 +90,30 @@ def _run_saved_update_workbench(session: UpdateSession) -> bool:
     )
 
 
+def _start_new_update_from_setup(store: MemoryStore) -> None:
+    """Collect one new Update request without browsing saved sessions."""
+
+    setup = choose_update_setup(store)
+    if setup is None:
+        typer.echo("Update setup cancelled; no session was created.")
+        return
+    start_kwargs = {
+        "source_name": setup.source_name,
+        "target_name": setup.target_name,
+        "source_descendants": setup.source_descendants,
+        "target_descendants": setup.target_descendants,
+    }
+    if setup.source_memory_uid is not None:
+        start_kwargs["source_memory"] = setup.source_memory_uid
+    if setup.target_memory_uid is not None:
+        start_kwargs["target_memory"] = setup.target_memory_uid
+    # The reviewed setup supplies explicit endpoints before returning to the
+    # ordinary command boundary; a prior singleton session cannot redirect it.
+    cmd(**start_kwargs)
+
+
 def _browse_saved_update(store: MemoryStore) -> None:
-    """Browse the singleton receipt, or collect endpoints for a new Update."""
+    """Browse the singleton receipt; New delegates to the shared setup."""
     session = store.load_staged_update()
     interactive = _interactive_terminal()
     if not interactive:
@@ -130,7 +152,7 @@ def _browse_saved_update(store: MemoryStore) -> None:
                     "Update retains one global receipt; New replaces it only "
                     "through the existing explicit endpoint checks."
                 ),
-                reopen_argv=("mem", "update"),
+                reopen_argv=("mem", "update", "--sessions"),
             ),
         )
     receipt = choose_session(
@@ -144,28 +166,14 @@ def _browse_saved_update(store: MemoryStore) -> None:
     if isinstance(receipt, SessionNewReceipt):
         if receipt.kind != "update" or receipt.argv != ("mem", "update"):
             raise UpdateError("Update session picker returned an invalid receipt.")
-        setup = choose_update_setup(store)
-        if setup is None:
-            typer.echo("New Update cancelled; no session was created.")
-            return
-        start_kwargs = {
-            "source_name": setup.source_name,
-            "target_name": setup.target_name,
-            "source_descendants": setup.source_descendants,
-            "target_descendants": setup.target_descendants,
-        }
-        if setup.source_memory_uid is not None:
-            start_kwargs["source_memory"] = setup.source_memory_uid
-        if setup.target_memory_uid is not None:
-            start_kwargs["target_memory"] = setup.target_memory_uid
-        cmd(**start_kwargs)
+        _start_new_update_from_setup(store)
         return
     if (
         not isinstance(receipt, SessionOpenReceipt)
         or receipt.kind != "update"
         or session is None
         or receipt.key != session.uid
-        or receipt.argv != ("mem", "update")
+        or receipt.argv != ("mem", "update", "--sessions")
     ):
         raise UpdateError("Update session picker returned an invalid receipt.")
     current = store.load_staged_update()
@@ -476,6 +484,13 @@ def cmd(
             help="Require the exact staged Update revision reviewed for this turn",
         ),
     ] = None,
+    sessions: Annotated[
+        bool,
+        typer.Option(
+            "--sessions",
+            help="Enter the interactive Update session launcher",
+        ),
+    ] = False,
 ) -> None:
     try:
         source_name, target_name = choose_update_endpoint_operands(
@@ -534,6 +549,31 @@ def cmd(
             err=True,
         )
         raise typer.Exit(2)
+    if sessions and (
+        source_name is not None
+        or target_name is not None
+        or replace_stage
+        or source_memory is not None
+        or target_memory is not None
+        or scope_flags_supplied
+        or comment is not None
+        or expect_session is not None
+    ):
+        typer.secho(
+            "Update error: --sessions cannot be combined with Context operands "
+            "or Update actions.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+    if sessions:
+        store = MemoryStore(create=False)
+        try:
+            _browse_saved_update(store)
+        except (OSError, UpdateError, ValueError) as error:
+            typer.secho(f"Update error: {error}", fg=typer.colors.RED, err=True)
+            raise typer.Exit(1)
+        return
     if source_name is None and target_name is None:
         if (
             source_memory is not None
@@ -550,7 +590,7 @@ def cmd(
             raise typer.Exit(2)
         store = MemoryStore(create=False)
         try:
-            _browse_saved_update(store)
+            _start_new_update_from_setup(store)
         except (OSError, UpdateError, ValueError) as error:
             typer.secho(f"Update error: {error}", fg=typer.colors.RED, err=True)
             raise typer.Exit(1)

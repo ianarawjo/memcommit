@@ -700,7 +700,7 @@ COMMAND_FORMS = {
         "mem log --actions (current Study Profile action events)",
     ),
     "meld": (
-        "mem meld (enter the interactive Meld session launcher)",
+        "mem meld (choose mode and endpoints for a new Meld)",
         "mem meld --sessions (enter the interactive Meld session launcher)",
         "mem meld [incoming_context] (directional into current Baseline)",
         "mem meld [incoming_context] [baseline_context] (directional)",
@@ -811,7 +811,7 @@ COMMAND_FORMS = {
         "mem review ambiguities --context [context] (Context-bound Ambiguity review)",
     ),
     "sever": (
-        "mem sever (enter the interactive Sever session launcher)",
+        "mem sever (choose Source, Criteria, and Result for a new Sever)",
         "mem sever --sessions (enter the interactive Sever session launcher)",
         "mem sever [source_context] [criteria_context] (self-save into Source)",
         "mem sever [source_context] [criteria_context] [fresh_result_context] (save as a separate Result)",
@@ -893,7 +893,8 @@ COMMAND_FORMS = {
         "mem unlock profile (compatibility active Profile)",
     ),
     "update": (
-        "mem update (enter the interactive Update session launcher)",
+        "mem update (choose Source and Target for a new Update)",
+        "mem update --sessions (enter the interactive Update session launcher)",
         "mem update [source_context] [target_context] (explicit direction)",
         "mem update --from [source_context] --to [target_context] (compatibility aliases)",
         "mem update -r --from [source_context] --to [target_context] (both subtrees)",

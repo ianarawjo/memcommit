@@ -771,18 +771,6 @@ def cmd(
                 )
 
         interactive = _interactive_terminal()
-        bare_launcher = (
-            source_name is None
-            and criteria_name is None
-            and save_as is None
-            and resume is None
-            and candidate is None
-            and choice is None
-            and comment is None
-            and expect_session is None
-            and not accept
-            and not scope_flags_supplied
-        )
         if (
             scope_flags_supplied
             and source_name is None
@@ -797,16 +785,10 @@ def cmd(
         session: SeverSession | None = None
         snapshot: SeverSessionSnapshot | None = None
         sever_prewarm_origin: str | None = None
-        start_from_launcher = False
-        if sessions_flag or bare_launcher:
+        start_new_from_sessions = False
+        if sessions_flag:
             if not interactive:
-                if sessions_flag:
-                    _render_saved_session_list(session_store)
-                else:
-                    typer.echo(
-                        "No Sever setup supplied. Use SOURCE CRITERIA [RESULT], "
-                        "or run in a TTY."
-                    )
+                _render_saved_session_list(session_store)
                 return
             launcher_action, selected_session = _choose_saved_sever_session(
                 session_store
@@ -829,7 +811,7 @@ def cmd(
                     )
                 session = snapshot.session
             elif launcher_action == "NEW":
-                start_from_launcher = True
+                start_new_from_sessions = True
             else:
                 raise SeverCommandError(
                     "Sever session picker returned an unsupported action."
@@ -848,7 +830,7 @@ def cmd(
             session = snapshot.session
         else:
             if (
-                start_from_launcher
+                start_new_from_sessions
                 or source_name is None
                 and criteria_name is None
                 and save_as is None

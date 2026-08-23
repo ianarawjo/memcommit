@@ -77,9 +77,10 @@ emit the legacy Share-oriented terms.
 
 ## Setup and review
 
-With no operands in a TTY, Sever opens the shared saved-session launcher.
-Starting a new session uses the three-pane Source–Criteria–Save Location setup. Source
-and Criteria reuse the ordinary Context namespace tree and independently select
+With no operands in a TTY, Sever opens the three-pane
+Source–Criteria–Save Location setup directly. `mem sever --sessions` opens the
+shared saved-session launcher, whose New action delegates to that same setup.
+Source and Criteria reuse the ordinary Context namespace tree and independently select
 `THIS CONTEXT ONLY` or `INCLUDE DESCENDANTS`. Query-only rows remain visible
 but unavailable. Save Location accepts the selected Source for self-save only
 when Source is `THIS CONTEXT ONLY`; every other existing name is rejected.

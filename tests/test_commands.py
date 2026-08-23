@@ -533,7 +533,7 @@ class TestHelp:
         assert "--into" in meld_help
 
         forms = help_inventory.COMMAND_FORMS["meld"]
-        assert "mem meld (enter the interactive Meld session launcher)" in forms
+        assert "mem meld (choose mode and endpoints for a new Meld)" in forms
         assert (
             "mem meld [incoming_context] [baseline_context] (directional)"
         ) in forms
@@ -597,7 +597,7 @@ class TestHelp:
 
     def test_forms_include_meaningful_bare_entry_routes(self):
         assert help_inventory.COMMAND_FORMS["update"][0] == (
-            "mem update (enter the interactive Update session launcher)"
+            "mem update (choose Source and Target for a new Update)"
         )
         assert help_inventory.COMMAND_FORMS["checkpoint"][0] == (
             "mem checkpoint (save without a message)"
@@ -619,7 +619,14 @@ class TestHelp:
         assert help_inventory.COMMAND_FORMS["branch"][0].startswith("mem branch (")
 
     def test_interactive_help_names_the_entry_surface(self):
-        session_launchers = ("atomize", "compare", "ground", "meld", "sever")
+        session_launchers = (
+            "atomize",
+            "compare",
+            "ground",
+            "meld",
+            "sever",
+            "update",
+        )
         root = get_command(app)
         context = click.Context(root)
         for command_name in session_launchers:

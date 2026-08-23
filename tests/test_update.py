@@ -1529,7 +1529,7 @@ def test_omitted_endpoint_requires_current_context(
     assert message in result.stderr
 
 
-def test_bare_update_reports_empty_saved_session_outside_tty(
+def test_update_sessions_reports_empty_saved_session_outside_tty(
     isolated_store,
     monkeypatch,
 ):
@@ -1538,10 +1538,42 @@ def test_bare_update_reports_empty_saved_session_outside_tty(
         lambda: pytest.fail("provider should not connect"),
     )
 
-    result = runner.invoke(app, ["update"])
+    result = runner.invoke(app, ["update", "--sessions"])
 
     assert result.exit_code == 0
     assert "No saved Update session." in result.output
+
+
+def test_bare_update_enters_setup_without_session_launcher(
+    isolated_store,
+    monkeypatch,
+):
+    setup_stores = []
+    monkeypatch.setattr(
+        update_command,
+        "_browse_saved_update",
+        lambda _store: pytest.fail("bare Update must not browse saved sessions"),
+    )
+    monkeypatch.setattr(
+        update_command,
+        "_start_new_update_from_setup",
+        lambda store: setup_stores.append(store),
+    )
+
+    result = runner.invoke(app, ["update"])
+
+    assert result.exit_code == 0, result.output
+    assert len(setup_stores) == 1
+
+
+def test_update_sessions_rejects_explicit_route_or_action(isolated_store):
+    result = runner.invoke(
+        app,
+        ["update", "source", "target", "--sessions"],
+    )
+
+    assert result.exit_code == 2
+    assert "--sessions cannot be combined" in (result.output + result.stderr)
 
 
 def test_empty_update_launcher_new_collects_distinct_endpoints(
@@ -1635,7 +1667,7 @@ def test_empty_update_launcher_passes_exact_setup_memories(
     ]
 
 
-def test_saved_update_launcher_opens_state_aware_interactive_workbench(
+def test_saved_update_launcher_reenters_compact_execution_without_impact_workbench(
     isolated_store,
     monkeypatch,
 ):

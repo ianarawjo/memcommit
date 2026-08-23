@@ -1271,7 +1271,7 @@ def test_shared_sever_picker_new_receipt_enters_setup_path(
     assert session is None
 
 
-def test_bare_sever_opens_a_selected_saved_session_without_provider_call(
+def test_sessions_sever_opens_a_selected_saved_session_without_provider_call(
     isolated_store,
     monkeypatch,
 ):
@@ -1303,12 +1303,36 @@ def test_bare_sever_opens_a_selected_saved_session_without_provider_call(
         lambda: (_ for _ in ()).throw(AssertionError("provider called")),
     )
 
-    result = runner.invoke(app, ["sever"])
+    result = runner.invoke(app, ["sever", "--sessions"])
 
     assert result.exit_code == 0, result.output
     assert f"SESSION · {session.uid}" in result.output
     assert f"IMPACT · mem impact sever --session {session.uid}" in result.output
     assert "SEVER READY · source → draft" in result.output
+
+
+def test_bare_sever_enters_setup_without_session_launcher(
+    isolated_store,
+    monkeypatch,
+):
+    setup_calls = []
+    monkeypatch.setattr(sever_command, "_interactive_terminal", lambda: True)
+    monkeypatch.setattr(
+        sever_command,
+        "_choose_saved_sever_session",
+        lambda _sessions: pytest.fail("bare Sever must not browse saved sessions"),
+    )
+    monkeypatch.setattr(
+        sever_command,
+        "_interactive_setup",
+        lambda store: setup_calls.append(store) or None,
+    )
+
+    result = runner.invoke(app, ["sever"])
+
+    assert result.exit_code == 0, result.output
+    assert len(setup_calls) == 1
+    assert "Sever setup cancelled" in result.output
 
 
 def test_non_tty_sever_sessions_retains_plain_listing(
