@@ -2,9 +2,10 @@
 
 Ordinary checkpoints remain owned by one Context.  This module adds the small
 amount of host-side interpretation needed to recover command boundaries across
-Contexts: semantic Update checkpoints share an Update identity, while explicit
-Undo/Redo receipts share a restoration identity.  No referenced Context or
-Memory content is opened while building the stacks.
+Contexts: semantic Update and deterministic batch Move checkpoints share their
+operation identity, while explicit Undo/Redo receipts share a restoration
+identity. No referenced Context or Memory content is opened while building the
+stacks.
 """
 from __future__ import annotations
 
@@ -318,6 +319,17 @@ def command_unit_uid(
                 and operation_uid
             ):
                 return f"replace:{operation_uid}"
+    if command in {"copy", "move"}:
+        record = args.get("memory_transfer")
+        if isinstance(record, dict):
+            operation_uid = record.get("operation_uid")
+            if (
+                record.get("version") == 1
+                and record.get("kind") == command.upper()
+                and isinstance(operation_uid, str)
+                and operation_uid
+            ):
+                return f"{command}:{operation_uid}"
     if command == "branch":
         record = args.get("branch_tree")
         if isinstance(record, dict):

@@ -20,6 +20,8 @@ def test_history_action_aliases_resolve_without_classifying_mixed_operations():
         "init": SemanticColorRole.CREATE,
         "CREATED": SemanticColorRole.CREATE,
         "add": SemanticColorRole.ADD,
+        "copy": SemanticColorRole.ADD,
+        "COPIED": SemanticColorRole.ADD,
         "SURVIVOR": SemanticColorRole.ADD,
         "SURVIVORS": SemanticColorRole.ADD,
         "mem embed": SemanticColorRole.EMBED,
@@ -35,6 +37,7 @@ def test_history_action_aliases_resolve_without_classifying_mixed_operations():
     assert {label: semantic_action_role(label) for label in expected} == expected
     assert semantic_action_role("update") is None
     assert semantic_action_role("atomize") is None
+    assert semantic_action_role("move") is None
 
 
 def test_judgments_have_distinct_roles_without_reusing_action_meaning():

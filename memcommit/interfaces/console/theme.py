@@ -94,6 +94,8 @@ _ACTION_ROLES = {
     "branch": SemanticColorRole.CREATE,
     "add": SemanticColorRole.ADD,
     "added": SemanticColorRole.ADD,
+    "copy": SemanticColorRole.ADD,
+    "copied": SemanticColorRole.ADD,
     "survivor": SemanticColorRole.ADD,
     "survivors": SemanticColorRole.ADD,
     "embed": SemanticColorRole.EMBED,
