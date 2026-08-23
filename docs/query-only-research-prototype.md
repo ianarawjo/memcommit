@@ -168,11 +168,9 @@ mem query campus-wiki/construction-details \
 ```
 
 `mem query` resolves either a direct legacy `QueryContextRef` or an effective
-`QUERY` grant. One-shot questions and answers are not saved. An explicit
-`--session NAME` stores only visible Q/A in the task Profile when the grant
-also includes `SESSION_LOG`; `mem query --sessions` and `--show-session NAME`
-inspect that chat log without reopening the authority source. Language
-selection occurs only after provider authentication and inside the authority
+`QUERY` grant. Questions and answers are process-local and are not saved,
+replayed, or listed by memcommit. Language selection occurs only after
+provider authentication and inside the authority
 source-loading boundary.
 
 ## Temporary Codex provider

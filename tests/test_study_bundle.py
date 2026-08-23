@@ -281,7 +281,7 @@ def _assert_grant_templates(task, manifest, context_uids):
                 "name": "campus-wiki/construction-details",
             }
         ]
-        assert details["permissions"] == ["QUERY", "SESSION_LOG"]
+        assert details["permissions"] == ["QUERY"]
         assert details["provider"] == "codex_chatgpt"
         assert details["attachment"]["grant_key"] == campus["key"]
     elif task == 2:
@@ -297,7 +297,7 @@ def _assert_grant_templates(task, manifest, context_uids):
         assert grants["task-2-advisor1-view"]["permissions"] == advisor_permissions
         assert grants["task-2-advisor2-view"]["permissions"] == advisor_permissions
         guidelines = grants["task-2-proposal-guidelines-query"]
-        assert guidelines["permissions"] == ["QUERY", "SESSION_LOG"]
+        assert guidelines["permissions"] == ["QUERY"]
         assert guidelines["provider"] == "codex_chatgpt"
         assert {
             grant["attachment"]["context"]["name"] for grant in grants.values()
@@ -308,7 +308,7 @@ def _assert_grant_templates(task, manifest, context_uids):
         assert receiver["recursive"] is False
         assert receiver["public_name"] == "government/healthcare-agent"
         healthcare = grants["task-3-healthcare-questions-and-answers-query"]
-        assert healthcare["permissions"] == ["QUERY", "SESSION_LOG"]
+        assert healthcare["permissions"] == ["QUERY"]
         assert healthcare["provider"] == "codex_chatgpt"
         assert grants["task-3-healthcare-transmission-guidance-view"]["permissions"] == [
             "READ",

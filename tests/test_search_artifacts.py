@@ -1,7 +1,6 @@
 """Shared Find/Query search over durable profile-local activity evidence."""
 
 import json
-import uuid
 
 from typer.testing import CliRunner
 
@@ -13,7 +12,6 @@ from memcommit.commands.find import (
 )
 from memcommit.context import AutoCheckpoint
 from memcommit.meld import MeldSession
-from memcommit.query_sessions import QuerySessionBinding, QuerySessionStore
 from memcommit.rationale_cache import (
     CachedRationaleInference,
     save_rationale_inference,
@@ -112,7 +110,7 @@ def test_query_single_argument_answers_from_ordinary_search_artifact(
     assert "Melded advisor1 and advisor2 into workspace" in result.output
 
 
-def test_find_frame_includes_visible_query_meld_and_rationale_sessions(
+def test_find_frame_includes_retained_meld_and_rationale_artifacts(
     isolated_store,
 ):
     store = MemoryStore()
@@ -125,32 +123,6 @@ def test_find_frame_includes_visible_query_meld_and_rationale_sessions(
         store.save(context)
     store.set_current(target.name)
 
-    query_store = QuerySessionStore(store.store_dir)
-    session, digest = query_store.load_or_start(
-        "prior-question",
-        QuerySessionBinding(
-            grant_uid=str(uuid.uuid4()),
-            grant_revision=1,
-            grant_digest="a" * 64,
-            grantee_profile_uid=str(uuid.uuid4()),
-            authority_profile_uid=str(uuid.uuid4()),
-            attachment_context_uid=target.uid,
-            attachment_context_name=target.name,
-            resource_uid=str(uuid.uuid4()),
-            resource_name="guidelines",
-            public_name="guidelines",
-            requested_name="guidelines",
-            language="en",
-            source_digest="b" * 64,
-        ),
-    )
-    assert digest is None
-    query_store.append_turn(
-        session,
-        expected_record_digest=None,
-        question="What did the prior guidance say?",
-        answer="It required an explicit owner.",
-    )
     store.save_meld_session(
         MeldSession.create_symmetric(left, right, target),
         expected_session_digest=None,
@@ -188,4 +160,5 @@ def test_find_frame_includes_visible_query_meld_and_rationale_sessions(
         if isinstance(candidate.item, SearchArtifact)
     }
 
-    assert {"query_session", "meld_session", "rationale"} <= kinds
+    assert {"meld_session", "rationale"} <= kinds
+    assert "query_session" not in kinds

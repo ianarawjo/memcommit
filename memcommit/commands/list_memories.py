@@ -825,10 +825,7 @@ def _emit_snapshot_text(
 
 
 def _permission_text(permissions: tuple[str, ...]) -> str:
-    return " + ".join(
-        "SAVE QUERY SESSION" if item == "SESSION_LOG" else item
-        for item in permissions
-    )
+    return " + ".join(permissions)
 
 
 def _boundary_value(permission: str, permissions: set[str]) -> str:

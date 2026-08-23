@@ -11,7 +11,7 @@ and publication workflow.
 | --- | --- | --- |
 | campus authority Profile | `task-1-campus-authority` | owns the ordinary campus source trees and can be selected for full CRUD |
 | editable campus view | `campus-wiki` | task-side `READ+CREATE+UPDATE` grant over the authority Context graph |
-| construction detail view | `campus-wiki/construction-details` | narrower task-side `QUERY+SESSION_LOG` grant; no `READ` |
+| construction detail view | `campus-wiki/construction-details` | narrower task-side `QUERY` grant; no `READ` |
 | verified change source | `participant/construction-updates` | ordinary task-owned Context graph and task attachment |
 | person in English prose | `the participant` | role label, not a personal name |
 

@@ -1,4 +1,4 @@
-"""Interactive Question, Source, Scope, and Answer workbench for Query."""
+"""Compact one-shot Source, Question, and Answer workbench for Query."""
 
 from __future__ import annotations
 
@@ -22,21 +22,12 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.widgets import Frame, TextArea
 
+from memcommit.context_targeting.tui.compact_scope import (
+    CompactReadableScopeControl,
+)
+from memcommit.interfaces.console.terminal import require_interactive_terminal
+from memcommit.interfaces.console.text import safe_terminal_text
 from memcommit.interfaces.tui.components.background_turn import BackgroundExecutorTurn
-from memcommit.interfaces.tui.components.horizontal_choice import (
-    HorizontalChoiceOption,
-    HorizontalChoiceState,
-    render_horizontal_choice,
-)
-from memcommit.operations.query.granted_application import (
-    GrantedQueryRequest,
-    GrantedQueryTarget,
-)
-from memcommit.interfaces.tui.components.plain_text_clipboard import (
-    PlainTextClipboardReceipt,
-    clipboard_failure_receipt,
-    copy_plain_text,
-)
 from memcommit.interfaces.tui.components.focus import (
     FocusSurface,
     SurfaceActionResult,
@@ -44,40 +35,40 @@ from memcommit.interfaces.tui.components.focus import (
     SurfaceMoveResult,
     bind_surface_navigation,
 )
-from memcommit.interfaces.tui.core.theme import (
-    MEMCOMMIT_TUI_STYLE,
-    SEMANTIC_VIEWER_STYLE,
+from memcommit.interfaces.tui.components.frame import (
+    TuiRegion,
+    bind_focused_frame_style,
+    build_tui_frame,
+)
+from memcommit.interfaces.tui.components.horizontal_choice import (
+    HorizontalChoiceOption,
+    HorizontalChoiceState,
+    render_horizontal_choice,
+)
+from memcommit.interfaces.tui.components.plain_text_clipboard import (
+    PlainTextClipboardReceipt,
+    clipboard_failure_receipt,
+    copy_plain_text,
 )
 from memcommit.interfaces.tui.core.activity import busy_suffix
 from memcommit.interfaces.tui.core.keybindings import (
     bind_case_insensitive_key,
     dispatch_tui_back,
 )
-from memcommit.interfaces.tui.components.frame import (
-    bind_focused_frame_style,
+from memcommit.interfaces.tui.core.theme import (
+    MEMCOMMIT_TUI_STYLE,
+    SEMANTIC_VIEWER_STYLE,
 )
-from memcommit.interfaces.console.terminal import (
-    require_interactive_terminal,
-)
-from memcommit.interfaces.console.text import (
-    safe_terminal_text,
-)
-from memcommit.context_targeting.tui.range_selection import (
-    ContextRangeSelectionState,
-)
-from memcommit.context_targeting.tui.reach import render_context_reach
-from memcommit.context_targeting.tui.selection import render_context_target_mode
-from memcommit.selection.model import SelectionOption
-from memcommit.selection.state import FlatSelectionState
-from memcommit.selection.tui import render_vertical_choice_rows
-from memcommit.source_projection.presentation import (
-    SourceDisplayValue,
-    normalize_source_display_tokens,
+from memcommit.operations.query.granted_application import (
+    GrantedQueryRequest,
+    GrantedQueryResponse,
+    GrantedQueryTarget,
 )
 from memcommit.operations.query.ordinary_application import (
     OrdinaryQueryRequest,
+    OrdinaryQueryResponse,
 )
-
+from memcommit.source_projection.presentation import SourceDisplayValue
 
 from memcommit.interfaces.tui.operations.query.adapter import (
     QUERY_VIEW_LABEL,
@@ -86,14 +77,15 @@ from memcommit.interfaces.tui.operations.query.adapter import (
     query_answer_reference_document,
     query_answer_stop_count,
     render_query_answer_fragments,
-    render_saved_query_transcript,
 )
 from memcommit.interfaces.tui.operations.query.model import (
     GrantedQueryRunner,
     OrdinaryQueryRunner,
     QueryWorkbenchResponse,
     QueryWorkbenchResult,
-    SavedQueryTranscript,
+)
+from memcommit.interfaces.tui.operations.query.query_view_scope import (
+    CompactQueryViewScopeControl,
 )
 
 
@@ -106,16 +98,14 @@ def run_query_workbench(
     run_ordinary: OrdinaryQueryRunner,
     run_granted: GrantedQueryRunner,
     annotations: Mapping[str, SourceDisplayValue] | None = None,
-    saved_transcripts: Sequence[SavedQueryTranscript] = (),
     initial_language: str = "en",
-    initial_session_name: str | None = None,
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
     clipboard_writer: Callable[[str], None] | None = None,
     help_binder: Callable[..., object] | None = None,
 ) -> QueryWorkbenchResult:
-    """Open a read-only Query launcher without connecting before Enter."""
+    """Open a process-local Query surface without connecting before Enter."""
 
     if require_tty:
         require_interactive_terminal(
@@ -123,95 +113,57 @@ def run_query_workbench(
             snapshot_hint='Pass a question, for example: mem query "What changed?".',
         )
     targets = tuple(query_targets)
-    transcripts = tuple(saved_transcripts)
-    if (
-        any(not isinstance(transcript, SavedQueryTranscript) for transcript in transcripts)
-        or len({transcript.name for transcript in transcripts}) != len(transcripts)
-    ):
-        raise ValueError("Saved Query transcripts must have distinct names.")
-    target_by_uid = {target.grant_uid: target for target in targets}
-    if len(target_by_uid) != len(targets):
+    if len({target.grant_uid for target in targets}) != len(targets):
         raise ValueError("Query-only target identities must be distinct.")
     if not isinstance(initial_language, str) or not initial_language:
         raise ValueError("Query language must be nonblank.")
-    initial_query_target = next(
-        (target for target in targets if target.session_log_allowed),
-        targets[0] if targets else None,
-    )
-    if initial_session_name is not None and (
-        initial_query_target is None or not initial_query_target.session_log_allowed
-    ):
-        raise ValueError("No query-only View allows SESSION_LOG.")
-    context_state = ContextRangeSelectionState.create(
-        context_names,
-        current_name=current_context,
-        initial_target=initial_context,
-        multiple=True,
-        include_descendants=True,
-    )
+
     source_options = [HorizontalChoiceOption("ORDINARY", "VISIBLE CONTEXTS")]
     if targets:
         source_options.append(HorizontalChoiceOption("GRANTED", QUERY_VIEW_LABEL))
-    source_choice = HorizontalChoiceState(
-        tuple(source_options),
-        "GRANTED" if initial_session_name is not None else "ORDINARY",
-    )
-    embed_choice = HorizontalChoiceState(
-        (
-            HorizontalChoiceOption("EXCLUDE", "EXCLUDE"),
-            HorizontalChoiceOption("FOLLOW", "FOLLOW"),
-        ),
-        "FOLLOW",
-    )
-    federate_choice = HorizontalChoiceState(
-        (
-            HorizontalChoiceOption("EXACT", "EXACT VIEW"),
-            HorizontalChoiceOption("FEDERATE", "FEDERATE DESCENDANTS"),
-        ),
-        "EXACT" if initial_session_name is not None else "FEDERATE",
-    )
-    session_choice = HorizontalChoiceState(
-        (
-            HorizontalChoiceOption("OFF", "ONE SHOT"),
-            HorizontalChoiceOption("ON", "SAVE VISIBLE Q/A"),
-        ),
-        "ON" if initial_session_name is not None else "OFF",
-    )
-    query_selection = (
-        FlatSelectionState(
-            tuple(
-                SelectionOption(
-                    target.grant_uid,
-                    target.public_name,
-                    QUERY_VIEW_LABEL + " · ATTACHED TO "
-                    + target.attachment_name
-                    + (" · SESSION LOG" if target.session_log_allowed else ""),
-                )
-                for target in targets
-            ),
-            cursor_uid=initial_query_target.grant_uid,
-            selected_uid=initial_query_target.grant_uid,
-            allow_empty=False,
-        )
-        if targets
-        else None
-    )
-    labels = dict(annotations or {})
-    if set(labels) - set(context_names):
-        raise ValueError("Query Context annotations are outside the catalog.")
-    try:
-        for annotation in labels.values():
-            normalize_source_display_tokens(annotation)
-    except (TypeError, ValueError) as error:
-        raise ValueError("Query received an invalid Context annotation.") from error
-    scope_row = {"value": 0}
+    source_choice = HorizontalChoiceState(tuple(source_options), "ORDINARY")
     response: QueryWorkbenchResponse | None = None
-    viewed_transcript: SavedQueryTranscript | None = None
     answer_focus = QueryAnswerFocus()
     status = {"value": "ENTER A QUESTION"}
     copy_receipt: PlainTextClipboardReceipt | None = None
     background_turn: BackgroundExecutorTurn[QueryWorkbenchResponse] = (
         BackgroundExecutorTurn()
+    )
+
+    def clear_answer(message: str) -> None:
+        nonlocal copy_receipt, response
+        response = None
+        copy_receipt = None
+        answer_focus.reset()
+        answer_window.vertical_scroll = 0
+        status["value"] = message
+
+    def update_status(message: str) -> None:
+        status["value"] = message
+
+    ordinary_scope = CompactReadableScopeControl(
+        context_names,
+        current_name=current_context,
+        initial_targets=(initial_context,),
+        include_descendants=True,
+        follow_embeds=True,
+        annotations=annotations,
+        input_name="query-readable-scope-context",
+        on_change=clear_answer,
+        on_status=update_status,
+        locked=lambda: background_turn.busy,
+    )
+    query_view_scope = (
+        CompactQueryViewScopeControl(
+            targets,
+            initial_target=targets[0],
+            federate_descendants=True,
+            on_change=clear_answer,
+            on_status=update_status,
+            locked=lambda: background_turn.busy,
+        )
+        if targets
+        else None
     )
 
     bindings = KeyBindings()
@@ -223,112 +175,53 @@ def run_query_workbench(
         read_only=Condition(lambda: background_turn.busy),
         name="query-question",
     )
-    session_area = TextArea(
-        text=initial_session_name or "",
-        multiline=False,
-        prompt="› ",
-        wrap_lines=False,
-        height=Dimension.exact(1),
-        read_only=Condition(lambda: background_turn.busy),
-        name="query-session-name",
-    )
 
     def granted_mode() -> bool:
         return source_choice.selected_uid == "GRANTED"
 
-    def selected_query_target() -> GrantedQueryTarget:
-        if query_selection is None or query_selection.selected_uid is None:
-            raise ValueError("Select one query-only View.")
-        return target_by_uid[query_selection.selected_uid]
+    source_type_control: FormattedTextControl
 
-    def render_sources() -> list[tuple[str, str]]:
-        focused = app.layout.has_focus(sources_control)
-        if not granted_mode():
-            return context_state.render_rows(
-                focused=focused,
-                annotations=labels,
-            )
-        assert query_selection is not None
-        width = max(30, app.output.get_size().columns - 8)
-        return render_vertical_choice_rows(
-            query_selection,
-            focused=focused,
-            content_width=width,
-            numbered=False,
+    def render_source_type() -> list[tuple[str, str]]:
+        return render_horizontal_choice(
+            source_choice,
+            title="SOURCE",
+            focused=app.layout.has_focus(source_type_control),
         )
 
-    sources_control = FormattedTextControl(
-        render_sources,
+    source_type_control = FormattedTextControl(
+        render_source_type,
         focusable=True,
         show_cursor=False,
     )
-    sources_window = Window(
-        sources_control,
-        wrap_lines=False,
-        right_margins=[ScrollbarMargin(display_arrows=True)],
+    scope_container = HSplit(
+        [
+            Window(
+                source_type_control,
+                height=Dimension.exact(1),
+                dont_extend_height=True,
+            ),
+            ConditionalContainer(
+                ordinary_scope.container,
+                filter=Condition(lambda: not granted_mode()),
+            ),
+            ConditionalContainer(
+                query_view_scope.container
+                if query_view_scope is not None
+                else Window(),
+                filter=Condition(granted_mode),
+            ),
+        ]
     )
 
-    def render_scope() -> list[tuple[str, str]]:
-        focused = app.layout.has_focus(scope_control)
-        fragments = render_horizontal_choice(
-            source_choice,
-            title="SOURCE TYPE",
-            focused=focused and scope_row["value"] == 0,
+    def render_answer() -> list[tuple[str, str]]:
+        return render_query_answer_fragments(
+            response,
+            focus=answer_focus,
+            focused=app.layout.has_focus(answer_control),
         )
-        fragments.append(("", "\n"))
-        if not granted_mode():
-            fragments.extend(
-                render_context_target_mode(
-                    context_state.target_mode,
-                    focused=focused and scope_row["value"] == 1,
-                )
-            )
-            fragments.append(("", "\n"))
-            fragments.extend(
-                render_context_reach(
-                    context_state.reach,
-                    title="CONTEXT RANGE",
-                    focused=focused and scope_row["value"] == 2,
-                )
-            )
-            fragments.append(("", "\n"))
-            fragments.extend(
-                render_horizontal_choice(
-                    embed_choice,
-                    title="EMBEDDED CONTEXTS",
-                    focused=focused and scope_row["value"] == 3,
-                )
-            )
-            return fragments
-        fragments.extend(
-            render_horizontal_choice(
-                federate_choice,
-                title="QUERY VIEW RANGE",
-                focused=focused and scope_row["value"] == 1,
-            )
-        )
-        fragments.append(("", "\n"))
-        fragments.extend(
-            render_horizontal_choice(
-                session_choice,
-                title="SESSION LOG",
-                focused=focused and scope_row["value"] == 2,
-            )
-        )
-        fragments.append(("", f"\n  LANGUAGE · {safe_terminal_text(initial_language)}"))
-        return fragments
 
-    scope_control = FormattedTextControl(render_scope, focusable=True, show_cursor=False)
     answer_control = FormattedTextControl(
-        lambda: (
-            [("", render_saved_query_transcript(viewed_transcript))]
-            if viewed_transcript is not None
-            else render_query_answer_fragments(
-                response,
-                focus=answer_focus,
-                focused=app.layout.has_focus(answer_control),
-            )
-        ),
+        render_answer,
         focusable=True,
         show_cursor=False,
     )
@@ -337,99 +230,29 @@ def run_query_workbench(
         wrap_lines=True,
         right_margins=[ScrollbarMargin(display_arrows=True)],
     )
-    transcript_selection = (
-        FlatSelectionState(
-            tuple(
-                SelectionOption(
-                    transcript.name,
-                    transcript.name,
-                    f"{transcript.requested_name} · {transcript.language} · "
-                    f"{len(transcript.turns)} TURN(S) · REVISION "
-                    f"{transcript.revision}",
-                )
-                for transcript in transcripts
-            ),
-            cursor_uid=transcripts[0].name,
-            selected_uid=None,
-            allow_empty=True,
-        )
-        if transcripts
-        else None
-    )
-    transcript_by_name = {transcript.name: transcript for transcript in transcripts}
-
-    def render_transcript_rows() -> list[tuple[str, str]]:
-        if transcript_selection is None:
-            return [("", "  No saved query transcripts.")]
-        width = max(30, app.output.get_size().columns - 8)
-        return render_vertical_choice_rows(
-            transcript_selection,
-            focused=app.layout.has_focus(transcripts_control),
-            content_width=width,
-            numbered=False,
-        )
-
-    transcripts_control = FormattedTextControl(
-        render_transcript_rows,
-        focusable=True,
-        show_cursor=False,
-    )
-    transcripts_window = Window(
-        transcripts_control,
-        wrap_lines=False,
-        right_margins=[ScrollbarMargin(display_arrows=True)],
-    )
 
     header = Window(
         FormattedTextControl(" MEM QUERY"),
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
+    scope_frame = Frame(scope_container, title="SCOPE")
     question_frame = Frame(
         question_area,
         title="QUESTION · ENTER TO ASK",
         height=Dimension.exact(3),
     )
-    sources_frame = Frame(
-        sources_window,
-        title=lambda: (
-            f"SOURCES · {QUERY_VIEW_LABEL}S · ENTER TO SELECT"
-            if granted_mode()
-            else "SOURCES · PROFILE/CONTEXT · ENTER/SPACE TO SELECT"
-        ),
-        height=Dimension(min=5, preferred=8, max=12, weight=1),
-    )
-    scope_frame = Frame(
-        Window(scope_control, height=Dimension.exact(4), wrap_lines=False),
-        title="SCOPE",
-        height=Dimension.exact(6),
-    )
-    session_frame = Frame(
-        session_area,
-        title="SESSION NAME · VISIBLE Q/A ONLY",
-        height=Dimension.exact(3),
-    )
-    transcripts_frame = Frame(
-        transcripts_window,
-        title="SAVED TRANSCRIPTS · ENTER TO VIEW",
-        height=Dimension(min=3, preferred=5, max=7),
-    )
 
     def answer_title() -> str:
         if background_turn.busy:
             return f"ANSWER · QUERYING {busy_suffix(background_turn.frame)}"
-        if viewed_transcript is not None:
-            return "ANSWER · SAVED TRANSCRIPT · READ ONLY"
         return "ANSWER"
 
     answer_frame = Frame(
         answer_window,
         title=answer_title,
-        height=Dimension(min=5, weight=2),
+        height=Dimension(min=7, weight=2),
     )
-
-    def session_visible() -> bool:
-        return granted_mode() and session_choice.selected_uid == "ON"
 
     def render_footer() -> str | list[tuple[str, str]]:
         if background_turn.busy:
@@ -438,47 +261,42 @@ def run_query_workbench(
                 "H Help · Ctrl-C closes after query"
             )
         if app.layout.has_focus(question_area):
-            navigation = "Enter ask · Tab switch · Esc close"
-        elif app.layout.has_focus(session_area):
-            navigation = "Enter ask · Tab switch · Esc question"
-        else:
-            navigation = (
-                "↑/↓ move/cross · Tab switch · / question · "
-                "Esc/Backspace question · H Help · Q close"
-            )
-        if app.layout.has_focus(answer_control):
+            navigation = "Enter ask · Tab/Shift-Tab panes · Esc close"
+        elif app.layout.has_focus(answer_control):
             navigation = (
                 "↑/↓ answer/References · y copy focused · "
-                "Y copy complete answer · Tab switch · Esc question"
+                "Y copy complete answer · / question · Esc back"
+            )
+        elif ordinary_scope.browser_open:
+            navigation = (
+                "↑/↓ move · ←/→ tree · Enter/Space check · "
+                "A expand all · Esc close Browse"
+            )
+        elif query_view_scope is not None and query_view_scope.browser_open:
+            navigation = "↑/↓ move · Enter/Space select · Esc close Browse"
+        else:
+            navigation = (
+                "↑/↓ move/cross · ←/→ adjust · Enter activate · "
+                "/ question · Esc back · H Help · Q close"
             )
         if copy_receipt is not None and app.layout.has_focus(answer_control):
             return [
                 (copy_receipt.style, " " + copy_receipt.message),
                 ("", f" · {navigation}"),
             ]
-        return (
-            f" {safe_terminal_text(status['value'])} · {navigation}"
-        )
+        return f" {safe_terminal_text(status['value'])} · {navigation}"
 
     footer = Window(
         FormattedTextControl(render_footer),
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
-    root = HSplit(
-        [
-            header,
-            question_frame,
-            sources_frame,
-            scope_frame,
-            ConditionalContainer(
-                session_frame,
-                filter=Condition(session_visible),
-            ),
-            transcripts_frame,
-            answer_frame,
-            footer,
-        ]
+    root = build_tui_frame(
+        TuiRegion(header),
+        TuiRegion(scope_frame),
+        TuiRegion(question_frame),
+        TuiRegion(answer_frame),
+        TuiRegion(footer),
     )
     app: Application[QueryWorkbenchResult] = Application(
         layout=Layout(root, focused_element=question_area),
@@ -490,46 +308,43 @@ def run_query_workbench(
         mouse_support=False,
         style=merge_styles([MEMCOMMIT_TUI_STYLE, SEMANTIC_VIEWER_STYLE]),
     )
+
+    def scope_focused() -> bool:
+        controls = [
+            source_type_control,
+            ordinary_scope.input,
+            ordinary_scope.browse_control,
+            ordinary_scope.range_control,
+            ordinary_scope.embed_control,
+            ordinary_scope.tree_control,
+        ]
+        if query_view_scope is not None:
+            controls.extend(
+                [
+                    query_view_scope.input,
+                    query_view_scope.browse_control,
+                    query_view_scope.range_control,
+                    query_view_scope.catalog_control,
+                ]
+            )
+        return any(app.layout.has_focus(control) for control in controls)
+
+    bind_focused_frame_style(scope_frame, is_focused=scope_focused)
     bind_focused_frame_style(
         question_frame,
         is_focused=lambda: app.layout.has_focus(question_area),
-    )
-    bind_focused_frame_style(
-        sources_frame,
-        is_focused=lambda: app.layout.has_focus(sources_control),
-    )
-    bind_focused_frame_style(
-        scope_frame,
-        is_focused=lambda: app.layout.has_focus(scope_control),
-    )
-    bind_focused_frame_style(
-        session_frame,
-        is_focused=lambda: app.layout.has_focus(session_area),
-    )
-    bind_focused_frame_style(
-        transcripts_frame,
-        is_focused=lambda: app.layout.has_focus(transcripts_control),
     )
     bind_focused_frame_style(
         answer_frame,
         is_focused=lambda: app.layout.has_focus(answer_control),
     )
 
-    def clear_answer(message: str) -> None:
-        nonlocal copy_receipt, response, viewed_transcript
-        response = None
-        viewed_transcript = None
-        copy_receipt = None
-        answer_focus.reset()
-        answer_window.vertical_scroll = 0
-        status["value"] = message
-
-    def text_changed(_buffer) -> None:
+    def question_changed(_buffer) -> None:
         if response is not None and not background_turn.busy:
             clear_answer("QUESTION CHANGED · PRESS ENTER TO QUERY")
             app.invalidate()
 
-    question_area.buffer.on_text_changed += text_changed
+    question_area.buffer.on_text_changed += question_changed
 
     def _move_question(_event, _delta: int) -> SurfaceMoveResult:
         return "BOUNDARY"
@@ -537,197 +352,54 @@ def run_query_workbench(
     def _enter_question(_delta: int) -> None:
         question_area.buffer.cursor_position = len(question_area.text)
 
-    def _move_sources(_event, delta: int) -> SurfaceMoveResult:
-        if granted_mode():
-            assert query_selection is not None
-            return "MOVED" if query_selection.move(delta) else "BOUNDARY"
-        return "MOVED" if context_state.move_cursor(delta) else "BOUNDARY"
-
-    def _enter_sources(delta: int) -> None:
-        if granted_mode():
-            assert query_selection is not None
-            query_selection.cursor_uid = (
-                query_selection.options[0].uid
-                if delta > 0
-                else query_selection.options[-1].uid
-            )
-            return
-        context_state.enter_from_boundary(delta)
-
-    def _choose_source(event) -> SurfaceActionResult:
+    def _move_source_type(_event, delta: int) -> SurfaceMoveResult:
         if background_turn.busy:
-            status["value"] = "Wait for the current Query before changing Sources."
-        elif granted_mode():
-            assert query_selection is not None
-            before = query_selection.selected_uid
-            query_selection.select_cursor(toggle=False)
-            target = selected_query_target()
-            if not target.session_log_allowed:
-                session_choice.choose("OFF")
-            if query_selection.selected_uid != before:
-                clear_answer("SOURCE CHANGED · PRESS ENTER TO QUERY")
-        else:
-            if context_state.toggle_cursor():
-                clear_answer("SOURCES CHANGED · PRESS ENTER TO QUERY")
-        event.app.invalidate()
-        return "HANDLED"
-
-    @bindings.add("right", filter=has_focus(sources_control), eager=True)
-    def _source_right(event) -> None:
-        if not granted_mode():
-            context_state.expand_cursor()
-        event.app.invalidate()
-
-    @bindings.add("left", filter=has_focus(sources_control), eager=True)
-    def _source_left(event) -> None:
-        if not granted_mode():
-            context_state.collapse_cursor()
-        event.app.invalidate()
-
-    @bindings.add(" ", filter=has_focus(sources_control), eager=True)
-    def _source_space(event) -> None:
-        _choose_source(event)
-
-    @bindings.add("a", filter=has_focus(sources_control), eager=True)
-    @bindings.add("A", filter=has_focus(sources_control), eager=True)
-    def _source_expand_all(event) -> None:
-        if not granted_mode():
-            context_state.toggle_expand_all()
-        event.app.invalidate()
-
-    def scope_last_row() -> int:
-        return 2 if granted_mode() else 3
-
-    def _move_scope_vertical(_event, delta: int) -> SurfaceMoveResult:
-        before = scope_row["value"]
-        scope_row["value"] = max(0, min(before + delta, scope_last_row()))
-        return "MOVED" if scope_row["value"] != before else "BOUNDARY"
-
-    def _enter_scope(delta: int) -> None:
-        scope_row["value"] = 0 if delta > 0 else scope_last_row()
-
-    def move_scope(delta: int) -> None:
-        if background_turn.busy:
-            status["value"] = "Wait for the current Query before changing Scope."
-            return
-        row = scope_row["value"]
-        if row == 0:
-            if source_choice.move(delta):
-                scope_row["value"] = 0
-                clear_answer("SOURCE TYPE CHANGED · PRESS ENTER TO QUERY")
-            return
-        if not granted_mode():
-            if row == 1:
-                _changed, targets_changed = context_state.move_target_mode(delta)
-                if targets_changed:
-                    clear_answer("SOURCES CHANGED · PRESS ENTER TO QUERY")
-                return
-            if row == 2:
-                if context_state.move_reach(delta):
-                    clear_answer("CONTEXT RANGE CHANGED · PRESS ENTER TO QUERY")
-                return
-            if embed_choice.move(delta):
-                clear_answer("EMBED SCOPE CHANGED · PRESS ENTER TO QUERY")
-            return
-        if row == 1:
-            if session_choice.selected_uid == "ON":
-                status["value"] = "Saved Query sessions remain exact to one View."
-                return
-            if federate_choice.move(delta):
-                clear_answer("QUERY VIEW RANGE CHANGED · PRESS ENTER TO QUERY")
-            return
-        target = selected_query_target()
-        if delta > 0 and not target.session_log_allowed:
-            status["value"] = "The selected Query View does not allow SESSION_LOG."
-            return
-        if session_choice.move(delta):
-            if session_choice.selected_uid == "ON":
-                federate_choice.choose("EXACT")
-            clear_answer("SESSION MODE CHANGED · PRESS ENTER TO QUERY")
-
-    @bindings.add("right", filter=has_focus(scope_control), eager=True)
-    def _scope_right(event) -> None:
-        move_scope(1)
-        event.app.invalidate()
-
-    @bindings.add("left", filter=has_focus(scope_control), eager=True)
-    def _scope_left(event) -> None:
-        move_scope(-1)
-        event.app.invalidate()
-
-    def _move_session(_event, _delta: int) -> SurfaceMoveResult:
-        return "BOUNDARY"
-
-    def _enter_session(_delta: int) -> None:
-        session_area.buffer.cursor_position = len(session_area.text)
-
-    def _move_transcripts(_event, delta: int) -> SurfaceMoveResult:
-        if transcript_selection is None:
+            status["value"] = "Wait for the current Query before changing Source."
+            return "CONSUMED"
+        if not source_choice.move(delta):
             return "BOUNDARY"
-        return "MOVED" if transcript_selection.move(delta) else "BOUNDARY"
+        clear_answer("SOURCE TYPE CHANGED · PRESS ENTER TO QUERY")
+        return "MOVED"
 
-    def _enter_transcripts(delta: int) -> None:
-        if transcript_selection is None:
-            return
-        transcript_selection.cursor_uid = (
-            transcript_selection.options[0].uid
-            if delta > 0
-            else transcript_selection.options[-1].uid
-        )
-
-    def _view_transcript(event) -> SurfaceActionResult:
-        nonlocal copy_receipt, viewed_transcript
-        if transcript_selection is None:
-            status["value"] = "NO SAVED QUERY TRANSCRIPTS"
-            return "HANDLED"
-        selected_name = transcript_selection.select_cursor(toggle=False)
-        assert selected_name is not None
-        viewed_transcript = transcript_by_name[selected_name]
-        copy_receipt = None
-        answer_focus.reset()
-        answer_window.vertical_scroll = 0
-        status["value"] = (
-            f"TRANSCRIPT {safe_terminal_text(selected_name)} · "
-            f"{len(viewed_transcript.turns)} TURN(S) · READ ONLY"
-        )
-        event.app.invalidate()
+    def _activate_source_type(event) -> SurfaceActionResult:
+        if granted_mode():
+            assert query_view_scope is not None
+            event.app.layout.focus(query_view_scope.input)
+        else:
+            event.app.layout.focus(ordinary_scope.input)
         return "HANDLED"
+
+    @bindings.add("left", filter=has_focus(source_type_control), eager=True)
+    def _source_type_left(event) -> None:
+        _move_source_type(event, -1)
+        event.app.invalidate()
+
+    @bindings.add("right", filter=has_focus(source_type_control), eager=True)
+    def _source_type_right(event) -> None:
+        _move_source_type(event, 1)
+        event.app.invalidate()
 
     def _move_answer(_event, delta: int) -> SurfaceMoveResult:
         nonlocal copy_receipt
-        document = (
-            None
-            if viewed_transcript is not None
-            else query_answer_reference_document(response)
-        )
+        document = query_answer_reference_document(response)
         if document is not None:
             moved = answer_focus.move(response, delta)
             if moved:
                 copy_receipt = None
             return "MOVED" if moved else "BOUNDARY"
-
         render_info = answer_window.render_info
         if render_info is None:
             return "BOUNDARY"
         previous = answer_window.vertical_scroll
         maximum = max(0, render_info.content_height - render_info.window_height)
-        answer_window.vertical_scroll = max(
-            0,
-            min(previous + delta, maximum),
-        )
+        answer_window.vertical_scroll = max(0, min(previous + delta, maximum))
         if answer_window.vertical_scroll != previous:
             copy_receipt = None
-        return (
-            "MOVED"
-            if answer_window.vertical_scroll != previous
-            else "BOUNDARY"
-        )
+            return "MOVED"
+        return "BOUNDARY"
 
     def _enter_answer(delta: int) -> None:
-        if (
-            viewed_transcript is None
-            and query_answer_reference_document(response) is not None
-        ):
+        if query_answer_reference_document(response) is not None:
             answer_focus.enter(response, delta)
             return
         render_info = answer_window.render_info
@@ -744,50 +416,59 @@ def run_query_workbench(
         return "HANDLED"
 
     def _query(event) -> SurfaceActionResult:
-        nonlocal copy_receipt, response, viewed_transcript
+        nonlocal copy_receipt, response
         if background_turn.busy:
             status["value"] = "A Query is already running."
             return "HANDLED"
         try:
             if granted_mode():
-                target = selected_query_target()
-                session_name = (
-                    session_area.text.strip()
-                    if session_choice.selected_uid == "ON"
-                    else None
-                )
+                assert query_view_scope is not None
                 request = GrantedQueryRequest(
-                    target=target,
+                    target=query_view_scope.selected_target(),
                     question=question_area.text.strip() or None,
                     language=initial_language,
-                    session_name=session_name,
-                    federate_descendants=(
-                        session_choice.selected_uid == "OFF"
-                        and federate_choice.selected_uid == "FEDERATE"
-                    ),
+                    federate_descendants=query_view_scope.federate_descendants,
                 )
 
                 def work() -> QueryWorkbenchResponse:
-                    return run_granted(request)
+                    next_response = run_granted(request)
+                    if (
+                        not isinstance(next_response, GrantedQueryResponse)
+                        or next_response.request != request
+                    ):
+                        raise ValueError(
+                            "Query inputs changed while the request was running. "
+                            "Ask the question again."
+                        )
+                    return next_response
 
             else:
+                request_targets, request_descendants = ordinary_scope.request_scope()
                 request = OrdinaryQueryRequest(
                     question=question_area.text.strip(),
-                    target_names=context_state.effective_names,
-                    include_descendants=False,
-                    follow_embeds=embed_choice.selected_uid == "FOLLOW",
+                    target_names=request_targets,
+                    include_descendants=request_descendants,
+                    follow_embeds=ordinary_scope.follow_embeds,
                 )
 
                 def work() -> QueryWorkbenchResponse:
-                    return run_ordinary(request)
+                    next_response = run_ordinary(request)
+                    if (
+                        not isinstance(next_response, OrdinaryQueryResponse)
+                        or next_response.request != request
+                    ):
+                        raise ValueError(
+                            "Query inputs changed while the request was running. "
+                            "Ask the question again."
+                        )
+                    return next_response
         except ValueError as error:
             status["value"] = str(error)
             return "HANDLED"
 
         def commit(next_response: QueryWorkbenchResponse) -> None:
-            nonlocal copy_receipt, response, viewed_transcript
+            nonlocal copy_receipt, response
             response = next_response
-            viewed_transcript = None
             copy_receipt = None
             answer_focus.reset()
             answer_window.vertical_scroll = 0
@@ -817,8 +498,28 @@ def run_query_workbench(
         event.app.layout.focus(answer_control)
         return "HANDLED"
 
-    def visible_surfaces():
-        surfaces = [
+    def visible_surfaces() -> tuple[FocusSurface, ...]:
+        if not granted_mode() and ordinary_scope.browser_open:
+            return (ordinary_scope.browser_surface(uid_prefix="query-scope"),)
+        if (
+            granted_mode()
+            and query_view_scope is not None
+            and query_view_scope.browser_open
+        ):
+            return (query_view_scope.browser_surface(uid_prefix="query-view"),)
+        scope_surfaces = (
+            query_view_scope.normal_surfaces(uid_prefix="query-view")
+            if granted_mode() and query_view_scope is not None
+            else ordinary_scope.normal_surfaces(uid_prefix="query-scope")
+        )
+        return (
+            FocusSurface(
+                "source-type",
+                source_type_control,
+                move_vertical=lambda _event, _delta: "BOUNDARY",
+                activate=_activate_source_type,
+            ),
+            *scope_surfaces,
             FocusSurface(
                 "question",
                 question_area,
@@ -827,60 +528,71 @@ def run_query_workbench(
                 on_vertical_enter=_enter_question,
             ),
             FocusSurface(
-                "sources",
-                sources_control,
-                move_vertical=_move_sources,
-                activate=_choose_source,
-                on_vertical_enter=_enter_sources,
-            ),
-            FocusSurface(
-                "scope",
-                scope_control,
-                move_vertical=_move_scope_vertical,
-                activate=_focus_question,
-                on_vertical_enter=_enter_scope,
-            ),
-        ]
-        if session_visible():
-            surfaces.append(
-                FocusSurface(
-                    "session",
-                    session_area,
-                    move_vertical=_move_session,
-                    activate=_focus_question,
-                    on_vertical_enter=_enter_session,
-                )
-            )
-        if transcript_selection is not None:
-            surfaces.append(
-                FocusSurface(
-                    "transcripts",
-                    transcripts_control,
-                    move_vertical=_move_transcripts,
-                    activate=_view_transcript,
-                    on_vertical_enter=_enter_transcripts,
-                )
-            )
-        surfaces.append(
-            FocusSurface(
                 "answer",
                 answer_control,
                 move_vertical=_move_answer,
                 activate=_focus_question,
                 on_vertical_enter=_enter_answer,
-            )
+            ),
         )
-        return tuple(surfaces)
 
     surface_focus = SurfaceFocusController(visible_surfaces)
     bind_surface_navigation(bindings, surface_focus)
+    ordinary_scope.bind_keybindings(bindings)
+    if query_view_scope is not None:
+        query_view_scope.bind_keybindings(bindings)
 
-    read_only_focus = (
-        has_focus(sources_control)
-        | has_focus(scope_control)
-        | has_focus(transcripts_control)
-        | has_focus(answer_control)
+    @bindings.add("tab", filter=has_focus(ordinary_scope.tree_control), eager=True)
+    @bindings.add("s-tab", filter=has_focus(ordinary_scope.tree_control), eager=True)
+    @bindings.add(
+        "backspace", filter=has_focus(ordinary_scope.tree_control), eager=True
     )
+    def _leave_context_browser(event) -> None:
+        ordinary_scope.close_browser(event)
+        event.app.invalidate()
+
+    if query_view_scope is not None:
+
+        @bindings.add(
+            "tab",
+            filter=has_focus(query_view_scope.catalog_control),
+            eager=True,
+        )
+        @bindings.add(
+            "s-tab",
+            filter=has_focus(query_view_scope.catalog_control),
+            eager=True,
+        )
+        @bindings.add(
+            "backspace",
+            filter=has_focus(query_view_scope.catalog_control),
+            eager=True,
+        )
+        def _leave_query_view_browser(event) -> None:
+            query_view_scope.close_browser(event)
+            event.app.invalidate()
+
+    scope_focus = (
+        has_focus(source_type_control)
+        | has_focus(ordinary_scope.input)
+        | has_focus(ordinary_scope.browse_control)
+        | has_focus(ordinary_scope.range_control)
+        | has_focus(ordinary_scope.embed_control)
+        | has_focus(ordinary_scope.tree_control)
+    )
+    if query_view_scope is not None:
+        scope_focus = (
+            scope_focus
+            | has_focus(query_view_scope.input)
+            | has_focus(query_view_scope.browse_control)
+            | has_focus(query_view_scope.range_control)
+            | has_focus(query_view_scope.catalog_control)
+        )
+    read_only_focus = (scope_focus | has_focus(answer_control)) & ~has_focus(
+        ordinary_scope.input
+    )
+    if query_view_scope is not None:
+        read_only_focus = read_only_focus & ~has_focus(query_view_scope.input)
     if help_binder is not None:
         help_binder(
             bindings,
@@ -896,14 +608,11 @@ def run_query_workbench(
             projection = project_query_answer_clipboard(
                 response,
                 focus=answer_focus,
-                viewed_transcript=viewed_transcript,
                 whole_document=whole_document,
             )
         except ValueError as error:
             copy_receipt = clipboard_failure_receipt(error)
         else:
-            # Answer copies are plain OS text only. They do not create the
-            # typed single-source clipboard stage used by mutating commands.
             copy_receipt = copy_plain_text(
                 projection.text,
                 success_message=projection.label,
@@ -927,65 +636,56 @@ def run_query_workbench(
     @bindings.add("pageup", filter=has_focus(answer_control), eager=True)
     def _answer_page_up(event) -> None:
         nonlocal copy_receipt
-        document = (
-            None
-            if viewed_transcript is not None
-            else query_answer_reference_document(response)
-        )
-        if document is not None:
-            previous_stop = answer_focus.stop_index
-            answer_focus.stop_index = max(0, answer_focus.stop_index - 4)
-            if answer_focus.stop_index != previous_stop:
+        if query_answer_reference_document(response) is not None:
+            previous = answer_focus.stop_index
+            answer_focus.stop_index = max(0, previous - 4)
+            if answer_focus.stop_index != previous:
                 copy_receipt = None
         else:
-            previous_scroll = answer_window.vertical_scroll
             render_info = answer_window.render_info
             step = 1 if render_info is None else max(1, render_info.window_height - 1)
-            answer_window.vertical_scroll = max(
-                0,
-                answer_window.vertical_scroll - step,
-            )
-            if answer_window.vertical_scroll != previous_scroll:
+            previous = answer_window.vertical_scroll
+            answer_window.vertical_scroll = max(0, previous - step)
+            if answer_window.vertical_scroll != previous:
                 copy_receipt = None
         event.app.invalidate()
 
     @bindings.add("pagedown", filter=has_focus(answer_control), eager=True)
     def _answer_page_down(event) -> None:
         nonlocal copy_receipt
-        document = (
-            None
-            if viewed_transcript is not None
-            else query_answer_reference_document(response)
-        )
-        if document is not None:
-            previous_stop = answer_focus.stop_index
+        if query_answer_reference_document(response) is not None:
+            previous = answer_focus.stop_index
             answer_focus.stop_index = min(
                 query_answer_stop_count(response) - 1,
-                answer_focus.stop_index + 4,
+                previous + 4,
             )
-            if answer_focus.stop_index != previous_stop:
+            if answer_focus.stop_index != previous:
                 copy_receipt = None
         else:
-            previous_scroll = answer_window.vertical_scroll
             render_info = answer_window.render_info
             step = 1 if render_info is None else max(1, render_info.window_height - 1)
             maximum = (
                 answer_window.vertical_scroll + step
                 if render_info is None
-                else max(
-                    0,
-                    render_info.content_height - render_info.window_height,
-                )
+                else max(0, render_info.content_height - render_info.window_height)
             )
-            answer_window.vertical_scroll = min(
-                maximum,
-                answer_window.vertical_scroll + step,
-            )
-            if answer_window.vertical_scroll != previous_scroll:
+            previous = answer_window.vertical_scroll
+            answer_window.vertical_scroll = min(maximum, previous + step)
+            if answer_window.vertical_scroll != previous:
                 copy_receipt = None
         event.app.invalidate()
 
-    @bindings.add("backspace", filter=read_only_focus, eager=True)
+    @bindings.add(
+        "backspace",
+        filter=read_only_focus
+        & ~has_focus(ordinary_scope.tree_control)
+        & (
+            ~has_focus(query_view_scope.catalog_control)
+            if query_view_scope is not None
+            else Condition(lambda: True)
+        ),
+        eager=True,
+    )
     def _back_to_question(event) -> None:
         _focus_question(event)
         event.app.invalidate()
@@ -1005,7 +705,14 @@ def run_query_workbench(
 
     @bindings.add("escape", eager=True)
     def _escape(event) -> None:
+        if ordinary_scope.close_browser(event):
+            event.app.invalidate()
+            return
+        if query_view_scope is not None and query_view_scope.close_browser(event):
+            event.app.invalidate()
+            return
         dispatch_tui_back(event, _return_to_question, close=close)
+        event.app.invalidate()
 
     @bind_case_insensitive_key(bindings, "q", filter=read_only_focus, eager=True)
     def _close_read_only(event) -> None:

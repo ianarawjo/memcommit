@@ -1,189 +1,115 @@
 # Interactive Query workbench design rationale
 
+Last verified: 2026-08-22.
+
 ## Problem
 
-`mem query` historically overloaded its first positional `SELECTOR`. One value
-could be an ordinary-Context question, a public query-only View, a
-`VIEW#HANDLE`, or a legacy reference. With no value, the callback returned a
-usage error before resolving the current Context or connecting a provider.
-That contract preserved explicit scripts but prevented Query from offering the
-same query-first terminal entry point as Find.
+The previous workbench permanently displayed a large Source tree, then added
+Scope, optional Session Name, Saved Transcripts, Answer, and To Do frames. The
+screen gave a one-shot read operation the visual and persistence weight of a
+resumable review workflow. It also diverged from the compact Source selector
+already used by Find and other setup screens.
 
-Query also has two materially different Source boundaries. Ordinary Query reads
-visible Contexts and synthesizes a grounded answer from the complete frozen
-candidate corpus in one provider turn.
-Query-only View execution receives only public grant routing metadata until the
-query provider is authenticated; it then opens concealed authority material,
-revalidates the grant and source after the provider call, and may save only the
-visible Q/A transcript when `SESSION_LOG` is granted. Treating both as plain
-Context strings would erase this distinction.
+Query still has two distinct Source boundaries. Ordinary Query reads a frozen
+set of visible readable Contexts. Query Views use public grant routes and must
+not open concealed authority content before provider authentication. A clean
+surface must preserve that type distinction without keeping either catalog
+expanded all the time.
 
 ## Decision
 
-In a TTY, bare `mem query` opens a process-local workbench with visible frames
-in this order:
+Bare `mem query` in a TTY opens one compact, process-local workbench:
 
-1. `QUESTION`, initially focused and blank;
-2. `SOURCES`, showing either the shared Profile/Context range selector or a
-   typed list of public query-only Views;
-3. `SCOPE`, whose controls depend on Source type;
-4. optional `SESSION NAME`, visible only for query-only transcript logging; and
-5. `ANSWER`.
+1. `SCOPE` contains a Source-type choice and a one-line exact Source field;
+2. `[ BROWSE ]` opens the relevant catalog only while the user is choosing;
+3. range and embed controls stay adjacent to the Source they affect;
+4. `QUESTION` is the initial focus and Enter performs one Query; and
+5. `ANSWER` displays the current process-local result and typed References.
 
-The ordinary Scope reuses `ContextRangeSelectionState`: `PROFILE`, one versus
-many roots, exact versus descendant rows, and embedded-Context traversal remain
-independent. Execution freezes the exact effective checked names so an
-independently cleared descendant cannot be silently reintroduced. The
-query-only Scope instead exposes exact View versus relevant-descendant
-federation and one-shot versus visible-Q/A session logging. Language remains an
-explicit command option and is displayed in the workbench.
+There is no Session Name, Saved Transcripts, or To Do frame. Closing the
+workbench discards its question draft, selection state, and answer. The only
+explicit output action is copying the current typed answer or focused
+Reference to the ordinary OS clipboard.
 
-No provider connects merely because the workbench opens or a cursor moves.
-Enter in `QUESTION` freezes one typed request and runs it through the shared
-background-turn lifecycle. `ANSWER · QUERYING …` and the footer both display
-progress. A blank ordinary question is rejected before connection. A blank
-question with a selected query-only View retains the established safe catalog
-browse: only opaque handles and shape placeholders are rendered.
+For ordinary Contexts the screen composes `CompactReadableScopeControl`, the
+same exact-name plus transient Browse grammar used by Find. Direct name input
+is the fast path. Browse temporarily replaces the normal focus topology with
+the frozen readable tree; Escape, Backspace, or Tab closes it and returns to
+the compact row. The shared control continues to own exact-versus-descendant
+range, Profile expansion, checked effective targets, and embed traversal.
 
-Escape uses the shared hierarchical back dispatcher. From Sources, Scope,
-Answer, or the optional Session Name field it returns to the Question field
-without submitting; from Question it closes the workbench. Backspace mirrors
-the one-level return only on read-only Surfaces and remains ordinary deletion
-inside Question or Session Name. Closing while a provider turn is in flight
-retains the existing deferred-close boundary.
+Query Views use an operation-specific typed companion with the same visual
+grammar. Direct input accepts only a public name from the frozen authorized
+catalog. Browse shows typed `GrantedQueryTarget` rows and never substitutes an
+ordinary Context locator. Exact View versus federated descendants remains an
+independent range choice.
 
-An ordinary grounded answer retains a typed citation document alongside its
-CLI string. `ANSWER` treats the neutral answer body and each used Reference as
-one linear Up/Down sequence. Moving onto a Reference anchors that row in the
-viewport and gives the complete content-and-provenance row the shared blue
-focused-control background; leaving Answer retains the blue selection without
-bold focus. This structure comes from the citation renderer and is never
-reconstructed by parsing `References` out of finished text.
+## Execution and focus boundary
 
-Each used Reference is one logical row in the stable form
-`[N] CONTENT — UID_PREFIX, CONTEXT ALIAS`. Content precedes provenance, every
-row repeats its exact canonical Context because one answer may cite different
-Sources, and adjacent References have no blank separator. Stored line breaks
-are folded to spaces so content cannot create a sibling citation or a second
-`References` heading. The typed evidence still retains its kind, full UID,
-Context, alias, and bounded locally projected content; the compact terminal
-row omits kind because UID plus canonical Context identifies the cited object,
-while the alias preserves the frozen provider-evidence mapping.
+Opening the workbench, moving focus, typing a Source name, or browsing does not
+connect a provider. Enter in Question constructs either an
+`OrdinaryQueryRequest` or `GrantedQueryRequest`, then runs it through the
+shared background-turn lifecycle. A blank ordinary question is rejected
+before provider construction; a blank Query View question retains the safe
+opaque-catalog mode.
 
-While `ANSWER` owns focus, lowercase `y` copies exactly that typed focus unit:
-the answer body at stop zero or the complete numbered content-and-provenance
-row for the active Reference. Uppercase `Y` copies the complete typed answer
-document in body-then-References order. A granted answer, granted catalog, or
-saved transcript has no finer typed stop, so `y` copies that displayed document
-and `Y` produces the same complete document. Clipboard projection runs before
-terminal wrapping and escapes terminal controls through the same display
-boundary, so pasted text has neither viewport line breaks nor ANSI styling.
+Normal vertical order is Source type, exact Source, Browse, range, optional
+embed policy, Question, then Answer. While a catalog is open it is the sole
+focus Surface. Escape closes that transient layer first, returns to Question
+from another root Surface second, and closes from Question. Backspace mirrors
+the one-level return only for read-only controls and remains text deletion in
+the exact Source and Question fields.
 
-These keys are bound only on the read-only Answer Surface. Both characters
-remain ordinary text in `QUESTION`, `SESSION NAME`, and every other writable
-field. A successful `COPIED` receipt or a nonfatal `COPY FAILED` receipt is
-shown in the footer; neither closes the workbench nor changes answer focus.
-The action writes only the operating-system plain-text clipboard. It does not
-create the private structured clipboard stage used by mutation-oriented
-commands, save a transcript, or grant authority over any cited Source.
+The Answer document retains the neutral body and typed used References as one
+linear Up/Down sequence. Lowercase `y` copies the focused typed unit; uppercase
+`Y` copies the complete typed answer. Clipboard projection happens before
+terminal wrapping and does not persist a memcommit artifact.
 
-Outside a TTY, a selector remains required because there is no interactive
-surface in which to supply a question or Source. All existing explicit forms
-remain compatible.
+## Persistence and authority invariants
 
-## Shared execution boundary
+- Workbench selection, draft, answer, catalog projection, and focus are
+  process-local.
+- Query has no durable publication stage and no success action after Answer;
+  therefore a To Do frame would be false workflow chrome.
+- Ordinary Browse freezes `ReadableContextCatalog`, including effectively
+  READ-granted public names with their exact access bindings.
+- Query View Browse freezes public grant metadata only. Provider construction
+  precedes concealed Source loading, and post-provider revalidation precedes
+  answer disclosure.
+- The exact checked ordinary target set is executed; no hidden descendant
+  expansion re-includes an independently unchecked row.
+- CLI flags retain explicit direct and recursive one-shot forms, while the TUI
+  owns its visible scope controls.
 
-Ordinary Query now crosses the terminal-independent
-`operations/query/ordinary_application.py` request, frozen-source,
-provider-ordering, and response boundary. `ordinary_runtime.py` supplies the
-`MemoryStore` and readable-catalog adapter. Granted Query separately crosses
-`granted_application.py`, whose answer/catalog read returns an optional
-still-unpublished session-turn plan, and `granted_runtime.py`, whose publication
-adapter independently revalidates `SESSION_LOG`, Source freshness, and the
-session CAS. The local `QueryContextRef` route crosses
-`reference_application.py` and `reference_runtime.py`; its provider factory is
-deliberately invoked before the runtime may open concealed Source content. CLI
-and TTY import the operation package directly, while the former top-level
-module paths remain implementation-free compatibility exports. The former
-`commands/query_execution.py` progress facade was removed after production,
-tests, and capture tools moved to the direct operation runtime:
+## Alternatives considered
 
-- `OrdinaryQueryRequest` freezes question, exact public Context names,
-  descendant policy, and embed policy. It has no top-k evidence limit.
-- `FindAnswerReferenceDocument` retains the rendered answer body and numbered
-  used References while its `text` property owns the exact compact CLI
-  projection.
-- `GrantedQueryRequest` freezes a public control-plane grant target, question or
-  catalog mode, language, optional opaque Memory handle, session name, and
-  federation policy.
-- `QueryReferenceRequest` freezes one local concealed Source UID/name,
-  persisted provider identifier, question, and language without importing
-  terminal or Store types into the application contract.
-
-The CLI continues to resolve its overloaded positional grammar for backward
-compatibility, then constructs one of these typed requests. The workbench never
-re-enters that string inference path. Presentation and progress stay in the
-calling adapter. For ordinary Query, readable evidence freezes and whole-frame
-preflight completes before the injected provider factory is called, and no
-durable effect exists. For granted Query, provider construction still precedes
-concealed-source opening; the read releases an answer only after route and
-Source revalidation. Merely returning its process-local publication plan does
-not write. The optional append is a second use case that rechecks current
-authority and Source identity before the profile-guarded, locked CAS write.
-For a local `QueryContextRef`, provider construction completes before the Store
-adapter opens the exact Source UID/name/language projection; the returned
-answer has no durable effect.
-
-## Authority and persistence invariants
-
-- The ordinary Source tree is frozen through `ReadableContextCatalog`; READ
-  grants retain their exact access binding and query-only sources never enter
-  its candidate corpus.
-- A granted current Context remains the initial checked row but does not narrow
-  `PROFILE`: the tree still contains the active Profile's local Contexts and all
-  other valid READ-granted public names.
-- Query-only Source discovery reads only active grant and local attachment
-  metadata. It does not open authority source content.
-- Authentication precedes concealed source loading.
-- Every published query-only answer is preceded by a post-provider grant and
-  source-binding recheck under the registry snapshot lock.
-- A completed session-shaped read is not publication authority. The separate
-  append rechecks `SESSION_LOG` and the Source binding under a fresh authority
-  snapshot, then CAS-checks the exact visible transcript snapshot.
-- Federation offers only public descendant names to its routing turn and opens
-  only the returned authorized subset.
-- Saved sessions remain bound to one exact grant/source/language projection and
-  persist visible questions and answers only. Federation is disabled for a
-  saved session.
-- Workbench cursor, Source type, Scope, question drafts, and one-shot answers
-  are process-local. Ordinary Query does not create a session.
-
-## Alternatives and limitations
-
-Calling the Typer callback from inside the TUI was rejected because its direct
-stdout and progress rendering would corrupt the full-screen terminal and would
-retain ambiguous string routing inside the interactive state. Duplicating the
-Find workbench was also rejected; Query instead reuses the shared Context range,
-Surface focus, horizontal choice, flat selection, background lifecycle, and
-Frame styling components.
-
-The first workbench edits language through the existing CLI option rather than
-adding another free-form field. Legacy `QueryContextRef` selectors and exact
-`#HANDLE` authoring remain explicit CLI routes, while a query-only catalog
-displayed in the workbench shows the handles needed for that explicit route.
-Command-C was not selected as the semantic binding because terminal emulators
-normally consume the Command modifier for their own selection copy and do not
-portably forward it to prompt-toolkit. Ctrl-C therefore retains close semantics,
-and `y`/`Y` provide a terminal-native focused-versus-complete distinction.
+- **Keep the full tree visible:** rejected because selection metadata dominates
+  the question and answer even when the user already knows the Source name.
+- **Use one untyped Browse list:** rejected because ordinary readable Contexts
+  and query-only Views have different loading and disclosure authority.
+- **Keep Saved Transcripts but hide the frame:** rejected because invisible
+  persistence still leaves the session permission, replay, storage, and API
+  contracts.
+- **Keep To Do as a close action:** rejected because closing is terminal
+  navigation, not an operation outcome or reviewed materialization step.
+- **Call the Typer callback from the TUI:** rejected because stdout/progress
+  rendering and positional string inference do not belong inside the
+  full-screen state machine.
 
 ## Interface ownership
 
-The workbench implementation now lives under
-`interfaces/tui/operations/query/` as separate model, typed projection adapter,
-and prompt-toolkit screen modules. The command imports that owner directly;
-`commands/query_workbench.py` is an implementation-free compatibility export.
-Shared activity, background-turn, horizontal-choice, and plain-text clipboard
-mechanics are likewise interface-owned. Session Help remains command-composed
-and is injected into the screen because its inventory depends on the Typer root
-command rather than Query semantics. The detailed dependency decision and
-verification are recorded in `query-tui-interface-design-rationale.md`.
+The screen, projection adapter, model, and Query View scope control live under
+`memcommit.interfaces.tui.operations.query`. Ordinary compact selection stays
+owned by `memcommit.context_targeting.tui.compact_scope`. Terminal-independent
+requests and execution live in `memcommit.operations.query`; no operation
+application module imports prompt-toolkit or command code.
+
+## Verification
+
+`tests/test_query_workbench.py` covers no-connect entry, transient ordinary
+Browse, typed Query View routing, one-shot request freezing, absence of Saved
+Transcripts/To Do, opaque catalog mode, and typed Reference copy projection.
+The ordered real-color 180×52 evidence under
+`docs/screenshots/query-compact-one-shot-20260822/` records ordinary entry,
+Browse, question, provider progress, answer, Reference focus, final no-write
+verification, and the separate public-only Query View Browse boundary.

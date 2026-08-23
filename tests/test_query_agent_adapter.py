@@ -20,8 +20,6 @@ from memcommit.api import (
     QueryExecutionError,
     QueryInputError,
     QueryProviderFailure,
-    QueryPublicationError,
-    QuerySessionReceipt,
     QueryStorageError,
     ReferenceQueryResult,
 )
@@ -86,7 +84,7 @@ def test_ordinary_route_calls_only_the_public_client_and_serializes_citations(
     monkeypatch.setattr(client, "query_ordinary", query_ordinary)
     response = QueryAgentAdapter(client).invoke(
         {
-            "version": 1,
+            "version": QUERY_AGENT_CONTRACT_VERSION,
             "kind": "ordinary",
             "question": "What changed?",
             "context_names": ["task/wiki"],
@@ -104,7 +102,7 @@ def test_ordinary_route_calls_only_the_public_client_and_serializes_citations(
         }
     ]
     assert response == {
-        "version": 1,
+        "version": QUERY_AGENT_CONTRACT_VERSION,
         "ok": True,
         "kind": "ordinary",
         "result": {
@@ -144,7 +142,6 @@ def test_ordinary_route_calls_only_the_public_client_and_serializes_citations(
                         "placeholder_lines": ["Memory · opaque"],
                     }
                 ],
-                "session_receipt": None,
             },
         ),
         (
@@ -152,27 +149,17 @@ def test_ordinary_route_calls_only_the_public_client_and_serializes_citations(
                 mode="ANSWER",
                 public_name="construction",
                 answer="After 18:00.",
-                session_receipt=QuerySessionReceipt(
-                    session_name="review",
-                    revision=2,
-                    turn_count=2,
-                ),
             ),
             {
                 "mode": "ANSWER",
                 "public_name": "construction",
                 "answer": "After 18:00.",
                 "catalog": [],
-                "session_receipt": {
-                    "session_name": "review",
-                    "revision": 2,
-                    "turn_count": 2,
-                },
             },
         ),
     ],
 )
-def test_granted_route_preserves_catalog_or_publication_meaning(
+def test_granted_route_preserves_catalog_or_answer_meaning(
     tmp_path,
     monkeypatch,
     result,
@@ -188,12 +175,11 @@ def test_granted_route_preserves_catalog_or_publication_meaning(
     monkeypatch.setattr(client, "query_granted", query_granted)
     response = QueryAgentAdapter(client).invoke(
         {
-            "version": 1,
+            "version": QUERY_AGENT_CONTRACT_VERSION,
             "kind": "granted",
             "public_name": "construction",
             "question": "When does it open?",
             "language": "en",
-            "session_name": "review",
             "memory_handle": "M1",
             "federate_descendants": False,
         }
@@ -204,13 +190,12 @@ def test_granted_route_preserves_catalog_or_publication_meaning(
             "public_name": "construction",
             "question": "When does it open?",
             "language": "en",
-            "session_name": "review",
             "memory_handle": "M1",
             "federate_descendants": False,
         }
     ]
     assert response == {
-        "version": 1,
+        "version": QUERY_AGENT_CONTRACT_VERSION,
         "ok": True,
         "kind": "granted",
         "result": expected,
@@ -235,7 +220,7 @@ def test_reference_route_reconstructs_only_public_routing_metadata(
     monkeypatch.setattr(client, "query_reference", query_reference)
     response = QueryAgentAdapter(client).invoke(
         {
-            "version": 1,
+            "version": QUERY_AGENT_CONTRACT_VERSION,
             "kind": "reference",
             "reference": {
                 "uid": "route-1",
@@ -269,11 +254,11 @@ def test_reference_route_reconstructs_only_public_routing_metadata(
 @pytest.mark.parametrize(
     ("payload", "message"),
     [
-        ({"version": 2, "kind": "ordinary", "question": "Q"}, "version"),
-        ({"version": 1, "kind": "unknown"}, "kind"),
+        ({"version": 1, "kind": "ordinary", "question": "Q"}, "version"),
+        ({"version": 2, "kind": "unknown"}, "kind"),
         (
             {
-                "version": 1,
+                "version": 2,
                 "kind": "ordinary",
                 "question": "Q",
                 "surprise": True,
@@ -282,7 +267,7 @@ def test_reference_route_reconstructs_only_public_routing_metadata(
         ),
         (
             {
-                "version": 1,
+                "version": 2,
                 "kind": "ordinary",
                 "question": "Q",
                 "context_names": [],
@@ -318,7 +303,7 @@ def test_invalid_request_detail_is_control_safe_and_bounded(tmp_path):
 
     response = QueryAgentAdapter(client).invoke(
         {
-            "version": 1,
+            "version": QUERY_AGENT_CONTRACT_VERSION,
             "kind": "ordinary",
             "question": "Q",
             hostile_key: True,
@@ -336,7 +321,11 @@ def test_provider_and_internal_failures_do_not_expose_host_details(
     monkeypatch,
 ):
     client = _client(tmp_path)
-    payload = {"version": 1, "kind": "ordinary", "question": "Q"}
+    payload = {
+        "version": QUERY_AGENT_CONTRACT_VERSION,
+        "kind": "ordinary",
+        "question": "Q",
+    }
 
     def provider_failure(**_kwargs):
         raise QueryProviderFailure("secret endpoint body /private/host/path")
@@ -385,12 +374,6 @@ def test_provider_and_internal_failures_do_not_expose_host_details(
             False,
         ),
         (
-            QueryPublicationError("private publication detail"),
-            "publication_failed",
-            False,
-            False,
-        ),
-        (
             QueryStorageError("/private/storage/path"),
             "storage_failure",
             False,
@@ -413,7 +396,11 @@ def test_public_error_taxonomy_is_stable_and_sensitive_details_are_bounded(
 
     monkeypatch.setattr(client, "query_ordinary", fail)
     response = QueryAgentAdapter(client).invoke(
-        {"version": 1, "kind": "ordinary", "question": "Q"}
+        {
+            "version": QUERY_AGENT_CONTRACT_VERSION,
+            "kind": "ordinary",
+            "question": "Q",
+        }
     )
 
     assert response["error"]["code"] == code
@@ -457,10 +444,9 @@ def test_companion_skill_preserves_route_and_failure_boundaries():
     assert "name: memcommit-query" in skill
     assert "Use when a user asks an agent" in skill
     assert "Invoke `memcommit_query` directly." in skill
-    assert "Always send `version: 1`." in skill
+    assert "Always send `version: 2`." in skill
     assert all(
         f"Use `{kind}`" in skill for kind in ("ordinary", "granted", "reference")
     )
-    assert "Treat `publication_failed` as no returned answer" in skill
     assert "Do not fall back to shell access" in skill
     assert "$memcommit-query" in metadata

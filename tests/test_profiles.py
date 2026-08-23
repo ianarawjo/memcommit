@@ -28,6 +28,7 @@ from memcommit.profile_config import (
     GrantContextBinding,
     ProfileEntry,
     ProfileRegistry,
+    canonical_grant_permissions,
     load_profile_registry,
     profile_control_dir,
     profile_registry_file,
@@ -40,13 +41,18 @@ from memcommit.profiles import (
     resolve_granted_context_view,
     study_profile_groups,
 )
-from memcommit.query_sessions import load_authority_query_catalog
+from memcommit.operations.query.granted_source import load_authority_query_catalog
 from memcommit.store import MemoryStore
 from memcommit.source_projection.presentation import source_display_text
 from memcommit.study_action_log import StudyActionLedger
 
 
 runner = CliRunner(mix_stderr=False)
+
+
+def test_legacy_session_log_permission_normalizes_to_one_shot_query():
+    assert canonical_grant_permissions(("QUERY", "SESSION_LOG")) == ("QUERY",)
+    assert canonical_grant_permissions(("SESSION_LOG",)) == ("QUERY",)
 
 
 def _tree_digest(root: Path) -> str:
@@ -559,11 +565,11 @@ def test_init_study_selects_the_initialized_complete_profile(
         required_permission="QUERY",
     )
     assert len(load_authority_query_catalog(wiki_query_view, language="en")) == 300
-    with pytest.raises(ProfileError, match="does not allow session_log access"):
+    with pytest.raises(ProfileError, match="does not allow share access"):
         resolve_granted_context_view(
             "task-1/campus-wiki",
             attachment_name="task-1/participant/construction-updates",
-            required_permission="SESSION_LOG",
+            required_permission="SHARE",
         )
 
     run_only_text = "Participant edit stored only in this Study run."

@@ -23,9 +23,8 @@ content mutation:
 | `SAVE_BOUND_ANALYSIS` | A saved artifact remains usable only while its exact grants remain available. |
 | `SAVE_ANALYSIS` | The grantee may permanently retain an analysis or intermediate artifact derived from the source. |
 
-`SESSION_LOG` remains narrower: it permits saving provider-mediated query
-turns for a QUERY grant. It does not imply general derivative or analysis
-retention.
+`QUERY` permits one provider-mediated result. It does not imply general
+derivative, analysis, or transcript retention.
 
 Permission dependencies fail closed. `DERIVE` and `ACCEPT_DERIVED` require
 `READ`; `COMBINE`, `EXPORT`, `SAVE_BOUND_ANALYSIS`, and `SAVE_ANALYSIS`
@@ -82,8 +81,8 @@ acceptance, grant-bound analysis, and retained analysis in addition to its
 existing content effects.
 Task 2 advisor grants and Task 3 official healthcare guidance permit source-side
 derivation, combination, export, grant-bound analysis, and retained analysis.
-Task 3 guardrails are participant-owned local data, not a grant. Query-only sources remain
-`QUERY + SESSION_LOG`; they do not silently become READ or derivative grants.
+Task 3 guardrails are participant-owned local data, not a grant. Query-only
+sources remain `QUERY`; they do not silently become READ or derivative grants.
 
 ## `mem ls` disclosure
 

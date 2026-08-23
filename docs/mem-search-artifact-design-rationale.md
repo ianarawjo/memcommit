@@ -19,7 +19,6 @@ from Find.
 Find and ordinary Query share one searchable candidate frame. It contains the
 visible ordinary Memory graph plus bounded, active-Profile projections of:
 
-- saved visible query-session questions and answers;
 - saved Compare and Meld work relevant to a Context in the searched frame;
 - Context checkpoints as recorded trace events; and
 - validated legacy rationale-inference caches already present for Memories in

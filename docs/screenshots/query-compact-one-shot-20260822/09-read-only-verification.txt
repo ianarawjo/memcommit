@@ -1,0 +1,3 @@
+ONE-SHOT VERIFICATION · REQUESTS 1 · PROVIDER CALLS 1                                                                                                                               
+QUERY CLOSED · SOURCE FILES UNCHANGED True · QUERY SESSION DIRECTORY EXISTS False                                                                                                   
+NO SAVED TRANSCRIPT · NO TO DO · NO SOURCE MUTATION

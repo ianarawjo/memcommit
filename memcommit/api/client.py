@@ -1150,16 +1150,11 @@ class MemCommitClient:
         question: str | None = None,
         *,
         language: str = "en",
-        session_name: str | None = None,
         memory_handle: str | None = None,
         federate_descendants: bool = True,
         on_stage: StageObserver | None = None,
     ) -> GrantedQueryResult:
-        """Browse or answer one active-Profile QUERY grant.
-
-        When ``session_name`` is supplied, returning successfully means the
-        visible turn was also reauthorized and CAS-published.
-        """
+        """Browse or answer one active-Profile QUERY grant without persistence."""
 
         from memcommit.api._operations.query import query_granted
 
@@ -1168,7 +1163,6 @@ class MemCommitClient:
             public_name,
             question,
             language=language,
-            session_name=session_name,
             memory_handle=memory_handle,
             federate_descendants=federate_descendants,
             on_stage=on_stage,

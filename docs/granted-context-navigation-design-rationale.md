@@ -26,8 +26,8 @@ Task 2 workflow.
   into the compact vocabulary `READ`, `QUERY`, `EDIT`, `DELETE`, `EXPORT`, and
   `SHARE`. `EDIT` summarizes ordinary `CREATE` or `UPDATE` capability while
   `DELETE` remains explicit because of its different risk. Dependency atoms
-  such as `DERIVE`, `COMBINE`, `ACCEPT_DERIVED`, analysis retention, embedding,
-  and query-session retention remain on the exact Grant and remain mandatory
+  such as `DERIVE`, `COMBINE`, `ACCEPT_DERIVED`, analysis retention, and
+  embedding remain on the exact Grant and remain mandatory
   at execution, but are not repeated on every Context row. For example, the
   study views render as `READ + QUERY + EDIT + DELETE + EXPORT`, `READ +
   EXPORT`, or `QUERY` instead of printing the complete atomic tuple.

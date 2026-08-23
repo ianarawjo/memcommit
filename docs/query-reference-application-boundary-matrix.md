@@ -88,8 +88,8 @@ command grammar. New terminal snapshots are therefore unnecessary.
 Leaving provider construction in the command and extracting only Source
 loading was rejected because the privacy ordering would still be implicit in
 one adapter. Reusing the granted Query application was rejected because a
-local `QueryContextRef` has no Grant registry, public-view federation,
-post-provider authority revalidation, or `SESSION_LOG` capability. Reusing
+local `QueryContextRef` has no Grant registry, public-view federation, or
+post-provider authority revalidation. Reusing
 ordinary Query was rejected because concealed Query Sources are deliberately
 outside the READable Context corpus.
 

@@ -11,7 +11,6 @@ import pytest
 
 import memcommit
 import memcommit.ops as ops
-import memcommit.api._operations.query as query_operation
 from memcommit.api import (
     MemCommitClient,
     OrdinaryQueryResult,
@@ -21,8 +20,6 @@ from memcommit.api import (
     QueryInputError,
     QueryProviderConfig,
     QueryProviderFailure,
-    QueryPublicationError,
-    QuerySessionReceipt,
     ReferenceQueryResult,
 )
 from memcommit.context import QueryContextRef
@@ -101,7 +98,7 @@ def _authority_grant(isolated_store, tmp_path, monkeypatch):
         resource_name=source_context.name,
         attachment_name=task_context.name,
         public_name="construction-details",
-        permissions=("QUERY", "SESSION_LOG"),
+        permissions=("QUERY",),
     )
     return task_store
 
@@ -253,7 +250,7 @@ def test_reference_query_authenticates_before_opening_and_never_publishes(
     assert tuple(sorted(path.relative_to(isolated_store) for path in isolated_store.rglob("*"))) == before
 
 
-def test_granted_query_high_level_success_includes_session_publication(
+def test_granted_query_high_level_success_is_process_local(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -265,31 +262,20 @@ def test_granted_query_high_level_success_includes_session_publication(
     result = client.query_granted(
         "construction-details",
         "When does it open?",
-        session_name="campus-review",
         federate_descendants=False,
         on_stage=stages.append,
     )
 
     assert result.mode == "ANSWER"
     assert result.answer == "After 18:00."
-    assert result.session_receipt == QuerySessionReceipt(
-        session_name="campus-review",
-        revision=1,
-        turn_count=1,
-    )
     assert stages == [
         "AUTHORITY_FROZEN",
         "CONNECTING_PROVIDER",
         "PREPARING_SOURCES",
         "ANSWERING",
         "REVALIDATING",
-        "PUBLISHING_SESSION",
     ]
-    records = list((isolated_store / "query-sessions").glob("*.json"))
-    assert len(records) == 1
-    serialized = records[0].read_text(encoding="utf-8")
-    assert "The north tunnel opens after 18:00." not in serialized
-    assert '"answer": "After 18:00."' in serialized
+    assert not (isolated_store / "query-sessions").exists()
 
 
 def test_explicit_root_never_inherits_host_granted_query(
@@ -316,33 +302,6 @@ def test_explicit_root_never_inherits_host_granted_query(
             "When does it open?",
         )
     assert provider_called is False
-
-
-def test_granted_session_publication_failure_returns_no_partial_success(
-    isolated_store,
-    tmp_path,
-    monkeypatch,
-):
-    _authority_grant(isolated_store, tmp_path, monkeypatch)
-    client = MemCommitClient(ordinary_provider_factory=_GrantedProvider)
-
-    def fail_publication(*_args, **_kwargs):
-        raise ValueError("source changed before publication")
-
-    monkeypatch.setattr(
-        query_operation,
-        "execute_granted_query_session_publication",
-        fail_publication,
-    )
-
-    with pytest.raises(QueryPublicationError, match="changed"):
-        client.query_granted(
-            "construction-details",
-            "When does it open?",
-            session_name="campus-review",
-            federate_descendants=False,
-        )
-    assert not (isolated_store / "query-sessions").exists()
 
 
 def test_provider_connection_failure_is_publicly_typed(isolated_store):

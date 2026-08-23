@@ -50,7 +50,7 @@ def test_query_only_row_is_visible_but_cannot_be_selected_as_criteria() -> None:
             annotations={
                 "government/qna": SourceDisplayFacts(
                     access=SourceAccess.QUERY_GRANT,
-                    permissions=("QUERY", "SESSION_LOG"),
+                    permissions=("QUERY",),
                 ),
                 "public-guidance": SourceDisplayFacts(
                     access=SourceAccess.READ_GRANT,

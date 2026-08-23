@@ -194,15 +194,11 @@ class QueryProviderFailure(QueryError):
 
 
 class QueryExecutionError(QueryError):
-    """Authorized Query execution failed before a durable publication."""
-
-
-class QueryPublicationError(QueryError):
-    """A granted Query answered, but its requested session was not published."""
+    """Authorized Query execution failed."""
 
 
 class QueryStorageError(QueryError):
-    """Query could not safely read or publish local durable state."""
+    """Query could not safely read local state."""
 
 
 class MeldError(MemCommitError):
@@ -452,7 +448,6 @@ __all__ = [
     "QueryExecutionError",
     "QueryInputError",
     "QueryProviderFailure",
-    "QueryPublicationError",
     "QueryStorageError",
     "ReferenceConflictError",
     "ReferenceContextError",

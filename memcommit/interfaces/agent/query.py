@@ -16,7 +16,6 @@ from memcommit.api import (
     QueryExecutionError,
     QueryInputError,
     QueryProviderFailure,
-    QueryPublicationError,
     QueryStorageError,
     ReferenceQueryResult,
 )
@@ -32,7 +31,7 @@ from memcommit.interfaces.agent.contract import (
 )
 
 
-QUERY_AGENT_CONTRACT_VERSION = 1
+QUERY_AGENT_CONTRACT_VERSION = 2
 QUERY_AGENT_TOOL_NAME = "memcommit_query"
 QUERY_AGENT_ERROR_MESSAGE_LIMIT = AGENT_ERROR_MESSAGE_LIMIT
 QueryAgentKind = Literal["ordinary", "granted", "reference"]
@@ -90,7 +89,6 @@ def _granted_arguments(payload: Mapping[str, object]) -> dict[str, object]:
             {
                 "question",
                 "language",
-                "session_name",
                 "memory_handle",
                 "federate_descendants",
             }
@@ -101,7 +99,6 @@ def _granted_arguments(payload: Mapping[str, object]) -> dict[str, object]:
         "public_name": _text(payload["public_name"], field="public_name"),
         "question": _optional_text(payload, "question"),
         "language": _text(payload.get("language", "en"), field="language"),
-        "session_name": _optional_text(payload, "session_name"),
         "memory_handle": _optional_text(payload, "memory_handle"),
         "federate_descendants": _boolean(
             payload.get("federate_descendants", True),
@@ -183,7 +180,6 @@ def _ordinary_result(result: OrdinaryQueryResult) -> JsonObject:
 
 
 def _granted_result(result: GrantedQueryResult) -> JsonObject:
-    receipt = result.session_receipt
     return {
         "mode": result.mode,
         "public_name": result.public_name,
@@ -195,15 +191,6 @@ def _granted_result(result: GrantedQueryResult) -> JsonObject:
             }
             for entry in result.catalog
         ],
-        "session_receipt": (
-            {
-                "session_name": receipt.session_name,
-                "revision": receipt.revision,
-                "turn_count": receipt.turn_count,
-            }
-            if receipt is not None
-            else None
-        ),
     }
 
 
@@ -247,12 +234,6 @@ _PUBLIC_ERRORS: tuple[
         QueryExecutionError,
         "execution_failed",
         "Authorized Query execution failed.",
-        False,
-    ),
-    (
-        QueryPublicationError,
-        "publication_failed",
-        "The Query answer was withheld because session publication failed.",
         False,
     ),
     (
@@ -412,7 +393,6 @@ def query_agent_tool_schema() -> JsonObject:
                     "public_name": text(),
                     "question": {"type": ["string", "null"], "minLength": 1},
                     "language": {"type": "string", "minLength": 1, "default": "en"},
-                    "session_name": {"type": ["string", "null"], "minLength": 1},
                     "memory_handle": {"type": ["string", "null"], "minLength": 1},
                     "federate_descendants": {"type": "boolean", "default": True},
                 },

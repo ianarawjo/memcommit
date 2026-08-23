@@ -79,7 +79,7 @@ classification, and stale generated output.
   applied-result receipts, exception rollback, deterministic diff, and the
   mutation boundary.
 
-## Profile authority and query sessions
+## Profile authority and one-shot Query
 
 - [`mem-profile-design-rationale.md`](mem-profile-design-rationale.md) defines
   whole-store selection, inventory, and atomic Profile import.
@@ -94,8 +94,8 @@ classification, and stale generated output.
   distinguishes current authority-granted query views from the supported
   legacy `QueryContextRef` storage model.
 - [`query-session-design-rationale.md`](query-session-design-rationale.md)
-  defines optional task-owned visible Q/A transcripts, `SESSION_LOG`, explicit
-  replay, source/grant freshness, and non-retention of authority source text.
+  records why Query transcript retention was removed, how older permissions
+  normalize, and why legacy records are ignored rather than auto-deleted.
 
 ## Context namespace migration
 

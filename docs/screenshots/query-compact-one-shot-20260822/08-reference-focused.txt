@@ -1,0 +1,52 @@
+ MEM QUERY                                                                                                                                                                          
+┌────────────────────────────────────────────────────────────────────────────────────| SCOPE |─────────────────────────────────────────────────────────────────────────────────────┐
+│  SOURCE · [ VISIBLE CONTEXTS ] · ←/→ SELECT                                                                                                                                      │
+│ CONTEXT · › task-1                                    [ BROWSE ]  1 ROOTS · 3 CONTEXTS                                                                                           │
+│  RANGE · [ THIS CONTEXT ONLY ]  [ INCLUDE DESCENDANTS ] · ←/→ SELECT                                                                                                             │
+│  EMBEDS · [ EXCLUDE ]  [ FOLLOW ] · ←/→ SELECT                                                                                                                                   │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────────────────| QUESTION · ENTER TO ASK |────────────────────────────────────────────────────────────────────────────┐
+│› What changes during construction?                                                                                                                                               │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ ANSWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃The east entrance remains available during construction. [1]                                                                                                                     ^┃
+┃                                                                                                                                                                                  ┃
+┃General access changes from 10 p.m. to 5 p.m. [2] [3]                                                                                                                             ┃
+┃                                                                                                                                                                                  ┃
+┃The answer uses the complete checked Context scope. [1] [2] [3]                                                                                                                   ┃
+┃                                                                                                                                                                                  ┃
+┃References                                                                                                                                                                        ┃
+┃[1] The Main Building remains open through the east entrance. — a599dbfb, task-1, m1                                                                                              ┃
+┃[2] The main entrance normally closes at 10 p.m. — 36ecc2ea, task-1/campus-wiki, m2                                                                                               ┃
+┃[3] During construction, general access ends at 5 p.m. — 397b1e9d, task-1/participant/construction-updates, m3                                                                    ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ ANSWER READY · ↑/↓ answer/References · y copy focused · Y copy complete answer · / question · Esc back

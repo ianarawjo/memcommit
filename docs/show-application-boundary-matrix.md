@@ -40,11 +40,11 @@ mutation lifecycle.
    Profile-backed read may briefly use the shared authority coordination lock;
    that lock is infrastructure coordination, not a Show result artifact.
 8. CLI, Python, agent, and MCP project one typed result; none reconstructs
-   targeting or authority policy.
+targeting or authority policy.
 
 ## Intentional exclusions
 
 Show has no current interactive TUI. A future read-only Viewer, recursive
 scope, historical snapshot, or bulk selector is a new contract rather than an
-implicit extension of this direct inspection route. Query answering and any
-saved transcript remain owned by Query.
+implicit extension of this direct inspection route. Provider-mediated
+one-shot answering remains owned by Query.

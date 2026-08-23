@@ -13,10 +13,9 @@ readable Context catalog to that use case. Console and workbench code only
 resolve controls, select a provider factory, project progress, and present the
 result.
 
-This slice deliberately excludes authority QUERY routes, legacy
-`QueryContextRef`, saved transcript inspection, and `SESSION_LOG` persistence.
-Granted QUERY reads and optional saved-turn publication are now separated by
-the follow-on contract in
+This slice deliberately excludes authority QUERY routes and legacy
+`QueryContextRef`. Granted QUERY's distinct provider-before-concealed-Source
+read contract is recorded in
 `granted-query-read-publication-design-rationale.md`; they do not broaden this
 ordinary read-only contract.
 
@@ -101,8 +100,8 @@ clipboard work remains outside this commit.
 - application/runtime modules import no command, Typer, prompt-toolkit, or
   concrete provider module, while only the runtime imports `MemoryStore`.
 
-The focused application, synthesis, provider, workbench, and Query-session
-suite passed 70 tests after the extraction. The existing compatibility test
+The focused application, synthesis, provider, and workbench suite passed after
+the extraction. The existing compatibility test
 also verifies that its progress projection remains exactly `connecting
 provider` followed by `answering from complete frozen corpus`.
 
@@ -117,17 +116,14 @@ that unrelated implementation.
 
 ## Remaining boundaries and non-goals
 
-1. Granted QUERY execution has its own typed read-versus-publication split;
-   its process-local publication plans are intentionally not part of this
-   ordinary Query result.
+1. Granted QUERY execution has its own typed one-shot read and revalidation
+   boundary; it likewise has no publication stage.
 2. Legacy `QueryContextRef` intentionally authenticates its provider before
    opening concealed source content and remains unchanged.
-3. Query transcript listing and viewing are read-only adapters over durable
-   task-owned session records; creating a turn is not part of ordinary Query.
-4. `MemCommitClient.query_ordinary` now projects this internal result through
+3. `MemCommitClient.query_ordinary` now projects this internal result through
    the versioned Python types recorded in
    `query-public-python-api-design-rationale.md`; the internal request and
    response remain non-public implementation seams.
-5. Provider and runtime configuration remain injected composition concerns;
+4. Provider and runtime configuration remain injected composition concerns;
    the public client freezes a Query-only non-secret snapshot but this use case
    still does not select a model, endpoint, timeout, or profile.

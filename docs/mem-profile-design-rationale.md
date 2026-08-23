@@ -144,7 +144,7 @@ revocation, checkpoint provenance, and mutation revalidation boundaries rather
 than introducing a second local ACL implementation.
 
 Initialization uses the clean Profile-import allowlist. Checkpoints, command
-receipts, workflow and query sessions, caches, locks, lifecycle events,
+receipts, workflow sessions, legacy Query-session records, caches, locks, lifecycle events,
 clipboard state, and write-protection state do not cross into the run. The
 admitted source files are digested before and after the staged copy and at the
 destination. Profile-name collisions, including the derived authority name,

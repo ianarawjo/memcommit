@@ -1,6 +1,6 @@
 ---
 name: memcommit-query
-description: Use the registered memcommit_query tool to browse or answer ordinary readable Contexts, authority-granted query-only views, and exact legacy QueryContextRef Sources. Use when a user asks an agent to query MemCommit memory, inspect an opaque granted catalog, ask about a catalog handle, or save a granted Query session. Requires the host to expose version 1 of the tool; do not use for mutation or invent missing route metadata.
+description: Use the registered memcommit_query tool to browse or answer ordinary readable Contexts, authority-granted query-only views, and exact legacy QueryContextRef Sources. Use when a user asks an agent to query MemCommit memory, inspect an opaque granted catalog, or ask about a catalog handle. Requires the host to expose version 2 of the tool; do not use for mutation, persistence, or invented route metadata.
 ---
 
 # MemCommit Query
@@ -16,13 +16,12 @@ Invoke `memcommit_query` directly. Do not reconstruct the operation with
   the user specifies scope.
 - Use `granted` for a public query-only view. Omit `question` to browse its
   opaque catalog. When asking about one returned handle, pass that exact
-  `memory_handle`. Supply `session_name` only when the user requests a durable
-  visible transcript.
+  `memory_handle`. Every granted answer is process-local.
 - Use `reference` only when exact `uid`, `name`, `target_source_uid`, and
   `provider` metadata came from an existing `QueryContextRef`. Never guess or
   synthesize any of these fields.
 
-Always send `version: 1`. Never silently change one route into another after an
+Always send `version: 2`. Never silently change one route into another after an
 error.
 
 ## Interpret the response
@@ -33,18 +32,15 @@ error.
   `grounded: false` from a supported answer.
 - For granted `CATALOG`, describe only returned handles and placeholders; do
   not infer concealed content.
-- For a granted answer with `session_receipt`, report that the visible turn was
-  saved. Without a requested session, do not imply persistence.
-- Treat `publication_failed` as no returned answer and no confirmed new turn,
-  even if provider work may have completed internally.
+- Never imply that an answer or catalog was saved by MemCommit.
 
 ## Handle failures
 
 Do not expose or speculate about hidden provider, storage, or host details.
 Correct `invalid_request` locally only when the intended values are already
-known. Ask the user for missing Context, public-view, session, or reference
+known. Ask the user for missing Context, public-view, or reference
 information. Retry only `provider_failure`, at most once, and only when it still
-matches the user's request. Do not retry publication, storage, authority, or
+matches the user's request. Do not retry storage, authority, or
 internal failures automatically.
 
 If `memcommit_query` is unavailable, state that the host has not registered the

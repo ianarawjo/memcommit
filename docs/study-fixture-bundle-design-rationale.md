@@ -276,20 +276,18 @@ and are not embedded into their children or parents.
 Task 1's task Profile owns only `participant/construction-updates`.
 `task-1-campus-authority` owns ordinary `campus-wiki` and its
 `construction-details` subtree. The task receives
-`READ+CREATE+UPDATE+DELETE+QUERY` for the wiki and a narrower
-`QUERY+SESSION_LOG` override for the details. Whole-wiki query is explicit but
-one-shot; durable transcript permission remains limited to the query-only
-details condition.
+`READ+CREATE+UPDATE+DELETE+QUERY` for the wiki and a narrower `QUERY` override
+for the details. Both Query routes are one-shot.
 
 Task 2 starts at an empty `participant/proposal-workspace` task Context.
 `task-2-proposal-authority` owns `advisor1`, `advisor2`, and
 `proposal-submission-guidelines`; the advisor views are `READ` and guidelines
-are `QUERY+SESSION_LOG`. Task 3 owns `local/personal-memory` and
+are `QUERY`. Task 3 owns `local/personal-memory` and
 `local/guardrails`. `task-3-healthcare-authority` owns ordinary
 `remote/government/healthcare-agent/info-request/transmission-guidance` and the
 query-only sibling `questions-and-answers`. Only the public transmission
 guidance receives a derived-work READ grant; questions-and-answers receives
-`QUERY+SESSION_LOG`.
+`QUERY`.
 The real healthcare-agent parent supplies a non-recursive `SHARE` endpoint
 grant under the stable recipient name `government/healthcare-agent`.
 

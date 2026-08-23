@@ -1,0 +1,2 @@
+QUERY VIEW BROWSE VERIFICATION · ORDINARY CALLS 0 · GRANTED CALLS 0                                                                                                                 
+PUBLIC CONTROL-PLANE ONLY · NO PROVIDER · NO CONCEALED SOURCE OPEN

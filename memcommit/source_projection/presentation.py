@@ -164,13 +164,9 @@ def source_display_tokens(
     elif include_defaults:
         tokens.append(SourceDisplayToken("OWNED", SourceTokenRole.ACCESS))
     if include_permissions and facts.permissions:
-        permissions = tuple(
-            "SAVE QUERY SESSION" if value == "SESSION_LOG" else value
-            for value in facts.permissions
-        )
         tokens.append(
             SourceDisplayToken(
-                "PERMISSIONS " + " + ".join(permissions),
+                "PERMISSIONS " + " + ".join(facts.permissions),
                 SourceTokenRole.ACCESS,
             )
         )

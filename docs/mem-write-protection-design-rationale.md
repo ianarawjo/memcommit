@@ -38,7 +38,7 @@ protected target must be explicitly unlocked first.
 | --- | --- | --- |
 | Context | Any change to that exact Context record, namespace rename that rewrites it, and deletion | Read commands, switching, checkpoint creation, using it as a read-only source, and branching to a new Context identity |
 | Memory | Editing or removing that directly owned Memory occurrence, including whole-Context clear, deletion, revert, Undo, or Redo that would replace or remove it | Adding or changing other direct items and metadata-only Context rename |
-| Profile | Durable writes anywhere inside the active Profile store, including new or changed Contexts, checkpoints, query-only sources, Ground/workflow sessions, derived analyses, and saved query transcripts | Reads, one-shot unsaved queries, current-Context switching, active-Profile switching, and protection policy changes |
+| Profile | Durable writes anywhere inside the active Profile store, including new or changed Contexts, checkpoints, query-only sources, Ground/workflow sessions, and derived analyses | Reads, one-shot queries, current-Context switching, active-Profile switching, and protection policy changes |
 
 A Context lock applies to one exact Context identity, not its lexical
 descendants unless `--recursive` is supplied. Recursive mode freezes the root
@@ -129,7 +129,7 @@ file. Removing the final policy removes the empty registry file.
 The Profile target means the active Profile's durable store, not every global
 control plane that can route to it. It freezes ordinary Contexts, checkpoints,
 query-only sources, Ground/Meld/review/update/atomize sessions, translations,
-comparisons, rationale caches, and saved query transcripts. It also blocks new
+comparisons and rationale caches. It also blocks new
 Context identities, so it protects future names without requiring enumeration.
 
 It does not prevent selecting a current Context or switching to another

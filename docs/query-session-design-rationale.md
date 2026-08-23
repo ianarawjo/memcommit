@@ -1,149 +1,84 @@
-# Query session design rationale
+# Query one-shot retention rationale
+
+Last verified: 2026-08-22.
 
 ## Decision
 
-`mem query VIEW QUESTION` remains a one-shot, unsaved operation. A person may
-explicitly name a durable chat-like transcript with `--session NAME`, but only
-when the view's grant includes both `QUERY` and `SESSION_LOG`.
+Query is one-shot across the CLI, TUI, Python API, and agent adapter. It does
+not create, append, list, reopen, or search saved transcripts. The earlier
+named Query-session experiment and its `SESSION_LOG` capability have been
+removed.
 
-```bash
-mem query campus-wiki/construction-details
-mem query 'campus-wiki/construction-details#q-7d19c531f084' "What is this item about?"
-mem query campus-wiki/construction-details "What is planned?"
-mem query campus-wiki/construction-details "What depends on that?" --session campus-review
-mem query --sessions
-mem query --show-session campus-review
-```
+The result remains visible only in the active process and in stdout or an
+explicit user clipboard copy. `mem query` has no `--session`, `--sessions`, or
+`--show-session` forms, and its workbench has no Session Name, Saved
+Transcripts, or To Do frame.
 
-Bare `mem query` in a TTY also freezes the task-owned session catalog once and
-renders it in a read-only `SAVED TRANSCRIPTS` frame beneath Query scope. Enter
-on a transcript displays its already-visible Q/A in the existing Answer frame;
-it does not reopen the authority Source, connect a provider, or change the
-session. Starting a new query clears that projection and restores the ordinary
-Answer lifecycle. The explicit `--sessions` and `--show-session` forms remain
-stable noninteractive inspection routes.
+This makes the interactive surface match the direct CLI contract: each Enter
+freezes one Source selection and one question, performs one provider turn,
+shows one answer, and retains no memcommit-owned history after the process
+closes.
 
-The session belongs to the active task Profile. It stores the questions and
-answers that were already visible to the person, plus opaque binding and
-freshness digests. It never stores the authority source, source entry
-metadata, provider prompt, authentication material, or hidden provider state.
+## Compatibility boundary
 
-## Opaque Memory catalog
+Older Profile registries can contain `SESSION_LOG`. Registry loading
+normalizes that retired permission to `QUERY` so an existing Profile does not
+become unusable, but no retention authority or storage behavior is restored.
+New grants cannot request `SESSION_LOG`, and capability displays expose only
+`QUERY`.
 
-Omitting `QUESTION` from an authority-granted view opens its query flow as an
-opaque Memory catalog. `QUERY` itself authorizes this catalog; it is not an
-ordinary `LIST` or `READ` capability. Each admitted Memory is represented by
-a per-grant opaque handle and a Flow Circular capsule. The renderer replaces
-every source word with an equal-code-point-length dummy mask in memory, draws
-that mask with the bundled Flow Circular TTF, and converts the four-pixel-high
-raster to Unicode Braille cells. The source characters are never sent to the
-font renderer or terminal. Copying terminal output therefore copies only
-Braille pixels, never the source or dummy mask characters.
+Existing files under a legacy `query-sessions/` directory are deliberately not
+deleted. Destructive migration is outside Query execution. Current code does
+not read, replay, index, append, or otherwise publish those records. Clean
+Profile import continues to exclude the directory.
 
-The catalog intentionally discloses the number and order of queryable
-Memories, normalized word boundaries, and each word's Unicode-code-point
-length. Runs of whitespace are collapsed to one ordinary space; punctuation
-and every other non-space character contribute only to their word's length.
-The handle is derived from the grant and Memory identities, so it remains
-stable across ordering and content edits without exposing the authority
-Memory UID. Recreating the grant changes the handle. A missing or nonmatching
-handle fails closed.
+## Source and provider invariants
 
-Flow Circular is bundled unmodified from the Google Fonts distribution under
-the SIL Open Font License 1.1, with its copyright and license alongside the
-TTF. Pillow is a required runtime dependency, but it is imported only when the
-opaque catalog actually rasterizes a placeholder. The CLI constructs its full
-command tree at startup, so a feature-level import there would otherwise make
-an incomplete Pillow installation disable unrelated commands such as
-`mem profile`. Catalog rendering itself still fails closed with an actionable
-installation error; it never substitutes source text or a less private
-placeholder. Terminal ANSI cannot select a font for one span, so the Braille
-raster is the portable CLI representation of the actual Flow Circular
-geometry; the terminal's own Braille glyph design can slightly affect its
-final appearance.
+- Ordinary Query freezes exact readable Context targets through the shared
+  readable catalog before constructing its request.
+- Query-only discovery uses public grant routing metadata; concealed authority
+  Source content opens only after provider construction succeeds.
+- A granted answer is withheld if its grant or Source binding changes while
+  the provider is running.
+- Relevant-descendant federation receives public names only and opens only the
+  authorized subset selected for that one request.
+- Opaque Memory handles and Flow Circular placeholders remain process-local
+  projections and are never written to the grantee Store.
+- Search artifacts contain retained workflow evidence from operations that
+  actually own durable review state; Query answers are not indexed.
 
-Using `VIEW#HANDLE` with a question sends only that selected Memory to the
-provider. The existing `VIEW QUESTION` form remains a whole-view query for
-compatibility. Handles and placeholders are process-local projections: they
-are not written into the grantee Context, grant registry, query transcript,
-or clipboard metadata.
+## Why the session experiment was removed
 
-## Provider and replay contract
+Saved transcripts made the TUI materially more complex than the direct CLI:
+Source selection was mixed with a Session Name field, a persistent transcript
+browser, replay behavior, CAS publication, and a second authority capability.
+That complexity did not support an Apply or resumable-review boundary. Unlike
+Compare, Meld, Update, or Sever, Query has no reviewed proposal whose later
+materialization depends on retaining the operation artifact.
 
-Every turn is still a fresh provider call. For a continued session, memcommit
-reconstructs the dialogue from the saved visible Q/A and sends that replay
-with the current question. This makes the referent of a short follow-up
-auditable and portable instead of relying on a provider-side conversation the
-local application cannot inspect.
-
-Provider authentication occurs before authority Context content is loaded,
-including when only the opaque catalog is requested.
-The ephemeral source is serialized only from ordinary direct Memories whose
-Context UID/name pairs occur in the query grant's frozen scope. A complete
-root-bound translation catalog is required for a non-English query.
-
-## Freshness and publication
-
-A saved session binds to:
-
-- grant UID, revision, and canonical grant digest;
-- grantee and authority Profile UIDs;
-- attachment and resource Context identities;
-- public and requested view names;
-- language; and
-- the exact serialized source snapshot digest.
-
-Changing the grant, source Memories, translation, language, or view makes the
-old session stale. The person must choose a new session name rather than
-silently continuing against different evidence. After the provider returns,
-the command re-resolves the permission and source. Revocation or source drift
-during inference prevents both transcript publication and answer display.
-The registry grant lock remains held from that final check through transcript
-publication and terminal disclosure, closing a revoke-after-check race.
-Session append uses a record digest CAS so concurrent turns cannot overwrite
-one another.
-
-Files live under the task store's `query-sessions/` directory. The directory
-and lock directory require mode `0700`, records and locks require `0600`, and
-unsafe links, permissions, duplicate JSON keys, oversized records, invalid
-names, or identity mismatches fail closed. Publication uses a same-directory
-fsynced temporary file and atomic replacement.
-
-## Why `SESSION_LOG` is separate
-
-Permission to ask one question does not necessarily authorize durable
-retention. `SESSION_LOG` makes that additional data-lifecycle choice explicit
-and depends on `QUERY`. Revoking the authority grant blocks new turns, while
-an already stored task-owned transcript remains locally inspectable because
-it contains only material previously disclosed to that task.
+A one-shot answer is also the clearer privacy contract. `QUERY` authorizes the
+current provider-mediated disclosure; it no longer implicitly starts a new
+task-owned retention lifecycle. Users who intentionally need a copy still
+control stdout redirection or the explicit plain-text clipboard action.
 
 ## Alternatives considered
 
-- **Save every query automatically:** rejected because it changes the legacy
-  non-retention contract and creates logs without an explicit user choice.
-- **Reuse a hidden provider session:** rejected because behavior would depend
-  on state that cannot be reviewed, replayed, or migrated to MCP.
-- **Store source snapshots with the transcript:** rejected because it would
-  turn query authority into read/copy authority and retain concealed data in
-  the task Profile.
-- **Render the real source directly in Flow Circular:** rejected because copy,
-  accessibility, terminal history, and logs would still contain the source
-  characters. The selected renderer sends only equal-length dummy masks to
-  Flow Circular and emits only raster cells.
-- **Add a separate `LIST` permission:** rejected because the catalog is part
-  of selecting the object of a query and never lists source content or
-  authority identities.
-- **Make Pillow an optional extra:** rejected because no reduced installation
-  tier is defined and opaque catalog rendering has no non-Pillow contract.
-  Delaying the import limits an installation failure without weakening the
-  declared runtime dependency.
-- **Continue after source changes:** rejected for this study because a single
-  transcript would then cite multiple unstated evidence snapshots.
+- **Keep sessions only in the TUI:** rejected because it gives identical Query
+  requests different retention semantics depending on terminal adapter.
+- **Keep an optional CLI flag:** rejected because the storage, authority,
+  replay, and migration contracts remain even if the control is visually
+  hidden.
+- **Automatically delete legacy records:** rejected because feature removal
+  does not authorize destructive cleanup of user data.
+- **Use provider-side conversation state:** rejected because it would retain
+  unauditable state outside the local one-shot contract.
+- **Reuse saved-session workbenches from review operations:** rejected because
+  Query has no deferred Apply or required resolution that justifies one.
 
 ## Limitations
 
-The current surface lists and shows sessions but does not yet rename, export,
-or delete them. The provider can still answer too broadly, and the local
-research boundary is not OS-level confidentiality. A future MCP provider may
-replace source loading while retaining the same explicit transcript and
-freshness contract.
+One-shot means follow-up questions are independent calls; the user must include
+the necessary context in each question. The provider can still answer too
+broadly, and this research prototype does not provide OS-level confidentiality.
+Legacy transcript files may remain on disk until the user chooses a separate,
+explicit cleanup policy.

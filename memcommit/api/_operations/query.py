@@ -12,7 +12,6 @@ from memcommit.api.errors import (
     QueryExecutionError,
     QueryInputError,
     QueryProviderFailure,
-    QueryPublicationError,
     QueryStorageError,
 )
 from memcommit.api.query import (
@@ -20,7 +19,6 @@ from memcommit.api.query import (
     OrdinaryQueryResult,
     QueryCatalogEntry,
     QueryCitation,
-    QuerySessionReceipt,
     ReferenceQueryResult,
 )
 from memcommit.authority.access import resolve_context_access
@@ -36,9 +34,9 @@ from memcommit.operations.query.granted_application import (
 )
 from memcommit.operations.query.granted_runtime import (
     execute_granted_query_read,
-    execute_granted_query_session_publication,
     freeze_granted_query_targets,
 )
+from memcommit.operations.query.granted_source import GrantedQuerySourceError
 from memcommit.operations.query.ordinary_application import OrdinaryQueryRequest
 from memcommit.operations.query.ordinary_runtime import execute_ordinary_query
 from memcommit.operations.query.reference_application import QueryReferenceRequest
@@ -51,7 +49,6 @@ from memcommit.profile_config import (
 )
 from memcommit.profiles import ProfileError
 from memcommit.query_provider import QueryProviderError
-from memcommit.query_sessions import QuerySessionError
 from memcommit.search import FindError
 
 
@@ -208,7 +205,6 @@ def query_granted(
     question: str | None = None,
     *,
     language: str = "en",
-    session_name: str | None = None,
     memory_handle: str | None = None,
     federate_descendants: bool = True,
     on_stage: StageObserver | None = None,
@@ -243,20 +239,14 @@ def query_granted(
             matches,
             key=lambda target: len(target.public_name.split("/")),
         )
-        if session_name is not None and not base_target.session_log_allowed:
-            raise QueryAuthorityError(
-                f"Query-only view {public_name!r} does not allow SESSION_LOG."
-            )
         request = GrantedQueryRequest(
             target=GrantedQueryTarget(
                 grant_uid=base_target.grant_uid,
                 public_name=public_name,
                 attachment_name=base_target.attachment_name,
-                session_log_allowed=base_target.session_log_allowed,
             ),
             question=question,
             language=language,
-            session_name=session_name,
             memory_handle=memory_handle,
             federate_descendants=federate_descendants,
         )
@@ -264,13 +254,13 @@ def query_granted(
         raise
     except (ProfileConfigError, ProfileError) as error:
         raise_public(QueryAuthorityError, error)
-    except (QuerySessionError, TypeError, ValueError) as error:
+    except (GrantedQuerySourceError, TypeError, ValueError) as error:
         raise_public(QueryInputError, error)
     except OSError as error:
         raise_public(QueryStorageError, error)
 
     try:
-        outcome = execute_granted_query_read(
+        response = execute_granted_query_read(
             request,
             store=store,
             provider_factory=lambda: _safe_ordinary_provider(runtime),
@@ -284,32 +274,13 @@ def query_granted(
         raise_public(QueryContextError, error)
     except (ProfileConfigError, ProfileError) as error:
         raise_public(QueryAuthorityError, error)
-    except QuerySessionError as error:
+    except GrantedQuerySourceError as error:
         raise_public(QueryExecutionError, error)
     except OSError as error:
         raise_public(QueryStorageError, error)
     except (RuntimeError, TypeError, ValueError) as error:
         raise_public(QueryExecutionError, error)
 
-    receipt = None
-    if outcome.publication is not None:
-        try:
-            published = execute_granted_query_session_publication(
-                outcome.publication,
-                store=store,
-                observer=on_stage,  # type: ignore[arg-type]
-            )
-        except (ProfileConfigError, ProfileError, QuerySessionError) as error:
-            raise_public(QueryPublicationError, error)
-        except (OSError, RuntimeError, TypeError, ValueError) as error:
-            raise_public(QueryPublicationError, error)
-        receipt = QuerySessionReceipt(
-            session_name=published.session_name,
-            revision=published.revision,
-            turn_count=published.turn_count,
-        )
-
-    response = outcome.response
     if response.answer is None:
         return GrantedQueryResult(
             mode="CATALOG",
@@ -323,7 +294,6 @@ def query_granted(
         mode="ANSWER",
         public_name=public_name,
         answer=response.answer,
-        session_receipt=receipt,
     )
 
 
@@ -373,4 +343,3 @@ def query_reference(
 
 
 __all__ = ["query_granted", "query_ordinary", "query_reference"]
-

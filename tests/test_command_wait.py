@@ -109,7 +109,7 @@ def test_default_context_browser_includes_opaque_grant_routes(monkeypatch):
             names=("public/readable", "public/query"),
             annotations={
                 "public/readable": grant_navigation_annotation(("READ",)),
-                "public/query": grant_navigation_annotation(("QUERY", "SESSION_LOG")),
+                "public/query": grant_navigation_annotation(("QUERY",)),
             },
             selectable_names=frozenset({"public/readable"}),
         ),

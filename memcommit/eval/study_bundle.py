@@ -197,7 +197,7 @@ TASK_SPECS = {
                 grantee_profile="task-1",
                 authority_context="campus-wiki/construction-details",
                 public_name="construction-details",
-                permissions=("QUERY", "SESSION_LOG"),
+                permissions=("QUERY",),
                 parent_grant_key="task-1-campus-wiki-view",
                 provider="codex_chatgpt",
             ),
@@ -235,7 +235,7 @@ TASK_SPECS = {
                 authority_context=context,
                 public_name=context,
                 permissions=(
-                    ("QUERY", "SESSION_LOG")
+                    ("QUERY",)
                     if permission == "QUERY"
                     else (
                         "READ",
@@ -346,7 +346,7 @@ TASK_SPECS = {
                 public_name=(
                     "remote/government/healthcare-agent/info-request/questions-and-answers"
                 ),
-                permissions=("QUERY", "SESSION_LOG"),
+                permissions=("QUERY",),
                 grantee_parent_context="local/personal-memory",
                 provider="codex_chatgpt",
             ),
@@ -934,7 +934,6 @@ def _grant_template_records(
             not permissions
             or len(set(permissions)) != len(permissions)
             or any(permission not in _GRANT_PERMISSIONS for permission in permissions)
-            or ("SESSION_LOG" in permissions and "QUERY" not in permissions)
         ):
             raise StudyBundleError(
                 f"Grant template {template.key!r} has invalid permissions."
@@ -1155,8 +1154,8 @@ All fixture data, including material exposed through a QUERY grant, is stored
 as ordinary authority-owned Contexts. English is canonical Memory content and
 Korean is attached to the same Memory UID as an unreviewed imported
 translation view. A task profile sees only the READ, CREATE, UPDATE, or QUERY
-views declared in its grant templates; study QUERY views also grant explicit
-SESSION_LOG retention for named visible Q/A transcripts.
+views declared in its grant templates. QUERY answers remain process-local and
+are never retained by the study Profile.
 Audience annotations remain review metadata and are not automatically
 interpreted as ACL rules.
 

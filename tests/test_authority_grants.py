@@ -385,7 +385,6 @@ def test_profile_target_workbenches_keep_all_readable_names_from_a_grant(
         store,
         context_name=None,
         language="en",
-        session_name=None,
     )
     find_command._open_find_search_workbench(
         store,

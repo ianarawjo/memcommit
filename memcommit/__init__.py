@@ -72,8 +72,6 @@ _LAZY_API_EXPORTS = {
         "QueryInputError",
         "QueryProviderConfig",
         "QueryProviderFailure",
-        "QueryPublicationError",
-        "QuerySessionReceipt",
         "QueryStorageError",
         "ReferenceQueryResult",
     )
@@ -154,8 +152,6 @@ __all__ = [
     "QueryInputError",
     "QueryProviderConfig",
     "QueryProviderFailure",
-    "QueryPublicationError",
-    "QuerySessionReceipt",
     "QueryStorageError",
     "ReferenceQueryResult",
     "ops",

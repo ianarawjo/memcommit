@@ -1,4 +1,4 @@
-"""Typed Answer and transcript projections for the Query terminal interface."""
+"""Typed Answer projections for the Query terminal interface."""
 
 from __future__ import annotations
 
@@ -17,38 +17,10 @@ from memcommit.source_projection.presentation import source_object_label
 from memcommit.interfaces.tui.operations.query.model import (
     QueryAnswerClipboardProjection,
     QueryWorkbenchResponse,
-    SavedQueryTranscript,
 )
 
 
 QUERY_VIEW_LABEL = source_object_label(SourceForm.QUERY_VIEW).upper()
-
-
-def render_saved_query_transcript(transcript: SavedQueryTranscript) -> str:
-    """Render only the durable, person-visible transcript projection."""
-
-    lines = [
-        f"QUERY SESSION · {safe_terminal_text(transcript.name)}",
-        "VIEW · "
-        + safe_terminal_text(transcript.requested_name)
-        + " · LANGUAGE "
-        + safe_terminal_text(transcript.language)
-        + f" · REVISION {transcript.revision}",
-    ]
-    if not transcript.turns:
-        lines.extend(("", "(no turns)"))
-        return "\n".join(lines)
-    for index, (question, answer) in enumerate(transcript.turns, start=1):
-        lines.extend(
-            (
-                "",
-                f"Q{index}",
-                safe_terminal_text(question),
-                f"A{index}",
-                safe_terminal_text(answer),
-            )
-        )
-    return "\n".join(lines)
 
 
 def _render_granted_catalog(response: GrantedQueryResponse) -> str:
@@ -120,17 +92,9 @@ def project_query_answer_clipboard(
     response: QueryWorkbenchResponse | None,
     *,
     focus: QueryAnswerFocus,
-    viewed_transcript: SavedQueryTranscript | None = None,
     whole_document: bool = False,
 ) -> QueryAnswerClipboardProjection:
     """Project typed Answer focus without parsing or terminal wrapping."""
-
-    if viewed_transcript is not None:
-        return QueryAnswerClipboardProjection(
-            text=render_saved_query_transcript(viewed_transcript),
-            scope="DOCUMENT",
-            label=f"saved transcript {safe_terminal_text(viewed_transcript.name)}",
-        )
     if response is None:
         raise ValueError("There is no Query answer to copy.")
 

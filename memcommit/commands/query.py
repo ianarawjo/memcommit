@@ -1,4 +1,4 @@
-"""Browse or ask a question of an opaque authority-granted query view."""
+"""Run one process-local Query over readable or authority-granted Sources."""
 
 from typing import Annotated, Optional
 
@@ -24,7 +24,6 @@ from memcommit.infrastructure.providers.find_query import (
     connect_query_route_provider as connect_query_provider,
 )
 from memcommit.interfaces.tui.operations.query import (
-    SavedQueryTranscript,
     run_query_workbench,
 )
 from memcommit.commands.session_help import bind_session_help
@@ -40,8 +39,6 @@ from memcommit.interfaces.cli.query import (
     render_granted_query_response,
     render_ordinary_query_response,
     render_query_reference_response,
-    render_query_session,
-    render_query_session_list,
     split_query_memory_selector,
 )
 from memcommit.context import QueryContextRef
@@ -60,11 +57,9 @@ from memcommit.operations.query.ordinary_application import OrdinaryQueryRequest
 from memcommit.operations.query.ordinary_runtime import execute_ordinary_query
 from memcommit.operations.query.reference_application import QueryReferenceRequest
 from memcommit.operations.query.reference_runtime import execute_query_reference
-from memcommit.query_sessions import (
-    QuerySessionError,
-    QuerySessionStore,
+from memcommit.operations.query.granted_source import (
+    GrantedQuerySourceError,
     load_authority_query_catalog,
-    validate_query_session_name,
 )
 from memcommit.store import MemoryStore
 from memcommit.search import FindError
@@ -118,7 +113,6 @@ def _open_query_workbench(
     *,
     context_name: str | None,
     language: str,
-    session_name: str | None,
 ) -> None:
     """Open one blank Query over frozen readable and public QUERY catalogs."""
 
@@ -142,18 +136,6 @@ def _open_query_workbench(
         for name in names
         if catalog.access_for(name).is_granted
     }
-    saved_transcripts = tuple(
-        SavedQueryTranscript(
-            name=session.name,
-            requested_name=session.binding.requested_name,
-            language=session.binding.language,
-            revision=session.revision,
-            turns=tuple(
-                (turn.question, turn.answer) for turn in session.turns
-            ),
-        )
-        for session in QuerySessionStore(store.store_dir).list_sessions()
-    )
     run_query_workbench(
         names,
         current_context=displayed_current,
@@ -172,9 +154,7 @@ def _open_query_workbench(
             load_catalog=load_authority_query_catalog,
         ),
         annotations=annotations,
-        saved_transcripts=saved_transcripts,
         initial_language=language,
-        initial_session_name=session_name,
         help_binder=bind_session_help,
     )
 
@@ -221,30 +201,6 @@ def cmd(
             ),
         ),
     ] = "en",
-    session_name: Annotated[
-        Optional[str],
-        typer.Option(
-            "--session",
-            help=(
-                "Save and replay visible Q/A in the active task Profile; "
-                "the grant must allow SESSION_LOG"
-            ),
-        ),
-    ] = None,
-    sessions: Annotated[
-        bool,
-        typer.Option(
-            "--sessions",
-            help="List saved task-owned query transcripts without opening sources",
-        ),
-    ] = False,
-    show_session_name: Annotated[
-        Optional[str],
-        typer.Option(
-            "--show-session",
-            help="Show one saved task-owned Q/A transcript",
-        ),
-    ] = None,
     include_descendants: Annotated[
         Optional[bool],
         typer.Option(
@@ -297,46 +253,6 @@ def cmd(
         )
         raise typer.Exit(2)
     store = MemoryStore()
-    if sessions or show_session_name is not None:
-        if sessions and show_session_name is not None:
-            typer.secho(
-                "Error: choose either --sessions or --show-session.",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
-        if (
-            selector is not None
-            or question is not None
-            or context_name is not None
-            or session_name is not None
-            or language != "en"
-            or scope_flags_supplied
-        ):
-            typer.secho(
-                "Error: transcript inspection cannot be combined with a query.",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
-        session_store = QuerySessionStore(store.store_dir)
-        try:
-            if sessions:
-                saved = session_store.list_sessions()
-                render_query_session_list(saved)
-                return
-            assert show_session_name is not None
-            session = session_store.load(show_session_name)
-        except (OSError, QuerySessionError, ValueError) as error:
-            typer.secho(
-                f"Error: {display_escape_text(str(error))}",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
-        render_query_session(session)
-        return
-
     if selector is None:
         if scope_flags_supplied:
             typer.secho(
@@ -350,7 +266,7 @@ def cmd(
             typer.secho(
                 "Query error: SELECTOR is required outside a terminal. In a "
                 "terminal, run 'mem query' to open the interactive Query "
-                "workbench; use --sessions to inspect saved transcripts.",
+                "workbench.",
                 fg=typer.colors.RED,
                 err=True,
             )
@@ -360,7 +276,6 @@ def cmd(
                 store,
                 context_name=context_name,
                 language=language,
-                session_name=session_name,
             )
         except (
             FileNotFoundError,
@@ -371,7 +286,7 @@ def cmd(
             ProfileConfigError,
             ProfileError,
             QueryProviderError,
-            QuerySessionError,
+            GrantedQuerySourceError,
             RuntimeError,
             ValueError,
         ) as error:
@@ -387,13 +302,6 @@ def cmd(
     )
     route_selector = selector
     memory_handle = None
-    if question is None and session_name is not None:
-        typer.secho(
-            "Error: --session requires a QUESTION.",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(1)
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
         selected_name = context_snapshot.resolve_or_current(context_name)
@@ -444,17 +352,6 @@ def cmd(
             err=True,
         )
         raise typer.Exit(1)
-    if session_name is not None:
-        try:
-            session_name = validate_query_session_name(session_name)
-        except QuerySessionError as error:
-            typer.secho(
-                f"Error: {display_escape_text(str(error))}",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
-
     resolution_error: KeyError | ValueError | None = None
     try:
         item = ops.resolve(ctx, selector)
@@ -467,14 +364,6 @@ def cmd(
             typer.secho(
                 "Error: legacy query-only references require a QUESTION; "
                 "opaque Memory browsing is available for authority grants.",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
-        if session_name is not None:
-            typer.secho(
-                "Error: --session is available only for authority-granted "
-                "query views with SESSION_LOG permission.",
                 fg=typer.colors.RED,
                 err=True,
             )
@@ -559,13 +448,6 @@ def cmd(
         raise typer.Exit(1)
     if not routed_grants:
         if question is None:
-            if session_name is not None:
-                typer.secho(
-                    "Error: --session currently applies only to a query-only view.",
-                    fg=typer.colors.RED,
-                    err=True,
-                )
-                raise typer.Exit(1)
             if language != "en":
                 typer.secho(
                     "Error: --language applies only to a query-only view.",
@@ -615,11 +497,10 @@ def cmd(
         routed_grants,
         key=lambda grant: len(grant.public_name.split("/")),
     )
-    required_permission = "SESSION_LOG" if session_name is not None else "QUERY"
-    if required_permission not in effective_grant.permissions:
+    if "QUERY" not in effective_grant.permissions:
         typer.secho(
             f"Query error: Grant {effective_grant.uid[:8]} does not allow "
-            f"{required_permission.lower()} access to "
+            "query access to "
             f"{display_escape_text(route_selector)!r}.",
             fg=typer.colors.RED,
             err=True,
@@ -644,13 +525,9 @@ def cmd(
                     grant_uid=effective_grant.uid,
                     public_name=route_selector,
                     attachment_name=selected_name,
-                    session_log_allowed=(
-                        "SESSION_LOG" in effective_grant.permissions
-                    ),
                 ),
                 question=question,
                 language=language,
-                session_name=session_name,
                 memory_handle=memory_handle,
                 federate_descendants=traversal.include_descendants,
             ),
@@ -682,7 +559,7 @@ def cmd(
         ProfileConfigError,
         ProfileError,
         QueryProviderError,
-        QuerySessionError,
+        GrantedQuerySourceError,
         ValueError,
     ) as error:
         if progress is not None:

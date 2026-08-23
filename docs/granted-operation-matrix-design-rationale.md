@@ -29,7 +29,7 @@ nor can a friendly command name stand in for the effects it eventually writes.
 |---|---|---|
 | switch, ls, show, status, summarize | READ | Public virtual pointer or read-only output |
 | find, dedun discovery, find-ambiguities, find-conflicts | READ | Current projection only; QUERY-only overrides excluded |
-| query | QUERY | Provider-mediated result; SESSION_LOG separately controls saved query sessions |
+| query | QUERY | One process-local provider-mediated result; no transcript retention |
 | add | CREATE | Authority Memory and checkpoint |
 | edit | UPDATE | Authority Memory and checkpoint |
 | remove | DELETE | Authority Memory and checkpoint |

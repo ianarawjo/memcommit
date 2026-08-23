@@ -123,8 +123,6 @@ __all__ = [
     "QueryInputError",
     "QueryProviderConfig",
     "QueryProviderFailure",
-    "QueryPublicationError",
-    "QuerySessionReceipt",
     "QueryStorageError",
     "QualityFindResult",
     "QualityFindingHandoff",
@@ -327,7 +325,6 @@ _LAZY_EXPORTS = {
     "QueryCatalogEntry": ("memcommit.api.query", "QueryCatalogEntry"),
     "QueryCitation": ("memcommit.api.query", "QueryCitation"),
     "QueryProviderConfig": ("memcommit.api.query", "QueryProviderConfig"),
-    "QuerySessionReceipt": ("memcommit.api.query", "QuerySessionReceipt"),
     "ReferenceQueryResult": ("memcommit.api.query", "ReferenceQueryResult"),
     **{
         name: ("memcommit.api.replace", name)

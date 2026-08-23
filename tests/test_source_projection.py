@@ -47,18 +47,18 @@ def test_source_display_uses_one_axis_order_and_canonical_vocabulary():
         reach=SourceReach.VIA_EMBED,
         form=SourceForm.MEMORY_REF,
         states=(SourceState.NOT_INCLUDED, SourceState.DANGLING),
-        permissions=("READ", "DERIVE", "SESSION_LOG"),
+        permissions=("READ", "DERIVE", "QUERY"),
     )
 
     assert source_display_text(facts, include_permissions=True) == (
-        "READ GRANT · PERMISSIONS READ + DERIVE + SAVE QUERY SESSION · "
+        "READ GRANT · PERMISSIONS READ + DERIVE + QUERY · "
         "VIA EMBED · memory ref · DANGLING · NOT INCLUDED"
     )
 
     assert source_object_label(facts) == "memory ref"
     assert source_object_label(facts, title=True) == "Memory ref"
     assert source_annotation_text(facts, include_permissions=True) == (
-        "READ GRANT · PERMISSIONS READ + DERIVE + SAVE QUERY SESSION · "
+        "READ GRANT · PERMISSIONS READ + DERIVE + QUERY · "
         "VIA EMBED · DANGLING · NOT INCLUDED"
     )
 

@@ -1,9 +1,8 @@
-"""Profile-local searchable projections of sessions and provenance evidence.
+"""Profile-local searchable projections of retained workflow evidence.
 
 The projections in this module are deliberately smaller than their durable
-records.  Search may rank what a person previously saw or approved, but it
-must not turn a query into an unconditional dump of operation frames, source
-Memories, provider prompts, or concealed authority data.
+records. Search may rank what a person approved, but it must not dump operation
+frames, source Memories, provider prompts, or concealed authority data.
 """
 from __future__ import annotations
 
@@ -13,7 +12,6 @@ from collections.abc import Sequence
 from memcommit.commands.compare_sessions import iter_saved_comparisons
 from memcommit.commands.meld_sessions import list_meld_session_catalog
 from memcommit.context import Context
-from memcommit.query_sessions import QuerySessionStore
 from memcommit.rationale_cache import list_rationale_inferences
 from memcommit.search import SearchArtifact
 from memcommit.store import MemoryStore
@@ -95,52 +93,6 @@ def _checkpoint_artifacts(
                     ),
                 )
             )
-    return records
-
-
-def _query_session_artifacts(
-    store: MemoryStore,
-    contexts: Sequence[Context],
-) -> list[SearchArtifactRecord]:
-    by_uid = {context.uid: context for context in contexts}
-    records: list[SearchArtifactRecord] = []
-    for session in QuerySessionStore(store.store_dir).list_sessions():
-        context = by_uid.get(session.binding.attachment_context_uid)
-        if context is None:
-            continue
-        turns = [
-            {
-                "turn": index,
-                "question": turn.question,
-                "answer": turn.answer,
-            }
-            for index, turn in enumerate(session.turns, start=1)
-        ]
-        records.append(
-            (
-                context.uid,
-                context.name,
-                SearchArtifact(
-                    uid=session.uid,
-                    artifact_kind="query_session",
-                    title=(
-                        f"Query session {session.name} for "
-                        f"{session.binding.requested_name}"
-                    ),
-                    # Only the already-visible transcript is projected. The
-                    # concealed source and its digest remain routing metadata.
-                    content=_json_projection({"turns": turns}),
-                    summary=(
-                        f"{len(turns)} visible turn(s)"
-                        + (
-                            f"; latest question: {turns[-1]['question']}"
-                            if turns
-                            else ""
-                        )
-                    ),
-                ),
-            )
-        )
     return records
 
 
@@ -299,7 +251,6 @@ def collect_search_artifacts(
     return tuple(
         [
             *_checkpoint_artifacts(store, unique_contexts),
-            *_query_session_artifacts(store, unique_contexts),
             *_comparison_artifacts(store, unique_contexts),
             *_meld_artifacts(store, unique_contexts),
             *_rationale_artifacts(unique_contexts),

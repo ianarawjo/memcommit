@@ -839,7 +839,7 @@ def grant_create_cmd(
             "--allow",
             help=(
                 "Permission to grant; repeat CREATE, READ, EMBED, UPDATE/EDIT, "
-                "DELETE, QUERY, SESSION_LOG, DERIVE, COMBINE, EXPORT, "
+                "DELETE, QUERY, DERIVE, COMBINE, EXPORT, "
                 "ACCEPT_DERIVED, SAVE_BOUND_ANALYSIS, SAVE_ANALYSIS, or SHARE"
             ),
         ),

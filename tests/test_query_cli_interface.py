@@ -4,8 +4,10 @@ from __future__ import annotations
 
 import ast
 from pathlib import Path
-from types import SimpleNamespace
 
+from typer.testing import CliRunner
+
+from memcommit.cli import app
 from memcommit.find_answer_references import (
     FindAnswerEvidence,
     FindAnswerSentence,
@@ -15,8 +17,6 @@ from memcommit.interfaces.cli.query import (
     render_granted_query_response,
     render_ordinary_query_response,
     render_query_reference_response,
-    render_query_session,
-    render_query_session_list,
     split_query_memory_selector,
 )
 from memcommit.operations.query.granted_application import (
@@ -24,6 +24,7 @@ from memcommit.operations.query.granted_application import (
     GrantedQueryResponse,
     GrantedQueryTarget,
 )
+from memcommit.operations.query.granted_source import AuthorityQueryCatalogEntry
 from memcommit.operations.query.ordinary_application import (
     OrdinaryQueryRequest,
     OrdinaryQueryResponse,
@@ -32,11 +33,24 @@ from memcommit.operations.query.reference_application import (
     QueryReferenceRequest,
     QueryReferenceResponse,
 )
-from memcommit.query_sessions import AuthorityQueryCatalogEntry
 
 
 ROOT = Path(__file__).parents[1]
 PACKAGE = ROOT / "memcommit"
+runner = CliRunner(mix_stderr=False)
+
+
+def test_query_cli_has_no_transcript_session_surface():
+    help_result = runner.invoke(app, ["query", "--help"])
+
+    assert help_result.exit_code == 0
+    assert "--session" not in help_result.output
+    assert "--sessions" not in help_result.output
+    assert "--show-session" not in help_result.output
+
+    removed = runner.invoke(app, ["query", "--sessions"])
+    assert removed.exit_code == 2
+    assert "No such option" in (removed.output + removed.stderr)
 
 
 def test_query_memory_selector_split_is_interface_owned_and_exact():
@@ -107,7 +121,7 @@ def test_grounded_query_plain_renderer_uses_self_contained_reference_rows(capsys
 
 
 def test_granted_query_plain_renderer_keeps_catalog_opaque(capsys):
-    target = GrantedQueryTarget("grant", "shared/view", "anchor", False)
+    target = GrantedQueryTarget("grant", "shared/view", "anchor")
     response = GrantedQueryResponse(
         GrantedQueryRequest(target, None),
         catalog=(
@@ -125,27 +139,6 @@ def test_granted_query_plain_renderer_keeps_catalog_opaque(capsys):
     assert "[q-0123456789ab]" in output
     assert "◯ ◯◯" in output
     assert "source text is not present" in output
-
-
-def test_query_session_renderers_use_only_visible_transcript_fields(capsys):
-    session = SimpleNamespace(
-        name="notes",
-        binding=SimpleNamespace(requested_name="shared/view", language="en"),
-        revision=2,
-        turns=(
-            SimpleNamespace(question="What?", answer="Visible answer."),
-        ),
-    )
-
-    render_query_session_list(())
-    render_query_session_list((session,))
-    render_query_session(session)
-
-    output = capsys.readouterr().out
-    assert "No saved query sessions." in output
-    assert "notes · view=shared/view · language=en · 1 turn(s) · revision 2" in output
-    assert "Query session: notes" in output
-    assert "Q1\nWhat?\nA1\nVisible answer." in output
 
 
 def test_query_command_uses_cli_and_terminal_interfaces_without_local_presenters():

@@ -279,7 +279,7 @@ def _setup_granted_target(
         resource_name=details.name,
         attachment_name=source.name,
         public_name=public_name + "/construction-details",
-        permissions=("QUERY", "SESSION_LOG"),
+        permissions=("QUERY",),
         recursive=True,
     )
     return active_store, authority_store, source, wiki, parent_grant

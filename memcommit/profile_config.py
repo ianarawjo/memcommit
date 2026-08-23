@@ -33,7 +33,6 @@ GRANT_PERMISSIONS = frozenset(
         "UPDATE",
         "DELETE",
         "QUERY",
-        "SESSION_LOG",
         "DERIVE",
         "COMBINE",
         "EXPORT",
@@ -50,7 +49,6 @@ _GRANT_PERMISSION_ORDER = (
     "UPDATE",
     "DELETE",
     "QUERY",
-    "SESSION_LOG",
     "DERIVE",
     "COMBINE",
     "EXPORT",
@@ -189,11 +187,14 @@ def canonical_grant_permissions(value: object) -> tuple[str, ...]:
         permission = raw.strip().upper()
         if permission == "EDIT":
             permission = "UPDATE"
+        if permission == "SESSION_LOG":
+            # Saved Query transcripts no longer exist, but rejecting an older
+            # registry would prevent every Profile operation. Preserve the old
+            # implied QUERY authority while dropping the retention capability.
+            permission = "QUERY"
         if permission not in GRANT_PERMISSIONS:
             raise ProfileConfigError(f"Unsupported grant permission: {raw!r}.")
         normalized.add(permission)
-    if "SESSION_LOG" in normalized and "QUERY" not in normalized:
-        raise ProfileConfigError("SESSION_LOG requires QUERY permission.")
     if normalized & {"DERIVE", "ACCEPT_DERIVED"} and "READ" not in normalized:
         raise ProfileConfigError(
             "Derive and accept-derived grants require READ permission."

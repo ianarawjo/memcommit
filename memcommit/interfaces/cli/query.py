@@ -12,12 +12,9 @@ from memcommit.interfaces.console.text import (
     safe_terminal_text,
 )
 from memcommit.operations.query.granted_application import GrantedQueryResponse
+from memcommit.operations.query.granted_source import AuthorityQueryCatalogEntry
 from memcommit.operations.query.ordinary_application import OrdinaryQueryResponse
 from memcommit.operations.query.reference_application import QueryReferenceResponse
-from memcommit.query_sessions import (
-    AuthorityQueryCatalogEntry,
-    QuerySession,
-)
 from memcommit.source_projection.model import SourceForm
 from memcommit.source_projection.presentation import source_object_label
 
@@ -71,43 +68,6 @@ def render_query_catalog(
     )
 
 
-def render_query_session_list(sessions: Sequence[QuerySession]) -> None:
-    """Render the task-owned transcript index without opening Query sources."""
-
-    if not sessions:
-        typer.echo("No saved query sessions.")
-        return
-    for session in sessions:
-        typer.echo(
-            f"{session.name} · view={session.binding.requested_name} · "
-            f"language={session.binding.language} · "
-            f"{len(session.turns)} turn(s) · revision {session.revision}"
-        )
-
-
-def render_query_session(session: QuerySession) -> None:
-    """Render one durable visible transcript without reconstructing a provider turn."""
-
-    typer.secho(
-        f"Query session: {display_escape_text(session.name)}",
-        bold=True,
-    )
-    typer.echo(
-        "View: "
-        + display_escape_text(session.binding.requested_name)
-        + " · language="
-        + display_escape_text(session.binding.language)
-    )
-    if not session.turns:
-        typer.echo("\n(no turns)")
-        return
-    for index, turn in enumerate(session.turns, start=1):
-        typer.secho(f"\nQ{index}", bold=True)
-        typer.echo(safe_terminal_text(turn.question))
-        typer.secho(f"A{index}", bold=True)
-        typer.echo(safe_terminal_text(turn.answer))
-
-
 def render_query_reference_response(response: QueryReferenceResponse) -> None:
     """Render one legacy reference answer through the terminal-safe boundary."""
 
@@ -128,7 +88,5 @@ __all__ = [
     "render_ordinary_query_response",
     "render_query_catalog",
     "render_query_reference_response",
-    "render_query_session",
-    "render_query_session_list",
     "split_query_memory_selector",
 ]

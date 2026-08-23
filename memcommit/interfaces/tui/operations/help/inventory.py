@@ -753,7 +753,7 @@ COMMAND_FORMS = {
         "mem provider probe (test the current selection)",
     ),
     "query": (
-        "mem query (open the interactive Question, Source, and saved transcript workbench)",
+        "mem query (open the compact one-shot Scope, Question, and Answer workbench)",
         'mem query "[question]" (ask the direct current ordinary Context)',
         'mem query -r "[question]" (include descendants and embedded Contexts)',
         'mem query --context [context] "[question]" (ask an explicit ordinary Context)',
@@ -761,9 +761,6 @@ COMMAND_FORMS = {
         'mem query [query_view] "[question]" (ask a query-only view)',
         'mem query [query_view]#[memory_handle] "[question]" (ask one opaque Memory)',
         'mem query [query_view] "[question]" --language [language] (explicit source language)',
-        'mem query [query_view] "[question]" --session [session_name] (retain visible Q/A)',
-        "mem query --sessions (list saved query transcripts)",
-        "mem query --show-session [session_name] (show one saved transcript)",
     ),
     "rationale": (
         "mem rationale (open Recents or select a Memory from the current readable Context)",

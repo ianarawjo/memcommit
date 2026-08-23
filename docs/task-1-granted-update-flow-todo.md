@@ -122,7 +122,7 @@ but it is not a substitute for the runtime work below.
     score all 75 source dispositions and 77 expected patches.
   - Confirm the run-private authority changed, the participant source did not,
     and `study-baseline` remained byte-for-byte unchanged.
-  - Confirm Task 2/3 grants and query sessions are unaffected.
+  - Confirm Task 2/3 grants and one-shot Query routes are unaffected.
 
 - [ ] 7. Refresh examples and participant-facing documentation.
   - Replace the obsolete single-Profile/no-grant `init-study` description.
@@ -130,7 +130,7 @@ but it is not a substitute for the runtime work below.
     `#HANDLE` examples.
   - Update Task 1 permission tables to
     `READ+CREATE+UPDATE+DELETE+QUERY` for the wiki and
-    `QUERY+SESSION_LOG` for `construction-details`.
+    `QUERY` for `construction-details`.
   - Show which commands are executable and retain any remaining limitation
     explicitly; do not document planned behavior as complete before its tests
     and live verification pass.

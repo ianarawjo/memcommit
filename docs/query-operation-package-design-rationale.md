@@ -1,6 +1,6 @@
 # Query operation-package design rationale
 
-Last verified: 2026-08-15.
+Last verified: 2026-08-22.
 
 ## Motivation
 
@@ -19,6 +19,7 @@ memcommit/operations/query/
   ordinary_application.py
   ordinary_runtime.py
   granted_application.py
+  granted_source.py
   granted_runtime.py
   reference_application.py
   reference_runtime.py
@@ -26,9 +27,9 @@ memcommit/operations/query/
 
 The three routes remain separate because they have different authority and
 disclosure contracts. Ordinary Query reads a frozen readable Context set;
-granted Query reads concealed Grant material and may separately publish a
-`SESSION_LOG` turn; `QueryContextRef` authenticates its provider before opening
-one legacy concealed Source. Grouping them does not merge those semantics.
+granted Query reads concealed Grant material for one process-local response;
+`QueryContextRef` authenticates its provider before opening one legacy
+concealed Source. Grouping them does not merge those semantics.
 
 Application modules own typed requests, responses, ports, and use-case order.
 Runtime modules adapt `MemoryStore`, authority, and persistence. CLI, TUI, and
@@ -52,8 +53,9 @@ span multiple distant trees and is harder to review operation by operation.
 
 ## Invariants and non-goals
 
-- Provider ordering, authority checks, Source freezing, CAS publication, typed
-  results, output, and durable effects are unchanged.
+- Provider ordering, authority checks, Source freezing, typed results, and
+  output remain owned by the operation. Query has no publication or durable
+  effect.
 - Application modules still do not import terminal, command, Store, or concrete
   provider implementations; Store integration remains runtime-owned.
 - Internal adapters do not route through the top-level compatibility exports.
@@ -62,14 +64,14 @@ span multiple distant trees and is harder to review operation by operation.
   `query-tui-interface-design-rationale.md` record the sibling adapters, while
   `query-callable-boundary-matrix.md` classifies the remaining command-owned
   composition functions.
-- Shared Query infrastructure such as provider policy, session storage, and
-  answer/reference helpers stays shared until its ownership is evaluated; this
-  change does not move files merely because their names contain `query`.
+- Shared Query infrastructure such as provider policy and answer/reference
+  helpers stays shared until its ownership is evaluated; this change does not
+  move files merely because their names contain `query`.
 
 ## Verification
 
-The existing ordinary, granted, reference, provider, session, and workbench
-tests continue to exercise the same behavior through the new owners. A focused
+The ordinary, granted, reference, provider, and workbench tests exercise the
+same behavior through the new owners. A focused
 package test checks that every old public export is object-identical to the new
 owner, that the compatibility modules contain no functions or classes, and
 that internal Python modules do not import the old paths.

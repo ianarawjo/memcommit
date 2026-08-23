@@ -1,162 +1,100 @@
-# Granted Query read and session-publication boundary
+# Granted Query one-shot read boundary
 
-Last verified: 2026-08-14.
-
-## Problem
-
-A granted Query has two effects that were previously implemented in one
-command-owned function. Opening a catalog or producing an answer is a
-revalidated read of concealed authority material. Appending the visible
-question and answer to a named Query session is a durable write owned by the
-active grantee store. Combining both effects made the answer function the only
-callable entry point and made it impossible for another adapter to request an
-answer without also publishing the requested session turn.
-
-The split must not weaken the established privacy order. Provider
-authentication must still precede concealed Source loading, answers must still
-be withheld if a grant or Source changes during inference, and a completed
-answer must never be treated as continuing `SESSION_LOG` authority.
+Last verified: 2026-08-22.
 
 ## Decision
 
-`memcommit.operations.query.granted_application` owns terminal-independent request,
-response, unpublished-turn, publication-receipt, port, and orchestration
-contracts. `memcommit.operations.query.granted_runtime` owns the `MemoryStore`, authority,
-Source-loading, federation, session-store, lock, and CAS adapters.
-
-The read use case returns `GrantedQueryReadOutcome`. A session request includes
-an opaque `GrantedQuerySessionPublication`, but that value is only an intent to
-append the exact answered turn. Reading it, returning it, or discarding it does
-not create a session directory or record. Only the separate publication use
-case may make it durable.
+Granted Query has one effect: a revalidated, process-local read of concealed
+authority material. The former second phase that published visible Q/A to a
+named session has been removed from application contracts, Store adapters,
+public API results, agent payloads, CLI grammar, and the TUI.
 
 ```text
-public target + question/session intent
-                    |
-                    v
-         freeze required grant permission
-                    |
-                    v
-          construct/authenticate provider
-                    |
-                    v
-    open catalog or exact concealed Source frame
-                    |
-                    v
-       route allowed descendants when eligible
-                    |
-                    v
-              produce answer
-                    |
-                    v
-       revalidate grant + every Source binding
-                    |
-          +---------+------------------+
-          |                            |
-          v                            v
- revalidated response       unpublished session-turn plan
-                                       |
-                         explicit publication use case
-                                       |
-                     revalidate SESSION_LOG + Source again
-                                       |
-                         CAS append exactly one turn
+public target + one question
+            |
+            v
+ freeze QUERY grant identity
+            |
+            v
+construct/authenticate provider
+            |
+            v
+open exact concealed Source frame
+            |
+            v
+route allowed descendants if requested
+            |
+            v
+       produce answer
+            |
+            v
+revalidate grant + Source binding
+            |
+            v
+release process-local response
 ```
 
-The CLI and TUI call the Store-backed runtime directly. The Store-backed
-`execute_granted_query_request` compatibility composition executes the read
-and, only when the outcome contains a publication plan, explicitly invokes the
-separate publication use case. The former command-owned execution/progress
-facade has been retired; the Typer composition root alone maps typed stages to
-its visible progress labels.
+`GrantedQueryRequest` freezes grant UID, public name, attachment name,
+catalog-or-answer mode, language, optional opaque Memory handle, and
+federation policy. `GrantedQueryResponse` contains either the authorized opaque
+catalog or the answer. There is no unpublished turn, publication token,
+publication receipt, record digest, session name, or Store write port.
 
 ## Responsibility matrix
 
 | Boundary | Owner | Invariant |
 | --- | --- | --- |
-| Public input | `GrantedQueryRequest` | Freezes grant UID, public and attachment names, catalog/answer mode, language, handle, federation, and optional session intent |
-| Capability display | `GrantedQueryTarget.session_log_allowed` | UI hint only; runtime registry state remains authoritative |
-| Pre-provider authority | read Store adapter | Requires `QUERY`, or `SESSION_LOG` for a saved turn, before provider construction |
-| Provider disclosure | read Store adapter | Concealed Source content opens only after provider construction succeeds |
-| Catalog | read Store adapter | Catalog is loaded twice across an authority snapshot check and is never persisted |
-| Answer | read Store adapter | Root and every selected descendant binding are revalidated after the provider returns and before the answer is released |
-| Existing session | `QuerySessionStore.load_or_start` | Reads visible prior Q/A and strict binding without creating storage |
-| Publication plan | application value plus opaque runtime token | Binds the exact request, answer, Source digest, session snapshot, expected record digest, and Store root; grants no write by itself |
-| Durable publication | publication Store adapter | Rechecks current `SESSION_LOG` and Source binding, then performs one profile-guarded, locked CAS append |
-| Receipt | `GrantedQuerySessionPublicationResult` | Reports session name, resulting revision, and turn count only after the append succeeds |
-
-## Preserved behavior
-
-- Catalog browsing still authenticates the provider before opening authority
-  Memories, even though it does not call the provider afterward.
-- A one-shot answer still uses `QUERY`; a saved turn still requires the
-  distinct `SESSION_LOG` permission before provider construction.
-- Relevant-descendant routing still sees public names only, opens only the
-  selected authorized views, and remains disabled for saved sessions and
-  opaque Memory-handle requests.
-- Saved dialogue still reconstructs provider input from visible prior Q/A and
-  persists only visible question/answer text plus opaque freshness bindings.
-- The command compatibility entry point retains its argument order, result,
-  and three established progress callbacks. The new internal revalidation and
-  publication stages are not projected as new terminal output.
-- Replay of one publication plan fails its expected-record-digest CAS rather
-  than appending the same turn twice.
-
-No TUI frame, focus order, key binding, output wording, provider policy,
-session schema, file mode, federation rule, or command-line grammar changes in
-this slice. Therefore no new terminal snapshots are required.
+| Public input | `GrantedQueryRequest` | One immutable public target and one-shot query intent |
+| Pre-provider authority | runtime prepare adapter | Requires current `QUERY` before provider construction |
+| Provider disclosure | runtime read adapter | Concealed Source opens only after provider construction succeeds |
+| Catalog | granted Source adapter | Opaque handles/placeholders are reloaded across an authority check and never persisted |
+| Federation | runtime routing adapter | Provider sees public descendant names only; only selected authorized bindings open |
+| Answer | runtime read adapter | Root and selected descendant bindings revalidate before response release |
+| Retention | none | Query creates no transcript, publication plan, receipt, or search artifact |
 
 ## Failure and no-write matrix
 
-| Case | Provider called | Answer returned | Session write |
-| --- | ---: | ---: | ---: |
-| Missing required permission at preparation | No | No | No |
-| Provider construction failure | No concealed Source opened | No | No |
-| Grant or Source changes during answer generation | Yes | No | No |
-| Session read completes and publication plan is discarded | Yes | Yes | No |
-| Grant revoked after read but before publication | Already complete | Already returned to caller | No |
-| Source changes after read but before publication | Already complete | Already returned to caller | No |
-| Session changes concurrently or plan is replayed | Already complete | Already returned to caller | No additional turn |
-| Explicit publication with fresh grant, Source, and session snapshot | Already complete | Yes | Exactly one CAS append |
+| Case | Provider constructed | Concealed Source opened | Answer released | Store write |
+| --- | ---: | ---: | ---: | ---: |
+| Missing QUERY authority | No | No | No | No |
+| Provider construction failure | Attempted | No | No | No |
+| Catalog browse | Yes | After authentication | Catalog only | No |
+| Grant or Source changes during inference | Yes | Yes | No | No |
+| Successful one-shot answer | Yes | Yes | Yes | No |
 
-The read/publish gap deliberately means a caller may already possess a valid
-answer when later publication authority disappears. Publication failure does
-not retract that earlier authorized read; it prevents only the durable effect.
+Revocation during the provider turn may surface as the current Profile or
+Source error type, but the important contract is that the answer is never
+released after failed revalidation.
 
-## Alternatives and limitations
+## Compatibility
 
-Keeping a Boolean such as `save_session=True` inside one answer function was
-rejected because omission and publication would still share one effectful
-contract. Publishing immediately and returning only a saved receipt was
-rejected because nonterminal adapters could not safely obtain a read-only
-answer for a session-shaped request. Treating the target's
-`session_log_allowed` field as authority was rejected because it is a frozen
-display hint that can become stale.
+The old top-level granted Query modules remain thin implementation-free export
+facades for the surviving request, response, and execution names. The runtime
+keeps `execute_granted_query_request` as an alias of the one-shot read entry
+point. Removed session-publication symbols are intentionally not emulated.
 
-The publication plan is process-local and intentionally opaque. It is not a
-portable receipt, cache artifact, or agent-tool payload. The public Python API
-keeps it internal: a high-level call either returns the separately published
-`QuerySessionReceipt` or raises `QueryPublicationError` with no partial result.
-Catalog and answer reads still depend on the existing active-Profile authority
-registry and Source projection implementation. Legacy `QueryContextRef`,
-transcript listing/viewing, and agent versioning remain separate work.
+Legacy Profile registry values containing `SESSION_LOG` normalize to `QUERY`
+during load. This prevents a retired capability string from breaking Profile
+startup without reintroducing a publication path. Legacy on-disk transcript
+records are ignored and not automatically deleted.
+
+## Alternatives considered
+
+- **Leave a no-op publication receipt:** rejected because it would falsely
+  promise a durable effect and preserve an unusable API surface.
+- **Retain the Store adapter behind a hidden flag:** rejected because hidden
+  retention is still a data-lifecycle feature and still diverges from TUI/CLI
+  parity.
+- **Release the answer before revalidation:** rejected because revocation or
+  Source drift during inference must fail closed.
+- **Open the Source before connecting the provider:** rejected because provider
+  authentication is part of the concealed-data disclosure boundary.
 
 ## Verification
 
-`tests/test_granted_query_application.py` proves application ordering,
-publication opt-in, zero-write read behavior, exactly-one append, replay/CAS
-rejection, answer-substitution rejection, grant revocation after read, Source
-change after read, and interface dependency direction. Existing granted Query
-tests continue to prove catalog,
-opaque-handle, federation, translation, provider-time revocation, stale
-session, file-permission, size-bound, and visible-Q/A behavior.
-
-The focused current-worktree run passed 69 application, workbench, granted
-session, and query-only tests. An expanded Query run passed 116 tests before
-one unrelated concurrent provider-policy expectation failed because its Find
-and Query model order no longer matched the implementation. The exact staged
-tree passed Ruff, both application/runtime type checks, all seven new boundary
-tests, and 55 non-CLI Query application/provider/workbench tests. Its broader
-CLI collection remains gated by the pre-existing committed Summarize import of
-`declared_artifact_available`, whose implementation is outside `HEAD`; this
-Query change does not absorb that unrelated function.
+`tests/test_granted_query_application.py` covers application ordering,
+provider stages, zero storage, and revocation during a turn.
+`tests/test_granted_query_sources.py` covers catalog opacity, handle isolation,
+federation, translation, Source drift, and the absence of Query-session
+storage. Public API and agent tests assert one-shot response schemas with no
+session receipt or publication error.

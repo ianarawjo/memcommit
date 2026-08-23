@@ -435,7 +435,7 @@ _OPERATIONS = (
         ),
         "Readable source + question -> answer with references",
         ExecutionKind.SEMANTIC,
-        "Returns an answer; the visible transcript may be retained",
+        "Returns one process-local answer without retaining a transcript",
         (
             "Readable exact, descendant, or embedded Context scope; or one "
             "QUERY-authorized query-only view"

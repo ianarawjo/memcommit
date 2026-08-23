@@ -1056,7 +1056,7 @@ def test_picker_enter_does_not_select_a_query_only_virtual_context():
             virtual_names=("task-2/proposal-submission-guidelines",),
             virtual_annotations={
                 "task-2/proposal-submission-guidelines": (
-                    "[grant QUERY + SAVE QUERY SESSION]"
+                    "[grant QUERY]"
                 ),
             },
             app_input=pipe_input,

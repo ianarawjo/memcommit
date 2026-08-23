@@ -43,7 +43,6 @@ Permissions are independent capabilities:
 | `UPDATE` | edit a direct Memory; `EDIT` is a CLI input alias; requires `READ` |
 | `DELETE` | remove a direct item; requires `READ` |
 | `QUERY` | browse opaque Memory shapes/handles and ask a provider without reading source text |
-| `SESSION_LOG` | retain and replay visible query Q/A; requires `QUERY` |
 | `SHARE` | deliver one exactly reviewed ordinary Context snapshot as a receiver-owned consent unit; grants no receiver read access |
 
 These permissions currently govern direct items inside existing Contexts.
@@ -98,17 +97,16 @@ each newly initialized run.
 
 | Task | Task-owned data | Authority Profile and ordinary data | Granted views |
 | --- | --- | --- | --- |
-| 1 | `participant/construction-updates` | `task-1-campus-authority`: `campus-wiki`, including construction details | wiki `READ+CREATE+UPDATE+DELETE+QUERY`; nested details `QUERY+SESSION_LOG` |
-| 2 | `participant/proposal-workspace` | `task-2-proposal-authority`: `advisor1`, `advisor2`, submission guidelines | advisors `READ`; guidelines `QUERY+SESSION_LOG` |
-| 3 | `local/personal-memory`, `local/guardrails` | `task-3-healthcare-authority`: `remote/government/healthcare-agent/info-request/transmission-guidance`, `questions-and-answers` | healthcare agent `SHARE`; public transmission guidance `READ+DERIVE+COMBINE+EXPORT+SAVE_BOUND_ANALYSIS+SAVE_ANALYSIS`; questions-and-answers `QUERY+SESSION_LOG` |
+| 1 | `participant/construction-updates` | `task-1-campus-authority`: `campus-wiki`, including construction details | wiki `READ+CREATE+UPDATE+DELETE+QUERY`; nested details `QUERY` |
+| 2 | `participant/proposal-workspace` | `task-2-proposal-authority`: `advisor1`, `advisor2`, submission guidelines | advisors `READ`; guidelines `QUERY` |
+| 3 | `local/personal-memory`, `local/guardrails` | `task-3-healthcare-authority`: `remote/government/healthcare-agent/info-request/transmission-guidance`, `questions-and-answers` | healthcare agent `SHARE`; public transmission guidance `READ+DERIVE+COMBINE+EXPORT+SAVE_BOUND_ANALYSIS+SAVE_ANALYSIS`; questions-and-answers `QUERY` |
 
 `task-1-campus-authority` is intentionally task-specific. A future shared
 campus authority may be appropriate for a different experiment, but this
 fixture's exact contents and permissions are part of Task 1's condition.
-`QUERY` on the editable wiki is explicit so the same source can be used for
-one-shot questions; `SESSION_LOG` is deliberately absent there. Only the
-narrower details view may persist visible Q/A, keeping transcript retention a
-separate experimental condition from ordinary wiki editing.
+`QUERY` on the editable wiki and narrower details view is explicit so both can
+answer one-shot questions without granting READ over the query-only override.
+Query transcript retention is not an experimental condition.
 
 Within `study-baseline`, the corresponding authority material remains under
 `granted-memory/task-N` as ordinary owned Contexts. `init-study` separates

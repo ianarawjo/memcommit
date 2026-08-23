@@ -1,27 +1,29 @@
-"""Store and authority composition for terminal-independent granted Query."""
+"""Store and authority composition for one-shot granted Query."""
 
 from __future__ import annotations
 
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 import json
-from pathlib import Path
 
 from memcommit.operations.query.granted_application import (
     GrantedQueryObserver,
     GrantedQueryProviderFactory,
-    GrantedQueryReadOutcome,
     GrantedQueryReadPort,
     GrantedQueryRequest,
     GrantedQueryResponse,
-    GrantedQuerySessionPublication,
-    GrantedQuerySessionPublicationPort,
-    GrantedQuerySessionPublicationResult,
     GrantedQueryStage,
     GrantedQueryTarget,
     PreparedGrantedQuery,
-    publish_granted_query_session,
     run_granted_query_read,
+)
+from memcommit.operations.query.granted_source import (
+    AuthorityQueryCatalogEntry,
+    AuthorityQuerySource,
+    GrantedQuerySourceBinding,
+    freeze_granted_query_source_binding,
+    load_authority_query_catalog,
+    load_authority_query_source,
 )
 from memcommit.profile_config import (
     AuthorityGrant,
@@ -31,17 +33,6 @@ from memcommit.profile_config import (
 from memcommit.profiles import (
     authority_grant_snapshot_lock,
     resolve_granted_context_view,
-)
-from memcommit.query_sessions import (
-    AuthorityQueryCatalogEntry,
-    AuthorityQuerySource,
-    QuerySession,
-    QuerySessionBinding,
-    QuerySessionStore,
-    load_authority_query_catalog,
-    load_authority_query_source,
-    query_session_binding,
-    render_session_question,
 )
 from memcommit.store import MemoryStore
 
@@ -54,16 +45,6 @@ class _PreparedGrantToken:
     request: GrantedQueryRequest
     registry: object
     expected_grant: AuthorityGrant
-
-
-@dataclass(frozen=True)
-class _SessionPublicationToken:
-    store_root: Path
-    request: GrantedQueryRequest
-    answer: str
-    binding: QuerySessionBinding
-    session: QuerySession
-    expected_record_digest: str | None
 
 
 def _observe(
@@ -158,7 +139,6 @@ def _grant_for_request(
     request: GrantedQueryRequest,
     *,
     registry,
-    required_permission: str,
 ) -> AuthorityGrant:
     matches = [
         grant
@@ -174,19 +154,19 @@ def _grant_for_request(
     if len(matches) != 1:
         raise ValueError("The selected query-only View is no longer available.")
     grant = matches[0]
-    if required_permission not in grant.permissions:
+    if "QUERY" not in grant.permissions:
         raise ValueError(
-            f"Grant {grant.uid[:8]} does not allow "
-            f"{required_permission.lower()} access to {grant.public_name!r}."
+            f"Grant {grant.uid[:8]} does not allow query access to "
+            f"{grant.public_name!r}."
         )
     return grant
 
 
 def freeze_granted_query_targets(store: MemoryStore) -> tuple[GrantedQueryTarget, ...]:
-    """List only valid public QUERY routes without opening authority sources."""
+    """List valid public QUERY routes without opening authority sources."""
 
     registry = load_profile_registry()
-    # Isolated stores must not inherit host grants merely because names collide.
+    # An explicit isolated Store must not inherit host grants by name collision.
     if store.store_dir.resolve() != profile_store_dir(registry.active).resolve():
         return ()
     targets: list[GrantedQueryTarget] = []
@@ -205,7 +185,6 @@ def freeze_granted_query_targets(store: MemoryStore) -> tuple[GrantedQueryTarget
                 grant_uid=grant.uid,
                 public_name=grant.public_name,
                 attachment_name=grant.attachment_context_name,
-                session_log_allowed="SESSION_LOG" in grant.permissions,
             )
         )
     return tuple(
@@ -217,7 +196,7 @@ def freeze_granted_query_targets(store: MemoryStore) -> tuple[GrantedQueryTarget
 
 
 class MemoryStoreGrantedQueryReadPort(GrantedQueryReadPort):
-    """Read and revalidate concealed grant material without publishing a turn."""
+    """Read and revalidate concealed grant material without persistence."""
 
     def __init__(
         self,
@@ -229,13 +208,8 @@ class MemoryStoreGrantedQueryReadPort(GrantedQueryReadPort):
         self._load_catalog = load_catalog
 
     def prepare(self, request: GrantedQueryRequest) -> PreparedGrantedQuery:
-        required_permission = "SESSION_LOG" if request.session_name else "QUERY"
         registry = load_profile_registry()
-        expected_grant = _grant_for_request(
-            request,
-            registry=registry,
-            required_permission=required_permission,
-        )
+        expected_grant = _grant_for_request(request, registry=registry)
         return PreparedGrantedQuery(
             request,
             _PreparedGrantToken(request, registry, expected_grant),
@@ -246,7 +220,7 @@ class MemoryStoreGrantedQueryReadPort(GrantedQueryReadPort):
         prepared: PreparedGrantedQuery,
         provider: object,
         observer: GrantedQueryObserver | None = None,
-    ) -> GrantedQueryReadOutcome:
+    ) -> GrantedQueryResponse:
         token = prepared.token
         if (
             not isinstance(token, _PreparedGrantToken)
@@ -254,11 +228,10 @@ class MemoryStoreGrantedQueryReadPort(GrantedQueryReadPort):
         ):
             raise ValueError("Granted Query preparation token is invalid.")
         request = prepared.request
-        required_permission = "SESSION_LOG" if request.session_name else "QUERY"
         view = resolve_granted_context_view(
             request.target.public_name,
             attachment_name=request.target.attachment_name,
-            required_permission=required_permission,
+            required_permission="QUERY",
         )
         if view.grant.uid != token.expected_grant.uid:
             raise ValueError("The selected query-only View binding changed.")
@@ -281,9 +254,7 @@ class MemoryStoreGrantedQueryReadPort(GrantedQueryReadPort):
                     raise ValueError(
                         "The granted query catalog changed while it was being opened."
                     )
-            return GrantedQueryReadOutcome(
-                GrantedQueryResponse(request, catalog=catalog)
-            )
+            return GrantedQueryResponse(request, catalog=catalog)
 
         _observe(observer, "PREPARING_SOURCES")
         source = load_authority_query_source(
@@ -291,15 +262,15 @@ class MemoryStoreGrantedQueryReadPort(GrantedQueryReadPort):
             language=request.language,
             memory_handle=request.memory_handle,
         )
-        binding = query_session_binding(view, source, language=request.language)
+        binding = freeze_granted_query_source_binding(
+            view,
+            source,
+            language=request.language,
+        )
         federated_sources: list[
-            tuple[str, AuthorityQuerySource, QuerySessionBinding]
+            tuple[str, AuthorityQuerySource, GrantedQuerySourceBinding]
         ] = []
-        if (
-            request.federate_descendants
-            and request.session_name is None
-            and request.memory_handle is None
-        ):
+        if request.federate_descendants and request.memory_handle is None:
             registry = token.registry
             descendant_candidates = tuple(
                 sorted(
@@ -334,7 +305,7 @@ class MemoryStoreGrantedQueryReadPort(GrantedQueryReadPort):
                     (
                         descendant_name,
                         descendant_source,
-                        query_session_binding(
+                        freeze_granted_query_source_binding(
                             descendant_view,
                             descendant_source,
                             language=request.language,
@@ -342,19 +313,6 @@ class MemoryStoreGrantedQueryReadPort(GrantedQueryReadPort):
                     )
                 )
 
-        session_store = QuerySessionStore(self._store.store_dir)
-        saved_session = None
-        expected_session_digest = None
-        provider_question = request.question
-        if request.session_name is not None:
-            saved_session, expected_session_digest = session_store.load_or_start(
-                request.session_name,
-                binding,
-            )
-            provider_question = render_session_question(
-                saved_session.turns,
-                request.question,
-            )
         provider_source_name = source.name
         provider_source_content = source.content
         if federated_sources:
@@ -377,7 +335,7 @@ class MemoryStoreGrantedQueryReadPort(GrantedQueryReadPort):
         answer = query(
             provider_source_name,
             provider_source_content,
-            provider_question,
+            request.question,
         )
         if not isinstance(answer, str) or not answer.strip():
             raise ValueError("The query provider returned an empty answer.")
@@ -389,42 +347,23 @@ class MemoryStoreGrantedQueryReadPort(GrantedQueryReadPort):
                 binding=binding,
                 federated_sources=federated_sources,
                 registry=current_registry,
-                required_permission=required_permission,
             )
-
-        response = GrantedQueryResponse(request, answer=answer)
-        publication = None
-        if request.session_name is not None:
-            assert saved_session is not None
-            publication = GrantedQuerySessionPublication(
-                request,
-                answer,
-                _SessionPublicationToken(
-                    self._store.store_dir.resolve(),
-                    request,
-                    answer,
-                    binding,
-                    saved_session,
-                    expected_session_digest,
-                ),
-            )
-        return GrantedQueryReadOutcome(response, publication)
+        return GrantedQueryResponse(request, answer=answer)
 
     @staticmethod
     def _revalidate_sources(
         request: GrantedQueryRequest,
         *,
-        binding: QuerySessionBinding,
+        binding: GrantedQuerySourceBinding,
         federated_sources: Sequence[
-            tuple[str, AuthorityQuerySource, QuerySessionBinding]
+            tuple[str, AuthorityQuerySource, GrantedQuerySourceBinding]
         ],
         registry,
-        required_permission: str,
     ) -> None:
         current_view = resolve_granted_context_view(
             request.target.public_name,
             attachment_name=request.target.attachment_name,
-            required_permission=required_permission,
+            required_permission="QUERY",
             registry=registry,
         )
         current_source = load_authority_query_source(
@@ -433,7 +372,7 @@ class MemoryStoreGrantedQueryReadPort(GrantedQueryReadPort):
             memory_handle=request.memory_handle,
         )
         if (
-            query_session_binding(
+            freeze_granted_query_source_binding(
                 current_view,
                 current_source,
                 language=request.language,
@@ -455,7 +394,7 @@ class MemoryStoreGrantedQueryReadPort(GrantedQueryReadPort):
                 language=request.language,
             )
             if (
-                query_session_binding(
+                freeze_granted_query_source_binding(
                     current_descendant_view,
                     current_descendant_source,
                     language=request.language,
@@ -467,66 +406,6 @@ class MemoryStoreGrantedQueryReadPort(GrantedQueryReadPort):
                 )
 
 
-class MemoryStoreGrantedQuerySessionPublicationPort(GrantedQuerySessionPublicationPort):
-    """Revalidate SESSION_LOG authority and CAS-append one prepared turn."""
-
-    def __init__(self, store: MemoryStore) -> None:
-        self._store = store
-
-    def publish(
-        self,
-        publication: GrantedQuerySessionPublication,
-    ) -> GrantedQuerySessionPublicationResult:
-        token = publication.token
-        if (
-            not isinstance(token, _SessionPublicationToken)
-            or token.request != publication.request
-            or token.answer != publication.answer
-            or token.store_root != self._store.store_dir.resolve()
-        ):
-            raise ValueError("Query session publication token is invalid.")
-        request = publication.request
-        assert request.question is not None
-        assert request.session_name is not None
-        session_store = QuerySessionStore(self._store.store_dir)
-        # Authority and source freshness are rechecked in the same snapshot that
-        # encloses the local CAS append; a completed read is not save authority.
-        with authority_grant_snapshot_lock() as current_registry:
-            current_view = resolve_granted_context_view(
-                request.target.public_name,
-                attachment_name=request.target.attachment_name,
-                required_permission="SESSION_LOG",
-                registry=current_registry,
-            )
-            current_source = load_authority_query_source(
-                current_view,
-                language=request.language,
-                memory_handle=request.memory_handle,
-            )
-            if (
-                query_session_binding(
-                    current_view,
-                    current_source,
-                    language=request.language,
-                )
-                != token.binding
-            ):
-                raise ValueError(
-                    "The granted query view changed before the turn was saved."
-                )
-            saved = session_store.append_turn(
-                token.session,
-                expected_record_digest=token.expected_record_digest,
-                question=request.question,
-                answer=publication.answer,
-            )
-        return GrantedQuerySessionPublicationResult(
-            session_name=saved.name,
-            revision=saved.revision,
-            turn_count=len(saved.turns),
-        )
-
-
 def execute_granted_query_read(
     request: GrantedQueryRequest,
     *,
@@ -534,31 +413,13 @@ def execute_granted_query_read(
     provider_factory: GrantedQueryProviderFactory,
     observer: GrantedQueryObserver | None = None,
     load_catalog: CatalogLoader = load_authority_query_catalog,
-) -> GrantedQueryReadOutcome:
-    """Execute a granted read without publishing a Query session turn."""
+) -> GrantedQueryResponse:
+    """Execute one granted read without publishing durable Query state."""
 
     return run_granted_query_read(
         request,
-        read_port=MemoryStoreGrantedQueryReadPort(
-            store,
-            load_catalog=load_catalog,
-        ),
+        read_port=MemoryStoreGrantedQueryReadPort(store, load_catalog=load_catalog),
         provider_factory=provider_factory,
-        observer=observer,
-    )
-
-
-def execute_granted_query_session_publication(
-    publication: GrantedQuerySessionPublication,
-    *,
-    store: MemoryStore,
-    observer: GrantedQueryObserver | None = None,
-) -> GrantedQuerySessionPublicationResult:
-    """Publish exactly one prepared turn through the Store-backed CAS port."""
-
-    return publish_granted_query_session(
-        publication,
-        publication_port=MemoryStoreGrantedQuerySessionPublicationPort(store),
         observer=observer,
     )
 
@@ -571,30 +432,21 @@ def execute_granted_query_request(
     observer: GrantedQueryObserver | None = None,
     load_catalog: CatalogLoader = load_authority_query_catalog,
 ) -> GrantedQueryResponse:
-    """Compatibility composition of read and optional explicit publication."""
+    """Compatibility name for the one-shot granted Query composition."""
 
-    outcome = execute_granted_query_read(
+    return execute_granted_query_read(
         request,
         store=store,
         provider_factory=provider_factory,
         observer=observer,
         load_catalog=load_catalog,
     )
-    if outcome.publication is not None:
-        execute_granted_query_session_publication(
-            outcome.publication,
-            store=store,
-            observer=observer,
-        )
-    return outcome.response
 
 
 __all__ = [
     "CatalogLoader",
     "MemoryStoreGrantedQueryReadPort",
-    "MemoryStoreGrantedQuerySessionPublicationPort",
     "execute_granted_query_read",
     "execute_granted_query_request",
-    "execute_granted_query_session_publication",
     "freeze_granted_query_targets",
 ]

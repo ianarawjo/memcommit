@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import json
-import uuid
 
 import pytest
 from typer.testing import CliRunner
@@ -11,11 +10,6 @@ import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.context import AutoCheckpoint, Context, Memory
 from memcommit.ground import create_ground_session
-from memcommit.query_sessions import (
-    QuerySession,
-    QuerySessionBinding,
-    QuerySessionStore,
-)
 from memcommit.store import MemoryStore, context_record_digest
 from memcommit.write_protection import (
     WriteProtectionError,
@@ -201,41 +195,10 @@ def test_profile_lock_blocks_non_context_profile_artifacts(isolated_store):
         )
     with pytest.raises(WriteProtectionError, match="Profile is locked"):
         store.create_query_source("locked-source", "must not persist")
-    binding = QuerySessionBinding(
-        grant_uid=str(uuid.uuid4()),
-        grant_revision=1,
-        grant_digest="0" * 64,
-        grantee_profile_uid=str(uuid.uuid4()),
-        authority_profile_uid=str(uuid.uuid4()),
-        attachment_context_uid=str(uuid.uuid4()),
-        attachment_context_name="attachment",
-        resource_uid=str(uuid.uuid4()),
-        resource_name="resource",
-        public_name="public",
-        requested_name="requested",
-        language="en",
-        source_digest="1" * 64,
-    )
-    query_session = QuerySession(
-        uid=str(uuid.uuid4()),
-        revision=0,
-        name="locked-query",
-        binding=binding,
-        turns=(),
-    )
-    with pytest.raises(WriteProtectionError, match="Profile is locked"):
-        QuerySessionStore(isolated_store).append_turn(
-            query_session,
-            expected_record_digest=None,
-            question="Should this persist?",
-            answer="No.",
-        )
-
     # The failed guard runs before validation or storage creation.
     assert not (isolated_store / "impact-plan.json").exists()
     assert not (isolated_store / "ground-sessions").exists()
     assert not (isolated_store / "query-sources").exists()
-    assert not (isolated_store / "query-sessions").exists()
 
 
 def test_v1_registry_remains_readable_and_upgrades_on_next_change(

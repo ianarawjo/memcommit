@@ -69,23 +69,13 @@ class QueryCatalogEntry:
 
 
 @dataclass(frozen=True)
-class QuerySessionReceipt:
-    """Receipt for one successful CAS-published visible Query turn."""
-
-    session_name: str
-    revision: int
-    turn_count: int
-
-
-@dataclass(frozen=True)
 class GrantedQueryResult:
-    """Granted catalog or answer, optionally with a completed publication."""
+    """One process-local granted catalog or answer."""
 
     mode: Literal["CATALOG", "ANSWER"]
     public_name: str
     answer: str | None = None
     catalog: tuple[QueryCatalogEntry, ...] = ()
-    session_receipt: QuerySessionReceipt | None = None
 
 
 @dataclass(frozen=True)
@@ -102,6 +92,5 @@ __all__ = [
     "QueryCatalogEntry",
     "QueryCitation",
     "QueryProviderConfig",
-    "QuerySessionReceipt",
     "ReferenceQueryResult",
 ]
