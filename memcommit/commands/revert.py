@@ -52,7 +52,7 @@ def _matching_checkpoint(
     ]
     if len(matches) > 1:
         raise ValueError(
-            f"Ambiguous prefix '{selector}' matches " f"{len(matches)} checkpoints."
+            f"Ambiguous prefix '{selector}' matches {len(matches)} checkpoints."
         )
     return matches[0] if matches else None
 
@@ -213,11 +213,14 @@ def cmd(
     keep: Annotated[
         bool,
         typer.Option(
-            "--keep",
+            "--keep/--discard-newer",
             "-k",
-            help="Keep newer checkpoints in the log instead of truncating",
+            help=(
+                "Keep newer checkpoints in the active log (default), or "
+                "explicitly remove them with --discard-newer"
+            ),
         ),
-    ] = False,
+    ] = True,
     context_name: Annotated[
         Optional[str],
         typer.Option(

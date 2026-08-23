@@ -35,10 +35,17 @@ from memcommit.commands.horizontal_choice import (
     HorizontalChoiceState,
     render_horizontal_choice,
 )
+from memcommit.exact_command_review import ExactCommandReview
+from memcommit.interfaces.tui.components.exact_command_review import (
+    EditableExactCommandControl,
+    ExactCommandDraft,
+    ExactCommandForm,
+    ExactCommandFormField,
+    resolve_displayed_command_value,
+)
 from memcommit.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
-    focused_control_style,
     semantic_action_style,
 )
 from memcommit.interfaces.tui.core.keybindings import (
@@ -46,6 +53,7 @@ from memcommit.interfaces.tui.core.keybindings import (
 )
 from memcommit.interfaces.tui.components.frame import (
     bind_focused_frame_style,
+    build_focused_frame,
 )
 from memcommit.interfaces.tui.components.scrollable_pane import (
     build_scrollable_formatted_text_pane,
@@ -140,7 +148,7 @@ class HistorySelectionReceipt:
 
     context_name: str
     checkpoint_uid: str
-    keep_history: bool = False
+    keep_history: bool = True
 
 
 @dataclass(frozen=True)
@@ -149,6 +157,106 @@ class HistoryBackNavigation:
 
 
 HISTORY_BACK = HistoryBackNavigation()
+
+
+REVERT_COMMAND_FORM = ExactCommandForm(
+    command=("mem", "revert"),
+    usage=("mem revert CHECKPOINT --context CONTEXT (--keep | --discard-newer)"),
+    fields=(
+        ExactCommandFormField(
+            "CHECKPOINT",
+            "one exact checkpoint UID or unambiguous prefix",
+        ),
+        ExactCommandFormField(
+            "--context CONTEXT",
+            "the frozen local Context whose state will be restored",
+        ),
+        ExactCommandFormField(
+            "--keep | --discard-newer",
+            "the explicit newer-checkpoint retention policy",
+        ),
+    ),
+)
+
+
+def parse_revert_command_argv(
+    argv: Sequence[str],
+    *,
+    context_name: str,
+    entries: Sequence[HistoryPickerItem],
+) -> tuple[str, bool]:
+    """Resolve one editable Revert command against the frozen visible frame."""
+
+    values = tuple(argv)
+    if values[:2] != ("mem", "revert"):
+        raise ValueError("Editable Revert commands must start with 'mem revert'.")
+    if len(values) != 6:
+        raise ValueError(
+            "Editable Revert commands require CHECKPOINT --context CONTEXT "
+            "and one explicit --keep or --discard-newer policy."
+        )
+    selector, context_flag, displayed_context, policy = values[2:]
+    if context_flag not in {"--context", "-c"}:
+        raise ValueError("Editable Revert commands require --context CONTEXT.")
+    resolve_displayed_command_value(
+        displayed_context,
+        (context_name,),
+        label="Revert --context Context",
+    )
+    policy_by_flag = {
+        "--keep": True,
+        "-k": True,
+        "--discard-newer": False,
+    }
+    if policy not in policy_by_flag:
+        raise ValueError("Editable Revert commands require --keep or --discard-newer.")
+    matches = tuple(entry.uid for entry in entries if entry.uid.startswith(selector))
+    if not matches:
+        raise ValueError(
+            f"Checkpoint selector '{selector}' is not available in this review."
+        )
+    if len(matches) > 1:
+        raise ValueError(
+            f"Checkpoint selector '{selector}' matches {len(matches)} visible "
+            "checkpoints."
+        )
+    return matches[0], policy_by_flag[policy]
+
+
+def revert_exact_command_review(
+    *,
+    context_name: str,
+    checkpoint_uid: str,
+    keep_history: bool,
+) -> ExactCommandReview:
+    """Project the final editable Revert boundary as one explicit command."""
+
+    if not checkpoint_uid:
+        raise ValueError("Select a checkpoint before reviewing Revert.")
+    policy = "--keep" if keep_history else "--discard-newer"
+    retention = (
+        "Every currently visible checkpoint remains active."
+        if keep_history
+        else (
+            "Newer active checkpoint files are removed; the recovery checkpoint "
+            "retains their supported recovery metadata."
+        )
+    )
+    return ExactCommandReview(
+        argv=(
+            "mem",
+            "revert",
+            checkpoint_uid,
+            "--context",
+            context_name,
+            policy,
+        ),
+        effects=(
+            f"Only Context '{context_name}' may be restored.",
+            f"The exact target is checkpoint [{checkpoint_uid[:8]}].",
+            retention,
+        ),
+    )
 
 
 def _visible_bounds(selected: int, count: int) -> tuple[int, int]:
@@ -346,16 +454,17 @@ def choose_history(
     back_navigation: bool = False,
     title: str | None = None,
     workbench_navigation: SessionWorkbenchNavigation | None = None,
-    keep_history: bool = False,
+    keep_history: bool = True,
     staged_checkpoint_uid: str | None = None,
 ) -> HistorySelectionReceipt | HistoryBackNavigation | None:
     """Inspect history or return one exact checkpoint selection.
 
     In ``log`` mode Enter opens the selected checkpoint in Viewer and only a
-    close/cancel key exits. In ``revert`` mode Enter stages an exact checkpoint,
-    then the History and Apply frames review its retention policy before this
-    function returns a receipt. This function never performs a revert. Arrow
-    keys traverse Viewer and Items at their real content boundaries.
+    close/cancel key exits. In ``revert`` mode Enter stages an exact checkpoint
+    and moves directly to an editable proposed command. The History choice and
+    command stay synchronized in both directions before the command returns a
+    receipt. This function never performs a revert. Arrow keys traverse Viewer
+    and Items at their real content boundaries.
     """
     options = tuple(entries)
     if not isinstance(context_name, str) or not context_name:
@@ -433,8 +542,8 @@ def choose_history(
                     "DISCARD_NEWER",
                     "DISCARD NEWER",
                     (
-                        "Remove newer visible checkpoints after restoration; "
-                        "the recovery checkpoint retains undo metadata."
+                        "Remove newer active checkpoint files after restoration; "
+                        "the recovery checkpoint retains supported recovery metadata."
                     ),
                 ),
                 HorizontalChoiceOption(
@@ -543,20 +652,20 @@ def choose_history(
             and app.layout.has_focus(policy_control)
         ):
             return (
-                " FOCUS HISTORY · ←/→ select  Enter apply  "
+                " FOCUS HISTORY · ←/→ select  Enter review command  "
                 f"Esc/Backspace items  Tab switch  q cancel  ·  {position}"
             )
         if (
             history_policy is not None
             and app is not None
-            and app.layout.has_focus(apply_control)
+            and app.layout.has_focus(command_control.active_control)
         ):
             return (
-                " FOCUS APPLY · Enter revert exact checkpoint  "
-                f"Esc/Backspace history  Tab switch  q cancel  ·  {position}"
+                " FOCUS PROPOSED COMMAND · Enter apply reviewed Revert  "
+                f"Esc history  Tab switch  q cancel  ·  {position}"
             )
         if mode == "revert":
-            action = "Enter select exact UID"
+            action = "Enter stage UID and review command"
             close = (
                 "Esc/Backspace back  q cancel"
                 if back_navigation
@@ -593,6 +702,42 @@ def choose_history(
     def sync_detail(*, anchor: Literal["preserve", "start", "end"]) -> None:
         detail_pane.set_formatted_text(render_detail(), anchor=anchor)
 
+    def proposed_revert_review() -> ExactCommandReview:
+        uid = selected_checkpoint["uid"]
+        if uid is None or history_policy is None:
+            raise ValueError("Select a checkpoint before reviewing Revert.")
+        return revert_exact_command_review(
+            context_name=context_name,
+            checkpoint_uid=uid,
+            keep_history=history_policy.selected_uid == "KEEP_ALL",
+        )
+
+    def apply_command_argv(argv: tuple[str, ...]) -> None:
+        if history_policy is None:
+            raise ValueError("Revert history policy is unavailable.")
+        uid, keep = parse_revert_command_argv(
+            argv,
+            context_name=context_name,
+            entries=options,
+        )
+        selected_checkpoint["uid"] = uid
+        row = next(index for index, entry in enumerate(options) if entry.uid == uid)
+        navigation.move_row(len(options), row)
+        navigation.preview_selected_row()
+        history_policy.choose("KEEP_ALL" if keep else "DISCARD_NEWER")
+        sync_detail(anchor="start")
+
+    command_control = EditableExactCommandControl.create(
+        ExactCommandDraft(
+            review=proposed_revert_review,
+            apply_argv=apply_command_argv,
+            form=REVERT_COMMAND_FORM,
+        ),
+        action_label="PRESS ENTER TO APPLY THE REVIEWED REVERT",
+        incomplete_action="FIX THE RED COMMAND BEFORE APPLY",
+        input_name="revert-proposed-command",
+    )
+
     def move_items(_event, delta: int) -> SurfaceMoveResult:
         if not options:
             return "BOUNDARY"
@@ -624,7 +769,11 @@ def choose_history(
             return "HANDLED"
         if mode == "revert":
             selected_checkpoint["uid"] = options[navigation.row_index].uid
-            surface_focus.focus_relative(event.app, 1, wrap=False)
+            command_control.sync_from_review(event.app)
+            # Selecting the exact row completes target staging, so final
+            # review starts immediately. History remains one Tab away for an
+            # explicit policy revision.
+            event.app.layout.focus(command_control.active_control)
             return "HANDLED"
         details_open["value"] = True
         sync_detail(anchor="start")
@@ -648,6 +797,7 @@ def choose_history(
         return "BOUNDARY"
 
     def activate_policy(event) -> SurfaceActionResult:
+        command_control.sync_from_review(event.app)
         surface_focus.focus_relative(event.app, 1, wrap=False)
         return "HANDLED"
 
@@ -655,10 +805,9 @@ def choose_history(
         surface_focus.focus_relative(event.app, -1, wrap=False)
         return "HANDLED"
 
-    def move_apply(_event, _delta: int) -> SurfaceMoveResult:
-        return "BOUNDARY"
-
     def activate_apply(event) -> SurfaceActionResult:
+        if not command_control.validate_current(event.app):
+            return "HANDLED"
         uid = selected_checkpoint["uid"]
         if uid is None or history_policy is None:
             return "HANDLED"
@@ -671,10 +820,6 @@ def choose_history(
         )
         return "HANDLED"
 
-    def back_apply(event) -> SurfaceActionResult:
-        surface_focus.focus_relative(event.app, -1, wrap=False)
-        return "HANDLED"
-
     policy_control = FormattedTextControl(
         lambda: (
             render_horizontal_choice(
@@ -684,7 +829,7 @@ def choose_history(
                     app_ref.get("app") is not None
                     and app_ref["app"].layout.has_focus(policy_control)
                 ),
-                show_description=True,
+                show_description=False,
                 inline_boxed=True,
             )
             if history_policy is not None
@@ -694,38 +839,23 @@ def choose_history(
         show_cursor=False,
     )
     policy_frame = Frame(
-        Window(policy_control, height=2, dont_extend_height=True),
+        Window(policy_control, height=1, dont_extend_height=True),
         title="HISTORY",
     )
 
-    def render_apply() -> StyleAndTextTuples:
-        focused = app_ref.get("app") is not None and app_ref["app"].layout.has_focus(
-            apply_control
-        )
-        uid = selected_checkpoint["uid"]
-        if uid is None or history_policy is None:
-            label = "SELECT A CHECKPOINT FIRST"
-        else:
-            policy = (
-                "KEEP ALL CHECKPOINTS"
-                if history_policy.selected_uid == "KEEP_ALL"
-                else "DISCARD NEWER CHECKPOINTS"
-            )
-            label = f"REVERT TO {uid[:8]} · {policy}"
-        return [
-            ("[SetCursorPosition]", ""),
-            (focused_control_style(focused=focused), f"[ {label} ]"),
-        ]
-
-    apply_control = FormattedTextControl(
-        render_apply,
-        focusable=history_policy is not None,
-        show_cursor=False,
+    proposed_command_frame = build_focused_frame(
+        command_control.body,
+        title=lambda: (
+            "PROPOSED COMMAND"
+            if command_control.valid
+            else "PROPOSED COMMAND · INVALID"
+        ),
+        is_focused=command_control.is_focused,
+        height=Dimension.exact(4),
     )
-    apply_frame = Frame(
-        Window(apply_control, height=1, dont_extend_height=True),
-        title="APPLY",
-    )
+    # Match Edit's exact-command safety signal: an invalid command is red and
+    # a complete runnable command is blue, independent of cursor placement.
+    proposed_command_frame.container.style = command_control.frame_style
 
     surfaces = [
         FocusSurface(
@@ -757,11 +887,9 @@ def choose_history(
                     back=back_policy,
                 ),
                 FocusSurface(
-                    "apply",
-                    apply_control,
-                    move_vertical=move_apply,
+                    "proposed-command",
+                    command_control.active_control,
                     activate=activate_apply,
-                    back=back_apply,
                 ),
             )
         )
@@ -774,11 +902,20 @@ def choose_history(
         @bindings.add("left", filter=policy_focused, eager=True)
         def _policy_left(event) -> None:
             history_policy.move(-1)
+            command_control.sync_from_review(event.app)
             event.app.invalidate()
 
         @bindings.add("right", filter=policy_focused, eager=True)
         def _policy_right(event) -> None:
             history_policy.move(1)
+            command_control.sync_from_review(event.app)
+            event.app.invalidate()
+
+        command_focused = has_focus(command_control.active_control)
+
+        @bindings.add("escape", filter=command_focused, eager=True)
+        def _command_back(event) -> None:
+            event.app.layout.focus(policy_control)
             event.app.invalidate()
 
     viewer_focused = has_focus(detail_pane.text_area)
@@ -835,7 +972,7 @@ def choose_history(
         items_frame,
     ]
     if history_policy is not None:
-        body.extend((policy_frame, apply_frame))
+        body.extend((policy_frame, proposed_command_frame))
     body.append(footer)
 
     app: Application[HistorySelectionReceipt | HistoryBackNavigation | None] = (
@@ -843,7 +980,7 @@ def choose_history(
             layout=Layout(
                 HSplit(body),
                 focused_element=(
-                    policy_control
+                    command_control.active_control
                     if staged_checkpoint_uid is not None
                     else list_control
                 ),
@@ -860,14 +997,7 @@ def choose_history(
     for control, frame in (
         (detail_pane.text_area, viewer_frame),
         (list_control, items_frame),
-        *(
-            (
-                (policy_control, policy_frame),
-                (apply_control, apply_frame),
-            )
-            if history_policy is not None
-            else ()
-        ),
+        *(((policy_control, policy_frame),) if history_policy is not None else ()),
     ):
         bind_focused_frame_style(
             frame,

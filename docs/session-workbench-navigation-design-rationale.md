@@ -42,13 +42,18 @@ cleanup such as closing transient detail, loading a response draft, or
 constructing an exact mutation receipt.
 History Log, Trace, Diff, and Revert use the same cursor/preview transition.
 Log-style Enter opens the aligned Viewer. Revert instead stages the displayed
-exact checkpoint UID, then advances through its visible `HISTORY` policy and
-`APPLY` frames. Its complete screen order is
-`VIEWER → ITEMS → HISTORY → APPLY`; Tab follows that order and boundary-aware
-Up/Down crosses adjacent frames without wrapping. The History control reuses
-the common checked-choice grammar for `DISCARD NEWER` versus `KEEP ALL`.
-Previewing or checking a Revert row therefore does not weaken or bypass its
-later exact mutation boundary.
+exact checkpoint UID and moves directly from Items to its editable
+`PROPOSED COMMAND`; the visible `HISTORY` policy remains available through
+ordinary traversal. Its complete screen order is
+`VIEWER → ITEMS → HISTORY → PROPOSED COMMAND`; Tab follows that order and
+boundary-aware Up/Down crosses read-only adjacent frames without wrapping.
+The History control reuses the common checked-choice grammar for
+`DISCARD NEWER` versus the default `KEEP ALL`, without a redundant description
+line below those self-contained labels. History changes rewrite the command,
+and a valid command edit—including a unique checkpoint UID prefix—moves the
+checked Items row and History choice. Previewing or checking a Revert row
+therefore does not weaken or bypass
+its later exact mutation boundary; only Enter on the valid command applies.
 
 Resolution sessions use three visible frames with separate responsibilities:
 

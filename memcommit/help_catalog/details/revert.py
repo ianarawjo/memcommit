@@ -38,8 +38,11 @@ REVERT_DETAILS = (
                 ),
             ),
             OperationComparisonOption(
-                label="--KEEP",
-                guidance="Preserve checkpoints newer than the restored checkpoint.",
+                label="--DISCARD-NEWER",
+                guidance=(
+                    "Explicitly remove newer active checkpoint files; the "
+                    "default keeps all checkpoints."
+                ),
             ),
         ),
     ),

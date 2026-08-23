@@ -65,7 +65,11 @@ def test_build_history_flattens_revert_log_snapshot_and_marks_archived_entries(
     ops.add(ctx, "Day two")
     day_two_uid = _save_step(store, ctx, "add", "Added day two")
 
-    pre_revert, _ = store.revert("journal", initial_uid)
+    pre_revert, _ = store.revert(
+        "journal",
+        initial_uid,
+        keep_history=False,
+    )
     timeline = build_history(store, "journal")
     by_uid = {checkpoint.uid: checkpoint for checkpoint in timeline.checkpoints}
 

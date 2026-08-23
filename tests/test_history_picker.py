@@ -12,6 +12,7 @@ from prompt_toolkit.utils import get_cwidth
 import memcommit.commands.history_picker as history_picker
 from memcommit.commands.history_picker import (
     HISTORY_BACK,
+    REVERT_COMMAND_FORM,
     HistoryDetailView,
     HistoryPickerEntry,
     HistorySelectionReceipt,
@@ -21,6 +22,11 @@ from memcommit.commands.history_picker import (
     _render_entry_line,
     _visible_bounds,
     choose_history,
+    parse_revert_command_argv,
+    revert_exact_command_review,
+)
+from memcommit.interfaces.tui.components.exact_command_review import (
+    format_exact_command,
 )
 from memcommit.session_workbench_navigation import SessionWorkbenchNavigation
 
@@ -29,9 +35,10 @@ def entry(
     suffix: int,
     *,
     description: str = "Added one note",
+    uid: str | None = None,
 ) -> HistoryPickerEntry:
     return HistoryPickerEntry(
-        uid=f"00000000-0000-4000-8000-{suffix:012d}",
+        uid=uid or f"00000000-0000-4000-8000-{suffix:012d}",
         timestamp=f"2026-07-30T11:{suffix:02d}:00-04:00",
         command="add",
         description=description,
@@ -94,10 +101,12 @@ def test_history_row_colors_only_the_unfocused_action_token():
     assert all(style == "class:memcommit.table.selected" for style, _text in focused)
 
 
-def test_revert_stages_exact_checkpoint_then_history_policy_then_apply():
+def test_revert_stages_exact_checkpoint_then_jumps_directly_to_proposed_command():
     candidate = entry(1)
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\r\r\r")
+        # Items Enter stages the exact UID and focuses the final editable
+        # command; the next Enter applies it without a redundant policy stop.
+        pipe_input.send_text("\r\r")
         selected = choose_history(
             (candidate,),
             context_name="test/update/to",
@@ -110,6 +119,7 @@ def test_revert_stages_exact_checkpoint_then_history_policy_then_apply():
     assert selected == HistorySelectionReceipt(
         context_name="test/update/to",
         checkpoint_uid=candidate.uid,
+        keep_history=True,
     )
 
 
@@ -117,7 +127,7 @@ def test_revert_arrows_move_and_clamp_before_accepting():
     candidates = (entry(1), entry(2), entry(3))
     with create_pipe_input() as pipe_input:
         # Move to the last row, once up, then choose the second row.
-        pipe_input.send_text("\x1b[B\x1b[B\x1b[A\r\r\r")
+        pipe_input.send_text("\x1b[B\x1b[B\x1b[A\r\r")
         selected = choose_history(
             candidates,
             context_name="journal",
@@ -129,6 +139,7 @@ def test_revert_arrows_move_and_clamp_before_accepting():
 
     assert selected is not None
     assert selected.checkpoint_uid == candidates[1].uid
+    assert selected.keep_history is True
 
 
 def test_revert_arrow_boundary_enters_viewer_then_returns_to_items():
@@ -136,7 +147,7 @@ def test_revert_arrow_boundary_enters_viewer_then_returns_to_items():
     with create_pipe_input() as pipe_input:
         # Up from the first Item crosses into the Viewer. Enter returns to
         # Items, where Down must still select the second exact checkpoint.
-        pipe_input.send_text("\x1b[A\r\x1b[B\r\r\r")
+        pipe_input.send_text("\x1b[A\r\x1b[B\r\r")
         selected = choose_history(
             candidates,
             context_name="journal",
@@ -149,15 +160,17 @@ def test_revert_arrow_boundary_enters_viewer_then_returns_to_items():
     assert selected == HistorySelectionReceipt(
         context_name="journal",
         checkpoint_uid=candidates[1].uid,
+        keep_history=True,
     )
 
 
-def test_revert_tui_can_keep_all_newer_checkpoints():
+def test_revert_tui_can_explicitly_discard_newer_checkpoints():
     candidate = entry(1)
     with create_pipe_input() as pipe_input:
-        # Stage the target, change DISCARD NEWER to KEEP ALL, advance to
-        # APPLY, then approve the exact frozen choice.
-        pipe_input.send_text("\r\x1b[C\r\r")
+        # Items Enter jumps to the command. Shift-Tab returns to History,
+        # Left changes the keep-all default to DISCARD NEWER, and Enter returns
+        # to the synchronized command before final approval.
+        pipe_input.send_text("\r\x1b[Z\x1b[D\r\r")
         selected = choose_history(
             (candidate,),
             context_name="journal",
@@ -170,7 +183,7 @@ def test_revert_tui_can_keep_all_newer_checkpoints():
     assert selected == HistorySelectionReceipt(
         context_name="journal",
         checkpoint_uid=candidate.uid,
-        keep_history=True,
+        keep_history=False,
     )
 
 
@@ -178,9 +191,9 @@ def test_revert_accepts_a_checkpoint_staged_in_the_context_tree():
     candidates = (entry(1), entry(2))
     with create_pipe_input() as pipe_input:
         # The Context tree's exact-version Enter already performed checkpoint
-        # selection. History policy and Apply therefore remain, without a
+        # selection. The proposed command therefore starts focused, without a
         # redundant second selection of the same UID in Items.
-        pipe_input.send_text("\r\r")
+        pipe_input.send_text("\r")
         selected = choose_history(
             candidates,
             context_name="journal",
@@ -194,25 +207,98 @@ def test_revert_accepts_a_checkpoint_staged_in_the_context_tree():
     assert selected == HistorySelectionReceipt(
         context_name="journal",
         checkpoint_uid=candidates[1].uid,
+        keep_history=True,
     )
 
 
-def test_revert_keep_flag_initializes_the_tui_policy():
+def test_revert_discard_flag_initializes_the_tui_policy():
     candidate = entry(1)
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\r\r\r")
+        pipe_input.send_text("\r\r")
         selected = choose_history(
             (candidate,),
             context_name="journal",
             mode="revert",
-            keep_history=True,
+            keep_history=False,
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
         )
 
     assert selected is not None
-    assert selected.keep_history is True
+    assert selected.keep_history is False
+
+
+def test_revert_proposed_command_unique_prefix_updates_controls_and_applies():
+    candidates = (
+        entry(1, uid="11111111-1111-4111-8111-111111111111"),
+        entry(2, uid="22222222-2222-4222-8222-222222222222"),
+    )
+    selector = candidates[1].uid[:8]
+    replacement = f"{selector} --context journal --discard-newer"
+    with create_pipe_input() as pipe_input:
+        # Stage the first row, then use only a unique prefix for another frozen
+        # UID. Validation must move Items/Viewer and History before Apply.
+        pipe_input.send_text("\r\x15" + replacement + "\r")
+        selected = choose_history(
+            candidates,
+            context_name="journal",
+            mode="revert",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == HistorySelectionReceipt(
+        context_name="journal",
+        checkpoint_uid=candidates[1].uid,
+        keep_history=False,
+    )
+
+
+def test_revert_proposed_command_is_explicit_and_round_trips_unique_prefix():
+    candidates = (
+        entry(1, uid="11111111-1111-4111-8111-111111111111"),
+        entry(2, uid="22222222-2222-4222-8222-222222222222"),
+    )
+    selector = candidates[1].uid[:8]
+    review = revert_exact_command_review(
+        context_name="practice/greetings",
+        checkpoint_uid=candidates[1].uid,
+        keep_history=True,
+    )
+
+    assert format_exact_command(review) == (
+        f"mem revert {candidates[1].uid} --context practice/greetings --keep"
+    )
+    assert parse_revert_command_argv(
+        (
+            *REVERT_COMMAND_FORM.command,
+            selector,
+            "--context",
+            "practice/greetings",
+            "--discard-newer",
+        ),
+        context_name="practice/greetings",
+        entries=candidates,
+    ) == (candidates[1].uid, False)
+
+
+def test_revert_proposed_command_rejects_ambiguous_uid_prefix():
+    candidates = (entry(1), entry(2))
+
+    with pytest.raises(ValueError, match="matches 2 visible checkpoints"):
+        parse_revert_command_argv(
+            (
+                *REVERT_COMMAND_FORM.command,
+                "00000000",
+                "--context",
+                "practice/greetings",
+                "--keep",
+            ),
+            context_name="practice/greetings",
+            entries=candidates,
+        )
 
 
 def test_empty_revert_stays_read_only_until_back_navigation():

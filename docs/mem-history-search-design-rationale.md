@@ -272,6 +272,7 @@ mem revert 2f98a740
 mem revert 2f98a740 --context ../participant
 mem revert "the version before the shuttle notice was removed"
 mem revert --keep
+mem revert 2f98a740 --discard-newer
 ```
 
 An exact checkpoint UID or unambiguous UID prefix remains the deterministic
@@ -298,19 +299,32 @@ Viewer uses the shared complete revision renderer described in
 `docs/checkpoint-revision-diff-design-rationale.md`. It shows what the selected
 checkpoint's command changed relative to its own predecessor and the complete
 direct-item result at that revision; it no longer labels a current-to-target
-change list as `RESTORE IMPACT`. Enter on an Items row checks that exact full
-checkpoint UID and advances to the `HISTORY` frame. The shared checked-choice
-control stages either `DISCARD NEWER` or
-`KEEP ALL`; `--keep` initializes the latter but may still be changed before
-approval. Enter advances to a separate `APPLY` frame whose label repeats the
-checkpoint prefix and chosen history policy. Only Enter there returns the
-local receipt and permits the ordinary store restoration path. The selection,
-policy change, and Apply are process-local until that last action.
+change list as `RESTORE IMPACT`. `KEEP ALL` is the default History policy.
+Enter on an Items row checks that exact full checkpoint UID and moves directly
+to an editable `PROPOSED COMMAND` such as
+`mem revert UID --context NAME --keep`. The History choice remains visible and
+stages either `KEEP ALL` or `DISCARD NEWER`; changing it rewrites the command,
+while editing a valid command UID or explicit policy moves the checked Items
+row and History choice back to the same state. The editable selector may be a
+full UID or any prefix that uniquely identifies one checkpoint in the frozen
+review; Apply resolves it to the full UID receipt, while an ambiguous prefix
+remains invalid. History renders only the two policy labels because their
+meaning is already carried by the explicit command flags and review effects.
+`--keep` remains an explicit
+compatibility spelling for the default, and `--discard-newer` is the deliberate
+destructive-retention route. Only Enter on the valid command returns the local
+receipt and permits the ordinary store restoration path. The selection, policy
+change, command edit, and Apply are process-local until that last action.
 
 The ordered `180×52` PTY evidence under
-`docs/screenshots/revert-revision-result-20260821/` records direct current-
-Context entry, complete revision state, exact version staging, policy and Apply
-review, the durable receipt, and read-only post-Revert verification.
+`docs/screenshots/revert-editable-command-20260823/` records the current
+keep-all default, direct Items-to-command transition, both synchronization
+directions including a unique UID-prefix edit, exact Apply, durable receipt, and
+read-only post-Revert
+verification. The earlier
+`docs/screenshots/revert-revision-result-20260821/` set remains the focused
+complete-revision Viewer baseline; its former policy/Apply frames are
+superseded by the 2026-08-23 set.
 
 A natural-language selector keeps its current- or explicitly selected-Context
 scope and opens the same staged Revert workbench after semantic candidate
@@ -459,12 +473,14 @@ command or output mode.
 
 ## Restoration and recoverability
 
-The default revert behavior truncates checkpoints newer than the selected
-target and first records the pre-revert Context state. That pre-revert
-checkpoint carries a bounded `log_snapshot`, allowing the displaced local log
-to be reconstructed when the person reverts back to it. History enumeration
-may include records recoverable through this metadata rather than pretending
-that the visible checkpoint directory is an append-only ledger.
+The default Revert behavior keeps every checkpoint file active and appends the
+pre-Revert Context state as a recovery checkpoint. `--discard-newer` is the
+explicit alternative: it removes active checkpoint files newer than the
+selected target after first recording that recovery checkpoint. The recovery
+record carries a bounded `log_snapshot`, allowing the displaced local log to
+be reconstructed with its displayed exact recovery command. History
+enumeration may include records recoverable through this metadata rather than
+pretending that the visible checkpoint directory is an append-only ledger.
 
 Nested `log_snapshot` values are deliberately thinned to prevent recursive
 growth. Therefore, “recoverable history” means the history reconstructable
@@ -473,10 +489,18 @@ metadata. It is not an immutable audit log, and it is not permission to
 restore an arbitrary intermediate Memory version. Restoration always ends at
 an exact retained checkpoint boundary.
 
-Selecting `KEEP ALL` in the TUI or passing `--keep` leaves every currently
-visible checkpoint file in place and appends only the pre-revert recovery
-checkpoint. This changes retention, not the restored Context snapshot or the
-ability of command-unit Undo to reverse the Revert.
+The default `KEEP ALL` choice, or the compatible explicit `--keep` spelling,
+leaves every currently visible checkpoint file in place and appends only the
+pre-Revert recovery checkpoint. This changes retention, not the restored
+Context snapshot or the ability of command-unit Undo to reverse the Revert.
+
+Discard is therefore not immediate unrecoverable erasure: the newer files
+leave the active directory, but the new recovery checkpoint retains their
+supported flattened metadata and the receipt spells the exact
+`mem revert RECOVERY --discard-newer` reconstruction route. It is still not an
+immutable archive. Nested snapshots are deliberately thinned, so a person who
+must preserve every checkpoint as an independently active boundary should use
+the keep-all default rather than relying on later recovery metadata.
 
 Revert treats checkpoint snapshots as direct persistence records. It rebuilds
 them without resolving embedded Contexts or MemoryRef targets, so an

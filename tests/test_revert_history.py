@@ -65,7 +65,7 @@ def test_bare_revert_uses_picker_and_exact_returned_uid(
     def choose(entries, *, context_name, mode, **kwargs):
         assert context_name == "notes"
         assert mode == "revert"
-        assert kwargs["keep_history"] is False
+        assert kwargs["keep_history"] is True
         return HistorySelectionReceipt(
             context_name=context_name,
             checkpoint_uid=init_uid,
@@ -112,7 +112,7 @@ def test_bare_revert_opens_the_current_context_history_directly(
         "context_locator": "notes",
         "title": "REVERT",
         "mode": "revert",
-        "keep_history": False,
+        "keep_history": True,
     }
     assert "Revert cancelled" in result.output
 
@@ -186,6 +186,59 @@ def test_revert_tui_keep_choice_preserves_newer_checkpoint_files(
     assert {entry["uid"] for entry in before} <= after_uids
 
 
+def test_exact_revert_keeps_all_checkpoint_files_by_default(isolated_store):
+    invoke("init", "notes")
+    invoke("add", "first")
+    invoke("add", "second")
+    store = MemoryStore()
+    before = store.list_checkpoints("notes")
+    target_uid = before[-1]["uid"]
+
+    result = invoke("revert", target_uid[:8])
+
+    assert result.exit_code == 0, result.output
+    after_uids = {entry["uid"] for entry in store.list_checkpoints("notes")}
+    assert {entry["uid"] for entry in before} <= after_uids
+
+
+def test_discard_newer_removes_active_files_but_retains_recovery_snapshot(
+    isolated_store,
+):
+    invoke("init", "notes")
+    invoke("add", "first")
+    invoke("add", "second")
+    store = MemoryStore()
+    before = store.list_checkpoints("notes")
+    target_uid = before[-1]["uid"]
+    newer_uids = {entry["uid"] for entry in before[:-1]}
+
+    result = invoke("revert", target_uid[:8], "--discard-newer")
+
+    assert result.exit_code == 0, result.output
+    after = store.list_checkpoints("notes")
+    after_uids = {entry["uid"] for entry in after}
+    assert target_uid in after_uids
+    assert not newer_uids & after_uids
+    recovery = next(entry for entry in after if entry["command"] == "revert")
+    assert recovery["args"]["keep_history"] is False
+    assert {entry["uid"] for entry in recovery["args"]["log_snapshot"]} == {
+        entry["uid"] for entry in before
+    }
+    assert "--discard-newer" in result.output
+
+    recovered = invoke(
+        "revert",
+        recovery["uid"][:8],
+        "--discard-newer",
+    )
+
+    assert recovered.exit_code == 0, recovered.output
+    recovered_uids = {
+        entry["uid"] for entry in store.list_checkpoints("notes")
+    }
+    assert {entry["uid"] for entry in before} <= recovered_uids
+
+
 def test_natural_language_revert_searches_then_requires_picker_enter(
     isolated_store,
     monkeypatch,
@@ -206,7 +259,7 @@ def test_natural_language_revert_searches_then_requires_picker_enter(
 
     def choose(entries, *, context_name, mode, **kwargs):
         assert [entry.uid for entry in entries] == [init_uid]
-        assert kwargs["keep_history"] is False
+        assert kwargs["keep_history"] is True
         return HistorySelectionReceipt(
             context_name=context_name,
             checkpoint_uid=entries[0].uid,

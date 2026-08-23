@@ -506,7 +506,10 @@ def _restored_command(unit: ContextCommandUnit) -> str:
         if command is not None:
             return command
     if unit.command == "revert" and isinstance(args.get("target_uid"), str):
-        return f"mem revert {_command_arg(args['target_uid'])}"
+        # Legacy Revert receipts predate the keep-all default, so a missing
+        # policy still describes the old explicit discard behavior faithfully.
+        policy = "--keep" if args.get("keep_history") is True else "--discard-newer"
+        return f"mem revert {_command_arg(args['target_uid'])} {policy}"
     if unit.command == "atomize":
         if context_name is not None:
             if unit.changes and unit.changes[0].before is None:
@@ -696,6 +699,6 @@ def render_revert_receipt(
         dim=True,
     )
     typer.secho(
-        f"Exact recovery checkpoint: mem revert {recovery.uid[:8]}",
+        f"Exact recovery checkpoint: mem revert {recovery.uid[:8]} --discard-newer",
         dim=True,
     )

@@ -117,6 +117,7 @@ def test_revert_reports_target_action_and_removed_content(isolated_store):
     assert f'- [{removed_uid}] Memory: "remove this"' in result.output
     assert "Undo command: mem undo" in result.output
     assert "Exact recovery checkpoint: mem revert" in result.output
+    assert "--discard-newer" in result.output
 
 
 def test_undo_of_revert_names_revert_as_the_action(isolated_store):
@@ -129,7 +130,7 @@ def test_undo_of_revert_names_revert_as_the_action(isolated_store):
     result = invoke("undo")
 
     assert result.exit_code == 0
-    assert f"Undid command: mem revert {init_uid}" in result.output
+    assert f"Undid command: mem revert {init_uid} --keep" in result.output
     assert "Affected Memories: 1 · + 1 added" in result.output
     assert "restore me" not in result.output
 
@@ -400,7 +401,7 @@ def _command_unit(
         (
             "revert",
             {"target_uid": "target-checkpoint-uid"},
-            "mem revert target-checkpoint-uid",
+            "mem revert target-checkpoint-uid --discard-newer",
         ),
         (
             "atomize",

@@ -8887,7 +8887,7 @@ class MemoryStore:
         self,
         ctx_name: str,
         uid_prefix: str,
-        keep_history: bool = False,
+        keep_history: bool = True,
         *,
         expected_context_uid: str | None = None,
         expected_context_digest: str | None = None,
@@ -8918,12 +8918,11 @@ class MemoryStore:
     ) -> tuple[Checkpoint, Checkpoint]:
         """Revert context to a checkpoint. Returns (pre_revert_cp, target_cp).
 
-        By default, checkpoints newer than the target are removed and the
-        pre-revert snapshot is appended as the new head. If the target is itself
-        a pre-revert checkpoint carrying a log_snapshot, the full original log
-        is rebuilt from that snapshot instead of just truncating.
-
-        Pass keep_history=True to leave all checkpoint files untouched.
+        By default, all checkpoint files remain active and the pre-revert
+        snapshot is appended as the new head. Pass ``keep_history=False`` to
+        remove checkpoints newer than the target. If that target is itself a
+        pre-revert checkpoint carrying a log_snapshot, discard mode rebuilds
+        the full original log from that snapshot instead of just truncating.
         """
         entries = self.list_checkpoints(ctx_name)  # captured before any mutations
         # Preconditions and the recovery snapshot concern the directly owned
@@ -9005,6 +9004,7 @@ class MemoryStore:
             command="revert",
             args={
                 "target_uid": target_data["uid"],
+                "keep_history": keep_history,
                 "log_snapshot": thin_entries,
             },
             description=message,
