@@ -40,6 +40,10 @@
       "docs/mem-compare-design-rationale.md",
       "docs/session-endpoint-setup-design-rationale.md"
     ],
+    "copy": [
+      "docs/copy-callable-boundary-matrix.md",
+      "docs/memory-transfer-design-rationale.md"
+    ],
     "config": [],
     "contexts": [
       "docs/context-listing-design-rationale.md"
@@ -58,6 +62,7 @@
       "docs/resolution-lifecycle-design-rationale.md"
     ],
     "delete": [
+      "docs/delete-callable-boundary-matrix.md",
       "docs/unified-delete-selector-design-rationale.md"
     ],
     "diff": [
@@ -164,6 +169,10 @@
       "docs/context-locator-design-rationale.md",
       "docs/execution-receipt-review-lifecycle-design-rationale.md"
     ],
+    "move": [
+      "docs/move-callable-boundary-matrix.md",
+      "docs/memory-transfer-design-rationale.md"
+    ],
     "profile": [
       "docs/context-name-portability-design-rationale.md",
       "docs/mem-profile-design-rationale.md",
@@ -189,7 +198,9 @@
       "docs/memory-reference-embed-semantics-design-rationale.md",
       "docs/reference-callable-boundary-matrix.md"
     ],
-    "rename": [],
+    "rename": [
+      "docs/mem-rename-design-rationale.md"
+    ],
     "replace": [
       "docs/replace-callable-boundary-matrix.md",
       "docs/search-find-replace-design-rationale.md"
