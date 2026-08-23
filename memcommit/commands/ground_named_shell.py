@@ -975,7 +975,7 @@ def _proposal_item_effects(
         return (
             f"Selected Memory: {alias}",
             f"USE: {before} -> {use}",
-            "Future Fit and Ground Distill runs freeze this new participation set.",
+            "Future Fit and Ground Distill runs use this participation set.",
         )
     if proposal.kind == "REVIEW_ITEM":
         return _review_item_effects(session, proposal)
@@ -2182,9 +2182,9 @@ def run_named_ground_shell(
             draft_queue_stale["value"] = True
         conversation.append("YOU · " + submitted_text)
         conversation.append(
-            "DIRECT WORDING FROZEN\n"
+            "DIRECT EDIT READY\n"
             "  The edited text was not rewritten by the provider.\n"
-            "  Press Enter on the exact command to save this wording."
+            "  Review the command below, then press Enter to save it."
         )
         suspended_message["value"] = ""
         pending_inline_edit["value"] = (

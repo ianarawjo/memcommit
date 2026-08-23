@@ -104,7 +104,10 @@ def context_subtree_names(tree: ContextTree, name: str) -> tuple[str, ...]:
     """Return one frozen lexical subtree in visible depth-first order."""
 
     if name not in tree.parent_by_name:
-        raise ValueError("Context subtree root is outside the frozen catalog.")
+        raise ValueError(
+            "The selected Context is no longer available. "
+            "Reopen the operation and select it again."
+        )
     names: list[str] = []
     pending = [name]
     while pending:

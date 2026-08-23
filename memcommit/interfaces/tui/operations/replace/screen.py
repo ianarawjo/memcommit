@@ -142,7 +142,7 @@ def _exact_review(plan: FrozenReplacePlan) -> ExactCommandReview:
             f"{sum(bool(context.changed_matches) for context in plan.contexts)} "
             "changed Context(s)."
         ),
-        "Reject the command if any frozen Context or namespace membership changed.",
+        "Apply only if the selected Contexts are unchanged.",
     )
     return ExactCommandReview(tuple(argv), effects)
 
@@ -351,7 +351,7 @@ def run_replace_tui(
         except (OSError, RuntimeError, TypeError, ValueError) as error:
             status = safe_terminal_text(str(error)).upper()
             return "HANDLED"
-        status = "APPLIED" if applied.applied else "COMPLETE · NO CHANGES"
+        status = "APPLIED" if applied.applied else "NO CHANGES"
         return "HANDLED"
 
     def move_target(_event, delta):

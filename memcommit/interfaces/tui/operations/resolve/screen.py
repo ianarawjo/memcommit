@@ -252,10 +252,11 @@ def resolve_candidate_exact_review(
     return ExactCommandReview(
         argv=_candidate_argv(analysis, candidate),
         effects=(
-            f"Frozen Context revision · {analysis.frame.revision}.",
+            f"Context revision · {analysis.frame.revision}.",
+            "Apply will stop if the Context has changed.",
             f"Verified automatic plan · {candidate.uid}.",
             *effect_lines,
-            "The complete post-image independently Fits as YES.",
+            "The proposed result independently Fits as YES.",
             "Apply creates one checkpoint; recovery is mem undo.",
         ),
     )

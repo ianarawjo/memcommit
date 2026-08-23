@@ -120,7 +120,7 @@ def cmd(
         Optional[str],
         typer.Option(
             "--expected-revision",
-            help="Exact frozen revision printed by the reviewed analysis",
+            help="Reviewed Context revision required to apply",
         ),
     ] = None,
     apply_now: Annotated[
@@ -204,7 +204,7 @@ def cmd(
         )
         with CommandProgress(
             "RESOLVE",
-            "judging, generating, and independently verifying the complete frame",
+            "building and checking repair",
             total=1,
         ) as progress:
             analysis = run_resolve(
@@ -214,7 +214,7 @@ def cmd(
                 provider_factory=connect_semantic_provider,
                 expected_revision=expected_revision,
             )
-            progress.update("verified proposal ready", step=1)
+            progress.update("repair ready", step=1)
 
         if apply_now:
             assert candidate_uid is not None

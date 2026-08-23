@@ -877,7 +877,7 @@ def quality_audit_resolution_view(
     total = len(items)
     check_lines = [
         (
-            f"{kind.upper()} · COMPLETE · {counts[kind]} "
+            f"{kind.upper()} · FINISHED · {counts[kind]} "
             f"{'finding' if counts[kind] == 1 else 'findings'}"
         )
         for kind in QUALITY_AUDIT_KINDS
@@ -891,7 +891,7 @@ def quality_audit_resolution_view(
     if conformance is not None:
         check_total = 4
         check_lines.append(
-            "CONFORMANCE · COMPLETE · "
+            "CONFORMANCE · FINISHED · "
             f"{len(conformance.context_judgments)} Rules · "
             f"{conformance.issue_count} issues"
         )

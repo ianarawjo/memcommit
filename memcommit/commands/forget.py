@@ -344,7 +344,7 @@ def cmd(
     if not result.applied:
         annotate_command_outcome("NO_CHANGE")
         typer.echo(
-            "FORGET COMPLETE · SOURCE "
+            "FORGET · NO CHANGE · SOURCE "
             f"{safe_terminal_text(apply_receipt.source_name)}"
         )
         typer.echo("OUTCOME · NO CHANGE · Context unchanged · no checkpoint")

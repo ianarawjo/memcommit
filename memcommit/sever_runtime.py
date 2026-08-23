@@ -391,7 +391,7 @@ def execute_sever_analysis(
         )
         frozen = input_port.last_frozen
         frame = (
-            f" Frozen frame: {len(frozen.source.memories)} Source Memories x "
+            f" Prepared input: {len(frozen.source.memories)} Source Memories x "
             f"{len(frozen.criteria.memories)} Criteria Memories."
             if frozen is not None
             else ""

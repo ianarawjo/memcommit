@@ -115,7 +115,7 @@ def cmd(
         typer.Option(
             "--apply",
             metavar="PLAN_DIGEST",
-            help="Apply only if the newly frozen plan has this reviewed digest",
+            help="Reviewed plan digest required to apply",
         ),
     ] = None,
     plain: Annotated[

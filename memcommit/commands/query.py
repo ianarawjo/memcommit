@@ -103,7 +103,7 @@ def _query_ordinary_context(
             provider_factory=connect_codex_chatgpt_provider,
             observer=lambda stage: (
                 progress.update(
-                    "answering from complete frozen corpus",
+                    "answering question",
                     step=2,
                 )
                 if stage == "ANSWERING"

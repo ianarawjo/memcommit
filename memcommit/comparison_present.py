@@ -376,7 +376,7 @@ def render_comparison_receipt(
     counts = Counter(relation.kind for relation in analysis.relations)
     lines = [
         (
-            "COMPARE COMPLETE · "
+            "COMPARE · "
             f"{display_escape_text(reference.context_name)} ↔ "
             f"{display_escape_text(compared.context_name)}"
         ),

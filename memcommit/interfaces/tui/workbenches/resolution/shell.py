@@ -158,7 +158,7 @@ def run_resolution_workbench(
             right_margins=[WrappedScrollbarMargin(display_arrows=True)],
         ),
         title=lambda: (
-            "VIEWER · COMPLETE REPORT"
+            "VIEWER · REPORT"
             if opened_item() is None
             else spec.detail_title
         ),

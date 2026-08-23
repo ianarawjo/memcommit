@@ -101,7 +101,7 @@ def context_reference_exact_command_review(
     scope_text = (
         "lexical descendants and local embedded Context contents"
         if request.include_descendants
-        else "only the Source Context's direct frame; embedded rows stay opaque"
+        else "only the Source Context's direct contents; embedded rows stay opaque"
     )
     return ExactCommandReview(
         argv=(
@@ -215,12 +215,12 @@ def run_reference_tui(
             HorizontalChoiceOption(
                 "DIRECT",
                 "DIRECT · -d",
-                "Freeze only the selected Context's direct frame.",
+                "Capture only the selected Context.",
             ),
             HorizontalChoiceOption(
                 "RECURSIVE",
                 "RECURSIVE · -r",
-                "Also freeze lexical descendants and local embedded Contexts.",
+                "Also include descendants and local embedded Contexts.",
             ),
         ),
         selected_uid="DIRECT",
@@ -272,8 +272,8 @@ def run_reference_tui(
             review = render_exact_command_review(exact)
             action = "PRESS ENTER TO RETAIN THE REVIEWED SNAPSHOT"
         except ValueError as error:
-            review = f"INCOMPLETE · {display_escape_text(str(error))}"
-            action = "COMPLETE THE SOURCE SELECTION FIRST"
+            review = f"SOURCE REQUIRED · {display_escape_text(str(error))}"
+            action = "SELECT THE SOURCE FIRST"
         return [
             ("", review + "\n\n"),
             ("[SetCursorPosition]", "") if focused else ("", ""),

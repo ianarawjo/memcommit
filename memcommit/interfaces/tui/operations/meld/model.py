@@ -32,7 +32,10 @@ class MeldTuiSetup:
         ):
             raise ValueError("Meld setup requires distinct available A/B defaults.")
         if not self.eligible_target_names <= set(self.names):
-            raise ValueError("Meld Result targets are outside the frozen catalog.")
+            raise ValueError(
+                "A selected Meld Result target is no longer available. "
+                "Reopen Meld and select it again."
+            )
         labels = dict(self.annotations)
         if len(labels) != len(self.annotations) or set(labels) - set(self.names):
             raise ValueError("Meld setup annotations are outside its catalog.")

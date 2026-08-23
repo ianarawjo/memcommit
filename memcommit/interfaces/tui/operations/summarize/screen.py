@@ -56,7 +56,10 @@ def run_summarize_tui(
     while True:
         context_name = current_request.context_locator
         if context_name is None or context_name not in setup.names:
-            raise ValueError("The staged Summarize Context left the frozen catalog.")
+            raise ValueError(
+                "The selected Summarize Context is no longer available. "
+                "Reopen Summarize and select it again."
+            )
 
         def project_clipboard(
             focused_uid: str | None,

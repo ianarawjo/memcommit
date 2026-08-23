@@ -116,7 +116,10 @@ class ContextSelectionState:
         """Choose or toggle one name and report whether the checked set changed."""
 
         if name not in self.catalog:
-            raise ValueError("Selected Context is outside the frozen catalog.")
+            raise ValueError(
+                "The selected Context is no longer available. "
+                "Reopen the operation and select it again."
+            )
         if not self.multiple:
             changed = self._selected_order != [name]
             self._selected_order = [name]
@@ -132,7 +135,10 @@ class ContextSelectionState:
 
         chosen = list(dict.fromkeys(names))
         if any(name not in self.catalog for name in chosen):
-            raise ValueError("Context selections are outside the frozen catalog.")
+            raise ValueError(
+                "One or more selected Contexts are no longer available. "
+                "Reopen the operation and select them again."
+            )
         if not self.multiple and len(chosen) != 1:
             raise ValueError("Single Context selection requires exactly one value.")
         changed = chosen != self._selected_order
@@ -154,7 +160,10 @@ class ContextSelectionState:
             or anchor_name not in group
             or any(name not in self.catalog for name in group)
         ):
-            raise ValueError("Context selection group is outside the frozen catalog.")
+            raise ValueError(
+                "This Context group is no longer available. "
+                "Reopen the operation and select it again."
+            )
         if not self.multiple:
             return self.choose(anchor_name)
 

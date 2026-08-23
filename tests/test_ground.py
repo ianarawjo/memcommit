@@ -1935,7 +1935,10 @@ def test_named_ground_apply_rejects_tampered_frozen_version_guards(
         lambda _argv: pytest.fail("tampered command must not run"),
     )
 
-    with pytest.raises(GroundError, match="version guard|Context guards"):
+    with pytest.raises(
+        GroundError,
+        match="version guard|Ground revision check|Context revision checks",
+    ):
         ground_command._apply_named_ground_proposal(session, tampered)
 
     assert store.load_ground_session(session.contract_name) == session
@@ -2235,7 +2238,7 @@ def test_target_focus_renders_one_compact_read_only_ground_screen(
     assert "MEM UNDERSTANDS" in rendered
     assert "[BLOCKED]" in rendered
     assert "SUPPORTED SLICE" in rendered
-    assert "COMPLETE TARGET" in rendered
+    assert "FULL TARGET" in rendered
     assert "> 3  BOTH" in rendered
     assert (
         "RULES 1 (1 proposed) · MEMORIES 1 (1 proposed) · ACCEPTED 0"

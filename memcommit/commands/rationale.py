@@ -116,7 +116,7 @@ def cmd(
         typer.Option(
             "--verbose",
             "-v",
-            help="Show complete Context, Memory, and checkpoint UIDs",
+            help="Show full Context, Memory, and checkpoint UIDs",
         ),
     ] = False,
     limit: Annotated[
@@ -125,7 +125,7 @@ def cmd(
             "--limit",
             "-n",
             help=(
-                "Maximum complete natural-language provenance length "
+                "Maximum natural-language provenance length "
                 f"(1-{MAX_RATIONALE_PROVENANCE_LIMIT})"
             ),
         ),
@@ -265,7 +265,7 @@ def cmd(
         )
         with progressing_provider_factory(
             "RATIONALE",
-            "synthesizing complete provenance",
+            "writing rationale",
             connect_semantic_provider,
         ) as provider_factory:
             projection = synthesize_rationale_provenance(

@@ -152,7 +152,7 @@ def run_endpoint_setup(
         )
         selector.frame.title = lambda uid=role.uid: safe_terminal_text(
             spec.role_label(selected_mode_uid(), uid)
-            + (" · FROZEN" if role_by_uid[uid].fixed else "")
+            + (" · FIXED" if role_by_uid[uid].fixed else "")
         )
         selectors[role.uid] = selector
     reach_states = {

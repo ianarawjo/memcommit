@@ -148,7 +148,7 @@ def test_sever_start_reports_real_blocking_stages(isolated_store, monkeypatch):
     )
 
     assert events == [
-        ("start", "SEVER", "freezing source and criteria", 3),
+        ("start", "SEVER", "preparing source and criteria", 3),
         ("update", "connecting provider", 2),
         ("update", "analyzing 1 source x 1 criteria", 3),
         ("close",),
@@ -168,7 +168,7 @@ def test_sever_provider_failure_reports_the_unsaved_frozen_frame(isolated_store)
 
     with pytest.raises(
         sever_command.SeverCommandError,
-        match=r"Frozen frame: 2 Source Memories x 1 Criteria Memories",
+        match=r"Prepared input: 2 Source Memories x 1 Criteria Memories",
     ):
         sever_command._start(
             store=store,

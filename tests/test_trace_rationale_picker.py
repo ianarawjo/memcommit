@@ -280,8 +280,8 @@ def test_interactive_trace_opens_vertical_viewer_only_when_requested(
     assert bare.exit_code == 0, bare.output
     assert explicit.exit_code == 0, explicit.output
     assert explicit_tui.exit_code == 0, explicit_tui.output
-    assert "TRACE COMPLETE" in bare.output
-    assert "TRACE COMPLETE" in explicit.output
+    assert "TRACE · notes" in bare.output
+    assert "TRACE · notes" in explicit.output
     assert viewed == [("notes", target.uid)]
 
 

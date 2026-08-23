@@ -245,13 +245,13 @@ class MemoryStoreResolvePort:
             or context_record_digest(current) != frame.context_digest
         ):
             raise ResolveConflictError(
-                "The Resolve Context changed after its semantic frame was frozen."
+                "The Resolve Context changed during review. Reopen Resolve."
             )
         return current
 
     def revalidate(self, frame: FrozenResolveFrame) -> None:
         if not isinstance(frame, FrozenResolveFrame):
-            raise TypeError("Resolve revalidation requires a frozen frame.")
+            raise TypeError("Resolve revalidation requires a reviewed frame.")
         access = self._revalidated_access(frame)
         if access.view is not None:
             permissions = set(access.view.grant.permissions)
@@ -300,12 +300,12 @@ class MemoryStoreResolvePort:
         if not isinstance(frame, FrozenResolveFrame) or not isinstance(
             candidate, ResolveCandidate
         ):
-            raise TypeError("Resolve Apply requires a frozen frame and candidate.")
+            raise TypeError("Resolve Apply requires a reviewed frame and candidate.")
         if any(
             effect.kind not in frame.allowed_effects for effect in candidate.effects
         ):
             raise ResolveAuthorityError(
-                "Resolve candidate exceeds its frozen effect capabilities."
+                "Resolve candidate exceeds the reviewed effect capabilities."
             )
         if any(
             effect.owner_context_uid != frame.context_uid
@@ -313,7 +313,7 @@ class MemoryStoreResolvePort:
             for effect in candidate.effects
         ):
             raise ResolveConflictError(
-                "Resolve candidate names an owner outside its frozen Context."
+                "Resolve candidate names an owner outside its reviewed Context."
             )
         access = self._revalidated_access(frame)
         required_permissions = self._required_permissions(candidate)

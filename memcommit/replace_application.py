@@ -319,7 +319,7 @@ def plan_replace(request: ReplaceRequest, *, port: ReplacePort) -> FrozenReplace
     )
     frozen = port.freeze(request)
     if not isinstance(frozen, FrozenReplaceSource):
-        raise ReplaceError("Replace source returned an invalid frozen scope.")
+        raise ReplaceError("Replace could not prepare the selected search area.")
     context_plans: list[ReplaceContextPlan] = []
     for context in frozen.contexts:
         changes: list[ReplaceMemoryChange] = []

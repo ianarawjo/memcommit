@@ -52,7 +52,10 @@ def run_distill_tui(
     while True:
         context_name = current_request.context_locator
         if context_name is None or context_name not in setup.names:
-            raise ValueError("The staged Distill Context left the frozen catalog.")
+            raise ValueError(
+                "The selected Distill Context is no longer available. "
+                "Reopen Distill and select it again."
+            )
 
         def clipboard_projector(
             focused_uid: str | None,

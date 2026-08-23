@@ -194,7 +194,7 @@ def render_grounding_session(
     elif session.state == "READY_TO_APPLY":
         lines.extend(
             [
-                "Apply the exact complete proposal with:",
+                "Apply the reviewed proposal with:",
                 "  mem atomize --accept-grounding",
                 "Or continue discussing with: mem atomize --reply \"...\"",
             ]

@@ -932,7 +932,7 @@ def _apply_show_result(
                 role="STATUS",
                 text="\n".join(
                     [
-                        "SHOW COMPLETE",
+                        "RESULT SHOWN",
                         f"  {format_exact_command(proposal.review)}",
                         "",
                         "ACTUAL OUTPUT",

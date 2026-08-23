@@ -44,7 +44,7 @@ class DistillTuiSetup:
         if self.memory_loader is not None and not callable(self.memory_loader):
             raise ValueError("Distill TUI Memory loader must be callable.")
         if self.source_locked and self.names != (self.selected_context,):
-            raise ValueError("Locked Distill requires only its frozen Source Context.")
+            raise ValueError("Fixed Distill requires only its selected Source Context.")
 
 
 @dataclass(frozen=True)

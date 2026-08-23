@@ -208,7 +208,7 @@ def run_query_workbench(
     response: QueryWorkbenchResponse | None = None
     viewed_transcript: SavedQueryTranscript | None = None
     answer_focus = QueryAnswerFocus()
-    status = {"value": "READY · ENTER A QUESTION"}
+    status = {"value": "ENTER A QUESTION"}
     copy_receipt: PlainTextClipboardReceipt | None = None
     background_turn: BackgroundExecutorTurn[QueryWorkbenchResponse] = (
         BackgroundExecutorTurn()
@@ -380,35 +380,9 @@ def run_query_workbench(
         right_margins=[ScrollbarMargin(display_arrows=True)],
     )
 
-    def render_header() -> str:
-        if granted_mode():
-            target = selected_query_target()
-            scope = (
-                "FEDERATE DESCENDANTS"
-                if federate_choice.selected_uid == "FEDERATE"
-                else "EXACT VIEW"
-            )
-            return (
-                f" MEM QUERY · INTERACTIVE · {QUERY_VIEW_LABEL}\n "
-                f"{target.public_name} · {scope} · "
-                f"LANGUAGE {safe_terminal_text(initial_language)}"
-            )
-        target_label = (
-            f"PROFILE · {len(context_state.effective_names)} CONTEXTS"
-            if context_state.profile_selected
-            else f"CONTEXTS {len(context_state.effective_names)}"
-        )
-        reach = (
-            "INCLUDE DESCENDANTS"
-            if context_state.reach.include_descendants
-            else "THIS CONTEXT ONLY"
-        )
-        embeds = "FOLLOW EMBEDS" if embed_choice.selected_uid == "FOLLOW" else "EXCLUDE EMBEDS"
-        return f" MEM QUERY · INTERACTIVE · VISIBLE\n {target_label} · {reach} · {embeds}"
-
     header = Window(
-        FormattedTextControl(render_header),
-        height=Dimension.exact(2),
+        FormattedTextControl(" MEM QUERY"),
+        height=Dimension.exact(1),
         dont_extend_height=True,
     )
     question_frame = Frame(
@@ -817,7 +791,7 @@ def run_query_workbench(
             copy_receipt = None
             answer_focus.reset()
             answer_window.vertical_scroll = 0
-            status["value"] = "QUERY COMPLETE"
+            status["value"] = "ANSWER READY"
 
         def fail(error: Exception) -> None:
             detail = " ".join(safe_terminal_text(str(error)).split())

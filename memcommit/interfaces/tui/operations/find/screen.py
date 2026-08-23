@@ -134,7 +134,10 @@ def run_literal_find_tui(
 
     initial_targets = setup.initial_targets if request is None else request.target_names
     if any(name not in setup.names for name in initial_targets):
-        raise ValueError("Find TUI request targets left the frozen catalog.")
+        raise ValueError(
+            "A selected Context is no longer available. "
+            "Reopen Find and select it again."
+        )
 
     mode_choice = _choice(
         ("LITERAL", "LITERAL"),
@@ -149,7 +152,7 @@ def run_literal_find_tui(
     result: LiteralFindResult | None = None
     result_index = 0
     settings_row = 0
-    status = "READY · ENTER A PATTERN"
+    status = "ENTER A PATTERN"
     bindings = KeyBindings()
 
     pattern_area = TextArea(
@@ -209,7 +212,7 @@ def run_literal_find_tui(
 
     def render_results():
         if result is None:
-            return [("", "Enter a pattern to run provider-free Find.")]
+            return [("", "Enter a pattern to search.")]
         return _render_match_content(
             result,
             result_index,
@@ -248,9 +251,12 @@ def run_literal_find_tui(
                 app.layout.focus(scope.input)
             return "HANDLED"
         result_index = 0
+        memory_count = len(result.matches)
+        occurrence_count = result.occurrence_count
         status = (
-            f"COMPLETE · {len(result.matches)} MEMORIES"
-            f" · {result.occurrence_count} OCCURRENCES"
+            f"{memory_count} {'MEMORY' if memory_count == 1 else 'MEMORIES'}"
+            f" · {occurrence_count} "
+            f"{'OCCURRENCE' if occurrence_count == 1 else 'OCCURRENCES'}"
         )
         app.layout.focus(results_control)
         return "HANDLED"
@@ -383,16 +389,8 @@ def run_literal_find_tui(
         event.app.exit(result=None if result is None else LiteralFindTuiOutcome(result))
 
     header = Window(
-        FormattedTextControl(
-            [
-                ("class:report-label", "MEM FIND\n"),
-                (
-                    "class:report-neutral",
-                    "EXACT TEXT OR REGEX · COMPLETE, UNTRUNCATED ROWS",
-                ),
-            ]
-        ),
-        height=Dimension.exact(2),
+        FormattedTextControl([("class:report-label", "MEM FIND")]),
+        height=Dimension.exact(1),
         dont_extend_height=True,
     )
     scope_frame = build_focused_frame(

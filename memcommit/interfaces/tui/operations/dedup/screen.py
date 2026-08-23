@@ -195,7 +195,8 @@ def dedup_exact_review(
     return ExactCommandReview(
         argv=tuple(argv),
         effects=(
-            f"Frozen Context revision · {plan.revision}.",
+            f"Context revision · {plan.revision}.",
+            "Apply will stop if the Context has changed.",
             f"Keep {len(selections)} unchanged existing survivor UID(s).",
             f"Absorb {len(absorbed)} of {member_count} component member UID(s): "
             + ", ".join(absorbed),

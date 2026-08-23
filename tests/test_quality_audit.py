@@ -267,9 +267,9 @@ def test_audit_report_keeps_three_sections_and_type_specific_items():
         "AMBIGUITY",
         "CONFLICT",
     ]
-    assert "DUPLICATES · COMPLETE · 1 finding" in view.overview
-    assert "AMBIGUITIES · COMPLETE · 1 finding" in view.overview
-    assert "CONFLICTS · COMPLETE · 1 finding" in view.overview
+    assert "DUPLICATES · FINISHED · 1 finding" in view.overview
+    assert "AMBIGUITIES · FINISHED · 1 finding" in view.overview
+    assert "CONFLICTS · FINISHED · 1 finding" in view.overview
     assert "AUDITED SOURCE" in view.overview
     assert "FROZEN SOURCE" not in view.overview
     assert [location.role for location in view.context_locations] == [
@@ -447,9 +447,9 @@ def test_review_audit_snapshot_reopens_exact_saved_report(isolated_store):
     assert result.exit_code == 0
     assert "MEM AUDIT" in result.stdout
     assert "SAVED · 3/3 CHECKS" in result.stdout
-    assert "DUPLICATES · COMPLETE · 1 finding" in result.stdout
-    assert "AMBIGUITIES · COMPLETE · 1 finding" in result.stdout
-    assert "CONFLICTS · COMPLETE · 1 finding" in result.stdout
+    assert "DUPLICATES · FINISHED · 1 finding" in result.stdout
+    assert "AMBIGUITIES · FINISHED · 1 finding" in result.stdout
+    assert "CONFLICTS · FINISHED · 1 finding" in result.stdout
 
 
 def test_audit_help_names_all_three_finders():

@@ -1038,7 +1038,7 @@ def cmd(
         if context_name is not None or scope_flags_supplied:
             typer.secho(
                 "Error: CONTEXT and scope flags cannot be used with --paste; "
-                "the copied scope is already frozen.",
+                "the copied result already defines its Contexts and scope.",
                 fg=typer.colors.RED,
                 err=True,
             )

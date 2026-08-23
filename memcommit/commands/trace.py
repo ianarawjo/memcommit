@@ -66,7 +66,7 @@ def render_trace_receipt(report: TraceReport) -> None:
     typer.echo(
         "\n".join(
             [
-                f"TRACE COMPLETE · {display_escape_text(report.context_name)}",
+                f"TRACE · {display_escape_text(report.context_name)}",
                 f"MEMORY · {report.selected_uid}",
                 f"LINEAGE · {len(report.events)} events · "
                 f"{len(report.component_uids)} components",

@@ -77,7 +77,7 @@ def cmd(
             "--recursive",
             "-r",
             help=(
-                "Merge matching lexical descendants by complete relative path, "
+                "Merge matching descendants by the same relative path, "
                 "creating Source-only Target paths"
             ),
         ),
@@ -87,7 +87,7 @@ def cmd(
         typer.Option(
             "--resolve",
             help=(
-                "Resolve one frozen conflict as ID=keep-target or "
+                "Resolve one conflict as ID=keep-target or "
                 "ID=take-source; repeat for every conflict"
             ),
         ),
@@ -218,8 +218,8 @@ def cmd(
             if plan.conflicts and not parsed and bulk is None:
                 render_merge_conflicts_plain(plan)
                 raise MergeError(
-                    "Merge has required conflicts; review the frozen IDs above "
-                    "and choose deterministic resolutions."
+                    "Merge has required conflicts; review the conflict IDs above "
+                    "and choose one resolution for each."
                 )
             result = run_merge(
                 request,

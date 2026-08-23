@@ -42,7 +42,7 @@ def run_forget_review_workbench(
             revision=active_view.revision,
             title="IMPACT · PROPOSED SOURCE REVISION",
             summary=(
-                "These are the exact changes Apply would make to the frozen "
+                "These are the changes Apply would make to the selected "
                 "Source. Nothing has changed yet."
             ),
             changes=forget_memory_changes(review),

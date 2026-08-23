@@ -68,12 +68,12 @@ def cmd(
         Optional[str],
         typer.Option(
             "--expected-revision",
-            help="Exact frozen revision printed by the reviewed plan",
+            help="Reviewed Context revision required to apply",
         ),
     ] = None,
     apply_now: Annotated[
         bool,
-        typer.Option("--apply", help="Apply the exact complete survivor set"),
+        typer.Option("--apply", help="Apply the reviewed survivor decisions"),
     ] = False,
     plain: Annotated[
         bool,

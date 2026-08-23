@@ -47,7 +47,7 @@ def test_describe_returns_one_complete_stable_contract(tmp_path):
             "Changes Target only after every required conflict has KEEP TARGET "
             "or TAKE SOURCE; Source stays unchanged"
         ),
-        "range": "Exact roots or matching lexical descendants by complete relative path",
+        "range": "Exact roots or matching descendants by the same relative path",
         "best_for": (
             "Appending Source-only items or bringing a copied or branched "
             "Context into a selected Target Context without semantic synthesis."

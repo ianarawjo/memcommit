@@ -673,7 +673,7 @@ COMMAND_FORMS = {
         "mem list [context] -R (recursive Context listing)",
         "mem list --copy (copy and stage the current listing)",
         "mem list [context] --copy (copy and stage an explicit listing)",
-        "mem list --paste (reopen the frozen copied result)",
+        "mem list --paste (reopen the copied result)",
     ),
     "lock": (
         "mem lock (lock the current Context)",
@@ -719,7 +719,7 @@ COMMAND_FORMS = {
         "mem merge [source_context] --into [target_context] (compatibility alias)",
         "mem merge [source_context] --keep-target-all (resolve every structural conflict by retaining Target)",
         "mem merge [source_context] --take-source-all (resolve every structural conflict with exact Source values)",
-        "mem merge [source_context] --resolve [conflict_id]=keep-target (repeat one exact frozen decision per conflict)",
+        "mem merge [source_context] --resolve [conflict_id]=keep-target (repeat one reviewed decision per conflict)",
     ),
     "profile": (
         "mem profile (enter the interactive Profile selector in a TTY; list otherwise)",

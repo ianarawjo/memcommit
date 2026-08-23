@@ -26,7 +26,7 @@ def render_conformance(report: ConformanceReport) -> str:
     identity = report.provider_identity
     lines = [
         f"CHECK CONFORMANCE · {report.mode}",
-        "STATUS · COMPLETE",
+        "STATUS · REPORT READY",
         f"SUBJECT · {safe_terminal_text(report.source_label)}",
         f"RULES · {safe_terminal_text(report.rules_label)} · {len(report.rules)}",
         "PROVIDER · " + (identity.display_name() if identity is not None else "UNRECORDED"),
@@ -214,7 +214,7 @@ def cmd(
                 )
         with CommandProgress("CHECK CONFORMANCE", label, total=1) as progress:
             report = run()
-            progress.update("complete", step=1)
+            progress.update("report ready", step=1)
         typer.echo(render_conformance(report))
     except (
         ConformanceError,

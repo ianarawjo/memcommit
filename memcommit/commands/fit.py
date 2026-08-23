@@ -73,7 +73,7 @@ def cmd(
         Optional[list[str]],
         typer.Option(
             "--background",
-            help="Repeatable frozen background proposition used as Context K",
+            help="Repeatable background proposition used as Context K",
         ),
     ] = None,
     memory_sources: Annotated[
@@ -153,7 +153,7 @@ def cmd(
                         provider_factory=connect_semantic_provider,
                     )
                 with CommandProgress(
-                    "FIT", "checking the complete Ground graph", total=1
+                    "FIT", "checking Ground", total=1
                 ) as progress:
                     result = run_fit_with_store(
                         request,
@@ -199,7 +199,7 @@ def cmd(
             next_request: FitPropositionsRequest | FitStoredSourcesRequest,
         ):
             with CommandProgress(
-                "FIT", "judging the complete proposition set", total=1
+                "FIT", "checking propositions", total=1
             ) as progress:
                 result = (
                     run_stored_source_fit(
@@ -213,7 +213,7 @@ def cmd(
                         provider_factory=connect_semantic_provider,
                     )
                 )
-                progress.update("judgment complete", step=1)
+                progress.update("judgment ready", step=1)
             return result
 
         render_proposition_fit_plain(

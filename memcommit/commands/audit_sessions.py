@@ -56,12 +56,12 @@ def audit_session_entries(
                     (
                         f"Audit {session.uid}",
                         f"Created {session.created_at}",
-                        f"Frozen Source {session.source.context_name}",
+                        f"Source {session.source.context_name}",
                         f"Direct Memories {len(session.source.memories)}",
                         (
                             "Duplicate, Ambiguity, Conflict"
                             + (", and Conformance" if session.conformance is not None else "")
-                            + " checks: COMPLETE"
+                            + " checks: FINISHED"
                         ),
                         "Source: UNCHANGED BY AUDIT",
                     )

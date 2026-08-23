@@ -393,10 +393,9 @@ def atomize_session_entries(
                         if output_name == analysis.context_name
                         else " · REQUIRE NEW\n"
                     )
-                    + "Picker selection uses the frozen analysis UID and "
-                    "revalidates it without provider or refresh. The shown "
-                    "argv is only the nearest public route and is not "
-                    "executed by the picker."
+                    + "Opening this analysis checks that it is still current. "
+                    "The shown command is a reference route; the picker does "
+                    "not run it."
                 ),
                 reopen_argv=argv,
             )

@@ -66,7 +66,7 @@ def test_replace_apply_requires_and_consumes_exact_reviewed_digest(
     )
 
     assert applied.exit_code == 0, applied.output + applied.stderr
-    assert "REPLACE COMPLETE" in applied.output
+    assert "REPLACE APPLIED" in applied.output
     assert "STATUS · APPLIED · MATCHED 1 · CHANGED 1 · OCCURRENCES 2" in applied.output
     assert _memory_contents(store, context.name) == ("new and new",)
 

@@ -920,7 +920,7 @@ def run_command_wait(
         if background.request_close():
             close_requested["value"] = True
             status_message["value"] = (
-                "Close requested; waiting for the current frozen work to finish."
+                "Close requested; waiting for the current operation to finish."
             )
             record_study_action(
                 "TUI_ACTION",

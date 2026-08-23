@@ -401,11 +401,11 @@ _OPERATIONS = (
         "Source Context -> selected Target Context",
         ExecutionKind.DETERMINISTIC,
         "Changes Target only after every required conflict has KEEP TARGET or TAKE SOURCE; Source stays unchanged",
-        "Exact roots or matching lexical descendants by complete relative path",
+        "Exact roots or matching descendants by the same relative path",
     ),
     _operation(
         "profile",
-        "Create, select, and manage complete local MemoryStore Profiles. Profiles "
+        "Create, select, and manage local MemoryStore Profiles. Profiles "
         "can be renamed or permanently removed, and Study headings can be renamed "
         "through the picker or explicit profile subcommands.",
         "Profile registry <-> Profile administration",

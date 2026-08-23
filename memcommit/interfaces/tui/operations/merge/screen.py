@@ -65,9 +65,9 @@ def merge_exact_command_review(
     """Describe one exact deterministic union and its complete reach boundary."""
 
     scope = (
-        "matching lexical descendants by complete relative path"
+        "matching lexical descendants by relative path"
         if recursive
-        else "the two exact Context roots only"
+        else "the two selected Context roots only"
     )
     target_effect = (
         f"Target subtree '{target_name}' may update existing matching Contexts "
@@ -107,15 +107,15 @@ def merge_plan_exact_command_review(plan: FrozenMergePlan) -> ExactCommandReview
     return ExactCommandReview(
         argv=base.argv,
         effects=(
-            f"Apply the frozen {plan.request.reach.value} plan to "
+            f"Apply this {plan.request.reach.value} plan to "
             f"{len(plan.contexts)} Context mapping(s).",
             f"Create {created} Source-only Target path(s).",
             f"Add {merge_summary(plan.additions)}; retain "
             f"{len(plan.unchanged)} unchanged item(s); resolve "
             f"{len(plan.conflicts)} conflict(s); record "
             f"{len(plan.contexts)} checkpoint(s).",
-            "Revalidate every frozen identity, digest, and subtree membership before writing.",
-            "Publish the complete plan atomically or publish none of it.",
+            "Apply only if the selected Contexts are unchanged.",
+            "Save all changes together, or save none.",
         ),
     )
 
@@ -233,7 +233,7 @@ def run_merge_plan_review(
             wrap_lines=True,
             right_margins=[ScrollbarMargin(display_arrows=True)],
         ),
-        title="PLAN · COMPLETE CONTEXT MAPPINGS",
+        title="PLAN · CONTEXT MAPPINGS",
         is_focused=lambda: get_app().layout.has_focus(viewer_control),
         height=Dimension(min=18, weight=1),
     )
@@ -297,11 +297,8 @@ def run_merge_plan_review(
         height=Dimension(min=15, max=18),
     )
     header = Window(
-        FormattedTextControl(
-            " MEM MERGE · REVIEW PLAN\n"
-            " DETERMINISTIC · NO PROVIDER · COMPLETE PLAN BEFORE APPLY"
-        ),
-        height=Dimension.exact(2),
+        FormattedTextControl(" MEM MERGE · REVIEW PLAN"),
+        height=Dimension.exact(1),
         dont_extend_height=True,
     )
 
@@ -312,7 +309,7 @@ def run_merge_plan_review(
             return " Enter/Esc/Q close · durable receipt shown above"
         if get_app().layout.has_focus(viewer_control):
             return " ↑/↓ mapping · Home/End · Tab exact plan · Esc cancel"
-        return " Enter apply frozen plan · ↑ Viewer · Tab Viewer · Esc cancel"
+        return " Enter apply plan · ↑ Viewer · Tab Viewer · Esc cancel"
 
     footer = Window(
         FormattedTextControl(render_footer),

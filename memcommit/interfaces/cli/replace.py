@@ -51,7 +51,7 @@ def render_replace_plan(plan: FrozenReplacePlan) -> str:
 
 def render_replace_apply_result(result: ReplaceApplyResult) -> str:
     lines = [
-        "REPLACE COMPLETE" if result.applied else "REPLACE COMPLETE · NO CHANGES",
+        "REPLACE APPLIED" if result.applied else "REPLACE · NO CHANGES",
         f"PLAN DIGEST · {result.plan_digest}",
         (
             f"STATUS · {'APPLIED' if result.applied else 'NO-OP'}"

@@ -129,7 +129,7 @@ def choose_forget_setup(
             ("", f"  SOURCE · {selected} · THIS CONTEXT ONLY\n"),
             (
                 "",
-                "  The complete direct Source and instruction run in one provider turn.",
+                "  All selected Source Memories and the instruction run together.",
             ),
         ]
 

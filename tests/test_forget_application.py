@@ -150,7 +150,7 @@ def test_forget_all_keep_is_a_visible_noop_without_a_checkpoint(
 
     assert result.exit_code == 0, result.output + result.stderr
     assert (
-        "FORGET COMPLETE · SOURCE forget/noop\n"
+        "FORGET · NO CHANGE · SOURCE forget/noop\n"
         "OUTCOME · NO CHANGE · Context unchanged · no checkpoint"
     ) in result.output
     assert store.list_checkpoints(context.name) == before

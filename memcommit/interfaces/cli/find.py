@@ -40,8 +40,7 @@ def literal_find_result_header_lines(
             f" · {'FOLLOW EMBEDS' if result.request.follow_embeds else 'EXCLUDE EMBEDS'}"
         ),
         (
-            f"STATUS · COMPLETE"
-            f" · SCANNED {result.scanned_item_count}"
+            f"SCANNED {result.scanned_item_count}"
             f" · MATCHED {len(result.matches)}"
             f" · OCCURRENCES {result.occurrence_count}"
             f"{showing}"

@@ -206,7 +206,7 @@ def forget_cmd(
         )
         with CommandProgress(
             "IMPACT · FORGET",
-            "freezing the complete Source frame",
+            "preparing source",
             total=2,
         ) as progress:
             result = run_forget_analysis(
@@ -422,7 +422,7 @@ def distill_cmd(
             store.assert_context_creatable(save_as)
         with CommandProgress(
             "IMPACT · DISTILL",
-            "freezing the complete Source frame",
+            "preparing source",
             total=2,
         ) as progress:
             if save_as is not None:
@@ -719,7 +719,7 @@ def elaborate_cmd(
             resolved_target = endpoints.target_name
         with CommandProgress(
             "IMPACT · ELABORATE",
-            "freezing source and target",
+            "preparing source and target",
             total=2,
         ) as progress:
             prepared = prepare_elaborate_add(
@@ -1018,7 +1018,7 @@ def resolve_cmd(
         port = MemoryStoreResolvePort(store, current_name=snapshot.current_name)
         with CommandProgress(
             "IMPACT · RESOLVE",
-            "freezing and judging the complete Source frame",
+            "preparing source",
             total=2,
         ) as progress:
             analysis = run_resolve(

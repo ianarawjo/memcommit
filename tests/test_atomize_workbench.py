@@ -498,7 +498,7 @@ def test_atomize_sessions_catalog_reopens_exact_analysis_provider_free(
         "--context",
         ctx.name,
     )
-    assert "not executed by the picker" in entry.detail
+    assert "the picker does not run it" in entry.detail
 
     other = ops.init("unrelated/current")
     ops.add(other, "Unrelated Memory.")

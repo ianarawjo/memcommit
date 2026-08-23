@@ -386,7 +386,7 @@ def run_find_search_workbench(
     )
     response: FindSearchResponse | None = None
     result_selection: FlatMultiSelectionState | None = None
-    status = {"value": "READY · ENTER A QUERY"}
+    status = {"value": "ENTER A QUERY"}
     copy_receipt: PlainTextClipboardReceipt | None = None
     background_turn: BackgroundExecutorTurn[FindSearchResponse] = (
         BackgroundExecutorTurn()
@@ -524,13 +524,9 @@ def run_find_search_workbench(
         show_cursor=False,
     )
 
-    def render_header() -> str:
-        mode = response.mode if response is not None else "AUTO FROM QUERY"
-        return f" MEM SEARCH · INTERACTIVE · {mode}\n {scope.summary()}"
-
     header = Window(
-        FormattedTextControl(render_header),
-        height=Dimension.exact(2),
+        FormattedTextControl(" MEM SEARCH"),
+        height=Dimension.exact(1),
         dont_extend_height=True,
     )
     scope_frame = Frame(
@@ -777,7 +773,10 @@ def run_find_search_workbench(
             if not isinstance(next_response, FindSearchResponse):
                 raise ValueError("Find controller returned an invalid response.")
             if next_response.request != request:
-                raise ValueError("Find controller changed the frozen request.")
+                raise ValueError(
+                    "Search inputs changed while the result was being prepared. "
+                    "Run the search again."
+                )
             return next_response
 
         def commit(next_response: FindSearchResponse) -> None:
@@ -816,9 +815,10 @@ def run_find_search_workbench(
                     )
                 finally:
                     save_location_edit["programmatic"] = False
-            status["value"] = (
-                f"{response.mode} · {len(response.results)} RESULT(S)"
-            )
+            result_count = len(response.results)
+            result_label = "RESULT" if result_count == 1 else "RESULTS"
+            mode_prefix = "HISTORY · " if response.mode == "HISTORY" else ""
+            status["value"] = f"{mode_prefix}{result_count} {result_label}"
 
         def fail(error: Exception) -> None:
             detail = " ".join(safe_terminal_text(str(error)).split())

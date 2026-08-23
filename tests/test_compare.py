@@ -390,7 +390,7 @@ def test_compare_creates_durable_read_only_analysis_and_resumes_provider_free(
 
     assert created.exit_code == 0, created.output
     assert len(provider.payloads) == 1
-    assert "COMPARE COMPLETE · task2/advisor1 ↔ task2/advisor2" in created.output
+    assert "COMPARE · task2/advisor1 ↔ task2/advisor2" in created.output
     assert "UNDERSTOOD · The two equal-authority advisors" in created.output
     assert "RELATIONS · SAME 1 · DIFFERENT 2 · UNCLEAR 0" in created.output
     assert "ATTENTION · 0 potential conflicts" in created.output
@@ -1540,7 +1540,7 @@ def test_compare_sessions_catalog_and_bare_picker_are_provider_free(
     resumed = runner.invoke(app, ["compare", "--sessions"])
 
     assert resumed.exit_code == 0, resumed.output
-    assert "COMPARE COMPLETE · task2/advisor1 ↔ task2/advisor2" in resumed.output
+    assert "COMPARE · task2/advisor1 ↔ task2/advisor2" in resumed.output
     assert "REVIEW · mem review compare --session" in resumed.output
     assert store.current_context_name() == unrelated.name
     assert len(provider.payloads) == 1

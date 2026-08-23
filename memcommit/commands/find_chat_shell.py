@@ -247,7 +247,7 @@ def render_find_chat_header(state: FindChatState) -> str:
     )
     return "\n".join(
         [
-            (f"MEM SEARCH · INTERACTIVE · {safe_terminal_text(state.context_name)}"),
+            (f"MEM SEARCH · {safe_terminal_text(state.context_name)}"),
             f"QUERY · {safe_terminal_text(query)}",
             result_summary,
             f"STATUS · {safe_terminal_text(state.status)}",

@@ -2573,7 +2573,7 @@ def resolve_granted_context_view(
     authority_uid = bindings.get(authority_name)
     if authority_uid is None:
         raise ProfileError(
-            f"Context {requested_name!r} is outside the grant's frozen scope."
+            f"Context {requested_name!r} is not included in this Grant."
         )
     if permission not in grant.permissions:
         raise ProfileError(

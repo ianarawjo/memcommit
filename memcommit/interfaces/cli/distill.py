@@ -70,7 +70,7 @@ def render_distill_receipt(result: DistillResult) -> None:
     typer.echo(
         "\n".join(
             [
-                f"DISTILL COMPLETE · {safe_terminal_text(analysis.source.context_name)}",
+                f"DISTILL PROPOSAL · {safe_terminal_text(analysis.source.context_name)}",
                 f"UNDERSTOOD · {overview}",
                 f"PROPOSED · {len(analysis.rules)} rules",
                 f"ATTENTION · {len(analysis.outside_memory_uids)} source Memories outside proposed Rules",

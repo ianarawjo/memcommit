@@ -612,7 +612,7 @@ def test_exact_review_names_recursive_path_and_selected_target() -> None:
         "target",
         "--recursive",
     )
-    assert any("complete relative path" in effect for effect in review.effects)
+    assert any("by relative path" in effect for effect in review.effects)
     assert any("Target subtree 'target'" in effect for effect in review.effects)
     assert any("selected Target 'target'" in effect for effect in review.effects)
 

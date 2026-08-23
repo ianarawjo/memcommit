@@ -42,7 +42,7 @@ MERGE_DETAILS = (
             ),
             OperationComparisonOption(
                 label="RECURSIVE",
-                guidance="Align descendants by complete relative path.",
+                guidance="Align descendants by the same relative path.",
             ),
         ),
     ),

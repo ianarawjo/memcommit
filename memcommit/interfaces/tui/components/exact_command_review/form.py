@@ -192,7 +192,10 @@ def resolve_displayed_command_value(
         if value == candidate or value == display_escape_text(candidate)
     )
     if not matches:
-        raise ValueError(f"{label} is outside the frozen catalog.")
+        raise ValueError(
+            f"{label} is not available in this review. "
+            "Reopen the operation and select it again."
+        )
     if len(matches) > 1:
         raise ValueError(f"{label} is ambiguous after terminal escaping.")
     return matches[0]

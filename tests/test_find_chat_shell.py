@@ -104,7 +104,7 @@ def _state(**changes) -> FindChatState:
 def test_snapshot_exposes_chat_state_without_searching_or_mutating():
     snapshot = render_find_chat_snapshot(_state())
 
-    assert "MEM SEARCH · INTERACTIVE · temp/task-1-atomized-en" in snapshot
+    assert "MEM SEARCH · temp/task-1-atomized-en" in snapshot
     assert "QUERY · related to cafe and store" in snapshot
     assert "RESULTS 5 · KEPT 2" in snapshot
     assert "YOU" in snapshot

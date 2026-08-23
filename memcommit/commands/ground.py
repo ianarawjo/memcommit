@@ -1709,7 +1709,7 @@ def _validate_named_ground_proposal_command(
     argv = proposal.review.argv
     if argv[:5] != expected_prefix:
         raise GroundError(
-            "The reviewed Ground command lost its frozen version guard."
+            "The reviewed Ground command lost its Ground revision check."
         )
     cursor = 5
     actual_context_versions: list[str] = []
@@ -1729,7 +1729,7 @@ def _validate_named_ground_proposal_command(
     expected_context_versions = proposal.expected_context_versions
     if tuple(actual_context_versions) != expected_context_versions:
         raise GroundError(
-            "The reviewed Ground command lost its frozen Context guards."
+            "The reviewed Ground command lost its Context revision checks."
         )
     if proposal.kind == "BIND":
         if not expected_context_versions:
@@ -2480,7 +2480,7 @@ def render_ground_focus(
                     "evidence and keep the missing material explicit."
                 ),
                 "",
-                "    2  COMPLETE TARGET",
+                "    2  FULL TARGET",
                 (
                     "       Keep the full target as the scope boundary and "
                     "remain blocked until evidence is supplied."

@@ -29,7 +29,7 @@ def run_conflict_resolve_handoff(
     port = MemoryStoreResolvePort(store, current_name=current_name)
     with CommandProgress(
         "RESOLVE",
-        "rechecking the finding and verifying the complete repair frame",
+        "rechecking finding and preparing repair",
         total=1,
     ) as progress:
         analysis = run_resolve(
@@ -38,7 +38,7 @@ def run_conflict_resolve_handoff(
             semantic_port=ProviderResolveSemanticPort(),
             provider_factory=connect_semantic_provider,
         )
-        progress.update("verified proposal ready", step=1)
+        progress.update("repair ready", step=1)
     receipt = run_resolve_tui(
         analysis,
         apply_candidate=lambda selected: apply_resolve(

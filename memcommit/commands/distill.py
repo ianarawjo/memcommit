@@ -241,7 +241,7 @@ def cmd(
             )
             with CommandProgress(
                 "DISTILL",
-                "freezing source and target",
+                "preparing source and target",
                 total=2,
             ) as progress:
                 prepared = prepare_distill_add(
@@ -292,7 +292,7 @@ def cmd(
                 )
             with CommandProgress(
                 "DISTILL",
-                "freezing source",
+                "preparing source",
                 total=2,
             ) as progress:
                 def connect_provider():

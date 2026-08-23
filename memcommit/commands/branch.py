@@ -118,7 +118,8 @@ def cmd(
             return
         if receipt.source_name not in local_names:
             typer.secho(
-                "Error: selected Branch Source is outside the frozen local catalog.",
+                "Error: the selected Branch Source is no longer available. "
+                "Reopen Branch and select it again.",
                 fg=typer.colors.RED,
                 err=True,
             )

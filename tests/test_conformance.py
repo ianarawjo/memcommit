@@ -428,7 +428,7 @@ def test_check_conformance_cli_runs_the_shared_context_core(
     assert "  EVIDENCE ·" not in result.output
     assert "  WHY ·" not in result.output
     assert "OUTSIDE RULE JUDGMENTS" not in result.output
-    assert "STATUS · COMPLETE" in result.output
+    assert "STATUS · REPORT READY" in result.output
 
 
 def _install_context_conformance_cli_fixture(monkeypatch):
@@ -694,7 +694,7 @@ def test_audit_cli_rules_alias_saves_one_read_only_four_check_report(
 
     assert result.exit_code == 0, result.output
     assert "SAVED · 4/4 CHECKS" in result.output
-    assert "CONFORMANCE · COMPLETE" in result.output
+    assert "CONFORMANCE · FINISHED" in result.output
     saved = QualityAuditStore(store).list()
     assert len(saved) == 1
     assert saved[0].conformance is not None

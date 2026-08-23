@@ -88,7 +88,7 @@ def cmd(
         typer.Option(
             "-d",
             "--direct",
-            help="Snapshot only the selected Context's direct frame",
+            help="Snapshot only the selected Context's direct contents",
         ),
     ] = False,
     recursive: Annotated[

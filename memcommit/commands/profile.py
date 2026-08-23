@@ -911,7 +911,7 @@ def grant_update_cmd(
             "-r",
             "--recursive",
             "--refresh-scope",
-            help="Replace the frozen scope with all current descendants",
+            help="Include all current descendants",
         ),
     ] = False,
     root_only: Annotated[
@@ -920,7 +920,7 @@ def grant_update_cmd(
             "-d",
             "--direct",
             "--root-only",
-            help="Replace the frozen scope with only its root Context",
+            help="Include only the current root Context",
         ),
     ] = False,
 ) -> None:
@@ -1330,7 +1330,8 @@ def migrate_context_cmd(
         if apply_migration:
             _fail(
                 ProfileError(
-                    "Context migration is blocked by frozen cross-Profile Grants."
+                    "Context migration is blocked because cross-Profile Grants "
+                    "still reference the current name."
                 )
             )
         typer.echo("PLAN ONLY · APPLY BLOCKED · NOTHING CHANGED")

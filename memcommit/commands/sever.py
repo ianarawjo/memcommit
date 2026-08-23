@@ -152,7 +152,7 @@ def _start_analysis(
 
     result = run_command_wait(
         "SEVER",
-        "freezing source and criteria",
+        "preparing source and criteria",
         total=3,
         work=freeze_and_analyze,
     )
