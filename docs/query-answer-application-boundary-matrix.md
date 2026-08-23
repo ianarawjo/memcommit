@@ -1,6 +1,6 @@
 # Ordinary Query answer application-boundary matrix
 
-Last verified: 2026-08-20.
+Last verified: 2026-08-23.
 
 ## Decision
 
@@ -38,7 +38,7 @@ interactive Query workbench -----/          |
                                              |
                                configured provider factory
                                              |
-                       answer blocks + locally validated aliases
+                  typed outcome + role blocks + validated aliases
                                              |
                     host-numbered OrdinaryQueryResponse references
 ```
@@ -53,7 +53,7 @@ interactive Query workbench -----/          |
 | Empty frame | Application | Label and empty candidate tuple | Returns the established no-grounded-answer result without constructing a provider |
 | Semantic preflight | `prepare_ordinary_query_answer` | Complete evidence frame, prompt budget, output schema | Over-budget whole-frame work fails before provider construction; no ranking, truncation, or hidden batching |
 | Provider | Injected `OrdinaryQueryProviderFactory` | Constructed only after freeze and preflight | Exactly one completion sees every frozen candidate once |
-| Answer | `complete_ordinary_query_answer` | Strict answer blocks or one explicit no-answer explanation | Provider cannot forge numeric citations, unknown aliases, or unsourced answer blocks |
+| Answer | `complete_ordinary_query_answer` | One strict outcome plus ordered `SUPPORTED_CLAIM`, `INPUT_INTERPRETATION`, or `SCOPE_LIMITATION` blocks | Provider cannot forge numeric citations or unknown aliases; supported claims require aliases, interpretation/scope blocks forbid them, and outcome/role combinations fail closed |
 | References | Application plus neutral Source Reference projection | Host-compacted authorized evidence | Host assigns citation numbers and Query aliases, then maps each used Source to the shared `[N] content — UID prefix, Context, alias` row; the shared renderer never selects evidence or assigns either identity |
 | Result | `OrdinaryQueryResponse` | Exact request, nonblank answer, grounded flag, optional matching reference document | Ungrounded results cannot expose evidence references |
 | Durable effect | None | None | No Context, current pointer, checkpoint, session, transcript, or cache receipt is written |
@@ -71,7 +71,9 @@ The extraction preserves the existing ordinary Query contract:
   target names and authorizes their combined semantic use before provider
   construction;
 - empty frames still render `(no grounded answer found)`;
-- grounded and no-answer strings retain their prior formatting;
+- full answers and bounded no-answers retain their established outer
+  presentation, while mixed roles join without fabricating citations for input
+  interpretation or scope limitations;
 - the same whole-frame prompt, schema, decoder, artifact compaction, citation
   numbering, and Reference document are used;
 - every compact Reference remains self-contained when adjacent citations come
@@ -84,9 +86,10 @@ The extraction preserves the existing ordinary Query contract:
 - the Typer composition root retains the same two visible progress labels
   while the application observer exposes typed stages.
 
-No visible TUI state, focus topology, key binding, output wording, provider
-policy, or scope default is changed by this slice. Concurrent scope-preset and
-clipboard work remains outside this commit.
+Provider contract version 2 later changed answer wording and structure without
+changing visible TUI state, focus topology, key bindings, provider policy, or
+scope defaults. Concurrent scope-preset and clipboard work remains outside this
+boundary.
 
 ## Verification
 

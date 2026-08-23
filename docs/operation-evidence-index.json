@@ -187,7 +187,8 @@
     "query": [
       "docs/query-callable-boundary-matrix.md",
       "docs/query-answer-application-boundary-matrix.md",
-      "docs/query-reference-application-boundary-matrix.md"
+      "docs/query-reference-application-boundary-matrix.md",
+      "docs/query-case-derived-answer-design-rationale.md"
     ],
     "rationale": [
       "docs/read-report-lifecycle-design-rationale.md",

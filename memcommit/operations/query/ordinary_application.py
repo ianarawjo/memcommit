@@ -160,9 +160,12 @@ def run_ordinary_query(
     _observe(observer, "ANSWERING")
     answer = complete_ordinary_query_answer(plan, provider)
     if not answer.grounded:
+        rendered = answer.text
+        if answer.outcome_kind == "NO_ANSWER":
+            rendered = f"{frozen.label}\n  {rendered}"
         return OrdinaryQueryResponse(
             request,
-            f"{frozen.label}\n  {answer.no_answer}",
+            rendered,
             False,
         )
 

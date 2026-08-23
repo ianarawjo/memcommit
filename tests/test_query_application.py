@@ -55,13 +55,14 @@ class _AnsweringProvider:
         aliases = [item["alias"] for item in payload["complete_frozen_corpus"]]
         return json.dumps(
             {
-                "answer_blocks": [
+                "outcome_kind": "ANSWER",
+                "blocks": [
                     {
+                        "role": "SUPPORTED_CLAIM",
                         "text": "The frozen evidence supports the answer.",
                         "source_aliases": aliases,
                     }
                 ],
-                "no_answer": "",
             }
         )
 
@@ -115,6 +116,75 @@ def test_empty_frozen_query_returns_without_constructing_provider():
     assert events == ["freeze"]
     assert response.grounded is False
     assert response.answer == "empty\n  (no grounded answer found)"
+
+
+@pytest.mark.parametrize(
+    ("provider_response", "expected_answer", "grounded"),
+    [
+        (
+            {
+                "outcome_kind": "PARTIAL_ANSWER",
+                "blocks": [
+                    {
+                        "role": "SUPPORTED_CLAIM",
+                        "text": "The stored part is supported.",
+                        "source_aliases": ["m1"],
+                    },
+                    {
+                        "role": "SCOPE_LIMITATION",
+                        "text": "The other part is absent from the selected Context.",
+                        "source_aliases": [],
+                    },
+                ],
+            },
+            (
+                "The stored part is supported. [1] The other part is absent "
+                "from the selected Context."
+            ),
+            True,
+        ),
+        (
+            {
+                "outcome_kind": "NO_RELATED_OBSERVATION",
+                "blocks": [
+                    {
+                        "role": "INPUT_INTERPRETATION",
+                        "text": "This is a statement rather than a question.",
+                        "source_aliases": [],
+                    },
+                    {
+                        "role": "SCOPE_LIMITATION",
+                        "text": "No directly related content is in this Context.",
+                        "source_aliases": [],
+                    },
+                ],
+            },
+            (
+                "This is a statement rather than a question. No directly "
+                "related content is in this Context."
+            ),
+            False,
+        ),
+    ],
+)
+def test_application_preserves_partial_and_non_question_outcomes(
+    provider_response,
+    expected_answer,
+    grounded,
+):
+    class Provider:
+        def complete(self, prompt, *, operation, output_schema=None):
+            return json.dumps(provider_response)
+
+    response = run_ordinary_query(
+        OrdinaryQueryRequest("input", ("notes",)),
+        source_port=_Source((_candidate(),)),
+        provider_factory=Provider,
+    )
+
+    assert response.grounded is grounded
+    assert expected_answer in response.answer
+    assert ("References" in response.answer) is grounded
 
 
 def test_whole_frame_preflight_fails_before_provider_construction(monkeypatch):

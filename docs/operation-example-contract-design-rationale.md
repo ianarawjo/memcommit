@@ -62,6 +62,48 @@ operation. Authority failures, stale revisions, no-op, oversized frames, and
 other materially different safety boundaries remain separate test and matrix
 obligations.
 
+## Case-to-rule derivation method
+
+Examples become a semantic contract through controlled comparison, not by
+collecting several plausible outputs and summarizing their wording. Use this
+sequence when an operation's desired model behavior is still being established:
+
+1. **Hold the semantic frame constant.** Freeze one small Source, authority
+   frame, and presentation boundary. Vary one request property at a time so a
+   changed output can be attributed to behavior rather than different evidence.
+2. **Name independent axes before multiplying cases.** Examples include input
+   role, evidence coverage, authority, requested effect, output kind, and
+   provenance obligation. Start with the meaningful values for the operation,
+   not a full Cartesian product.
+3. **Author the smallest acceptable output.** Write the concise human result
+   first. Label each clause by semantic role and identify its evidence,
+   authority, effect, or lack thereof. Remove clauses that have no owned role.
+4. **Construct the nearest failure or boundary.** Change one axis: remove one
+   support, add one unsupported request part, revoke one capability, make one
+   item stale, or turn an explicit input into an ambiguous one. The output
+   difference reveals the actual invariant.
+5. **Generalize the obligation, not the example vocabulary.** A Korean greeting
+   can establish that an input act must be preserved; it does not establish a
+   Korean-specific branch. A majority pattern is not universal, and generated
+   prose cannot supply evidence absent from the frozen frame.
+6. **Declare exposure before reuse.** Register the case as `HOST_ONLY`,
+   `PROVIDER_VISIBLE`, `CALIBRATION`, or `HOLDOUT_NEVER`. Moving a case into a
+   prompt changes its role and prevents later claims that it was independent
+   evaluation evidence.
+7. **Promote the rule through every enforcing boundary.** Update prompt,
+   schema, decoder, typed application result, interface projections, fixtures,
+   and tests together when the rule changes observable behavior. Prompt prose
+   alone is not a contract when the host still accepts an incompatible result.
+
+Use a new pairwise case only when an interaction changes the result. Use a
+multi-axis scenario later as an integration check. This keeps the calibration
+set small enough to review while preventing one happy path from standing in
+for a semantic method.
+
+`query-case-derived-answer-design-rationale.md` is the first focused
+application of this method to input act, corpus coverage, claim role, and
+citation obligation in ordinary Query.
+
 ## Focused operation matrix shape
 
 The shared consistency matrix owns only `EXAMPLE-01`. Each focused operation

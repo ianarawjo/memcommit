@@ -16,11 +16,14 @@ Raising the cap to 50 would enlarge but retain that recall bottleneck.
 Ordinary Query no longer calls the Find ranker. It freezes the complete
 candidate corpus, assigns temporary `mN` aliases, preflights one aggregate
 provider turn, and sends every frozen evidence projection to a single
-`gpt-5.6-sol` completion with reasoning effort `none`. The structured response
-contains both:
+`gpt-5.6-sol` completion with reasoning effort `none`. Provider contract
+version 2 returns:
 
-- ordered natural-language answer blocks; and
-- every temporary source alias directly supporting each block.
+- one typed outcome distinguishing full, partial, absent, related, no-related,
+  and ambiguous results;
+- ordered natural-language blocks classified as supported claims, input
+  interpretations, or Context-bounded scope limitations; and
+- every temporary source alias directly supporting each supported claim.
 
 The prompt requires the combined blocks to address every part of the question.
 For comparisons it asks for evidence from each represented side when available,
@@ -52,8 +55,9 @@ construction.
 The model never owns display numbers. It may return only allowlisted temporary
 aliases and is explicitly told not to write `[1]`, a `References` heading, or a
 bibliography. The local decoder rejects unknown or duplicate aliases, empty
-source lists on answer blocks, line breaks or numeric citation markers in model
-prose, ambiguous answer/no-answer combinations, and malformed structures.
+source lists on supported claims, any source on input interpretations or scope
+limitations, line breaks or numeric citation markers in model prose,
+outcome/role-order mismatches, and malformed structures.
 
 After validation, the host walks answer blocks in order. The first use of an
 alias receives `[1]`, the next new alias receives `[2]`, and later reuse keeps
@@ -69,6 +73,12 @@ does not display kind. Durable UIDs never enter the model prompt. This makes
 `[1]` work like an actual citation: the prose marker and Reference row share one
 host-validated identity rather than trusting a number fabricated in generated
 text.
+
+Answer intent and citation identity are separate concerns. The implemented
+case-derived answer contract and its calibration method are recorded in
+`query-case-derived-answer-design-rationale.md`. Provider contract version 2
+distinguishes direct, partial, absent, and observational results without
+weakening this document's host-owned alias and numbering boundary.
 
 Only the row facts and punctuation are shared with literal Find. Query retains
 first-use citation numbering, evidence alias validation, and used-reference

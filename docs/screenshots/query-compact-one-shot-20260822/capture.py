@@ -83,27 +83,28 @@ def _run_child() -> None:
                 assert operation == "ordinary query"
                 provider_calls.append(prompt)
                 payload = json.loads(prompt.split("ORDINARY QUERY PAYLOAD:\n", 1)[1])
-                aliases = [
-                    item["alias"] for item in payload["complete_frozen_corpus"]
-                ]
+                aliases = [item["alias"] for item in payload["complete_frozen_corpus"]]
                 time.sleep(1.2)
                 return json.dumps(
                     {
-                        "answer_blocks": [
+                        "outcome_kind": "ANSWER",
+                        "blocks": [
                             {
+                                "role": "SUPPORTED_CLAIM",
                                 "text": "The east entrance remains available during construction.",
                                 "source_aliases": [aliases[0]],
                             },
                             {
+                                "role": "SUPPORTED_CLAIM",
                                 "text": "General access changes from 10 p.m. to 5 p.m.",
                                 "source_aliases": aliases[1:3],
                             },
                             {
+                                "role": "SUPPORTED_CLAIM",
                                 "text": "The answer uses the complete checked Context scope.",
                                 "source_aliases": aliases,
                             },
                         ],
-                        "no_answer": "",
                     }
                 )
 
@@ -137,7 +138,9 @@ def _run_child() -> None:
         )
         print(
             "NO SAVED TRANSCRIPT · NO TO DO · NO SOURCE MUTATION"
-            if result.status == "CLOSED" and before == after and not session_dir.exists()
+            if result.status == "CLOSED"
+            and before == after
+            and not session_dir.exists()
             else f"UNEXPECTED QUERY RESULT {result!r}"
         )
 
@@ -286,9 +289,7 @@ def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     _capture()
     _capture_query_view()
-    raw = "".join(
-        path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript")
-    )
+    raw = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript"))
     assert "PTY 180 52" in raw
     assert "38;" in raw
     assert "48;" in raw

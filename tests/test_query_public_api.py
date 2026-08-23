@@ -42,13 +42,14 @@ class _OrdinaryProvider:
         aliases = [item["alias"] for item in payload["complete_frozen_corpus"]]
         return json.dumps(
             {
-                "answer_blocks": [
+                "outcome_kind": "ANSWER",
+                "blocks": [
                     {
+                        "role": "SUPPORTED_CLAIM",
                         "text": "The root fact is supported.",
                         "source_aliases": aliases,
                     }
                 ],
-                "no_answer": "",
             }
         )
 
@@ -230,7 +231,9 @@ def test_reference_query_authenticates_before_opening_and_never_publishes(
         return original_open(*args, **kwargs)
 
     monkeypatch.setattr(client._store, "load_query_source", open_source)
-    before = tuple(sorted(path.relative_to(isolated_store) for path in isolated_store.rglob("*")))
+    before = tuple(
+        sorted(path.relative_to(isolated_store) for path in isolated_store.rglob("*"))
+    )
 
     result = client.query_reference(
         QueryContextRef(
@@ -247,7 +250,14 @@ def test_reference_query_authenticates_before_opening_and_never_publishes(
         answer="The rear entrance closes.",
     )
     assert events == ["provider", "source", "answer"]
-    assert tuple(sorted(path.relative_to(isolated_store) for path in isolated_store.rglob("*"))) == before
+    assert (
+        tuple(
+            sorted(
+                path.relative_to(isolated_store) for path in isolated_store.rglob("*")
+            )
+        )
+        == before
+    )
 
 
 def test_granted_query_high_level_success_is_process_local(

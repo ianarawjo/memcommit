@@ -53,32 +53,53 @@ def _evidence():
 
     return (
         FindAnswerEvidence(
-            "m1", "task-1/campus-wiki/building-access", "memory",
-            "11111111-base-access", "The main entrance normally closes at 10 p.m.",
+            "m1",
+            "task-1/campus-wiki/building-access",
+            "memory",
+            "11111111-base-access",
+            "The main entrance normally closes at 10 p.m.",
         ),
         FindAnswerEvidence(
-            "m2", "task-1/participant/construction-updates/building-access", "memory",
-            "22222222-change-access", "During construction, general access ends at 5 p.m.",
+            "m2",
+            "task-1/participant/construction-updates/building-access",
+            "memory",
+            "22222222-change-access",
+            "During construction, general access ends at 5 p.m.",
         ),
         FindAnswerEvidence(
-            "m3", "task-1/campus-wiki/temporary-parking", "memory",
-            "33333333-base-parking", "The underground garage normally accepts general vehicles.",
+            "m3",
+            "task-1/campus-wiki/temporary-parking",
+            "memory",
+            "33333333-base-parking",
+            "The underground garage normally accepts general vehicles.",
         ),
         FindAnswerEvidence(
-            "m4", "task-1/participant/construction-updates/temporary-parking", "memory",
-            "44444444-change-parking", "During construction, use Outdoor Parking Lot C instead.",
+            "m4",
+            "task-1/participant/construction-updates/temporary-parking",
+            "memory",
+            "44444444-change-parking",
+            "During construction, use Outdoor Parking Lot C instead.",
         ),
         FindAnswerEvidence(
-            "m5", "task-1/campus-wiki/event-relocations", "memory",
-            "55555555-base-event", "The tenth-floor hall normally remains open during recess.",
+            "m5",
+            "task-1/campus-wiki/event-relocations",
+            "memory",
+            "55555555-base-event",
+            "The tenth-floor hall normally remains open during recess.",
         ),
         FindAnswerEvidence(
-            "m6", "task-1/participant/construction-updates/event-relocations", "memory",
-            "66666666-change-event", "During construction, viewing and new reservations stop.",
+            "m6",
+            "task-1/participant/construction-updates/event-relocations",
+            "memory",
+            "66666666-change-event",
+            "During construction, viewing and new reservations stop.",
         ),
         FindAnswerEvidence(
-            "m7", "task-1/participant", "artifact",
-            "77777777-comparison", "Compare issues: 0. Every reviewed relation is resolved.",
+            "m7",
+            "task-1/participant",
+            "artifact",
+            "77777777-comparison",
+            "Compare issues: 0. Every reviewed relation is resolved.",
         ),
     )
 
@@ -107,21 +128,24 @@ def _run_child() -> None:
             time.sleep(1.4)
             return json.dumps(
                 {
-                    "answer_blocks": [
+                    "outcome_kind": "ANSWER",
+                    "blocks": [
                         {
+                            "role": "SUPPORTED_CLAIM",
                             "text": "Access changes from 10 p.m. to 5 p.m. during construction.",
                             "source_aliases": ["m1", "m2"],
                         },
                         {
+                            "role": "SUPPORTED_CLAIM",
                             "text": "Parking moves to Lot C, while hall viewing and reservations stop.",
                             "source_aliases": ["m3", "m4", "m5", "m6"],
                         },
                         {
+                            "role": "SUPPORTED_CLAIM",
                             "text": "The reviewed comparison reports no unresolved issue; this is bounded to that corpus.",
                             "source_aliases": ["m7"],
                         },
                     ],
-                    "no_answer": "",
                 }
             )
 
@@ -148,8 +172,7 @@ def _run_child() -> None:
         run_granted=lambda _request: (_ for _ in ()).throw(AssertionError()),
     )
     all_aliases_exposed = all(
-        f'"alias": "m{index}"' in calls[0]
-        for index in range(1, len(evidence) + 1)
+        f'"alias": "m{index}"' in calls[0] for index in range(1, len(evidence) + 1)
     )
     print(
         f"ONE-SHOT VERIFICATION · CALLS {len(calls)} · "

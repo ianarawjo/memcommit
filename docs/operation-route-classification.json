@@ -140,7 +140,8 @@
         "evidence": [
           "docs/query-callable-boundary-matrix.md",
           "docs/query-answer-application-boundary-matrix.md",
-          "docs/query-reference-application-boundary-matrix.md"
+          "docs/query-reference-application-boundary-matrix.md",
+          "docs/query-case-derived-answer-design-rationale.md"
         ],
         "reason": "Ordinary, granted, and query-only families plus CLI, TUI, public, and agent projections have a verified operation package."
       },

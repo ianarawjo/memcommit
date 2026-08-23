@@ -34,13 +34,14 @@ class _QueryAnswerProvider:
         )
         return json.dumps(
             {
-                "answer_blocks": [
+                "outcome_kind": "ANSWER",
+                "blocks": [
                     {
+                        "role": "SUPPORTED_CLAIM",
                         "text": "Advisor 1 and Advisor 2 were merged into this Context.",
                         "source_aliases": [artifact_alias],
                     }
                 ],
-                "no_answer": "",
             }
         )
 
@@ -106,7 +107,8 @@ def test_query_single_argument_answers_from_ordinary_search_artifact(
 
     assert result.exit_code == 0
     assert "Advisor 1 and Advisor 2 were merged" in result.output
-    assert "artifact" in result.output
+    # Compact Query References omit kind; the retained checkpoint content is
+    # the visible proof that the artifact crossed the search boundary.
     assert "Melded advisor1 and advisor2 into workspace" in result.output
 
 

@@ -53,13 +53,14 @@ class _RegistryQueryProvider:
         aliases = [item["alias"] for item in payload["complete_frozen_corpus"]]
         return json.dumps(
             {
-                "answer_blocks": [
+                "outcome_kind": "ANSWER",
+                "blocks": [
                     {
+                        "role": "SUPPORTED_CLAIM",
                         "text": "The registry reached the added Memory.",
                         "source_aliases": aliases,
                     }
                 ],
-                "no_answer": "",
             }
         )
 
