@@ -74,7 +74,7 @@ Each Rule receives exactly one `CONFORMS`, `VIOLATES`,
 Every Target Memory must be cited by at least one Rule judgment or explicitly
 placed outside the judgments. Absence of evidence is not conformance.
 
-The command exposes the same two Context roles through three equivalent
+The command exposes the same Target and Rules roles through three equivalent
 vocabularies:
 
 ```text
@@ -82,12 +82,14 @@ mem check-conformance TARGET --against RULES
 mem check-conformance --rule RULES --example TARGET
 mem check-conformance --rule RULES --case TARGET
 mem check-conformance --from RULES --to TARGET
+mem check-conformance --from UID_OR_PREFIX
+mem check-conformance --from "literal Rule proposition"
 ```
 
 `Example` is the canonical Ground-v3 term for a concrete proposition; `Case`
 remains an accepted user-facing alias because exact input/output replay and
 older Ground material use that vocabulary. `--from` always names the Rules
-Context and `--to` the Context being judged. If exactly one option-qualified
+source and `--to` the Context being judged. If exactly one option-qualified
 role is omitted, the command-start current Context supplies it, matching the
 shared endpoint convention. The legacy positional Target does not by itself
 infer a Rules Context, so an accidentally incomplete old command remains an
@@ -98,7 +100,27 @@ Rules alias or a Subject alias, or combining the positional Target with a
 Subject alias, fails before Context loading or provider connection. This avoids
 order-dependent last-value-wins behavior and preserves one command-start
 locator snapshot for both resolved names. `--ground` remains a separate bundled
-Rules-plus-Examples route and cannot be combined with any Context endpoint.
+Rules-plus-Examples route and cannot be combined with any direct endpoint.
+
+The Target side remains one complete local direct Context frame. The Rules
+slot additionally accepts one direct ordinary Memory UID/prefix or one literal
+Rule proposition, so a caller need not create a one-Memory Rules Context merely
+to run an ad hoc check. Automatic classification follows the general Fit
+grammar: `text:VALUE` forces literal text; an eight-or-more-character
+UUID-shaped value or `CONTEXT:UID_OR_PREFIX` is a strict Memory selector; an
+existing local Context keeps its Context meaning; and remaining non-relative
+text is a literal Rule. A relative locator that resolves to no local Context is
+an error rather than silently becoming Rule text. A literal colliding with a
+Context name or UID shape must use `text:`.
+
+Bare Memory selectors use the shared direct-Memory locator and must have one
+unique owner across all ordinary local Contexts. The current Context receives
+no hidden lookup priority. The selected Memory retains its real UID and is
+revalidated by owner identity, exact UID, and content digest after the provider
+turn. Literal text receives only a deterministic process-local Rule UUID for
+typed frame linkage; this does not fabricate a durable Memory or provenance
+claim. The compact source label distinguishes these forms as
+`RULES MEMORY CONTEXT:UID` or `RULES TEXT VALUE`.
 
 The provider also returns the exact counterexample subset for every
 `VIOLATES` or `PARTIALLY_CONFORMS` judgment. A violating judgment's cited
@@ -174,10 +196,10 @@ identity, and case-specific reasons. Compact presentation therefore does not
 weaken coverage or turn absence of a visible issue into proof of general
 correctness.
 
-Both Contexts are frozen from one command-start locator snapshot and
-revalidated after the provider turn. The first implementation accepts local
-direct Contexts only. Descendant, embedded, and granted frames require explicit
-scope and retained-analysis authority contracts before rollout.
+The Target Context and any Rules Context locator are resolved from one
+command-start snapshot and revalidated after the provider turn. Descendant,
+embedded, and granted frames remain out of scope; they require explicit scope
+and retained-analysis authority contracts before rollout.
 
 ## Audit composition and compatibility
 

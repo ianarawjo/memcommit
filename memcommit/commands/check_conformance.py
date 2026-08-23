@@ -10,7 +10,7 @@ from memcommit.commands.command_progress import CommandProgress
 from memcommit.commands.context_operand import ContextOperandSnapshot
 from memcommit.conformance import ConformanceError, ConformanceReport
 from memcommit.conformance_runtime import (
-    execute_context_conformance,
+    execute_context_conformance_with_rules_operand,
     execute_ground_conformance,
 )
 from memcommit.interfaces.console.text import display_escape_text, safe_terminal_text
@@ -183,9 +183,11 @@ def cmd(
             "--against",
             "--rule",
             "--from",
-            metavar="RULES_CONTEXT",
+            metavar="RULES_SOURCE",
             help=(
-                "Rules Context; --against, --rule, and --from are equivalent"
+                "Rules Context, unique local Memory UID/prefix, or literal "
+                "Rule; use text:VALUE to force text; --against, --rule, and "
+                "--from are equivalent"
             ),
         ),
     ] = None,
@@ -219,7 +221,7 @@ def cmd(
         if len(rules_operands) > 1:
             raise ConformanceError(
                 "Use only one of --against, --rule, or --from; they are "
-                "aliases for the Rules Context."
+                "aliases for the Rules source."
             )
         if len(subject_operands) > 1:
             raise ConformanceError(
@@ -243,7 +245,7 @@ def cmd(
                 or option_subject_locator is not None
             ):
                 raise ConformanceError(
-                    "--ground cannot be combined with Context operands."
+                    "--ground cannot be combined with direct operands."
                 )
             label = "replaying Ground cases"
 
@@ -267,19 +269,23 @@ def cmd(
                     "Context Conformance needs an Example, Case, Target, or "
                     "current Context."
                 )
-            rules_name = snapshot.resolve_or_current(rules_locator)
-            if rules_name is None:
+            rules_operand = (
+                rules_locator
+                if rules_locator is not None
+                else snapshot.current_name
+            )
+            if rules_operand is None:
                 raise ConformanceError(
-                    "Context Conformance needs a Rules Context or a current "
-                    "Context."
+                    "Context Conformance needs a Rules source or a current Context."
                 )
             label = "checking Context against Rules"
 
             def run() -> ConformanceReport:
-                return execute_context_conformance(
+                return execute_context_conformance_with_rules_operand(
                     store=store,
                     target_name=target_name,
-                    rules_name=rules_name,
+                    rules_operand=rules_operand,
+                    current_name=snapshot.current_name,
                     provider_factory=connect_semantic_provider,
                 )
         with CommandProgress("CHECK CONFORMANCE", label, total=1) as progress:

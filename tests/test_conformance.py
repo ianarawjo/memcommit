@@ -585,6 +585,174 @@ def test_check_conformance_role_and_direction_aliases_share_context_route(
     assert len(provider.calls) == 1
 
 
+def test_check_conformance_from_accepts_unique_local_rule_memory_uid(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    target = ops.init("ticker/examples")
+    ops.add(target, "North Star Energy → NSE")
+    rules = ops.init("ticker/rules")
+    rule = ops.add(rules, "Use uppercase initials for multiword names.")
+    store.create_context(target)
+    store.create_context(rules)
+    store.set_current(target.name)
+    provider = Provider(
+        {
+            "judgments": [
+                {
+                    "rule_id": "r1",
+                    "status": "CONFORMS",
+                    "evidence_memory_ids": ["m000001"],
+                    "nonconforming_cases": [],
+                    "reason": "NSE uses the three initials.",
+                }
+            ],
+            "outside_memory_ids": [],
+        }
+    )
+    monkeypatch.setattr(
+        check_conformance_command,
+        "connect_semantic_provider",
+        lambda: provider,
+    )
+
+    result = CliRunner().invoke(
+        app,
+        ["check-conformance", "--from", rule.uid[:8] + "\N{NO-BREAK SPACE}"],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert f"[RULES MEMORY {rules.name}:{rule.uid[:8]}]" in result.output
+    prompt, operation, _schema = provider.calls[0]
+    payload = json.loads(prompt.split("CONFORMANCE CONTEXT PAYLOAD:\n", 1)[1])
+    assert operation == CONTEXT_CONFORMANCE_OPERATION
+    assert payload["rules"] == [{"rule_id": "r1", "content": rule.content}]
+    assert payload["target_context"]["name"] == target.name
+
+
+def test_check_conformance_from_accepts_literal_rule_text(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    target = ops.init("ticker/examples")
+    ops.add(target, "North Star Energy → NSE")
+    store.create_context(target)
+    store.set_current(target.name)
+    literal = "Use uppercase initials for multiword names."
+    provider = Provider(
+        {
+            "judgments": [
+                {
+                    "rule_id": "r1",
+                    "status": "CONFORMS",
+                    "evidence_memory_ids": ["m000001"],
+                    "nonconforming_cases": [],
+                    "reason": "NSE uses the three initials.",
+                }
+            ],
+            "outside_memory_ids": [],
+        }
+    )
+    monkeypatch.setattr(
+        check_conformance_command,
+        "connect_semantic_provider",
+        lambda: provider,
+    )
+
+    result = CliRunner().invoke(
+        app,
+        ["check-conformance", "--from", literal],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert f"[RULES TEXT {literal}]" in result.output
+    prompt, _operation, _schema = provider.calls[0]
+    payload = json.loads(prompt.split("CONFORMANCE CONTEXT PAYLOAD:\n", 1)[1])
+    assert payload["rules"] == [{"rule_id": "r1", "content": literal}]
+
+
+def test_check_conformance_revalidates_selected_rule_memory(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    target = ops.init("ticker/examples")
+    ops.add(target, "North Star Energy → NSE")
+    rules = ops.init("ticker/rules")
+    rule = ops.add(rules, "Use uppercase initials for multiword names.")
+    store.create_context(target)
+    store.create_context(rules)
+    store.set_current(target.name)
+
+    class MutatingProvider(Provider):
+        def complete(self, prompt, *, operation, output_schema=None):
+            response = super().complete(
+                prompt,
+                operation=operation,
+                output_schema=output_schema,
+            )
+            ops.edit(rules, rule.uid, "Use a different Rule now.")
+            store.save(rules)
+            return response
+
+    provider = MutatingProvider(
+        {
+            "judgments": [
+                {
+                    "rule_id": "r1",
+                    "status": "CONFORMS",
+                    "evidence_memory_ids": ["m000001"],
+                    "nonconforming_cases": [],
+                    "reason": "NSE uses the three initials.",
+                }
+            ],
+            "outside_memory_ids": [],
+        }
+    )
+    monkeypatch.setattr(
+        check_conformance_command,
+        "connect_semantic_provider",
+        lambda: provider,
+    )
+
+    result = CliRunner().invoke(
+        app,
+        ["check-conformance", "--from", rule.uid[:8]],
+    )
+
+    assert result.exit_code == 1
+    assert "Rules source changed during Conformance" in result.output
+    assert "CONFORMANCE ·" not in result.output
+
+
+def test_check_conformance_uid_shaped_rule_is_strict_before_provider(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    target = ops.init("ticker/examples")
+    ops.add(target, "North Star Energy → NSE")
+    store.create_context(target)
+    store.set_current(target.name)
+    provider = Provider({})
+    monkeypatch.setattr(
+        check_conformance_command,
+        "connect_semantic_provider",
+        lambda: provider,
+    )
+
+    result = CliRunner().invoke(
+        app,
+        ["check-conformance", "--from", "deadbeef"],
+    )
+
+    assert result.exit_code == 1
+    assert "No directly owned Memory" in result.output
+    assert provider.calls == []
+
+
 @pytest.mark.parametrize(
     ("arguments", "current_name"),
     [
@@ -650,7 +818,7 @@ def test_check_conformance_alias_endpoints_fill_from_one_current_snapshot(
         ),
         (
             ["--ground", "ticker", "--rule", "ticker/rules"],
-            "--ground cannot be combined with Context operands",
+            "--ground cannot be combined with direct operands",
         ),
     ],
 )
@@ -696,8 +864,10 @@ def test_check_conformance_help_exposes_role_and_direction_aliases():
     assert result.exit_code == 0
     assert "--against,--rule,--from" in result.output
     assert "--example,--case,--to" in result.output
-    assert "RULES_CONTEXT" in result.output
+    assert "RULES_SOURCE" in result.output
     assert "SUBJECT_CONTEXT" in result.output
+    assert "Memory UID/prefix" in result.output
+    assert "text:VALUE" in result.output
 
 
 class AuditProvider:
