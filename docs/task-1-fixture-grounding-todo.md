@@ -228,8 +228,9 @@ typed ordinary references and current state, keeps existing checkpoint
 identity while repairing future-restorable pointer locators, and records an
 automatic checkpoint for every changed live owner. Named Ground frames and
 translation artifacts have explicit UID-bound continuity rules; unrelated
-semantic caches retain their own freshness boundaries. This is no longer the
-public `mem rename` command; that spelling now changes a Profile display name.
+semantic caches retain their own freshness boundaries. The public `mem rename`
+command exposes this portable-to-portable Context graph migration; Profile
+display-name changes remain under `mem profile rename` and the Profile picker.
 
 An owning internal operation supplies exact canonical old and new names,
 freezes the complete graph plan, and requires the applied graph to equal that
@@ -401,9 +402,9 @@ automatically creates or accepts Ground Memories.
 
 ## Ordered TODO
 
-1. If fixture roots still require relocation, run a focused internal migration
-   using the stored Context relocation plan; do not use the Profile-oriented
-   public `mem rename` command.
+1. If portable fixture roots still require relocation, use the reviewed public
+   `mem rename OLD NEW` command; use `mem profile migrate-context` instead for
+   a nonportable legacy source.
 2. Verify the resulting Context UIDs, descendants, references, current state,
    and rename checkpoints before fixture population.
 3. Specify `mem impact sort` and the eventual UID-preserving `mem sort`

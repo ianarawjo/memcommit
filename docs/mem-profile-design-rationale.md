@@ -287,17 +287,13 @@ retained-name boundary keeps tombstones and Study grouping unambiguous.
 
 ## Stable-identity Profile rename
 
-`mem rename` and `mem profile rename` are equivalent spellings that change one
-live managed Profile's display name without changing which complete
-MemoryStore it identifies. The explicit `profile` route remains supported for
-scripts and for people who prefer the resource-qualified spelling. Their one-
-and two-argument forms deliberately have different target selection:
+`mem profile rename` changes one live managed Profile's display name without
+changing which complete MemoryStore it identifies. Its one- and two-argument
+forms deliberately have different target selection:
 
 ```text
-mem rename NEW               # rename the current Profile
-mem rename OLD NEW           # rename this explicitly named Profile
-mem profile rename NEW       # explicit equivalent
-mem profile rename OLD NEW   # explicit equivalent
+mem profile rename NEW       # rename the current Profile
+mem profile rename OLD NEW   # rename this explicitly named Profile
 ```
 
 Interactive `mem profile` places the same operation beside its target. `R` on
@@ -314,8 +310,11 @@ Application checks both under the registry lock, then reloads the complete
 picker catalog and restores the renamed row's visual position. A concurrent
 Profile use, Grant mutation, removal, or rename therefore cannot redirect the
 reviewed action to a same-named replacement. Context pickers deliberately do
-not expose rename: Context namespace relocation is a graph migration and is no
-longer a public `mem rename` meaning.
+not expose rename because Context namespace relocation is a graph migration,
+but the reviewed line-oriented `mem rename OLD NEW` command exposes that
+separate Context operation. Keeping the resource-qualified Profile spelling
+prevents slash-delimited Context operands from entering Profile-name
+validation.
 
 In the one-argument form, `NEW` is never interpreted as an existing Profile
 selector. The command acquires the Profile registry lock and then captures the
@@ -363,12 +362,12 @@ whole legacy-group rename would need to revise all member identities and is not
 an ordinary Profile rename.
 
 CLI subcommand tokens remain legal Profile names for compatibility with import
-and the existing shorthand contract. The reserved selection tokens are `list`,
-`ls`, `current`, `use`, `import`, `import-study`,
-`archive-study`, `rename`, and `grant`. A Profile with one of those names must
-be selected with `mem profile use NAME`; rename success output always prints
-that explicit form. An existing Profile named `rename` can itself be renamed
-with `mem profile rename rename NEW`.
+and the existing shorthand contract. Registered subcommands and their supported
+hyphen-omitted input aliases take precedence over shorthand selection. A
+Profile named `archive-study` or `archivestudy`, for example, must be selected
+with `mem profile use NAME`; rename success output always prints that explicit
+form. An existing Profile named `rename` can itself be renamed with
+`mem profile rename rename NEW`.
 
 Success output distinguishes an active target from an inactive one, prints the
 unchanged Profile UID and store path, and states that store data, grants, and

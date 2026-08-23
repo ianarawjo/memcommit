@@ -34,8 +34,8 @@ PROFILE_DETAILS = (
             OperationComparisonOption(
                 label="RENAME",
                 guidance=(
-                    "Press R on a Profile row, or use mem profile rename; mem "
-                    "rename is the top-level shortcut."
+                    "Press R on a Profile row, or use mem profile rename. "
+                    "Top-level mem rename is reserved for Context namespaces."
                 ),
             ),
             OperationComparisonOption(

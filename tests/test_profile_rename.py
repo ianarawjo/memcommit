@@ -187,29 +187,18 @@ def _install_current_study(
     return study_uid, participant, authority
 
 
-@pytest.mark.parametrize(
-    ("argv", "expected_prefix"),
-    [
-        (("rename", "alias-old", "alias-new"), "Renamed Profile"),
-        (
-            ("profile", "rename", "alias-old", "alias-new"),
-            "Renamed Profile",
-        ),
-    ],
-)
-def test_top_level_and_explicit_profile_rename_are_equivalent(
-    profile_home,
-    argv,
-    expected_prefix,
-):
+def test_explicit_profile_rename_preserves_store_identity(profile_home):
     profile = _register_profile("alias-old", context_name="context-stays-put")
     root = profile_store_dir(profile)
     digest = _tree_digest(root)
 
-    result = runner.invoke(app, list(argv))
+    result = runner.invoke(
+        app,
+        ["profile", "rename", "alias-old", "alias-new"],
+    )
 
     assert result.exit_code == 0, result.stderr or result.output
-    assert f"{expected_prefix} 'alias-old' to 'alias-new'." in result.output
+    assert "Renamed Profile 'alias-old' to 'alias-new'." in result.output
     renamed = load_profile_registry().by_name("alias-new")
     assert renamed is not None and renamed.uid == profile.uid
     assert profile_store_dir(renamed) == root
@@ -217,21 +206,13 @@ def test_top_level_and_explicit_profile_rename_are_equivalent(
     assert _tree_digest(root) == digest
 
 
-def test_top_level_rename_help_describes_profiles_and_keeps_explicit_route(
-    profile_home,
-):
-    command_help = runner.invoke(app, ["rename", "--help"])
-    inventory = runner.invoke(app, ["help"])
+def test_explicit_profile_rename_help_describes_profile_targets(profile_home):
+    command_help = runner.invoke(app, ["profile", "rename", "--help"])
 
     assert command_help.exit_code == 0, command_help.output
     assert "current Profile" in command_help.output
     assert "explicitly named Profile" in command_help.output
     assert "--force" not in command_help.output
-    assert inventory.exit_code == 0, inventory.output
-    rename_row = next(
-        line for line in inventory.output.splitlines() if line.startswith("rename ")
-    )
-    assert "managed Profile" in rename_row
 
 
 def test_picker_receipt_rejects_a_new_registry_generation(profile_home):
@@ -328,8 +309,7 @@ def test_legacy_study_rename_updates_all_derived_profile_names_atomically(
         "renamed-legacy-task-3",
     ]
     assert all(
-        profile.source is not None
-        and profile.source["study_name"] == "renamed-legacy"
+        profile.source is not None and profile.source["study_name"] == "renamed-legacy"
         for profile in (*group.profiles, *group.support_profiles)
     )
     assert after.generation == before.generation + 1

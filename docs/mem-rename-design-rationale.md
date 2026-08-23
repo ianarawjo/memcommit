@@ -1,27 +1,27 @@
-# Internal Context namespace relocation design rationale
+# `mem rename` design rationale
 
 ## Status and intent
 
-Context namespace relocation changes the canonical locator of one existing
-ordinary Context namespace without changing the identities or contents of the
-Contexts and Memories inside it. It remains available to operation-owned code
-through the reviewed store plan:
+`mem rename` changes the canonical locator of one existing portable ordinary
+Context namespace without changing the identities or contents of the Contexts
+and Memories inside it:
 
-```python
-plan = store.plan_context_rename(old_name, new_name)
-store.rename_contexts(plan)
+```text
+mem rename OLD NEW
+mem rename OLD NEW --force
 ```
 
-It is no longer exposed as `mem rename`. That public command now renames a
-Profile display name, with `mem profile rename` retained as its explicit
-equivalent. Routine direct Context rename was removed because rename belongs
-beside the selected Profile in its picker, while Context namespace relocation
-is a specialized graph migration rather than a routine picker action. The
-narrow `mem profile migrate-context` compatibility route exposes this same
-plan only when a nonportable legacy source is moved to a portable destination;
-it previews by default and accepts `--apply` only with the exact Profile UID
-and graph digest printed by the preview. The naming policy and rollout
-boundary are specified in
+Profile display-name rename remains a separate operation at `mem profile
+rename`, and interactive `mem profile` keeps that action beside its selected
+Profile. Reusing top-level `mem rename` as a Profile alias was rejected because
+it displaced the ordinary Context operation and made slash-delimited Context
+operands fail under the unrelated one-segment Profile-name validator.
+
+The narrow `mem profile migrate-context` compatibility route uses the same
+store plan only when a nonportable legacy source is moved to a portable
+destination. It previews by default and accepts `--apply` only with the exact
+Profile UID and graph digest printed by the preview. The naming policy and
+rollout boundary are specified in
 [`context-name-portability-design-rationale.md`](context-name-portability-design-rationale.md).
 
 The motivating Task 1 case is migration from provisional fixture names such as
@@ -35,17 +35,28 @@ stored owner names, references, current state, or restorable checkpoints at
 the old locator would produce a store that is physically present but no longer
 semantically coherent.
 
-## Internal plan contract
+## Command and store-plan contract
 
-The source operand is a canonical slash-delimited Context name supplied by the
-owning operation and may use the historical storage grammar so legacy data can
-be migrated. The requested destination root uses the portable new-identity
-grammar. A descendant can retain a nonportable suffix during a top-down
-compatibility rollout and is reported for a following migration. Relative CLI
-locators are not accepted or resolved at this layer. The caller must build and
-freeze a read-only plan, retain any operation-specific review or authority
-boundary, and apply exactly that plan. The store never relaxes collision,
-integrity, identity, freshness, or rollback checks.
+`OLD` locates an existing ordinary Context. The command captures the current
+Context once and resolves `OLD` through the shared existing-Context locator
+contract. A bare value is a canonical global name, while `.`, `..`, `./...`,
+and `../...` opt into lexical relative resolution. The resolved source must be
+portable; a nonportable legacy source uses the separately reviewed
+`mem profile migrate-context` compatibility route.
+
+`NEW` declares a new canonical Context name. It uses the portable new-identity
+grammar and is never interpreted relative to the current Context. Before
+mutation, the command builds a read-only plan and displays the resolved
+canonical source and destination plus the number of Contexts and lexical
+descendants that will move. Confirmation is required by default. `-f` and
+`--force` skip only that prompt; they do not relax collision, integrity,
+identity, freshness, write-protection, or rollback checks.
+
+The shared store plan additionally accepts a historical nonportable source so
+the compatibility migration route can retire legacy names. Such a subtree can
+retain a nonportable descendant suffix during a top-down rollout; that route
+reports the remaining names for later reviewed migration. Both callers freeze
+one read-only plan and apply exactly that plan.
 
 The operation requires an ordinary Context at the exact `OLD` name. It renames
 that Context and every stored ordinary Context whose canonical name begins
@@ -241,6 +252,9 @@ multi-user publication primitive.
 
 - The operation renames ordinary Context namespaces, not individual Memories.
   A Memory currently has no independent name; changing its content is an edit.
+- General `mem rename` accepts portable existing Context names. Nonportable
+  legacy sources use `mem profile migrate-context` and its Profile/graph-bound
+  Apply receipt.
 - Query-only sources, remote systems, publication branches, shell working
   directories, and filesystem paths outside the local store are not renamed.
 - Rename does not establish aliases, cross-store redirects, or an upstream

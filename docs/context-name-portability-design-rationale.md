@@ -132,7 +132,8 @@ so the terminal never receives the raw control while the shell still
 reconstructs the exact stored locator.
 
 The command accepts only a nonportable source and a portable destination. It
-is therefore a compatibility route, not a second general Context rename UI.
+is therefore the compatibility route for legacy names, not an alternative
+spelling for the portable-to-portable `mem rename` operation.
 A subtree move can leave a nonportable descendant segment—for example,
 `old root/bad child` to `old-root/bad child`. The receipt reports the remaining
 canonical names and the person migrates those roots in later reviewed steps.
