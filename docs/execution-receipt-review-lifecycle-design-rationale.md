@@ -53,6 +53,10 @@ into a precondition named Review or rendering it again after success.
    sessions through Review.
 7. A no-change result is terminal and explicit even when it creates no Context
    checkpoint. It must not be presented as an unaccepted proposal.
+8. Every saved artifact selector resolves an exact UID first and otherwise one
+   unique prefix inside the operation's frozen catalog. A displayed compact
+   UID is therefore callable; an ambiguous prefix asks for more characters
+   instead of choosing the newest or current artifact.
 
 ## Compact judgment surface
 

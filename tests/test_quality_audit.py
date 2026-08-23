@@ -570,6 +570,44 @@ def test_review_audit_snapshot_reopens_exact_saved_report(isolated_store):
     assert "CONFLICTS · FINISHED · 2/2 MEMORIES INVOLVED" in result.stdout
 
 
+def test_review_audit_snapshot_accepts_displayed_session_prefix(isolated_store):
+    ctx, first, second = _context()
+    session = _finding_session(ctx, first, second)
+    QualityAuditStore(MemoryStore()).save(session, expected_digest=None)
+
+    result = runner.invoke(
+        app,
+        ["review", "audit", "--session", session.uid[:8], "--snapshot"],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert f"SESSION [{session.uid[:8]}]" in result.stdout
+    assert "SAVED · 3/3 CHECKS" in result.stdout
+
+
+def test_review_audit_rejects_an_ambiguous_session_prefix(isolated_store):
+    ctx, first, second = _context()
+    original = _finding_session(ctx, first, second)
+    sessions = QualityAuditStore(MemoryStore())
+    sessions.save(
+        replace(original, uid="aaaaaaaa-0000-4000-8000-000000000000"),
+        expected_digest=None,
+    )
+    sessions.save(
+        replace(original, uid="aaaaaaaa-1111-4000-8000-000000000000"),
+        expected_digest=None,
+    )
+
+    result = runner.invoke(
+        app,
+        ["review", "audit", "--session", "aaaaaaaa", "--snapshot"],
+    )
+
+    assert result.exit_code == 1
+    assert "matches 2 candidates" in result.output
+    assert "pass a longer UID" in result.output
+
+
 def test_audit_help_names_all_three_finders():
     result = runner.invoke(app, ["audit", "--help"])
 

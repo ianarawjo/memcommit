@@ -314,7 +314,7 @@ def test_saved_update_apply_handoff_reenters_owning_update_flow(
         lambda **kwargs: observed.append(kwargs),
     )
 
-    impact_command._saved_update_impact(store, session_uid=session.uid)
+    impact_command._saved_update_impact(store, session_uid=session.uid[:8])
 
     assert observed == [
         {

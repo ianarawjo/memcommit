@@ -17,6 +17,7 @@ from memcommit.interfaces.console.text import safe_terminal_text
 from memcommit.interfaces.console.theme import SemanticColorRole
 from memcommit.review_report import ReviewReportController, ReviewTextFragment
 from memcommit.store import MemoryStore
+from memcommit.uid_locator import resolve_exact_or_unique_uid
 
 
 CHECKPOINT_REVIEW_OPERATIONS = frozenset(
@@ -101,15 +102,12 @@ def select_applied_checkpoint_review(
 ) -> AppliedCheckpointReview:
     """Resolve one exact or unambiguous receipt prefix."""
 
-    if not isinstance(selector, str) or not selector.strip():
-        raise ValueError("Review receipt selector must be nonblank text.")
-    value = selector.strip()
-    matches = [record for record in records if record.checkpoint_uid.startswith(value)]
-    if len(matches) != 1:
-        raise ValueError(
-            "Review receipt is unavailable or ambiguous; pass a longer receipt UID."
-        )
-    return matches[0]
+    return resolve_exact_or_unique_uid(
+        records,
+        selector,
+        uid=lambda record: record.checkpoint_uid,
+        label="Review receipt",
+    )
 
 
 def _line(value: object) -> str:

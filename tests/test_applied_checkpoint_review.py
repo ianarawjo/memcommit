@@ -66,7 +66,7 @@ def test_checkpoint_review_discovers_and_renders_exact_applied_effects(
 def test_checkpoint_review_requires_an_unambiguous_receipt_prefix(isolated_store):
     records = ()
 
-    with pytest.raises(ValueError, match="unavailable or ambiguous"):
+    with pytest.raises(ValueError, match="unavailable"):
         select_applied_checkpoint_review(records, "deadbeef")
 
 

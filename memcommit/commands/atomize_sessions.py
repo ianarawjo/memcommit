@@ -24,6 +24,7 @@ from memcommit.commands.ground_session_picker import (
 )
 from memcommit.context import Context
 from memcommit.store import MemoryStore
+from memcommit.uid_locator import resolve_exact_or_unique_uid
 
 
 _FINAL_ANALYSIS_NAME = re.compile(r"^([0-9a-f-]{36})\.json$")
@@ -175,20 +176,17 @@ def load_saved_atomize_analysis(
     store: MemoryStore,
     analysis_uid: str,
 ) -> AtomizeAnalysisSession:
-    """Resolve one exact analysis UID without falling into create/refresh."""
-    expected_uid = _canonical_uuid(analysis_uid, "atomize analysis uid")
-    matches = [
+    """Resolve one analysis UID/prefix without falling into create/refresh."""
+    candidates = tuple(
         analysis
         for analysis, _path in _canonical_saved_atomize_analyses(store)
-        if analysis.uid == expected_uid
-    ]
-    if not matches:
-        raise ValueError(
-            f"Saved atomize analysis '{analysis_uid}' is no longer available."
-        )
-    if len(matches) != 1:
-        raise ValueError("Saved atomize analysis identity is not unique.")
-    return matches[0]
+    )
+    return resolve_exact_or_unique_uid(
+        candidates,
+        analysis_uid,
+        uid=lambda analysis: analysis.uid,
+        label="Saved Atomize analysis",
+    )
 
 
 def revalidate_saved_atomize_analysis(

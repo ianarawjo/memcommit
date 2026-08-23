@@ -103,6 +103,7 @@ from memcommit.review import (
     review_response_digest,
 )
 from memcommit.store import MemoryStore
+from memcommit.uid_locator import UidLocatorError, resolve_exact_or_unique_uid
 from memcommit.study_prewarm.registry import StudyPrewarmRegistryError
 from memcommit.update import UpdateError, plan_update, session_matches
 from memcommit.update_endpoints import (
@@ -162,16 +163,18 @@ def _select_saved_session(
     title: str,
     session_uid: str | None,
 ) -> SessionPickerEntry | None:
-    """Resolve an exact saved operation artifact or one frozen TTY choice."""
+    """Resolve one saved UID/prefix or one frozen TTY choice."""
 
     if session_uid is not None:
-        matches = [entry for entry in entries if entry.key == session_uid]
-        if len(matches) != 1:
-            raise ValueError(
-                f"Saved {kind.title()} Impact artifact '{session_uid}' is not "
-                "available."
+        try:
+            return resolve_exact_or_unique_uid(
+                entries,
+                session_uid,
+                uid=lambda entry: entry.key,
+                label=f"Saved {kind.title()} Impact artifact",
             )
-        return matches[0]
+        except UidLocatorError as error:
+            raise ValueError(str(error)) from error
     if not entries:
         raise ValueError(f"No saved {kind.title()} Impact artifacts are available.")
     if not sys.stdin.isatty() or not sys.stdout.isatty():
@@ -288,9 +291,12 @@ def _saved_update_impact(
             "No saved Update or directional Impact plan exists. Run "
             "'mem impact --from SOURCE --to TARGET' first."
         )
-    if session_uid is not None and session.uid != session_uid:
-        raise ValueError(
-            f"Saved Update Impact artifact '{session_uid}' is not available."
+    if session_uid is not None:
+        session = resolve_exact_or_unique_uid(
+            (session,),
+            session_uid,
+            uid=lambda candidate: candidate.uid,
+            label="Saved Update Impact artifact",
         )
     def load_presentation() -> ImpactSessionPresentation:
         current = store.load_staged_update() or store.load_impact_plan()
@@ -990,7 +996,7 @@ def _dispatch_impact(
         Optional[str],
         typer.Option(
             "--session",
-            help="Exact saved Meld, Sever, or Update artifact uid",
+            help="Saved Meld, Sever, or Update artifact uid or unique prefix",
         ),
     ] = None,
     sessions: Annotated[
@@ -1452,7 +1458,7 @@ def atomize_impact_cmd(
         Optional[str],
         typer.Option(
             "--session",
-            help="Exact saved Atomize analysis uid",
+            help="Saved Atomize analysis uid or unambiguous prefix",
         ),
     ] = None,
 ) -> None:
@@ -1534,7 +1540,7 @@ def _saved_impact_cmd(operation: ImpactOperation, session_uid: str | None) -> No
 def meld_impact_cmd(
     session_uid: Annotated[
         Optional[str],
-        typer.Option("--session", help="Exact saved Meld artifact uid"),
+        typer.Option("--session", help="Saved Meld artifact uid or unique prefix"),
     ] = None,
 ) -> None:
     """Inspect one exact saved Meld assessment."""
@@ -1545,7 +1551,7 @@ def meld_impact_cmd(
 def sever_impact_cmd(
     session_uid: Annotated[
         Optional[str],
-        typer.Option("--session", help="Exact saved Sever artifact uid"),
+        typer.Option("--session", help="Saved Sever artifact uid or unique prefix"),
     ] = None,
 ) -> None:
     """Inspect one exact saved Sever result."""
@@ -1563,7 +1569,7 @@ def update_impact_cmd(
     ] = None,
     session_uid: Annotated[
         Optional[str],
-        typer.Option("--session", help="Exact saved Update artifact uid"),
+        typer.Option("--session", help="Saved Update artifact uid or unique prefix"),
     ] = None,
     source_name: Annotated[
         Optional[str],

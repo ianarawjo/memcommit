@@ -174,6 +174,47 @@ def test_mem_review_update_prints_saved_exact_change_report(isolated_store):
     assert "APPLY CHANGES" not in result.output
 
 
+def test_mem_review_update_accepts_receipt_uid_prefix(isolated_store):
+    prepared = _update_session()
+    owner = prepared.operations[0]
+    staged = replace(
+        prepared,
+        status="staged",
+        target_contexts=(
+            *prepared.target_contexts,
+            ContextFingerprint(
+                owner.owner_context_uid,
+                owner.owner_context_name,
+                "c" * 64,
+            ),
+        ),
+    )
+    session = staged.with_application(
+        UpdateApplicationReceipt(
+            applied_at="2026-08-05T00:01:00+00:00",
+            operation_digest=operation_digest(prepared.operations),
+            target_digest=prepared.target_digest,
+            target_contexts=staged.target_contexts,
+            checkpoints=(
+                UpdateCheckpointReceipt(
+                    owner.owner_context_uid,
+                    owner.owner_context_name,
+                    "55555555-5555-4555-8555-555555555555",
+                ),
+            ),
+        )
+    )
+    MemoryStore().save_staged_update(session)
+
+    result = runner.invoke(
+        app,
+        ["review", "update", "--session", session.uid[:8], "--snapshot"],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert "MEM REVIEW · UPDATE" in result.output
+
+
 def test_review_host_cannot_turn_accept_key_into_apply():
     controller = update_review_report(_update_session())
 

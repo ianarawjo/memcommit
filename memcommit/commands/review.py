@@ -62,6 +62,7 @@ from memcommit.review import (
     review_matches_context,
 )
 from memcommit.store import MemoryStore
+from memcommit.uid_locator import UidLocatorError, resolve_exact_or_unique_uid
 
 
 def _interactive_terminal() -> bool:
@@ -76,14 +77,17 @@ def _select_report_session(
     session_uid: str | None,
     selector_option: str = "--session",
 ) -> SessionPickerEntry | None:
-    """Resolve an exact report artifact or return one TTY picker selection."""
+    """Resolve one UID/prefix or return one TTY picker selection."""
     if session_uid is not None:
-        matches = [entry for entry in entries if entry.key == session_uid]
-        if len(matches) != 1:
-            raise ReviewError(
-                f"Saved {kind} review artifact '{session_uid}' is not available."
+        try:
+            return resolve_exact_or_unique_uid(
+                entries,
+                session_uid,
+                uid=lambda entry: entry.key,
+                label=f"Saved {kind} review artifact",
             )
-        return matches[0]
+        except UidLocatorError as error:
+            raise ReviewError(str(error)) from error
     if not entries:
         raise ReviewError(f"No saved {kind} review artifacts are available.")
     if not sys.stdin.isatty() or not sys.stdout.isatty():
@@ -200,8 +204,16 @@ def _run_update_report(
         raise ReviewError(
             "No saved Update or Impact plan exists. Run 'mem impact' first."
         )
-    if session_uid is not None and session.uid != session_uid:
-        raise ReviewError(f"Saved Update artifact '{session_uid}' is not available.")
+    if session_uid is not None:
+        try:
+            session = resolve_exact_or_unique_uid(
+                (session,),
+                session_uid,
+                uid=lambda candidate: candidate.uid,
+                label="Saved Update artifact",
+            )
+        except UidLocatorError as error:
+            raise ReviewError(str(error)) from error
     if session.status not in {"applied", "undone"}:
         raise ReviewError(
             "Update execution is not complete. Resume it with 'mem update'; "
@@ -384,6 +396,7 @@ def _run_atomize_workbench(
             store,
             expected_analysis_uid,
         )
+        expected_analysis_uid = selected_analysis.uid
         context_name = selected_analysis.context_name
     ctx = _load_direct_context(
         store,
@@ -575,7 +588,7 @@ def cmd(
         Optional[str],
         typer.Option(
             "--session",
-            help="Exact saved operation artifact uid for an adaptive report",
+            help="Saved operation artifact uid or unambiguous prefix",
         ),
     ] = None,
     receipt_uid: Annotated[
