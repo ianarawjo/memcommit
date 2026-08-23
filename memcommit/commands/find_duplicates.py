@@ -11,7 +11,7 @@ from memcommit.commands.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
 )
-from memcommit.authority.access import GrantedReadStore, resolve_context_access
+from memcommit.authority.access import resolve_context_access
 from memcommit.commands.findings_render import (
     render_cleanup_member,
     render_heading,
@@ -25,6 +25,10 @@ from memcommit.interfaces.console.text import (
 )
 from memcommit.interfaces.console.identity import collision_safe_uid_prefixes
 from memcommit.context import Memory
+from memcommit.context_targeting.presets import (
+    ContextScopePreset,
+    resolve_scope_preset,
+)
 from memcommit.findings import DuplicateFinding, DuplicateReport, FindingsError
 from memcommit.query_provider import (
     QueryProviderError,
@@ -41,16 +45,16 @@ from memcommit.dedup_application import (
     recommended_dedup_selections,
 )
 from memcommit.dedup_runtime import MemoryStoreDedupPort
-from memcommit.quality_find_workbench import (
-    QualityFindSourceFrame,
-    create_quality_find_workbench,
-)
 from memcommit.quality_finding_handoff import (
     QualityFindingSource,
-    quality_finding_handoffs,
 )
 from memcommit.semantic_redundancy_evidence import (
     redundancy_evidence_json,
+)
+from memcommit.redundancy_scope import (
+    RedundancyScopeAnalysis,
+    analyze_independent_redundancy_scope,
+    freeze_redundancy_scope,
 )
 
 
@@ -189,6 +193,7 @@ def _run(
     context_name: str | None,
     evidence_json: bool,
     dedun_handoff: bool,
+    include_descendants: bool = False,
 ) -> None:
     """Run one shared analysis, optionally exposing Dedun's Apply handoff."""
 
@@ -204,10 +209,10 @@ def _run(
             current_name=context_snapshot.current_name,
             required_permission="READ",
         )
-        ctx = (
-            GrantedReadStore(access).load_direct(access.display_name)
-            if access.is_granted
-            else store.load_direct(access.context_name)
+        source = freeze_redundancy_scope(
+            store,
+            access,
+            include_descendants=include_descendants,
         )
     except (
         FileNotFoundError,
@@ -227,10 +232,14 @@ def _run(
     try:
         with CommandProgress(
             progress_label,
-            "analyzing direct memories",
-            total=1,
+            "analyzing independent direct Context frames",
+            total=len(source.contexts),
         ):
-            report = ops.find_redundancies(ctx, connect_codex_chatgpt_provider)
+            analysis = analyze_independent_redundancy_scope(
+                source,
+                connect_codex_chatgpt_provider,
+                operation=ops.find_redundancies,
+            )
     except (FindingsError, QueryProviderError) as error:
         typer.secho(
             f"{operation_label} error: " + display_escape_text(str(error)),
@@ -239,10 +248,6 @@ def _run(
         )
         raise typer.Exit(1)
 
-    source = QualityFindSourceFrame.create(
-        (ctx,),
-        context_names=(access.display_name,),
-    )
     annotate_quality_find_attempt(
         "duplicates",
         source,
@@ -250,16 +255,22 @@ def _run(
     )
 
     if evidence_json:
-        session = create_quality_find_workbench("duplicates", source, report)
-        for handoff in quality_finding_handoffs(session):
+        for handoff in analysis.handoffs:
             typer.echo(redundancy_evidence_json(handoff))
         return
 
     if dedun_handoff:
-        session = create_quality_find_workbench("duplicates", source, report)
+        if source.include_descendants:
+            raise ValueError(
+                "Recursive Dedun Apply is not available through the read-only "
+                "Finder stage."
+            )
+        frame = analysis.contexts[0]
+        report = frame.report
+        ctx = frame.source.contexts[0]
         applicable = tuple(
             handoff
-            for handoff in quality_finding_handoffs(session)
+            for handoff in frame.handoffs
             if handoff.classification in DEDUP_ELIGIBLE_RELATIONS
         )
         context_label = display_escape_text(access.display_name)
@@ -306,6 +317,13 @@ def _run(
         )
         return
 
+    if source.include_descendants:
+        _render_redundancy_scope(analysis)
+        return
+
+    frame = analysis.contexts[0]
+    report = frame.report
+    ctx = frame.source.contexts[0]
     render_heading(
         operation_label="Find Redundancies",
         context_name=display_escape_text(ctx.name),
@@ -319,6 +337,44 @@ def _run(
     if not report.findings and not report.exact_item_groups:
         return
     _render_redundancy_groups(report)
+
+
+def _render_redundancy_scope(analysis: RedundancyScopeAnalysis) -> None:
+    source = analysis.source
+    group_count = sum(frame.report.group_count for frame in analysis.contexts)
+    absorption_count = sum(
+        frame.report.redundancy_count for frame in analysis.contexts
+    )
+    render_heading(
+        operation_label="Find Redundancies",
+        context_name=display_escape_text(source.target_names[0]),
+        facts=(
+            _count(len(analysis.contexts), "Context"),
+            _count(analysis.memory_count, "direct memory", "direct memories")
+            + " checked",
+            _count(group_count, "group"),
+            _count(absorption_count, "proposed absorption"),
+        ),
+    )
+    for index, frame in enumerate(analysis.contexts, start=1):
+        typer.echo()
+        typer.secho(
+            f"CONTEXT {index}/{len(analysis.contexts)} · "
+            f"{display_escape_text(frame.context_name)}",
+            bold=True,
+        )
+        typer.echo(
+            "  "
+            + _count(frame.report.memory_count, "direct memory", "direct memories")
+            + " checked · "
+            + _count(frame.report.group_count, "group")
+            + " · "
+            + _count(frame.report.redundancy_count, "proposed absorption")
+        )
+        if frame.report.findings or frame.report.exact_item_groups:
+            _render_redundancy_groups(frame.report)
+        else:
+            typer.echo("  No redundancies.")
 
 
 def cmd(
@@ -344,12 +400,36 @@ def cmd(
             help="Print one canonical redundancy evidence JSON per finding",
         ),
     ] = False,
+    direct: Annotated[
+        bool,
+        typer.Option(
+            "--direct",
+            "-d",
+            help="Inspect the exact Context root only (default)",
+        ),
+    ] = False,
+    recursive: Annotated[
+        bool,
+        typer.Option(
+            "--recursive",
+            "-r",
+            help=(
+                "Inspect each readable lexical descendant as an independent "
+                "direct semantic frame"
+            ),
+        ),
+    ] = False,
 ) -> None:
     """Report complete DUN evidence; never change Context content."""
     try:
         context_name = choose_context_operand(
             context_operand,
             option=context_name,
+        )
+        preset = resolve_scope_preset(
+            direct=direct,
+            recursive=recursive,
+            default=ContextScopePreset.DIRECT,
         )
     except ValueError as error:
         typer.secho(
@@ -363,6 +443,7 @@ def cmd(
             context_name=context_name,
             evidence_json=evidence_json,
             dedun_handoff=False,
+            include_descendants=preset is ContextScopePreset.RECURSIVE,
         )
     except typer.Exit:
         raise
@@ -386,6 +467,7 @@ def run_dedun(
         context_name=context_name,
         evidence_json=evidence_json,
         dedun_handoff=True,
+        include_descendants=False,
     )
 
 

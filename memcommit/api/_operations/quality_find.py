@@ -17,7 +17,7 @@ from memcommit.api.errors import (
     SemanticProviderFailure,
     SemanticStorageError,
 )
-from memcommit.api.quality_find import QualityFindResult
+from memcommit.api.quality_find import QualityFindContextResult, QualityFindResult
 from memcommit.authority.access import GrantedReadStore, resolve_context_access
 from memcommit.context_locator import resolve_context_locator
 from memcommit.derived_policy import authorize_combination
@@ -35,6 +35,10 @@ from memcommit.quality_find_workbench import (
     create_quality_find_workbench,
 )
 from memcommit.quality_finding_handoff import quality_finding_handoffs
+from memcommit.redundancy_scope import (
+    analyze_independent_redundancy_scope,
+    freeze_redundancy_scope,
+)
 
 
 def _current_name(runtime: ClientRuntime) -> str | None:
@@ -93,8 +97,7 @@ def _source(
         )
         for name in canonical
     )
-    if len(accesses) > 1:
-        authorize_combination(accesses)
+    authorize_combination(accesses)
     contexts = tuple(
         (
             GrantedReadStore(access, registry=registry).load_direct(access.display_name)
@@ -116,13 +119,56 @@ def find_quality(
     runtime: ClientRuntime,
     kind: QualityFindKind,
     context_names: Sequence[str] = (),
+    *,
+    include_descendants: bool = False,
 ) -> QualityFindResult:
     """Analyze one frozen readable frame and return typed handoffs."""
 
     if kind not in {"duplicates", "ambiguities", "conflicts"}:
         raise SemanticInputError("Unsupported quality finder kind.")
     try:
-        source = _source(runtime, context_names)
+        if type(include_descendants) is not bool:
+            raise TypeError("Quality finder descendant reach must be a boolean.")
+        if include_descendants and kind != "duplicates":
+            raise ValueError(
+                "Recursive lexical scope is available only for redundancies."
+            )
+        if include_descendants:
+            if isinstance(context_names, (str, bytes)):
+                raise TypeError("Quality finder Context names must be a sequence.")
+            operands = tuple(context_names)
+            if len(operands) > 1:
+                raise ValueError(
+                    "Recursive Find Redundancies accepts exactly one root Context."
+                )
+            current_name = _current_name(runtime)
+            if not operands:
+                if current_name is None:
+                    raise FileNotFoundError("No current Context is available.")
+                root_name = current_name
+            else:
+                root_name = operands[0]
+                if not isinstance(root_name, str) or not root_name.strip():
+                    raise TypeError(
+                        "Quality finder Context names must be nonblank text."
+                    )
+                root_name = resolve_context_locator(root_name, current=current_name)
+            registry = _active_registry(runtime)
+            access = resolve_context_access(
+                runtime.store,
+                root_name,
+                current_name=current_name,
+                required_permission="READ",
+                registry=registry,
+            )
+            source = freeze_redundancy_scope(
+                runtime.store,
+                access,
+                include_descendants=True,
+                registry=registry,
+            )
+        else:
+            source = _source(runtime, context_names)
     except SemanticAuthorityError:
         raise
     except (FileNotFoundError, KeyError) as error:
@@ -140,6 +186,32 @@ def find_quality(
         "conflicts": ops.find_conflicts,
     }[kind]
     try:
+        if include_descendants:
+            analysis = analyze_independent_redundancy_scope(
+                source,
+                lambda: safe_semantic_provider(runtime),
+            )
+            contexts = tuple(
+                QualityFindContextResult(
+                    context_name=frame.context_name,
+                    source_digest=frame.source.digest,
+                    memory_count=frame.report.memory_count,
+                    handoffs=frame.handoffs,
+                    exact_item_groups=frame.report.exact_item_groups,
+                )
+                for frame in analysis.contexts
+            )
+            return QualityFindResult(
+                kind="redundancies",
+                context_names=source.context_names,
+                source_digest=source.digest,
+                memory_count=analysis.memory_count,
+                pair_count=None,
+                handoffs=analysis.handoffs,
+                exact_item_groups=analysis.exact_item_groups,
+                include_descendants=True,
+                contexts=contexts,
+            )
         report = operation(
             source.analysis_context(),
             lambda: safe_semantic_provider(runtime),
@@ -170,6 +242,19 @@ def find_quality(
         pair_count=(report.pair_count if isinstance(report, ConflictReport) else None),
         handoffs=handoffs,
         exact_item_groups=(report.exact_item_groups if kind == "duplicates" else ()),
+        contexts=(
+            QualityFindContextResult(
+                context_name=source.context_names[0],
+                source_digest=source.digest,
+                memory_count=report.memory_count,
+                handoffs=handoffs,
+                exact_item_groups=(
+                    report.exact_item_groups if kind == "duplicates" else ()
+                ),
+            ),
+        )
+        if len(source.context_names) == 1
+        else (),
     )
 
 

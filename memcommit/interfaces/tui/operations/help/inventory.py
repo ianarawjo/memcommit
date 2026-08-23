@@ -631,6 +631,8 @@ COMMAND_FORMS = {
         "mem find-redundancies (report DUP + semantic DUN in the current Context)",
         "mem find-redundancies [context] (one-shot complete redundancy report)",
         "mem find-redundancies --context [context] (compatibility alias)",
+        "mem find-redundancies -d (inspect the exact Context root; default)",
+        "mem find-redundancies -r (inspect each readable lexical Context independently)",
     ),
     "forget": (
         "mem forget (enter interactive instruction and direct-Source setup)",

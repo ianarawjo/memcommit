@@ -129,12 +129,12 @@ def redundancy_evidence_agent_schema() -> JsonObject:
     return schema
 
 
-def _parse_request(payload: object) -> tuple[str, tuple[str, ...]]:
+def _parse_request(payload: object) -> tuple[str, tuple[str, ...], bool]:
     value = object_value(payload, label="Quality Find request")
     exact_fields(
         value,
         required={"version", "kind"},
-        optional={"context_names"},
+        optional={"context_names", "include_descendants"},
         label="Quality Find request",
     )
     version = value["version"]
@@ -158,7 +158,18 @@ def _parse_request(payload: object) -> tuple[str, tuple[str, ...]]:
     )
     if len(set(names)) != len(names):
         raise AgentRequestError("context_names must not repeat.")
-    return kind, names
+    include_descendants = value.get("include_descendants", False)
+    if type(include_descendants) is not bool:
+        raise AgentRequestError("include_descendants must be a boolean.")
+    if include_descendants and kind != "redundancies":
+        raise AgentRequestError(
+            "include_descendants is available only for redundancies."
+        )
+    if include_descendants and len(names) > 1:
+        raise AgentRequestError(
+            "Recursive redundancies accepts at most one root Context."
+        )
+    return kind, names, include_descendants
 
 
 _PUBLIC_ERRORS: tuple[tuple[type[SemanticError], str, str, bool], ...] = (
@@ -209,7 +220,7 @@ class QualityFindAgentAdapter:
         if isinstance(payload, Mapping) and isinstance(payload.get("kind"), str):
             kind = payload["kind"]
         try:
-            kind, context_names = _parse_request(payload)
+            kind, context_names, include_descendants = _parse_request(payload)
         except AgentRequestError as error:
             return error_response(
                 version=QUALITY_FIND_AGENT_CONTRACT_VERSION,
@@ -224,7 +235,14 @@ class QualityFindAgentAdapter:
                 "ambiguities": self._client.find_ambiguities,
                 "conflicts": self._client.find_conflicts,
             }[kind]
-            result = operation(context_names)
+            result = (
+                operation(
+                    context_names,
+                    include_descendants=include_descendants,
+                )
+                if kind == "redundancies"
+                else operation(context_names)
+            )
         except SemanticError as error:
             for error_type, code, message, retryable in _PUBLIC_ERRORS:
                 if isinstance(error, error_type):
@@ -261,34 +279,58 @@ class QualityFindAgentAdapter:
                 message="The Quality Find tool failed internally.",
                 retryable=False,
             )
+        result_payload: JsonObject = {
+            "context_names": list(result.context_names),
+            "source_digest": result.source_digest,
+            "memory_count": result.memory_count,
+            "pair_count": result.pair_count,
+            "include_descendants": result.include_descendants,
+            "evidence": [
+                (
+                    redundancy_evidence_dict(handoff)
+                    if kind == "redundancies"
+                    else handoff.to_dict()
+                )
+                for handoff in result.evidence
+            ],
+            "exact_item_groups": [
+                {
+                    "item_kind": group.item_kind,
+                    "survivor_uid": group.survivor_uid,
+                    "absorbed_uids": list(group.absorbed_uids),
+                    "summary": group.summary,
+                }
+                for group in result.exact_item_groups
+            ],
+            "effect": "NONE",
+        }
+        if result.include_descendants:
+            result_payload["contexts"] = [
+                {
+                    "context_name": frame.context_name,
+                    "source_digest": frame.source_digest,
+                    "memory_count": frame.memory_count,
+                    "evidence": [
+                        redundancy_evidence_dict(handoff)
+                        for handoff in frame.evidence
+                    ],
+                    "exact_item_groups": [
+                        {
+                            "item_kind": group.item_kind,
+                            "survivor_uid": group.survivor_uid,
+                            "absorbed_uids": list(group.absorbed_uids),
+                            "summary": group.summary,
+                        }
+                        for group in frame.exact_item_groups
+                    ],
+                }
+                for frame in result.contexts
+            ]
         return {
             "version": QUALITY_FIND_AGENT_CONTRACT_VERSION,
             "ok": True,
             "kind": kind,
-            "result": {
-                "context_names": list(result.context_names),
-                "source_digest": result.source_digest,
-                "memory_count": result.memory_count,
-                "pair_count": result.pair_count,
-                "evidence": [
-                    (
-                        redundancy_evidence_dict(handoff)
-                        if kind == "redundancies"
-                        else handoff.to_dict()
-                    )
-                    for handoff in result.evidence
-                ],
-                "exact_item_groups": [
-                    {
-                        "item_kind": group.item_kind,
-                        "survivor_uid": group.survivor_uid,
-                        "absorbed_uids": list(group.absorbed_uids),
-                        "summary": group.summary,
-                    }
-                    for group in result.exact_item_groups
-                ],
-                "effect": "NONE",
-            },
+            "result": result_payload,
         }
 
 
@@ -318,6 +360,14 @@ def quality_find_agent_tool_schema() -> JsonObject:
                 "context_names": {
                     "type": "array",
                     "items": {"type": "string", "minLength": 1},
+                },
+                "include_descendants": {
+                    "type": "boolean",
+                    "default": False,
+                    "description": (
+                        "For redundancies only, analyze each readable lexical "
+                        "descendant as an independent direct Context frame."
+                    ),
                 },
             },
         },

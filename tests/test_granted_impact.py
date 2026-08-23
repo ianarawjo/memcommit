@@ -872,7 +872,9 @@ def test_find_and_quality_finders_read_granted_current_projection(
         isolated_store,
         tmp_path,
         monkeypatch,
-        parent_permissions=("READ",),
+        # Provider-backed quality analysis is derived use even when the
+        # command publishes only a read-only report.
+        parent_permissions=("READ", "DERIVE"),
     )
     active.set_current_virtual_context_if(source.name, "campus-wiki")
     provider = _GrantedFindProvider()

@@ -303,7 +303,7 @@ _OPERATIONS = (
         "Direct Context items -> role-aware DUP + Memory semantic DUN evidence report",
         ExecutionKind.SEMANTIC,
         "Creates a redundancy report without editing the Source",
-        "One exact direct Context",
+        "Exact root or readable lexical subtree; every Context remains an independent semantic frame",
     ),
     _operation(
         "forget",

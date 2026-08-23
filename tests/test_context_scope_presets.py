@@ -97,6 +97,7 @@ def _walk_commands(command, path: tuple[str, ...] = ()):
         ("distill",),
         ("find",),
         ("find-duplicates",),
+        ("find-redundancies",),
         ("impact",),
         ("impact", "distill"),
         ("import",),
@@ -137,7 +138,6 @@ def test_context_scope_commands_expose_both_common_short_flags(path):
         ("find-ambiguities",),
         ("find-conflicts",),
         ("dedun",),
-        ("find-redundancies",),
         ("forget",),
     ),
 )

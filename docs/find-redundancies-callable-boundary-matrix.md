@@ -3,8 +3,10 @@
 ## Reviewed scope
 
 Find Redundancies is the public read-only complete-DUN operation. Its direct
-CLI freezes one readable direct-item frame, determines same-role exact groups
-and conservative direct-Memory surface relations locally, obtains and
+route freezes one readable direct-item frame, while recursive reach freezes a
+readable lexical subtree as independent direct-item frames. Each frame
+determines same-role exact groups and conservative direct-Memory surface
+relations locally, obtains and
 validates semantic Memory redundancy evidence for the remaining
 representatives, and projects the combined typed report without modifying any
 Source. Dedun reuses this analysis but owns the separate deterministic-survivor
@@ -12,9 +14,9 @@ and Apply boundary.
 
 | Route | Public input | Application entry | Result/effect |
 | --- | --- | --- | --- |
-| CLI | `mem find-redundancies [CONTEXT]` or `--context CONTEXT` | exact one-Context source freeze and `ops.find_redundancies` | immediate one-shot report in TTY and non-TTY environments; no initial selector, review workbench, or Apply handoff |
-| Public Python | `MemCommitClient.find_redundancies(...)` | `api._operations.quality_find.find_quality(..., "duplicates")` | typed redundancy findings; no mutation |
-| Agent/MCP | `memcommit_quality_find(kind=redundancies)` | the same public Python route | JSON-safe evidence; no mutation |
+| CLI | `mem find-redundancies [CONTEXT] [-d\| -r]` or `--context CONTEXT` | exact root or readable lexical source freeze and per-Context `ops.find_redundancies` | immediate complete report in TTY and non-TTY environments; no initial selector, review workbench, or Apply handoff |
+| Public Python | `MemCommitClient.find_redundancies(..., include_descendants=...)` | `api._operations.quality_find.find_quality(..., "duplicates")` | aggregate typed result plus per-Context results; no mutation |
+| Agent/MCP | `memcommit_quality_find(kind=redundancies, include_descendants=...)` | the same public Python route | JSON-safe aggregate and conditional per-Context evidence; no mutation |
 
 `ops.find_duplicates` now owns the separate provider-free exact-DUP report.
 The complete-DUN report type retains `DuplicateReport` and the provider task
@@ -25,15 +27,16 @@ those internal names do not collapse the two public operation identities.
 
 Every current route:
 
-- freezes every directly owned Memory in one exact readable Context exactly
+- freezes every directly owned Memory in each selected readable Context exactly
   once and preserves its public Context owner in evidence;
 - excludes embedded Context traversal and provider-invisible partial output;
-- applies readable-catalog and cross-authority `DERIVE`/`COMBINE` checks before
-  provider connection;
+- applies readable-catalog and per-frame `DERIVE` checks before provider
+  connection; recursive siblings are not combined and do not require
+  cross-domain `COMBINE` merely because they share a command scope;
 - includes typed `EXACT`, `SURFACE_EQUIVALENT`, and
   `SEMANTIC_EQUIVALENT` evidence in one complete DUN forest;
-- includes role-aware exact Embed and Reference groups in the one-Context CLI
-  frame without disclosing them to the semantic provider;
+- includes role-aware exact Embed and Reference groups in each direct frame
+  without disclosing them to the semantic provider;
 - never compares different item roles, and keeps provider inference limited to
   directly owned Memories;
 - validates the complete typed report before publication;
@@ -42,16 +45,17 @@ Every current route:
 
 The CLI adapter supplies no Apply behavior. The Dedun adapter calls the same
 analyzer with operation identity `dedun`, accepts the eligible evidence from
-its newly frozen frame, and alone enters the survivor and Apply boundary. This
-explicit dependency prevents a read-only Find invocation from gaining mutation
-behavior merely because it shares a result model.
+its newly frozen direct frame, and alone enters the survivor and Apply
+boundary. This explicit dependency prevents a read-only Find invocation from
+gaining mutation behavior merely because it shares a result model.
 
 The CLI intentionally has no `--select` path. Exact Duplicate and complete-DUN
 Redundancy are report commands whose invocation is already sufficient read-only
 intent; introducing a target setup would make TTY execution differ from pipes
-and would misrepresent the one-exact-Context analysis boundary. Broader
-multi-Context judgment remains available only to operations whose public
-contract declares it.
+and would misrepresent the immediate report boundary. Recursive breadth is one
+root's readable lexical subtree and keeps every Context independent; the
+existing public multi-Context direct call remains one deliberately combined
+semantic frame for compatibility.
 
 The core report retains exact, semantic, and complete connected-group counts.
 Human-facing projections keep those layers visibly typed rather than reducing
@@ -62,8 +66,9 @@ join the same component.
 
 ## Limits
 
-Find Redundancies reports same-role exact groups from the frozen one-Context
-direct-item frame and semantic relations only among directly owned Memories.
+Find Redundancies reports same-role exact groups from each frozen direct-item
+frame and semantic relations only among Memories directly owned by that same
+Context. Recursive reach does not imply atomic mutation; it is read-only.
 It does not remove redundancy, synthesize canonical wording, migrate inbound
 references, compare roles, deduplicate query-only views, atomize partial
 overlaps, persist reviewer notes, or apply a cross-Context consolidation.

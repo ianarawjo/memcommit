@@ -42,6 +42,7 @@ Flagless and explicit Context forms use the stable one-shot report contract:
 
 ```text
 mem find-redundancies --context NAME
+mem find-redundancies --recursive NAME
 mem dedun --context NAME
 mem find-ambiguities --context NAME
 mem find-conflicts --context NAME
@@ -51,13 +52,21 @@ mem find-conflicts -a
 
 In a TTY, invoking a read-only finder without flags immediately analyzes the
 command-start current Context, exactly like its non-TTY route.
-`find-duplicates` and `find-redundancies` are deliberately direct-only relation
+`find-duplicates` and `find-redundancies` are deliberately immediate relation
 reports: neither command exposes an initial selector or a process-local review
 workbench. The current Context is the implicit exact Source, and a positional
 Context or `--context` compatibility form supplies one other exact Source.
 This preserves the useful distinction between `dup` as a deterministic exact
 scan and `dun` as the complete exact-plus-semantic scan without inserting a
 second approval step before either read-only report.
+
+Both reports accept the common `-d/--direct` and `-r/--recursive` scope
+presets. Recursive Find Redundancies freezes the root's readable lexical
+subtree, then runs one complete direct-item DUN analysis per Context. It does
+not combine siblings into one provider frame, infer cross-Context DUN edges,
+or follow embedded Contexts. Every frame must validate before any report is
+published. This keeps each cleanup group owned by exactly one Context and lets
+the later applying operation define an auditable all-or-nothing boundary.
 
 Ambiguity and Conflict retain an explicit `--select` capability because their
 judgment review can span a deliberately composed readable frame. That screen
@@ -105,9 +114,9 @@ choice. Embedded Context edges remain excluded: descendant reach follows the
 public lexical namespace only. The explicit `--context NAME` forms retain
 their original exact, direct, one-Context behavior.
 
-Dedun does not expose the multi-target selector because Apply owns
-one exact Context. Its flagless route uses the current Context; `--context`
-selects another exact readable Context. Eligible EXACT, SURFACE_EQUIVALENT,
+Dedun does not yet expose recursive reach or the multi-target selector because
+its current Apply owns one exact Context. Its flagless route uses the current
+Context; `--context` selects another exact readable Context. Eligible EXACT, SURFACE_EQUIVALENT,
 and SEMANTIC_EQUIVALENT evidence is grouped; the earliest stored UID survives each
 group, and the operation applies one checkpoint immediately. OVERLAP stays
 unchanged. If no eligible group exists, Dedun prints a no-change receipt and

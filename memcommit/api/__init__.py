@@ -152,6 +152,7 @@ __all__ = [
     "QueryProviderConfig",
     "QueryProviderFailure",
     "QueryStorageError",
+    "QualityFindContextResult",
     "QualityFindResult",
     "QualityFindingHandoff",
     "QualityFindingReviewDraft",
@@ -394,7 +395,10 @@ _LAZY_EXPORTS = {
     "FindSpanResult": ("memcommit.api.find", "FindSpanResult"),
     "SearchItemResult": ("memcommit.api.search", "SearchItemResult"),
     "SearchResult": ("memcommit.api.search", "SearchResult"),
-    "QualityFindResult": ("memcommit.api.quality_find", "QualityFindResult"),
+    **{
+        name: ("memcommit.api.quality_find", name)
+        for name in ("QualityFindContextResult", "QualityFindResult")
+    },
     **{
         name: ("memcommit.quality_finding_handoff", name)
         for name in (

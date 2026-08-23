@@ -9,6 +9,21 @@ from memcommit.quality_finding_handoff import QualityFindingHandoff
 
 
 @dataclass(frozen=True)
+class QualityFindContextResult:
+    """One independently analyzed direct Context frame."""
+
+    context_name: str
+    source_digest: str
+    memory_count: int
+    handoffs: tuple[QualityFindingHandoff, ...]
+    exact_item_groups: tuple[ExactDuplicateGroup, ...] = ()
+
+    @property
+    def evidence(self) -> tuple[QualityFindingHandoff, ...]:
+        return self.handoffs
+
+
+@dataclass(frozen=True)
 class QualityFindResult:
     """One complete finder result with adapter-neutral evidence."""
 
@@ -19,6 +34,8 @@ class QualityFindResult:
     pair_count: int | None
     handoffs: tuple[QualityFindingHandoff, ...]
     exact_item_groups: tuple[ExactDuplicateGroup, ...] = ()
+    include_descendants: bool = False
+    contexts: tuple[QualityFindContextResult, ...] = ()
 
     @property
     def evidence(self) -> tuple[QualityFindingHandoff, ...]:
@@ -27,4 +44,4 @@ class QualityFindResult:
         return self.handoffs
 
 
-__all__ = ["QualityFindResult"]
+__all__ = ["QualityFindContextResult", "QualityFindResult"]

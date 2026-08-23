@@ -210,7 +210,7 @@
           "docs/quality-finding-handoff-design-rationale.md",
           "docs/read-report-lifecycle-design-rationale.md"
         ],
-        "reason": "CLI, public Python, agent, and MCP routes share one frozen readable-frame DUN analysis: same-role exact direct items remain typed and semantic inference remains limited to owned Memories; only the separate Dedun adapter enters the survivor and Apply boundary."
+        "reason": "CLI, public Python, agent, and MCP routes share one frozen DUN analysis for an exact root or readable lexical subtree: recursive Contexts remain independent direct semantic frames, same-role exact items remain typed, all frames validate before publication, and only the separate Dedun adapter enters the survivor and Apply boundary."
       },
       "sever": {
         "evidence": [

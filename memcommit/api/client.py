@@ -485,12 +485,19 @@ class MemCommitClient:
     def find_redundancies(
         self,
         context_names: Sequence[str] = (),
+        *,
+        include_descendants: bool = False,
     ) -> QualityFindResult:
-        """Find complete exact-DUP plus semantic-DUN evidence."""
+        """Find complete DUN evidence in one combined or lexical scope."""
 
         from memcommit.api._operations.quality_find import find_quality
 
-        return find_quality(self._runtime, "duplicates", context_names)
+        return find_quality(
+            self._runtime,
+            "duplicates",
+            context_names,
+            include_descendants=include_descendants,
+        )
 
     def find_duplicates(
         self,
