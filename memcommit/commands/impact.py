@@ -44,6 +44,7 @@ from memcommit.authority.access import (
     resolve_context_access,
 )
 from memcommit.commands.impact_sessions import ImpactSessionPresentation
+from memcommit.commands.impact_catalog import choose_impact_session
 from memcommit.commands.impact_process_local import (
     distill_cmd as distill_impact_cmd,
     elaborate_cmd as elaborate_impact_cmd,
@@ -193,6 +194,53 @@ def _show_saved_impact(presentation, *, kind: str) -> bool:
         return handoff
     typer.echo(render_impact_session_snapshot(presentation))
     return False
+
+
+def _saved_atomize_impact(
+    store: MemoryStore,
+    *,
+    session_uid: str | None,
+    show_all: bool = False,
+) -> None:
+    """Open one exact Atomize analysis without a create or refresh fallback."""
+
+    from memcommit.commands.atomize_sessions import (
+        load_saved_atomize_analysis,
+        revalidate_saved_atomize_analysis,
+    )
+
+    if session_uid is None:
+        raise ValueError("Saved Atomize Impact requires an exact session UID.")
+    analysis = load_saved_atomize_analysis(store, session_uid)
+    revalidate_saved_atomize_analysis(store, analysis)
+    workbench = store.load_atomize_workbench(analysis)
+    if workbench is None:
+        raise ValueError(
+            "The saved Atomize workbench is unavailable. Run "
+            "'mem impact atomize CONTEXT' to reopen or explicitly refresh "
+            "that Context."
+        )
+    if not sys.stdin.isatty() or not sys.stdout.isatty():
+        typer.echo(
+            render_atomize_workbench_snapshot(
+                workbench,
+                analysis,
+                show_all=show_all,
+            )
+        )
+    else:
+        try:
+            run_atomize_workbench_shell(
+                workbench,
+                analysis,
+                save=store.save_atomize_workbench,
+            )
+        except ReviewCancelled:
+            typer.echo("Atomize workbench saved. No Memory changes applied.")
+    typer.secho(
+        f"Resumed saved analysis [{analysis.uid[:8]}]; the provider was not called.",
+        fg=typer.colors.CYAN,
+    )
 
 
 def _run_saved_impact_handoff_loop(
@@ -406,6 +454,7 @@ def _operation_session_impact(
     *,
     operation: ImpactOperation,
     session_uid: str | None,
+    show_all: bool = False,
 ) -> None:
     try:
         store = MemoryStore(create=False)
@@ -414,7 +463,14 @@ def _operation_session_impact(
             ImpactOperation.sever: _saved_sever_impact,
             ImpactOperation.update: _saved_update_impact,
         }
-        runners[operation](store, session_uid=session_uid)
+        if operation is ImpactOperation.atomize:
+            _saved_atomize_impact(
+                store,
+                session_uid=session_uid,
+                show_all=show_all,
+            )
+        else:
+            runners[operation](store, session_uid=session_uid)
     except (
         FileNotFoundError,
         OSError,
@@ -428,6 +484,41 @@ def _operation_session_impact(
             err=True,
         )
         raise typer.Exit(1)
+
+
+def _browse_impact_sessions(
+    *,
+    operation: ImpactOperation | None = None,
+    show_all: bool = False,
+) -> None:
+    """Select a durable Impact artifact, then enter its exact saved route."""
+
+    try:
+        store = MemoryStore(create=False)
+        receipt = choose_impact_session(
+            store,
+            kinds=None if operation is None else (operation.value,),
+            title=(
+                "MEM IMPACT · SAVED ANALYSES"
+                if operation is None
+                else f"MEM IMPACT · {operation.value.upper()} ANALYSES"
+            ),
+        )
+    except (FileNotFoundError, OSError, RuntimeError, TypeError, ValueError) as error:
+        typer.secho(
+            f"Impact error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
+    if receipt is None:
+        typer.echo("Impact selection cancelled; no analysis was opened.")
+        return
+    _operation_session_impact(
+        operation=ImpactOperation(receipt.kind),
+        session_uid=receipt.key,
+        show_all=show_all,
+    )
 
 
 def _directional_impact(
@@ -860,6 +951,9 @@ def _atomize_impact(
             "the provider was not called.",
             fg=typer.colors.CYAN,
         )
+    typer.echo(f"REOPEN · mem impact atomize --session {analysis.uid}")
+    typer.echo("BROWSE ATOMIZE · mem impact atomize --sessions")
+    typer.echo("BROWSE ALL IMPACT · mem impact --sessions")
     if analysis.declared_frames and opened.created_analysis:
         typer.secho(
             f"Incorporated {len(analysis.declared_frames)} reviewed declared "
@@ -885,6 +979,13 @@ def _dispatch_impact(
             help="Exact saved Meld, Sever, or Update artifact uid",
         ),
     ] = None,
+    sessions: Annotated[
+        bool,
+        typer.Option(
+            "--sessions",
+            help="Browse saved Impact analyses in an interactive launcher",
+        ),
+    ] = False,
     source_name: Annotated[
         Optional[str],
         typer.Option(
@@ -1016,11 +1117,38 @@ def _dispatch_impact(
                 "Context scope presets apply to directional Update Impact; "
                 "atomize remains direct-only."
             )
-        if session_uid is not None:
+        if sessions and session_uid is not None:
             _usage_error(
-                "'--session' is valid only with 'mem impact meld', "
-                "'mem impact sever', or 'mem impact update'."
+                "use either '--sessions' to browse saved Atomize analyses or "
+                "'--session UID' to reopen one exact analysis."
             )
+        if sessions or session_uid is not None:
+            if (
+                source_name is not None
+                or target_name is not None
+                or context_name is not None
+                or memory_selector is not None
+                or source_memory is not None
+                or target_memory is not None
+                or with_review
+                or refresh
+            ):
+                _usage_error(
+                    "saved Atomize Impact selection cannot be combined with "
+                    "Context, Memory, directional, or reanalysis options."
+                )
+            if sessions:
+                _browse_impact_sessions(
+                    operation=ImpactOperation.atomize,
+                    show_all=show_all,
+                )
+            else:
+                _operation_session_impact(
+                    operation=ImpactOperation.atomize,
+                    session_uid=session_uid,
+                    show_all=show_all,
+                )
+            return
         if source_name is not None or target_name is not None:
             _usage_error(
                 "'atomize' cannot be combined with '--from' or '--to'. "
@@ -1069,6 +1197,7 @@ def _dispatch_impact(
             or show_all
             or with_review
             or refresh
+            or sessions
             or scope_flags_supplied
         ):
             _usage_error(
@@ -1089,6 +1218,7 @@ def _dispatch_impact(
         )
     if (
         session_uid is not None
+        or sessions
         or context_name is not None
         or memory_selector is not None
         or show_all
@@ -1096,7 +1226,7 @@ def _dispatch_impact(
         or refresh
     ):
         _usage_error(
-            "'--session' is valid only with a saved-session operation; "
+            "'--session' and '--sessions' require a saved-session operation; "
             "'--context', '--memory', '--all', '--with-review', and '--refresh' are only "
             "valid with 'mem impact atomize'."
         )
@@ -1183,6 +1313,13 @@ def cmd(
             help="Refine Target reach",
         ),
     ] = None,
+    sessions: Annotated[
+        bool,
+        typer.Option(
+            "--sessions",
+            help="Browse every saved analysis inspectable through Impact",
+        ),
+    ] = False,
 ) -> None:
     """Preview directional Update effects when no named operation is supplied."""
 
@@ -1202,6 +1339,19 @@ def cmd(
                 "directional Update options cannot be combined with a named "
                 "Impact operation."
             )
+        if sessions:
+            _usage_error(
+                "root '--sessions' cannot be combined with a named Impact "
+                "operation; put operation-specific options after its name."
+            )
+        return
+    if sessions:
+        if directional_options:
+            _usage_error(
+                "'--sessions' cannot be combined with directional Update "
+                "endpoints or reach options."
+            )
+        _browse_impact_sessions()
         return
     _dispatch_impact(
         operation=None,
@@ -1258,6 +1408,20 @@ def atomize_impact_cmd(
             help="Replace the saved analysis with a new semantic completion",
         ),
     ] = False,
+    sessions: Annotated[
+        bool,
+        typer.Option(
+            "--sessions",
+            help="Browse saved Atomize analyses in the Impact launcher",
+        ),
+    ] = False,
+    session_uid: Annotated[
+        Optional[str],
+        typer.Option(
+            "--session",
+            help="Exact saved Atomize analysis uid",
+        ),
+    ] = None,
 ) -> None:
     """Preview one Context's exhaustive Atomize classification and splits."""
 
@@ -1271,6 +1435,8 @@ def atomize_impact_cmd(
 
     _dispatch_impact(
         operation=ImpactOperation.atomize,
+        session_uid=session_uid,
+        sessions=sessions,
         context_name=context_name,
         memory_selector=memory_selector,
         show_all=show_all,

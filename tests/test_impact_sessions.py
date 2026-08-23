@@ -18,6 +18,9 @@ from memcommit.commands.impact_sessions import (
     render_impact_session_snapshot,
     update_impact_presentation,
 )
+from memcommit.interfaces.tui.components.operation_launcher.session import (
+    SessionOpenReceipt,
+)
 from memcommit.store import MemoryStore
 from memcommit.update import plan_update
 
@@ -52,6 +55,7 @@ def test_help_names_every_supported_impact_operation():
     assert result.exit_code == 0, result.output
     for operation in IMPACT_ROUTES.names:
         assert operation in result.output
+    assert "--sessions" in result.output
     assert IMPACT_ROUTES.route("forget").lifecycle is ImpactLifecycle.PREPARE_PROCESS_LOCAL
     assert IMPACT_ROUTES.route("distill").lifecycle is ImpactLifecycle.PREPARE_PROCESS_LOCAL
     assert IMPACT_ROUTES.route("resolve").lifecycle is ImpactLifecycle.PREPARE_PROCESS_LOCAL
@@ -75,6 +79,121 @@ def test_help_names_every_supported_impact_operation():
     assert any(
         form.startswith("mem impact update") for form in COMMAND_FORMS["impact"]
     )
+    assert any(
+        form.startswith("mem impact --sessions") for form in COMMAND_FORMS["impact"]
+    )
+    assert any(
+        form.startswith("mem impact atomize --session")
+        for form in COMMAND_FORMS["impact"]
+    )
+
+
+def test_aggregate_sessions_dispatches_selected_artifact_exactly(
+    isolated_store,
+    monkeypatch,
+):
+    receipt = SessionOpenReceipt(
+        kind="sever",
+        key="sever-session",
+        argv=("mem", "impact", "sever", "--session", "sever-session"),
+    )
+    monkeypatch.setattr(
+        impact_command,
+        "choose_impact_session",
+        lambda _store, *, kinds, title: receipt,
+    )
+    observed = []
+    monkeypatch.setattr(
+        impact_command,
+        "_operation_session_impact",
+        lambda **kwargs: observed.append(kwargs),
+    )
+
+    result = runner.invoke(app, ["impact", "--sessions"])
+
+    assert result.exit_code == 0, result.output + result.stderr
+    assert observed == [
+        {
+            "operation": impact_command.ImpactOperation.sever,
+            "session_uid": "sever-session",
+            "show_all": False,
+        }
+    ]
+
+
+def test_atomize_sessions_filters_catalog_and_dispatches_exact_analysis(
+    isolated_store,
+    monkeypatch,
+):
+    receipt = SessionOpenReceipt(
+        kind="atomize",
+        key="atomize-analysis",
+        argv=(
+            "mem",
+            "impact",
+            "atomize",
+            "--session",
+            "atomize-analysis",
+        ),
+    )
+    observed_catalog = []
+    monkeypatch.setattr(
+        impact_command,
+        "choose_impact_session",
+        lambda _store, *, kinds, title: (
+            observed_catalog.append((kinds, title)) or receipt
+        ),
+    )
+    observed_open = []
+    monkeypatch.setattr(
+        impact_command,
+        "_operation_session_impact",
+        lambda **kwargs: observed_open.append(kwargs),
+    )
+
+    result = runner.invoke(app, ["impact", "atomize", "--sessions", "--all"])
+
+    assert result.exit_code == 0, result.output + result.stderr
+    assert observed_catalog == [(("atomize",), "MEM IMPACT · ATOMIZE ANALYSES")]
+    assert observed_open == [
+        {
+            "operation": impact_command.ImpactOperation.atomize,
+            "session_uid": "atomize-analysis",
+            "show_all": True,
+        }
+    ]
+
+
+def test_atomize_exact_session_dispatches_without_context_resolution(
+    isolated_store,
+    monkeypatch,
+):
+    observed = []
+    monkeypatch.setattr(
+        impact_command,
+        "_saved_atomize_impact",
+        lambda _store, *, session_uid, show_all: observed.append(
+            (session_uid, show_all)
+        ),
+    )
+
+    result = runner.invoke(
+        app,
+        ["impact", "atomize", "--session", "analysis-1"],
+    )
+
+    assert result.exit_code == 0, result.output + result.stderr
+    assert observed == [("analysis-1", False)]
+
+
+def test_atomize_saved_selection_rejects_new_analysis_inputs(isolated_store):
+    result = runner.invoke(
+        app,
+        ["impact", "atomize", "source", "--sessions"],
+    )
+
+    assert result.exit_code == 2
+    assert "cannot be combined" in result.stderr
 
 
 @pytest.mark.parametrize(

@@ -1,0 +1,52 @@
+ MEM IMPACT · ATOMIZE ANALYSES · RECENT FIRST · ALL                                                                                                                                 
+ PROFILE · (unregistered)                                                                                                                                                           
+ STORE   · /var/folders/gb/k74fw7ks06x4c041g8gqgj600000gq/T/memcommit-impact-launcher-dmdslrvc/atomize-store                                                                        
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+› 2026-08-23 04:30Z  ATOMIZE · capture/impact/atomize  [CURRENT]  capture/impact/atomize → capture/impact/atomize · 1 → 1 Memories · 0 issues                                      ^
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ATOMIZE IMPACT                                                                                                                                                                     ^
+State: CURRENT                                                                                                                                                                      
+Context: capture/impact/atomize                                                                                                                                                     
+Summary: capture/impact/atomize → capture/impact/atomize · 1 → 1 Memories · 0 issues                                                                                                
+                                                                                                                                                                                    
+Analysis 16d20e1e-26b9-4108-80e9-a13ed847d9f4                                                                                                                                       
+Source Context capture/impact/atomize [c3a323d9-150d-4553-9702-b1ad2b0be96e]                                                                                                        
+Planned Output capture/impact/atomize · IN PLACE                                                                                                                                    
+Opening this analysis checks that it is still current. The shown command is a reference route; the picker does not run it.                                                          
+                                                                                                                                                                                    
+Enter inspects this exact saved artifact through Impact.                                                                                                                            
+Opening the artifact does not call a semantic provider or apply Memory changes.                                                                                                     
+Any later Apply handoff remains explicit and operation-owned.                                                                                                                       
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ ↑/↓ move  PgUp/PgDn detail  Enter inspect  S sort  G group  / filter  Esc/q cancel  ·  1/1

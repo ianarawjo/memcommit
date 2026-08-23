@@ -1,0 +1,12 @@
+Resumed saved analysis [16d20e1e]; the provider was not called.                                                                                                                     
+                                                                                                                                                                                    
+ATOMIZE IMPACT LAUNCHER CLOSED                                                                                                                                                      
+  EXIT · 0                                                                                                                                                                          
+  CURRENT · capture/impact/atomize                                                                                                                                                  
+  SELECTED ANALYSIS UID · 16d20e1e-26b9-4108-80e9-a13ed847d9f4                                                                                                                      
+  UPDATE UID RETAINED · True                                                                                                                                                        
+  CONTEXT BYTES UNCHANGED · True                                                                                                                                                    
+  CHECKPOINTS UNCHANGED · True                                                                                                                                                      
+  WORKBENCH BYTES UNCHANGED · True                                                                                                                                                  
+  IMPACT PLAN BYTES UNCHANGED · True                                                                                                                                                
+  PROVIDER CALLS WHILE OPEN · 0

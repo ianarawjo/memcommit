@@ -770,11 +770,29 @@ def test_cli_preview_is_direct_only_and_saves_only_analysis(
     assert store.current_context_name() == root.name
     analysis = store.load_atomize_analysis(root.uid)
     assert analysis is not None
+    assert f"REOPEN · mem impact atomize --session {analysis.uid}" in result.output
+    assert "BROWSE ATOMIZE · mem impact atomize --sessions" in result.output
+    assert "BROWSE ALL IMPACT · mem impact --sessions" in result.output
     assert analysis.context_uid == root.uid
     assert [item.memory_uid for item in analysis.items] == [
         first.uid,
         second.uid,
     ]
+
+    monkeypatch.setattr(
+        "memcommit.commands.impact.connect_codex_chatgpt_provider",
+        ForbiddenProvider(),
+    )
+    reopened = runner.invoke(
+        app,
+        ["impact", "atomize", "--session", analysis.uid],
+    )
+
+    assert reopened.exit_code == 0, reopened.output + reopened.stderr
+    assert "WHAT MEM UNDERSTOOD" in reopened.output
+    assert f"Resumed saved analysis [{analysis.uid[:8]}]" in reopened.output
+    assert "the provider was not called" in reopened.output
+    assert len(provider.calls) == 1
 
 
 def test_cli_all_shows_atomic_items_and_explicit_context_does_not_switch(

@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ MEM ATOMIZE                                                                                                                                                                     ^┃
+┃ CONTEXT LOCATIONS                                                                                                                                                                ┃
+┃   SOURCE · capture/impact/atomize                                                                                                                                                ┃
+┃   OUTPUT · capture/impact/atomize · IN PLACE                                                                                                                                     ┃
+┃ READY_TO_APPLY · 1 SOURCE MEMORIES · 1 PROJECTED MEMORIES · 0 FINDINGS · 0 ANSWERED                                                                                              ┃
+┃                                                                                                                                                                                  ┃
+┃ UNDERSTOOD                                                                                                                                                                       ┃
+┃ The source records one independently revisable policy.                                                                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃ CHANGED                                                                                                                                                                          ┃
+┃ No split is required.                                                                                                                                                            ┃
+┃                                                                                                                                                                                  ┃
+┃ UNRESOLVED                                                                                                                                                                       ┃
+┃ (none)                                                                                                                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃ ACTIONABLE FINDINGS · 0                                                                                                                                                          ┃
+┃  No actionable Atomize findings in this analysis.                                                                                                                                ┃
+┃ RESOLVE ALL · WHOLE-SET STRATEGY                                                                                                                                                 ┃
+┃ Choose a strategy below. It requests a revised proposal and never applies the target.                                                                                            ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› REPORT         Complete Atomize report                                                                                                                                         ^│
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ COMPLETE ]  Required review is complete · No whole-set action is required; close or revisit an item.                                                                            │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close S sort  H Help  y/Y copy  Q close

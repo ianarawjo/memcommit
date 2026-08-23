@@ -104,6 +104,30 @@ headings cannot hide the selected session.
 
 ## Operation adapters
 
+### Impact
+
+`mem impact --sessions` is a read-only aggregate launcher for every durable
+artifact that an existing Impact route can inspect: Atomize analyses, Meld
+assessments, Sever results, and the singleton Update/Impact plan.  Selecting a
+row redispatches its frozen operation kind and exact artifact UID through that
+operation's existing Impact loader.  The aggregate does not introduce a
+common persistence schema, call a provider, refresh an analysis, or apply a
+Memory change.  An operation-owned Impact surface may still offer its existing
+explicit Apply handoff after the saved artifact has been reopened.
+
+The aggregate is a catalog of *Impact-inspectable saved artifacts*, not an
+invocation log.  Current schemas do not record whether an Atomize, Meld,
+Sever, or Update artifact was first produced by an `impact` spelling or its
+owning operation.  Forget, Distill, Elaborate, and Resolve are absent because
+their Impact proposals are intentionally process-local; listing them would
+fabricate durable history that does not exist.
+
+`mem impact atomize --sessions` uses the same catalog filtered to Atomize.
+`mem impact atomize --session UID` reopens one exact saved analysis without a
+Context fallback, provider construction, or implicit refresh.  This keeps a
+displayed analysis UID actionable while preventing a replaced Context-scoped
+analysis from silently turning an exact reopen request into new semantic work.
+
 ### Ground
 
 In an interactive terminal, bare `mem ground` always shows the launcher,

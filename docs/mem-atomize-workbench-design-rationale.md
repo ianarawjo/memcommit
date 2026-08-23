@@ -78,6 +78,15 @@ mem impact atomize
     -> show an overview of understanding and transformation
     -> inspect and answer actionable issues
 
+mem impact atomize --session UID
+    -> reopen one exact saved analysis without provider work or refresh
+
+mem impact atomize --sessions
+    -> browse only saved Atomize analyses through the Impact launcher
+
+mem impact --sessions
+    -> browse every durable artifact inspectable through Impact
+
 mem atomize
     -> target the complete current Context without opening a session
     -> create or reuse the compatible saved analysis
@@ -982,6 +991,12 @@ until timestamps and their lifecycle semantics exist.
 The following decisions are stable enough to guide implementation and tests:
 
 - `mem impact atomize` is the primary atomize workbench entry point.
+- `mem impact atomize --session UID` is the exact provider-free reopen route,
+  while `mem impact atomize --sessions` is its filtered launcher and
+  `mem impact --sessions` is the cross-operation durable Impact launcher.
+- A newly created or resumed Impact analysis prints its exact reopen route and
+  both launcher routes. The compact UID remains a recognition label; the full
+  UID in the command is the executable identity.
 - `mem atomize` and `mem review atomize` resume the same compatible saved
   analysis and workbench state without another provider call. TTY bare
   `mem review` selects among all saved Review-capable sessions; its Atomize row

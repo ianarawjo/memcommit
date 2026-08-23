@@ -35,6 +35,14 @@ IMPACT_DETAILS = (
                     "is the current Context."
                 ),
             ),
+            OperationComparisonOption(
+                label="SAVED ANALYSES",
+                guidance=(
+                    "Use mem impact --sessions to browse every durable artifact "
+                    "that Impact can inspect, or mem impact atomize --sessions "
+                    "for the filtered Atomize catalog."
+                ),
+            ),
         ),
     ),
 )

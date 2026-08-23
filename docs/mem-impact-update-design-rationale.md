@@ -224,10 +224,21 @@ The reusable controller also supports provider-free reopening through the
 standalone command surface:
 
 ```text
+mem impact --sessions
+mem impact atomize --sessions
+mem impact atomize --session UID
 mem impact update [--session UID]
 mem impact meld [--session UID]
 mem impact sever [--session UID]
 ```
+
+The root launcher aggregates only durable artifacts that these Impact routes
+can reopen.  It includes the singleton Update/Impact plan together with saved
+Atomize, Meld, and Sever artifacts, then redispatches a selected kind and exact
+UID through the same operation-owned loader used by the explicit command.
+Process-local Forget, Distill, Elaborate, and Resolve previews are not shown.
+This is an inspectable-artifact catalog rather than a log claiming which CLI
+spelling originally created a shared operation session.
 
 With no endpoints, these forms inspect an already-saved operation artifact;
 opening the Impact ledger never creates a new plan, requests a semantic
