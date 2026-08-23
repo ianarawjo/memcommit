@@ -139,11 +139,11 @@ non-goals are recorded in
 [`context-locator-design-rationale.md`](context-locator-design-rationale.md).
 
 Deep Compare performs one aggregate semantic call over the two complete
-bounded direct-Memory frames. It saves an immutable `ComparisonAnalysis`
+bounded readable-evidence frames. It saves an immutable `ComparisonAnalysis`
 containing:
 
-- exact ordered source Context identities, names, digests, Memory order, and
-  Memory snapshots;
+- exact ordered source Context identities, names, digests, evidence order,
+  content snapshots, and host-only source provenance;
 - one overview;
 - four short category reports for shared, differing, reference-only, and
   compared-only material;
@@ -183,7 +183,7 @@ match. A changed semantic ruleset also performs a fresh analysis while an
 older supported artifact remains readable for replacement CAS. Provider or
 validation failure leaves the prior saved analysis intact.
 
-Version 1 intentionally keeps `A → B` and `B → A` as separate ordered slots.
+Compare intentionally keeps `A → B` and `B → A` as separate ordered slots.
 This preserves the ability to study whether presentation order changes a
 model's judgments. A later product decision may canonicalize the pair and
 render two projections from one analysis, but that must not be silently
@@ -223,6 +223,39 @@ unit of inspection.
 The schema deliberately omits Meld dispositions and target Memories. Compare
 describes what exists in both, what differs, and what exists on only one side;
 Meld later decides what an accepted target should contain.
+
+### Content-bearing direct items
+
+Compare treats every readable content-bearing occurrence as an ordinary
+semantic claim. An owned Memory, live Memory Embed, immutable Memory Reference,
+Memory reached through a Context Embed or Context Reference, and readable
+granted Context content all enter the same ordered content frame. Their text is
+not prefixed with a Context name or acquisition label, and the semantic provider
+receives no real Context name, Memory UID, Grant identity, or ownership hint.
+This keeps comparison about the claims rather than their storage form.
+
+Acquisition remains typed host metadata rather than being erased. Each saved
+evidence row binds its placement UID and path, source form, Source Memory UID,
+and owning Context identity. A live Memory Embed uses the Embed placement UID as
+the evidence identity and retains the Source Memory UID separately. This means
+two placements are two evidence occurrences, while a same-text retarget is
+still a source change. Recursive Context graphs visit an exact Context UID once
+to prevent cycles and duplicate graph exposure.
+
+Freshness follows the source form. A Reference binds its retained snapshot and
+remains comparable after the original Source disappears. A live Embed or live
+Context graph is reprojected before reuse; local external owners are included in
+the save-time lock set, and a content, owner, target, or placement change stops
+publication. Compare and Compare Summary use the same projection and freshness
+identity. The exhaustive ledger may display host provenance such as `EMBED
+FROM` or `REFERENCE FROM`, but that annotation is never part of the claim sent
+for semantic judgment.
+
+Query-only Context routes are not readable Memory evidence. Compare fails
+explicitly before provider connection instead of opening hidden content or
+silently omitting the row. Likewise, a dangling live Embed names the unavailable
+Source in the error. These errors describe the concrete boundary and do not
+advertise an implementation-version capability label.
 
 ### Explicit descendant scope
 
@@ -275,11 +308,11 @@ infers that a resolved relation ledger is itself permission to write a target.
 ## Provider and trust boundary
 
 The provider receives call-local opaque frame and Memory IDs, full bounded
-direct Memory content, source order, and equal-authority instructions. Context
-names remain local presentation metadata: sending advisor names is unnecessary
-for comparison and could introduce identity or ordering bias. The provider may
-return only `overview`, `reports`, `relations`, `source_assignments`, and
-`issues` under a strict JSON schema.
+evidence content, source order, and equal-authority instructions. Context names,
+source forms, and ownership remain local presentation metadata: sending them is
+unnecessary for comparison and could introduce identity or ordering bias. The
+provider may return only `overview`, `reports`, `relations`,
+`source_assignments`, and `issues` under a strict JSON schema.
 
 Relation definitions carry semantic judgment and prose but no nested member-ID
 arrays. `source_assignments` instead contains exactly one
@@ -326,11 +359,13 @@ soft generation targets, not truncation or validation rules. A material
 difference, exception, or unresolved relation must be retained even when doing
 so exceeds the target; exact relations remain complete in `--ledger`.
 
-Schema version 2 adds these reports. Schema-version-1 artifacts remain
-strictly readable and preserve their old serialization shape so they can
-participate in ordered-slot replacement CAS. Ruleset version 3 requires
-reports for newly created analyses, so an unchanged pair with a version-1/2
-analysis is refreshed rather than reused.
+Schema version 2 added reports, version 3 added independent descendant scope,
+and version 4 adds optional typed evidence provenance. Schema-version-1 through
+version-3 artifacts remain strictly readable and preserve their old
+serialization shape so they can participate in ordered-slot replacement CAS.
+Ruleset version 4 requires the current content-evidence contract for newly
+created analyses, so an unchanged pair with an older ruleset is refreshed
+rather than reused.
 
 The schema deliberately omits JSON Schema `uniqueItems` because the Codex
 structured-output subset rejects that keyword. Exact row count and alias enums
@@ -340,8 +375,9 @@ was not returned. The operation parser then reconstructs relation members in
 canonical Source order and rechecks side shape and exhaustive coverage before
 an analysis can be saved. Legacy call-local responses that embedded member
 arrays remain parser-compatible for tests and older provider adapters; all new
-schema-constrained turns use source assignments. The persisted
-`ComparisonAnalysis` schema does not change.
+schema-constrained turns use source assignments. The provider response schema
+does not expose or reproduce host provenance; the host attaches and validates
+that metadata independently.
 
 Local validation rejects:
 
@@ -359,16 +395,17 @@ The persisted frame also recomputes its canonical Context record digest from
 the exact ordered Memory snapshot. A stored analysis cannot retain a valid
 live-Context digest while displaying altered “exact source” text.
 
-Compare has no independent direct-Memory count gate. It accepts the complete
+Compare has no independent evidence-count gate. It accepts the complete
 frozen pair while its encoded input fits the shared 1,000,000-character
 effective provider capacity, and rejects an over-capacity frame rather than
 truncating or hiding retrieval calls.
 
-After provider latency, both Contexts are reloaded while their cooperative
-write locks are held. Their complete records must still match the analysis.
-The ordered slot is also compare-and-swapped against the analysis UID observed
-before the call. A changed source or newer concurrent analysis prevents the
-new result from being saved.
+After provider latency, both Contexts and every local live external evidence
+owner are reloaded while their cooperative write locks are held. Their complete
+projected content and provenance must still match the analysis. The ordered slot
+is also compare-and-swapped against the analysis UID observed before the call.
+A changed source, retargeted placement, or newer concurrent analysis prevents
+the new result from being saved.
 
 Comparison artifacts copy source text and derived explanations. Deleting
 either bound source therefore removes both ordered orientations involving

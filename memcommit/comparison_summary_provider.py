@@ -146,6 +146,8 @@ def _prompt(payload: dict[str, object]) -> str:
         "versus specialization when supported; never treat size or REFERENCE "
         "position as authority. CONTEXT rows may disambiguate PRIMARY content but "
         "must not become another comparison topic.\n\n"
+        "Treat every content field as an ordinary semantic claim, regardless "
+        "of how the host obtained that readable evidence.\n\n"
         "Return one natural-language paragraph in the language shared by the "
         "PRIMARY rows, using the REFERENCE primary language only when the sides "
         "differ. Use one or two complete sentences, aim for roughly 45 words, "

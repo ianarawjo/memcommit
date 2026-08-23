@@ -1683,7 +1683,7 @@ def test_granted_compare_is_retained_and_seeds_local_symmetric_meld(
             else pytest.fail("Meld setup received another store")
         ),
     )
-    meld_command._start_new_meld_from_picker(active)
+    meld_command._start_new_meld_from_setup(active)
     assert calls == 2
     meld_artifact = load_granted_comparison_artifact(active, source.uid, wiki.uid)
     assert meld_artifact is not None

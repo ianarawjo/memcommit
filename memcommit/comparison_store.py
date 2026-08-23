@@ -14,7 +14,8 @@ from memcommit.comparison import (
     ComparisonError,
     comparison_canonical_digest,
 )
-from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.context import Context
+from memcommit.comparison_evidence import project_comparison_context
 from memcommit.context_targeting.loading import load_context_scope
 from memcommit.context_targeting.model import ContextScope
 from memcommit.context_targeting.resolution import expand_lexical_context_names
@@ -178,6 +179,17 @@ def save_comparison_analysis(
                 include_descendants=include_descendants,
             )
             lock_names.update(expand_lexical_context_names(scope, catalog))
+            # A live Embed contributes bytes owned outside the containing
+            # Context record. Lock that owner too so revalidation and artifact
+            # publication observe one stable evidence set. Immutable snapshot
+            # References need only the containing record lock.
+            lock_names.update(
+                memory.source.owner_context_name
+                for memory in (*frame.memories, *frame.context_evidence)
+                if memory.source is not None
+                and memory.source.is_live_external
+                and memory.source.owner_context_name in catalog
+            )
         locks.enter_context(store._context_write_locks(lock_names))
         locks.enter_context(store.profile_write_guard())
 
@@ -238,35 +250,7 @@ def save_comparison_analysis(
 def _comparison_projection(root: Context) -> Context:
     """Mirror Compare's recursive projection at the locked save boundary."""
 
-    if not any(isinstance(item, Context) for item in root.iter_items()):
-        return root
-    projected = Context(uid=root.uid, name=root.name)
-    seen: set[str] = set()
-
-    def visit(context: Context) -> None:
-        if context.uid in seen:
-            return
-        seen.add(context.uid)
-        for item in context.iter_items():
-            if isinstance(item, Memory):
-                projected.add(
-                    Memory(
-                        uid=item.uid,
-                        content=f"[{context.name}] {item.content}",
-                    )
-                )
-            elif isinstance(item, Context):
-                visit(item)
-            elif isinstance(item, QueryContextRef):
-                continue
-            elif isinstance(item, MemoryRef):
-                raise ComparisonError(
-                    "Recursive Compare does not copy live Memory references; "
-                    f"unsupported item [{item.uid[:8]}] in {context.name!r}."
-                )
-
-    visit(root)
-    return projected
+    return project_comparison_context(root)
 
 
 def comparison_paths_for_context(context_uid: str) -> tuple[Path, ...]:

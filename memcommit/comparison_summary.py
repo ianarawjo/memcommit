@@ -84,39 +84,13 @@ class ComparisonSummary:
             return False
         return (
             self.include_descendants == comparison_input.include_descendants
-            and tuple(
-                (
-                    frame.context_uid,
-                    frame.context_name,
-                    frame.context_digest,
-                    frame.selected_memory_uid,
-                    tuple(
-                        (memory.uid, memory.position, memory.content_digest)
-                        for memory in frame.memories
-                    ),
-                    tuple(
-                        (memory.uid, memory.position, memory.content_digest)
-                        for memory in frame.context_evidence
-                    ),
+            and all(
+                saved.source_state() == requested.source_state()
+                for saved, requested in zip(
+                    self.frames,
+                    comparison_input.frames,
+                    strict=True,
                 )
-                for frame in self.frames
-            )
-            == tuple(
-                (
-                    frame.context_uid,
-                    frame.context_name,
-                    frame.context_digest,
-                    frame.selected_memory_uid,
-                    tuple(
-                        (memory.uid, memory.position, memory.content_digest)
-                        for memory in frame.memories
-                    ),
-                    tuple(
-                        (memory.uid, memory.position, memory.content_digest)
-                        for memory in frame.context_evidence
-                    ),
-                )
-                for frame in comparison_input.frames
             )
         )
 

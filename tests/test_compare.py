@@ -37,10 +37,12 @@ from memcommit.commands.compare_sessions import (
     choose_comparison_session,
     comparison_session_entries,
 )
-from memcommit.context import Context
+from memcommit.context import Context, Memory, MemoryRef
 from memcommit.interfaces.tui.components.operation_launcher.session import SessionNewReceipt, SessionOpenReceipt
 from memcommit.store import MemoryStore
 from memcommit.query_provider import CodexChatGPTProvider
+from memcommit.reference_application import ContextReferenceRequest
+from memcommit.reference_runtime import execute_context_reference
 
 
 runner = CliRunner()
@@ -372,6 +374,163 @@ def test_focused_compare_relates_only_selected_memories_and_keeps_neighbors_cont
     } == {reference_focus.uid, compared_focus.uid}
 
 
+def _memory_embed_pair(store: MemoryStore):
+    owner = ops.init("embed/owner")
+    source = ops.add(owner, "Embedded policy claim.")
+    reference = ops.init("embed/reference")
+    embed = MemoryRef(
+        uid=str(uuid.uuid4()),
+        target_context_uid=owner.uid,
+        target_context_name=owner.name,
+        target_memory_uid=source.uid,
+        target=source,
+    )
+    reference.add(embed)
+    compared = ops.init("embed/compared")
+    ops.add(compared, "Compared policy claim.")
+    for context in (owner, reference, compared):
+        store.save(context)
+    store.set_current(reference.name)
+    return owner, source, reference, embed, compared
+
+
+def test_compare_includes_live_memory_embed_content_and_retains_provenance(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    owner, source, reference, embed, compared = _memory_embed_pair(store)
+    provider = ExhaustiveCompareProvider()
+    _patch_provider(monkeypatch, provider)
+
+    result = runner.invoke(
+        app,
+        ["compare", reference.name, compared.name, "--ledger", "--snapshot"],
+    )
+    analysis = load_comparison_analysis(reference.uid, compared.uid)
+
+    assert result.exit_code == 0, result.output
+    assert analysis is not None
+    evidence = analysis.frames[0].memories[0]
+    assert evidence.uid == embed.uid
+    assert evidence.content == source.content
+    assert evidence.source is not None
+    assert evidence.source.source_form == "LIVE_MEMORY_EMBED"
+    assert evidence.source.owner_context_uid == owner.uid
+    assert evidence.source.source_memory_uid == source.uid
+    assert provider.payloads[0]["frames"][0]["memories"][0]["content"] == (
+        source.content
+    )
+    assert "EMBED FROM embed/owner:" in result.output
+    assert "version 1" not in result.output.lower()
+
+
+def test_live_memory_embed_change_during_provider_call_publishes_no_analysis(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    owner, source, reference, _embed, compared = _memory_embed_pair(store)
+
+    class MutatingEmbedProvider(ExhaustiveCompareProvider):
+        def complete(self, prompt, *, operation, output_schema=None):
+            changed = store.load_direct(owner.name)
+            changed.replace(Memory(uid=source.uid, content="Changed in flight."))
+            store.save(changed)
+            return super().complete(
+                prompt,
+                operation=operation,
+                output_schema=output_schema,
+            )
+
+    _patch_provider(monkeypatch, MutatingEmbedProvider())
+
+    result = runner.invoke(
+        app,
+        ["compare", reference.name, compared.name, "--ledger"],
+    )
+
+    assert result.exit_code == 1
+    assert "changed while Compare was analyzing" in result.output
+    assert not comparison_analysis_path(reference.uid, compared.uid).exists()
+
+
+def test_compare_includes_memory_snapshot_after_its_source_is_unavailable(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    retained = Memory(uid=str(uuid.uuid4()), content="Retained snapshot claim.")
+    reference = ops.init("snapshot/reference")
+    snapshot = MemoryRef(
+        uid=str(uuid.uuid4()),
+        target_context_uid=str(uuid.uuid4()),
+        target_context_name="deleted/source",
+        target_memory_uid=retained.uid,
+        target=retained,
+        snapshot_content_sha256=hashlib.sha256(
+            retained.content.encode("utf-8")
+        ).hexdigest(),
+    )
+    reference.add(snapshot)
+    compared = ops.init("snapshot/compared")
+    ops.add(compared, "Compared snapshot claim.")
+    store.save(reference)
+    store.save(compared)
+    provider = ExhaustiveCompareProvider()
+    _patch_provider(monkeypatch, provider)
+
+    result = runner.invoke(
+        app,
+        ["compare", reference.name, compared.name, "--ledger", "--snapshot"],
+    )
+    analysis = load_comparison_analysis(reference.uid, compared.uid)
+
+    assert result.exit_code == 0, result.output
+    assert analysis is not None
+    evidence = analysis.frames[0].memories[0]
+    assert evidence.content == retained.content
+    assert evidence.source is not None
+    assert evidence.source.source_form == "MEMORY_REFERENCE"
+    assert "REFERENCE FROM deleted/source:" in result.output
+
+
+def test_compare_includes_context_snapshot_after_its_source_is_unavailable(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    source = ops.init("context-snapshot/source")
+    retained = ops.add(source, "Retained Context snapshot claim.")
+    reference = ops.init("context-snapshot/reference")
+    compared = ops.init("context-snapshot/compared")
+    ops.add(compared, "Compared Context snapshot claim.")
+    for context in (source, reference, compared):
+        store.save(context)
+    execute_context_reference(
+        ContextReferenceRequest(source.name, reference.name),
+        store=store,
+    )
+    store.delete(source.name)
+    provider = ExhaustiveCompareProvider()
+    _patch_provider(monkeypatch, provider)
+
+    result = runner.invoke(
+        app,
+        ["compare", reference.name, compared.name, "--ledger", "--snapshot"],
+    )
+    analysis = load_comparison_analysis(reference.uid, compared.uid)
+
+    assert result.exit_code == 0, result.output
+    assert analysis is not None
+    evidence = analysis.frames[0].memories[0]
+    assert evidence.uid == retained.uid
+    assert evidence.content == retained.content
+    assert evidence.source is not None
+    assert evidence.source.source_form == "CONTEXT_REFERENCE"
+    assert "CONTEXT REFERENCE FROM context-snapshot/source:" in result.output
+
+
 def test_compare_creates_durable_read_only_analysis_and_resumes_provider_free(
     isolated_store,
     monkeypatch,
@@ -562,12 +721,18 @@ def test_compare_descendant_flags_freeze_lexical_child_memories(
     assert result.exit_code == 0, result.output
     assert analysis is not None
     assert analysis.include_descendants == (True, True)
-    assert "[scoped/reference/child] Reference child policy." in {
+    assert "Reference child policy." in {
         memory.content for memory in analysis.frames[0].memories
     }
-    assert "[scoped/compared/child] Compared child policy." in {
+    assert "Compared child policy." in {
         memory.content for memory in analysis.frames[1].memories
     }
+    reference_source = analysis.frames[0].memories[0].source
+    compared_source = analysis.frames[1].memories[0].source
+    assert reference_source is not None
+    assert compared_source is not None
+    assert reference_source.owner_context_name == reference_child.name
+    assert compared_source.owner_context_name == compared_child.name
 
 
 def test_refresh_and_source_change_each_replace_the_ordered_latest_slot(
@@ -1090,7 +1255,7 @@ def test_older_supported_ruleset_is_readable_but_not_reused(
     assert len(provider.payloads) == 2
     current = load_comparison_analysis(reference.uid, compared.uid)
     assert current is not None
-    assert current.ruleset_version == "peer-relations-v3"
+    assert current.ruleset_version == "peer-relations-v4"
 
 
 def test_ordered_slot_cas_rejects_stale_competing_refresh(

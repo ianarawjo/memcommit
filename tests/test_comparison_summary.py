@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import uuid
 
 import pytest
 from typer.testing import CliRunner
@@ -11,10 +12,14 @@ import memcommit.commands.compare as compare_command
 import memcommit.ops as ops
 from memcommit.cli import app
 from memcommit.comparison import ComparisonInput
+from memcommit.context import MemoryRef
 from memcommit.comparison_store import comparison_analysis_path
 from memcommit.comparison_summary import ComparisonSummaryError
 from memcommit.comparison_summary_provider import summarize_comparison
 from memcommit.infrastructure.providers.policy import ResolvedProviderPolicy
+from memcommit.infrastructure.providers.profile_routes import (
+    ProfileProviderRoutesError,
+)
 from memcommit.store import MemoryStore
 
 
@@ -76,6 +81,62 @@ def test_summary_contract_has_no_relation_or_issue_output_shape():
     assert "assignments" not in schema_text
     assert summary.paragraph.text.startswith("Both peers")
     assert summary.source_count == 2
+
+
+def test_summary_treats_live_embed_content_as_an_ordinary_claim():
+    owner = ops.init("summary/embed-owner")
+    source = ops.add(owner, "Embedded summary claim.")
+    reference = ops.init("summary/embed-reference")
+    reference.add(
+        MemoryRef(
+            uid=str(uuid.uuid4()),
+            target_context_uid=owner.uid,
+            target_context_name=owner.name,
+            target_memory_uid=source.uid,
+            target=source,
+        )
+    )
+    compared = ops.init("summary/embed-peer")
+    ops.add(compared, "Peer summary claim.")
+    provider = ConciseCompareProvider()
+
+    summary = summarize_comparison(
+        ComparisonInput.from_contexts(reference, compared),
+        provider,
+    )
+    payload = json.loads(
+        provider.prompts[0].split("COMPARISON SUMMARY PAYLOAD:\n", 1)[1]
+    )
+
+    assert summary.source_count == 2
+    assert payload["frames"][0]["memories"][0]["content"] == source.content
+    assert "owner_context" not in json.dumps(payload)
+    assert "source_form" not in json.dumps(payload)
+
+
+def test_default_cli_reports_an_unavailable_profile_provider_without_traceback(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    reference, compared = _pair(store)
+
+    def unavailable_provider(_operation):
+        raise ProfileProviderRoutesError("Study provider policy is unavailable.")
+
+    monkeypatch.setattr(
+        compare_command,
+        "connect_operation_provider",
+        unavailable_provider,
+    )
+
+    result = runner.invoke(app, ["compare", reference.name, compared.name])
+
+    assert result.exit_code == 1
+    assert result.output == (
+        "Compare error: Study provider policy is unavailable.\n"
+    )
+    assert "Traceback" not in result.output
 
 
 def test_summary_rejects_one_sided_evidence_for_a_cross_frame_claim():

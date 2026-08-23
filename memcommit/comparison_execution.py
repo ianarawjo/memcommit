@@ -26,7 +26,8 @@ from memcommit.authority.access import (
     resolve_context_access,
     revalidate_granted_context_binding,
 )
-from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.context import Context
+from memcommit.comparison_evidence import project_comparison_context
 from memcommit.context_targeting.loading import load_context_scope
 from memcommit.derived_policy import (
     AnalysisRetention,
@@ -78,38 +79,9 @@ def connect_comparison_provider(provider_factory):
 
 
 def recursive_comparison_projection(root: Context) -> Context:
-    """Flatten one loaded tree while retaining each Memory's public path."""
+    """Compatibility facade for Compare's typed content evidence projection."""
 
-    if not any(isinstance(item, Context) for item in root.iter_items()):
-        return root
-    projected = Context(uid=root.uid, name=root.name)
-    seen_contexts: set[str] = set()
-
-    def visit(context: Context) -> None:
-        if context.uid in seen_contexts:
-            return
-        seen_contexts.add(context.uid)
-        for item in context.iter_items():
-            if isinstance(item, Memory):
-                projected.add(
-                    Memory(
-                        uid=item.uid,
-                        content=f"[{context.name}] {item.content}",
-                    )
-                )
-            elif isinstance(item, Context):
-                visit(item)
-            elif isinstance(item, QueryContextRef):
-                # Concealed query-only content is never ordinary Compare input.
-                continue
-            elif isinstance(item, MemoryRef):
-                raise ComparisonError(
-                    "Recursive Compare does not copy live Memory references; "
-                    f"unsupported item [{item.uid[:8]}] in {context.name!r}."
-                )
-
-    visit(root)
-    return projected
+    return project_comparison_context(root)
 
 
 def load_comparison_context(

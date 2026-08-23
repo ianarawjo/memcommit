@@ -15,6 +15,12 @@ from datetime import datetime, timezone
 from typing import Iterable, Literal
 
 from memcommit.context import Context, Memory
+from memcommit.comparison_evidence import (
+    ComparisonEvidenceError,
+    ComparisonEvidenceSource,
+    ProjectedComparisonMemory,
+    project_comparison_context,
+)
 from memcommit.context_targeting.memory_focus import (
     MemoryFocusError,
     resolve_memory_focus,
@@ -25,13 +31,15 @@ from memcommit.understanding import (
 )
 
 
-COMPARISON_SCHEMA_VERSION = 3
+COMPARISON_SCHEMA_VERSION = 4
+COMPARISON_DESCENDANT_SCHEMA_VERSION = 3
 COMPARISON_REPORTS_SCHEMA_VERSION = 2
 COMPARISON_LEGACY_SCHEMA_VERSION = 1
-COMPARISON_RULESET_VERSION = "peer-relations-v3"
+COMPARISON_RULESET_VERSION = "peer-relations-v4"
 SUPPORTED_COMPARISON_RULESET_VERSIONS = {
     "peer-relations-v1",
     "peer-relations-v2",
+    "peer-relations-v3",
     COMPARISON_RULESET_VERSION,
 }
 COMPARISON_TEXT_LIMIT = 20_000
@@ -181,6 +189,7 @@ class ComparisonMemory:
     content: str
     position: int
     content_digest: str
+    source: ComparisonEvidenceSource | None = None
 
     @classmethod
     def create(
@@ -188,34 +197,50 @@ class ComparisonMemory:
         memory: Memory,
         position: int,
     ) -> "ComparisonMemory":
-        return cls.from_dict(
-            {
-                "uid": memory.uid,
-                "content": memory.content,
-                "position": position,
-                "content_digest": hashlib.sha256(
-                    memory.content.encode("utf-8")
-                ).hexdigest(),
-            }
-        )
+        value: dict[str, object] = {
+            "uid": memory.uid,
+            "content": memory.content,
+            "position": position,
+            "content_digest": hashlib.sha256(
+                memory.content.encode("utf-8")
+            ).hexdigest(),
+        }
+        if isinstance(memory, ProjectedComparisonMemory):
+            value["source"] = memory.comparison_source.to_dict()
+        return cls.from_dict(value)
 
     def to_dict(self) -> dict[str, object]:
-        return {
+        result: dict[str, object] = {
             "uid": self.uid,
             "content": self.content,
             "position": self.position,
             "content_digest": self.content_digest,
         }
+        if self.source is not None:
+            result["source"] = self.source.to_dict()
+        return result
 
     @classmethod
     def from_dict(cls, value: object) -> "ComparisonMemory":
+        keys = {"uid", "content", "position", "content_digest"}
+        if isinstance(value, dict) and "source" in value:
+            keys.add("source")
         data = _exact_dict(
             value,
-            {"uid", "content", "position", "content_digest"},
+            keys,
             "comparison Memory",
         )
+        try:
+            source = (
+                ComparisonEvidenceSource.from_dict(data["source"])
+                if "source" in data
+                else None
+            )
+        except ComparisonEvidenceError as error:
+            raise ComparisonError(str(error)) from error
+        uid = _canonical_uuid(data["uid"], "comparison Memory uid")
         result = cls(
-            uid=_canonical_uuid(data["uid"], "comparison Memory uid"),
+            uid=uid,
             content=_string(data["content"], "comparison Memory content"),
             position=_integer(
                 data["position"],
@@ -225,7 +250,12 @@ class ComparisonMemory:
                 data["content_digest"],
                 "comparison Memory content digest",
             ),
+            source=source,
         )
+        if source is not None and source.evidence_uid != uid:
+            raise ComparisonError(
+                "Comparison Memory source identity does not match its evidence uid."
+            )
         if result.content_digest != hashlib.sha256(
             result.content.encode("utf-8")
         ).hexdigest():
@@ -255,18 +285,10 @@ class ComparisonFrame:
     ) -> "ComparisonFrame":
         if not isinstance(context, Context):
             raise ComparisonError("Compare source must be a Context.")
-        unsupported = [
-            uid
-            for uid, item in context.iter_entries()
-            if not isinstance(item, Memory)
-        ]
-        if unsupported:
-            raise ComparisonError(
-                "Compare version 1 supports direct owned Memories only; "
-                "unsupported direct item(s): "
-                + ", ".join(uid[:8] for uid in unsupported)
-                + "."
-            )
+        try:
+            context = project_comparison_context(context)
+        except ComparisonEvidenceError as error:
+            raise ComparisonError(str(error)) from error
         memories = tuple(
             ComparisonMemory.create(item, position)
             for position, item in enumerate(context.iter_items())
@@ -274,7 +296,7 @@ class ComparisonFrame:
         )
         if not memories:
             raise ComparisonError(
-                f"Source Context '{context.name}' has no direct Memories."
+                f"Source Context '{context.name}' has no readable Memory content."
             )
         return cls.from_dict(
             {
@@ -341,6 +363,60 @@ class ComparisonFrame:
         if self.selected_memory_uid is not None:
             result["selected_memory_uid"] = self.selected_memory_uid
         return result
+
+    def source_state(
+        self,
+        *,
+        include_provenance: bool = True,
+    ) -> tuple[object, ...]:
+        """Return the exact source state without the call-local frame UID."""
+
+        def memory_state(memory: ComparisonMemory) -> tuple[object, ...]:
+            return (
+                memory.uid,
+                memory.content,
+                memory.position,
+                memory.content_digest,
+                (
+                    memory.source.to_dict()
+                    if include_provenance and memory.source is not None
+                    else None
+                ),
+            )
+
+        return (
+            self.context_uid,
+            self.context_name,
+            self.context_digest,
+            self.side,
+            self.selected_memory_uid,
+            tuple(memory_state(memory) for memory in self.memories),
+            tuple(memory_state(memory) for memory in self.context_evidence),
+        )
+
+    def matches_context(self, context: Context) -> bool:
+        """Check current content plus live provenance against this frozen frame."""
+
+        try:
+            current, _evidence = ComparisonFrame.focused_from_context(
+                context,
+                side=self.side,
+                memory_selector=self.selected_memory_uid,
+            )
+        except ComparisonError:
+            return False
+        # Older artifacts did not retain provenance. Preserve their direct
+        # owned-Memory readability while current-rule artifacts bind every
+        # Embed/Reference owner and placement explicitly.
+        include_provenance = any(
+            memory.source is not None
+            for memory in (*self.memories, *self.context_evidence)
+        )
+        return self.source_state(
+            include_provenance=include_provenance
+        ) == current.source_state(
+            include_provenance=include_provenance
+        )
 
     @classmethod
     def from_dict(cls, value: object) -> "ComparisonFrame":
@@ -818,38 +894,7 @@ def comparison_analysis_matches_input(
     return (
         analysis.include_descendants == comparison_input.include_descendants
         and all(
-            (
-                saved.context_uid,
-                saved.context_name,
-                saved.context_digest,
-                saved.side,
-                saved.selected_memory_uid,
-                tuple(
-                    (
-                        memory.uid,
-                        memory.content,
-                        memory.position,
-                        memory.content_digest,
-                    )
-                    for memory in saved.memories
-                ),
-            )
-            == (
-                requested.context_uid,
-                requested.context_name,
-                requested.context_digest,
-                requested.side,
-                requested.selected_memory_uid,
-                tuple(
-                    (
-                        memory.uid,
-                        memory.content,
-                        memory.position,
-                        memory.content_digest,
-                    )
-                    for memory in requested.memories
-                ),
-            )
+            saved.source_state() == requested.source_state()
             for saved, requested in zip(
                 analysis.frames,
                 comparison_input.frames,
@@ -929,7 +974,7 @@ class ComparisonAnalysis:
         }
         if self.reports is not None:
             result["reports"] = self.reports.to_dict()
-        if schema_version == COMPARISON_SCHEMA_VERSION:
+        if schema_version >= COMPARISON_DESCENDANT_SCHEMA_VERSION:
             result["include_descendants"] = list(self.include_descendants)
         return result
 
@@ -944,6 +989,7 @@ class ComparisonAnalysis:
             not in {
                 COMPARISON_LEGACY_SCHEMA_VERSION,
                 COMPARISON_REPORTS_SCHEMA_VERSION,
+                COMPARISON_DESCENDANT_SCHEMA_VERSION,
                 COMPARISON_SCHEMA_VERSION,
             }
         ):
@@ -962,7 +1008,7 @@ class ComparisonAnalysis:
         }
         if schema_version >= COMPARISON_REPORTS_SCHEMA_VERSION:
             keys.add("reports")
-        if schema_version == COMPARISON_SCHEMA_VERSION:
+        if schema_version >= COMPARISON_DESCENDANT_SCHEMA_VERSION:
             keys.add("include_descendants")
         data = _exact_dict(
             value,
@@ -990,7 +1036,7 @@ class ComparisonAnalysis:
         )
         raw_descendant_scopes = (
             data["include_descendants"]
-            if schema_version == COMPARISON_SCHEMA_VERSION
+            if schema_version >= COMPARISON_DESCENDANT_SCHEMA_VERSION
             else [False, False]
         )
         if (
@@ -1044,11 +1090,7 @@ class ComparisonAnalysis:
         compared: Context,
     ) -> bool:
         return all(
-            (
-                context.uid == frame.context_uid
-                and context.name == frame.context_name
-                and context_record_digest(context) == frame.context_digest
-            )
+            frame.matches_context(context)
             for frame, context in zip(
                 self.frames,
                 (reference, compared),
@@ -1067,11 +1109,12 @@ class ComparisonAnalysis:
         if self.schema_version not in {
             COMPARISON_LEGACY_SCHEMA_VERSION,
             COMPARISON_REPORTS_SCHEMA_VERSION,
+            COMPARISON_DESCENDANT_SCHEMA_VERSION,
             COMPARISON_SCHEMA_VERSION,
         }:
             raise ComparisonError("Unsupported comparison analysis schema version.")
         if (
-            self.schema_version < COMPARISON_SCHEMA_VERSION
+            self.schema_version < COMPARISON_DESCENDANT_SCHEMA_VERSION
             and any(self.include_descendants)
         ):
             raise ComparisonError(

@@ -19,7 +19,11 @@ from memcommit.comparison import (
     ComparisonError,
     comparison_canonical_digest,
 )
-from memcommit.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.context import Context, Memory
+from memcommit.comparison_evidence import (
+    ProjectedComparisonMemory,
+    project_comparison_context,
+)
 from memcommit.context_targeting.loading import load_context_scope
 from memcommit.derived_policy import AnalysisRetention, authorize_analysis_save
 from memcommit.store import MemoryStore, _write_json_atomic
@@ -254,7 +258,15 @@ def granted_artifact_contexts(
                 (*frame.memories, *frame.context_evidence),
                 key=lambda item: item.position,
             ):
-                context.add(Memory(uid=memory.uid, content=memory.content))
+                context.add(
+                    ProjectedComparisonMemory(
+                        uid=memory.uid,
+                        content=memory.content,
+                        source=memory.source,
+                    )
+                    if memory.source is not None
+                    else Memory(uid=memory.uid, content=memory.content)
+                )
             contexts.append(context)
         return contexts[0], contexts[1]
 
@@ -291,31 +303,4 @@ def granted_artifact_contexts(
 
 
 def recursive_comparison_projection(root: Context) -> Context:
-    if not any(isinstance(item, Context) for item in root.iter_items()):
-        return root
-    projected = Context(uid=root.uid, name=root.name)
-    seen: set[str] = set()
-
-    def visit(context: Context) -> None:
-        if context.uid in seen:
-            return
-        seen.add(context.uid)
-        for item in context.iter_items():
-            if isinstance(item, Memory):
-                projected.add(
-                    Memory(
-                        uid=item.uid,
-                        content=f"[{context.name}] {item.content}",
-                    )
-                )
-            elif isinstance(item, Context):
-                visit(item)
-            elif isinstance(item, QueryContextRef):
-                continue
-            elif isinstance(item, MemoryRef):
-                raise ValueError(
-                    "Granted comparison source contains a live Memory reference."
-                )
-
-    visit(root)
-    return projected
+    return project_comparison_context(root)

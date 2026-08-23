@@ -55,6 +55,9 @@ from memcommit.context_targeting.presets import (
 from memcommit.context_targeting.resolution import (
     is_direct_memory_locator_operand,
 )
+from memcommit.infrastructure.providers.profile_routes import (
+    ProfileProviderRoutesError,
+)
 from memcommit.query_provider import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
@@ -714,6 +717,7 @@ def cmd(
         OSError,
         ProvenanceError,
         ProfileConfigError,
+        ProfileProviderRoutesError,
         ProfileError,
         QueryProviderError,
         RationaleError,

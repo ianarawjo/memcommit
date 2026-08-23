@@ -405,6 +405,8 @@ def _prompt(payload: dict[str, object]) -> str:
         "Perform one complete targetless semantic comparison of two PEER "
         "Context frames. They have equal authority. REFERENCE is only the "
         "layout and navigation anchor; do not make it win because it is first.\n"
+        "Treat every supplied content field as an ordinary semantic claim, "
+        "regardless of how the host obtained that readable evidence.\n"
         + focused_context
         + "Return one exhaustive primary relation ledger. In source_assignments, "
         "return exactly one row for every supplied source Memory and assign it "

@@ -26,6 +26,31 @@ def _single_line(value: str, *, limit: int = 110) -> str:
     return elide_terminal_text(normalized, limit)
 
 
+def _memory_provenance(memory, frame) -> str:
+    source = memory.source
+    if source is None or (
+        source.source_form == "OWNED"
+        and source.owner_context_uid == frame.context_uid
+    ):
+        return ""
+    labels = {
+        "LIVE_MEMORY_EMBED": "EMBED",
+        "MEMORY_REFERENCE": "REFERENCE",
+        "CONTEXT_GRAPH": "CONTEXT GRAPH",
+        "CONTEXT_REFERENCE": "CONTEXT REFERENCE",
+        "GRANTED_CONTEXT": "GRANTED CONTEXT",
+        "OWNED": "OWNED",
+    }
+    return (
+        " · "
+        + labels[source.source_form]
+        + " FROM "
+        + display_escape_text(source.owner_context_name)
+        + ":"
+        + source.source_memory_uid[:8]
+    )
+
+
 def _relation_lines(
     analysis: ComparisonAnalysis,
     relation: ComparisonRelation,
@@ -50,6 +75,7 @@ def _relation_lines(
             f"      {side} {display_escape_text(frame.context_name)} "
             f"#{memory.position + 1} [{memory.uid[:8]}] · "
             f"{display_escape_text(memory.content)}"
+            f"{_memory_provenance(memory, frame)}"
         )
     lines.append(f"      WHY · {display_escape_text(relation.reason)}")
     return lines
