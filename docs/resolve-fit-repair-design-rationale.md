@@ -349,3 +349,23 @@ proposal the public outcome. The checkpoint retains the candidate summary,
 grounding, Fit reason, and exact effects for `mem review resolve --receipt
 UID`. `--apply --candidate --expected-revision` remains a compatibility replay
 boundary, not the default lifecycle.
+
+## 2026-08-22 compact execution handoff
+
+A `PROPOSAL` no longer opens Resolve's former full Viewer, Responses, Items,
+and To Do workbench. That layout repeated a report after generation and made a
+single verified automatic plan look like an unresolved interpretation choice.
+Resolve now projects that plan into the same compact Enter-only execution
+surface used by Meld: the verified plan row is selected, and a separate Apply
+row is the only mutation action. Read-only terminal outcomes remain in the
+semantic Viewer.
+
+Conflict Find hands the exact finding to this same Resolve route, so direct
+Resolve and conflict handoff cannot drift into different application UIs. The
+compact shell does not weaken the execution contract: the operation callback
+still receives the candidate UID from the frozen analysis and revalidates
+authority and revision before mutation. The removed second exact-command page
+was presentation duplication, not the source of those invariants. Supporting
+several Pareto-incomparable candidates would require an explicit typed design;
+the current route deliberately exposes exactly one independently verified
+candidate.

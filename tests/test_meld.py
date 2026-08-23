@@ -4852,7 +4852,8 @@ def test_meld_shell_selects_one_issue_reading_from_the_compact_surface():
     )
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("1a\r")
+        option_count = len(comparison.issues[0].options)
+        pipe_input.send_text("\r" + "\x1b[B" * option_count + "\r")
         action = run_meld_shell(
             session,
             app_input=pipe_input,
@@ -4866,7 +4867,7 @@ def test_meld_shell_selects_one_issue_reading_from_the_compact_surface():
     assert comparison.issues[0].options[0].text in action.comment
 
 
-def test_ready_meld_applies_after_the_shared_final_review_screen():
+def test_ready_meld_applies_from_the_compact_apply_row():
     left = ops.init("left/report-apply")
     ops.add(left, "Cash compensation includes travel time.")
     right = ops.init("right/report-apply")
@@ -4892,9 +4893,9 @@ def test_ready_meld_applies_after_the_shared_final_review_screen():
     assert session.state == "READY_TO_APPLY"
 
     with create_pipe_input() as pipe_input:
-        # To Do opens Review and Apply; the final Enter confirms the exact
-        # ready proposal.
-        pipe_input.send_text("\x1b[Z\r\x1b[F\r")
+        # The separated Apply row is the one confirmation; no exact-command
+        # review screen follows it.
+        pipe_input.send_text("\r")
         action = run_meld_shell(
             session,
             app_input=pipe_input,
@@ -4930,7 +4931,7 @@ def test_ready_meld_review_report_cannot_accept_or_apply():
     assert session.state == "READY_TO_APPLY"
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("aq")
+        pipe_input.send_text("q")
         action = run_meld_shell(
             session,
             app_input=pipe_input,
@@ -4943,7 +4944,7 @@ def test_ready_meld_review_report_cannot_accept_or_apply():
     assert session.state == "READY_TO_APPLY"
 
 
-def test_meld_compact_surface_number_and_continue_contract():
+def test_meld_compact_surface_arrow_and_apply_row_contract():
     left = ops.init("left/dialogue-input")
     ops.add(left, "Cash compensation includes travel time.")
     right = ops.init("right/dialogue-input")
@@ -4957,7 +4958,10 @@ def test_meld_compact_surface_number_and_continue_contract():
     )
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("2a\r")
+        option_count = len(session.current_assessment.issues[0].options)
+        pipe_input.send_text(
+            "\x1b[B\r" + "\x1b[B" * (option_count - 1) + "\r"
+        )
         action = run_meld_shell(
             session,
             app_input=pipe_input,
@@ -4972,7 +4976,7 @@ def test_meld_compact_surface_number_and_continue_contract():
 
 
 @pytest.mark.parametrize("back_key", ["\x1b", "\x7f"])
-def test_meld_compact_back_key_saves_and_closes_without_a_turn(
+def test_meld_compact_back_key_closes_without_saving_a_turn(
     back_key: str,
 ):
     left = ops.init("left/escape-detail")

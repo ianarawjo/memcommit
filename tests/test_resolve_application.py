@@ -1032,9 +1032,9 @@ def test_resolve_tui_projects_and_applies_the_preselected_automatic_plan(
     applied: list[str] = []
 
     with create_pipe_input() as pipe_input:
-        # The semantic plan is already selected: Viewer -> Items -> To Do,
-        # then exact review, Apply, and close. No interpretation choice occurs.
-        pipe_input.send_text("\t\t\r\r\r")
+        # The verified plan is already selected. Move to its separated Apply
+        # row and activate it with the same Enter-only compact grammar as Meld.
+        pipe_input.send_text("\x1b[B\r")
         receipt = run_resolve_tui(
             analysis,
             apply_candidate=lambda candidate_uid: (

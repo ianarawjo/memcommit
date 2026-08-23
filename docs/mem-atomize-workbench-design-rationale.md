@@ -430,16 +430,19 @@ records those findings as `UNRESOLVED AT APPLY` rather than `RESOLVED`,
 `SKIPPED`, or `DEFERRED`.
 
 The report also names its operation frame independently of this semantic
-summary. A typed `CONTEXT LOCATIONS` block identifies Source and Output above
-`WHAT MEM UNDERSTOOD`, marking an unchanged Output as `IN PLACE` and a planned
-fresh Output as `NOT CREATED`. That complete report remains available through
-Impact and Review, but applying Atomize does not wrap a pending decision in the
-report workbench. The execution surface shows only the current finding,
-operation-authored choices, the exact Output, and compact actions. `L` opens
-the shared one-line exact-name input; validation failure retains that input,
-Escape returns one level, and a valid change is persisted by the Atomize
-controller before the same compact revision reopens. This keeps Output editing
-adjacent to the applying decision without restoring a second large viewer or a
+summary. A typed `CONTEXT LOCATIONS` block identifies Source and Output,
+marking an unchanged Output as `IN PLACE` and a planned fresh Output as `NOT
+CREATED`. That complete report remains available through Impact and Review,
+but applying Atomize does not wrap a pending decision in the report workbench.
+The execution surface shows only the current finding, operation-authored
+choices, the exact Output, and compact actions. Location remains a visible row
+because it changes materialization, but it has no `L` shortcut: `Up`/`Down`
+focuses the row and `Enter` opens the shared one-line exact-name input. The
+same Enter-only rule applies to unnumbered choices and Apply; numeric choice
+keys and direct `A` are inert. Validation failure retains the input, Escape
+returns one level, and a valid change is persisted by the Atomize controller
+before the same compact revision reopens. This keeps Output editing adjacent
+to the applying decision without restoring a second large viewer or a
 redundant post-review location prompt.
 
 The ordered 180×52 color-PTY evidence in

@@ -51,4 +51,9 @@ PTY 180 52
 
 
 [0m [0m
-[0m ←/→ issue · ↑/↓ move · Enter select/apply · Esc close[54D[51A[0m
+[0m ←/→ issue · ↑/↓ move · Enter select/apply · Esc close[54D[51A[0m[J[0m[?7h[?1049l[?2004l
+MELD CLOSED · NO DECISION APPLIED
+PROCESS-LOCAL SELECTIONS · DISCARDED
+SOURCE · UNCHANGED
+TARGET · UNCHANGED · NO CHECKPOINT
+DRAFT · NOT SAVED

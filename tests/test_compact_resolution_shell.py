@@ -3,7 +3,6 @@ from __future__ import annotations
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.exact_command_review import ExactCommandReview
 from memcommit.interfaces.tui.workbenches.resolution.compact_shell import (
     run_compact_resolution_decisions,
 )
@@ -27,7 +26,11 @@ def _item(uid: str, title: str) -> ResolutionItem:
         obligation="REQUIRED",
         question=f"Which reading should {title} use?",
         options=(
-            ResolutionOption(f"{uid}:a", "A", "Keep records for 30 days."),
+            ResolutionOption(
+                f"{uid}:recommended",
+                "A",
+                "Keep records for 30 days.",
+            ),
             ResolutionOption(f"{uid}:b", "B", "Keep records for 90 days."),
             ResolutionOption(
                 f"{uid}:both",
@@ -78,7 +81,6 @@ def _run(keys: str):
             selected_option=selected.get,
             stage_option=selected.__setitem__,
             build_continue_action=continue_action,
-            build_simple_action=lambda kind: ResolutionWorkbenchAction(kind=kind),
             continue_label=lambda: "Continue",
             app_input=pipe_input,
             app_output=DummyOutput(),
@@ -86,54 +88,53 @@ def _run(keys: str):
     return result, selected, actions
 
 
-def test_numbers_stage_multiple_issues_before_one_continue_action():
-    action, selected, actions = _run("1\x1b[C2a")
+def test_enter_stages_multiple_issues_before_one_apply_action():
+    action, selected, actions = _run(
+        "\x1b[C\x1b[B\r" + "\x1b[B" * 2 + "\r"
+    )
 
     assert action.kind == "SUBMIT_ALL"
-    assert selected == {"retention": "retention:a", "access": "access:b"}
+    assert selected == {
+        "retention": "retention:recommended",
+        "access": "access:b",
+    }
     assert actions == [action]
 
 
 def test_direction_keys_alone_can_navigate_and_stage_out_of_order():
     # Right opens issue 2, Down targets choice 2, and Enter stages it. Left
     # returns to issue 1, whose first choice is staged with Enter.
-    action, selected, _actions = _run("\x1b[C\x1b[B\r\x1b[D\ra")
+    action, selected, _actions = _run(
+        "\x1b[C\x1b[B\r\x1b[D\r" + "\x1b[B" * 3 + "\r"
+    )
 
     assert action.kind == "SUBMIT_ALL"
-    assert selected == {"access": "access:b", "retention": "retention:a"}
+    assert selected == {
+        "access": "access:b",
+        "retention": "retention:recommended",
+    }
 
 
-def test_defer_is_available_as_a_single_compact_key():
-    action, selected, actions = _run("d")
+def test_recommendations_are_defaults_and_apply_has_no_second_confirmation():
+    action, selected, actions = _run("\x1b[B" * 3 + "\r")
 
-    assert action.kind == "DEFER"
-    assert selected == {}
+    assert action.kind == "SUBMIT_ALL"
+    assert selected == {
+        "retention": "retention:recommended",
+        "access": "access:recommended",
+    }
+    assert actions == [action]
+
+
+def test_old_choice_and_action_shortcuts_have_no_compact_action():
+    action, selected, actions = _run("12adpl\x1b")
+
+    assert action.kind == "CLOSE"
+    assert selected == {
+        "retention": "retention:recommended",
+        "access": "access:recommended",
+    }
     assert actions == []
-
-
-def test_exact_command_review_stays_adjacent_to_compact_decisions():
-    selected: dict[str, str] = {}
-    action = ResolutionWorkbenchAction(kind="ACCEPT")
-    review = ExactCommandReview(
-        argv=("mem", "meld", "--accept"),
-        effects=("Apply the exact reviewed Meld proposal.",),
-    )
-    with create_pipe_input() as pipe_input:
-        pipe_input.send_text("1\x1b[C1a\r")
-        result = run_compact_resolution_decisions(
-            _view,
-            selected_option=selected.get,
-            stage_option=selected.__setitem__,
-            build_continue_action=lambda _uid: action,
-            build_simple_action=lambda kind: ResolutionWorkbenchAction(kind=kind),
-            continue_label=lambda: "Apply",
-            turn_command_review=lambda _action: review,
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-        )
-
-    assert result is action
-    assert selected == {"retention": "retention:a", "access": "access:a"}
 
 
 def test_compact_decisions_edit_the_exact_save_location_inline():
@@ -147,7 +148,7 @@ def test_compact_decisions_edit_the_exact_save_location_inline():
         # The first invalid Enter must retain the editor; the second exact
         # candidate leaves it through a typed destination-change action.
         pipe_input.send_text(
-            "l\x15wrong/place\r\x15result/reviewed\r"
+            "\x1b[B" * 3 + "\r\x15wrong/place\r\x15result/reviewed\r"
         )
         result = run_compact_resolution_decisions(
             _view,
@@ -156,7 +157,6 @@ def test_compact_decisions_edit_the_exact_save_location_inline():
             build_continue_action=lambda _uid: ResolutionWorkbenchAction(
                 kind="ACCEPT"
             ),
-            build_simple_action=lambda kind: ResolutionWorkbenchAction(kind=kind),
             continue_label=lambda: "Apply",
             destination=SaveLocationView(
                 value="result/draft",
@@ -169,18 +169,20 @@ def test_compact_decisions_edit_the_exact_save_location_inline():
 
     assert result.kind == "CHANGE_DESTINATION"
     assert result.destination == "result/reviewed"
-    assert selected == {}
+    assert selected == {
+        "retention": "retention:recommended",
+        "access": "access:recommended",
+    }
 
 
 def test_compact_destination_backspace_remains_text_deletion():
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("l\x7f\r")
+        pipe_input.send_text("\x1b[B" * 3 + "\r\x7f\r")
         result = run_compact_resolution_decisions(
             _view,
             selected_option=lambda _uid: None,
             stage_option=lambda _uid, _option_uid: None,
             build_continue_action=lambda _uid: None,
-            build_simple_action=lambda kind: ResolutionWorkbenchAction(kind=kind),
             continue_label=lambda: "Apply",
             destination=SaveLocationView(value="result/draft"),
             app_input=pipe_input,
@@ -193,13 +195,12 @@ def test_compact_destination_backspace_remains_text_deletion():
 
 def test_compact_destination_keeps_printable_q_as_name_input():
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("lq\r")
+        pipe_input.send_text("\x1b[B" * 3 + "\rq\r")
         result = run_compact_resolution_decisions(
             _view,
             selected_option=lambda _uid: None,
             stage_option=lambda _uid, _option_uid: None,
             build_continue_action=lambda _uid: None,
-            build_simple_action=lambda kind: ResolutionWorkbenchAction(kind=kind),
             continue_label=lambda: "Apply",
             destination=SaveLocationView(value="result/draft"),
             app_input=pipe_input,
@@ -212,13 +213,12 @@ def test_compact_destination_keeps_printable_q_as_name_input():
 
 def test_compact_destination_escape_returns_before_root_close():
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("l\x1b\x1b")
+        pipe_input.send_text("\x1b[B" * 3 + "\r\x1b\x1b")
         result = run_compact_resolution_decisions(
             _view,
             selected_option=lambda _uid: None,
             stage_option=lambda _uid, _option_uid: None,
             build_continue_action=lambda _uid: None,
-            build_simple_action=lambda kind: ResolutionWorkbenchAction(kind=kind),
             continue_label=lambda: "Apply",
             destination=SaveLocationView(value="result/draft"),
             app_input=pipe_input,

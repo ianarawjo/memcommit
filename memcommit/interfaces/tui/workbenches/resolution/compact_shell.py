@@ -20,12 +20,8 @@ from prompt_toolkit.layout import (
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
-from memcommit.exact_command_review import ExactCommandReview
 from memcommit.interfaces.console.text import safe_terminal_text
 from memcommit.interfaces.tui.components.exact_name import ExactNameInputControl
-from memcommit.interfaces.tui.components.exact_command_review.rendering import (
-    render_exact_command_review,
-)
 from memcommit.interfaces.tui.components.frame import TuiRegion, build_tui_frame
 from memcommit.interfaces.tui.components.save_location import SaveLocationView
 from memcommit.interfaces.tui.core.keybindings import bind_case_insensitive_key
@@ -39,6 +35,8 @@ from memcommit.resolution_workbench import (
     ResolutionWorkbenchAction,
     ResolutionWorkbenchView,
 )
+from memcommit.selection import FlatSelectionState, SelectionOption
+from memcommit.selection.tui import render_vertical_choice_rows
 
 
 def _recommended(option_uid: str, label: str) -> bool:
@@ -57,7 +55,7 @@ def _choice_text(item: ResolutionItem, index: int) -> str:
     text = safe_terminal_text(option.text).strip()
     content = label if not text or text == label else f"{label} · {text}"
     if _recommended(option.uid, option.label):
-        content += " (Recommended)"
+        content += " · Recommended"
     return content
 
 
@@ -67,20 +65,16 @@ def run_compact_resolution_decisions(
     selected_option: Callable[[str], str | None],
     stage_option: Callable[[str, str], None],
     build_continue_action: Callable[[str | None], ResolutionWorkbenchAction | None],
-    build_simple_action: Callable[[str], ResolutionWorkbenchAction | None],
     continue_label: Callable[[], str],
     destination: SaveLocationView | None = None,
-    turn_command_review: (
-        Callable[[ResolutionWorkbenchAction], ExactCommandReview | None] | None
-    ) = None,
     app_input: Input | None = None,
     app_output: Output | None = None,
 ) -> ResolutionWorkbenchAction:
     """Navigate issues and stage choices without rendering the retained report.
 
-    Left/Right changes the issue, Up/Down changes the compact row, number keys
-    stage the matching choice, and the same rows remain operable with Enter.
-    A command-bearing semantic turn receives one adjacent exact confirmation.
+    Left/Right changes the issue, Up/Down changes the compact row, and Enter is
+    the sole activation grammar for choices, location, and Apply. Staging is
+    process-local and the separated Apply row is the operation's confirmation.
     """
 
     supplier = (
@@ -93,6 +87,19 @@ def run_compact_resolution_decisions(
         if item.effective_obligation in {"REQUIRED", "OPTIONAL"}
         and item.response_state != "NOT_APPLICABLE"
     )
+
+    # A recommendation is an operation-authored default, not a positional
+    # guess. Stage it in the process-local decision map so Enter can apply an
+    # unchanged recommendation without first manufacturing a draft.
+    for item in items:
+        if selected_option(item.uid) is not None or item.selected_option_uid:
+            continue
+        recommendations = tuple(
+            option for option in item.options if _recommended(option.uid, option.label)
+        )
+        if len(recommendations) == 1:
+            stage_option(item.uid, recommendations[0].uid)
+
     item_index = {"value": 0}
     if items:
         selected_uid = next(
@@ -103,8 +110,6 @@ def run_compact_resolution_decisions(
             index for index, item in enumerate(items) if item.uid == selected_uid
         )
     row_index = {"value": 0}
-    pending_action: dict[str, ResolutionWorkbenchAction | None] = {"value": None}
-    pending_review: dict[str, ExactCommandReview | None] = {"value": None}
     status = {"value": ""}
     destination_editing = {"value": False}
     bindings = KeyBindings()
@@ -115,34 +120,76 @@ def run_compact_resolution_decisions(
     )
     decision_keys_active = Condition(lambda: not destination_editing["value"])
     destination_keys_active = Condition(lambda: destination_editing["value"])
-    location_key_active = Condition(
-        lambda: destination is not None and not destination_editing["value"]
-    )
 
     def active_item() -> ResolutionItem | None:
         return items[item_index["value"]] if items else None
 
-    def action_rows() -> tuple[tuple[str, str], ...]:
-        capabilities = supplier().capabilities
-        rows: list[tuple[str, str]] = []
-        if "PRESERVE_ALL" in capabilities:
-            rows.append(("P", "Preserve all"))
-        if "DEFER" in capabilities:
-            rows.append(("D", "Defer"))
+    def action_rows() -> tuple[SelectionOption, ...]:
+        rows: list[SelectionOption] = []
         if destination is not None:
-            rows.append(("L", f"Change {destination.label.lower()}"))
-        rows.append(("A", continue_label()))
+            rows.append(
+                SelectionOption(
+                    "action:CHANGE_DESTINATION",
+                    f"Change {destination.label.lower()}",
+                )
+            )
+        rows.append(SelectionOption("action:CONTINUE", continue_label()))
         return tuple(rows)
 
-    def row_count() -> int:
+    def visible_rows() -> tuple[SelectionOption, ...]:
         item = active_item()
-        return (len(item.options) if item is not None else 0) + len(action_rows())
+        choices = (
+            tuple(
+                SelectionOption(
+                    f"choice:{option.uid}",
+                    _choice_text(item, index),
+                )
+                for index, option in enumerate(item.options)
+            )
+            if item is not None
+            else ()
+        )
+        return choices + action_rows()
 
-    def clamp_row() -> None:
-        row_index["value"] = min(row_index["value"], max(row_count() - 1, 0))
+    def row_count() -> int:
+        return len(visible_rows())
 
     def selected_for(item: ResolutionItem) -> str | None:
         return selected_option(item.uid) or item.selected_option_uid
+
+    def focus_selected_choice() -> None:
+        item = active_item()
+        if item is None:
+            row_index["value"] = 0
+            return
+        selected_uid = selected_for(item)
+        row_index["value"] = next(
+            (
+                index
+                for index, option in enumerate(item.options)
+                if option.uid == selected_uid
+            ),
+            0,
+        )
+
+    focus_selected_choice()
+
+    def continue_row_label() -> str:
+        base = safe_terminal_text(continue_label()).strip().upper()
+        if base == "APPLY":
+            base = "APPLY ALL"
+        required = tuple(
+            item for item in items if item.effective_obligation == "REQUIRED"
+        )
+        if not required:
+            return base
+        answered = sum(
+            1
+            for item in required
+            if selected_for(item) is not None or item.response_state == "ANSWERED"
+        )
+        readiness = " READY" if answered == len(required) else ""
+        return f"{base} · {answered}/{len(required)}{readiness}"
 
     def render_header() -> list[tuple[str, str]]:
         view = supplier()
@@ -160,22 +207,6 @@ def run_compact_resolution_decisions(
         ]
 
     def render_body() -> list[tuple[str, str]]:
-        if pending_review["value"] is not None:
-            return [
-                ("class:report-label", " RUN EXACT COMMAND\n"),
-                (
-                    "class:report-neutral",
-                    safe_terminal_text(
-                        render_exact_command_review(pending_review["value"])
-                    )
-                    + "\n\n",
-                ),
-                (
-                    focused_control_style(focused=True, selected=True),
-                    " › Enter · Run exact command",
-                ),
-            ]
-
         fragments: list[tuple[str, str]] = []
         if destination is not None:
             fragments.append(
@@ -192,7 +223,6 @@ def run_compact_resolution_decisions(
                 )
             )
         item = active_item()
-        option_count = len(item.options) if item is not None else 0
         if item is not None:
             fragments.append(
                 (
@@ -205,47 +235,63 @@ def run_compact_resolution_decisions(
                 fragments.append(
                     ("class:report-neutral", f" {safe_terminal_text(item.question)}\n")
                 )
-            chosen_uid = selected_for(item)
-            for index, option in enumerate(item.options):
-                focused = row_index["value"] == index
-                chosen = chosen_uid == option.uid
-                marker = "✓" if chosen else " "
-                prefix = f" {marker} [{index + 1}] "
-                fragments.append(
-                    (
-                        focused_control_style(
-                            focused=focused,
-                            # In this deliberately sparse surface, blue is the
-                            # visible arrow-key cursor while the check remains
-                            # the complete staged-selection channel.
-                            selected=focused or chosen,
-                        ),
-                        prefix + _choice_text(item, index) + "\n",
-                    )
+        option_rows = visible_rows()[: len(item.options) if item is not None else 0]
+        if option_rows:
+            choice_uid = selected_for(item) if item is not None else None
+            cursor_uid = (
+                option_rows[row_index["value"]].uid
+                if row_index["value"] < len(option_rows)
+                else (
+                    f"choice:{choice_uid}"
+                    if choice_uid is not None
+                    else option_rows[0].uid
                 )
-
-        for offset, (key, label) in enumerate(action_rows()):
-            focused = row_index["value"] == option_count + offset
+            )
+            state = FlatSelectionState(
+                option_rows,
+                cursor_uid=cursor_uid,
+                selected_uid=(
+                    f"choice:{choice_uid}" if choice_uid is not None else None
+                ),
+                allow_empty=True,
+            )
+            fragments.extend(
+                render_vertical_choice_rows(
+                    state,
+                    focused=row_index["value"] < len(option_rows),
+                    content_width=max(30, get_app().output.get_size().columns - 4),
+                    numbered=False,
+                    blank_between=False,
+                )
+            )
+        action_offset = len(option_rows)
+        if destination is not None:
+            focused = row_index["value"] == action_offset
             fragments.append(
                 (
                     focused_control_style(focused=focused, selected=focused),
-                    f"   [{key}] {safe_terminal_text(label)}\n",
+                    f"  Change {safe_terminal_text(destination.label.lower())}\n",
                 )
             )
+            action_offset += 1
+        focused = row_index["value"] == action_offset
+        fragments.extend(
+            (
+                ("", "\n"),
+                (
+                    focused_control_style(focused=focused, selected=focused),
+                    f"  {continue_row_label()}\n",
+                ),
+            )
+        )
         return fragments
 
     def render_footer() -> str:
         if status["value"]:
             return " " + safe_terminal_text(status["value"])
-        if pending_review["value"] is not None:
-            return " Enter run · Esc/Backspace return · Q cancel"
         if destination_editing["value"]:
             return " Enter use exact name · Esc return · Ctrl-C cancel"
-        location_hint = " · L location" if destination is not None else ""
-        return (
-            " ←/→ issue · ↑/↓ choice/action · Enter select · "
-            f"1–9 choose · A continue · D defer{location_hint} · Esc save & close"
-        )
+        return " ←/→ issue · ↑/↓ move · Enter select/apply · Esc close"
 
     header_control = FormattedTextControl(render_header)
     body_control = FormattedTextControl(render_body, focusable=True, show_cursor=False)
@@ -285,39 +331,29 @@ def run_compact_resolution_decisions(
     )
 
     def move_item(delta: int) -> None:
-        if not items or pending_review["value"] is not None:
+        if not items:
             return
         item_index["value"] = (item_index["value"] + delta) % len(items)
-        row_index["value"] = 0
+        focus_selected_choice()
         status["value"] = ""
 
     def move_row(delta: int) -> None:
-        if pending_review["value"] is not None:
-            return
         row_index["value"] = max(
             0,
             min(row_index["value"] + delta, max(row_count() - 1, 0)),
         )
         status["value"] = ""
 
-    def finish_or_review(action: ResolutionWorkbenchAction | None) -> None:
+    def finish(action: ResolutionWorkbenchAction | None) -> None:
         if action is None:
             status["value"] = "This action is not ready. Choose a required response."
             return
-        review = (
-            turn_command_review(action) if turn_command_review is not None else None
-        )
-        if review is None:
-            app.exit(result=action)
-            return
-        pending_action["value"] = action
-        pending_review["value"] = review
-        status["value"] = ""
+        app.exit(result=action)
 
     def select_choice(index: int) -> None:
         item = active_item()
         if item is None or not 0 <= index < len(item.options):
-            status["value"] = "That numbered choice is unavailable."
+            status["value"] = "That choice is unavailable."
             return
         option = item.options[index]
         stage_option(item.uid, option.uid)
@@ -325,25 +361,18 @@ def run_compact_resolution_decisions(
         status["value"] = f"Selected · {safe_terminal_text(option.label)}"
 
     def activate() -> None:
-        if pending_review["value"] is not None:
-            action = pending_action["value"]
-            if action is not None:
-                app.exit(result=action)
-            return
         item = active_item()
         option_count = len(item.options) if item is not None else 0
         if item is not None and row_index["value"] < option_count:
             select_choice(row_index["value"])
             return
-        key, _label = action_rows()[row_index["value"] - option_count]
-        if key == "A":
-            finish_or_review(
+        action_uid = action_rows()[row_index["value"] - option_count].uid
+        if action_uid == "action:CONTINUE":
+            finish(
                 build_continue_action(item.uid if item is not None else None)
             )
-        elif key == "P":
-            finish_or_review(build_simple_action("PRESERVE_ALL"))
         else:
-            finish_or_review(build_simple_action("DEFER"))
+            open_destination()
 
     def open_destination() -> None:
         if destination is None or destination_field is None:
@@ -398,71 +427,7 @@ def run_compact_resolution_decisions(
         activate()
         event.app.invalidate()
 
-    for number in range(1, 10):
-        key = str(number)
-
-        @bindings.add(key, filter=decision_keys_active, eager=True)
-        def _number(event, index: int = number - 1) -> None:
-            if pending_review["value"] is None:
-                select_choice(index)
-            event.app.invalidate()
-
-    @bind_case_insensitive_key(
-        bindings,
-        "a",
-        filter=decision_keys_active,
-        eager=True,
-    )
-    def _continue(event) -> None:
-        if pending_review["value"] is None:
-            item = active_item()
-            finish_or_review(
-                build_continue_action(item.uid if item is not None else None)
-            )
-        event.app.invalidate()
-
-    @bind_case_insensitive_key(
-        bindings,
-        "p",
-        filter=decision_keys_active,
-        eager=True,
-    )
-    def _preserve(event) -> None:
-        if (
-            pending_review["value"] is None
-            and "PRESERVE_ALL" in supplier().capabilities
-        ):
-            finish_or_review(build_simple_action("PRESERVE_ALL"))
-        event.app.invalidate()
-
-    @bind_case_insensitive_key(
-        bindings,
-        "d",
-        filter=decision_keys_active,
-        eager=True,
-    )
-    def _defer(event) -> None:
-        if pending_review["value"] is None and "DEFER" in supplier().capabilities:
-            finish_or_review(build_simple_action("DEFER"))
-        event.app.invalidate()
-
-    @bind_case_insensitive_key(
-        bindings,
-        "l",
-        filter=location_key_active,
-        eager=True,
-    )
-    def _location(event) -> None:
-        open_destination()
-        event.app.invalidate()
-
     def close_or_back(event) -> None:
-        if pending_review["value"] is not None:
-            pending_review["value"] = None
-            pending_action["value"] = None
-            clamp_row()
-            event.app.invalidate()
-            return
         event.app.exit(result=ResolutionWorkbenchAction(kind="CLOSE"))
 
     @bindings.add("escape", filter=decision_keys_active, eager=True)

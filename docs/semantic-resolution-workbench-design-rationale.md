@@ -181,15 +181,28 @@ boundary tests count the live host definitions so a future compatibility edit
 cannot silently restore a shadow application.
 
 Execution and report inspection are separate hosts over the same typed view.
-Meld, Update, Forget, Sever, and Atomize use the report-free compact decision
-surface when the current command can advance or apply semantic state. Explicit
-Review and Impact retain the complete Viewer, evidence, Items, and Responses
+Meld, Update, Forget, Sever, Atomize, and verified Fit-repair Resolve use the
+report-free compact decision surface when the current command can advance or
+apply semantic state. Explicit Review and Impact retain the complete Viewer,
+evidence, Items, and Responses
 topology. The compact host may receive an operation-owned Save Location. It
 renders the frozen exact value beside the decision and uses the shared
-single-line exact-name control for `L`; it returns a typed destination-change
-action and never persists or validates operation meaning itself. Backspace and
+single-line exact-name control when the visible Location row is activated; it
+returns a typed destination-change action and never persists or validates
+operation meaning itself. Backspace and
 printable keys remain editor input, invalid values keep the editor open, and
 Escape retreats from the editor before it can close the decision surface.
+
+The compact surface intentionally has one visible grammar: `Left`/`Right`
+changes the semantic item, `Up`/`Down` changes the visible row, and `Enter`
+activates that row. Choice numbers and `L` may remain undisclosed accelerators;
+direct `A`, `D`, and `P` actions are inert. This prevents issue ordinals from
+being mistaken for choice ordinals and keeps Location and Apply discoverable
+as ordinary rows. A unique operation-authored recommendation may be checked
+process-locally on entry; closing saves no newly changed selection, while the
+separated Apply row is the single explicit mutation boundary. The complete
+report remains a Review concern and
+does not reappear as a second confirmation screen.
 
 ## Common contract
 
@@ -511,19 +524,22 @@ target-bound and therefore do not expose a misleading save-as control.
 
 ### Resolve
 
-Resolve projects its complete analysis into Viewer, one required candidate
-choice into Responses, the real plan into Items, and exact Apply into To Do.
-The operation adapter supplies Resolve-specific titles without changing the
-shared Meld defaults. One candidate is preselected as a proposal; several
-Pareto-incomparable candidates remain real choices. The exact review binds the
-canonical Context, actionable Memory UIDs, requested effect flags, guidance,
-full candidate hash, and frozen revision.
+Resolve keeps terminal outcomes such as `ALREADY_FIT`, `NEEDS_INPUT`, and
+`NEEDS_AUTHORITY` in the shared read-only Viewer. A verified Fit-repair
+proposal instead projects its one independently checked candidate into the
+same compact execution form as Meld. The candidate is visibly selected, and
+the separate Apply row is the sole confirmation. This is also the form opened
+by a conflict Find handoff, so that handoff does not revive Resolve's former
+large Viewer/Responses/Items/To Do stack.
 
-The workbench neither regenerates candidates nor writes storage. It returns
-the selected candidate UID to the Resolve application callback, which applies
-the already verified process-local analysis after authority and freshness
-revalidation. Terminal outcomes such as `ALREADY_FIT`, `NEEDS_INPUT`, and
-`NEEDS_AUTHORITY` use the shared read-only semantic Viewer and expose no Apply.
+The compact adapter neither regenerates candidates nor writes storage. It
+returns the selected candidate UID to the Resolve application callback, which
+applies the already verified process-local analysis after authority and
+freshness revalidation. Candidate and revision identity still bind the
+application contract even though the TUI does not add a second exact-command
+review page. Multiple Pareto-incomparable candidate selection remains outside
+this single-candidate compact route rather than being implied by positional
+choice order.
 
 ## Invariants
 

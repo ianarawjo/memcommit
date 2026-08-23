@@ -1,6 +1,6 @@
                                                                                                                                                                                     
-MELD DEFERRED · SYMMETRIC · policy                                                                                                                                                  
-SESSION · capture-meld-session · RETAINED                                                                                                                                           
+MELD CLOSED · NO DECISION APPLIED                                                                                                                                                   
+PROCESS-LOCAL SELECTIONS · DISCARDED                                                                                                                                                
 SOURCE · UNCHANGED                                                                                                                                                                  
 TARGET · UNCHANGED · NO CHECKPOINT                                                                                                                                                  
-REPORT · mem review meld --session capture-meld-session
+DRAFT · NOT SAVED

@@ -1533,8 +1533,8 @@ def test_shared_atomize_review_can_incorporate_and_apply_in_one_action():
 
     with create_pipe_input() as pipe_input:
         # Execution decisions skip the retained report and expose one compact
-        # continue action for the already reviewed responses.
-        pipe_input.send_text("a")
+        # Apply row for the already reviewed responses.
+        pipe_input.send_text("\x1b[B" * 99 + "\r")
         action = run_atomize_workbench_shell(
             workbench,
             analysis,
@@ -1637,9 +1637,12 @@ def test_atomize_uses_shared_save_location_frame_before_final_review():
     workbench.response_for(issue.uid).selected_choice_uid = issue.choice_uids[0]
 
     with create_pipe_input() as pipe_input:
-        # L opens the shared exact-name field without restoring the retained
-        # report workbench around this execution decision.
-        pipe_input.send_text("l\x15workbench/destination-final\r")
+        # Location is an ordinary Enter-activated row after the issue choices;
+        # no operation-specific shortcut restores the retained report shell.
+        pipe_input.send_text(
+            "\x1b[B" * len(issue.choice_uids)
+            + "\r\x15workbench/destination-final\r"
+        )
         action = run_atomize_workbench_shell(
             workbench,
             analysis,

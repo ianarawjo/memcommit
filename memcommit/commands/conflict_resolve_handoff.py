@@ -5,6 +5,7 @@ from __future__ import annotations
 from memcommit.clipboard import write_system_clipboard
 from memcommit.commands.command_progress import CommandProgress
 from memcommit.interfaces.tui.operations.resolve import run_resolve_tui
+from memcommit.interfaces.cli.resolve import render_resolve_receipt
 from memcommit.quality_finding_handoff import (
     QualityFindingHandoff,
     conflict_handoff_to_resolve_request,
@@ -38,7 +39,7 @@ def run_conflict_resolve_handoff(
             provider_factory=connect_semantic_provider,
         )
         progress.update("verified proposal ready", step=1)
-    run_resolve_tui(
+    receipt = run_resolve_tui(
         analysis,
         apply_candidate=lambda selected: apply_resolve(
             analysis,
@@ -47,6 +48,8 @@ def run_conflict_resolve_handoff(
         ),
         clipboard_writer=write_system_clipboard,
     )
+    if receipt is not None:
+        render_resolve_receipt(receipt)
 
 
 __all__ = ["run_conflict_resolve_handoff"]

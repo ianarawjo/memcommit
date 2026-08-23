@@ -120,7 +120,6 @@ def _view():
 
 
 def _run_child(kind: str) -> None:
-    from memcommit.exact_command_review import ExactCommandReview
     from memcommit.interfaces.tui.workbenches.resolution.compact_shell import (
         run_compact_resolution_decisions,
     )
@@ -136,32 +135,6 @@ def _run_child(kind: str) -> None:
             return None
         return ResolutionWorkbenchAction(kind="ACCEPT")
 
-    def command_review(action: ResolutionWorkbenchAction):
-        argv = (
-            ("mem", "meld", "advisor-a", "advisor-b", "policy", "--accept")
-            if action.kind == "ACCEPT"
-            else (
-                "mem",
-                "meld",
-                "advisor-a",
-                "advisor-b",
-                "policy",
-                "--defer-all",
-            )
-        )
-        effects = (
-            (
-                "Apply the two staged judgments to the exact saved Meld proposal.",
-                "Source Contexts remain unchanged; the target receives one checkpoint.",
-            )
-            if action.kind == "ACCEPT"
-            else (
-                "Keep the saved Meld report for later Review without applying it.",
-                "All Source and target Contexts remain unchanged.",
-            )
-        )
-        return ExactCommandReview(argv=argv, effects=effects)
-
     print("$ mem meld advisor-a advisor-b policy", flush=True)
     print(f"PTY {size.columns} {size.lines}", flush=True)
     action = run_compact_resolution_decisions(
@@ -169,11 +142,7 @@ def _run_child(kind: str) -> None:
         selected_option=selected.get,
         stage_option=selected.__setitem__,
         build_continue_action=continue_action,
-        build_simple_action=lambda action_kind: ResolutionWorkbenchAction(
-            kind=action_kind
-        ),
-        continue_label=lambda: "Apply staged judgments",
-        turn_command_review=command_review,
+        continue_label=lambda: "Apply",
     )
     if kind == "success":
         if action.kind != "ACCEPT":
@@ -193,13 +162,13 @@ def _run_child(kind: str) -> None:
         print("  UNRESOLVED REQUIRED · 0")
         print("  ADDITIONAL PROVIDER CALLS · 0")
     else:
-        if action.kind != "DEFER":
-            raise RuntimeError(f"expected DEFER, received {action.kind}")
-        print("\nMELD DEFERRED · SYMMETRIC · policy")
-        print("SESSION · capture-meld-session · RETAINED")
+        if action.kind != "CLOSE":
+            raise RuntimeError(f"expected CLOSE, received {action.kind}")
+        print("\nMELD CLOSED · NO DECISION APPLIED")
+        print("PROCESS-LOCAL SELECTIONS · DISCARDED")
         print("SOURCE · UNCHANGED")
         print("TARGET · UNCHANGED · NO CHECKPOINT")
-        print("REPORT · mem review meld --session capture-meld-session")
+        print("DRAFT · NOT SAVED")
 
 
 def _environment() -> dict[str, str]:
@@ -333,43 +302,43 @@ def _capture_success() -> None:
         _settle(child)
         _snapshot(recorder, "05-left-returns-first-conflict")
 
-        child.send("3")
+        child.send(DOWN)
+        child.send(DOWN)
         _settle(child)
-        _snapshot(recorder, "06-number-stages-preserve-both")
+        _snapshot(recorder, "06-down-preserve-both-focus")
 
-        child.send("a")
-        child.expect("RUN EXACT COMMAND")
+        child.send("\r")
         _settle(child)
-        _snapshot(recorder, "07-one-continue-exact-review")
+        _snapshot(recorder, "07-enter-stages-preserve-both")
+
+        child.send(DOWN)
+        _settle(child)
+        _snapshot(recorder, "08-apply-row-ready")
 
         child.send("\r")
         child.expect("CAPTURE GATE .* READ-ONLY VERIFICATION")
         _settle(child)
-        _snapshot(recorder, "08-applied-receipt")
+        _snapshot(recorder, "09-applied-receipt")
 
         child.send("v\r")
         child.expect("ADDITIONAL PROVIDER CALLS .* 0")
         child.expect(pexpect.EOF)
-        _snapshot(recorder, "09-read-only-verification")
+        _snapshot(recorder, "10-read-only-verification")
     finally:
         if child.isalive():
             child.close(force=True)
 
 
-def _capture_defer() -> None:
-    child, recorder = _spawn("defer")
+def _capture_close() -> None:
+    child, recorder = _spawn("close")
     try:
         child.expect("MELD NEEDS INPUT")
         _settle(child)
-        child.send("d")
-        child.expect("RUN EXACT COMMAND")
-        _settle(child)
-        _snapshot(recorder, "10-defer-exact-review")
-
-        child.send("\r")
-        child.expect("TARGET .* UNCHANGED .* NO CHECKPOINT")
+        child.send("2")
+        child.send("\x1b")
+        child.expect("DRAFT .* NOT SAVED")
         child.expect(pexpect.EOF)
-        _snapshot(recorder, "11-deferred-receipt")
+        _snapshot(recorder, "11-close-discards-process-local-choice")
     finally:
         if child.isalive():
             child.close(force=True)
@@ -379,7 +348,7 @@ def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="memcommit-compact-decisions-"):
         _capture_success()
-        _capture_defer()
+        _capture_close()
     raw = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript"))
     if "38;2;" not in raw and "48;2;" not in raw:
         raise RuntimeError("PTY stream did not contain expected true-color ANSI.")

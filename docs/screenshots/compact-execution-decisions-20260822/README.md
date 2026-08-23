@@ -1,9 +1,10 @@
 # Compact execution-decision TTY capture
 
 This ordered set records the report-free execution surface shared by Meld,
-Update, Forget, and Sever. The deterministic harness uses the real shared
-Prompt Toolkit surface and exact-command review component. It retains a full
-report route but does not render that report during execution.
+Update, Forget, Sever, Atomize, and Resolve. The deterministic harness uses the
+real shared Prompt Toolkit surface. It retains a full report route for explicit
+Review but does not render that report or a second command-confirmation screen
+during execution.
 
 ## Reproduction frame
 
@@ -22,19 +23,23 @@ report route but does not render that report during execution.
 
 | Image | Input since preceding image | Visible state | Durable mutation |
 | --- | --- | --- | --- |
-| `01-entry-first-conflict.png` | Launch | `MELD NEEDS INPUT · < 1/2 >`; first option focused; complete report hidden | None |
+| `01-entry-first-conflict.png` | Launch | `MELD NEEDS INPUT · < 1/2 >`; the typed Recommended option is already checked and focused; complete report hidden | None |
 | `02-right-second-conflict.png` | `Right` | Issue 2/2 opens directly; no submission or forced order | None |
 | `03-down-second-choice.png` | `Down` | Choice B is the keyboard target; blue focus makes arrow movement visible | None |
 | `04-enter-stages-second-choice.png` | `Enter` | Choice B retains `✓`; the process remains on issue 2 | None |
-| `05-left-returns-first-conflict.png` | `Left` | Issue 1/2 returns without losing issue 2's staged value | None |
-| `06-number-stages-preserve-both.png` | `3` | `Preserve both` is staged directly by number | None |
-| `07-one-continue-exact-review.png` | `A` | One exact command review covers both staged judgments | None |
-| `08-applied-receipt.png` | `Enter` | Compact applied receipt exposes report Review route | Target checkpoint (fixture receipt) |
-| `09-read-only-verification.png` | `v` | Both reviewed choices, retained report, zero unresolved requirements, and no extra provider call | None |
-| `10-defer-exact-review.png` | New run, then `D` | Exact non-applying Defer command and effects | None |
-| `11-deferred-receipt.png` | `Enter` | Saved report retained; Source and target unchanged; no checkpoint | None |
+| `05-left-returns-first-conflict.png` | `Left` | Issue 1/2 returns without losing issue 2's process-local choice | None |
+| `06-down-preserve-both-focus.png` | `Down`, `Down` | `Preserve both` is the visible arrow-key target while Recommended remains checked | None |
+| `07-enter-stages-preserve-both.png` | `Enter` | `Preserve both` receives the retained check for this run | None |
+| `08-apply-row-ready.png` | `Down` | A blank line separates item judgment from `APPLY ALL · 2/2 READY`; no `A`, Defer, or draft action appears | None |
+| `09-applied-receipt.png` | `Enter` | Apply runs immediately and the compact receipt exposes the report Review route; no second confirmation screen appears | Target checkpoint (fixture receipt) |
+| `10-read-only-verification.png` | `v` | Both reviewed choices, retained report, zero unresolved requirements, and no extra provider call | None |
+| `11-close-discards-process-local-choice.png` | New run, legacy `2`, then `Esc` | `2` is inert because the visible rows are Enter-only; close discards the process-local recommendations without saving a draft | None |
 
-The two runs demonstrate that arrows alone are sufficient to navigate and
-stage a choice, number keys are accelerators rather than a separate mode, and
-`D` is a first-class non-applying exit. `(Recommended)` appears only because
-the operation fixture explicitly marks that option as recommended.
+The two runs demonstrate that arrows and Enter are the complete interaction
+grammar and one separated Apply row is the only confirmation. Numeric choice
+keys and direct `L`, `A`, `D`, and `P` actions are deliberately inert. A
+recommendation is selected only when the operation explicitly types it;
+option order is never treated as recommendation. Defer, Preserve-all, and
+saved drafts are absent from this compact surface. Their legacy domain/CLI
+values remain readable for compatibility, but explicit report inspection
+belongs to Review.

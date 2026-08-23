@@ -1,15 +1,11 @@
  MELD NEEDS INPUT · < 1/2 >                                                                                                                                                         
- RUN EXACT COMMAND                                                                                                                                                                  
-PROPOSED COMMAND · NOT RUN                                                                                                                                                          
-  mem meld advisor-a advisor-b policy --defer-all                                                                                                                                   
+ CONFLICT · Retention period                                                                                                                                                        
+ Which retention period should the policy use?                                                                                                                                      
+  A · Keep records for 30 days. · Recommended                                                                                                                                       
+  B · Keep records for 90 days.                                                                                                                                                     
+✓ Preserve both · Retain both readings with their exact scopes.                                                                                                                     
                                                                                                                                                                                     
-EFFECTS · ONE COMMAND                                                                                                                                                               
-  Keep the saved Meld report for later Review without applying it.                                                                                                                  
-  All Source and target Contexts remain unchanged.                                                                                                                                  
-                                                                                                                                                                                    
-Approval applies only to the exact command shown above.                                                                                                                             
-                                                                                                                                                                                    
- › Enter · Run exact command                                                                                                                                                        
+  APPLY ALL · 2/2 READY                                                                                                                                                             
                                                                                                                                                                                     
                                                                                                                                                                                     
                                                                                                                                                                                     
@@ -49,4 +45,8 @@ Approval applies only to the exact command shown above.
                                                                                                                                                                                     
                                                                                                                                                                                     
                                                                                                                                                                                     
- Enter run · Esc/Backspace return · Q cancel
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+ ←/→ issue · ↑/↓ move · Enter select/apply · Esc close

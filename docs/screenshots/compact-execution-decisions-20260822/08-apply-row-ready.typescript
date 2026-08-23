@@ -161,4 +161,115 @@ PTY 180 52
 
 
 
+[C[0m←/→ issue · ↑/↓ move · Enter select/apply · Esc close[51A[54D[0m[?25l[0m
+
+
+[0;38;2;16;36;47;48;2;139;213;255m✓ A · Keep records for 30 days. · Recommended[0m
+[0;38;2;16;36;47;48;2;139;213;255;1m  B · Keep records for 90 days.[4A[31D[0m[?25l[0m
+
+
+
+[0m  B · Keep records for 90 days.[0m
+[0;38;2;16;36;47;48;2;139;213;255;1m  Preserve both · Retain both readings with their exact scopes.[5A[63D[0m[?25l[0m
+
+
+[0m  A · Keep records for 30 days. · Recommended[0m
+
+[0;38;2;16;36;47;48;2;139;213;255;1m✓[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[C[0mSelected · Preserve both[0m[K[51A[25D[0m[?25l[0m
+
+
+
+
+[0;38;2;16;36;47;48;2;139;213;255m✓ Preserve both · Retain both readings with their exact scopes.[0m
+
+[0;38;2;16;36;47;48;2;139;213;255;1m  APPLY ALL · 2/2 READY[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 [C[0m←/→ issue · ↑/↓ move · Enter select/apply · Esc close[51A[54D[0m

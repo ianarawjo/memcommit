@@ -18,18 +18,19 @@ from memcommit.interfaces.tui.viewers.semantic import (
     SemanticViewerSection,
     run_semantic_viewer,
 )
-from memcommit.interfaces.tui.workbenches.resolution import (
-    ResolutionChoice,
+from memcommit.interfaces.tui.workbenches.resolution.compact_shell import (
+    run_compact_resolution_decisions,
+)
+from memcommit.resolution_workbench import (
     ResolutionItem,
-    ResolutionOutcome,
-    ResolutionWorkbenchSpec,
-    run_resolution_workbench,
+    ResolutionOption,
+    ResolutionWorkbenchAction,
+    ResolutionWorkbenchView,
 )
 from memcommit.resolve_application import (
     ResolveAnalysis,
     ResolveCandidate,
     ResolveReceipt,
-    resolve_case,
 )
 
 
@@ -203,43 +204,6 @@ def project_resolve_analysis(analysis: ResolveAnalysis) -> SemanticViewerDocumen
     )
 
 
-def _candidate_detail(candidate: ResolveCandidate) -> SemanticViewerDocument:
-    fragments: list[tuple[str, str]] = [
-        ("class:title", "VERIFIED AUTOMATIC RESOLVE PLAN\n"),
-        ("class:report-label", safe_terminal_text(candidate.uid) + "\n"),
-        ("class:viewer-body", safe_terminal_text(candidate.summary) + "\n\n"),
-        (
-            "class:report-label",
-            "CLASSIFICATION · "
-            + safe_terminal_text(candidate.classification)
-            + "\nRESOLUTION · "
-            + candidate.resolution_level
-            + "\nRULES · "
-            + safe_terminal_text(", ".join(candidate.rule_ids))
-            + "\n\n",
-        ),
-        *_issue_fragments(candidate),
-        *_effect_fragments(candidate),
-        (
-            "class:impact.keep",
-            "GROUNDING VERIFIED · "
-            + safe_terminal_text(candidate.verification_reason)
-            + f"\nFIT {candidate.fit.verdict} · "
-            + safe_terminal_text(candidate.fit.reason)
-            + "\n",
-        ),
-    ]
-    return SemanticViewerDocument(
-        (
-            SemanticViewerSection(
-                uid=candidate.uid,
-                kind="CANDIDATE",
-                block=SemanticViewerBlock(tuple(fragments), anchor="both"),
-            ),
-        )
-    )
-
-
 def _candidate_argv(
     analysis: ResolveAnalysis,
     candidate: ResolveCandidate,
@@ -297,66 +261,51 @@ def resolve_candidate_exact_review(
     )
 
 
-def _spec(analysis: ResolveAnalysis) -> ResolutionWorkbenchSpec:
-    if not analysis.candidates:
-        raise ValueError("Resolve workbench requires verified candidates.")
-    first = analysis.candidates[0]
-    return ResolutionWorkbenchSpec(
-        case=resolve_case(analysis),
-        title="MEM RESOLVE · RESOLUTION SESSION",
-        subtitle="AUTOMATIC INTERPRETATION · INDEPENDENTLY VERIFIED · EXACT APPLY",
-        report=project_resolve_analysis(analysis),
+def _compact_resolve_view(analysis: ResolveAnalysis) -> ResolutionWorkbenchView:
+    """Project the one verified repair into the shared execution decision shell."""
+
+    candidate = analysis.candidates[0]
+    effects = " · ".join(
+        f"{kind} {sum(effect.kind == kind for effect in candidate.effects)}"
+        for kind in ("CREATE", "UPDATE", "DELETE")
+        if any(effect.kind == kind for effect in candidate.effects)
+    )
+    return ResolutionWorkbenchView(
+        operation="RESOLVE",
+        artifact_uid=analysis.frame.context_uid,
+        revision=analysis.frame.revision,
+        title="Verified Fit repair",
+        route=analysis.frame.display_name,
+        status="READY TO APPLY",
+        metrics=(),
+        overview="",
+        list_label="VERIFIED PLAN",
         items=(
             ResolutionItem(
                 uid="resolve-plan",
-                label="Approve the automatically selected plan for exact Apply.",
-                classification="FIT REPAIR",
-                detail=SemanticViewerDocument(
-                    tuple(
-                        section
-                        for candidate in analysis.candidates
-                        for section in _candidate_detail(candidate).sections
-                    )
-                ),
-                choices=tuple(
-                    ResolutionChoice(
+                kind="VERIFIED PLAN",
+                status="ANSWERED",
+                priority="REQUIRED",
+                title=f"Fit repair for {analysis.frame.display_name}",
+                summary=candidate.summary,
+                obligation="REQUIRED",
+                response_state="ANSWERED",
+                options=(
+                    ResolutionOption(
                         candidate.uid,
-                        "AUTOMATIC PLAN",
-                        candidate.summary,
-                    )
-                    for candidate in analysis.candidates
+                        "Verified automatic plan",
+                        f"{candidate.summary} · {effects}",
+                    ),
                 ),
-                default_choice_uid=first.uid,
+                selected_option_uid=candidate.uid,
             ),
         ),
-        exact_review=resolve_candidate_exact_review(analysis, first),
-        detail_title="VIEWER · VERIFIED AUTOMATIC PLAN",
-        responses_title="RESPONSES · AUTOMATIC PLAN",
-        items_title="ITEMS · AUTOMATIC RESOLVE PLAN",
-    )
-
-
-def _selected_candidate(
-    analysis: ResolveAnalysis,
-    outcome: ResolutionOutcome,
-) -> ResolveCandidate:
-    if outcome.decisions[0][0] != "resolve-plan":
-        raise ValueError("Resolve workbench returned an unknown item.")
-    selected_uid = outcome.decisions[0][1]
-    return next(
-        candidate for candidate in analysis.candidates if candidate.uid == selected_uid
-    )
-
-
-def _receipt(receipt: ResolveReceipt) -> str:
-    return (
-        f"CONTEXT · {receipt.context_name}\n"
-        f"CANDIDATE · {receipt.candidate_uid}\n"
-        f"CREATED · {len(receipt.created_uids)}\n"
-        f"UPDATED · {len(receipt.updated_uids)}\n"
-        f"DELETED · {len(receipt.deleted_uids)}\n"
-        f"CHECKPOINT · {receipt.checkpoint_uid}\n"
-        "RECOVERY · mem undo"
+        empty_message="No verified repair is available.",
+        results_label="EFFECTS",
+        results=(),
+        capabilities=frozenset({"ACCEPT"}),
+        accept_enabled=True,
+        show_results=False,
     )
 
 
@@ -369,7 +318,7 @@ def run_resolve_tui(
     app_output: Output | None = None,
     require_tty: bool = True,
 ) -> ResolveReceipt | None:
-    """Inspect the automatic outcome and optionally approve exact Apply."""
+    """Inspect a terminal outcome or approve one verified plan compactly."""
 
     if not isinstance(analysis, ResolveAnalysis):
         raise TypeError("Resolve TUI requires a typed analysis.")
@@ -383,21 +332,37 @@ def run_resolve_tui(
             require_tty=require_tty,
         )
         return None
-    return run_resolution_workbench(
-        _spec(analysis),
-        apply_outcome=lambda outcome: apply_candidate(
-            _selected_candidate(analysis, outcome).uid
-        ),
-        receipt_text=_receipt,
-        review_outcome=lambda outcome: resolve_candidate_exact_review(
-            analysis,
-            _selected_candidate(analysis, outcome),
-        ),
-        clipboard_writer=clipboard_writer,
+    candidate = analysis.candidates[0]
+    selected = {"value": candidate.uid}
+
+    def stage(_item_uid: str, option_uid: str) -> None:
+        if option_uid != candidate.uid:
+            raise ValueError("Resolve selected an unavailable verified plan.")
+        selected["value"] = option_uid
+
+    def continue_action(item_uid: str | None) -> ResolutionWorkbenchAction | None:
+        if item_uid != "resolve-plan" or selected["value"] != candidate.uid:
+            return None
+        return ResolutionWorkbenchAction(
+            kind="ACCEPT",
+            item_uid=item_uid,
+            option_uid=candidate.uid,
+        )
+
+    action = run_compact_resolution_decisions(
+        _compact_resolve_view(analysis),
+        selected_option=lambda _item_uid: selected["value"],
+        stage_option=stage,
+        build_continue_action=continue_action,
+        continue_label=lambda: "Apply verified plan",
         app_input=app_input,
         app_output=app_output,
-        require_tty=require_tty,
     )
+    if action.kind == "CLOSE":
+        return None
+    if action.kind != "ACCEPT" or action.option_uid != candidate.uid:
+        raise ValueError("Resolve compact decisions returned an invalid action.")
+    return apply_candidate(candidate.uid)
 
 
 __all__ = [

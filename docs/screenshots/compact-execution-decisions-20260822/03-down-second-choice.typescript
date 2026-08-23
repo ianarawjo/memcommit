@@ -3,11 +3,11 @@ PTY 180 52
 [?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;2;244;245;247;1m MELD NEEDS INPUT · < 1/2 >[0m
 [0m CONFLICT · Retention period[0m
 [0;38;2;244;245;247m Which retention period should the policy use?[0m
-[0;38;2;16;36;47;48;2;139;213;255;1m   [1] A · Keep records for 30 days. (Recommended)[0m
-[0m   [2] B · Keep records for 90 days.[0m
-[0m   [3] Preserve both · Retain both readings with their exact scopes.[0m
-[0m   [D] Defer[0m
-[0m   [A] Apply staged judgments[0m
+[0;38;2;16;36;47;48;2;139;213;255;1m✓ A · Keep records for 30 days. · Recommended[0m
+[0m  B · Keep records for 90 days.[0m
+[0m  Preserve both · Retain both readings with their exact scopes.[0m
+
+[0m  APPLY ALL · 2/2 READY[0m
 
 
 
@@ -51,11 +51,12 @@ PTY 180 52
 
 
 [0m [0m
-[0m ←/→ issue · ↑/↓ choice/action · Enter select · 1–9 choose · A continue · D defer · Esc save & close[100D[50A[0m[?25l[A[22C[0;38;2;244;245;247;1m2[0m
+[0m ←/→ issue · ↑/↓ move · Enter select/apply · Esc close[54D[51A[0m[?25l[22C[0;38;2;244;245;247;1m2[0m
 [12C[0mAcc[Css window[0m[K[0m
 [7C[0;38;2;244;245;247macc[Css window should the policy use?[0m[K[0m
-[11C[0;38;2;16;36;47;48;2;139;213;255;1mAllow a[Cces[2Cdu[Cing[Cstaffed hours. (Recommended)[0m
-[11C[0mAllow a[Cces[2Cat any[Ctime[3A[35D[0m[?25l[0m
+[6C[0;38;2;16;36;47;48;2;139;213;255;1mAllow a[Cces[2Cdu[Cing[Cstaffed[Chours. · Recommended[0m
+[6C[0mAllow a[Cces[2Cat any[Ctime[4A[30D[0m[?25l[0m
 
-[0m   [1] A · Allow access during staffed hours. (Recommended)[0m
-[0;38;2;16;36;47;48;2;139;213;255;1m   [2] B · Allow access at any time.[3A[36D[0m
+
+[0;38;2;16;36;47;48;2;139;213;255m✓ A · Allow access during staffed hours. · Recommended[0m
+[0;38;2;16;36;47;48;2;139;213;255;1m  B · Allow access at any time.[4A[31D[0m

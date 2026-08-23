@@ -4959,7 +4959,6 @@ def run_resolution_workbench_shell(
             return automatic
 
     if compact_decisions:
-
         def selected_compact_option(item_uid: str) -> str | None:
             item = current_view().item(item_uid)
             return _item_draft(item, local_drafts).selected_choice_uid
@@ -4969,9 +4968,9 @@ def run_resolution_workbench_shell(
             item.option(option_uid)
             existing = _item_draft(item, local_drafts)
             draft = ResponseDraft(option_uid, existing.text)
+            # A compact choice is process-local until Apply/Continue consumes
+            # it. Closing this surface must not manufacture a durable draft.
             local_drafts[item_uid] = draft
-            if draft_saver is not None:
-                draft_saver(item_uid, option_uid, draft.text)
 
         def compact_continue_action(
             focused_item_uid: str | None,

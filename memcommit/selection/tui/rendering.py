@@ -201,6 +201,7 @@ def render_vertical_choice_rows(
     content_width: int,
     numbered: bool = True,
     anchor_cursor: bool = True,
+    blank_between: bool = True,
 ) -> list[tuple[str, str]]:
     """Render stacked choices as highlighted text rows without card chrome.
 
@@ -251,6 +252,6 @@ def render_vertical_choice_rows(
             )
         if keyboard_target and anchor_cursor:
             fragments.append(("[SetCursorPosition]", ""))
-        if index < len(state.options):
+        if blank_between and index < len(state.options):
             fragments.append(("", "\n"))
     return fragments
