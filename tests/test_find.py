@@ -252,7 +252,6 @@ def test_explicit_find_repeats_context_for_the_same_multi_root_request(
         "memcommit.commands.find._run_find_search_request",
         run_request,
     )
-
     result = runner.invoke(
         app,
         [
@@ -275,6 +274,82 @@ def test_explicit_find_repeats_context_for_the_same_multi_root_request(
                 limit=5,
         )
     ]
+
+
+def test_search_all_and_short_alias_freeze_every_readable_context(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    first = ops.init("first")
+    second = ops.init("second")
+    for context in (first, second):
+        store.save(context)
+    store.set_current(first.name)
+    observed: list[FindSearchRequest] = []
+    authorized: list[tuple[str, ...]] = []
+
+    def run_request(_store, _catalog, request):
+        observed.append(request)
+        return FindSearchResponse(request=request, mode="CURRENT", results=())
+
+    monkeypatch.setattr(
+        "memcommit.commands.find._run_find_search_request",
+        run_request,
+    )
+    monkeypatch.setattr(
+        "memcommit.commands.find.authorize_combination",
+        lambda accesses: authorized.append(
+            tuple(access.display_name for access in accesses)
+        ),
+    )
+
+    for option in ("--all", "-a"):
+        result = runner.invoke(app, ["search", option, "shared detail"])
+        assert result.exit_code == 0, result.output + result.stderr
+        assert result.output == "ALL READABLE CONTEXTS\n  (no matching items)\n"
+
+    assert observed == [
+        FindSearchRequest(
+            query="shared detail",
+            target_names=(first.name, second.name),
+            include_descendants=False,
+            follow_embeds=False,
+            limit=5,
+        ),
+        FindSearchRequest(
+            query="shared detail",
+            target_names=(first.name, second.name),
+            include_descendants=False,
+            follow_embeds=False,
+            limit=5,
+        ),
+    ]
+    assert authorized == [
+        (first.name, second.name),
+        (first.name, second.name),
+    ]
+
+
+def test_search_all_rejects_explicit_context(isolated_store, monkeypatch):
+    store = MemoryStore()
+    context = ops.init("first")
+    store.save(context)
+    store.set_current(context.name)
+    monkeypatch.setattr(
+        "memcommit.commands.find._run_find_search_request",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            AssertionError("invalid Search scope must not execute")
+        ),
+    )
+
+    result = runner.invoke(
+        app,
+        ["search", "--all", "--context", context.name, "shared detail"],
+    )
+
+    assert result.exit_code == 1
+    assert "--all/-a cannot be combined with --context/-c" in result.stderr
 
 
 def test_find_cli_multi_roots_keep_descendants_and_embeds_independent(
@@ -930,6 +1005,10 @@ def test_find_help_explains_the_bare_route_and_default_scope():
     assert "--context-only" in result.output
     assert "--follow-embeds" in result.output
     assert "--exclude-embeds" in result.output
+    assert "--all" in result.output
+    assert "all readable" in result.output
+    assert "active" in result.output
+    assert "Profile" in result.output
     assert "Search only the selected" in result.output
     assert "-d" in result.output
     assert "-r" in result.output

@@ -55,8 +55,8 @@ last inspected page in terminal history when Escape or `q` closes it.
 
 The application result remains complete. `--plain` preserves a bounded static
 projection for scripts or explicit noninteractive output, and pipes are always
-plain; `--all` prints every row. Every human Source Reference row folds stored
-whitespace but retains the complete Memory content and provenance; terminal
+plain; `--all-results` prints every row. Every human Source Reference row folds
+stored whitespace but retains the complete Memory content and provenance; terminal
 width may wrap one logical row onto multiple physical lines, but Find never
 inserts an ellipsis or discards a content suffix. `--copy` and TUI whole-result
 copy likewise retain every row and its complete content, so display paging
@@ -75,6 +75,29 @@ from the visible location identity. Find also owns complete spans, MemoryRef
 provenance, and the ten-row page policy. Query owns first-use citation numbering
 and its own temporary evidence aliases. Raw `start:end` spans remain in Find's
 typed result and Replace planning but are omitted from the default human row.
+
+Find and Search share one command-line breadth spelling: `-a/--all` expands the
+request to every Context in one frozen Profile-readable catalog. It cannot be
+combined with explicit `-c/--context` roots, and the virtual word `PROFILE`
+never enters an application request or storage lookup. The exact canonical
+names are frozen once and remain subject to the operation's independent
+descendant and Embed choices. This makes the one-shot CLI match the existing
+interactive `PROFILE · ALL READABLE CONTEXTS` target. Semantic Search also
+authorizes the complete frozen contributor set for `DERIVE` and cross-domain
+`COMBINE` before constructing its provider; provider-free literal Find needs
+only the already-frozen READ bindings. Human Find and Search report chrome
+projects that virtual target as `ALL READABLE CONTEXTS` instead of enumerating
+the frozen names. The names remain explicit in the application request and in
+per-result provenance; compact presentation must not weaken the execution or
+evidence boundary.
+
+Find formerly used `--all`, and briefly `-a`, for presentation completeness.
+That spelling was reassigned because a retrieval command's unqualified “all”
+is expected to describe what is searched, while a bounded preview changes only
+what is printed. Complete static output remains available through the explicit
+`--all-results` name. Keeping the old overload or assigning `--all` different
+meanings in Find and Search was rejected because the same scope family would
+then disclose different Context sets for identical flags.
 
 ## Deterministic Replace
 

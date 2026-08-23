@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from memcommit.interfaces.cli.find import (
     DEFAULT_LITERAL_FIND_PREVIEW_MATCHES,
+    literal_find_result_header_lines,
     project_literal_find_match,
     render_literal_find_result,
 )
@@ -47,6 +48,20 @@ def test_find_result_uses_compact_source_rows_without_exposing_raw_spans():
     assert "1 [memory-1] First needle. Second line. [scope m1]" in rendered
     assert "SPANS" not in rendered
     assert project_literal_find_match(result.matches[0], number=1) in rendered
+
+
+def test_find_all_readable_scope_hides_frozen_context_enumeration() -> None:
+    result = _result()
+
+    header = literal_find_result_header_lines(
+        result,
+        all_readable_contexts=True,
+    )
+
+    assert header[2] == (
+        "SCOPE · ALL READABLE CONTEXTS · EXACT · EXCLUDE EMBEDS"
+    )
+    assert "SCOPE · scope ·" not in header[2]
 
 
 def test_find_memory_ref_row_keeps_owner_before_referenced_source():
@@ -93,7 +108,10 @@ def test_find_preview_is_explicit_about_hidden_rows_and_complete_counts():
     assert "MATCHED 12 · OCCURRENCES 12 · SHOWING 1–10 OF 12" in preview
     assert "10 [memory-0] needle row 9, [scope m10]" in preview
     assert "11 [memory-0] needle row 10, [scope m11]" not in preview
-    assert "2 more matches not shown; rerun with --all to show every result." in preview
+    assert (
+        "2 more matches not shown; rerun with --all-results to show every result."
+        in preview
+    )
     assert "SHOWING" not in complete
     assert "12 [memory-0] needle row 11, [scope m12]" in complete
 

@@ -112,6 +112,34 @@ def test_find_tui_lowercase_y_copies_focused_and_uppercase_y_copies_all() -> Non
     assert "SPANS" not in copied[1]
 
 
+def test_find_tui_whole_copy_keeps_initial_all_readable_label() -> None:
+    copied: list[str] = []
+    setup = _setup()
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\rYq")
+        returned = run_literal_find_tui(
+            LiteralFindRequest(
+                pattern="needle",
+                target_names=setup.names,
+            ),
+            setup=LiteralFindTuiSetup(
+                names=setup.names,
+                current_name=setup.current_name,
+                initial_targets=setup.names,
+            ),
+            execute=_execute,
+            clipboard_writer=copied.append,
+            initial_all_readable_contexts=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert isinstance(returned, LiteralFindTuiOutcome)
+    assert "SCOPE · ALL READABLE CONTEXTS" in copied[0]
+    assert "SCOPE · alpha + alpha/child + peer" not in copied[0]
+
+
 def test_find_tui_projects_descendants_as_exact_checked_execution_set() -> None:
     requests: list[LiteralFindRequest] = []
     with create_pipe_input() as pipe_input:

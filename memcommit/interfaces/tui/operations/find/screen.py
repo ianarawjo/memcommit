@@ -114,6 +114,7 @@ def run_literal_find_tui(
     setup: LiteralFindTuiSetup,
     execute: LiteralFindRunner,
     clipboard_writer: Callable[[str], None] | None = None,
+    initial_all_readable_contexts: bool = False,
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
@@ -129,6 +130,8 @@ def run_literal_find_tui(
         raise TypeError("Find TUI requires a LiteralFindTuiSetup.")
     if request is not None and not isinstance(request, LiteralFindRequest):
         raise TypeError("Find TUI request must be a LiteralFindRequest or None.")
+    if type(initial_all_readable_contexts) is not bool:
+        raise TypeError("Find initial all-readable choice must be a boolean.")
     if not callable(execute):
         raise TypeError("Find TUI requires an execution callback.")
 
@@ -341,7 +344,16 @@ def run_literal_find_tui(
             status = "NOTHING TO COPY"
             return
         text = (
-            render_literal_find_result(result)
+            render_literal_find_result(
+                result,
+                all_readable_contexts=(
+                    scope.profile_selected
+                    or (
+                        initial_all_readable_contexts
+                        and result.request.target_names == setup.names
+                    )
+                ),
+            )
             if whole or not result.matches
             else project_literal_find_match(
                 result.matches[result_index],

@@ -105,12 +105,19 @@ def cmd(
         bool,
         typer.Option("--copy", help="Copy the complete plain result after execution"),
     ] = False,
-    show_all: Annotated[
+    all_contexts: Annotated[
         bool,
         typer.Option(
             "--all",
             "-a",
-            help="Print every matching row instead of the preview",
+            help="Search all readable Contexts in the active Profile",
+        ),
+    ] = False,
+    show_all_results: Annotated[
+        bool,
+        typer.Option(
+            "--all-results",
+            help="Print every matching row instead of the bounded preview",
         ),
     ] = False,
     plain: Annotated[
@@ -149,6 +156,8 @@ def cmd(
 
         store = MemoryStore(create=False)
         snapshot = ContextOperandSnapshot.capture(store)
+        if all_contexts and context_name:
+            raise ValueError("--all/-a cannot be combined with --context/-c.")
         operands: tuple[str | None, ...] = (
             tuple(context_name) if context_name else (None,)
         )
@@ -171,6 +180,11 @@ def cmd(
             accesses[0],
             include_query_routes=False,
         )
+        if all_contexts:
+            # Expand the virtual Profile target before request construction;
+            # neither storage nor the application accepts PROFILE as a name.
+            target_names = tuple(catalog.list_context_names())
+            accesses = tuple(catalog.access_for(name) for name in target_names)
         for access in accesses:
             catalog.access_for(access.display_name)
 
@@ -215,6 +229,7 @@ def cmd(
                 ),
                 execute=execute,
                 clipboard_writer=write_system_clipboard,
+                initial_all_readable_contexts=all_contexts,
             )
             result = None if outcome is None else outcome.result
         else:
@@ -223,22 +238,26 @@ def cmd(
             if (
                 mode is ConsoleMode.AUTO
                 and terminal.is_interactive()
-                and not show_all
+                and not show_all_results
                 and len(result.matches) > DEFAULT_LITERAL_FIND_PREVIEW_MATCHES
             ):
                 # A completed one-shot request stays in the primary terminal
                 # flow. Only its bounded rows become interactive; setup and
                 # result semantics remain outside the shared pager shell.
-                run_compact_literal_find_result(result)
+                run_compact_literal_find_result(
+                    result,
+                    all_readable_contexts=all_contexts,
+                )
             else:
                 typer.echo(
                     render_literal_find_result(
                         result,
                         match_limit=(
                             None
-                            if show_all
+                            if show_all_results
                             else DEFAULT_LITERAL_FIND_PREVIEW_MATCHES
                         ),
+                        all_readable_contexts=all_contexts,
                     )
                 )
 
@@ -246,7 +265,17 @@ def cmd(
             typer.echo("Find closed.")
             return
         if copy_result:
-            write_system_clipboard(render_literal_find_result(result))
+            result_uses_all_readable_contexts = (
+                all_contexts
+                and result.request.target_names
+                == tuple(catalog.list_context_names())
+            )
+            write_system_clipboard(
+                render_literal_find_result(
+                    result,
+                    all_readable_contexts=result_uses_all_readable_contexts,
+                )
+            )
             typer.secho("Copied complete Find result.", fg=typer.colors.GREEN, err=True)
     except (
         ClipboardError,

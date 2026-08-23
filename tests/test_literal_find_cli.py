@@ -13,6 +13,18 @@ from memcommit.store import MemoryStore
 runner = CliRunner(mix_stderr=False)
 
 
+def test_find_help_distinguishes_target_and_result_breadth() -> None:
+    result = runner.invoke(app, ["find", "--help"])
+
+    assert result.exit_code == 0, result.output + result.stderr
+    assert "--all" in result.output
+    assert "all readable" in result.output
+    assert "active" in result.output
+    assert "Profile" in result.output
+    assert "--all-results" in result.output
+    assert "every matching row" in result.output
+
+
 def test_find_plain_matches_every_literal_occurrence(isolated_store) -> None:
     context = ops.init("find/source")
     ops.add(context, "Needle one; needle two.")
@@ -178,7 +190,9 @@ def test_find_tui_flag_still_opens_supplied_pattern_in_tty(
     assert result.output == "Find closed.\n"
 
 
-def test_find_inline_preview_and_all_keep_complete_match_count(isolated_store) -> None:
+def test_find_inline_preview_and_all_results_keep_complete_match_count(
+    isolated_store,
+) -> None:
     context = ops.init("find/source")
     for index in range(12):
         ops.add(context, f"needle row {index}")
@@ -187,26 +201,36 @@ def test_find_inline_preview_and_all_keep_complete_match_count(isolated_store) -
     store.set_current("find/source")
 
     preview = runner.invoke(app, ["find", "--plain", "needle"])
-    complete = runner.invoke(app, ["find", "--plain", "--all", "needle"])
+    complete = runner.invoke(
+        app,
+        ["find", "--plain", "--all-results", "needle"],
+    )
 
     assert preview.exit_code == 0, preview.output + preview.stderr
     assert complete.exit_code == 0, complete.output + complete.stderr
     assert "MATCHED 12 · OCCURRENCES 12 · SHOWING 1–10 OF 12" in preview.output
     assert "11 [" not in preview.output
     assert "needle row 10, [find/source m11]" not in preview.output
-    assert "2 more matches not shown; rerun with --all to show every result." in preview.output
+    assert (
+        "2 more matches not shown; rerun with --all-results to show every result."
+        in preview.output
+    )
     assert "SHOWING" not in complete.output
     assert "12 [" in complete.output
     assert "needle row 11, [find/source m12]" in complete.output
 
 
-def test_find_short_all_alias_matches_long_option(isolated_store) -> None:
-    context = ops.init("find/source")
-    for index in range(12):
-        ops.add(context, f"needle row {index}")
+def test_find_all_and_short_alias_search_every_readable_context(
+    isolated_store,
+) -> None:
+    first = ops.init("find/first")
+    second = ops.init("find/second")
+    ops.add(first, "needle from first")
+    ops.add(second, "needle from second")
     store = MemoryStore()
-    store.save(context)
-    store.set_current("find/source")
+    store.save(first)
+    store.save(second)
+    store.set_current(first.name)
 
     long_option = runner.invoke(app, ["find", "--plain", "--all", "needle"])
     short_option = runner.invoke(app, ["find", "--plain", "-a", "needle"])
@@ -214,6 +238,29 @@ def test_find_short_all_alias_matches_long_option(isolated_store) -> None:
     assert long_option.exit_code == 0, long_option.output + long_option.stderr
     assert short_option.exit_code == 0, short_option.output + short_option.stderr
     assert short_option.output == long_option.output
+    assert (
+        "SCOPE · ALL READABLE CONTEXTS · EXACT · EXCLUDE EMBEDS"
+        in long_option.output
+    )
+    assert "SCOPE · find/first + find/second" not in long_option.output
+    assert "SCANNED 2 · MATCHED 2 · OCCURRENCES 2" in long_option.output
+    assert "needle from first" in long_option.output
+    assert "needle from second" in long_option.output
+
+
+def test_find_all_rejects_explicit_context(isolated_store) -> None:
+    context = ops.init("find/source")
+    store = MemoryStore()
+    store.save(context)
+    store.set_current(context.name)
+
+    result = runner.invoke(
+        app,
+        ["find", "--all", "--context", context.name, "needle"],
+    )
+
+    assert result.exit_code == 1
+    assert "--all/-a cannot be combined with --context/-c" in result.stderr
 
 
 def test_find_copy_remains_complete_when_terminal_output_is_previewed(
@@ -252,8 +299,9 @@ def test_find_long_tty_result_uses_compact_pager(isolated_store, monkeypatch) ->
         def is_interactive(self) -> bool:
             return True
 
-    def run_compact(result):
+    def run_compact(result, *, all_readable_contexts=False):
         captured["result"] = result
+        captured["all_readable_contexts"] = all_readable_contexts
         return 0
 
     monkeypatch.setattr(
@@ -267,8 +315,9 @@ def test_find_long_tty_result_uses_compact_pager(isolated_store, monkeypatch) ->
         run_compact,
     )
 
-    result = runner.invoke(app, ["find", "needle"])
+    result = runner.invoke(app, ["find", "-a", "needle"])
 
     assert result.exit_code == 0, result.output + result.stderr
     assert len(captured["result"].matches) == 12
+    assert captured["all_readable_contexts"] is True
     assert result.output == ""

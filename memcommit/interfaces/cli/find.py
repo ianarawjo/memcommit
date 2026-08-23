@@ -14,11 +14,14 @@ def literal_find_result_header_lines(
     result: LiteralFindResult,
     *,
     visible_range: tuple[int, int] | None = None,
+    all_readable_contexts: bool = False,
 ) -> tuple[str, str, str, str]:
     """Project stable Find chrome with an optional zero-based visible range."""
 
     if not isinstance(result, LiteralFindResult):
         raise TypeError("Find result presentation requires a LiteralFindResult.")
+    if type(all_readable_contexts) is not bool:
+        raise TypeError("Find all-readable presentation choice must be a boolean.")
     if visible_range is not None:
         start, stop = visible_range
         if not 0 <= start < stop <= len(result.matches):
@@ -26,7 +29,13 @@ def literal_find_result_header_lines(
         showing = f" · SHOWING {start + 1}–{stop} OF {len(result.matches)}"
     else:
         showing = ""
-    scope = " + ".join(result.request.target_names)
+    # --all still executes the exact frozen names; the virtual Profile label is
+    # presentation-only so a large catalog does not leak into report chrome.
+    scope = (
+        "ALL READABLE CONTEXTS"
+        if all_readable_contexts
+        else " + ".join(result.request.target_names)
+    )
     return (
         "FIND RESULTS",
         (
@@ -52,6 +61,7 @@ def render_literal_find_result(
     result: LiteralFindResult,
     *,
     match_limit: int | None = None,
+    all_readable_contexts: bool = False,
 ) -> str:
     """Render the complete result without reparsing an interface string."""
 
@@ -71,7 +81,11 @@ def render_literal_find_result(
         else None
     )
     lines = list(
-        literal_find_result_header_lines(result, visible_range=visible_range)
+        literal_find_result_header_lines(
+            result,
+            visible_range=visible_range,
+            all_readable_contexts=all_readable_contexts,
+        )
     )
     if not result.matches:
         empty_message = (
@@ -93,7 +107,7 @@ def render_literal_find_result(
         noun = "match" if hidden_count == 1 else "matches"
         lines.append(
             f"{hidden_count} more {noun} not shown; "
-            "rerun with --all to show every result."
+            "rerun with --all-results to show every result."
         )
     return "\n".join(lines)
 

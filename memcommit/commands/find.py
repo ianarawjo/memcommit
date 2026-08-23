@@ -55,6 +55,7 @@ from memcommit.context_targeting.presets import (
     resolve_context_traversal,
     resolve_scope_preset,
 )
+from memcommit.derived_policy import authorize_combination
 from memcommit.interfaces.console.text import (
     display_escape_text,
     safe_terminal_text,
@@ -1037,10 +1038,15 @@ def _render_find_search_response(
     response: FindSearchResponse,
     *,
     target_names: tuple[str, ...],
+    all_readable_contexts: bool = False,
 ) -> None:
     """Present one typed application result without rerunning its search."""
 
-    heading = " + ".join(display_escape_text(name) for name in target_names)
+    heading = (
+        "ALL READABLE CONTEXTS"
+        if all_readable_contexts
+        else " + ".join(display_escape_text(name) for name in target_names)
+    )
     if response.mode == "HISTORY":
         history_results = tuple(
             result.history_result
@@ -1194,6 +1200,14 @@ def cmd(
             ),
         ),
     ] = None,
+    all_contexts: Annotated[
+        bool,
+        typer.Option(
+            "--all",
+            "-a",
+            help="Search all readable Contexts in the active Profile",
+        ),
+    ] = False,
     limit: Annotated[
         int,
         typer.Option(
@@ -1272,6 +1286,8 @@ def cmd(
     store = MemoryStore()
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
+        if all_contexts and context_name:
+            raise ValueError("--all/-a cannot be combined with --context/-c.")
         operands: tuple[str | None, ...] = (
             (context_name,)
             if isinstance(context_name, str)
@@ -1292,6 +1308,24 @@ def cmd(
         if len(set(target_names)) != len(target_names):
             raise ValueError("Find Context roots must be distinct.")
         access = accesses[0]
+        all_readable_catalog = None
+        if all_contexts:
+            # PROFILE is a process-local shortcut, never a storage locator.
+            # Freeze its concrete names once so later scope and provider work
+            # cannot reinterpret --all after current/Profile state changes.
+            all_readable_catalog = freeze_profile_readable_context_catalog(
+                store,
+                access,
+                include_query_routes=follow_embeds,
+            )
+            target_names = tuple(all_readable_catalog.list_context_names())
+            accesses = tuple(
+                all_readable_catalog.access_for(name) for name in target_names
+            )
+            # Semantic retrieval combines every frozen contributor in one
+            # provider frame, so READ visibility alone is insufficient for
+            # granted Sources even though literal Find needs only READ.
+            authorize_combination(accesses)
     except (
         FileNotFoundError,
         OSError,
@@ -1361,12 +1395,14 @@ def cmd(
     )
     temporal_query = is_temporal_query(query)
     try:
-        if len(target_names) > 1:
-            catalog = freeze_profile_readable_context_catalog(
-                store,
-                access,
-                include_query_routes=follow_embeds,
-            )
+        if all_readable_catalog is not None or len(target_names) > 1:
+            catalog = all_readable_catalog
+            if catalog is None:
+                catalog = freeze_profile_readable_context_catalog(
+                    store,
+                    access,
+                    include_query_routes=follow_embeds,
+                )
             for target_access in accesses:
                 catalog.access_for(target_access.display_name)
             response = _run_find_search_request(store, catalog, request)
@@ -1401,7 +1437,11 @@ def cmd(
                     request,
                     observer=observe,
                 )
-        _render_find_search_response(response, target_names=target_names)
+        _render_find_search_response(
+            response,
+            target_names=target_names,
+            all_readable_contexts=all_contexts,
+        )
     except (
         FindError,
         HistoryError,

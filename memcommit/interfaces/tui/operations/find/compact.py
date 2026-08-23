@@ -23,6 +23,7 @@ from memcommit.literal_find_application import LiteralFindResult
 def run_compact_literal_find_result(
     result: LiteralFindResult,
     *,
+    all_readable_contexts: bool = False,
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
@@ -38,6 +39,7 @@ def run_compact_literal_find_result(
         lines = literal_find_result_header_lines(
             result,
             visible_range=(state.page_start, state.page_stop),
+            all_readable_contexts=all_readable_contexts,
         )
         fragments: StyleAndTextTuples = [("class:report-label", lines[0])]
         fragments.extend(
