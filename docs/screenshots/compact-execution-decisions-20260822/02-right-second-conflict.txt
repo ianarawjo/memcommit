@@ -5,7 +5,9 @@
   B · Allow access at any time.                                                                                                                                                     
   Preserve both · Retain both readings with their exact scopes.                                                                                                                     
                                                                                                                                                                                     
-  RESPONSE ·    ›                                                                                                                                                                   
+┌────────────────────────────────| DIRECTION OR NOTE · OPTIONAL |────────────────────────────────┐                                                                                  
+│›                                                                                               │                                                                                  
+└────────────────────────────────────────────────────────────────────────────────────────────────┘                                                                                  
                                                                                                                                                                                     
   APPLY ALL · 2/2 READY                                                                                                                                                             
                                                                                                                                                                                     

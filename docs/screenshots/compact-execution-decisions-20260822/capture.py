@@ -174,8 +174,8 @@ def _run_child(kind: str) -> None:
     elif kind == "response":
         if action.kind != "SUBMIT_ALL":
             raise RuntimeError(f"expected SUBMIT_ALL, received {action.kind}")
-        print("\nMELD RESPONSE INCORPORATED · PROVIDER REVISION REQUIRED")
-        print("RESPONSE · PRESERVE 30 DAYS FOR AUDIT LOGS ONLY")
+        print("\nMELD GUIDANCE INCORPORATED · PROVIDER REVISION REQUIRED")
+        print("DIRECTION OR NOTE · PRESERVE 30 DAYS FOR AUDIT LOGS ONLY")
         print("SOURCE · advisor-a + advisor-b · UNCHANGED")
         print("TARGET · policy · UNCHANGED · NO CHECKPOINT")
         print("NEXT · REVIEW REVISED PROPOSAL BEFORE APPLY")
@@ -184,7 +184,7 @@ def _run_child(kind: str) -> None:
         if action.kind != "CLOSE":
             raise RuntimeError(f"expected CLOSE, received {action.kind}")
         print("\nMELD CLOSED · NO DECISION APPLIED")
-        print("PROCESS-LOCAL SELECTIONS AND RESPONSE · DISCARDED")
+        print("PROCESS-LOCAL SELECTIONS AND GUIDANCE · DISCARDED")
         print("SOURCE · UNCHANGED")
         print("TARGET · UNCHANGED · NO CHECKPOINT")
         print("DRAFT · NOT SAVED")
@@ -332,7 +332,7 @@ def _capture_success() -> None:
 
         child.send(DOWN)
         _settle(child)
-        _snapshot(recorder, "08-response-row-focus")
+        _snapshot(recorder, "08-direction-box-focus")
 
         child.send(DOWN)
         _settle(child)
@@ -359,20 +359,20 @@ def _capture_response() -> None:
         _settle(child)
         child.send(DOWN * 3)
         _settle(child)
-        _snapshot(recorder, "12-response-inline-focus")
+        _snapshot(recorder, "12-direction-box-inline-focus")
 
         child.send("Preserve 30 days for audit logs only.")
         _settle(child)
-        _snapshot(recorder, "13-response-inline-text")
+        _snapshot(recorder, "13-direction-box-inline-text")
 
         child.send("\r")
         _settle(child)
-        _snapshot(recorder, "14-continue-response")
+        _snapshot(recorder, "14-continue-guidance")
 
         child.send("\r")
         child.expect("NEXT .* REVIEW REVISED PROPOSAL BEFORE APPLY")
         child.expect(pexpect.EOF)
-        _snapshot(recorder, "15-response-incorporated-receipt")
+        _snapshot(recorder, "15-guidance-incorporated-receipt")
     finally:
         if child.isalive():
             child.close(force=True)
@@ -389,7 +389,7 @@ def _capture_close() -> None:
         child.send("\x1b")
         child.expect("DRAFT .* NOT SAVED")
         child.expect(pexpect.EOF)
-        _snapshot(recorder, "16-close-discards-process-local-response")
+        _snapshot(recorder, "16-close-discards-process-local-guidance")
     finally:
         if child.isalive():
             child.close(force=True)
@@ -401,6 +401,15 @@ def main() -> None:
         _capture_success()
         _capture_response()
         _capture_close()
+    focused_guidance = (OUT / "12-direction-box-inline-focus.txt").read_text(
+        encoding="utf-8"
+    )
+    if (
+        "DIRECTION OR NOTE · OPTIONAL" not in focused_guidance
+        or "┏" not in focused_guidance
+        or "┓" not in focused_guidance
+    ):
+        raise RuntimeError("Focused guidance evidence lacks its titled input box.")
     raw = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript"))
     if "38;2;" not in raw and "48;2;" not in raw:
         raise RuntimeError("PTY stream did not contain expected true-color ANSI.")

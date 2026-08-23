@@ -5,8 +5,10 @@
   B · Keep records for 90 days.                                                                                                                                                     
   Preserve both · Retain both readings with their exact scopes.                                                                                                                     
                                                                                                                                                                                     
-  ✓ RESPONSE ·  › Preserve 30 days for audit logs only.                                                                                                                             
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ DIRECTION OR NOTE · OPTIONAL ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓                                                                                  
+┃› Preserve 30 days for audit logs only.                                                         ┃                                                                                  
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛                                                                                  
                                                                                                                                                                                     
   CONTINUE · 2/2 READY                                                                                                                                                              
                                                                                                                                                                                     
- Type directly · Enter/↓ next · ↑ previous · Esc leave
+ Type a direction or note · Enter/↓ next · ↑ previous · Esc leave

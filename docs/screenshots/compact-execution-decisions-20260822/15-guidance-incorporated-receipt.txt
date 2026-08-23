@@ -1,6 +1,6 @@
                                                                                                                                                                                     
-MELD RESPONSE INCORPORATED · PROVIDER REVISION REQUIRED                                                                                                                             
-RESPONSE · PRESERVE 30 DAYS FOR AUDIT LOGS ONLY                                                                                                                                     
+MELD GUIDANCE INCORPORATED · PROVIDER REVISION REQUIRED                                                                                                                             
+DIRECTION OR NOTE · PRESERVE 30 DAYS FOR AUDIT LOGS ONLY                                                                                                                            
 SOURCE · advisor-a + advisor-b · UNCHANGED                                                                                                                                          
 TARGET · policy · UNCHANGED · NO CHECKPOINT                                                                                                                                         
 NEXT · REVIEW REVISED PROPOSAL BEFORE APPLY                                                                                                                                         

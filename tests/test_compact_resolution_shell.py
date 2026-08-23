@@ -163,7 +163,7 @@ def test_compact_choice_is_discarded_on_close_instead_of_saved_as_a_draft():
     assert saved == []
 
 
-def test_compact_response_is_a_direct_inline_form_field():
+def test_compact_direction_or_note_is_a_direct_inline_form_field():
     item = replace(_item("retention", "Retention period"), commentable=True)
     view = replace(
         _view(),
@@ -195,7 +195,7 @@ def test_compact_response_is_a_direct_inline_form_field():
     assert saved == []
 
 
-def test_compact_response_escape_discards_unsaved_text_before_root_close():
+def test_compact_direction_or_note_escape_discards_text_before_root_close():
     item = replace(_item("retention", "Retention period"), commentable=True)
     view = replace(_view(), items=(item,))
     saved: list[tuple[str, str | None, str]] = []
@@ -217,7 +217,7 @@ def test_compact_response_escape_discards_unsaved_text_before_root_close():
     assert saved == []
 
 
-def test_compact_response_uses_one_whole_set_revision_turn_when_available():
+def test_compact_direction_or_note_uses_one_revision_turn_when_available():
     item = replace(_item("retention", "Retention period"), commentable=True)
     view = replace(
         _view(),

@@ -5,8 +5,10 @@
   B · Keep records for 90 days.                                                                                                                                                     
   Preserve both · Retain both readings with their exact scopes.                                                                                                                     
                                                                                                                                                                                     
-  ✓ RESPONSE ·  › Preserve 30 days for audit logs only.                                                                                                                             
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ DIRECTION OR NOTE · OPTIONAL ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓                                                                                  
+┃›                                                                                               ┃                                                                                  
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛                                                                                  
                                                                                                                                                                                     
-  CONTINUE · 2/2 READY                                                                                                                                                              
+  APPLY ALL · 2/2 READY                                                                                                                                                             
                                                                                                                                                                                     
- ←/→ issue · ↑/↓ move · Enter select/apply · Esc close
+ Type a direction or note · Enter/↓ next · ↑ previous · Esc leave

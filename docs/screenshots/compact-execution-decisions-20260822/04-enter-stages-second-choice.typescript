@@ -7,13 +7,13 @@ PTY 180 52
 [0m  B · Keep records for 90 days.[0m
 [0m  Preserve both · Retain both readings with their exact scopes.[0m
 [0m [0m
-[0m  RESPONSE ·    ›[0m
+[0;38;2;244;245;247m┌────────────────────────────────| DIRECTION OR NOTE · OPTIONAL |────────────────────────────────┐[0m
+[0;38;2;244;245;247m│›                                                                                               │[0m
+[0;38;2;244;245;247m└────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
 
 [0m  APPLY ALL · 2/2 READY[0m
 [0m [0m
 [0m ←/→ issue · ↑/↓ move · Enter select/apply · Esc close[0m
-
-
 
 
 
@@ -65,4 +65,6 @@ PTY 180 52
 
 
 
-[C[0mSelected · B[0m[K[6A[13D[0m
+
+
+[C[0mSelected · B[0m[K[8A[13D[0m

@@ -51,57 +51,9 @@ PTY 180 52
 
 
 
-[0m [47A[0m[?25l[4A[22C[0;38;2;244;245;247;1m2[0m
-[12C[0mAcc[Css window[0m[K[0m
-[7C[0;38;2;244;245;247macc[Css window should the policy use?[0m[K[0m
-[6C[0;38;2;16;36;47;48;2;139;213;255;1mAllow a[Cces[2Cdu[Cing[Cstaffed[Chours. · Recommended[0m
-[6C[0mAllow a[Cces[2Cat any[Ctime[30D[0m[?25l[A[0;38;2;16;36;47;48;2;139;213;255m✓ A · Allow access during staffed hours. · Recommended[0m
-[0;38;2;16;36;47;48;2;139;213;255;1m  B · Allow access at any time.[0m
-[0m[?25l[2A[0m  A · Allow access during staffed hours. · Recommended[0m
-[0;38;2;16;36;47;48;2;139;213;255;1m✓[0m
+[0m [47A[0m[?25l[A[0;38;2;16;36;47;48;2;139;213;255m✓ A · Keep records for 30 days. · Recommended[0m
 
 
-
-
-
-
-
-
-[C[0mSelected · B[0m[K[8A[13D[0m[?25l[5A[22C[0;38;2;244;245;247;1m1[0m
-[12C[0mRet[Cntion period[0m
-[7C[0;38;2;244;245;247mret[Cntion period should the policy use?[0m
-[0;38;2;16;36;47;48;2;139;213;255;1m✓ A · Keep records for 30 days. · Recommended[0m[K[0m
-[0m  B · Keep records for 90 days.[0m
-
-
-
-
-
-
-
-
-[C[0m←/→ issue · ↑/↓ move · Enter select/apply · Esc close[9A[54D[0m[?25l[A[0;38;2;16;36;47;48;2;139;213;255m✓ A · Keep records for 30 days. · Recommended[0m
-[0;38;2;16;36;47;48;2;139;213;255;1m  B · Keep records for 90 days.[0m
-[0m[?25l[A[0m  B · Keep records for 90 days.[0m
-[0;38;2;16;36;47;48;2;139;213;255;1m  Preserve both · Retain both readings with their exact scopes.[5A[63D[0m[?25l[0m
-
-
-[0m  A · Keep records for 30 days. · Recommended[0m
-
-[0;38;2;16;36;47;48;2;139;213;255;1m✓[0m
-
-
-
-
-
-
-
-[C[0mSelected · Preserve both[0m[K[13A[25D[0m[?25l[0m
-
-
-
-
-[0;38;2;16;36;47;48;2;139;213;255m✓ Preserve both · Retain both readings with their exact scopes.[0m
 
 [0;38;2;139;213;255;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ DIRECTION OR NOTE · OPTIONAL ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
 [0;38;2;139;213;255;1m┃[0;38;2;244;245;247m›                                                                                               [0;38;2;139;213;255;1m┃[0m
@@ -109,24 +61,19 @@ PTY 180 52
 
 
 
-[C[0mTyp[C a [Cirection or[Cn[2Ce · Enter/↓ next · ↑ previous · Esc leave[5A[62D[0m[?12l[?25h[?25l[A[3D[0;38;2;244;245;247m┌────────────────────────────────| DIRECTION OR NOTE · OPTIONAL |────────────────────────────────┐[0m
-[0;38;2;244;245;247m│›                                                                                               │[0m
+[C[0mType a direction [Cr note · Ent[Cr/↓ next ·[C↑[Cpreviou[C · Esc leave[5A[62D[0m[?12l[?25h[?25l[0;38;2;244;245;247mPreserve 30 days for audit logs only. [0m
+
+
+[2C[0mCONTINUE · 2/2 READY[0m[K[3A[18C[0m[?12l[?25h[?25l[A[40D[0;38;2;244;245;247m┌────────────────────────────────| DIRECTION OR NOTE · OPTIONAL |────────────────────────────────┐[0m
+[0;38;2;244;245;247m│› Preserve 30 days for audit logs only.                                                         │[0m
 [0;38;2;244;245;247m└────────────────────────────────────────────────────────────────────────────────────────────────┘[0m
 
-[0;38;2;16;36;47;48;2;139;213;255;1m  APPLY ALL · 2/2 READY[0m
+[0;38;2;16;36;47;48;2;139;213;255;1m  CONTINUE · 2/2 READY[0m
 
 [C[0m←/→ issue · ↑/↓ m[Cve · Enter s[Clect/apply[C·[CEsc clo[Ce[0m[K[13A[54D[0m[J[0m[?7h[?1049l[?2004l
-MELD APPLIED · SYMMETRIC · policy
-JUDGMENTS · 2 STAGED · 2 APPLIED
+MELD GUIDANCE INCORPORATED · PROVIDER REVISION REQUIRED
+DIRECTION OR NOTE · PRESERVE 30 DAYS FOR AUDIT LOGS ONLY
 SOURCE · advisor-a + advisor-b · UNCHANGED
-TARGET · policy · CHECKPOINT CREATED
+TARGET · policy · UNCHANGED · NO CHECKPOINT
+NEXT · REVIEW REVISED PROPOSAL BEFORE APPLY
 REPORT · RETAINED · mem review meld --session capture-meld-session
-CAPTURE GATE · PRESS V FOR READ-ONLY VERIFICATION
-v
-
-READ-ONLY RESULT VERIFICATION
-  RETENTION · Preserve both · REVIEWED
-  ACCESS · Allow access at any time · REVIEWED
-  REPORT AVAILABLE · YES
-  UNRESOLVED REQUIRED · 0
-  ADDITIONAL PROVIDER CALLS · 0

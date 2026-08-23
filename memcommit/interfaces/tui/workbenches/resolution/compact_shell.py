@@ -26,7 +26,11 @@ from prompt_toolkit.widgets import TextArea
 
 from memcommit.interfaces.console.text import safe_terminal_text
 from memcommit.interfaces.tui.components.exact_name import ExactNameInputControl
-from memcommit.interfaces.tui.components.frame import TuiRegion, build_tui_frame
+from memcommit.interfaces.tui.components.frame import (
+    TuiRegion,
+    build_focused_frame,
+    build_tui_frame,
+)
 from memcommit.interfaces.tui.components.save_location import SaveLocationView
 from memcommit.interfaces.tui.core.keybindings import bind_case_insensitive_key
 from memcommit.interfaces.tui.core.theme import (
@@ -81,9 +85,9 @@ def run_compact_resolution_decisions(
 
     Left/Right changes the issue, Up/Down changes the compact row, and Enter is
     the sole activation grammar for choices, location, and Apply. An answerable
-    Response is a directly writable one-line form row, not a replacement
-    editor screen. Staging is process-local and the separated Apply row is the
-    operation's confirmation.
+    item has a directly writable one-line Direction or Note box, not a
+    replacement editor screen. Staging is process-local and the separated
+    Apply row is the operation's confirmation.
     """
 
     if (response_text is None) != (stage_response is None):
@@ -139,7 +143,7 @@ def run_compact_resolution_decisions(
             focusable=True,
             focus_on_click=True,
             wrap_lines=False,
-            width=Dimension(min=24, preferred=80, max=140),
+            width=Dimension(min=24, preferred=96, max=96),
             height=Dimension.exact(1),
             dont_extend_width=True,
             name="compact-resolution-response",
@@ -172,7 +176,9 @@ def run_compact_resolution_decisions(
     def action_rows() -> tuple[SelectionOption, ...]:
         rows: list[SelectionOption] = []
         if response_available(active_item()):
-            rows.append(SelectionOption("action:RESPONSE", "Response"))
+            rows.append(
+                SelectionOption("action:RESPONSE", "Direction or note")
+            )
         if destination is not None:
             rows.append(
                 SelectionOption(
@@ -313,22 +319,6 @@ def run_compact_resolution_decisions(
             )
         return fragments
 
-    def render_response_label() -> list[tuple[str, str]]:
-        item = active_item()
-        if not response_available(item) or item is None or response_text is None:
-            return []
-        current_response = response_text(item.uid).strip()
-        focused = response_area is not None and get_app().layout.has_focus(response_area)
-        return [
-            (
-                focused_control_style(
-                    focused=focused,
-                    selected=focused or bool(current_response),
-                ),
-                f"  {'✓ ' if current_response else ''}RESPONSE · ",
-            )
-        ]
-
     def render_actions() -> list[tuple[str, str]]:
         fragments: list[tuple[str, str]] = []
         item = active_item()
@@ -362,39 +352,34 @@ def run_compact_resolution_decisions(
         if destination_editing["value"]:
             return " Enter use exact name · Esc return · Ctrl-C cancel"
         if response_area is not None and get_app().layout.has_focus(response_area):
-            return " Type directly · Enter/↓ next · ↑ previous · Esc leave"
+            return " Type a direction or note · Enter/↓ next · ↑ previous · Esc leave"
         return " ←/→ issue · ↑/↓ move · Enter select/apply · Esc close"
 
     header_control = FormattedTextControl(render_header)
     body_control = FormattedTextControl(render_body, focusable=True, show_cursor=False)
-    response_label_control = FormattedTextControl(
-        render_response_label,
-        focusable=False,
-        show_cursor=False,
-    )
     action_control = FormattedTextControl(
         render_actions,
         focusable=True,
         show_cursor=False,
     )
     footer_control = FormattedTextControl(render_footer)
-    inline_response_row = (
-        ConditionalContainer(
-            VSplit(
-                [
-                    Window(
-                        response_label_control,
-                        width=Dimension(min=13, preferred=16, max=16),
-                        height=Dimension.exact(1),
-                        dont_extend_height=True,
-                    ),
-                    response_area,
-                ],
-                height=Dimension.exact(1),
-            ),
-            filter=Condition(lambda: response_available(active_item())),
+    response_frame = (
+        build_focused_frame(
+            response_area,
+            title="DIRECTION OR NOTE · OPTIONAL",
+            is_focused=lambda: get_app().layout.has_focus(response_area),
+            height=Dimension.exact(3),
+            style="class:report-neutral",
         )
         if response_area is not None
+        else None
+    )
+    inline_response_row = (
+        ConditionalContainer(
+            VSplit([response_frame, Window()]),
+            filter=Condition(lambda: response_available(active_item())),
+        )
+        if response_frame is not None
         else None
     )
     decision_children = [
