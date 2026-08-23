@@ -84,11 +84,11 @@ the default result is:
 
 ```text
 Context: parent
-  2 items
+  1 memory
+  1 subcontext
 
-  [context 12345678] parent/child
-  [memory  abcdef12]
-    Parent fact.
+  DESCENDANT · [context 12345678] parent/child
+  [memory abcdef12] Parent fact.
 ```
 
 `Child fact.` is intentionally absent. This follows the normal directory
@@ -116,6 +116,29 @@ mem ls -R parent
 
 A Context behaves like a logical directory, so namespace children and direct
 embedded Contexts are displayed before direct Memory and MemoryRef entries.
+
+The summary deliberately does not add these heterogeneous rows into one
+`items` total. It reports direct Memory-shaped rows and direct subcontext rows
+independently. `Memory`, live Memory Embed, and immutable Memory Reference rows
+contribute to the Memory count; namespace descendants, embedded Contexts,
+Context References, and query-only Context views contribute to the subcontext
+count. In a recursive listing, the header still describes the selected root's
+direct rows, while copy/paste receipts report the separately typed totals for
+the complete visible occurrence tree.
+
+A subcontext's reach precedes its identity:
+
+```text
+DESCENDANT · [context 12345678] parent/child
+VIA EMBED · [context 87654321] related/context
+```
+
+Reach answers why the row occurs beneath the selected Context; it is not a
+property of the canonical Context name. Leading with that fact makes a tree's
+namespace and embed edges scannable before the varying UID and name columns.
+Only `VIA EMBED` receives the shared Embed color; `context`, its UID, and its
+name stay neutral. Clean clipboard text keeps the same order without the
+`[context UID]` selector.
 
 This grouping is a presentation rule only. It does not rewrite the Context's
 persisted `order` field.
@@ -207,9 +230,8 @@ atomic Memory content: aaa
 They are different logical types, so the listing is unambiguous:
 
 ```text
-[context 12345678] aaa/ab
-[memory  abcdef12]
-  aaa
+VIA EMBED · [context 12345678] aaa/ab
+[memory abcdef12] aaa
 ```
 
 A stored Root Context named `aaa` and a stored descendant Context named
@@ -255,13 +277,14 @@ level:
 
 ```text
 Context: parent
-  2 items
+  1 memory
+  1 subcontext
 
-  [context 11111111] child
-    [context 22222222] grandchild
-      [memory  33333333] Grandchild fact.
-    [memory  44444444] Child fact.
-  [memory  55555555] Parent fact.
+  VIA EMBED · [context 11111111] child
+    VIA EMBED · [context 22222222] grandchild
+      [memory 33333333] Grandchild fact.
+    [memory 44444444] Child fact.
+  [memory 55555555] Parent fact.
 ```
 
 When a recursive level contains multiple Context children, one empty display
@@ -274,8 +297,8 @@ changing traversal order or snapshot contents.
 An empty embedded Context is explicit:
 
 ```text
-[context 11111111] child
-  (no items)
+VIA EMBED · [context 11111111] child
+  (empty)
 ```
 
 ### Materialized namespace edges, not implicit embeds
@@ -374,9 +397,10 @@ result:
 2. a versioned structured snapshot is written to the private mem store.
 
 The default clipboard rendering omits `[kind uid]` annotations. Context names
-end in `/`, query-only names end in `/ (query-only)`, and MemoryRef lines retain
-their content-to-Context arrow without object UIDs. This keeps the text useful
-when pasted into prose, chat, or another tool. `--copy --with-ids` instead puts
+end in `/`, with `DESCENDANT ·` or `VIA EMBED ·` still leading the row;
+query-only names remain explicitly typed, and MemoryRef lines retain their
+content-to-Context arrow without object UIDs. This keeps the text useful when
+pasted into prose, chat, or another tool. `--copy --with-ids` instead puts
 the compact inline indexed rendering in the clipboard. It contains the same
 annotations shown by the normal terminal list, but keeps each Memory selector
 and its normalized content on one physical line. Ordinary command stdout uses
@@ -387,7 +411,9 @@ operation does not remove the local selection cues.
 without `--copy`, including with `--paste`, is rejected. The success receipt is
 not part of either copied representation. Copy does not save a Context, change
 the current Context, or create a checkpoint. This makes it an output action
-rather than an early target mutation.
+rather than an early target mutation. Copy and Paste receipts likewise report
+Memory and subcontext occurrence totals separately rather than recreating a
+mixed `items` count.
 
 The structured half preserves full UIDs, full Memory text, MemoryRef pointer
 metadata and its frozen resolved display content, embedded Context pointer
@@ -481,6 +507,10 @@ The implementation is covered by tests for:
 - content-as-name for direct Memory entries;
 - hanging-indent Memory rows at direct and recursive depths;
 - Context-first rendering when a Memory was inserted first;
+- separate Memory and subcontext counts at the selected root and in recursive
+  copy/paste receipts;
+- leading `DESCENDANT` and `VIA EMBED` reach markers in annotated and clean
+  Context rows;
 - `aaa/ab` Context and `aaa` Memory content coexisting without ambiguity;
 - relative ordering of Memory and MemoryRef entries;
 - default listing not leaking child content;

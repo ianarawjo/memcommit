@@ -18,7 +18,10 @@ from memcommit.interfaces.console.theme import (
     semantic_color_rgb,
     semantic_source_role,
 )
-from memcommit.source_projection.console import styled_source_relationship_label
+from memcommit.source_projection.console import (
+    styled_source_reach_label,
+    styled_source_relationship_label,
+)
 from memcommit.source_projection.model import (
     SourceAccess,
     SourceDisplayFacts,
@@ -34,6 +37,7 @@ from memcommit.source_projection.presentation import (
     render_source_reference_row,
     source_annotation_text,
     source_object_label,
+    source_reach_label,
     source_relationship_label,
     source_display_text,
     source_display_tokens,
@@ -80,6 +84,18 @@ def test_relationship_labels_and_colors_distinguish_live_embed_from_snapshot():
     assert (
         f"\x1b[38;2;{';'.join(map(str, semantic_color_rgb(SemanticColorRole.REFERENCE)))}m"
         in styled_source_relationship_label(reference)
+    )
+
+
+def test_reach_labels_keep_context_identity_separate_from_embed_color():
+    assert source_reach_label(SourceReach.DESCENDANT) == "DESCENDANT"
+    assert source_reach_label(SourceReach.VIA_EMBED) == "VIA EMBED"
+    assert click.unstyle(styled_source_reach_label(SourceReach.VIA_EMBED)) == (
+        "VIA EMBED"
+    )
+    assert (
+        f"\x1b[38;2;{';'.join(map(str, semantic_color_rgb(SemanticColorRole.EMBED)))}m"
+        in styled_source_reach_label(SourceReach.VIA_EMBED)
     )
 
 def test_source_reference_row_folds_content_and_keeps_owner_alias_separate():

@@ -48,12 +48,14 @@ from memcommit.source_projection.model import (
 )
 from memcommit.source_projection.console import (
     styled_source_object_label,
+    styled_source_reach_label,
     styled_source_relationship_label,
 )
 from memcommit.source_projection.presentation import (
     source_annotation_text,
     source_display_text,
     source_object_label,
+    source_reach_label,
     source_relationship_label,
 )
 
@@ -483,28 +485,49 @@ def _render_snapshot_item(
                 ),
                 states=(SourceState.CYCLE,) if cycle else (),
             )
-        context_annotation = source_annotation_text(context_facts)
-        if scope is not None:
-            context_annotation = f"{context_annotation} · {scope}"
-        relationship_label = (
-            styled_source_object_label(context_facts)
-            if style_relationships
-            else source_object_label(context_facts)
-        )
-        if with_ids:
-            lines.append(
-                f"{prefix}[{relationship_label} {uid[:8]}] "
-                f"{name}"
-                + (f"  {context_annotation}" if context_annotation else "")
+        if kind == "context_snapshot_ref":
+            context_annotation = source_annotation_text(context_facts)
+            if scope is not None:
+                context_annotation = f"{context_annotation} · {scope}"
+            relationship_label = (
+                styled_source_object_label(context_facts)
+                if style_relationships
+                else source_object_label(context_facts)
             )
+            if with_ids:
+                lines.append(
+                    f"{prefix}[{relationship_label} {uid[:8]}] "
+                    f"{name}  {context_annotation}"
+                )
+            else:
+                lines.append(f"{prefix}{name}/ · {context_annotation}")
         else:
-            lines.append(
-                f"{prefix}{name}/"
-                + (f" · {context_annotation}" if context_annotation else "")
+            # Reach explains why this Context row occurs in the selected tree,
+            # so it leads the row instead of looking like a trailing property
+            # of the canonical Context identity.
+            reach_label = (
+                styled_source_reach_label(context_facts.reach)
+                if style_relationships
+                else source_reach_label(context_facts.reach)
             )
+            context_label = source_object_label(context_facts)
+            state_annotation = source_annotation_text(
+                SourceDisplayFacts(states=context_facts.states)
+            )
+            if with_ids:
+                lines.append(
+                    f"{prefix}{reach_label} · "
+                    f"[{context_label} {uid[:8]}] {name}"
+                    + (f"  {state_annotation}" if state_annotation else "")
+                )
+            else:
+                lines.append(
+                    f"{prefix}{reach_label} · {name}/"
+                    + (f" · {state_annotation}" if state_annotation else "")
+                )
         if not cycle and children is not None:
             if not children:
-                lines.append(f"{' ' * (indent + 2)}(no items)")
+                lines.append(f"{' ' * (indent + 2)}(empty)")
             else:
                 _render_snapshot_items(
                     children,
@@ -676,6 +699,14 @@ def _render_snapshot_items(
         )
 
 
+def _memory_count_text(count: int) -> str:
+    return f"{count} {'memory' if count == 1 else 'memories'}"
+
+
+def _subcontext_count_text(count: int) -> str:
+    return f"{count} subcontext{'s' if count != 1 else ''}"
+
+
 def _render_snapshot(
     snapshot: dict[str, object],
     *,
@@ -701,12 +732,14 @@ def _render_snapshot(
     recursive = _require_bool(snapshot, "recursive")
     items = _require_items(snapshot.get("items"))
 
+    contexts, memories = _group_snapshot_items(items)
     lines = [
         f"Context: {name}",
-        f"  {len(items)} item{'s' if len(items) != 1 else ''}",
+        f"  {_memory_count_text(len(memories))}",
+        f"  {_subcontext_count_text(len(contexts))}",
     ]
     if not items:
-        lines.extend(["", "  (no items)"])
+        lines.extend(["", "  (empty)"])
     else:
         lines.append("")
         _render_snapshot_items(
@@ -723,17 +756,29 @@ def _render_snapshot(
     return "\n".join(lines) + "\n"
 
 
-def _snapshot_occurrence_count(snapshot: dict[str, object]) -> int:
-    def count(items: list[dict[str, object]]) -> int:
-        total = 0
+def _snapshot_occurrence_counts(snapshot: dict[str, object]) -> tuple[int, int]:
+    """Count displayed Memory rows and subcontext rows independently."""
+
+    def count(items: list[dict[str, object]]) -> tuple[int, int]:
+        contexts, memories = _group_snapshot_items(items)
+        memory_count = len(memories)
+        subcontext_count = len(contexts)
         for item in items:
-            total += 1
             children = item.get("children")
             if children is not None:
-                total += count(_require_items(children))
-        return total
+                nested_memories, nested_subcontexts = count(_require_items(children))
+                memory_count += nested_memories
+                subcontext_count += nested_subcontexts
+        return memory_count, subcontext_count
 
     return count(_require_items(snapshot.get("items")))
+
+
+def _occurrence_count_text(memory_count: int, subcontext_count: int) -> str:
+    return (
+        f"{_memory_count_text(memory_count)} and "
+        f"{_subcontext_count_text(subcontext_count)}"
+    )
 
 
 def _granted_list_receipt(
@@ -1087,11 +1132,11 @@ def cmd(
                 style_relationships=True,
             )
         )
-        count = _snapshot_occurrence_count(snapshot)
+        memory_count, subcontext_count = _snapshot_occurrence_counts(snapshot)
         source_context = _require_record(snapshot.get("context"))
         source_name = _require_string(source_context, "name")
         typer.secho(
-            f"Pasted {count} staged item{'s' if count != 1 else ''} "
+            f"Pasted {_occurrence_count_text(memory_count, subcontext_count)} "
             f"from '{source_name}' "
             "(no Context changes).",
             dim=True,
@@ -1185,10 +1230,10 @@ def cmd(
         except ClipboardError as error:
             typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
             raise typer.Exit(1)
-        count = _snapshot_occurrence_count(snapshot)
+        memory_count, subcontext_count = _snapshot_occurrence_counts(snapshot)
         copied_style = "text with IDs" if with_ids else "clean text"
         typer.secho(
-            f"Copied {count} item{'s' if count != 1 else ''}: "
+            f"Copied {_occurrence_count_text(memory_count, subcontext_count)}: "
             f"{copied_style} to the system clipboard; "
             "structured list staged.",
             fg=typer.colors.GREEN,

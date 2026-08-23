@@ -277,7 +277,8 @@ def test_path_descendant_is_listed_for_navigation_without_leaking_content(
 
     assert direct.exit_code == 0
     assert recursive.exit_code == 0
-    assert "  1 item\n" in direct.output
+    assert "  0 memories\n" in direct.output
+    assert "  1 subcontext\n" in direct.output
     assert "construction-updates/building-access" in direct.output
     assert "Child-only detail." not in direct.output
     assert "construction-updates/building-access" in recursive.output
@@ -322,7 +323,8 @@ def test_explicit_embed_deduplicates_lexical_child_in_list(
     recursive = runner.invoke(app, ["ls", "-R", "construction-updates"])
 
     assert direct.exit_code == 0
-    assert "  3 items\n" in direct.output
+    assert "  1 memory\n" in direct.output
+    assert "  2 subcontexts\n" in direct.output
     assert direct.output.count("construction-updates/building-access") == 1
     assert direct.output.count("construction-updates/unembedded") == 1
     assert direct.output.index("construction-updates/building-access") < (
@@ -354,7 +356,8 @@ def test_ls_sorts_immediate_children_before_current_memories(isolated_store):
     recursive = runner.invoke(app, ["ls", "-R", "test/update"])
 
     assert direct.exit_code == 0
-    assert "  3 items\n" in direct.output
+    assert "  1 memory\n" in direct.output
+    assert "  2 subcontexts\n" in direct.output
     assert "From-only detail." not in direct.output
     assert "To-only detail." not in direct.output
     assert "test/update/from/deep" not in direct.output
@@ -363,14 +366,14 @@ def test_ls_sorts_immediate_children_before_current_memories(isolated_store):
     from_index = next(
         index
         for index, line in enumerate(direct_lines)
-        if "[context " in line
-        and line.endswith("test/update/from  DESCENDANT")
+        if line.startswith("  DESCENDANT · [context ")
+        and line.endswith("] test/update/from")
     )
     to_index = next(
         index
         for index, line in enumerate(direct_lines)
-        if "[context " in line
-        and line.endswith("test/update/to  DESCENDANT")
+        if line.startswith("  DESCENDANT · [context ")
+        and line.endswith("] test/update/to")
     )
     summary_index = next(
         index
@@ -398,7 +401,9 @@ def test_ls_does_not_synthesize_a_missing_intermediate_context(
 
     assert direct.exit_code == 0
     assert recursive.exit_code == 0
-    assert "(no items)" in direct.output
+    assert "  0 memories\n" in direct.output
+    assert "  0 subcontexts\n" in direct.output
+    assert "(empty)" in direct.output
     assert "root/missing" not in direct.output
     assert "root/missing" not in recursive.output
     assert "Leaf-only detail." not in recursive.output

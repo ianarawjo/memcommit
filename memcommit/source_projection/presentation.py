@@ -57,6 +57,7 @@ _ACCESS_LABELS = {
     SourceAccess.QUERY_GRANT: "QUERY GRANT",
 }
 _REACH_LABELS = {
+    SourceReach.DIRECT: "DIRECT",
     SourceReach.DESCENDANT: "DESCENDANT",
     SourceReach.VIA_EMBED: "VIA EMBED",
 }
@@ -172,10 +173,18 @@ def source_display_tokens(
         )
     if facts.reach is not SourceReach.DIRECT:
         tokens.append(
-            SourceDisplayToken(_REACH_LABELS[facts.reach], SourceTokenRole.REACH)
+            SourceDisplayToken(
+                source_reach_label(facts.reach),
+                SourceTokenRole.REACH,
+            )
         )
     elif include_defaults:
-        tokens.append(SourceDisplayToken("DIRECT", SourceTokenRole.REACH))
+        tokens.append(
+            SourceDisplayToken(
+                source_reach_label(SourceReach.DIRECT),
+                SourceTokenRole.REACH,
+            )
+        )
     if facts.form is not SourceForm.CONTEXT:
         tokens.append(
             SourceDisplayToken(
@@ -207,6 +216,14 @@ def source_object_label(
         raise TypeError("Source object labels require a SourceForm value.")
     labels = _OBJECT_TITLE_LABELS if title else _OBJECT_LABELS
     return labels[form]
+
+
+def source_reach_label(value: SourceReach) -> str:
+    """Name one typed reach without mixing it into object identity."""
+
+    if not isinstance(value, SourceReach):
+        raise TypeError("Source reach labels require a SourceReach value.")
+    return _REACH_LABELS[value]
 
 
 def source_relationship_label(

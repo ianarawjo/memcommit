@@ -17,6 +17,10 @@ import memcommit.clipboard as clipboard
 from memcommit.cli import app
 from memcommit.clipboard import ClipboardError, ClipboardPayload
 from memcommit.context import QueryContextRef
+from memcommit.interfaces.console.theme import (
+    SemanticColorRole,
+    semantic_color_rgb,
+)
 from memcommit.store import MemoryStore
 
 
@@ -60,7 +64,8 @@ def test_ls_copy_uses_clean_text_while_preserving_output_and_full_objects(
     assert result.stdout == expected.stdout
     assert fake_system_clipboard["text"] == (
         "Context: source\n"
-        "  1 item\n"
+        "  1 memory\n"
+        "  0 subcontexts\n"
         "\n"
         "  Café north entrance. Closed through Friday.\n"
     )
@@ -70,9 +75,9 @@ def test_ls_copy_uses_clean_text_while_preserving_output_and_full_objects(
     ) in result.stdout
     assert "[memory " in result.stdout
     assert "[memory " not in fake_system_clipboard["text"]
-    assert "Copied 1 item" in result.stderr
+    assert "Copied 1 memory and 0 subcontexts" in result.stderr
     assert "clean text" in result.stderr
-    assert "Copied 1 item" not in fake_system_clipboard["text"]
+    assert "Copied 1 memory" not in fake_system_clipboard["text"]
     assert store.current_context_name() == "source"
     assert len(store.list_checkpoints("source")) == checkpoint_count
 
@@ -104,7 +109,8 @@ def test_list_copy_with_ids_uses_inline_clipboard_and_hanging_stdout(
     expected = invoke("ls")
     inline = (
         "Context: source\n"
-        "  1 item\n"
+        "  1 memory\n"
+        "  0 subcontexts\n"
         "\n"
         f"  [memory {memory.uid[:8]}] "
         "Keep this object's visible identifier.\n"
@@ -116,7 +122,8 @@ def test_list_copy_with_ids_uses_inline_clipboard_and_hanging_stdout(
     assert copied.stdout == expected.stdout
     assert expected.stdout == (
         "Context: source\n"
-        "  1 item\n"
+        "  1 memory\n"
+        "  0 subcontexts\n"
         "\n"
         f"  [memory {memory.uid[:8]}] "
         "Keep this object's visible identifier.\n"
@@ -159,7 +166,8 @@ def test_list_long_memory_uses_hanging_indent_but_clipboard_stays_one_line(
     assert continuation.startswith(" " * (len(label) + 1) + "modification")
     assert fake_system_clipboard["text"] == (
         "Context: source\n"
-        "  1 item\n"
+        "  1 memory\n"
+        "  0 subcontexts\n"
         "\n"
         f"{label} {content}\n"
     )
@@ -243,9 +251,10 @@ def test_recursive_copy_freezes_visible_tree_and_paste_replays_it(
     assert copied.stdout == annotated.stdout
     assert copied_text == (
         "Context: parent\n"
-        "  2 items\n"
+        "  1 memory\n"
+        "  1 subcontext\n"
         "\n"
-        "  child/ · VIA EMBED\n"
+        "  VIA EMBED · child/\n"
         "    Nested fact.\n"
         "  Parent fact.\n"
     )
@@ -257,7 +266,7 @@ def test_recursive_copy_freezes_visible_tree_and_paste_replays_it(
     assert pasted.exit_code == 0
     assert pasted.stdout == copied_text
     assert "Nested fact." in pasted.stdout
-    assert "Copied 3 items" in copied.stderr
+    assert "Copied 2 memories and 1 subcontext" in copied.stderr
 
 
 def test_copy_freezes_a_typed_namespace_child_for_later_paste(
@@ -276,9 +285,10 @@ def test_copy_freezes_a_typed_namespace_child_for_later_paste(
     assert "Child-only fact." not in copied.stdout
     assert fake_system_clipboard["text"] == (
         "Context: parent\n"
-        "  2 items\n"
+        "  1 memory\n"
+        "  1 subcontext\n"
         "\n"
-        "  parent/child/ · DESCENDANT\n"
+        "  DESCENDANT · parent/child/\n"
         "  Parent fact.\n"
     )
     record = json.loads(
@@ -304,6 +314,33 @@ def test_copy_freezes_a_typed_namespace_child_for_later_paste(
     assert "parent/child/" in pasted.stdout
     assert not store.context_exists("parent")
     assert not store.context_exists("parent/child")
+
+
+def test_list_leads_context_identity_with_typed_reach_in_plain_and_color(
+    isolated_store,
+):
+    invoke("init", "parent/descendant")
+    invoke("init", "parent/embedded")
+    invoke("init", "parent")
+    invoke("embed", "parent/embedded", "--into", "parent")
+
+    plain = invoke("list", "parent")
+
+    assert plain.exit_code == 0, plain.output
+    assert "  0 memories\n" in plain.stdout
+    assert "  2 subcontexts\n" in plain.stdout
+    assert "  DESCENDANT · [context " in plain.stdout
+    assert "] parent/descendant\n" in plain.stdout
+    assert "  VIA EMBED · [context " in plain.stdout
+    assert "] parent/embedded\n" in plain.stdout
+
+    colored = runner.invoke(app, ["list", "parent"], color=True)
+
+    embed_rgb = ";".join(map(str, semantic_color_rgb(SemanticColorRole.EMBED)))
+    assert colored.exit_code == 0, colored.output
+    assert f"\x1b[38;2;{embed_rgb}mVIA EMBED\x1b[0m · [context " in (colored.stdout)
+    assert f"\x1b[38;2;{embed_rgb}mcontext\x1b[0m" not in colored.stdout
+    assert click.unstyle(colored.stdout) == plain.stdout
 
 
 def test_copy_stages_query_pointer_without_hidden_source_content(

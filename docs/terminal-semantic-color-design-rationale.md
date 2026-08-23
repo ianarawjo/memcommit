@@ -30,7 +30,7 @@ The stable role mapping is:
 | --- | --- | --- |
 | CREATE | `create`, `init`, `branch`, `CREATED` | blue `#8aadf4` |
 | ADD | `add`, `ADD`, `ADDED`, `SURVIVOR(S)` | blue `#8aadf4` |
-| EMBED | `embed`, `VIA EMBED`, embedded Context kind | yellow `#eed49f` |
+| EMBED | `embed`, `VIA EMBED`, live Memory Embed kind | yellow `#eed49f` |
 | EDIT | `edit`, `replace`, `EDITED` | green `#a6da95` |
 | REMOVE | `remove`, `delete`, `clear`, `REMOVED`, `ABSORB(ED)` | red `#ed8796` |
 | UNDO | `undo`, `revert`, `RESTORED` | peach `#f5a97f` |
@@ -111,6 +111,13 @@ and `READ ONLY` state are not inferred from or absorbed into that color. Show
 renders direct and resolved-reference Memory bodies with the shared Memory-object
 lavender in both exact-item and whole-Context views; it does not dim a body to
 suggest a state that the operation model does not contain.
+
+List's Context rows separately classify their typed reach. `VIA EMBED` leads
+the `[context UID] name` identity and alone receives EMBED yellow;
+`DESCENDANT`, the Context object label, UID, name, and punctuation remain
+neutral. The prefix position expresses why the Context occurs in the visible
+tree without tinting the identity as though the Context object itself were an
+Embed effect.
 
 Grant ownership and available capability are independent roles. Source
 projection in operation workbenches and static authority reports keeps the

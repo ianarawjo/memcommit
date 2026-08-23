@@ -8,9 +8,14 @@ from memcommit.interfaces.console.theme import (
     semantic_color_rgb,
     semantic_source_role,
 )
-from memcommit.source_projection.model import SourceDisplayFacts, SourceForm
+from memcommit.source_projection.model import (
+    SourceDisplayFacts,
+    SourceForm,
+    SourceReach,
+)
 from memcommit.source_projection.presentation import (
     source_object_label,
+    source_reach_label,
     source_relationship_label,
 )
 
@@ -46,7 +51,19 @@ def styled_source_relationship_label(
     return _style_source_label(source_relationship_label(value), value)
 
 
+def styled_source_reach_label(value: SourceReach) -> str:
+    """Color only a typed reach marker; keep the Context identity neutral."""
+
+    if not isinstance(value, SourceReach):
+        raise TypeError("Styled Source reach labels require a SourceReach value.")
+    return _style_source_label(
+        source_reach_label(value),
+        SourceDisplayFacts(reach=value),
+    )
+
+
 __all__ = [
     "styled_source_object_label",
+    "styled_source_reach_label",
     "styled_source_relationship_label",
 ]

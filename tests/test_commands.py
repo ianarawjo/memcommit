@@ -1325,11 +1325,13 @@ class TestList:
         assert "fact one" in result.output
         assert "fact two" in result.output
 
-    def test_empty_context_shows_no_items(self, isolated_store):
+    def test_empty_context_shows_separate_zero_counts(self, isolated_store):
         invoke("init", "empty")
         result = invoke("list")
         assert result.exit_code == 0
-        assert "no items" in result.output
+        assert "  0 memories\n" in result.output
+        assert "  0 subcontexts\n" in result.output
+        assert "  (empty)\n" in result.output
 
     def test_list_explicit_context_name(self, isolated_store):
         invoke("init", "alpha")
@@ -1391,7 +1393,7 @@ class TestList:
         context_index = next(
             index
             for index, line in enumerate(lines)
-            if "[context " in line and line.endswith("aaa/ab  VIA EMBED")
+            if line.startswith("  VIA EMBED · [context ") and line.endswith("] aaa/ab")
         )
         first_memory_index = next(
             index
@@ -1432,12 +1434,13 @@ class TestList:
         child_index = next(
             index
             for index, line in enumerate(lines)
-            if "[context " in line and line.endswith("child  VIA EMBED")
+            if line.startswith("  VIA EMBED · [context ") and line.endswith("] child")
         )
         grandchild_index = next(
             index
             for index, line in enumerate(lines)
-            if "[context " in line and line.endswith("grandchild  VIA EMBED")
+            if line.startswith("    VIA EMBED · [context ")
+            and line.endswith("] grandchild")
         )
         grandchild_memory_index = next(
             index
@@ -1484,12 +1487,12 @@ class TestList:
         alpha_index = next(
             index
             for index, line in enumerate(recursive_lines)
-            if "[context " in line and line.endswith("alpha  VIA EMBED")
+            if line.startswith("  VIA EMBED · [context ") and line.endswith("] alpha")
         )
         beta_index = next(
             index
             for index, line in enumerate(recursive_lines)
-            if "[context " in line and line.endswith("beta  VIA EMBED")
+            if line.startswith("  VIA EMBED · [context ") and line.endswith("] beta")
         )
         assert recursive_lines[alpha_index - 1] == ""
         assert recursive_lines[alpha_index - 2] != ""
@@ -1500,9 +1503,10 @@ class TestList:
         direct_beta_index = next(
             index
             for index, line in enumerate(direct_lines)
-            if "[context " in line and line.endswith("beta  VIA EMBED")
+            if line.startswith("  VIA EMBED · [context ") and line.endswith("] beta")
         )
-        assert direct_lines[direct_beta_index - 1].endswith("alpha  VIA EMBED")
+        assert direct_lines[direct_beta_index - 1].startswith("  VIA EMBED · [context ")
+        assert direct_lines[direct_beta_index - 1].endswith("] alpha")
 
     def test_recursive_long_option_matches_short_option(self, isolated_store):
         invoke("init", "child")
