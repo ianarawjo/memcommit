@@ -10,11 +10,13 @@ from pathlib import Path
 import sys
 import tempfile
 import time
+from unittest.mock import patch
+import uuid
 
 import pexpect
 
 
-ROOT = Path("/Users/KimMunyeong/Github/memcommit")
+ROOT = Path(__file__).resolve().parents[3]
 OUT = ROOT / "docs/screenshots/query-compact-one-shot-20260822"
 COLUMNS = 180
 ROWS = 52
@@ -51,12 +53,16 @@ def _run_child() -> None:
     with tempfile.TemporaryDirectory(prefix="mem-query-compact-") as raw_root:
         fixture_root = Path(raw_root)
         store = MemoryStore(root=fixture_root)
-        root = ops.init("task-1")
-        ops.add(root, "The Main Building remains open through the east entrance.")
-        campus = ops.init("task-1/campus-wiki")
-        ops.add(campus, "The main entrance normally closes at 10 p.m.")
-        updates = ops.init("task-1/participant/construction-updates")
-        ops.add(updates, "During construction, general access ends at 5 p.m.")
+        fixture_uids = (uuid.UUID(int=value) for value in range(1, 7))
+        # Stable fixture identities keep the ordered study captures byte-for-byte
+        # reproducible instead of changing every time the PTY path is verified.
+        with patch.object(ops.uuid, "uuid4", side_effect=lambda: next(fixture_uids)):
+            root = ops.init("task-1")
+            ops.add(root, "The Main Building remains open through the east entrance.")
+            campus = ops.init("task-1/campus-wiki")
+            ops.add(campus, "The main entrance normally closes at 10 p.m.")
+            updates = ops.init("task-1/participant/construction-updates")
+            ops.add(updates, "During construction, general access ends at 5 p.m.")
         for context in (root, campus, updates):
             store.save(context)
         store.set_current(root.name)

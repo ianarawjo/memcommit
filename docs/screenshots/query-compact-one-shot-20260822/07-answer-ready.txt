@@ -16,9 +16,9 @@
 ┃The answer uses the complete checked Context scope. [1] [2] [3]                                                                                                                   ┃
 ┃                                                                                                                                                                                  ┃
 ┃References                                                                                                                                                                        ┃
-┃[1] The Main Building remains open through the east entrance. — a599dbfb, task-1, m1                                                                                              ┃
-┃[2] The main entrance normally closes at 10 p.m. — 36ecc2ea, task-1/campus-wiki, m2                                                                                               ┃
-┃[3] During construction, general access ends at 5 p.m. — 397b1e9d, task-1/participant/construction-updates, m3                                                                    ┃
+┃[1] The Main Building remains open through the east entrance. — 00000000, task-1, m1                                                                                              ┃
+┃[2] The main entrance normally closes at 10 p.m. — 00000000, task-1/campus-wiki, m2                                                                                               ┃
+┃[3] During construction, general access ends at 5 p.m. — 00000000, task-1/participant/construction-updates, m3                                                                    ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃

@@ -327,9 +327,9 @@ PTY 180 52
 [C[0mThe answer uses the complete checked Context scope. [1] [2] [3][0m
 
 [C[0mReferences[0m
-[C[0m[1] The Main Building remains open through the east entrance. — a599dbfb, task-1, m1[0m
-[C[0m[2] The main entrance normally closes at 10 p.m. — 36ecc2ea, task-1/campus-wiki, m2[0m
-[C[0m[3] During construction, general access ends at 5 p.m. — 397b1e9d, task-1/participant/construction-updates, m3[0m
+[C[0m[1] The Main Building remains open through the east entrance. — 00000000, task-1, m1[0m
+[C[0m[2] The main entrance normally closes at 10 p.m. — 00000000, task-1/campus-wiki, m2[0m
+[C[0m[3] During construction, general access ends at 5 p.m. — 00000000, task-1/participant/construction-updates, m3[0m
 
 
 
@@ -367,4 +367,4 @@ PTY 180 52
 
 
 
-[C[0;38;5;234;48;5;117;1m[1] The Main Building remains open through the east entrance. — a599dbfb, task-1, m1[84D[0m
+[C[0;38;5;234;48;5;117;1m[1] The Main Building remains open through the east entrance. — 00000000, task-1, m1[84D[0m
