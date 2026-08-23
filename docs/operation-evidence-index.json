@@ -25,7 +25,10 @@
     "checkout": [
       "docs/switch-application-boundary-matrix.md"
     ],
-    "checkpoint": [],
+    "checkpoint": [
+      "docs/checkpoint-targeting-design-rationale.md",
+      "docs/context-locator-design-rationale.md"
+    ],
     "chunk": [
       "docs/mem-chunk-design-rationale.md"
     ],

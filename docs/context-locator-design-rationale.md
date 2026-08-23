@@ -44,6 +44,9 @@ mem atomize [LOCATOR | MEMORY | LOCATOR:MEMORY]
 mem chunk [LOCATOR | MEMORY | LOCATOR:MEMORY] [--context LOCATOR]
 mem translate [LOCATOR | MEMORY | LOCATOR:MEMORY]
 mem forget INSTRUCTION --context LOCATOR
+mem checkpoint LOCATOR MESSAGE
+mem checkpoint LOCATOR --message MESSAGE
+mem checkpoint --context LOCATOR [MESSAGE]
 mem clear [LOCATOR]
 mem clear [LOCATOR] --recursive
 mem delete LOCATOR
@@ -176,6 +179,7 @@ table as the authored cross-operation rule:
 | `impact update` | Inspect saved Update Impact | `SOURCE TARGET` starts a new preview | same `--from`/`--to` endpoint aliases |
 | root `impact` | Error without a named route or endpoint | none, because the first token is a subcommand | retained `--from`/`--to` directional alias |
 | `forget`, `impact forget` | Context defaults to current; instruction is still required outside the setup TTY | the position is reserved for `INSTRUCTION` | `--context CONTEXT` |
+| `checkpoint` | Use current Context; one positional operand remains its compatibility `MESSAGE` | `CONTEXT MESSAGE`, or `CONTEXT --message MESSAGE`; the explicit message makes the Context role unambiguous | `--context CONTEXT` makes an optional positional operand the message; `--message MESSAGE` makes an optional positional operand the Context |
 | `sever` | Open Source/Criteria/Result setup | `SOURCE CRITERIA [RESULT]`; omitted Result self-saves | `--source`/`--from`, `--criteria`/`--against`, `--save-as`/`--to` |
 | `embed`, `reference` | Open Source/Target setup | `ITEM`; omitted Target is current | A Context Source may use `--from SOURCE`; `--into`/`--to` select Target. With an explicit Memory ITEM, `--from` retains its owner-Context qualifier meaning |
 | `impact meld`, `impact sever` | Inspect saved operation work | none | `--session UID` only |
@@ -198,6 +202,14 @@ the same captured current name. `--to B` fills the source with current,
 `--from A` fills the target with current, and `--from A --to B` needs no
 current Context when both locators are canonical global names. A relative
 locator still requires current even when the other endpoint is explicit.
+
+Checkpoint retains its older one-positional message grammar: `mem checkpoint
+"MESSAGE"` still targets current. Two positional operands instead mean
+`CONTEXT MESSAGE`; `--message` disambiguates one positional Context, while
+`--context` disambiguates one positional message. Supplying both named roles
+allows no positional operands. The asymmetry deliberately preserves scripts
+without deciding whether an existing Context happens to share a message's
+spelling.
 
 Sever follows the same command-entry rule for its positional Source/Criteria
 inputs and their `--source`/`--from` and `--criteria`/`--against` aliases. When

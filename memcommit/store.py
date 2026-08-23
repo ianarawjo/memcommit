@@ -6243,6 +6243,115 @@ class MemoryStore:
                     auto=auto,
                 )
 
+    def checkpoint_context_batch(
+        self,
+        entries: Iterable[tuple[Context, str]],
+        *,
+        message: str = "",
+        command: Optional[str] = None,
+        args: Optional[dict] = None,
+        description: Optional[str] = None,
+        auto: bool = False,
+        expected_context_catalog: Iterable[str] | None = None,
+    ) -> tuple[Checkpoint, ...]:
+        """Append one exception-atomic checkpoint set to existing Contexts.
+
+        Context bytes are unchanged. Every member is locked and revalidated
+        before the first history append, and a failed later append removes the
+        provisional checkpoints already written by this call. A durable crash
+        journal remains outside this prototype boundary.
+        """
+
+        records = tuple(entries)
+        if not records:
+            raise ValueError("At least one Context checkpoint entry is required.")
+        if any(
+            not isinstance(context, Context)
+            or not isinstance(expected_digest, str)
+            or not expected_digest
+            for context, expected_digest in records
+        ):
+            raise TypeError("Invalid Context checkpoint batch entry.")
+        names = tuple(context.name for context, _expected_digest in records)
+        if len(names) != len(set(names)):
+            raise ValueError("Context checkpoint batch contains duplicate names.")
+        for name in names:
+            validate_context_name(name)
+        expected_catalog = (
+            None
+            if expected_context_catalog is None
+            else tuple(expected_context_catalog)
+        )
+        if expected_catalog is not None and (
+            len(expected_catalog) != len(set(expected_catalog))
+            or any(not isinstance(name, str) or not name for name in expected_catalog)
+        ):
+            raise ValueError("Expected Context checkpoint catalog is invalid.")
+
+        with self._command_write_lock():
+            with self._context_graph_lock(exclusive=expected_catalog is not None):
+                if (
+                    expected_catalog is not None
+                    and tuple(self.list_context_names()) != expected_catalog
+                ):
+                    raise ConcurrentContextUpdateError(
+                        "The Context namespace changed after the checkpoint "
+                        "scope was selected."
+                    )
+                with self._context_write_locks(names):
+                    self._assert_profile_write_allowed()
+                    for context, expected_digest in records:
+                        try:
+                            current = self.load_direct(context.name)
+                        except FileNotFoundError as error:
+                            raise ConcurrentContextUpdateError(
+                                f"Context '{context.name}' no longer exists."
+                            ) from error
+                        current_digest = context_record_digest(current)
+                        if (
+                            current.uid != context.uid
+                            or current_digest != expected_digest
+                        ):
+                            raise ConcurrentContextUpdateError(
+                                f"Context '{context.name}' changed before it "
+                                "could be checkpointed."
+                            )
+                        if context_record_digest(context) != current_digest:
+                            raise ValueError(
+                                f"Context '{context.name}' has unsaved changes; "
+                                "save it before checkpointing."
+                            )
+
+                    created: list[tuple[str, Checkpoint]] = []
+                    try:
+                        for context, _expected_digest in records:
+                            checkpoint = self._checkpoint_locked(
+                                context,
+                                message=message,
+                                command=command,
+                                args=args,
+                                description=description,
+                                auto=auto,
+                            )
+                            created.append((context.name, checkpoint))
+                    except Exception:
+                        rollback_error: Exception | None = None
+                        for name, checkpoint in created:
+                            try:
+                                self._remove_checkpoint_uid_locked(
+                                    name,
+                                    checkpoint.uid,
+                                )
+                            except Exception as candidate:
+                                rollback_error = rollback_error or candidate
+                        if rollback_error is not None:
+                            raise RuntimeError(
+                                "Context checkpoint batch failed and could not "
+                                "be fully rolled back."
+                            ) from rollback_error
+                        raise
+        return tuple(checkpoint for _name, checkpoint in created)
+
     def _checkpoint_locked(
         self,
         ctx: Context,

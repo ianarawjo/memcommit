@@ -81,10 +81,14 @@ _OPERATIONS = (
     ),
     _operation(
         "checkpoint",
-        "Save the current Context as a manual recovery point for Diff or Revert.",
-        "Context state -> checkpoint",
+        "Save the current or an explicit local Context as a manual recovery "
+        "point for Diff or Revert.",
+        "Context or local lexical subtree state -> manual checkpoint set",
         ExecutionKind.DETERMINISTIC,
-        "Adds recoverable history; content is unchanged",
+        "Adds recoverable history without changing content; direct by default, "
+        "while --recursive appends one exception-atomic lexical-subtree set",
+        "One exact local Context or its frozen lexical descendants; embedded "
+        "and granted Contexts are not followed",
     ),
     _operation(
         "check-conformance",

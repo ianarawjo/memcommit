@@ -901,6 +901,67 @@ def test_checkpoint_rejects_unsaved_context_state(
     assert store.list_checkpoints(context.name) == history_before
 
 
+def test_checkpoint_context_batch_rolls_back_a_partial_history_append(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    contexts = []
+    for name in ("batch/root", "batch/root/child"):
+        context = ops.init(name)
+        store.save(context)
+        contexts.append(store.load_direct(name))
+    catalog = tuple(store.list_context_names())
+    original_write = store_module._write_json_atomic
+    checkpoint_writes = 0
+
+    def fail_second_checkpoint(path, data):
+        nonlocal checkpoint_writes
+        if path.parent.name == "checkpoints":
+            checkpoint_writes += 1
+            if checkpoint_writes == 2:
+                raise OSError("injected checkpoint batch failure")
+        return original_write(path, data)
+
+    monkeypatch.setattr(store_module, "_write_json_atomic", fail_second_checkpoint)
+
+    with pytest.raises(OSError, match="injected checkpoint batch failure"):
+        store.checkpoint_context_batch(
+            ((context, context_record_digest(context)) for context in contexts),
+            message="must roll back",
+            command="checkpoint",
+            expected_context_catalog=catalog,
+        )
+
+    assert store.list_checkpoints("batch/root") == []
+    assert store.list_checkpoints("batch/root/child") == []
+
+
+def test_checkpoint_context_batch_rejects_catalog_drift_before_appending(
+    isolated_store,
+):
+    store = MemoryStore()
+    root = ops.init("batch/root")
+    store.save(root)
+    root = store.load_direct(root.name)
+    catalog = tuple(store.list_context_names())
+    added = ops.init("batch/new-child")
+    store.save(added)
+
+    with pytest.raises(
+        store_module.ConcurrentContextUpdateError,
+        match="namespace changed",
+    ):
+        store.checkpoint_context_batch(
+            ((root, context_record_digest(root)),),
+            message="stale scope",
+            command="checkpoint",
+            expected_context_catalog=catalog,
+        )
+
+    assert store.list_checkpoints("batch/root") == []
+
+
 def test_auto_checkpoint_is_rolled_back_when_context_write_fails(
     isolated_store,
     monkeypatch,

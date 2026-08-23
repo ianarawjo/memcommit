@@ -623,6 +623,22 @@ class TestHelp:
         assert help_inventory.COMMAND_FORMS["checkpoint"][0] == (
             "mem checkpoint (save without a message)"
         )
+        assert any(
+            form.startswith('mem checkpoint -m "[message]"')
+            for form in help_inventory.COMMAND_FORMS["checkpoint"]
+        )
+        assert any(
+            form.startswith('mem checkpoint --message "[message]"')
+            for form in help_inventory.COMMAND_FORMS["checkpoint"]
+        )
+        assert any(
+            form.startswith('mem checkpoint [context] "[message]"')
+            for form in help_inventory.COMMAND_FORMS["checkpoint"]
+        )
+        assert any(
+            "--context [context] --recursive" in form
+            for form in help_inventory.COMMAND_FORMS["checkpoint"]
+        )
         assert help_inventory.COMMAND_FORMS["translate"][0] == (
             "mem translate (show/save a default-English view of the current Context)"
         )
@@ -2294,6 +2310,153 @@ class TestCheckpoint:
         messages = [c.get("message", "") for c in cps]
         assert "stable baseline" in messages
 
+    def test_accepts_short_message_option(self, isolated_store):
+        invoke("init", "ctx")
+
+        result = invoke("checkpoint", "-m", "short option")
+
+        assert result.exit_code == 0
+        assert "short option" in result.output
+        checkpoints = MemoryStore().list_checkpoints("ctx")
+        assert checkpoints[0]["message"] == "short option"
+
+    def test_accepts_long_message_option(self, isolated_store):
+        invoke("init", "ctx")
+
+        result = invoke("checkpoint", "--message", "long option")
+
+        assert result.exit_code == 0
+        assert "long option" in result.output
+        checkpoints = MemoryStore().list_checkpoints("ctx")
+        assert checkpoints[0]["message"] == "long option"
+
+    def test_two_positionals_select_context_then_message(self, isolated_store):
+        invoke("init", "current")
+        invoke("init", "task-1")
+        invoke("switch", "current")
+
+        result = invoke("checkpoint", "task-1", "yes another checkpoint")
+
+        assert result.exit_code == 0
+        assert "Context 'task-1'" in result.output
+        assert MemoryStore().list_checkpoints("task-1")[0]["message"] == (
+            "yes another checkpoint"
+        )
+        assert all(
+            entry.get("message") != "yes another checkpoint"
+            for entry in MemoryStore().list_checkpoints("current")
+        )
+
+    def test_message_option_disambiguates_positional_context(self, isolated_store):
+        invoke("init", "current")
+        invoke("init", "task-1")
+        invoke("switch", "current")
+
+        result = invoke("checkpoint", "task-1", "-m", "option message")
+
+        assert result.exit_code == 0
+        assert MemoryStore().list_checkpoints("task-1")[0]["message"] == (
+            "option message"
+        )
+
+    def test_context_option_disambiguates_positional_message(self, isolated_store):
+        invoke("init", "current")
+        invoke("init", "task-1")
+        invoke("switch", "current")
+
+        result = invoke("checkpoint", "message text", "-c", "task-1")
+
+        assert result.exit_code == 0
+        assert MemoryStore().list_checkpoints("task-1")[0]["message"] == (
+            "message text"
+        )
+
+    def test_long_context_and_message_options_select_exact_target(
+        self,
+        isolated_store,
+    ):
+        invoke("init", "current")
+        invoke("init", "task-1")
+        invoke("switch", "current")
+
+        result = invoke(
+            "checkpoint",
+            "--context",
+            "task-1",
+            "--message",
+            "named options",
+        )
+
+        assert result.exit_code == 0
+        assert MemoryStore().list_checkpoints("task-1")[0]["message"] == (
+            "named options"
+        )
+
+    def test_context_option_supports_target_without_message(self, isolated_store):
+        invoke("init", "current")
+        invoke("init", "task-1")
+        invoke("switch", "current")
+
+        result = invoke("checkpoint", "--context", "task-1")
+
+        assert result.exit_code == 0
+        assert "Context 'task-1'" in result.output
+        assert "(no message)" in result.output
+
+    def test_relative_positional_context_uses_command_start_current(
+        self,
+        isolated_store,
+    ):
+        invoke("init", "tree/from")
+        invoke("init", "tree/to")
+        invoke("switch", "tree/from")
+
+        result = invoke("checkpoint", "../to", "relative target")
+
+        assert result.exit_code == 0
+        assert "Context 'tree/to'" in result.output
+        assert MemoryStore().list_checkpoints("tree/to")[0]["message"] == (
+            "relative target"
+        )
+
+    def test_rejects_message_in_positional_and_option_forms_without_checkpointing(
+        self,
+        isolated_store,
+    ):
+        invoke("init", "ctx")
+        before = MemoryStore().list_checkpoints("ctx")
+
+        result = invoke(
+            "checkpoint",
+            "ctx",
+            "positional",
+            "-m",
+            "option",
+        )
+
+        assert result.exit_code == 2
+        assert "cannot be supplied both" in result.stderr
+        assert MemoryStore().list_checkpoints("ctx") == before
+
+    def test_rejects_context_in_positional_and_option_forms_without_checkpointing(
+        self,
+        isolated_store,
+    ):
+        invoke("init", "ctx")
+        before = MemoryStore().list_checkpoints("ctx")
+
+        result = invoke(
+            "checkpoint",
+            "ctx",
+            "positional",
+            "--context",
+            "ctx",
+        )
+
+        assert result.exit_code == 2
+        assert "cannot be supplied both" in result.stderr
+        assert MemoryStore().list_checkpoints("ctx") == before
+
     def test_saves_manual_checkpoint_without_message(self, isolated_store):
         invoke("init", "ctx")
         result = invoke("checkpoint")
@@ -2308,6 +2471,98 @@ class TestCheckpoint:
         manual = [c for c in cps if c.get("message") == "manual one"]
         assert len(manual) == 1
         assert manual[0].get("auto") is False
+
+    def test_direct_scope_does_not_checkpoint_descendants(self, isolated_store):
+        invoke("init", "tree")
+        invoke("init", "tree/child")
+        before_child = MemoryStore().list_checkpoints("tree/child")
+
+        result = invoke(
+            "checkpoint",
+            "--context",
+            "tree",
+            "--direct",
+            "--message",
+            "direct baseline",
+        )
+
+        assert result.exit_code == 0
+        assert MemoryStore().list_checkpoints("tree")[0]["message"] == (
+            "direct baseline"
+        )
+        assert MemoryStore().list_checkpoints("tree/child") == before_child
+
+    def test_recursive_scope_checkpoints_frozen_lexical_subtree(self, isolated_store):
+        invoke("init", "tree")
+        invoke("init", "tree/child")
+        invoke("init", "other")
+        store = MemoryStore()
+        before = {
+            name: store.list_checkpoints(name)
+            for name in ("tree", "tree/child", "other")
+        }
+
+        result = invoke(
+            "checkpoint",
+            "tree",
+            "recursive baseline",
+            "--recursive",
+        )
+
+        assert result.exit_code == 0
+        assert "[set " in result.output
+        assert "2 Context(s) under 'tree'" in result.output
+        root = store.list_checkpoints("tree")[0]
+        child = store.list_checkpoints("tree/child")[0]
+        assert len(store.list_checkpoints("tree")) == len(before["tree"]) + 1
+        assert len(store.list_checkpoints("tree/child")) == (
+            len(before["tree/child"]) + 1
+        )
+        assert store.list_checkpoints("other") == before["other"]
+        assert root["message"] == child["message"] == "recursive baseline"
+        assert root["description"] == child["description"] == "recursive baseline"
+        assert root["auto"] is child["auto"] is False
+        assert root["command"] == child["command"] == "checkpoint"
+        assert root["args"] == child["args"]
+        assert root["args"]["checkpoint_set"] == {
+            "version": 1,
+            "uid": root["args"]["checkpoint_set"]["uid"],
+            "root": "tree",
+            "include_descendants": True,
+        }
+        assert root["args"]["command_contexts"] == [
+            {"uid": store.load_direct("tree").uid, "name": "tree"},
+            {
+                "uid": store.load_direct("tree/child").uid,
+                "name": "tree/child",
+            },
+        ]
+
+    def test_rejects_direct_and_recursive_without_checkpointing(
+        self,
+        isolated_store,
+    ):
+        invoke("init", "ctx")
+        before = MemoryStore().list_checkpoints("ctx")
+
+        result = invoke("checkpoint", "message", "-d", "-r")
+
+        assert result.exit_code == 2
+        assert "either --direct/-d or --recursive/-r" in result.stderr
+        assert MemoryStore().list_checkpoints("ctx") == before
+
+    def test_help_lists_short_and_long_targeting_options(self, isolated_store):
+        result = invoke("checkpoint", "--help")
+
+        assert result.exit_code == 0
+        assert "--context" in result.output
+        assert "-c" in result.output
+        assert "--message" in result.output
+        assert "-m" in result.output
+        assert "--direct" in result.output
+        assert "-d" in result.output
+        assert "--recursive" in result.output
+        assert "-r" in result.output
 
     def test_fails_with_no_current_context(self, isolated_store):
         result = invoke("checkpoint", "orphan")

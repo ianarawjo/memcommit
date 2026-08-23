@@ -480,6 +480,14 @@ COMMAND_FORMS = {
     "checkpoint": (
         "mem checkpoint (save without a message)",
         'mem checkpoint "[message]" (describe the saved checkpoint)',
+        'mem checkpoint -m "[message]" (short message option for current Context)',
+        'mem checkpoint --message "[message]" (long message option for current Context)',
+        'mem checkpoint [context] "[message]" (checkpoint an explicit local Context)',
+        'mem checkpoint [context] -m "[message]" (positionally target a Context)',
+        'mem checkpoint --context [context] "[message]" (explicitly target a Context)',
+        'mem checkpoint --context [context] --message "[message]" (fully named form)',
+        'mem checkpoint --context [context] --direct (checkpoint only that Context)',
+        'mem checkpoint --context [context] --recursive (checkpoint its local lexical subtree atomically)',
     ),
     "chunk": (
         "mem chunk (immediately split all splittable direct Memories in the current Context; Undo can restore)",

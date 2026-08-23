@@ -13,7 +13,7 @@ only from `docs/operation-evidence-index.json`.
 | `branch` | `UNREVIEWED` | [`history-uid-presentation-design-rationale.md`](../history-uid-presentation-design-rationale.md)<br>[`mem-branch-design-rationale.md`](../mem-branch-design-rationale.md) | — |
 | `check-conformance` | `UNREVIEWED` | [`mem-check-conformance-design-rationale.md`](../mem-check-conformance-design-rationale.md) | — |
 | `checkout` | `UNREVIEWED` | [`switch-application-boundary-matrix.md`](../switch-application-boundary-matrix.md) | — |
-| `checkpoint` | `UNREVIEWED` | — | — |
+| `checkpoint` | `UNREVIEWED` | [`checkpoint-targeting-design-rationale.md`](../checkpoint-targeting-design-rationale.md)<br>[`context-locator-design-rationale.md`](../context-locator-design-rationale.md) | — |
 | `chunk` | `UNREVIEWED` | [`mem-chunk-design-rationale.md`](../mem-chunk-design-rationale.md) | — |
 | `clear` | `UNREVIEWED` | [`mem-clear-design-rationale.md`](../mem-clear-design-rationale.md) | — |
 | `compare` | `CLOSED` | [`compare-application-boundary-matrix.md`](../compare-application-boundary-matrix.md)<br>[`compare-summary-design-rationale.md`](../compare-summary-design-rationale.md)<br>[`compare-session-lifecycle-design-rationale.md`](../compare-session-lifecycle-design-rationale.md)<br>[`context-locator-design-rationale.md`](../context-locator-design-rationale.md)<br>[`mem-compare-design-rationale.md`](../mem-compare-design-rationale.md)<br>[`session-endpoint-setup-design-rationale.md`](../session-endpoint-setup-design-rationale.md) | The default CLI enters one transient source-revalidated summary application, while CLI, TUI, Python, agent, and MCP deep routes retain the targetless exhaustive Run, exact Open, and version-bound Refresh lifecycle with no Context Apply. |
