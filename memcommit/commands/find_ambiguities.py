@@ -13,6 +13,7 @@ from memcommit.commands.context_operand import (
 )
 from memcommit.authority.access import GrantedReadStore, resolve_context_access
 from memcommit.commands.findings_render import (
+    render_finding_outcome,
     render_heading,
     render_memory,
     render_question,
@@ -183,12 +184,17 @@ def cmd(
     )
 
     render_heading(
+        operation_label="Find Ambiguities",
         context_name=display_escape_text(ctx.name),
         memory_count=report.memory_count,
+    )
+    render_finding_outcome(
         finding_count=len(report.findings),
+        singular="ambiguity finding",
+        plural_form="ambiguity findings",
+        empty_message="No ambiguities found",
     )
     if not report.findings:
-        typer.echo("\n  (no ambiguity findings)")
         return
 
     for finding in report.findings:

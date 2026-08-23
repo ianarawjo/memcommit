@@ -772,10 +772,23 @@ def test_cli_finders_are_read_only_and_each_use_one_provider_call(
     assert ambiguity_result.exit_code == 0
     assert conflict_result.exit_code == 0
     assert "pair" not in redundancy_result.output
-    assert "2 direct memories, 0 findings" in redundancy_result.output
+    assert (
+        "Find Redundancies · quality · 2 direct memories checked"
+        in redundancy_result.output
+    )
+    assert "No redundancies found" in redundancy_result.output
+    assert "0 findings" not in redundancy_result.output
     assert "No redundancies in 'quality'." in dedun_result.output
-    assert "no ambiguity findings" in ambiguity_result.output
-    assert "no conflict findings" in conflict_result.output
+    assert (
+        "Find Ambiguities · quality · 2 direct memories checked"
+        in ambiguity_result.output
+    )
+    assert "No ambiguities found" in ambiguity_result.output
+    assert (
+        "Find Conflicts · quality · 2 direct memories checked · 1 pair checked"
+        in conflict_result.output
+    )
+    assert "No conflicts found" in conflict_result.output
     assert [call[1] for call in provider.calls] == [
         "find_duplicates",
         "find_duplicates",
@@ -833,8 +846,11 @@ def test_cli_positional_context_does_not_switch_current(
         assert "Dedun 'target': absorbed 1 redundant Memory item(s)" in result.output
         assert "1 DUP / EXACT link" in result.output
     elif command_name == "find-redundancies":
-        assert "Context: target" in result.output
-        assert "1 finding" in result.output
+        assert (
+            "Find Redundancies · target · 2 direct memories checked"
+            in result.output
+        )
+        assert "1 redundancy finding" in result.output
         assert "DUN = DUP / EXACT + SEMANTIC DUN" in result.output
         assert "1 link = 1 DUP / EXACT link + 0 SEMANTIC DUN links" in result.output
         assert "1 connected group" in result.output
@@ -858,7 +874,12 @@ def test_cli_positional_context_does_not_switch_current(
         assert "LATER" not in result.output
         assert "Apply exact cleanup with mem dedup" in result.output
     else:
-        assert "Context: target" in result.output
+        title = (
+            "Find Ambiguities"
+            if command_name == "find-ambiguities"
+            else "Find Conflicts"
+        )
+        assert f"{title} · target · 2 direct memories checked" in result.output
     assert store.current_context_name() == active.name
 
 

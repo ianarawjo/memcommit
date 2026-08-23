@@ -16,6 +16,7 @@ from memcommit.commands.context_operand import (
 )
 from memcommit.authority.access import GrantedReadStore, resolve_context_access
 from memcommit.commands.findings_render import (
+    render_finding_outcome,
     render_heading,
     render_memory,
     render_question,
@@ -213,13 +214,18 @@ def cmd(
         return
 
     render_heading(
+        operation_label="Find Conflicts",
         context_name=display_escape_text(ctx.name),
         memory_count=report.memory_count,
         pair_count=report.pair_count,
+    )
+    render_finding_outcome(
         finding_count=len(report.findings),
+        singular="conflict finding",
+        plural_form="conflict findings",
+        empty_message="No conflicts found",
     )
     if not report.findings:
-        typer.echo("\n  (no conflict findings)")
         return
 
     for finding in report.findings:

@@ -14,6 +14,7 @@ from memcommit.commands.context_operand import (
 from memcommit.authority.access import GrantedReadStore, resolve_context_access
 from memcommit.commands.findings_render import (
     render_cleanup_member,
+    render_finding_outcome,
     render_heading,
 )
 from memcommit.commands.command_progress import CommandProgress
@@ -261,12 +262,18 @@ def _run(
         return
 
     render_heading(
+        operation_label="Find Redundancies",
         context_name=display_escape_text(ctx.name),
         memory_count=report.memory_count,
+    )
+    render_finding_outcome(
         finding_count=len(report.findings),
+        singular="redundancy finding",
+        plural_form="redundancy findings",
+        empty_message="No redundancies found",
     )
     if not report.findings:
-        typer.echo("\n  (no redundancy findings)")
+        return
     else:
         typer.echo()
         typer.secho(

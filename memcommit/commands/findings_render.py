@@ -21,18 +21,37 @@ def plural(count: int, singular: str, plural_form: str | None = None) -> str:
 
 def render_heading(
     *,
+    operation_label: str,
     context_name: str,
     memory_count: int,
-    finding_count: int,
     pair_count: int | None = None,
 ) -> None:
-    """Render the trusted, locally computed report summary."""
-    typer.secho(f"Context: {context_name}", bold=True)
-    parts = [plural(memory_count, "direct memory", "direct memories")]
+    """Render operation, target, and frozen scan scope as one report header."""
+    typer.secho(operation_label, bold=True, nl=False)
+    parts = [
+        context_name,
+        plural(memory_count, "direct memory", "direct memories") + " checked",
+    ]
     if pair_count is not None:
-        parts.append(plural(pair_count, "pair"))
-    parts.append(plural(finding_count, "finding"))
-    typer.echo(f"  {', '.join(parts)}")
+        parts.append(plural(pair_count, "pair") + " checked")
+    typer.echo(" · " + " · ".join(parts))
+
+
+def render_finding_outcome(
+    *,
+    finding_count: int,
+    singular: str,
+    plural_form: str,
+    empty_message: str,
+) -> None:
+    """Give the report conclusion its own line without repeating zero counts."""
+    typer.echo()
+    message = (
+        empty_message
+        if finding_count == 0
+        else plural(finding_count, singular, plural_form)
+    )
+    typer.secho(message, bold=True)
 
 
 def render_memory(label: str, memory: Memory) -> None:
