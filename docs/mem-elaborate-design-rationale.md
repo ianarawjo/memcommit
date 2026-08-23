@@ -15,9 +15,11 @@ evidence, and generated Cases are not real-world observations. Each direction
 must nevertheless return a complete candidate set. Elaborate exists to make an
 abstract or underspecified idea concrete enough to inspect and correct, so a
 sparse input is not a valid reason to return an empty result. Omitting the
-number means exactly three distinct proposals in both directions. `--n N`
-(also `-n` and `--number`) overrides that default with another exact count or
-the complete operation fails.
+number means exactly three proposals in both directions. `--n N` (also `-n`
+and `--number`) overrides that default with another exact count or the complete
+operation fails. Exact count applies to ordered, UID-backed proposal
+occurrences, not distinct content: repeated Rule content or Case propositions
+remain valid when repetition is intended or useful.
 
 ## Shared application contract
 
@@ -48,6 +50,15 @@ envelope limits remain independent of this count contract, so a provider may
 still fail an exceptionally large exact request rather than silently reducing
 its count.
 
+Proposal identity is not derived from normalized content. Every returned Rule
+or Case has a distinct proposal UID even when its content repeats, and
+standalone Add materializes every occurrence as a separate Memory with its own
+UID. Content equality therefore neither invalidates the analysis nor silently
+reduces the requested count. This matches the Store's identity model and keeps
+intentional repetition observable in Context order, receipts, Review, and
+Undo. Reusing one proposal UID remains invalid because that would collapse two
+ordered occurrences onto one identity.
+
 Every Case is classified as `FIT`, `BOUNDARY`, or `CONTRAST` and carries one
 ordered `rule_checks` entry for every current input Rule. Every stored
 proposition must jointly comply with the complete Rule set; a contrast may
@@ -66,7 +77,9 @@ prompt result from replaying; version 5 introduced typed Target ambient
 context, version 6 introduced an optional exact proposal number, and version 7
 makes the omitted number normalize to the exact default of three. Version 8
 removes the ordinary directional count ceilings so every positive explicit
-count reaches the exact one-turn contract.
+count reaches the exact one-turn contract. Version 9 makes proposal identity
+UID-backed rather than content-backed and explicitly admits repeated output
+content without weakening exact count or complete Rule coverage.
 
 ### Why the former 4/3 ceilings were removed
 
@@ -262,5 +275,7 @@ can remain a presentation adapter over the same request.
 - no persisted hidden-prewarm artifact;
 - no interactive input composer; and
 - no guarantee that an external provider can fulfill an arbitrarily large
-  exact count within one response envelope; and
+  exact count within one response envelope;
+- no promise that exact-count proposal content is unique; repetition is a
+  valid, separately identified result; and
 - no claim that generated or stored Case propositions are evidence.

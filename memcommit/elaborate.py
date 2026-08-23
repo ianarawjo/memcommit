@@ -29,7 +29,7 @@ from memcommit.semantic_execution import (
 
 
 ELABORATE_OPERATION = "elaborate"
-ELABORATE_PROVIDER_CONTRACT_VERSION = 8
+ELABORATE_PROVIDER_CONTRACT_VERSION = 9
 ELABORATE_PAYLOAD_MARKER = "ELABORATE PAYLOAD:\n"
 
 
@@ -309,10 +309,12 @@ class ElaborateAnalysis:
                 raise ElaborateError(
                     "Rule elaboration requires at least one Case proposal."
                 )
-        if len({item.content.casefold() for item in self.rules}) != len(self.rules):
-            raise ElaborateError("Elaborate returned duplicate Rule proposals.")
-        if len({item.proposition.casefold() for item in self.cases}) != len(self.cases):
-            raise ElaborateError("Elaborate returned duplicate Case proposals.")
+        proposals = (*self.rules, *self.cases)
+        if len({item.uid for item in proposals}) != len(proposals):
+            raise ElaborateError("Elaborate returned duplicate proposal identities.")
+        # Proposal identity is positional and UID-backed, not content-backed.
+        # Repeated content may be the intended exact-count result, and the Add
+        # boundary gives every occurrence its own durable Memory identity.
         required_rule_indexes = tuple(range(1, len(self.inputs) + 1))
         if any(
             tuple(check.source_rule_index for check in item.rule_checks)
@@ -744,8 +746,10 @@ def analyze_elaborate(
         quantity = f"exactly {number}"
         instruction = (
             f"Propose {quantity} "
-            "independently useful candidate Rules that make the Goal more "
-            "operational and reviewable. A sparse or abstract Goal is not a "
+            "candidate Rules that make the Goal more operational and reviewable. "
+            "Repeated Rule content is valid when the Goal calls for repetition; "
+            "do not invent artificial distinctions solely to make proposal content "
+            "unique. A sparse or abstract Goal is not a "
             "reason to return an empty set: propose the smallest concrete "
             "candidate that makes its assumptions inspectable. The Goal is "
             "intent, not evidence. Every Rule is suggested and unverified until "
@@ -755,11 +759,15 @@ def analyze_elaborate(
         quantity = f"exactly {number}"
         instruction = (
             f"Propose {quantity} "
-            "diverse, self-contained positive Example Memories. Every Case must "
+            "self-contained positive Example Memories. Repeated Case propositions "
+            "are valid when repetition is required or useful under the complete Rule "
+            "set; do not invent artificial distinctions solely to make proposition "
+            "content unique. Every Case must "
             "instantiate and comply with the complete input Rule set together; do "
             "not assign different Cases to different Rules. Preserve fixed roles, "
             "relationships, event order, decision boundaries, and presentation form "
-            "required by the Rules while varying only legitimate instance slots. "
+            "required by the Rules; when variation is useful, vary only legitimate "
+            "instance slots. "
             "The proposition itself must contain the complete compliant scenario "
             "and outcome that would be stored as the Example Memory.\n\n"
             "For every Case, provide rule_checks for every source Rule exactly once "
